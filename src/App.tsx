@@ -36,8 +36,6 @@ function App() {
     logo: require('./logo.svg').default
   })
 
-
-  
   return (
     <React.Fragment>
       <Router>
@@ -45,7 +43,7 @@ function App() {
           <GlobalStyle />
           <Header>
             <img src={state.logo} className="App-logo" alt="logo" />
-            <Button onClick={() => dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("Connect Wallet")}</Button>
+            <Button onClick={() => dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button>
             <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
             <Link to="/">Goback</Link>
             <Link to="/home">Home</Link>
