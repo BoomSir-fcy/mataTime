@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["./src"]
+      }
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "import/no-unresolved": [ 2, { "caseSensitive": false } ]
+  }
+}
