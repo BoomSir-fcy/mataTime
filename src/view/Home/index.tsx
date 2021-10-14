@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 
 const PageContainer = styled.div`
-  padding-top: 0;
+  padding: 20px;
   margin-top: 0;
   flex: 1;
   min-height: auto;
