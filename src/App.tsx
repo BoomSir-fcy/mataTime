@@ -5,9 +5,9 @@ import { useImmer } from "use-immer";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction } from 'store';
+import { languages } from './config/localization';
 
 import GlobalStyle from 'style/global';
-import { languages } from './config/localization';
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
@@ -35,10 +35,6 @@ function App() {
   const [state] = useImmer({
     logo: require('./logo.svg').default
   })
-
-  React.useEffect(() => {
-
-  }, []);
 
   return (
     <React.Fragment>
