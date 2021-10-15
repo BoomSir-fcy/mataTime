@@ -14,6 +14,13 @@ export const storeAction = {
 	...TestAction
 }
 
+export const Dispatch = {
+  toast: {
+    show: (params: TestAction.toastInterface) => store.dispatch({ type: "toast/show", payload: params }),
+    hide: () => store.dispatch({ type: "toast/hide" })
+  },
+}
+
 export function useStore<TSelected>(selector: (state: Store) => TSelected, equalityFn?: (left: TSelected, right: TSelected) => boolean) {
 	return useSelector<Store, TSelected>(selector, equalityFn);
 }

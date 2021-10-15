@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useImmer } from "use-immer";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
-import { useStore, storeAction } from 'store';
+import { useStore, storeAction, Dispatch } from 'store';
 import { languages } from './config/localization';
+import { Toast } from 'components';
 
 import GlobalStyle from 'style/global';
 
@@ -14,7 +15,7 @@ const Home = React.lazy(() => import('./view/Home'));
 
 const Header = styled.header`
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,12 +43,15 @@ function App() {
         <React.Suspense fallback={<h1>111</h1>}>
           <GlobalStyle />
           <Header>
-            <img src={state.logo} className="App-logo" alt="logo" />
-            <Button onClick={() => dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button>
+            <img src={state.logo} width="100" alt="logo" />
+            {/* <Button onClick={() => 
+              dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
+            <Button onClick={() => Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) }>{t("wallet")}</Button>
             <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
             <Link to="/">Goback</Link>
             <Link to="/home">Home</Link>
           </Header> 
+          <Toast />
           <Switch>
             <Route path="/home">
               <Home />
