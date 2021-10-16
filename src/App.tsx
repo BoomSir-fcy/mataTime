@@ -46,7 +46,9 @@ function App() {
             <img src={state.logo} width="100" alt="logo" />
             {/* <Button onClick={() => 
               dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
-            <Button onClick={() => Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) }>{t("wallet")}</Button>
+            <Button onClick={() => 
+              Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) 
+            }>{t("wallet")}</Button>
             <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
             <Link to="/">Goback</Link>
             <Link to="/home">Home</Link>
