@@ -1,7 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
+import { PancakeTheme } from 'uikit'
 
 declare module 'styled-components' {
-  export interface DefaultTheme {
+  export interface DefaultTheme extends PancakeTheme {
     main: string
   }
 }

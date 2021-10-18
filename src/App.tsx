@@ -6,23 +6,14 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, Dispatch } from 'store';
 import { languages } from './config/localization';
-import { Toast } from 'components';
+import { Header, Toast } from 'components';
 
 import GlobalStyle from 'style/global';
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
+const Login = React.lazy(() => import('./view/Login'));
 
-const Header = styled.header`
-  background-color: #282c34;
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-`
 const Button = styled.button`
   padding: 5px 10px;
   background-color: transparent;
@@ -33,17 +24,13 @@ function App() {
   const dispatch = useDispatch();
   const testStore = useStore(p=> p.testReducer);
   const { t, setLanguage } = useTranslation();
-  const [state] = useImmer({
-    logo: require('./logo.svg').default
-  })
 
   return (
     <React.Fragment>
       <Router>
-        <React.Suspense fallback={<h1>111</h1>}>
+        <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
           <Header>
-            <img src={state.logo} width="100" alt="logo" />
             {/* <Button onClick={() => 
               dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
             <Button onClick={() => 
@@ -51,14 +38,17 @@ function App() {
             }>{t("wallet")}</Button>
             <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
             <Link to="/">Goback</Link>
-            <Link to="/home">Home</Link>
+            <Link to="/login">login</Link>
           </Header> 
-          <Toast />
           <Switch>
-            <Route path="/home">
+            <Route path="/" exact>
               <Home />
             </Route>
+            <Route path="/login">
+              <Login/>
+            </Route>
           </Switch>
+          <Toast />
         </React.Suspense>
       </Router>
     </React.Fragment>
