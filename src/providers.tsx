@@ -1,8 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { Web3ReactProvider } from '@web3-react/core'
 import { ThemeProvider } from 'styled-components';
 import { LanguageProvider } from 'contexts/Localization';
 import { store } from 'store';
+import { getLibrary } from 'utils';
 
 const ThemeProviderWrapper = (props) => {
 	const theme = { main: "mediumseagreen" };
@@ -11,13 +13,15 @@ const ThemeProviderWrapper = (props) => {
 
 const Providers: React.FC = ({ children }) => {
 	return (
-		<Provider store={store}>
-			<ThemeProviderWrapper>
-				<LanguageProvider>
-					{children}
-				</LanguageProvider>
-			</ThemeProviderWrapper>
-		</Provider> 
+		<Web3ReactProvider getLibrary={getLibrary}>
+			<Provider store={store}>
+				<ThemeProviderWrapper>
+					<LanguageProvider>
+						{children}
+					</LanguageProvider>
+				</ThemeProviderWrapper>
+			</Provider> 
+		</Web3ReactProvider>
 	)
 }
 
