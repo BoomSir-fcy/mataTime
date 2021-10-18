@@ -20,7 +20,7 @@ export const Toast: React.FC = React.memo(() => {
       timer.current = setTimeout(() => Dispatch.toast.hide(), 2000);
     }
     return () => timer.current && clearTimeout(timer.current);
-  }, [show]);
+  }, [show, type, text]);
 
   return (
     <ToastContainer

@@ -117,6 +117,7 @@ const zIndices = {
   modal: 100,
 };
 
+// eslint-disable-next-line
 export default {
   siteWidth: 1200,
   breakpoints,
