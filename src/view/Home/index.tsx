@@ -1,6 +1,6 @@
 import React from 'react';
-import Modal from 'react-modal';
 import styled from "styled-components";
+import { Avatar, EmojiView, ModalWrapper } from 'components';
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -8,48 +8,51 @@ const PageContainer = styled.div`
   flex: 1;
   min-height: auto;
 `
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+const FollowContainer = styled.div`
+  padding: 36px;
+`
+
+const FollowTitle = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  color: #FFFFFF;
+`
+
+const FollowBody = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+  color: #FFFFFF;
+  margin: 25px 0 38px;
+  line-height: 1.5;
+  a {
+    color: rgba(65, 104, 237, 1);
+  }
+`
+
+const CancelFollow = () => {
+  return (
+    <FollowContainer>
+      <FollowTitle>是否取消关注Ta?</FollowTitle>
+      <FollowBody>
+        <Avatar />
+        屏蔽用户<a>@0x5...684</a>，将无法获取查看Ta的最 新动态、信息，屏蔽后可在“个人主页”取消 屏蔽
+      </FollowBody>
+      <div className="button">
+        <button>确认</button>
+        <button>取消</button>
+      </div>
+    </FollowContainer>
+  )
+}
 
 const Home: React.FC = () => {
-
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  }
-
-  const afterOpenModal = () =>{
-    subtitle.style.color = '#000';
-  }
-
-  const closeModal = () => {
-    setIsOpen(false);
-  }
-
   return (
     <PageContainer>
-      <button onClick={openModal}>Open Modal</button>
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Example Modal">
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
-        <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
-      </Modal>
+      <button>Open Modal</button>
+      <ModalWrapper>
+        <CancelFollow />
+      </ModalWrapper>
+      <EmojiView />
     </PageContainer>
   )
 }
