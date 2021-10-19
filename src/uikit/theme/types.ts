@@ -93,6 +93,7 @@ export type Colors = {
   white_black: string;
   member_num: string;
   textPrimary: string;
+  textTips: string;
   textDisabled: string;
   textSubtle: string;
   disabled: string;

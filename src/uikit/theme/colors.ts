@@ -9,6 +9,7 @@ export const baseColors = {
   success: "#31D0AA",
   warning: "#FFB237",
   transparent: "transparent",
+  blue: "#5A79F8",
 };
 
 export const additionalColors = {
@@ -56,6 +57,7 @@ export const lightColors: Colors = {
   textValue: "#7E7E7E",
   textPrimary: "#ADE58A",
   textSubtle: "#759290",
+  textTips: "#B5B5B5",
   textDisabled: "#BDC2C4",
   disabled: "#E9EAEB",
   gradients: {
@@ -82,7 +84,7 @@ export const darkColors: Colors = {
   backgroundDisabled: "#3c3742",
   backgroundPrimary: "#4168ED",
   backgroundMember:'rgba(49, 64, 111, 0.5)',
-  backgroundCard: "#25302E",
+  backgroundCard: "#191F2D",
   backgroundAlt: "#212827",
   cardBorder: "#383241",
   contrast: "#FFFFFF",
@@ -101,7 +103,8 @@ export const darkColors: Colors = {
   member_num:'#FFFFFF',
   textValue: "#7E7E7E",
   textPrimary: "#ADE58A",
-  textSubtle: "#759290",
+  textSubtle: "#EC612B",
+  textTips: "#B5B5B5",
   textDisabled: "#666171",
   disabled: "#524B63",
   gradients: {

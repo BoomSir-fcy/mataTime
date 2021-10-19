@@ -34,7 +34,7 @@ const CancelFollow = () => {
     <FollowContainer>
       <FollowTitle>是否取消关注Ta?</FollowTitle>
       <FollowBody>
-        <Avatar />
+        <Avatar src="" />
         屏蔽用户<a>@0x5...684</a>，将无法获取查看Ta的最 新动态、信息，屏蔽后可在“个人主页”取消 屏蔽
       </FollowBody>
       <div className="button">

@@ -30,16 +30,6 @@ function App() {
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
             <ConnectWalletButton />
-          <Header>
-            {/* <Button onClick={() => 
-              dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
-            <Button onClick={() => 
-              Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) 
-            }>{t("wallet")}</Button>
-            <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
-            <Link to="/">Goback</Link>
-            <Link to="/login">login</Link>
-          </Header> 
           <Header /> 
           <Switch>
             <Route path="/" exact>
