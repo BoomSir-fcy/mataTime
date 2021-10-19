@@ -65,6 +65,12 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  input, input::-webkit-input-placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    color: #FFFFFF;
+  }
+
   /* Number */
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {

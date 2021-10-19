@@ -2,21 +2,23 @@ import { createStore, combineReducers } from "redux";
 import { useSelector } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { testReducer, Test, TestAction } from './test';
+import { appReducer, appAction, App } from './app';
+import { loginReducer, loginAction, Login } from './login';
 
 export interface Store {
-	testReducer: Test
+	appReducer: App,
+	loginReducer: Login
 }
 
-const rootReducer = combineReducers({ testReducer });
+const rootReducer = combineReducers({ appReducer, loginReducer });
 export const store = createStore(rootReducer, composeWithDevTools());
 export const storeAction = {
-	...TestAction
+	...loginAction
 }
 
 export const Dispatch = {
   toast: {
-    show: (params: TestAction.toastInterface) => store.dispatch({ type: "toast/show", payload: params }),
+    show: (params: appAction.toastInterface) => store.dispatch({ type: "toast/show", payload: params }),
     hide: () => store.dispatch({ type: "toast/hide" })
   },
 }

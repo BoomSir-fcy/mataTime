@@ -12,13 +12,14 @@ import { scales, variants } from "./types";
 
 export const scaleVariants = {
   [scales.LD]: {
-    height: "36px",
+    fontSize: "18px",
+    height: "44px",
     minWidth: "108px",
-    padding: "0 24px",
+    padding: "0 30px",
   },
   [scales.MD]: {
-    height: "36px",
-    padding: "0 24px",
+    height: "35px",
+    padding: "0 20px",
   },
   [scales.SM]: {
     height: "32px",
@@ -33,12 +34,12 @@ export const scaleVariants = {
 
 export const styleVariants = {
   [variants.PRIMARY]: {
-    // backgroundColor: "primary",
+    backgroundColor: "rgba(65, 104, 237, 1)",
     color: "white",
-    backgroundRepeat: "no-repeat",
+    // backgroundRepeat: "no-repeat",
     // backgroundImage: `url(${btn1}), url(${btn}), url(${btn2})`,
-    backgroundPosition: "0 0px, 10px 0px, 100% -1px",
-    backgroundSize: "20px 36px, calc(100% - 20px) 36px, 20px 38px",
+    // backgroundPosition: "0 0px, 10px 0px, 100% -1px",
+    // backgroundSize: "20px 36px, calc(100% - 20px) 36px, 20px 38px",
   },
   [variants.SECONDARY]: {
     backgroundColor: "transparent",
