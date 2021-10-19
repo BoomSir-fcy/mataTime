@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { ToastContainerProps } from 'react-toastify';
 
 export interface toastInterface {
 	type: string
@@ -7,4 +8,5 @@ export interface toastInterface {
 
 export const toggleTheme = createAction('app/toggleTheme');
 export const toastShow = createAction<toastInterface>('toast/show');
+export const toastContainer = createAction<ToastContainerProps>('toast/toastContainer');
 export const toastHide = createAction('toast/hide');

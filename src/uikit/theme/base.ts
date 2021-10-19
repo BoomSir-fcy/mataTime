@@ -160,7 +160,7 @@ const radii = {
   small: "4px",
   default: "16px",
   nftImage: "10px",
-  card: "20px",
+  card: "10px",
   circle: "50%",
 };
 

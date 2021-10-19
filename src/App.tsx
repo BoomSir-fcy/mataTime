@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, Dispatch } from 'store';
 import { languages } from './config/localization';
-import { Header, Toast } from 'components';
+import { Header, Toast, ConnectWalletButton } from 'components';
 
 import GlobalStyle from 'style/global';
 
@@ -29,6 +29,17 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
+            <ConnectWalletButton />
+          <Header>
+            {/* <Button onClick={() => 
+              dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
+            <Button onClick={() => 
+              Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) 
+            }>{t("wallet")}</Button>
+            <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
+            <Link to="/">Goback</Link>
+            <Link to="/login">login</Link>
+          </Header> 
           <Header /> 
           <Switch>
             <Route path="/" exact>
