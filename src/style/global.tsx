@@ -1,7 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
+import { PancakeTheme } from 'uikit'
 
 declare module 'styled-components' {
-  export interface DefaultTheme {
+  export interface DefaultTheme extends PancakeTheme {
     main: string
   }
 }
@@ -62,6 +63,12 @@ const GlobalStyle = createGlobalStyle`
   }
   *, *::before, *::after {
     box-sizing: border-box;
+  }
+
+  input, input::-webkit-input-placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    color: #FFFFFF;
   }
 
   /* Number */
