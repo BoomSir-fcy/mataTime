@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, Dispatch } from 'store';
 import { languages } from './config/localization';
-import { Header, Toast } from 'components';
+import { Header, Toast, ConnectWalletButton } from 'components';
 
 import GlobalStyle from 'style/global';
 
@@ -31,6 +31,7 @@ function App() {
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
           <Header>
+            <ConnectWalletButton />
             {/* <Button onClick={() => 
               dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
             <Button onClick={() => 

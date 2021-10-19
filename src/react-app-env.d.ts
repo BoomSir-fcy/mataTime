@@ -69,3 +69,13 @@ declare module '*.module.sass' {
   const classes: { readonly [key: string]: string };
   export default classes;
 }
+
+interface Window {
+  ethereum?: {
+    isMetaMask?: true
+    request?: (...args: any[]) => Promise<void>
+  }
+  BinanceChain?: {
+    bnbSign?: (address: string, message: string) => Promise<{ publicKey: string; signature: string }>
+  }
+}
