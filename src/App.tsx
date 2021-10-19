@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useImmer } from "use-immer";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, Dispatch } from 'store';
@@ -30,16 +29,7 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          <Header>
-            {/* <Button onClick={() => 
-              dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
-            <Button onClick={() => 
-              Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) 
-            }>{t("wallet")}</Button>
-            <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
-            <Link to="/">Goback</Link>
-            <Link to="/login">login</Link>
-          </Header> 
+          <Header /> 
           <Switch>
             <Route path="/" exact>
               <Home />
@@ -54,5 +44,13 @@ function App() {
     </React.Fragment>
   );
 }
+
+{/* <Button onClick={() => 
+              dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> 
+            <Button onClick={() => 
+              Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) 
+            }>{t("wallet")}</Button>
+            <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
+            */}
 
 export default React.memo(App);

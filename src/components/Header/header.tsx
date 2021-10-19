@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex } from 'uikit';
 import { Logo } from './logo';
+import { Search } from './search';
+import { Menu } from './menu';
 
 const BoxStyled = styled(Box)`
   width: 100%;
@@ -13,8 +15,12 @@ const BoxStyled = styled(Box)`
 export const Header = React.memo((props) => {
   return (
     <BoxStyled>
-      <Flex alignItems="center" height="100%">
-        <Logo />
+      <Flex alignItems="center" justifyContent="space-between" height="100%">
+        <Flex justifyContent="space-between"> 
+          <Logo />
+          <Search />
+        </Flex>
+        <Menu />
         {props.children}
       </Flex>
     </BoxStyled>
