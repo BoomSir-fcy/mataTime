@@ -34,8 +34,8 @@ export const scaleVariants = {
 
 export const styleVariants = {
   [variants.PRIMARY]: {
-    backgroundColor: "rgba(65, 104, 237, 1)",
-    color: "white",
+    backgroundColor: "backgroundPrimary",
+    color: "primary",
     // backgroundRepeat: "no-repeat",
     // backgroundImage: `url(${btn1}), url(${btn}), url(${btn2})`,
     // backgroundPosition: "0 0px, 10px 0px, 100% -1px",

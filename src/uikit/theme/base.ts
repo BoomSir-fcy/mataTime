@@ -23,6 +23,15 @@ export const mediaQueries: MediaQueries = {
   nav: `@media screen and (min-width: ${breakpointMap.lg}px)`,
 };
 
+const mediaMarginUpAndDown = `
+  ${mediaQueries.lg} {
+    margin: 30px 0 14px;
+  }
+  ${mediaQueries.xl} {
+    margin: 30px 0 14px;
+  }
+`
+
 const mediaQueriesMargin = `
   ${mediaQueries.xxs} {
     margin: 8px 4px;
@@ -43,6 +52,46 @@ const mediaQueriesMargin = `
   }
 
 `
+const mediaMarginBottom = `
+  ${mediaQueries.xxs} {
+    margin-bottom: 4px;
+  }
+  ${mediaQueries.xs} {
+    margin-bottom: 8px;
+  }
+
+  ${mediaQueries.sm} {
+    margin-bottom: 16px;
+  }
+
+  ${mediaQueries.lg} {
+    margin-bottom: 41px;
+  }
+  ${mediaQueries.xl} {
+    margin-bottom: 41px;
+  }
+`
+
+const mediaMarginTop = `
+  ${mediaQueries.xxs} {
+    margin-top: 4px;
+  }
+  ${mediaQueries.xs} {
+    margin-top: 8px;
+  }
+
+  ${mediaQueries.sm} {
+    margin-top: 16px;
+  }
+
+  ${mediaQueries.lg} {
+    margin-top: 30px;
+  }
+  ${mediaQueries.xl} {
+    margin-top: 30px;
+  }
+`
+
 const mediaQueriesMarginRight = `
   ${mediaQueries.xxs} {
     margin-right: 4px;
@@ -87,6 +136,9 @@ const mediaQueriesPadding = `
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
   marginr: mediaQueriesMarginRight,
+  marginb: mediaMarginBottom,
+  margint: mediaMarginTop,
+  marginUD: mediaMarginUpAndDown,
   padding: mediaQueriesPadding,
 }
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useImmer } from 'use-immer';
+import { useDispatch } from "react-redux";
+import { storeAction, useStore } from 'store';
 import { Box, Flex } from 'uikit'; 
 import { mediaQueries } from "uikit/theme/base";
 
 import { LoginJoin, SignUp } from './components';
 
 const LoginContainer = styled(Flex)`
-  padding-top: 91px;
+  padding-top: 90px;
   ${mediaQueries.xxl} {
     padding-left: 160px;
     padding-right: 160px;
@@ -17,29 +18,34 @@ const LoginContainer = styled(Flex)`
   }
 `
 
-const Login: React.FC = () => {
+const Login: React.FC = React.memo(() => {
 
-  const [state, setState] = useImmer({
-    isSignUp: false
-  })
+  const dispatch = useDispatch();
+  const loginReduce = useStore(p => p.loginReducer);
+  const { isSignup } = loginReduce;
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(storeAction.changeSignUp({isSignup: false}));
+    }
+  }, []);
 
   return (
     <Box backgroundImage={`url(${require('assets/images/background_images.jpg').default})`}
-      minHeight="calc(100vh - 90px);"
-    >
+      minHeight="calc(100vh - 90px);">
       <LoginContainer>
         <Flex flex="1">
           <img src={require('./images/logo_left_images.png').default} />
         </Flex>
         {
-          state.isSignUp ? 
-          <SignUp />
+          isSignup ? 
+          <SignUp isSignup={true} />
           :
           <LoginJoin />
         }
       </LoginContainer>
     </Box>
   )
-}
+})
 
 export default Login;

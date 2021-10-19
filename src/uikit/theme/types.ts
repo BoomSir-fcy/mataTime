@@ -12,6 +12,9 @@ export type MediaQueries = {
 };
 export type MediaQueriesSize = {
   margin: string;
+  marginUD: string;
+  marginb: string;
+  margint: string;
   marginr: string;
   padding: string;
 };

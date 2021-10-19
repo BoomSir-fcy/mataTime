@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from "react-redux";
+import { useStore, storeAction, Dispatch } from 'store';
 import { Box, Flex, Text, Button } from 'uikit';
 
 const LoginWarpper = styled(Box)`
@@ -25,6 +27,7 @@ const ConnectWalletButton = styled(Button)`
 `
 
 export const LoginJoin = React.memo(() => {
+  const dispatch = useDispatch();
 
   return (
     <LoginWarpper>
@@ -32,7 +35,8 @@ export const LoginJoin = React.memo(() => {
       <Text color="rgba(236, 97, 43, 1)">平台beta 版本试运营中，目前仅限持有恐龙创世NFT的用户可以注册</Text>
       <ConnectWallet>
         <img width="40%" src={require('../images/login_right_images.png').default} />
-        <ConnectWalletButton scale="ld" variants="primary">
+        <ConnectWalletButton scale="ld" variant="primary"
+          onClick={() => dispatch(storeAction.changeSignUp({isSignup: true}))}>
           Connerct Wallet
         </ConnectWalletButton>
       </ConnectWallet>

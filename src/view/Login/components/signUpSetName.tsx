@@ -1,0 +1,61 @@
+import React from 'react';
+import styled from 'styled-components';
+import { Box, Flex, Text, Button } from 'uikit';
+import { mediaQueriesSize } from 'uikit/theme/base';
+
+import { WalletAddress } from './signUp';
+
+
+const InputItems = styled(Flex)`
+
+`
+const InputText = styled(Text)`
+  min-width: 85px;
+  ${mediaQueriesSize.marginr}
+`
+
+const InputNftImg = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  ${mediaQueriesSize.marginr}
+`
+
+const InputNickName = styled.input`
+  width: 381px;
+  height: 50px;
+  background: #292D34;
+  border-radius: 10px;
+  padding-left: 25px;
+  border: 0;
+  outline: 0;
+`
+
+const Submit = styled(Button)`
+  width: 205px;
+  ${mediaQueriesSize.margint}
+`
+
+export const SignUpSetName = React.memo(() => {
+  return(
+    <Box>
+      <WalletAddress />
+      <Box paddingTop="25px">
+        <InputItems marginBottom="32px">
+          <InputText>* NFT头像</InputText>
+          <Flex alignItems="flex-end">
+            <InputNftImg src="" />
+            <Text color="#B5B5B5">默认展示您的恐龙NFT头像</Text>
+          </Flex>
+        </InputItems>
+        <InputItems alignItems="center">
+          <InputText>*设置昵称</InputText>
+          <InputNickName placeholder="最多20个字符" />
+        </InputItems>
+      </Box>
+      <Flex justifyContent="center">
+        <Submit scale="ld">下一步</Submit>
+      </Flex>
+    </Box>
+  )
+})
