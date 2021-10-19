@@ -21,7 +21,7 @@ const Button = styled.button`
 function App() {
 
   const dispatch = useDispatch();
-  const testStore = useStore(p=> p.testReducer);
+  const testStore = useStore(p=> p.loginReducer);
   const { t, setLanguage } = useTranslation();
 
   return (

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useImmer } from 'use-immer';
 import { Box, Flex } from 'uikit'; 
 import { mediaQueries } from "uikit/theme/base";
 
-import { LoginJoin } from './components';
+import { LoginJoin, SignUp } from './components';
 
 const LoginContainer = styled(Flex)`
   padding-top: 91px;
@@ -17,6 +18,11 @@ const LoginContainer = styled(Flex)`
 `
 
 const Login: React.FC = () => {
+
+  const [state, setState] = useImmer({
+    isSignUp: false
+  })
+
   return (
     <Box backgroundImage={`url(${require('assets/images/background_images.jpg').default})`}
       minHeight="calc(100vh - 90px);"
@@ -25,7 +31,12 @@ const Login: React.FC = () => {
         <Flex flex="1">
           <img src={require('./images/logo_left_images.png').default} />
         </Flex>
-        <LoginJoin />
+        {
+          state.isSignUp ? 
+          <SignUp />
+          :
+          <LoginJoin />
+        }
       </LoginContainer>
     </Box>
   )

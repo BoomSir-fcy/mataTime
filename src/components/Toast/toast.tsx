@@ -6,7 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const Toast: React.FC = React.memo(() => {
 
-  const toastReducer = useStore(p => p.testReducer);
+  const toastReducer = useStore(p => p.appReducer);
+  console.log(toastReducer);
   const timer = React.useRef<NodeJS.Timeout>();
   const { toast, show } = toastReducer;
   const { type, text } = toast;

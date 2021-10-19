@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Button, Svg } from 'uikit';
 
+import { mediaQueries } from "uikit/theme/base";
+
 const HeaderMenuItem = styled(Flex)`
   justify-content: center;
   align-items: center;
@@ -10,7 +12,10 @@ const HeaderMenuItem = styled(Flex)`
   font-size: 16px;
   font-weight: 400;
   color: #FFFFFF;
-  margin: 0 38px;
+  margin: 0 18px;
+  ${mediaQueries.xxl} {
+    margin: 0 38px;
+  }
 `
 
 const HeaderLine = styled.div`
