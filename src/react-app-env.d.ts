@@ -78,4 +78,5 @@ interface Window {
   BinanceChain?: {
     bnbSign?: (address: string, message: string) => Promise<{ publicKey: string; signature: string }>
   }
+  MSStream?: boolean
 }

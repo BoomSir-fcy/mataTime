@@ -29,8 +29,8 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          <Header>
             <ConnectWalletButton />
+          <Header>
             {/* <Button onClick={() => 
               dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> */}
             <Button onClick={() => 
