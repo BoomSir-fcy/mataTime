@@ -15,7 +15,8 @@ export interface Store {
 const rootReducer = combineReducers({ appReducer, loginReducer });
 export const store = createStore(rootReducer, composeWithDevTools());
 export const storeAction = {
-	...loginAction
+	...loginAction,
+  ...appAction
 }
 
 export const Dispatch = {

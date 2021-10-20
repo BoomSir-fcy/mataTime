@@ -31,20 +31,17 @@ const Login: React.FC = React.memo(() => {
   }, []);
 
   return (
-    <Box backgroundImage={`url(${require('assets/images/background_images.jpg').default})`}
-      minHeight="calc(100vh - 90px);">
-      <LoginContainer>
-        <Flex flex="1">
-          <img src={require('./images/logo_left_images.png').default} />
-        </Flex>
-        {
-          isSignup ? 
-          <SignUp isSignup={true} />
-          :
-          <LoginJoin />
-        }
-      </LoginContainer>
-    </Box>
+    <LoginContainer>
+      <Flex flex="1">
+        <img src={require('./images/logo_left_images.png').default} />
+      </Flex>
+      {
+        isSignup ? 
+        <SignUp isSignup={true} />
+        :
+        <LoginJoin />
+      }
+    </LoginContainer>
   )
 })
 

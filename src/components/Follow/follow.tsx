@@ -14,20 +14,19 @@ const Name = styled(Text)`
   font-weight: bold;
 `
 const Desc = styled(Text)`
-  color: ${({ theme }) => theme.colors.textTips}; 
+  color: ${({ theme }) => theme.colors.textTips};
 `
 
 const SafeIcon = styled.img`
   width: 22px;
   height: 22px;
-
 `
 
 export const Follow = (() => {
   return (
     <FolloWarpper>
       <Flex alignItems="center">
-        <Avatar src={require('assets/images/community_logo.png').default} />
+        <Avatar scale="md" src={require('assets/images/community_logo.png').default} />
         <Flex flexDirection="column" paddingLeft="12px">
           <Flex alignItems="center">
             <Name>曼克斯</Name>

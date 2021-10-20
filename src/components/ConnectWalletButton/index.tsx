@@ -5,13 +5,16 @@ import useAuth from 'hooks/useAuth'
 import { toast } from 'react-toastify';
 // import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
-import WalletModal from './WalletModal'
-
+import WalletModal from './WalletModal';
 
 const WalletButton = styled(Button)`
   background: #FFFFFF;
   color: #5A7CF9;
 `
+
+export {
+  WalletModal
+}
 
 export const ConnectWalletButton: React.FC = (props) => {
   const { t } = useTranslation()

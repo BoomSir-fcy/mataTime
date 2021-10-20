@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
-import { useStore, storeAction, Dispatch } from 'store';
+import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
-import { Header, Toast, ConnectWalletButton } from 'components';
+import { Header, Toast, WalletModal } from 'components';
+import { Box } from 'uikit';
 
 import GlobalStyle from 'style/global';
 
@@ -13,33 +14,47 @@ import GlobalStyle from 'style/global';
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
 
-const Button = styled.button`
-  padding: 5px 10px;
-  background-color: transparent;
+const Container = styled(Box)`
+  background-image: url(${require('assets/images/background_images.jpg').default});
+  min-height: calc(100vh - 90px);
 `
 
 function App() {
 
   const dispatch = useDispatch();
-  const testStore = useStore(p=> p.loginReducer);
+  const store = useStore(p=> p.appReducer);
   const { t, setLanguage } = useTranslation();
+
+  React.useEffect(() => {
+    if(store.connectWallet) {
+      const changeHandler = () => {
+        dispatch(storeAction.connectWallet({connectWallet: false}));
+      } 
+      document.body.addEventListener('click', changeHandler)
+      return () => document.body.removeEventListener('click', changeHandler)
+    }
+  }, [store.connectWallet]);
 
   return (
     <React.Fragment>
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-            <ConnectWalletButton />
-          <Header /> 
-          <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/login">
-              <Login/>
-            </Route>
-          </Switch>
+          <Header />
+          <Container>
+            <Switch>
+              <Route path="/" exact>
+                <Home />
+              </Route>
+              <Route path="/login">
+                <Login/>
+              </Route>
+            </Switch>
+          </Container>
           <Toast />
+          <WalletModal 
+            onClick={() => dispatch(storeAction.connectWallet({connectWallet: false}))} 
+            show={store.connectWallet} />
         </React.Suspense>
       </Router>
     </React.Fragment>

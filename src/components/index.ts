@@ -5,3 +5,5 @@ export * from './ModalWrapper';
 export * from './Header';
 export * from './ConnectWalletButton';
 export * from './Follow';
+export * from './Profile';
+export * from './Editor';

@@ -13,9 +13,14 @@ export type MediaQueries = {
 export type MediaQueriesSize = {
   margin: string;
   marginUD: string;
+  marginLRmd: string;
   marginb: string;
+  marginbmd: string;
   margint: string;
   marginr: string;
+  marginrmd: string;
+  marginl: string;
+  marginlmd: string;
   padding: string;
 };
 
@@ -87,6 +92,7 @@ export type Colors = {
   backgroundPrimary: string;
   backgroundMember: string;
   backgroundCard: string;
+  backgroundTextArea: string;
   textValue: string;
   backgroundAlt: string;
   text: string;

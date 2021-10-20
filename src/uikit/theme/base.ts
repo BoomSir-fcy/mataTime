@@ -32,6 +32,15 @@ const mediaMarginUpAndDown = `
   }
 `
 
+const mediaMarginLeftAndRightMd = `
+  ${mediaQueries.lg} {
+    margin: 0 15px;
+  }
+  ${mediaQueries.xl} {
+    margin: 0 25px;
+  }
+`
+
 const mediaQueriesMargin = `
   ${mediaQueries.xxs} {
     margin: 8px 4px;
@@ -50,8 +59,8 @@ const mediaQueriesMargin = `
   ${mediaQueries.xl} {
     margin: 24px 32px;
   }
-
 `
+
 const mediaMarginBottom = `
   ${mediaQueries.xxs} {
     margin-bottom: 4px;
@@ -69,6 +78,14 @@ const mediaMarginBottom = `
   }
   ${mediaQueries.xl} {
     margin-bottom: 41px;
+  }
+`
+const mediaMarginBottomMd = `
+  ${mediaQueries.lg} {
+    margin-bottom: 12px;
+  }
+  ${mediaQueries.xl} {
+    margin-bottom: 8px;
   }
 `
 
@@ -92,6 +109,24 @@ const mediaMarginTop = `
   }
 `
 
+const mediaMarginLeft = `
+  ${mediaQueries.lg} {
+    margin-left: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-left: 18px;
+  }
+`
+
+const mediaMarginLeftMd = `
+  ${mediaQueries.lg} {
+    margin-left: 4px;
+  }
+  ${mediaQueries.xl} {
+    margin-left: 8px;
+  }
+`
+
 const mediaQueriesMarginRight = `
   ${mediaQueries.xxs} {
     margin-right: 4px;
@@ -112,6 +147,16 @@ const mediaQueriesMarginRight = `
   }
 
 `
+
+const mediaMarginRightMd = `
+  ${mediaQueries.lg} {
+    margin-right: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-right: 14px;
+  }
+`
+
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
     padding: 8px 4px;
@@ -129,16 +174,21 @@ const mediaQueriesPadding = `
   }
 
   ${mediaQueries.lg} {
-    padding: 16px 24px;
+    padding: 20px 25px;
   }
 `
 
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
   marginr: mediaQueriesMarginRight,
+  marginrmd: mediaMarginRightMd,
   marginb: mediaMarginBottom,
+  marginbmd: mediaMarginBottomMd,
   margint: mediaMarginTop,
+  marginl: mediaMarginLeft,
+  marginlmd: mediaMarginLeftMd,
   marginUD: mediaMarginUpAndDown,
+  marginLRmd: mediaMarginLeftAndRightMd,
   padding: mediaQueriesPadding,
 }
 

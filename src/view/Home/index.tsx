@@ -1,13 +1,29 @@
 import React from 'react';
 import styled from "styled-components";
-import { Avatar, EmojiView, ModalWrapper } from 'components';
+import { About, Avatar, Editor, ModalWrapper } from 'components';
+import { Flex } from 'uikit';
+
+import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 
 const PageContainer = styled.div`
-  padding: 20px;
-  margin-top: 0;
-  flex: 1;
-  min-height: auto;
+  padding-top: 35px;
+  ${mediaQueries.xxl} {
+    padding-left: 160px;
+    padding-right: 160px;
+  }
 `
+
+const LeftCard = styled(Flex)`
+  width: 375px;
+`
+const CenterCard = styled(Flex)`
+  flex: 1;
+  ${mediaQueriesSize.marginLRmd}
+`
+const RightCard = styled(Flex)`
+  width: 375px;
+`
+
 const FollowContainer = styled.div`
   padding: 36px;
 `
@@ -48,11 +64,19 @@ const CancelFollow = () => {
 const Home: React.FC = () => {
   return (
     <PageContainer>
-      <button>Open Modal</button>
+      <Flex justifyContent="space-between">
+        <LeftCard>
+          <About />
+        </LeftCard>
+        <CenterCard>
+          <Editor />
+        </CenterCard>
+        <RightCard>3</RightCard>
+      </Flex>
+      {/* <button>Open Modal</button>
       <ModalWrapper>
         <CancelFollow />
-      </ModalWrapper>
-      <EmojiView />
+      </ModalWrapper> */}
     </PageContainer>
   )
 }
