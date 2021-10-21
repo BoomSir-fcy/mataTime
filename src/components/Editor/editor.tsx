@@ -26,8 +26,15 @@ const EditorTextarea = styled.textarea`
   ${mediaQueriesSize.padding}
 `
 
+const SendButton = styled(Button)`
+border-radius: ${({ theme }) => theme.radii.card};
+width: 100px;
+height: 35px;
+border-radius: 10px;
+background-color:#4168ED;
+margin-top:12px;
+`;
 const EditorToolbar = styled(Flex)`
-
 `
 
 export const Editor = React.memo(() => {
@@ -46,29 +53,34 @@ export const Editor = React.memo(() => {
         console.log(textBeforeCursorPosition, textAfterCursorPosition)
 
       }} />
-      <EditorToolbar>
-        <Emoji onChange={handleSelectEmoji} />
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_img.png').default}/>
-          </Svg>
-        </Button>
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_gif.png').default}/>
-          </Svg>
-        </Button>
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_at.png').default}/>
-          </Svg>
-        </Button>
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_topic.png').default}/>
-          </Svg>
-        </Button>
-      </EditorToolbar>
+      <Flex  justifyContent="space-between" >
+        <EditorToolbar>
+          <Emoji onChange={handleSelectEmoji} />
+          <Button variant="text">
+            <Svg viewBox="0 0 45 45" width="25px">
+              <image xlinkHref={require('./images/icon_img.png').default}/>
+            </Svg>
+          </Button>
+          <Button variant="text">
+            <Svg viewBox="0 0 45 45" width="25px">
+              <image xlinkHref={require('./images/icon_gif.png').default}/>
+            </Svg>
+          </Button>
+          <Button variant="text">
+            <Svg viewBox="0 0 45 45" width="25px">
+              <image xlinkHref={require('./images/icon_at.png').default}/>
+            </Svg>
+          </Button>
+          <Button variant="text">
+            <Svg viewBox="0 0 45 45" width="25px">
+              <image xlinkHref={require('./images/icon_topic.png').default}/>
+            </Svg>
+          </Button>
+        </EditorToolbar>
+        <SendButton variant="text">
+          发布
+        </SendButton>
+      </Flex>
     </EditorWarpper>
   )
 })
