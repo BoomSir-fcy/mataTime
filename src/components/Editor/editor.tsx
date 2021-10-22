@@ -5,6 +5,8 @@ import { Box, Flex, Button, Svg } from 'uikit';
 import { Emoji } from './emoji';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useImmer } from 'use-immer';
+import { stringify } from 'querystring';
 
 const EditorWarpper = styled(Box)`
   width: 100%;
@@ -12,7 +14,6 @@ const EditorWarpper = styled(Box)`
   border-radius: ${({ theme }) => theme.radii.card};
   ${mediaQueriesSize.padding}
 `
-
 const EditorTextarea = styled.textarea`
   width: 100%;
   min-height: 112px;
@@ -32,20 +33,38 @@ const EditorToolbar = styled(Flex)`
 
 export const Editor = React.memo(() => {
 
+  const [state, setState] = useImmer({
+    cursor: 0,
+    textBefore: "",
+    textAfter: "",
+    editorValue: ""
+  });
+
   const handleSelectEmoji = React.useCallback((data) => {
-    console.log(data);
-  }, []);
+    console.log(state);
+    setState(p => {
+      p.editorValue = ""
+    })
+  }, [state]);
+
+  // console.log(state);
 
   return (
     <EditorWarpper>
-      <EditorTextarea placeholder="分享新鲜事" onChange={(e) => {
-        let cursorPosition = e.target.selectionStart
-        let textBeforeCursorPosition = e.target.value.substring(0, cursorPosition)
-        let textAfterCursorPosition = e.target.value.substring(cursorPosition, e.target.value.length)
-
-        console.log(textBeforeCursorPosition, textAfterCursorPosition)
-
-      }} />
+      <EditorTextarea placeholder="分享新鲜事" 
+        value={state.editorValue}
+        onBlur={(e) => {
+          let cursor = e.target.selectionStart;
+          let textBeforeCursor = e.target.value.substring(0, cursor);
+          let textAfterCursor = e.target.value.substring(cursor, e.target.value.length);
+          console.log(cursor);
+          setState(p => {
+            p.cursor = cursor;
+            p.textBefore = textBeforeCursor;
+            p.textAfter = textAfterCursor
+          })
+        }}
+        onChange={(e) => setState(p => {p.editorValue = e.target.value})} />
       <EditorToolbar>
         <Emoji onChange={handleSelectEmoji} />
         <Button variant="text">
