@@ -3,6 +3,7 @@ export * from './Emoji';
 export * from './Avatar';
 export * from './ModalWrapper';
 export * from './Header';
+export * from './Footer';
 export * from './ConnectWalletButton';
 export * from './Follow';
 export * from './Profile';

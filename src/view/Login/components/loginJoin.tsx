@@ -6,7 +6,7 @@ import { Box, Flex, Text, Button } from 'uikit';
 
 const LoginWarpper = styled(Box)`
   width: 600px;
-  height: 550px;
+  height: 700px;
   background: ${({ theme }) => theme.colors.backgroundCard};
   box-shadow: 0px 0px 25px 0px rgba(180, 200, 169, 0.3);
   border-radius: ${({ theme }) => theme.radii.card};
