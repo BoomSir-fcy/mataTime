@@ -7,32 +7,32 @@ import { mediaQueriesSize } from "uikit/theme/base";
 
 import { Certification } from './certification';
 
-const AboutWarpper = styled(Box)`
+export const AboutWarpper = styled(Box)`
   width: 100%;
   background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: ${({ theme }) => theme.radii.card};
   ${mediaQueriesSize.padding}
 `
 
-const Desc = styled(Flex)`
+export const Desc = styled(Flex)`
   flex: 1;
   flex-direction: column;
   ${mediaQueriesSize.marginl}
 `
-const Rows = styled(Flex)`
+export const Rows = styled(Flex)`
   width: 100%;
   align-items: center;
   ${mediaQueriesSize.marginbmd}
 `
 
-const Name = styled(Text)`
+export const Name = styled(Text)`
   color: ${({ theme }) => theme.colors.text};
   font-size: 18px;
   font-weight: bold;
   ${mediaQueriesSize.marginbmd}
 `
 
-const Decoration = styled(Text)`
+export const Decoration = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
 `
 
@@ -64,10 +64,15 @@ const Links = styled(Flex)`
 `
 
 export const About = (() => {
+  // const editPeople = () => {
+  //   console.log('编辑')
+  // } 
   return (
     <AboutWarpper>
       <Flex>
-        <Avatar src="" scale="ld" />
+        <Link to="/edit">
+          <Avatar src="" scale="ld"/>
+        </Link>
         <Desc>
           <Name>Baby fuck me</Name>
           <Rows>

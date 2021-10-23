@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
-import { About, Avatar, Editor, ModalWrapper, LikePeople, HotWords } from 'components';
+import { Avatar, ModalWrapper, LikePeople, HotWords } from 'components';
+import SideBar from './components/sidebar';
+import Editor from './components/editor';
 import { Flex } from 'uikit';
 
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 
 const PageContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding-top: 35px;
   ${mediaQueries.xxl} {
     padding-left: 160px;
@@ -61,12 +65,12 @@ const CancelFollow = () => {
   )
 }
 
-const Home: React.FC = () => {
+const Edit: React.FC = () => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
         <LeftCard>
-          <About />
+          <SideBar />
         </LeftCard>
         <CenterCard>
           <Editor />
@@ -75,12 +79,16 @@ const Home: React.FC = () => {
           <LikePeople />
         </RightCard>
       </Flex>
+      {/* <HotWords /> */}
       {/* <button>Open Modal</button>
       <ModalWrapper>
         <CancelFollow />
       </ModalWrapper> */}
+      {/* <RightCard>
+        <HotWords />
+      </RightCard> */}
     </PageContainer>
   )
 }
 
-export default Home;
+export default Edit;

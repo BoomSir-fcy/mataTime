@@ -13,6 +13,7 @@ import GlobalStyle from 'style/global';
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
+const Edit = React.lazy(() => import('./view/Edit'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
@@ -48,6 +49,9 @@ function App() {
               </Route>
               <Route path="/login">
                 <Login/>
+              </Route>
+              <Route path="/edit">
+                <Edit/>
               </Route>
             </Switch>
           </Container>
