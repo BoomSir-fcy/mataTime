@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Text, Button } from 'uikit';
+import { Logo } from 'components';
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
 
@@ -11,10 +12,13 @@ const LoginWarpper = styled(Box)`
   width: 600px;
   height: 700px;
   background: ${({ theme }) => theme.colors.backgroundCard};
-  box-shadow: 0px 0px 25px 0px rgba(180, 200, 169, 0.3);
   border-radius: ${({ theme }) => theme.radii.card};
-  padding: 43px 45px 0;
-  margin-top: 20px;
+  padding: 25px 40px 0;
+`
+const LogoWarpper = styled(Box)`
+  width: 337px;
+  height: 60px;
+  ${mediaQueriesSize.marginbmd}
 `
 
 const SignUpWarpper = styled(Flex)`
@@ -27,7 +31,7 @@ const WalletBody = styled(Flex)`
   justify-content: center;
   align-items: center;
   width: 510px;
-  height: 74px;
+  height: 70px;
   background: #292D34;
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
@@ -85,6 +89,9 @@ export const SignUp: React.FC<{
     <LoginWarpper>
       {state.setp === 1 &&
         <React.Fragment>
+          <LogoWarpper>
+            <Logo url="/" src={require('../images/logo.svg').default} />
+          </LogoWarpper>
           <Text fontSize="34px" marginBottom="29px" bold>欢迎加入恐龙社区</Text>
           <SubTitle>平台beta 版本试运营中，目前仅限持有恐龙创世NFT的用户可以注册</SubTitle>
           <SignUpWarpper>
@@ -103,9 +110,13 @@ export const SignUp: React.FC<{
       {
         state.setp === 2 && 
         <Box>
+          <LogoWarpper>
+            <Logo url="/" src={require('../images/logo.svg').default} />
+          </LogoWarpper>
+          <Text fontSize="34px" marginBottom="24px" bold>欢迎加入恐龙社区</Text>
           <WalletAddress />
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
-            <img width="237px" src={require('../images/login_right_images.png').default} />
+            <img width="230px" src={require('../images/login_right_images.png').default} />
             <SignUpText>注册成功！</SignUpText>
             <SignUpSubText>感谢您加入恐龙社交平台</SignUpSubText>
             <Button scale="ld" onClick={() => setState(state => { state.setp = 3 })}>下一步，个人信息</Button>

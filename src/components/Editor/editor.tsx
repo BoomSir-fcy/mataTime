@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Svg } from 'uikit';
 
 import { Emoji } from './emoji';
+import { Toolbar } from './toolbar';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
-import { useImmer } from 'use-immer';
-import { stringify } from 'querystring';
 
 const EditorWarpper = styled(Box)`
   width: 100%;
@@ -27,67 +27,41 @@ const EditorTextarea = styled.textarea`
   ${mediaQueriesSize.padding}
 `
 
-const EditorToolbar = styled(Flex)`
-
-`
-
 export const Editor = React.memo(() => {
 
   const [state, setState] = useImmer({
     cursor: 0,
-    textBefore: "",
-    textAfter: "",
     editorValue: ""
   });
+  const editor = React.useRef(null);
+
+  const insertMyText = (event:any, text: string) => {
+    const { cursor } = state;
+    const { value } = event;
+    let textBefore = value.substring(0, cursor);
+    let textAfter = value.substring(cursor, value.length);
+    return textBefore + text + textAfter;
+  }
 
   const handleSelectEmoji = React.useCallback((data) => {
-    console.log(state);
+    const { editorValue, cursor } = state;
+    let newValue = insertMyText(editor.current, data);
     setState(p => {
-      p.editorValue = ""
+      p.cursor = cursor + data.length;
+      p.editorValue = cursor > 0 ? newValue : (editorValue + data);
     })
   }, [state]);
 
-  // console.log(state);
-
   return (
     <EditorWarpper>
-      <EditorTextarea placeholder="分享新鲜事" 
+      <EditorTextarea placeholder="分享新鲜事" ref={editor}
         value={state.editorValue}
-        onBlur={(e) => {
-          let cursor = e.target.selectionStart;
-          let textBeforeCursor = e.target.value.substring(0, cursor);
-          let textAfterCursor = e.target.value.substring(cursor, e.target.value.length);
-          console.log(cursor);
-          setState(p => {
-            p.cursor = cursor;
-            p.textBefore = textBeforeCursor;
-            p.textAfter = textAfterCursor
-          })
-        }}
+        onBlur={(e) => setState(p => {p.cursor = e.target.selectionStart})}
         onChange={(e) => setState(p => {p.editorValue = e.target.value})} />
-      <EditorToolbar>
-        <Emoji onChange={handleSelectEmoji} />
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_img.png').default}/>
-          </Svg>
-        </Button>
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_gif.png').default}/>
-          </Svg>
-        </Button>
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_at.png').default}/>
-          </Svg>
-        </Button>
-        <Button variant="text">
-          <Svg viewBox="0 0 45 45" width="25px">
-            <image xlinkHref={require('./images/icon_topic.png').default}/>
-          </Svg>
-        </Button>
-      </EditorToolbar>
+      <Flex justifyContent="space-between" mt="12px">
+        <Toolbar callback={handleSelectEmoji} />
+        <Button>发布</Button>
+      </Flex>
     </EditorWarpper>
   )
 })

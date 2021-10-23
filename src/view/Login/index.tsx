@@ -8,7 +8,7 @@ import { mediaQueries } from "uikit/theme/base";
 
 import { LoginJoin, SignUp } from './components';
 
-const LoginContainer = styled(Box)`
+const LoginContainer = styled(Flex)`
   padding-top: 58px;
   ${mediaQueries.xxl} {
     padding-left: 160px;
@@ -32,8 +32,8 @@ const Login: React.FC = React.memo(() => {
   }, []);
 
   return (
-    <LoginContainer>
-      <Flex>
+    <React.Fragment>
+      <LoginContainer>
         <Flex flex="1">
           <img src={require('./images/logo_left_images.png').default} />
         </Flex>
@@ -43,9 +43,10 @@ const Login: React.FC = React.memo(() => {
           :
           <LoginJoin />
         }
-      </Flex>
+      </LoginContainer>
       <Footer />
-    </LoginContainer>
+    </React.Fragment>
+
   )
 })
 

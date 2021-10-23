@@ -2,9 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Button } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
-
+import { Logo } from 'components';
 import { WalletAddress } from './signUp';
 
+const LogoWarpper = styled(Box)`
+  width: 337px;
+  height: 60px;
+  ${mediaQueriesSize.marginbmd}
+`
 
 const InputItems = styled(Flex)`
 
@@ -39,6 +44,10 @@ const Submit = styled(Button)`
 export const SignUpSetName = React.memo(() => {
   return(
     <Box>
+      <LogoWarpper>
+        <Logo url="/" src={require('../images/logo.svg').default} />
+      </LogoWarpper>
+      <Text fontSize="34px" marginBottom="29px" bold>欢迎加入恐龙社区</Text>
       <WalletAddress />
       <Box paddingTop="25px">
         <InputItems marginBottom="32px">
