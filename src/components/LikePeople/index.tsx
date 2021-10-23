@@ -74,7 +74,7 @@ const PeopleMsg = (() => {
 export const LikePeople = (() => {
   return (
     <div>
-      <AboutWarpper style={{height:'380px'}}>
+      <AboutWarpper style={{height:'380px',width:'330px'}}>
         <Rows justifyContent="space-between">
           <Title>可能感兴趣的人</Title>
           <Use><a href="#">更多</a></Use>
