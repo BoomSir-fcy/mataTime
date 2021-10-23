@@ -1,27 +1,24 @@
 import React from 'react';
 import styled from "styled-components";
-import { About, Avatar, Editor, ModalWrapper, LikePeople, HotWords } from 'components';
+import { LeftMenu, About, Avatar, Editor, ModalWrapper, LikePeople, HotWords } from 'components';
 import { Flex } from 'uikit';
 
-import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
+import { mediaQueriesSize } from "uikit/theme/base";
 
 const PageContainer = styled.div`
+  width: 1200px;
+  margin: 0 auto;
   padding-top: 35px;
-  ${mediaQueries.xxl} {
-    padding-left: 160px;
-    padding-right: 160px;
-  }
 `
-
-export const LeftCard = styled(Flex)`
-  width: 375px;
+const LeftCard = styled(Flex)`
+  width: 200px;
 `
 export const CenterCard = styled(Flex)`
   flex: 1;
   ${mediaQueriesSize.marginLRmd}
 `
-export const RightCard = styled(Flex)`
-  width: 375px;
+const RightCard = styled(Flex)`
+  width: 300px;
 `
 
 const FollowContainer = styled.div`
@@ -66,7 +63,7 @@ const Home: React.FC = () => {
     <PageContainer>
       <Flex justifyContent="space-between">
         <LeftCard>
-          <About />
+          <LeftMenu />
         </LeftCard>
         <CenterCard>
           <Editor />

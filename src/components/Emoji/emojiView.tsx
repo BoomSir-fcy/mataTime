@@ -8,6 +8,8 @@ export const EmojiView: React.FC<{
 }> = React.memo(({ selectedEmoji }) => {
   return(
     <Picker 
+      set="twitter"
+      tooltip
       showPreview={false} 
       showSkinTones={false} 
       style={{ position: 'absolute', left: 0, top: 40 }}

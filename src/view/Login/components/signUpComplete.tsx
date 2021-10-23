@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Follow } from 'components';
+import { Follow, Logo } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
+import { mediaQueriesSize } from 'uikit/theme/base';
 
 const FlexButton = styled(Flex)`
   margin-top: 110px;
@@ -11,9 +12,18 @@ const FlexButton = styled(Flex)`
   }
 `
 
+const LogoWarpper = styled(Box)`
+  width: 337px;
+  height: 60px;
+  ${mediaQueriesSize.marginbmd}
+`
+
 export const SignUpcomplete = React.memo(() => {
   return (
     <Box>
+      <LogoWarpper>
+        <Logo url="/" src={require('../images/logo.svg').default} />
+      </LogoWarpper>
       <Text fontSize="34px" marginBottom="26px" bold>推荐关注热门用户</Text>
       <Box>
         {[12,3, 4].map((row:number, index:number) => (

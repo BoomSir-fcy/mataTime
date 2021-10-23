@@ -17,7 +17,7 @@ const Edit = React.lazy(() => import('./view/Edit'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
-  min-height: calc(100vh - 90px);
+  min-height: 100vh;
 `
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          <Header />
+          {/* <Header /> */}
           <Container>
             <Switch>
               <Route path="/" exact>
