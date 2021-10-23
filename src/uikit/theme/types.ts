@@ -16,6 +16,7 @@ export type MediaQueriesSize = {
   marginLRmd: string;
   marginb: string;
   marginbmd: string;
+  marginbsm: string;
   margint: string;
   marginr: string;
   marginrmd: string;
@@ -23,6 +24,7 @@ export type MediaQueriesSize = {
   marginlmd: string;
   padding: string;
   paddingsm: string;
+  paddingxs: string;
 };
 
 export type BreakpointMap = {

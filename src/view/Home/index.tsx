@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
-import { LeftMenu, Avatar, Editor, ModalWrapper } from 'components';
-import { Flex } from 'uikit';
+import { LeftMenu, Avatar, Editor, Crumbs, MenuTabs } from 'components';
+import { Flex, Box } from 'uikit';
 
 import { mediaQueriesSize } from "uikit/theme/base";
 
@@ -13,8 +13,8 @@ const PageContainer = styled.div`
 const LeftCard = styled(Flex)`
   width: 200px;
 `
-const CenterCard = styled(Flex)`
-  flex: 1;
+const CenterCard = styled(Box)`
+  width: 100%;
   ${mediaQueriesSize.marginLRmd}
 `
 const RightCard = styled(Flex)`
@@ -61,12 +61,14 @@ const CancelFollow = () => {
 const Home: React.FC = () => {
   return (
     <PageContainer>
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" alignItems="flex-start">
         <LeftCard>
           <LeftMenu />
         </LeftCard>
         <CenterCard>
+          <Crumbs />
           <Editor />
+          <MenuTabs />
         </CenterCard>
         <RightCard>3</RightCard>
       </Flex>

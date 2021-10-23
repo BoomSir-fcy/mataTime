@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Svg } from 'uikit';
 
-import { Emoji } from './emoji';
 import { Toolbar } from './toolbar';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
@@ -13,6 +12,7 @@ const EditorWarpper = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: ${({ theme }) => theme.radii.card};
   ${mediaQueriesSize.padding}
+  ${mediaQueriesSize.marginbsm}
 `
 const EditorTextarea = styled.textarea`
   width: 100%;

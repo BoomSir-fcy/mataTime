@@ -78,6 +78,15 @@ const mediaMarginBottomMd = `
   }
 `
 
+const mediaMarginBottomSm = `
+  ${mediaQueries.lg} {
+    margin-bottom: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-bottom: 12px;
+  }
+`
+
 const mediaMarginTop = `
   ${mediaQueries.xxs} {
     margin-top: 4px;
@@ -177,12 +186,23 @@ const mediaPaddingSM = `
   }
 `
 
+const mediaPaddingXs = `
+  ${mediaQueries.sm} {
+    padding: 14px 18px;
+  }
+
+  ${mediaQueries.lg} {
+    padding: 14px 18px;
+  }
+`
+
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
   marginr: mediaQueriesMarginRight,
   marginrmd: mediaMarginRightMd,
   marginb: mediaMarginBottom,
   marginbmd: mediaMarginBottomMd,
+  marginbsm: mediaMarginBottomSm,
   margint: mediaMarginTop,
   marginl: mediaMarginLeft,
   marginlmd: mediaMarginLeftMd,
@@ -190,6 +210,7 @@ export const mediaQueriesSize: MediaQueriesSize = {
   marginLRmd: mediaMarginLeftAndRightMd,
   padding: mediaQueriesPadding,
   paddingsm: mediaPaddingSM,
+  paddingxs: mediaPaddingXs
 }
 
 export const shadows = {

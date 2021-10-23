@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Box, Flex, Button, Text, Radio, Input } from 'uikit';
-import { Logo } from 'components';
+import { Logo, Info } from 'components';
 
 import { mediaQueriesSize } from "uikit/theme/base";
 
@@ -18,14 +19,21 @@ const LogoWarpper = styled(Box)`
 `
 
 const MenuBody = styled(Box)`
-
+  padding-bottom: 100px;
 `
 
 const MenuItems = styled(Box)`
-
-
+  display: block;
+  ${mediaQueriesSize.margint}
+  &.active {
+    max-width: 120px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    background-color: #232A3D;
+  }
 `
 const MenuText = styled(Text)`
+  font-weight: bold;
   color: ${({ theme }) => theme.colors.textSubtle};
 `
 
@@ -36,7 +44,7 @@ export const LeftMenu = React.memo(() => {
         <Logo url="/" src={require('assets/images/logo.svg').default} />
       </LogoWarpper>
       <MenuBody>
-        <MenuItems>
+        <MenuItems className="active" as={Link} to="/">
           <MenuText>首页</MenuText>
         </MenuItems>
         <MenuItems>
@@ -46,6 +54,7 @@ export const LeftMenu = React.memo(() => {
           <MenuText>消息</MenuText>
         </MenuItems>
       </MenuBody>
+      <Info />
     </MenuWarpper>
   )
 })
