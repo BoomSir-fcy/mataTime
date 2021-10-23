@@ -13,6 +13,7 @@ import GlobalStyle from 'style/global';
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
+const MeAccount = React.lazy(() => import('./view/Me/account'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});

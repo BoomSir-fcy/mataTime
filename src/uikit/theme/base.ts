@@ -178,11 +178,10 @@ const mediaQueriesPadding = `
 
 const mediaPaddingSM = `
   ${mediaQueries.sm} {
-    padding: 22px 12px;
+    padding: 15px 12px;
   }
-
   ${mediaQueries.lg} {
-    padding: 22px 12px;
+    padding: 15px 12px;
   }
 `
 
@@ -190,7 +189,6 @@ const mediaPaddingXs = `
   ${mediaQueries.sm} {
     padding: 14px 18px;
   }
-
   ${mediaQueries.lg} {
     padding: 14px 18px;
   }

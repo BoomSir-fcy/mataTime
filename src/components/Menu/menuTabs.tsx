@@ -1,19 +1,21 @@
 import React from 'react';
 import classnames from 'classnames';
 import styled from 'styled-components';
-import { Box, Flex, Button } from 'uikit';
+import { Flex, Button, Card } from 'uikit';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
 
-const Card = styled(Flex)`
-  justify-content: space-between;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: ${({ theme }) => theme.radii.card};
+const CardWarpper = styled(Card)`
   ${mediaQueriesSize.paddingsm}
   ${mediaQueriesSize.marginbsm}
 `
 
 const TabsBox = styled(Flex)`
+  &.btn {
+    button {
+      margin-left: 11px;
+    }
+  }
   .btn_text {
     color: ${({ theme }) => theme.colors.textTips};
   }
@@ -26,17 +28,19 @@ const TabsBox = styled(Flex)`
 
 export const MenuTabs = React.memo(() => {
   return (
-    <Card>
-      <TabsBox>
-        <Button variant="text" className={classnames("btn_text active")}>全部</Button>
-        <Button variant="text" className="btn_text">原创</Button>
-        <Button variant="text" className="btn_text">文章</Button>
-      </TabsBox>
-      <TabsBox>
-        <Button>全站最新</Button>
-        <Button>热门推荐</Button>
-        <Button>仅关注</Button>
-      </TabsBox>
-    </Card>
+    <CardWarpper>
+      <Flex justifyContent="space-between">
+        <TabsBox>
+          <Button variant="text" className={classnames("btn_text active")}>全部</Button>
+          <Button variant="text" className="btn_text">原创</Button>
+          <Button variant="text" className="btn_text">文章</Button>
+        </TabsBox>
+        <TabsBox className="btn">
+          <Button variant="tertiary">全站最新</Button>
+          <Button>热门推荐</Button>
+          <Button>仅关注</Button>
+        </TabsBox>
+      </Flex>
+    </CardWarpper>
   )
 })

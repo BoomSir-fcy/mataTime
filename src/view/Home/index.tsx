@@ -72,8 +72,7 @@ const Home: React.FC = () => {
         </CenterCard>
         <RightCard>3</RightCard>
       </Flex>
-      {/* <button>Open Modal</button>
-      <ModalWrapper>
+      {/* <ModalWrapper>
         <CancelFollow />
       </ModalWrapper> */}
     </PageContainer>

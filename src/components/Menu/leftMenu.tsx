@@ -47,7 +47,7 @@ export const LeftMenu = React.memo(() => {
         <MenuItems className="active" as={Link} to="/">
           <MenuText>首页</MenuText>
         </MenuItems>
-        <MenuItems>
+        <MenuItems as={Link} to="/me/account">
           <MenuText>星球</MenuText>
         </MenuItems>
         <MenuItems>
