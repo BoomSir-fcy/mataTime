@@ -1,11 +1,22 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box } from 'uikit';
 
-export const Logo: React.FC = (() => {
+interface LogoInterface {
+  src: string
+  url?: String
+  style?: React.CSSProperties
+}
+
+const LogoWarpper = styled(Box)`
+  display: block;
+`
+
+export const Logo: React.FC<LogoInterface> = (({ src, url, style }) => {
   return (
-    <Box width="300px" height="60px" marginRight="92px" as={Link} to="/">
-      <img src={require('./images/logo.svg').default} alt="" />
-    </Box>
+    <LogoWarpper as={Link} to={url} style={style}>
+      <img src={src} alt="" />
+    </LogoWarpper>
   )
 })

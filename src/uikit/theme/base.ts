@@ -25,19 +25,19 @@ export const mediaQueries: MediaQueries = {
 
 const mediaMarginUpAndDown = `
   ${mediaQueries.lg} {
-    margin: 30px 0 14px;
+    margin: 24px 0 12px;
   }
   ${mediaQueries.xl} {
-    margin: 30px 0 14px;
+    margin: 24px 0 12px;
   }
 `
 
 const mediaMarginLeftAndRightMd = `
   ${mediaQueries.lg} {
-    margin: 0 15px;
+    margin: 0 10px;
   }
   ${mediaQueries.xl} {
-    margin: 0 25px;
+    margin: 0 15px;
   }
 `
 
@@ -62,30 +62,19 @@ const mediaQueriesMargin = `
 `
 
 const mediaMarginBottom = `
-  ${mediaQueries.xxs} {
-    margin-bottom: 4px;
-  }
-  ${mediaQueries.xs} {
-    margin-bottom: 8px;
-  }
-
-  ${mediaQueries.sm} {
-    margin-bottom: 16px;
-  }
-
   ${mediaQueries.lg} {
-    margin-bottom: 41px;
+    margin-bottom: 18px;
   }
   ${mediaQueries.xl} {
-    margin-bottom: 41px;
+    margin-bottom: 32px;
   }
 `
 const mediaMarginBottomMd = `
   ${mediaQueries.lg} {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   ${mediaQueries.xl} {
-    margin-bottom: 8px;
+    margin-bottom: 20px;
   }
 `
 
@@ -178,6 +167,16 @@ const mediaQueriesPadding = `
   }
 `
 
+const mediaPaddingSM = `
+  ${mediaQueries.sm} {
+    padding: 22px 12px;
+  }
+
+  ${mediaQueries.lg} {
+    padding: 22px 12px;
+  }
+`
+
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
   marginr: mediaQueriesMarginRight,
@@ -190,6 +189,7 @@ export const mediaQueriesSize: MediaQueriesSize = {
   marginUD: mediaMarginUpAndDown,
   marginLRmd: mediaMarginLeftAndRightMd,
   padding: mediaQueriesPadding,
+  paddingsm: mediaPaddingSM,
 }
 
 export const shadows = {

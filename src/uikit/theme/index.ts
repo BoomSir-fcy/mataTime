@@ -1,7 +1,7 @@
 // import { AlertTheme } from "../components/Alert/types";
 // import { CardTheme } from "../components/Card/types";
 // import { PancakeToggleTheme } from "../components/PancakeToggle/types";
-// import { RadioTheme } from "../components/Radio/types";
+import { RadioTheme } from "../components/Radio/types";
 // import { ToggleTheme } from "../components/Toggle/types";
 // import { TooltipTheme } from "../components/Tooltip/types";
 import { NavTheme } from "../widgets/Menu/types";
@@ -18,7 +18,7 @@ export interface PancakeTheme {
   nav: NavTheme;
   // modal?: ModalTheme;
   // pancakeToggle?: PancakeToggleTheme;
-  // radio?: RadioTheme;
+  radio?: RadioTheme;
   // toggle?: ToggleTheme;
   // tooltip?: TooltipTheme;
   breakpoints: Breakpoints;

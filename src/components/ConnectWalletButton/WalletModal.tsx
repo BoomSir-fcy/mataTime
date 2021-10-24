@@ -44,8 +44,8 @@ const WalletModal: React.FC<{ show?: boolean, onClick?: (e: any) => void }> = ({
       </Flex>
       <Box>
         {
-          connectors.map(item => (
-            <Box mt="12px">
+          connectors.map((item, index) => (
+            <Box mt="12px" key={index}>
               <WalletItem walletConfig={item} login={login} />
             </Box>
           ))

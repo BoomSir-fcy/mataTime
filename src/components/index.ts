@@ -7,3 +7,4 @@ export * from './ConnectWalletButton';
 export * from './Follow';
 export * from './Profile';
 export * from './Editor';
+export * from './Menu';
