@@ -1,26 +1,27 @@
 import React from 'react';
 import styled from "styled-components";
 import { About, Avatar, Editor, ModalWrapper } from 'components';
-import { Flex } from 'uikit';
-
+import {Route} from 'react-router-dom'
+import { Flex ,Box} from 'uikit';
+import {Menu}  from './left';
+import {Header,Tabs,ArticleList}  from './center';
+import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from './right';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
-
 const PageContainer = styled.div`
   padding-top: 35px;
-  ${mediaQueries.xxl} {
-    padding-left: 160px;
-    padding-right: 160px;
-  }
+  display:flex;
+justify-content:center;
 `
 
 const LeftCard = styled(Flex)`
-  width: 375px;
+  // width: 375px;
 `
-const CenterCard = styled(Flex)`
-  flex: 1;
+const CenterCard = styled(Box)`
+  // flex: 1;
   ${mediaQueriesSize.marginLRmd}
+  // width:670px;
 `
-const RightCard = styled(Flex)`
+const RightCard = styled.div`
   width: 375px;
 `
 
@@ -60,18 +61,27 @@ const CancelFollow = () => {
     </FollowContainer>
   )
 }
-
 const Home: React.FC = () => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
         <LeftCard>
-          <About />
+          {/* <About /> */}
+          <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Editor />
+          <Route path="/" component={Header}></Route>
+          <Route path="/" component={Editor}></Route>
+          <Route path="/" component={Tabs}></Route>
+          <Route path="/" component={ArticleList}></Route>
         </CenterCard>
-        <RightCard>3</RightCard>
+        <RightCard>
+          <Route path="/" component={Search}></Route>
+          <Route path="/" component={Swap}></Route>
+          <Route path="/" component={RecommendPeople}></Route>
+          <Route path="/" component={HotTopic}></Route>
+          <Route path="/" component={FooterCopyright}></Route>
+        </RightCard>
       </Flex>
       {/* <button>Open Modal</button>
       <ModalWrapper>

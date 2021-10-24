@@ -10,7 +10,8 @@ const EditorWarpper = styled(Box)`
   width: 100%;
   background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: ${({ theme }) => theme.radii.card};
-  ${mediaQueriesSize.padding}
+  ${mediaQueriesSize.padding};
+  margin-bottom:13px;
 `
 
 const EditorTextarea = styled.textarea`
