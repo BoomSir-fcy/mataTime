@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
 import MentionItem from '../components/MentionItem';
+import MentionOperator from '../components/MentionOperator';
 
 import {
-  NewsWrapper
+  NewsMeWrapper,
+  MeItemWrapper
 } from './style';
 
 
 
 const NewsMe: React.FC = () => {
-  const [list, setList] = useState<any []>([{}, {}, {}]);
+  const [list, setList] = useState<any[]>([{}, {}, {}]);
   return (
-    <NewsWrapper>
+    <NewsMeWrapper>
       {
-        list.map((item: any, index: number) => <MentionItem key={index} />)
+        list.map((item: any, index: number) => {
+          return (
+            <MeItemWrapper key={index}>
+              <MentionItem>
+                <MentionOperator />
+              </MentionItem>
+            </MeItemWrapper>
+
+          )
+        })
       }
-    </NewsWrapper>
+    </NewsMeWrapper>
   )
 }
 
