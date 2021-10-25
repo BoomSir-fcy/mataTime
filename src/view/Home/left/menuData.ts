@@ -8,8 +8,13 @@ const menuArr = [
   {
     icon:'none',
     title:'星球',
-    path:'/',
+    path:'/account',
     badge:true
   },
+  {
+    icon:'none',
+    title:'星球',
+    path:'/login',
+  }
 ]
 export default menuArr
