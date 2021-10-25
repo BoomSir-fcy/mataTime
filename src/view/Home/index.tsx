@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { LeftMenu, About, Avatar, Editor, ModalWrapper, LikePeople, HotWords } from 'components';
+import { LeftMenu, About, Avatar, Editor, ModalWrapper } from 'components';
 import { Flex } from 'uikit';
 
 import { mediaQueriesSize } from "uikit/theme/base";
@@ -69,7 +69,7 @@ const Home: React.FC = () => {
           <Editor />
         </CenterCard>
         <RightCard>
-          <LikePeople />
+          
         </RightCard>
       </Flex>
       {/* <button>Open Modal</button>
