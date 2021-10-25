@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from "styled-components";
-import { About, Avatar, Editor, ModalWrapper } from 'components';
+import {Header} from './center';
+import NftAvatar from './center/nftavatar';
+import {Avatar} from 'components';
 import BgUpload from '../../components/BgUpload';
-import Nft from './center/nftavatar';
-import {Route} from 'react-router-dom'
+import {Route} from 'react-router-dom';
 import { Flex ,Box} from 'uikit';
 import {Menu}  from './left';
-import {Header} from './center';
 import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from '../Home/right';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 const PageContainer = styled.div`
@@ -75,7 +75,7 @@ const Edit: React.FC = () => {
         <CenterCard>
           <Route path="/" component={Header}></Route>
           <Route path="/" component={BgUpload}></Route>
-          <Route path="/" component={Nft}></Route>
+          <Route path="/" component={NftAvatar}></Route>
         </CenterCard>
         <RightCard>
           <Route path="/" component={Search}></Route>

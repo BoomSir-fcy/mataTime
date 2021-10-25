@@ -1,8 +1,8 @@
 import {Box,Text,Flex,Button} from 'uikit';
 import styled from "styled-components";
-import { About, Avatar, Editor, ModalWrapper } from 'components';
+import {Avatar} from 'components';
 
-const NftAvatar = styled(Box)`
+const Nft = styled(Box)`
   overflow:hidden;
   background: skyblue;
   margin-top:19px;
@@ -42,10 +42,10 @@ const Authorize = styled(Flex)`
 `
 
 
-const Nft = () => {
+const NftAvatar = () => {
   return (
     <div>
-      <NftAvatar>
+      <Nft>
         <div>
           <Title>NFT 头像</Title>
           <Point>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
@@ -62,9 +62,9 @@ const Nft = () => {
             <Button>授权获取</Button>
           </Authorize>
         </div>
-      </NftAvatar>
+      </Nft>
     </div>
   )
 }
-export default Nft;
+export default NftAvatar
 
