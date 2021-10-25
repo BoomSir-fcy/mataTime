@@ -26,7 +26,7 @@ export const Toast: React.FC = React.memo(() => {
   return (
     <ToastContainer
       position="top-right"
-      // limit={3}
+      limit={3}
       autoClose={3000}
       newestOnTop={false}
       closeOnClick
