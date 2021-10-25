@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Svg } from 'uikit';
 
+import { Emoji } from './emoji';
 import { Toolbar } from './toolbar';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
@@ -27,14 +28,22 @@ const EditorTextarea = styled.textarea`
   ${mediaQueriesSize.padding}
 `
 
+const SendButton = styled(Button)`
+border-radius: ${({ theme }) => theme.radii.card};
+width: 100px;
+height: 35px;
+border-radius: 10px;
+background-color:#4168ED;
+margin-top:12px;
+`;
+const EditorToolbar = styled(Flex)`
+`
 export const Editor = React.memo(() => {
-
   const [state, setState] = useImmer({
     cursor: 0,
     editorValue: ""
   });
   const editor = React.useRef(null);
-
   const insertMyText = (event:any, text: string) => {
     const { cursor } = state;
     const { value } = event;
