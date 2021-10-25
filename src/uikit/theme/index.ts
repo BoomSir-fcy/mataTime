@@ -1,5 +1,5 @@
 // import { AlertTheme } from "../components/Alert/types";
-// import { CardTheme } from "../components/Card/types";
+import { CardTheme } from "../components/Card/types";
 // import { PancakeToggleTheme } from "../components/PancakeToggle/types";
 import { RadioTheme } from "../components/Radio/types";
 // import { ToggleTheme } from "../components/Toggle/types";
@@ -14,7 +14,7 @@ export interface PancakeTheme {
   // alert?: AlertTheme;
   filter: Filters;
   colors: Colors;
-  // card?: CardTheme;
+  card?: CardTheme;
   nav: NavTheme;
   // modal?: ModalTheme;
   // pancakeToggle?: PancakeToggleTheme;

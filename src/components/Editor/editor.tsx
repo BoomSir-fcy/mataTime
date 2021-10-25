@@ -12,8 +12,8 @@ const EditorWarpper = styled(Box)`
   width: 100%;
   background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: ${({ theme }) => theme.radii.card};
-  ${mediaQueriesSize.padding};
-  margin-bottom:13px;
+  ${mediaQueriesSize.padding}
+  ${mediaQueriesSize.marginbsm}
 `
 const EditorTextarea = styled.textarea`
   width: 100%;
@@ -63,41 +63,13 @@ export const Editor = React.memo(() => {
 
   return (
     <EditorWarpper>
-      <EditorTextarea placeholder="分享新鲜事" onChange={(e) => {
-        let cursorPosition = e.target.selectionStart
-        let textBeforeCursorPosition = e.target.value.substring(0, cursorPosition)
-        let textAfterCursorPosition = e.target.value.substring(cursorPosition, e.target.value.length)
-
-        console.log(textBeforeCursorPosition, textAfterCursorPosition)
-
-      }} />
-      <Flex  justifyContent="space-between" >
-        <EditorToolbar>
-          <Emoji onChange={handleSelectEmoji} />
-          <Button variant="text">
-            <Svg viewBox="0 0 45 45" width="25px">
-              <image xlinkHref={require('./images/icon_img.png').default}/>
-            </Svg>
-          </Button>
-          <Button variant="text">
-            <Svg viewBox="0 0 45 45" width="25px">
-              <image xlinkHref={require('./images/icon_gif.png').default}/>
-            </Svg>
-          </Button>
-          <Button variant="text">
-            <Svg viewBox="0 0 45 45" width="25px">
-              <image xlinkHref={require('./images/icon_at.png').default}/>
-            </Svg>
-          </Button>
-          <Button variant="text">
-            <Svg viewBox="0 0 45 45" width="25px">
-              <image xlinkHref={require('./images/icon_topic.png').default}/>
-            </Svg>
-          </Button>
-        </EditorToolbar>
-        <SendButton variant="text">
-          发布
-        </SendButton>
+      <EditorTextarea placeholder="分享新鲜事" ref={editor}
+        value={state.editorValue}
+        onBlur={(e) => setState(p => {p.cursor = e.target.selectionStart})}
+        onChange={(e) => setState(p => {p.editorValue = e.target.value})} />
+      <Flex justifyContent="space-between" mt="12px">
+        <Toolbar callback={handleSelectEmoji} />
+        <Button>发布</Button>
       </Flex>
     </EditorWarpper>
   )
