@@ -16,7 +16,7 @@ import { languages } from './config/localization';
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
-const News = React.lazy(() => import('./view/News'));
+const NewsMe = React.lazy(() => import('./view/News/Me'));
 const MeAccount = React.lazy(() => import('./view/Me/account'));
 
 const Container = styled(Box)`
@@ -28,14 +28,14 @@ function App() {
   useEagerConnect()
 
   const dispatch = useDispatch();
-  const store = useStore(p=> p.appReducer);
+  const store = useStore(p => p.appReducer);
   const { t, setLanguage } = useTranslation();
 
   React.useEffect(() => {
-    if(store.connectWallet) {
+    if (store.connectWallet) {
       const changeHandler = () => {
-        dispatch(storeAction.connectWallet({connectWallet: false}));
-      } 
+        dispatch(storeAction.connectWallet({ connectWallet: false }));
+      }
       document.body.addEventListener('click', changeHandler)
       return () => document.body.removeEventListener('click', changeHandler)
     }
@@ -48,23 +48,22 @@ function App() {
           <GlobalStyle />
           {/* <Header /> */}
           <Container>
-            <Switch>
               <Route path="/" exact>
                 <Home />
               </Route>
-              <Route path="/news" exact>
-                <CommonLayout>
-                  <News />
-                </CommonLayout>
+              <Route path="/news" render={
+                props => (
+                  <CommonLayout {...props} ></CommonLayout>
+                )
+              }>
               </Route>
               <Route path="/login">
-                <Login/>
+                <Login />
               </Route>
-            </Switch>
           </Container>
           <Toast />
-          <WalletModal 
-            onClick={() => dispatch(storeAction.connectWallet({connectWallet: false}))} 
+          <WalletModal
+            onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))}
             show={store.connectWallet} />
         </React.Suspense>
       </Router>

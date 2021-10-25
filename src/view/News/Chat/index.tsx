@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MentionItem from './components/MentionItem';
+import MentionItem from '../components/MentionItem';
 
 import {
   NewsWrapper
@@ -7,7 +7,7 @@ import {
 
 
 
-const News: React.FC = () => {
+const NewsChat: React.FC = () => {
   const [list, setList] = useState<any []>([{}, {}, {}]);
   return (
     <NewsWrapper>
@@ -18,4 +18,4 @@ const News: React.FC = () => {
   )
 }
 
-export default News;
+export default NewsChat;

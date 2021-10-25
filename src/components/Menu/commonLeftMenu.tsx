@@ -32,9 +32,11 @@ const MenuBody = styled(Box)`
 
 const MenuItems = styled(Box)`
   display: flex;
-  ${mediaQueriesSize.margint}
+  align-items: center;
+  padding: 10px 15px;
+  margin-bottom: 10px;
   &.active {
-    max-width: 120px;
+    max-width: 130px;
     padding: 10px 15px;
     border-radius: 18px;
     background-color: #232A3D;
@@ -71,9 +73,11 @@ const MenuText = styled(Text)`
 type IProps = {
   logo: any;
   menu: MenuProps [];
+  route: any;
 }
 
 export const CommonLeftMenu = React.memo((props: IProps) => {
+  const { pathname } = props.route
   return (
     <MenuWarpper>
       <LogoWarpper>
@@ -83,7 +87,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
         {
           props.menu.map((item: any) => {
             return (
-              <MenuItems as={Link} to={item.link}>
+              <MenuItems className={item.link === pathname ? 'active' : ''} as={Link} to={item.link}>
                 <MenuIcon>
                   <img src={item.icon} alt="icon" />
                   <span>0</span>
@@ -93,15 +97,6 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
             )
           })
         }
-        <MenuItems className="active" as={Link} to="/">
-          <MenuText>首页</MenuText>
-        </MenuItems>
-        <MenuItems as={Link} to="/me/account">
-          <MenuText>星球</MenuText>
-        </MenuItems>
-        <MenuItems>
-          <MenuText>消息</MenuText>
-        </MenuItems>
       </MenuBody>
     </MenuWarpper>
   )

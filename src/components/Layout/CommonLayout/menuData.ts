@@ -13,26 +13,31 @@ export const NewsMenuData: MenuProps[] = [
   {
     icon: atIcn,
     name: '提到我的',
-    link: ''
+    link: '/news/me'
   },
   {
     icon: commentIcn,
     name: '评论',
-    link: ''
+    link: '/news/comment'
   },
   {
     icon: likesIcn,
     name: '点赞',
-    link: ''
+    link: '/news/praise'
   },
   {
     icon: atIcn,
     name: '私信',
-    link: ''
+    link: '/news/chat'
   },
   {
     icon: noticeIcn,
     name: '通知',
-    link: ''
+    link: '/news/notice'
   }
 ]
+
+
+export default {
+  '/news': NewsMenuData
+}
