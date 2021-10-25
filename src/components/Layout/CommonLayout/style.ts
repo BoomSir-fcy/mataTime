@@ -1,26 +1,27 @@
+import { Box } from 'uikit';
 import styled from 'styled-components';
 
-export const CommonLayoutWrapper = styled.div`
+export const CommonLayoutWrapper = styled(Box)`
     width: 100%;
     height: 100%;
 `
 
-export const LayoutContentWrapper = styled.div`
+export const LayoutContentWrapper = styled(Box)`
     width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 35px;
 `
 
-export const LayoutLeftWrapper = styled.div`
+export const LayoutLeftWrapper = styled(Box)`
     width: 210px;
 `
-export const LayoutMiddleWrapper = styled.div`
+export const LayoutMiddleWrapper = styled(Box)`
     width: 800px;
     margin-left: 15px;
     margin-right: 15px;
 `
-export const LayoutRightWrapper = styled.div`
+export const LayoutRightWrapper = styled(Box)`
     width: 375px;
     margin-top: -15px;
 `

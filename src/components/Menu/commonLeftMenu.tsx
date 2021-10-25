@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Button, Text, Radio, Input } from 'uikit';
@@ -31,13 +31,36 @@ const MenuBody = styled(Box)`
 `
 
 const MenuItems = styled(Box)`
-  display: block;
+  display: flex;
   ${mediaQueriesSize.margint}
   &.active {
     max-width: 120px;
     padding: 10px 15px;
     border-radius: 18px;
     background-color: #232A3D;
+  }
+`
+const MenuIcon = styled(Box)`
+  margin-right: 10px;
+  position: relative;
+  img{
+    width: 25px;
+  }
+  span{
+    position: absolute;
+    width: 21px;
+    height: 13px;
+    background: #EC612B;
+    border-radius: 5px;
+    font-size: 11px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: 400;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: -10px;
+    top: -5px;
   }
 `
 const MenuText = styled(Text)`
@@ -61,6 +84,10 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
           props.menu.map((item: any) => {
             return (
               <MenuItems as={Link} to={item.link}>
+                <MenuIcon>
+                  <img src={item.icon} alt="icon" />
+                  <span>0</span>
+                </MenuIcon>
                 <MenuText>{item.name}</MenuText>
               </MenuItems>
             )
