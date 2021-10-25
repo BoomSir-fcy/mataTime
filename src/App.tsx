@@ -10,9 +10,12 @@ import { Box } from 'uikit';
 
 import GlobalStyle from 'style/global';
 
+import { CommonLayout } from 'components/Layout';
+
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
+const News = React.lazy(() => import('./view/News'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
@@ -45,6 +48,11 @@ function App() {
             <Switch>
               <Route path="/" exact>
                 <Home />
+              </Route>
+              <Route path="/news" exact>
+                <CommonLayout>
+                  <News />
+                </CommonLayout>
               </Route>
               <Route path="/login">
                 <Login/>
