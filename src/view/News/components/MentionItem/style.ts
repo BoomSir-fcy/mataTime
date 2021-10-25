@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-
+import { Flex, Button ,Box} from 'uikit'
+export const FollowBtn  = styled(Button)`
+margin-right:15px;
+font-size: 14px;
+font-weight: bold;
+`
 export const MentionItemWrapper = styled.div`
     width: 100%;
     background: #191F2D;
@@ -27,6 +32,19 @@ export const MentionItemWrapper = styled.div`
           }
         }
         .user-info{
+          display: flex;
+          align-items: center;
+          .topic{
+            display:flex;
+            align-items: center;
+            margin-left:27px;
+            padding:0 10px;
+            height:35px;
+            font-size: 14px;
+            color: #FFFFFF;
+            border: 2px solid #4168ED;
+            border-radius: 10px;
+          }
           .user-name{
             font-size: 18px;
             font-family: Alibaba PuHuiTi;
@@ -34,6 +52,7 @@ export const MentionItemWrapper = styled.div`
             color: #FFFFFF;
           }
           .time{
+            margin-top:5px;
             font-size: 14px;
             font-family: Alibaba PuHuiTi;
             font-weight: 400;
@@ -42,6 +61,8 @@ export const MentionItemWrapper = styled.div`
         }
       }
       .user-right-wrapper{
+        display:flex;
+        align-items: center;
         img{
           width: 25px;
           cursor: pointer;

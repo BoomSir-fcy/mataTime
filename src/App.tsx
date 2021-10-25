@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import GlobalStyle from 'style/global';
+import 'style/fonts/iconfont.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
@@ -45,9 +46,9 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          {/* <Header /> */}
           <Container>
               <Route path="/" exact>
+                <Header />
                 <Home />
               </Route>
               <Route path="/news" render={

@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { Flex ,Box} from 'uikit';
 import {Link} from 'react-router-dom'
 import menuData from './menuData'
-import { Avatar } from 'components/Avatar';
-
+import { Avatar ,Icon} from 'components';
 const MenuBox = styled(Flex)`
   flex-direction: column;
   justify-content:space-between;
@@ -53,16 +52,6 @@ if(count>99){
   }}>{count}</span>
   )
 }
-// require('Lib/iconfont.js')//将下载文件中的iconfont.js引入
-
-
-export const  Icon=(props) =>{
-  return (
-    <svg  viewBox= "0 0 20 20"  aria-hidden="true">
-      <use xlinkHref={`#${props.type}`} />
-    </svg>
-  )
-}
 export  const MenuList = (props:{menuList:any[]})=>{
   const [currentIndex ,setCurrentIndex] = useState(0)
   const {menuList} =props
@@ -71,17 +60,15 @@ export  const MenuList = (props:{menuList:any[]})=>{
   }
 return(
   <>
-  <i className="iconfont icon-dianzan1"></i>
   {
    menuList.map((item,index)=>{
       return(
         <ItemLink onClick={itemClick.bind(this,index)} to={item.path} key={index} style={{backgroundColor:currentIndex===index?'#232A3D':''}}>
           <div style={{position:'relative'}} title={item.title}>
             {item.badge?<Badge count={0}></Badge>:''}
-             {/* <img src={item.icon} width="20px" height="20px" /> */}
-             <Icon type="image/png"></Icon>
+             <Icon name={currentIndex===index?item.activeIcon:item.icon} margin="10px 14px"></Icon>
           </div>
-          <span style={{marginLeft:'20px'}}>{item.title}</span>
+          <span style={{marginLeft:'5px'}}>{item.title}</span>
         </ItemLink>
       )
     })

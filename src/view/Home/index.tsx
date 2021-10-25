@@ -4,7 +4,7 @@ import { About, Avatar, Editor, ModalWrapper } from 'components';
 import {Route} from 'react-router-dom'
 import { Flex ,Box} from 'uikit';
 import {Menu}  from './left';
-import {Header,Tabs,ArticleList}  from './center';
+import {Header ,Tabs,ArticleList}  from './center';
 import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from './right';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 const PageContainer = styled.div`
