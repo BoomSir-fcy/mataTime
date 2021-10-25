@@ -14,10 +14,10 @@ export const LayoutContentWrapper = styled(Box)`
 `
 
 export const LayoutLeftWrapper = styled(Box)`
-    width: 210px;
+    width: 200px;
 `
 export const LayoutMiddleWrapper = styled(Box)`
-    width: 800px;
+    width: 670px;
     margin-left: 15px;
     margin-right: 15px;
 `
