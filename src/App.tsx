@@ -16,6 +16,7 @@ import { CommonLayout } from 'components/Layout';
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
 const News = React.lazy(() => import('./view/News'));
+const MeAccount = React.lazy(() => import('./view/Me/account'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});

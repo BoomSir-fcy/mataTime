@@ -6,6 +6,7 @@ import { Box, Flex, Button, Svg } from 'uikit';
 
 const EmojiWarpper = styled(Box)`
   position: relative;
+  padding-right: 10px;
 `
 
 const ButtonIcon = styled(Button)`
