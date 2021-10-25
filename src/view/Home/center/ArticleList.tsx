@@ -53,7 +53,7 @@ export const ArticleList = () => {
     <ArticleListBox>
       {
         Array(6).fill(null).map((item,index)=>(
-          <MentionItem key={index} index={index}></MentionItem>
+          <MentionItem key={index}></MentionItem>
           // <ArticleListItem key={index}>
           //   <Avatar src="" style={{width:'50px',height:'50px'}} scale="md"/>
           //   <div style={{flex:1,marginLeft:'22px'}}>

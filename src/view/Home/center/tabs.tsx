@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from "styled-components";
 import { Flex, Button } from 'uikit'
 export const TabsBox = styled(Flex)`
+margin-bottom: 12px;
 line-height:60px;
 padding-left:16px;
 width: 670px;

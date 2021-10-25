@@ -17,7 +17,7 @@ const MenuWarpper = styled(Box)`
 const LogoWarpper = styled(Box)`
   width: 175px;
   height: 32px;
-  margin: 0 auto;
+  margin: 10px auto 20px auto;
   h2{
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
