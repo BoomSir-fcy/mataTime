@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import GlobalStyle from 'style/global';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
@@ -7,11 +8,9 @@ import useEagerConnect from 'hooks/useEagerConnect'
 import { useStore, storeAction } from 'store';
 import { Header, Toast, WalletModal, CommonLayout } from 'components';
 import { Box } from 'uikit';
-import GlobalStyle from 'style/global';
 import { languages } from './config/localization';
 
-
-// import { CommonLayout } from 'components/Layout';
+import { PrivateRoute } from './PrivateRoute';
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
@@ -57,9 +56,8 @@ function App() {
                 )
               }>
               </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
+              <PrivateRoute path="/account" Component={MeAccount} />
+              <Route path="/login" component={Login} />
           </Container>
           <Toast />
           <WalletModal

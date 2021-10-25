@@ -14,9 +14,6 @@ const LoginContainer = styled(Flex)`
     padding-left: 160px;
     padding-right: 160px;
   }
-  ${mediaQueries.md} {
-
-  }
 `
 
 const Login: React.FC = React.memo(() => {
