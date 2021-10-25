@@ -5,12 +5,12 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
-import { Header, Toast, WalletModal } from 'components';
+import { Header, Toast, WalletModal, CommonLayout } from 'components';
 import { Box } from 'uikit';
 
 import GlobalStyle from 'style/global';
 
-import { CommonLayout } from 'components/Layout';
+// import { CommonLayout } from 'components/Layout';
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
