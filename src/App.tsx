@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
+import useEagerConnect from 'hooks/useEagerConnect'
 import { useStore, storeAction } from 'store';
-import { languages } from './config/localization';
 import { Header, Toast, WalletModal, CommonLayout } from 'components';
 import { Box } from 'uikit';
-
 import GlobalStyle from 'style/global';
+import { languages } from './config/localization';
+
 
 // import { CommonLayout } from 'components/Layout';
 
@@ -24,6 +25,7 @@ const Container = styled(Box)`
 `
 
 function App() {
+  useEagerConnect()
 
   const dispatch = useDispatch();
   const store = useStore(p=> p.appReducer);
