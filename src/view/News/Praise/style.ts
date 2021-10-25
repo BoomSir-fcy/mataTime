@@ -22,10 +22,8 @@ export const PraiseItemWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       align-items: center;
-      img{
-        width: 20px;
-        height: 18px;
-        margin-right: 10px;
+      i{
+        margin-right: 10px !important;
       }
     }
     .comment-content{
