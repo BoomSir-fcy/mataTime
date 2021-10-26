@@ -81,7 +81,7 @@ export function useLogin() {
         console.error(error)
       }
     },
-    [chainId, library],
+    [chainId, library, account],
   )
   return {
     loginCallback,

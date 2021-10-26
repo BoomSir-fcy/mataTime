@@ -10,6 +10,7 @@ import { useLogin, useSignIn } from '../hooks'
 import { Logo } from 'components';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useImmer } from 'use-immer';
 
 const LoginWarpper = styled(Card)`
   width: 600px;
@@ -44,19 +45,27 @@ export const LoginJoin = React.memo(() => {
   const { loginCallback } = useLogin();
   const { siginInVerify } = useSignIn();
   const { account } = useWeb3React();
+  const [state, setState] = useImmer({
+    isSignIn: false
+  })
 
-  // const loginHandle = useCallback(async () => {
-  //   const res = await loginCallback(1)
-  // }, [dispatch, loginCallback])
-  
+  const signIn = useCallback(async () => {
+    const res = await loginCallback(2);
+    console.log(res);
+  }, [dispatch, loginCallback])
+
   const verify = async() => {
     const verifyRes = await siginInVerify(account);
-    const loginRes = await loginCallback(2);
-    console.log(verifyRes, loginRes)
+    setState(p => {p.isSignIn = true});
     // dispatch(storeAction.changeSignUp({isSignup: true}))
   }
 
   React.useEffect(() => {
+    state.isSignIn && signIn();
+  }, [state.isSignIn])
+
+  React.useEffect(() => {
+    console.log(account);
     Boolean(account) && verify();
   }, [account]);
   
@@ -70,10 +79,6 @@ export const LoginJoin = React.memo(() => {
       <ConnectWallet>
         <img width="40%" src={require('../images/login_right_images.png').default} />
         <ConnectWalletButton />
-        {/* <LoginButton scale="ld" variant="primary"
-          onClick={loginHandle}>
-          Login
-        </LoginButton> */}
       </ConnectWallet>
       <TextTips>使用您的数字钱包账号即可免费创建并登录恐龙社区，平台不会保存您的任何钱包敏感数据，请妥善保管您的钱包，丢失钱包则无法登录平台</TextTips>
     </LoginWarpper>
