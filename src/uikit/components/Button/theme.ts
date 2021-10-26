@@ -42,8 +42,10 @@ export const styleVariants = {
     // backgroundSize: "20px 36px, calc(100% - 20px) 36px, 20px 38px",
   },
   [variants.SECONDARY]: {
-    backgroundColor: "primary",
+    backgroundColor: "transparent",
     boxShadow: "none",
+    border: "1px solid",
+    borderColor: "backgroundPrimary",
     color: "blue",
     ":disabled": {
       backgroundColor: "primary",
