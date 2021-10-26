@@ -1,10 +1,10 @@
-import {Box,Text,Flex,Button} from 'uikit';
+import { Box, Text, Flex, Button } from 'uikit';
 import styled from "styled-components";
-import {Avatar} from 'components';
+import { Avatar } from 'components';
 
 const Nft = styled(Box)`
   overflow:hidden;
-  background: skyblue;
+  background: #191F2D;
   margin-top:19px;
   padding:27px 26px 38px 34px;
   border-radius: 10px;
@@ -40,6 +40,21 @@ const Authorize = styled(Flex)`
   background:#292D34;
   margin-top:28px;
 `
+const GetAuthorizeBox = styled(Box)`
+padding:17px;
+margin-top:28px;
+border-radius:10px;
+`
+const GetAuthorize = styled(Flex)`
+justify-content: space-between;
+margin-top:26px;
+`
+const AvatarName = styled(Text)`
+text-align: center;
+margin-top: 21px;
+font-size:14px;
+color:#B5B5B5;
+`
 
 
 const NftAvatar = () => {
@@ -52,15 +67,36 @@ const NftAvatar = () => {
         </div>
         <div>
           <Rows>
-            <Avatar src="" scale="ld" style={{marginRight:'18px'}}/>
+            <Avatar src="" scale="ld" style={{ marginRight: '18px' }} />
             <Column>
               <UserName>Baby fuck me</UserName>
-              <div>#3292</div>
+              <div style={{ color: '#B5B5B5' }}>#3292</div>
             </Column>
           </Rows>
           <Authorize>
             <Button>授权获取</Button>
           </Authorize>
+          <GetAuthorizeBox style={{ background: '#292D34' }}>
+            <Point style={{ textAlign: 'center' }}>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
+            <GetAuthorize>
+              <Column>
+                <Avatar src="" scale="ld" />
+                <AvatarName>DSG #2636</AvatarName>
+              </Column>
+              <Column>
+                <Avatar src="" scale="ld" />
+                <AvatarName>DSG #2636</AvatarName>
+              </Column>
+              <Column>
+                <Avatar src="" scale="ld" />
+                <AvatarName>DSG #2636</AvatarName>
+              </Column>
+              <Column>
+                <Avatar src="" scale="ld" />
+                <AvatarName>DSG #2636</AvatarName>
+              </Column>
+            </GetAuthorize>
+          </GetAuthorizeBox>
         </div>
       </Nft>
     </div>
