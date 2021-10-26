@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
-import { Header, Toast, WalletModal } from 'components';
+import { CommonLayout, Header, Toast, WalletModal } from 'components';
 import { Box } from 'uikit';
 
 // 路由加载
@@ -46,6 +46,12 @@ function App() {
               <Route path="/" exact>
                 <Header />
                 <Home />
+              </Route>
+              <Route path="/news" render={
+                props => (
+                  <CommonLayout {...props}></CommonLayout>
+                )
+              }>
               </Route>
               <Route path="/login">
                 <Login />
