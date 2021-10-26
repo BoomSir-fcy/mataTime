@@ -10,4 +10,5 @@ export * from './Editor';
 export * from './Menu';
 export * from './Layout';
 export * from './Icon';
+export * from './Popup'
 
