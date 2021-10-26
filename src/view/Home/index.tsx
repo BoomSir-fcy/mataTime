@@ -62,7 +62,7 @@ const CancelFollow = () => {
     </FollowContainer>
   )
 }
-const Home: React.FC = () => {
+const Home: React.FC = (props) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -71,21 +71,21 @@ const Home: React.FC = () => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Route path="/" component={Header}></Route>
-          <Route path="/" component={Editor}></Route>
-          <Route path="/" component={Tabs}></Route>
-          <Route path="/" component={ArticleList}></Route>
+          <Header {...props}></Header>
+          <Editor></Editor>
+          <Tabs></Tabs>
+          <ArticleList {...props}></ArticleList>
         </CenterCard>
         <RightCard>
-          <Route path="/" component={Search}></Route>
-          <Route path="/" component={Swap}></Route>
-          <Route path="/" component={RecommendPeople}></Route>
-          <Route path="/" component={HotTopic}></Route>
-          <Route path="/" component={FooterCopyright}></Route>
+          <Search></Search>
+          <Swap></Swap>
+          <RecommendPeople></RecommendPeople>
+          <HotTopic></HotTopic>
+          <FooterCopyright></FooterCopyright>
         </RightCard>
       </Flex>
-      {/* <button>Open Modal</button>
-      <ModalWrapper>
+      {/* <ModalWrapper>
+          <button>Open Modal</button>
         <CancelFollow />
       </ModalWrapper> */}
     </PageContainer>

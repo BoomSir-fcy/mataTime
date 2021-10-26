@@ -1,7 +1,7 @@
 import React,{ useState, useRef} from 'react';
 import styled from "styled-components";
 import {Flex,Box,Button} from 'uikit'
-import { Avatar } from 'components/Avatar';
+import { Avatar,Icon } from 'components';
 
 const HotTopicBox = styled.div`
 margin-top: 15px;
@@ -18,6 +18,11 @@ font-size: 18px;
 const Hot = styled.span`
 font-size: 16px;
 color: #7393FF;
+cursor: pointer;
+:hover{
+  text-decoration: underline;
+  transition:all 0.3s;
+}
 `
 const HotCount = styled.span`
 font-size: 16px;
@@ -31,7 +36,7 @@ export  const HotTopic:React.FC = ()=>{
     <HotTopicBox>
       <Flex justifyContent="space-between">
         <TitleText>热门话题</TitleText>
-        <span>刷新icon</span>
+        <Icon name="icon-jiazai_shuaxin" margin="0"color="#7393FF"></Icon>
       </Flex>
       <Box>
         {

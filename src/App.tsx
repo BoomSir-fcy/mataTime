@@ -7,10 +7,11 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import useEagerConnect from 'hooks/useEagerConnect'
 import { useStore, storeAction } from 'store';
-import { Header, Toast, WalletModal, CommonLayout } from 'components';
+import { Header, Toast, WalletModal, CommonLayout, ArticleDetilsLayout } from 'components';
 import { Box } from 'uikit';
 import { languages } from './config/localization';
-
+import 'moment/locale/zh-cn';
+import moment from 'moment';
 import { PrivateRoute } from './PrivateRoute';
 
 // 路由加载
@@ -18,6 +19,7 @@ const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
 const NewsMe = React.lazy(() => import('./view/News/Me'));
 const MeAccount = React.lazy(() => import('./view/Me/account'));
+moment.locale('zh-cn');
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
@@ -47,9 +49,23 @@ function App() {
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
           <Container>
-              <Route path="/" exact>
-                <Header />
-                <Home />
+              <Route path="/" exact  render={
+                props => (
+                  <>
+                    <Header {...props} />
+                    <Home {...props} />
+                  </>
+                )
+              }>
+              </Route>
+              <Route path="/articleDetils" exact  render={
+                props => (
+                  <>
+                    <Header {...props} />
+                    <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
+                 </>
+                )
+              }>
               </Route>
               <Route path="/news" render={
                 props => (
