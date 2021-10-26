@@ -16,10 +16,6 @@ const Home = React.lazy(() => import('./view/Home'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Edit = React.lazy(() => import('./view/Edit'));
-const SafeSet = React.lazy(() => import('./view/Set/safeSet'));
-const NoticeSet = React.lazy(() => import('./view/Set/noticeSet'));
-const LikeSet = React.lazy(() => import('./view/Set/likeSet'));
-const Set = React.lazy(() => import('./view/Set'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
@@ -60,21 +56,11 @@ function App() {
               }>
               </Route>
               <PrivateRoute path="/me" Component={Me} />
-              <PrivateRoute path="/set" Component={Set} />
               <Route path="/login">
                 <Login />
               </Route>
               <Route path="/edit">
                 <Edit />
-              </Route>
-              <Route path="/safeSet">
-                <SafeSet />
-              </Route>
-              <Route path="/noticeSet">
-                <NoticeSet />
-              </Route>
-              <Route path="/likeSet">
-                <LikeSet />
               </Route>
             </Switch>
           </Container>
