@@ -16,6 +16,7 @@ const Home = React.lazy(() => import('./view/Home'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Edit = React.lazy(() => import('./view/Edit'));
+const Set = React.lazy(() => import('./view/Set'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
@@ -61,6 +62,9 @@ function App() {
               </Route>
               <Route path="/edit">
                 <Edit />
+              </Route>
+              <Route path="/set">
+                <Set />
               </Route>
             </Switch>
           </Container>
