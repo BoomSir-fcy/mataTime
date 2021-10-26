@@ -1,9 +1,11 @@
 import React from 'react';
 import { Card } from 'uikit';
 
-const Account = React.memo(() => {
+const Account = React.memo((props) => {
+  console.log("我是Account", props)
+
   return (
-    <Card>11111</Card>
+    <Card>3123123sdsdasd11111</Card>
   )
 })
 

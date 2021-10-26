@@ -4,7 +4,7 @@ import { Route, Redirect} from 'react-router-dom';
 export const PrivateRoute = ({ Component, ...rest }) => {
   
   let auth = {
-    user: false
+    user: true
   };
 
   return (
