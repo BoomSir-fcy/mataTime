@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
-import {Header} from './center';
+import { Header } from './center';
 import NftAvatar from './center/nftavatar';
-import {Avatar} from 'components';
+import { Avatar } from 'components';
 import BgUpload from '../../components/BgUpload';
-import {Route} from 'react-router-dom';
-import { Flex ,Box} from 'uikit';
-import {Menu}  from './left';
-import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from '../Home/right';
+import { Route } from 'react-router-dom';
+import { Flex, Box } from 'uikit';
+import { Menu } from './left';
+import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 const PageContainer = styled.div`
   width: 1200px;

@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
-import { Flex, Box } from 'uikit'
-import { Menu } from '../Edit/left';
-import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
+import { Flex, Box } from 'uikit';
+import { Menu } from './menu/menu';
 import { mediaQueriesSize } from "uikit/theme/base";
+import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
+import Header from "./Header";
 
 const PageContainer = styled.div`
   width: 1200px;
@@ -25,13 +26,16 @@ const RightCard = styled.div`
 `
 
 export const Container = (props) => {
+  console.log('props2', props);
+
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
         <LeftCard>
-          <Menu></Menu>
+          <Menu />
         </LeftCard>
         <CenterCard>
+          <Header />
           {props.children}
         </CenterCard>
         <RightCard>
