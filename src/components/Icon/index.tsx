@@ -1,7 +1,18 @@
 import classnames from 'classnames';
-export const Icon=(props:{size?:number ,name:string,color?:string,margin?:string}) =>{
-  const {size,name,color,margin} = props
+interface iocnType {
+  size?:number ;
+  name:string;
+  color?:string;
+  margin?:string;
+  onClick?:()=>void;
+  [propName:string]:any;
+}
+export const Icon=(props:iocnType) =>{
+  const {size,name,color,margin,style={},onClick} = props
   return (
-    <i className={classnames("iconfont "+name)} style={{fontSize:(size||20),color:color||'#fff',margin:margin||'0'}}></i>
+    <i className={classnames("iconfont "+name)} onClick={onClick.bind(this)} style={{fontSize:(size||20),color:color||'#fff',margin:margin||'0',...style}}></i>
   )
+}
+Icon.defaultProps = {
+  onClick:()=>{}
 }

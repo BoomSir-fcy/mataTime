@@ -7,8 +7,10 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
-import { CommonLayout, Header, Toast, WalletModal } from 'components';
+import { CommonLayout, Header, Toast, WalletModal,ArticleDetilsLayout } from 'components';
 import { Box } from 'uikit';
+import 'moment/locale/zh-cn';
+import moment from 'moment';
 import { PrivateRoute } from './PrivateRoute';
 
 // 路由加载
@@ -17,7 +19,7 @@ const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Edit = React.lazy(() => import('./view/Edit'));
 const Set = React.lazy(() => import('./view/Set'));
-
+moment.locale('zh-cn');
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
   min-height: 100vh;
@@ -46,9 +48,23 @@ function App() {
           <GlobalStyle />
           <Container>
             <Switch>
-              <Route path="/" exact>
-                <Header />
-                <Home />
+              <Route path="/" exact  render={
+                props => (
+                  <>
+                    <Header {...props} />
+                    <Home {...props} />
+                  </>
+                )
+              }>
+              </Route>
+              <Route path="/articleDetils" exact  render={
+                props => (
+                  <>
+                    <Header {...props} />
+                    <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
+                 </>
+                )
+              }>
               </Route>
               <Route path="/news" render={
                 props => (

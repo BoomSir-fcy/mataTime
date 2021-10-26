@@ -5,7 +5,6 @@ export const TabsBox = styled(Flex)`
 margin-bottom: 12px;
 line-height:60px;
 padding-left:16px;
-width: 670px;
 background: #191F2D;
 border-radius: 10px;
 `

@@ -1,7 +1,7 @@
 import React,{ useState, useRef} from 'react';
 import styled from "styled-components";
 import {Flex,Box,Button} from 'uikit'
-import { Avatar } from 'components/Avatar';
+import { Avatar,Icon } from 'components';
 
 const RecommendPeopleBox = styled.div`
 margin-top: 15px;
@@ -51,6 +51,7 @@ export  const RecommendPeople:React.FC = ()=>{
             <Box>
               <UserTitle>
               曼克斯
+                    <Icon name="icon-dunpai" margin="0 0 0 5px" size={15} color="#699a4d"></Icon>
               </UserTitle>
               <UserDesc>@0x3...d39</UserDesc>
             </Box>

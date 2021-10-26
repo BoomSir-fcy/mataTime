@@ -10,6 +10,7 @@ const MenuBox = styled(Flex)`
 padding:20px 13px;
 width: 200px;
 height: calc(100vh - 150px);
+min-height:780px;
 background: #191F2D;
 border-radius: 10px;
 `
