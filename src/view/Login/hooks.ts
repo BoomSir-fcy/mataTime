@@ -4,6 +4,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ChainId } from 'config/wallet/config'
 import { signMessage } from 'utils/web3React'
 import { storage } from 'config'
+import { Api } from 'apis';
 
 import http from 'apis/http'
 
@@ -72,10 +73,9 @@ export function useLogin() {
           nonce: random(0xFFFF_FFFF, 0xFFFF_FFFF_FFFF),
         }
         const res = await signMessage(library, account, JSON.stringify(sign));
-        const response = await http.post(
-          operationType === 1 ?'/v1/sign/signup' : '/v1/sign/signin'
-          , { ...sign, encode_data: res });
-        window.localStorage.setItem(storage.Token, response.token);
+        const params = { ...sign, encode_data: res };
+        const response = await operationType === 1  ? Api.SignInApi.signIn(params) : Api.SignInApi.signIn(params);
+        // window.localStorage.setItem(storage.Token, response.token);
         return response;
       } catch (error) {
         console.error(error)
