@@ -6,7 +6,6 @@ import { Menu } from '../Edit/left';
 import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
 import { mediaQueriesSize } from "uikit/theme/base";
 
-
 const PageContainer = styled.div`
   width: 1200px;
   margin: 0 auto;
@@ -17,9 +16,8 @@ const PageContainer = styled.div`
 const LeftCard = styled(Flex)`
 
 `
-
 const CenterCard = styled(Box)`
-  width: auto;
+  flex: 1;
   ${mediaQueriesSize.marginLRmd}
 `
 const RightCard = styled.div`

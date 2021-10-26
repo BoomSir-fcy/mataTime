@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
+import { FollowPopup, MorePopup } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -21,7 +22,11 @@ const MentionItem: React.FC<IProps> = ({ children, more = true, size = 'nomal' }
       <div className="mention-content">
         <p><a>#Dinosaur Eggs#</a></p>
         <p>New baby is coming. How about this one? </p>
-        <p><a>@Baby fuck me</a></p>
+        <p>
+          <FollowPopup>
+            <a>@Baby fuck me</a>
+          </FollowPopup>
+        </p>
       </div>
       {children}
     </MentionItemWrapper>
@@ -34,6 +39,7 @@ type UserProps = {
 }
 
 export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) => {
+  const [followShow, setFollowShow] = useState(false);
   return (
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
@@ -48,7 +54,9 @@ export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) =
           more ? (
             <div className="user-right-wrapper">
               <FollowBtn>+关注</FollowBtn>
-              <img src={moreIcon} alt="more" />
+              <MorePopup>
+                <img src={moreIcon} onClick={() => { setFollowShow(true) }} alt="more" />
+              </MorePopup>
             </div>
           ) : null
         }

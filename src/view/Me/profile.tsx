@@ -1,11 +1,128 @@
 import React from 'react';
-import { Card } from 'uikit';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { Crumbs, Avatar, Certification } from 'components';
+import { Box, Button, Card, Flex, Text } from 'uikit';
+import { mediaQueriesSize } from 'uikit/theme/base';
 
-const Profile = React.memo((props) => {
-  console.log("我是Profile", props)
+const ProfileCard = styled(Card)`
+  position: relative;
+`
+const HeadTop = styled(Box)`
+  width: 100%;
+  min-height: 270px;
+  border-radius: ${({ theme }) => theme.radii.card};
+  background-color: #f5f5f5;
+`
+const ProfileInfo = styled(Box)`
+  margin-top: -85px;
+  ${mediaQueriesSize.padding}
+`
+const Info = styled(Flex)`
+  justify-content: space-between;
+  align-items: flex-end;
+  ${mediaQueriesSize.marginbmd}
+`
+const Desc = styled(Box)`
+  ${mediaQueriesSize.marginl}
+  .name {
+    font-size: 28px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.text};
+  }
+  .text {
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.textTips}
+  }
+  .marginLeft {
+    margin-left: 30px;
+  }
+`
 
+const Content = styled(Box)`
+  .desc  {
+    ${mediaQueriesSize.marginb}
+  }
+  .text {
+    font-size: 18px;
+    & a {
+      color: #7393FF;
+    }
+  }
+  .number {
+    ${mediaQueriesSize.marginb}
+    .text {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 16px;
+      color: ${({ theme }) => theme.colors.textTips};
+    }
+    .value {
+      display: inline-block;
+      font-size: 16px;
+      font-weight: bold;
+      color: ${({ theme }) => theme.colors.text};
+    }
+    .text  + .text {
+      margin-left: 30px;
+    }
+  }
+
+  .topic {
+    align-items: center;
+    .text {
+      font-size: 16px;
+      color: ${({ theme }) => theme.colors.textTips};
+      ${mediaQueriesSize.marginr}
+    }
+  }
+`
+
+const Profile = React.memo(() => {
   return (
-    <Card>我是Profile</Card>
+    <Box>
+      <Crumbs title="个人主页" />
+      <ProfileCard>
+        <HeadTop></HeadTop>
+        <ProfileInfo>
+          <Info>
+            <Flex alignItems="flex-end">
+              <Avatar scale="xl" />
+              <Desc>
+                <Text className="name">Dinosaur eggs</Text>
+                <Flex mb="5px">
+                  <Flex>
+                    <Certification />
+                    <Text className="text">@0x3...d39</Text>
+                  </Flex>
+                  <Flex className="marginLeft">
+                    <Text className="text">美国</Text>
+                  </Flex>
+                </Flex>
+                <Text className="text">177条动态</Text>
+              </Desc>
+            </Flex>
+            <Button>编辑资料</Button>
+          </Info>
+          <Content>
+            <Box className="desc">
+              <Text className="text">Metaverse protocol "dinosaurs" on Binance Smart Chain</Text>
+              <Text className="text">Web: <Text as={Link} to="/">http://dsgmetaverse.com/#/</Text></Text>
+              <Text className="text">Email：contact@dsgmetaverse.com</Text>
+            </Box>
+            <Flex className="number">
+              <Text className="text">粉丝 <Text className="value">918</Text></Text>
+              <Text className="text">关注 <Text className="value">918</Text></Text>
+              <Text className="text">动态 <Text className="value">918</Text></Text>
+            </Flex>
+            <Flex className="topic">  
+              <Text className="text">活跃话题</Text>
+              <Button variant="secondary">#DSG</Button>
+            </Flex>
+          </Content>
+        </ProfileInfo>
+      </ProfileCard>
+    </Box>
   )
 })
 

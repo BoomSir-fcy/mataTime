@@ -31,9 +31,10 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           <CommonLeftMenu
             menu={menu[match.url]}
             route={location}
-           />
+          />
         </LayoutLeftWrapper>
         <LayoutMiddleWrapper>
+          <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
           <Route path={'/news/me'} component={NewsMe}></Route>
           <Route path={'/news/comment'} component={NewsComment}></Route>
           <Route path={'/news/praise'} component={NewsPraise}></Route>

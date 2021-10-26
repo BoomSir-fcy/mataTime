@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Flex, Button ,Box} from 'uikit'
-export const FollowBtn  = styled(Button)`
+import { Flex, Button, Box } from 'uikit'
+export const FollowBtn = styled(Button)`
 margin-right:15px;
 font-size: 14px;
 font-weight: bold;
@@ -17,6 +17,7 @@ export const MentionItemWrapper = styled.div`
           color: #FFFFFF;
         a{
           color: #4168ED;
+          cursor: pointer;
         }
       }
     }
