@@ -1,5 +1,5 @@
 import React from 'react';
-import commentIcon from 'assets/images/social/comment.png';
+import { Icon } from 'components';
 import { 
   MentionOperatorWrapper
 } from './style';
@@ -15,15 +15,16 @@ const MentionOperator: React.FC<IProps> = () => {
         <MentionOperatorWrapper>
           <div className="mention-operator">
             <div className="operator-item">
-              <img src={commentIcon} alt="icon" />
+              <Icon name={'icon-pinglun'} color={'#B5B5B5'}></Icon>
               36
             </div>
             <div className="operator-item">
-              <img src={commentIcon} alt="icon" />
+              <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
               36
             </div>
             <div className="operator-item">
-              <img src={commentIcon} alt="icon" />
+              <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
+              {/* <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> */}
               36
             </div>
           </div>
