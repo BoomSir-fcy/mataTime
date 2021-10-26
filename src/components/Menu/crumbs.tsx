@@ -10,12 +10,18 @@ const Card = styled(Box)`
   border-radius: ${({ theme }) => theme.radii.card};
   ${mediaQueriesSize.paddingxs}
   ${mediaQueriesSize.marginbsm}
+  .text {
+    font-size: 18px;
+    font-weight: bold;
+  }
 `
 
-export const Crumbs = React.memo(() => {
+export const Crumbs: React.FC<{
+  title?: string
+}> = React.memo(({ title }) => {
   return (
     <Card>
-      <Text fontWeight="bold">主页</Text>
+      <Text className="text">{title || "首页"}</Text>
     </Card>
   )
 })

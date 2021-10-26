@@ -9,9 +9,11 @@ import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
 import { CommonLayout, Header, Toast, WalletModal } from 'components';
 import { Box } from 'uikit';
+import { PrivateRoute } from './PrivateRoute';
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
+const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Edit = React.lazy(() => import('./view/Edit'));
 
@@ -53,6 +55,7 @@ function App() {
                 )
               }>
               </Route>
+              <PrivateRoute path="/me" Component={Me} />
               <Route path="/login">
                 <Login />
               </Route>
