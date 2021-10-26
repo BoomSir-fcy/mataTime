@@ -28,18 +28,19 @@ interface LoginSignMessage {
   operation_type: OperationType,
   nonce: number, // 随机数
 }
+
 // 用户登录
 export function useSignIn() {
   const { account, chainId, library } = useActiveWeb3React();
 
-  const signInCallback = useCallback(async() => {
+  const siginInVerify = useCallback(async(address: string) => {
     try {
-      const res = await http.get('/v1/sign/signin');
+      const res = await http.get('/v1/sign/verify', { address });
       console.log(res);
     } catch (error) {
-      console.log(error);
+      
     }
-  }, [account]);
+  }, []);
 
   const isSignUpCallback = useCallback(async() => {
     try {
@@ -50,7 +51,7 @@ export function useSignIn() {
   }, []);
 
   return {
-    signInCallback,
+    siginInVerify,
     isSignUpCallback
   }
 }
@@ -71,12 +72,10 @@ export function useLogin() {
           nonce: random(0xFFFF_FFFF, 0xFFFF_FFFF_FFFF),
         }
         const res = await signMessage(library, account, JSON.stringify(sign));
-        const response = await http.post('/v1/sign/signup', { ...sign, encode_data: res });
+        const response = await http.post(
+          operationType === 1 ?'/v1/sign/signup' : '/v1/sign/signin'
+          , { ...sign, encode_data: res });
         window.localStorage.setItem(storage.Token, response.token);
-        // return http.post('/v1/sign/signup', {
-        //   ...sign,
-        //   encode_data: res,
-        // })
         return response;
       } catch (error) {
         console.error(error)

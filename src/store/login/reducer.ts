@@ -3,6 +3,9 @@ import { changeSignUp } from './actions';
 
 const initialState = {
 	isSignup: false,
+  userInfo: {
+    uuid: ''
+  }
 };
 
 export type Login = typeof initialState;

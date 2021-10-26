@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import random from 'lodash/random';
 import { useDispatch } from "react-redux";
 import { useWeb3React } from '@web3-react/core';
 import { useStore, storeAction, Dispatch } from 'store';
@@ -11,8 +10,6 @@ import { useLogin, useSignIn } from '../hooks'
 import { Logo } from 'components';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
-
-// interface 
 
 const LoginWarpper = styled(Card)`
   width: 600px;
@@ -40,29 +37,27 @@ const ConnectWallet = styled(Flex)`
   padding: 70px 0 79px;
   position: relative;
 `
-const LoginButton = styled(Button)`
-  position: absolute;
-  bottom: 40px;
-`
 
 export const LoginJoin = React.memo(() => {
+
   const dispatch = useDispatch();
-  // const { loginCallback } = useLogin();
-  const { signInCallback } = useSignIn();
+  const { loginCallback } = useLogin();
+  const { siginInVerify } = useSignIn();
   const { account } = useWeb3React();
 
   // const loginHandle = useCallback(async () => {
   //   const res = await loginCallback(1)
   // }, [dispatch, loginCallback])
-
-  const signUp = async() => {
-    const res = await signInCallback();
-    console.log(res);
+  
+  const verify = async() => {
+    const verifyRes = await siginInVerify(account);
+    const loginRes = await loginCallback(2);
+    console.log(verifyRes, loginRes)
     // dispatch(storeAction.changeSignUp({isSignup: true}))
   }
 
   React.useEffect(() => {
-    Boolean(account) && signUp();
+    Boolean(account) && verify();
   }, [account]);
   
   return (
