@@ -21,7 +21,7 @@ export const ArticleDetilsLayout : React.FC = (props) => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header title="返回" {...props}></Header>
+          <Header back title="返回" {...props}></Header>
           <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList>
           <Editor></Editor>
           <CommentList></CommentList>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
+import { relativeTime } from 'utils'
 import { FollowPopup, MorePopup } from 'components'
 import {
   MentionItemWrapper,
@@ -13,13 +14,18 @@ import {
 type IProps = {
   more?: boolean;
   size?: string;
+  [propName:string]:any;
 }
 
-const MentionItem: React.FC<IProps> = ({ children, more = true, size = 'nomal' }) => {
+const MentionItem: React.FC<IProps> = (props,{ children, more = true, size = 'nomal' }) => {
+    const goDetils=(e)=>{
+    if(props.location.pathname==='/articleDetils')return
+    props.history.push('/articleDetils')
+  }
   return (
     <MentionItemWrapper>
       <MentionItemUser more={more} size={size} />
-      <div className="mention-content">
+      <div className="mention-content" onClick={(e)=>{goDetils(e)}}>
         <p><a>#Dinosaur Eggs#</a></p>
         <p>New baby is coming. How about this one? </p>
         <p>
@@ -47,7 +53,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) =
           <div className="avatar"></div>
           <div className="user-info">
             <div className="user-name">曼克斯</div>
-            <div className="time">5小时前</div>
+            <div className="time">{relativeTime()}</div>
           </div>
         </div>
         {

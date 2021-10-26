@@ -3,6 +3,8 @@ import { Avatar, Icon } from 'components';
 import { Flex, Button, Box } from 'uikit'
 import { relativeTime } from 'utils'
 import { SortIcon } from './SortIcon'
+import MentionOperator from 'view/News/components/MentionOperator';
+import { FollowPopup, MorePopup } from 'components'
 
 import {
   CommentListBox,
@@ -10,7 +12,7 @@ import {
   CommentItem,
   CommentHeader,
   CommentContent,
-  CommentFooter,
+  // CommentFooter,
   CommentListFooter
 } from './style'
 
@@ -28,8 +30,8 @@ export const CommentList: React.FC = () => {
           </div>
         </div>
       </CommentTitle>
-      {Array(3).fill(null).map(item => (
-        <CommentItem key={item}>
+      {Array(3).fill(null).map((item,index) => (
+        <CommentItem key={index}>
           <Flex>
             <Avatar src="" style={{ width: '50px', height: '50px' }} scale="md" />
             <div style={{ flex: 1, marginLeft: '22px' }}>
@@ -40,11 +42,19 @@ export const CommentList: React.FC = () => {
                     <div className="relative-time">{relativeTime('2020')}</div>
                   </div>
                   <div className="reply">
-                    回复 <span>@曼克斯</span> 和 <span>@others</span>
+                    回复 和 
+                    <FollowPopup>
+                      <span>@曼克斯</span>
+                    </FollowPopup>
+                    <FollowPopup>
+                      <span>@others</span>
+                    </FollowPopup>
                   </div>
                 </Flex>
                 <Flex>
+                <MorePopup>
                   <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
+              </MorePopup>
                 </Flex>
               </CommentHeader>
               <CommentContent >
@@ -52,11 +62,12 @@ export const CommentList: React.FC = () => {
               </CommentContent>
             </div>
           </Flex>
-          <CommentFooter>
+          <MentionOperator></MentionOperator>
+          {/* <CommentFooter>
             <div> <Icon name="icon-retweet" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-aixin" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-          </CommentFooter>
+          </CommentFooter> */}
         </CommentItem>
       ))}
       <CommentListFooter>没有更多内容了</CommentListFooter>

@@ -47,6 +47,10 @@ export const CommentItem = styled.div`
   transition:all 0.3s;
 }
 padding:18px 18px 0 28px;
+.mention-operator{
+  padding-bottom:20px;
+border-bottom: solid 1px #4D535F;
+}
 `
 export const CommentHeader  = styled(Flex)`
 .relative-time{
@@ -71,6 +75,9 @@ export const CommentHeader  = styled(Flex)`
 font-weight: 400;
 color: #B5B5B5;
 line-height: 35px;
+div{
+  line-height: initial;
+}
 span{ 
   cursor: pointer;
   color: #4168ED;

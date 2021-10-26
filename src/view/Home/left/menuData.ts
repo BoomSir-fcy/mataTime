@@ -16,7 +16,7 @@ const menuArr = [
     icon:'icon-xiaoxi',
     activeIcon:'icon-xiaoxi1',
     title:'消息',
-    path:'/',
+    path:'/news/me',
   },
   {
     icon:'icon-youxiang',

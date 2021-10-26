@@ -35,8 +35,12 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
         </LayoutLeftWrapper>
         <LayoutMiddleWrapper>
           <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
-          <Route path={'/news/me'} component={NewsMe}></Route>
-          <Route path={'/news/comment'} component={NewsComment}></Route>
+          <Route path={'/news/me'} render={(props)=>{
+            return (<NewsMe {...props}/>)
+          }}></Route>
+          <Route path={'/news/comment'}  render={(props)=>{
+            return (<NewsComment {...props}/>)
+          }}></Route>
           <Route path={'/news/praise'} component={NewsPraise}></Route>
           <Route path={'/news/notice'} component={NewsNotice}></Route>
         </LayoutMiddleWrapper>

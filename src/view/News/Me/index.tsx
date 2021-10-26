@@ -9,7 +9,7 @@ import {
 
 
 
-const NewsMe: React.FC = () => {
+const NewsMe: React.FC = (props) => {
   const [list, setList] = useState<any[]>([{}, {}, {}]);
   return (
     <NewsMeWrapper>
@@ -17,11 +17,10 @@ const NewsMe: React.FC = () => {
         list.map((item: any, index: number) => {
           return (
             <MeItemWrapper key={index}>
-              <MentionItem>
-                <MentionOperator />
+              <MentionItem {...props}>
               </MentionItem>
+                <MentionOperator />
             </MeItemWrapper>
-
           )
         })
       }

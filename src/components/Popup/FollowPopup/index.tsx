@@ -29,6 +29,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
   return (
     <PopupWrapper onClick={(e: any) => {
+      e.stopPropagation()
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(true)
     }}>

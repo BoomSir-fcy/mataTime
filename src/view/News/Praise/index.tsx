@@ -11,7 +11,7 @@ import {
 
 
 
-const NewsPraise: React.FC = () => {
+const NewsPraise: React.FC = (props) => {
   const [list, setList] = useState<any []>([{}, {}, {}]);
   return (
     <NewsPraiseWrapper>
@@ -24,7 +24,7 @@ const NewsPraise: React.FC = () => {
                 <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> 赞了你的内容
               </div>
               <div className="comment-content">
-                <MentionItem more={false} size={'small'}></MentionItem>
+                <MentionItem {...props} more={false} size={'small'}></MentionItem>
               </div>
               <MentionOperator />
             </PraiseItemWrapper>

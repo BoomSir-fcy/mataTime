@@ -51,6 +51,7 @@ export const MentionItemUserWrapper = styled.div`
           color: #FFFFFF;
         }
         .time{
+          margin-top:5px;
           font-size: 14px;
           font-family: Alibaba PuHuiTi;
           font-weight: 400;
@@ -59,6 +60,8 @@ export const MentionItemUserWrapper = styled.div`
       }
     }
     .user-right-wrapper{
+      display: flex;
+      align-items: center;
       img{
         width: 25px;
         cursor: pointer;

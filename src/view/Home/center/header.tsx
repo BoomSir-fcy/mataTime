@@ -11,16 +11,15 @@ font-weight: bold;
 line-height:60px;
 color: #FFFFFF;
 `
-export const Header = (props:{title?:string,clickTitle?:()=>void,[propName:string]:any}) => {
-  const {title} = props
+export const Header = (props:{title?:string,back?:boolean,clickTitle?:()=>void,[propName:string]:any}) => {
+  const {title,back=false} = props
   const clickTitle=(e)=>{
     // console.log(e);
   }
   const clickBack=()=>{
     props.history.goBack()
   }
-  const back = props.location.pathname!=='/'
-  // const back =true
+  // const back = props.location.pathname!=='/'
   return (
       <HeaderBox alignItems="center">
        {back && <Icon name="icon-fanhui"  onClick={clickBack} margin="0px 10px 0 0" size={23} color="#fff" style={{cursor: 'pointer'}} />}

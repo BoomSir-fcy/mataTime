@@ -7,6 +7,8 @@ import {Menu}  from './left';
 import {Header ,Tabs,ArticleList}  from './center';
 import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from './right';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
+const NewsMe = React.lazy(() => import('view/News/Me'));
+
 const PageContainer = styled.div`
   width: 1200px;
   margin: 0 auto;
@@ -20,10 +22,10 @@ const LeftCard = styled(Flex)`
 const CenterCard = styled(Box)`
   // flex: 1;
   ${mediaQueriesSize.marginLRmd}
-  // width:670px;
+  width:670px;
 `
 const RightCard = styled.div`
-  width: 375px;
+  // width: 375px;
 `
 
 const FollowContainer = styled.div`
@@ -74,7 +76,8 @@ const Home: React.FC = (props) => {
           <Header {...props}></Header>
           <Editor></Editor>
           <Tabs></Tabs>
-          <ArticleList {...props}></ArticleList>
+          <NewsMe {...props}></NewsMe>
+          {/* <ArticleList {...props}></ArticleList> */}
         </CenterCard>
         <RightCard>
           <Search></Search>
