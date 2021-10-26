@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReportModal } from 'components';
+import { ReportModal, ShieldModal } from 'components';
 import {
   PopupWrapper,
   PopupContentWrapper
@@ -13,6 +13,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { children } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
+  const [shieldShow, setShieldShow] = useState<boolean>(false);
 
   useEffect(() => {
     addEventListener()
@@ -37,12 +38,14 @@ export const MorePopup = React.memo((props: Iprops) => {
             <p>复制内容地址</p>
             <p>收藏</p>
             <p onClick={() => { setReportShow(true) }}>举报该条</p>
-            <p>屏蔽作者</p>
+            <p onClick={() => { setShieldShow(true) }}>屏蔽作者</p>
           </PopupContentWrapper>
         ) : null
       }
       {/* 举报 */}
       <ReportModal show={reportShow} onClose={() => { setReportShow(false) }}></ReportModal>
+      {/* 屏蔽作者 */}
+      <ShieldModal show={shieldShow} onClose={() => { setShieldShow(false) }}></ShieldModal>
     </PopupWrapper>
   )
 });

@@ -27,14 +27,13 @@ export const ModalTitleWrapper = styled(Box)`
 `
 export const ReportModalWrapper = styled(Box)`
   width: 500px;
-  height: 380px;
   background: #191F2D;
   border-radius: 20px;
   position: fixed;
   left: 50%;
   top: 50%;
   margin-left: -250px;
-  margin-top: -180px;
+  margin-top: -150px;
   box-sizing: border-box;
   padding: 35px;
 `
