@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { variant } from "styled-system";
 
 export const scales = {
+  XL: "xl",
   LD: "ld",
   MD: "md",
   SM: "sm",
@@ -10,6 +11,10 @@ export const scales = {
 } as const;
 
 export const scaleVariants = {
+  [scales.XL]: {
+    width: "160px",
+    height: "160px",
+  },
   [scales.LD]: {
     width: "100px",
     height: "100px",
@@ -33,8 +38,8 @@ const Img = styled.img`
 `
 
 export const Avatar: React.FC<{
-  src: string
-  scale?: "ld" | "md" | "sm"
+  src?: string
+  scale?: "xl" | "ld" | "md" | "sm"
   [propName:string]:any
 }> = ((props) => {
   let deepProps  = Object.assign({},props)
