@@ -17,9 +17,8 @@ export const MentionOperatorWrapper = styled.div`
         align-items: center;
         margin-right: 75px;
         cursor: pointer;
-        img{
-          width: 20px;
-          margin-right: 10px;
+        i{
+          margin-right: 10px !important;
         }
       }
     }

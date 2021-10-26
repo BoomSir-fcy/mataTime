@@ -11,7 +11,7 @@ font-weight: bold;
 line-height:60px;
 color: #FFFFFF;
 `
-export const Header = (props:{title:string,clickTitle?:()=>void}) => {
+export const Header = (props:{title?:string,clickTitle?:()=>void}) => {
   const {title} = props
   const clickTitle=(e)=>{
     console.log(e);

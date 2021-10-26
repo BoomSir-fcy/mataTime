@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import GlobalStyle from 'style/global';
+import 'style/fonts/iconfont.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
@@ -7,8 +9,6 @@ import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
 import { Header, Toast, WalletModal } from 'components';
 import { Box } from 'uikit';
-
-import GlobalStyle from 'style/global';
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
@@ -23,14 +23,14 @@ const Container = styled(Box)`
 function App() {
 
   const dispatch = useDispatch();
-  const store = useStore(p=> p.appReducer);
+  const store = useStore(p => p.appReducer);
   const { t, setLanguage } = useTranslation();
 
   React.useEffect(() => {
-    if(store.connectWallet) {
+    if (store.connectWallet) {
       const changeHandler = () => {
-        dispatch(storeAction.connectWallet({connectWallet: false}));
-      } 
+        dispatch(storeAction.connectWallet({ connectWallet: false }));
+      }
       document.body.addEventListener('click', changeHandler)
       return () => document.body.removeEventListener('click', changeHandler)
     }
@@ -41,23 +41,23 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          {/* <Header /> */}
           <Container>
             <Switch>
               <Route path="/" exact>
+                <Header />
                 <Home />
               </Route>
               <Route path="/login">
-                <Login/>
+                <Login />
               </Route>
               <Route path="/edit">
-                <Edit/>
+                <Edit />
               </Route>
             </Switch>
           </Container>
           <Toast />
-          <WalletModal 
-            onClick={() => dispatch(storeAction.connectWallet({connectWallet: false}))} 
+          <WalletModal
+            onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))}
             show={store.connectWallet} />
         </React.Suspense>
       </Router>

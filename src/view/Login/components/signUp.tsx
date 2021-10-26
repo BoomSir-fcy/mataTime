@@ -1,18 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Box, Flex, Text, Button } from 'uikit';
+import { useDispatch } from "react-redux";
+import { useWeb3React } from '@web3-react/core';
+import { Box, Flex, Text, Button, Card } from 'uikit';
 import { Logo } from 'components';
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { shortenAddress } from 'utils/contract';
+import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
-const LoginWarpper = styled(Box)`
+import { useLogin } from '../hooks';
+
+const Warpper = styled(Card)`
   width: 600px;
   height: 700px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: ${({ theme }) => theme.radii.card};
   padding: 25px 40px 0;
 `
 const LogoWarpper = styled(Box)`
@@ -20,9 +24,8 @@ const LogoWarpper = styled(Box)`
   height: 60px;
   ${mediaQueriesSize.marginbmd}
 `
-
 const SignUpWarpper = styled(Flex)`
-  padding-top: 35px;
+  padding-top: 50px;
   padding-bottom: 100px;
   flex-direction: column;
   align-items: center;
@@ -37,24 +40,20 @@ const WalletBody = styled(Flex)`
   margin-bottom: 30px;
 `
 const SubTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.textSubtle};
+  color: ${({ theme }) => theme.colors.textOrigin};
 `
-
 const TextTips = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
 `
-
 const FailButton = styled(Button)`
   width: 205px;
   margin-bottom: 23px;
 `
-
 const SignUpText = styled(Text)`
   font-size: 34px;
   font-weight: bold;
   ${mediaQueriesSize.marginUD}
 `
-
 const SignUpSubText = styled(Text)`
   font-size: 20px;
   ${mediaQueriesSize.marginb}
@@ -62,17 +61,27 @@ const SignUpSubText = styled(Text)`
 
 const SignUpFail = (() => {
   return (
-    <Flex justifyContent="center" flexDirection="column" alignItems="center">
-      <FailButton scale="ld" variant="tertiary" disabled>创建账户</FailButton>
+    <Flex width="100%" flexDirection="column">
+      <Flex justifyContent="space-between">
+        <FailButton scale="ld" variant="tertiary">创建账户</FailButton>
+        <FailButton scale="ld">获取NFT</FailButton>
+      </Flex>
       <SubTitle>您的账户中未持有对应的NFT，无法注册</SubTitle>
     </Flex>
   )
 })
 
-export const WalletAddress = (() => {
+export const WalletAddress: React.FC<{
+  address?: string
+}> = (({ address}) => {
+
+  const connector = window.localStorage.getItem(walletLocalStorageKey);
+  const Icon = walletIcon[connector];
+
   return (
     <WalletBody>
-      <Text fontSize="18px" fontWeight="bold">0x18592.....9w5999w</Text>
+      <Icon width="40px" mr="30px" />
+      <Text fontSize="18px" fontWeight="bold">{shortenAddress(address || "")}</Text>
     </WalletBody>
   )
 })
@@ -80,13 +89,21 @@ export const WalletAddress = (() => {
 export const SignUp: React.FC<{
   isSignup?: boolean
 }> = (({ isSignup }) => {
-  
+
+  const dispatch = useDispatch();
+  const { loginCallback } = useLogin();
+  const { account } = useWeb3React();
   const [state, setState] = useImmer({
-    setp: 4
-  })
+    setp: 1
+  });
+
+  const signHandle = React.useCallback(async () => {
+    const res = await loginCallback(1);
+    setState(state => { state.setp = 2 });
+  }, [dispatch, loginCallback])
 
   return (
-    <LoginWarpper>
+    <Warpper>
       {state.setp === 1 &&
         <React.Fragment>
           <LogoWarpper>
@@ -95,11 +112,11 @@ export const SignUp: React.FC<{
           <Text fontSize="34px" marginBottom="29px" bold>欢迎加入恐龙社区</Text>
           <SubTitle>平台beta 版本试运营中，目前仅限持有恐龙创世NFT的用户可以注册</SubTitle>
           <SignUpWarpper>
-            <WalletAddress />
+            <WalletAddress address={account} />
             {
               isSignup ?
               <Button scale="ld" style={{width: '205px', fontSize: '18px'}}
-               onClick={() => setState(state => { state.setp = 2 })}>钱包签名</Button>
+               onClick={() => signHandle()}>钱包签名</Button>
               :
               <SignUpFail />
             }
@@ -114,7 +131,7 @@ export const SignUp: React.FC<{
             <Logo url="/" src={require('../images/logo.svg').default} />
           </LogoWarpper>
           <Text fontSize="34px" marginBottom="24px" bold>欢迎加入恐龙社区</Text>
-          <WalletAddress />
+          <WalletAddress address={account} />
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
             <img width="230px" src={require('../images/login_right_images.png').default} />
             <SignUpText>注册成功！</SignUpText>
@@ -131,6 +148,6 @@ export const SignUp: React.FC<{
         state.setp === 4 && 
         <SignUpcomplete />
       }
-    </LoginWarpper>
+    </Warpper>
   )
 })

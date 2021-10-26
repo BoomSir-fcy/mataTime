@@ -23,5 +23,4 @@ export const LayoutMiddleWrapper = styled(Box)`
 `
 export const LayoutRightWrapper = styled(Box)`
     width: 375px;
-    margin-top: -15px;
 `

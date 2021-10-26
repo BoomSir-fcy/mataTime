@@ -3,7 +3,8 @@ import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import {
   MentionItemWrapper,
-  MentionItemUserWrapper
+  MentionItemUserWrapper,
+  FollowBtn
 } from './style';
 
 
@@ -46,6 +47,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) =
         {
           more ? (
             <div className="user-right-wrapper">
+              <FollowBtn>+关注</FollowBtn>
               <img src={moreIcon} alt="more" />
             </div>
           ) : null

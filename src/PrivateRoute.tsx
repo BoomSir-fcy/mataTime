@@ -8,8 +8,7 @@ export const PrivateRoute = ({ Component, ...rest }) => {
   };
 
   return (
-    <Route
-      {...rest}
+    <Route {...rest}
       render={(props) =>
         auth.user ? (
           <Component {...props} />
