@@ -19,7 +19,7 @@ const LeftCard = styled(Flex)`
 `
 
 const CenterCard = styled(Box)`
-  width: auto;
+  flex: 1;
   ${mediaQueriesSize.marginLRmd}
 `
 const RightCard = styled.div`
