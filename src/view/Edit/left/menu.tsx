@@ -1,7 +1,7 @@
-import React,{ useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import styled from "styled-components";
-import { Flex ,Box,Button} from 'uikit';
-import {Link} from 'react-router-dom'
+import { Flex, Box, Button } from 'uikit';
+import { Link } from 'react-router-dom'
 import menuData from './menuData'
 import { Avatar } from 'components/Avatar';
 
@@ -34,7 +34,7 @@ const Btn = styled.div`
 const ItemLink = styled(Link)`
 margin-top:20px;
 display: flex;
-width: 120px;
+width: 130px;
 height: 40px;
 border-radius: 18px;
 font-size: 18px;
@@ -42,7 +42,7 @@ font-weight: bold;
 color: #EAEAEA;
 line-height:40px;
 `
-const UserTitle  = styled.div`
+const UserTitle = styled.div`
 margin:0 12px;
   font-weight:700;
   font-size:18px;
@@ -60,69 +60,69 @@ margin:0 12px;
     border-top: 7px solid transparent;
 }
 `
-const UserDesc  = styled.div`
+const UserDesc = styled.div`
 margin:0 12px;
 font-size: 16px;
 font-weight: 400;
 color: #B5B5B5;
 `
-const Badge= (props:{count:number|string})=>{
-let {count} = props
-if(count>99){
-  count='+99'
-}
-  return(
+const Badge = (props: { count: number | string }) => {
+  let { count } = props
+  if (count > 99) {
+    count = '+99'
+  }
+  return (
     <span style={{
-    position: "absolute",
-    top:'-5px',
-    right:'-20px',
-    // width:'25px',
-    padding:'0 6px',
-    height:'15px',
-    display:'flex',
-    justifyContent:'center',
-    alignItems: 'center',
-    background: '#EC612B',
-    borderRadius: '5px',
-    fontWeight:400,
-    fontSize:'12px',
-  }}>{count}</span>
+      position: "absolute",
+      top: '-5px',
+      right: '-20px',
+      // width:'25px',
+      padding: '0 6px',
+      height: '15px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: '#EC612B',
+      borderRadius: '5px',
+      fontWeight: 400,
+      fontSize: '12px',
+    }}>{count}</span>
   )
 }
-export const User = ()=>{
-  return(
+export const User = () => {
+  return (
     <div>
     </div>
   )
 }
 
-export  const MenuList = (props:{menuList:any[]})=>{
-  const {menuList} = props
-  const [currentIndex ,setCurrentIndex] = useState(0)
-  const itemClick  =(index)=>{
+export const MenuList = (props: { menuList: any[] }) => {
+  const { menuList } = props
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const itemClick = (index) => {
     setCurrentIndex(index)
   }
-return(
-  <>
-  {
-   menuList.map((item,index)=>{
-      return(
-        <ItemLink onClick={itemClick.bind(this,index)} to={item.path} key={index} style={{backgroundColor:currentIndex===index?'#232A3D':''}}>
-          <div style={{position:'relative'}}>
-            {item.badge?<Badge count={0}></Badge>:''}
-            <span style={{fontSize:'14px',color:'blue'}}>{item.icon}</span>
-          </div>
-          <span style={{marginLeft:'20px'}}>{item.title}</span>
-        </ItemLink>
-      )
-    })
-  }
-  </>
-)
+  return (
+    <>
+      {
+        menuList.map((item, index) => {
+          return (
+            <ItemLink onClick={itemClick.bind(this, index)} to={item.path} key={index} style={{ backgroundColor: currentIndex === index ? '#232A3D' : '' }}>
+              <div style={{ position: 'relative' }}>
+                {item.badge ? <Badge count={0}></Badge> : ''}
+                <span style={{ fontSize: '14px', color: 'blue' }}>{item.icon}</span>
+              </div>
+              <span style={{ marginLeft: '20px' }}>{item.title}</span>
+            </ItemLink>
+          )
+        })
+      }
+    </>
+  )
 }
 
 
-export  const Menu:React.FC = ()=>{
+export const Menu: React.FC = () => {
   return (
     <MenuBox>
       <Box>

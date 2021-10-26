@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
-import { Flex ,Box} from 'uikit'
-import { Menu }  from '../Edit/left';
-import { Search, Swap, RecommendPeople ,HotTopic, FooterCopyright }  from '../Home/right';
+import { Flex, Box } from 'uikit'
+import { Menu } from '../Edit/left';
+import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
 import { mediaQueriesSize } from "uikit/theme/base";
 
 
