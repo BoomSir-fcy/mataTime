@@ -14,6 +14,9 @@ import { Box } from 'uikit';
 const Home = React.lazy(() => import('./view/Home'));
 const Login = React.lazy(() => import('./view/Login'));
 const Edit = React.lazy(() => import('./view/Edit'));
+const SafeSet = React.lazy(() => import('./view/Set/safeSet'));
+const NoticeSet = React.lazy(() => import('./view/Set/noticeSet'));
+const LikeSet = React.lazy(() => import('./view/Set/likeSet'));
 
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
@@ -52,6 +55,15 @@ function App() {
               </Route>
               <Route path="/edit">
                 <Edit />
+              </Route>
+              <Route path="/safeSet">
+                <SafeSet />
+              </Route>
+              <Route path="/noticeSet">
+                <NoticeSet />
+              </Route>
+              <Route path="/likeSet">
+                <LikeSet />
               </Route>
             </Switch>
           </Container>
