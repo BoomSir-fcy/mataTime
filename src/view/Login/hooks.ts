@@ -1,20 +1,15 @@
-import { useCallback, useMemo } from 'react'
-import random from 'lodash/random';
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useCallback } from 'react'
 import { ChainId } from 'config/wallet/config'
 import { signMessage } from 'utils/web3React'
 import { storage } from 'config'
 import { Api } from 'apis';
 
-import http from 'apis/http'
+import random from 'lodash/random';
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 enum LoginNetwork {
   BSC = 1,
   MATIC = 2,
-}
-enum OperationType {
-  LOGIN = 1,
-  REGISTER = 2,
 }
 
 const networks = {
@@ -23,20 +18,13 @@ const networks = {
   [ChainId.MATIC_MAINET]: LoginNetwork.MATIC,
 }
 
-interface LoginSignMessage {
-  network: LoginNetwork,
-  sign_time: number, // 签名时间
-  operation_type: OperationType,
-  nonce: number, // 随机数
-}
-
 // 用户登录
 export function useSignIn() {
   const { account, chainId, library } = useActiveWeb3React();
 
   const siginInVerify = useCallback(async(address: string) => {
     try {
-      const res = await http.get('/v1/sign/verify', { address });
+      const res = await Api.SignInApi.signVerify(address);
       console.log(res);
     } catch (error) {
       
@@ -61,12 +49,12 @@ export function useLogin() {
   const { account, chainId, library } = useActiveWeb3React()
 
   const loginCallback = useCallback(
-    async (operationType: OperationType) => {
+    async (operationType: Api.SignIn.OperationType) => {
       try {
         if (!networks[chainId]) {
           throw new Error(`not support ChainID: ${chainId}`)
         }
-        const sign: LoginSignMessage = {
+        const sign = {
           network: networks[chainId],
           sign_time: Math.floor(new Date().getTime() / 1000),
           operation_type: operationType,
@@ -74,7 +62,9 @@ export function useLogin() {
         }
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
-        const response = await operationType === 1  ? Api.SignInApi.signIn(params) : Api.SignInApi.signIn(params);
+        const response = 
+            await operationType === 1  ? 
+              Api.SignInApi.signIn(params) : Api.SignInApi.signIn(params);
         // window.localStorage.setItem(storage.Token, response.token);
         return response;
       } catch (error) {
