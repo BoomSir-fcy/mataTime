@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useImmer } from 'use-immer';
 import { useDispatch } from "react-redux";
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { Logo } from 'components';
+import { useStore, storeAction } from 'store';
+import { Api } from 'apis';
+
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
 
@@ -12,7 +14,7 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 import { shortenAddress } from 'utils/contract';
 import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
-import { useLogin } from '../hooks';
+import { useLogin, useSignIn } from '../hooks';
 
 const Warpper = styled(Card)`
   width: 600px;
@@ -91,20 +93,28 @@ export const SignUp: React.FC<{
 }> = (({ isSignup }) => {
 
   const dispatch = useDispatch();
+  const { singUpStep } = useStore(p => p.loginReducer);
   const { loginCallback } = useLogin();
   const { account } = useWeb3React();
-  const [state, setState] = useImmer({
-    setp: 1
-  });
+  const { getNftUrl } = useSignIn();
 
   const signHandle = React.useCallback(async () => {
+
     const res = await loginCallback(1);
-    setState(state => { state.setp = 2 });
+    dispatch(storeAction.changeSignUpStep({singUpStep: 2}));
+
   }, [dispatch, loginCallback])
+
+  const changeNftUrl = React.useCallback(async() => {
+    const res = await getNftUrl();
+    if(Api.isSuccess(res)) {
+      dispatch(storeAction.changeSignUpStep({singUpStep: 3}));
+    }
+  }, []);
 
   return (
     <Warpper>
-      {state.setp === 1 &&
+      {singUpStep === 1 &&
         <React.Fragment>
           <LogoWarpper>
             <Logo url="/" src={require('../images/logo.svg').default} />
@@ -114,7 +124,7 @@ export const SignUp: React.FC<{
           <SignUpWarpper>
             <WalletAddress address={account} />
             {
-              isSignup ?
+              !isSignup ?
               <Button scale="ld" style={{width: '205px', fontSize: '18px'}}
                onClick={() => signHandle()}>钱包签名</Button>
               :
@@ -125,7 +135,7 @@ export const SignUp: React.FC<{
         </React.Fragment>
       }
       {
-        state.setp === 2 && 
+        singUpStep === 2 && 
         <Box>
           <LogoWarpper>
             <Logo url="/" src={require('../images/logo.svg').default} />
@@ -136,16 +146,16 @@ export const SignUp: React.FC<{
             <img width="230px" src={require('../images/login_right_images.png').default} />
             <SignUpText>注册成功！</SignUpText>
             <SignUpSubText>感谢您加入恐龙社交平台</SignUpSubText>
-            <Button scale="ld" onClick={() => setState(state => { state.setp = 3 })}>下一步，个人信息</Button>
+            <Button scale="ld" onClick={() => changeNftUrl()}>下一步，个人信息</Button>
           </Flex>
         </Box>
       }
       {
-        state.setp === 3 && 
+        singUpStep === 3 && 
         <SignUpSetName />
       }
       {
-        state.setp === 4 && 
+        singUpStep === 4 && 
         <SignUpcomplete />
       }
     </Warpper>

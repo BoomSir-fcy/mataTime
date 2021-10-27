@@ -102,7 +102,7 @@ const Profile = React.memo(() => {
                 <Text className="text">177条动态</Text>
               </Desc>
             </Flex>
-            <Button>编辑资料</Button>
+            <Button as={Link} to="/me/edit">编辑资料</Button>
           </Info>
           <Content>
             <Box className="desc">

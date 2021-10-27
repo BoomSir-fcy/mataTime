@@ -52,7 +52,7 @@ export const Menu = React.memo(() => {
         </Svg>
         星球
       </HeaderMenuItem>
-      <HeaderMenuItem as={Link} to="/">
+      <HeaderMenuItem as={Link} to="/me">
         <Svg viewBox="0 0 60 60" width="30px">
           <image xlinkHref={require('./images/icon_news.png').default}/>
         </Svg>
