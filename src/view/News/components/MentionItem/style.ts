@@ -44,6 +44,8 @@ export const MentionItemUserWrapper = styled.div`
         }
       }
       .user-info{
+        display:flex;
+        align-items: center;
         .user-name{
           font-size: 18px;
           font-family: Alibaba PuHuiTi;
@@ -56,6 +58,17 @@ export const MentionItemUserWrapper = styled.div`
           font-family: Alibaba PuHuiTi;
           font-weight: 400;
           color: #B5B5B5;
+        }
+        .topic{
+          display:flex;
+          align-items: center;
+          margin-left:27px;
+          padding:0 10px;
+          height:35px;
+          font-size: 14px;
+          color: #FFFFFF;
+          border: 2px solid #4168ED;
+          border-radius: 10px;
         }
       }
     }

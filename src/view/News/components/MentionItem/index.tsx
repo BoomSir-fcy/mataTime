@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
-import { FollowPopup, MorePopup } from 'components'
+import { FollowPopup, MorePopup,Icon } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -52,8 +52,14 @@ export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) =
         <div className="user-left-wrapper">
           <div className="avatar"></div>
           <div className="user-info">
-            <div className="user-name">曼克斯</div>
-            <div className="time">{relativeTime()}</div>
+            <div>
+              <div className="user-name">曼克斯</div>
+              <div className="time">{relativeTime()}</div>
+            </div>
+            <div className="topic">
+                      <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
+                      老表的吃货天堂
+                    </div>
           </div>
         </div>
         {
