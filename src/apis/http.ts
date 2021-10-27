@@ -47,7 +47,7 @@ export class Http {
     return this.request(config);
   }
 
-  async post(url: string, data) {
+  async post(url: string, data?) {
     const config: AxiosRequestConfig = {
       method: "POST",
       url,

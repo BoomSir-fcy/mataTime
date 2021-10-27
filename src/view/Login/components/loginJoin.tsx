@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from "react-redux";
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { useStore, storeAction, Dispatch } from 'store';
-import { Box, Flex, Text, Button, Card } from 'uikit';
+import { Box, Flex, Text, Card } from 'uikit';
 import { ConnectWalletButton } from 'components'
 import { useLogin, useSignIn } from '../hooks'
 
@@ -24,7 +25,7 @@ const LogoWarpper = styled(Box)`
 `
 
 const SubTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.textSubtle};
+  color: ${({ theme }) => theme.colors.textOrigin};
 `
 
 const TextTips = styled(Text)`
@@ -39,9 +40,12 @@ const ConnectWallet = styled(Flex)`
   position: relative;
 `
 
-export const LoginJoin = React.memo(() => {
+export const LoginJoin: React.FC<{
+  redirectUrl?: string
+}> = React.memo(({ redirectUrl }) => {
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const { loginCallback } = useLogin();
   const { siginInVerify } = useSignIn();
   const { account } = useWeb3React();
@@ -49,15 +53,16 @@ export const LoginJoin = React.memo(() => {
     isSignIn: false
   })
 
-  const signIn = useCallback(async () => {
+  const signIn = async () => {
     const res = await loginCallback(2);
-    console.log(res);
-  }, [dispatch, loginCallback])
+    dispatch(storeAction.changeUpdateProfile({...res, uuid: '11111'}));
+    history.replace(`${redirectUrl || '/'}`);
+  }
 
   const verify = async() => {
     const verifyRes = await siginInVerify(account);
-    setState(p => {p.isSignIn = true});
-    // dispatch(storeAction.changeSignUp({isSignup: true}))
+    Boolean(verifyRes) && setState(p => {p.isSignIn = true});
+    dispatch(storeAction.changeSignUp({isSignup: true}));
   }
 
   React.useEffect(() => {

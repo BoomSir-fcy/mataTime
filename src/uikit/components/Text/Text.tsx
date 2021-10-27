@@ -46,8 +46,6 @@ const Text = styled.div<TextProps>`
 
 Text.defaultProps = {
   color: "text",
-  small: false,
-  ellipsis: false,
 };
 
 export default Text;
