@@ -6,5 +6,6 @@ export * from "./components/Svg";
 export * from "./components/Checkbox";
 export * from "./components/Input";
 export * from "./components/Radio";
+export * from "./components/Toggle";
 export * from "./widgets/Menu";
 export * from "./theme";

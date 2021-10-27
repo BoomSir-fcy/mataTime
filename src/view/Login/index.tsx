@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from "react-redux";
 import { storeAction, useStore } from 'store';
-import { Box, Flex } from 'uikit'; 
+import { Toggle, Flex } from 'uikit'; 
 import { Footer } from 'components';
 import { mediaQueries } from "uikit/theme/base";
 

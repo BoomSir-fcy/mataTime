@@ -61,11 +61,10 @@ export const LoginJoin = React.memo(() => {
   }
 
   React.useEffect(() => {
-    state.isSignIn && signIn();
+    state.isSignIn && Boolean(account) && signIn();
   }, [state.isSignIn])
 
   React.useEffect(() => {
-    console.log(account);
     Boolean(account) && verify();
   }, [account]);
   

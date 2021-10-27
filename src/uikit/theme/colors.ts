@@ -10,6 +10,8 @@ export const baseColors = {
   warning: "#FFB237",
   transparent: "transparent",
   blue: "#5A79F8",
+  switch: '#2B303F',
+  switchChecked: "#4168ED",
 };
 
 export const additionalColors = {
@@ -82,12 +84,12 @@ export const darkColors: Colors = {
   background: "#08060B",
   backgroundPage: "#0B1513",
   backgroundLight: "#334542",
-  backgroundSelect: "#2f3836",
+  backgroundSelect: "#4168ED",
   backgroundDisabled: "#3c3742",
   backgroundPrimary: "#4168ED",
   backgroundMember:'rgba(49, 64, 111, 0.5)',
   backgroundCard: "#191F2D",
-  backgroundAlt: "#212827",
+  backgroundAlt: "#FFFFFF",
   backgroundTextArea: "#292D34",
   cardBorder: "#383241",
   contrast: "#FFFFFF",

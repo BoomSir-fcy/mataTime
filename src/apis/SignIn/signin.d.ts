@@ -6,6 +6,7 @@ declare namespace Api {
       BSC = 1,
       MATIC = 2,
     }
+    
     enum OperationType {
       LOGIN = 1,
       REGISTER = 2,
