@@ -5,28 +5,6 @@ import NftAvatar from './center/nftavatar';
 import { Avatar } from 'components';
 import BgUpload from '../../components/BgUpload';
 import { Route } from 'react-router-dom';
-import { Flex, Box } from 'uikit';
-import { Menu } from './left';
-import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
-import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
-const PageContainer = styled.div`
-  width: 1200px;
-  margin: 0 auto;
-  padding-top: 35px;
-  display:flex;
-justify-content:center;
-`
-const LeftCard = styled(Flex)`
-  // width: 375px;
-`
-const CenterCard = styled(Box)`
-  // flex: 1;
-  ${mediaQueriesSize.marginLRmd}
-  // width:670px;
-`
-const RightCard = styled.div`
-  width: 375px;
-`
 
 const FollowContainer = styled.div`
   padding: 36px;
@@ -66,31 +44,11 @@ const CancelFollow = () => {
 }
 const Edit: React.FC = () => {
   return (
-    <PageContainer>
-      <Flex justifyContent="space-between">
-        <LeftCard>
-          {/* <About /> */}
-          <Menu></Menu>
-        </LeftCard>
-        <CenterCard>
-          <Route path="/" component={Header}></Route>
-          <Route path="/" component={BgUpload}></Route>
-          <Route path="/" component={NftAvatar}></Route>
-        </CenterCard>
-        <RightCard>
-          <Route path="/" component={Search}></Route>
-          <Route path="/" component={Swap}></Route>
-          <Route path="/" component={RecommendPeople}></Route>
-          <Route path="/" component={HotTopic}></Route>
-          <Route path="/" component={FooterCopyright}></Route>
-
-        </RightCard>
-      </Flex>
-      {/* <button>Open Modal</button>
-      <ModalWrapper>
-        <CancelFollow />
-      </ModalWrapper> */}
-    </PageContainer>
+    <div>
+      <Route path="/" component={Header}></Route>
+      <Route path="/" component={BgUpload}></Route>
+      <Route path="/" component={NftAvatar}></Route>
+    </div>
   )
 }
 
