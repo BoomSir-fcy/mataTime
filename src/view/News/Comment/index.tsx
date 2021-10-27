@@ -10,7 +10,7 @@ import {
 
 
 const NewsComment: React.FC = (props) => {
-  const [list, setList] = useState<any []>([{}, {}, {}]);
+  const [list, setList] = useState<any[]>([{}, {}, {}]);
   return (
     <NewsCommentWrapper>
       {
@@ -19,7 +19,7 @@ const NewsComment: React.FC = (props) => {
             <CommentItemWrapper key={index}>
               <MentionItemUser more={true} />
               <div className="reply-wrapper">
-              回复<a>@曼克斯</a><p>这句话是我回复他的</p>
+                回复<a>@曼克斯</a><p>这句话是我回复他的</p>
               </div>
               <div className="comment-content">
                 <MentionItem {...props} more={false} size={'small'}></MentionItem>
