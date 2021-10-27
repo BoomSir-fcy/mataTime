@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 import { Header, CommonLeftMenu } from 'components';
-import { HotTopic, RecommendPeople, Search, Swap } from 'view/Home/right';
+import { HotTopic, RecommendPeople, Search, Swap, FooterCopyright } from 'view/Home/right';
 import menu from './menuData';
 import {
   CommonLayoutWrapper,
@@ -35,11 +35,11 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
         </LayoutLeftWrapper>
         <LayoutMiddleWrapper>
           <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
-          <Route path={'/news/me'} render={(props)=>{
-            return (<NewsMe {...props}/>)
+          <Route path={'/news/me'} render={(props) => {
+            return (<NewsMe {...props} />)
           }}></Route>
-          <Route path={'/news/comment'}  render={(props)=>{
-            return (<NewsComment {...props}/>)
+          <Route path={'/news/comment'} render={(props) => {
+            return (<NewsComment {...props} />)
           }}></Route>
           <Route path={'/news/praise'} component={NewsPraise}></Route>
           <Route path={'/news/notice'} component={NewsNotice}></Route>
@@ -49,6 +49,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           <Swap />
           <RecommendPeople />
           <HotTopic />
+          <FooterCopyright />
         </LayoutRightWrapper>
       </LayoutContentWrapper>
     </CommonLayoutWrapper>
