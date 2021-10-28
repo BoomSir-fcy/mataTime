@@ -12,8 +12,19 @@ export type MediaQueries = {
 };
 export type MediaQueriesSize = {
   margin: string;
+  marginUD: string;
+  marginLRmd: string;
+  marginb: string;
+  marginbmd: string;
+  marginbsm: string;
+  margint: string;
   marginr: string;
+  marginrmd: string;
+  marginl: string;
+  marginlmd: string;
   padding: string;
+  paddingsm: string;
+  paddingxs: string;
 };
 
 export type BreakpointMap = {
@@ -84,14 +95,17 @@ export type Colors = {
   backgroundPrimary: string;
   backgroundMember: string;
   backgroundCard: string;
+  backgroundTextArea: string;
   textValue: string;
   backgroundAlt: string;
   text: string;
   white_black: string;
   member_num: string;
   textPrimary: string;
+  textTips: string;
   textDisabled: string;
   textSubtle: string;
+  textOrigin: string;
   disabled: string;
 
   // Gradients

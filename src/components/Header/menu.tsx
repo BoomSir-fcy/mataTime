@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useStore, storeAction, Dispatch } from 'store';
 import { Box, Flex, Button, Svg } from 'uikit';
 
 import { mediaQueries } from "uikit/theme/base";
@@ -32,6 +34,10 @@ const WalletButton = styled(Button)`
 `
 
 export const Menu = React.memo(() => {
+
+  const dispatch = useDispatch();
+  const store = useStore(p => p.appReducer);
+
   return(
     <Flex alignItems="center">
       <HeaderMenuItem as={Link} to="/">
@@ -46,7 +52,7 @@ export const Menu = React.memo(() => {
         </Svg>
         星球
       </HeaderMenuItem>
-      <HeaderMenuItem as={Link} to="/">
+      <HeaderMenuItem as={Link} to="/me">
         <Svg viewBox="0 0 60 60" width="30px">
           <image xlinkHref={require('./images/icon_news.png').default}/>
         </Svg>
@@ -59,7 +65,9 @@ export const Menu = React.memo(() => {
         其他
       </HeaderMenuItem>
       <HeaderLine />
-      <WalletButton scale="ld">Connerct Wallet</WalletButton>
+      <WalletButton scale="ld" 
+        onClick={() => 
+          dispatch(storeAction.connectWallet({connectWallet: true}))}>Connerct Wallet</WalletButton>
     </Flex>
   )
 })

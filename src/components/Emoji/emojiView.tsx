@@ -3,15 +3,18 @@ import { Picker } from 'emoji-mart';
 
 import 'emoji-mart/css/emoji-mart.css';
 
-export const EmojiView: React.FC = React.memo(() => {
+export const EmojiView: React.FC<{
+  selectedEmoji: (data: string) => void
+}> = React.memo(({ selectedEmoji }) => {
   return(
-    <React.Fragment>
-      <Picker 
-        emoji='santa'
-        showPreview={false} 
-        showSkinTones={false} 
-        onSelect={(e) => console.log(e)} />
-    </React.Fragment>
+    <Picker 
+      set="twitter"
+      tooltip
+      showPreview={false} 
+      showSkinTones={false} 
+      style={{ position: 'absolute', left: 0, top: 40 }}
+      onClick={(emoji, e) => e.nativeEvent.stopImmediatePropagation()}
+      onSelect={emoji => selectedEmoji(emoji.native)} />
   )
 });
 

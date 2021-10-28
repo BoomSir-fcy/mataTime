@@ -22,7 +22,7 @@ export const Header = React.memo((props) => {
     <BoxStyled>
       <Flex alignItems="center" justifyContent="space-between" height="100%">
         <Flex justifyContent="space-between" alignItems="center"> 
-          <Logo />
+          <Logo src={require('./images/logo.svg').default} url="/" />
           <Search />
         </Flex>
         <Menu />

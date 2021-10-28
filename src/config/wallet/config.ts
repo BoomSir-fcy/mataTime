@@ -71,13 +71,25 @@ const connectors: Config[] = [
 export enum ChainId {
   BSC_MAINNET = 56,
   BSC_TESTNET = 97,
+  MATIC_MAINET = 137,
 }
 
 export const BASE_BSC_SCAN_URLS = {
   [ChainId.BSC_MAINNET]: 'https://bscscan.com',
   [ChainId.BSC_TESTNET]: 'https://testnet.bscscan.com',
+  [ChainId.MATIC_MAINET]: 'https://testnet.bscscan.com',
 }
 
+export const walletIcon = {
+  Metamask: Metamask,
+  WalletConnect: WalletConnect,
+  TrustWallet: TrustWallet,
+  MathWallet: MathWallet,
+  TokenPocket: TokenPocket,
+  BinanceChain: BinanceChain,
+  SafePal: SafePal,
+  Coin98: Coin98
+}
 
 export default connectors;
 export const connectorLocalStorageKey = "connectorIdv2";

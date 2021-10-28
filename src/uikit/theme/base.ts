@@ -23,6 +23,24 @@ export const mediaQueries: MediaQueries = {
   nav: `@media screen and (min-width: ${breakpointMap.lg}px)`,
 };
 
+const mediaMarginUpAndDown = `
+  ${mediaQueries.lg} {
+    margin: 24px 0 12px;
+  }
+  ${mediaQueries.xl} {
+    margin: 24px 0 12px;
+  }
+`
+
+const mediaMarginLeftAndRightMd = `
+  ${mediaQueries.lg} {
+    margin: 0 10px;
+  }
+  ${mediaQueries.xl} {
+    margin: 0 15px;
+  }
+`
+
 const mediaQueriesMargin = `
   ${mediaQueries.xxs} {
     margin: 8px 4px;
@@ -41,8 +59,72 @@ const mediaQueriesMargin = `
   ${mediaQueries.xl} {
     margin: 24px 32px;
   }
-
 `
+
+const mediaMarginBottom = `
+  ${mediaQueries.lg} {
+    margin-bottom: 18px;
+  }
+  ${mediaQueries.xl} {
+    margin-bottom: 32px;
+  }
+`
+const mediaMarginBottomMd = `
+  ${mediaQueries.lg} {
+    margin-bottom: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-bottom: 20px;
+  }
+`
+
+const mediaMarginBottomSm = `
+  ${mediaQueries.lg} {
+    margin-bottom: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-bottom: 12px;
+  }
+`
+
+const mediaMarginTop = `
+  ${mediaQueries.xxs} {
+    margin-top: 4px;
+  }
+  ${mediaQueries.xs} {
+    margin-top: 8px;
+  }
+
+  ${mediaQueries.sm} {
+    margin-top: 16px;
+  }
+
+  ${mediaQueries.lg} {
+    margin-top: 30px;
+  }
+  ${mediaQueries.xl} {
+    margin-top: 30px;
+  }
+`
+
+const mediaMarginLeft = `
+  ${mediaQueries.lg} {
+    margin-left: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-left: 18px;
+  }
+`
+
+const mediaMarginLeftMd = `
+  ${mediaQueries.lg} {
+    margin-left: 4px;
+  }
+  ${mediaQueries.xl} {
+    margin-left: 8px;
+  }
+`
+
 const mediaQueriesMarginRight = `
   ${mediaQueries.xxs} {
     margin-right: 4px;
@@ -63,6 +145,16 @@ const mediaQueriesMarginRight = `
   }
 
 `
+
+const mediaMarginRightMd = `
+  ${mediaQueries.lg} {
+    margin-right: 10px;
+  }
+  ${mediaQueries.xl} {
+    margin-right: 14px;
+  }
+`
+
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
     padding: 8px 4px;
@@ -80,14 +172,43 @@ const mediaQueriesPadding = `
   }
 
   ${mediaQueries.lg} {
-    padding: 16px 24px;
+    padding: 20px 25px;
+  }
+`
+
+const mediaPaddingSM = `
+  ${mediaQueries.sm} {
+    padding: 15px 12px;
+  }
+  ${mediaQueries.lg} {
+    padding: 15px 12px;
+  }
+`
+
+const mediaPaddingXs = `
+  ${mediaQueries.sm} {
+    padding: 14px 18px;
+  }
+  ${mediaQueries.lg} {
+    padding: 14px 18px;
   }
 `
 
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
   marginr: mediaQueriesMarginRight,
+  marginrmd: mediaMarginRightMd,
+  marginb: mediaMarginBottom,
+  marginbmd: mediaMarginBottomMd,
+  marginbsm: mediaMarginBottomSm,
+  margint: mediaMarginTop,
+  marginl: mediaMarginLeft,
+  marginlmd: mediaMarginLeftMd,
+  marginUD: mediaMarginUpAndDown,
+  marginLRmd: mediaMarginLeftAndRightMd,
   padding: mediaQueriesPadding,
+  paddingsm: mediaPaddingSM,
+  paddingxs: mediaPaddingXs
 }
 
 export const shadows = {

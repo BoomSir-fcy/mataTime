@@ -5,13 +5,15 @@ import useAuth from 'hooks/useAuth'
 import { toast } from 'react-toastify';
 // import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
-import WalletModal from './WalletModal'
-
+import WalletModal from './WalletModal';
 
 const WalletButton = styled(Button)`
-  background: #FFFFFF;
-  color: #5A7CF9;
+  width: 205px;
 `
+
+export {
+  WalletModal
+}
 
 export const ConnectWalletButton: React.FC = (props) => {
   const { t } = useTranslation()
@@ -19,8 +21,7 @@ export const ConnectWalletButton: React.FC = (props) => {
 
   useEffect(() => {
     const changeHandler = () => {
-      console.log(211)
-      setShow(false)
+      setShow(false);
     }
     document.body.addEventListener('click', changeHandler)
     return () => document.body.removeEventListener('click', changeHandler)
@@ -29,7 +30,6 @@ export const ConnectWalletButton: React.FC = (props) => {
   return (
     <Box>
       <WalletButton onClick={(e) => {
-        console.log(444)
         setShow(!show);
         e.stopPropagation()
       }} {...props}>
