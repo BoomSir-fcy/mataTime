@@ -1,4 +1,6 @@
+import { storeAction } from "./../../store/index";
 import { useCallback } from 'react'
+import { useDispatch } from 'react-redux';
 import { ChainId } from 'config/wallet/config'
 import { signMessage } from 'utils/web3React'
 import { storage } from 'config'
@@ -8,7 +10,7 @@ import random from 'lodash/random';
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 enum LoginNetwork {
-  BSC = 1,
+  BSC = 2,
   MATIC = 2,
 }
 
@@ -21,33 +23,56 @@ const networks = {
 // 用户登录
 export function useSignIn() {
 
+  const dispatch = useDispatch(); 
   // 验证地址是否注册
   const siginInVerify = useCallback(async(address: string) => {
     try {
       const res = await Api.SignInApi.signVerify(address);
-      return res.code;
+      if(Api.isSuccess(res)) {
+        return res.code;
+      }
+      return "";
     } catch (error) {
       console.log(error);
     }
   }, []);
 
-  const getNftUrl = async() => {
+  const getNftUrl = async(address?: string) => {
     try {
-      const res = await Api.SignInApi.getNft();
+      const res: Api.SignIn.nftCallback = await Api.SignInApi.getNft(2, address);
+      if(Api.isSuccess(res)) {
+        dispatch(storeAction.setUserNft({...res.data}));
+        return res.code;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getUserName = async() => {
+    try {
+      const res = await Api.UserApi.getUserInfo();
       return res;
     } catch (error) {
       console.log(error);
     }
   }
 
-  const isSignUpCallback = useCallback(async() => {
-    
-  }, []);
+  // 添加用户昵称
+  const addNickName = async(nickname: string) => {
+    try {
+      const res = await Api.UserApi.addNickName(nickname);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return {
     siginInVerify,
     getNftUrl,
-    isSignUpCallback
+    getUserName,
+    addNickName
   }
 }
 
@@ -69,10 +94,10 @@ export function useLogin() {
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
         const response = operationType === 1  ? 
-            await Api.SignInApi.signIn(params) : await Api.SignInApi.signIn(params);
+            await Api.SignInApi.signUp(params) : await Api.SignInApi.signIn(params);
         const { token } = response.data;
         window.localStorage.setItem(storage.Token, token);
-        return response.data;
+        return response;
       } catch (error) {
         console.error(error)
       }

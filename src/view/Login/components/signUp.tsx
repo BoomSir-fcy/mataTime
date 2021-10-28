@@ -99,15 +99,15 @@ export const SignUp: React.FC<{
   const { getNftUrl } = useSignIn();
 
   const signHandle = React.useCallback(async () => {
-
     const res = await loginCallback(1);
-    dispatch(storeAction.changeSignUpStep({singUpStep: 2}));
-
+    if(Api.isSuccess(res)) {
+      dispatch(storeAction.changeSignUpStep({singUpStep: 2}));
+    }
   }, [dispatch, loginCallback])
 
   const changeNftUrl = React.useCallback(async() => {
-    const res = await getNftUrl();
-    if(Api.isSuccess(res)) {
+    const res:number = await getNftUrl(account);
+    if(Boolean(res)) {
       dispatch(storeAction.changeSignUpStep({singUpStep: 3}));
     }
   }, []);

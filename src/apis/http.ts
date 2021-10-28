@@ -30,7 +30,7 @@ export class Http {
 
     try {
       response = await axios({...configs, headers: { ...configs.headers, token: token }});
-      response.data.code === 0 && toast.error("Token expiration");
+      // response.data.code === 0 && toast.error("Token expiration");
       return response.data;
     } catch (e) {
       Dispatch.toast.show({type:'error', text: "error"});

@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
+import { toast } from 'react-toastify';
 import { useStore, storeAction, Dispatch } from 'store';
 import { Box, Flex, Text, Card } from 'uikit';
 import { ConnectWalletButton } from 'components'
 import { useLogin, useSignIn } from '../hooks'
-
+import { Api } from 'apis';
 import { Logo } from 'components';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
@@ -47,7 +48,7 @@ export const LoginJoin: React.FC<{
   const dispatch = useDispatch();
   const history = useHistory();
   const { loginCallback } = useLogin();
-  const { siginInVerify } = useSignIn();
+  const { siginInVerify, getUserName, getNftUrl } = useSignIn();
   const { account } = useWeb3React();
   const [state, setState] = useImmer({
     isSignIn: false
@@ -55,14 +56,33 @@ export const LoginJoin: React.FC<{
 
   const signIn = async () => {
     const res = await loginCallback(2);
-    dispatch(storeAction.changeUpdateProfile({...res, uuid: '11111'}));
-    history.replace(`${redirectUrl || '/'}`);
+    if(res) {
+      const user:any = await getUserName();
+      // 20103 已注册未添加昵称
+      if(user.code === 20103) {
+        dispatch(storeAction.changeSignUp({isSignup: true}));
+        dispatch(storeAction.changeSignUpStep({singUpStep: 3}));
+      } else if(Api.isSuccess(user)) {
+        history.replace(`${redirectUrl || '/'}`);
+        dispatch(storeAction.changeUpdateProfile({...user.data}));
+      }
+    }
+    setState(p => {p.isSignIn = false})
   }
 
-  const verify = async() => {
-    const verifyRes = await siginInVerify(account);
-    Boolean(verifyRes) && setState(p => {p.isSignIn = true});
-    dispatch(storeAction.changeSignUp({isSignup: true}));
+  const init = async() => {
+    const [verify, nft] = await Promise.all([
+      siginInVerify(account),
+      getNftUrl(account)
+    ]);
+    // 用户登录
+    Boolean(verify) && setState(p => { p.isSignIn = true });
+    if(!Boolean(verify)) {
+      dispatch(storeAction.changeSignUp({isSignup: true}));
+      if(nft === 20104) {
+        dispatch(storeAction.changeSignUpFail({signUpFail: true}));
+      }
+    }
   }
 
   React.useEffect(() => {
@@ -70,7 +90,10 @@ export const LoginJoin: React.FC<{
   }, [state.isSignIn])
 
   React.useEffect(() => {
-    Boolean(account) && verify();
+    Boolean(account) && init();
+    return () => {
+      setState(p => {p.isSignIn = false})
+    }
   }, [account]);
   
   return (

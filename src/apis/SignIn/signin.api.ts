@@ -8,7 +8,7 @@ export class SignInApi extends Http {
   }
 
   async signUp(params: Api.SignIn.LoginSignMessage) {
-    const res = await this.post('/v1/sign/signup', params);
+    const res:any = await this.post('/v1/sign/signup', params);
     return res;
   }
 
@@ -17,8 +17,8 @@ export class SignInApi extends Http {
     return res;
   }
 
-  async getNft() {
-    const res = await this.get('/v1/sign/nfturl');
+  async getNft(network: number, address?: string) {
+    const res: Api.SignIn.nftCallback = await this.get('/v1/sign/nfturl', { address, network });
     return res;
   }
 

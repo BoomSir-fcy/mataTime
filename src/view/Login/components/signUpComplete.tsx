@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { Follow, Logo } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useDispatch } from 'react-redux';
+import { fetchThunk } from 'store';
 
 const FlexButton = styled(Flex)`
   margin-top: 110px;
@@ -19,6 +22,15 @@ const LogoWarpper = styled(Box)`
 `
 
 export const SignUpcomplete = React.memo(() => {
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const complete = () => {
+    dispatch(fetchThunk.fetchUserInfoAsync());
+    history.replace("/");
+  } 
+
   return (
     <Box>
       <LogoWarpper>
@@ -32,7 +44,7 @@ export const SignUpcomplete = React.memo(() => {
       </Box>
       <FlexButton>
         <Button scale="ld">换一批</Button>
-        <Button scale="ld" variant="secondary">完成注册</Button>
+        <Button scale="ld" variant="secondary" onClick={complete}>完成注册</Button>
       </FlexButton>
     </Box>
   )
