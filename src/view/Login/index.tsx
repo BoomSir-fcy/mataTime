@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { storeAction, useStore } from 'store';
-import { Toggle, Flex } from 'uikit'; 
+import { Flex } from 'uikit'; 
 import { Footer } from 'components';
 import { mediaQueries } from "uikit/theme/base";
 
@@ -16,15 +17,17 @@ const LoginContainer = styled(Flex)`
   }
 `
 
-const Login: React.FC = React.memo(() => {
+const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
-  const { isSignup } = loginReduce;
+  const { isSignup, signUpFail } = loginReduce;
+  const { location } = route;
 
   React.useEffect(() => {
     return () => {
       dispatch(storeAction.changeSignUp({isSignup: false}));
+      dispatch(storeAction.changeSignUpStep({singUpStep: 1}));
     }
   }, []);
 
@@ -36,15 +39,14 @@ const Login: React.FC = React.memo(() => {
         </Flex>
         {
           isSignup ? 
-          <SignUp isSignup={true} />
+          <SignUp isSignup={signUpFail} />
           :
-          <LoginJoin />
+          <LoginJoin redirectUrl={location.state?.from?.pathname} />
         }
       </LoginContainer>
       <Footer />
     </React.Fragment>
-
   )
 })
 
-export default Login;
+export default withRouter(Login);

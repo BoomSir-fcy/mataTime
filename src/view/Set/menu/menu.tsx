@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from "styled-components";
 import { Flex, Box } from 'uikit';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import menuData from './menuData'
 import { Avatar, Icon } from 'components';
+
 const MenuBox = styled(Flex)`
   flex-direction: column;
   justify-content:space-between;
@@ -60,6 +61,8 @@ const Badge = (props: { count: number | string }) => {
   )
 }
 export const MenuList = (props: { menuList: any[] }) => {
+  console.log('route', props)
+
   const [currentIndex, setCurrentIndex] = useState(0)
   const { menuList } = props
   const itemClick = (index) => {
@@ -107,12 +110,16 @@ font-size: 16px;
 font-weight: 400;
 color: #B5B5B5;
 `
-export const Menu: React.FC = () => {
+
+export const Menu: React.FC = (props) => {
+  const Back = () => {
+    console.log('props', props);
+  }
   return (
     <MenuBox>
       <Box>
-        <Logo></Logo>
-        <GoBack>返回</GoBack>
+        <Logo />
+        <GoBack onClick={Back}>返回</GoBack>
         <MenuList menuList={menuData}></MenuList>
       </Box>
       <Flex>

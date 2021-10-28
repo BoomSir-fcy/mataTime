@@ -4,19 +4,16 @@ import { Container } from './container';
 
 const SafeSet = React.lazy(() => import('./SafeSet'));
 const NoticeSet = React.lazy(() => import('./NoticeSet'));
-const LikeSet = React.lazy(() => import('./NoticeSet'));
-
+const LikeSet = React.lazy(() => import('./LikeSet'));
 
 const Set = (props) => {
-  console.log('props', props);
-
   return (
     <Router>
       <Route render={() =>
         <Container>
-          <Route exact component={SafeSet} />
-          <Route component={NoticeSet} />
-          <Route component={LikeSet} />
+          <Route path={`${props.match.path}/safeset`} exact component={SafeSet} />
+          <Route path={`${props.match.path}/noticeset`} component={NoticeSet} />
+          <Route path={`${props.match.path}/likeset`} component={LikeSet} />
         </Container>}
       />
     </Router>

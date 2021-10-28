@@ -6,7 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import { LanguageProvider } from 'contexts/Localization';
 import { store } from 'store';
 import { getLibrary } from 'utils';
-import { ProvideAuth } from 'contexts';
 
 const ThemeProviderWrapper = (props) => {
 	// const theme = { main: "mediumseagreen" };
@@ -19,9 +18,7 @@ const Providers: React.FC = ({ children }) => {
 			<Provider store={store}>
 				<ThemeProviderWrapper>
 					<LanguageProvider>
-						<ProvideAuth>
-							{children}
-						</ProvideAuth>
+						{children}
 					</LanguageProvider>
 				</ThemeProviderWrapper>
 			</Provider> 

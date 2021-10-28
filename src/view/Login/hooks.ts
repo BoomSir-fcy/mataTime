@@ -20,27 +20,33 @@ const networks = {
 
 // 用户登录
 export function useSignIn() {
-  const { account, chainId, library } = useActiveWeb3React();
 
+  // 验证地址是否注册
   const siginInVerify = useCallback(async(address: string) => {
     try {
       const res = await Api.SignInApi.signVerify(address);
-      console.log(res);
+      return res.code;
     } catch (error) {
-      
+      console.log(error);
     }
   }, []);
 
-  const isSignUpCallback = useCallback(async() => {
+  const getNftUrl = async() => {
     try {
-      // const response = await http.get("/");
+      const res = await Api.SignInApi.getNft();
+      return res;
     } catch (error) {
-      
+      console.log(error);
     }
+  }
+
+  const isSignUpCallback = useCallback(async() => {
+    
   }, []);
 
   return {
     siginInVerify,
+    getNftUrl,
     isSignUpCallback
   }
 }
@@ -62,11 +68,11 @@ export function useLogin() {
         }
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
-        const response = 
-            await operationType === 1  ? 
-              Api.SignInApi.signIn(params) : Api.SignInApi.signIn(params);
-        // window.localStorage.setItem(storage.Token, response.token);
-        return response;
+        const response = operationType === 1  ? 
+            await Api.SignInApi.signIn(params) : await Api.SignInApi.signIn(params);
+        const { token } = response.data;
+        window.localStorage.setItem(storage.Token, token);
+        return response.data;
       } catch (error) {
         console.error(error)
       }

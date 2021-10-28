@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction } from 'store';
 import { languages } from './config/localization';
-import { CommonLayout, Header, Toast, WalletModal,ArticleDetilsLayout } from 'components';
+import { CommonLayout, Header, Toast, WalletModal, ArticleDetilsLayout } from 'components';
 import { Box } from 'uikit';
 import 'moment/locale/zh-cn';
 import moment from 'moment';
@@ -48,7 +48,7 @@ function App() {
           <GlobalStyle />
           <Container>
             <Switch>
-              <Route path="/" exact  render={
+              <Route path="/" exact render={
                 props => (
                   <>
                     <Header {...props} />
@@ -57,12 +57,12 @@ function App() {
                 )
               }>
               </Route>
-              <Route path="/articleDetils" exact  render={
+              <Route path="/articleDetils" exact render={
                 props => (
                   <>
                     <Header {...props} />
                     <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
-                 </>
+                  </>
                 )
               }>
               </Route>
@@ -79,9 +79,7 @@ function App() {
               <Route path="/edit">
                 <Edit />
               </Route>
-              <Route path="/set">
-                <Set />
-              </Route>
+              <PrivateRoute path="/set" Component={Set} />
             </Switch>
           </Container>
           <Toast />

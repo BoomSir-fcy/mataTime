@@ -25,6 +25,8 @@ const RightCard = styled.div`
 `
 
 export const Container = (props) => {
+  console.log('props', props);
+
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">

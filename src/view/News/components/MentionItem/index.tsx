@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
-import { FollowPopup, MorePopup,Icon } from 'components'
+import { FollowPopup, MorePopup, Icon } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -14,18 +14,18 @@ import {
 type IProps = {
   more?: boolean;
   size?: string;
-  [propName:string]:any;
+  [propName: string]: any;
 }
 
-const MentionItem: React.FC<IProps> = (props,{ children, more = true, size = 'nomal' }) => {
-    const goDetils=(e)=>{
-    if(props.location.pathname==='/articleDetils')return
+const MentionItem: React.FC<IProps> = (props, { children, size = 'nomal' }) => {
+  const goDetils = (e) => {
+    if (props.location.pathname === '/articleDetils') return
     props.history.push('/articleDetils')
   }
   return (
     <MentionItemWrapper>
-      <MentionItemUser more={more} size={size} />
-      <div className="mention-content" onClick={(e)=>{goDetils(e)}}>
+      <MentionItemUser more={props.more || true} size={size} />
+      <div className="mention-content" onClick={(e) => { goDetils(e) }}>
         <p><a>#Dinosaur Eggs#</a></p>
         <p>New baby is coming. How about this one? </p>
         <p>
@@ -44,7 +44,7 @@ type UserProps = {
   size?: string;
 }
 
-export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) => {
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal' }) => {
   const [followShow, setFollowShow] = useState(false);
   return (
     <MentionItemUserWrapper>
@@ -57,9 +57,9 @@ export const MentionItemUser: React.FC<UserProps> = ({ more, size = 'nomal' }) =
               <div className="time">{relativeTime()}</div>
             </div>
             <div className="topic">
-                      <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
-                      老表的吃货天堂
-                    </div>
+              <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
+              老表的吃货天堂
+            </div>
           </div>
         </div>
         {
