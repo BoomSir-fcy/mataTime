@@ -52,7 +52,7 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          <Container>
+          <Container id="bg">
             <Switch>
               <Route path="/" exact render={
                 props => (

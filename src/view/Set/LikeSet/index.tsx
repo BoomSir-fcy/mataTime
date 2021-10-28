@@ -39,6 +39,13 @@ const LikeSet = () => {
   const setDeep = () => {
     setState(p => {
       p.isDeep = !p.isDeep
+      let bgColor = document.getElementById("bg")
+      if (state.isDeep) {
+        bgColor.style.backgroundImage = "url(../../../assets/images/background_images.jpg)"
+      } else {
+        bgColor.style.backgroundColor = 'skyblue'
+        bgColor.style.backgroundImage = ""
+      }
     })
   }
   // 红点提醒
@@ -54,12 +61,6 @@ const LikeSet = () => {
       p.isTranslation = !p.isTranslation
     })
   }
-
-  const statelikeSet = [
-    { title: '深色模式', msg: '可切换为深色模式，夜间浏览更舒服', toggle: true },
-    { title: '消息红点提醒', msg: '有新消息时通过红点提醒', toggle: true },
-    { title: '默认显示语言', msg: '显示更符合你的语言', toggle: false },
-  ]
 
   return (
     <NoticeSetBox>

@@ -12,10 +12,10 @@ import {
 } from './style';
 
 
-const NewsMe = React.lazy(() => import('view/News/Me'));
-const NewsComment = React.lazy(() => import('view/News/Comment'));
-const NewsPraise = React.lazy(() => import('view/News/Praise'));
-const NewsNotice = React.lazy(() => import('view/News/Notice'));
+import NewsMe  from 'view/News/Me'
+import NewsComment  from 'view/News/Comment'
+import NewsPraise  from 'view/News/Praise'
+import NewsNotice  from 'view/News/Notice'
 type IProps = {
 
 }

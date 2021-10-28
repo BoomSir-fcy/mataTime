@@ -9,7 +9,7 @@ import {
 import { Api } from 'apis';
 
 const initialState = {
-	isSignup: false,
+  isSignup: false,
   signUpFail: false,
   singUpStep: 1,
   userInfo: {},

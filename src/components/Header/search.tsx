@@ -10,7 +10,7 @@ const SearchBox = styled(Flex)`
   padding-left: 33px;
 `
 
-const  InputBox = styled.input`
+const InputBox = styled.input`
   flex: 1;
   height: 100%;
   border: 0;
@@ -23,7 +23,7 @@ export const Search = React.memo(() => {
   return (
     <SearchBox justifyContent="space-between" alignItems="center">
       <Svg viewBox="0 0 45 45" width="30px">
-        <image xlinkHref={require('./images/icon_search.png').default}/>
+        <image xlinkHref={require('./images/icon_search.png').default} />
       </Svg>
       <InputBox placeholder="搜索 SOFI" />
     </SearchBox>

@@ -1,4 +1,4 @@
-import React,{ useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import styled from "styled-components";
 import searchImg from 'assets/images/common/search.png'
 const SearchBox = styled.div`
@@ -24,13 +24,13 @@ padding-left: 66px;
 border-radius: 20px;
 `
 
-export  const Search:React.FC = ()=>{
-  const [value,setValue]= useState('')
-  const searchChange=(e)=>{
+export const Search: React.FC = () => {
+  const [value, setValue] = useState('')
+  const searchChange = (e) => {
     setValue(e.target.value)
   }
-  const startSearch=(e)=>{
-    if(e.code==='Enter'&&value){
+  const startSearch = (e) => {
+    if (e.code === 'Enter' && value) {
       console.log(value)
     }
 
@@ -38,7 +38,7 @@ export  const Search:React.FC = ()=>{
   return (
     <SearchBox>
       <img src={searchImg} alt="" />
-      <SearchInput value={value} onChange={(e)=>{searchChange(e)}} onKeyDown={startSearch.bind(this)}  type="text" placeholder="搜索 SOFI" />
+      <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder="搜索 SOFI" />
     </SearchBox>
   )
 }
