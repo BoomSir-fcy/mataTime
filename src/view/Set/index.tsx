@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 import { Container } from './container';
 
-const SafeSet = React.lazy(() => import('./safeset'));
-const NoticeSet = React.lazy(() => import('./noticeset'));
-const LikeSet = React.lazy(() => import('./likeset'));
+const SafeSet = React.lazy(() => import('./SafeSet'));
+const NoticeSet = React.lazy(() => import('./NoticeSet'));
+const LikeSet = React.lazy(() => import('./LikeSet'));
 
 const Set = (props) => {
   return (
