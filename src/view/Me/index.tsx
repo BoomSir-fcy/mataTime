@@ -5,6 +5,7 @@ import { Container } from './container';
 const Account = React.lazy(() => import('./account'));
 const Profile = React.lazy(() => import('./profile'));
 const Edit = React.lazy(() => import('../Edit'));
+const Follow = React.lazy(() => import('./follow'));
 
 const Me = (props) => {
   return (
@@ -15,6 +16,7 @@ const Me = (props) => {
           <Route path={`${props.match.path}/account`} component={Account} />
           <Route path={`${props.match.path}/profile`} component={Account} />
           <Route path={`${props.match.path}/edit`} component={Edit} />
+          <Route path={`${props.match.path}/follow`} component={Follow} />
         </Container>}
       />
     </Router>

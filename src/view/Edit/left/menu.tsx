@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Flex, Box, Button } from 'uikit';
 import { Link } from 'react-router-dom'
 import menuData from './menuData'
-import { Avatar } from 'components/Avatar';
+import { Avatar, Icon } from 'components'
 
 const MenuBox = styled(Flex)`
   flex-direction: column;
@@ -17,14 +17,7 @@ const MenuBox = styled(Flex)`
 const Logo = styled.h2`
 width: 175px;
 height: 32px;
-background-color: red;
-// margin-bottom:26px;
-`
-const GoBack = styled.div`
-  width:100%;
-  height:32px;
-  color:#fff;
-  font-weight: bold;
+background: url('${require('assets/images/logo/nav-logo.png').default}') center/cover;
 `
 const Btn = styled.div`
   width:100%;
@@ -65,6 +58,23 @@ margin:0 12px;
 font-size: 16px;
 font-weight: 400;
 color: #B5B5B5;
+`
+const BackWarpper = styled(Box)`
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  cursor: pointer;
+  i{
+    font-size: 23px !important;
+    font-weight: bold;
+  }
+  span{
+    font-size: 18px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-left: 10px;
+  }
 `
 const Badge = (props: { count: number | string }) => {
   let { count } = props
@@ -126,8 +136,11 @@ export const Menu: React.FC = () => {
   return (
     <MenuBox>
       <Box>
-        <Logo>logo</Logo>
-        <GoBack>返回</GoBack>
+        <Logo />
+        <BackWarpper>
+          <Icon name={'icon-fanhui'}></Icon>
+          <span>返回</span>
+        </BackWarpper>
         <MenuList menuList={menuData}></MenuList>
         <Btn><Button>断开钱包</Button></Btn>
       </Box>

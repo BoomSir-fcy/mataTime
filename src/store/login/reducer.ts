@@ -2,11 +2,11 @@ import { createReducer } from '@reduxjs/toolkit';
 import { changeSignUp, changeSignUpFail, changeSignUpStep, changeUpdateProfile } from './actions';
 
 const initialState = {
-	isSignup: false,
+  isSignup: false,
   signUpFail: false,
   singUpStep: 1,
   userInfo: {
-    uuid: ''
+    uuid: '1'
   }
 };
 
@@ -26,5 +26,5 @@ export default createReducer(initialState, (builder) => {
     .addCase(changeUpdateProfile, (state, action) => {
       state.userInfo = action.payload;
     })
-    
+
 })

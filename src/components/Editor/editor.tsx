@@ -1,76 +1,100 @@
 import React from 'react';
-import styled from 'styled-components';
-import { useImmer } from 'use-immer';
-import { Box, Flex, Button, Svg } from 'uikit';
-
-import { Emoji } from './emoji';
-import { Toolbar } from './toolbar';
-
-import { mediaQueriesSize } from 'uikit/theme/base';
-
-const EditorWarpper = styled(Box)`
-  width: 100%;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: ${({ theme }) => theme.radii.card};
-  ${mediaQueriesSize.padding}
-  ${mediaQueriesSize.marginbsm}
-`
-const EditorTextarea = styled.textarea`
-  width: 100%;
-  min-height: 112px;
-  color: ${({ theme }) => theme.colors.text};
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
-  border-radius: ${({ theme }) => theme.radii.card};
-  border: 0;
-  outline: 0;
-  resize: none;
-  font-size: 16px;
-  ${mediaQueriesSize.padding}
-`
-
-const SendButton = styled(Button)`
-border-radius: ${({ theme }) => theme.radii.card};
-width: 100px;
-height: 35px;
-border-radius: 10px;
-background-color:#4168ED;
-margin-top:12px;
-`;
-const EditorToolbar = styled(Flex)`
-`
-export const Editor = React.memo(() => {
-  const [state, setState] = useImmer({
-    cursor: 0,
-    editorValue: ""
-  });
-  const editor = React.useRef(null);
-  const insertMyText = (event:any, text: string) => {
-    const { cursor } = state;
-    const { value } = event;
-    let textBefore = value.substring(0, cursor);
-    let textAfter = value.substring(cursor, value.length);
-    return textBefore + text + textAfter;
+// import styled from 'styled-components';
+// import { useImmer } from 'use-immer';
+import E from 'wangeditor'
+// import { Emoji } from './emoji';
+// import { Toolbar } from './toolbar';
+import {
+  EditorWarpper,
+  SendButton,
+  TextBox,
+  Toolbar
+} from './style'
+{/* <SendButton>发布</SendButton> */}
+const {BtnMenu} = E
+export class Editor extends React.Component {
+  editor:any
+  constructor(props) {
+    super(props);
   }
-
-  const handleSelectEmoji = React.useCallback((data) => {
-    const { editorValue, cursor } = state;
-    let newValue = insertMyText(editor.current, data);
-    setState(p => {
-      p.cursor = cursor + data.length;
-      p.editorValue = cursor > 0 ? newValue : (editorValue + data);
-    })
-  }, [state]);
-
-  return (
-    <EditorWarpper>
-      <EditorTextarea placeholder="分享新鲜事" ref={editor}
-        value={state.editorValue}
-        onBlur={(e) => setState(p => {p.cursor = e.target.selectionStart})}
-        onChange={(e) => setState(p => {p.editorValue = e.target.value})} />
-      <Flex justifyContent="space-between" mt="12px">
-        <Toolbar callback={handleSelectEmoji} />
-        <Button>发布</Button>
-      </Flex>
-    </EditorWarpper>
-  )
-})
+  componentDidMount() {
+    this.initEditor()
+  }
+  initEditor(){
+    const editor = new E('#toolbar','#textbox')
+    editor.config.placeholder = '分享新鲜事'
+    editor.config.height = 500
+    // editor.config.showFullScreen = true
+    editor.config.showLinkImg = false
+    editor.config.menus=[
+      'emoticon',
+      'image'
+    ]
+    class InsertAT extends BtnMenu {
+      constructor(editor) {
+        const $elem = E.$(
+          `
+          <div class="w-e-menu" data-title="艾特">
+            <i class="iconfont icon-aite"></i>
+          </div>
+          `
+        );
+        super($elem, editor);
+      }
+      clickHandler() {
+        editor.cmd.do("insertHTML", `<span contenteditable="false">&nbsp;<span style="color:blue">@李某某</span>&nbsp;</span>`);
+      }
+      // 菜单激活状态
+      tryChangeActive() {
+        this.active(); // 菜单激活
+        // this.unActive() // 菜单不激活
+      }
+    }
+    class InsertTopic extends BtnMenu {
+      constructor(editor) {
+        const $elem = E.$(
+          `
+          <div class="w-e-menu" data-title="话题">
+            <i class="iconfont icon-a-xiaoxi1"></i>
+          </div>
+          `
+        );
+        super($elem, editor);
+      }
+      clickHandler() {
+        editor.cmd.do("insertHTML", `<span contenteditable="false">&nbsp;<span style="color:blue">#瓜娃子#</span>&nbsp;</span>`);
+      }
+      // 菜单激活状态
+      tryChangeActive() {
+        this.active(); // 菜单激活
+        // this.unActive() // 菜单不激活
+      }
+    }
+    editor.menus.extend("aite",   InsertAT);
+    editor.menus.extend("topic",   InsertTopic);
+    editor.config.menuTooltipPosition = 'down'
+    editor.config.menus = editor.config.menus.concat('aite','topic');
+    editor.config.uploadImgShowBase64 = true
+    editor.config.onchange = function (newHtml) {
+    };
+    editor.create()
+    this.editor = editor
+  } 
+  componentWillUnmount(){
+    this.editor.destroy();
+  }
+  sendArticle(){
+    console.log(this.editor.txt.html());
+  }
+  render() {
+    return(
+      <EditorWarpper>
+        <TextBox id="textbox"></TextBox>
+        <Toolbar justifyContent="space-between" alignItems="center">
+          <div id="toolbar"></div>
+        <SendButton onClick={this.sendArticle.bind(this)}>发表</SendButton>
+        </Toolbar>
+      </EditorWarpper>
+    )
+  }
+}
