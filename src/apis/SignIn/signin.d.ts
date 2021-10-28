@@ -8,8 +8,8 @@ declare namespace Api {
     }
     
     enum OperationType {
-      LOGIN = 1,
-      REGISTER = 2,
+      REGISTER = 1,
+      LOGIN = 2,
     }
 
     interface LoginSignMessage {
@@ -19,6 +19,15 @@ declare namespace Api {
       nonce: number, // 随机数
       encode_data: string
     }    
+
+    interface nftParams {
+      nftID: number
+      nftUrl: string 
+    }
+
+    interface nftCallback extends Api.Error {
+      data: nftParams
+    }
 
   }
 }

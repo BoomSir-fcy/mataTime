@@ -1,22 +1,31 @@
-import { createStore, combineReducers } from "redux";
+import { configureStore } from '@reduxjs/toolkit'
 import { useSelector } from "react-redux";
-import { composeWithDevTools } from "redux-devtools-extension";
 import { ToastContainerProps } from 'react-toastify';
-
 import { appReducer, appAction, App } from './app';
 import { toastContainer } from './app/actions';
-import { loginReducer, loginAction, Login } from './login';
+import { loginReducer, loginAction, Login, fetchUserInfoAsync } from './login';
 
 export interface Store {
 	appReducer: App,
 	loginReducer: Login
 }
+// const rootReducer = combineReducers({ appReducer, loginReducer });
+// export const store = createStore(rootReducer, composeWithDevTools());
+export const store = configureStore({
+  reducer: {
+    appReducer, 
+    loginReducer 
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  devTools: process.env.NODE_ENV !== 'production',
+})
 
-const rootReducer = combineReducers({ appReducer, loginReducer });
-export const store = createStore(rootReducer, composeWithDevTools());
 export const storeAction = {
 	...loginAction,
   ...appAction
+}
+export const fetchThunk = {
+  fetchUserInfoAsync,
 }
 
 export const Dispatch = {

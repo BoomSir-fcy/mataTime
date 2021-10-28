@@ -5,12 +5,13 @@ import 'style/fonts/iconfont.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
-import { useStore, storeAction } from 'store';
+import { useStore, storeAction, fetchThunk } from 'store';
 import { languages } from './config/localization';
 import { CommonLayout, Header, Toast, WalletModal, ArticleDetilsLayout } from 'components';
 import { Box } from 'uikit';
 import 'moment/locale/zh-cn';
 import moment from 'moment';
+import { storage } from 'config';
 import { PrivateRoute } from './PrivateRoute';
 
 // 路由加载
@@ -29,6 +30,7 @@ function App() {
 
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
+  const token = window.localStorage.getItem(storage.Token);
   const { t, setLanguage } = useTranslation();
 
   React.useEffect(() => {
@@ -40,6 +42,10 @@ function App() {
       return () => document.body.removeEventListener('click', changeHandler)
     }
   }, [store.connectWallet]);
+
+  React.useEffect(() => {
+    token && dispatch(fetchThunk.fetchUserInfoAsync());
+  }, [token])
 
   return (
     <React.Fragment>
