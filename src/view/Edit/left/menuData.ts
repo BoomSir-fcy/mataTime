@@ -14,12 +14,12 @@ const menuArr = [
   {
     icon: 'none',
     title: '粉丝',
-    path: '/',
+    path: '/me/fans',
   },
   {
     icon: 'none',
     title: '点赞',
-    path: '/',
+    path: '/me/praise',
   },
   {
     icon: 'none',

@@ -31,20 +31,21 @@ border-bottom: 1px solid #4D535F;
 
 const LikeSet = () => {
   const [state, setState] = useImmer({
-    isDeep: false,
+    isDeep: true,
     isRemind: true,
     isTranslation: false
   })
   // 深色模式
   const setDeep = () => {
+    let bgImg = document.getElementById("bg")
     setState(p => {
       p.isDeep = !p.isDeep
-      let bgColor = document.getElementById("bg")
       if (state.isDeep) {
-        bgColor.style.backgroundImage = "url(../../../assets/images/background_images.jpg)"
+        bgImg.style.backgroundImage = "url(../../../assets/images/background_images.jpg)"
+        bgImg.style.backgroundColor = "skyblue"
       } else {
-        bgColor.style.backgroundColor = 'skyblue'
-        bgColor.style.backgroundImage = ""
+        bgImg.style.backgroundColor = "skyblue"
+        bgImg.style.backgroundImage = ""
       }
     })
   }

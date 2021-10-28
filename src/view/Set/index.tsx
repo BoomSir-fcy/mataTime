@@ -7,6 +7,8 @@ const NoticeSet = React.lazy(() => import('./NoticeSet'));
 const LikeSet = React.lazy(() => import('./LikeSet'));
 
 const Set = (props) => {
+
+  console.log('props', props);
   return (
     <Router>
       <Route render={() =>
@@ -21,4 +23,4 @@ const Set = (props) => {
   )
 }
 
-export default Set;
+export default withRouter(Set);
