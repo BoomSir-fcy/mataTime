@@ -17,7 +17,6 @@ import { PrivateRoute } from './PrivateRoute';
 const Home = React.lazy(() => import('./view/Home'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
-const Edit = React.lazy(() => import('./view/Edit'));
 const Set = React.lazy(() => import('./view/Set'));
 moment.locale('zh-cn');
 const Container = styled(Box)`
@@ -26,7 +25,6 @@ const Container = styled(Box)`
 `
 
 function App() {
-
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
@@ -79,7 +77,7 @@ function App() {
               </Route>
               <Route path="/login" component={Login} />
               <PrivateRoute path="/me" component={Me} />
-              <Route path="/edit" component={Edit} />
+              {/* <Route path="/edit" component={Edit} /> */}
               <PrivateRoute path="/set" component={Set} />
             </Switch>
           </Container>
