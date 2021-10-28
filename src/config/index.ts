@@ -7,5 +7,6 @@ export const BASE_BSC_SCAN_URLS = {
 }
 
 export const storage = {
-  Token: "token"
+  Token: 'token',
+  UserInfo: 'userInfo'
 }

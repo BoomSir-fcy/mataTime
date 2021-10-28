@@ -8,6 +8,7 @@ declare namespace Api {
       display_format: number
       introduction: string
       location: string
+      background_image: string
     }    
 
     interface userInfoCallback extends Api.Error {

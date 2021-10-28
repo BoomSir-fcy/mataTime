@@ -25,7 +25,6 @@ const RightCard = styled.div`
 `
 
 export const Container = (props) => {
-  console.log('props', props);
 
   return (
     <PageContainer>

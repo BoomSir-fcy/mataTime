@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, fetchThunk } from 'store';
-import { languages } from './config/localization';
 import { CommonLayout, Header, Toast, WalletModal, ArticleDetilsLayout } from 'components';
 import { Box } from 'uikit';
 import 'moment/locale/zh-cn';
@@ -44,7 +43,7 @@ function App() {
   }, [store.connectWallet]);
 
   React.useEffect(() => {
-    token && dispatch(fetchThunk.fetchUserInfoAsync());
+    Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token])
 
   return (
@@ -78,14 +77,10 @@ function App() {
                 )
               }>
               </Route>
-              <PrivateRoute path="/me" Component={Me} />
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/edit">
-                <Edit />
-              </Route>
-              <PrivateRoute path="/set" Component={Set} />
+              <Route path="/login" component={Login} />
+              <PrivateRoute path="/me" component={Me} />
+              <Route path="/edit" component={Edit} />
+              <PrivateRoute path="/set" component={Set} />
             </Switch>
           </Container>
           <Toast />
