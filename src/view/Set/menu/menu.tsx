@@ -14,13 +14,6 @@ height: calc(100vh - 150px);
 background: #191F2D;
 border-radius: 10px;
 `
-const GoBack = styled.div`
-  width:100%;
-  height:32px;
-  line-height: 32px;
-  color:#fff;
-  font-weight: bold;
-`
 const Logo = styled.h2`
 width: 175px;
 height: 32px;
@@ -110,16 +103,40 @@ font-size: 16px;
 font-weight: 400;
 color: #B5B5B5;
 `
+const BackWarpper = styled(Box)`
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  cursor: pointer;
+  i{
+    font-size: 23px !important;
+    font-weight: bold;
+  }
+  span{
+    font-size: 18px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-left: 10px;
+  }
+`
 
 export const Menu: React.FC = (props) => {
   const Back = () => {
+    console.log('window.history', window.history.replaceState);
     console.log('props', props);
+    window.history.go(-1)
   }
   return (
     <MenuBox>
       <Box>
         <Logo />
-        <GoBack onClick={Back}>返回</GoBack>
+        <a href="/">
+          <BackWarpper onClick={Back}>
+            <Icon name={'icon-fanhui'}></Icon>
+            <span>返回</span>
+          </BackWarpper>
+        </a>
         <MenuList menuList={menuData}></MenuList>
       </Box>
       <Flex>

@@ -11,7 +11,8 @@ const Set = (props) => {
     <Router>
       <Route render={() =>
         <Container>
-          <Route path={`${props.match.path}/safeset`} exact component={SafeSet} />
+          <Route path="/set" exact component={SafeSet} />
+          <Route path={`${props.match.path}/safeset`} component={SafeSet} />
           <Route path={`${props.match.path}/noticeset`} component={NoticeSet} />
           <Route path={`${props.match.path}/likeset`} component={LikeSet} />
         </Container>}

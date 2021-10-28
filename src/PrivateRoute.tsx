@@ -1,10 +1,10 @@
-import { Route, Redirect} from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { useProvideAuth } from 'hooks';
 
 export const PrivateRoute = ({ Component, ...rest }) => {
 
-  const authInfo = useProvideAuth();  
-  
+  const authInfo = useProvideAuth();
+
   return (
     <Route {...rest}
       render={(props) =>
