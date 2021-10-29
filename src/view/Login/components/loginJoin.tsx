@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useImmer } from 'use-immer';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { toast } from 'react-toastify';
-import { useStore, storeAction, Dispatch } from 'store';
+import { storeAction } from 'store';
 import { Box, Flex, Text, Card } from 'uikit';
 import { ConnectWalletButton } from 'components'
 import { useLogin, useSignIn } from '../hooks'
@@ -12,7 +13,7 @@ import { Api } from 'apis';
 import { Logo } from 'components';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
-import { useImmer } from 'use-immer';
+import useAuth from 'hooks/useAuth';
 
 const LoginWarpper = styled(Card)`
   width: 600px;
@@ -47,6 +48,7 @@ export const LoginJoin: React.FC<{
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const { logout } = useAuth();
   const { loginCallback } = useLogin();
   const { siginInVerify, getUserName, getNftUrl } = useSignIn();
   const { account } = useWeb3React();
@@ -66,8 +68,10 @@ export const LoginJoin: React.FC<{
         history.replace(`${redirectUrl || '/'}`);
         dispatch(storeAction.changeUpdateProfile({...user.data}));
       }
+    } else {
+      logout();
+      setState(p => {p.isSignIn = false});
     }
-    setState(p => {p.isSignIn = false})
   }
 
   const init = async() => {

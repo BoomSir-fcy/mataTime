@@ -65,7 +65,7 @@ const SignUpFail = (() => {
   return (
     <Flex width="100%" flexDirection="column">
       <Flex justifyContent="space-between">
-        <FailButton scale="ld" variant="tertiary">创建账户</FailButton>
+        <FailButton scale="ld" variant="tertiary" disabled>创建账户</FailButton>
         <FailButton scale="ld">获取NFT</FailButton>
       </Flex>
       <SubTitle>您的账户中未持有对应的NFT，无法注册</SubTitle>
