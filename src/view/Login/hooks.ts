@@ -1,8 +1,8 @@
-import { storeAction } from "./../../store/index";
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux';
 import { ChainId } from 'config/wallet/config'
 import { signMessage } from 'utils/web3React'
+import { storeAction } from "store";
 import { storage } from 'config'
 import { Api } from 'apis';
 
@@ -24,6 +24,7 @@ const networks = {
 export function useSignIn() {
 
   const dispatch = useDispatch(); 
+  const { chainId } = useActiveWeb3React()
   // 验证地址是否注册
   const siginInVerify = useCallback(async(address: string) => {
     try {
@@ -39,11 +40,11 @@ export function useSignIn() {
 
   const getNftUrl = async(address?: string) => {
     try {
-      const res: Api.SignIn.nftCallback = await Api.SignInApi.getNft(2, address);
+      const res: Api.SignIn.nftCallback = await Api.SignInApi.getNft(networks[chainId], address);
       if(Api.isSuccess(res)) {
         dispatch(storeAction.setUserNft({...res.data}));
-        return res.code;
       }
+      return res.code;
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +100,7 @@ export function useLogin() {
         window.localStorage.setItem(storage.Token, token);
         return response;
       } catch (error) {
-        console.error(error)
+        return false;
       }
     },
     [chainId, library, account],
