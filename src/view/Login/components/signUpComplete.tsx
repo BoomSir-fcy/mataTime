@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Follow, Logo } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
@@ -25,11 +25,13 @@ export const SignUpcomplete = React.memo(() => {
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
+  const { from } = location.state;
 
   const complete = () => {
     dispatch(fetchThunk.fetchUserInfoAsync());
-    history.replace("/");
-  } 
+    history.replace(`${from?.pathname || '/'}`);
+  }
 
   return (
     <Box>

@@ -58,19 +58,20 @@ export const LoginJoin: React.FC<{
 
   const signIn = async () => {
     const res = await loginCallback(2);
+    setState(p => {p.isSignIn = false});
     if(res) {
       const user:any = await getUserName();
       // 20103 已注册未添加昵称
-      if(user.code === 20103) {
+      if(Api.isSuccess(user)) {
+        console.log(redirectUrl);
+        dispatch(storeAction.changeUpdateProfile({...user.data}));
+        history.replace(`${redirectUrl || '/'}`);
+      } else if(user.code === 20103) {
         dispatch(storeAction.changeSignUp({isSignup: true}));
         dispatch(storeAction.changeSignUpStep({singUpStep: 3}));
-      } else if(Api.isSuccess(user)) {
-        history.replace(`${redirectUrl || '/'}`);
-        dispatch(storeAction.changeUpdateProfile({...user.data}));
       }
     } else {
       logout();
-      setState(p => {p.isSignIn = false});
     }
   }
 
