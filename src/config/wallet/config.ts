@@ -71,13 +71,23 @@ const connectors: Config[] = [
 export enum ChainId {
   BSC_MAINNET = 56,
   BSC_TESTNET = 97,
+  MAINNET = 56,
+  TESTNET = 222,
   MATIC_MAINET = 137,
+  MATIC_MAINNET = 137,
+  MATIC_TESTNET = 80001,
+  // OKT = 66,
+  // OKT = 65,
 }
 
 export const BASE_BSC_SCAN_URLS = {
+  [ChainId.MAINNET]: 'https://polygonscan.com',
+  [ChainId.TESTNET]: 'https://mumbai.polygonscan.com',
   [ChainId.BSC_MAINNET]: 'https://bscscan.com',
   [ChainId.BSC_TESTNET]: 'https://testnet.bscscan.com',
   [ChainId.MATIC_MAINET]: 'https://testnet.bscscan.com',
+  [ChainId.MATIC_MAINNET]: 'https://polygonscan.com/',
+  [ChainId.MATIC_TESTNET]: 'https://mumbai.polygonscan.com/',
 }
 
 export const walletIcon = {

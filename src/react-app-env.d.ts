@@ -73,6 +73,7 @@ declare module '*.module.sass' {
 interface Window {
   ethereum?: {
     isMetaMask?: true
+    on? : (...args: any[]) => Promise<void>
     request?: (...args: any[]) => Promise<void>
   }
   BinanceChain?: {

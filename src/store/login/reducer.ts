@@ -1,4 +1,4 @@
-import { createReducer, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { 
   changeSignUp, 
   changeSignUpFail, 
@@ -6,13 +6,16 @@ import {
   changeUpdateProfile,
   setUserNft
 } from './actions';
+import { storage } from 'config';
 import { Api } from 'apis';
 
 const initialState = {
   isSignup: false,
   signUpFail: false,
   singUpStep: 1,
-  userInfo: {},
+  userInfo: {
+    UID: 0 as number
+  },
   nft: {
     nftID: 0,
     nftUrl: ""
@@ -25,6 +28,7 @@ export type Login = typeof initialState;
 export const fetchUserInfoAsync = createAsyncThunk('fetch/getUserInfo',
   async () => {
     const response = await Api.UserApi.getUserInfo();
+    window.localStorage.setItem(storage.UserInfo, JSON.stringify(response.data));
     return response;
   },
 )
