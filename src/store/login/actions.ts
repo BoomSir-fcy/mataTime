@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 
 interface profile {
-  UID?: number
+  UID: number
   uuid?: number
   token: string
 }

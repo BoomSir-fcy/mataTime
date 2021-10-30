@@ -13,7 +13,9 @@ const initialState = {
   isSignup: false,
   signUpFail: false,
   singUpStep: 1,
-  userInfo: {},
+  userInfo: {
+    UID: 0 as number
+  },
   nft: {
     nftID: 0,
     nftUrl: ""
