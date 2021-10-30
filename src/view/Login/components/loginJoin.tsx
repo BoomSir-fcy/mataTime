@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { toast } from 'react-toastify';
@@ -25,15 +25,12 @@ const LogoWarpper = styled(Box)`
   height: 60px;
   ${mediaQueriesSize.marginbmd}
 `
-
 const SubTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.textOrigin};
 `
-
 const TextTips = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
 `
-
 const ConnectWallet = styled(Flex)`
   flex-direction: column;
   justify-content: center;
@@ -42,16 +39,16 @@ const ConnectWallet = styled(Flex)`
   position: relative;
 `
 
-export const LoginJoin: React.FC<{
-  redirectUrl?: string
-}> = React.memo(({ redirectUrl }) => {
+export const LoginJoin: React.FC = React.memo(() => {
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
   const { logout } = useAuth();
   const { loginCallback } = useLogin();
   const { siginInVerify, getUserName, getNftUrl } = useSignIn();
   const { account } = useWeb3React();
+  const redict = location?.state?.from;
   const [state, setState] = useImmer({
     isSignIn: false
   })
@@ -63,9 +60,8 @@ export const LoginJoin: React.FC<{
       const user:any = await getUserName();
       // 20103 已注册未添加昵称
       if(Api.isSuccess(user)) {
-        console.log(redirectUrl);
         dispatch(storeAction.changeUpdateProfile({...user.data}));
-        history.replace(`${redirectUrl || '/'}`);
+        history.replace(`${redict || '/'}`);
       } else if(user.code === 20103) {
         dispatch(storeAction.changeSignUp({isSignup: true}));
         dispatch(storeAction.changeSignUpStep({singUpStep: 3}));

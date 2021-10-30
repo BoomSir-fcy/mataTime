@@ -24,7 +24,16 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const { isSignup, signUpFail } = loginReduce;
   const { location } = route;
 
+  const checkNetwork = async() => {
+    const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
+    dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
+  }
+
   React.useEffect(() => {
+    checkNetwork();
+    window.ethereum.on('chainChanged', (chainId: string) => {
+      dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
+    });
     return () => {
       dispatch(storeAction.changeSignUp({isSignup: false}));
       dispatch(storeAction.changeSignUpStep({singUpStep: 1}));
@@ -41,7 +50,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
           isSignup ? 
           <SignUp isSignup={signUpFail} />
           :
-          <LoginJoin redirectUrl={location.state?.from?.pathname} />
+          <LoginJoin />
         }
       </LoginContainer>
       <Footer />

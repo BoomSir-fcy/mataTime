@@ -4,7 +4,7 @@ import { useProvideAuth } from 'hooks';
 export const PrivateRoute = ({ component, ...rest }) => {
 
   const authInfo = useProvideAuth();  
-  const { UID }: any = authInfo;
+  const { UID } = authInfo;
   const Component = component;
   
   return (

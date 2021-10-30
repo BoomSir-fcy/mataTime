@@ -10,13 +10,13 @@ import random from 'lodash/random';
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 enum LoginNetwork {
-  BSC = 2,
+  BSC = 1,
   MATIC = 2,
 }
 
 const networks = {
   [ChainId.BSC_MAINNET]: LoginNetwork.BSC,
-  [ChainId.BSC_TESTNET]: LoginNetwork.BSC,
+  [ChainId.BSC_TESTNET]: LoginNetwork.MATIC,
   [ChainId.MATIC_MAINET]: LoginNetwork.MATIC,
 }
 
@@ -32,9 +32,9 @@ export function useSignIn() {
       if(Api.isSuccess(res)) {
         return res.code;
       }
-      return "";
+      return 0;
     } catch (error) {
-      console.log(error);
+      return 0
     }
   }, []);
 
@@ -46,7 +46,7 @@ export function useSignIn() {
       }
       return res.code;
     } catch (error) {
-      console.log(error);
+      return 0
     }
   }
 
