@@ -9,22 +9,24 @@ const Follow = React.lazy(() => import('./follow'));
 const Fans = React.lazy(() => import('./fans'));
 const Praise = React.lazy(() => import('./praise'));
 
-const Me = (props) => {
+const Me = props => {
   return (
     <Router>
-      <Route render={() =>
-        <Container>
-          <Route path={`${props.match.path}`} exact component={Profile} />
-          <Route path={`${props.match.path}/account`} component={Account} />
-          <Route path={`${props.match.path}/profile`} component={Account} />
-          <Route path={`${props.match.path}/edit`} component={Edit} />
-          <Route path={`${props.match.path}/follow`} component={Follow} />
-          <Route path={`${props.match.path}/fans`} component={Fans} />
-          <Route path={`${props.match.path}/praise`} component={Praise} />
-        </Container>}
+      <Route
+        render={() => (
+          <Container>
+            <Route path={`${props.match.path}`} exact component={Profile} />
+            <Route path={`${props.match.path}/account`} component={Account} />
+            <Route path={`${props.match.path}/profile`} component={Account} />
+            <Route path={`${props.match.path}/edit`} component={Edit} />
+            <Route path={`${props.match.path}/follow`} component={Follow} />
+            <Route path={`${props.match.path}/fans`} component={Fans} />
+            <Route path={`${props.match.path}/praise`} component={Praise} />
+          </Container>
+        )}
       />
     </Router>
-  )
-}
+  );
+};
 
 export default Me;
