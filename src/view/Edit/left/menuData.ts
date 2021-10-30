@@ -29,7 +29,7 @@ const menuArr = [
   {
     icon: 'none',
     title: '屏蔽列表',
-    path: '/',
+    path: '/me/shield',
   },
 ]
 export default menuArr

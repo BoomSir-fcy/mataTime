@@ -4,15 +4,6 @@ import { Avatar, Icon } from 'components';
 import { Box, Button, Flex } from 'uikit';
 import { ArticleList } from '../Home/center/ArticleList'
 
-// const Header = styled(Flex)`
-//   width:100%;
-//   height:70px;
-//   padding:0 16px;
-//   line-height: 70px;
-//   background:#191F2D;
-//   justify-content: space-between;
-//   border-radius:10px;
-// `
 const Title = styled(Box)`
 color:#fff;
 font-weight:bold;
@@ -25,6 +16,7 @@ background:#191F2D;
 border-radius: 10px;
 margin-top:10px;
 overflow:hidden;
+overflow-y:scroll;
 `
 const Header = styled(Flex)`
 justify-content: space-between;

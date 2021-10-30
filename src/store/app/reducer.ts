@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { toggleTheme, toastContainer, connectWallet } from './actions';
 
 const initialState = {
-	isDark: false,
+  isDark: false,
   connectWallet: false,
   show: false,
   toast: {
@@ -19,7 +19,7 @@ export default createReducer(initialState, (builder) => {
     .addCase(toggleTheme, (state) => {
       state.isDark = !state.isDark;
     })
-    .addCase(toastContainer, (state, { payload } ) => {
+    .addCase(toastContainer, (state, { payload }) => {
       state.toast.toastContainer = payload;
     })
     .addCase(connectWallet, (state, action) => {

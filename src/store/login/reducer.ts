@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { 
-  changeSignUp, 
-  changeSignUpFail, 
-  changeSignUpStep, 
+import {
+  changeSignUp,
+  changeSignUpFail,
+  changeSignUpStep,
   changeUpdateProfile,
   setUserNft
 } from './actions';

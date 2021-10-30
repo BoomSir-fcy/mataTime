@@ -8,7 +8,7 @@ export class SignInApi extends Http {
   }
 
   async signUp(params: Api.SignIn.LoginSignMessage) {
-    const res:any = await this.post('/v1/sign/signup', params);
+    const res: any = await this.post('/v1/sign/signup', params);
     return res;
   }
 

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Crumbs, Avatar, Certification } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { Api } from 'apis';
 
 const ProfileCard = styled(Card)`
   position: relative;
@@ -79,6 +80,17 @@ const Content = styled(Box)`
 `
 
 const Profile = React.memo(() => {
+  const getUserInfo = async () => {
+    try {
+      const res = await Api.UserApi.getUserInfo();
+      console.log('getUserInfo', res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getUserInfo()
+  })
   return (
     <Box>
       <Crumbs title="个人主页" />
@@ -115,7 +127,7 @@ const Profile = React.memo(() => {
               <Text className="text">关注 <Text className="value">918</Text></Text>
               <Text className="text">动态 <Text className="value">918</Text></Text>
             </Flex>
-            <Flex className="topic">  
+            <Flex className="topic">
               <Text className="text">活跃话题</Text>
               <Button variant="secondary">#DSG</Button>
             </Flex>

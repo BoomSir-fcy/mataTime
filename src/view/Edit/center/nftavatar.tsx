@@ -56,7 +56,6 @@ font-size:14px;
 color:#B5B5B5;
 `
 
-
 const NftAvatar = () => {
   return (
     <div>
