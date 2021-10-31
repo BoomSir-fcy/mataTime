@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
 import { Box, Button, Flex } from 'uikit';
@@ -68,6 +68,47 @@ button {
 `
 
 const Shield = React.memo(() => {
+  const people = [
+    { uname: '满克斯', dunpai: true, present: '@0x32...9239', isFollow: '取消屏蔽' },
+    { uname: '乔布斯', dunpai: false, present: '巴里拉里', isFollow: '取消屏蔽' },
+    { uname: '马克思', dunpai: true, present: '个人主页的介绍', isFollow: '取消屏蔽' }
+  ]
+  const [peopleState, setPeopleState] = useState(people)
+
+  // 屏蔽列表
+  const ShieldList = () => {
+    const setPeople = useCallback((index) => {
+      if (peopleState[index].isFollow) {
+        peopleState.splice(index, 1)
+      }
+      const res = peopleState.map((item, subIndex) => {
+        if (index === subIndex) {
+          return {
+            ...item,
+          }
+        }
+        return {
+          ...item
+        }
+      })
+      setPeopleState(res)
+    }, [peopleState])
+
+    return (
+      peopleState.map((item, index) => {
+        return (
+          <ContentBox>
+            <Avatar scale="md" style={{ float: 'left' }} />
+            <Column style={{ float: 'left' }}>
+              <div><span className="username">{item.uname}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">@0x32...9239</span></div>
+              <Msg>{item.present}</Msg>
+            </Column>
+            <Button onClick={() => setPeople(index)}>取消屏蔽</Button>
+          </ContentBox>
+        )
+      })
+    )
+  }
   return (
     <Box>
       <Header>
@@ -79,30 +120,7 @@ const Shield = React.memo(() => {
       </Header>
 
       <Content>
-        <ContentBox>
-          <Avatar scale="md" style={{ float: 'left' }} />
-          <Column>
-            <div><span className="username">满克斯</span> <Icon name="icon-dunpai" margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">@0x32...9239</span></div>
-            <Msg>个人主页的介绍</Msg>
-          </Column>
-          <Button>取消关注</Button>
-        </ContentBox>
-        <ContentBox>
-          <Avatar scale="md" style={{ float: 'left' }} />
-          <Column style={{ float: 'left' }}>
-            <div><span className="username">满克斯</span> <Icon name="icon-dunpai" margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">@0x32...9239</span></div>
-            <Msg>个人主页的介绍</Msg>
-          </Column>
-          <Button>取消关注</Button>
-        </ContentBox>
-        <ContentBox>
-          <Avatar scale="md" style={{ float: 'left' }} />
-          <Column style={{ float: 'left' }}>
-            <div><span className="username">满克斯</span> <Icon name="icon-dunpai" margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">@0x32...9239</span></div>
-            <Msg>个人主页的介绍</Msg>
-          </Column>
-          <Button>取消关注</Button>
-        </ContentBox>
+        {ShieldList()}
       </Content>
 
     </Box>
