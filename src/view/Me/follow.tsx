@@ -80,9 +80,8 @@ const Follow = React.memo(() => {
   // 头部
 
   // 关注列表
-  const FollowBox = () => {
+  const FollowList = () => {
     const setPeople = useCallback((index) => {
-      console.log(peopleState[index]);
       if (peopleState[index].isFollow) {
         peopleState.splice(index, 1)
       }
@@ -125,7 +124,7 @@ const Follow = React.memo(() => {
       </Header>
 
       <Content>
-        {FollowBox()}
+        {FollowList()}
       </Content>
 
     </Box>
