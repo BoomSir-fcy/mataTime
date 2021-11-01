@@ -8,8 +8,8 @@ export class NewsApi extends Http {
   }
 
   // 将消息变为已读
-  async getMessageRead(message_type: number) {
-    const res = await this.get('/v1/message/read', { message_type });
+  async getMessageRead(message_ids: number) {
+    const res = await this.get('/v1/message/read', { message_ids });
     return res;
   }
 

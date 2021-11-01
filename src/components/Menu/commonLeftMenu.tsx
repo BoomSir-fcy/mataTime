@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Button, Text, Radio, Input } from 'uikit';
@@ -108,18 +108,46 @@ const UserDesc = styled.div`
 type IProps = {
   menu: MenuProps[];
   route: any;
+  history: any;
 }
 
 export const CommonLeftMenu = React.memo((props: IProps) => {
   const { pathname } = props.route
+  const [msgNum, setMsgNum] = useState<any>({})
 
   useEffect(() => {
     getMsgNumRequest()
   }, [])
 
+  // 获取未读消息数量
   const getMsgNumRequest = async () => {
-    const res = await Api.NewsApi.getUnreadMsgNum()
-    console.log('未读消息：', res)
+    const res = await Api.NewsApi.getUnreadMsgNum();
+    if (res.code === 1) {
+      setMsgNum(res.data);
+    }
+  }
+
+  // 将消息变为已读
+  const getMsgReadRequest = async (alias: string) => {
+    let type = 1;
+    switch (alias) {
+      case 'message_at_me':
+        type = 1;
+        break;
+      case 'message_comment':
+        type = 2;
+        break;
+      case 'message_like':
+        type = 3;
+        break;
+      case 'message_system':
+        type = 5;
+        break;
+    }
+    const res = await Api.NewsApi.getMessageRead(type);
+    if (res.code === 1) {
+      getMsgNumRequest();
+    }
   }
 
 
@@ -129,7 +157,9 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
       <LogoWarpper>
         <Logo url="/" src={require('assets/images/logo.svg').default} />
       </LogoWarpper>
-      <BackWarpper>
+      <BackWarpper onClick={() => {
+        props.history.push('/')
+      }}>
         <Icon name={'icon-fanhui'}></Icon>
         <span>返回</span>
       </BackWarpper>
@@ -137,10 +167,20 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
         {
           props.menu.map((item: any) => {
             return (
-              <MenuItems className={item.link === pathname ? 'active' : ''} as={Link} to={item.link}>
+              <MenuItems
+                key={item.alias}
+                className={item.link === pathname ? 'active' : ''}
+                as={Link}
+                to={item.link}
+                onClick={() => {
+                  getMsgReadRequest(item.alias)
+                }}
+              >
                 <MenuIcon>
                   <Icon name={item.icon}></Icon>
-                  <span>0</span>
+                  {
+                    msgNum[item.alias] ? <span>{msgNum[item.alias]}</span> : null
+                  }
                 </MenuIcon>
                 <MenuText>{item.name}</MenuText>
               </MenuItems>
