@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Button, Text, Radio, Input } from 'uikit';
@@ -7,6 +7,8 @@ import { Logo, Icon, Avatar } from 'components';
 import { mediaQueriesSize } from "uikit/theme/base";
 
 import { MenuProps } from 'components/Layout/CommonLayout/menuData';
+
+import { Api } from 'apis';
 
 const MenuWarpper = styled(Box)`
   width: 100%;
@@ -110,6 +112,18 @@ type IProps = {
 
 export const CommonLeftMenu = React.memo((props: IProps) => {
   const { pathname } = props.route
+
+  useEffect(() => {
+    getMsgNumRequest()
+  }, [])
+
+  const getMsgNumRequest = async () => {
+    const res = await Api.NewsApi.getUnreadMsgNum()
+    console.log('未读消息：', res)
+  }
+
+
+
   return (
     <MenuWarpper>
       <LogoWarpper>
