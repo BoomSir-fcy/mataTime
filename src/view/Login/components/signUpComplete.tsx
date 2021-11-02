@@ -25,11 +25,11 @@ export const SignUpcomplete = React.memo(() => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const { from } = location.state;
+  const redict = location?.state?.from;
 
   const complete = () => {
     dispatch(fetchThunk.fetchUserInfoAsync());
-    history.replace(`${from?.pathname || '/'}`);
+    history.replace(`${redict || '/'}`);
   };
 
   return (
