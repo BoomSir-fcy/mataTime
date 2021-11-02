@@ -7,7 +7,6 @@ import { Dispatch } from 'store';
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
 // axios.defaults.headers.common['token'] = "";
-axios.defaults.baseURL = 'https://api.social.qgx.io'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.headers.get.Accept = 'application/json';
