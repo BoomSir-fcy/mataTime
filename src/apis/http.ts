@@ -7,6 +7,7 @@ import { Dispatch } from 'store';
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
 // axios.defaults.headers.common['token'] = "";
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.headers.get.Accept = 'application/json';
 
@@ -25,7 +26,7 @@ axios.interceptors.response.use(
 export class Http {
   async request(configs: AxiosRequestConfig) {
     let response;
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzYyNjc0NjUsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNTY2MjY2NSwidWlkIjoiMTA1MjI4OTcyMCIsImFkZHJlc3MiOiIweDZmMzBhZDZjQTE2NjRkZkQwYkIxRjYzOWQ5RmM4MDcxNDlDQzEzQWEifQ.ZrZBJyXo2nb80zpPI3J8TEPTVsbqaFFj24UfnZLNEUY';
 
     try {
       response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
