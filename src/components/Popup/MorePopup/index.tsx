@@ -5,6 +5,9 @@ import {
   PopupContentWrapper
 } from './style';
 
+import { Api } from 'apis';
+import { copyContent } from 'utils/copy';
+
 type Iprops = {
   children: React.ReactElement;
 }
@@ -25,6 +28,22 @@ export const MorePopup = React.memo((props: Iprops) => {
     })
   }
 
+  // 收藏
+  const onFavAgreeRequest = async () => {
+    const res = await Api.ContentApi.onFavAgree(1);
+    if (res.code === 1) {
+
+    }
+  }
+
+  // 取消收藏
+  const onFavCancelRequest = async () => {
+    const res = await Api.ContentApi.onFavCancel(1);
+    if (res.code === 1) {
+
+    }
+  }
+
   return (
     <PopupWrapper onClick={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
@@ -35,8 +54,12 @@ export const MorePopup = React.memo((props: Iprops) => {
         visible ? (
           <PopupContentWrapper>
             <p>分享到Twitter</p>
-            <p>复制内容地址</p>
-            <p>收藏</p>
+            <p onClick={() => {
+              copyContent('这是复制的内容！')
+            }}>复制内容地址</p>
+            <p onClick={() => {
+              onFavAgreeRequest()
+            }}>收藏</p>
             <p onClick={() => { setReportShow(true) }}>举报该条</p>
             <p onClick={() => { setShieldShow(true) }}>屏蔽作者</p>
           </PopupContentWrapper>
