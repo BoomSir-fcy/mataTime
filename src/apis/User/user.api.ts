@@ -26,4 +26,10 @@ export class UserApi extends Http {
     return res;
   }
 
+  // 可能感兴趣的人
+  async referrerMans(params: Api.User.referrerMans) {
+    const res = await this.get('/v1/user/interest',params);
+    return res;
+  }
+
 }

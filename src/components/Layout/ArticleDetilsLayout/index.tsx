@@ -14,6 +14,9 @@ import {
 } from './style'
 
 export const ArticleDetilsLayout : React.FC = (props) => {
+  const sendArticle=(res)=>{
+    console.log(res);
+  }
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -22,8 +25,8 @@ export const ArticleDetilsLayout : React.FC = (props) => {
         </LeftCard>
         <CenterCard>
           <Header back title="返回" {...props}></Header>
-          <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList>
-          <Editor></Editor>
+          {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
+          <Editor sendArticle={sendArticle}></Editor>
           <CommentList></CommentList>
         </CenterCard>
         <RightCard>

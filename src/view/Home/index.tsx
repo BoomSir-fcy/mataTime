@@ -7,7 +7,8 @@ import {Menu}  from './left';
 import {Header ,Tabs,ArticleList}  from './center';
 import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from './right';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
-const NewsMe = React.lazy(() => import('view/News/Me'));
+// const NewsMe = React.lazy(() => import('view/News/Me'));
+import {Api} from 'apis'
 
 const PageContainer = styled.div`
   width: 1200px;
@@ -65,6 +66,14 @@ const CancelFollow = () => {
   )
 }
 const Home: React.FC = (props) => {
+  const  sendArticle=(res?:string)=>{
+    if(!res)return false
+    Api.HomeApi.createArticle({
+      content:res
+    }).then(res=>{
+      console.log(res);
+    })
+  }
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -74,10 +83,10 @@ const Home: React.FC = (props) => {
         </LeftCard>
         <CenterCard>
           <Header {...props}></Header>
-          <Editor></Editor>
+          <Editor sendArticle={sendArticle}></Editor>
           <Tabs></Tabs>
-          <NewsMe {...props}></NewsMe>
-          {/* <ArticleList {...props}></ArticleList> */}
+          {/* <NewsMe {...props}></NewsMe> */}
+          <ArticleList {...props}></ArticleList>
         </CenterCard>
         <RightCard>
           <Search></Search>

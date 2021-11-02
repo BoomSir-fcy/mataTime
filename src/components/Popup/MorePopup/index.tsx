@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ReportModal, ShieldModal } from 'components';
+import { toast } from 'react-toastify';
 import {
   PopupWrapper,
   PopupContentWrapper
@@ -32,7 +33,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onFavAgreeRequest = async () => {
     const res = await Api.ContentApi.onFavAgree(1);
     if (res.code === 1) {
-
+      toast(res.msg)
     }
   }
 
@@ -40,7 +41,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onFavCancelRequest = async () => {
     const res = await Api.ContentApi.onFavCancel(1);
     if (res.code === 1) {
-
+      toast(res.msg)
     }
   }
 
