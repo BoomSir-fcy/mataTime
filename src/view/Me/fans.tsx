@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
 import { Box, Button, Flex } from 'uikit';
+import { Api } from 'apis';
 
 const Header = styled(Flex)`
   width:100%;
@@ -76,6 +77,13 @@ const Fans = React.memo(() => {
 
   // 粉丝列表
   const FansList = () => {
+    const getFansList = async () => {
+      try {
+        const res = await Api.MeApi.fansList()
+      } catch (error) {
+        console.log(error);
+      }
+    }
     const setPeople = useCallback((index) => {
       const isFollow = peopleState[index].isFollow
       if (isFollow === '互相关注') {
@@ -99,6 +107,10 @@ const Fans = React.memo(() => {
       })
       setPeopleState(res)
     }, [peopleState])
+
+    useEffect(() => {
+      getFansList()
+    }, [])
 
     return (
       peopleState.map((item, index) => {

@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Crumbs, Avatar, Certification, Icon } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useImmer } from 'use-immer';
+import { Api } from 'apis';
 
 const Header = styled(Flex)`
   width:100%;
@@ -81,6 +82,13 @@ const Follow = React.memo(() => {
 
   // 关注列表
   const FollowList = () => {
+    const getFollowList = async () => {
+      try {
+        const res = await Api.MeApi.followList()
+      } catch (error) {
+        console.log(error);
+      }
+    }
     const setPeople = useCallback((index) => {
       if (peopleState[index].isFollow) {
         peopleState.splice(index, 1)
@@ -98,6 +106,9 @@ const Follow = React.memo(() => {
       setPeopleState(res)
     }, [peopleState])
 
+    useEffect(() => {
+      getFollowList()
+    }, [])
     return (
       peopleState.map((item, index) => {
         return (

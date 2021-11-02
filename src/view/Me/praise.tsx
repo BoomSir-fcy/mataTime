@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
 import { Box, Button, Flex } from 'uikit';
 import { ArticleList } from '../Home/center/ArticleList'
+import { Api } from 'apis';
 
 const Title = styled(Box)`
 color:#fff;
@@ -31,6 +32,19 @@ float:right;
 `
 
 const Praise = React.memo(() => {
+  // 点赞列表
+  const getFansList = async () => {
+    try {
+      const res = await Api.MeApi.praiseList()
+      console.log(res);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getFansList()
+  }, [])
   return (
     <Box>
       <Header>

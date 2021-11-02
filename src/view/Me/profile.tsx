@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Crumbs, Avatar, Certification } from 'components';
@@ -80,17 +80,29 @@ const Content = styled(Box)`
 `
 
 const Profile = React.memo(() => {
+  const [stateUserInfo, setUserInfo] = useState<Api.User.userInfoParams>({
+    UID: 0,
+    nick_name: '',
+    fans_num: 0,
+    attention_num: 0,
+    email: '',
+    Introduction: '',
+    location: ''
+  })
+  // const [stateUserInfo, setUserInfo] = useState({ nick_name: '' })
   const getUserInfo = async () => {
     try {
-      const res = await Api.UserApi.getUserInfo();
-      console.log('getUserInfo', res);
+      const res = await Api.UserApi.getUserInfo()
+      setUserInfo({
+        ...res.data
+      })
     } catch (error) {
       console.log(error);
     }
   }
   useEffect(() => {
     getUserInfo()
-  })
+  }, [])
   return (
     <Box>
       <Crumbs title="个人主页" />
@@ -101,14 +113,14 @@ const Profile = React.memo(() => {
             <Flex alignItems="flex-end">
               <Avatar scale="xl" />
               <Desc>
-                <Text className="name">Dinosaur eggs</Text>
+                <Text className="name">{stateUserInfo.nick_name}</Text>
                 <Flex mb="5px">
                   <Flex>
                     <Certification />
                     <Text className="text">@0x3...d39</Text>
                   </Flex>
                   <Flex className="marginLeft">
-                    <Text className="text">美国</Text>
+                    <Text className="text">{stateUserInfo.location}</Text>
                   </Flex>
                 </Flex>
                 <Text className="text">177条动态</Text>
@@ -118,14 +130,14 @@ const Profile = React.memo(() => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text">Metaverse protocol "dinosaurs" on Binance Smart Chain</Text>
+              <Text className="text">{stateUserInfo.Introduction}</Text>
               <Text className="text">Web: <Text as={Link} to="/">http://dsgmetaverse.com/#/</Text></Text>
-              <Text className="text">Email：contact@dsgmetaverse.com</Text>
+              <Text className="text">Email：{stateUserInfo.email}</Text>
             </Box>
             <Flex className="number">
-              <Text className="text">粉丝 <Text className="value">918</Text></Text>
-              <Text className="text">关注 <Text className="value">918</Text></Text>
-              <Text className="text">动态 <Text className="value">918</Text></Text>
+              <Text className="text">粉丝 <Text className="value">{stateUserInfo.fans_num}</Text></Text>
+              <Text className="text">关注 <Text className="value">{stateUserInfo.attention_num}</Text></Text>
+              <Text className="text">动态 <Text className="value">{stateUserInfo.fans_num}</Text></Text>
             </Flex>
             <Flex className="topic">
               <Text className="text">活跃话题</Text>
