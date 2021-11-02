@@ -12,9 +12,12 @@ import {
 } from './style'
 {/* <SendButton>发布</SendButton> */}
 const {BtnMenu} = E
-export class Editor extends React.Component {
+type Iprops = {
+  sendArticle:(any) =>void
+}
+export class Editor extends React.Component<Iprops> {
   editor:any
-  constructor(props) {
+  constructor(props:Iprops) {
     super(props);
   }
   componentDidMount() {
@@ -84,7 +87,8 @@ export class Editor extends React.Component {
     this.editor.destroy();
   }
   sendArticle(){
-    console.log(this.editor.txt.html());
+    // console.log(this.editor.txt.html());
+    this.props.sendArticle(this.editor.txt.html())
   }
   render() {
     return(
