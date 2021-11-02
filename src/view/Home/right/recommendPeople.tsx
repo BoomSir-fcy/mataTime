@@ -1,8 +1,8 @@
-import React,{ useState, useRef} from 'react';
+import React,{ useState, useEffect} from 'react';
 import styled from "styled-components";
 import {Flex,Box,Button} from 'uikit'
 import { Avatar,Icon } from 'components';
-
+import {Api} from 'apis'
 const RecommendPeopleBox = styled.div`
 margin-top: 15px;
   padding:20px 18px;
@@ -38,6 +38,15 @@ font-size: 14px;
 font-weight: bold;
 `
 export  const RecommendPeople:React.FC = ()=>{
+  const [list, setList] = useState([])
+  useEffect(() => {
+    getManList()
+  })
+  const getManList=()=>{
+    Api.UserApi.referrerMans({num:10}).then(res=>{
+      console.log(res);
+    })
+  }
   return (
     <RecommendPeopleBox>
       <Flex justifyContent="space-between">

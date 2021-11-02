@@ -27,59 +27,32 @@ export const ArticleList = (props) => {
   const [page,setPage] = useState(1)
   const [loading,setLoading] = useState(false)
   const [listData,setListData] = useState([])
-  useEffect(() => {
-    Api.HomeApi.getArticleList().then(res=>{
-      console.log(res);
-    })
-  })
+  const [totalPage,setTotalPage] = useState(2)
   return (
     <ArticleListBox>
-      <List renderList={()=>{
-        if(loading)return false
-        console.log('哈哈');
+      <List marginTop={410} renderList={()=>{
+        if(loading||page>totalPage)return false
+        setLoading(true)
+        Api.HomeApi.getArticleList({
+          attention:1, 
+          page:page, 
+          per_page:size
+        }).then(res=>{
+          setLoading(false)
+          if(res.code===1){
+            setPage(page+1)
+            setListData([...listData,...res.data.List])
+            setTotalPage(res.data.total_page)
+          }
+        })
       }}>
-        <MeItemWrapper >
+        {listData.map(item=>(
+        <MeItemWrapper key={item.id} >
           <MentionItem {...props}>
           </MentionItem>
             <MentionOperator />
         </MeItemWrapper>
-      {/* {
-        props.data.map((item, index) => (
-          // <MentionItem key={index} index={index}></MentionItem>
-          <ArticleListItem key={index} style={props.style}>
-            <Flex>
-              <Avatar src="" style={{ width: '50px', height: '50px' }} scale="md" />
-              <div style={{ flex: 1, marginLeft: '22px' }}>
-                <ArticleHeader justifyContent="space-between">
-                  <Flex>
-                    <div>
-                      <div>慢渴死</div>
-                      <div className="relative-time">{relativeTime('2020')}</div>
-                    </div>
-                    {index === 0 ?
-                      <div className="topic">
-                        <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
-                        老表的吃货天堂
-                      </div> : ''}
-                  </Flex>
-                  <Flex>
-                    <FollowBtn>+关注</FollowBtn>
-                    <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
-                  </Flex>
-                </ArticleHeader>
-                <ArticleContent onClick={(e) => { goDetils(e) }}>
-                  #New project# We recently passed 10,000 followers  As a thank y#New project# We recently passed 10,000 followers  As a thank y
-                </ArticleContent>
-              </div>
-            </Flex>
-            <ArticleFooter>
-              <div> <Icon name="icon-retweet" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-              <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-              <div><Icon name="icon-aixin" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-            </ArticleFooter>
-          </ArticleListItem>
-        ))
-      } */}
+        ))}
       </List>
     </ArticleListBox>
   )

@@ -2,8 +2,8 @@ import { Http } from "../http";
 
 export class HomeApi extends Http {
   // 文章列表
-  async getArticleList() {
-    const res = await this.get('/v1/token');
+  async getArticleList(params:Api.Home.queryListParams) {
+    const res = await this.get('/v1/post/list', params);
     return res;
   }
   // 文章列表

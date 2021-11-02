@@ -22,6 +22,7 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
+  background-attachment: fixed;
   min-height: 100vh;
 `;
 
