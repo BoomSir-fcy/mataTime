@@ -11,4 +11,9 @@ export class HomeApi extends Http {
     const res = await this.post('/v1/post/create', params);
     return res;
   }
+  // 文章详情
+  async articleFindById(params:Api.Home.articleFindById) {
+    const res = await this.get('/v1/post/info', params);
+    return res;
+  }
 }

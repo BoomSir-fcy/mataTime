@@ -6,17 +6,20 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, fetchThunk } from 'store';
-import { CommonLayout, Header, Toast, WalletModal, ArticleDetilsLayout } from 'components';
+import { CommonLayout, Header, Toast, WalletModal } from 'components';
 import { Box } from 'uikit';
 import { storage } from 'config';
 import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
 import 'style/fonts/iconfont.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 moment.locale('zh-cn');
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
+const ArticleDetilsLayout = React.lazy(() => import('./components/Layout/ArticleDetilsLayout'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
@@ -64,7 +67,7 @@ function App() {
                 )}
               ></Route>
               <Route
-                path="/articleDetils"
+                path="/articleDetils/:id"
                 exact
                 render={props => (
                   <>

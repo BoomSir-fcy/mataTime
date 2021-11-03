@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState,useEffect} from 'react';
 import { About, Avatar, Editor, ModalWrapper } from 'components';
 import {Route} from 'react-router-dom'
 import { Flex ,Box} from 'uikit';
@@ -6,17 +6,35 @@ import {Menu}  from 'view/Home/left';
 import {Header ,Tabs,ArticleList}  from 'view/Home/center';
 import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from 'view/Home/right';
 import {CommentList}  from './CommentList';
+import MentionItem from 'view/News/components/MentionItem';
+import MentionOperator from 'view/News/components/MentionOperator';
+
+import {
+  NewsMeWrapper,
+  MeItemWrapper
+} from 'view/News/Me/style';
+import { Api } from 'apis'
 import {
   PageContainer,
   LeftCard,
   CenterCard,
   RightCard
 } from './style'
-
-export const ArticleDetilsLayout : React.FC = (props) => {
+type Iprops = {
+  [name: string]:any
+}
+export const ArticleDetilsLayout : React.FC= (props:Iprops) => {
+  // let itemData ={}
+  const [itemData,setItemData] = useState({})
   const sendArticle=(res)=>{
     console.log(res);
   }
+  useEffect(()=>{
+    Api.HomeApi.articleFindById({id:props.match.params.id}).then(res=>{
+      // itemData =res.data
+      setItemData(res.data)
+    })
+  },[])
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -25,6 +43,10 @@ export const ArticleDetilsLayout : React.FC = (props) => {
         </LeftCard>
         <CenterCard>
           <Header back title="返回" {...props}></Header>
+          <MeItemWrapper>
+            <MentionItem {...props} itemData={itemData} more={false} />
+            <MentionOperator itemData={itemData} />
+          </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
           <Editor sendArticle={sendArticle}></Editor>
           <CommentList></CommentList>
@@ -40,3 +62,4 @@ export const ArticleDetilsLayout : React.FC = (props) => {
     </PageContainer>
   )
 }
+export default  ArticleDetilsLayout

@@ -22,9 +22,9 @@ const NewsComment: React.FC = (props) => {
                 回复<a>@曼克斯</a><p>这句话是我回复他的</p>
               </div>
               <div className="comment-content">
-                <MentionItem {...props} more={false} size={'small'}></MentionItem>
+                <MentionItem {...props} more={false} size={'small'} itemData={new Object()}></MentionItem>
               </div>
-              <MentionOperator />
+              <MentionOperator itemData={new Object()} />
             </CommentItemWrapper>
           )
         })

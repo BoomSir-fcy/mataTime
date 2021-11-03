@@ -14,19 +14,16 @@ defaultProps : {
 }
 componentDidMount(){
   this.props.renderList()
-  console.log('创建');
   document.addEventListener('scroll', this.scrollRenderHandler.bind(this))
 }
 componentWillUnmount(){
-  console.log('移除');
-  
   document.removeEventListener('scroll',this.scrollRenderHandler.bind(this))
 }
 scrollRenderHandler(){
   if(!this.listBox.current)return false
   if (window.pageYOffset + window.innerHeight >= this.listBox.current.offsetHeight+this.props.marginTop) {
-  this.props.renderList()
-}
+    this.props.renderList()
+  }
 }
 render(){
   return (

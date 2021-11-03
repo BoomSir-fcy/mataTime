@@ -20,6 +20,7 @@ background-color:#4168ED;
 export const TextBox = styled.div`
 margin-bottom: 15px;
 .w-e-text-container{
+  z-index:22 !important;
   overflow-y:auto;
   color: ${({ theme }) => theme.colors.text};
   background: ${({ theme }) => theme.colors.backgroundTextArea};

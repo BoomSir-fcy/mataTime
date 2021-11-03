@@ -24,9 +24,9 @@ const NewsPraise: React.FC = (props) => {
                 <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> 赞了你的内容
               </div>
               <div className="comment-content">
-                <MentionItem {...props} more={false} size={'small'}></MentionItem>
+                <MentionItem {...props} more={false} size={'small'} itemData={new Object()}></MentionItem>
               </div>
-              <MentionOperator />
+              <MentionOperator  itemData={new Object()}/>
             </PraiseItemWrapper>
           )
         })

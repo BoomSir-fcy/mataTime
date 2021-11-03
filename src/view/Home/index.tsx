@@ -1,7 +1,8 @@
-import React from 'react';
+import React,{ useState, useRef} from 'react';
 import styled from "styled-components";
 import { About, Avatar, Editor, ModalWrapper } from 'components';
 import {Route} from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
 import { Flex ,Box} from 'uikit';
 import {Menu}  from './left';
 import {Header ,Tabs,ArticleList}  from './center';
@@ -66,12 +67,22 @@ const CancelFollow = () => {
   )
 }
 const Home: React.FC = (props) => {
-  const  sendArticle=(res?:string)=>{
-    if(!res)return false
+  const [refresh,setRefresh] = useState(false)
+  // const  editorRef = useRef()
+  const  sendArticle=(content:string,resetInput:() => void)=>{
+    if(!content)return false
     Api.HomeApi.createArticle({
-      content:res
+      content:content
     }).then(res=>{
-      console.log(res);
+      if(res.code === 1){
+        setRefresh(!refresh)
+        resetInput()
+      }
+      if(res.code ===0){
+        toast.error(res.msg, {
+          position: toast.POSITION.TOP_RIGHT
+        })    
+      }
     })
   }
   return (
@@ -86,7 +97,7 @@ const Home: React.FC = (props) => {
           <Editor sendArticle={sendArticle}></Editor>
           <Tabs></Tabs>
           {/* <NewsMe {...props}></NewsMe> */}
-          <ArticleList {...props}></ArticleList>
+          <ArticleList key={refresh} {...props}></ArticleList>
         </CenterCard>
         <RightCard>
           <Search></Search>

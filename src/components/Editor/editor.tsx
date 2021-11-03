@@ -10,26 +10,26 @@ import {
   TextBox,
   Toolbar
 } from './style'
-{/* <SendButton>发布</SendButton> */}
-const {BtnMenu} = E
+{/* <SendButton>发布</SendButton> */ }
+const { BtnMenu } = E
 type Iprops = {
-  sendArticle:(any) =>void
+  sendArticle: (string, ...args: any[]) => void
 }
 export class Editor extends React.Component<Iprops> {
-  editor:any
-  constructor(props:Iprops) {
+  editor: any
+  constructor(props: Iprops) {
     super(props);
   }
-  componentDidMount() {
+  componentDidMount () {
     this.initEditor()
   }
-  initEditor(){
-    const editor = new E('#toolbar','#textbox')
+  initEditor () {
+    const editor = new E('#toolbar', '#textbox')
     editor.config.placeholder = '分享新鲜事'
     editor.config.height = 500
     // editor.config.showFullScreen = true
     editor.config.showLinkImg = false
-    editor.config.menus=[
+    editor.config.menus = [
       'emoticon',
       'image'
     ]
@@ -44,11 +44,11 @@ export class Editor extends React.Component<Iprops> {
         );
         super($elem, editor);
       }
-      clickHandler() {
+      clickHandler () {
         editor.cmd.do("insertHTML", `<span contenteditable="false">&nbsp;<span style="color:blue">@李某某</span>&nbsp;</span>`);
       }
       // 菜单激活状态
-      tryChangeActive() {
+      tryChangeActive () {
         this.active(); // 菜单激活
         // this.unActive() // 菜单不激活
       }
@@ -64,39 +64,42 @@ export class Editor extends React.Component<Iprops> {
         );
         super($elem, editor);
       }
-      clickHandler() {
+      clickHandler () {
         editor.cmd.do("insertHTML", `<span contenteditable="false">&nbsp;<span style="color:blue">#瓜娃子#</span>&nbsp;</span>`);
       }
       // 菜单激活状态
-      tryChangeActive() {
+      tryChangeActive () {
         this.active(); // 菜单激活
         // this.unActive() // 菜单不激活
       }
     }
-    editor.menus.extend("aite",   InsertAT);
-    editor.menus.extend("topic",   InsertTopic);
+    editor.menus.extend("aite", InsertAT);
+    editor.menus.extend("topic", InsertTopic);
     editor.config.menuTooltipPosition = 'down'
-    editor.config.menus = editor.config.menus.concat('aite','topic');
+    editor.config.menus = editor.config.menus.concat('aite', 'topic');
     editor.config.uploadImgShowBase64 = true
     editor.config.onchange = function (newHtml) {
+      console.log(editor.txt.text())
     };
     editor.create()
     this.editor = editor
-  } 
-  componentWillUnmount(){
+  }
+  componentWillUnmount () {
     this.editor.destroy();
   }
-  sendArticle(){
-    // console.log(this.editor.txt.html());
-    this.props.sendArticle(this.editor.txt.html())
+  protected restInput () {
+    this.editor.txt.clear()
   }
-  render() {
-    return(
+  sendArticle () {
+    this.props.sendArticle(this.editor.txt.html(), this.restInput.bind(this))
+  }
+  render () {
+    return (
       <EditorWarpper>
         <TextBox id="textbox"></TextBox>
         <Toolbar justifyContent="space-between" alignItems="center">
           <div id="toolbar"></div>
-        <SendButton onClick={this.sendArticle.bind(this)}>发表</SendButton>
+          <SendButton onClick={this.sendArticle.bind(this)}>发表</SendButton>
         </Toolbar>
       </EditorWarpper>
     )

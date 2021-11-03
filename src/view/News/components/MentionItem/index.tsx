@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
-import { FollowPopup, MorePopup, Icon } from 'components'
+import { FollowPopup, MorePopup, Icon ,Avatar} from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -14,20 +14,22 @@ import {
 type IProps = {
   more?: boolean;
   size?: string;
+  itemData:any;
   [propName: string]: any;
 }
 
-const MentionItem: React.FC<IProps> = (props, { children, size = 'nomal' }) => {
+const MentionItem: React.FC<IProps> = (props) => {
+  const { children, size = 'nomal' ,itemData={}}= props
   const goDetils = (e) => {
-    if (props.location.pathname === '/articleDetils') return
-    props.history.push('/articleDetils')
+    if (props.match.path === '/articleDetils/:id') return
+    props.history.push('/articleDetils/'+itemData.id)
   }
   return (
     <MentionItemWrapper>
-      <MentionItemUser more={props.more || true} size={size} />
+      <MentionItemUser more={props.more} size={size} itemData={itemData} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
         <p><a>#Dinosaur Eggs#</a></p>
-        <p>New baby is coming. How about this one? </p>
+        <div dangerouslySetInnerHTML={{ __html:itemData.content}}></div>
         <p>
           <FollowPopup>
             <a>@Baby fuck me</a>
@@ -42,24 +44,25 @@ const MentionItem: React.FC<IProps> = (props, { children, size = 'nomal' }) => {
 type UserProps = {
   more?: boolean;
   size?: string;
+  itemData?:any;
 }
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal' }) => {
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData={}}) => {
   const [followShow, setFollowShow] = useState(false);
   return (
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
         <div className="user-left-wrapper">
-          <div className="avatar"></div>
+          <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
           <div className="user-info">
             <div>
-              <div className="user-name">曼克斯</div>
-              <div className="time">{relativeTime()}</div>
+              <div className="user-name">{itemData.user_name}</div>
+              <div className="time">{relativeTime(itemData.add_time)}</div>
             </div>
-            <div className="topic">
+            {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
               老表的吃货天堂
-            </div>
+            </div> */}
           </div>
         </div>
         {

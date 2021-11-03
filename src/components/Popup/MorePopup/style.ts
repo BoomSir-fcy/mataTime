@@ -8,6 +8,7 @@ export const PopupContentWrapper = styled(Box)`
   width: 150px;
   height: 200px;
   position: absolute;
+  z-index:99999;
   left: 0;
   top: 30px;
   background: #4D535F;

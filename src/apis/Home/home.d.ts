@@ -10,5 +10,8 @@ declare namespace Api {
     interface createArticle {
       content: string
     }
+    interface articleFindById {
+      id:string
+    }
   }
 }

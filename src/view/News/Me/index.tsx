@@ -17,9 +17,9 @@ const NewsMe: React.FC = (props) => {
         list.map((item: any, index: number) => {
           return (
             <MeItemWrapper key={index}>
-              <MentionItem {...props}>
+              <MentionItem itemData={new Object()} {...props}>
               </MentionItem>
-                <MentionOperator />
+                <MentionOperator itemData={new Object()} />
             </MeItemWrapper>
           )
         })

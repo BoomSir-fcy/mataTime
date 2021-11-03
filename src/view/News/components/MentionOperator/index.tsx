@@ -1,35 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify'
 import { Icon } from 'components';
-import { 
+import {
   MentionOperatorWrapper
 } from './style';
-
+import { Api } from 'apis';
 
 
 type IProps = {
-
+  itemData: any
 }
 
-const MentionOperator: React.FC<IProps> = () => {
-    return (
-        <MentionOperatorWrapper>
-          <div className="mention-operator">
-            <div className="operator-item">
-              <Icon name={'icon-pinglun'} color={'#B5B5B5'}></Icon>
-              36
-            </div>
-            <div className="operator-item">
-              <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
-              36
-            </div>
-            <div className="operator-item">
-              <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
-              {/* <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> */}
-              36
-            </div>
-          </div>
-        </MentionOperatorWrapper>
-    )
+const MentionOperator: React.FC<IProps> = ({ itemData }) => {
+  const [isLike, setIsLike] = useState<number>(itemData.is_like)
+  const changeLike = () => {
+    Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.id }).then(res => {
+      if (res.code === 1 || res.code === 0) {
+        setIsLike(isLike === 1 ? 0 : 1)
+        toast.success(res.data)
+      }
+    })
+  }
+  return (
+    <MentionOperatorWrapper>
+      <div className="mention-operator">
+        <div className="operator-item">
+          <Icon name={'icon-pinglun'} color={'#B5B5B5'}></Icon>
+          {itemData.comment_num}
+        </div>
+        <div className="operator-item">
+          <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
+          {itemData.share_num}
+        </div>
+        <div className="operator-item" onClick={changeLike}>
+          {
+            isLike === 1 ?
+              <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon>
+              : <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
+          }
+
+          少字段
+        </div>
+      </div>
+    </MentionOperatorWrapper>
+  )
 }
 
 export default MentionOperator
