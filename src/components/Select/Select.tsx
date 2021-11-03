@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
-import styled, { css } from 'styled-components'
-import { ArrowDropDownIcon, Text, SortDownIcon, SortUpIcon, Flex } from 'pancake-uikit'
+import React, { useState, useRef, useEffect } from 'react';
+import styled, { css } from 'styled-components';
+import { ArrowDropDownIcon, Text, SortDownIcon, SortUpIcon, Flex } from 'uikit';
 
 export const scales = {
-  LD: "ld",
-  MD: "md",
-  SM: "sm",
-  XS: "xs",
+  LD: 'ld',
+  MD: 'md',
+  SM: 'sm',
+  XS: 'xs'
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];
@@ -14,26 +14,26 @@ export type Scale = typeof scales[keyof typeof scales];
 export enum SortType {
   DEFAULT = 'default',
   UP = 'up',
-  DOWN = 'down',
+  DOWN = 'down'
 }
 
 export const scaleVariants = {
   [scales.LD]: {
-    minWidth: "108px",
-    minWidthBig: "108px",
+    minWidth: '108px',
+    minWidthBig: '108px'
   },
   [scales.MD]: {
-    minWidth: "148px",
-    minWidthBig: "168px",
+    minWidth: '148px',
+    minWidthBig: '168px'
   },
   [scales.SM]: {
-    minWidth: "80px",
-    minWidthBig: "128px",
+    minWidth: '80px',
+    minWidthBig: '128px'
   },
   [scales.XS]: {
-    minWidth: "60px",
-    minWidthBig: "100px",
-  },
+    minWidth: '60px',
+    minWidthBig: '100px'
+  }
 };
 
 const DropDownHeader = styled.div`
@@ -48,11 +48,11 @@ const DropDownHeader = styled.div`
   border-radius: 16px;
   background: ${({ theme }) => theme.colors.input};
   transition: border-radius 0.15s;
-`
+`;
 
 const DropDownListContainer = styled.div<{ scale: Scale }>`
   /* min-width: 100px; */
-  min-width: ${( { scale } ) => scaleVariants[scale].minWidth};
+  min-width: ${({ scale }) => scaleVariants[scale].minWidth};
 
   height: 0;
   position: absolute;
@@ -67,9 +67,9 @@ const DropDownListContainer = styled.div<{ scale: Scale }>`
 
   ${({ theme }) => theme.mediaQueries.sm} {
     /* min-width: 168px; */
-    min-width: ${( { scale } ) => scaleVariants[scale].minWidthBig};
+    min-width: ${({ scale }) => scaleVariants[scale].minWidthBig};
   }
-`
+`;
 
 const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Scale; fillWidth: boolean; height: number }>`
   cursor: pointer;
@@ -79,17 +79,16 @@ const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Sc
   border-radius: 16px;
   height: 40px;
   /* min-width: 100px; */
-  min-width: ${( { scale } ) => scaleVariants[scale].minWidth};
-  
+  min-width: ${({ scale }) => scaleVariants[scale].minWidth};
+
   user-select: none;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     /* min-width: 168px; */
-    min-width: ${( { scale } ) => scaleVariants[scale].minWidthBig};
-
+    min-width: ${({ scale }) => scaleVariants[scale].minWidthBig};
   }
 
-  ${(props) =>
+  ${props =>
     props.isOpen &&
     css`
       ${DropDownHeader} {
@@ -124,14 +123,14 @@ const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Sc
     top: 50%;
     transform: translateY(-50%);
   }
-`
+`;
 
 const DropDownList = styled.ul`
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   z-index: ${({ theme }) => theme.zIndices.dropdown};
-`
+`;
 
 const ListItem = styled.li`
   list-style: none;
@@ -139,71 +138,71 @@ const ListItem = styled.li`
   &:hover {
     background: ${({ theme }) => theme.colors.inputSecondary};
   }
-`
+`;
 
 export interface SelectProps {
-  options: OptionProps[]
-  defaultId?: string|number,
-  fillWidth?: boolean
-  activeIndex?: number
-  onChange?: (option: OptionProps) => void
-  onSortClick?: () => void
-  scale?: Scale
-  sort?: SortType
+  options: OptionProps[];
+  defaultId?: string | number;
+  fillWidth?: boolean;
+  activeIndex?: number;
+  onChange?: (option: OptionProps) => void;
+  onSortClick?: () => void;
+  scale?: Scale;
+  sort?: SortType;
 }
 
 export interface OptionProps {
-  label: string
-  value: any
-  id?: string|number
+  label: string;
+  value: any;
+  id?: string | number;
 }
 
 const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children }) => {
-  const containerRef = useRef(null)
-  const dropdownRef = useRef(null)
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+  const containerRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const toggling = (event: React.MouseEvent<HTMLDivElement>) => {
-    setIsOpen(!isOpen)
-    event.stopPropagation()
-  }
+    setIsOpen(!isOpen);
+    event.stopPropagation();
+  };
 
   useEffect(() => {
     if (defaultId) {
       options.forEach((item, index) => {
         if (item.id === defaultId && index !== selectedOptionIndex) {
-          setSelectedOptionIndex(index)
+          setSelectedOptionIndex(index);
         }
-      })
+      });
     }
-  }, [defaultId, options, selectedOptionIndex])
+  }, [defaultId, options, selectedOptionIndex]);
 
   const onOptionClicked = (selectedIndex: number) => () => {
-    setSelectedOptionIndex(selectedIndex)
-    setIsOpen(false)
+    setSelectedOptionIndex(selectedIndex);
+    setIsOpen(false);
 
     if (onChange) {
-      onChange(options[selectedIndex])
+      onChange(options[selectedIndex]);
     }
-  }
+  };
 
   useEffect(() => {
     setContainerSize({
       width: dropdownRef.current.offsetWidth, // Consider border
-      height: dropdownRef.current.offsetHeight,
-    })
+      height: dropdownRef.current.offsetHeight
+    });
 
     const handleClickOutside = () => {
-      setIsOpen(false)
-    }
+      setIsOpen(false);
+    };
 
-    document.addEventListener('click', handleClickOutside)
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <DropDownContainer scale={scale} isOpen={isOpen} fillWidth={fillWidth} ref={containerRef} {...containerSize}>
@@ -230,16 +229,16 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onCh
               <ListItem onClick={onOptionClicked(index)} key={option.label}>
                 <Text>{option.label}</Text>
               </ListItem>
-            ) : null,
+            ) : null
           )}
         </DropDownList>
       </DropDownListContainer>
     </DropDownContainer>
-  )
-}
+  );
+};
 
 Select.defaultProps = {
   scale: scales.MD
-}
+};
 
-export default Select
+export default Select;

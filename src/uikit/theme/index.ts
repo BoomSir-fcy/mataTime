@@ -1,12 +1,12 @@
 // import { AlertTheme } from "../components/Alert/types";
-import { CardTheme } from "../components/Card/types";
+import { CardTheme } from '../components/Card/types';
 // import { PancakeToggleTheme } from "../components/PancakeToggle/types";
-import { RadioTheme } from "../components/Radio/types";
-import { ToggleTheme } from "../components/Toggle/types";
-// import { TooltipTheme } from "../components/Tooltip/types";
-import { NavTheme } from "../widgets/Menu/types";
+import { RadioTheme } from '../components/Radio/types';
+import { ToggleTheme } from '../components/Toggle/types';
+import { TooltipTheme } from '../components/Tooltip/types';
+import { NavTheme } from '../widgets/Menu/types';
 // import { ModalTheme } from "../widgets/Modal/types";
-import { Colors, Breakpoints, MediaQueries, BreakpointMap, Spacing, Shadows, Radii, ZIndices, MediaQueriesSize, Filters } from "./types";
+import { Colors, Breakpoints, MediaQueries, BreakpointMap, Spacing, Shadows, Radii, ZIndices, MediaQueriesSize, Filters } from './types';
 
 export interface PancakeTheme {
   siteWidth: number;
@@ -20,7 +20,7 @@ export interface PancakeTheme {
   // pancakeToggle?: PancakeToggleTheme;
   radio?: RadioTheme;
   toggle?: ToggleTheme;
-  // tooltip?: TooltipTheme;
+  tooltip?: TooltipTheme;
   breakpoints: Breakpoints;
   mediaQueries: MediaQueries;
   // breakpointMap: BreakpointMap;
@@ -31,8 +31,8 @@ export interface PancakeTheme {
   mediaQueriesSize: MediaQueriesSize;
 }
 
-export { default as dark } from "./dark";
-export { default as light } from "./light";
+export { default as dark } from './dark';
+export { default as light } from './light';
 
-export { lightColors } from "./colors";
-export { darkColors } from "./colors";
+export { lightColors } from './colors';
+export { darkColors } from './colors';
