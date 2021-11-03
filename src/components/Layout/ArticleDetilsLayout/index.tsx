@@ -49,7 +49,7 @@ export const ArticleDetilsLayout : React.FC= (props:Iprops) => {
           </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
           <Editor sendArticle={sendArticle}></Editor>
-          <CommentList></CommentList>
+          <CommentList itemData={itemData}></CommentList>
         </CenterCard>
         <RightCard>
           <Search></Search>

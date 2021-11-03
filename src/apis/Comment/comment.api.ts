@@ -2,7 +2,7 @@ import { Http } from "../http";
 
 export class CommentApi extends Http {
   // 评论列表
-  async getArticleList(params:Api.Comment.queryList) {
+  async getCommentList(params:Api.Comment.queryList) {
     const res = await this.get('/v1/post/list', params);
     return res;
   }

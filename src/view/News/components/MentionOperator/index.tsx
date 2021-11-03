@@ -39,7 +39,7 @@ const MentionOperator: React.FC<IProps> = ({ itemData }) => {
               : <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
           }
 
-          少字段
+          {itemData.like_num}
         </div>
       </div>
     </MentionOperatorWrapper>
