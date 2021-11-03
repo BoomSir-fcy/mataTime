@@ -5,6 +5,7 @@ import { ContentApi } from './Content';
 import { HomeApi } from './Home';
 import { CommentApi } from './Comment';
 import { MeApi } from './Me';
+import { AttentionApi } from './Attention';
 
 const isSuccess = (res: Api.Error) => {
   return res && res.code === 1;
@@ -18,5 +19,6 @@ export const Api = {
   HomeApi: new HomeApi(),
   CommentApi: new CommentApi(),
   ContentApi: new ContentApi(),
-  MeApi: new MeApi()
+  MeApi: new MeApi(),
+  AttentionApi: new AttentionApi()
 };

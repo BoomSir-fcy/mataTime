@@ -33,7 +33,9 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onFavAgreeRequest = async () => {
     const res = await Api.ContentApi.onFavAgree(1);
     if (res.code === 1) {
-      toast(res.msg)
+      toast.success(res.msg)
+    } else {
+      toast.error(res.msg)
     }
   }
 
@@ -41,7 +43,9 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onFavCancelRequest = async () => {
     const res = await Api.ContentApi.onFavCancel(1);
     if (res.code === 1) {
-      toast(res.msg)
+      toast.success(res.msg)
+    } else {
+      toast.error(res.msg)
     }
   }
 
