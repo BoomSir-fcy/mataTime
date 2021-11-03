@@ -89,7 +89,6 @@ const Profile = React.memo(() => {
     Introduction: '',
     location: ''
   })
-  // const [stateUserInfo, setUserInfo] = useState({ nick_name: '' })
   const getUserInfo = async () => {
     try {
       const res = await Api.UserApi.getUserInfo()

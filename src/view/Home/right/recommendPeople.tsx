@@ -72,6 +72,10 @@ export const RecommendPeople: React.FC<Iprops> = (props) => {
       } else {
         toast.error(res.data)
       }
+      // if (res.code === 1) {
+      //   console.log(res.data);
+      //   setList(res.data || [])
+      // }
     })
   }
   return (
