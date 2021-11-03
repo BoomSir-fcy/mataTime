@@ -139,6 +139,7 @@ export const MentionItemUserWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
+      color: #FFFFFF;
       p{
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
