@@ -12,8 +12,11 @@ constructor(props:Iprops){
 defaultProps : {
   marginTop: 0
 }
-componentDidMount(){
+loadList(){
   this.props.renderList()
+}
+componentDidMount(){
+  this.loadList()
   document.addEventListener('scroll', this.scrollRenderHandler.bind(this))
 }
 componentWillUnmount(){
@@ -22,7 +25,7 @@ componentWillUnmount(){
 scrollRenderHandler(){
   if(!this.listBox.current)return false
   if (window.pageYOffset + window.innerHeight >= this.listBox.current.offsetHeight+this.props.marginTop) {
-    this.props.renderList()
+    this.loadList()
   }
 }
 render(){

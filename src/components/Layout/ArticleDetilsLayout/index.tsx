@@ -8,6 +8,7 @@ import {Search,Swap,RecommendPeople,HotTopic,FooterCopyright}  from 'view/Home/r
 import {CommentList}  from './CommentList';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
+import {toast} from 'react-toastify'
 
 import {
   NewsMeWrapper,
@@ -24,15 +25,26 @@ type Iprops = {
   [name: string]:any
 }
 export const ArticleDetilsLayout : React.FC= (props:Iprops) => {
-  // let itemData ={}
-  const [itemData,setItemData] = useState({})
-  const sendArticle=(res)=>{
+  const [itemData,setItemData] = useState<any>({})
+  const [refresh,setRefresh] = useState(1)
+  const sendArticle=(res,resetInput:() => void)=>{
     console.log(res);
+    if(!res) return
+    Api.CommentApi.createComment({
+      pid:itemData.id,
+      comment:res,
+    }).then(res=>{
+      if(res.code===1){
+        toast.success(res.data)
+        setRefresh(refresh===1?2:1)
+        resetInput()
+      }
+    })
   }
   useEffect(()=>{
     Api.HomeApi.articleFindById({id:props.match.params.id}).then(res=>{
-      // itemData =res.data
       setItemData(res.data)
+      setRefresh(refresh===1?2:1)
     })
   },[])
   return (
@@ -49,7 +61,7 @@ export const ArticleDetilsLayout : React.FC= (props:Iprops) => {
           </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
           <Editor sendArticle={sendArticle}></Editor>
-          <CommentList itemData={itemData}></CommentList>
+          <CommentList key={refresh} itemData={itemData}></CommentList>
         </CenterCard>
         <RightCard>
           <Search></Search>
