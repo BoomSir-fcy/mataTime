@@ -10,7 +10,7 @@ export const PrivateRoute = ({ component, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        Boolean(!UID) ? (
+        Boolean(UID) ? (
           <Component {...props} />
         ) : (
           <Redirect

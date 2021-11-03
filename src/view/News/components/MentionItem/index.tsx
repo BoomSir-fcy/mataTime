@@ -2,39 +2,42 @@ import React, { useState } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
-import { FollowPopup, MorePopup, Icon ,Avatar} from 'components'
+import { toast } from 'react-toastify';
+import { FollowPopup, MorePopup, Icon, Avatar } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
   FollowBtn
 } from './style';
 
+import { Api } from 'apis';
 
 
 type IProps = {
   more?: boolean;
   size?: string;
-  itemData:any;
+  itemData: any;
   [propName: string]: any;
+  callback?: Function;
 }
 
 const MentionItem: React.FC<IProps> = (props) => {
-  const { children, size = 'nomal' ,itemData={}}= props
+  const { children, size = 'nomal', itemData = {}, callback = () => { } } = props
   const goDetils = (e) => {
     if (props.match.path === '/articleDetils/:id') return
-    props.history.push('/articleDetils/'+itemData.id)
+    props.history.push('/articleDetils/' + itemData.id)
   }
   return (
     <MentionItemWrapper>
-      <MentionItemUser more={props.more} size={size} itemData={itemData} />
+      <MentionItemUser more={props.more} size={size} itemData={itemData} callback={callback} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
-        <p><a>#Dinosaur Eggs#</a></p>
-        <div dangerouslySetInnerHTML={{ __html:itemData.content}}></div>
-        <p>
+        {/* <p><a>#Dinosaur Eggs#</a></p> */}
+        <div dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
+        {/* <p>
           <FollowPopup>
             <a>@Baby fuck me</a>
           </FollowPopup>
-        </p>
+        </p> */}
       </div>
       {children}
     </MentionItemWrapper>
@@ -44,11 +47,23 @@ const MentionItem: React.FC<IProps> = (props) => {
 type UserProps = {
   more?: boolean;
   size?: string;
-  itemData?:any;
+  itemData?: any;
+  callback?: Function;
 }
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData={}}) => {
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
   const [followShow, setFollowShow] = useState(false);
+
+  // 关注用户
+  const onAttentionFocusRequest = async (focus_uid: number) => {
+    const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
+    if (res.code === 1) {
+      toast.success(res.data)
+      callback()
+    } else {
+      toast.error(res.data)
+    }
+  }
   return (
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
@@ -57,7 +72,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
           <div className="user-info">
             <div>
               <div className="user-name">{itemData.user_name}</div>
-              <div className="time">{relativeTime(itemData.add_time)}</div>
+              <div className="time">{itemData.add_time_desc}</div>
             </div>
             {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
@@ -68,8 +83,15 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
         {
           more ? (
             <div className="user-right-wrapper">
-              <FollowBtn>+关注</FollowBtn>
-              <MorePopup>
+              {
+                itemData.is_attention === 0 ? (
+                  <FollowBtn onClick={() => {
+                    onAttentionFocusRequest(itemData.id)
+                  }}>+关注</FollowBtn>
+                ) : null
+              }
+
+              <MorePopup data={itemData}>
                 <img src={moreIcon} onClick={() => { setFollowShow(true) }} alt="more" />
               </MorePopup>
             </div>

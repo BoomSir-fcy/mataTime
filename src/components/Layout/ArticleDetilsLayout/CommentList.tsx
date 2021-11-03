@@ -52,7 +52,7 @@ export const CommentList: React.FC = () => {
                   </div>
                 </Flex>
                 <Flex>
-                  <MorePopup>
+                  <MorePopup data={item}>
                     <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
                   </MorePopup>
                 </Flex>
