@@ -31,13 +31,13 @@ const MentionItem: React.FC<IProps> = (props) => {
     <MentionItemWrapper>
       <MentionItemUser more={props.more} size={size} itemData={itemData} callback={callback} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
-        <p><a>#Dinosaur Eggs#</a></p>
+        {/* <p><a>#Dinosaur Eggs#</a></p> */}
         <div dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
-        <p>
+        {/* <p>
           <FollowPopup>
             <a>@Baby fuck me</a>
           </FollowPopup>
-        </p>
+        </p> */}
       </div>
       {children}
     </MentionItemWrapper>
@@ -72,7 +72,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
           <div className="user-info">
             <div>
               <div className="user-name">{itemData.user_name}</div>
-              <div className="time">{relativeTime(itemData.add_time)}</div>
+              <div className="time">{itemData.add_time_desc}</div>
             </div>
             {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
