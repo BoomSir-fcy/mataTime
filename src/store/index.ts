@@ -39,3 +39,6 @@ export const Dispatch = {
 export function useStore<TSelected>(selector: (state: Store) => TSelected, equalityFn?: (left: TSelected, right: TSelected) => boolean) {
   return useSelector<Store, TSelected>(selector, equalityFn);
 }
+
+export type AppDispatch = typeof store.dispatch
+export type AppState = ReturnType<typeof store.getState>

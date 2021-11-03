@@ -1,4 +1,5 @@
 import React from 'react'
+import { useThemeManager } from 'store/app/hooks';
 import styled from "styled-components";
 import { Flex, Box, Text, Button, Toggle } from 'uikit';
 import { useImmer } from 'use-immer';
@@ -30,6 +31,8 @@ border-bottom: 1px solid #4D535F;
 `
 
 const LikeSet = () => {
+
+  const [isDark, toggleThemeHandle] = useThemeManager()
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
@@ -68,7 +71,7 @@ const LikeSet = () => {
       <Column>
         <Rows>
           <Title>深色模式</Title>
-          <Toggle checked={state.isDeep} onClick={setDeep} />
+          <Toggle checked={isDark} onClick={toggleThemeHandle} />
         </Rows>
         <Msg>可切换为深色模式，夜间浏览更舒服</Msg>
       </Column>
@@ -82,7 +85,7 @@ const LikeSet = () => {
       <Column>
         <Rows>
           <Title>默认显示语言</Title>
-          <div>简体中文（CN）</div>
+          <Text>简体中文（CN）</Text>
         </Rows>
         <Msg>显示更符合你的语言</Msg>
       </Column>
