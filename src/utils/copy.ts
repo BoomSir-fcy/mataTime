@@ -8,5 +8,5 @@ export const copyContent = (content: string) => {
   document.execCommand("Copy"); // 执行浏览器复制命令
   oInput.className = 'oInput';
   oInput.style.display = 'none';
-  toast('复制成功！');
+  toast.success('复制成功！');
 }

@@ -1,11 +1,11 @@
-import React from 'react';
+import React,{ useState,useEffect} from 'react';
 import { Avatar, Icon } from 'components';
 import { Flex, Button, Box } from 'uikit'
 import { relativeTime } from 'utils'
 import { SortIcon } from './SortIcon'
 import MentionOperator from 'view/News/components/MentionOperator';
 import { FollowPopup, MorePopup } from 'components'
-
+import {Api} from 'apis'
 import {
   CommentListBox,
   CommentTitle,
@@ -15,8 +15,15 @@ import {
   // CommentFooter,
   CommentListFooter
 } from './style'
-
-export const CommentList: React.FC = () => {
+type Iprops = {
+  itemData:any
+}
+export const CommentList: React.FC<Iprops> = (props:Iprops) => {
+  useEffect(()=>{
+    // Api.CommentApi.getCommentList().then(res=>{
+    //   console.log(res);
+    // })
+  },[])
   return (
     <CommentListBox>
       <CommentTitle justifyContent="space-between" alignItems="center">

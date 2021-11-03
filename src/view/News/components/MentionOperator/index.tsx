@@ -26,11 +26,11 @@ const MentionOperator: React.FC<IProps> = ({ itemData }) => {
       <div className="mention-operator">
         <div className="operator-item">
           <Icon name={'icon-pinglun'} color={'#B5B5B5'}></Icon>
-          {itemData.comment_num}
+          {itemData.comment_num || 0}
         </div>
         <div className="operator-item">
           <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
-          {itemData.share_num}
+          {itemData.share_num || 0}
         </div>
         <div className="operator-item" onClick={changeLike}>
           {
@@ -39,7 +39,7 @@ const MentionOperator: React.FC<IProps> = ({ itemData }) => {
               : <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
           }
 
-          {itemData.like_num}
+          {itemData.like_num || 0}
         </div>
       </div>
     </MentionOperatorWrapper>
