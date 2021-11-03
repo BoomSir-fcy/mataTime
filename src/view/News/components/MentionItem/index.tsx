@@ -91,7 +91,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
                 ) : null
               }
 
-              <MorePopup>
+              <MorePopup data={itemData}>
                 <img src={moreIcon} onClick={() => { setFollowShow(true) }} alt="more" />
               </MorePopup>
             </div>

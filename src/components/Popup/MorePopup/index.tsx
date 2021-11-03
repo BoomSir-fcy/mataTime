@@ -9,12 +9,15 @@ import {
 import { Api } from 'apis';
 import { copyContent } from 'utils/copy';
 
+
+
 type Iprops = {
+  data: any;
   children: React.ReactElement;
 }
 
 export const MorePopup = React.memo((props: Iprops) => {
-  const { children } = props
+  const { children, data } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [shieldShow, setShieldShow] = useState<boolean>(false);
@@ -49,6 +52,11 @@ export const MorePopup = React.memo((props: Iprops) => {
     }
   }
 
+  // 分享到Twitter
+  const onShareTwitterClick = () => {
+    window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('分享title')).concat(' ').concat(encodeURIComponent('https://www.baidu.com')))
+  }
+
   return (
     <PopupWrapper onClick={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
@@ -58,9 +66,11 @@ export const MorePopup = React.memo((props: Iprops) => {
       {
         visible ? (
           <PopupContentWrapper>
-            <p>分享到Twitter</p>
             <p onClick={() => {
-              copyContent('这是复制的内容！')
+              onShareTwitterClick()
+            }}>分享到Twitter</p>
+            <p onClick={() => {
+              copyContent(data.content || '无可复制到内容！')
             }}>复制内容地址</p>
             <p onClick={() => {
               onFavAgreeRequest()
