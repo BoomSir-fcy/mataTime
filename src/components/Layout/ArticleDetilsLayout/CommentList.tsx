@@ -30,7 +30,7 @@ export const CommentList: React.FC = () => {
           </div>
         </div>
       </CommentTitle>
-      {Array(3).fill(null).map((item,index) => (
+      {Array(3).fill(null).map((item, index) => (
         <CommentItem key={index}>
           <Flex>
             <Avatar src="" style={{ width: '50px', height: '50px' }} scale="md" />
@@ -42,7 +42,7 @@ export const CommentList: React.FC = () => {
                     <div className="relative-time">{relativeTime('2020')}</div>
                   </div>
                   <div className="reply">
-                    回复 和 
+                    回复 和
                     <FollowPopup>
                       <span>@曼克斯</span>
                     </FollowPopup>
@@ -52,9 +52,9 @@ export const CommentList: React.FC = () => {
                   </div>
                 </Flex>
                 <Flex>
-                <MorePopup>
-                  <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
-              </MorePopup>
+                  <MorePopup>
+                    <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
+                  </MorePopup>
                 </Flex>
               </CommentHeader>
               <CommentContent >

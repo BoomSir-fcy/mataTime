@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
 import { Box, Button, Flex } from 'uikit';
+import { Api } from 'apis';
 
 const Header = styled(Flex)`
   width:100%;
@@ -77,6 +78,28 @@ const Shield = React.memo(() => {
 
   // 屏蔽列表
   const ShieldList = () => {
+
+    // 屏蔽
+    const shieldUser = async (pid: number) => {
+      try {
+        const res = await Api.MeApi.shieldUser(pid)
+        console.log('屏蔽', res)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    // 取消屏蔽
+    const unShieldUser = async (pid: number) => {
+      try {
+        const res = await Api.MeApi.shieldUser(pid)
+        console.log('取消屏蔽', res);
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     const setPeople = useCallback((index) => {
       if (peopleState[index].isFollow) {
         peopleState.splice(index, 1)
@@ -103,7 +126,7 @@ const Shield = React.memo(() => {
               <div><span className="username">{item.uname}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">@0x32...9239</span></div>
               <Msg>{item.present}</Msg>
             </Column>
-            <Button onClick={() => setPeople(index)}>取消屏蔽</Button>
+            <Button onClick={() => shieldUser(1)}>取消屏蔽</Button>
           </ContentBox>
         )
       })

@@ -70,8 +70,7 @@ button {
 const Fans = React.memo(() => {
   const people = [
     { uname: '满克斯', dunpai: true, present: '@0x32...9239', isFollow: '互相关注' },
-    { uname: '乔布斯', dunpai: false, present: '巴里拉里', isFollow: '关注' },
-    { uname: '马克思', dunpai: true, present: '个人主页的介绍', isFollow: '取消关注' }
+    { uname: '乔布斯', dunpai: false, present: '巴里拉里', isFollow: '关注' }
   ]
   const [peopleState, setPeopleState] = useState(people)
 
@@ -80,6 +79,8 @@ const Fans = React.memo(() => {
     const getFansList = async () => {
       try {
         const res = await Api.MeApi.fansList()
+        console.log('粉丝列表', res);
+
       } catch (error) {
         console.log(error);
       }

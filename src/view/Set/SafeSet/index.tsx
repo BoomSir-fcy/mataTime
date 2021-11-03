@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import { Flex, Box, Text, Button } from 'uikit';
+import { useWeb3React } from '@web3-react/core';
 
 const SafeSetBox = styled.div`
 height: 707px;
@@ -34,6 +35,8 @@ font-size:16px;
 
 
 const SafeSet = () => {
+  console.log('钱包地址', useWeb3React());
+
   return (
     <SafeSetBox>
       <Rows>

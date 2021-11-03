@@ -3,9 +3,15 @@ declare namespace Api {
   namespace Me {
 
     interface followParams {
-      UID: number
-      uid?: number
+      uid: number,
+      data: array,
+      res: object,
+      nick_name: string,
     }
+    interface followUserParams {
+      focus_uid: number
+    }
+
     interface fansParams {
       UID: number
       uid?: number
@@ -18,7 +24,11 @@ declare namespace Api {
       UID: number
       uid?: number
     }
-
+    interface addContentDetail {
+      pid: number,
+      comment: string,
+      comment_id?: number
+    }
 
     interface followCallback extends Api.Error {
       data: followParams
@@ -31,6 +41,12 @@ declare namespace Api {
     }
     interface collectCallback extends Api.Error {
       data: collectParams
+    }
+    interface followUserCallback extends Api.Error {
+      data: followUserParams
+    }
+    interface addContentCallback extends Api.Error {
+      data: addContentDetail
     }
     interface referrerMans {
       num: number

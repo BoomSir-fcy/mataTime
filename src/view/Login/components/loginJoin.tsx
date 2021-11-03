@@ -47,6 +47,7 @@ export const LoginJoin: React.FC = React.memo(() => {
   const { loginCallback } = useLogin();
   const { siginInVerify, getUserName, getNftUrl } = useSignIn();
   const { account } = useWeb3React();
+
   const redict = location?.state?.from;
   const [state, setState] = useImmer({
     isSignIn: false
