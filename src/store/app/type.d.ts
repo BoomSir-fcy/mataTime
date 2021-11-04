@@ -2,7 +2,8 @@ import { Language } from 'config/localization';
 
 export interface systemCustom {
   isDark: boolean;
-  notification: notification;
+  notification: boolean;
+  languange: languange;
   autoTranslation: boolean;
 }
 
