@@ -23,7 +23,7 @@ export const ArticleList = (props) => {
     if (props.location.pathname === '/articleDetils') return
     props.history.push('/articleDetils')
   }
-  const [size, setSize] = useState(20)
+  // const [size, setSize] = useState(20)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
@@ -36,20 +36,19 @@ export const ArticleList = (props) => {
         Api.HomeApi.getArticleList({
           attention: 1,
           page: page,
-          per_page: size
+          per_page: 20
         }).then(res => {
           setLoading(false)
           if (res.code === 1) {
             setPage(page + 1)
-            setListData([...listData])
-            // setListData([...listData, ...res.data.List])
             setTotalPage(res.data.total_page)
+            setListData([...listData, ...res.data.List])
           }
         })
       }}>
         {listData.map(item => (
           <MeItemWrapper key={item.id} >
-            <MentionItem {...props}>
+            <MentionItem {...props} itemData={item}>
             </MentionItem>
             <MentionOperator itemData={item} />
           </MeItemWrapper>

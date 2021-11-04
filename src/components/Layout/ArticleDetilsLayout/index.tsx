@@ -60,7 +60,7 @@ export const ArticleDetilsLayout : React.FC= (props:Iprops) => {
             <MentionOperator itemData={itemData} />
           </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
-          <Editor sendArticle={sendArticle}></Editor>
+          <Editor type="comment" sendArticle={sendArticle}></Editor>
           <CommentList key={refresh} itemData={itemData}></CommentList>
         </CenterCard>
         <RightCard>

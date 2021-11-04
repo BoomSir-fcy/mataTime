@@ -9,9 +9,13 @@ declare namespace Api {
     }
     interface createArticle {
       content: string
+      image_urls: string[]
     }
     interface articleFindById {
       id:string
+    }
+    type queryHotTopic={
+      page:number
     }
   }
 }

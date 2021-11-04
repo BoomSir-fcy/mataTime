@@ -19,12 +19,13 @@ background-color:#4168ED;
 `;
 export const TextBox = styled.div`
 margin-bottom: 15px;
+border-radius: ${({ theme }) => theme.radii.card};
+overflow: hidden;
 .w-e-text-container{
   z-index:22 !important;
   overflow-y:auto;
   color: ${({ theme }) => theme.colors.text};
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
-  border-radius: ${({ theme }) => theme.radii.card};
+background: ${({ theme }) => theme.colors.backgroundTextArea};
   .placeholder{
     color: #B5B5B5;
   }
@@ -41,6 +42,28 @@ margin-bottom: 15px;
     }
     min-height: 112px;
     max-height: 150px;
+  }
+}
+.imgList{
+  padding:10px 0;
+  overflow-x: auto;
+  display: flex;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
+  &>div{
+    position:relative;
+    margin-left:15px;
+    img{
+      width: 53px;
+      height: 53px;
+      border-radius:5px;
+    }
+    i{
+      padding:5px;
+      position:absolute;
+      top:-10px;
+      right:-10px;
+      transition:all 0.3s ;
+    }
   }
 }
 `;

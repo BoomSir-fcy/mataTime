@@ -14,11 +14,11 @@ export const LeftCard = styled(Flex)`
 `
 export const CenterCard = styled(Box)`
   // flex: 1;
-  ${mediaQueriesSize.marginLRmd}
-  // width:670px;
+  // ${mediaQueriesSize.marginLRmd}
+  width:670px;
 `
 export const RightCard = styled.div`
-  width: 375px;
+  // width: 375px;
 `
 export const CommentListBox = styled.div`
 background-color:#191F2D;
