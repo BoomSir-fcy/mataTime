@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
 import { Icon } from 'components';
 import {
@@ -6,16 +6,30 @@ import {
 } from './style';
 import { Api } from 'apis';
 
-
-type IProps = {
-  itemData: any
+enum MentionObjEnum {
+  Article,
+  Comment
 }
 
-const MentionOperator: React.FC<IProps> = ({ itemData }) => {
+type IProps = {
+  itemData: any,
+  type?: MentionObjEnum,
+  callback?: Function
+}
+
+const MentionOperator: React.FC<IProps> = ({ itemData, type = 'Article', callback }) => {
   const [isLike, setIsLike] = useState<number>(itemData.is_like)
   const changeLike = () => {
-    Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.id }).then(res => {
-      if (res.code === 1 || res.code === 0) {
+    Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.post_id }).then(res => {
+      if (Api.isSuccess(res)) {
+        callback({
+          ...itemData,
+          post: {
+            ...itemData.post,
+            like_num: isLike === 1 ? itemData.post.like_num - 1 : itemData.post.like_num + 1,
+            is_like: isLike === 1 ? 0 : 1
+          }
+        })
         setIsLike(isLike === 1 ? 0 : 1)
         toast.success(res.data)
       }
@@ -23,7 +37,7 @@ const MentionOperator: React.FC<IProps> = ({ itemData }) => {
   }
   useEffect(() => {
     setIsLike(itemData.is_like)
-  },[itemData.is_like])
+  }, [itemData.is_like])
   return (
     <MentionOperatorWrapper>
       <div className="mention-operator">

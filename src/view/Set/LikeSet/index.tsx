@@ -1,70 +1,70 @@
-import React from 'react'
-import { useThemeManager } from 'store/app/hooks';
-import styled from "styled-components";
-import { Flex, Box, Text, Button, Toggle } from 'uikit';
+import React from 'react';
+import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { useThemeManager } from 'store/app/hooks';
+import { Flex, Box, Text, Button, Toggle } from 'uikit';
 
 const NoticeSetBox = styled.div`
-height: 707px;
-background: #191F2D;
-margin-top: 16px;
-padding: 27px 29px;
-border-radius: 10px;
-`
+  height: 707px;
+  background: #191f2d;
+  margin-top: 16px;
+  padding: 27px 29px;
+  border-radius: 10px;
+`;
 const Title = styled.div`
-color:#fff;
-font-weight: bold;
-`
+  color: #fff;
+  font-weight: bold;
+`;
 const Msg = styled(Text)`
-color:#B5B5B5;
-font-size:16px;
-`
+  color: #b5b5b5;
+  font-size: 16px;
+`;
 const Rows = styled(Flex)`
-justify-content: space-between;
-`
+  justify-content: space-between;
+`;
 const Column = styled(Flex)`
-flex-direction: column;
-justify-content: space-around;
-padding-bottom:23px;
-margin-bottom:22px;
-border-bottom: 1px solid #4D535F;
-`
+  flex-direction: column;
+  justify-content: space-around;
+  padding-bottom: 23px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #4d535f;
+`;
 
-const LikeSet = () => {
-
-  const [isDark, toggleThemeHandle] = useThemeManager()
+const LikeSet: React.FC = () => {
+  const [isDark, toggleThemeHandle] = useThemeManager();
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
     isTranslation: false
-  })
+  });
+
   // 深色模式
   const setDeep = () => {
-    let bgImg = document.getElementById("bg")
+    let bgImg = document.getElementById('bg');
     setState(p => {
-      p.isDeep = !p.isDeep
+      p.isDeep = !p.isDeep;
       if (state.isDeep) {
-        bgImg.style.backgroundImage = "url(../../../assets/images/background_images.jpg)"
-        bgImg.style.backgroundColor = "skyblue"
+        bgImg.style.backgroundImage = 'url(../../../assets/images/background_images.jpg)';
+        bgImg.style.backgroundColor = 'skyblue';
       } else {
-        bgImg.style.backgroundColor = "skyblue"
-        bgImg.style.backgroundImage = ""
+        bgImg.style.backgroundColor = 'skyblue';
+        bgImg.style.backgroundImage = '';
       }
-    })
-  }
+    });
+  };
   // 红点提醒
   const setRemind = () => {
     setState(p => {
-      p.isRemind = !p.isRemind
-    })
-  }
+      p.isRemind = !p.isRemind;
+    });
+  };
   // 默认语言
   // 自动翻译
   const setTranslation = () => {
     setState(p => {
-      p.isTranslation = !p.isTranslation
-    })
-  }
+      p.isTranslation = !p.isTranslation;
+    });
+  };
 
   return (
     <NoticeSetBox>
@@ -97,7 +97,7 @@ const LikeSet = () => {
         <Msg>浏览其他人的内容时，自动翻译成你选择的默认显示语言 </Msg>
       </Column>
     </NoticeSetBox>
-  )
-}
+  );
+};
 
 export default LikeSet;

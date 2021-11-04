@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { toggleTheme, toastContainer, connectWallet, setChainId } from './actions';
 
 const initialState = {
-  isDark: false,
+  isDark: true,
   connectWallet: false,
   chainId: 0,
   show: false,

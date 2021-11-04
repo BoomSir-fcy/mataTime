@@ -12,7 +12,6 @@ import {
 
 import { Api } from 'apis';
 
-
 type IProps = {
   more?: boolean;
   size?: string;
@@ -20,6 +19,7 @@ type IProps = {
   [propName: string]: any;
   callback?: Function;
 }
+
 
 const MentionItem: React.FC<IProps> = (props) => {
   const { children, size = 'nomal', itemData = {}, callback = () => { } } = props
@@ -29,7 +29,9 @@ const MentionItem: React.FC<IProps> = (props) => {
   }
   return (
     <MentionItemWrapper>
-      <MentionItemUser more={props.more} size={size} itemData={itemData} callback={callback} />
+      <MentionItemUser more={props.more} size={size} itemData={itemData} callback={(data: any) => {
+        callback(data)
+      }} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
         {/* <p><a>#Dinosaur Eggs#</a></p> */}
         <div dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
@@ -57,12 +59,19 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
   // 关注用户
   const onAttentionFocusRequest = async (focus_uid: number) => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
-    if (res.code === 1) {
+    if (Api.isSuccess(res)) {
       toast.success(res.data)
-      callback()
+      callback({
+        ...itemData,
+        post: {
+          ...itemData.post,
+          is_attention: 0
+        }
+      })
     } else {
       toast.error(res.data)
     }
+
   }
   return (
     <MentionItemUserWrapper>
@@ -86,7 +95,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
               {
                 itemData.is_attention === 0 ? (
                   <FollowBtn onClick={() => {
-                    onAttentionFocusRequest(itemData.id)
+                    onAttentionFocusRequest(itemData.uid)
                   }}>+关注</FollowBtn>
                 ) : null
               }

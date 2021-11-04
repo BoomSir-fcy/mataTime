@@ -32,6 +32,7 @@ function App() {
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
+  const isDark = JSON.parse(window.localStorage.getItem(storage.isDark));
   const { t, setLanguage } = useTranslation();
 
   React.useEffect(() => {
@@ -46,6 +47,7 @@ function App() {
 
   React.useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
+    isDark !== store.isDark && dispatch(storeAction.toggleTheme());
   }, [token]);
 
   return (

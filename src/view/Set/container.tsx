@@ -1,11 +1,11 @@
 import React from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 import { Flex, Box } from 'uikit';
 import { Menu } from './menu/menu';
-import { mediaQueriesSize } from "uikit/theme/base";
+import { mediaQueriesSize } from 'uikit/theme/base';
 import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
-import Header from "./Header";
+import Header from './Header';
 
 const PageContainer = styled.div`
   width: 1200px;
@@ -13,21 +13,17 @@ const PageContainer = styled.div`
   padding-top: 35px;
   display: flex;
   justify-content: center;
-`
-const LeftCard = styled(Flex)`
-
-`
+`;
+const LeftCard = styled(Flex)``;
 const CenterCard = styled(Box)`
   flex: 1;
   ${mediaQueriesSize.marginLRmd}
-`
+`;
 const RightCard = styled.div`
   width: 375px;
-`
+`;
 
-export const Container = (props) => {
-  console.log('props2', props);
-
+export const Container = props => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
@@ -47,5 +43,5 @@ export const Container = (props) => {
         </RightCard>
       </Flex>
     </PageContainer>
-  )
-}
+  );
+};
