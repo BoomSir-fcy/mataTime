@@ -35,7 +35,6 @@ export const MentionItemUserWrapper = styled.div`
         width: 60px;
         height: 60px;
         border-radius: 10px;
-        background-color: #f0f0f0;
         overflow: hidden;
         margin-right: 13px;
         img{
