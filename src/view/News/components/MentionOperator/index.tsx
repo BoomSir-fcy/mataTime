@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { toast } from 'react-toastify'
 import { Icon } from 'components';
 import {
@@ -21,6 +21,9 @@ const MentionOperator: React.FC<IProps> = ({ itemData }) => {
       }
     })
   }
+  useEffect(() => {
+    setIsLike(itemData.is_like)
+  },[itemData.is_like])
   return (
     <MentionOperatorWrapper>
       <div className="mention-operator">

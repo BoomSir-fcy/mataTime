@@ -25,11 +25,12 @@ const menuArr = [
     icon: 'none',
     title: '收藏',
     path: '/',
+    badge: true
   },
-  {
-    icon: 'none',
-    title: '屏蔽列表',
-    path: '/me/shield',
-  },
+  // {
+  //   icon: 'none',
+  //   title: '屏蔽列表',
+  //   path: '/me/shield',
+  // },
 ]
 export default menuArr

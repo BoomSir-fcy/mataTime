@@ -1,6 +1,9 @@
 import styled from "styled-components";
-
-export const SortIcon =(props)=>{
+type Iprops = {
+  changeSort:()=>void;
+  flag:boolean
+}
+export const SortIcon =(props:Iprops)=>{
   const {flag = false} = props;
   const SortBox = styled.div`
 display:flex;
@@ -25,8 +28,11 @@ i:last-child{
   border-top: 6px solid ${flag?'#4168ED':'#fff'};
 }
 `
+const changeSort =()=>{
+    props.changeSort()
+}
   return(
-    <SortBox>
+    <SortBox onClick={changeSort}>
       <i></i>
       <i></i>
     </SortBox>

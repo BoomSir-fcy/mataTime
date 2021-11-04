@@ -6,4 +6,9 @@ export class AttentionApi extends Http {
     const res = await this.get('/v1/attention/focus', { focus_uid });
     return res;
   }
+  // 关注用户
+  async cancelAttentionFocus(focus_uid: number) {
+    const res = await this.get('/v1/attention/focus', { focus_uid });
+    return res;
+  }
 }

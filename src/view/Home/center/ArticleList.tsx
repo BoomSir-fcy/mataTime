@@ -19,10 +19,11 @@ color:#fff;
 `
 
 export const ArticleList = (props) => {
-  // const goDetils = (e) => {
-  //   if (props.location.pathname === '/articleDetils') return
-  //   props.history.push('/articleDetils')
-  // }
+  const goDetils = (e) => {
+    if (props.location.pathname === '/articleDetils') return
+    props.history.push('/articleDetils')
+  }
+  const [size, setSize] = useState(20)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
@@ -35,19 +36,21 @@ export const ArticleList = (props) => {
         Api.HomeApi.getArticleList({
           attention: 1,
           page: page,
-          per_page: 20
+          per_page: size
         }).then(res => {
           setLoading(false)
           if (res.code === 1) {
             setPage(page + 1)
-            setListData([...listData, ...res.data.List])
+            setListData([...listData])
+            // setListData([...listData, ...res.data.List])
             setTotalPage(res.data.total_page)
           }
         })
       }}>
         {listData.map(item => (
           <MeItemWrapper key={item.id} >
-            <MentionItem itemData={item} {...props} />
+            <MentionItem {...props}>
+            </MentionItem>
             <MentionOperator itemData={item} />
           </MeItemWrapper>
         ))}

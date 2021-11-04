@@ -6,6 +6,7 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useImmer } from 'use-immer';
 import { Api } from 'apis';
+import { MeApi } from 'src/apis/Me';
 
 const Header = styled(Flex)`
   width:100%;
@@ -71,57 +72,74 @@ button {
 `
 
 const Follow = React.memo(() => {
-  const people = [
-    { uname: '满克斯', dunpai: true, present: '@0x32...9239', isFollow: '取消关注' },
-    { uname: '乔布斯', dunpai: false, present: '巴里拉里', isFollow: '取消关注' },
-    { uname: '马克思', dunpai: true, present: '个人主页的介绍', isFollow: '取消关注' }
-  ]
-  const [peopleState, setPeopleState] = useState(people)
+  const [state, setState] = useImmer<Api.Me.followParams>({
+    uid: 0,
+    data: [],
+    res: {},
+    nick_name: ''
+  })
 
   // 头部
 
-  // 关注列表
   const FollowList = () => {
+    // 关注列表
+    console.log('关注列表2', state.data);
+
     const getFollowList = async () => {
       try {
         const res = await Api.MeApi.followList()
+        console.log('关注列表1', res.data.List);
+        setState(p => {
+          p.data = res.data.List
+        })
       } catch (error) {
         console.log(error);
       }
     }
-    const setPeople = useCallback((index) => {
-      if (peopleState[index].isFollow) {
-        peopleState.splice(index, 1)
-      }
-      const res = peopleState.map((item, subIndex) => {
-        if (index === subIndex) {
-          return {
-            ...item,
-          }
-        }
-        return {
-          ...item
-        }
+
+    // 关注用户
+    const followUser = async (focus_uid) => {
+      Api.MeApi.followUser({
+        focus_uid
+      }).then(res => {
+        console.log(res)
       })
-      setPeopleState(res)
-    }, [peopleState])
+    }
+
+    // 取消关注
+    const unFollowUser = (res?: number) => {
+      Api.MeApi.unFollowUser({
+        focus_uid: 1455853291
+      }).then(res => {
+        console.log('取消关注', res)
+      })
+    }
 
     useEffect(() => {
       getFollowList()
     }, [])
     return (
-      peopleState.map((item, index) => {
-        return (
-          <ContentBox>
-            <Avatar scale="md" style={{ float: 'left' }} />
-            <Column>
-              <div><span className="username">{item.uname}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">{item.present}</span></div>
-              <Msg>个人主页的介绍</Msg>
-            </Column>
-            <Button onClick={() => setPeople(index)} style={{ background: '#4D535F' }}>{item.isFollow}</Button>
-          </ContentBox>
-        )
-      })
+      <div>
+        {
+          state.data.map(item => {
+            return (
+              <ContentBox key={item.uid}>
+                <Avatar scale="md" style={{ float: 'left' }} />
+                <Column>
+                  <div><span className="username">{item.nick_name}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">    @0x32...9239</span></div>
+                  <Msg>{item.introduction}</Msg>
+                </Column>
+                {
+                  item.attention_status_name === "已关注" && <Button onClick={() => unFollowUser(item.uid)} style={{ background: '#4168ED' }}>{item.attention_status_name}</Button>
+                }
+                {
+                  item.attention_status_name !== "已关注" && <Button onClick={() => followUser(item.uid)} style={{ background: '#4168ED' }}>{item.attention_status_name}</Button>
+                }
+              </ContentBox>
+            )
+          })
+        }
+      </div>
     )
   }
   return (
@@ -130,7 +148,7 @@ const Follow = React.memo(() => {
         <div className="title">个人主页</div>
         <div>
           <span className="myFollow">我的关注</span>
-          <span className="msg">138人</span>
+          <span className="msg">{state.data.length}人</span>
         </div>
       </Header>
 

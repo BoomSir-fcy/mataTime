@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
+import { CommentList } from 'src/components/Layout/ArticleDetilsLayout/CommentList';
 import { Box, Button, Flex } from 'uikit';
-import { ArticleList } from '../Home/center/ArticleList'
 import { Api } from 'apis';
 
 const Title = styled(Box)`
@@ -33,17 +33,70 @@ float:right;
 
 const Praise = React.memo(() => {
   // 点赞列表
-  const getFansList = async () => {
+  const getPraiseList = async () => {
     try {
       const res = await Api.MeApi.praiseList()
-      console.log(res);
-
+      console.log('点赞列表', res);
     } catch (error) {
       console.log(error);
     }
   }
+  // 点赞用户
+  const praiseUser = async (post_id: number) => {
+    try {
+      const res = await Api.MeApi.praiseUser(post_id)
+      console.log('点赞用户', res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 取消点赞
+  const unPraiseUser = async (post_id: number) => {
+    try {
+      const res = await Api.MeApi.unPraiseUser(post_id)
+      console.log('取消点赞', res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 帖子详情
+  const getContentDetail = async () => {
+    try {
+      const res = await Api.MeApi.getContentDetail()
+      console.log('帖子详情', res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // 添加评论
+  const addContentDetail = async (params: Api.Me.addContentDetail) => {
+    try {
+      const res = await Api.MeApi.addContentDetail({
+        pid: 1,
+        comment: 'dcsd',
+        comment_id: 11
+      })
+      console.log('添加评论', res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 删除评论
+  const removeContentDetail = async (id: number) => {
+    try {
+      const res = await Api.MeApi.removeContentDetail(id)
+      console.log('删除评论', res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
-    getFansList()
+    getPraiseList()
+    getContentDetail()
   }, [])
   return (
     <Box>
@@ -56,7 +109,7 @@ const Praise = React.memo(() => {
       </Header>
 
       <Content>
-        <ArticleList />
+        <Button onClick={() => removeContentDetail(1)}>点赞</Button>
       </Content>
     </Box>
   )

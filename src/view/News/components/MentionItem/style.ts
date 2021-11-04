@@ -7,6 +7,7 @@ font-weight: bold;
 `
 export const MentionItemWrapper = styled.div`
     .mention-content{
+      color: #FFFFFF;
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
@@ -14,7 +15,6 @@ export const MentionItemWrapper = styled.div`
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-          color: #FFFFFF;
         a{
           color: #4168ED;
           cursor: pointer;
