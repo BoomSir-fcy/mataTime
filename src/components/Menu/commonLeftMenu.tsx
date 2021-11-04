@@ -12,7 +12,8 @@ import { Api } from 'apis';
 
 const MenuWarpper = styled(Box)`
   width: 100%;
-  background: ${({ theme }) => theme.colors.backgroundCard};
+  /* background: ${({ theme }) => theme.colors.backgroundCard}; */
+  background: #191F2D;
   border-radius: ${({ theme }) => theme.radii.card};
   ${mediaQueriesSize.paddingsm}
 `

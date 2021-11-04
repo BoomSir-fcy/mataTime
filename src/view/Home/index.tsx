@@ -69,10 +69,11 @@ const CancelFollow = () => {
 const Home: React.FC = (props) => {
   const [refresh,setRefresh] = useState(false)
   // const  editorRef = useRef()
-  const  sendArticle=(content:string,resetInput:() => void)=>{
+  const  sendArticle=(content:string,resetInput:() => void,image_urls)=>{
     if(!content)return false
     Api.HomeApi.createArticle({
-      content:content
+      content:content,
+      image_urls: image_urls
     }).then(res=>{
       if(res.code === 1){
         setRefresh(!refresh)
@@ -94,7 +95,7 @@ const Home: React.FC = (props) => {
         </LeftCard>
         <CenterCard>
           <Header {...props}></Header>
-          <Editor sendArticle={sendArticle}></Editor>
+          <Editor type="post" sendArticle={sendArticle}></Editor>
           <Tabs></Tabs>
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} {...props}></ArticleList>

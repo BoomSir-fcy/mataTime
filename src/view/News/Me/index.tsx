@@ -8,15 +8,25 @@ import {
   MeItemWrapper
 } from './style';
 
-
-
-
-
 const NewsMe: React.FC = (props) => {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
+
+  // 更新列表
+  const updateList = (newItem: any) => {
+    listData.map((item: any) => {
+      if (item.id === newItem.id) {
+        const obj = item
+        obj.post = newItem.post
+      }
+      return item
+    })
+    setListData([...listData])
+  }
+
+
   return (
     <NewsMeWrapper>
       <List marginTop={410} renderList={() => {
@@ -39,8 +49,15 @@ const NewsMe: React.FC = (props) => {
               ...item.post,
               user_name: item.send_name,
               user_avator_url: item.send_image
-            }} {...props} />
-            <MentionOperator itemData={item.post} />
+            }} {...props} callback={(data) => {
+              updateList(data)
+            }} />
+            <MentionOperator itemData={{
+              ...item,
+              ...item.post
+            }} callback={(item: any) => {
+              updateList(item)
+            }} />
           </MeItemWrapper>
         ))}
       </List>

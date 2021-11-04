@@ -16,4 +16,9 @@ export class HomeApi extends Http {
     const res = await this.get('/v1/post/info', params);
     return res;
   }
+  // 热门话题
+  async queryHotTopic (params:Api.Home.queryHotTopic) {
+    const res = await this.get('/v1/post/hot', params);
+    return res;
+  }
 }

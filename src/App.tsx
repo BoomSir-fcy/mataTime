@@ -11,7 +11,6 @@ import { storage } from 'config';
 import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
-import 'style/fonts/iconfont.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 moment.locale('zh-cn');
