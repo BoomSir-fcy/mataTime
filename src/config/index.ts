@@ -9,5 +9,5 @@ export const BASE_BSC_SCAN_URLS = {
 export const storage = {
   Token: 'token',
   UserInfo: 'userInfo',
-  isDark: 'isDark'
+  systemCustom: 'systemCustom'
 };

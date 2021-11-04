@@ -21,15 +21,14 @@ const MoreBtn = styled.span`
   cursor: pointer;
 `;
 const UserTitle = styled.div`
-margin:0 12px;
-  font-weight:700;
-  font-size:18px;
-  color:#fff;
-width: 80px;
-overflow: hidden;
-white-space: nowrap;
-text-overflow: ellipsis;
-}
+  margin: 0 12px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  width: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 const UserDesc = styled.div`
   margin: 0 12px;
@@ -56,7 +55,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
   }, []);
   const getManList = () => {
     Api.UserApi.referrerMans({ num: 3 }).then(res => {
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
         setList(res.data || []);
       }
     });

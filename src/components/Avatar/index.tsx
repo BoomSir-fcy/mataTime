@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { variant } from 'styled-system';
 
-export const scales = {
+const scales = {
   XL: 'xl',
   LD: 'ld',
   MD: 'md',
@@ -10,7 +10,7 @@ export const scales = {
   XS: 'xs'
 } as const;
 
-export const scaleVariants = {
+const scaleVariants = {
   [scales.XL]: {
     width: '160px',
     height: '160px'

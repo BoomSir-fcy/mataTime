@@ -1,4 +1,5 @@
 {
   "dataFormat": "YYYY-MM-DD",
-  "wallet": "wallet"
+  "wallet": "wallet",
+  "Dark": "dark"
 }

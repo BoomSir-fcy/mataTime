@@ -38,7 +38,7 @@ export const scaleVariants = {
 
 const DropDownHeader = styled.div`
   width: 100%;
-  height: 40px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -53,7 +53,6 @@ const DropDownHeader = styled.div`
 const DropDownListContainer = styled.div<{ scale: Scale }>`
   /* min-width: 100px; */
   min-width: ${({ scale }) => scaleVariants[scale].minWidth};
-
   height: 0;
   position: absolute;
   overflow: hidden;
@@ -64,7 +63,6 @@ const DropDownListContainer = styled.div<{ scale: Scale }>`
   transform-origin: top;
   opacity: 0;
   width: 100%;
-
   ${({ theme }) => theme.mediaQueries.sm} {
     /* min-width: 168px; */
     min-width: ${({ scale }) => scaleVariants[scale].minWidthBig};
@@ -111,8 +109,7 @@ const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Sc
   .drop-svg {
     position: absolute;
     right: 16px;
-    top: 50%;
-    height: 80%;
+    top: 68%;
     background: ${({ theme }) => theme.colors.input};
     /* background: #f00; */
     transform: translateY(-50%);
@@ -157,7 +154,7 @@ export interface OptionProps {
   id?: string | number;
 }
 
-const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children }) => {
+export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children }) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -240,5 +237,3 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onCh
 Select.defaultProps = {
   scale: scales.MD
 };
-
-export default Select;

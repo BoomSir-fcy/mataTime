@@ -4,7 +4,6 @@ import moment from 'moment';
 import GlobalStyle from 'style/global';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useTranslation } from 'contexts/Localization';
 import { useStore, storeAction, fetchThunk } from 'store';
 import { CommonLayout, Header, Toast, WalletModal } from 'components';
 import { Box } from 'uikit';
@@ -23,6 +22,7 @@ const ArticleDetilsLayout = React.lazy(() => import('./components/Layout/Article
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
+
 const Container = styled(Box)`
   background-image: url(${require('assets/images/background_images.jpg').default});
   background-attachment: fixed;
@@ -33,8 +33,7 @@ function App() {
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
-  const isDark = JSON.parse(window.localStorage.getItem(storage.isDark));
-  const { t, setLanguage } = useTranslation();
+  const systemCustom = JSON.parse(window.localStorage.getItem(storage.systemCustom));
 
   React.useEffect(() => {
     if (store.connectWallet) {
@@ -48,7 +47,7 @@ function App() {
 
   React.useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
-    isDark !== store.isDark && dispatch(storeAction.toggleTheme());
+    Boolean(systemCustom) && dispatch(storeAction.setSystemCustom(systemCustom));
   }, [token]);
 
   return (
@@ -63,7 +62,7 @@ function App() {
                 exact
                 render={props => (
                   <>
-                    <Header {...props} />
+                    {/* <Header {...props} /> */}
                     <Home {...props} />
                   </>
                 )}
@@ -91,16 +90,6 @@ function App() {
       </Router>
     </React.Fragment>
   );
-}
-
-{
-  /* <Button onClick={() => 
-              dispatch(storeAction.testUpdaeShow({show: !testStore.show}))}>{t("wallet")}</Button> 
-            <Button onClick={() => 
-              Dispatch.toast.show({type: 'info',  text: '🦄 Wow so easy!'}) 
-            }>{t("wallet")}</Button>
-            <Button onClick={() => setLanguage(languages['zh-CN'])}>Change Language</Button>
-            */
 }
 
 export default React.memo(App);

@@ -58,6 +58,7 @@ export type Shadows = {
 };
 
 export type Gradients = {
+  footer: string;
   bubblegum: string;
   inverseBubblegum: string;
   cardHeader: string;
@@ -124,10 +125,10 @@ export type Colors = {
 };
 
 export type Filters = {
-  brightness: string
-  grayscale: string
-  blur: string
-}
+  brightness: string;
+  grayscale: string;
+  blur: string;
+};
 
 export type ZIndices = {
   dropdown: number;
