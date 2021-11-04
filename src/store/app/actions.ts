@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ToastContainerProps } from 'react-toastify';
+import { systemCustom } from './type';
 
 export interface toastInterface {
   type: string;
