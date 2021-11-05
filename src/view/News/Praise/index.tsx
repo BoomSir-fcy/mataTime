@@ -38,7 +38,7 @@ const NewsPraise: React.FC = (props) => {
         setLoading(true)
         Api.NewsApi.getMessageList(3, page, 20).then(res => {
           setLoading(false)
-          if (res.code === 1) {
+          if (Api.isSuccess(res)) {
             setPage(page + 1)
             setListData([...listData, ...res.data.list])
             setTotalPage(res.data.total_page)

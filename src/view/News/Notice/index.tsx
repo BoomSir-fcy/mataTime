@@ -23,7 +23,7 @@ const NewsNotice: React.FC = () => {
           setLoading(true)
           Api.NewsApi.getMessageList(5, page, 20).then(res => {
             setLoading(false)
-            if (res.code === 1) {
+            if (Api.isSuccess(res)) {
               setPage(page + 1)
               setListData([...listData, ...res.data.list])
               setTotalPage(res.data.total_page)

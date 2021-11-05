@@ -146,7 +146,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
         break;
     }
     const res = await Api.NewsApi.getMessageRead(type);
-    if (res.code === 1) {
+    if (Api.isSuccess(res)) {
       getMsgNumRequest();
     }
   }
