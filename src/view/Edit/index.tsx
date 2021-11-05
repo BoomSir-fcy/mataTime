@@ -2,6 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { Header } from './center';
 import NftAvatar from './center/nftavatar';
+import FormInput from './center/formInput';
 import { Avatar } from 'components';
 import BgUpload from '../../components/BgUpload';
 import { Route } from 'react-router-dom';
@@ -48,6 +49,7 @@ const Edit: React.FC = () => {
       <Route path="/" component={Header}></Route>
       <Route path="/" component={BgUpload}></Route>
       <Route path="/" component={NftAvatar}></Route>
+      <Route path="/" component={FormInput}></Route>
     </div>
   )
 }

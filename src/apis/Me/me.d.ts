@@ -26,7 +26,7 @@ declare namespace Api {
     }
     interface addContentDetail {
       pid: number,
-      comment: string,
+      comment: number,
       comment_id?: number
     }
 
