@@ -20,6 +20,7 @@ textarea {
 background: #292D34;
 width:381px;
 height:210px;
+color:#B5B5B5;
 padding:15px;
 border-radius: 10px;
 border:none;
@@ -103,7 +104,7 @@ const formInput = () => {
       <Rows>
         <Title>* 个人简介</Title>
         <div>
-          <textarea />
+          <textarea placeholder="请填写您的个人资料简介" />
           <Msg>1~140个字符</Msg>
         </div>
       </Rows>
