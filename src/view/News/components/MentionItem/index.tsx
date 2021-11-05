@@ -100,7 +100,9 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
                 ) : null
               }
 
-              <MorePopup data={itemData}>
+              <MorePopup data={itemData} callback={(data: any) => {
+                callback(data)
+              }}>
                 <img src={moreIcon} onClick={() => { setFollowShow(true) }} alt="more" />
               </MorePopup>
             </div>

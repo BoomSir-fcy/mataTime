@@ -15,6 +15,19 @@ const NewsComment: React.FC = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
+
+  // 更新列表
+  const updateList = (newItem: any) => {
+    listData.map((item: any) => {
+      if (item.id === newItem.id) {
+        const obj = item
+        obj.post = newItem.post
+      }
+      return item
+    })
+    setListData([...listData])
+  }
+
   return (
     <NewsCommentWrapper>
       <List marginTop={410} renderList={() => {
@@ -22,7 +35,7 @@ const NewsComment: React.FC = (props) => {
         setLoading(true)
         Api.NewsApi.getMessageList(2, page, 20).then(res => {
           setLoading(false)
-          if (res.code === 1) {
+          if (Api.isSuccess(res)) {
             setPage(page + 1)
             setListData([...listData, ...res.data.list])
             setTotalPage(res.data.total_page)
@@ -37,6 +50,8 @@ const NewsComment: React.FC = (props) => {
               ...item.comment,
               user_name: item.send_name,
               user_avator_url: item.send_image
+            }} callback={(data) => {
+              updateList(data)
             }} />
             <div className="reply-wrapper">
               回复<a>@{item.comment.comment_user_name}</a><p>{item.comment.comment}</p>
@@ -50,7 +65,12 @@ const NewsComment: React.FC = (props) => {
                 user_avator_url: item.post.nft_image
               }} {...props} more={false} size={'small'}></MentionItem>
             </div>
-            <MentionOperator itemData={item.post} />
+            <MentionOperator itemData={{
+              ...item,
+              ...item.post
+            }} callback={(item: any) => {
+              updateList(item)
+            }} />
           </CommentItemWrapper>
         ))}
       </List>

@@ -116,7 +116,7 @@ const Fans = React.memo(() => {
     return (
       peopleState.map((item, index) => {
         return (
-          <ContentBox>
+          <ContentBox key={index}>
             <Avatar scale="md" style={{ float: 'left' }} />
             <Column>
               <div><span className="username">{item.uname}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">{item.present}</span></div>
