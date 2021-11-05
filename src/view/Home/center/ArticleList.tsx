@@ -28,6 +28,22 @@ export const ArticleList = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
+
+
+  // 更新列表
+  const updateList = (newItem: any) => {
+    console.log('newItem:', newItem)
+    let arr = []
+    listData.forEach((item: any) => {
+      let obj = item
+      if (item.id === newItem.id) {
+        // let obj = item
+        obj = { ...newItem.post }
+      }
+      arr.push(obj)
+    })
+    setListData([...arr])
+  }
   return (
     <ArticleListBox>
       <List marginTop={410} renderList={() => {
@@ -48,9 +64,27 @@ export const ArticleList = (props) => {
       }}>
         {listData.map(item => (
           <MeItemWrapper key={item.id} >
-            <MentionItem {...props} itemData={item}>
+            <MentionItem {...props} itemData={{
+              ...item,
+              post_id: item.id,
+              post: {
+                ...item,
+                post_id: item.id,
+              }
+            }} callback={(item: any) => {
+              updateList(item)
+            }}>
             </MentionItem>
-            <MentionOperator itemData={item} />
+            <MentionOperator itemData={{
+              ...item,
+              post_id: item.id,
+              post: {
+                ...item,
+                post_id: item.id
+              }
+            }} callback={(item: any) => {
+              updateList(item)
+            }} />
           </MeItemWrapper>
         ))}
       </List>

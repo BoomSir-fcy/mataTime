@@ -15,10 +15,6 @@ const Name = styled(Text)`
 const Desc = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
 `;
-const SafeIcon = styled.img`
-  width: 22px;
-  height: 22px;
-`;
 
 export const Follow: React.FC<{
   rows: {
@@ -34,12 +30,11 @@ export const Follow: React.FC<{
         <Flex flexDirection="column" paddingLeft="12px">
           <Flex alignItems="center">
             <Name>{rows.nick_name}</Name>
-            <SafeIcon src={require('assets/images/icon_safe.png').default} alt="" />
           </Flex>
           <Desc>@0x32...9239</Desc>
         </Flex>
       </Flex>
-      <Button>+关注</Button>
+      <Button variant="secondary">+关注</Button>
     </FolloWarpper>
   );
 };

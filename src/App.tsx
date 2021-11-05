@@ -50,7 +50,6 @@ function App() {
 
   React.useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
-    Boolean(systemCustom) && dispatch(storeAction.setSystemCustom(systemCustom));
   }, [token]);
 
   return (

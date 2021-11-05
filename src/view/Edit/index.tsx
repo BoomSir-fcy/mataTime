@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import { Header } from './center';
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
@@ -9,24 +9,24 @@ import { Route } from 'react-router-dom';
 
 const FollowContainer = styled.div`
   padding: 36px;
-`
+`;
 
 const FollowTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  color: #FFFFFF;
-`
+  color: #ffffff;
+`;
 
 const FollowBody = styled.div`
   font-size: 16px;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 25px 0 38px;
   line-height: 1.5;
   a {
     color: rgba(65, 104, 237, 1);
   }
-`
+`;
 
 const CancelFollow = () => {
   return (
@@ -41,8 +41,8 @@ const CancelFollow = () => {
         <button>取消</button>
       </div>
     </FollowContainer>
-  )
-}
+  );
+};
 const Edit: React.FC = () => {
   return (
     <div>
@@ -51,7 +51,7 @@ const Edit: React.FC = () => {
       <Route path="/" component={NftAvatar}></Route>
       <Route path="/" component={FormInput}></Route>
     </div>
-  )
-}
+  );
+};
 
 export default Edit;
