@@ -33,12 +33,12 @@ export class MeApi extends Http {
   }
   // 点赞
   async praiseUser(post_id: number) {
-    const res = await this.post('/v1/like/agree', post_id);
+    const res = await this.get('/v1/like/agree', post_id);
     return res;
   }
   // 取消点赞
   async unPraiseUser(post_id: number) {
-    const res = await this.post('/v1/like/cancel', post_id);
+    const res = await this.get('/v1/like/cancel', post_id);
     return res;
   }
 
@@ -60,14 +60,14 @@ export class MeApi extends Http {
   }
 
   // 帖子详情
-  async getContentDetail() {
-    const res = await this.get('/v1/post/info');
+  async getContentDetail(id: number) {
+    const res = await this.get('/v1/post/info', id);
     return res;
   }
 
   // 添加评论
   async addContentDetail(params: Api.Me.addContentDetail) {
-    const res = await this.post('/v1/post/cancel_shield_1635924744752', params);
+    const res = await this.post('v1/comment/create', params);
     return res;
   }
 

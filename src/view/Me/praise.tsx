@@ -62,9 +62,9 @@ const Praise = React.memo(() => {
   }
 
   // 帖子详情
-  const getContentDetail = async () => {
+  const getContentDetail = async (id: number) => {
     try {
-      const res = await Api.MeApi.getContentDetail()
+      const res = await Api.MeApi.getContentDetail(1)
       console.log('帖子详情', res);
     } catch (error) {
       console.log(error);
@@ -76,7 +76,7 @@ const Praise = React.memo(() => {
     try {
       const res = await Api.MeApi.addContentDetail({
         pid: 1,
-        comment: 'dcsd',
+        comment: 123123,
         comment_id: 11
       })
       console.log('添加评论', res)
@@ -96,7 +96,7 @@ const Praise = React.memo(() => {
   }
   useEffect(() => {
     getPraiseList()
-    getContentDetail()
+    getContentDetail(1)
   }, [])
   return (
     <Box>
@@ -109,7 +109,7 @@ const Praise = React.memo(() => {
       </Header>
 
       <Content>
-        <Button onClick={() => removeContentDetail(1)}>点赞</Button>
+        <Button onClick={() => praiseUser(9)}>点赞</Button>
       </Content>
     </Box>
   )
