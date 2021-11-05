@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
+import { save, load } from 'redux-localstorage-simple';
 import { ToastContainerProps } from 'react-toastify';
 import { appReducer, appAction, App } from './app';
 import { toastContainer } from './app/actions';
@@ -9,14 +10,20 @@ export interface Store {
   appReducer: App;
   loginReducer: Login;
 }
+
 // const rootReducer = combineReducers({ appReducer, loginReducer });
 // export const store = createStore(rootReducer, composeWithDevTools());
+const PERSISTED_KEYS: string[] = ['appReducer', 'loginReducer'];
 export const store = configureStore({
   reducer: {
     appReducer,
     loginReducer
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware(),
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      thunk: true
+    }).concat(save({ states: PERSISTED_KEYS })),
+  preloadedState: load({ states: PERSISTED_KEYS }),
   devTools: process.env.NODE_ENV !== 'production'
 });
 
@@ -40,5 +47,5 @@ export function useStore<TSelected>(selector: (state: Store) => TSelected, equal
   return useSelector<Store, TSelected>(selector, equalityFn);
 }
 
-export type AppDispatch = typeof store.dispatch
-export type AppState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;
+export type AppState = ReturnType<typeof store.getState>;
