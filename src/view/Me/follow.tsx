@@ -89,9 +89,11 @@ const Follow = React.memo(() => {
       try {
         const res = await Api.MeApi.followList()
         console.log('关注列表1', res.data.List);
-        setState(p => {
-          p.data = res.data.List
-        })
+        if (res.data.List) {
+          setState(p => {
+            p.data = res.data.List
+          })
+        }
       } catch (error) {
         console.log(error);
       }
