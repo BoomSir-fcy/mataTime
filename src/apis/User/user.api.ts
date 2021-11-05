@@ -1,7 +1,6 @@
-import { Http } from "../http";
+import { Http } from '../http';
 
 export class UserApi extends Http {
-
   // 添加昵称
   async addNickName(nick_name: string) {
     const res = await this.post('/v1/user/nickname', { nick_name });
@@ -28,8 +27,7 @@ export class UserApi extends Http {
 
   // 可能感兴趣的人
   async referrerMans(params: Api.User.referrerMans) {
-    const res = await this.get('/v1/user/interest',params);
+    const res = await this.get('/v1/user/interest', params);
     return res;
   }
-
 }
