@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'store';
-import { Flex } from 'uikit';
-import { Footer } from 'components';
-import { mediaQueries } from 'uikit/theme/base';
-
+import { useThemeManager } from 'store/app/hooks';
+import { Flex, Card, Box } from 'uikit';
+import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
+import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
@@ -16,12 +16,22 @@ const LoginContainer = styled(Flex)`
     padding-right: 160px;
   }
 `;
+const Content = styled(Card)`
+  width: 600px;
+  height: 700px;
+  padding: 25px 40px 0;
+`;
+const LogoWarpper = styled(Box)`
+  width: 337px;
+  height: 60px;
+  ${mediaQueriesSize.marginbmd}
+`;
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
   const { isSignup, signUpFail } = loginReduce;
-  const { location } = route;
+  const [isDark] = useThemeManager();
 
   const checkNetwork = async () => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
@@ -45,7 +55,12 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         <Flex flex="1">
           <img src={require('./images/logo_left_images.png').default} />
         </Flex>
-        {isSignup ? <SignUp isSignup={signUpFail} /> : <LoginJoin />}
+        <Content>
+          <LogoWarpper>
+            <Logo url="/" src={`${require(isDark ? './images/logo.svg' : './images/light_logo.svg').default}`} />
+          </LogoWarpper>
+          {isSignup ? <SignUp isSignup={signUpFail} /> : <LoginJoin />}
+        </Content>
       </LoginContainer>
       <Footer />
     </React.Fragment>

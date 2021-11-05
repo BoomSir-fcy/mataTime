@@ -5,19 +5,12 @@ import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
-import { Logo } from 'components';
 import { Api } from 'apis';
 
 import { useStore, storeAction } from 'store';
 import { useSignIn } from '../hooks';
 
 import { WalletAddress } from './signUp';
-
-const LogoWarpper = styled(Box)`
-  width: 337px;
-  height: 60px;
-  ${mediaQueriesSize.marginbmd}
-`;
 
 const InputItems = styled(Flex)``;
 const InputText = styled(Text)`
@@ -35,7 +28,7 @@ const InputNftImg = styled.img`
 const InputNickName = styled.input`
   width: 381px;
   height: 50px;
-  background: #292d34;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 10px;
   padding-left: 25px;
   border: 0;
@@ -66,9 +59,6 @@ export const SignUpSetName = React.memo(() => {
 
   return (
     <Box>
-      <LogoWarpper>
-        <Logo url="/" src={require('../images/logo.svg').default} />
-      </LogoWarpper>
       <Text fontSize="34px" marginBottom="29px" bold>
         欢迎加入恐龙社区
       </Text>

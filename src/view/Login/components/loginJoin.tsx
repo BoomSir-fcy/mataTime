@@ -4,27 +4,14 @@ import { useImmer } from 'use-immer';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
-import { toast } from 'react-toastify';
+import { Box, Flex, Text } from 'uikit';
 import { storeAction } from 'store';
-import { Box, Flex, Text, Card } from 'uikit';
 import { ConnectWalletButton } from 'components';
 import { useLogin, useSignIn } from '../hooks';
 import { Api } from 'apis';
-import { Logo } from 'components';
 
-import { mediaQueriesSize } from 'uikit/theme/base';
 import useAuth from 'hooks/useAuth';
 
-const LoginWarpper = styled(Card)`
-  width: 600px;
-  height: 700px;
-  padding: 25px 40px 0;
-`;
-const LogoWarpper = styled(Box)`
-  width: 337px;
-  height: 60px;
-  ${mediaQueriesSize.marginbmd}
-`;
 const SubTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.textOrigin};
 `;
@@ -102,10 +89,7 @@ export const LoginJoin: React.FC = React.memo(() => {
   }, [account]);
 
   return (
-    <LoginWarpper>
-      <LogoWarpper>
-        <Logo url="/" src={require('../images/logo.svg').default} />
-      </LogoWarpper>
+    <Box>
       <Text fontSize="34px" marginBottom="29px" bold>
         欢迎加入恐龙社区
       </Text>
@@ -115,6 +99,6 @@ export const LoginJoin: React.FC = React.memo(() => {
         <ConnectWalletButton />
       </ConnectWallet>
       <TextTips>使用您的数字钱包账号即可免费创建并登录恐龙社区，平台不会保存您的任何钱包敏感数据，请妥善保管您的钱包，丢失钱包则无法登录平台</TextTips>
-    </LoginWarpper>
+    </Box>
   );
 });

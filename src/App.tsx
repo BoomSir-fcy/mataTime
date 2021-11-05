@@ -8,6 +8,7 @@ import { useStore, storeAction, fetchThunk } from 'store';
 import { CommonLayout, Header, Toast, WalletModal } from 'components';
 import { Box } from 'uikit';
 import { storage } from 'config';
+import { useThemeManager } from 'store/app/hooks';
 import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
@@ -22,8 +23,10 @@ const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 
-const Container = styled(Box)`
-  background-image: url(${require('assets/images/background_images.jpg').default});
+const Container = styled(Box)<{
+  dark: boolean;
+}>`
+  background-image: ${({ dark }) => `url(${require(dark ? 'assets/images/dark_background.jpg' : 'assets/images/light_background.jpg').default})`};
   background-attachment: fixed;
   min-height: 100vh;
 `;
@@ -33,6 +36,7 @@ function App() {
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
   const systemCustom = JSON.parse(window.localStorage.getItem(storage.systemCustom));
+  const [isDark] = useThemeManager();
 
   React.useEffect(() => {
     if (store.connectWallet) {
@@ -54,7 +58,7 @@ function App() {
       <Router>
         <React.Suspense fallback={<h1></h1>}>
           <GlobalStyle />
-          <Container id="bg">
+          <Container id="bg" dark={isDark}>
             <Switch>
               <Route
                 path="/"

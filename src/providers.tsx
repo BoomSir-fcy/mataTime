@@ -9,7 +9,7 @@ import { getLibrary } from 'utils';
 import { useThemeManager } from 'store/app/hooks';
 
 const ThemeProviderWrapper = props => {
-  const [isDark] = useThemeManager()
+  const [isDark] = useThemeManager();
   return <ThemeProvider theme={isDark ? dark : light} {...props} />;
 };
 

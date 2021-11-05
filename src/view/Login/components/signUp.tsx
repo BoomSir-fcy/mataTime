@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
-import { Logo } from 'components';
 import { useStore, storeAction } from 'store';
 import { Api } from 'apis';
 
@@ -16,16 +15,6 @@ import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
 import { useLogin, useSignIn } from '../hooks';
 
-const Warpper = styled(Card)`
-  width: 600px;
-  height: 700px;
-  padding: 25px 40px 0;
-`;
-const LogoWarpper = styled(Box)`
-  width: 337px;
-  height: 60px;
-  ${mediaQueriesSize.marginbmd}
-`;
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
   padding-bottom: 100px;
@@ -37,7 +26,7 @@ const WalletBody = styled(Flex)`
   align-items: center;
   width: 510px;
   height: 70px;
-  background: #292d34;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;
@@ -85,7 +74,7 @@ export const WalletAddress: React.FC<{
     <WalletBody>
       <Icon width="40px" mr="30px" />
       <Text fontSize="18px" fontWeight="bold">
-        {shortenAddress(address || '')}
+        {address && shortenAddress(address)}
       </Text>
     </WalletBody>
   );
@@ -115,12 +104,9 @@ export const SignUp: React.FC<{
   }, []);
 
   return (
-    <Warpper>
+    <Box>
       {singUpStep === 1 && (
         <React.Fragment>
-          <LogoWarpper>
-            <Logo url="/" src={require('../images/logo.svg').default} />
-          </LogoWarpper>
           <Text fontSize="34px" marginBottom="29px" bold>
             欢迎加入恐龙社区
           </Text>
@@ -140,9 +126,6 @@ export const SignUp: React.FC<{
       )}
       {singUpStep === 2 && (
         <Box>
-          <LogoWarpper>
-            <Logo url="/" src={require('../images/logo.svg').default} />
-          </LogoWarpper>
           <Text fontSize="34px" marginBottom="24px" bold>
             欢迎加入恐龙社区
           </Text>
@@ -159,6 +142,6 @@ export const SignUp: React.FC<{
       )}
       {singUpStep === 3 && <SignUpSetName />}
       {singUpStep === 4 && <SignUpcomplete />}
-    </Warpper>
+    </Box>
   );
 };
