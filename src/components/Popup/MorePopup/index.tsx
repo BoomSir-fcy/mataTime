@@ -14,10 +14,11 @@ import { copyContent } from 'utils/copy';
 type Iprops = {
   data: any;
   children: React.ReactElement;
+  callback?: Function;
 }
 
 export const MorePopup = React.memo((props: Iprops) => {
-  const { children, data } = props
+  const { children, data, callback = () => { } } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [shieldShow, setShieldShow] = useState<boolean>(false);
@@ -33,20 +34,34 @@ export const MorePopup = React.memo((props: Iprops) => {
   }
 
   // 收藏
-  const onFavAgreeRequest = async () => {
-    const res = await Api.ContentApi.onFavAgree(1);
-    if (res.code === 1) {
-      toast.success(res.msg)
+  const onFavAgreeRequest = async (post_id: number) => {
+    const res = await Api.ContentApi.onFavAgree(post_id);
+    if (Api.isSuccess(res)) {
+      callback({
+        ...data,
+        post: {
+          ...data.post,
+          is_fav: 1
+        }
+      })
+      toast.success('收藏成功！')
     } else {
       toast.error(res.msg)
     }
   }
 
   // 取消收藏
-  const onFavCancelRequest = async () => {
-    const res = await Api.ContentApi.onFavCancel(1);
-    if (res.code === 1) {
-      toast.success(res.msg)
+  const onFavCancelRequest = async (post_id: number) => {
+    const res = await Api.ContentApi.onFavCancel(post_id);
+    if (Api.isSuccess(res)) {
+      callback({
+        ...data,
+        post: {
+          ...data.post,
+          is_fav: 0
+        }
+      })
+      toast.success('取消收藏成功！')
     } else {
       toast.error(res.msg)
     }
@@ -70,11 +85,11 @@ export const MorePopup = React.memo((props: Iprops) => {
               onShareTwitterClick()
             }}>分享到Twitter</p>
             <p onClick={() => {
-              copyContent(data.content || '无可复制到内容！')
+              copyContent(data.post.post_id || '无可复制到内容！')
             }}>复制内容地址</p>
             <p onClick={() => {
-              onFavAgreeRequest()
-            }}>收藏</p>
+              data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
+            }}>{data.post.is_fav === 1 ? '取消收藏' : '收藏'}</p>
             <p onClick={() => { setReportShow(true) }}>举报该条</p>
             <p onClick={() => { setShieldShow(true) }}>屏蔽作者</p>
           </PopupContentWrapper>
