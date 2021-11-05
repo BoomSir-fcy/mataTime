@@ -15,12 +15,8 @@ color: #FFFFFF;
 `
 
 const userInfoParams = {
-  UID: null,
-  nick_name: null,
-  display_format: null,
-  introduction: null,
-  location: null,
-  background_image: null
+  UID: 1,
+  nick_name: '奇奇'
 }
 export const Header = (props: { title: string, clickTitle?: () => void }) => {
   const updateUserInfo = async (userInfoParams: Api.User.userInfoParams) => {

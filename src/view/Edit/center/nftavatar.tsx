@@ -56,7 +56,7 @@ font-size:14px;
 color:#B5B5B5;
 `
 
-const NftAvatar = () => {
+const NftAvatar: React.FC = () => {
   return (
     <div>
       <Nft>
