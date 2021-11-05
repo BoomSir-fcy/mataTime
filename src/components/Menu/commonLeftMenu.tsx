@@ -123,7 +123,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
   // 获取未读消息数量
   const getMsgNumRequest = async () => {
     const res = await Api.NewsApi.getUnreadMsgNum();
-    if (res.code === 1) {
+    if (Api.isSuccess(res)) {
       setMsgNum(res.data);
     }
   }
