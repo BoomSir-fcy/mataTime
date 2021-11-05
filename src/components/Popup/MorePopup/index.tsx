@@ -46,7 +46,7 @@ export const MorePopup = React.memo((props: Iprops) => {
       })
       toast.success('收藏成功！')
     } else {
-      toast.error(res.msg)
+      toast.error(res.msg || '收藏失败！')
     }
   }
 
@@ -63,7 +63,7 @@ export const MorePopup = React.memo((props: Iprops) => {
       })
       toast.success('取消收藏成功！')
     } else {
-      toast.error(res.msg)
+      toast.error(res.msg || '取消收藏失败！')
     }
   }
 
