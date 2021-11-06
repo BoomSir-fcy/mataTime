@@ -39,8 +39,8 @@ export const ArticleList = (props) => {
       if (item.id === newItem.id) {
         obj = { ...newItem.post }
       }
-      if (item.id === newItem.id && type === MoreOperatorEnum.SHIELD) {
-        // 屏蔽
+      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+        // 屏蔽、删除
       } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
         // 置顶
         arr.unshift(obj)

@@ -12,6 +12,7 @@ import { copyContent } from 'utils/copy';
 export enum MoreOperatorEnum {
   SHIELD = 'SHIELD', // 屏蔽
   SETTOP = 'SETTOP',
+  DELPOST = 'DELPOST'
 }
 
 
@@ -92,6 +93,18 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false)
   }
 
+  // 删除
+  const onPostDelRequest = async (pid: number) => {
+    const res = await Api.AttentionApi.delPost(pid);
+    if (Api.isSuccess(res)) {
+      callback(data, MoreOperatorEnum.DELPOST)
+      toast.success('删除成功！')
+    } else {
+      toast.error(res.data || '删除失败！')
+    }
+    setVisible(false)
+  }
+
   return (
     <PopupWrapper onClick={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
@@ -108,7 +121,7 @@ export const MorePopup = React.memo((props: Iprops) => {
 
                   }}>编辑</p>
                   <p onClick={() => {
-
+                    onPostDelRequest(data.post.post_id)
                   }}>删除</p>
                   <p onClick={() => {
                     onTopPostRequest(data.post.post_id)

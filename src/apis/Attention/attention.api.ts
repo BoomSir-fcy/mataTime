@@ -34,7 +34,7 @@ export class AttentionApi extends Http {
   }
   // 删除推特(帖子)
   async delPost(pid: number) {
-    const res = await this.post('/v1/post/de', { pid });
+    const res = await this.post('/v1/post/del', { pid });
     return res;
   }
   // 举报推特(帖子)
