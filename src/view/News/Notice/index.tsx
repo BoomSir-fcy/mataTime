@@ -18,7 +18,7 @@ const NewsNotice: React.FC = () => {
     <NoticeWrapper>
       <Header title={'消息'} />
       <div className="notice-content-wrapper">
-        <List marginTop={410} renderList={() => {
+        <List marginTop={410} loading={page <= totalPage} renderList={() => {
           if (loading || page > totalPage) return false
           setLoading(true)
           Api.NewsApi.getMessageList(5, page, 20).then(res => {

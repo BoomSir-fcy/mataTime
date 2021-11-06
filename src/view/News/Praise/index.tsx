@@ -33,7 +33,7 @@ const NewsPraise: React.FC = (props) => {
 
   return (
     <NewsPraiseWrapper>
-      <List marginTop={410} renderList={() => {
+      <List marginTop={410} loading={page <= totalPage} renderList={() => {
         if (loading || page > totalPage) return false
         setLoading(true)
         Api.NewsApi.getMessageList(3, page, 20).then(res => {

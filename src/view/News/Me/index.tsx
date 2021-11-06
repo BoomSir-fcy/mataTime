@@ -45,7 +45,7 @@ const NewsMe: React.FC = (props) => {
 
   return (
     <NewsMeWrapper>
-      <List marginTop={410} renderList={() => {
+      <List marginTop={410} loading={page <= totalPage} renderList={() => {
         if (loading || page > totalPage) return false
         setLoading(true)
         Api.NewsApi.getMessageList(1, page, 20).then(res => {

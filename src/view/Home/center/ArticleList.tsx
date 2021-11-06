@@ -49,7 +49,7 @@ export const ArticleList = (props) => {
   }
   return (
     <ArticleListBox>
-      <List marginTop={410} renderList={() => {
+      <List marginTop={410} loading={page <= totalPage} renderList={() => {
         if (loading || page > totalPage) return false
         setLoading(true)
         Api.HomeApi.getArticleList({
