@@ -25,7 +25,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
   const { match, location } = props
   return (
     <CommonLayoutWrapper>
-      <Header></Header>
+      {/* <Header></Header> */}
       <LayoutContentWrapper>
         <LayoutLeftWrapper>
           <CommonLeftMenu

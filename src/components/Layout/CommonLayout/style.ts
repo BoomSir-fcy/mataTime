@@ -10,7 +10,7 @@ export const LayoutContentWrapper = styled(Box)`
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 35px;
+    padding-top: 35px;
 `
 
 export const LayoutLeftWrapper = styled(Box)`

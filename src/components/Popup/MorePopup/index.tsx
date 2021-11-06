@@ -9,6 +9,9 @@ import {
 import { Api } from 'apis';
 import { copyContent } from 'utils/copy';
 
+export enum MoreOperatorEnum {
+  SHIELD, // 屏蔽
+}
 
 
 type Iprops = {
@@ -22,6 +25,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [shieldShow, setShieldShow] = useState<boolean>(false);
+  const [isOwn, setIsOwn] = useState<boolean>(false);
 
   useEffect(() => {
     addEventListener()
@@ -48,6 +52,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     } else {
       toast.error(res.msg || '收藏失败！')
     }
+    setVisible(false)
   }
 
   // 取消收藏
@@ -65,11 +70,13 @@ export const MorePopup = React.memo((props: Iprops) => {
     } else {
       toast.error(res.msg || '取消收藏失败！')
     }
+    setVisible(false)
   }
 
   // 分享到Twitter
   const onShareTwitterClick = () => {
     window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('分享title')).concat(' ').concat(encodeURIComponent('https://www.baidu.com')))
+    setVisible(false)
   }
 
   return (
@@ -81,6 +88,22 @@ export const MorePopup = React.memo((props: Iprops) => {
       {
         visible ? (
           <PopupContentWrapper>
+            {
+              isOwn ? (
+                <>
+                  <p onClick={() => {
+
+                  }}>编辑</p>
+                  <p onClick={() => {
+
+                  }}>删除</p>
+                  <p onClick={() => {
+
+                  }}>置顶</p>
+                </>
+              ) : null
+            }
+
             <p onClick={() => {
               onShareTwitterClick()
             }}>分享到Twitter</p>
@@ -90,15 +113,46 @@ export const MorePopup = React.memo((props: Iprops) => {
             <p onClick={() => {
               data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
             }}>{data.post.is_fav === 1 ? '取消收藏' : '收藏'}</p>
-            <p onClick={() => { setReportShow(true) }}>举报该条</p>
-            <p onClick={() => { setShieldShow(true) }}>屏蔽作者</p>
+            {
+              !isOwn ? (
+                <>
+                  <p onClick={() => {
+                    setVisible(false)
+                    setReportShow(true)
+                  }}>举报该条</p>
+                  <p onClick={() => {
+                    setVisible(false)
+                    setShieldShow(true)
+                  }}>屏蔽</p>
+                </>
+              ) : null
+            }
+
           </PopupContentWrapper>
         ) : null
       }
       {/* 举报 */}
-      <ReportModal show={reportShow} onClose={() => { setReportShow(false) }}></ReportModal>
-      {/* 屏蔽作者 */}
-      <ShieldModal show={shieldShow} onClose={() => { setShieldShow(false) }}></ShieldModal>
+      <ReportModal
+        show={reportShow}
+        pid={data.post.post_id}
+        onClose={() => { setReportShow(false) }}
+        onQuery={() => {
+          setReportShow(false)
+          callback(data)
+          setVisible(false)
+        }}
+      ></ReportModal>
+      {/* 屏蔽推特 */}
+      <ShieldModal
+        show={shieldShow}
+        pid={data.post.post_id}
+        onClose={() => { setShieldShow(false) }}
+        onQuery={() => {
+          setShieldShow(false)
+          callback(data, MoreOperatorEnum.SHIELD)
+          setVisible(false)
+        }}
+      ></ShieldModal>
     </PopupWrapper>
   )
 });

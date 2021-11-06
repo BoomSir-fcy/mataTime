@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MentionItem from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
-import { List } from 'components';
+import { List, MoreOperatorEnum } from 'components';
 import { Api } from 'apis';
 import {
   NewsMeWrapper,
@@ -15,15 +15,30 @@ const NewsMe: React.FC = (props) => {
   const [totalPage, setTotalPage] = useState(2)
 
   // 更新列表
-  const updateList = (newItem: any) => {
-    listData.map((item: any) => {
+  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    // listData.map((item: any) => {
+    //   if (item.id === newItem.id) {
+    //     const obj = item
+    //     obj.post = newItem.post
+    //   }
+    //   return item
+    // })
+    // setListData([...listData])
+
+    let arr = []
+    listData.forEach((item: any) => {
+      let obj = item
       if (item.id === newItem.id) {
-        const obj = item
-        obj.post = newItem.post
+        obj.post = { ...newItem.post }
       }
-      return item
+      if (type === MoreOperatorEnum.SHIELD) {
+        // 屏蔽
+      } else {
+        arr.push(obj)
+      }
+
     })
-    setListData([...listData])
+    setListData([...arr])
   }
 
 
@@ -49,8 +64,8 @@ const NewsMe: React.FC = (props) => {
               ...item.post,
               user_name: item.send_name,
               user_avator_url: item.send_image
-            }} {...props} callback={(data) => {
-              updateList(data)
+            }} {...props} callback={(data, type: MoreOperatorEnum) => {
+              updateList(data, type)
             }} />
             <MentionOperator itemData={{
               ...item,

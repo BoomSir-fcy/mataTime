@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from "styled-components";
 import { Flex, Button, Box } from 'uikit'
-import { Avatar, Icon, List } from 'components';
+import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
 // import MentionItem from 'view/News/components/MentionItem';
 import { Link } from 'react-router-dom'
 import { relativeTime } from 'utils'
@@ -31,16 +31,19 @@ export const ArticleList = (props) => {
 
 
   // 更新列表
-  const updateList = (newItem: any) => {
-    console.log('newItem:', newItem)
+  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     let arr = []
     listData.forEach((item: any) => {
       let obj = item
       if (item.id === newItem.id) {
-        // let obj = item
         obj = { ...newItem.post }
       }
-      arr.push(obj)
+      if (type === MoreOperatorEnum.SHIELD) {
+        // 屏蔽
+      } else {
+        arr.push(obj)
+      }
+
     })
     setListData([...arr])
   }
@@ -71,8 +74,8 @@ export const ArticleList = (props) => {
                 ...item,
                 post_id: item.id,
               }
-            }} callback={(item: any) => {
-              updateList(item)
+            }} callback={(item: any, type: MoreOperatorEnum) => {
+              updateList(item, type)
             }}>
             </MentionItem>
             <MentionOperator itemData={{
