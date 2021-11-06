@@ -10,7 +10,8 @@ import { Api } from 'apis';
 import { copyContent } from 'utils/copy';
 
 export enum MoreOperatorEnum {
-  SHIELD, // 屏蔽
+  SHIELD = 'SHIELD', // 屏蔽
+  SETTOP = 'SETTOP',
 }
 
 
@@ -25,7 +26,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [shieldShow, setShieldShow] = useState<boolean>(false);
-  const [isOwn, setIsOwn] = useState<boolean>(false);
+  const [isOwn, setIsOwn] = useState<boolean>(true);
 
   useEffect(() => {
     addEventListener()
@@ -79,6 +80,18 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false)
   }
 
+  // 置顶
+  const onTopPostRequest = async (pid: number) => {
+    const res = await Api.AttentionApi.setTopPost(pid);
+    if (Api.isSuccess(res)) {
+      callback(data, MoreOperatorEnum.SETTOP)
+      toast.success('置顶成功！')
+    } else {
+      toast.error(res.data || '置顶失败！')
+    }
+    setVisible(false)
+  }
+
   return (
     <PopupWrapper onClick={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
@@ -98,7 +111,7 @@ export const MorePopup = React.memo((props: Iprops) => {
 
                   }}>删除</p>
                   <p onClick={() => {
-
+                    onTopPostRequest(data.post.post_id)
                   }}>置顶</p>
                 </>
               ) : null

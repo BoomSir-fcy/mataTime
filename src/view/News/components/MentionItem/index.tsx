@@ -3,7 +3,7 @@ import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
 import { toast } from 'react-toastify';
-import { FollowPopup, MorePopup, Icon, Avatar } from 'components'
+import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -29,8 +29,8 @@ const MentionItem: React.FC<IProps> = (props) => {
   }
   return (
     <MentionItemWrapper>
-      <MentionItemUser more={props.more} size={size} itemData={itemData} callback={(data: any) => {
-        callback(data)
+      <MentionItemUser more={props.more} size={size} itemData={itemData} callback={(data: any, type: MoreOperatorEnum) => {
+        callback(data, type)
       }} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
         {/* <p><a>#Dinosaur Eggs#</a></p> */}
@@ -100,8 +100,8 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
                 ) : null
               }
 
-              <MorePopup data={itemData} callback={(data: any) => {
-                callback(data)
+              <MorePopup data={itemData} callback={(data: any, type: MoreOperatorEnum) => {
+                callback(data, type)
               }}>
                 <img src={moreIcon} onClick={() => { setFollowShow(true) }} alt="more" />
               </MorePopup>

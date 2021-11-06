@@ -32,18 +32,21 @@ export const ArticleList = (props) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    console.log(type)
     let arr = []
     listData.forEach((item: any) => {
       let obj = item
       if (item.id === newItem.id) {
         obj = { ...newItem.post }
       }
-      if (type === MoreOperatorEnum.SHIELD) {
+      if (item.id === newItem.id && type === MoreOperatorEnum.SHIELD) {
         // 屏蔽
+      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
+        // 置顶
+        arr.unshift(obj)
       } else {
         arr.push(obj)
       }
-
     })
     setListData([...arr])
   }

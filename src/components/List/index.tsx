@@ -14,7 +14,9 @@ export const NoDataWrapper = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  font-size: 14px;
+  font-weight: 400;
+  color: #B5B5B5;
 `
 
 interface Iprops {
