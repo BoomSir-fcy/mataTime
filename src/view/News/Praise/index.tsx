@@ -47,7 +47,7 @@ const NewsPraise: React.FC = (props) => {
       }}>
         {listData.map(item => (
           <PraiseItemWrapper key={item.id}>
-            <MentionItemUser more={true} itemData={{
+            <MentionItemUser more={false} itemData={{
               ...item,
               ...item.post,
               ...item.comment,
@@ -68,7 +68,7 @@ const NewsPraise: React.FC = (props) => {
                 user_avator_url: item.post.nft_image
               }} {...props} more={false} size={'small'}></MentionItem>
             </div>
-            <MentionOperator itemData={{
+            <MentionOperator hasLike={false} itemData={{
               ...item,
               ...item.post
             }} callback={(item: any) => {

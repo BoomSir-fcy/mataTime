@@ -38,6 +38,7 @@ const NewsMe: React.FC = (props) => {
       }
 
     })
+    console.log('arr:', arr)
     setListData([...arr])
   }
 
@@ -58,7 +59,7 @@ const NewsMe: React.FC = (props) => {
       }}>
         {listData.map(item => (
           <MeItemWrapper key={item.id} >
-            <MentionItem itemData={{
+            <MentionItem more={false} itemData={{
               ...item,
               ...item.comment,
               ...item.post,
@@ -67,7 +68,7 @@ const NewsMe: React.FC = (props) => {
             }} {...props} callback={(data, type: MoreOperatorEnum) => {
               updateList(data, type)
             }} />
-            <MentionOperator itemData={{
+            <MentionOperator hasLike={false} itemData={{
               ...item,
               ...item.post
             }} callback={(item: any) => {

@@ -135,7 +135,10 @@ export const MorePopup = React.memo((props: Iprops) => {
       <ReportModal
         show={reportShow}
         pid={data.post.post_id}
-        onClose={() => { setReportShow(false) }}
+        onClose={() => {
+          setVisible(false)
+          setReportShow(false)
+        }}
         onQuery={() => {
           setReportShow(false)
           callback(data)
@@ -146,7 +149,10 @@ export const MorePopup = React.memo((props: Iprops) => {
       <ShieldModal
         show={shieldShow}
         pid={data.post.post_id}
-        onClose={() => { setShieldShow(false) }}
+        onClose={() => {
+          setShieldShow(false)
+          setVisible(false)
+        }}
         onQuery={() => {
           setShieldShow(false)
           callback(data, MoreOperatorEnum.SHIELD)

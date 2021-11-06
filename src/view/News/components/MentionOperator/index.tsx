@@ -13,11 +13,12 @@ enum MentionObjEnum {
 
 type IProps = {
   itemData: any,
+  hasLike?: boolean,
   type?: MentionObjEnum,
   callback?: Function
 }
 
-const MentionOperator: React.FC<IProps> = ({ itemData, type = 'Article', callback }) => {
+const MentionOperator: React.FC<IProps> = ({ itemData, type = 'Article', hasLike = true, callback }) => {
   const [isLike, setIsLike] = useState<number>(itemData.is_like)
   const changeLike = () => {
     Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.post_id }).then(res => {
@@ -49,15 +50,20 @@ const MentionOperator: React.FC<IProps> = ({ itemData, type = 'Article', callbac
           <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
           {itemData.share_num || 0}
         </div>
-        <div className="operator-item" onClick={changeLike}>
-          {
-            isLike === 1 ?
-              <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon>
-              : <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
-          }
+        {
+          hasLike ? (
+            <div className="operator-item" onClick={changeLike}>
+              {
+                isLike === 1 ?
+                  <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon>
+                  : <Icon name={'icon-aixin'} color={'#B5B5B5'}></Icon>
+              }
 
-          {itemData.like_num || 0}
-        </div>
+              {itemData.like_num || 0}
+            </div>
+          ) : null
+        }
+
       </div>
     </MentionOperatorWrapper>
   )
