@@ -20,20 +20,22 @@ type IProps = {
 const MentionOperator: React.FC<IProps> = ({ itemData, type = 'Article', callback }) => {
   const [isLike, setIsLike] = useState<number>(itemData.is_like)
   const changeLike = () => {
-    Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.post_id }).then(res => {
-      if (Api.isSuccess(res)) {
-        callback({
-          ...itemData,
-          post: {
-            ...itemData.post,
-            like_num: isLike === 1 ? itemData.post.like_num - 1 : itemData.post.like_num + 1,
-            is_like: isLike === 1 ? 0 : 1
-          }
-        })
-        setIsLike(isLike === 1 ? 0 : 1)
-        toast.success(res.data)
-      }
-    })
+    if(type==='Article'){
+      Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.post_id }).then(res => {
+        if (Api.isSuccess(res)) {
+          callback({
+            ...itemData,
+            post: {
+              ...itemData.post,
+              like_num: isLike === 1 ? itemData.post.like_num - 1 : itemData.post.like_num + 1,
+              is_like: isLike === 1 ? 0 : 1
+            }
+          })
+          setIsLike(isLike === 1 ? 0 : 1)
+          toast.success(res.data)
+        }
+      })
+    }
   }
   useEffect(() => {
     setIsLike(itemData.is_like)

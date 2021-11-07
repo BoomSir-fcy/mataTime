@@ -57,7 +57,11 @@ export const ArticleDetilsLayout : React.FC= (props:Iprops) => {
           <Header back title="返回" {...props}></Header>
           <MeItemWrapper>
             <MentionItem {...props} itemData={itemData} more={false} />
-            <MentionOperator itemData={itemData} />
+            <MentionOperator itemData={{...itemData,post_id:itemData.id,post:{
+              ...itemData
+            }}}  callback={(data) => {
+                  setItemData(data)
+            }}  />
           </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
           <Editor type="comment" sendArticle={sendArticle}></Editor>

@@ -28,6 +28,11 @@ export const ArticleList = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
+  const updateList = (newItem,index)=>{
+      let temp =  listData
+      temp[index]=newItem
+      setListData(temp)
+  }
   return (
     <ArticleListBox>
       <List marginTop={410} renderList={() => {
@@ -39,18 +44,22 @@ export const ArticleList = (props) => {
           per_page: 20
         }).then(res => {
           setLoading(false)
-          if (res.code === 1) {
+          if (Api.isSuccess(res)) {
             setPage(page + 1)
             setTotalPage(res.data.total_page)
             setListData([...listData, ...res.data.List])
           }
         })
       }}>
-        {listData.map(item => (
+        {listData.map((item,index) => (
           <MeItemWrapper key={item.id} >
             <MentionItem {...props} itemData={item}>
             </MentionItem>
-            <MentionOperator itemData={item} />
+            <MentionOperator itemData={{...item,post_id:item.id,post:{
+              ...item
+            }}} callback={(data) => {
+              updateList(data,index)
+            }} />
           </MeItemWrapper>
         ))}
       </List>

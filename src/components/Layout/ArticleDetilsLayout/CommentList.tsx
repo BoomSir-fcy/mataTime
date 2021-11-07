@@ -113,7 +113,7 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
               </CommentContent>
             </div>
           </Flex>
-          <MentionOperator itemData={item} ></MentionOperator>
+          <MentionOperator type={Response['Comment']}  itemData={item} ></MentionOperator>
           {/* <CommentFooter>
             <div> <Icon name="icon-retweet" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>

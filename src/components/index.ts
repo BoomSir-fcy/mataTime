@@ -12,4 +12,5 @@ export * from './Layout';
 export * from './Icon';
 export * from './Popup'
 export * from './List'
+export * from './ImgList'
 

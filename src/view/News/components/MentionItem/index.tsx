@@ -3,7 +3,7 @@ import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
 import { toast } from 'react-toastify';
-import { FollowPopup, MorePopup, Icon, Avatar } from 'components'
+import { FollowPopup, MorePopup, Icon, Avatar,ImgList } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -40,6 +40,7 @@ const MentionItem: React.FC<IProps> = (props) => {
             <a>@Baby fuck me</a>
           </FollowPopup>
         </p> */}
+        <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}
     </MentionItemWrapper>

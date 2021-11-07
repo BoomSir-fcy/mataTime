@@ -24,7 +24,8 @@ overflow: hidden;
 .w-e-text-container{
   z-index:22 !important;
   overflow-y:auto;
-  color: ${({ theme }) => theme.colors.text};
+  // color: ${({ theme }) => theme.colors.text};
+  color:#fff;
 background: ${({ theme }) => theme.colors.backgroundTextArea};
   .placeholder{
     color: #B5B5B5;
