@@ -14,27 +14,30 @@ const ToolbarButton = styled(Button)`
 
 export const Toolbar: React.FC<{
   callback: (data: string) => void
-}> = React.memo(({ callback }) => {
+  callbackSelectImg: (data: string) => void
+  callbackInserTopic: (data: string) => void
+  callbackInserAt: (data: string) => void
+}> = React.memo(({ callback ,callbackSelectImg,callbackInserTopic,callbackInserAt}) => {
 
   return (
     <EditorToolbar>
       <Emoji onChange={callback} />
-      <ToolbarButton variant="text">
+      <ToolbarButton variant="text" onClick={callbackSelectImg}>
         <Svg viewBox="0 0 45 45" width="25px">
           <image xlinkHref={require('./images/icon_img.png').default}/>
         </Svg>
       </ToolbarButton>
-      <ToolbarButton variant="text">
+      {/* <ToolbarButton variant="text">
         <Svg viewBox="0 0 45 45" width="25px">
           <image xlinkHref={require('./images/icon_gif.png').default}/>
         </Svg>
-      </ToolbarButton>
-      <ToolbarButton variant="text">
+      </ToolbarButton> */}
+      <ToolbarButton variant="text"  onClick={callbackInserAt}>
         <Svg viewBox="0 0 45 45" width="25px">
           <image xlinkHref={require('./images/icon_at.png').default}/>
         </Svg>
       </ToolbarButton>
-      <ToolbarButton variant="text">
+      <ToolbarButton variant="text" onClick={callbackInserTopic}>
         <Svg viewBox="0 0 45 45" width="25px">
           <image xlinkHref={require('./images/icon_topic.png').default}/>
         </Svg>

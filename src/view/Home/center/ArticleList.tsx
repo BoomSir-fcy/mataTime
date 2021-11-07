@@ -61,14 +61,14 @@ export const ArticleList = (props) => {
           per_page: 20
         }).then(res => {
           setLoading(false)
-          if (res.code === 1) {
+          if (Api.isSuccess(res)) {
             setPage(page + 1)
             setTotalPage(res.data.total_page)
             setListData([...listData, ...res.data.List])
           }
         })
       }}>
-        {listData.map(item => (
+        {listData.map((item,index) => (
           <MeItemWrapper key={item.id} >
             <MentionItem {...props} itemData={{
               ...item,

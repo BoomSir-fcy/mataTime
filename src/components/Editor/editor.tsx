@@ -1,204 +1,173 @@
-import React,{useState,useEffect} from 'react';
-// import styled from 'styled-components';
-// import { useImmer } from 'use-immer';
-import E from 'wangeditor'
-import { Api } from 'apis'
-import {Icon} from 'components'
-// import { Emoji } from './emoji';
-// import { Toolbar } from './toolbar';
-import {
-  EditorWarpper,
-  SendButton,
-  TextBox,
-  Toolbar
-} from './style'
-import { toast } from 'react-toastify';
-{/* <SendButton>发布</SendButton> */ }
-const { BtnMenu } = E
+import React from 'react';
+import styled from 'styled-components';
+import { useImmer } from 'use-immer';
+import { Box, Flex, Button, Svg } from 'uikit';
+import { Api } from 'apis';
+import { Toolbar } from './toolbar';
+import { ImgList } from './ImgList'
+import { toast } from 'react-toastify'
+import { mediaQueriesSize } from 'uikit/theme/base';
 
-type imgListType = {
-  imgList:any[],
-  delImgItem:(index)=>void
-}
-const ImgList=(props:imgListType)=>{
-  const [imgList,setImgList] = useState([])
-  useEffect(()=>{
-    setImgList(props.imgList)
-    console.log(props.imgList);
-  },[props.imgList])
-  const delImgItem =(index)=>{
-    const temp = [...imgList]
-    temp.splice(index,1)
-    setImgList(temp)
-    console.log(temp);
-    props.delImgItem(temp)
+const EditorWarpper = styled(Box)`
+  width: 100%;
+  background: ${({ theme }) => theme.colors.backgroundCard};
+  border-radius: ${({ theme }) => theme.radii.card};
+  ${mediaQueriesSize.padding}
+`
+const EditorTextarea = styled.textarea`
+  width: 100%;
+  min-height: 112px;
+  vertical-align:middle;
+  // color: ${({ theme }) => theme.colors.text};
+  color:#fff;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
+  border-radius: ${({ theme }) => theme.radii.card};
+  border-bottom-right-radius: 0;
+border-bottom-left-radius: 0;
+  border: 0;
+  outline: 0;
+  resize: none;
+  font-size: 16px;
+  ${mediaQueriesSize.padding}
+    &::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+      height: 1px;
+      }
+    &::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 10px;
+    background   : rgba(83,83,83,0.5);
+    }
+    min-height: 112px;
+    max-height: 150px;
   }
-  return (
-    <div className="imgList">
-        {
-          imgList.map((item,index)=>(
-            // Array(9).fill(null).map((item,index)=>(
-            <div key={index}>
-              <Icon cur size={17} name="icon-jian" color="#ec612b" onClick={delImgItem.bind(this, index)}></Icon>
-              <img  src={item} alt="" />
-            </div>
-          ))
-        }
-    </div>
-  )
-}
+`
+
+const SendButton = styled(Button)`
+border-radius: ${({ theme }) => theme.radii.card};
+width: 100px;
+height: 35px;
+border-radius: 10px;
+background-color:#4168ED;
+margin-top:12px;
+`;
+const EditorToolbar = styled(Flex)`
+`
 type Iprops = {
   sendArticle: (string, ...args: any[]) => void,
   type: string
 }
-export class Editor extends React.Component<Iprops> {
-  editor: any
-  state:{
-    imgList:any[]
+export const Editor = React.memo((props: Iprops) => {
+
+  const [state, setState] = useImmer({
+    cursor: 0,
+    editorValue: "",
+    imgList: []
+  });
+  const editor = React.useRef(null);
+
+  const insertMyText = (event: any, text: string) => {
+    const { cursor } = state;
+    const { value } = event;
+    let textBefore = value.substring(0, cursor);
+    let textAfter = value.substring(cursor, value.length);
+    return textBefore + text + textAfter;
   }
-  constructor(props: Iprops) {
-    super(props)
-    this.state={
-      imgList:[]
-    }
-  }
-  componentDidMount () {
-    this.initEditor()
-  }
-  initEditor () {
-    const editor = new E('#toolbar', '#textbox')
-    editor.config.placeholder = '分享新鲜事'
-    editor.config.height = 500
-    // editor.config.showFullScreen = true
-    editor.config.showLinkImg = false
-    editor.config.menus = [
-      'emoticon',
-      'image'
-    ]
-    class InsertAT extends BtnMenu {
-      constructor(editor) {
-        const $elem = E.$(
-          `
-          <div class="w-e-menu" data-title="艾特">
-            <i class="iconfont icon-aite"></i>
-          </div>
-          `
-        );
-        super($elem, editor);
-      }
-      clickHandler () {
-        editor.cmd.do("insertHTML", `<span contenteditable="false">&nbsp;<span style="color:blue">@李某某</span>&nbsp;</span>`);
-      }
-      // 菜单激活状态
-      tryChangeActive () {
-        this.active(); // 菜单激活
-        // this.unActive() // 菜单不激活
-      }
-    }
-    class InsertTopic extends BtnMenu {
-      constructor(editor) {
-        const $elem = E.$(
-          `
-          <div class="w-e-menu" data-title="话题">
-            <i class="iconfont icon-a-xiaoxi1"></i>
-          </div>
-          `
-        );
-        super($elem, editor);
-      }
-      clickHandler () {
-        editor.cmd.do("insertHTML", `<span contenteditable="false">&nbsp;<span style="color:blue">#瓜娃子#</span>&nbsp;</span>`);
-      }
-      // 菜单激活状态
-      tryChangeActive () {
-        this.active(); // 菜单激活
-        // this.unActive() // 菜单不激活
-      }
-    }
-    editor.menus.extend("aite", InsertAT);
-    editor.menus.extend("topic", InsertTopic);
-    editor.config.menuTooltipPosition = 'down'
-    editor.config.menus = editor.config.menus.concat('aite', 'topic');
-    // editor.config.uploadImgShowBase64 = true
-    //   editor.config.uploadImgServer = 'http://yapi.qgx.io/mock/20/v1/upload/img'
-    //   editor.config.uploadImgHeaders  = {
-    //     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzYyNjc0NjUsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNTY2MjY2NSwidWlkIjoiMTA1MjI4OTcyMCIsImFkZHJlc3MiOiIweDZmMzBhZDZjQTE2NjRkZkQwYkIxRjYzOWQ5RmM4MDcxNDlDQzEzQWEifQ.ZrZBJyXo2nb80zpPI3J8TEPTVsbqaFFj24UfnZLNEUY'
-    // }
-    // editor.config.uploadImgParams = {
-    //   dir_name:'post'
-    // }
-    // editor.config.uploadFileName = ''
-       editor.config.uploadImgMaxLength = 1
-      editor.config.customUploadImg =  (resultFiles: any[], insertImgFn)=> {
-        if(this.state.imgList.length>=9)return toast.error('最多上传九张')
-      const file = resultFiles[0];
+
+  const handleSelect = React.useCallback((data) => {
+    const { editorValue, cursor } = state;
+    let newValue = insertMyText(editor.current, data);
+    setState(p => {
+      p.cursor = cursor + data.length;
+      p.editorValue = cursor > 0 ? newValue : (editorValue + data);
+    })
+  }, [state]);
+  const handleSelectImg = React.useCallback((data) => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.name = 'file'
+    input.accept = '.png,.jpg,.jpeg,.gif'
+    input.onchange = async (e: any) => {
+      if (!e.target.files[0]) return false
+      if (state.imgList.length >= 9) return toast.error('最多上传九张')
+      const file = e.target.files[0];
       let fr: any = new FileReader();
       // 读取文件
       fr.readAsDataURL(file);
       // 将文件转为base64
-      fr.onload = ()=> {
-        Api.CommonApi.uploadImg({ dir_name:this.props.type, base64: fr.result }).then(res => {
-          // console.log(this.imgList);
-          // this.imgList.push(res.data.full_path)
-          this.setState({ imgList: [...this.state.imgList,res.data.full_path] })
-          
-          // const inputEl: any = document.querySelector('#textbox')
-          // const lastEl:any = inputEl.lastElementChild
-          // let imgBox:any = ''
-          // const imgEl:any = document.createElement('img')
-          // imgEl.src=res.data.full_path
-          // // imgEl.contenteditable = 'false'
-          // imgEl.style.cssText=`
-          // pointerEvents:none;
-          // width:50px;height:50px
-          // `
-          // if(lastEl.id !== 'imgList'){
-          //   imgBox = document.createElement('div')
-          //   imgBox.id = 'imgList'
-          //   inputEl.appendChild(imgBox)
-          // }
-          // const imgListBox = document.querySelector('#textbox').lastElementChild
-          // console.log(imgListBox);
-          // imgListBox.appendChild(imgEl)
-        //   if (lastEl.id !== 'imgList') {
-        //   }else{
-        //     imgBox = lastEl
-        //   }
-        //   imgBox.appendChild(imgEl)
-        //   // insertImgFn(res.data.full_path)
+      fr.onload = () => {
+        Api.CommonApi.uploadImg({ dir_name: props.type, base64: fr.result }).then(res => {
+          setState({
+            ...state,
+            imgList: [...(state.imgList || []), res.data.full_path]
+          })
         })
       }
     }
-    editor.config.onchange = function (newHtml) {
-      console.log(editor.txt.text())
-    };
-    editor.create()
-    this.editor = editor
+    input.click()
+  }, [state]);
+  const delImgItem = (imgList) => {
+    setState({
+      ...state,
+      imgList: imgList
+    })
   }
-  componentWillUnmount () {
-    this.editor.destroy();
+  const restInput = () => {
+    setState({
+      ...state,
+      editorValue: ''
+    })
   }
-  protected restInput () {
-    this.editor.txt.clear()
+  //话题替换增加连接   
+function ReplaceTopic(str){   
+  let r, k;   // 声明变量。   
+  let ss = str;   
+  r=ss.replace(/\#([^\#|.]+)\#/g, function(word){
+      k = encodeURI(word.replace(/\#/g,""));   
+      return "<a href=\"s/?a=weibo&k="+ k +"\">" + word + "</a>";   
+      }   
+  );   
+  return(r);  //返回替换后的字符串   
+}   
+
+//@替换增加连接   
+function ReplaceAt(str){   
+  let r, k  // 声明变量。   
+  let ss = str;   
+  r=ss.replace(/\@([^\@|.|^ ]+)/g, function(word){   
+      k = encodeURI(word.replace(/\@/g,""));   
+      return "<a href=\"n/?a=user&k="+ k +"\" usercard=\"name="+ k +"\">" + word + "</a>";   
+      }   
+  )
+  return(r);  //返回替换后的字符串    
+}   
+  const sendArticle = () => {
+    props.sendArticle(ReplaceAt(ReplaceTopic(state.editorValue)), restInput, state.imgList.join(','))
   }
-  sendArticle () {
-    this.props.sendArticle(this.editor.txt.html(), this.restInput.bind(this),this.state.imgList)
+  const callbackInserTopic = () => {
+    setState({
+      ...state,
+      editorValue: state.editorValue+' #请输入话题# '
+    })
   }
-  delImgItem(imgList){
-    this.setState({ imgList})
+  const callbackInserAt = () => {
+    setState({
+      ...state,
+      editorValue: state.editorValue+' @xxx '
+    })
   }
-  render () {
-    return (
-      <EditorWarpper>
-        <TextBox>
-          <div id="textbox"></div>
-          <ImgList delImgItem={this.delImgItem.bind(this)} imgList={this.state.imgList}></ImgList>
-        </TextBox>
-        <Toolbar justifyContent="space-between" alignItems="center">
-          <div id="toolbar"></div>
-          <SendButton onClick={this.sendArticle.bind(this)}>发表</SendButton>
-        </Toolbar>
-      </EditorWarpper>
-    )
-  }
-}
+  return (
+    <EditorWarpper>
+      <EditorTextarea id="input" placeholder="分享新鲜事" ref={editor}
+        value={state.editorValue}
+        onBlur={(e) => setState(p => { p.cursor = e.target.selectionStart })}
+        onChange={(e) => setState(p => { p.editorValue = e.target.value })} />
+      <ImgList imgList={state.imgList || []} delImgItem={delImgItem}></ImgList>
+      <Flex justifyContent="space-between" mt="12px">
+        <Toolbar callback={handleSelect} callbackSelectImg={handleSelectImg} callbackInserTopic={callbackInserTopic} callbackInserAt={callbackInserAt} />
+        <Button onClick={sendArticle}>发布</Button>
+      </Flex>
+    </EditorWarpper>
+  )
+})
