@@ -120,41 +120,42 @@ export const Editor = React.memo((props: Iprops) => {
     })
   }
   //话题替换增加连接   
-function ReplaceTopic(str){   
-  let r, k;   // 声明变量。   
-  let ss = str;   
-  r=ss.replace(/\#([^\#|.]+)\#/g, function(word){
-      k = encodeURI(word.replace(/\#/g,""));   
-      return "<a href=\"s/?a=weibo&k="+ k +"\">" + word + "</a>";   
-      }   
-  );   
-  return(r);  //返回替换后的字符串   
-}   
+  function ReplaceTopic(str) {
+    let r, k;   // 声明变量。   
+    let ss = str;
+    r = ss.replace(/\#([^\#|.]+)\#/g, function (word) {
+      k = encodeURI(word.replace(/\#/g, ""));
+      return "<a href=\"s/?a=weibo&k=" + k + "\">" + word + "</a>";
+    }
+    );
+    return (r);  //返回替换后的字符串   
+  }
 
-//@替换增加连接   
-function ReplaceAt(str){   
-  let r, k  // 声明变量。   
-  let ss = str;   
-  r=ss.replace(/\@([^\@|.|^ ]+)/g, function(word){   
-      k = encodeURI(word.replace(/\@/g,""));   
-      return "<a href=\"n/?a=user&k="+ k +"\" usercard=\"name="+ k +"\">" + word + "</a>";   
-      }   
-  )
-  return(r);  //返回替换后的字符串    
-}   
+  //@替换增加连接   
+  function ReplaceAt(str) {
+    let r, k  // 声明变量。   
+    let ss = str;
+    r = ss.replace(/\@([^\@|.|^ ]+)/g, function (word) {
+      k = encodeURI(word.replace(/\@/g, ""));
+      // return "<a href=\"n/?a=user&k="+ k +"\" usercard=\"name="+ k +"\">" + word + "</a>";   
+      return `<span data-uid="1" class="user-dom">${word}</span>`;
+    }
+    )
+    return (r);  //返回替换后的字符串    
+  }
   const sendArticle = () => {
     props.sendArticle(ReplaceAt(ReplaceTopic(state.editorValue)), restInput, state.imgList.join(','))
   }
   const callbackInserTopic = () => {
     setState({
       ...state,
-      editorValue: state.editorValue+' #请输入话题# '
+      editorValue: state.editorValue + ' #请输入话题# '
     })
   }
   const callbackInserAt = () => {
     setState({
       ...state,
-      editorValue: state.editorValue+' @xxx '
+      editorValue: state.editorValue + ' @xxx '
     })
   }
   return (

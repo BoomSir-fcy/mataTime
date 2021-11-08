@@ -30,4 +30,10 @@ export class UserApi extends Http {
     const res = await this.get('/v1/user/interest', params);
     return res;
   }
+
+  // 通过用户Id获取用户详情
+  async getUserInfoByUID(uid: string | number) {
+    const res = await this.get('/v1/user/userinfo', { uid });
+    return res;
+  }
 }
