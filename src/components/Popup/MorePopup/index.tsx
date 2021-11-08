@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ReportModal, ShieldModal } from 'components';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux'
 import {
   PopupWrapper,
   PopupContentWrapper
@@ -23,15 +24,23 @@ type Iprops = {
 }
 
 export const MorePopup = React.memo((props: Iprops) => {
+  const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
+
   const { children, data, callback = () => { } } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [shieldShow, setShieldShow] = useState<boolean>(false);
-  const [isOwn, setIsOwn] = useState<boolean>(true);
+  const [isOwn, setIsOwn] = useState<boolean>(false);
 
   useEffect(() => {
+    init()
     addEventListener()
   }, [])
+
+  //  初始化
+  const init = () => {
+    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
+  }
 
   const addEventListener = () => {
     document.addEventListener('click', (e) => {
@@ -77,7 +86,7 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   // 分享到Twitter
   const onShareTwitterClick = () => {
-    window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('分享title')).concat(' ').concat(encodeURIComponent('https://www.baidu.com')))
+    window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('分享')).concat(' ').concat(encodeURIComponent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id)))
     setVisible(false)
   }
 
@@ -134,7 +143,7 @@ export const MorePopup = React.memo((props: Iprops) => {
               onShareTwitterClick()
             }}>分享到Twitter</p>
             <p onClick={() => {
-              copyContent(data.post.post_id || '无可复制到内容！')
+              copyContent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id || '无可复制到内容！')
             }}>复制内容地址</p>
             <p onClick={() => {
               data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
