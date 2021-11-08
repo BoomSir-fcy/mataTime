@@ -2,14 +2,9 @@ import { useStore } from 'store';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
-import { storage } from 'config';
 import { AppDispatch, AppState } from '..';
 import { toggleTheme, setSystemCustom } from './actions';
-import { systemCustom, languange } from './type';
-
-const storageJson = (val: systemCustom) => {
-  window.localStorage.setItem(storage.systemCustom, JSON.stringify(val));
-};
+import { languange } from './type';
 
 export const useThemeManager = (): [boolean, () => void] => {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,12 +12,7 @@ export const useThemeManager = (): [boolean, () => void] => {
   const isDark = useSelector<AppState, AppState['appReducer']['systemCustom']['isDark']>(state => state.appReducer.systemCustom.isDark);
 
   const toggleThemeHandle = useCallback(() => {
-    const systemSetting = {
-      ...setting,
-      isDark: !setting.isDark
-    };
     dispatch(toggleTheme());
-    storageJson(systemSetting);
   }, [dispatch, setting]);
 
   return [isDark, toggleThemeHandle];
@@ -38,7 +28,6 @@ export const useNotification = (): [boolean, () => void] => {
       notification: !setting.notification
     };
     dispatch(setSystemCustom(systemSetting));
-    storageJson(systemSetting);
   }, [dispatch, setting]);
 
   return [setting.notification, setNotification];
@@ -57,7 +46,6 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
       };
       dispatch(setSystemCustom(systemSetting));
       setLanguage(val.value);
-      storageJson(systemSetting);
     },
     [dispatch]
   );
