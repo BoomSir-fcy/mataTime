@@ -7,6 +7,7 @@ background:#191F2D;
 padding: 21px 17px;
 color: #fff;
 border-radius: 10px;
+font-weight: bold;
 `
 
 const Header = () => {

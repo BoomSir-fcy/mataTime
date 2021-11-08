@@ -24,8 +24,7 @@ const menuArr = [
   {
     icon: 'none',
     title: '收藏',
-    path: '/',
-    badge: true
+    path: '/'
   },
   // {
   //   icon: 'none',

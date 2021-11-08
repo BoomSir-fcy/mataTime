@@ -145,7 +145,6 @@ const Shield = React.memo(() => {
       <Content>
         {ShieldList()}
       </Content>
-
     </Box>
   )
 })
