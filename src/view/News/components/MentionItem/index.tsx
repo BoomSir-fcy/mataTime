@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
 import { toast } from 'react-toastify';
-import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum,ImgList } from 'components'
+import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD } from 'components'
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -23,26 +23,58 @@ type IProps = {
 
 const MentionItem: React.FC<IProps> = (props) => {
   const { children, size = 'nomal', itemData = {}, callback = () => { } } = props
+  const mentionRef: any = useRef()
+
+  const [position, setPosition] = useState([-999, -999])
+  const [uid, setUid] = useState<string | number>(0)
+
+  useEffect(() => {
+    handleUserHover()
+  }, [])
+
+  // 用户hover  
+  const handleUserHover = () => {
+    const user: any[] = mentionRef.current.getElementsByClassName('user-dom');
+    Array.from(user).forEach((dom: any) => {
+      dom.addEventListener('mouseenter', (e: any) => {
+        const uid = dom.getAttribute('data-uid')
+        console.log('mouseenter:', dom)
+        console.log('e:', e)
+        if (uid) {
+          setUid(uid)
+          setPosition([e.clientX, e.clientY])
+        }
+      })
+      // dom.addEventListener('mouseout', (e: any) => {
+      //   console.log('mouseout:', e)
+      //   setPosition([-999, -999])
+      // })
+    })
+  }
+
   const goDetils = (e) => {
     if (props.match.path === '/articleDetils/:id') return
     props.history.push('/articleDetils/' + itemData.id)
   }
   return (
-    <MentionItemWrapper>
+    <MentionItemWrapper ref={mentionRef}>
       <MentionItemUser more={props.more} size={size} itemData={itemData} callback={(data: any, type: MoreOperatorEnum) => {
         callback(data, type)
       }} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
-        {/* <p><a>#Dinosaur Eggs#</a></p> */}
         <div dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
-        {/* <p>
-          <FollowPopup>
-            <a>@Baby fuck me</a>
-          </FollowPopup>
-        </p> */}
         <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}
+
+      {/* 关注提示 */}
+      <FollowPopupD
+        uid={uid}
+        left={position[0]}
+        top={position[1]}
+        callback={() => {
+          setPosition([-999, -999])
+        }} />
     </MentionItemWrapper>
   )
 }
@@ -96,7 +128,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
               {
                 itemData.is_attention === 0 ? (
                   <FollowBtn onClick={() => {
-                    onAttentionFocusRequest(itemData.uid)
+                    onAttentionFocusRequest(itemData.user_id)
                   }}>+关注</FollowBtn>
                 ) : null
               }

@@ -20,6 +20,14 @@ export const MentionItemWrapper = styled.div`
           cursor: pointer;
         }
       }
+      a{
+        color: #4168ED;
+        cursor: pointer;
+      }
+      span {
+        color: #4168ED;
+        cursor: pointer;
+      }
     }
 `
 
