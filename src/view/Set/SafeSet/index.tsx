@@ -2,6 +2,7 @@ import React from 'react'
 import styled from "styled-components";
 import { Flex, Box, Text, Button } from 'uikit';
 import { useWeb3React } from '@web3-react/core';
+import { Api } from 'apis';
 
 const SafeSetBox = styled.div`
 height: 707px;
@@ -35,6 +36,15 @@ font-size:16px;
 
 
 const SafeSet = () => {
+  // 更新邮箱
+  const updateEmail = async (email: string) => {
+    try {
+      const res = await Api.SetApi.updateEmail(email)
+      console.log('更新邮箱', res);
+    } catch (error) {
+      console.log(error)
+    }
+  }
   console.log('钱包地址', useWeb3React());
 
   return (
@@ -51,7 +61,7 @@ const SafeSet = () => {
           <Title>邮箱设置</Title>
           <Msg>平台最新消息将发送至该邮箱</Msg>
         </Column>
-        <Button>立即绑定</Button>
+        <Button onClick={() => updateEmail('liujiaqi@qgx.com')}>立即绑定</Button>
       </Rows>
     </SafeSetBox>
   )

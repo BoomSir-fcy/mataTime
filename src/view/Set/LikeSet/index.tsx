@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
@@ -6,6 +6,7 @@ import { useThemeManager, useLanguange, useNotification } from 'store/app/hooks'
 import { Flex, Box, Text, Toggle } from 'uikit';
 import { Select } from 'components';
 import { languages } from 'config/localization';
+import { Api } from 'apis';
 
 const NoticeSetBox = styled.div`
   height: 707px;
@@ -45,12 +46,26 @@ const LikeSet: React.FC = () => {
   });
   const { t } = useTranslation();
 
+  // 偏好设置
+  const getLikeSet = async (params: Api.Set.likeSetParams) => {
+    try {
+      const res = await Api.SetApi.likeSet(params)
+      console.log('偏好设置', res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // 自动翻译
   const setTranslation = () => {
     setState(p => {
       p.isTranslation = !p.isTranslation;
     });
   };
+
+  useEffect(() => {
+    getLikeSet({ color_model: 1, msg_remind: 2, language: 3, translation: 2 })
+  }, [])
 
   return (
     <NoticeSetBox>

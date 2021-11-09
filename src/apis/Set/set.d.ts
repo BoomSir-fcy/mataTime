@@ -1,52 +1,14 @@
 declare namespace Api {
 
   namespace Set {
-
-    interface followParams {
-      uid: number,
-      data: array,
-      res: object,
-      nick_name: string,
+    interface likeSetParams {
+      color_model?: number,
+      msg_remind?: number,
+      language?: number,
+      translation?: number,
     }
-    interface followUserParams {
-      focus_uid: number
-    }
-
-    interface fansParams {
-      UID: number
-      uid?: number
-    }
-    interface praiseParams {
-      UID: number
-      uid?: number
-    }
-    interface collectParams {
-      UID: number
-      uid?: number
-    }
-    interface addContentDetail {
-      pid: number,
-      comment: number,
-      comment_id?: number
-    }
-
-    interface followCallback extends Api.Error {
-      data: followParams
-    }
-    interface fansCallback extends Api.Error {
-      data: followParams
-    }
-    interface praiseCallback extends Api.Error {
-      data: praiseParams
-    }
-    interface collectCallback extends Api.Error {
-      data: collectParams
-    }
-    interface followUserCallback extends Api.Error {
-      data: followUserParams
-    }
-    interface addContentCallback extends Api.Error {
-      data: addContentDetail
+    interface likeSetCallback extends Api.Error {
+      data: likeSetParams
     }
     interface referrerMans {
       num: number

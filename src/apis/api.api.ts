@@ -6,6 +6,7 @@ import { HomeApi } from './Home';
 import { CommentApi } from './Comment';
 import { CommonApi } from './Common';
 import { MeApi } from './Me';
+import { SetApi } from './Set';
 import { AttentionApi } from './Attention';
 
 const isSuccess = (res: Api.Error) => {
@@ -22,5 +23,6 @@ export const Api = {
   CommonApi: new CommonApi(),
   ContentApi: new ContentApi(),
   MeApi: new MeApi(),
+  SetApi: new SetApi(),
   AttentionApi: new AttentionApi()
 };

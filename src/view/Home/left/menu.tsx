@@ -107,10 +107,10 @@ export const Menu: React.FC = () => {
   return (
     <MenuBox>
       <Box>
-        <Logo></Logo>
+        <Logo />
         <MenuList menuList={menuData}></MenuList>
       </Box>
-      <Link to="/set/safeset">
+      <Link to="/me">
         <Flex>
           <Avatar src="" scale="sm" />
           <Box>

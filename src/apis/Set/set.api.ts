@@ -1,20 +1,14 @@
 import { Http } from "../http";
 
 export class SetApi extends Http {
-
-  // 关注列表
-  async followList() {
-    const res: Api.Set.followParams = await this.get('/v1/attention/list');
+  // 偏好设置
+  async likeSet(params: Api.Set.likeSetParams) {
+    const res = await this.post('/v1/setting/preference', params);
     return res;
   }
-  // 关注用户
-  async followUser(params: Api.Set.followUserParams) {
-    const res = await this.get('/v1/attention/focus', params);
-    return res;
-  }
-  // 删除评论
-  async removeContentDetail(id: number) {
-    const res = await this.post('/v1/comment/del', id);
+  // 更新邮箱
+  async updateEmail(email: string) {
+    const res = await this.post('v1/setting/email', email);
     return res;
   }
 }
