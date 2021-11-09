@@ -35,7 +35,6 @@ function App() {
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
-  const systemCustom = JSON.parse(window.localStorage.getItem(storage.systemCustom));
   const [isDark] = useThemeManager();
 
   React.useEffect(() => {
@@ -54,21 +53,12 @@ function App() {
 
   return (
     <React.Fragment>
-      <Router>
-        <React.Suspense fallback={<h1></h1>}>
-          <GlobalStyle />
-          <Container id="bg" dark={isDark}>
+      <React.Suspense fallback={<h1></h1>}>
+        <GlobalStyle />
+        <Container id="bg" dark={isDark}>
+          <Router forceRefresh>
             <Switch>
-              <Route
-                path="/"
-                exact
-                render={props => (
-                  <>
-                    {/* <Header {...props} /> */}
-                    <Home {...props} />
-                  </>
-                )}
-              ></Route>
+              <Route path="/" exact render={props => <Home {...props} />} />
               <Route
                 path="/articleDetils/:id"
                 exact
@@ -82,14 +72,13 @@ function App() {
               <Route path="/news" render={props => <CommonLayout {...props}></CommonLayout>}></Route>
               <Route path="/login" component={Login} />
               <PrivateRoute path="/me" component={Me} />
-              {/* <Route path="/edit" component={Edit} /> */}
               <PrivateRoute path="/set" component={Set} />
             </Switch>
-          </Container>
-          <Toast />
-          <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} />
-        </React.Suspense>
-      </Router>
+          </Router>
+        </Container>
+        <Toast />
+        <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} />
+      </React.Suspense>
     </React.Fragment>
   );
 }

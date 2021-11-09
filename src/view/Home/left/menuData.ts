@@ -34,7 +34,7 @@ const menuArr = [
     icon: 'icon-qianbao',
     activeIcon: 'icon-qianbao1',
     title: '钱包',
-    path: '/'
+    path: '/me'
   },
   {
     icon: 'icon-w31shezhi',
