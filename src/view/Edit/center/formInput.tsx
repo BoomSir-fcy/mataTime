@@ -86,13 +86,6 @@ const FormInput: React.FC = () => {
   const [txtAreaState, setTxtAreaState] = useState('')
   const [selectState, setSelectState] = useState('')
 
-  const formState = {
-    nikename: nikeNameState,
-    utype: typeState,
-    txtArea: txtAreaState,
-    selectValue: selectState
-  }
-
   // 设置昵称
   const handleChangeNikeName = (e) => {
     setNikeName(e.target.value)

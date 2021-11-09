@@ -110,13 +110,15 @@ export const Menu: React.FC = () => {
         <Logo></Logo>
         <MenuList menuList={menuData}></MenuList>
       </Box>
-      <Flex>
-        <Avatar src="" scale="sm" />
-        <Box>
-          <UserTitle>OliNe</UserTitle>
-          <UserDesc>@0x3...d39</UserDesc>
-        </Box>
-      </Flex>
+      <Link to="/set/safeset">
+        <Flex>
+          <Avatar src="" scale="sm" />
+          <Box>
+            <UserTitle>OliNe</UserTitle>
+            <UserDesc>@0x3...d39</UserDesc>
+          </Box>
+        </Flex>
+      </Link>
     </MenuBox>
   );
 };

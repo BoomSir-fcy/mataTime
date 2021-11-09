@@ -48,7 +48,7 @@ const Edit: React.FC = () => {
     <div>
       <Route path="/" component={Header}></Route>
       <Route path="/" component={BgUpload}></Route>
-      <Route path="/" component={NftAvatar}></Route>
+      {/* <Route path="/" component={NftAvatar}></Route> */}
       <Route path="/" component={FormInput}></Route>
     </div>
   );
