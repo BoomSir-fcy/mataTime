@@ -17,7 +17,6 @@ background:#191F2D;
 border-radius: 10px;
 margin-top:10px;
 overflow:hidden;
-/* overflow-y:scroll; */
 `
 const Header = styled(Flex)`
 justify-content: space-between;

@@ -33,7 +33,7 @@ export class MeApi extends Http {
   }
   // 点赞
   async praiseUser(post_id: number) {
-    const res = await this.get('/v1/like/agree', post_id);
+    const res = await this.get('/v1/like/agree', { post_id });
     return res;
   }
   // 取消点赞
@@ -47,10 +47,20 @@ export class MeApi extends Http {
     const res: Api.Me.collectParams = await this.get('/v1/fav/list');
     return res;
   }
+  // 取消收藏
+  async cancelCollect(post_id: number) {
+    const res = await this.get('/v1/fav/cancel', { post_id });
+    return res;
+  }
+  // 收藏文章
+  async addCollect(post_id: number) {
+    const res = await this.get('/v1/fav/agree', { post_id });
+    return res;
+  }
 
   // 屏蔽
   async shieldUser(pid: number) {
-    const res = await this.post('/v1/post/cancel_shield_1635924744752', pid);
+    const res = await this.post('/v1/post/add_shield', pid);
     return res;
   }
   // 取消屏蔽

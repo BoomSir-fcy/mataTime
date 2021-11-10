@@ -9,6 +9,7 @@ const Follow = React.lazy(() => import('./follow'));
 const Fans = React.lazy(() => import('./fans'));
 const Praise = React.lazy(() => import('./praise'));
 const Shield = React.lazy(() => import('./shield'));
+const Collect = React.lazy(() => import('./collect'));
 
 const Me = props => {
   return (
@@ -24,7 +25,7 @@ const Me = props => {
               <Route path={`${props.match.path}/follow`} component={Follow} />
               <Route path={`${props.match.path}/fans`} component={Fans} />
               <Route path={`${props.match.path}/praise`} component={Praise} />
-              <Route path={`${props.match.path}/shield`} component={Shield} />
+              <Route path={`${props.match.path}/collect`} component={Collect} />
             </Container>
           )}
         />

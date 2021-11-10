@@ -28,9 +28,9 @@ const menuArr = [
     icon: 'icon-shoucang',
     activeIcon: 'icon-shoucang1',
     title: '收藏',
-    path: '/',
+    path: '/me/collect',
     badge: true
-  }
+  },
   // {
   //   icon: 'icon-pingbi1',
   //   activeIcon: 'icon-pingbi',
