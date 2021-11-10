@@ -31,7 +31,7 @@ export class Http {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzcxMzE1MDEsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNjUyNjcwMSwidWlkIjoiMjk5NjA0NzM4NyIsImFkZHJlc3MiOiIweDAzYmYzOGQ4YjY0YzEwRDI4NDI4ZkY5QjVBYzA1QzU3MDgzMTU2ZDMifQ.kCKKz9ZnldMSwWpOgHXgp5JyQDFRw2K164x_7DMPXbA';
 
     try {
-      response = await axios({ ...configs, headers: { ...configs.headers, claims: token } });
+      response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
       // response.data.code === 0 && toast.error("Token expiration");
       return response.data;
     } catch (e) {
