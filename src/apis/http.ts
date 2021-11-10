@@ -26,10 +26,12 @@ axios.interceptors.response.use(
 export class Http {
   async request(configs: AxiosRequestConfig) {
     let response;
-    let token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzY0NDMwMjQsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNTgzODIyNCwidWlkIjoiMTY3MDA0ODgwIiwiYWRkcmVzcyI6IjB4NmYzMGFkNmNBMTY2NGRmRDBiQjFGNjM5ZDlGYzgwNzE0OUNDMTNBYSJ9.zlj_neMcsw9lVY3ruKXN4kg_ytdWYz4jcqDpJkcFsQo';
+    let token =
+      localStorage.getItem('token') ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzcxMzE1MDEsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNjUyNjcwMSwidWlkIjoiMjk5NjA0NzM4NyIsImFkZHJlc3MiOiIweDAzYmYzOGQ4YjY0YzEwRDI4NDI4ZkY5QjVBYzA1QzU3MDgzMTU2ZDMifQ.kCKKz9ZnldMSwWpOgHXgp5JyQDFRw2K164x_7DMPXbA';
 
     try {
-      response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
+      response = await axios({ ...configs, headers: { ...configs.headers, claims: token } });
       // response.data.code === 0 && toast.error("Token expiration");
       return response.data;
     } catch (e) {

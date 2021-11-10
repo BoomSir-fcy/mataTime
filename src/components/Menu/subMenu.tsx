@@ -17,18 +17,13 @@ const ItemLink = styled(Link)`
 
 export const SubMenu = (props: { menuList: any[] }) => {
   const { menuList } = props;
-  const [currentIndex, setCurrentIndex] = React.useState(0);
   const location = useLocation();
-
-  const itemClick = index => {
-    setCurrentIndex(index);
-  };
 
   return (
     <React.Fragment>
       {menuList.map((item, index) => {
         return (
-          <ItemLink to={item.path} key={index} style={{ backgroundColor: location.pathname === item.path ? '#232A3D' : '' }} onClick={() => itemClick(index)}>
+          <ItemLink to={item.path} key={index} style={{ backgroundColor: location.pathname === item.path ? '#232A3D' : '' }}>
             <div style={{ position: 'relative' }}>
               {item.badge && <Badge count={0} />}
               <Icon name={item.icon} margin="10px 14px"></Icon>
