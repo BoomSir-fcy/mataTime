@@ -60,9 +60,13 @@ function App() {
           <Router forceRefresh>
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
-              <Route path="/test" exact >
-                <Test />
-              </Route>
+              {
+                process.env.NODE_ENV === 'development' && (
+                  <Route path="/test" exact >
+                    <Test />
+                  </Route>
+                )
+              }
               <Route
                 path="/articleDetils/:id"
                 exact

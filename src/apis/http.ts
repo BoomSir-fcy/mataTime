@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { toast } from 'react-toastify';
 import { Dispatch } from 'store';
 
-// const baseURL = "http://192.168.101.122:8888"
+const baseURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
@@ -43,7 +43,7 @@ export class Http {
     const config: AxiosRequestConfig = {
       method: 'GET',
       url,
-      // baseURL,
+      baseURL,
       params
     };
     return this.request(config);
@@ -53,8 +53,8 @@ export class Http {
     const config: AxiosRequestConfig = {
       method: 'POST',
       url,
-      data
-      // baseURL,
+      data,
+      baseURL,
     };
     return this.request(config);
   }
