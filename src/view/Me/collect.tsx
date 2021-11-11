@@ -94,7 +94,7 @@ const Collect = () => {
         </div>
       </Header>
       <Content>
-        <Button onClick={() => cancelCollect(1)}>按钮</Button>
+        <Button onClick={() => addCollect(1)}>按钮</Button>
       </Content>
     </Box >
   )
