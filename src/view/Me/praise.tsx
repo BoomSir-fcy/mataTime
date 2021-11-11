@@ -4,6 +4,7 @@ import { Avatar, Icon } from 'components';
 import { CommentList } from 'src/components/Layout/ArticleDetilsLayout/CommentList';
 import { Box, Button, Flex } from 'uikit';
 import { Api } from 'apis';
+import { toast } from 'react-toastify';
 
 const Title = styled(Box)`
 color:#fff;
@@ -44,7 +45,11 @@ const Praise = React.memo(() => {
   const praiseUser = async (post_id: number) => {
     try {
       const res = await Api.MeApi.praiseUser(post_id)
-      console.log('点赞用户', res)
+      if (res.code === 1) {
+        toast.success(res.data)
+      } else {
+        toast.warning(res.data)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -55,6 +60,11 @@ const Praise = React.memo(() => {
     try {
       const res = await Api.MeApi.unPraiseUser(post_id)
       console.log('取消点赞', res)
+      if (res.code === 1) {
+        toast.success(res.data)
+      } else {
+        toast.warning(res.data)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -108,7 +118,7 @@ const Praise = React.memo(() => {
       </Header>
 
       <Content>
-        <Button onClick={() => praiseUser(9)}>点赞</Button>
+        <Button onClick={() => unPraiseUser(9)}>点赞</Button>
       </Content>
     </Box>
   )

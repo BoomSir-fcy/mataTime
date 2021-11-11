@@ -7,6 +7,7 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 import { useImmer } from 'use-immer';
 import { Api } from 'apis';
 import { MeApi } from 'src/apis/Me';
+import { toast } from 'react-toastify';
 
 const Header = styled(Flex)`
   width:100%;
@@ -72,49 +73,49 @@ button {
 `
 
 const Follow = React.memo(() => {
-  const [state, setState] = useImmer<Api.Me.followParams>({
-    uid: 0,
-    data: [],
-    res: {},
-    nick_name: ''
-  })
-
-  // 头部
-
+  const [followAry, setFollowAry] = useState([])
   const FollowList = () => {
+    console.log('关注列表', followAry);
     // 关注列表
-    console.log('关注列表2', state.data);
-
     const getFollowList = async () => {
       try {
         const res = await Api.MeApi.followList()
-        console.log('关注列表1', res.data.List);
-        if (res.data.List) {
-          setState(p => {
-            p.data = res.data.List
-          })
-        }
+        setFollowAry(res.data.list)
       } catch (error) {
         console.log(error);
       }
     }
 
     // 关注用户
-    const followUser = async (focus_uid) => {
-      Api.MeApi.followUser({
-        focus_uid
-      }).then(res => {
-        console.log(res)
-      })
+    const followUser = async (focus_uid: number) => {
+      try {
+        const res = await Api.MeApi.followUser(focus_uid)
+        console.log('关注用户', res);
+        if (res.code === 1) {
+          getFollowList()
+          toast.success(res.data)
+        } else {
+          toast.warning(res.data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     // 取消关注
-    const unFollowUser = (res?: number) => {
-      Api.MeApi.unFollowUser({
-        focus_uid: 1455853291
-      }).then(res => {
-        console.log('取消关注', res)
-      })
+    const unFollowUser = async (focus_uid: number) => {
+      try {
+        const res = await Api.MeApi.unFollowUser(focus_uid)
+        console.log('取消关注', res);
+        if (res.code === 1) {
+          getFollowList()
+          toast.success(res.data)
+        } else {
+          toast.warning(res.data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     useEffect(() => {
@@ -123,10 +124,10 @@ const Follow = React.memo(() => {
     return (
       <div>
         {
-          state.data.map(item => {
+          followAry.map(item => {
             return (
               <ContentBox key={item.uid}>
-                <Avatar scale="md" style={{ float: 'left' }} />
+                <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
                 <Column>
                   <div><span className="username">{item.nick_name}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">    @0x32...9239</span></div>
                   <Msg>{item.introduction}</Msg>
@@ -150,7 +151,7 @@ const Follow = React.memo(() => {
         <div className="title">个人主页</div>
         <div>
           <span className="myFollow">我的关注</span>
-          <span className="msg">{state.data.length}人</span>
+          <span className="msg">{followAry.length}人</span>
         </div>
       </Header>
 

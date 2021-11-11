@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import styled from 'styled-components';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
+import { ArticleList } from '../Home/center/ArticleList'
 
 const Header = styled(Flex)`
   width:100%;
@@ -29,7 +30,7 @@ const Header = styled(Flex)`
 const Content = styled(Box)`
 width:100%;
 height:705px;
-padding:29px 19px;
+padding:0 19px;
 background:#191F2D;
 border-radius: 10px;
 margin-top:10px;
@@ -44,11 +45,13 @@ overflow:hidden;
 `
 
 const Collect = () => {
+  const [collectAry, setCollectAry] = useState([])
   // 收藏列表
   const getCollectList = async () => {
     try {
       const res = await Api.MeApi.collectList()
       console.log('收藏列表', res);
+      setCollectAry(res.data.list)
     } catch (error) {
       console.log(error);
     }
@@ -90,12 +93,13 @@ const Collect = () => {
         <div className="title">个人主页</div>
         <div>
           <span className="myFollow">我的收藏</span>
-          <span className="msg">138人</span>
+          <span className="msg">{collectAry.length}条</span>
         </div>
       </Header>
-      <Content>
-        <Button onClick={() => cancelCollect(1)}>按钮</Button>
-      </Content>
+      <Box style={{ marginTop: '14px' }}>
+        {/* <Button onClick={() => addCollect(1)}>按钮</Button> */}
+        {/* <ArticleList /> */}
+      </Box>
     </Box >
   )
 }

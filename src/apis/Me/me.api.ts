@@ -3,32 +3,30 @@ import { Http } from "../http";
 export class MeApi extends Http {
 
   // 关注列表
-  async followList() {
-    const res: Api.Me.followParams = await this.get('/v1/attention/list');
+  async followList(page?: number, perpage?: number) {
+    const res = await this.get('/v1/attention/list', { page, perpage });
     return res;
   }
-
   // 关注用户
-  async followUser(params: Api.Me.followUserParams) {
-    const res = await this.get('/v1/attention/focus', params);
+  async followUser(focus_uid: number) {
+    const res = await this.get('/v1/attention/focus', { focus_uid });
     return res;
   }
-
   // 取消关注
-  async unFollowUser(params: Api.Me.followUserParams) {
-    const res = await this.get('v1/attention/cancel', params);
+  async unFollowUser(focus_uid: number) {
+    const res = await this.get('/v1/attention/cancel', { focus_uid });
     return res;
   }
 
   // 粉丝列表
-  async fansList() {
-    const res: Api.Me.fansParams = await this.get('/v1/attention/fans_list');
+  async fansList(page?: number, perpage?: number) {
+    const res = await this.get('/v1/attention/fans_list', { page, perpage });
     return res;
   }
 
   // 点赞列表
   async praiseList() {
-    const res: Api.Me.praiseParams = await this.get('/v1/like/list');
+    const res = await this.get('/v1/like/list');
     return res;
   }
   // 点赞
@@ -38,13 +36,13 @@ export class MeApi extends Http {
   }
   // 取消点赞
   async unPraiseUser(post_id: number) {
-    const res = await this.get('/v1/like/cancel', post_id);
+    const res = await this.get('/v1/like/cancel', { post_id });
     return res;
   }
 
   // 收藏列表
   async collectList() {
-    const res: Api.Me.collectParams = await this.get('/v1/fav/list');
+    const res = await this.get('/v1/fav/list');
     return res;
   }
   // 取消收藏

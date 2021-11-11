@@ -68,46 +68,19 @@ button {
 `
 
 const Fans = React.memo(() => {
-  const people = [
-    { uname: '满克斯', dunpai: true, present: '@0x32...9239', isFollow: '互相关注' },
-    { uname: '乔布斯', dunpai: false, present: '巴里拉里', isFollow: '关注' }
-  ]
-  const [peopleState, setPeopleState] = useState(people)
-
+  const [peopleState, setPeopleState] = useState([])
   // 粉丝列表
   const FansList = () => {
     const getFansList = async () => {
       try {
         const res = await Api.MeApi.fansList()
-        console.log('粉丝列表', res);
-
+        console.log('粉丝列表', res.data.list);
+        const fansListAry = res.data.list
+        setPeopleState(fansListAry)
       } catch (error) {
         console.log(error);
       }
     }
-    const setPeople = useCallback((index) => {
-      const isFollow = peopleState[index].isFollow
-      if (isFollow === '互相关注') {
-        peopleState[index].isFollow = '关注'
-      }
-      if (isFollow === '关注') {
-        peopleState[index].isFollow = '互相关注'
-      }
-      if (isFollow === '取消关注') {
-        peopleState[index].isFollow = '关注'
-      }
-      const res = peopleState.map((item, subIndex) => {
-        if (index === subIndex) {
-          return {
-            ...item,
-          }
-        }
-        return {
-          ...item
-        }
-      })
-      setPeopleState(res)
-    }, [peopleState])
 
     useEffect(() => {
       getFansList()
@@ -117,12 +90,12 @@ const Fans = React.memo(() => {
       peopleState.map((item, index) => {
         return (
           <ContentBox key={index}>
-            <Avatar scale="md" style={{ float: 'left' }} />
+            <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
             <Column>
-              <div><span className="username">{item.uname}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">{item.present}</span></div>
-              <Msg>个人主页的介绍</Msg>
+              <div><span className="username">{item.nick_name}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">{item.present}</span></div>
+              <Msg>{item.introduction}</Msg>
             </Column>
-            <Button onClick={() => setPeople(index)} style={{ background: (item.isFollow === '取消关注') ? '#4D535F' : null }}>{item.isFollow}</Button>
+            <Button>{item.attention_status_name}</Button>
           </ContentBox>
         )
       })
@@ -134,7 +107,7 @@ const Fans = React.memo(() => {
         <div className="title">个人主页</div>
         <div>
           <span className="myFollow">我的粉丝</span>
-          <span className="msg">138人</span>
+          <span className="msg">{peopleState.length}人</span>
         </div>
       </Header>
 
