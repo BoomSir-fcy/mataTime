@@ -57,13 +57,24 @@ const MentionItem: React.FC<IProps> = (props) => {
     if (props.match.path === '/articleDetils/:id') return
     props.history.push('/articleDetils/' + itemData.id)
   }
+  const contentClick = (e)=>{
+    e.stopPropagation()
+   const itemBox =  document.querySelector('.mention-content')
+   console.log(itemBox.getElementsByTagName('a'));
+  }
   return (
     <MentionItemWrapper ref={mentionRef}>
       <MentionItemUser more={props.more} size={size} itemData={itemData} callback={(data: any, type: MoreOperatorEnum) => {
         callback(data, type)
       }} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
-        <div dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
+        {/* <p><a>#Dinosaur Eggs#</a></p> */}
+        <div onClick={contentClick} dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
+        {/* <p>
+          <FollowPopup>
+            <a>@Baby fuck me</a>
+          </FollowPopup>
+        </p> */}
         <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}

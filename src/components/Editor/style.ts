@@ -15,22 +15,23 @@ width: 100px;
 height: 35px;
 border-radius: 10px;
 background-color:#4168ED;
-// margin-top:12px;
+margin-top:12px;
 `;
-export const TextBox = styled.div`
-margin-bottom: 15px;
+export const SlateBox = styled.div`
+background: #191F2D;
+margin-bottom: 10px;
 border-radius: ${({ theme }) => theme.radii.card};
-overflow: hidden;
-.w-e-text-container{
-  z-index:22 !important;
-  overflow-y:auto;
-  // color: ${({ theme }) => theme.colors.text};
-  color:#fff;
-background: ${({ theme }) => theme.colors.backgroundTextArea};
-  .placeholder{
-    color: #B5B5B5;
-  }
-  .w-e-text{
+padding: 15px;
+padding-bottom:20px;
+  div.text-box{
+    color:#fff;
+    background: ${({ theme }) => theme.colors.backgroundTextArea};
+    padding:15px;
+    padding-bottom:0px;
+    border-radius: 5px;
+    min-height: 112px !important;
+    max-height: 120px;
+    overflow-y:auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/
       width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
@@ -41,33 +42,8 @@ background: ${({ theme }) => theme.colors.backgroundTextArea};
     border-radius: 10px;
     background   : rgba(83,83,83,0.5);
     }
-    min-height: 112px;
-    max-height: 150px;
   }
-}
-.imgList{
-  padding:10px 0;
-  overflow-x: auto;
-  display: flex;
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
-  &>div{
-    position:relative;
-    margin-left:15px;
-    img{
-      width: 53px;
-      height: 53px;
-      border-radius:5px;
-    }
-    i{
-      padding:5px;
-      position:absolute;
-      top:-10px;
-      right:-10px;
-      transition:all 0.3s ;
-    }
-  }
-}
-`;
+`
 export const Toolbar = styled(Flex)`
 .w-e-toolbar{
   background-color: transparent !important;

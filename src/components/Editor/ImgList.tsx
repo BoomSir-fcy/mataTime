@@ -6,7 +6,7 @@ type imgListType = {
   delImgItem:(index)=>void
 }
 const ImgListBox = styled.div`
-padding-bottom:10px;
+padding-top:10px;
 overflow-x: auto;
 display: flex;
 background: ${({ theme }) => theme.colors.backgroundTextArea};
