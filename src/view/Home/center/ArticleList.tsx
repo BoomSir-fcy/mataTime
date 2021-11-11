@@ -19,6 +19,8 @@ color:#fff;
 `
 
 export const ArticleList = (props) => {
+  console.log('ArticleListprops', props);
+
   const goDetils = (e) => {
     if (props.location.pathname === '/articleDetils') return
     props.history.push('/articleDetils')
@@ -68,7 +70,7 @@ export const ArticleList = (props) => {
           }
         })
       }}>
-        {listData.map((item,index) => (
+        {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >
             <MentionItem {...props} itemData={{
               ...item,
