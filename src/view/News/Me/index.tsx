@@ -52,7 +52,7 @@ const NewsMe: React.FC = (props) => {
           setLoading(false)
           if (Api.isSuccess(res)) {
             setPage(page + 1)
-            setListData([...listData, ...res.data.list])
+            setListData([...listData, ...(res.data.list || [])])
             setTotalPage(res.data.total_page)
           }
         })
