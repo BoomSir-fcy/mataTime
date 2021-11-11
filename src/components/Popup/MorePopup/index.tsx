@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReportModal, ShieldModal } from 'components';
+import { ReportModal, ShieldModal, EditTwitterModal } from 'components';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux'
 import {
@@ -30,6 +30,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [shieldShow, setShieldShow] = useState<boolean>(false);
+  const [editShow, setEditShow] = useState<boolean>(false);
   const [isOwn, setIsOwn] = useState<boolean>(false);
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onTopPostRequest = async (pid: number) => {
     const res = await Api.AttentionApi.setTopPost(pid);
     if (Api.isSuccess(res)) {
-      callback(data, MoreOperatorEnum.SETTOP)
+      // callback(data, MoreOperatorEnum.SETTOP)
       toast.success('置顶成功！')
     } else {
       toast.error(res.data || '置顶失败！')
@@ -127,7 +128,7 @@ export const MorePopup = React.memo((props: Iprops) => {
               isOwn ? (
                 <>
                   <p onClick={() => {
-
+                    setEditShow(true)
                   }}>编辑</p>
                   <p onClick={() => {
                     onPostDelRequest(data.post.post_id)
@@ -194,6 +195,18 @@ export const MorePopup = React.memo((props: Iprops) => {
           setVisible(false)
         }}
       ></ShieldModal>
+
+      {/* 编辑twitter */}
+      <EditTwitterModal
+        show={editShow}
+        pid={data.post.post_id}
+        onClose={() => {
+          setEditShow(false)
+        }}
+        onQuery={() => {
+          setEditShow(false)
+        }}
+      ></EditTwitterModal>
     </PopupWrapper>
   )
 });
