@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 import { Flex, Box, Button } from 'uikit';
 import { Avatar, Icon } from 'components';
 import { Api } from 'apis';
@@ -60,6 +61,19 @@ export const RecommendPeople: React.FC<Iprops> = props => {
       }
     });
   };
+
+  // 关注用户
+  const onAttentionFocusRequest = async (focus_uid: number) => {
+    const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
+    if (Api.isSuccess(res)) {
+      toast.success(res.data)
+      getManList();
+    } else {
+      toast.error(res.data)
+    }
+  }
+
+
   return (
     <RecommendPeopleBox>
       <Flex justifyContent="space-between">
@@ -78,7 +92,9 @@ export const RecommendPeople: React.FC<Iprops> = props => {
               <UserDesc title={item.introduction}>{item.introduction}</UserDesc>
             </UserInfo>
           </Flex>
-          <FollowBtn>+关注</FollowBtn>
+          <FollowBtn onClick={() => {
+            onAttentionFocusRequest(item.uid)
+          }}>+关注</FollowBtn>
         </Flex>
       ))}
     </RecommendPeopleBox>
