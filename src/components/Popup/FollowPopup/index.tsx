@@ -98,6 +98,18 @@ export const FollowPopupD = React.memo((props: IDprops) => {
     const res = await Api.AttentionApi.onAttentionFocus('167004880' || uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data)
+      getUserInfo()
+    } else {
+      toast.error(res.data)
+    }
+  }
+
+  // 取消关注用户
+  const cancelAttentionFocusRequest = async () => {
+    const res = await Api.AttentionApi.cancelAttentionFocus('167004880' || uid);
+    if (Api.isSuccess(res)) {
+      toast.success(res.data)
+      getUserInfo()
     } else {
       toast.error(res.data)
     }
@@ -136,8 +148,8 @@ export const FollowPopupD = React.memo((props: IDprops) => {
       </div>
       <div className="btn">
         <FollowBtn onClick={() => {
-          onAttentionFocusRequest()
-        }}>+关注</FollowBtn>
+          userInfo.IsAttention === 1 ? cancelAttentionFocusRequest() : onAttentionFocusRequest()
+        }}>{userInfo.IsAttention === 1 ? '取消关注' : '+关注'}</FollowBtn>
       </div>
     </PopupContentWrapper>
   )

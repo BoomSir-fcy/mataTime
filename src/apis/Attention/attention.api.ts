@@ -6,9 +6,9 @@ export class AttentionApi extends Http {
     const res = await this.get('/v1/attention/focus', { focus_uid });
     return res;
   }
-  // 关注用户
+  // 取消关注用户
   async cancelAttentionFocus(focus_uid: number | string) {
-    const res = await this.get('/v1/attention/focus', { focus_uid });
+    const res = await this.get('/v1/attention/cancel', { focus_uid });
     return res;
   }
   // 置顶推特(帖子)

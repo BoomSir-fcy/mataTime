@@ -3,6 +3,7 @@ import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils'
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux'
 import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD } from 'components'
 import {
   MentionItemWrapper,
@@ -41,7 +42,7 @@ const MentionItem: React.FC<IProps> = (props) => {
         console.log('mouseenter:', dom)
         console.log('e:', e)
         if (uid) {
-          setUid(uid)
+          setUid(Math.random())
           setPosition([e.clientX, e.clientY])
         }
       })
@@ -87,7 +88,18 @@ type UserProps = {
 }
 
 export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
+  const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
+  const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
+
+  useEffect(() => {
+    init()
+  }, [])
+
+  //  初始化
+  const init = () => {
+    UID === itemData.user_id ? setIsOwn(true) : setIsOwn(false)
+  }
 
   // 关注用户
   const onAttentionFocusRequest = async (focus_uid: number) => {
@@ -126,7 +138,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
           more ? (
             <div className="user-right-wrapper">
               {
-                itemData.is_attention === 0 ? (
+                !isOwn && itemData.is_attention === 0 ? (
                   <FollowBtn onClick={() => {
                     onAttentionFocusRequest(itemData.user_id)
                   }}>+关注</FollowBtn>
