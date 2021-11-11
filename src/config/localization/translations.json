@@ -1,5 +1,27 @@
 {
   "dataFormat": "YYYY-MM-DD",
   "wallet": "wallet",
-  "Dark": "dark"
+  "Dark": "dark",
+
+
+  "翻译规范: key值使用英文字符串, value 为对应翻译值": "",
+  "Example: This is a passage": "Example: This is a passage",
+  "Example: There is a variable: %variableA% here": "Example: There is a variable: %variableA% here",
+  "Example: There is variableA: %variableA% and variableB: %variableB%": "Example: There is variableA: %variableA% and variableB: %variableB%",
+
+
+  "******start*****@wanghao********": "@wanghao翻译开始",
+  "******end*****@wanghao********": "@wanghao翻译结束",
+
+
+  "******start*****@qi********": "@qi翻译开始",
+  "******end*****@qi********": "@qi翻译结束",
+
+
+  "******start*****@kksam********": "@kksam翻译开始",
+  "******end*****@kksam********": "@kksam翻译结束",
+
+  
+  "******start*****@bigCongee********": "@bigCongee翻译开始",
+  "******end*****@bigCongee********": "@bigCongee翻译结束"
 }

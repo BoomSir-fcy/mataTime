@@ -22,8 +22,9 @@ const ArticleDetilsLayout = React.lazy(() => import('./components/Layout/Article
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
+const Test = React.lazy(() => import('./view/Test'));
 
-const Container = styled(Box)<{
+const Container = styled(Box) <{
   dark: boolean;
 }>`
   background-image: ${({ dark }) => `url(${require(dark ? 'assets/images/dark_background.jpg' : 'assets/images/light_background.jpg').default})`};
@@ -59,6 +60,9 @@ function App() {
           <Router forceRefresh>
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
+              <Route path="/test" exact >
+                <Test />
+              </Route>
               <Route
                 path="/articleDetils/:id"
                 exact

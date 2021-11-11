@@ -47,7 +47,7 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
       dispatch(setSystemCustom(systemSetting));
       setLanguage(val.value);
     },
-    [dispatch]
+    [dispatch, setting]
   );
 
   return [setting.languange, setUseLanguage];
