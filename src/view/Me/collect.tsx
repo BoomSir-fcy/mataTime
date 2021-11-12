@@ -62,10 +62,11 @@ const Collect = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
+  console.log('listData', listData);
+
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    console.log(type)
     let arr = []
     listData.forEach((item: any) => {
       let obj = item
@@ -85,13 +86,11 @@ const Collect = (props) => {
   }
   const goDetils = (e) => {
     e.preventdefault()
-    // if (props.match.path === '/articleDetils/:id') return
-    // props.history.push('/articleDetils/' + id)
   }
   // 收藏列表
   const ArticleList = () => {
     return (
-      <ArticleListBox>
+      <ArticleListBox onClick={() => goDetils}>
         <List marginTop={410} loading={page <= totalPage} renderList={() => {
           if (loading || page > totalPage) return false
           setLoading(true)
@@ -106,7 +105,7 @@ const Collect = (props) => {
         }}>
           {listData.map((item, index) => {
             return (
-              <MeItemWrapper onClick={() => goDetils} key={index}>
+              <MeItemWrapper key={index}>
                 <MentionItem {...props} itemData={{
                   ...item,
                   post_id: item.id,
