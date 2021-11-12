@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 import { fetchThunk } from 'store';
 import { Api } from 'apis';
 
+import { useTranslation } from 'contexts/Localization';
+
 const FlexButton = styled(Flex)`
   margin-top: 50px;
   justify-content: space-between;
@@ -25,6 +27,7 @@ export const SignUpcomplete = React.memo(() => {
   const [state, setState] = useImmer({
     list: []
   });
+  const { t } = useTranslation();
 
   const getManList = async () => {
     try {
@@ -48,8 +51,8 @@ export const SignUpcomplete = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="26px" bold>
-        推荐关注热门用户
+      <Text fontSize="34px" marginBottom="26px" bold style={{ textTransform: 'capitalize' }}>
+        {t('loginFollow')}
       </Text>
       <Box>
         {state.list.map((row, index: number) => (
@@ -58,10 +61,10 @@ export const SignUpcomplete = React.memo(() => {
       </Box>
       <FlexButton>
         <Button scale="ld" onClick={debounce(() => getManList(), 1000)}>
-          换一批
+          {t('loginSignUpChangeBatch')}
         </Button>
         <Button scale="ld" variant="secondary" onClick={complete}>
-          完成注册
+          {t('loginSignUpComplete')}
         </Button>
       </FlexButton>
     </Box>

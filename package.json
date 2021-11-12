@@ -36,7 +36,7 @@
     "case-sensitive-paths-webpack-plugin": "2.3.0",
     "classnames": "^2.3.1",
     "css-loader": "4.3.0",
-    "dotenv": "8.2.0",
+    "dotenv": "^10.0.0",
     "dotenv-expand": "5.1.0",
     "emoji-mart": "^3.0.1",
     "emotion": "^11.0.0",
@@ -110,6 +110,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:test": "dotenv -e .env.test node scripts/build.js",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
     "test": "node scripts/test.js"
   },
