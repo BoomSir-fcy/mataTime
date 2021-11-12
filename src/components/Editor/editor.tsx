@@ -1,96 +1,88 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useImmer } from 'use-immer';
-import { Box, Flex, Button, Svg } from 'uikit';
-import { Api } from 'apis';
+import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react';
+import { Editor as slateEditor, Transforms, Range, createEditor, Descendant } from 'slate';
+import { Flex } from 'uikit';
+import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
-import { ImgList } from './ImgList'
-import { toast } from 'react-toastify'
-import { mediaQueriesSize } from 'uikit/theme/base';
-
-const EditorWarpper = styled(Box)`
-  width: 100%;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: ${({ theme }) => theme.radii.card};
-  ${mediaQueriesSize.padding}
-`
-const EditorTextarea = styled.textarea`
-  width: 100%;
-  min-height: 112px;
-  vertical-align:middle;
-  // color: ${({ theme }) => theme.colors.text};
-  color:#fff;
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
-  border-radius: ${({ theme }) => theme.radii.card};
-  border-bottom-right-radius: 0;
-border-bottom-left-radius: 0;
-  border: 0;
-  outline: 0;
-  resize: none;
-  font-size: 16px;
-  ${mediaQueriesSize.padding}
-    &::-webkit-scrollbar {
-      /*滚动条整体样式*/
-      width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
-      height: 1px;
-      }
-    &::-webkit-scrollbar-thumb {
-    /*滚动条里面小方块*/
-    border-radius: 10px;
-    background   : rgba(83,83,83,0.5);
-    }
-    min-height: 112px;
-    max-height: 150px;
-  }
-`
-
-const SendButton = styled(Button)`
-border-radius: ${({ theme }) => theme.radii.card};
-width: 100px;
-height: 35px;
-border-radius: 10px;
-background-color:#4168ED;
-margin-top:12px;
-`;
-const EditorToolbar = styled(Flex)`
-`
+import { ImgList } from './ImgList';
+import { Api } from 'apis';
+import { toast } from 'react-toastify';
+import { Slate, Editable, ReactEditor, withReact, useSelected, useFocused, useSlate } from 'slate-react';
+import { SlateBox, SendButton } from './style';
 type Iprops = {
-  sendArticle: (string, ...args: any[]) => void,
-  type: string
-}
-export const Editor = React.memo((props: Iprops) => {
+  type: any;
+  sendArticle: any;
+};
+const AtElement = props => {
+  console.log(props);
+  return (
+    <span {...props.attributes}>
+      {props.children}
+      @哈哈哈
+    </span>
+  );
+};
+const TopicElement = props => {
+  return (
+    <span {...props.attributes}>
+      {props.children}
+      #牛逼#
+    </span>
+  );
+};
 
-  const [state, setState] = useImmer({
-    cursor: 0,
-    editorValue: "",
-    imgList: []
-  });
-  const editor = React.useRef(null);
-
-  const insertMyText = (event: any, text: string) => {
-    const { cursor } = state;
-    const { value } = event;
-    let textBefore = value.substring(0, cursor);
-    let textAfter = value.substring(cursor, value.length);
-    return textBefore + text + textAfter;
+const DefaultElement = props => {
+  return <p {...props.attributes}>{props.children}</p>;
+};
+const initialValue: Descendant[] = [
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: ''
+      }
+    ]
   }
+];
+export const Editor = (props: Iprops) => {
+  const ref = useRef<HTMLDivElement | null>();
+  const [value, setValue] = useState<Descendant[]>(initialValue);
+  const [imgList, setImgList] = useState([]);
+  const renderElement = useCallback(props => {
+    console.log(props);
 
-  const handleSelect = React.useCallback((data) => {
-    const { editorValue, cursor } = state;
-    let newValue = insertMyText(editor.current, data);
-    setState(p => {
-      p.cursor = cursor + data.length;
-      p.editorValue = cursor > 0 ? newValue : (editorValue + data);
-    })
-  }, [state]);
-  const handleSelectImg = React.useCallback((data) => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.name = 'file'
-    input.accept = '.png,.jpg,.jpeg,.gif'
+    switch (props.element.type) {
+      case 'at':
+        return <AtElement {...props} />;
+      case 'topic':
+        return <TopicElement {...props} />;
+      default:
+        return <DefaultElement {...props} />;
+    }
+  }, []);
+  const editor = useMemo(() => withReact(withHistory(createEditor())), []);
+  // 扩大focus距离
+  useEffect(() => {
+    const el: any = ref.current;
+    const eventFn = () => {
+      el.firstElementChild.focus();
+      const range = window.getSelection(); //创建range
+      range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
+      range.collapseToEnd(); //光标移至最后
+    };
+    el.addEventListener('click', eventFn);
+    return () => {
+      el.removeEventListener('click', eventFn);
+    };
+  });
+
+  const callbackSelectImg = e => {
+    if (imgList.length >= 9) return toast.error('最多上传九张');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.name = 'file';
+    input.accept = '.png,.jpg,.jpeg,.gif';
     input.onchange = async (e: any) => {
-      if (!e.target.files[0]) return false
-      if (state.imgList.length >= 9) return toast.error('最多上传九张')
+      if (!e.target.files[0]) return false;
       const file = e.target.files[0];
       let fr: any = new FileReader();
       // 读取文件
@@ -98,77 +90,39 @@ export const Editor = React.memo((props: Iprops) => {
       // 将文件转为base64
       fr.onload = () => {
         Api.CommonApi.uploadImg({ dir_name: props.type, base64: fr.result }).then(res => {
-          setState({
-            ...state,
-            imgList: [...(state.imgList || []), res.data.full_path]
-          })
-        })
-      }
-    }
-    input.click()
-  }, [state]);
-  const delImgItem = (imgList) => {
-    setState({
-      ...state,
-      imgList: imgList
-    })
-  }
-  const restInput = () => {
-    setState({
-      ...state,
-      editorValue: ''
-    })
-  }
-  //话题替换增加连接   
-  function ReplaceTopic(str) {
-    let r, k;   // 声明变量。   
-    let ss = str;
-    r = ss.replace(/\#([^\#|.]+)\#/g, function (word) {
-      k = encodeURI(word.replace(/\#/g, ""));
-      return "<a href=\"s/?a=weibo&k=" + k + "\">" + word + "</a>";
-    }
-    );
-    return (r);  //返回替换后的字符串   
-  }
-
-  //@替换增加连接   
-  function ReplaceAt(str) {
-    let r, k  // 声明变量。   
-    let ss = str;
-    r = ss.replace(/\@([^\@|.|^ ]+)/g, function (word) {
-      k = encodeURI(word.replace(/\@/g, ""));
-      // return "<a href=\"n/?a=user&k="+ k +"\" usercard=\"name="+ k +"\">" + word + "</a>";   
-      return `<span data-uid="1" class="user-dom">${word}</span>`;
-    }
-    )
-    return (r);  //返回替换后的字符串    
-  }
+          if (Api.isSuccess(res)) {
+            setImgList([...imgList, res.data.full_path]);
+            toast.success('上传成功');
+          } else {
+            toast.error('上传失败');
+          }
+        });
+      };
+    };
+    input.click();
+  };
+  const callbackInserAt = e => {
+    Transforms.setNodes<any>(editor, { type: 'at' }, { match: n => slateEditor.isBlock(editor, n) });
+  };
+  const callbackInserTopic = e => {
+    Transforms.setNodes<any>(editor, { type: 'topic' }, { match: n => slateEditor.isBlock(editor, n) });
+  };
   const sendArticle = () => {
-    props.sendArticle(ReplaceAt(ReplaceTopic(state.editorValue)), restInput, state.imgList.join(','))
-  }
-  const callbackInserTopic = () => {
-    setState({
-      ...state,
-      editorValue: state.editorValue + ' #请输入话题# '
-    })
-  }
-  const callbackInserAt = () => {
-    setState({
-      ...state,
-      editorValue: state.editorValue + ' @xxx '
-    })
-  }
+    console.log(value);
+    // props.sendArticle(ReplaceAt(ReplaceTopic(state.editorValue)), restInput, state.imgList.join(','))
+  };
   return (
-    <EditorWarpper>
-      <EditorTextarea id="input" placeholder="分享新鲜事" ref={editor}
-        value={state.editorValue}
-        onBlur={(e) => setState(p => { p.cursor = e.target.selectionStart })}
-        onChange={(e) => setState(p => { p.editorValue = e.target.value })} />
-      <ImgList imgList={state.imgList || []} delImgItem={delImgItem}></ImgList>
-      <Flex justifyContent="space-between" mt="12px">
-        <Toolbar callback={handleSelect} callbackSelectImg={handleSelectImg} callbackInserTopic={callbackInserTopic} callbackInserAt={callbackInserAt} />
-        <Button onClick={sendArticle}>发布</Button>
-      </Flex>
-    </EditorWarpper>
-  )
-})
+    <SlateBox>
+      <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+        <div className="text-box" ref={ref}>
+          <Editable renderElement={renderElement} placeholder="分享新鲜事" />
+        </div>
+        <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Toolbar callbackEmoji={data => editor.insertText(data)} callbackSelectImg={callbackSelectImg} callbackInserAt={callbackInserAt} callbackInserTopic={callbackInserTopic}></Toolbar>
+          <SendButton onClick={sendArticle}>发表</SendButton>
+        </Flex>
+      </Slate>
+    </SlateBox>
+  );
+};

@@ -15,10 +15,10 @@ export const MentionItemWrapper = styled.div`
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-        a{
-          color: #4168ED;
-          cursor: pointer;
-        }
+      }
+      a{
+        color: #4168ED;
+        cursor: pointer;
       }
       a{
         color: #4168ED;

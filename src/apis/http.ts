@@ -26,9 +26,7 @@ axios.interceptors.response.use(
 export class Http {
   async request(configs: AxiosRequestConfig) {
     let response;
-    let token =
-      localStorage.getItem('token') ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzcxMzE1MDEsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNjUyNjcwMSwidWlkIjoiMjk5NjA0NzM4NyIsImFkZHJlc3MiOiIweDAzYmYzOGQ4YjY0YzEwRDI4NDI4ZkY5QjVBYzA1QzU3MDgzMTU2ZDMifQ.kCKKz9ZnldMSwWpOgHXgp5JyQDFRw2K164x_7DMPXbA';
+    let token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzcxMzQ0ODYsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNjUyOTY4NiwidWlkIjoiMTY3MDA0ODgwIiwiYWRkcmVzcyI6IjB4NmYzMGFkNmNBMTY2NGRmRDBiQjFGNjM5ZDlGYzgwNzE0OUNDMTNBYSJ9.kYbyMXHQYG03jHrDySEQ_EWRAwCIdktiMulClzsJ5sE';
 
     try {
       response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
