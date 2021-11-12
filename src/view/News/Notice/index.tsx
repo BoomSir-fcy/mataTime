@@ -4,7 +4,8 @@ import { List } from 'components';
 import { Api } from 'apis';
 import {
   NoticeWrapper,
-  NoticeItemWrapper
+  NoticeItemWrapper,
+  NoticeContentWrapper
 } from './style';
 
 
@@ -17,7 +18,7 @@ const NewsNotice: React.FC = () => {
   return (
     <NoticeWrapper>
       <Header title={'消息'} />
-      <div className="notice-content-wrapper">
+      <NoticeContentWrapper>
         <List marginTop={410} loading={page <= totalPage} renderList={() => {
           if (loading || page > totalPage) return false
           setLoading(true)
@@ -34,7 +35,7 @@ const NewsNotice: React.FC = () => {
             <NoticeItem key={item.id} itemData={item} />
           ))}
         </List>
-      </div>
+      </NoticeContentWrapper>
     </NoticeWrapper>
   )
 }

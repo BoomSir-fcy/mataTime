@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Button, Text, Radio, Input } from 'uikit';
+import { Box, Flex, Card, Text, Radio, Input } from 'uikit';
 import { Logo, Icon, Avatar } from 'components';
 
 import { mediaQueriesSize } from "uikit/theme/base";
@@ -10,10 +10,8 @@ import { MenuProps } from 'components/Layout/CommonLayout/menuData';
 
 import { Api } from 'apis';
 
-const MenuWarpper = styled(Box)`
+const MenuWarpper = styled(Card)`
   width: 100%;
-  /* background: ${({ theme }) => theme.colors.backgroundCard}; */
-  background: #191F2D;
   border-radius: ${({ theme }) => theme.radii.card};
   ${mediaQueriesSize.paddingsm}
 `
@@ -35,7 +33,7 @@ const BackWarpper = styled(Box)`
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
     font-weight: bold;
-    color: #FFFFFF;
+    color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#4168ED'};
     margin-left: 10px;
   }
 `
@@ -53,7 +51,10 @@ const MenuItems = styled(Box)`
     width: 140px;
     padding: 5px 15px;
     border-radius: 18px;
-    background-color: #232A3D;
+    background-color: ${({ theme }) => theme.isDark ? '#232A3D' : '#EAF2FF'};
+    div{
+      font-weight: bold;
+    }
   }
 `
 const MenuIcon = styled(Box)`
@@ -77,15 +78,14 @@ const MenuIcon = styled(Box)`
   }
 `
 const MenuText = styled(Text)`
-  font-weight: bold;
-  color: ${({ theme }) => theme.colors.textSubtle};
+  color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
 `
 
 const UserTitle = styled.div`
   margin:0 12px;
   font-weight:700;
   font-size:18px;
-  color:#fff;
+  color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
   ::after{
     position:relative;
     right:-50px;
@@ -94,7 +94,8 @@ const UserTitle = styled.div`
     width:0px;
     height:0px;
     border-bottom: 7px solid transparent;
-    border-left: 7px solid #fff;
+    /* border-left: 7px solid #fff; */
+    border-left: 7px solid ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
     border-right: 7px solid transparent;
     border-top: 7px solid transparent;
 }
@@ -103,7 +104,7 @@ const UserDesc = styled.div`
   margin:0 12px;
   font-size: 16px;
   font-weight: 400;
-  color: #B5B5B5;
+  color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
 `
 
 type IProps = {
