@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'contexts/Localization';
 import { Flex, Box, Text } from 'uikit';
 import { Logo } from './logo';
 
@@ -33,6 +34,8 @@ const SubText = styled(Text)<{
 `;
 
 export const Footer = React.memo(() => {
+  const { t } = useTranslation();
+
   return (
     <FooterWarpper flexDirection="column">
       <LogoWrapper>
@@ -40,10 +43,10 @@ export const Footer = React.memo(() => {
       </LogoWrapper>
       <Flex>
         <SubText as={Link} to="/">
-          Terms of Service
+          {t('loginTeamText')}
         </SubText>
         <SubText as={Link} to="/">
-          Privacy Policy
+          {t('loginPrivacyPolicyText')}
         </SubText>
         <SubText>@2021 Twitter,Inc</SubText>
       </Flex>

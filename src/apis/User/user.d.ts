@@ -13,7 +13,7 @@ declare namespace Api {
       email?: string;
       Introduction?: string;
       location?: string;
-      NftImage: string;
+      NftImage?: string;
     }
 
     interface userInfoCallback extends Api.Error {

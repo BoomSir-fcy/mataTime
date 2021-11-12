@@ -3,7 +3,6 @@ import { createAction } from '@reduxjs/toolkit';
 interface profile {
   UID: number;
   uuid?: number;
-  NftImage: string;
   token: string;
 }
 

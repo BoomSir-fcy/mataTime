@@ -12,9 +12,12 @@ import { useSignIn } from '../hooks';
 
 import { WalletAddress } from './signUp';
 
+import { useTranslation } from 'contexts/Localization';
+
 const InputItems = styled(Flex)``;
 const InputText = styled(Text)`
-  min-width: 85px;
+  width: 100px;
+  min-width: 100px;
   ${mediaQueriesSize.marginr}
 `;
 
@@ -37,6 +40,7 @@ const InputNickName = styled.input`
 
 const Submit = styled(Button)`
   width: 205px;
+  text-transform: capitalize;
   ${mediaQueriesSize.margint}
 `;
 
@@ -48,6 +52,7 @@ export const SignUpSetName = React.memo(() => {
   });
   const { account } = useWeb3React();
   const { addNickName } = useSignIn();
+  const { t } = useTranslation();
 
   const submitProfile = React.useCallback(async () => {
     const res = await addNickName(state.nickName);
@@ -59,20 +64,20 @@ export const SignUpSetName = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="29px" bold>
-        欢迎加入恐龙社区
+      <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+        {t('loginWelcome')}
       </Text>
       <WalletAddress address={account} />
       <Box paddingTop="25px">
-        <InputItems marginBottom="32px">
-          <InputText>* NFT头像</InputText>
+        <InputItems marginBottom="32px" alignItems="center">
+          <InputText>{t('loginInputTitleAvatar')}</InputText>
           <Flex alignItems="flex-end">
             <InputNftImg src={nft.nftUrl} />
-            <Text color="#B5B5B5">默认展示您的恐龙NFT头像</Text>
+            <Text color="#B5B5B5">{t('loginInputValueAvatar')}</Text>
           </Flex>
         </InputItems>
         <InputItems alignItems="center">
-          <InputText>*设置昵称</InputText>
+          <InputText>{t('loginInputTitleNickname')}</InputText>
           <InputNickName
             onChange={event => {
               setState(p => {
@@ -80,13 +85,13 @@ export const SignUpSetName = React.memo(() => {
               });
             }}
             maxLength={20}
-            placeholder="最多20个字符"
+            placeholder={t('loginInputValueNickname')}
           />
         </InputItems>
       </Box>
       <Flex justifyContent="center">
         <Submit scale="ld" onClick={submitProfile}>
-          下一步
+          {t('loginSignUpNext')}
         </Submit>
       </Flex>
     </Box>

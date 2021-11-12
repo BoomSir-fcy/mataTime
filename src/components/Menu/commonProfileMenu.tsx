@@ -30,17 +30,20 @@ const UserDesc = styled.div`
 `;
 
 export const ProfileMenu = React.memo(() => {
-  const userInfo = useStore(p => p.loginReducer.userInfo);
-
-  console.log(userInfo);
-
+  const userInfo: any = useStore(p => p.loginReducer.userInfo);
   return (
-    <Flex>
-      <Avatar src={userInfo && userInfo.NftImage} scale="sm" />
-      <Box>
-        <UserTitle>OliNe</UserTitle>
-        <UserDesc>@0x3...d39</UserDesc>
-      </Box>
-    </Flex>
+    <React.Fragment>
+      {userInfo.UID ? (
+        <Flex>
+          <Avatar src={userInfo?.NftImage} scale="sm" />
+          <Box>
+            <UserTitle>OliNe</UserTitle>
+            <UserDesc>@0x3...d39</UserDesc>
+          </Box>
+        </Flex>
+      ) : (
+        <></>
+      )}
+    </React.Fragment>
   );
 });

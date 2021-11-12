@@ -9,7 +9,7 @@ import { storeAction } from 'store';
 import { ConnectWalletButton } from 'components';
 import { useLogin, useSignIn } from '../hooks';
 import { Api } from 'apis';
-
+import { useTranslation } from 'contexts/Localization';
 import useAuth from 'hooks/useAuth';
 
 const SubTitle = styled(Text)`
@@ -17,6 +17,7 @@ const SubTitle = styled(Text)`
 `;
 const TextTips = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
+  text-align: justify;
 `;
 const ConnectWallet = styled(Flex)`
   flex-direction: column;
@@ -34,6 +35,7 @@ export const LoginJoin: React.FC = React.memo(() => {
   const { loginCallback } = useLogin();
   const { siginInVerify, getUserName, getNftUrl } = useSignIn();
   const { account } = useWeb3React();
+  const { t } = useTranslation();
 
   const redict = location?.state?.from;
   const [state, setState] = useImmer({
@@ -90,15 +92,15 @@ export const LoginJoin: React.FC = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="29px" bold>
-        欢迎加入恐龙社区
+      <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+        {t('loginWelcome')}
       </Text>
-      <SubTitle>平台beta 版本试运营中，目前仅限持有恐龙创世NFT的用户可以注册</SubTitle>
+      <SubTitle>{t('loginSubTitle')}</SubTitle>
       <ConnectWallet>
         <img width="40%" src={require('../images/login_right_images.png').default} />
         <ConnectWalletButton />
       </ConnectWallet>
-      <TextTips>使用您的数字钱包账号即可免费创建并登录恐龙社区，平台不会保存您的任何钱包敏感数据，请妥善保管您的钱包，丢失钱包则无法登录平台</TextTips>
+      <TextTips>{t('loginSubTips')}</TextTips>
     </Box>
   );
 });

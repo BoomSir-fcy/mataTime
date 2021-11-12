@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Box } from 'uikit';
 import { Link } from 'react-router-dom';
-import { ProfileMenu, Avatar, Icon } from 'components';
+import { ProfileMenu, Icon } from 'components';
 
 import menuData from './menuData';
 
@@ -81,30 +81,7 @@ export const MenuList = (props: { menuList: any[] }) => {
     </>
   );
 };
-const UserTitle = styled.div`
-  margin: 0 12px;
-  font-weight: 700;
-  font-size: 18px;
-  color: #fff;
-  ::after {
-    position: relative;
-    right: -50px;
-    content: '';
-    display: inline-block;
-    width: 0px;
-    height: 0px;
-    border-bottom: 7px solid transparent;
-    border-left: 7px solid #fff;
-    border-right: 7px solid transparent;
-    border-top: 7px solid transparent;
-  }
-`;
-const UserDesc = styled.div`
-  margin: 0 12px;
-  font-size: 16px;
-  font-weight: 400;
-  color: #b5b5b5;
-`;
+
 export const Menu: React.FC = () => {
   return (
     <MenuBox>
