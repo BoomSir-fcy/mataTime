@@ -1,122 +1,131 @@
-import React, { useState } from 'react'
-import styled from "styled-components";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useImmer } from 'use-immer';
 import { Flex, Button } from 'uikit';
+import { Select } from 'components';
+import { useStore } from 'store';
 import { Api } from 'apis';
-import { Handle } from 'src/uikit/components/Toggle/StyledToggle';
 
 const FormBox = styled.div`
-padding:35px 27px 43px 41px;
-margin-top:13px;
-background:#191F2D; 
-border-radius: 10px;
-`
+  padding: 35px 27px 43px 41px;
+  margin-top: 13px;
+  background: #191f2d;
+  border-radius: 10px;
+`;
 const Title = styled.div`
-color:#fff;
-line-height: 50px;
-`
+  color: #fff;
+  line-height: 50px;
+`;
 const Rows = styled(Flex)`
-justify-content: space-around;
-margin-bottom:26px;
-textarea { 
-background: #292D34;
-width:381px;
-height:210px;
-color:#B5B5B5;
-padding:15px;
-border-radius: 10px;
-border:none;
-outline:none;
-resize: none;
-}
-select {
-width:381px;
-height:50px;
-padding:16px;
-border-radius: 10px;
-color:#fff;
-border:none;
-outline:none;
-background: #292D34;
-}
-`
+  justify-content: space-around;
+  margin-bottom: 26px;
+  textarea {
+    background: #292d34;
+    width: 381px;
+    height: 210px;
+    color: #b5b5b5;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+  select {
+    width: 381px;
+    height: 50px;
+    padding: 16px;
+    border-radius: 10px;
+    color: #fff;
+    border: none;
+    outline: none;
+    background: #292d34;
+  }
+`;
 const InputRows = styled(Flex)`
-justify-content: space-between;
-border-radius: 10px;
-padding:13px 9px;
-background: #292D34;
-width:381px;
-height:50px;
-input {
-  color:#B5B5B5;
-  padding:14px 13px 14px 26px;
-  background: #292D34;
-  border:none;
-  outline:none;
-}
-`
+  justify-content: space-between;
+  border-radius: 10px;
+  padding: 13px 9px;
+  background: #292d34;
+  width: 381px;
+  height: 50px;
+  input {
+    color: #b5b5b5;
+    padding: 14px 13px 14px 26px;
+    background: #292d34;
+    border: none;
+    outline: none;
+  }
+`;
 const Uaddres = styled.div`
-width: 124px;
-height:26px;
-line-height:26px;
-color:#fff;
-background:#4D535F;
-border-radius: 10px;
-text-align:center;
-font-size:14px;
-`
+  width: 124px;
+  height: 26px;
+  line-height: 26px;
+  color: #fff;
+  background: #4d535f;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+`;
 const Msg = styled.div`
-margin-top:14px;
-color:#B5B5B5;
-font-size:#B5B5B5;
-`
+  margin-top: 14px;
+  color: #b5b5b5;
+  font-size: #b5b5b5;
+`;
 const RadioBox = styled.div`
-width:381px;
-height:50px;
-line-height: 50px;
-padding-left: 13px;
-span {
-  color:#fff;
-  margin-right:38px;
-}
-`
+  width: 381px;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 13px;
+  span {
+    color: #fff;
+    margin-right: 38px;
+  }
+`;
 
 const FormInput: React.FC = () => {
-  const [nikeNameState, setNikeName] = useState('Baby fuck me')
-  const [typeState, setTypeState] = useState('zero')
-  const [txtAreaState, setTxtAreaState] = useState('')
-  const [selectState, setSelectState] = useState('')
+  const [typeState, setTypeState] = useState('zero');
+  const [txtAreaState, setTxtAreaState] = useState('');
+  const [selectState, setSelectState] = useState('');
+  const country = useStore(p => p.appReducer.localtion);
+  const [state, setState] = useImmer({
+    nick_name: '',
+    display_format: 0,
+    introduction: '',
+    background_image: '',
+    location: 0
+  });
 
-  // 设置昵称
-  const handleChangeNikeName = (e) => {
-    setNikeName(e.target.value)
-    console.log('nikeNameState', nikeNameState);
-    return {
-      type: 'nikename',
-      value: nikeNameState
-    }
-  }
   // 显示格式
-  const handleChangeRadio = (e) => {
-    setTypeState(e.target.value)
+  const handleChangeRadio = e => {
+    setTypeState(e.target.value);
     console.log('typeState', typeState);
-  }
+  };
   // 个人简介
-  const handleChangeTxtArea = (e) => {
-    setTxtAreaState(e.target.value)
+  const handleChangeTxtArea = e => {
+    setTxtAreaState(e.target.value);
     console.log('txtAreaState', txtAreaState);
-  }
+  };
   // 所在国家
-  const handleChangeSelect = (e) => {
-    setSelectState(e.target.value)
+  const handleChangeSelect = e => {
+    setSelectState(e.target.value);
     console.log(e.target.value);
-  }
+  };
+
   return (
     <FormBox>
       <Rows>
         <Title>* 设置昵称</Title>
         <div>
           <InputRows>
-            <input type="text" onChange={handleChangeNikeName} value={nikeNameState} />
+            <input
+              type="text"
+              onChange={event =>
+                setState(p => {
+                  p.nick_name = event.target.value;
+                })
+              }
+              value={state.nick_name}
+            />
             <Uaddres>0x259.....d59w5</Uaddres>
           </InputRows>
           <Msg>4~32个字符，支持中英文、数字</Msg>
@@ -140,13 +149,10 @@ const FormInput: React.FC = () => {
       </Rows>
       <Rows>
         <Title>* 所在国家</Title>
-        <select onChange={handleChangeSelect} value={selectState}>
-          <option value="China">中国（CH）</option>
-          <option value="America">美国（US）</option>
-        </select>
+        <Select options={country} defaultId={1} onChange={(val: any) => console.log(val)} />
       </Rows>
     </FormBox>
-  )
-}
+  );
+};
 
 export default FormInput;

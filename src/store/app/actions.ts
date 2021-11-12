@@ -9,6 +9,7 @@ export interface toastInterface {
 
 export const toggleTheme = createAction('app/toggleTheme');
 export const setSystemCustom = createAction<systemCustom>('app/set/systemCustom');
+export const setLocation = createAction<[]>('app/set/location');
 export const toastShow = createAction<toastInterface>('toast/show');
 export const toastContainer = createAction<ToastContainerProps>('toast/toastContainer');
 export const toastHide = createAction('toast/hide');
