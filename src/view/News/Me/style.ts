@@ -12,4 +12,5 @@ export const MeItemWrapper = styled(Card)`
     margin-bottom: 15px;
     box-sizing: border-box;
     padding: 25px;
+    overflow: visible;
 `

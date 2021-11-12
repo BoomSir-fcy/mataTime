@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Card, Text, Radio, Input } from 'uikit';
+import { useSelector } from 'react-redux'
 import { Logo, Icon, Avatar } from 'components';
 
 import { mediaQueriesSize } from "uikit/theme/base";
@@ -114,6 +115,7 @@ type IProps = {
 }
 
 export const CommonLeftMenu = React.memo((props: IProps) => {
+  const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const { pathname } = props.route
   const [msgNum, setMsgNum] = useState<any>({})
 
@@ -162,7 +164,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
       <BackWarpper onClick={() => {
         props.history.push('/')
       }}>
-        <Icon name={'icon-fanhui'}></Icon>
+        <Icon color={isDark ? '#ffffff' : '#4168ED'} name={'icon-fanhui'}></Icon>
         <span>返回</span>
       </BackWarpper>
       <MenuBody>
@@ -179,7 +181,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
                 }}
               >
                 <MenuIcon>
-                  <Icon name={item.icon}></Icon>
+                  <Icon color={isDark ? '#ffffff' : '#7A83A0'} name={item.icon}></Icon>
                   {
                     msgNum[item.alias] ? <span>{msgNum[item.alias]}</span> : null
                   }
