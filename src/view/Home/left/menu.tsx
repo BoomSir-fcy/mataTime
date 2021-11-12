@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Box } from 'uikit';
 import { Link } from 'react-router-dom';
+import { ProfileMenu, Avatar, Icon } from 'components';
+
 import menuData from './menuData';
-import { Avatar, Icon } from 'components';
+
 const MenuBox = styled(Flex)`
   flex-direction: column;
   justify-content: space-between;
@@ -111,13 +113,7 @@ export const Menu: React.FC = () => {
         <MenuList menuList={menuData}></MenuList>
       </Box>
       <Link to="/me">
-        <Flex>
-          <Avatar src="" scale="sm" />
-          <Box>
-            <UserTitle>OliNe</UserTitle>
-            <UserDesc>@0x3...d39</UserDesc>
-          </Box>
-        </Flex>
+        <ProfileMenu />
       </Link>
     </MenuBox>
   );
