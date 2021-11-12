@@ -3,7 +3,13 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import styled from 'styled-components';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
-import { ArticleList } from '../Home/center/ArticleList'
+import { List } from 'components';
+import MentionItem from 'view/News/components/MentionItem';
+import MentionOperator from 'view/News/components/MentionOperator';
+import {
+  NewsMeWrapper,
+  MeItemWrapper
+} from 'view/News/Me/style';
 
 const Header = styled(Flex)`
   width:100%;
@@ -43,18 +49,94 @@ overflow:hidden;
   color:#fff;
 }
 `
+const ArticleListBox = styled.div`
+color:#fff;
+`
+enum MoreOperatorEnum {
+  SHIELD = 'SHIELD', // 屏蔽
+  SETTOP = 'SETTOP',
+  DELPOST = 'DELPOST'
+}
+const Collect = (props) => {
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [listData, setListData] = useState([])
+  const [totalPage, setTotalPage] = useState(2)
 
-const Collect = () => {
-  const [collectAry, setCollectAry] = useState([])
+  // 更新列表
+  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    console.log(type)
+    let arr = []
+    listData.forEach((item: any) => {
+      let obj = item
+      if (item.id === newItem.id) {
+        obj = { ...newItem.post }
+      }
+      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+        // 屏蔽、删除
+      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
+        // 置顶
+        arr.unshift(obj)
+      } else {
+        arr.push(obj)
+      }
+    })
+    setListData([...arr])
+  }
+  const goDetils = (e) => {
+    e.preventdefault()
+    // if (props.match.path === '/articleDetils/:id') return
+    // props.history.push('/articleDetils/' + id)
+  }
   // 收藏列表
-  const getCollectList = async () => {
-    try {
-      const res = await Api.MeApi.collectList()
-      console.log('收藏列表', res);
-      setCollectAry(res.data.list)
-    } catch (error) {
-      console.log(error);
-    }
+  const ArticleList = () => {
+    return (
+      <ArticleListBox>
+        <List marginTop={410} loading={page <= totalPage} renderList={() => {
+          if (loading || page > totalPage) return false
+          setLoading(true)
+          Api.MeApi.collectList().then(res => {
+            setLoading(false)
+            if (res.msg === 'success') {
+              setPage(page + 1)
+              setTotalPage(res.data.total_num)
+              setListData([...listData, ...res.data.list])
+            }
+          })
+        }}>
+          {listData.map((item, index) => {
+            return (
+              <MeItemWrapper onClick={() => goDetils} key={index}>
+                <MentionItem {...props} itemData={{
+                  ...item,
+                  post_id: item.id,
+                  post: {
+                    ...item,
+                    post_id: item.id,
+                  }
+                }} callback={(item: any, type: MoreOperatorEnum) => {
+                  updateList(item, type)
+                }}>
+                </MentionItem>
+                <MentionOperator itemData={{
+                  ...item,
+                  post_id: item.id,
+                  post: {
+                    ...item,
+                    post_id: item.id
+                  }
+                }} callback={(item: any) => {
+                  updateList(item)
+                }} />
+              </MeItemWrapper>
+            )
+          })}
+        </List>
+      </ArticleListBox >
+    )
+  }
+  ArticleList.defaultProps = {
+    data: Array(6).fill(null)
   }
   // 取消收藏
   const cancelCollect = async (post_id: number) => {
@@ -85,7 +167,7 @@ const Collect = () => {
     }
   }
   useEffect(() => {
-    getCollectList()
+    // getCollectList()
   }, [])
   return (
     <Box>
@@ -93,12 +175,11 @@ const Collect = () => {
         <div className="title">个人主页</div>
         <div>
           <span className="myFollow">我的收藏</span>
-          <span className="msg">{collectAry.length}条</span>
+          <span className="msg">{listData.length}条</span>
         </div>
       </Header>
       <Box style={{ marginTop: '14px' }}>
-        {/* <Button onClick={() => addCollect(1)}>按钮</Button> */}
-        {/* <ArticleList /> */}
+        {ArticleList()}
       </Box>
     </Box >
   )
