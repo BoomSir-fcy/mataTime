@@ -7,7 +7,7 @@ import { useStore } from 'store';
 import { Api } from 'apis';
 
 const FormBox = styled.div`
-  padding: 35px 27px 43px 41px;
+  padding: 35px 40px;
   margin-top: 13px;
   background: #191f2d;
   border-radius: 10px;
@@ -15,9 +15,11 @@ const FormBox = styled.div`
 const Title = styled.div`
   color: #fff;
   line-height: 50px;
+  min-width: 80px;
+  margin-right: 40px;
 `;
 const Rows = styled(Flex)`
-  justify-content: space-around;
+  justify-content: flex-start;
   margin-bottom: 26px;
   textarea {
     background: #292d34;
@@ -75,7 +77,6 @@ const RadioBox = styled.div`
   width: 381px;
   height: 50px;
   line-height: 50px;
-  padding-left: 13px;
   span {
     color: #fff;
     margin-right: 38px;
@@ -83,38 +84,19 @@ const RadioBox = styled.div`
 `;
 
 const FormInput: React.FC = () => {
-  const [typeState, setTypeState] = useState('zero');
-  const [txtAreaState, setTxtAreaState] = useState('');
-  const [selectState, setSelectState] = useState('');
   const country = useStore(p => p.appReducer.localtion);
   const [state, setState] = useImmer({
     nick_name: '',
-    display_format: 0,
+    display_format: 1,
     introduction: '',
     background_image: '',
     location: 0
   });
 
-  // 显示格式
-  const handleChangeRadio = e => {
-    setTypeState(e.target.value);
-    console.log('typeState', typeState);
-  };
-  // 个人简介
-  const handleChangeTxtArea = e => {
-    setTxtAreaState(e.target.value);
-    console.log('txtAreaState', txtAreaState);
-  };
-  // 所在国家
-  const handleChangeSelect = e => {
-    setSelectState(e.target.value);
-    console.log(e.target.value);
-  };
-
   return (
     <FormBox>
       <Rows>
-        <Title>* 设置昵称</Title>
+        <Title>*设置昵称</Title>
         <div>
           <InputRows>
             <input
@@ -132,18 +114,46 @@ const FormInput: React.FC = () => {
         </div>
       </Rows>
       <Rows>
-        <Title>* 显示格式</Title>
+        <Title>*显示格式</Title>
         <RadioBox>
-          <form onChange={handleChangeRadio}>
-            <input type="radio" name="gs" value="domain" /> <span>0x 格式</span>
-            <input type="radio" name="gs" value="zero" /> <span>域名格式</span>
-          </form>
+          <input
+            type="radio"
+            name="gs"
+            checked={state.display_format === 1}
+            onChange={event =>
+              setState(p => {
+                p.display_format = Number(event.target.value);
+              })
+            }
+            value="1"
+          />{' '}
+          <span>0x格式</span>
+          <input
+            type="radio"
+            name="gs"
+            checked={state.display_format === 2}
+            onChange={event =>
+              setState(p => {
+                p.display_format = Number(event.target.value);
+              })
+            }
+            value="2"
+          />{' '}
+          <span>域名格式</span>
         </RadioBox>
       </Rows>
       <Rows>
-        <Title>* 个人简介</Title>
+        <Title>*个人简介</Title>
         <div>
-          <textarea placeholder="请填写您的个人资料简介" onChange={handleChangeTxtArea} value={txtAreaState} />
+          <textarea
+            placeholder="请填写您的个人资料简介"
+            onChange={event =>
+              setState(p => {
+                p.introduction = event.target.value;
+              })
+            }
+            value={state.introduction}
+          />
           <Msg>1~140个字符</Msg>
         </div>
       </Rows>
