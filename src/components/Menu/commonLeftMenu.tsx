@@ -159,7 +159,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
   return (
     <MenuWarpper>
       <LogoWarpper>
-        <Logo url="/" src={require('assets/images/logo.svg').default} />
+        <Logo url="/" src={require(isDark ? 'assets/images/logo.svg' : 'assets/images/light_logo.svg').default} />
       </LogoWarpper>
       <BackWarpper onClick={() => {
         props.history.push('/')

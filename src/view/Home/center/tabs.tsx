@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import styled from "styled-components";
-import { Flex, Button } from 'uikit'
-export const TabsBox = styled(Flex)`
-margin-bottom: 12px;
-line-height:60px;
-padding-left:16px;
-background: #191F2D;
-border-radius: 10px;
+import { Flex, Button, Card } from 'uikit'
+export const TabsBox = styled(Card)`
+  margin-bottom: 12px;
+  line-height:60px;
+  padding-left:16px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
 const TableLeftBox = styled(Flex)`
 font-size: 14px;
 font-weight: 400;
-color: #B5B5B5;
+color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
 & div{
   padding:0 20px;
   cursor:pointer;
@@ -19,7 +21,7 @@ color: #B5B5B5;
 .leftActive{
   font-size: 18px;
   font-weight: bold;
-  color: #FFFFFF;
+  color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
 }
  `
 const TableRightBox = styled(Flex)`
@@ -60,7 +62,7 @@ export const Tabs = (props: propsType) => {
     tabRightChange(item)
   }
   return (
-    <TabsBox justifyContent="space-between">
+    <TabsBox>
       {tabLeftArr.length > 0 ?
         <TableLeftBox >
           {
