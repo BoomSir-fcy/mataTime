@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
 import { CommentList } from 'src/components/Layout/ArticleDetilsLayout/CommentList';
+import { Link } from 'react-router-dom';
+import moreIcon from 'assets/images/social/more.png';
 import { Box, Button, Flex } from 'uikit';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
@@ -10,14 +12,17 @@ const Title = styled(Box)`
 color:#fff;
 font-weight:bold;
 `
-const Content = styled(Box)`
+const ArticleListBox = styled.div`
+color:#fff;
+`
+const Content = styled(Flex)`
 width:100%;
-height:715px;
-padding:29px 19px;
+padding:29px 18px 31px 29px;
 background:#191F2D;
 border-radius: 10px;
-margin-top:10px;
+margin-top:14px;
 overflow:hidden;
+justify-content: space-between;
 `
 const Header = styled(Flex)`
 justify-content: space-between;
@@ -27,25 +32,117 @@ padding:0 16px;
 background:#191F2D;
 border-radius:10px;
 `
-const FloatR = styled(Box)`
-float:right;
+const More = styled(Box)`
+width: 25px;
+cursor: pointer;
 `
-
-const Praise = React.memo(() => {
-  // 点赞列表
+const Msg = styled(Flex)`
+height:50px;
+justify-content: space-between;
+flex-direction: column;
+margin-right:27px;
+float: left;
+`
+const Time = styled(Box)`
+font-size:14px;
+color:#B5B5B5;
+`
+const Name = styled(Box)`
+color:#fff;
+font-weight:bold;
+font-size:18px;
+`
+const Center = styled(Box)`
+width: 80%;
+`
+const Detail = styled(Box)`
+width:100%;
+margin:22px 0 28px 0;
+}
+`
+const IconFont = styled(Box)`
+float:left;
+margin-right:60px;
+span {
+  margin-left:12px;
+  display: inline-block;
+  font-size:16px;
+  color:#B5B5B5;
+}
+`
+const Praise = React.memo((props) => {
+  const [listData, setListData] = useState([])
+  // 跳转详情页
+  console.log('点赞列表', listData);
+  // 获取点赞列表
   const getPraiseList = async () => {
     try {
-      const res = await Api.MeApi.praiseList()
-      console.log('点赞列表', res);
+      const res = await Api.MeApi.collectList()
+      setListData(res.data.list)
     } catch (error) {
       console.log(error);
     }
+  }
+  // 点赞列表组件
+  const PraiseList = () => {
+    return (
+      <div>
+        {
+          listData.map((item, index) => {
+            return (
+              <Content key={index}>
+                <Avatar src={item.nft_image} scale="md" style={{ float: 'left', marginRight: "23px" }} />
+
+                <Center>
+                  <div>
+                    <Msg>
+                      <Name>{item.nick_name}</Name>
+                      <Time>{item.post_time_desc}</Time>
+                    </Msg>
+                    <Button variant="secondary" style={{ marginTop: '10px' }}>#老表的吃货天堂</Button>
+                  </div>
+                  <Link to={'/articleDetils/' + item.id}>
+                    <Detail>
+                      <div className="content" dangerouslySetInnerHTML={{ __html: item.content }} />
+                    </Detail>
+                  </Link>
+                  <IconFont>
+                    <Icon className="iconfont" name={'icon-pinglun'} color={'#B5B5B5'}></Icon>
+                    <span>{item.comment_num || 0}</span>
+                  </IconFont>
+                  <IconFont>
+                    <Icon className="iconfont" name={'icon-retweet'} color={'#B5B5B5'}></Icon>
+                    <span>{item.share_num || 0}</span>
+                  </IconFont>
+                  {
+                    item.like_status === 0 ? (
+                      <IconFont>
+                        <Icon onClick={() => praiseUser(item.id)} className="iconfont" name={'icon-aixin'} color={'#B5B5B5'}></Icon>
+                        <span>{item.like_num || 0}</span>
+                      </IconFont>
+                    ) : (
+                      <IconFont>
+                        <Icon onClick={() => unPraiseUser(item.id)} className="iconfont" name={'icon-aixin1'} color={'#EC612B'}></Icon>
+                        <span>{item.like_num || 0}</span>
+                      </IconFont>
+                    )
+                  }
+                </Center>
+
+                <More style={{ float: 'right' }}><img src={moreIcon} alt="more" /></More>
+              </Content>
+            )
+          })
+        }
+      </div >
+    )
   }
   // 点赞用户
   const praiseUser = async (post_id: number) => {
     try {
       const res = await Api.MeApi.praiseUser(post_id)
       if (res.code === 1) {
+        getPraiseList()
         toast.success(res.data)
       } else {
         toast.warning(res.data)
@@ -61,6 +158,7 @@ const Praise = React.memo(() => {
       const res = await Api.MeApi.unPraiseUser(post_id)
       console.log('取消点赞', res)
       if (res.code === 1) {
+        getPraiseList()
         toast.success(res.data)
       } else {
         toast.warning(res.data)
@@ -108,7 +206,7 @@ const Praise = React.memo(() => {
     getContentDetail(1)
   }, [])
   return (
-    <Box>
+    <ArticleListBox>
       <Header>
         <Title>个人主页</Title>
         <div>
@@ -116,11 +214,8 @@ const Praise = React.memo(() => {
           <Button>今日新增</Button>
         </div>
       </Header>
-
-      <Content>
-        <Button onClick={() => unPraiseUser(9)}>点赞</Button>
-      </Content>
-    </Box>
+      {PraiseList()}
+    </ArticleListBox>
   )
 })
 
