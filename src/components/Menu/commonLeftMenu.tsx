@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Box, Flex, Card, Text } from 'uikit';
 import { useSelector } from 'react-redux';
 import { Logo, Icon, ProfileMenu } from 'components';
+import { useTranslation } from 'contexts/Localization'
 
 import { mediaQueriesSize } from 'uikit/theme/base';
 
@@ -96,6 +97,7 @@ type IProps = {
 };
 
 export const CommonLeftMenu = React.memo((props: IProps) => {
+  const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const { pathname } = props.route;
   const [msgNum, setMsgNum] = useState<any>({});
@@ -146,7 +148,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
         }}
       >
         <Icon color={isDark ? '#ffffff' : '#4168ED'} name={'icon-fanhui'}></Icon>
-        <span>返回</span>
+        <span>{t('newsBack')}</span>
       </BackWarpper>
       <MenuBody>
         {props.menu.map((item: any) => {
@@ -164,7 +166,8 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
                 <Icon color={isDark ? '#ffffff' : '#7A83A0'} name={item.icon}></Icon>
                 {msgNum[item.alias] ? <span>{msgNum[item.alias]}</span> : null}
               </MenuIcon>
-              <MenuText>{item.name}</MenuText>
+              {/* <MenuText>{item.name}</MenuText> */}
+              <MenuText>{t(item.transaltion)}</MenuText>
             </MenuItems>
           );
         })}
