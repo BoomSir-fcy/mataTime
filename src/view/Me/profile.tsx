@@ -78,23 +78,27 @@ const Content = styled(Box)`
       color: ${({ theme }) => theme.colors.textTips};
       ${mediaQueriesSize.marginr}
     }
+    button + button {
+      margin-left: 15px;
+    }
   }
 `;
 
-const Profile = React.memo(() => {
+const Profile: React.FC<any> = React.memo(props => {
   const [stateUserInfo, setUserInfo] = useState<Api.User.userInfoParams>({
     UID: 0,
-    NickName: '',
+    nick_name: '',
     fans_num: 0,
     attention_num: 0,
     email: '',
-    Introduction: '',
-    Location: ''
+    introduction: '',
+    location: '',
+    label_list: []
   });
 
   const getUserInfo = async () => {
     try {
-      const res = await Api.UserApi.getUserInfo();
+      const res = await Api.MeApi.getProfile(props.match?.params?.uid);
       setUserInfo({
         ...res.data
       });
@@ -115,16 +119,16 @@ const Profile = React.memo(() => {
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end">
-              <Avatar scale="xl" src={stateUserInfo.NftImage} />
+              <Avatar scale="xl" src={stateUserInfo.nft_image} />
               <Desc>
-                <Text className="name">{stateUserInfo.NickName}</Text>
+                <Text className="name">{stateUserInfo.nick_name}</Text>
                 <Flex mb="5px">
                   <Flex>
                     <Certification />
                     <Text className="text">@0x3...d39</Text>
                   </Flex>
                   <Flex className="marginLeft">
-                    <Text className="text">{stateUserInfo.Location}</Text>
+                    <Text className="text">{stateUserInfo.location}</Text>
                   </Flex>
                 </Flex>
                 <Text className="text">177条动态</Text>
@@ -158,7 +162,11 @@ const Profile = React.memo(() => {
             </Flex>
             <Flex className="topic">
               <Text className="text">活跃话题</Text>
-              <Button variant="secondary">#DSG</Button>
+              {stateUserInfo?.label_list.map((row: string, index: number) => (
+                <Button variant="secondary" key={index}>
+                  #{row}
+                </Button>
+              ))}
             </Flex>
           </Content>
         </ProfileInfo>

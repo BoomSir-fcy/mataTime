@@ -82,10 +82,6 @@ const RadioBox = styled.div`
   }
 `;
 
-interface profile {
-  finishSubmit?: (event: Api.User.updateProfileParams) => void;
-}
-
 const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
   const profile: any = useStore(p => p.loginReducer.userInfo);

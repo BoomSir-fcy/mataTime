@@ -16,7 +16,8 @@ declare namespace Api {
       Introduction?: string;
       location?: string;
       Location?: string;
-      NftImage?: string;
+      nft_image?: string;
+      label_list?: string[];
     }
 
     interface updateProfileParams {
