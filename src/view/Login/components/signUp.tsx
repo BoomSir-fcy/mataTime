@@ -32,12 +32,6 @@ const WalletBody = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;
-const SubTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.textOrigin};
-`;
-const TextTips = styled(Text)`
-  color: ${({ theme }) => theme.colors.textTips};
-`;
 const FailButton = styled(Button)`
   width: 205px;
   margin-bottom: 23px;
@@ -63,7 +57,7 @@ const SignUpFail = () => {
         </FailButton>
         <FailButton scale="ld"> {t('loginGetNft')}</FailButton>
       </Flex>
-      <SubTitle>{t('loginSignUpFail')}</SubTitle>
+      <Text color="textOrigin">{t('loginSignUpFail')}</Text>
     </Flex>
   );
 };
@@ -115,7 +109,7 @@ export const SignUp: React.FC<{
           <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
             {t('loginWelcome')}
           </Text>
-          <SubTitle>{t('loginSubTitle')}</SubTitle>
+          <Text color="textOrigin">{t('loginSubTitle')}</Text>
           <SignUpWarpper>
             <WalletAddress address={account} />
             {!isSignup ? (
@@ -126,7 +120,7 @@ export const SignUp: React.FC<{
               <SignUpFail />
             )}
           </SignUpWarpper>
-          <TextTips>{t('loginSubTips')}</TextTips>
+          <Text color="textTips">{t('loginSubTips')}</Text>
         </React.Fragment>
       )}
       {singUpStep === 2 && (
