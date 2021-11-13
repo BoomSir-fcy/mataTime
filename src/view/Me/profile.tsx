@@ -84,13 +84,14 @@ const Content = styled(Box)`
 const Profile = React.memo(() => {
   const [stateUserInfo, setUserInfo] = useState<Api.User.userInfoParams>({
     UID: 0,
-    nick_name: '',
+    NickName: '',
     fans_num: 0,
     attention_num: 0,
     email: '',
     Introduction: '',
-    location: ''
+    Location: ''
   });
+
   const getUserInfo = async () => {
     try {
       const res = await Api.UserApi.getUserInfo();
@@ -101,9 +102,11 @@ const Profile = React.memo(() => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getUserInfo();
   }, []);
+
   return (
     <Box>
       <Crumbs title="个人主页" />
@@ -112,16 +115,16 @@ const Profile = React.memo(() => {
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end">
-              <Avatar scale="xl" />
+              <Avatar scale="xl" src={stateUserInfo.NftImage} />
               <Desc>
-                <Text className="name">{stateUserInfo.nick_name}</Text>
+                <Text className="name">{stateUserInfo.NickName}</Text>
                 <Flex mb="5px">
                   <Flex>
                     <Certification />
                     <Text className="text">@0x3...d39</Text>
                   </Flex>
                   <Flex className="marginLeft">
-                    <Text className="text">{stateUserInfo.location}</Text>
+                    <Text className="text">{stateUserInfo.Location}</Text>
                   </Flex>
                 </Flex>
                 <Text className="text">177条动态</Text>

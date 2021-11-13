@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Flex, Button } from 'uikit';
+import { Flex } from 'uikit';
 import { Select } from 'components';
 import { useStore } from 'store';
-import { Api } from 'apis';
 
 const FormBox = styled.div`
   padding: 35px 40px;
@@ -52,7 +51,7 @@ const InputRows = styled(Flex)`
   height: 50px;
   input {
     color: #b5b5b5;
-    padding: 14px 13px 14px 26px;
+    padding: 14px 13px 14px 0;
     background: #292d34;
     border: none;
     outline: none;
@@ -83,15 +82,26 @@ const RadioBox = styled.div`
   }
 `;
 
-const FormInput: React.FC = () => {
+interface profile {
+  finishSubmit?: (event: Api.User.updateProfileParams) => void;
+}
+
+const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
-  const [state, setState] = useImmer({
-    nick_name: '',
-    display_format: 1,
-    introduction: '',
-    background_image: '',
-    location: 0
+  const profile: any = useStore(p => p.loginReducer.userInfo);
+  const [state, setState] = useImmer<Api.User.updateProfileParams>({
+    nick_name: profile.NickName,
+    display_format: profile.DisplayFormat,
+    introduction: profile.Introduction,
+    background_image: profile.BackgroundImage,
+    location: profile.Location
   });
+
+  useImperativeHandle(ref, () => ({
+    getFrom() {
+      return state;
+    }
+  }));
 
   return (
     <FormBox>
@@ -126,7 +136,7 @@ const FormInput: React.FC = () => {
               })
             }
             value="1"
-          />{' '}
+          />
           <span>0x格式</span>
           <input
             type="radio"
@@ -138,7 +148,7 @@ const FormInput: React.FC = () => {
               })
             }
             value="2"
-          />{' '}
+          />
           <span>域名格式</span>
         </RadioBox>
       </Rows>
@@ -158,11 +168,19 @@ const FormInput: React.FC = () => {
         </div>
       </Rows>
       <Rows>
-        <Title>* 所在国家</Title>
-        <Select options={country} defaultId={1} onChange={(val: any) => console.log(val)} />
+        <Title>*所在国家</Title>
+        <Select
+          options={country}
+          defaultId={1}
+          onChange={(val: any) =>
+            setState(p => {
+              p.location = val.value;
+            })
+          }
+        />
       </Rows>
     </FormBox>
   );
-};
+});
 
 export default FormInput;
