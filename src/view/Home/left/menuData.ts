@@ -40,7 +40,7 @@ const menuArr = [
     icon: 'icon-w31shezhi',
     activeIcon: 'icon-a-31shezhi1',
     title: '设置',
-    path: '/set'
+    path: '/set/safeset'
   }
 ];
 export default menuArr;
