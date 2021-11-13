@@ -17,6 +17,8 @@ export const Swap: React.FC = () => {
   const [isDark] = useThemeManager()
   const { onConnectWallet } = useConnectWallet()
 
+  // TODO: 样式不统一  待优化
+
   return (
     <SwapBox>
       <MiniSwap resetTheme={{
