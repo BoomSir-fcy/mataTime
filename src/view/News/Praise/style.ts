@@ -1,12 +1,12 @@
 import styled from 'styled-components';
+import { Card } from 'uikit'
 
 export const NewsPraiseWrapper = styled.div`
     width: 100%;
 `
 
-export const PraiseItemWrapper = styled.div`
+export const PraiseItemWrapper = styled(Card)`
     width: 100%;
-    background: #191F2D;
     border-radius: 10px;
     margin-bottom: 15px;
     box-sizing: border-box;
@@ -28,7 +28,7 @@ export const PraiseItemWrapper = styled.div`
     }
     .comment-content{
       width: calc(100% + 50px);
-      background: #2B303F;
+      background: ${({ theme }) => theme.isDark ? '#2B303F' : '#EAF2FF'};
       box-sizing: border-box;
       padding: 20px 98px;
       margin-left: -25px;

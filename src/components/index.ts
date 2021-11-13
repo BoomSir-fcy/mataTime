@@ -13,4 +13,5 @@ export * from './Icon';
 export * from './Popup';
 export * from './List';
 export * from './Select';
-export * from './ImgList'
+export * from './ImgList';
+export * from './Upload';

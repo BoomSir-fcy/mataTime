@@ -6,7 +6,7 @@ import useConnectWallet from 'hooks/useConnectWallet';
 
 const WalletButton = styled(Button)`
   width: 205px;
-`
+`;
 
 export const ConnectWalletButton: React.FC = (props) => {
   const { t } = useTranslation()
@@ -19,6 +19,6 @@ export const ConnectWalletButton: React.FC = (props) => {
         {t('Connect Wallet')}
       </WalletButton>
     </Box>
-  )
-}
+  );
+};
 

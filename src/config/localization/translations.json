@@ -2,7 +2,7 @@
   "dataFormat": "YYYY-MM-DD",
   "wallet": "wallet",
   "Dark": "dark",
-
+  "connectWallet": "connect wallet",
 
   "翻译规范: key值使用英文字符串, value 为对应翻译值": "",
   "Example: This is a passage": "Example: This is a passage",
@@ -19,6 +19,25 @@
 
 
   "******start*****@kksam********": "@kksam翻译开始",
+  "loginWelcome": "Welcome To Join",
+  "loginSubTitle": "The beta version of the platform is in trial operation, and currently only users with Dinosaur Genesis NFT can register",
+  "loginSignUpFail": "You do not hold the corresponding NFT in your account, so you cannot register",
+  "loginFollow": "Recommend to follow popular users",
+  "loginSubTips": "You can use your digital wallet account to create and log in to the Dinosaur Community for free. The platform will not save any sensitive data of your wallet. Please keep your wallet properly. If you lose your wallet, you cannot log in to the platform.",
+  "loginCreatAccount": "Create Account",
+  "loginGetNft": "Get NFT",
+  "loginSignupSuccess": "registration success!",
+  "loginSignupSuccessText": "Thank you for joining the dinosaur social platform",
+  "loginSignupSuccessNextText": "Next, personal information",
+  "loginInputTitleAvatar": "*NFT Avatar",
+  "loginInputValueAvatar": "Show your dinosaur NFT avatar by default",
+  "loginInputTitleNickname": "*Set Nickname",
+  "loginInputValueNickname": "Up to 20 characters",
+  "loginSignUpNext": "Next step",
+  "loginSignUpChangeBatch": "Change Batch",
+  "loginSignUpComplete": "Complete SignUp",
+  "loginTeamText": "Terms of Service",
+  "loginPrivacyPolicyText": "Privacy Policy",
   "******end*****@kksam********": "@kksam翻译结束",
 
   

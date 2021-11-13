@@ -8,7 +8,7 @@ const initialState = {
   signUpFail: false,
   singUpStep: 1,
   userInfo: {
-    UID: 0 as number
+    UID: 0
   },
   nft: {
     nftID: 0,

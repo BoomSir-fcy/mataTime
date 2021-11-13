@@ -19,8 +19,6 @@ color:#fff;
 `
 
 export const ArticleList = (props) => {
-  console.log('ArticleListprops', props);
-
   const goDetils = (e) => {
     if (props.location.pathname === '/articleDetils') return
     props.history.push('/articleDetils')
@@ -30,8 +28,6 @@ export const ArticleList = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
-
-
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     console.log(type)

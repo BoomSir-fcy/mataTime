@@ -3,6 +3,8 @@ import { Box } from 'uikit';
 import ReactLoading from "react-loading";
 import styled from 'styled-components';
 
+import { store } from 'store';
+
 export const LoadingWrapper = styled(Box)`
   width: 100%;
   display: flex;
@@ -26,6 +28,7 @@ interface Iprops {
 }
 export class List extends React.Component<Iprops>{
   listBox: any
+  isDark: boolean;
   constructor(props: Iprops) {
     super(props)
     this.listBox = createRef()
@@ -38,6 +41,9 @@ export class List extends React.Component<Iprops>{
     this.props.renderList()
   }
   componentDidMount() {
+    this.setState({
+      isDark: store.getState().appReducer.systemCustom.isDark || true
+    })
     this.loadList()
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this))
   }
@@ -57,7 +63,7 @@ export class List extends React.Component<Iprops>{
         {
           this.props.loading ? (
             <LoadingWrapper>
-              <ReactLoading type={'cylon'} color="#fff" />
+              <ReactLoading type={'cylon'} color={this.isDark ? '#fff' : '#4168ED'} />
             </LoadingWrapper>
           ) : (
             <NoDataWrapper>已经到底了～</NoDataWrapper>
