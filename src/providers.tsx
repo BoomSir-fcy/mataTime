@@ -6,10 +6,11 @@ import { ThemeProvider } from 'styled-components';
 import { LanguageProvider } from 'contexts/Localization';
 import { store } from 'store';
 import { getLibrary } from 'utils';
+import { useThemeManager } from 'store/app/hooks';
 
 const ThemeProviderWrapper = props => {
-  // const theme = { main: "mediumseagreen" };
-  return <ThemeProvider theme={dark} {...props} />;
+  const [isDark] = useThemeManager();
+  return <ThemeProvider theme={isDark ? dark : light} {...props} />;
 };
 
 const Providers: React.FC = ({ children }) => {

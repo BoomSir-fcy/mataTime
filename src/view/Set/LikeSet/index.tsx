@@ -1,100 +1,105 @@
-import React from 'react'
-import styled from "styled-components";
-import { Flex, Box, Text, Button, Toggle } from 'uikit';
+import React from 'react';
+import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { useTranslation } from 'contexts/Localization';
+import { useThemeManager, useLanguange, useNotification } from 'store/app/hooks';
+import { Flex, Box, Text, Toggle } from 'uikit';
+import { Select } from 'components';
+import { languages } from 'config/localization';
+import { Api } from 'apis';
 
 const NoticeSetBox = styled.div`
-height: 707px;
-background: #191F2D;
-margin-top: 16px;
-padding: 27px 29px;
-border-radius: 10px;
-`
+  height: 707px;
+  background: #191f2d;
+  margin-top: 16px;
+  padding: 27px 29px;
+  border-radius: 10px;
+`;
 const Title = styled.div`
-color:#fff;
-font-weight: bold;
-`
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 12px;
+`;
 const Msg = styled(Text)`
-color:#B5B5B5;
-font-size:16px;
-`
+  color: #b5b5b5;
+  font-size: 16px;
+`;
 const Rows = styled(Flex)`
-justify-content: space-between;
-`
+  flex-direction: column;
+  justify-content: space-between;
+`;
 const Column = styled(Flex)`
-flex-direction: column;
-justify-content: space-around;
-padding-bottom:23px;
-margin-bottom:22px;
-border-bottom: 1px solid #4D535F;
-`
+  justify-content: space-between;
+  padding-bottom: 23px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #4d535f;
+`;
 
-const LikeSet = () => {
+const LikeSet: React.FC = () => {
+  const [isDark, toggleThemeHandle] = useThemeManager();
+  const [notification, setNotification] = useNotification();
+  const [languange, setUseLanguage] = useLanguange();
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
     isTranslation: false
-  })
-  // 深色模式
-  const setDeep = () => {
-    let bgImg = document.getElementById("bg")
-    setState(p => {
-      p.isDeep = !p.isDeep
-      if (state.isDeep) {
-        bgImg.style.backgroundImage = "url(../../../assets/images/background_images.jpg)"
-        bgImg.style.backgroundColor = "skyblue"
-      } else {
-        bgImg.style.backgroundColor = "skyblue"
-        bgImg.style.backgroundImage = ""
-      }
-    })
-  }
-  // 红点提醒
-  const setRemind = () => {
-    setState(p => {
-      p.isRemind = !p.isRemind
-    })
-  }
-  // 默认语言
+  });
+  const { t } = useTranslation();
+
   // 自动翻译
   const setTranslation = () => {
     setState(p => {
-      p.isTranslation = !p.isTranslation
-    })
-  }
+      p.isTranslation = !p.isTranslation;
+    });
+  };
 
   return (
     <NoticeSetBox>
       <Column>
         <Rows>
-          <Title>深色模式</Title>
-          <Toggle checked={state.isDeep} onClick={setDeep} />
+          <Title>{t('Dark')}</Title>
+          <Msg>可切换为深色模式，夜间浏览更舒服</Msg>
         </Rows>
-        <Msg>可切换为深色模式，夜间浏览更舒服</Msg>
+        <Toggle checked={isDark} onClick={toggleThemeHandle} />
       </Column>
       <Column>
         <Rows>
           <Title>消息红点提醒</Title>
-          <Toggle checked={state.isRemind} onClick={setRemind} />
+          <Msg>有新消息时通过红点提醒</Msg>
         </Rows>
-        <Msg>有新消息时通过红点提醒</Msg>
+        <Toggle checked={notification} onClick={setNotification} />
       </Column>
-      <Column>
+      <Column alignItems="center">
         <Rows>
           <Title>默认显示语言</Title>
-          <div>简体中文（CN）</div>
+          <Msg>显示更符合你的语言</Msg>
         </Rows>
-        <Msg>显示更符合你的语言</Msg>
+        <Select
+          options={[
+            {
+              id: 1,
+              label: 'English（EN）',
+              value: languages['en-US']
+            },
+            {
+              id: 2,
+              label: '简体中文（CN）',
+              value: languages['zh-CN']
+            }
+          ]}
+          defaultId={languange.id}
+          onChange={(val: any) => setUseLanguage(val)}
+        />
       </Column>
       <Column>
         <Rows>
           <Title>信息自动翻译</Title>
-          <Toggle checked={state.isTranslation} onClick={setTranslation} />
+          <Msg>浏览其他人的内容时，自动翻译成你选择的默认显示语言 </Msg>
         </Rows>
-        <Msg>浏览其他人的内容时，自动翻译成你选择的默认显示语言 </Msg>
+        <Toggle checked={state.isTranslation} onClick={setTranslation} />
       </Column>
     </NoticeSetBox>
-  )
-}
+  );
+};
 
 export default LikeSet;

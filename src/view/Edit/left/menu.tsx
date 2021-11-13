@@ -1,158 +1,100 @@
-import React, { useState, useRef } from 'react';
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import { Flex, Box, Button } from 'uikit';
-import { Link } from 'react-router-dom'
-import menuData from './menuData'
-import { Avatar, Icon } from 'components'
+import { Avatar, Icon, Logo, SubMenu } from 'components';
+
+import menuData from './menuData';
 
 const MenuBox = styled(Flex)`
   flex-direction: column;
-  justify-content:space-between;
-  padding:20px 13px;
+  justify-content: space-between;
+  padding: 20px 13px;
   width: 200px;
   height: calc(100vh - 150px);
-  background: #191F2D;
+  background: #191f2d;
   border-radius: 10px;
-`
-const Logo = styled.h2`
-width: 175px;
-height: 32px;
-background: url('${require('assets/images/logo/nav-logo.png').default}') center/cover;
-`
+`;
+const LogoWarpper = styled(Box)`
+  width: 175px;
+  height: 32px;
+`;
 const Btn = styled.div`
-  width:100%;
-  margin-top:94px;
+  width: 100%;
+  margin-top: 94px;
   text-align: center;
-`
-const ItemLink = styled(Link)`
-margin-top:20px;
-display: flex;
-width: 130px;
-height: 40px;
-border-radius: 18px;
-font-size: 18px;
-font-weight: bold;
-color: #EAEAEA;
-line-height:40px;
-`
+`;
+
 const UserTitle = styled.div`
-margin:0 12px;
-  font-weight:700;
-  font-size:18px;
-  color:#fff;
-  ::after{
-    position:relative;
-    right:-50px;
-    content: "";
-    display:inline-block;
-    width:0px;
-    height:0px;
+  margin: 0 12px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  ::after {
+    position: relative;
+    right: -50px;
+    content: '';
+    display: inline-block;
+    width: 0px;
+    height: 0px;
     border-bottom: 7px solid transparent;
     border-left: 7px solid #fff;
     border-right: 7px solid transparent;
     border-top: 7px solid transparent;
-}
-`
+  }
+`;
 const UserDesc = styled.div`
-margin:0 12px;
-font-size: 16px;
-font-weight: 400;
-color: #B5B5B5;
-`
+  margin: 0 12px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #b5b5b5;
+`;
 const BackWarpper = styled(Box)`
   display: flex;
   align-items: center;
-  margin: 20px;
+  margin: 30px 0 30px 15px;
   cursor: pointer;
-  i{
+  i {
     font-size: 23px !important;
     font-weight: bold;
   }
-  span{
+  span {
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
     font-weight: bold;
-    color: #FFFFFF;
+    color: #ffffff;
     margin-left: 10px;
   }
-`
-const Badge = (props: { count: number | string }) => {
-  let { count } = props
-  if (count > 99) {
-    count = '+99'
-  }
-  return (
-    <span style={{
-      position: "absolute",
-      top: '-5px',
-      right: '-20px',
-      // width:'25px',
-      padding: '0 6px',
-      height: '15px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      background: '#EC612B',
-      borderRadius: '5px',
-      fontWeight: 400,
-      fontSize: '12px',
-    }}>{count}</span>
-  )
-}
-export const User = () => {
-  return (
-    <div>
-    </div>
-  )
-}
+`;
 
-export const MenuList = (props: { menuList: any[] }) => {
-  const { menuList } = props
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const itemClick = (index) => {
-    setCurrentIndex(index)
-  }
-  return (
-    <>
-      {
-        menuList.map((item, index) => {
-          return (
-            <ItemLink onClick={itemClick.bind(this, index)} to={item.path} key={index} style={{ backgroundColor: currentIndex === index ? '#232A3D' : '' }}>
-              <div style={{ position: 'relative' }}>
-                {item.badge ? <Badge count={0}></Badge> : ''}
-                <span style={{ fontSize: '14px', color: 'blue' }}>{item.icon}</span>
-              </div>
-              <span style={{ marginLeft: '20px' }}>{item.title}</span>
-            </ItemLink>
-          )
-        })
-      }
-    </>
-  )
-}
+export const Menu: React.FC<any> = props => {
+  const { history } = props;
 
+  const goback = () => {
+    history.goBack();
+  };
 
-export const Menu: React.FC = () => {
   return (
     <MenuBox>
       <Box>
-        <Logo />
-        <BackWarpper>
-          <Icon name={'icon-fanhui'}></Icon>
+        <LogoWarpper>
+          <Logo url="/" src={`${require('assets/images/logo/nav-logo.png').default}`} />
+        </LogoWarpper>
+        <BackWarpper onClick={goback}>
+          <Icon name={'icon-fanhui'} />
           <span>返回</span>
         </BackWarpper>
-        <MenuList menuList={menuData}></MenuList>
-        <Btn><Button>断开钱包</Button></Btn>
+        <SubMenu menuList={menuData} />
+        <Btn>
+          <Button scale="ld">断开钱包</Button>
+        </Btn>
       </Box>
       <Flex>
         <Avatar src="" scale="sm" />
         <Box>
-          <UserTitle>
-            OliNe
-          </UserTitle>
+          <UserTitle>OliNe</UserTitle>
           <UserDesc>@0x3...d39</UserDesc>
         </Box>
       </Flex>
     </MenuBox>
-  )
-}
+  );
+};

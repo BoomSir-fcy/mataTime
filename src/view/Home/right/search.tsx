@@ -1,7 +1,10 @@
 import React, { useState, useRef } from 'react';
 import styled from "styled-components";
+import { useSelector } from 'react-redux'
+import { Flex, Box, Button, Card } from 'uikit';
+import { Icon } from 'components';
 import searchImg from 'assets/images/common/search.png'
-const SearchBox = styled.div`
+const SearchBox = styled(Card)`
   position: relative;
   img{
     // width:16px;
@@ -15,16 +18,33 @@ const SearchBox = styled.div`
 const SearchInput = styled.input`
 width: 300px;
 height: 50px;
-background: #191F2D;
+background: ${({ theme }) => theme.isDark ? '#191F2D' : '#fff'};
 border:none;
 outline: none;
 font-size: 16px;
-color: #FFFFFF;
+color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#7A83A0'};
 padding-left: 66px;
 border-radius: 20px;
+  &::-webkit-input-placeholder { 
+    /* WebKit browsers */ 
+    color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#7A83A0'};
+  } 
+  &:-moz-placeholder { 
+    /* Mozilla Firefox 4 to 18 */ 
+    color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#7A83A0'};
+  } 
+  &::-moz-placeholder { 
+    /* Mozilla Firefox 19+ */ 
+    color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#7A83A0'};
+  } 
+  &:-ms-input-placeholder { 
+    /* Internet Explorer 10+ */ 
+    color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#7A83A0'};
+  }
 `
 
 export const Search: React.FC = () => {
+  const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [value, setValue] = useState('')
   const searchChange = (e) => {
     setValue(e.target.value)
@@ -37,7 +57,12 @@ export const Search: React.FC = () => {
   }
   return (
     <SearchBox>
-      <img src={searchImg} alt="" />
+      {/* <img src={searchImg} alt="" /> */}
+      <Icon name={'icon-sousuo'} style={{
+        position: 'absolute',
+        top: '8px',
+        left: '25px',
+      }} size={28} color={isDark ? '#FFFFFF' : '#7A83A0'}></Icon>
       <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder="搜索 SOFI" />
     </SearchBox>
   )

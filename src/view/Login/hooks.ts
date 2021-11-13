@@ -94,8 +94,10 @@ export function useLogin() {
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
         const response = operationType === 1 ? await Api.SignInApi.signUp(params) : await Api.SignInApi.signIn(params);
-        const { token } = response.data;
-        window.localStorage.setItem(storage.Token, token);
+        if (Api.isSuccess(response)) {
+          const { token } = response.data;
+          window.localStorage.setItem(storage.Token, token);
+        }
         return response;
       } catch (error) {
         return false;

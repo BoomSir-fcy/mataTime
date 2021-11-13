@@ -7,7 +7,7 @@ export const ModalWrapper = styled(Box)`
   left: 0;
   top: 0;
   background: rgba(98, 98, 98, 0.3);
-  z-index: 99;
+  z-index: 99999;
 `
 export const ModalTitleWrapper = styled(Box)`
   width: 100%;

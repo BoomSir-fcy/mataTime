@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Card } from 'uikit'
 
 export const NoticeWrapper = styled.div`
     width: 100%;
@@ -10,13 +11,18 @@ export const NoticeWrapper = styled.div`
     }
 `
 
+export const NoticeContentWrapper = styled(Card)`
+  width: 100%;
+  /* height: 700px; */
+`
+
 export const NoticeItemWrapper = styled.div`
     width: 100%;
     box-sizing: border-box;
     padding: 13px 30px;
     cursor: pointer;
     &:hover{
-      background: #4D535F;
+      background: ${({ theme }) => theme.isDark ? '#4D535F' : '#EAF2FF'};
     }
     .notice-wrapper{
       width: 100%;
@@ -26,7 +32,6 @@ export const NoticeItemWrapper = styled.div`
           width: 60px;
           height: 60px;
           border-radius: 10px;
-          background-color: #f0f0f0;
           overflow: hidden;
           margin-right: 13px;
           img{
@@ -44,20 +49,20 @@ export const NoticeItemWrapper = styled.div`
               font-size: 18px;
               font-family: Alibaba PuHuiTi;
               font-weight: bold;
-              color: #FFFFFF;
+              color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
             }
             span{
               font-size: 14px;
               font-family: Alibaba PuHuiTi;
               font-weight: 400;
-              color: #B5B5B5;
+              color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
             }
           }
           .notice-des{
             font-size: 16px;
             font-family: Alibaba PuHuiTi;
             font-weight: 400;
-            color: #B5B5B5;
+            color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
             span{
               color: #4168ED;
             }

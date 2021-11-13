@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
-import { Logo } from 'components';
 import { useStore, storeAction } from 'store';
 import { Api } from 'apis';
 
@@ -16,16 +15,8 @@ import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
 import { useLogin, useSignIn } from '../hooks';
 
-const Warpper = styled(Card)`
-  width: 600px;
-  height: 700px;
-  padding: 25px 40px 0;
-`;
-const LogoWarpper = styled(Box)`
-  width: 337px;
-  height: 60px;
-  ${mediaQueriesSize.marginbmd}
-`;
+import { useTranslation } from 'contexts/Localization';
+
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
   padding-bottom: 100px;
@@ -37,7 +28,7 @@ const WalletBody = styled(Flex)`
   align-items: center;
   width: 510px;
   height: 70px;
-  background: #292d34;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;
@@ -54,6 +45,7 @@ const FailButton = styled(Button)`
 const SignUpText = styled(Text)`
   font-size: 34px;
   font-weight: bold;
+  text-transform: capitalize;
   ${mediaQueriesSize.marginUD}
 `;
 const SignUpSubText = styled(Text)`
@@ -62,15 +54,16 @@ const SignUpSubText = styled(Text)`
 `;
 
 const SignUpFail = () => {
+  const { t } = useTranslation();
   return (
     <Flex width="100%" flexDirection="column">
       <Flex justifyContent="space-between">
         <FailButton scale="ld" variant="tertiary" disabled>
-          创建账户
+          {t('loginCreatAccount')}
         </FailButton>
-        <FailButton scale="ld">获取NFT</FailButton>
+        <FailButton scale="ld"> {t('loginGetNft')}</FailButton>
       </Flex>
-      <SubTitle>您的账户中未持有对应的NFT，无法注册</SubTitle>
+      <SubTitle>{t('loginSignUpFail')}</SubTitle>
     </Flex>
   );
 };
@@ -85,7 +78,7 @@ export const WalletAddress: React.FC<{
     <WalletBody>
       <Icon width="40px" mr="30px" />
       <Text fontSize="18px" fontWeight="bold">
-        {shortenAddress(address || '')}
+        {address && shortenAddress(address)}
       </Text>
     </WalletBody>
   );
@@ -99,6 +92,7 @@ export const SignUp: React.FC<{
   const { loginCallback } = useLogin();
   const { account } = useWeb3React();
   const { getNftUrl } = useSignIn();
+  const { t } = useTranslation();
 
   const signHandle = React.useCallback(async () => {
     const res = await loginCallback(1);
@@ -115,16 +109,13 @@ export const SignUp: React.FC<{
   }, []);
 
   return (
-    <Warpper>
+    <Box>
       {singUpStep === 1 && (
         <React.Fragment>
-          <LogoWarpper>
-            <Logo url="/" src={require('../images/logo.svg').default} />
-          </LogoWarpper>
-          <Text fontSize="34px" marginBottom="29px" bold>
-            欢迎加入恐龙社区
+          <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+            {t('loginWelcome')}
           </Text>
-          <SubTitle>平台beta 版本试运营中，目前仅限持有恐龙创世NFT的用户可以注册</SubTitle>
+          <SubTitle>{t('loginSubTitle')}</SubTitle>
           <SignUpWarpper>
             <WalletAddress address={account} />
             {!isSignup ? (
@@ -135,30 +126,27 @@ export const SignUp: React.FC<{
               <SignUpFail />
             )}
           </SignUpWarpper>
-          <TextTips>使用您的数字钱包账号即可免费创建并登录恐龙社区，平台不会保存您的任何钱包敏感数据，请妥善保管您的钱包，丢失钱包则无法登录平台</TextTips>
+          <TextTips>{t('loginSubTips')}</TextTips>
         </React.Fragment>
       )}
       {singUpStep === 2 && (
         <Box>
-          <LogoWarpper>
-            <Logo url="/" src={require('../images/logo.svg').default} />
-          </LogoWarpper>
-          <Text fontSize="34px" marginBottom="24px" bold>
-            欢迎加入恐龙社区
+          <Text fontSize="34px" marginBottom="24px" bold style={{ textTransform: 'uppercase' }}>
+            {t('loginWelcome')}
           </Text>
           <WalletAddress address={account} />
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
             <img width="230px" src={require('../images/login_right_images.png').default} />
-            <SignUpText>注册成功！</SignUpText>
-            <SignUpSubText>感谢您加入恐龙社交平台</SignUpSubText>
-            <Button scale="ld" onClick={() => changeNftUrl()}>
-              下一步，个人信息
+            <SignUpText>{t('loginSignupSuccess')}</SignUpText>
+            <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
+            <Button scale="ld" onClick={() => changeNftUrl()} style={{ textTransform: 'capitalize' }}>
+              {t('loginSignupSuccessNextText')}
             </Button>
           </Flex>
         </Box>
       )}
       {singUpStep === 3 && <SignUpSetName />}
       {singUpStep === 4 && <SignUpcomplete />}
-    </Warpper>
+    </Box>
   );
 };

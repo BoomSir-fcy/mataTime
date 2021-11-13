@@ -12,10 +12,10 @@ import {
 } from './style';
 
 
-import NewsMe  from 'view/News/Me'
-import NewsComment  from 'view/News/Comment'
-import NewsPraise  from 'view/News/Praise'
-import NewsNotice  from 'view/News/Notice'
+import NewsMe from 'view/News/Me'
+import NewsComment from 'view/News/Comment'
+import NewsPraise from 'view/News/Praise'
+import NewsNotice from 'view/News/Notice'
 type IProps = {
 
 }
@@ -25,12 +25,13 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
   const { match, location } = props
   return (
     <CommonLayoutWrapper>
-      <Header></Header>
+      {/* <Header></Header> */}
       <LayoutContentWrapper>
         <LayoutLeftWrapper>
           <CommonLeftMenu
             menu={menu[match.url]}
             route={location}
+            {...props}
           />
         </LayoutLeftWrapper>
         <LayoutMiddleWrapper>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Flex, Button, Box } from 'uikit'
+import { Button, Box, Text, Toggle, Card, Flex } from 'uikit'
 export const FollowBtn = styled(Button)`
 margin-right:15px;
 font-size: 14px;
@@ -7,6 +7,7 @@ font-weight: bold;
 `
 export const MentionItemWrapper = styled.div`
     .mention-content{
+      color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#000000'};
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
@@ -14,11 +15,18 @@ export const MentionItemWrapper = styled.div`
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-          color: #FFFFFF;
-        a{
-          color: #4168ED;
-          cursor: pointer;
-        }
+      }
+      a{
+        color: #4168ED;
+        cursor: pointer;
+      }
+      a{
+        color: #4168ED;
+        cursor: pointer;
+      }
+      span {
+        color: #4168ED;
+        cursor: pointer;
       }
     }
 `
@@ -35,7 +43,6 @@ export const MentionItemUserWrapper = styled.div`
         width: 60px;
         height: 60px;
         border-radius: 10px;
-        background-color: #f0f0f0;
         overflow: hidden;
         margin-right: 13px;
         img{
@@ -50,14 +57,14 @@ export const MentionItemUserWrapper = styled.div`
           font-size: 18px;
           font-family: Alibaba PuHuiTi;
           font-weight: bold;
-          color: #FFFFFF;
+          color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
         }
         .time{
           margin-top:5px;
           font-size: 14px;
           font-family: Alibaba PuHuiTi;
           font-weight: 400;
-          color: #B5B5B5;
+          color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
         }
         .topic{
           display:flex;
@@ -66,9 +73,9 @@ export const MentionItemUserWrapper = styled.div`
           padding:0 10px;
           height:35px;
           font-size: 14px;
-          color: #FFFFFF;
           border: 2px solid #4168ED;
           border-radius: 10px;
+          color: #FFFFFF;
         }
       }
     }
@@ -88,7 +95,6 @@ export const MentionItemUserWrapper = styled.div`
           width: 40px;
           height: 40px;
           border-radius: 10px;
-          background-color: #f0f0f0;
           overflow: hidden;
           margin-right: 13px;
           img{
@@ -106,7 +112,6 @@ export const MentionItemUserWrapper = styled.div`
             padding:0 10px;
             height:35px;
             font-size: 14px;
-            color: #FFFFFF;
             border: 2px solid #4168ED;
             border-radius: 10px;
           }
@@ -114,14 +119,12 @@ export const MentionItemUserWrapper = styled.div`
             font-size: 14px;
             font-family: Alibaba PuHuiTi;
             font-weight: bold;
-            color: #FFFFFF;
           }
           .time{
             margin-top:5px;
             font-size: 14px;
             font-family: Alibaba PuHuiTi;
             font-weight: 400;
-            color: #B5B5B5;
           }
         }
       }
@@ -139,11 +142,12 @@ export const MentionItemUserWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
+      color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#000000'};
       p{
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-          color: #FFFFFF;
+        color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#000000'};
         a{
           color: #4168ED;
         }

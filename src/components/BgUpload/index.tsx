@@ -1,22 +1,22 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, Button } from 'uikit';
+import { Box, Flex, Button } from 'uikit';
+import { Upload } from 'components';
 
 const Background = styled(Flex)`
   width: 100%;
-  height:280px;
   background: skyblue;
   border-radius: 10px;
-  padding-top:190px;
+  padding: 190px 0 55px;
   justify-content: center;
-`
+`;
 
 const BgUpload = () => {
   return (
     <Background>
-      <Button>上传背景墙</Button>
+      <Upload multiple uploadSuccess={(imgSrc: string) => console.log(imgSrc)} />
     </Background>
-  )
-}
+  );
+};
 
 export default BgUpload;

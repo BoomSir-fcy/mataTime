@@ -38,7 +38,13 @@ export const VI: Language = { locale: 'vi-VN', language: 'Tiếng Việt', code:
 export const ZHCN: Language = { locale: 'zh-CN', language: '简体中文', code: 'CN' }
 export const ZHTW: Language = { locale: 'zh-TW', language: '繁體中文', code: 'zh-tw' }
 
-export const languages:languagesType = {
+export const languages: languagesType = {
   'en-US': EN,
   'zh-CN': ZHCN,
 }
+
+export const languagesOptions = Object.values(languages).map((item, index) => ({
+  id: index + 1,
+  label: item.language,
+  value: item
+}))

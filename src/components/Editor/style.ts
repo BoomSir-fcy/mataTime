@@ -15,19 +15,23 @@ width: 100px;
 height: 35px;
 border-radius: 10px;
 background-color:#4168ED;
-// margin-top:12px;
+margin-top:12px;
 `;
-export const TextBox = styled.div`
-margin-bottom: 15px;
-.w-e-text-container{
-  overflow-y:auto;
-  color: ${({ theme }) => theme.colors.text};
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
-  border-radius: ${({ theme }) => theme.radii.card};
-  .placeholder{
-    color: #B5B5B5;
-  }
-  .w-e-text{
+export const SlateBox = styled.div`
+background: #191F2D;
+margin-bottom: 10px;
+border-radius: ${({ theme }) => theme.radii.card};
+padding: 15px;
+padding-bottom:20px;
+  div.text-box{
+    color:#fff;
+    background: ${({ theme }) => theme.colors.backgroundTextArea};
+    padding:15px;
+    padding-bottom:0px;
+    border-radius: 5px;
+    min-height: 112px !important;
+    max-height: 120px;
+    overflow-y:auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/
       width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
@@ -38,11 +42,8 @@ margin-bottom: 15px;
     border-radius: 10px;
     background   : rgba(83,83,83,0.5);
     }
-    min-height: 112px;
-    max-height: 150px;
   }
-}
-`;
+`
 export const Toolbar = styled(Flex)`
 .w-e-toolbar{
   background-color: transparent !important;

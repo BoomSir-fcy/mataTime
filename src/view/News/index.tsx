@@ -12,7 +12,7 @@ const News: React.FC = () => {
   return (
     <NewsWrapper>
       {
-        list.map((item: any, index: number) => <MentionItem key={index} />)
+        list.map((item: any, index: number) => <MentionItem  itemData={item} key={index} />)
       }
     </NewsWrapper>
   )

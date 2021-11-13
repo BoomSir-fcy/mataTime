@@ -1,7 +1,6 @@
-import { Http } from "../http";
+import { Http } from '../http';
 
 export class UserApi extends Http {
-
   // 添加昵称
   async addNickName(nick_name: string) {
     const res = await this.post('/v1/user/nickname', { nick_name });
@@ -26,4 +25,15 @@ export class UserApi extends Http {
     return res;
   }
 
+  // 可能感兴趣的人
+  async referrerMans(params: Api.User.referrerMans) {
+    const res = await this.get('/v1/user/interest', params);
+    return res;
+  }
+
+  // 通过用户Id获取用户详情
+  async getUserInfoByUID(uid: string | number) {
+    const res = await this.get('/v1/user/userinfo', { uid });
+    return res;
+  }
 }
