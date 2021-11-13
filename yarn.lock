@@ -5363,10 +5363,10 @@ dotenv@8.2.0:
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-8.2.0.tgz"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
-dsgswap-sdk@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.5.tgz#6a9e0de44c57ec9cbdfa92e57e8e24d18611c13c"
-  integrity sha512-35WT54XgMRPnTw0l7hIHAER49b2/sY6SjdrSJgMrOLnkqYBL0N1pod1oO3Id+xyNsv6DXn+7VvOClHw0/T9A4Q==
+dsgswap-sdk@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.11.tgz#7a6426c2c4343629fa37f60e0742b96b8b358a94"
+  integrity sha512-joFaKEPGIi+dSTx7IOA7rHbj3XLTSD1T/YSKSwHDE5Hh92QieaLrrmNDAri/NpG9cLyqjM+00kMzeB/9u+93Nw==
   dependencies:
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"

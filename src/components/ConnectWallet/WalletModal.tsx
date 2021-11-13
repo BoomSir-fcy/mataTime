@@ -20,27 +20,29 @@ const WalletModalStyled = styled.div<{ show?: boolean, onClick?: (e: Event) => v
   /* TODO: 走theme配置文件 */
   background-color:#4D535F;
   border-radius: ${({ theme }) => theme.radii.card};
-  transform: ${({ show }) => show ? 'translateX(0)' : 'translateX(500px)' };
+  transform: ${({ show }) => show ? 'translateX(0)' : 'translateX(500px)'};
   transition: 300ms transform;
+`
+
+export const Cover = styled(Box) <{ show?: boolean }>`
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  display: ${({ show }) => show ? 'block' : 'none'};
+  z-index: 9;
 `
 
 const WalletModal: React.FC<{ show?: boolean, onClick?: (e: any) => void }> = ({ show, onClick }) => {
   const { t } = useTranslation()
   const { login, logout } = useAuth()
-  // const { toastCustom, clear } = useToast()
-  // const { onPresentConnectModal } = useWalletModal(login, logout, toastCustom, clear)
-  const onPresentConnectModal = useCallback(
-    () => {
-      console.log('12')
-    },
-    [],
-  )
 
   return (
     <WalletModalStyled onClick={onClick} show={show}>
       <Flex justifyContent="space-between">
         <Text>链接钱包</Text>
-        <CloseIcon />
+        {/* <CloseIcon /> */}
       </Flex>
       <Box>
         {

@@ -1,17 +1,24 @@
-import { __assign, __rest, __read, __extends, __awaiter, __generator, __spreadArray, __makeTemplateObject } from 'tslib';
+import { __assign, __rest, __read, __spreadArray, __extends, __awaiter, __generator, __makeTemplateObject } from 'tslib';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import React, { useRef, useState, useEffect, useCallback, useMemo, isValidElement, cloneElement, Children, forwardRef, createContext, useContext, memo, Fragment as Fragment$1 } from 'react';
-import { ETHEREUM_CHAIN, chainIdProxy, ChainId as ChainId$1, WETHER, MBT, USDT, USDC, WETH, WBTC, DSG, DAI, VAI, JSBI, Percent, getValueWithChainId, contractAddress, BASE_BSC_SCAN_URLS, ETHER, Token as Token$1, currencyEquals, DSG_TOKENS_TOP100, DSG_TOKENS_EXTENDED, Pair, TokenAmount, Trade as Trade$1, CurrencyAmount, TradeType, Currency, SWAP_TOKEN, Router, Price as Price$1, POLY_BASE_URL, Rounding, setChainId } from 'dsgswap-sdk';
+import { ETHEREUM_CHAIN, chainIdProxy, ChainId as ChainId$1, WETHER, MBT, USDT, USDC, WETH, WBTC, DSG, DAI, VAI, JSBI, Percent, getValueWithChainId, contractAddress, DSG_TOKENS_TOP100, Token as Token$1, BASE_BSC_SCAN_URLS, ETHER, currencyEquals, Pair, TokenAmount, Trade as Trade$1, CurrencyAmount, TradeType, SWAP_TOKEN, Router, Price as Price$1, POLY_BASE_URL, Rounding, setChainId } from 'dsgswap-sdk';
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import sample from 'lodash/sample';
 import { useDispatch, useSelector, Provider } from 'react-redux';
 import { createAction, nanoid, createAsyncThunk, createReducer, createSlice, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { Interface } from '@ethersproject/abi';
+import { getVersionUpgrade, VersionUpgrade } from '@uniswap/token-lists';
+import { parseBytes32String } from '@ethersproject/strings';
+import { arrayify, namehash } from 'ethers/lib/utils';
 import { Contract } from '@ethersproject/contracts';
 import { getAddress as getAddress$1 } from '@ethersproject/address';
 import { AddressZero, MaxUint256 } from '@ethersproject/constants';
 import { BigNumber } from '@ethersproject/bignumber';
+import { Interface } from '@ethersproject/abi';
+import Ajv from 'ajv';
+import CID from 'cids';
+import { getCodec, rmPrefix } from 'multicodec';
+import { decode, toB58String } from 'multihashes';
 import styled, { keyframes, css, ThemeProvider, useTheme as useTheme$1, createGlobalStyle, ThemeContext } from 'styled-components';
 import { space, typography, layout, variant as variant$1, background, border, position, flexbox, grid, color } from 'styled-system';
 import get from 'lodash/get';
@@ -24,22 +31,16 @@ import 'lodash/debounce';
 import { Link as Link$1 } from 'react-router-dom';
 import 'react-transition-group';
 import BigNumber$1 from 'bignumber.js';
-import { arrayify, namehash } from 'ethers/lib/utils';
 import CountUp from 'react-countup';
 import flatMap from 'lodash/flatMap';
-import { parseBytes32String } from '@ethersproject/strings';
-import CID from 'cids';
-import { getCodec, rmPrefix } from 'multicodec';
-import { decode, toB58String } from 'multihashes';
 import { FixedSizeList } from 'react-window';
-import Ajv from 'ajv';
 import { parseUnits } from '@ethersproject/units';
 import isEqual from 'lodash/isEqual';
 import 'qs';
 import axios from 'axios';
 import { HelmetProvider } from 'react-helmet-async';
+import merge from 'lodash/merge';
 import { save, load } from 'redux-localstorage-simple';
-import { getVersionUpgrade, VersionUpgrade } from '@uniswap/token-lists';
 
 var getNodeUrl = function () {
     // return process.env.REACT_APP_NODE_3
@@ -67,10 +68,10 @@ var useActiveWeb3React = function () {
     return __assign({ library: provider, chainId: chainId !== null && chainId !== void 0 ? chainId : chainIdProxy.chainId }, web3React);
 };
 
-var _a$b, _b$4, _c, _d, _e, _f;
+var _a$c, _b$4, _c, _d, _e, _f;
 // used to construct intermediary pairs for trading
-var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
-    _a$b[ChainId$1.MATIC_TESTNET] = [
+var BASES_TO_CHECK_TRADES_AGAINST = (_a$c = {},
+    _a$c[ChainId$1.MATIC_TESTNET] = [
         WETHER[ChainId$1.MATIC_TESTNET],
         MBT[ChainId$1.MATIC_TESTNET],
         USDT[ChainId$1.MATIC_TESTNET],
@@ -78,7 +79,7 @@ var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
         WETH[ChainId$1.MATIC_TESTNET],
         WBTC[ChainId$1.MATIC_TESTNET],
     ],
-    _a$b[ChainId$1.MATIC_MAINNET] = [
+    _a$c[ChainId$1.MATIC_MAINNET] = [
         WETHER[ChainId$1.MATIC_MAINNET],
         MBT[ChainId$1.MATIC_MAINNET],
         USDT[ChainId$1.MATIC_MAINNET],
@@ -88,7 +89,7 @@ var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
         // USDC[ChainId.MATIC_MAINNET],
         // DAI,
     ],
-    _a$b[ChainId$1.MAINNET] = [
+    _a$c[ChainId$1.MAINNET] = [
         WETHER[ChainId$1.MAINNET],
         MBT[ChainId$1.MAINNET],
         // BUSD[ChainId.MAINNET],
@@ -98,7 +99,7 @@ var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
         // ETH,
         USDC[ChainId$1.MAINNET],
     ],
-    _a$b);
+    _a$c);
 /**
  * Addittional bases for specific tokens
  * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
@@ -232,7 +233,7 @@ function useIsWindowVisible() {
 
 var updateBlockNumber = createAction('application/updateBlockNumber');
 
-function Updater$2() {
+function Updater$3() {
     var _a = useActiveWeb3React(), library = _a.library, chainId = _a.chainId;
     var dispatch = useDispatch();
     var windowVisible = useIsWindowVisible();
@@ -279,6 +280,2111 @@ var getAddress = function (address) {
 var getMulticallAddress = function () {
     return getAddress(contractAddress.multiCall);
 };
+
+var UNSUPPORTED_LIST_URLS = [];
+// lower index == higher priority for token import
+__spreadArray([
+    // PANCAKE_TOP100,
+    // PANCAKE_EXTENDED,
+    getAddress(DSG_TOKENS_TOP100)
+], __read(UNSUPPORTED_LIST_URLS));
+var getTokenDefaultList = function () { return __spreadArray([
+    // PANCAKE_TOP100,
+    // PANCAKE_EXTENDED,
+    getAddress(DSG_TOKENS_TOP100)
+], __read(UNSUPPORTED_LIST_URLS)); };
+// default lists to be 'active' aka searched across
+[getAddress(DSG_TOKENS_TOP100)];
+var getTokenDefaultActiveList = function () { return [getAddress(DSG_TOKENS_TOP100)]; };
+
+var name$1 = "Dsg Default List";
+var timestamp$1 = "2021-11-12T06:00:00Z";
+var version$1 = {
+	major: 1,
+	minor: 0,
+	patch: 1
+};
+var tags$2 = {
+};
+var logoURI$1 = "/logo.png";
+var keywords$1 = [
+	"dinosaur eggs",
+	"dsg",
+	"default"
+];
+var tokens$1 = [
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0x9A78649501BbAAC285Ea4187299471B7ad4ABD35",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "Monery-hunry Dino Frament Token",
+		symbol: "DSGMDF",
+		address: "0xbc44f2408192c2F853d953b370D449B9fdb9b1F6",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSGMDF.png"
+	},
+	{
+		name: "Meat Frament Token",
+		symbol: "DSGMF",
+		address: "0x8ee0eebefddc5f672680e9d3d165bc1dc7591919",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSGMF.png"
+	},
+	{
+		name: "WBNB Token",
+		symbol: "WBNB",
+		address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
+	},
+	{
+		name: "Binance Pegged BUSD",
+		symbol: "BUSD",
+		address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png"
+	},
+	{
+		name: "Binance Pegged ETH",
+		symbol: "ETH",
+		address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x2170Ed0880ac9A755fd29B2688956BD959F933F8.png"
+	},
+	{
+		name: "Binance Pegged Bitcoin",
+		symbol: "BTCB",
+		address: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png"
+	},
+	{
+		name: "Binance Pegged USDT",
+		symbol: "USDT",
+		address: "0x55d398326f99059fF775485246999027B3197955",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x55d398326f99059fF775485246999027B3197955.png"
+	},
+	{
+		name: "Venus Token",
+		symbol: "XVS",
+		address: "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63.png"
+	},
+	{
+		name: "VAI Stablecoin",
+		symbol: "VAI",
+		address: "0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7.png"
+	},
+	{
+		name: "Dai Stablecoin",
+		address: "0xe9C570f7775E5e7232590cD17438D99ec02cDfeB",
+		symbol: "DAI",
+		decimals: 18,
+		chainId: 80001,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+	},
+	{
+		name: "Dai Stablecoin",
+		address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+		symbol: "DAI",
+		decimals: 18,
+		chainId: 137,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+	},
+	{
+		name: "Tether USD",
+		address: "0x363B097cc4EbA999a6555427CB1b77d943FF43c1",
+		symbol: "USDT",
+		decimals: 6,
+		chainId: 80001,
+		logoURI: "/images/tokens/USDT.png"
+	},
+	{
+		name: "Tether USD",
+		address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+		symbol: "USDT",
+		decimals: 6,
+		chainId: 137,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+	},
+	{
+		name: "Wrapped Matic",
+		address: "0x9eeD3ab1c437b63C0A96ED9A7854593addc66aC5",
+		symbol: "WMATIC",
+		decimals: 18,
+		chainId: 80001,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
+	},
+	{
+		name: "Wrapped Matic",
+		address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+		symbol: "WMATIC",
+		decimals: 18,
+		chainId: 137,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
+	},
+	{
+		name: "USDC",
+		symbol: "USDC",
+		address: "0xCE8dca0BF7c5625A056B804A5e94F419480ba5a5",
+		chainId: 80001,
+		decimals: 6,
+		logoURI: "https://magicianmetaverse.com/images/tokens/USDC.png"
+	},
+	{
+		name: "USDC",
+		symbol: "USDC",
+		address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+		chainId: 137,
+		decimals: 6,
+		logoURI: "https://magicianmetaverse.com/images/tokens/USDC.png"
+	},
+	{
+		name: "WETH",
+		symbol: "WETH",
+		address: "0x09AB0a23e4e10aE30988cc11103aF1255142c2B1",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+	},
+	{
+		name: "WETH",
+		symbol: "WETH",
+		address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+	},
+	{
+		name: "WBTC",
+		symbol: "WBTC",
+		address: "0x6696143F1814E5d2A3EAFad16E2C51a25c809430",
+		chainId: 80001,
+		decimals: 8,
+		logoURI: "https://magicianmetaverse.com/images/tokens/WBTC.png"
+	},
+	{
+		name: "WBTC",
+		symbol: "WBTC",
+		address: "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
+		chainId: 137,
+		decimals: 8,
+		logoURI: "https://magicianmetaverse.com/images/tokens/WBTC.png"
+	},
+	{
+		name: "MagicBallToken",
+		symbol: "MBT",
+		address: "0xCb071b023a2D434cEE80ae0Fb19a46C1b5Ec38b8",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBT.png"
+	},
+	{
+		name: "MagicBallToken",
+		symbol: "MBT",
+		address: "0x9e5cc3aF2c87527Fdb48eb783E84E0fD9a59918a",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBT.png"
+	},
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0x683915d350824D6f046d67949359Fc8b9F8EeB28",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0xb65Ce345e1d6786C55c847076563b24B8B34bc2A",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "MBT Crystal Fragment",
+		symbol: "MBTCF",
+		address: "0xD6d8f98BDE2AC5DfC941269ea18803D72086427d",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTCF.png"
+	},
+	{
+		name: "MBT Crystal Fragment",
+		symbol: "MBTCF",
+		address: "0x4aB731C693D54188C3bC9762f61829D06f7afdC4",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTCF.png"
+	},
+	{
+		name: "MBT Potion Fragment",
+		symbol: "MBTPF",
+		address: "0x2f94dC2009494680CeC2C23bc49198434B802b18",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTPF.png"
+	},
+	{
+		name: "MBT Potion Fragment",
+		symbol: "MBTPF",
+		address: "0x437c7C0460E8b795C67872E8D0fB441ef6cc1E68",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTPF.png"
+	}
+];
+var DEFAULT_TOKEN_LIST = {
+	name: name$1,
+	timestamp: timestamp$1,
+	version: version$1,
+	tags: tags$2,
+	logoURI: logoURI$1,
+	keywords: keywords$1,
+	tokens: tokens$1
+};
+
+var name = "Dsg Unsupported List";
+var timestamp = "2021-01-05T20:47:02.923Z";
+var version = {
+	major: 1,
+	minor: 0,
+	patch: 0
+};
+var tags$1 = {
+};
+var logoURI = "";
+var keywords = [
+	"dinosaur eggs",
+	"dsg",
+	"unsupported"
+];
+var tokens = [
+];
+var UNSUPPORTED_TOKEN_LIST = {
+	name: name,
+	timestamp: timestamp,
+	version: version,
+	tags: tags$1,
+	logoURI: logoURI,
+	keywords: keywords,
+	tokens: tokens
+};
+
+var _a$b;
+var ChainId;
+(function (ChainId) {
+    ChainId[ChainId["MAINNET"] = 56] = "MAINNET";
+    ChainId[ChainId["TESTNET"] = 222] = "TESTNET";
+    ChainId[ChainId["OKT"] = 65] = "OKT";
+    ChainId[ChainId["MATIC_MAINNET"] = 137] = "MATIC_MAINNET";
+    ChainId[ChainId["MATIC_TESTNET"] = 80001] = "MATIC_TESTNET";
+})(ChainId || (ChainId = {}));
+// use ordering of default list of lists to assign priority
+function sortByListPriority(urlA, urlB) {
+    var first = getTokenDefaultList().includes(urlA) ? getTokenDefaultList().indexOf(urlA) : Number.MAX_SAFE_INTEGER;
+    var second = getTokenDefaultList().includes(urlB) ? getTokenDefaultList().indexOf(urlB) : Number.MAX_SAFE_INTEGER;
+    // need reverse order to make sure mapping includes top priority last
+    if (first < second)
+        return 1;
+    if (first > second)
+        return -1;
+    return 0;
+}
+/**
+ * Token instances created from token info.
+ */
+var WrappedTokenInfo = /** @class */ (function (_super) {
+    __extends(WrappedTokenInfo, _super);
+    function WrappedTokenInfo(tokenInfo, tags) {
+        var _this = _super.call(this, tokenInfo.chainId, tokenInfo.address, tokenInfo.decimals, tokenInfo.symbol, tokenInfo.name) || this;
+        _this.tokenInfo = tokenInfo;
+        _this.tags = tags;
+        return _this;
+    }
+    Object.defineProperty(WrappedTokenInfo.prototype, "logoURI", {
+        get: function () {
+            return this.tokenInfo.logoURI;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return WrappedTokenInfo;
+}(Token$1));
+/**
+ * An empty result, useful as a default.
+ */
+var EMPTY_LIST = (_a$b = {},
+    _a$b[ChainId.MAINNET] = {},
+    _a$b[ChainId.TESTNET] = {},
+    _a$b[ChainId.OKT] = {},
+    _a$b[ChainId.MATIC_MAINNET] = {},
+    _a$b[ChainId.MATIC_TESTNET] = {},
+    _a$b);
+var listCache = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
+function listToTokenMap(list) {
+    var result = listCache === null || listCache === void 0 ? void 0 : listCache.get(list);
+    if (result)
+        return result;
+    // const renderList = list.tokens.filter(item => item.chainId === 65)
+    var map = list.tokens.reduce(function (tokenMap, tokenInfo) {
+        var _a, _b;
+        var _c, _d, _e;
+        var tags = (_e = (_d = (_c = tokenInfo.tags) === null || _c === void 0 ? void 0 : _c.map(function (tagId) {
+            var _a;
+            if (!((_a = list.tags) === null || _a === void 0 ? void 0 : _a[tagId]))
+                return undefined;
+            return __assign(__assign({}, list.tags[tagId]), { id: tagId });
+        })) === null || _d === void 0 ? void 0 : _d.filter(function (x) { return Boolean(x); })) !== null && _e !== void 0 ? _e : [];
+        var token = new WrappedTokenInfo(tokenInfo, tags);
+        if (tokenMap[token.chainId][token.address] !== undefined) {
+            console.debug(tokenMap[token.chainId][token.address]);
+            throw Error('Duplicate tokens.');
+        }
+        return __assign(__assign({}, tokenMap), (_a = {}, _a[token.chainId] = __assign(__assign({}, tokenMap[token.chainId]), (_b = {}, _b[token.address] = {
+            token: token,
+            list: list,
+        }, _b)), _a));
+    }, __assign({}, EMPTY_LIST));
+    listCache === null || listCache === void 0 ? void 0 : listCache.set(list, map);
+    return map;
+}
+function useAllLists() {
+    return useSelector(function (state) { return state.lists.byUrl; });
+}
+function combineMaps(map1, map2) {
+    var _a;
+    return _a = {},
+        _a[ChainId.MAINNET] = __assign(__assign({}, map1[ChainId.MAINNET]), map2[ChainId.MAINNET]),
+        _a[ChainId.TESTNET] = __assign(__assign({}, map1[ChainId.TESTNET]), map2[ChainId.TESTNET]),
+        _a[ChainId.OKT] = __assign(__assign({}, map1[ChainId.OKT]), map2[ChainId.OKT]),
+        _a[ChainId.MATIC_MAINNET] = __assign(__assign({}, map1[ChainId.MATIC_MAINNET]), map2[ChainId.MATIC_MAINNET]),
+        _a[ChainId.MATIC_TESTNET] = __assign(__assign({}, map1[ChainId.MATIC_TESTNET]), map2[ChainId.MATIC_TESTNET]),
+        _a;
+}
+// merge tokens contained within lists from urls
+function useCombinedTokenMapFromUrls(urls) {
+    var lists = useAllLists();
+    return useMemo(function () {
+        if (!urls)
+            return EMPTY_LIST;
+        return (urls
+            .slice()
+            // sort by priority so top priority goes last
+            .sort(sortByListPriority)
+            .reduce(function (allTokens, currentUrl) {
+            var _a;
+            var current = (_a = lists[currentUrl]) === null || _a === void 0 ? void 0 : _a.current;
+            if (!current)
+                return allTokens;
+            try {
+                var newTokens = Object.assign(listToTokenMap(current));
+                return combineMaps(allTokens, newTokens);
+            }
+            catch (error) {
+                console.error('Could not show token list due to error', error);
+                return allTokens;
+            }
+        }, EMPTY_LIST));
+    }, [lists, urls]);
+}
+// filter out unsupported lists
+function useActiveListUrls() {
+    var _a;
+    return (_a = useSelector(function (state) { return state.lists.activeListUrls; })) === null || _a === void 0 ? void 0 : _a.filter(function (url) { return !UNSUPPORTED_LIST_URLS.includes(url); });
+}
+function useInactiveListUrls() {
+    var lists = useAllLists();
+    var allActiveListUrls = useActiveListUrls();
+    return Object.keys(lists).filter(function (url) { return !(allActiveListUrls === null || allActiveListUrls === void 0 ? void 0 : allActiveListUrls.includes(url)) && !UNSUPPORTED_LIST_URLS.includes(url); });
+}
+// get all the tokens from active lists, combine with local default tokens
+function useCombinedActiveList() {
+    var activeListUrls = useActiveListUrls();
+    var activeTokens = useCombinedTokenMapFromUrls(activeListUrls);
+    var defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST);
+    return combineMaps(activeTokens, defaultTokenMap);
+}
+// all tokens from inactive lists
+function useCombinedInactiveList() {
+    var allInactiveListUrls = useInactiveListUrls();
+    return useCombinedTokenMapFromUrls(allInactiveListUrls);
+}
+// list of tokens not supported on interface, used to show warnings and prevent swaps and adds
+function useUnsupportedTokenList() {
+    // get hard coded unsupported tokens
+    var localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST);
+    // get any loaded unsupported tokens
+    var loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS);
+    // format into one token address map
+    return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap);
+}
+function useIsListActive(url) {
+    var activeListUrls = useActiveListUrls();
+    return Boolean(activeListUrls === null || activeListUrls === void 0 ? void 0 : activeListUrls.includes(url));
+}
+
+function useBlockNumber() {
+    var chainId = useActiveWeb3React().chainId;
+    return useSelector(function (state) { return state.application.blockNumber[chainId !== null && chainId !== void 0 ? chainId : -1]; });
+}
+
+var ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+var LOWER_HEX_REGEX = /^0x[a-f0-9]*$/;
+function toCallKey(call) {
+    if (!ADDRESS_REGEX.test(call.address)) {
+        throw new Error("Invalid address: " + call.address);
+    }
+    if (!LOWER_HEX_REGEX.test(call.callData)) {
+        throw new Error("Invalid hex: " + call.callData);
+    }
+    return call.address + "-" + call.callData;
+}
+function parseCallKey(callKey) {
+    var pcs = callKey.split('-');
+    if (pcs.length !== 2) {
+        throw new Error("Invalid call key: " + callKey);
+    }
+    return {
+        address: pcs[0],
+        callData: pcs[1],
+    };
+}
+var addMulticallListeners = createAction('multicall/addMulticallListeners');
+var removeMulticallListeners = createAction('multicall/removeMulticallListeners');
+var fetchingMulticallResults = createAction('multicall/fetchingMulticallResults');
+var errorFetchingMulticallResults = createAction('multicall/errorFetchingMulticallResults');
+var updateMulticallResults = createAction('multicall/updateMulticallResults');
+
+function isMethodArg(x) {
+    return ['string', 'number'].indexOf(typeof x) !== -1;
+}
+function isValidMethodArgs(x) {
+    return (x === undefined ||
+        (Array.isArray(x) && x.every(function (xi) { return isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg)); })));
+}
+var INVALID_RESULT = { valid: false, blockNumber: undefined, data: undefined };
+// use this options object
+var NEVER_RELOAD = {
+    blocksPerFetch: Infinity,
+};
+// the lowest level call for subscribing to contract data
+function useCallsData(calls, options) {
+    var chainId = useActiveWeb3React().chainId;
+    var callResults = useSelector(function (state) { return state.multicall.callResults; });
+    var dispatch = useDispatch();
+    var serializedCallKeys = useMemo(function () {
+        var _a, _b, _c;
+        return JSON.stringify((_c = (_b = (_a = calls === null || calls === void 0 ? void 0 : calls.filter(function (c) { return Boolean(c); })) === null || _a === void 0 ? void 0 : _a.map(toCallKey)) === null || _b === void 0 ? void 0 : _b.sort()) !== null && _c !== void 0 ? _c : []);
+    }, [calls]);
+    // update listeners when there is an actual change that persists for at least 100ms
+    useEffect(function () {
+        var callKeys = JSON.parse(serializedCallKeys);
+        if (!chainId || callKeys.length === 0)
+            return undefined;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        var calls = callKeys.map(function (key) { return parseCallKey(key); });
+        dispatch(addMulticallListeners({
+            chainId: chainId,
+            calls: calls,
+            options: options,
+        }));
+        return function () {
+            dispatch(removeMulticallListeners({
+                chainId: chainId,
+                calls: calls,
+                options: options,
+            }));
+        };
+    }, [chainId, dispatch, options, serializedCallKeys]);
+    return useMemo(function () {
+        return calls.map(function (call) {
+            var _a;
+            if (!chainId || !call)
+                return INVALID_RESULT;
+            var result = (_a = callResults[chainId]) === null || _a === void 0 ? void 0 : _a[toCallKey(call)];
+            var data;
+            if ((result === null || result === void 0 ? void 0 : result.data) && (result === null || result === void 0 ? void 0 : result.data) !== '0x') {
+                // eslint-disable-next-line prefer-destructuring
+                data = result.data;
+            }
+            return { valid: true, data: data, blockNumber: result === null || result === void 0 ? void 0 : result.blockNumber };
+        });
+    }, [callResults, calls, chainId]);
+}
+var INVALID_CALL_STATE = { valid: false, result: undefined, loading: false, syncing: false, error: false };
+var LOADING_CALL_STATE = { valid: true, result: undefined, loading: true, syncing: true, error: false };
+function toCallState(callResult, contractInterface, fragment, latestBlockNumber) {
+    if (!callResult)
+        return INVALID_CALL_STATE;
+    var valid = callResult.valid, data = callResult.data, blockNumber = callResult.blockNumber;
+    if (!valid)
+        return INVALID_CALL_STATE;
+    if (valid && !blockNumber)
+        return LOADING_CALL_STATE;
+    if (!contractInterface || !fragment || !latestBlockNumber)
+        return LOADING_CALL_STATE;
+    var success = data && data.length > 2;
+    var syncing = (blockNumber !== null && blockNumber !== void 0 ? blockNumber : 0) < latestBlockNumber;
+    var result;
+    if (success && data) {
+        try {
+            result = contractInterface.decodeFunctionResult(fragment, data);
+        }
+        catch (error) {
+            console.debug('Result data parsing failed', fragment, data);
+            return {
+                valid: true,
+                loading: false,
+                error: true,
+                syncing: syncing,
+                result: result,
+            };
+        }
+    }
+    return {
+        valid: true,
+        loading: false,
+        syncing: syncing,
+        result: result,
+        error: !success,
+    };
+}
+function useSingleContractMultipleData(contract, methodName, callInputs, options) {
+    var fragment = useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
+    var calls = useMemo(function () {
+        return contract && fragment && callInputs && callInputs.length > 0
+            ? callInputs.map(function (inputs) {
+                return {
+                    address: contract.address,
+                    callData: contract.interface.encodeFunctionData(fragment, inputs),
+                };
+            })
+            : [];
+    }, [callInputs, contract, fragment]);
+    var results = useCallsData(calls, options);
+    var latestBlockNumber = useBlockNumber();
+    return useMemo(function () {
+        return results.map(function (result) { return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber); });
+    }, [fragment, contract, results, latestBlockNumber]);
+}
+function useMultipleContractSingleData(addresses, contractInterface, methodName, callInputs, options) {
+    var fragment = useMemo(function () { return contractInterface.getFunction(methodName); }, [contractInterface, methodName]);
+    var callData = useMemo(function () {
+        return fragment && isValidMethodArgs(callInputs)
+            ? contractInterface.encodeFunctionData(fragment, callInputs)
+            : undefined;
+    }, [callInputs, contractInterface, fragment]);
+    var calls = useMemo(function () {
+        return fragment && addresses && addresses.length > 0 && callData
+            ? addresses.map(function (address) {
+                return address && callData
+                    ? {
+                        address: address,
+                        callData: callData,
+                    }
+                    : undefined;
+            })
+            : [];
+    }, [addresses, callData, fragment]);
+    var results = useCallsData(calls, options);
+    var latestBlockNumber = useBlockNumber();
+    return useMemo(function () {
+        return results.map(function (result) { return toCallState(result, contractInterface, fragment, latestBlockNumber); });
+    }, [fragment, results, contractInterface, latestBlockNumber]);
+}
+function useSingleCallResult(contract, methodName, inputs, options) {
+    var fragment = useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
+    var calls = useMemo(function () {
+        return contract && fragment && isValidMethodArgs(inputs)
+            ? [
+                {
+                    address: contract.address,
+                    callData: contract.interface.encodeFunctionData(fragment, inputs),
+                },
+            ]
+            : [];
+    }, [contract, fragment, inputs]);
+    var result = useCallsData(calls, options)[0];
+    var latestBlockNumber = useBlockNumber();
+    return useMemo(function () {
+        return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber);
+    }, [result, contract, fragment, latestBlockNumber]);
+}
+
+function serializeToken(token) {
+    return {
+        chainId: token.chainId,
+        address: token.address,
+        decimals: token.decimals,
+        symbol: token.symbol,
+        name: token.name,
+    };
+}
+function deserializeToken(serializedToken) {
+    return new Token$1(serializedToken.chainId, serializedToken.address, serializedToken.decimals, serializedToken.symbol, serializedToken.name);
+}
+
+function useUserAddedTokens() {
+    var chainId = useActiveWeb3React().chainId;
+    var serializedTokensMap = useSelector(function (_a) {
+        var tokens = _a.user.tokens;
+        return tokens;
+    });
+    return useMemo(function () {
+        var _a;
+        if (!chainId)
+            return [];
+        return Object.values((_a = serializedTokensMap === null || serializedTokensMap === void 0 ? void 0 : serializedTokensMap[chainId]) !== null && _a !== void 0 ? _a : {}).map(deserializeToken);
+    }, [serializedTokensMap, chainId]);
+}
+
+var _a$a;
+var contracts = {
+    SwapRouter: (_a$a = {},
+        _a$a[ChainId$1.MAINNET] = '0xe9c7650b97712c0ec958ff270fbf4189fb99c071',
+        _a$a[ChainId$1.MATIC_MAINNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$a[ChainId$1.MATIC_TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$a)
+};
+
+var swapRouterAbi = [
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "_factory",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "_WOKT",
+				type: "address"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "constructor"
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "address",
+				name: "fromToken",
+				type: "address"
+			},
+			{
+				indexed: false,
+				internalType: "address",
+				name: "toToken",
+				type: "address"
+			},
+			{
+				indexed: false,
+				internalType: "address",
+				name: "sender",
+				type: "address"
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "fromAmount",
+				type: "uint256"
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "returnAmount",
+				type: "uint256"
+			}
+		],
+		name: "ExSwap",
+		type: "event"
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: "address",
+				name: "previousOwner",
+				type: "address"
+			},
+			{
+				indexed: true,
+				internalType: "address",
+				name: "newOwner",
+				type: "address"
+			}
+		],
+		name: "OwnershipTransferred",
+		type: "event"
+	},
+	{
+		inputs: [
+		],
+		name: "WOKT",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "tokenA",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "tokenB",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "amountADesired",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountBDesired",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountAMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountBMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "addLiquidity",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountA",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountB",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "token",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "amountTokenDesired",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountTokenMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETHMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "addLiquidityETH",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountToken",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETH",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			}
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "contractAddr",
+				type: "address"
+			}
+		],
+		name: "addWhiteList",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "fromToken",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "toToken",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "approveTarget",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "swapTarget",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "fromTokenAmount",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "minReturnAmount",
+				type: "uint256"
+			},
+			{
+				internalType: "bytes",
+				name: "callDataConcat",
+				type: "bytes"
+			},
+			{
+				internalType: "uint256",
+				name: "deadLine",
+				type: "uint256"
+			}
+		],
+		name: "externalSwap",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "returnAmount",
+				type: "uint256"
+			}
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+		],
+		name: "factory",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOut",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "reserveIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "reserveOut",
+				type: "uint256"
+			}
+		],
+		name: "getAmountIn",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			}
+		],
+		stateMutability: "pure",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "reserveIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "reserveOut",
+				type: "uint256"
+			}
+		],
+		name: "getAmountOut",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountOut",
+				type: "uint256"
+			}
+		],
+		stateMutability: "pure",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOut",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			}
+		],
+		name: "getAmountsIn",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			}
+		],
+		name: "getAmountsOut",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		name: "isWhiteListed",
+		outputs: [
+			{
+				internalType: "bool",
+				name: "",
+				type: "bool"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "fromToken",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "toToken",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "fromTokenAmount",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "minReturnAmount",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "mixAdapters",
+				type: "address[]"
+			},
+			{
+				internalType: "address[]",
+				name: "mixPairs",
+				type: "address[]"
+			},
+			{
+				internalType: "address[]",
+				name: "assetTo",
+				type: "address[]"
+			},
+			{
+				internalType: "uint256",
+				name: "directions",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "deadLine",
+				type: "uint256"
+			}
+		],
+		name: "mixSwap",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "returnAmount",
+				type: "uint256"
+			}
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+		],
+		name: "owner",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "tokenA",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "tokenB",
+				type: "address"
+			}
+		],
+		name: "pairFor",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "fromToken",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "toToken",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "fromTokenAmount",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "minReturnAmount",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256[]",
+				name: "weights",
+				type: "uint256[]"
+			},
+			{
+				internalType: "address[]",
+				name: "adapters",
+				type: "address[]"
+			},
+			{
+				internalType: "address[]",
+				name: "pools",
+				type: "address[]"
+			},
+			{
+				internalType: "uint256",
+				name: "directions",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "deadLine",
+				type: "uint256"
+			}
+		],
+		name: "polySwap",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "returnAmount",
+				type: "uint256"
+			}
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountA",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "reserveA",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "reserveB",
+				type: "uint256"
+			}
+		],
+		name: "quote",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountB",
+				type: "uint256"
+			}
+		],
+		stateMutability: "pure",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "tokenA",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "tokenB",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountAMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountBMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "removeLiquidity",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountA",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountB",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "token",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountTokenMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETHMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "removeLiquidityETH",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountToken",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETH",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "token",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountTokenMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETHMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "removeLiquidityETHSupportingFeeOnTransferTokens",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountETH",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "token",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountTokenMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETHMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			},
+			{
+				internalType: "bool",
+				name: "approveMax",
+				type: "bool"
+			},
+			{
+				internalType: "uint8",
+				name: "v",
+				type: "uint8"
+			},
+			{
+				internalType: "bytes32",
+				name: "r",
+				type: "bytes32"
+			},
+			{
+				internalType: "bytes32",
+				name: "s",
+				type: "bytes32"
+			}
+		],
+		name: "removeLiquidityETHWithPermit",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountToken",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETH",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "token",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountTokenMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountETHMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			},
+			{
+				internalType: "bool",
+				name: "approveMax",
+				type: "bool"
+			},
+			{
+				internalType: "uint8",
+				name: "v",
+				type: "uint8"
+			},
+			{
+				internalType: "bytes32",
+				name: "r",
+				type: "bytes32"
+			},
+			{
+				internalType: "bytes32",
+				name: "s",
+				type: "bytes32"
+			}
+		],
+		name: "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountETH",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "tokenA",
+				type: "address"
+			},
+			{
+				internalType: "address",
+				name: "tokenB",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "liquidity",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountAMin",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountBMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			},
+			{
+				internalType: "bool",
+				name: "approveMax",
+				type: "bool"
+			},
+			{
+				internalType: "uint8",
+				name: "v",
+				type: "uint8"
+			},
+			{
+				internalType: "bytes32",
+				name: "r",
+				type: "bytes32"
+			},
+			{
+				internalType: "bytes32",
+				name: "s",
+				type: "bytes32"
+			}
+		],
+		name: "removeLiquidityWithPermit",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "amountA",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountB",
+				type: "uint256"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "contractAddr",
+				type: "address"
+			}
+		],
+		name: "removeWhiteList",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+		],
+		name: "renounceOwnership",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "_tradingPool",
+				type: "address"
+			}
+		],
+		name: "setTradingPool",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOut",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapETHForExactTokens",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOutMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapExactETHForTokens",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOutMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapExactETHForTokensSupportingFeeOnTransferTokens",
+		outputs: [
+		],
+		stateMutability: "payable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountOutMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapExactTokensForETH",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountOutMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapExactTokensForETHSupportingFeeOnTransferTokens",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountOutMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapExactTokensForTokens",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountIn",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountOutMin",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapExactTokensForTokensSupportingFeeOnTransferTokens",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOut",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountInMax",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapTokensForExactETH",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amountOut",
+				type: "uint256"
+			},
+			{
+				internalType: "uint256",
+				name: "amountInMax",
+				type: "uint256"
+			},
+			{
+				internalType: "address[]",
+				name: "path",
+				type: "address[]"
+			},
+			{
+				internalType: "address",
+				name: "to",
+				type: "address"
+			},
+			{
+				internalType: "uint256",
+				name: "deadline",
+				type: "uint256"
+			}
+		],
+		name: "swapTokensForExactTokens",
+		outputs: [
+			{
+				internalType: "uint256[]",
+				name: "amounts",
+				type: "uint256[]"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+		],
+		name: "tradingPool",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "newOwner",
+				type: "address"
+			}
+		],
+		name: "transferOwnership",
+		outputs: [
+		],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		stateMutability: "payable",
+		type: "receive"
+	}
+];
+
+// returns the checksummed address if the address is valid, otherwise returns false
+function isAddress(value) {
+    try {
+        return getAddress$1(value);
+    }
+    catch (_a) {
+        return false;
+    }
+}
+function getBscScanLink(data, type, chainId) {
+    if (chainId === void 0) { chainId = chainIdProxy.chainId; }
+    switch (type) {
+        case 'transaction': {
+            return BASE_BSC_SCAN_URLS[chainId] + "/tx/" + data;
+        }
+        case 'token': {
+            return BASE_BSC_SCAN_URLS[chainId] + "/token/" + data;
+        }
+        case 'block': {
+            return BASE_BSC_SCAN_URLS[chainId] + "/block/" + data;
+        }
+        case 'countdown': {
+            return BASE_BSC_SCAN_URLS[chainId] + "/block/countdown/" + data;
+        }
+        default: {
+            return BASE_BSC_SCAN_URLS[chainId] + "/address/" + data;
+        }
+    }
+}
+// shorten the checksummed version of the input address to have 0x + 4 characters at start and end
+function shortenAddress(address, chars) {
+    if (chars === void 0) { chars = 4; }
+    var parsed = isAddress(address);
+    if (!parsed) {
+        throw Error("Invalid 'address' parameter '" + address + "'.");
+    }
+    return parsed.substring(0, chars + 2) + "..." + parsed.substring(42 - chars);
+}
+// add 50%
+function calculateGasMargin(value) {
+    return value.mul(BigNumber.from(10000).add(BigNumber.from(5000))).div(BigNumber.from(10000));
+}
+// converts a basis points value to a sdk percent
+function basisPointsToPercent(num) {
+    return new Percent(JSBI.BigInt(num), JSBI.BigInt(10000));
+}
+// account is not optional
+function getSigner(library, account) {
+    return library.getSigner(account).connectUnchecked();
+}
+// account is optional
+function getProviderOrSigner(library, account) {
+    return account ? getSigner(library, account) : library;
+}
+// account is optional
+function getContract$1(address, ABI, library, account) {
+    if (!isAddress(address) || address === AddressZero) {
+        throw Error("Invalid 'address' parameter '" + address + "'.");
+    }
+    return new Contract(address, ABI, getProviderOrSigner(library, account));
+}
+// account is optional
+function getRouterContract(_, library, account) {
+    return getContract$1(getValueWithChainId(contracts.SwapRouter), swapRouterAbi, library, account);
+}
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+function isTokenOnList(defaultTokens, currency) {
+    var _a;
+    if (currency === ETHER)
+        return true;
+    return Boolean(currency instanceof Token$1 && ((_a = defaultTokens[currency.chainId]) === null || _a === void 0 ? void 0 : _a[currency.address]));
+}
 
 var Erc20Abi = [
 	{
@@ -507,7 +2613,7 @@ var Erc20Abi = [
 	}
 ];
 
-var MultiCallAbi = [
+var MULTICALL_ABI = [
 	{
 		inputs: [
 			{
@@ -827,12 +2933,12 @@ var MultiCallAbi = [
 	}
 ];
 
-var getContract$1 = function (abi, address, signer) {
+var getContract = function (abi, address, signer) {
     var signerOrProvider = signer !== null && signer !== void 0 ? signer : simpleRpcProvider;
     return new ethers.Contract(address, abi, signerOrProvider);
 };
 var getMulticallContract = function (signer) {
-    return getContract$1(MultiCallAbi, getMulticallAddress(), signer);
+    return getContract(MULTICALL_ABI, getMulticallAddress(), signer);
 };
 
 var abi = [
@@ -3144,1583 +5250,7 @@ var WETH_ABI = [
 	}
 ];
 
-var MULTICALL_ABI = [
-	{
-		constant: true,
-		inputs: [
-		],
-		name: "getCurrentBlockTimestamp",
-		outputs: [
-			{
-				name: "timestamp",
-				type: "uint256"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-			{
-				components: [
-					{
-						name: "target",
-						type: "address"
-					},
-					{
-						name: "callData",
-						type: "bytes"
-					}
-				],
-				name: "calls",
-				type: "tuple[]"
-			}
-		],
-		name: "aggregate",
-		outputs: [
-			{
-				name: "blockNumber",
-				type: "uint256"
-			},
-			{
-				name: "returnData",
-				type: "bytes[]"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-		],
-		name: "getLastBlockHash",
-		outputs: [
-			{
-				name: "blockHash",
-				type: "bytes32"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-			{
-				name: "addr",
-				type: "address"
-			}
-		],
-		name: "getEthBalance",
-		outputs: [
-			{
-				name: "balance",
-				type: "uint256"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-		],
-		name: "getCurrentBlockDifficulty",
-		outputs: [
-			{
-				name: "difficulty",
-				type: "uint256"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-		],
-		name: "getCurrentBlockGasLimit",
-		outputs: [
-			{
-				name: "gaslimit",
-				type: "uint256"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-		],
-		name: "getCurrentBlockCoinbase",
-		outputs: [
-			{
-				name: "coinbase",
-				type: "address"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		constant: true,
-		inputs: [
-			{
-				name: "blockNumber",
-				type: "uint256"
-			}
-		],
-		name: "getBlockHash",
-		outputs: [
-			{
-				name: "blockHash",
-				type: "bytes32"
-			}
-		],
-		payable: false,
-		stateMutability: "view",
-		type: "function"
-	}
-];
-
 var MULTICALL_NETWORKS = __assign({}, contractAddress.multiCall);
-
-var _a$a;
-var contracts = {
-    SwapRouter: (_a$a = {},
-        _a$a[ChainId$1.MAINNET] = '0xe9c7650b97712c0ec958ff270fbf4189fb99c071',
-        _a$a[ChainId$1.MATIC_MAINNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$a[ChainId$1.MATIC_TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$a)
-};
-
-var swapRouterAbi = [
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_factory",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "_WOKT",
-				type: "address"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "constructor"
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "address",
-				name: "fromToken",
-				type: "address"
-			},
-			{
-				indexed: false,
-				internalType: "address",
-				name: "toToken",
-				type: "address"
-			},
-			{
-				indexed: false,
-				internalType: "address",
-				name: "sender",
-				type: "address"
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "fromAmount",
-				type: "uint256"
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "returnAmount",
-				type: "uint256"
-			}
-		],
-		name: "ExSwap",
-		type: "event"
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "previousOwner",
-				type: "address"
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "newOwner",
-				type: "address"
-			}
-		],
-		name: "OwnershipTransferred",
-		type: "event"
-	},
-	{
-		inputs: [
-		],
-		name: "WOKT",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "tokenA",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "tokenB",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "amountADesired",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountBDesired",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountAMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountBMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "addLiquidity",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountA",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountB",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "token",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "amountTokenDesired",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountTokenMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETHMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "addLiquidityETH",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountToken",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETH",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			}
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "contractAddr",
-				type: "address"
-			}
-		],
-		name: "addWhiteList",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "fromToken",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "toToken",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "approveTarget",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "swapTarget",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "fromTokenAmount",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "minReturnAmount",
-				type: "uint256"
-			},
-			{
-				internalType: "bytes",
-				name: "callDataConcat",
-				type: "bytes"
-			},
-			{
-				internalType: "uint256",
-				name: "deadLine",
-				type: "uint256"
-			}
-		],
-		name: "externalSwap",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "returnAmount",
-				type: "uint256"
-			}
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-		],
-		name: "factory",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOut",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "reserveIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "reserveOut",
-				type: "uint256"
-			}
-		],
-		name: "getAmountIn",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			}
-		],
-		stateMutability: "pure",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "reserveIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "reserveOut",
-				type: "uint256"
-			}
-		],
-		name: "getAmountOut",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountOut",
-				type: "uint256"
-			}
-		],
-		stateMutability: "pure",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOut",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			}
-		],
-		name: "getAmountsIn",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			}
-		],
-		name: "getAmountsOut",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address"
-			}
-		],
-		name: "isWhiteListed",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "fromToken",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "toToken",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "fromTokenAmount",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "minReturnAmount",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "mixAdapters",
-				type: "address[]"
-			},
-			{
-				internalType: "address[]",
-				name: "mixPairs",
-				type: "address[]"
-			},
-			{
-				internalType: "address[]",
-				name: "assetTo",
-				type: "address[]"
-			},
-			{
-				internalType: "uint256",
-				name: "directions",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "deadLine",
-				type: "uint256"
-			}
-		],
-		name: "mixSwap",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "returnAmount",
-				type: "uint256"
-			}
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-		],
-		name: "owner",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "tokenA",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "tokenB",
-				type: "address"
-			}
-		],
-		name: "pairFor",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "fromToken",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "toToken",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "fromTokenAmount",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "minReturnAmount",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256[]",
-				name: "weights",
-				type: "uint256[]"
-			},
-			{
-				internalType: "address[]",
-				name: "adapters",
-				type: "address[]"
-			},
-			{
-				internalType: "address[]",
-				name: "pools",
-				type: "address[]"
-			},
-			{
-				internalType: "uint256",
-				name: "directions",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "deadLine",
-				type: "uint256"
-			}
-		],
-		name: "polySwap",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "returnAmount",
-				type: "uint256"
-			}
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountA",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "reserveA",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "reserveB",
-				type: "uint256"
-			}
-		],
-		name: "quote",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountB",
-				type: "uint256"
-			}
-		],
-		stateMutability: "pure",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "tokenA",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "tokenB",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountAMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountBMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "removeLiquidity",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountA",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountB",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "token",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountTokenMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETHMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "removeLiquidityETH",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountToken",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETH",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "token",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountTokenMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETHMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "removeLiquidityETHSupportingFeeOnTransferTokens",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountETH",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "token",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountTokenMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETHMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			},
-			{
-				internalType: "bool",
-				name: "approveMax",
-				type: "bool"
-			},
-			{
-				internalType: "uint8",
-				name: "v",
-				type: "uint8"
-			},
-			{
-				internalType: "bytes32",
-				name: "r",
-				type: "bytes32"
-			},
-			{
-				internalType: "bytes32",
-				name: "s",
-				type: "bytes32"
-			}
-		],
-		name: "removeLiquidityETHWithPermit",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountToken",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETH",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "token",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountTokenMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountETHMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			},
-			{
-				internalType: "bool",
-				name: "approveMax",
-				type: "bool"
-			},
-			{
-				internalType: "uint8",
-				name: "v",
-				type: "uint8"
-			},
-			{
-				internalType: "bytes32",
-				name: "r",
-				type: "bytes32"
-			},
-			{
-				internalType: "bytes32",
-				name: "s",
-				type: "bytes32"
-			}
-		],
-		name: "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountETH",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "tokenA",
-				type: "address"
-			},
-			{
-				internalType: "address",
-				name: "tokenB",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "liquidity",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountAMin",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountBMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			},
-			{
-				internalType: "bool",
-				name: "approveMax",
-				type: "bool"
-			},
-			{
-				internalType: "uint8",
-				name: "v",
-				type: "uint8"
-			},
-			{
-				internalType: "bytes32",
-				name: "r",
-				type: "bytes32"
-			},
-			{
-				internalType: "bytes32",
-				name: "s",
-				type: "bytes32"
-			}
-		],
-		name: "removeLiquidityWithPermit",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "amountA",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountB",
-				type: "uint256"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "contractAddr",
-				type: "address"
-			}
-		],
-		name: "removeWhiteList",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-		],
-		name: "renounceOwnership",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_tradingPool",
-				type: "address"
-			}
-		],
-		name: "setTradingPool",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOut",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapETHForExactTokens",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOutMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapExactETHForTokens",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOutMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapExactETHForTokensSupportingFeeOnTransferTokens",
-		outputs: [
-		],
-		stateMutability: "payable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountOutMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapExactTokensForETH",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountOutMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapExactTokensForETHSupportingFeeOnTransferTokens",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountOutMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapExactTokensForTokens",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountIn",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountOutMin",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapExactTokensForTokensSupportingFeeOnTransferTokens",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOut",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountInMax",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapTokensForExactETH",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "amountOut",
-				type: "uint256"
-			},
-			{
-				internalType: "uint256",
-				name: "amountInMax",
-				type: "uint256"
-			},
-			{
-				internalType: "address[]",
-				name: "path",
-				type: "address[]"
-			},
-			{
-				internalType: "address",
-				name: "to",
-				type: "address"
-			},
-			{
-				internalType: "uint256",
-				name: "deadline",
-				type: "uint256"
-			}
-		],
-		name: "swapTokensForExactTokens",
-		outputs: [
-			{
-				internalType: "uint256[]",
-				name: "amounts",
-				type: "uint256[]"
-			}
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		inputs: [
-		],
-		name: "tradingPool",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address"
-			}
-		],
-		stateMutability: "view",
-		type: "function"
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "newOwner",
-				type: "address"
-			}
-		],
-		name: "transferOwnership",
-		outputs: [
-		],
-		stateMutability: "nonpayable",
-		type: "function"
-	},
-	{
-		stateMutability: "payable",
-		type: "receive"
-	}
-];
-
-// returns the checksummed address if the address is valid, otherwise returns false
-function isAddress(value) {
-    try {
-        return getAddress$1(value);
-    }
-    catch (_a) {
-        return false;
-    }
-}
-function getBscScanLink(data, type, chainId) {
-    if (chainId === void 0) { chainId = chainIdProxy.chainId; }
-    switch (type) {
-        case 'transaction': {
-            return BASE_BSC_SCAN_URLS[chainId] + "/tx/" + data;
-        }
-        case 'token': {
-            return BASE_BSC_SCAN_URLS[chainId] + "/token/" + data;
-        }
-        case 'block': {
-            return BASE_BSC_SCAN_URLS[chainId] + "/block/" + data;
-        }
-        case 'countdown': {
-            return BASE_BSC_SCAN_URLS[chainId] + "/block/countdown/" + data;
-        }
-        default: {
-            return BASE_BSC_SCAN_URLS[chainId] + "/address/" + data;
-        }
-    }
-}
-// shorten the checksummed version of the input address to have 0x + 4 characters at start and end
-function shortenAddress(address, chars) {
-    if (chars === void 0) { chars = 4; }
-    var parsed = isAddress(address);
-    if (!parsed) {
-        throw Error("Invalid 'address' parameter '" + address + "'.");
-    }
-    return parsed.substring(0, chars + 2) + "..." + parsed.substring(42 - chars);
-}
-// add 50%
-function calculateGasMargin(value) {
-    return value.mul(BigNumber.from(10000).add(BigNumber.from(5000))).div(BigNumber.from(10000));
-}
-// converts a basis points value to a sdk percent
-function basisPointsToPercent(num) {
-    return new Percent(JSBI.BigInt(num), JSBI.BigInt(10000));
-}
-// account is not optional
-function getSigner(library, account) {
-    return library.getSigner(account).connectUnchecked();
-}
-// account is optional
-function getProviderOrSigner(library, account) {
-    return account ? getSigner(library, account) : library;
-}
-// account is optional
-function getContract(address, ABI, library, account) {
-    if (!isAddress(address) || address === AddressZero) {
-        throw Error("Invalid 'address' parameter '" + address + "'.");
-    }
-    return new Contract(address, ABI, getProviderOrSigner(library, account));
-}
-// account is optional
-function getRouterContract(_, library, account) {
-    return getContract(getValueWithChainId(contracts.SwapRouter), swapRouterAbi, library, account);
-}
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-function isTokenOnList(defaultTokens, currency) {
-    var _a;
-    if (currency === ETHER)
-        return true;
-    return Boolean(currency instanceof Token$1 && ((_a = defaultTokens[currency.chainId]) === null || _a === void 0 ? void 0 : _a[currency.address]));
-}
 
 // Code below migrated from Exchange useContract.ts
 // returns null on errors
@@ -4731,7 +5261,7 @@ function useContract(address, ABI, withSignerIfPossible) {
         if (!address || !ABI || !library)
             return null;
         try {
-            return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined);
+            return getContract$1(address, ABI, library, withSignerIfPossible && account ? account : undefined);
         }
         catch (error) {
             console.error('Failed to get contract', error);
@@ -4768,6 +5298,899 @@ function useBytes32TokenContract(tokenAddress, withSignerIfPossible) {
 function useMulticallContract() {
     var chainId = useActiveWeb3React().chainId;
     return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false);
+}
+
+function filterTokens(tokens, search) {
+    if (search.length === 0)
+        return tokens;
+    var searchingAddress = isAddress(search);
+    if (searchingAddress) {
+        return tokens.filter(function (token) { return token.address === searchingAddress; });
+    }
+    var lowerSearchParts = search
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(function (s) { return s.length > 0; });
+    if (lowerSearchParts.length === 0) {
+        return tokens;
+    }
+    var matchesSearch = function (s) {
+        var sParts = s
+            .toLowerCase()
+            .split(/\s+/)
+            .filter(function (s_) { return s_.length > 0; });
+        return lowerSearchParts.every(function (p) { return p.length === 0 || sParts.some(function (sp) { return sp.startsWith(p) || sp.endsWith(p); }); });
+    };
+    return tokens.filter(function (token) {
+        var symbol = token.symbol, name = token.name;
+        return (symbol && matchesSearch(symbol)) || (name && matchesSearch(name));
+    });
+}
+function useSortedTokensByQuery(tokens, searchQuery) {
+    return useMemo(function () {
+        if (!tokens) {
+            return [];
+        }
+        var symbolMatch = searchQuery
+            .toLowerCase()
+            .split(/\s+/)
+            .filter(function (s) { return s.length > 0; });
+        if (symbolMatch.length > 1) {
+            return tokens;
+        }
+        var exactMatches = [];
+        var symbolSubtrings = [];
+        var rest = [];
+        // sort tokens by exact match -> subtring on symbol match -> rest
+        tokens.map(function (token) {
+            var _a, _b;
+            if (((_a = token.symbol) === null || _a === void 0 ? void 0 : _a.toLowerCase()) === symbolMatch[0]) {
+                return exactMatches.push(token);
+            }
+            if ((_b = token.symbol) === null || _b === void 0 ? void 0 : _b.toLowerCase().startsWith(searchQuery.toLowerCase().trim())) {
+                return symbolSubtrings.push(token);
+            }
+            return rest.push(token);
+        });
+        return __spreadArray(__spreadArray(__spreadArray([], __read(exactMatches)), __read(symbolSubtrings)), __read(rest));
+    }, [tokens, searchQuery]);
+}
+
+// reduce token map into standard address <-> Token mapping, optionally include user added tokens
+function useTokensFromMap(tokenMap, includeUserAdded) {
+    var chainId = useActiveWeb3React().chainId;
+    var userAddedTokens = useUserAddedTokens();
+    return useMemo(function () {
+        if (!chainId)
+            return {};
+        if (!tokenMap[chainId])
+            return {};
+        // reduce to just tokens
+        var mapWithoutUrls = Object.keys(tokenMap[chainId]).reduce(function (newMap, address) {
+            newMap[address] = tokenMap[chainId][address].token;
+            return newMap;
+        }, {});
+        if (includeUserAdded) {
+            return (userAddedTokens
+                // reduce into all ALL_TOKENS filtered by the current chain
+                .reduce(function (tokenMap_, token) {
+                tokenMap_[token.address] = token;
+                return tokenMap_;
+            }, __assign({}, mapWithoutUrls)));
+        }
+        return mapWithoutUrls;
+    }, [chainId, userAddedTokens, tokenMap, includeUserAdded]);
+}
+function useAllTokens() {
+    var allTokens = useCombinedActiveList();
+    return useTokensFromMap(allTokens, true);
+}
+function useAllInactiveTokens() {
+    // get inactive tokens
+    var inactiveTokensMap = useCombinedInactiveList();
+    var inactiveTokens = useTokensFromMap(inactiveTokensMap, false);
+    // filter out any token that are on active list
+    var activeTokensAddresses = Object.keys(useAllTokens());
+    var filteredInactive = activeTokensAddresses
+        ? Object.keys(inactiveTokens).reduce(function (newMap, address) {
+            if (!activeTokensAddresses.includes(address)) {
+                newMap[address] = inactiveTokens[address];
+            }
+            return newMap;
+        }, {})
+        : inactiveTokens;
+    return filteredInactive;
+}
+function useUnsupportedTokens() {
+    var unsupportedTokensMap = useUnsupportedTokenList();
+    return useTokensFromMap(unsupportedTokensMap, false);
+}
+function useIsTokenActive(token) {
+    var activeTokens = useAllTokens();
+    if (!activeTokens || !token) {
+        return false;
+    }
+    return !!activeTokens[token.address];
+}
+// used to detect extra search results
+function useFoundOnInactiveList(searchQuery) {
+    var chainId = useActiveWeb3React().chainId;
+    var inactiveTokens = useAllInactiveTokens();
+    return useMemo(function () {
+        if (!chainId || searchQuery === '') {
+            return undefined;
+        }
+        var tokens = filterTokens(Object.values(inactiveTokens), searchQuery);
+        return tokens;
+    }, [chainId, inactiveTokens, searchQuery]);
+}
+// Check if currency is included in custom list from user storage
+function useIsUserAddedToken(currency) {
+    var userAddedTokens = useUserAddedTokens();
+    if (!currency) {
+        return false;
+    }
+    return !!userAddedTokens.find(function (token) { return currencyEquals(currency, token); });
+}
+// parse a name or symbol from a token response
+var BYTES32_REGEX = /^0x[a-fA-F0-9]{64}$/;
+function parseStringOrBytes32(str, bytes32, defaultValue) {
+    return str && str.length > 0
+        ? str
+        : // need to check for proper bytes string and valid terminator
+            bytes32 && BYTES32_REGEX.test(bytes32) && arrayify(bytes32)[31] === 0
+                ? parseBytes32String(bytes32)
+                : defaultValue;
+}
+// undefined if invalid or does not exist
+// null if loading
+// otherwise returns the token
+function useToken(tokenAddress) {
+    var chainId = useActiveWeb3React().chainId;
+    var tokens = useAllTokens();
+    var address = isAddress(tokenAddress);
+    var tokenContract = useTokenContract(address || undefined, false);
+    var tokenContractBytes32 = useBytes32TokenContract(address || undefined, false);
+    var token = address ? tokens[address] : undefined;
+    var tokenName = useSingleCallResult(token ? undefined : tokenContract, 'name', undefined, NEVER_RELOAD);
+    var tokenNameBytes32 = useSingleCallResult(token ? undefined : tokenContractBytes32, 'name', undefined, NEVER_RELOAD);
+    var symbol = useSingleCallResult(token ? undefined : tokenContract, 'symbol', undefined, NEVER_RELOAD);
+    var symbolBytes32 = useSingleCallResult(token ? undefined : tokenContractBytes32, 'symbol', undefined, NEVER_RELOAD);
+    var decimals = useSingleCallResult(token ? undefined : tokenContract, 'decimals', undefined, NEVER_RELOAD);
+    return useMemo(function () {
+        var _a, _b, _c, _d;
+        if (token)
+            return token;
+        if (!chainId || !address)
+            return undefined;
+        if (decimals.loading || symbol.loading || tokenName.loading)
+            return null;
+        if (decimals.result) {
+            return new Token$1(chainId, address, decimals.result[0], parseStringOrBytes32((_a = symbol.result) === null || _a === void 0 ? void 0 : _a[0], (_b = symbolBytes32.result) === null || _b === void 0 ? void 0 : _b[0], 'UNKNOWN'), parseStringOrBytes32((_c = tokenName.result) === null || _c === void 0 ? void 0 : _c[0], (_d = tokenNameBytes32.result) === null || _d === void 0 ? void 0 : _d[0], 'Unknown Token'));
+        }
+        return undefined;
+    }, [
+        address,
+        chainId,
+        decimals.loading,
+        decimals.result,
+        symbol.loading,
+        symbol.result,
+        symbolBytes32.result,
+        token,
+        tokenName.loading,
+        tokenName.result,
+        tokenNameBytes32.result,
+    ]);
+}
+function useCurrency(currencyId) {
+    var _a;
+    var isBNB = (currencyId === null || currencyId === void 0 ? void 0 : currencyId.toUpperCase()) === ((_a = ETHER.symbol) === null || _a === void 0 ? void 0 : _a.toUpperCase());
+    var token = useToken(isBNB ? undefined : currencyId);
+    return isBNB ? ETHER : token;
+}
+
+var fetchTokenList = {
+    pending: createAction('lists/fetchTokenList/pending'),
+    fulfilled: createAction('lists/fetchTokenList/fulfilled'),
+    rejected: createAction('lists/fetchTokenList/rejected'),
+};
+// add and remove from list options
+var addList = createAction('lists/addList');
+var removeList = createAction('lists/removeList');
+// select which lists to search across from loaded lists
+var enableList = createAction('lists/enableList');
+var disableList = createAction('lists/disableList');
+// versioning
+var acceptListUpdate = createAction('lists/acceptListUpdate');
+createAction('lists/rejectVersionUpdate');
+// chainId
+var acceptListUpdateOfChainId = createAction('lists/acceptListUpdateOfChainId');
+
+var $schema = "http://json-schema.org/draft-07/schema#";
+var $id = "https://uniswap.org/tokenlist.schema.json";
+var title = "Uniswap Token List";
+var description = "Schema for lists of tokens compatible with the Uniswap Interface";
+var definitions = {
+	Version: {
+		type: "object",
+		description: "The version of the list, used in change detection",
+		examples: [
+			{
+				major: 1,
+				minor: 0,
+				patch: 0
+			}
+		],
+		additionalProperties: false,
+		properties: {
+			major: {
+				type: "integer",
+				description: "The major version of the list. Must be incremented when tokens are removed from the list or token addresses are changed.",
+				minimum: 0,
+				examples: [
+					1,
+					2
+				]
+			},
+			minor: {
+				type: "integer",
+				description: "The minor version of the list. Must be incremented when tokens are added to the list.",
+				minimum: 0,
+				examples: [
+					0,
+					1
+				]
+			},
+			patch: {
+				type: "integer",
+				description: "The patch version of the list. Must be incremented for any changes to the list.",
+				minimum: 0,
+				examples: [
+					0,
+					1
+				]
+			}
+		},
+		required: [
+			"major",
+			"minor",
+			"patch"
+		]
+	},
+	TagIdentifier: {
+		type: "string",
+		description: "The unique identifier of a tag",
+		minLength: 1,
+		maxLength: 10,
+		pattern: "^[\\w]+$",
+		examples: [
+			"compound",
+			"stablecoin"
+		]
+	},
+	ExtensionIdentifier: {
+		type: "string",
+		description: "The name of a token extension property",
+		minLength: 1,
+		maxLength: 30,
+		pattern: "^[\\w]+$",
+		examples: [
+			"color",
+			"is_fee_on_transfer",
+			"aliases"
+		]
+	},
+	ExtensionValue: {
+		anyOf: [
+			{
+				type: "string",
+				minLength: 1,
+				maxLength: 42,
+				examples: [
+					"#00000"
+				]
+			},
+			{
+				type: "boolean",
+				examples: [
+					true
+				]
+			},
+			{
+				type: "number",
+				examples: [
+					15
+				]
+			},
+			{
+				type: "null"
+			}
+		]
+	},
+	TagDefinition: {
+		type: "object",
+		description: "Definition of a tag that can be associated with a token via its identifier",
+		additionalProperties: false,
+		properties: {
+			name: {
+				type: "string",
+				description: "The name of the tag",
+				pattern: "^[ \\w]+$",
+				minLength: 1,
+				maxLength: 20
+			},
+			description: {
+				type: "string",
+				description: "A user-friendly description of the tag",
+				pattern: "^[ \\w\\.,]+$",
+				minLength: 1,
+				maxLength: 200
+			}
+		},
+		required: [
+			"name",
+			"description"
+		],
+		examples: [
+			{
+				name: "Stablecoin",
+				description: "A token with value pegged to another asset"
+			}
+		]
+	},
+	TokenInfo: {
+		type: "object",
+		description: "Metadata for a single token in a token list",
+		additionalProperties: false,
+		properties: {
+			chainId: {
+				type: "integer",
+				description: "The chain ID of the Ethereum network where this token is deployed",
+				minimum: 1,
+				examples: [
+					1,
+					42
+				]
+			},
+			address: {
+				type: "string",
+				description: "The checksummed address of the token on the specified chain ID",
+				pattern: "^0x[a-fA-F0-9]{40}$",
+				examples: [
+					"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+				]
+			},
+			decimals: {
+				type: "integer",
+				description: "The number of decimals for the token balance",
+				minimum: 0,
+				maximum: 255,
+				examples: [
+					18
+				]
+			},
+			name: {
+				type: "string",
+				description: "The name of the token",
+				minLength: 1,
+				maxLength: 40,
+				pattern: "^[ \\w.'+\\-%/À-ÖØ-öø-ÿ\\:]+$",
+				examples: [
+					"USD Coin"
+				]
+			},
+			symbol: {
+				type: "string",
+				description: "The symbol for the token; must be alphanumeric",
+				pattern: "^[a-zA-Z0-9+\\-%/\\$]+$",
+				minLength: 1,
+				maxLength: 20,
+				examples: [
+					"USDC"
+				]
+			},
+			logoURI: {
+				type: "string",
+				description: "A URI to the token logo asset; if not set, interface will attempt to find a logo based on the token address; suggest SVG or PNG of size 64x64",
+				format: "uri",
+				examples: [
+					"ipfs://QmXfzKRvjZz3u5JRgC4v5mGVbm9ahrUiB4DgzHBsnWbTMM"
+				]
+			},
+			tags: {
+				type: "array",
+				description: "An array of tag identifiers associated with the token; tags are defined at the list level",
+				items: {
+					$ref: "#/definitions/TagIdentifier"
+				},
+				maxLength: 10,
+				examples: [
+					"stablecoin",
+					"compound"
+				]
+			},
+			extensions: {
+				type: "object",
+				description: "An object containing any arbitrary or vendor-specific token metadata",
+				propertyNames: {
+					$ref: "#/definitions/ExtensionIdentifier"
+				},
+				additionalProperties: {
+					$ref: "#/definitions/ExtensionValue"
+				},
+				maxProperties: 10,
+				examples: [
+					{
+						color: "#000000",
+						is_verified_by_me: true
+					}
+				]
+			}
+		},
+		required: [
+			"chainId",
+			"address",
+			"decimals",
+			"name",
+			"symbol"
+		]
+	}
+};
+var type = "object";
+var additionalProperties = false;
+var properties = {
+	name: {
+		type: "string",
+		description: "The name of the token list",
+		minLength: 1,
+		maxLength: 20,
+		pattern: "^[\\w ]+$",
+		examples: [
+			"My Token List"
+		]
+	},
+	timestamp: {
+		type: "string",
+		format: "date-time",
+		description: "The timestamp of this list version; i.e. when this immutable version of the list was created"
+	},
+	version: {
+		$ref: "#/definitions/Version"
+	},
+	tokens: {
+		type: "array",
+		description: "The list of tokens included in the list",
+		items: {
+			$ref: "#/definitions/TokenInfo"
+		},
+		minItems: 1,
+		maxItems: 10000
+	},
+	keywords: {
+		type: "array",
+		description: "Keywords associated with the contents of the list; may be used in list discoverability",
+		items: {
+			type: "string",
+			description: "A keyword to describe the contents of the list",
+			minLength: 1,
+			maxLength: 20,
+			pattern: "^[\\w ]+$",
+			examples: [
+				"compound",
+				"lending",
+				"personal tokens"
+			]
+		},
+		maxItems: 20,
+		uniqueItems: true
+	},
+	tags: {
+		type: "object",
+		description: "A mapping of tag identifiers to their name and description",
+		propertyNames: {
+			$ref: "#/definitions/TagIdentifier"
+		},
+		additionalProperties: {
+			$ref: "#/definitions/TagDefinition"
+		},
+		maxProperties: 20,
+		examples: [
+			{
+				stablecoin: {
+					name: "Stablecoin",
+					description: "A token with value pegged to another asset"
+				}
+			}
+		]
+	},
+	logoURI: {
+		type: "string",
+		description: "A URI for the logo of the token list; prefer SVG or PNG of size 256x256",
+		format: "uri",
+		examples: [
+			"ipfs://QmXfzKRvjZz3u5JRgC4v5mGVbm9ahrUiB4DgzHBsnWbTMM"
+		]
+	}
+};
+var required = [
+	"name",
+	"timestamp",
+	"version",
+	"tokens"
+];
+var schema = {
+	$schema: $schema,
+	$id: $id,
+	title: title,
+	description: description,
+	definitions: definitions,
+	type: type,
+	additionalProperties: additionalProperties,
+	properties: properties,
+	required: required
+};
+
+function hexToUint8Array(hex) {
+    // eslint-disable-next-line no-param-reassign
+    hex = hex.startsWith('0x') ? hex.substr(2) : hex;
+    if (hex.length % 2 !== 0)
+        throw new Error('hex must have length that is multiple of 2');
+    var arr = new Uint8Array(hex.length / 2);
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = parseInt(hex.substr(i * 2, 2), 16);
+    }
+    return arr;
+}
+var UTF_8_DECODER = new TextDecoder();
+/**
+ * Returns the URI representation of the content hash for supported codecs
+ * @param contenthash to decode
+ */
+function contenthashToUri(contenthash) {
+    var buff = hexToUint8Array(contenthash);
+    var codec = getCodec(buff); // the typing is wrong for @types/multicodec
+    switch (codec) {
+        case 'ipfs-ns': {
+            var data = rmPrefix(buff);
+            var cid = new CID(data);
+            return "ipfs://" + toB58String(cid.multihash);
+        }
+        case 'ipns-ns': {
+            var data = rmPrefix(buff);
+            var cid = new CID(data);
+            var multihash = decode(cid.multihash);
+            if (multihash.name === 'identity') {
+                return "ipns://" + UTF_8_DECODER.decode(multihash.digest).trim();
+            }
+            return "ipns://" + toB58String(cid.multihash);
+        }
+        default:
+            throw new Error("Unrecognized codec: " + codec);
+    }
+}
+
+var ENS_NAME_REGEX = /^(([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+)eth(\/.*)?$/;
+function parseENSAddress(ensAddress) {
+    var match = ensAddress.match(ENS_NAME_REGEX);
+    if (!match)
+        return undefined;
+    return { ensName: match[1].toLowerCase() + "eth", ensPath: match[4] };
+}
+
+/* eslint-disable no-case-declarations */
+/**
+ * Given a URI that may be ipfs, ipns, http, or https protocol, return the fetch-able http(s) URLs for the same content
+ * @param uri to convert to fetch-able http url
+ */
+function uriToHttp(uri) {
+    var _a, _b;
+    var protocol = uri.split(':')[0].toLowerCase();
+    switch (protocol) {
+        case 'https':
+            return [uri];
+        case 'http':
+            return ["https" + uri.substr(4), uri];
+        case 'ipfs':
+            var hash = (_a = uri.match(/^ipfs:(\/\/)?(.*)$/i)) === null || _a === void 0 ? void 0 : _a[2];
+            return ["https://cloudflare-ipfs.com/ipfs/" + hash + "/", "https://ipfs.io/ipfs/" + hash + "/"];
+        case 'ipns':
+            var name_1 = (_b = uri.match(/^ipns:(\/\/)?(.*)$/i)) === null || _b === void 0 ? void 0 : _b[2];
+            return ["https://cloudflare-ipfs.com/ipns/" + name_1 + "/", "https://ipfs.io/ipns/" + name_1 + "/"];
+        default:
+            return [];
+    }
+}
+
+var tokenListValidator = new Ajv({ allErrors: true }).compile(schema);
+/**
+ * Contains the logic for resolving a list URL to a validated token list
+ * @param listUrl list url
+ * @param resolveENSContentHash resolves an ens name to a contenthash
+ */
+function getTokenList(listUrl, resolveENSContentHash) {
+    var _a, _b, _c;
+    return __awaiter(this, void 0, void 0, function () {
+        var parsedENS, urls, contentHashUri, error_1, translatedUri, i, url, isLast, response, error_2, json, validationErrors;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    parsedENS = parseENSAddress(listUrl);
+                    if (!parsedENS) return [3 /*break*/, 5];
+                    contentHashUri = void 0;
+                    _d.label = 1;
+                case 1:
+                    _d.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, resolveENSContentHash(parsedENS.ensName)];
+                case 2:
+                    contentHashUri = _d.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _d.sent();
+                    console.error("Failed to resolve ENS name: " + parsedENS.ensName, error_1);
+                    throw new Error("Failed to resolve ENS name: " + parsedENS.ensName);
+                case 4:
+                    translatedUri = void 0;
+                    try {
+                        translatedUri = contenthashToUri(contentHashUri);
+                    }
+                    catch (error) {
+                        console.error('Failed to translate contenthash to URI', contentHashUri);
+                        throw new Error("Failed to translate contenthash to URI: " + contentHashUri);
+                    }
+                    urls = uriToHttp("" + translatedUri + ((_a = parsedENS.ensPath) !== null && _a !== void 0 ? _a : ''));
+                    return [3 /*break*/, 6];
+                case 5:
+                    urls = uriToHttp(listUrl);
+                    _d.label = 6;
+                case 6:
+                    i = 0;
+                    _d.label = 7;
+                case 7:
+                    if (!(i < urls.length)) return [3 /*break*/, 14];
+                    url = urls[i];
+                    isLast = i === urls.length - 1;
+                    response = void 0;
+                    _d.label = 8;
+                case 8:
+                    _d.trys.push([8, 10, , 11]);
+                    return [4 /*yield*/, fetch(url + "?t=" + new Date().getTime())];
+                case 9:
+                    response = _d.sent();
+                    return [3 /*break*/, 11];
+                case 10:
+                    error_2 = _d.sent();
+                    console.error('Failed to fetch list', listUrl, error_2);
+                    if (isLast)
+                        throw new Error("Failed to download list " + listUrl);
+                    return [3 /*break*/, 13];
+                case 11:
+                    if (!response.ok) {
+                        if (isLast)
+                            throw new Error("Failed to download list " + listUrl);
+                        return [3 /*break*/, 13];
+                    }
+                    return [4 /*yield*/, response.json()];
+                case 12:
+                    json = _d.sent();
+                    if (!tokenListValidator(json)) {
+                        validationErrors = (_c = (_b = tokenListValidator.errors) === null || _b === void 0 ? void 0 : _b.reduce(function (memo, error) {
+                            var _a;
+                            var add = error.dataPath + " " + ((_a = error.message) !== null && _a !== void 0 ? _a : '');
+                            return memo.length > 0 ? memo + "; " + add : "" + add;
+                        }, '')) !== null && _c !== void 0 ? _c : 'unknown error';
+                        throw new Error("Token list failed validation: " + validationErrors);
+                    }
+                    return [2 /*return*/, json];
+                case 13:
+                    i++;
+                    return [3 /*break*/, 7];
+                case 14: throw new Error('Unrecognized list URL protocol.');
+            }
+        });
+    });
+}
+
+var REGISTRAR_ABI = [
+    {
+        constant: true,
+        inputs: [
+            {
+                name: 'node',
+                type: 'bytes32',
+            },
+        ],
+        name: 'resolver',
+        outputs: [
+            {
+                name: 'resolverAddress',
+                type: 'address',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+];
+var REGISTRAR_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
+var RESOLVER_ABI = [
+    {
+        constant: true,
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'node',
+                type: 'bytes32',
+            },
+        ],
+        name: 'contenthash',
+        outputs: [
+            {
+                internalType: 'bytes',
+                name: '',
+                type: 'bytes',
+            },
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+];
+// cache the resolver contracts since most of them are the public resolver
+function resolverContract(resolverAddress, provider) {
+    return new Contract(resolverAddress, RESOLVER_ABI, provider);
+}
+/**
+ * Fetches and decodes the result of an ENS contenthash lookup on mainnet to a URI
+ * @param ensName to resolve
+ * @param provider provider to use to fetch the data
+ */
+function resolveENSContentHash(ensName, provider) {
+    return __awaiter(this, void 0, void 0, function () {
+        var ensRegistrarContract, hash, resolverAddress;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    ensRegistrarContract = new Contract(REGISTRAR_ADDRESS, REGISTRAR_ABI, provider);
+                    hash = namehash(ensName);
+                    return [4 /*yield*/, ensRegistrarContract.resolver(hash)];
+                case 1:
+                    resolverAddress = _a.sent();
+                    return [2 /*return*/, resolverContract(resolverAddress, provider).contenthash(hash)];
+            }
+        });
+    });
+}
+
+function useFetchListCallback() {
+    var _this = this;
+    var library = useActiveWeb3React().library;
+    var chainId = useActiveWeb3React().chainId;
+    var dispatch = useDispatch();
+    var ensResolver = useCallback(function (ensName) {
+        if (chainId !== ChainId$1.MAINNET) {
+            throw new Error('Could not construct mainnet ENS resolver');
+        }
+        return resolveENSContentHash(ensName, library);
+    }, [chainId, library]);
+    // note: prevent dispatch if using for list search or unsupported list
+    return useCallback(function (listUrl, sendDispatch) {
+        if (sendDispatch === void 0) { sendDispatch = true; }
+        return __awaiter(_this, void 0, void 0, function () {
+            var requestId;
+            return __generator(this, function (_a) {
+                requestId = nanoid();
+                if (sendDispatch) {
+                    dispatch(fetchTokenList.pending({ requestId: requestId, url: listUrl, chainId: chainId }));
+                }
+                return [2 /*return*/, getTokenList(listUrl, ensResolver)
+                        .then(function (tokenList) {
+                        if (sendDispatch) {
+                            dispatch(fetchTokenList.fulfilled({ url: listUrl, tokenList: tokenList, requestId: requestId, chainId: chainId }));
+                        }
+                        return tokenList;
+                    })
+                        .catch(function (error) {
+                        console.error("Failed to get list at url " + listUrl, error);
+                        if (sendDispatch) {
+                            dispatch(fetchTokenList.rejected({ url: listUrl, requestId: requestId, errorMessage: error.message, chainId: chainId }));
+                        }
+                        throw error;
+                    })];
+            });
+        });
+    }, [dispatch, ensResolver, chainId]);
+}
+
+function useInterval(callback, delay, leading) {
+    if (leading === void 0) { leading = true; }
+    var savedCallback = useRef();
+    // Remember the latest callback.
+    useEffect(function () {
+        savedCallback.current = callback;
+    }, [callback]);
+    // Set up the interval.
+    useEffect(function () {
+        function tick() {
+            var current = savedCallback.current;
+            if (current) {
+                current();
+            }
+        }
+        if (delay !== null) {
+            if (leading)
+                tick();
+            var id_1 = setInterval(tick, delay);
+            return function () { return clearInterval(id_1); };
+        }
+        return undefined;
+    }, [delay, leading]);
+}
+
+function Updater$2() {
+    var _a = useActiveWeb3React(), library = _a.library; _a.chainId;
+    var dispatch = useDispatch();
+    var isWindowVisible = useIsWindowVisible();
+    // get all loaded lists, and the active urls
+    var lists = useAllLists();
+    var activeListUrls = useActiveListUrls();
+    // initiate loading
+    useAllInactiveTokens();
+    var fetchList = useFetchListCallback();
+    var fetchAllListsCallback = useCallback(function () {
+        if (!isWindowVisible)
+            return;
+        Object.keys(lists).forEach(function (url) {
+            return fetchList(url).catch(function (error) { return console.debug('interval list fetching error', error); });
+        });
+    }, [fetchList, isWindowVisible, lists]);
+    // fetch all lists every 10 minutes, but only after we initialize library
+    useInterval(fetchAllListsCallback, library ? 1000 * 60 * 10 : null);
+    // whenever a list is not loaded and not loading, try again to load it
+    useEffect(function () {
+        Object.keys(lists).forEach(function (listUrl) {
+            var list = lists[listUrl];
+            if (!list.current && !list.loadingRequestId && !list.error) {
+                fetchList(listUrl).catch(function (error) { return console.debug('list added fetching error', error); });
+            }
+        });
+    }, [dispatch, fetchList, library, lists]);
+    // if any lists from unsupported lists are loaded, check them too (in case new updates since last visit)
+    useEffect(function () {
+        Object.keys(UNSUPPORTED_LIST_URLS).forEach(function (listUrl) {
+            var list = lists[listUrl];
+            if (!list || (!list.current && !list.loadingRequestId && !list.error)) {
+                fetchList(listUrl).catch(function (error) { return console.debug('list added fetching error', error); });
+            }
+        });
+    }, [dispatch, fetchList, library, lists]);
+    // automatically update lists if versions are minor/patch
+    useEffect(function () {
+        Object.keys(lists).forEach(function (listUrl) {
+            var list = lists[listUrl];
+            if (list.current && list.pendingUpdate) {
+                var bump = getVersionUpgrade(list.current.version, list.pendingUpdate.version);
+                // eslint-disable-next-line default-case
+                switch (bump) {
+                    case VersionUpgrade.NONE:
+                        throw new Error('unexpected no version bump');
+                    // update any active or inactive lists
+                    case VersionUpgrade.PATCH:
+                    case VersionUpgrade.MINOR:
+                    case VersionUpgrade.MAJOR:
+                        dispatch(acceptListUpdate(listUrl));
+                }
+            }
+        });
+    }, [dispatch, lists, activeListUrls]);
+    var handleUpdateOfChainId = useCallback(function (newChainId) {
+        dispatch(acceptListUpdateOfChainId(newChainId));
+    }, [dispatch]);
+    useEffect(function () {
+        chainIdProxy.onChange(function (newChainId) { return handleUpdateOfChainId(newChainId); });
+        return chainIdProxy.removeChange(function (newChainId) { return handleUpdateOfChainId(newChainId); });
+    }, [handleUpdateOfChainId]);
+    return null;
 }
 
 /* eslint-disable */
@@ -4860,38 +6283,6 @@ function retry(fn, _a) {
     };
 }
 /* eslint-enable */
-
-function useBlockNumber() {
-    var chainId = useActiveWeb3React().chainId;
-    return useSelector(function (state) { return state.application.blockNumber[chainId !== null && chainId !== void 0 ? chainId : -1]; });
-}
-
-var ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
-var LOWER_HEX_REGEX = /^0x[a-f0-9]*$/;
-function toCallKey(call) {
-    if (!ADDRESS_REGEX.test(call.address)) {
-        throw new Error("Invalid address: " + call.address);
-    }
-    if (!LOWER_HEX_REGEX.test(call.callData)) {
-        throw new Error("Invalid hex: " + call.callData);
-    }
-    return call.address + "-" + call.callData;
-}
-function parseCallKey(callKey) {
-    var pcs = callKey.split('-');
-    if (pcs.length !== 2) {
-        throw new Error("Invalid call key: " + callKey);
-    }
-    return {
-        address: pcs[0],
-        callData: pcs[1],
-    };
-}
-var addMulticallListeners = createAction('multicall/addMulticallListeners');
-var removeMulticallListeners = createAction('multicall/removeMulticallListeners');
-var fetchingMulticallResults = createAction('multicall/fetchingMulticallResults');
-var errorFetchingMulticallResults = createAction('multicall/errorFetchingMulticallResults');
-var updateMulticallResults = createAction('multicall/updateMulticallResults');
 
 // chunks array into chunks of maximum size
 // evenly distributes items among the chunks
@@ -5373,10 +6764,8 @@ var Icon$H = function (props) {
     return (jsx(Svg, __assign({ viewBox: "0 0 24 24" }, props, { children: jsx("path", { d: "M9.29006 15.88L13.1701 12L9.29006 8.12001C8.90006 7.73001 8.90006 7.10001 9.29006 6.71001C9.68006 6.32001 10.3101 6.32001 10.7001 6.71001L15.2901 11.3C15.6801 11.69 15.6801 12.32 15.2901 12.71L10.7001 17.3C10.3101 17.69 9.68006 17.69 9.29006 17.3C8.91006 16.91 8.90006 16.27 9.29006 15.88Z" }, void 0) }), void 0));
 };
 
-var img$w = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjZBMUNCMjYzMUExMTFFQ0JGOEE4MEI4MTRBMTg3NDEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjZBMUNCMjUzMUExMTFFQ0JGOEE4MEI4MTRBMTg3NDEiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjg3RjQzREE1MTU0MDExRUM5MjM0QjhCNzNFRDk3OTMyIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjg3RjQzREE2MTU0MDExRUM5MjM0QjhCNzNFRDk3OTMyIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+JYIDWAAABZZJREFUeNrsml9MW3UUx09bCoXSNkAFpihGnYkPCv6JMXGZ+uSi021ihsb4pMaEqC9GpxHcDLjNPalLiIvRxOiiTJcpWXwz0wSWqIEVkY1lQ+hGGX9alpb23t7e9tZz7h/AcVtuue1tze5JTgrd7/6+93PP73fO4XdnSafTcD2ZFa4zM4FNYBPYBDaBTWAT2AQ2zMr0TvD5QFTX9a9sqS5t4Htf/OI/v3e82q7rBq6dLxc78/VLxkc4i92I3oa+Ff1u9EZ0z7WD8IGF8WMBfQT9N/TjvUf6Zkp2SatYK/pe9KfQbRrGe2S/Q35AH+ND6MfPDxDcV8pJy4H+KfoQ+k6NsJnuia4fQvDD6I5SjPBN6Cfl6IqW4NMQDCchHEtBLC4An0xDMrX2b+8ymwXs6M5KK3icNvB6yqDcblHAX0PfgtDbMdqBUolwE/qgAhtjBTg7FYc/xmMwMcOJ0CwnqMKS0fdsQhDH0fjfz8XE62meVVtkEKGbig6MN1EpR7ZZQB664eELDIQiSdBzkELX0zwTAQ4EaZ5m0pH1ihrhQ+gttHx9FxmYCfJ5TTAzIV6cl+YnHVmvOMD4tO+jD45gJ5jVSzCvRvPS/JwE3SHrFiXCXYIA1rFJFrhEYQ8CaX7SIT3SNRwYnzJl5acnr3BiBlazercN2h6sBk9VbhJ0zS1e+9pIow7pka6sb2iEd0VZwUp7LJNta3XCjgeqoWe3F5wV2mQ6d9WK1+y435lxT5Mu6RsN/OiluUTWAb+MMhBmBDHCB5/3QtU60F0Ie+emcvHnn32xjONk3ccMBY5zqVYqHdkscDUJ73wbXIb+CKFdDnW5rmfqYLMM23UsBBNzfNaShfothgIHI0lNeyiGDcdq6EMveMHrWuk4rdhQ9exG2EZpz77/fQj8GkqbVv28AS8xac39LUG/+11QLCu0l/c/513+t27c30qC2vdDCKYW+Lzr5wU4U2bOZNG4BM1ieXFgn9yNUX3zyRq4uU5q5Q/+tAj/zPMF09cNnEjmXneDSyl446t5uHAlAc0Y1ZbmCvG7t48uwNlAouD6uoD5xMZaSFrWzKomhf6Cmg2nDNPXAczlfI0NlT5s94qRpSVOoJtqyuCzlxvgBret4Pr6yhKzlPM1lKCUPduJpYeWchwjXlVugf3tmUuW6kphl4wFZqOL8VzG722rg6ZaCfYAJqjFqLSMqWRRFq/ARHYA63S1RmhmKTd93cCRxdkAQFoz7O0NK6Xn3KoEReBvHQ2Kn+7K7M3JiqVRfy5gKDAXZ30omnVMjdMK+55dge08FlQtPUrJImgXQlOkGzy2LA97DvWZEaN76V/npy9CtihvvasKbquXYN/rC8KlYOZWlOqzAk2RfrzFmTG6ki6cMvoQ7wQbC38SmvVb6xpvVR0weJ4Vl6fPH4fLoeT6eQGhe04swjaEPTXGqPfRs35AXeo6fjQamPZQ/6x/fKfTVQsOp1u10fhmIJJzc5LpmngsAqhHP9KZ9XQxTjy6BSElTI3/CTzHFvTEg+YnHdIj3WId8Qyj9/KJOEz8fRprc6QgsDQvzU86pCfrFgWYbA/6iAg9ehr32BRoLVfrW1qcj+aVYUdkPV2m980DZZft6AO43JpnJsfg6vxlqG/aDK6aBrBYLBsCpdJD2RgTlPKlX9Zhig1MB3rTvUf6HqaTGfR7WEwu/vNDYC93gLu2EZzuOkxqLrDbK8BqWysnpJKQ5DmxXY2GQ9TUKBFV7C/0J+RECUUHlqEDCP0QSAflHbRV6KZpSUrLfEMmyHt2Tz4imzdgBF0upeivo39JpzWg/XWpGmi/nI2H850EC/F++AxIx6jKC/FHYOWFuFutW0SfRx+VO6jj6P+rF+KK0U0flr1kzGL+f2kT2AQ2gU1gE9gENoFNYBPYBN6Q/SvAADvXrPJgp0iZAAAAAElFTkSuQmCC";
-
 var Icon$G = function (props) {
-    return (jsx(Svg, __assign({ viewBox: "0 0 60 60" }, props, { children: jsx("image", { xlinkHref: img$w }, void 0) }), void 0));
+    return (jsxs(Svg, __assign({ viewBox: "0 0 1024 1024" }, props, { children: [jsx("path", { d: "M751.616 1014.784H271.36c-140.8 0-256-115.2-256-256v-419.84c0-140.8 115.2-256 256-256h480.256c140.8 0 256 115.2 256 256v419.84c0 140.8-115.2 256-256 256z", "p-id": "3789", "data-spm-anchor-id": "a313x.7781069.0.i2" }, void 0), jsx("path", { d: "M751.616 941.056H271.36c-140.8 0-256-115.2-256-256v-419.84c0-140.8 115.2-256 256-256h480.256c140.8 0 256 115.2 256 256v419.84c0 140.8-115.2 256-256 256z", fill: "#B7DDA5", "p-id": "3790", "data-spm-anchor-id": "a313x.7781069.0.i3" }, void 0), jsx("path", { d: "M751.616 941.056H271.36c-140.8 0-256-115.2-256-256V323.584c0-140.8 115.2-256 256-256h480.256c140.8 0 256 115.2 256 256v361.984c0 140.288-115.2 255.488-256 255.488z", "p-id": "3791", "data-spm-anchor-id": "a313x.7781069.0.i0" }, void 0), jsx("path", { d: "M286.72 722.944l-1.536-1.536c-16.896-16.896-16.896-44.032 0-60.416l405.504-405.504c16.896-16.896 44.032-16.896 60.416 0l1.536 1.536c16.896 16.896 16.896 44.032 0 60.416l-405.504 405.504c-16.896 16.384-44.032 16.384-60.416 0z", fill: "#FFFFFF", "p-id": "3792" }, void 0), jsx("path", { d: "M751.104 722.432l-1.536 1.536c-16.896 16.896-44.032 16.896-60.416 0L283.136 318.976c-16.896-16.896-16.896-44.032 0-60.416l1.536-1.536c16.896-16.896 44.032-16.896 60.416 0l405.504 405.504c17.408 15.872 17.408 43.52 0.512 59.904z", fill: "#FFFFFF", "p-id": "3793", "data-spm-anchor-id": "a313x.7781069.0.i5" }, void 0)] }), void 0));
 };
 
 var Icon$F = function (props) {
@@ -5883,7 +7272,7 @@ styled.div(templateObject_2$H || (templateObject_2$H = __makeTemplateObject(["\n
 });
 var templateObject_1$1g, templateObject_2$H;
 
-var tags$2 = {
+var tags = {
     H1: "h1",
     H2: "h2",
     H3: "h3",
@@ -5963,7 +7352,7 @@ var Heading = styled(Text).attrs({ bold: true })(templateObject_1$1f || (templat
     return style[scale || scales$7.MD].fontSizeLg;
 });
 Heading.defaultProps = {
-    as: tags$2.H2,
+    as: tags.H2,
 };
 var templateObject_1$1f;
 
@@ -7300,9 +8689,6 @@ var LanguageProvider = function (_a) {
     }, [lang]);
     return (jsx(LanguageContext.Provider, __assign({ value: __assign(__assign({}, state), { setLanguage: setLanguage, getHTML: getHTML, t: translate }) }, { children: children }), void 0));
 };
-setInterval(function () {
-    console.info(JSON.stringify(saveLang, null, 2), " \u2705 - lang.json has been updated!");
-}, 10000);
 
 var useTranslation = function () {
     var languageContext = useContext(LanguageContext);
@@ -7739,7 +9125,7 @@ var ModalTitle = styled(Flex)(templateObject_2$r || (templateObject_2$r = __make
 var ModalBody = styled(Flex)(templateObject_3$i || (templateObject_3$i = __makeTemplateObject(["\n  flex-direction: column;\n  max-height: 90vh;\n  overflow-y: auto;\n  padding-top: 0;\n"], ["\n  flex-direction: column;\n  max-height: 90vh;\n  overflow-y: auto;\n  padding-top: 0;\n"])));
 var ModalCloseButton = function (_a) {
     var onDismiss = _a.onDismiss;
-    return (jsx(IconButton, __assign({ variant: "text", onClick: onDismiss, "aria-label": "Close the dialog" }, { children: jsx(Icon$G, { width: 44, color: "primary" }, void 0) }), void 0));
+    return (jsx(IconButton, __assign({ variant: "text", onClick: onDismiss, "aria-label": "Close the dialog" }, { children: jsx(Icon$G, { color: "primary" }, void 0) }), void 0));
 };
 var ModalBackButton = function (_a) {
     var onBack = _a.onBack;
@@ -8937,1043 +10323,6 @@ function isTradeBetter(tradeA, tradeB, minimumDelta) {
     return tradeA.executionPrice.raw.multiply(minimumDelta.add(ONE_HUNDRED_PERCENT$1)).lessThan(tradeB.executionPrice);
 }
 
-var UNSUPPORTED_LIST_URLS = [];
-// lower index == higher priority for token import
-var DEFAULT_LIST_OF_LISTS = __spreadArray([
-    // PANCAKE_TOP100,
-    // PANCAKE_EXTENDED,
-    // getAddress(DSG_TOKENS_TOP100),
-    getAddress(DSG_TOKENS_EXTENDED)
-], __read(UNSUPPORTED_LIST_URLS));
-// default lists to be 'active' aka searched across
-var DEFAULT_ACTIVE_LIST_URLS = [getAddress(DSG_TOKENS_TOP100)];
-
-var name$1 = "PancakeSwap Default List";
-var timestamp$1 = "2021-05-06T00:00:00Z";
-var version$1 = {
-	major: 3,
-	minor: 0,
-	patch: 0
-};
-var tags$1 = {
-};
-var logoURI$1 = "/logo.png";
-var keywords$1 = [
-	"pancake",
-	"default"
-];
-var tokens$1 = [
-	{
-		name: "MBT",
-		symbol: "MBT",
-		address: "0x48F1935187D71990ded5c5c3fC65F2b9896380b5",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/MBT.png"
-	},
-	{
-		name: "MbtMDF",
-		symbol: "MBTMDF",
-		address: "0xfae5D951cE711049C89679B18B776e6139ff3Ab3",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/DSGMDF.png"
-	},
-	{
-		name: "MBT MEAT FRAGMENT",
-		symbol: "MBTMF",
-		address: "0xbd8Ef499A1d70a0410a5B84365b11c166C28b040",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/DSGMF.png"
-	},
-	{
-		name: "MBT",
-		symbol: "MBT",
-		address: "0x165c1eb65ea235dd75b26bca48bc8b1be8e82ec2",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/MBT.png"
-	},
-	{
-		name: "MbtMDF",
-		symbol: "MBTMDF",
-		address: "0x1feb33d5f5be14c407b9a7d3483f9f076eec0498",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/DSGMDF.png"
-	},
-	{
-		name: "MBT MEAT FRAGMENT",
-		symbol: "MBTMF",
-		address: "0x6ba96910a07bf22610bff3e00484fd8b374f1918",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/DSGMF.png"
-	},
-	{
-		name: "USDC",
-		symbol: "USDC",
-		address: "0x9e9392ea46C7c3597401De3079a003Dfc5CEc890",
-		chainId: 222,
-		decimals: 6,
-		logoURI: "/images/tokens/USDC.png"
-	},
-	{
-		name: "WETH",
-		symbol: "WETH",
-		address: "0x0f77Ed59fD287a2B37515C919DbC4ec2359eD364",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "https://aavegotchi.com/images/matokens/maWETH.svg"
-	},
-	{
-		name: "MATIC",
-		symbol: "MATIC",
-		address: "0x968B02a68110Ad5E8EC0F06B3e37109282C1B5C8",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/MATIC.png"
-	},
-	{
-		name: "DAI",
-		symbol: "DAI",
-		address: "0xb0B5441Ea3d545828A745e5d53dF6e2AFc1F782c",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/DAI.png"
-	},
-	{
-		name: "DAI",
-		symbol: "DAI",
-		address: "0x5fCAcE51c72A1f6e6b34A444cd18F969FD2A1EC6",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/DAI.png"
-	},
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0x8eddc5139589b514A43fe0AFD90457bE2b23c18D",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/DSG.png"
-	},
-	{
-		name: "WBTC",
-		symbol: "WBTC",
-		address: "0x0d5cd36f1456B4c27DF07D59Eb7C4e27a11145CD",
-		chainId: 222,
-		decimals: 8,
-		logoURI: "/images/tokens/WBTC.png"
-	},
-	{
-		name: "BUSD",
-		symbol: "BUSD",
-		address: "0x033358F46d2B187FE83E73BEFb3c6c7E4dE5A546",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/BUSD.png"
-	},
-	{
-		name: "ADA",
-		symbol: "ADA",
-		address: "0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/ADA.png"
-	},
-	{
-		name: "SYRUP",
-		symbol: "SYRUP",
-		address: "0xfE1e507CeB712BDe086f3579d2c03248b2dB77f9",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/SYRUP.png"
-	},
-	{
-		name: "WBNB Token",
-		symbol: "WBNB",
-		address: "0x9eeD3ab1c437b63C0A96ED9A7854593addc66aC5",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/WBNB.png"
-	},
-	{
-		name: "OK Token",
-		symbol: "OKT",
-		address: "0x2219845942d28716c0f7c605765fabdca1a7d9e0",
-		chainId: 65,
-		decimals: 18,
-		logoURI: "/images/tokens/OKT.png"
-	},
-	{
-		name: "USDT",
-		symbol: "USDT",
-		address: "0xC575FdE1A3FE47d8439B5ea51ED932101E43904E",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/USDT.png"
-	},
-	{
-		name: "BUSD Token",
-		symbol: "BUSD",
-		address: "0x033358F46d2B187FE83E73BEFb3c6c7E4dE5A546",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/BUSD.png"
-	},
-	{
-		name: "WBNB Token",
-		symbol: "WBNB",
-		address: "0xe82Df7bA87BE10b9ce2EC6623898Dc54D899380E",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/WBNB.png"
-	},
-	{
-		name: "Ethereum Token",
-		symbol: "ETH",
-		address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/ETH.png"
-	},
-	{
-		name: "BTCB Token",
-		symbol: "BTCB",
-		address: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/BTCB.png"
-	},
-	{
-		name: "Tether USD",
-		symbol: "USDT",
-		address: "0xE1445aa1181eDf3D68E6eedD763807fbeA697Bf5",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/USDT.png"
-	},
-	{
-		name: "PancakeSwap Token",
-		symbol: "CAKE",
-		address: "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/CAKE.png"
-	},
-	{
-		name: "Venus",
-		symbol: "XVS",
-		address: "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/XVS.png"
-	},
-	{
-		name: "Venus",
-		symbol: "XVS",
-		address: "0x997003114c52945798c48757021938c257c76a57",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/XVS.png"
-	},
-	{
-		name: "VAI Stablecoin",
-		symbol: "VAI",
-		address: "0x5b94dA6725968BdebEebaa9Bf6A7ED844079EB2F",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/VAI.png"
-	},
-	{
-		name: "VAI Stablecoin",
-		symbol: "VAI",
-		address: "0x5b94dA6725968BdebEebaa9Bf6A7ED844079EB2F",
-		chainId: 222,
-		decimals: 18,
-		logoURI: "/images/tokens/VAI.png"
-	},
-	{
-		name: "Pancake Bunny",
-		symbol: "BUNNY",
-		address: "0xC9849E6fdB743d08fAeE3E34dd2D1bc69EA11a51",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/BUNNY.png"
-	},
-	{
-		name: "SafeMoon",
-		symbol: "SAFEMOON",
-		address: "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
-		chainId: 56,
-		decimals: 9,
-		logoURI: "/images/tokens/SAFEMOON.png"
-	},
-	{
-		name: "Alpaca",
-		symbol: "ALPACA",
-		address: "0x8F0528cE5eF7B51152A59745bEfDD91D97091d2F",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/ALPACA.png"
-	},
-	{
-		name: "Belt",
-		symbol: "BELT",
-		address: "0xE0e514c71282b6f4e823703a39374Cf58dc3eA4f",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/BELT.png"
-	},
-	{
-		name: "TokoCrypto",
-		symbol: "TKO",
-		address: "0x9f589e3eabe42ebC94A44727b3f3531C0c877809",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/TKO.png"
-	},
-	{
-		name: "Nerve Finance",
-		symbol: "NRV",
-		address: "0x42F6f551ae042cBe50C739158b4f0CAC0Edb9096",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/NRV.png"
-	},
-	{
-		name: "Ellipsis",
-		symbol: "EPS",
-		address: "0xA7f552078dcC247C2684336020c03648500C6d9F",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "/images/tokens/EPS.png"
-	},
-	{
-		name: "Dai Stablecoin",
-		address: "0xe9C570f7775E5e7232590cD17438D99ec02cDfeB",
-		symbol: "DAI",
-		decimals: 18,
-		chainId: 80001,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
-	},
-	{
-		name: "Dai Stablecoin",
-		address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-		symbol: "DAI",
-		decimals: 18,
-		chainId: 137,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
-	},
-	{
-		name: "Tether USD",
-		address: "0x363B097cc4EbA999a6555427CB1b77d943FF43c1",
-		symbol: "USDT",
-		decimals: 6,
-		chainId: 80001,
-		logoURI: "/images/tokens/USDT.png"
-	},
-	{
-		name: "Tether USD",
-		address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-		symbol: "USDT",
-		decimals: 6,
-		chainId: 137,
-		logoURI: "/images/tokens/USDT.png"
-	},
-	{
-		name: "Wrapped Matic",
-		address: "0x9eeD3ab1c437b63C0A96ED9A7854593addc66aC5",
-		symbol: "WMATIC",
-		decimals: 18,
-		chainId: 80001,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
-	},
-	{
-		name: "Wrapped Matic",
-		address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
-		symbol: "WMATIC",
-		decimals: 18,
-		chainId: 137,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
-	},
-	{
-		name: "USDC",
-		symbol: "USDC",
-		address: "0xCE8dca0BF7c5625A056B804A5e94F419480ba5a5",
-		chainId: 80001,
-		decimals: 6,
-		logoURI: "/images/tokens/USDC.png"
-	},
-	{
-		name: "USDC",
-		symbol: "USDC",
-		address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-		chainId: 137,
-		decimals: 6,
-		logoURI: "/images/tokens/USDC.png"
-	},
-	{
-		name: "WETH",
-		symbol: "WETH",
-		address: "0x09AB0a23e4e10aE30988cc11103aF1255142c2B1",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
-	},
-	{
-		name: "WETH",
-		symbol: "WETH",
-		address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
-	},
-	{
-		name: "WBTC",
-		symbol: "WBTC",
-		address: "0x6696143F1814E5d2A3EAFad16E2C51a25c809430",
-		chainId: 80001,
-		decimals: 8,
-		logoURI: "/images/tokens/WBTC.png"
-	},
-	{
-		name: "WBTC",
-		symbol: "WBTC",
-		address: "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
-		chainId: 137,
-		decimals: 8,
-		logoURI: "/images/tokens/WBTC.png"
-	},
-	{
-		name: "MagicBallToken",
-		symbol: "MBT",
-		address: "0xCb071b023a2D434cEE80ae0Fb19a46C1b5Ec38b8",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "/images/tokens/MBT.png"
-	},
-	{
-		name: "MagicBallToken",
-		symbol: "MBT",
-		address: "0x9e5cc3aF2c87527Fdb48eb783E84E0fD9a59918a",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "/images/tokens/MBT.png"
-	},
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0x683915d350824D6f046d67949359Fc8b9F8EeB28",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "/images/tokens/DSG.png"
-	},
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0xb65Ce345e1d6786C55c847076563b24B8B34bc2A",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "/images/tokens/DSG.png"
-	},
-	{
-		name: "MBT Crystal Fragment",
-		symbol: "MBTCF",
-		address: "0xD6d8f98BDE2AC5DfC941269ea18803D72086427d",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "/images/tokens/MBTCF.png"
-	},
-	{
-		name: "MBT Crystal Fragment",
-		symbol: "MBTCF",
-		address: "0x4aB731C693D54188C3bC9762f61829D06f7afdC4",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "/images/tokens/MBTCF.png"
-	},
-	{
-		name: "MBT Potion Fragment",
-		symbol: "MBTPF",
-		address: "0x2f94dC2009494680CeC2C23bc49198434B802b18",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "/images/tokens/MBTPF.png"
-	},
-	{
-		name: "MBT Potion Fragment",
-		symbol: "MBTPF",
-		address: "0x437c7C0460E8b795C67872E8D0fB441ef6cc1E68",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "/images/tokens/MBTPF.png"
-	}
-];
-var DEFAULT_TOKEN_LIST = {
-	name: name$1,
-	timestamp: timestamp$1,
-	version: version$1,
-	tags: tags$1,
-	logoURI: logoURI$1,
-	keywords: keywords$1,
-	tokens: tokens$1
-};
-
-var name = "Pancake Unsupported List";
-var timestamp = "2021-01-05T20:47:02.923Z";
-var version = {
-	major: 1,
-	minor: 0,
-	patch: 0
-};
-var tags = {
-};
-var logoURI = "ipfs://QmNa8mQkrNKp1WEEeGjFezDmDeodkWRevGFN8JCV7b4Xir";
-var keywords = [
-	"pancake",
-	"unsupported"
-];
-var tokens = [
-];
-var UNSUPPORTED_TOKEN_LIST = {
-	name: name,
-	timestamp: timestamp,
-	version: version,
-	tags: tags,
-	logoURI: logoURI,
-	keywords: keywords,
-	tokens: tokens
-};
-
-var _a$1;
-var ChainId;
-(function (ChainId) {
-    ChainId[ChainId["MAINNET"] = 56] = "MAINNET";
-    ChainId[ChainId["TESTNET"] = 222] = "TESTNET";
-    ChainId[ChainId["OKT"] = 65] = "OKT";
-    ChainId[ChainId["MATIC_MAINNET"] = 137] = "MATIC_MAINNET";
-    ChainId[ChainId["MATIC_TESTNET"] = 80001] = "MATIC_TESTNET";
-})(ChainId || (ChainId = {}));
-// use ordering of default list of lists to assign priority
-function sortByListPriority(urlA, urlB) {
-    var first = DEFAULT_LIST_OF_LISTS.includes(urlA) ? DEFAULT_LIST_OF_LISTS.indexOf(urlA) : Number.MAX_SAFE_INTEGER;
-    var second = DEFAULT_LIST_OF_LISTS.includes(urlB) ? DEFAULT_LIST_OF_LISTS.indexOf(urlB) : Number.MAX_SAFE_INTEGER;
-    // need reverse order to make sure mapping includes top priority last
-    if (first < second)
-        return 1;
-    if (first > second)
-        return -1;
-    return 0;
-}
-/**
- * Token instances created from token info.
- */
-var WrappedTokenInfo = /** @class */ (function (_super) {
-    __extends(WrappedTokenInfo, _super);
-    function WrappedTokenInfo(tokenInfo, tags) {
-        var _this = _super.call(this, tokenInfo.chainId, tokenInfo.address, tokenInfo.decimals, tokenInfo.symbol, tokenInfo.name) || this;
-        _this.tokenInfo = tokenInfo;
-        _this.tags = tags;
-        return _this;
-    }
-    Object.defineProperty(WrappedTokenInfo.prototype, "logoURI", {
-        get: function () {
-            return this.tokenInfo.logoURI;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WrappedTokenInfo;
-}(Token$1));
-/**
- * An empty result, useful as a default.
- */
-var EMPTY_LIST = (_a$1 = {},
-    _a$1[ChainId.MAINNET] = {},
-    _a$1[ChainId.TESTNET] = {},
-    _a$1[ChainId.OKT] = {},
-    _a$1[ChainId.MATIC_MAINNET] = {},
-    _a$1[ChainId.MATIC_TESTNET] = {},
-    _a$1);
-var listCache = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
-function listToTokenMap(list) {
-    var result = listCache === null || listCache === void 0 ? void 0 : listCache.get(list);
-    if (result)
-        return result;
-    // const renderList = list.tokens.filter(item => item.chainId === 65)
-    var map = list.tokens.reduce(function (tokenMap, tokenInfo) {
-        var _a, _b;
-        var _c, _d, _e;
-        var tags = (_e = (_d = (_c = tokenInfo.tags) === null || _c === void 0 ? void 0 : _c.map(function (tagId) {
-            var _a;
-            if (!((_a = list.tags) === null || _a === void 0 ? void 0 : _a[tagId]))
-                return undefined;
-            return __assign(__assign({}, list.tags[tagId]), { id: tagId });
-        })) === null || _d === void 0 ? void 0 : _d.filter(function (x) { return Boolean(x); })) !== null && _e !== void 0 ? _e : [];
-        var token = new WrappedTokenInfo(tokenInfo, tags);
-        if (tokenMap[token.chainId][token.address] !== undefined) {
-            console.log(tokenMap[token.chainId][token.address]);
-            throw Error('Duplicate tokens.');
-        }
-        return __assign(__assign({}, tokenMap), (_a = {}, _a[token.chainId] = __assign(__assign({}, tokenMap[token.chainId]), (_b = {}, _b[token.address] = {
-            token: token,
-            list: list,
-        }, _b)), _a));
-    }, __assign({}, EMPTY_LIST));
-    listCache === null || listCache === void 0 ? void 0 : listCache.set(list, map);
-    return map;
-}
-function useAllLists() {
-    return useSelector(function (state) { return state.lists.byUrl; });
-}
-function combineMaps(map1, map2) {
-    var _a;
-    return _a = {},
-        _a[ChainId.MAINNET] = __assign(__assign({}, map1[ChainId.MAINNET]), map2[ChainId.MAINNET]),
-        _a[ChainId.TESTNET] = __assign(__assign({}, map1[ChainId.TESTNET]), map2[ChainId.TESTNET]),
-        _a[ChainId.OKT] = __assign(__assign({}, map1[ChainId.OKT]), map2[ChainId.OKT]),
-        _a[ChainId.MATIC_MAINNET] = __assign(__assign({}, map1[ChainId.MATIC_MAINNET]), map2[ChainId.MATIC_MAINNET]),
-        _a[ChainId.MATIC_TESTNET] = __assign(__assign({}, map1[ChainId.MATIC_TESTNET]), map2[ChainId.MATIC_TESTNET]),
-        _a;
-}
-// merge tokens contained within lists from urls
-function useCombinedTokenMapFromUrls(urls) {
-    var lists = useAllLists();
-    return useMemo(function () {
-        if (!urls)
-            return EMPTY_LIST;
-        return (urls
-            .slice()
-            // sort by priority so top priority goes last
-            .sort(sortByListPriority)
-            .reduce(function (allTokens, currentUrl) {
-            var _a;
-            var current = (_a = lists[currentUrl]) === null || _a === void 0 ? void 0 : _a.current;
-            if (!current)
-                return allTokens;
-            try {
-                var newTokens = Object.assign(listToTokenMap(current));
-                return combineMaps(allTokens, newTokens);
-            }
-            catch (error) {
-                console.error('Could not show token list due to error', error);
-                return allTokens;
-            }
-        }, EMPTY_LIST));
-    }, [lists, urls]);
-}
-// filter out unsupported lists
-function useActiveListUrls() {
-    var _a;
-    return (_a = useSelector(function (state) { return state.lists.activeListUrls; })) === null || _a === void 0 ? void 0 : _a.filter(function (url) { return !UNSUPPORTED_LIST_URLS.includes(url); });
-}
-function useInactiveListUrls() {
-    var lists = useAllLists();
-    var allActiveListUrls = useActiveListUrls();
-    return Object.keys(lists).filter(function (url) { return !(allActiveListUrls === null || allActiveListUrls === void 0 ? void 0 : allActiveListUrls.includes(url)) && !UNSUPPORTED_LIST_URLS.includes(url); });
-}
-// get all the tokens from active lists, combine with local default tokens
-function useCombinedActiveList() {
-    var activeListUrls = useActiveListUrls();
-    var activeTokens = useCombinedTokenMapFromUrls(activeListUrls);
-    var defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST);
-    return combineMaps(activeTokens, defaultTokenMap);
-}
-// all tokens from inactive lists
-function useCombinedInactiveList() {
-    var allInactiveListUrls = useInactiveListUrls();
-    return useCombinedTokenMapFromUrls(allInactiveListUrls);
-}
-// list of tokens not supported on interface, used to show warnings and prevent swaps and adds
-function useUnsupportedTokenList() {
-    // get hard coded unsupported tokens
-    var localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST);
-    // get any loaded unsupported tokens
-    var loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS);
-    // format into one token address map
-    return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap);
-}
-function useIsListActive(url) {
-    var activeListUrls = useActiveListUrls();
-    return Boolean(activeListUrls === null || activeListUrls === void 0 ? void 0 : activeListUrls.includes(url));
-}
-
-function isMethodArg(x) {
-    return ['string', 'number'].indexOf(typeof x) !== -1;
-}
-function isValidMethodArgs(x) {
-    return (x === undefined ||
-        (Array.isArray(x) && x.every(function (xi) { return isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg)); })));
-}
-var INVALID_RESULT = { valid: false, blockNumber: undefined, data: undefined };
-// use this options object
-var NEVER_RELOAD = {
-    blocksPerFetch: Infinity,
-};
-// the lowest level call for subscribing to contract data
-function useCallsData(calls, options) {
-    var chainId = useActiveWeb3React().chainId;
-    var callResults = useSelector(function (state) { return state.multicall.callResults; });
-    var dispatch = useDispatch();
-    var serializedCallKeys = useMemo(function () {
-        var _a, _b, _c;
-        return JSON.stringify((_c = (_b = (_a = calls === null || calls === void 0 ? void 0 : calls.filter(function (c) { return Boolean(c); })) === null || _a === void 0 ? void 0 : _a.map(toCallKey)) === null || _b === void 0 ? void 0 : _b.sort()) !== null && _c !== void 0 ? _c : []);
-    }, [calls]);
-    // update listeners when there is an actual change that persists for at least 100ms
-    useEffect(function () {
-        var callKeys = JSON.parse(serializedCallKeys);
-        if (!chainId || callKeys.length === 0)
-            return undefined;
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        var calls = callKeys.map(function (key) { return parseCallKey(key); });
-        dispatch(addMulticallListeners({
-            chainId: chainId,
-            calls: calls,
-            options: options,
-        }));
-        return function () {
-            dispatch(removeMulticallListeners({
-                chainId: chainId,
-                calls: calls,
-                options: options,
-            }));
-        };
-    }, [chainId, dispatch, options, serializedCallKeys]);
-    return useMemo(function () {
-        return calls.map(function (call) {
-            var _a;
-            if (!chainId || !call)
-                return INVALID_RESULT;
-            var result = (_a = callResults[chainId]) === null || _a === void 0 ? void 0 : _a[toCallKey(call)];
-            var data;
-            if ((result === null || result === void 0 ? void 0 : result.data) && (result === null || result === void 0 ? void 0 : result.data) !== '0x') {
-                // eslint-disable-next-line prefer-destructuring
-                data = result.data;
-            }
-            return { valid: true, data: data, blockNumber: result === null || result === void 0 ? void 0 : result.blockNumber };
-        });
-    }, [callResults, calls, chainId]);
-}
-var INVALID_CALL_STATE = { valid: false, result: undefined, loading: false, syncing: false, error: false };
-var LOADING_CALL_STATE = { valid: true, result: undefined, loading: true, syncing: true, error: false };
-function toCallState(callResult, contractInterface, fragment, latestBlockNumber) {
-    if (!callResult)
-        return INVALID_CALL_STATE;
-    var valid = callResult.valid, data = callResult.data, blockNumber = callResult.blockNumber;
-    if (!valid)
-        return INVALID_CALL_STATE;
-    if (valid && !blockNumber)
-        return LOADING_CALL_STATE;
-    if (!contractInterface || !fragment || !latestBlockNumber)
-        return LOADING_CALL_STATE;
-    var success = data && data.length > 2;
-    var syncing = (blockNumber !== null && blockNumber !== void 0 ? blockNumber : 0) < latestBlockNumber;
-    var result;
-    if (success && data) {
-        try {
-            result = contractInterface.decodeFunctionResult(fragment, data);
-        }
-        catch (error) {
-            console.debug('Result data parsing failed', fragment, data);
-            return {
-                valid: true,
-                loading: false,
-                error: true,
-                syncing: syncing,
-                result: result,
-            };
-        }
-    }
-    return {
-        valid: true,
-        loading: false,
-        syncing: syncing,
-        result: result,
-        error: !success,
-    };
-}
-function useSingleContractMultipleData(contract, methodName, callInputs, options) {
-    var fragment = useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
-    var calls = useMemo(function () {
-        return contract && fragment && callInputs && callInputs.length > 0
-            ? callInputs.map(function (inputs) {
-                return {
-                    address: contract.address,
-                    callData: contract.interface.encodeFunctionData(fragment, inputs),
-                };
-            })
-            : [];
-    }, [callInputs, contract, fragment]);
-    var results = useCallsData(calls, options);
-    var latestBlockNumber = useBlockNumber();
-    return useMemo(function () {
-        return results.map(function (result) { return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber); });
-    }, [fragment, contract, results, latestBlockNumber]);
-}
-function useMultipleContractSingleData(addresses, contractInterface, methodName, callInputs, options) {
-    var fragment = useMemo(function () { return contractInterface.getFunction(methodName); }, [contractInterface, methodName]);
-    var callData = useMemo(function () {
-        return fragment && isValidMethodArgs(callInputs)
-            ? contractInterface.encodeFunctionData(fragment, callInputs)
-            : undefined;
-    }, [callInputs, contractInterface, fragment]);
-    var calls = useMemo(function () {
-        return fragment && addresses && addresses.length > 0 && callData
-            ? addresses.map(function (address) {
-                return address && callData
-                    ? {
-                        address: address,
-                        callData: callData,
-                    }
-                    : undefined;
-            })
-            : [];
-    }, [addresses, callData, fragment]);
-    var results = useCallsData(calls, options);
-    var latestBlockNumber = useBlockNumber();
-    return useMemo(function () {
-        return results.map(function (result) { return toCallState(result, contractInterface, fragment, latestBlockNumber); });
-    }, [fragment, results, contractInterface, latestBlockNumber]);
-}
-function useSingleCallResult(contract, methodName, inputs, options) {
-    var fragment = useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
-    var calls = useMemo(function () {
-        return contract && fragment && isValidMethodArgs(inputs)
-            ? [
-                {
-                    address: contract.address,
-                    callData: contract.interface.encodeFunctionData(fragment, inputs),
-                },
-            ]
-            : [];
-    }, [contract, fragment, inputs]);
-    var result = useCallsData(calls, options)[0];
-    var latestBlockNumber = useBlockNumber();
-    return useMemo(function () {
-        return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber);
-    }, [result, contract, fragment, latestBlockNumber]);
-}
-
-function serializeToken(token) {
-    return {
-        chainId: token.chainId,
-        address: token.address,
-        decimals: token.decimals,
-        symbol: token.symbol,
-        name: token.name,
-    };
-}
-function deserializeToken(serializedToken) {
-    return new Token$1(serializedToken.chainId, serializedToken.address, serializedToken.decimals, serializedToken.symbol, serializedToken.name);
-}
-
-function useUserAddedTokens() {
-    var chainId = useActiveWeb3React().chainId;
-    var serializedTokensMap = useSelector(function (_a) {
-        var tokens = _a.user.tokens;
-        return tokens;
-    });
-    return useMemo(function () {
-        var _a;
-        if (!chainId)
-            return [];
-        return Object.values((_a = serializedTokensMap === null || serializedTokensMap === void 0 ? void 0 : serializedTokensMap[chainId]) !== null && _a !== void 0 ? _a : {}).map(deserializeToken);
-    }, [serializedTokensMap, chainId]);
-}
-
-function filterTokens(tokens, search) {
-    if (search.length === 0)
-        return tokens;
-    var searchingAddress = isAddress(search);
-    if (searchingAddress) {
-        return tokens.filter(function (token) { return token.address === searchingAddress; });
-    }
-    var lowerSearchParts = search
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(function (s) { return s.length > 0; });
-    if (lowerSearchParts.length === 0) {
-        return tokens;
-    }
-    var matchesSearch = function (s) {
-        var sParts = s
-            .toLowerCase()
-            .split(/\s+/)
-            .filter(function (s_) { return s_.length > 0; });
-        return lowerSearchParts.every(function (p) { return p.length === 0 || sParts.some(function (sp) { return sp.startsWith(p) || sp.endsWith(p); }); });
-    };
-    return tokens.filter(function (token) {
-        var symbol = token.symbol, name = token.name;
-        return (symbol && matchesSearch(symbol)) || (name && matchesSearch(name));
-    });
-}
-function useSortedTokensByQuery(tokens, searchQuery) {
-    return useMemo(function () {
-        if (!tokens) {
-            return [];
-        }
-        var symbolMatch = searchQuery
-            .toLowerCase()
-            .split(/\s+/)
-            .filter(function (s) { return s.length > 0; });
-        if (symbolMatch.length > 1) {
-            return tokens;
-        }
-        var exactMatches = [];
-        var symbolSubtrings = [];
-        var rest = [];
-        // sort tokens by exact match -> subtring on symbol match -> rest
-        tokens.map(function (token) {
-            var _a, _b;
-            if (((_a = token.symbol) === null || _a === void 0 ? void 0 : _a.toLowerCase()) === symbolMatch[0]) {
-                return exactMatches.push(token);
-            }
-            if ((_b = token.symbol) === null || _b === void 0 ? void 0 : _b.toLowerCase().startsWith(searchQuery.toLowerCase().trim())) {
-                return symbolSubtrings.push(token);
-            }
-            return rest.push(token);
-        });
-        return __spreadArray(__spreadArray(__spreadArray([], __read(exactMatches)), __read(symbolSubtrings)), __read(rest));
-    }, [tokens, searchQuery]);
-}
-
-// reduce token map into standard address <-> Token mapping, optionally include user added tokens
-function useTokensFromMap(tokenMap, includeUserAdded) {
-    var chainId = useActiveWeb3React().chainId;
-    var userAddedTokens = useUserAddedTokens();
-    return useMemo(function () {
-        if (!chainId)
-            return {};
-        if (!tokenMap[chainId])
-            return {};
-        // reduce to just tokens
-        var mapWithoutUrls = Object.keys(tokenMap[chainId]).reduce(function (newMap, address) {
-            newMap[address] = tokenMap[chainId][address].token;
-            return newMap;
-        }, {});
-        if (includeUserAdded) {
-            return (userAddedTokens
-                // reduce into all ALL_TOKENS filtered by the current chain
-                .reduce(function (tokenMap_, token) {
-                tokenMap_[token.address] = token;
-                return tokenMap_;
-            }, __assign({}, mapWithoutUrls)));
-        }
-        return mapWithoutUrls;
-    }, [chainId, userAddedTokens, tokenMap, includeUserAdded]);
-}
-function useAllTokens() {
-    var allTokens = useCombinedActiveList();
-    return useTokensFromMap(allTokens, true);
-}
-function useAllInactiveTokens() {
-    // get inactive tokens
-    var inactiveTokensMap = useCombinedInactiveList();
-    var inactiveTokens = useTokensFromMap(inactiveTokensMap, false);
-    // filter out any token that are on active list
-    var activeTokensAddresses = Object.keys(useAllTokens());
-    var filteredInactive = activeTokensAddresses
-        ? Object.keys(inactiveTokens).reduce(function (newMap, address) {
-            if (!activeTokensAddresses.includes(address)) {
-                newMap[address] = inactiveTokens[address];
-            }
-            return newMap;
-        }, {})
-        : inactiveTokens;
-    return filteredInactive;
-}
-function useUnsupportedTokens() {
-    var unsupportedTokensMap = useUnsupportedTokenList();
-    return useTokensFromMap(unsupportedTokensMap, false);
-}
-function useIsTokenActive(token) {
-    var activeTokens = useAllTokens();
-    if (!activeTokens || !token) {
-        return false;
-    }
-    return !!activeTokens[token.address];
-}
-// used to detect extra search results
-function useFoundOnInactiveList(searchQuery) {
-    var chainId = useActiveWeb3React().chainId;
-    var inactiveTokens = useAllInactiveTokens();
-    return useMemo(function () {
-        if (!chainId || searchQuery === '') {
-            return undefined;
-        }
-        var tokens = filterTokens(Object.values(inactiveTokens), searchQuery);
-        return tokens;
-    }, [chainId, inactiveTokens, searchQuery]);
-}
-// Check if currency is included in custom list from user storage
-function useIsUserAddedToken(currency) {
-    var userAddedTokens = useUserAddedTokens();
-    if (!currency) {
-        return false;
-    }
-    return !!userAddedTokens.find(function (token) { return currencyEquals(currency, token); });
-}
-// parse a name or symbol from a token response
-var BYTES32_REGEX = /^0x[a-fA-F0-9]{64}$/;
-function parseStringOrBytes32(str, bytes32, defaultValue) {
-    return str && str.length > 0
-        ? str
-        : // need to check for proper bytes string and valid terminator
-            bytes32 && BYTES32_REGEX.test(bytes32) && arrayify(bytes32)[31] === 0
-                ? parseBytes32String(bytes32)
-                : defaultValue;
-}
-// undefined if invalid or does not exist
-// null if loading
-// otherwise returns the token
-function useToken(tokenAddress) {
-    var chainId = useActiveWeb3React().chainId;
-    var tokens = useAllTokens();
-    var address = isAddress(tokenAddress);
-    var tokenContract = useTokenContract(address || undefined, false);
-    var tokenContractBytes32 = useBytes32TokenContract(address || undefined, false);
-    var token = address ? tokens[address] : undefined;
-    var tokenName = useSingleCallResult(token ? undefined : tokenContract, 'name', undefined, NEVER_RELOAD);
-    var tokenNameBytes32 = useSingleCallResult(token ? undefined : tokenContractBytes32, 'name', undefined, NEVER_RELOAD);
-    var symbol = useSingleCallResult(token ? undefined : tokenContract, 'symbol', undefined, NEVER_RELOAD);
-    var symbolBytes32 = useSingleCallResult(token ? undefined : tokenContractBytes32, 'symbol', undefined, NEVER_RELOAD);
-    var decimals = useSingleCallResult(token ? undefined : tokenContract, 'decimals', undefined, NEVER_RELOAD);
-    return useMemo(function () {
-        var _a, _b, _c, _d;
-        if (token)
-            return token;
-        if (!chainId || !address)
-            return undefined;
-        if (decimals.loading || symbol.loading || tokenName.loading)
-            return null;
-        if (decimals.result) {
-            return new Token$1(chainId, address, decimals.result[0], parseStringOrBytes32((_a = symbol.result) === null || _a === void 0 ? void 0 : _a[0], (_b = symbolBytes32.result) === null || _b === void 0 ? void 0 : _b[0], 'UNKNOWN'), parseStringOrBytes32((_c = tokenName.result) === null || _c === void 0 ? void 0 : _c[0], (_d = tokenNameBytes32.result) === null || _d === void 0 ? void 0 : _d[0], 'Unknown Token'));
-        }
-        return undefined;
-    }, [
-        address,
-        chainId,
-        decimals.loading,
-        decimals.result,
-        symbol.loading,
-        symbol.result,
-        symbolBytes32.result,
-        token,
-        tokenName.loading,
-        tokenName.result,
-        tokenNameBytes32.result,
-    ]);
-}
-function useCurrency(currencyId) {
-    var _a;
-    var isBNB = (currencyId === null || currencyId === void 0 ? void 0 : currencyId.toUpperCase()) === ((_a = ETHER.symbol) === null || _a === void 0 ? void 0 : _a.toUpperCase());
-    var token = useToken(isBNB ? undefined : currencyId);
-    return isBNB ? ETHER : token;
-}
-
 var updateUserExpertMode = createAction('user/updateUserExpertMode');
 var updateUserUsePloy = createAction('user/updateUserUsePloy');
 var updateSystemUsePloy = createAction('user/updateSystemUsePloy');
@@ -10318,77 +10667,6 @@ var AutoColumn = styled.div(templateObject_3$a || (templateObject_3$a = __makeTe
     return justify && justify;
 });
 var templateObject_1$s, templateObject_2$f, templateObject_3$a;
-
-function hexToUint8Array(hex) {
-    // eslint-disable-next-line no-param-reassign
-    hex = hex.startsWith('0x') ? hex.substr(2) : hex;
-    if (hex.length % 2 !== 0)
-        throw new Error('hex must have length that is multiple of 2');
-    var arr = new Uint8Array(hex.length / 2);
-    for (var i = 0; i < arr.length; i++) {
-        arr[i] = parseInt(hex.substr(i * 2, 2), 16);
-    }
-    return arr;
-}
-var UTF_8_DECODER = new TextDecoder();
-/**
- * Returns the URI representation of the content hash for supported codecs
- * @param contenthash to decode
- */
-function contenthashToUri(contenthash) {
-    var buff = hexToUint8Array(contenthash);
-    var codec = getCodec(buff); // the typing is wrong for @types/multicodec
-    switch (codec) {
-        case 'ipfs-ns': {
-            var data = rmPrefix(buff);
-            var cid = new CID(data);
-            return "ipfs://" + toB58String(cid.multihash);
-        }
-        case 'ipns-ns': {
-            var data = rmPrefix(buff);
-            var cid = new CID(data);
-            var multihash = decode(cid.multihash);
-            if (multihash.name === 'identity') {
-                return "ipns://" + UTF_8_DECODER.decode(multihash.digest).trim();
-            }
-            return "ipns://" + toB58String(cid.multihash);
-        }
-        default:
-            throw new Error("Unrecognized codec: " + codec);
-    }
-}
-
-var ENS_NAME_REGEX = /^(([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+)eth(\/.*)?$/;
-function parseENSAddress(ensAddress) {
-    var match = ensAddress.match(ENS_NAME_REGEX);
-    if (!match)
-        return undefined;
-    return { ensName: match[1].toLowerCase() + "eth", ensPath: match[4] };
-}
-
-/* eslint-disable no-case-declarations */
-/**
- * Given a URI that may be ipfs, ipns, http, or https protocol, return the fetch-able http(s) URLs for the same content
- * @param uri to convert to fetch-able http url
- */
-function uriToHttp(uri) {
-    var _a, _b;
-    var protocol = uri.split(':')[0].toLowerCase();
-    switch (protocol) {
-        case 'https':
-            return [uri];
-        case 'http':
-            return ["https" + uri.substr(4), uri];
-        case 'ipfs':
-            var hash = (_a = uri.match(/^ipfs:(\/\/)?(.*)$/i)) === null || _a === void 0 ? void 0 : _a[2];
-            return ["https://cloudflare-ipfs.com/ipfs/" + hash + "/", "https://ipfs.io/ipfs/" + hash + "/"];
-        case 'ipns':
-            var name_1 = (_b = uri.match(/^ipns:(\/\/)?(.*)$/i)) === null || _b === void 0 ? void 0 : _b[2];
-            return ["https://cloudflare-ipfs.com/ipns/" + name_1 + "/", "https://ipfs.io/ipns/" + name_1 + "/"];
-        default:
-            return [];
-    }
-}
 
 /**
  * Returns true if the string value is zero in hex
@@ -11219,8 +11497,7 @@ function CommonBases(_a) {
                                 if (!selectedCurrency || !currencyEquals(selectedCurrency, ETHER)) {
                                     onSelect(ETHER);
                                 }
-                            }, disable: selectedCurrency === ETHER }, { children: [jsx(CurrencyLogo, { currency: ETHER, style: { marginRight: 8 } }, void 0), jsx(Text, { children: ETHER === null || ETHER === void 0 ? void 0 : ETHER.symbol }, void 0)] }), void 0), (chainId ? (SUGGESTED_BASES[chainId] || []) : []).map(function (token) {
-                            console.log(SUGGESTED_BASES);
+                            }, disable: selectedCurrency === ETHER }, { children: [jsx(CurrencyLogo, { symbol: ETHER.symbol, style: { marginRight: 8 } }, void 0), jsx(Text, { children: ETHER === null || ETHER === void 0 ? void 0 : ETHER.symbol }, void 0)] }), void 0), (chainId ? (SUGGESTED_BASES[chainId] || []) : []).map(function (token) {
                             var selected = selectedCurrency instanceof Token$1 && selectedCurrency.address === token.address;
                             return (jsxs(BaseWrapper, __assign({ onClick: function () { return !selected && onSelect(token); }, disable: selected }, { children: [jsx(CurrencyLogo, { currency: token, style: { marginRight: 8 } }, void 0), jsx(Text, { children: token.symbol }, void 0)] }), token.address));
                         })] }), void 0) }), void 0)] }), void 0));
@@ -11319,7 +11596,7 @@ function CurrencyRow(_a) {
 function CurrencyList(_a) {
     var height = _a.height, currencies = _a.currencies, selectedCurrency = _a.selectedCurrency, onCurrencySelect = _a.onCurrencySelect, otherCurrency = _a.otherCurrency, fixedListRef = _a.fixedListRef, showETH = _a.showETH, showImportView = _a.showImportView, setImportToken = _a.setImportToken, breakIndex = _a.breakIndex;
     var itemData = useMemo(function () {
-        var formatted = showETH ? __spreadArray([Currency.ETHER], __read(currencies)) : currencies;
+        var formatted = showETH ? __spreadArray([ETHER], __read(currencies)) : currencies;
         if (breakIndex !== undefined) {
             formatted = __spreadArray(__spreadArray(__spreadArray([], __read(formatted.slice(0, breakIndex))), [undefined]), __read(formatted.slice(breakIndex, formatted.length)));
         }
@@ -11490,545 +11767,6 @@ function ImportToken(_a) {
                                 handleCurrencySelect(tokens[0]);
                             }
                         }, className: ".token-dismiss-button" }, { children: t('Import') }), void 0)] }), void 0)] }), void 0));
-}
-
-var fetchTokenList = {
-    pending: createAction('lists/fetchTokenList/pending'),
-    fulfilled: createAction('lists/fetchTokenList/fulfilled'),
-    rejected: createAction('lists/fetchTokenList/rejected'),
-};
-// add and remove from list options
-var addList = createAction('lists/addList');
-var removeList = createAction('lists/removeList');
-// select which lists to search across from loaded lists
-var enableList = createAction('lists/enableList');
-var disableList = createAction('lists/disableList');
-// versioning
-var acceptListUpdate = createAction('lists/acceptListUpdate');
-createAction('lists/rejectVersionUpdate');
-
-var $schema = "http://json-schema.org/draft-07/schema#";
-var $id = "https://uniswap.org/tokenlist.schema.json";
-var title = "Uniswap Token List";
-var description = "Schema for lists of tokens compatible with the Uniswap Interface";
-var definitions = {
-	Version: {
-		type: "object",
-		description: "The version of the list, used in change detection",
-		examples: [
-			{
-				major: 1,
-				minor: 0,
-				patch: 0
-			}
-		],
-		additionalProperties: false,
-		properties: {
-			major: {
-				type: "integer",
-				description: "The major version of the list. Must be incremented when tokens are removed from the list or token addresses are changed.",
-				minimum: 0,
-				examples: [
-					1,
-					2
-				]
-			},
-			minor: {
-				type: "integer",
-				description: "The minor version of the list. Must be incremented when tokens are added to the list.",
-				minimum: 0,
-				examples: [
-					0,
-					1
-				]
-			},
-			patch: {
-				type: "integer",
-				description: "The patch version of the list. Must be incremented for any changes to the list.",
-				minimum: 0,
-				examples: [
-					0,
-					1
-				]
-			}
-		},
-		required: [
-			"major",
-			"minor",
-			"patch"
-		]
-	},
-	TagIdentifier: {
-		type: "string",
-		description: "The unique identifier of a tag",
-		minLength: 1,
-		maxLength: 10,
-		pattern: "^[\\w]+$",
-		examples: [
-			"compound",
-			"stablecoin"
-		]
-	},
-	ExtensionIdentifier: {
-		type: "string",
-		description: "The name of a token extension property",
-		minLength: 1,
-		maxLength: 30,
-		pattern: "^[\\w]+$",
-		examples: [
-			"color",
-			"is_fee_on_transfer",
-			"aliases"
-		]
-	},
-	ExtensionValue: {
-		anyOf: [
-			{
-				type: "string",
-				minLength: 1,
-				maxLength: 42,
-				examples: [
-					"#00000"
-				]
-			},
-			{
-				type: "boolean",
-				examples: [
-					true
-				]
-			},
-			{
-				type: "number",
-				examples: [
-					15
-				]
-			},
-			{
-				type: "null"
-			}
-		]
-	},
-	TagDefinition: {
-		type: "object",
-		description: "Definition of a tag that can be associated with a token via its identifier",
-		additionalProperties: false,
-		properties: {
-			name: {
-				type: "string",
-				description: "The name of the tag",
-				pattern: "^[ \\w]+$",
-				minLength: 1,
-				maxLength: 20
-			},
-			description: {
-				type: "string",
-				description: "A user-friendly description of the tag",
-				pattern: "^[ \\w\\.,]+$",
-				minLength: 1,
-				maxLength: 200
-			}
-		},
-		required: [
-			"name",
-			"description"
-		],
-		examples: [
-			{
-				name: "Stablecoin",
-				description: "A token with value pegged to another asset"
-			}
-		]
-	},
-	TokenInfo: {
-		type: "object",
-		description: "Metadata for a single token in a token list",
-		additionalProperties: false,
-		properties: {
-			chainId: {
-				type: "integer",
-				description: "The chain ID of the Ethereum network where this token is deployed",
-				minimum: 1,
-				examples: [
-					1,
-					42
-				]
-			},
-			address: {
-				type: "string",
-				description: "The checksummed address of the token on the specified chain ID",
-				pattern: "^0x[a-fA-F0-9]{40}$",
-				examples: [
-					"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-				]
-			},
-			decimals: {
-				type: "integer",
-				description: "The number of decimals for the token balance",
-				minimum: 0,
-				maximum: 255,
-				examples: [
-					18
-				]
-			},
-			name: {
-				type: "string",
-				description: "The name of the token",
-				minLength: 1,
-				maxLength: 40,
-				pattern: "^[ \\w.'+\\-%/À-ÖØ-öø-ÿ\\:]+$",
-				examples: [
-					"USD Coin"
-				]
-			},
-			symbol: {
-				type: "string",
-				description: "The symbol for the token; must be alphanumeric",
-				pattern: "^[a-zA-Z0-9+\\-%/\\$]+$",
-				minLength: 1,
-				maxLength: 20,
-				examples: [
-					"USDC"
-				]
-			},
-			logoURI: {
-				type: "string",
-				description: "A URI to the token logo asset; if not set, interface will attempt to find a logo based on the token address; suggest SVG or PNG of size 64x64",
-				format: "uri",
-				examples: [
-					"ipfs://QmXfzKRvjZz3u5JRgC4v5mGVbm9ahrUiB4DgzHBsnWbTMM"
-				]
-			},
-			tags: {
-				type: "array",
-				description: "An array of tag identifiers associated with the token; tags are defined at the list level",
-				items: {
-					$ref: "#/definitions/TagIdentifier"
-				},
-				maxLength: 10,
-				examples: [
-					"stablecoin",
-					"compound"
-				]
-			},
-			extensions: {
-				type: "object",
-				description: "An object containing any arbitrary or vendor-specific token metadata",
-				propertyNames: {
-					$ref: "#/definitions/ExtensionIdentifier"
-				},
-				additionalProperties: {
-					$ref: "#/definitions/ExtensionValue"
-				},
-				maxProperties: 10,
-				examples: [
-					{
-						color: "#000000",
-						is_verified_by_me: true
-					}
-				]
-			}
-		},
-		required: [
-			"chainId",
-			"address",
-			"decimals",
-			"name",
-			"symbol"
-		]
-	}
-};
-var type = "object";
-var additionalProperties = false;
-var properties = {
-	name: {
-		type: "string",
-		description: "The name of the token list",
-		minLength: 1,
-		maxLength: 20,
-		pattern: "^[\\w ]+$",
-		examples: [
-			"My Token List"
-		]
-	},
-	timestamp: {
-		type: "string",
-		format: "date-time",
-		description: "The timestamp of this list version; i.e. when this immutable version of the list was created"
-	},
-	version: {
-		$ref: "#/definitions/Version"
-	},
-	tokens: {
-		type: "array",
-		description: "The list of tokens included in the list",
-		items: {
-			$ref: "#/definitions/TokenInfo"
-		},
-		minItems: 1,
-		maxItems: 10000
-	},
-	keywords: {
-		type: "array",
-		description: "Keywords associated with the contents of the list; may be used in list discoverability",
-		items: {
-			type: "string",
-			description: "A keyword to describe the contents of the list",
-			minLength: 1,
-			maxLength: 20,
-			pattern: "^[\\w ]+$",
-			examples: [
-				"compound",
-				"lending",
-				"personal tokens"
-			]
-		},
-		maxItems: 20,
-		uniqueItems: true
-	},
-	tags: {
-		type: "object",
-		description: "A mapping of tag identifiers to their name and description",
-		propertyNames: {
-			$ref: "#/definitions/TagIdentifier"
-		},
-		additionalProperties: {
-			$ref: "#/definitions/TagDefinition"
-		},
-		maxProperties: 20,
-		examples: [
-			{
-				stablecoin: {
-					name: "Stablecoin",
-					description: "A token with value pegged to another asset"
-				}
-			}
-		]
-	},
-	logoURI: {
-		type: "string",
-		description: "A URI for the logo of the token list; prefer SVG or PNG of size 256x256",
-		format: "uri",
-		examples: [
-			"ipfs://QmXfzKRvjZz3u5JRgC4v5mGVbm9ahrUiB4DgzHBsnWbTMM"
-		]
-	}
-};
-var required = [
-	"name",
-	"timestamp",
-	"version",
-	"tokens"
-];
-var schema = {
-	$schema: $schema,
-	$id: $id,
-	title: title,
-	description: description,
-	definitions: definitions,
-	type: type,
-	additionalProperties: additionalProperties,
-	properties: properties,
-	required: required
-};
-
-var tokenListValidator = new Ajv({ allErrors: true }).compile(schema);
-/**
- * Contains the logic for resolving a list URL to a validated token list
- * @param listUrl list url
- * @param resolveENSContentHash resolves an ens name to a contenthash
- */
-function getTokenList(listUrl, resolveENSContentHash) {
-    var _a, _b, _c;
-    return __awaiter(this, void 0, void 0, function () {
-        var parsedENS, urls, contentHashUri, error_1, translatedUri, i, url, isLast, response, error_2, json, validationErrors;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    parsedENS = parseENSAddress(listUrl);
-                    if (!parsedENS) return [3 /*break*/, 5];
-                    contentHashUri = void 0;
-                    _d.label = 1;
-                case 1:
-                    _d.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, resolveENSContentHash(parsedENS.ensName)];
-                case 2:
-                    contentHashUri = _d.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _d.sent();
-                    console.error("Failed to resolve ENS name: " + parsedENS.ensName, error_1);
-                    throw new Error("Failed to resolve ENS name: " + parsedENS.ensName);
-                case 4:
-                    translatedUri = void 0;
-                    try {
-                        translatedUri = contenthashToUri(contentHashUri);
-                    }
-                    catch (error) {
-                        console.error('Failed to translate contenthash to URI', contentHashUri);
-                        throw new Error("Failed to translate contenthash to URI: " + contentHashUri);
-                    }
-                    urls = uriToHttp("" + translatedUri + ((_a = parsedENS.ensPath) !== null && _a !== void 0 ? _a : ''));
-                    return [3 /*break*/, 6];
-                case 5:
-                    urls = uriToHttp(listUrl);
-                    _d.label = 6;
-                case 6:
-                    i = 0;
-                    _d.label = 7;
-                case 7:
-                    if (!(i < urls.length)) return [3 /*break*/, 14];
-                    url = urls[i];
-                    isLast = i === urls.length - 1;
-                    response = void 0;
-                    _d.label = 8;
-                case 8:
-                    _d.trys.push([8, 10, , 11]);
-                    return [4 /*yield*/, fetch(url + "?t=" + new Date().getTime())];
-                case 9:
-                    response = _d.sent();
-                    return [3 /*break*/, 11];
-                case 10:
-                    error_2 = _d.sent();
-                    console.error('Failed to fetch list', listUrl, error_2);
-                    if (isLast)
-                        throw new Error("Failed to download list " + listUrl);
-                    return [3 /*break*/, 13];
-                case 11:
-                    if (!response.ok) {
-                        if (isLast)
-                            throw new Error("Failed to download list " + listUrl);
-                        return [3 /*break*/, 13];
-                    }
-                    return [4 /*yield*/, response.json()];
-                case 12:
-                    json = _d.sent();
-                    if (!tokenListValidator(json)) {
-                        validationErrors = (_c = (_b = tokenListValidator.errors) === null || _b === void 0 ? void 0 : _b.reduce(function (memo, error) {
-                            var _a;
-                            var add = error.dataPath + " " + ((_a = error.message) !== null && _a !== void 0 ? _a : '');
-                            return memo.length > 0 ? memo + "; " + add : "" + add;
-                        }, '')) !== null && _c !== void 0 ? _c : 'unknown error';
-                        throw new Error("Token list failed validation: " + validationErrors);
-                    }
-                    return [2 /*return*/, json];
-                case 13:
-                    i++;
-                    return [3 /*break*/, 7];
-                case 14: throw new Error('Unrecognized list URL protocol.');
-            }
-        });
-    });
-}
-
-var REGISTRAR_ABI = [
-    {
-        constant: true,
-        inputs: [
-            {
-                name: 'node',
-                type: 'bytes32',
-            },
-        ],
-        name: 'resolver',
-        outputs: [
-            {
-                name: 'resolverAddress',
-                type: 'address',
-            },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-    },
-];
-var REGISTRAR_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-var RESOLVER_ABI = [
-    {
-        constant: true,
-        inputs: [
-            {
-                internalType: 'bytes32',
-                name: 'node',
-                type: 'bytes32',
-            },
-        ],
-        name: 'contenthash',
-        outputs: [
-            {
-                internalType: 'bytes',
-                name: '',
-                type: 'bytes',
-            },
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function',
-    },
-];
-// cache the resolver contracts since most of them are the public resolver
-function resolverContract(resolverAddress, provider) {
-    return new Contract(resolverAddress, RESOLVER_ABI, provider);
-}
-/**
- * Fetches and decodes the result of an ENS contenthash lookup on mainnet to a URI
- * @param ensName to resolve
- * @param provider provider to use to fetch the data
- */
-function resolveENSContentHash(ensName, provider) {
-    return __awaiter(this, void 0, void 0, function () {
-        var ensRegistrarContract, hash, resolverAddress;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    ensRegistrarContract = new Contract(REGISTRAR_ADDRESS, REGISTRAR_ABI, provider);
-                    hash = namehash(ensName);
-                    return [4 /*yield*/, ensRegistrarContract.resolver(hash)];
-                case 1:
-                    resolverAddress = _a.sent();
-                    return [2 /*return*/, resolverContract(resolverAddress, provider).contenthash(hash)];
-            }
-        });
-    });
-}
-
-function useFetchListCallback() {
-    var _this = this;
-    var library = useActiveWeb3React().library;
-    var chainId = useActiveWeb3React().chainId;
-    var dispatch = useDispatch();
-    var ensResolver = useCallback(function (ensName) {
-        if (chainId !== ChainId$1.MAINNET) {
-            throw new Error('Could not construct mainnet ENS resolver');
-        }
-        return resolveENSContentHash(ensName, library);
-    }, [chainId, library]);
-    // note: prevent dispatch if using for list search or unsupported list
-    return useCallback(function (listUrl, sendDispatch) {
-        if (sendDispatch === void 0) { sendDispatch = true; }
-        return __awaiter(_this, void 0, void 0, function () {
-            var requestId;
-            return __generator(this, function (_a) {
-                requestId = nanoid();
-                if (sendDispatch) {
-                    dispatch(fetchTokenList.pending({ requestId: requestId, url: listUrl }));
-                }
-                return [2 /*return*/, getTokenList(listUrl, ensResolver)
-                        .then(function (tokenList) {
-                        if (sendDispatch) {
-                            dispatch(fetchTokenList.fulfilled({ url: listUrl, tokenList: tokenList, requestId: requestId }));
-                        }
-                        return tokenList;
-                    })
-                        .catch(function (error) {
-                        console.error("Failed to get list at url " + listUrl, error);
-                        if (sendDispatch) {
-                            dispatch(fetchTokenList.rejected({ url: listUrl, requestId: requestId, errorMessage: error.message }));
-                        }
-                        throw error;
-                    })];
-            });
-        });
-    }, [dispatch, ensResolver]);
 }
 
 var CurrencyModalView;
@@ -13274,22 +13012,22 @@ var fetchAllowancceAmount = function (spender, account, tokenAddress) { return _
     });
 }); };
 
-var _a;
-var initialState$8 = (_a = {
+var _a$1;
+var initialState$8 = (_a$1 = {
         independentField: Field$2.INPUT,
         typedValue: ''
     },
-    _a[Field$2.INPUT] = {
+    _a$1[Field$2.INPUT] = {
         currencyId: '',
     },
-    _a[Field$2.OUTPUT] = {
+    _a$1[Field$2.OUTPUT] = {
         currencyId: '',
     },
-    _a.recipient = null,
-    _a.polyDataIndex = {
+    _a$1.recipient = null,
+    _a$1.polyDataIndex = {
         lastQueryTimestamp: 0,
     },
-    _a);
+    _a$1);
 // Async thunks
 var fetchPolySwapDataAsync = createAsyncThunk('swap/fetchPolySwapDataAsync', function (_a) {
     var chainId = _a.chainId, polyQueryData = _a.polyQueryData;
@@ -14458,6 +14196,7 @@ var mint = createReducer(initialState$3, function (builder) {
     });
 });
 
+var _a;
 var NEW_LIST_STATE = {
     error: null,
     current: null,
@@ -14465,12 +14204,13 @@ var NEW_LIST_STATE = {
     pendingUpdate: null,
 };
 var initialState$2 = {
-    lastInitializedDefaultListOfLists: DEFAULT_LIST_OF_LISTS,
-    byUrl: __assign({}, DEFAULT_LIST_OF_LISTS.concat.apply(DEFAULT_LIST_OF_LISTS, __spreadArray([], __read(UNSUPPORTED_LIST_URLS))).reduce(function (memo, listUrl) {
+    lastInitializedDefaultListOfLists: getTokenDefaultList(),
+    byUrl: __assign({}, (_a = getTokenDefaultList()).concat.apply(_a, __spreadArray([], __read(UNSUPPORTED_LIST_URLS))).reduce(function (memo, listUrl) {
         memo[listUrl] = NEW_LIST_STATE;
         return memo;
     }, {})),
-    activeListUrls: DEFAULT_ACTIVE_LIST_URLS,
+    activeChainId: chainIdProxy.chainId,
+    activeListUrls: getTokenDefaultActiveList(),
 };
 var lists = createReducer(initialState$2, function (builder) {
     return builder
@@ -14494,7 +14234,7 @@ var lists = createReducer(initialState$2, function (builder) {
         }
         else {
             // activate if on default active
-            if (DEFAULT_ACTIVE_LIST_URLS.includes(url)) {
+            if (getTokenDefaultActiveList().includes(url)) {
                 (_d = state.activeListUrls) === null || _d === void 0 ? void 0 : _d.push(url);
             }
             state.byUrl[url] = __assign(__assign({}, state.byUrl[url]), { loadingRequestId: null, error: null, current: tokenList, pendingUpdate: null });
@@ -14551,6 +14291,17 @@ var lists = createReducer(initialState$2, function (builder) {
         }
         state.byUrl[url] = __assign(__assign({}, state.byUrl[url]), { pendingUpdate: null, current: state.byUrl[url].pendingUpdate });
     })
+        .addCase(acceptListUpdateOfChainId, function (state, _a) {
+        var _b;
+        var chainId = _a.payload;
+        if (state.activeChainId === chainId)
+            return;
+        state.activeChainId = chainId;
+        state.byUrl = __assign({}, (_b = getTokenDefaultList()).concat.apply(_b, __spreadArray([], __read(UNSUPPORTED_LIST_URLS))).reduce(function (memo, listUrl) {
+            memo[listUrl] = NEW_LIST_STATE;
+            return memo;
+        }, {}));
+    })
         .addCase(updateVersion, function (state) {
         // state loaded from localStorage, but new lists have never been initialized
         if (!state.lastInitializedDefaultListOfLists) {
@@ -14559,8 +14310,8 @@ var lists = createReducer(initialState$2, function (builder) {
         }
         else if (state.lastInitializedDefaultListOfLists) {
             var lastInitializedSet_1 = state.lastInitializedDefaultListOfLists.reduce(function (s, l) { return s.add(l); }, new Set());
-            var newListOfListsSet_1 = DEFAULT_LIST_OF_LISTS.reduce(function (s, l) { return s.add(l); }, new Set());
-            DEFAULT_LIST_OF_LISTS.forEach(function (listUrl) {
+            var newListOfListsSet_1 = getTokenDefaultList().reduce(function (s, l) { return s.add(l); }, new Set());
+            getTokenDefaultList().forEach(function (listUrl) {
                 if (!lastInitializedSet_1.has(listUrl)) {
                     state.byUrl[listUrl] = NEW_LIST_STATE;
                 }
@@ -14571,12 +14322,12 @@ var lists = createReducer(initialState$2, function (builder) {
                 }
             });
         }
-        state.lastInitializedDefaultListOfLists = DEFAULT_LIST_OF_LISTS;
+        state.lastInitializedDefaultListOfLists = getTokenDefaultList();
         // if no active lists, activate defaults
         if (!state.activeListUrls) {
-            state.activeListUrls = DEFAULT_ACTIVE_LIST_URLS;
+            state.activeListUrls = getTokenDefaultActiveList();
             // for each list on default list, initialize if needed
-            DEFAULT_ACTIVE_LIST_URLS.map(function (listUrl) {
+            getTokenDefaultActiveList().map(function (listUrl) {
                 if (!state.byUrl[listUrl]) {
                     state.byUrl[listUrl] = NEW_LIST_STATE;
                 }
@@ -14719,16 +14470,16 @@ var store = configureStore({
 store.dispatch(updateVersion());
 
 var ThemeProviderWrapper = function (_a) {
-    var isDark = _a.isDark, props = __rest(_a, ["isDark"]);
-    return jsx(ThemeProvider, __assign({ theme: isDark ? darkTheme : lightTheme }, props), void 0);
+    var isDark = _a.isDark, resetTheme = _a.resetTheme, props = __rest(_a, ["isDark", "resetTheme"]);
+    return jsx(ThemeProvider, __assign({ theme: isDark ? merge(darkTheme, resetTheme === null || resetTheme === void 0 ? void 0 : resetTheme.dark) : merge(lightTheme, resetTheme === null || resetTheme === void 0 ? void 0 : resetTheme.light) }, props), void 0);
 };
 var Providers = function (_a) {
-    var isDark = _a.isDark; _a.chainId; var lang = _a.lang, children = _a.children, onConnectWallet = _a.onConnectWallet, props = __rest(_a, ["isDark", "chainId", "lang", "children", "onConnectWallet"]);
-    return (jsx(Provider, __assign({ store: store }, { children: jsx(ConnectWalletProvider, __assign({}, props, { onConnectWallet: onConnectWallet }, { children: jsx(ToastsProvider, { children: jsx(HelmetProvider, { children: jsx(ThemeProviderWrapper, __assign({ isDark: isDark }, { children: jsx(LanguageProvider, __assign({ lang: lang }, { children: jsx(RefreshContextProvider, { children: jsx(ModalProvider, { children: jsx(ModalProvider$1, { children: children }, void 0) }, void 0) }, void 0) }), void 0) }), void 0) }, void 0) }, void 0) }), void 0) }), void 0));
+    var isDark = _a.isDark; _a.chainId; var lang = _a.lang, children = _a.children, resetTheme = _a.resetTheme, onConnectWallet = _a.onConnectWallet, props = __rest(_a, ["isDark", "chainId", "lang", "children", "resetTheme", "onConnectWallet"]);
+    return (jsx(Provider, __assign({ store: store }, { children: jsx(ConnectWalletProvider, __assign({}, props, { onConnectWallet: onConnectWallet }, { children: jsx(ToastsProvider, { children: jsx(HelmetProvider, { children: jsx(ThemeProviderWrapper, __assign({ resetTheme: resetTheme, isDark: isDark }, { children: jsx(LanguageProvider, __assign({ lang: lang }, { children: jsx(RefreshContextProvider, { children: jsx(ModalProvider, { children: jsx(ModalProvider$1, { children: children }, void 0) }, void 0) }, void 0) }), void 0) }), void 0) }, void 0) }, void 0) }), void 0) }), void 0));
 };
 
 function Updaters() {
-    return (jsxs(Fragment, { children: [jsx(Updater$2, {}, void 0), jsx(Updater, {}, void 0), jsx(Updater$1, {}, void 0)] }, void 0));
+    return (jsxs(Fragment, { children: [jsx(Updater$2, {}, void 0), jsx(Updater$3, {}, void 0), jsx(Updater, {}, void 0), jsx(Updater$1, {}, void 0)] }, void 0));
 }
 function Blocklist(_a) {
     var children = _a.children;
@@ -14740,12 +14491,12 @@ function Blocklist(_a) {
     return jsx(Fragment, { children: children }, void 0);
 }
 var MiniSwap = function (_a) {
-    var isDark = _a.isDark, lang = _a.lang, onConnectWallet = _a.onConnectWallet, chainId = _a.chainId;
+    var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onConnectWallet = _a.onConnectWallet, chainId = _a.chainId;
     useEffect(function () {
         console.debug("chainId is change " + chainId);
         setChainId(chainId);
     }, [chainId]);
-    return (jsxs(Providers, __assign({ lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsx(Updaters, {}, void 0), jsx(Blocklist, { children: jsx(Swap, {}, void 0) }, void 0)] }), void 0));
+    return (jsxs(Providers, __assign({ resetTheme: resetTheme, lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsx(Updaters, {}, void 0), jsx(Blocklist, { children: jsx(Swap, {}, void 0) }, void 0)] }), void 0));
 };
 
 export { MiniSwap as default };

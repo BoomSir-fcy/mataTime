@@ -5,7 +5,8 @@ import GlobalStyle from 'style/global';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
-import { CommonLayout, Header, Toast, WalletModal } from 'components';
+import { CommonLayout, Header, Toast } from 'components';
+// WalletModal
 import { Box } from 'uikit';
 import { storage } from 'config';
 import { useThemeManager } from 'store/app/hooks';
@@ -85,7 +86,7 @@ function App() {
           </Router>
         </Container>
         <Toast />
-        <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} />
+        {/* <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} /> */}
       </React.Suspense>
     </React.Fragment>
   );
