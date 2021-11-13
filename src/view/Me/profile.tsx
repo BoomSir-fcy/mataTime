@@ -95,10 +95,11 @@ const Profile: React.FC<any> = React.memo(props => {
     location: '',
     label_list: []
   });
+  const uid = props.match?.params?.uid;
 
   const getUserInfo = async () => {
     try {
-      const res = await Api.MeApi.getProfile(props.match?.params?.uid);
+      const res = await Api.MeApi.getProfile(uid);
       setUserInfo({
         ...res.data
       });
@@ -134,9 +135,11 @@ const Profile: React.FC<any> = React.memo(props => {
                 <Text className="text">177条动态</Text>
               </Desc>
             </Flex>
-            <Button as={Link} to="/me/edit">
-              编辑资料
-            </Button>
+            {!uid && (
+              <Button as={Link} to="/me/edit">
+                编辑资料
+              </Button>
+            )}
           </Info>
           <Content>
             <Box className="desc">
