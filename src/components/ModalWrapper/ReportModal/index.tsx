@@ -23,11 +23,11 @@ export const ReportModal = React.memo((props: IProp) => {
   const { t } = useTranslation()
   const { show, onClose, pid, onQuery } = props
   const [complainContent, setComplainContent] = useState<string[]>([
-    '我对这条信息不甘感兴趣',
-    '可疑内容或垃圾信息',
-    '敏感照片或视频',
-    '侮辱性或危害性',
-    '表达了自我伤害或自杀的意图'
+    t('ReportModalComplain1'),
+    t('ReportModalComplain2'),
+    t('ReportModalComplain3'),
+    t('ReportModalComplain4'),
+    t('ReportModalComplain5')
   ]);
 
   useEffect(() => {
