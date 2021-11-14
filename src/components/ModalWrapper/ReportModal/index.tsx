@@ -30,11 +30,6 @@ export const ReportModal = React.memo((props: IProp) => {
     t('ReportModalComplain5')
   ]);
 
-  useEffect(() => {
-    // setComplainContent(t('ReportModalComplain'))
-  }, [])
-
-
   // 举报
   const onComplainPostRequest = async (content: string) => {
     const res = await Api.AttentionApi.complainPost(pid, content);
