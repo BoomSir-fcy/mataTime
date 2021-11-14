@@ -14,3 +14,4 @@ export * from './Popup';
 export * from './List';
 export * from './Select';
 export * from './ImgList'
+export * from './SearchPop'

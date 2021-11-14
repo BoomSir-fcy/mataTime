@@ -21,7 +21,7 @@ const MoreBtn = styled.span`
   color: #7393ff;
   cursor: pointer;
 `;
-const UserTitle = styled.div`
+export const UserTitle = styled.div`
   margin: 0 12px;
   font-weight: 700;
   font-size: 18px;
@@ -31,7 +31,7 @@ const UserTitle = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
-const UserDesc = styled.div`
+export const UserDesc = styled.div`
   margin: 0 12px;
   font-size: 16px;
   font-weight: 400;

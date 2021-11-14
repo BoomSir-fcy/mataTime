@@ -9,6 +9,10 @@ export const EditorWarpper = styled(Box)`
   padding-bottom:15px;
   ${mediaQueriesSize.marginbsm}
 `
+export const MentionBox = styled.span`
+color:blue;
+cursor:pointer;
+`
 export const SendButton = styled(Button)`
 border-radius: ${({ theme }) => theme.radii.card};
 width: 100px;

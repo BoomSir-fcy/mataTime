@@ -19,7 +19,6 @@ color:#fff;
 `
 
 export const ArticleList = (props) => {
-  console.log('ArticleListprops', props);
 
   const goDetils = (e) => {
     if (props.location.pathname === '/articleDetils') return
