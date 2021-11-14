@@ -4,6 +4,8 @@ import {
   getBep20Contract,
   getErc721Contract,
   getMulticallContract,
+  getDsgNftContract,
+  getErc20EarnNftPoolContract
 } from 'utils/contractHelpers'
 import { getContract } from 'utils/contract'
 
@@ -53,4 +55,13 @@ export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: b
 export function useMulticallContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useMemo(() => getMulticallContract(), [chainId])
+}
+
+export const useDsgNft = (address: string) => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getDsgNftContract(address, library.getSigner()), [address, library])
+}
+export const useErc20EarnNftPool = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getErc20EarnNftPoolContract(library.getSigner()), [library])
 }

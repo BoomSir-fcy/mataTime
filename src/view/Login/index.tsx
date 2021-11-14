@@ -6,7 +6,7 @@ import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box } from 'uikit';
 import { Logo, Footer } from 'components';
-import { LoginJoin, SignUp } from './components';
+import { LoginJoin, SignUp, StakeNFT } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 
 const LoginContainer = styled(Flex)`
@@ -62,6 +62,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
           {isSignup ? <SignUp isSignup={signUpFail} /> : <LoginJoin />}
         </Content>
       </LoginContainer>
+      <StakeNFT />
       <Footer />
     </React.Fragment>
   );

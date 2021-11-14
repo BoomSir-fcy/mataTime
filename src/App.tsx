@@ -13,6 +13,7 @@ import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
+import useEagerConnect from './hooks/useEagerConnect';
 
 moment.locale('zh-cn');
 
@@ -37,7 +38,7 @@ function App() {
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
   const [isDark] = useThemeManager();
-
+  useEagerConnect()
   React.useEffect(() => {
     if (store.connectWallet) {
       const changeHandler = () => {
