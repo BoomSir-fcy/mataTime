@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
 import { Editor as slateEditor, Transforms, Range, createEditor, Descendant,Element as SlateElement } from 'slate'
 import {Flex} from 'uikit'
@@ -24,39 +23,6 @@ type Iprops= {
   type:any
   sendArticle:any
 }
-=======
-import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import { Editor as slateEditor, Transforms, Range, createEditor, Descendant } from 'slate';
-import { Flex } from 'uikit';
-import { withHistory } from 'slate-history';
-import { Toolbar } from './toolbar';
-import { ImgList } from './ImgList';
-import { Api } from 'apis';
-import { toast } from 'react-toastify';
-import { Slate, Editable, ReactEditor, withReact, useSelected, useFocused, useSlate } from 'slate-react';
-import { SlateBox, SendButton } from './style';
-type Iprops = {
-  type: any;
-  sendArticle: any;
-};
-const AtElement = props => {
-  console.log(props);
-  return (
-    <span {...props.attributes}>
-      {props.children}
-      @哈哈哈
-    </span>
-  );
-};
-const TopicElement = props => {
-  return (
-    <span {...props.attributes}>
-      {props.children}
-      #牛逼#
-    </span>
-  );
-};
->>>>>>> fa879ef8d050b6647252a65cc6fc9e91123ee3bb
 
 const DefaultElement = props => {
   return <p {...props.attributes}>{props.children}</p>;
@@ -70,7 +36,6 @@ const initialValue: Descendant[] = [
       }
     ]
   }
-<<<<<<< HEAD
 ]
 const withMentions = editor => {
   const { isInline, isVoid } = editor
@@ -124,25 +89,11 @@ export  const Editor = (props:Iprops) => {
     switch (props.element.type) {
       case 'mention':
         return <Mention {...props} />
-=======
-];
-export const Editor = (props: Iprops) => {
-  const ref = useRef<HTMLDivElement | null>();
-  const [value, setValue] = useState<Descendant[]>(initialValue);
-  const [imgList, setImgList] = useState([]);
-  const renderElement = useCallback(props => {
-    console.log(props);
-
-    switch (props.element.type) {
-      case 'at':
-        return <AtElement {...props} />;
->>>>>>> fa879ef8d050b6647252a65cc6fc9e91123ee3bb
       case 'topic':
         return <TopicElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
-<<<<<<< HEAD
   }, [])
   const editor = useMemo(
     () => withTopics(withMentions(withReact(withHistory(createEditor())))),
@@ -163,24 +114,6 @@ export const Editor = (props: Iprops) => {
       el.removeEventListener('click',eventFn)
     }
   },[])
-=======
-  }, []);
-  const editor = useMemo(() => withReact(withHistory(createEditor())), []);
-  // 扩大focus距离
-  useEffect(() => {
-    const el: any = ref.current;
-    const eventFn = () => {
-      el.firstElementChild.focus();
-      const range = window.getSelection(); //创建range
-      range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
-      range.collapseToEnd(); //光标移至最后
-    };
-    el.addEventListener('click', eventFn);
-    return () => {
-      el.removeEventListener('click', eventFn);
-    };
-  });
->>>>>>> fa879ef8d050b6647252a65cc6fc9e91123ee3bb
 
   const callbackSelectImg = e => {
     if (imgList.length >= 9) return toast.error('最多上传九张');
@@ -203,7 +136,6 @@ export const Editor = (props: Iprops) => {
           } else {
             toast.error('上传失败');
           }
-<<<<<<< HEAD
         })
       }
     }
@@ -239,32 +171,9 @@ export const Editor = (props: Iprops) => {
             renderElement={renderElement}
             placeholder="分享新鲜事"
           />
-=======
-        });
-      };
-    };
-    input.click();
-  };
-  const callbackInserAt = e => {
-    Transforms.setNodes<any>(editor, { type: 'at' }, { match: n => slateEditor.isBlock(editor, n) });
-  };
-  const callbackInserTopic = e => {
-    Transforms.setNodes<any>(editor, { type: 'topic' }, { match: n => slateEditor.isBlock(editor, n) });
-  };
-  const sendArticle = () => {
-    console.log(value);
-    // props.sendArticle(ReplaceAt(ReplaceTopic(state.editorValue)), restInput, state.imgList.join(','))
-  };
-  return (
-    <SlateBox>
-      <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-        <div className="text-box" ref={ref}>
-          <Editable renderElement={renderElement} placeholder="分享新鲜事" />
->>>>>>> fa879ef8d050b6647252a65cc6fc9e91123ee3bb
         </div>
         <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
         <Flex justifyContent="space-between" alignItems="center">
-<<<<<<< HEAD
         <Toolbar
           callbackEmoji={(data)=>editor.insertText(data)}
           callbackSelectImg={callbackSelectImg}
@@ -272,10 +181,6 @@ export const Editor = (props: Iprops) => {
           callbackInserTopic={()=>setSearcTopic(!searcTopic)}
         ></Toolbar>
         <SendButton onClick={sendArticle}>发表</SendButton>
-=======
-          <Toolbar callbackEmoji={data => editor.insertText(data)} callbackSelectImg={callbackSelectImg} callbackInserAt={callbackInserAt} callbackInserTopic={callbackInserTopic}></Toolbar>
-          <SendButton onClick={sendArticle}>发表</SendButton>
->>>>>>> fa879ef8d050b6647252a65cc6fc9e91123ee3bb
         </Flex>
       </Slate>
     </SlateBox>
