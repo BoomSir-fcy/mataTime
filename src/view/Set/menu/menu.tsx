@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Box } from 'uikit';
-import { Link, withRouter, useLocation } from 'react-router-dom';
+import { Link, withRouter, useLocation, useHistory } from 'react-router-dom';
 import menuData from './menuData';
 import { Avatar, Icon } from 'components';
 
@@ -124,21 +124,18 @@ const BackWarpper = styled(Box)`
 `;
 
 export const Menu: React.FC = props => {
-  const Back = () => {
-    console.log('window.history', window.history.replaceState);
-    console.log('props', props);
-    window.history.go(-1);
-  };
+  const { go } = useHistory()
+
   return (
     <MenuBox>
       <Box>
         <Logo />
-        <a href="/">
-          <BackWarpper onClick={Back}>
+        <Link to="/">
+          <BackWarpper>
             <Icon name={'icon-fanhui'}></Icon>
             <span>返回</span>
           </BackWarpper>
-        </a>
+        </Link>
         <MenuList menuList={menuData}></MenuList>
       </Box>
       <Flex>

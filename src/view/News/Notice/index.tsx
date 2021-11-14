@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { Header } from 'view/Home/center';
+import { useTranslation } from 'contexts/Localization'
 import { List } from 'components';
 import { Api } from 'apis';
 import {
   NoticeWrapper,
-  NoticeItemWrapper
+  NoticeItemWrapper,
+  NoticeContentWrapper
 } from './style';
 
 
 
 const NewsNotice: React.FC = () => {
+  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
   return (
     <NoticeWrapper>
-      <Header title={'消息'} />
-      <div className="notice-content-wrapper">
+      <Header title={t('newsNotice')} />
+      <NoticeContentWrapper>
         <List marginTop={410} loading={page <= totalPage} renderList={() => {
           if (loading || page > totalPage) return false
           setLoading(true)
@@ -34,7 +37,7 @@ const NewsNotice: React.FC = () => {
             <NoticeItem key={item.id} itemData={item} />
           ))}
         </List>
-      </div>
+      </NoticeContentWrapper>
     </NoticeWrapper>
   )
 }
@@ -44,6 +47,7 @@ type IProps = {
 }
 
 const NoticeItem: React.FC<IProps> = ({ itemData }) => {
+  const { t } = useTranslation()
   return (
     <NoticeItemWrapper>
       <div className={`notice-wrapper`}>
@@ -55,7 +59,7 @@ const NoticeItem: React.FC<IProps> = ({ itemData }) => {
             <h3>{itemData.send_name}</h3>
             <span>{itemData.add_time}</span>
           </div>
-          <div className="notice-des"><span>平台通知：</span>{itemData.msg_content}</div>
+          <div className="notice-des"><span>{t('newsNoticeTip')}：</span>{itemData.msg_content}</div>
         </div>
       </div>
     </NoticeItemWrapper>

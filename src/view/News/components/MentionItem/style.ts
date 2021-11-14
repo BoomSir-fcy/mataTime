@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Flex, Button, Box } from 'uikit'
+import { Button, Box, Text, Toggle, Card, Flex } from 'uikit'
 export const FollowBtn = styled(Button)`
 margin-right:15px;
 font-size: 14px;
@@ -7,7 +7,6 @@ font-weight: bold;
 `
 export const MentionItemWrapper = styled.div`
     .mention-content{
-      color: #FFFFFF;
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
@@ -57,14 +56,12 @@ export const MentionItemUserWrapper = styled.div`
           font-size: 18px;
           font-family: Alibaba PuHuiTi;
           font-weight: bold;
-          color: #FFFFFF;
         }
         .time{
           margin-top:5px;
           font-size: 14px;
           font-family: Alibaba PuHuiTi;
           font-weight: 400;
-          color: #B5B5B5;
         }
         .topic{
           display:flex;
@@ -73,9 +70,9 @@ export const MentionItemUserWrapper = styled.div`
           padding:0 10px;
           height:35px;
           font-size: 14px;
-          color: #FFFFFF;
           border: 2px solid #4168ED;
           border-radius: 10px;
+          color: #FFFFFF;
         }
       }
     }
@@ -95,7 +92,6 @@ export const MentionItemUserWrapper = styled.div`
           width: 40px;
           height: 40px;
           border-radius: 10px;
-          background-color: #f0f0f0;
           overflow: hidden;
           margin-right: 13px;
           img{
@@ -113,7 +109,6 @@ export const MentionItemUserWrapper = styled.div`
             padding:0 10px;
             height:35px;
             font-size: 14px;
-            color: #FFFFFF;
             border: 2px solid #4168ED;
             border-radius: 10px;
           }
@@ -121,14 +116,12 @@ export const MentionItemUserWrapper = styled.div`
             font-size: 14px;
             font-family: Alibaba PuHuiTi;
             font-weight: bold;
-            color: #FFFFFF;
           }
           .time{
             margin-top:5px;
             font-size: 14px;
             font-family: Alibaba PuHuiTi;
             font-weight: 400;
-            color: #B5B5B5;
           }
         }
       }
@@ -146,12 +139,10 @@ export const MentionItemUserWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
-      color: #FFFFFF;
       p{
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-          color: #FFFFFF;
         a{
           color: #4168ED;
         }

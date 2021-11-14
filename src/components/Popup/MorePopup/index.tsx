@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ReportModal, ShieldModal, EditTwitterModal } from 'components';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'contexts/Localization'
 import {
   PopupWrapper,
   PopupContentWrapper
@@ -24,6 +25,7 @@ type Iprops = {
 }
 
 export const MorePopup = React.memo((props: Iprops) => {
+  const { t } = useTranslation()
   const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
 
   const { children, data, callback = () => { } } = props
@@ -60,9 +62,9 @@ export const MorePopup = React.memo((props: Iprops) => {
           is_fav: 1
         }
       })
-      toast.success('收藏成功！')
+      toast.success(t('moreCollectionSuccess'))
     } else {
-      toast.error(res.msg || '收藏失败！')
+      toast.error(res.msg || t('moreCollectionError'))
     }
     setVisible(false)
   }
@@ -78,16 +80,16 @@ export const MorePopup = React.memo((props: Iprops) => {
           is_fav: 0
         }
       })
-      toast.success('取消收藏成功！')
+      toast.success(t('moreCancelCollectionSuccess'))
     } else {
-      toast.error(res.msg || '取消收藏失败！')
+      toast.error(res.msg || t('moreCancelCollectionError'))
     }
     setVisible(false)
   }
 
   // 分享到Twitter
   const onShareTwitterClick = () => {
-    window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('分享')).concat(' ').concat(encodeURIComponent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id)))
+    window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('share')).concat(' ').concat(encodeURIComponent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id)))
     setVisible(false)
   }
 
@@ -96,9 +98,9 @@ export const MorePopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.setTopPost(pid);
     if (Api.isSuccess(res)) {
       // callback(data, MoreOperatorEnum.SETTOP)
-      toast.success('置顶成功！')
+      toast.success(t('moreTopSuccess'))
     } else {
-      toast.error(res.data || '置顶失败！')
+      toast.error(res.data || t('moreTopError'))
     }
     setVisible(false)
   }
@@ -108,9 +110,9 @@ export const MorePopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.delPost(pid);
     if (Api.isSuccess(res)) {
       callback(data, MoreOperatorEnum.DELPOST)
-      toast.success('删除成功！')
+      toast.success(t('moreDeleteSuccess'))
     } else {
-      toast.error(res.data || '删除失败！')
+      toast.error(res.data || t('moreDeleteError'))
     }
     setVisible(false)
   }
@@ -129,37 +131,37 @@ export const MorePopup = React.memo((props: Iprops) => {
                 <>
                   <p onClick={() => {
                     setEditShow(true)
-                  }}>编辑</p>
+                  }}>{t('moreEdit')}</p>
                   <p onClick={() => {
                     onPostDelRequest(data.post.post_id)
-                  }}>删除</p>
+                  }}>{t('moreDelete')}</p>
                   <p onClick={() => {
                     onTopPostRequest(data.post.post_id)
-                  }}>置顶</p>
+                  }}>{t('moreTop')}</p>
                 </>
               ) : null
             }
 
             <p onClick={() => {
               onShareTwitterClick()
-            }}>分享到Twitter</p>
+            }}>{t('moreShareTwitter')}</p>
             <p onClick={() => {
-              copyContent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id || '无可复制到内容！')
-            }}>复制内容地址</p>
+              copyContent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id || '')
+            }}>{t('moreCopyAddress')}</p>
             <p onClick={() => {
               data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
-            }}>{data.post.is_fav === 1 ? '取消收藏' : '收藏'}</p>
+            }}>{data.post.is_fav === 1 ? t('moreCancelCollection') : t('moreCollection')}</p>
             {
               !isOwn ? (
                 <>
                   <p onClick={() => {
                     setVisible(false)
                     setReportShow(true)
-                  }}>举报该条</p>
+                  }}>{t('moreReport')}</p>
                   <p onClick={() => {
                     setVisible(false)
                     setShieldShow(true)
-                  }}>屏蔽</p>
+                  }}>{t('moreShield')}</p>
                 </>
               ) : null
             }

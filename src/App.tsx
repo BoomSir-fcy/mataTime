@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import GlobalStyle from 'style/global';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
-import { CommonLayout, Header, Toast, WalletModal } from 'components';
-import { Box } from 'uikit';
+import PageLoader from 'components/Loader/PageLoader'
+import { CommonLayout, Header, Toast } from 'components';
+import useEagerConnect from 'hooks/useEagerConnect';
+// WalletModal
+import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
 import { useThemeManager } from 'store/app/hooks';
 import { PrivateRoute } from './PrivateRoute';
@@ -33,6 +36,7 @@ const Container = styled(Box) <{
 `;
 
 function App() {
+  useEagerConnect()
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
@@ -54,15 +58,19 @@ function App() {
 
   return (
     <React.Fragment>
-      <React.Suspense fallback={<h1></h1>}>
-        <GlobalStyle />
-        <Container id="bg" dark={isDark}>
-          <Router forceRefresh>
+      <GlobalStyle />
+      <Container id="bg" dark={isDark}>
+        <React.Suspense fallback={<PageLoader />}>
+          <Router >
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
-              <Route path="/test" exact >
-                <Test />
-              </Route>
+              {
+                process.env.NODE_ENV === 'development' && (
+                  <Route path="/test" exact >
+                    <Test />
+                  </Route>
+                )
+              }
               <Route
                 path="/articleDetils/:id"
                 exact
@@ -79,10 +87,10 @@ function App() {
               <PrivateRoute path="/set" component={Set} />
             </Switch>
           </Router>
-        </Container>
-        <Toast />
-        <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} />
-      </React.Suspense>
+        </React.Suspense>
+      </Container>
+      <Toast />
+      {/* <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} /> */}
     </React.Fragment>
   );
 }

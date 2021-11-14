@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
-import { Flex, Box, Button } from 'uikit';
+import { Flex, Box, Button, Card, Text } from 'uikit';
 import { Avatar, Icon } from 'components';
 import { Api } from 'apis';
-const RecommendPeopleBox = styled.div`
+const RecommendPeopleBox = styled(Card)`
   margin-top: 15px;
   padding: 20px 18px;
   width: 298px;
-  background: #191f2d;
   border-radius: 10px;
 `;
-const TitleText = styled.span`
+const TitleText = styled(Text)`
   font-weight: bold;
-  color: #ffffff;
   font-size: 18px;
 `;
 const MoreBtn = styled.span`
@@ -25,7 +23,7 @@ export const UserTitle = styled.div`
   margin: 0 12px;
   font-weight: 700;
   font-size: 18px;
-  color: #fff;
+  color: ${({ theme }) => theme.isDark ? '#fff' : '#000'};
   width: 80px;
   overflow: hidden;
   white-space: nowrap;
@@ -35,7 +33,7 @@ export const UserDesc = styled.div`
   margin: 0 12px;
   font-size: 16px;
   font-weight: 400;
-  color: #b5b5b5;
+  color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
   width: 100px;
   overflow: hidden;
   white-space: nowrap;

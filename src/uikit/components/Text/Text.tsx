@@ -1,7 +1,7 @@
-import styled, { DefaultTheme } from "styled-components";
-import { space, typography, layout } from "styled-system";
-import getThemeValue from "../../util/getThemeValue";
-import { TextProps } from "./types";
+import styled, { DefaultTheme } from 'styled-components';
+import { space, typography, layout } from 'styled-system';
+import getThemeValue from '../../util/getThemeValue';
+import { TextProps } from './types';
 
 interface ThemedProps extends TextProps {
   theme: DefaultTheme;
@@ -12,7 +12,7 @@ const getColor = ({ color, theme }: ThemedProps) => {
 };
 
 const getFontSize = ({ fontSize, small }: TextProps) => {
-  return small ? "14px" : fontSize || "16px";
+  return small ? '14px' : fontSize || '16px';
 };
 
 const Text = styled.div<TextProps>`
@@ -23,21 +23,18 @@ const Text = styled.div<TextProps>`
   line-height: 1.5;
   ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}
   ${({ ellipsis, maxLine }) =>
-    (ellipsis || maxLine) && (
-      maxLine
-      ?
-      `
+    (ellipsis || maxLine) &&
+    (maxLine
+      ? `
       overflow: hidden;
       display:-webkit-box;
       text-overflow: ellipsis;
       -webkit-box-orient:vertical;
       -webkit-line-clamp:${maxLine};
       `
-      :
-      `white-space: nowrap;
+      : `white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;`
-    )}
+      text-overflow: ellipsis;`)}
 
   ${space}
   ${typography}
@@ -45,7 +42,7 @@ const Text = styled.div<TextProps>`
 `;
 
 Text.defaultProps = {
-  color: "text",
+  color: 'text'
 };
 
 export default Text;

@@ -1,7 +1,6 @@
-import { Http } from "../http";
+import { Http } from '../http';
 
 export class MeApi extends Http {
-
   // 关注列表
   async followList(page?: number, perpage?: number) {
     const res = await this.get('/v1/attention/list', { page, perpage });
@@ -82,6 +81,12 @@ export class MeApi extends Http {
   // 删除评论
   async removeContentDetail(id: number) {
     const res = await this.post('/v1/comment/del', id);
+    return res;
+  }
+
+  // 个人(他人)主页
+  async getProfile(uid?: number) {
+    const res = await this.get('/v1/user/home_header', { uid });
     return res;
   }
 }
