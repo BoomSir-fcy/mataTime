@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader'
 import { CommonLayout, Header, Toast } from 'components';
+import useEagerConnect from 'hooks/useEagerConnect';
 // WalletModal
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
@@ -35,6 +36,7 @@ const Container = styled(Box) <{
 `;
 
 function App() {
+  useEagerConnect()
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);

@@ -36,4 +36,10 @@ export class UserApi extends Http {
     const res = await this.get('/v1/user/userinfo', { uid });
     return res;
   }
+
+  // 通过名字模糊搜索用户
+  async searchUser(name: string) {
+    const res = await this.get('/v1/user/search_by_name', { name });
+    return res;
+  }
 }

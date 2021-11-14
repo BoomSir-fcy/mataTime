@@ -14,7 +14,7 @@ import {
 import { Api } from 'apis';
 
 type Iprops = {
-  children: React.ReactElement;
+  children: React.ReactElement
 }
 
 export const FollowPopup = React.memo((props: Iprops) => {
