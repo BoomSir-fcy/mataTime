@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useStore, storeAction, Dispatch } from 'store';
 import { Box, Flex, Button, Svg } from 'uikit';
+import { ConnectWalletButton } from 'components'
 
 import { mediaQueries } from "uikit/theme/base";
 
@@ -38,36 +39,37 @@ export const Menu = React.memo(() => {
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
 
-  return(
+  return (
     <Flex alignItems="center">
       <HeaderMenuItem as={Link} to="/">
         <Svg viewBox="0 0 60 60" width="30px">
-          <image xlinkHref={require('./images/icon_home.png').default}/>
+          <image xlinkHref={require('./images/icon_home.png').default} />
         </Svg>
         首页
       </HeaderMenuItem>
       <HeaderMenuItem as={Link} to="/">
         <Svg viewBox="0 0 60 60" width="30px">
-          <image xlinkHref={require('./images/icon_star.png').default}/>
+          <image xlinkHref={require('./images/icon_star.png').default} />
         </Svg>
         星球
       </HeaderMenuItem>
       <HeaderMenuItem as={Link} to="/me">
         <Svg viewBox="0 0 60 60" width="30px">
-          <image xlinkHref={require('./images/icon_news.png').default}/>
+          <image xlinkHref={require('./images/icon_news.png').default} />
         </Svg>
         快讯
       </HeaderMenuItem>
       <HeaderMenuItem as={Link} to="/login">
         <Svg viewBox="0 0 60 60" width="30px">
-          <image xlinkHref={require('./images/icon_other.png').default}/>
+          <image xlinkHref={require('./images/icon_other.png').default} />
         </Svg>
         其他
       </HeaderMenuItem>
       <HeaderLine />
-      <WalletButton scale="ld" 
+      <ConnectWalletButton />
+      {/* <WalletButton scale="ld" 
         onClick={() => 
-          dispatch(storeAction.connectWallet({connectWallet: true}))}>Connerct Wallet</WalletButton>
+          dispatch(storeAction.connectWallet({connectWallet: true}))}>Connerct Wallet</WalletButton> */}
     </Flex>
   )
 })

@@ -6,24 +6,26 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Api } from 'apis';
 
+import defaultImages from 'assets/images/default_me_background.jpg';
+
 const ProfileCard = styled(Card)`
   position: relative;
-`
+`;
 const HeadTop = styled(Box)`
   width: 100%;
   min-height: 270px;
   border-radius: ${({ theme }) => theme.radii.card};
-  background-color: #f5f5f5;
-`
+  background-size: 100% auto;
+`;
 const ProfileInfo = styled(Box)`
   margin-top: -85px;
   ${mediaQueriesSize.padding}
-`
+`;
 const Info = styled(Flex)`
   justify-content: space-between;
   align-items: flex-end;
   ${mediaQueriesSize.marginbmd}
-`
+`;
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
   .name {
@@ -33,21 +35,21 @@ const Desc = styled(Box)`
   }
   .text {
     font-size: 14px;
-    color: ${({ theme }) => theme.colors.textTips}
+    color: ${({ theme }) => theme.colors.textTips};
   }
   .marginLeft {
     margin-left: 30px;
   }
-`
+`;
 
 const Content = styled(Box)`
-  .desc  {
+  .desc {
     ${mediaQueriesSize.marginb}
   }
   .text {
     font-size: 18px;
     & a {
-      color: #7393FF;
+      color: #7393ff;
     }
   }
   .number {
@@ -64,7 +66,7 @@ const Content = styled(Box)`
       font-weight: bold;
       color: ${({ theme }) => theme.colors.text};
     }
-    .text  + .text {
+    .text + .text {
       margin-left: 30px;
     }
   }
@@ -76,41 +78,49 @@ const Content = styled(Box)`
       color: ${({ theme }) => theme.colors.textTips};
       ${mediaQueriesSize.marginr}
     }
+    button + button {
+      margin-left: 15px;
+    }
   }
-`
+`;
 
-const Profile = React.memo(() => {
+const Profile: React.FC<any> = React.memo(props => {
   const [stateUserInfo, setUserInfo] = useState<Api.User.userInfoParams>({
     UID: 0,
     nick_name: '',
     fans_num: 0,
     attention_num: 0,
     email: '',
-    Introduction: '',
-    location: ''
-  })
+    introduction: '',
+    location: '',
+    label_list: []
+  });
+  const uid = props.match?.params?.uid;
+
   const getUserInfo = async () => {
     try {
-      const res = await Api.UserApi.getUserInfo()
+      const res = await Api.MeApi.getProfile(uid);
       setUserInfo({
         ...res.data
-      })
+      });
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
   useEffect(() => {
-    getUserInfo()
-  }, [])
+    getUserInfo();
+  }, []);
+
   return (
     <Box>
       <Crumbs title="个人主页" />
       <ProfileCard>
-        <HeadTop></HeadTop>
+        <HeadTop style={{ backgroundImage: `url(${defaultImages})` }} />
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end">
-              <Avatar scale="xl" />
+              <Avatar scale="xl" src={stateUserInfo.nft_image} />
               <Desc>
                 <Text className="name">{stateUserInfo.nick_name}</Text>
                 <Flex mb="5px">
@@ -125,28 +135,47 @@ const Profile = React.memo(() => {
                 <Text className="text">177条动态</Text>
               </Desc>
             </Flex>
-            <Button as={Link} to="/me/edit">编辑资料</Button>
+            {!uid && (
+              <Button as={Link} to="/me/edit">
+                编辑资料
+              </Button>
+            )}
           </Info>
           <Content>
             <Box className="desc">
               <Text className="text">{stateUserInfo.Introduction}</Text>
-              <Text className="text">Web: <Text as={Link} to="/">http://dsgmetaverse.com/#/</Text></Text>
+              <Text className="text">
+                Web:{' '}
+                <Text as={Link} to="/">
+                  http://dsgmetaverse.com/#/
+                </Text>
+              </Text>
               <Text className="text">Email：{stateUserInfo.email}</Text>
             </Box>
             <Flex className="number">
-              <Text className="text">粉丝 <Text className="value">{stateUserInfo.fans_num}</Text></Text>
-              <Text className="text">关注 <Text className="value">{stateUserInfo.attention_num}</Text></Text>
-              <Text className="text">动态 <Text className="value">{stateUserInfo.fans_num}</Text></Text>
+              <Text className="text">
+                粉丝 <Text className="value">{stateUserInfo.fans_num}</Text>
+              </Text>
+              <Text className="text">
+                关注 <Text className="value">{stateUserInfo.attention_num}</Text>
+              </Text>
+              <Text className="text">
+                动态 <Text className="value">{stateUserInfo.fans_num}</Text>
+              </Text>
             </Flex>
             <Flex className="topic">
               <Text className="text">活跃话题</Text>
-              <Button variant="secondary">#DSG</Button>
+              {stateUserInfo?.label_list.map((row: string, index: number) => (
+                <Button variant="secondary" key={index}>
+                  #{row}
+                </Button>
+              ))}
             </Flex>
           </Content>
         </ProfileInfo>
       </ProfileCard>
     </Box>
-  )
-})
+  );
+});
 
 export default Profile;

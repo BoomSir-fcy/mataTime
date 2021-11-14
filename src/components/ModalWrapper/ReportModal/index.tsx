@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from 'components';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'contexts/Localization'
 import {
   ModalWrapper,
   ModalTitleWrapper,
@@ -19,23 +20,24 @@ type IProp = {
 }
 
 export const ReportModal = React.memo((props: IProp) => {
+  const { t } = useTranslation()
   const { show, onClose, pid, onQuery } = props
   const [complainContent, setComplainContent] = useState<string[]>([
-    '我对这条信息不甘感兴趣',
-    '可疑内容或垃圾信息',
-    '敏感照片或视频',
-    '侮辱性或危害性',
-    '表达了自我伤害或自杀的意图'
+    t('ReportModalComplain1'),
+    t('ReportModalComplain2'),
+    t('ReportModalComplain3'),
+    t('ReportModalComplain4'),
+    t('ReportModalComplain5')
   ]);
 
   // 举报
   const onComplainPostRequest = async (content: string) => {
     const res = await Api.AttentionApi.complainPost(pid, content);
     if (Api.isSuccess(res)) {
-      toast.success('举报成功！')
+      toast.success(t('ReportModalSuccess'))
       onQuery()
     } else {
-      toast.error(res.msg || '举报失败！')
+      toast.error(res.msg || t('ReportModalError'))
       onClose()
     }
   }
@@ -47,7 +49,7 @@ export const ReportModal = React.memo((props: IProp) => {
           <ModalWrapper>
             <ReportModalWrapper>
               <ModalTitleWrapper>
-                <h4>举报信息</h4>
+                <h4>{t('ReportModalTitle')}</h4>
                 <div className="close" onClick={() => {
                   onClose()
                 }}>

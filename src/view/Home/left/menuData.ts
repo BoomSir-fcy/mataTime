@@ -34,13 +34,13 @@ const menuArr = [
     icon: 'icon-qianbao',
     activeIcon: 'icon-qianbao1',
     title: '钱包',
-    path: '/me'
+    path: '/'
   },
   {
     icon: 'icon-w31shezhi',
     activeIcon: 'icon-a-31shezhi1',
     title: '设置',
-    path: '/set'
+    path: '/set/safeset'
   }
 ];
 export default menuArr;

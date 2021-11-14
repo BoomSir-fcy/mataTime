@@ -34,7 +34,7 @@ export const ProfileMenu = React.memo(() => {
   return (
     <React.Fragment>
       {userInfo.UID ? (
-        <Flex>
+        <Flex alignItems="center">
           <Avatar src={userInfo?.NftImage} scale="sm" />
           <Box>
             <UserTitle>OliNe</UserTitle>

@@ -64,7 +64,6 @@ const Collect = (props) => {
   const [totalPage, setTotalPage] = useState(2)
   console.log('listData', listData);
 
-
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     let arr = []

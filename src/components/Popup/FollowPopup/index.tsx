@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon, Avatar } from 'components';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'contexts/Localization'
 import {
   PopupWrapper,
   PopupContentWrapper
@@ -13,10 +14,11 @@ import {
 import { Api } from 'apis';
 
 type Iprops = {
-  children: React.ReactElement;
+  children: React.ReactElement
 }
 
 export const FollowPopup = React.memo((props: Iprops) => {
+  const { t } = useTranslation()
   const { children } = props
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -48,13 +50,13 @@ export const FollowPopup = React.memo((props: Iprops) => {
                 <div className="name">Others</div>
                 <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon> @0x32...9239</div>
                 <div className="number">
-                  <p>粉丝 <strong>299</strong></p>
-                  <p>关注 <strong>29</strong></p>
+                  <p>{t('followFans')}<strong>299</strong></p>
+                  <p>{t('followText')}<strong>29</strong></p>
                 </div>
               </div>
             </div>
             <div className="btn">
-              <FollowBtn>+关注</FollowBtn>
+              <FollowBtn>+{t('followText')}</FollowBtn>
             </div>
           </PopupContentWrapper>
         ) : null
@@ -73,6 +75,7 @@ type IDprops = {
 }
 
 export const FollowPopupD = React.memo((props: IDprops) => {
+  const { t } = useTranslation()
   const { left = 100, top = 100, callback = () => { }, uid } = props
   const popupRef: any = useRef()
   const [userInfo, setUserInfo] = useState<any>({})
@@ -141,15 +144,15 @@ export const FollowPopupD = React.memo((props: IDprops) => {
           <div className="name">{userInfo.NickName || '  '}</div>
           <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon> @0x32...9239</div>
           <div className="number">
-            <p>粉丝 <strong>{userInfo.FansNum || 0}</strong></p>
-            <p>关注 <strong>{userInfo.AttentionNum || 0}</strong></p>
+            <p>{t('followFans')}<strong>{userInfo.FansNum || 0}</strong></p>
+            <p>{t('followText')}<strong>{userInfo.AttentionNum || 0}</strong></p>
           </div>
         </div>
       </div>
       <div className="btn">
         <FollowBtn onClick={() => {
           userInfo.IsAttention === 1 ? cancelAttentionFocusRequest() : onAttentionFocusRequest()
-        }}>{userInfo.IsAttention === 1 ? '取消关注' : '+关注'}</FollowBtn>
+        }}>{userInfo.IsAttention === 1 ? t('followCancelText') : '+' + t('followText')}</FollowBtn>
       </div>
     </PopupContentWrapper>
   )

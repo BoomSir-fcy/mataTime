@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from 'components';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'contexts/Localization'
 import {
   ModalWrapper,
   ModalTitleWrapper,
@@ -24,16 +25,17 @@ type IProp = {
 }
 
 export const ShieldModal = React.memo((props: IProp) => {
+  const { t } = useTranslation()
   const { show, onClose, pid, onQuery } = props
 
   // 屏蔽
   const onShieldRequest = async () => {
     const res = await Api.AttentionApi.addShield(pid);
     if (Api.isSuccess(res)) {
-      toast.success('屏蔽成功！')
+      toast.success(t('shieldModalShieldSuccess'))
       onQuery()
     } else {
-      toast.error(res.data || '屏蔽失败！')
+      toast.error(res.data || t('shieldModalShieldError'))
       onClose()
     }
   }
@@ -46,11 +48,11 @@ export const ShieldModal = React.memo((props: IProp) => {
           <ModalWrapper>
             <ReportModalWrapper>
               <ModalTitleWrapper>
-                <h4>是否屏蔽这条推特?</h4>
+                <h4>{t('shieldModalTitle')}</h4>
               </ModalTitleWrapper>
               <ShieldContentWrapper>
                 {/* <div className="img-box"></div> */}
-                <div className="des-box">屏蔽该推特后，该推特将不会出现在你的推特列表中！</div>
+                <div className="des-box">{t('shieldModalDes')}</div>
               </ShieldContentWrapper>
               <ModalOperator onClose={onClose} onQuery={() => {
                 onShieldRequest()
@@ -69,11 +71,12 @@ type OperatorIprop = {
   onClose: Function;
 }
 export const ModalOperator = React.memo((props: OperatorIprop) => {
+  const { t } = useTranslation()
   const { onQuery, onClose } = props
   return (
     <ModalOperatorWrapper>
-      <ModalOperatorQueryWrapper onClick={() => { onQuery() }}>确认</ModalOperatorQueryWrapper>
-      <ModalOperatorCancerWrapper onClick={() => { onClose() }}>取消</ModalOperatorCancerWrapper>
+      <ModalOperatorQueryWrapper onClick={() => { onQuery() }}>{t('modalQuery')}</ModalOperatorQueryWrapper>
+      <ModalOperatorCancerWrapper onClick={() => { onClose() }}>{t('modalCancel')}</ModalOperatorCancerWrapper>
     </ModalOperatorWrapper>
   )
 })

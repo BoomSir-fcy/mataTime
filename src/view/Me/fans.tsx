@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Avatar, Icon } from 'components';
 import { Box, Button, Flex } from 'uikit';
 import { Api } from 'apis';
+import { toast } from 'react-toastify';
 
 const Header = styled(Flex)`
   width:100%;
@@ -82,6 +83,38 @@ const Fans = React.memo(() => {
       }
     }
 
+    // 关注用户
+    const followUser = async (focus_uid: number) => {
+      try {
+        const res = await Api.MeApi.followUser(focus_uid)
+        console.log('关注用户', res);
+        if (res.code === 1) {
+          getFansList()
+          toast.success(res.data)
+        } else {
+          toast.warning(res.data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    // 取消关注
+    const unFollowUser = async (focus_uid: number) => {
+      try {
+        const res = await Api.MeApi.unFollowUser(focus_uid)
+        console.log('取消关注', res);
+        if (res.code === 1) {
+          getFansList()
+          toast.success(res.data)
+        } else {
+          toast.warning(res.data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     useEffect(() => {
       getFansList()
     }, [])
@@ -95,7 +128,12 @@ const Fans = React.memo(() => {
               <div><span className="username">{item.nick_name}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" /> <span className="msg">{item.present}</span></div>
               <Msg>{item.introduction}</Msg>
             </Column>
-            <Button>{item.attention_status_name}</Button>
+            {
+              item.attention_status_name === "相互关注" && <Button onClick={() => unFollowUser(item.uid)} style={{ background: '#4168ED' }}>{item.attention_status_name}</Button>
+            }
+            {
+              item.attention_status_name !== "相互关注" && <Button onClick={() => followUser(item.uid)} style={{ background: '#4168ED' }}>{item.attention_status_name}</Button>
+            }
           </ContentBox>
         )
       })

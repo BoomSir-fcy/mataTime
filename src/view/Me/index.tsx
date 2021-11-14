@@ -20,7 +20,7 @@ const Me = props => {
             <Container {...props}>
               <Route path={`${props.match.path}`} exact component={Profile} />
               <Route path={`${props.match.path}/account`} component={Account} />
-              <Route path={`${props.match.path}/profile`} component={Account} />
+              <Route path={`${props.match.path}/profile/:uid`} component={Profile} />
               <Route path={`${props.match.path}/edit`} component={Edit} />
               <Route path={`${props.match.path}/follow`} component={Follow} />
               <Route path={`${props.match.path}/fans`} component={Fans} />

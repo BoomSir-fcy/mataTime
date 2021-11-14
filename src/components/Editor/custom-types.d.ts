@@ -46,7 +46,8 @@ export type ListItemElement = { type: 'list-item'; children: Descendant[] }
 
 export type MentionElement = {
   type: 'mention'
-  character: string
+  character: string,
+  attrs:any,
   children: CustomText[]
 }
 
