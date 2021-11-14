@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Avatar, Icon } from 'components';
-import { CommentList } from 'src/components/Layout/ArticleDetilsLayout/CommentList';
+import { Avatar, Icon, } from 'components';
 import { Link } from 'react-router-dom';
 import moreIcon from 'assets/images/social/more.png';
 import { Box, Button, Flex } from 'uikit';
@@ -58,7 +57,6 @@ width: 80%;
 const Detail = styled(Box)`
 width:100%;
 margin:22px 0 28px 0;
-}
 `
 const IconFont = styled(Box)`
 float:left;
@@ -72,12 +70,12 @@ span {
 `
 const Praise = React.memo((props) => {
   const [listData, setListData] = useState([])
-  // 跳转详情页
   console.log('点赞列表', listData);
   // 获取点赞列表
   const getPraiseList = async () => {
     try {
-      const res = await Api.MeApi.collectList()
+      const res = await Api.MeApi.praiseList()
+
       setListData(res.data.list)
     } catch (error) {
       console.log(error);
@@ -92,7 +90,6 @@ const Praise = React.memo((props) => {
             return (
               <Content key={index}>
                 <Avatar src={item.nft_image} scale="md" style={{ float: 'left', marginRight: "23px" }} />
-
                 <Center>
                   <div>
                     <Msg>
@@ -129,7 +126,7 @@ const Praise = React.memo((props) => {
                   }
                 </Center>
 
-                <More style={{ float: 'right' }}><img src={moreIcon} alt="more" /></More>
+                {/* <More style={{ float: 'right' }}><img src={moreIcon} alt="more" /> */}
               </Content>
             )
           })
