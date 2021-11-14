@@ -5358,15 +5358,15 @@ dotenv-expand@5.1.0:
   resolved "https://registry.npmjs.org/dotenv-expand/-/dotenv-expand-5.1.0.tgz"
   integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
 
-dotenv@8.2.0:
-  version "8.2.0"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-8.2.0.tgz"
-  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
+dotenv@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
+  integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
-dsgswap-sdk@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.11.tgz#7a6426c2c4343629fa37f60e0742b96b8b358a94"
-  integrity sha512-joFaKEPGIi+dSTx7IOA7rHbj3XLTSD1T/YSKSwHDE5Hh92QieaLrrmNDAri/NpG9cLyqjM+00kMzeB/9u+93Nw==
+dsgswap-sdk@1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.12.tgz#d5585c04a23d7e0027d5de5a8f97353f06951425"
+  integrity sha512-/B8c6WJFiLFfrEtdgowdOnhpCoRp/6YWe/jJHgWYO0SETkeFiRG7lfbjXagrwCiOVv4/IQnnontbsqgNwrp95w==
   dependencies:
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
