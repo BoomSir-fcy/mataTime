@@ -180,7 +180,7 @@ const Profile: React.FC<any> = React.memo(props => {
                     <Text className="text">{profile.location}</Text>
                   </Flex>
                 </Flex>
-                <Text className="text">{totalPage}条动态</Text>
+                <Text className="text">{profile.post_num}条动态</Text>
               </Desc>
             </Flex>
             {!uid && (

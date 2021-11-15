@@ -1,37 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Box, Text, Button } from 'uikit';
-import { useWeb3React } from '@web3-react/core';
+import { Flex, Card, Text, Button } from 'uikit';
 import { Api } from 'apis';
 
-const SafeSetBox = styled.div`
-  height: 707px;
-  background: #191f2d;
-  margin-top: 16px;
+const SafeSetBox = styled(Card)`
+  height: 700px;
+  margin-top: 13px;
   padding: 27px 29px;
-  border-radius: 10px;
 `;
 const Rows = styled(Flex)`
   justify-content: space-between;
   padding-bottom: 23px;
   margin-bottom: 22px;
-  border-bottom: 1px solid #4d535f;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.tertiary};
 `;
 const Title = styled.div`
-  color: #fff;
-  font-weight: bold;
-`;
-const Address = styled.div`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white_black};
   font-weight: bold;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-`;
-const Msg = styled(Text)`
-  color: #b5b5b5;
-  font-size: 16px;
 `;
 
 const SafeSet = () => {
@@ -44,24 +33,25 @@ const SafeSet = () => {
       console.log(error);
     }
   };
-  console.log('钱包地址', useWeb3React());
 
   return (
     <SafeSetBox>
       <Rows>
         <Column>
           <Title>钱包地址</Title>
-          <Msg>登录该账号的钱包地址，无法更改</Msg>
+          <Text color="textTips" mt="11px">
+            登录该账号的钱包地址，无法更改
+          </Text>
         </Column>
-        <Address>0x27B0FC6C…………9a5bde61214d2</Address>
+        <Title>0x0FC6C…………961214d2</Title>
       </Rows>
-      <Rows>
+      {/* <Rows>
         <Column>
           <Title>邮箱设置</Title>
-          <Msg>平台最新消息将发送至该邮箱</Msg>
+          <Text color="textTips">平台最新消息将发送至该邮箱</Text>
         </Column>
         <Button onClick={() => updateEmail('liujiaqi@qgx.com')}>立即绑定</Button>
-      </Rows>
+      </Rows> */}
     </SafeSetBox>
   );
 };

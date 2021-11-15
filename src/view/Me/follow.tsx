@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Avatar, Icon } from 'components';
+import { Avatar, List } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
@@ -14,14 +14,9 @@ const Msg = styled(Box)`
 `;
 const Content = styled(Card)`
   width: 100%;
-  height: 705px;
+  min-height: 700px;
   padding: 29px 19px;
-  background: #191f2d;
   margin-top: 13px;
-  .msg {
-    color: #b5b5b5;
-    font-size: 14px;
-  }
   .username {
     color: #fff;
   }
@@ -33,7 +28,6 @@ const Column = styled(Flex)`
   float: left;
   margin-left: 22px;
 `;
-
 const ContentBox = styled(Box)`
   float: left;
   width: 100%;
@@ -46,82 +40,60 @@ const ContentBox = styled(Box)`
 `;
 
 const Follow = React.memo(() => {
-  const [followAry, setFollowAry] = useState([]);
+  const [state, setState] = useImmer({
+    loading: false,
+    page: 1,
+    total: 0,
+    totalPage: 0,
+    list: []
+  });
+  const { loading, page, totalPage, list } = state;
 
-  const FollowList = () => {
-    const getFollowList = async () => {
-      try {
-        const res = await Api.MeApi.followList();
-        setFollowAry(res.data.list || []);
-      } catch (error) {
-        console.log(error);
+  const getFollowList = async () => {
+    try {
+      setState(p => {
+        p.loading = true;
+      });
+      const res = await Api.MeApi.followList(state.page);
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = [...state.list, ...(res.data.list || [])];
+          p.page = state.page + 1;
+          p.total = res.data.total_num;
+        });
       }
-    };
-
-    // 关注用户
-    const followUser = async (focus_uid: number) => {
-      try {
-        const res = await Api.MeApi.followUser(focus_uid);
-        if (res.code === 1) {
-          getFollowList();
-          toast.success(res.data);
-        } else {
-          toast.warning(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    // 取消关注
-    const unFollowUser = async (focus_uid: number) => {
-      try {
-        const res = await Api.MeApi.unFollowUser(focus_uid);
-        console.log('取消关注', res);
-        if (res.code === 1) {
-          getFollowList();
-          toast.success(res.data);
-        } else {
-          toast.warning(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    useEffect(() => {
-      getFollowList();
-    }, []);
-
-    return (
-      <div>
-        {followAry.map(item => {
-          return (
-            <ContentBox key={item.uid}>
-              <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
-              <Column>
-                <div>
-                  <span className="username">{item.nick_name}</span> <Icon name={item.dunpai ? 'icon-dunpai' : null} margin="0 5px 0 5px" size={15} color="#699a4d" />{' '}
-                  <span className="msg"> @0x32...9239</span>
-                </div>
-                <Msg>{item.introduction}</Msg>
-              </Column>
-              {item.attention_status_name === '已关注' && (
-                <Button onClick={() => unFollowUser(item.uid)} style={{ background: '#4168ED' }}>
-                  {item.attention_status_name}
-                </Button>
-              )}
-              {item.attention_status_name !== '已关注' && (
-                <Button onClick={() => followUser(item.uid)} style={{ background: '#4168ED' }}>
-                  {item.attention_status_name}
-                </Button>
-              )}
-            </ContentBox>
-          );
-        })}
-      </div>
-    );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setState(p => {
+        p.loading = false;
+      });
+    }
   };
+
+  // 取消关注
+  const unFollowUser = async (focus_uid: number) => {
+    try {
+      const res = await Api.MeApi.unFollowUser(focus_uid);
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = [];
+          p.page = 1;
+        });
+        toast.success(res.data);
+        getFollowList();
+      } else {
+        toast.error(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getFollowList();
+  }, []);
+
   return (
     <Box>
       <CrumbsHead>
@@ -129,10 +101,52 @@ const Follow = React.memo(() => {
           <Text fontWeight="bold" mr="10px" fontSize="14px">
             我的关注
           </Text>
-          <Text fontSize="14px">{followAry.length}人</Text>
+          <Text fontSize="14px">{state.total}人</Text>
         </Flex>
       </CrumbsHead>
-      <Content>{FollowList()}</Content>
+      <Content>
+        <List
+          marginTop={13}
+          loading={loading}
+          renderList={() => {
+            if (loading || page > totalPage) return false;
+            setState(p => {
+              p.loading = true;
+            });
+            Api.MeApi.followList(page).then(res => {
+              setState(p => {
+                p.loading = false;
+              });
+              if (Api.isSuccess(res)) {
+                setState(p => {
+                  p.page = page + 1;
+                  p.list = [...list, ...res.data.list];
+                });
+              }
+            });
+          }}
+        >
+          {state.list.map(item => {
+            return (
+              <ContentBox key={item.uid}>
+                <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
+                <Column>
+                  <Flex>
+                    <Text color="white_black" mr="13px">
+                      {item.nick_name}
+                    </Text>
+                    <Text color="textTips">@0x32...9239</Text>
+                  </Flex>
+                  <Msg>{item.introduction}</Msg>
+                </Column>
+                <Button onClick={() => unFollowUser(item.uid)} variant="tertiary">
+                  取消关注
+                </Button>
+              </ContentBox>
+            );
+          })}
+        </List>
+      </Content>
     </Box>
   );
 });

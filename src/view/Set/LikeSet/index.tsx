@@ -3,27 +3,20 @@ import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
 import { useThemeManager, useLanguange, useNotification } from 'store/app/hooks';
-import { Flex, Box, Text, Toggle } from 'uikit';
+import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
 import { languages } from 'config/localization';
-import { Api } from 'apis';
 
-const NoticeSetBox = styled.div`
-  height: 707px;
-  background: #191f2d;
-  margin-top: 16px;
+const NoticeSetBox = styled(Card)`
+  height: 700px;
+  margin-top: 13px;
   padding: 27px 29px;
-  border-radius: 10px;
 `;
 const Title = styled.div`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white_black};
   font-weight: bold;
-  margin-bottom: 12px;
 `;
-const Msg = styled(Text)`
-  color: #b5b5b5;
-  font-size: 16px;
-`;
+
 const Rows = styled(Flex)`
   flex-direction: column;
   justify-content: space-between;
@@ -32,7 +25,7 @@ const Column = styled(Flex)`
   justify-content: space-between;
   padding-bottom: 23px;
   margin-bottom: 22px;
-  border-bottom: 1px solid #4d535f;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.tertiary};
 `;
 
 const LikeSet: React.FC = () => {
@@ -58,21 +51,27 @@ const LikeSet: React.FC = () => {
       <Column>
         <Rows>
           <Title>{t('Dark')}</Title>
-          <Msg>可切换为深色模式，夜间浏览更舒服</Msg>
+          <Text color="textTips" mt="11px">
+            可切换为深色模式，夜间浏览更舒服
+          </Text>
         </Rows>
         <Toggle checked={isDark} onClick={toggleThemeHandle} />
       </Column>
       <Column>
         <Rows>
           <Title>消息红点提醒</Title>
-          <Msg>有新消息时通过红点提醒</Msg>
+          <Text color="textTips" mt="11px">
+            有新消息时通过红点提醒
+          </Text>
         </Rows>
         <Toggle checked={notification} onClick={setNotification} />
       </Column>
       <Column alignItems="center">
         <Rows>
           <Title>默认显示语言</Title>
-          <Msg>显示更符合你的语言</Msg>
+          <Text color="textTips" mt="11px">
+            显示更符合你的语言
+          </Text>
         </Rows>
         <Select
           options={[
@@ -94,7 +93,9 @@ const LikeSet: React.FC = () => {
       <Column>
         <Rows>
           <Title>信息自动翻译</Title>
-          <Msg>浏览其他人的内容时，自动翻译成你选择的默认显示语言 </Msg>
+          <Text color="textTips" mt="11px">
+            浏览其他人的内容时，自动翻译成你选择的默认显示语言{' '}
+          </Text>
         </Rows>
         <Toggle checked={state.isTranslation} onClick={setTranslation} />
       </Column>

@@ -97,6 +97,9 @@ export type Colors = {
   backgroundMember: string;
   backgroundCard: string;
   backgroundTextArea: string;
+  backgroundMenu: string;
+  backgroundMenuIcon: string;
+  backgroundMenuBack: string;
   textValue: string;
   backgroundAlt: string;
   text: string;
