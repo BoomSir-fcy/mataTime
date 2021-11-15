@@ -34,7 +34,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
   // 获取个人信息
   const getUserInfo = async () => {
-    const res = await Api.UserApi.getUserInfoByUID('167004880' || uid)
+    const res = await Api.UserApi.getUserInfoByUID(uid)
     if (Api.isSuccess(res)) {
       setUserInfo(res.data)
     }
@@ -42,7 +42,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
   // 关注用户
   const onAttentionFocusRequest = async () => {
-    const res = await Api.AttentionApi.onAttentionFocus('167004880' || uid);
+    const res = await Api.AttentionApi.onAttentionFocus(uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data)
       getUserInfo()
@@ -53,7 +53,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
   // 取消关注用户
   const cancelAttentionFocusRequest = async () => {
-    const res = await Api.AttentionApi.cancelAttentionFocus('167004880' || uid);
+    const res = await Api.AttentionApi.cancelAttentionFocus(uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data)
       getUserInfo()
@@ -61,6 +61,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
       toast.error(res.data)
     }
   }
+
 
   const addEventListener = () => {
     document.addEventListener('click', (e) => {
@@ -73,8 +74,6 @@ export const FollowPopup = React.memo((props: Iprops) => {
       e.stopPropagation()
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(true)
-    }} onMouseLeave={() => {
-      // setVisible(false)
     }}>
       {children}
       {

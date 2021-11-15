@@ -53,5 +53,4 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
   return [setting.languange, setUseLanguage];
 };
 
-export const useHackEslint = () => { };
-
+export const useHackEslint = () => {};

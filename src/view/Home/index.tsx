@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { About, Avatar, Editor, ModalWrapper } from 'components';
 import { withRouter } from 'react-router-dom';
-import { useTranslation } from 'contexts/Localization'
 import { ToastContainer, toast } from 'react-toastify';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
@@ -68,7 +67,6 @@ const CancelFollow = () => {
   );
 };
 const Home: React.FC = props => {
-  const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
   const sendArticle = (content: string, resetInput: () => void, image_urls) => {
@@ -96,7 +94,7 @@ const Home: React.FC = props => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header {...props} title={t('homeHeaderTitle')}></Header>
+          <Header {...props}></Header>
           <Editor type="post" sendArticle={sendArticle}></Editor>
           <Tabs></Tabs>
           {/* <NewsMe {...props}></NewsMe> */}

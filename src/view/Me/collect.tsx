@@ -75,9 +75,6 @@ const Collect = props => {
                 itemData={{
                   ...item,
                   post_id: item.id,
-                  user_avator_url: item.nft_image,
-                  user_name: item.nick_name,
-                  add_time_desc: item.post_time_desc,
                   post: {
                     ...item,
                     post_id: item.id
@@ -91,7 +88,6 @@ const Collect = props => {
                 itemData={{
                   ...item,
                   post_id: item.id,
-                  is_like: item.like_status,
                   post: {
                     ...item,
                     post_id: item.id

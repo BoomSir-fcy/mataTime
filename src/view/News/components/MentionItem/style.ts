@@ -22,10 +22,7 @@ export const MentionItemWrapper = styled.div`
       a{
         color: #4168ED;
         cursor: pointer;
-      }
-      a{
-        color: #4168ED;
-        cursor: pointer;
+        margin: 0 10px;
       }
       span {
         color: #4168ED;

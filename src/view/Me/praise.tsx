@@ -54,10 +54,10 @@ const Praise = React.memo(props => {
   return (
     <Box>
       <CrumbsHead>
-        <Flex>
+        <Box>
           <Button style={{ marginRight: '11px' }}>全部点赞</Button>
           <Button>今日新增</Button>
-        </Flex>
+        </Box>
       </CrumbsHead>
       <List
         marginTop={13}

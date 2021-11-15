@@ -40,6 +40,7 @@ const MentionItem: React.FC<IProps> = (props) => {
       try {
         arr = JSON.parse(itemData.content)
         setContent(arr || [])
+        console.log(arr)
       } catch (err: any) {
         arr = []
       }
@@ -100,8 +101,16 @@ const MentionItem: React.FC<IProps> = (props) => {
                                 <a>{child.character}</a>
                               </FollowPopup>
                             </p>
-                          ) : child.type === 'mention' ? (
-                            <p><a>#Dinosaur Eggs#</a></p>
+                          ) : child.type === 'topic' ? (
+                            <p>
+                              {
+                                (child.children || []).map((topic: any) => {
+                                  if (topic.text) {
+                                    return <a>#{topic.text}#</a>
+                                  }
+                                })
+                              }
+                            </p>
                           ) : (
                             <p>{child.text || ''}</p>
                           )
@@ -114,7 +123,6 @@ const MentionItem: React.FC<IProps> = (props) => {
             )
           })
         }
-
         {/* <p>
           <FollowPopup>
             <a>@Baby fuck me</a>

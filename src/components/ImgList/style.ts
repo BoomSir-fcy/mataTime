@@ -7,7 +7,6 @@ width:100%;
 export const  ImgItem = styled.img`
 width: 164px;
 height: 164px;
-border: 1px solid #6E6E6E;
 border-radius: 5px;
 margin-right:10px;
 `

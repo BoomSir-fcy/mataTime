@@ -5,7 +5,6 @@ declare namespace Api {
       uid?: number;
       nick_name?: string;
       NickName?: string;
-      address?: string;
       display_format?: number;
       introduction?: string;
       location?: string;

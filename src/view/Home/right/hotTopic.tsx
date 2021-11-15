@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Card, Text } from 'uikit'
 import { Avatar, Icon } from 'components';
 import { Api } from 'apis'
@@ -38,7 +37,6 @@ const HotItem = styled(Flex)`
 margin-top:20px;
 `
 export const HotTopic: React.FC = () => {
-  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [hotTopicList, setHotTopicList] = useState([])
   useEffect(() => {
@@ -49,7 +47,7 @@ export const HotTopic: React.FC = () => {
       if (Api.isSuccess(res)) {
         setHotTopicList(res.data.List)
         if (isToast) {
-          toast.success(t('HotTopicRefreshSuccess'))
+          toast.success('刷新成功')
         }
       }
     })
@@ -57,7 +55,7 @@ export const HotTopic: React.FC = () => {
   return (
     <HotTopicBox>
       <Flex justifyContent="space-between">
-        <TitleText>{t('HotTopicTitle')}</TitleText>
+        <TitleText>热门话题</TitleText>
         <Icon cur onClick={getList.bind(this, true)} name="icon-jiazai_shuaxin" margin="0" color="#7393FF"></Icon>
       </Flex>
       <Box>
@@ -65,7 +63,7 @@ export const HotTopic: React.FC = () => {
           hotTopicList.map((item, index) => (
             <HotItem key={item.tid} justifyContent="space-between">
               <Hot>#{item.topic_name}#</Hot>
-              <HotCount>{item.post_num > 50 ? 50 : item.post_num}{t('HotTopicUnit')}</HotCount>
+              <HotCount>{item.post_num > 50 ? 50 : item.post_num}+条内容</HotCount>
             </HotItem>
           ))
         }

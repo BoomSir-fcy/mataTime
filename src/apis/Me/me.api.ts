@@ -89,10 +89,4 @@ export class MeApi extends Http {
     const res = await this.get('/v1/user/home_header', { uid });
     return res;
   }
-
-  // 个人(他人)主页
-  async getProfileMsg(page: number, uid?: number) {
-    const res = await this.get('/v1/user/home_msg', { page, uid });
-    return res;
-  }
 }
