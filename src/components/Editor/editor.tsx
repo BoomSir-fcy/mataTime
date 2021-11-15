@@ -22,6 +22,7 @@ import { Mention, TopicElement } from './elements'
 type Iprops = {
   type: any
   sendArticle: any
+  initValue?: any[]
 }
 
 const DefaultElement = props => {
@@ -95,6 +96,12 @@ export const Editor = (props: Iprops) => {
     () => withTopics(withMentions(withReact(withHistory(createEditor())))),
     []
   )
+  useEffect(() => {
+    setValue(props.initValue)
+    // if (props.initValue.length) {
+    //   setValue(props.initValue)
+    // }
+  }, [])
   // 扩大focus距离
   useEffect(() => {
     const el: any = ref.current
