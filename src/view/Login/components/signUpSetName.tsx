@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useDispatch } from 'react-redux';
@@ -14,7 +14,9 @@ import { WalletAddress } from './signUp';
 
 import { useTranslation } from 'contexts/Localization';
 
-const InputItems = styled(Flex)``;
+const InputItems = styled(Flex)`
+  position: relative;
+`;
 const InputText = styled(Text)`
   width: 100px;
   min-width: 100px;
@@ -43,6 +45,9 @@ const Submit = styled(Button)`
   text-transform: capitalize;
   ${mediaQueriesSize.margint}
 `;
+const NameVerify = styled(Text)`
+  position: absolute;
+`;
 
 export const SignUpSetName = React.memo(() => {
   const dispatch = useDispatch();
@@ -50,11 +55,15 @@ export const SignUpSetName = React.memo(() => {
   const [state, setState] = useImmer({
     nickName: ''
   });
+  const [haveNickName, sethaveNickName] = useState(true)
   const { account } = useWeb3React();
   const { addNickName } = useSignIn();
   const { t } = useTranslation();
 
   const submitProfile = React.useCallback(async () => {
+    if (!haveNickName) {
+      return
+    }
     const res = await addNickName(state.nickName);
     console.log(res);
     if (Api.isSuccess(res)) {
@@ -80,6 +89,11 @@ export const SignUpSetName = React.memo(() => {
           <InputText>{t('loginInputTitleNickname')}</InputText>
           <InputNickName
             onChange={event => {
+              if (event.target.value.length < 1) {
+                sethaveNickName(false)
+              } else {
+                sethaveNickName(true)
+              }
               setState(p => {
                 p.nickName = event.target.value;
               });
@@ -87,6 +101,7 @@ export const SignUpSetName = React.memo(() => {
             maxLength={20}
             placeholder={t('loginInputValueNickname')}
           />
+          {!haveNickName && <NameVerify small color='red'>请输入昵称</NameVerify>}
         </InputItems>
       </Box>
       <Flex justifyContent="center">

@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { useApproveNftsFarm, useNftStakeFarms, useCancelNftStake } from '../hook';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
+import { storeAction } from 'store';
 
 
 export const NftButton: React.FC<{ item: any; token: string; }> = ({ item, token }) => {
@@ -50,6 +51,7 @@ export const NftButton: React.FC<{ item: any; token: string; }> = ({ item, token
           } else {
             // 质押
             await handleStakeOrUnstake(1, item.properties.token, item.properties.token_id)
+            dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
           }
         } else {
           // 授权 

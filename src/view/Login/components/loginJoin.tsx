@@ -11,7 +11,6 @@ import { useLogin, useSignIn } from '../hooks';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import useAuth from 'hooks/useAuth';
-import { FetchNftStakeType } from '../hook';
 
 const SubTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.textOrigin};
@@ -65,7 +64,6 @@ export const LoginJoin: React.FC = React.memo(() => {
 
   const init = async () => {
     const [verify] = await Promise.all([siginInVerify(account)]);
-    const nftStake = await FetchNftStakeType(account)
 
     // 用户登录
     Boolean(verify) &&
@@ -74,9 +72,6 @@ export const LoginJoin: React.FC = React.memo(() => {
       });
     if (!Boolean(verify)) {
       dispatch(storeAction.changeSignUp({ isSignup: true }));
-      if (nftStake[0].token_id) {
-        dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-      }
     }
   };
 
