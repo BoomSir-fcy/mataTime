@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-// import MiniSwap from 'libs/mini-swap'
+import MiniSwap from 'libs/mini-swap'
 import { useWeb3React } from '@web3-react/core';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import useConnectWallet from 'hooks/useConnectWallet';
@@ -13,6 +13,8 @@ width: 300px;
 export const Swap: React.FC = () => {
   const { chainId } = useWeb3React()
 
+  console.log(chainId)
+
   const [languange] = useLanguange()
   const [isDark] = useThemeManager()
   const { onConnectWallet } = useConnectWallet()
@@ -21,7 +23,7 @@ export const Swap: React.FC = () => {
 
   return (
     <SwapBox>
-      {/* <MiniSwap resetTheme={{
+      <MiniSwap resetTheme={{
         dark: {
           colors: {
             primary: '#4168ED',
@@ -38,7 +40,7 @@ export const Swap: React.FC = () => {
         }
       }}
         onConnectWallet={onConnectWallet}
-        chainId={chainId} isDark={isDark} lang={languange} /> */}
+        chainId={chainId} isDark={isDark} lang={languange} />
     </SwapBox>
   )
 }

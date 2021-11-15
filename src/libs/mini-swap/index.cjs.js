@@ -63,7 +63,7 @@ var getNodeUrl = function (chainId) {
     // return 'https://polygon-mumbai.infura.io/v3/330472ed44dd4692a16dfcb4cc41f122'
 };
 
-var RPC_URL = getNodeUrl(97);
+var RPC_URL = getNodeUrl();
 var simpleRpcProvider = new ethers.ethers.providers.JsonRpcProvider(RPC_URL);
 
 /**
@@ -14071,7 +14071,7 @@ function Blocklist(_a) {
 var MiniSwap = function (_a) {
     var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onLoaded = _a.onLoaded, onConnectWallet = _a.onConnectWallet, chainId = _a.chainId;
     React.useEffect(function () {
-        console.debug("chainId is change " + chainId, chainId);
+        console.debug("chainId is change " + chainId);
         dsgswapSdk.setChainId(chainId);
     }, [chainId]);
     var _b = tslib.__read(React.useState(false), 2), loaded = _b[0], setLoaded = _b[1];
