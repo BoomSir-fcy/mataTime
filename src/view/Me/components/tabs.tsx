@@ -17,6 +17,7 @@ const TabItems = styled(Flex)`
   justify-content: center;
   align-items: center;
   margin: 0 17px;
+  color: ${({ theme }) => theme.colors.textgrey};
   &.active {
     text-align: center;
     font-size: 18px;
