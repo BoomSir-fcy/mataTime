@@ -20,6 +20,7 @@ const Content = styled(Card)`
   width: 600px;
   height: 700px;
   padding: 25px 40px 0;
+  margin-left: 40px;
 `;
 const LogoWarpper = styled(Box)`
   width: 337px;
