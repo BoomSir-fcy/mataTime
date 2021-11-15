@@ -50,16 +50,19 @@ export const ArticleList = (props) => {
   }
   return (
     <ArticleListBox>
-      <List marginTop={410} loading={page <= totalPage} renderList={() => {
+      <List marginTop={320} loading={page <= totalPage} renderList={() => {
+        console.log(loading ,page ,totalPage);
+        
         if (loading || page > totalPage) return false
         setLoading(true)
         Api.HomeApi.getArticleList({
           attention: 1,
           page: page,
-          per_page: 20
+          per_page: 10
         }).then(res => {
           setLoading(false)
           if (Api.isSuccess(res)) {
+        setLoading(false)
             setPage(page + 1)
             setTotalPage(res.data.total_page)
             setListData([...listData, ...res.data.List])
