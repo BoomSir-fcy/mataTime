@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'uikit';
 
 export const Badge: React.FC<{
   count: number | string;
@@ -8,7 +9,8 @@ export const Badge: React.FC<{
     count = '+99';
   }
   return (
-    <span
+    <Text
+      color="white"
       style={{
         position: 'absolute',
         right: '0',
@@ -24,6 +26,6 @@ export const Badge: React.FC<{
       }}
     >
       {count}
-    </span>
+    </Text>
   );
 };

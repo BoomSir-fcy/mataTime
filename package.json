@@ -202,5 +202,5 @@
   "resolutions": {
     "styled-components": "^5"
   },
-  "proxy": "http://192.168.101.135:8888/"
+  "proxy": "http://192.168.101.129:8888/"
 }
