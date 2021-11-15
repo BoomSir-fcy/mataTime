@@ -112,6 +112,8 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
               {/* </MorePopup> */}
                 </Flex>
               </CommentHeader>
+              {/* <CommentContent  dangerouslySetInnerHTML={{ __html: item.comment }}>
+              </CommentContent> */}
               <CommentContent  dangerouslySetInnerHTML={{ __html: item.comment }}>
               </CommentContent>
             </div>

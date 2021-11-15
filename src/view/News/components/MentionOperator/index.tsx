@@ -16,15 +16,15 @@ type IProps = {
   hasLike?: boolean,
   type?: MentionObjEnum,
   callback?: Function,
-  location?:any,
-  history?:any
+  history?:any,
+  match?:any
 }
 
-const MentionOperator: React.FC<IProps> = ({ location, history,itemData, type = 'Article', hasLike = true, callback }) => {
-  const goDetils = () => {
-    if(!location||!history)return
-    if (location.pathname === '/articleDetils') return
-    history.push('/articleDetils/'+itemData.id)
+const MentionOperator: React.FC<IProps> = ({match,history, itemData, type = 'Article', hasLike = true, callback }) => {
+  const goDetils = ()=> {
+    if(!match||!history)return
+    if (match.path === '/articleDetils/:id') return;
+    history.push('/articleDetils/' + itemData.id);
   }
   const [isLike, setIsLike] = useState<number>(itemData.is_like)
   const changeLike = () => {
@@ -52,7 +52,7 @@ const MentionOperator: React.FC<IProps> = ({ location, history,itemData, type = 
     <MentionOperatorWrapper>
       <div className="mention-operator">
         <div className="operator-item">
-          <Icon name={'icon-pinglun'} onClick={goDetils} color={'#B5B5B5'}></Icon>
+          <Icon name={'icon-pinglun'} color={'#B5B5B5'} onClick={goDetils}></Icon>
           {itemData.comment_num || 0}
         </div>
         <div className="operator-item">
