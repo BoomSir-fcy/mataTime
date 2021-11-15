@@ -56,7 +56,14 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
         <CenterCard>
           <Header back title="返回" {...props}></Header>
           <MeItemWrapper>
-            <MentionItem {...props} itemData={itemData} more={false} />
+            <MentionItem {...props} itemData={{
+              ...itemData,
+              post_id: itemData.id,
+              post: {
+                ...itemData,
+                post_id: itemData.id
+              }
+            }} more={false} />
             <MentionOperator itemData={{
               ...itemData, post_id: itemData.id, post: {
                 ...itemData

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { Flex, Button, Box } from 'uikit'
 export const ModalWrapper = styled(Box)`
-  width: 100%;
+  /* width: 100%;
   height: 100%;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 0; */
   /* background: rgba(98, 98, 98, 0.3); */
-  z-index: 99999;
+  /* z-index: 99999; */
 `
 export const ModalTitleWrapper = styled(Box)`
   width: 100%;
@@ -28,7 +28,7 @@ export const ModalTitleWrapper = styled(Box)`
 export const ReportModalWrapper = styled(Box)`
   width: 800px;
   background: #191F2D;
-  border-radius: 20px;
+  border-radius: 10px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -36,6 +36,8 @@ export const ReportModalWrapper = styled(Box)`
   margin-top: -150px;
   box-sizing: border-box;
   padding: 35px;
+  box-shadow: 0px 0px 2px 1px rgba(180, 200, 169, 0.3);
+  z-index: 99999;
 `
 
 export const ReportContentWrapper = styled(Box)`

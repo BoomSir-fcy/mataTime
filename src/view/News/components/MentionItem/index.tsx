@@ -38,9 +38,11 @@ const MentionItem: React.FC<IProps> = (props) => {
     if (itemData.content) {
       let arr = []
       try {
-        arr = JSON.parse(itemData.content)
+        if (itemData.content.match(/\[.*?\]/g)) {
+          arr = JSON.parse(itemData.content)
+        }
+
         setContent(arr || [])
-        console.log(arr)
       } catch (err: any) {
         arr = []
       }
