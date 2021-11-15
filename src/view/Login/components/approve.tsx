@@ -3,28 +3,38 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import { useApproveNftsFarm, useNftStakeFarms } from '../hook';
+import { useDispatch } from 'react-redux';
+import { useApproveNftsFarm, useNftStakeFarms, useCancelNftStake } from '../hook';
+import { fetchUserNftInfoAsync } from 'store/login/reducer';
 
 
-export const NftButton: React.FC<{ item: any; token: string; upDate: () => void }> = ({ item, token, upDate }) => {
+export const NftButton: React.FC<{ item: any; token: string; }> = ({ item, token }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { onApprove } = useApproveNftsFarm(token)
   const [pendingTx, setPendingTx] = useState(false)
+  const dispatch = useDispatch()
 
   const handleApprove = useCallback(async () => {
     try {
       await onApprove()
-      upDate()
+      dispatch(fetchUserNftInfoAsync(account));
     } catch (e) {
       console.error(e)
     }
   }, [onApprove])
   const { onStake: onNftsStake } = useNftStakeFarms()
+  const { onStake: onCancelNftStake } = useCancelNftStake()
+
   const handleStakeOrUnstake = useCallback(
-    async (address: string, tokenId: string) => {
-      await onNftsStake(address, tokenId)
-      upDate()
+    async (type: number, address: string, tokenId: string) => {
+      if (type) {
+        await onNftsStake(address, tokenId)
+      } else {
+        // 取消质押
+        await onCancelNftStake()
+      }
+      dispatch(fetchUserNftInfoAsync(account));
     },
     [onNftsStake, account],
   )
@@ -36,9 +46,10 @@ export const NftButton: React.FC<{ item: any; token: string; upDate: () => void 
         if (item.isApprovedMarket) {
           if (item.isStakeMarket) {
             // 取消质押
+            await handleStakeOrUnstake(0, item.properties.token, item.properties.token_id)
           } else {
             // 质押
-            await handleStakeOrUnstake(item.properties.token, item.properties.token_id)
+            await handleStakeOrUnstake(1, item.properties.token, item.properties.token_id)
           }
         } else {
           // 授权 

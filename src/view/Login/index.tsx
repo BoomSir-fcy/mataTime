@@ -31,7 +31,7 @@ const LogoWarpper = styled(Box)`
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
-  const { isSignup, signUpFail } = loginReduce;
+  const { isSignup, signUpFail, isStakeNft } = loginReduce;
   const [isDark] = useThemeManager();
 
   const checkNetwork = async () => {
@@ -60,7 +60,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
           <LogoWarpper>
             <Logo url="/" src={`${require(isDark ? './images/logo.svg' : './images/light_logo.svg').default}`} />
           </LogoWarpper>
-          {isSignup ? <SignUp isSignup={signUpFail} /> : <LoginJoin />}
+          {isSignup ? <SignUp isSignup={signUpFail} isStakeNft={isStakeNft} /> : <LoginJoin />}
         </Content>
       </LoginContainer>
       <StakeNFT />

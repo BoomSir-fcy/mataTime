@@ -17,7 +17,14 @@ declare namespace Api {
       nonce: number; // 随机数
       encode_data: string;
     }
-
+    interface nftInfoParams {
+      token: string;
+      token_id: string;
+      image: string;
+    }
+    interface nftList {
+      data: nftInfoParams[]
+    }
     interface nftParams {
       nftID: number;
       nftUrl: string;

@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { changeSignUp, changeSignUpFail, changeSignUpStep, changeUpdateProfile, setUserNft } from './actions';
+import { changeSignUp, changeSignUpFail, changeSignUpStep, changeUpdateProfile, setUserNft, setUserNftStake } from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
+import { FetchNftsList } from 'view/Login/hook';
 
 const initialState = {
   isSignup: false,
   signUpFail: false,
+  isStakeNft: false,
   singUpStep: 1,
   userInfo: {
     UID: 0
@@ -13,7 +15,9 @@ const initialState = {
   nft: {
     nftID: 0,
     nftUrl: ''
-  }
+  },
+  nftList: []
+
 };
 
 export type Login = typeof initialState;
@@ -24,6 +28,11 @@ export const fetchUserInfoAsync = createAsyncThunk('fetch/getUserInfo', async ()
   window.localStorage.setItem(storage.UserInfo, JSON.stringify(response.data));
   return response;
 });
+// Async thunks
+export const fetchUserNftInfoAsync = createAsyncThunk<any, string>('fetch/getNftInfo', async (account) => {
+  const info = await FetchNftsList(account)
+  return info
+});
 
 export const login = createSlice({
   name: 'login',
@@ -33,6 +42,9 @@ export const login = createSlice({
     builder
       .addCase(changeSignUp, (state, action) => {
         state.isSignup = action.payload.isSignup;
+      })
+      .addCase(setUserNftStake, (state, action) => {
+        state.isStakeNft = action.payload.isStakeNft;
       })
       .addCase(changeSignUpFail, (state, action) => {
         state.signUpFail = action.payload.signUpFail;
@@ -48,6 +60,9 @@ export const login = createSlice({
       })
       .addCase(setUserNft, (state, action) => {
         state.nft = action.payload;
+      })
+      .addCase(fetchUserNftInfoAsync.fulfilled, (state, action) => {
+        state.nftList = action.payload;
       });
   }
 });

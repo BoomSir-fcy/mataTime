@@ -80,7 +80,8 @@ export const WalletAddress: React.FC<{
 
 export const SignUp: React.FC<{
   isSignup?: boolean;
-}> = ({ isSignup }) => {
+  isStakeNft?: boolean;
+}> = ({ isSignup, isStakeNft }) => {
   const dispatch = useDispatch();
   const { singUpStep } = useStore(p => p.loginReducer);
   const { loginCallback } = useLogin();
@@ -113,7 +114,7 @@ export const SignUp: React.FC<{
           <SignUpWarpper>
             <WalletAddress address={account} />
             {!isSignup ? (
-              <Button scale="ld" style={{ width: '205px', fontSize: '18px' }} onClick={() => signHandle()}>
+              <Button disabled={!isStakeNft} scale="ld" style={{ width: '205px', fontSize: '18px' }} onClick={() => signHandle()}>
                 钱包签名
               </Button>
             ) : (
