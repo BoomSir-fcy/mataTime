@@ -2,51 +2,30 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Flex, Card, Box, Button } from 'uikit';
-import { Avatar, Icon, Logo, SubMenu, ProfileMenu } from 'components';
+import { Icon, Logo, SubMenu, ProfileMenu } from 'components';
 
 import menuData from './menuData';
 
 const MenuBox = styled(Card)`
+  position: relative;
+  display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 20px 13px;
   width: 200px;
   height: calc(100vh - 150px);
+  border-radius: 10px;
 `;
 const LogoWarpper = styled(Box)`
   width: 175px;
   height: 32px;
 `;
+
 const Btn = styled.div`
   width: 100%;
   margin-top: 94px;
   text-align: center;
 `;
 
-const UserTitle = styled.div`
-  margin: 0 12px;
-  font-weight: 700;
-  font-size: 18px;
-  color: #fff;
-  ::after {
-    position: relative;
-    right: -50px;
-    content: '';
-    display: inline-block;
-    width: 0px;
-    height: 0px;
-    border-bottom: 7px solid transparent;
-    border-left: 7px solid #fff;
-    border-right: 7px solid transparent;
-    border-top: 7px solid transparent;
-  }
-`;
-const UserDesc = styled.div`
-  margin: 0 12px;
-  font-size: 16px;
-  font-weight: 400;
-  color: #b5b5b5;
-`;
 const BackWarpper = styled(Box)`
   display: flex;
   align-items: center;

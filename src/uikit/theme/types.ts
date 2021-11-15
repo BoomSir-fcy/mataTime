@@ -107,6 +107,7 @@ export type Colors = {
   textDisabled: string;
   textSubtle: string;
   textOrigin: string;
+  textgrey: string;
   disabled: string;
 
   // Gradients
