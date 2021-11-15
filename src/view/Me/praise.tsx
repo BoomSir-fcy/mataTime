@@ -1,222 +1,119 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Avatar, Icon } from 'components';
-import { CommentList } from 'src/components/Layout/ArticleDetilsLayout/CommentList';
-import { Link } from 'react-router-dom';
-import moreIcon from 'assets/images/social/more.png';
-import { Box, Button, Flex } from 'uikit';
+import { useImmer } from 'use-immer';
+import { List, MoreOperatorEnum } from 'components';
+import { Box, Button, Text, Card, Flex } from 'uikit';
+
 import { Api } from 'apis';
-import { toast } from 'react-toastify';
 
-const Title = styled(Box)`
-color:#fff;
-font-weight:bold;
-`
-const ArticleListBox = styled.div`
-color:#fff;
-`
-const Content = styled(Flex)`
-width:100%;
-padding:29px 18px 31px 29px;
-background:#191F2D;
-border-radius: 10px;
-margin-top:14px;
-overflow:hidden;
-justify-content: space-between;
-`
-const Header = styled(Flex)`
-justify-content: space-between;
-height:60px;
-line-height: 60px;
-padding:0 16px;
-background:#191F2D;
-border-radius:10px;
-`
-const More = styled(Box)`
-width: 25px;
-cursor: pointer;
-`
-const Msg = styled(Flex)`
-height:50px;
-justify-content: space-between;
-flex-direction: column;
-margin-right:27px;
-float: left;
-`
-const Time = styled(Box)`
-font-size:14px;
-color:#B5B5B5;
-`
-const Name = styled(Box)`
-color:#fff;
-font-weight:bold;
-font-size:18px;
-`
-const Center = styled(Box)`
-width: 80%;
-`
-const Detail = styled(Box)`
-width:100%;
-margin:22px 0 28px 0;
-}
-`
-const IconFont = styled(Box)`
-float:left;
-margin-right:60px;
-span {
-  margin-left:12px;
-  display: inline-block;
-  font-size:16px;
-  color:#B5B5B5;
-}
-`
-const Praise = React.memo((props) => {
-  const [listData, setListData] = useState([])
-  // 跳转详情页
-  console.log('点赞列表', listData);
-  // 获取点赞列表
-  const getPraiseList = async () => {
-    try {
-      const res = await Api.MeApi.collectList()
-      setListData(res.data.list)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  // 点赞列表组件
-  const PraiseList = () => {
-    return (
-      <div>
-        {
-          listData.map((item, index) => {
-            return (
-              <Content key={index}>
-                <Avatar src={item.nft_image} scale="md" style={{ float: 'left', marginRight: "23px" }} />
+import { CrumbsHead } from './components';
+import { MeItemWrapper } from 'view/News/Me/style';
+import MentionItem from 'view/News/components/MentionItem';
+import MentionOperator from 'view/News/components/MentionOperator';
 
-                <Center>
-                  <div>
-                    <Msg>
-                      <Name>{item.nick_name}</Name>
-                      <Time>{item.post_time_desc}</Time>
-                    </Msg>
-                    <Button variant="secondary" style={{ marginTop: '10px' }}>#老表的吃货天堂</Button>
-                  </div>
-                  <Link to={'/articleDetils/' + item.id}>
-                    <Detail>
-                      <div className="content" dangerouslySetInnerHTML={{ __html: item.content }} />
-                    </Detail>
-                  </Link>
-                  <IconFont>
-                    <Icon className="iconfont" name={'icon-pinglun'} color={'#B5B5B5'}></Icon>
-                    <span>{item.comment_num || 0}</span>
-                  </IconFont>
-                  <IconFont>
-                    <Icon className="iconfont" name={'icon-retweet'} color={'#B5B5B5'}></Icon>
-                    <span>{item.share_num || 0}</span>
-                  </IconFont>
-                  {
-                    item.like_status === 0 ? (
-                      <IconFont>
-                        <Icon onClick={() => praiseUser(item.id)} className="iconfont" name={'icon-aixin'} color={'#B5B5B5'}></Icon>
-                        <span>{item.like_num || 0}</span>
-                      </IconFont>
-                    ) : (
-                      <IconFont>
-                        <Icon onClick={() => unPraiseUser(item.id)} className="iconfont" name={'icon-aixin1'} color={'#EC612B'}></Icon>
-                        <span>{item.like_num || 0}</span>
-                      </IconFont>
-                    )
-                  }
-                </Center>
+const Header = styled(Card)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 16px;
+  margin-bottom: 13px;
+`;
 
-                <More style={{ float: 'right' }}><img src={moreIcon} alt="more" /></More>
-              </Content>
-            )
-          })
-        }
-      </div >
-    )
-  }
-  // 点赞用户
-  const praiseUser = async (post_id: number) => {
-    try {
-      const res = await Api.MeApi.praiseUser(post_id)
-      if (res.code === 1) {
-        getPraiseList()
-        toast.success(res.data)
-      } else {
-        toast.warning(res.data)
+const Praise = React.memo(props => {
+  const [state, setState] = useImmer({
+    loading: false,
+    list: [],
+    page: 1,
+    totalPage: 2
+  });
+  const { loading, page, totalPage, list } = state;
+
+  // 更新列表
+  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    let arr = [];
+    list.forEach((item: any) => {
+      let obj = item;
+      if (item.id === newItem.id) {
+        obj = { ...newItem.post };
       }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  // 取消点赞
-  const unPraiseUser = async (post_id: number) => {
-    try {
-      const res = await Api.MeApi.unPraiseUser(post_id)
-      console.log('取消点赞', res)
-      if (res.code === 1) {
-        getPraiseList()
-        toast.success(res.data)
+      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+        // 屏蔽、删除
+      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
+        // 置顶
+        arr.unshift(obj);
       } else {
-        toast.warning(res.data)
+        arr.push(obj);
       }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    });
+    setState(p => {
+      p.list = [...arr];
+    });
+  };
 
-  // 帖子详情
-  const getContentDetail = async (id: number) => {
-    try {
-      const res = await Api.MeApi.getContentDetail(1)
-      console.log('帖子详情', res);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // 添加评论
-  const addContentDetail = async (params: Api.Me.addContentDetail) => {
-    try {
-      const res = await Api.MeApi.addContentDetail({
-        pid: 1,
-        comment: 123123,
-        comment_id: 11
-      })
-      console.log('添加评论', res)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  // 删除评论
-  const removeContentDetail = async (id: number) => {
-    try {
-      const res = await Api.MeApi.removeContentDetail(id)
-      console.log('删除评论', res)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  useEffect(() => {
-    getPraiseList()
-    getContentDetail(1)
-  }, [])
   return (
-    <ArticleListBox>
-      <Header>
-        <Title>个人主页</Title>
-        <div>
+    <Box>
+      <CrumbsHead>
+        <Box>
           <Button style={{ marginRight: '11px' }}>全部点赞</Button>
           <Button>今日新增</Button>
-        </div>
-      </Header>
-      {PraiseList()}
-    </ArticleListBox>
-  )
-})
+        </Box>
+      </CrumbsHead>
+      <List
+        marginTop={13}
+        loading={loading}
+        renderList={() => {
+          if (loading || page > totalPage) return false;
+          setState(p => {
+            p.loading = true;
+          });
+          Api.MeApi.praiseList(page).then(res => {
+            setState(p => {
+              p.loading = false;
+            });
+            if (Api.isSuccess(res)) {
+              setState(p => {
+                p.page = page + 1;
+                p.list = [...list, ...res.data.list];
+              });
+            }
+          });
+        }}
+      >
+        {list.map((item, index) => (
+          <MeItemWrapper key={`${item.id}+${index}`}>
+            <MentionItem
+              {...props}
+              itemData={{
+                ...item,
+                post_id: item.id,
+                post: {
+                  ...item,
+                  post_id: item.id
+                }
+              }}
+              callback={(item: any, type: MoreOperatorEnum) => {
+                updateList(item, type);
+              }}
+            />
+            <MentionOperator
+              itemData={{
+                ...item,
+                post_id: item.id,
+                post: {
+                  ...item,
+                  post_id: item.id
+                }
+              }}
+              callback={(item: any) => {
+                updateList(item);
+              }}
+            />
+          </MeItemWrapper>
+        ))}
+      </List>
+    </Box>
+  );
+});
 
 export default Praise;

@@ -14,3 +14,7 @@ export const getTestAddress = () => {
 export const getMulticallAddress = () => {
   return getAddress(addresses.multiCall)
 }
+
+export const getNftSocialAddress = () => {
+  return getAddress(addresses.nftSocial)
+}

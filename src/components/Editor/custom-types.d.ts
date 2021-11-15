@@ -40,13 +40,14 @@ export type ImageElement = {
 
 export type LinkElement = { type: 'link'; url: string; children: Descendant[] }
 
-export type ButtonElement = { type: 'button'; children: Descendant[] }
+export type ButtonElement = { type: 'button';   character: string; children: Descendant[] }
 
 export type ListItemElement = { type: 'list-item'; children: Descendant[] }
 
 export type MentionElement = {
   type: 'mention'
-  character: string
+  character: string,
+  attrs:any,
   children: CustomText[]
 }
 

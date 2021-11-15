@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
@@ -16,6 +16,7 @@ import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 import { useLogin, useSignIn } from '../hooks';
 
 import { useTranslation } from 'contexts/Localization';
+import { FetchNftStakeType } from '../hook';
 
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
@@ -86,13 +87,22 @@ export const WalletAddress: React.FC<{
 
 export const SignUp: React.FC<{
   isSignup?: boolean;
-}> = ({ isSignup }) => {
+  isStakeNft?: boolean;
+}> = ({ isSignup, isStakeNft }) => {
   const dispatch = useDispatch();
   const { singUpStep } = useStore(p => p.loginReducer);
   const { loginCallback } = useLogin();
   const { account } = useWeb3React();
   const { getNftUrl } = useSignIn();
   const { t } = useTranslation();
+
+
+  const getStakeType = async (account) => {
+    const nftStake = await FetchNftStakeType(account)
+    if (nftStake[0].token_id) {
+      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+    }
+  }
 
   const signHandle = React.useCallback(async () => {
     const res = await loginCallback(1);
@@ -108,6 +118,10 @@ export const SignUp: React.FC<{
     }
   }, []);
 
+  useEffect(() => {
+    Boolean(account) && getStakeType(account)
+  }, [account])
+
   return (
     <Box>
       {singUpStep === 1 && (
@@ -119,7 +133,7 @@ export const SignUp: React.FC<{
           <SignUpWarpper>
             <WalletAddress address={account} />
             {!isSignup ? (
-              <Button scale="ld" style={{ width: '205px', fontSize: '18px' }} onClick={() => signHandle()}>
+              <Button disabled={!isStakeNft} scale="ld" style={{ width: '205px', fontSize: '18px' }} onClick={() => signHandle()}>
                 钱包签名
               </Button>
             ) : (

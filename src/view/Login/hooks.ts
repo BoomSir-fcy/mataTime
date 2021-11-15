@@ -8,10 +8,13 @@ import { Api } from 'apis';
 
 import random from 'lodash/random';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { FetchNftStakeType } from './hook';
+import { getNftInfo } from 'apis/DsgRequest';
 
 enum LoginNetwork {
   BSC = 1,
-  MATIC = 2
+  // 测试
+  MATIC = 1
 }
 
 const networks = {
@@ -39,11 +42,22 @@ export function useSignIn() {
 
   const getNftUrl = async (address?: string) => {
     try {
-      const res: Api.SignIn.nftCallback = await Api.SignInApi.getNft(networks[chainId], address);
-      if (Api.isSuccess(res)) {
-        dispatch(storeAction.setUserNft({ ...res.data }));
+      const nftStake = await FetchNftStakeType(address)
+      try {
+        const result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
+        const data = {
+          nftID: result.properties.token_id,
+          nftUrl: result.image
+        }
+        dispatch(storeAction.setUserNft(data));
+        return 1;
+      } catch (error) {
+        return 0;
       }
-      return res.code;
+      // const res: Api.SignIn.nftCallback = await Api.SignInApi.getNft(networks[chainId], address);
+      // if (Api.isSuccess(res)) {
+      //   dispatch(storeAction.setUserNft({ ...res.data }));
+      // }
     } catch (error) {
       return 0;
     }

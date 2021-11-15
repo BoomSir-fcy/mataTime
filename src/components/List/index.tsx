@@ -1,6 +1,7 @@
 import React, { useEffect, createRef } from 'react';
 import { Box } from 'uikit';
 import ReactLoading from "react-loading";
+import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components';
 
 import { store } from 'store';
@@ -42,7 +43,7 @@ export class List extends React.Component<Iprops>{
   }
   componentDidMount() {
     this.setState({
-      isDark: store.getState().appReducer.systemCustom.isDark || true
+      isDark: store.getState().appReducer.systemCustom.isDark
     })
     this.loadList()
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this))
@@ -63,10 +64,10 @@ export class List extends React.Component<Iprops>{
         {
           this.props.loading ? (
             <LoadingWrapper>
-              <ReactLoading type={'cylon'} color={this.isDark ? '#fff' : '#4168ED'} />
+              <ReactLoading type={'cylon'} color={store.getState().appReducer.systemCustom.isDark ? '#fff' : '#4168ED'} />
             </LoadingWrapper>
           ) : (
-            <NoDataWrapper>已经到底了～</NoDataWrapper>
+            <NoDataWrapper>{store.getState().appReducer.systemCustom.languange.id === 1 ? "It's over～" : '已经到底了～'}</NoDataWrapper>
           )
         }
       </div>

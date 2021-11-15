@@ -1,6 +1,6 @@
 {
   "name": "dev_projetc",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
@@ -21,7 +21,6 @@
     "@types/styled-system": "^5.1.13",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
-    "@uniswap/token-lists": "^1.0.0-beta.27",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/types": "^6.0.7",
@@ -36,7 +35,6 @@
     "bignumber.js": "^9.0.1",
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
-    "cids": "^1.1.9",
     "classnames": "^2.3.1",
     "css-loader": "4.3.0",
     "dotenv": "^10.0.0",
@@ -69,8 +67,6 @@
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "0.11.3",
     "moment": "^2.29.1",
-    "multicodec": "^3.2.1",
-    "multihashes": "^4.0.3",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
@@ -84,7 +80,6 @@
     "react-countup": "^6.0.0",
     "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.2",
-    "react-helmet-async": "^1.1.2",
     "react-loading": "^2.0.3",
     "react-modal": "^3.14.3",
     "react-popper": "^2.2.5",
@@ -92,8 +87,6 @@
     "react-refresh": "^0.8.3",
     "react-router-dom": "^5.3.0",
     "react-toastify": "^8.0.3",
-    "react-transition-group": "^4.4.2",
-    "react-window": "^1.8.6",
     "redux-localstorage-simple": "^2.4.1",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
@@ -202,5 +195,5 @@
   "resolutions": {
     "styled-components": "^5"
   },
-  "proxy": "https://api.social.qgx.io"
+  "proxy": "https://api.social.qgx.io/"
 }

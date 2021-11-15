@@ -7,10 +7,13 @@ font-weight: bold;
 `
 export const MentionItemWrapper = styled.div`
     .mention-content{
-      color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#000000'};
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
+      .paragraph-item{
+        display: flex;
+        flex-wrap: wrap;
+      }
       p{
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
@@ -19,10 +22,7 @@ export const MentionItemWrapper = styled.div`
       a{
         color: #4168ED;
         cursor: pointer;
-      }
-      a{
-        color: #4168ED;
-        cursor: pointer;
+        margin: 0 10px;
       }
       span {
         color: #4168ED;
@@ -57,14 +57,12 @@ export const MentionItemUserWrapper = styled.div`
           font-size: 18px;
           font-family: Alibaba PuHuiTi;
           font-weight: bold;
-          color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
         }
         .time{
           margin-top:5px;
           font-size: 14px;
           font-family: Alibaba PuHuiTi;
           font-weight: 400;
-          color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
         }
         .topic{
           display:flex;
@@ -142,12 +140,10 @@ export const MentionItemUserWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
-      color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#000000'};
       p{
         font-size: 18px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-        color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#000000'};
         a{
           color: #4168ED;
         }

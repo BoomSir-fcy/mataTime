@@ -5,6 +5,7 @@ declare namespace Api {
       uid?: number;
       nick_name?: string;
       NickName?: string;
+      address?: string;
       display_format?: number;
       introduction?: string;
       location?: string;
@@ -18,6 +19,7 @@ declare namespace Api {
       Location?: string;
       nft_image?: string;
       label_list?: string[];
+      post_num?: number;
     }
 
     interface updateProfileParams {

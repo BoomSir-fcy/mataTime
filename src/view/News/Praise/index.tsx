@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
+import { useTranslation } from 'contexts/Localization'
 import { Icon } from 'components';
 import { List } from 'components';
 import { Api } from 'apis';
@@ -14,6 +15,7 @@ import {
 
 
 const NewsPraise: React.FC = (props) => {
+  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
@@ -57,7 +59,7 @@ const NewsPraise: React.FC = (props) => {
               updateList(data)
             }} />
             <div className="reply-wrapper">
-              <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> 赞了你的内容
+              <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> {t('newsPraiseContent')}
             </div>
             <div className="comment-content">
               <MentionItem itemData={{

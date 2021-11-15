@@ -3,18 +3,23 @@ import styled from 'styled-components';
 import moment from 'moment';
 import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
+import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, Header, Toast } from 'components';
 // WalletModal
-import { Box } from 'uikit';
+import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
 import { useThemeManager } from 'store/app/hooks';
 import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
+
+import config from '../package.json';
+
+console.log(config.version);
 
 moment.locale('zh-cn');
 
@@ -26,7 +31,7 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 
-const Container = styled(Box) <{
+const Container = styled(Box)<{
   dark: boolean;
 }>`
   background-image: ${({ dark }) => `url(${require(dark ? 'assets/images/dark_background.jpg' : 'assets/images/light_background.jpg').default})`};
@@ -35,7 +40,7 @@ const Container = styled(Box) <{
 `;
 
 function App() {
-  useEagerConnect()
+  useEagerConnect();
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
@@ -57,19 +62,17 @@ function App() {
 
   return (
     <React.Fragment>
-      <React.Suspense fallback={<h1></h1>}>
-        <GlobalStyle />
-        <Container id="bg" dark={isDark}>
-          <Router forceRefresh>
+      <GlobalStyle />
+      <Container id="bg" dark={isDark}>
+        <React.Suspense fallback={<PageLoader />}>
+          <Router>
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
-              {
-                process.env.NODE_ENV === 'development' && (
-                  <Route path="/test" exact >
-                    <Test />
-                  </Route>
-                )
-              }
+              {process.env.NODE_ENV === 'development' && (
+                <Route path="/test" exact>
+                  <Test />
+                </Route>
+              )}
               <Route
                 path="/articleDetils/:id"
                 exact
@@ -86,10 +89,10 @@ function App() {
               <PrivateRoute path="/set" component={Set} />
             </Switch>
           </Router>
-        </Container>
-        <Toast />
-        {/* <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} /> */}
-      </React.Suspense>
+        </React.Suspense>
+      </Container>
+      <Toast />
+      {/* <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} /> */}
     </React.Fragment>
   );
 }

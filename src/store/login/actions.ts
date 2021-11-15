@@ -11,3 +11,4 @@ export const changeSignUpFail = createAction<{ signUpFail: boolean }>('login/cha
 export const changeSignUpStep = createAction<{ singUpStep: number }>('login/changeSignUpStep');
 export const changeUpdateProfile = createAction<profile>('login/changeUpdateProfile');
 export const setUserNft = createAction<Api.SignIn.nftParams>('login/setUserNft');
+export const setUserNftStake = createAction<{ isStakeNft: boolean }>('login/setUserNftList');

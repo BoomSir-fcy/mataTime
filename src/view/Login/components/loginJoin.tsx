@@ -63,7 +63,8 @@ export const LoginJoin: React.FC = React.memo(() => {
   };
 
   const init = async () => {
-    const [verify, nft] = await Promise.all([siginInVerify(account), getNftUrl(account)]);
+    const [verify] = await Promise.all([siginInVerify(account)]);
+
     // 用户登录
     Boolean(verify) &&
       setState(p => {
@@ -71,9 +72,6 @@ export const LoginJoin: React.FC = React.memo(() => {
       });
     if (!Boolean(verify)) {
       dispatch(storeAction.changeSignUp({ isSignup: true }));
-      if (nft === 20104) {
-        dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-      }
     }
   };
 

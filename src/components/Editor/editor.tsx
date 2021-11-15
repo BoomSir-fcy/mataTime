@@ -1,34 +1,28 @@
-import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import { Editor as slateEditor, Transforms, Range, createEditor, Descendant } from 'slate';
-import { Flex } from 'uikit';
-import { withHistory } from 'slate-history';
-import { Toolbar } from './toolbar';
-import { ImgList } from './ImgList';
-import { Api } from 'apis';
-import { toast } from 'react-toastify';
-import { Slate, Editable, ReactEditor, withReact, useSelected, useFocused, useSlate } from 'slate-react';
-import { SlateBox, SendButton } from './style';
+import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
+import { Editor as slateEditor, Transforms, Range, createEditor, Descendant, Element as SlateElement } from 'slate'
+import { Flex } from 'uikit'
+import { withHistory } from 'slate-history'
+import { Toolbar } from './toolbar'
+import { ImgList } from './ImgList'
+import { Api } from 'apis'
+import { toast } from 'react-toastify'
+import {
+  Slate,
+  Editable,
+  ReactEditor,
+  withReact,
+  useSelected,
+  useFocused,
+  useSlate
+} from 'slate-react'
+import { SlateBox, SendButton } from './style'
+import { MentionElement } from './custom-types'
+import { SearchPop, FollowPopup } from 'components'
+import { Mention, TopicElement } from './elements'
 type Iprops = {
-  type: any;
-  sendArticle: any;
-};
-const AtElement = props => {
-  console.log(props);
-  return (
-    <span {...props.attributes}>
-      {props.children}
-      @哈哈哈
-    </span>
-  );
-};
-const TopicElement = props => {
-  return (
-    <span {...props.attributes}>
-      {props.children}
-      #牛逼#
-    </span>
-  );
-};
+  type: any
+  sendArticle: any
+}
 
 const DefaultElement = props => {
   return <p {...props.attributes}>{props.children}</p>;
@@ -42,38 +36,80 @@ const initialValue: Descendant[] = [
       }
     ]
   }
-];
+]
+const withMentions = editor => {
+  const { isInline, isVoid } = editor
+  const tempEditor = editor
+  tempEditor.isInline = element => {
+    return element.type === 'mention' ? true : isInline(element)
+  }
+  tempEditor.isVoid = element => {
+    return element.type === 'mention' ? true : isVoid(element)
+  }
+  return tempEditor
+}
+const withTopics = editor => {
+  const { isInline, isVoid } = editor
+  const tempEditor = editor
+  tempEditor.isInline = element => {
+    return element.type === 'topic' ? true : isInline(element)
+  }
+  return tempEditor
+}
+const insertMention = (editor, { character, uid }) => {
+  const mention: MentionElement = {
+    type: 'mention',
+    character,
+    attrs: { userid: uid },
+    children: [{ text: '' }],
+  }
+  Transforms.insertNodes(editor, mention)
+  Transforms.move(editor)
+}
+const insertTopic = (editor, { character = '' }) => {
+  const topic: any = {
+    type: 'topic',
+    children: [{ text: character }],
+  }
+  Transforms.insertNodes(editor, topic)
+  // Transforms.wrapNodes(editor, topic, { split: true })
+  // Transforms.collapse(editor, { edge: 'end' })
+}
 export const Editor = (props: Iprops) => {
-  const ref = useRef<HTMLDivElement | null>();
-  const [value, setValue] = useState<Descendant[]>(initialValue);
-  const [imgList, setImgList] = useState([]);
+  const ref = useRef<HTMLDivElement | null>()
+  const [value, setValue] = useState<Descendant[]>(initialValue)
+  const [imgList, setImgList] = useState([])
+  const [searchUser, setSearchUser] = useState(false)
+  const [searcTopic, setSearcTopic] = useState(false)
   const renderElement = useCallback(props => {
-    console.log(props);
-
     switch (props.element.type) {
-      case 'at':
-        return <AtElement {...props} />;
+      case 'mention':
+        return <Mention {...props} />
       case 'topic':
         return <TopicElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
-  }, []);
-  const editor = useMemo(() => withReact(withHistory(createEditor())), []);
+  }, [])
+  const editor = useMemo(
+    () => withTopics(withMentions(withReact(withHistory(createEditor())))),
+    []
+  )
   // 扩大focus距离
   useEffect(() => {
-    const el: any = ref.current;
-    const eventFn = () => {
-      el.firstElementChild.focus();
-      const range = window.getSelection(); //创建range
-      range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
-      range.collapseToEnd(); //光标移至最后
-    };
-    el.addEventListener('click', eventFn);
+    const el: any = ref.current
+    const eventFn = (e: any) => {
+      if (e.target.className !== 'text-box') return false
+      el.firstElementChild.focus()
+      const range = window.getSelection();//创建range
+      range.selectAllChildren(el.firstElementChild);//range 选择obj下所有子内容
+      range.collapseToEnd();//光标移至最后
+    }
+    el.addEventListener('click', eventFn)
     return () => {
-      el.removeEventListener('click', eventFn);
-    };
-  });
+      el.removeEventListener('click', eventFn)
+    }
+  }, [])
 
   const callbackSelectImg = e => {
     if (imgList.length >= 9) return toast.error('最多上传九张');
@@ -96,30 +132,53 @@ export const Editor = (props: Iprops) => {
           } else {
             toast.error('上传失败');
           }
-        });
-      };
-    };
-    input.click();
-  };
-  const callbackInserAt = e => {
-    Transforms.setNodes<any>(editor, { type: 'at' }, { match: n => slateEditor.isBlock(editor, n) });
-  };
-  const callbackInserTopic = e => {
-    Transforms.setNodes<any>(editor, { type: 'topic' }, { match: n => slateEditor.isBlock(editor, n) });
-  };
+        })
+      }
+    }
+    input.click()
+  }
+  const restInput = () => {
+    setValue([])
+  }
   const sendArticle = () => {
-    console.log(value);
-    // props.sendArticle(ReplaceAt(ReplaceTopic(state.editorValue)), restInput, state.imgList.join(','))
-  };
+    console.log(value, imgList.join(','));
+    console.log(JSON.stringify(value), restInput, imgList.join(','));
+    props.sendArticle(JSON.stringify(value), restInput, imgList.join(','))
+  }
+  const searchSelect = (data, type) => {
+    setSearcTopic(false)
+    setSearchUser(false)
+    if (!data) return
+    if (type === 'user') {
+      insertMention(editor, { uid: data.uid, character: '@' + data.nick_name })
+    }
+    if (type === 'topic') {
+      insertTopic(editor, { character: 'hhhhh' })
+    }
+  }
   return (
     <SlateBox>
-      <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <SearchPop type={searchUser ? 'user' : 'topic'} show={searcTopic || searchUser} callback={searchSelect}></SearchPop>
+      <Slate
+        editor={editor}
+        value={value}
+        onChange={value => setValue(value)}
+      >
         <div className="text-box" ref={ref}>
-          <Editable renderElement={renderElement} placeholder="分享新鲜事" />
+          <Editable
+            autoFocus
+            renderElement={renderElement}
+            placeholder="分享新鲜事"
+          />
         </div>
         <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
         <Flex justifyContent="space-between" alignItems="center">
-          <Toolbar callbackEmoji={data => editor.insertText(data)} callbackSelectImg={callbackSelectImg} callbackInserAt={callbackInserAt} callbackInserTopic={callbackInserTopic}></Toolbar>
+          <Toolbar
+            callbackEmoji={(data) => editor.insertText(data)}
+            callbackSelectImg={callbackSelectImg}
+            callbackInserAt={() => setSearchUser(!searchUser)}
+            callbackInserTopic={() => setSearcTopic(!searcTopic)}
+          ></Toolbar>
           <SendButton onClick={sendArticle}>发表</SendButton>
         </Flex>
       </Slate>

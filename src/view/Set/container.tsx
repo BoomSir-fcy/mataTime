@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 import { Flex, Box } from 'uikit';
-import { Menu } from './menu/menu';
+import { Crumbs, CommonMenu } from 'components';
+
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
-import Header from './Header';
 
 const PageContainer = styled.div`
   width: 1200px;
@@ -23,23 +22,44 @@ const RightCard = styled.div`
   width: 375px;
 `;
 
+const menuArr = [
+  {
+    icon: 'icon-shouye',
+    activeIcon: 'icon-shouye1',
+    title: '账号安全',
+    path: '/set/safeset'
+  },
+  {
+    icon: 'icon-xingqiu',
+    activeIcon: 'icon-xingqiu1',
+    title: '通知设置',
+    path: '/set/noticeset'
+  },
+  {
+    icon: 'icon-xiaoxi',
+    activeIcon: 'icon-xiaoxi1',
+    title: '使用偏好',
+    path: '/set/likeset'
+  }
+];
+
 export const Container = props => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
         <LeftCard>
-          <Menu />
+          <CommonMenu menu={menuArr} {...props} />
         </LeftCard>
         <CenterCard>
-          <Header />
+          <Crumbs title="设置" />
           {props.children}
         </CenterCard>
         <RightCard>
-          <Route path="/" component={Search}></Route>
-          <Route path="/" component={Swap}></Route>
-          <Route path="/" component={RecommendPeople}></Route>
-          <Route path="/" component={HotTopic}></Route>
-          <Route path="/" component={FooterCopyright}></Route>
+          <Search />
+          <Swap />
+          <RecommendPeople />
+          <HotTopic />
+          <FooterCopyright />
         </RightCard>
       </Flex>
     </PageContainer>
