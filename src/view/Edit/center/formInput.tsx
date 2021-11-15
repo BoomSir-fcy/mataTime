@@ -8,11 +8,13 @@ import { useStore } from 'store';
 const FormBox = styled.div`
   padding: 35px 40px;
   margin-top: 13px;
-  background: #191f2d;
+  background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: 10px;
+  min-height: 70vh;
+  margin-bottom: 20px;
 `;
 const Title = styled.div`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.text};
   line-height: 50px;
   min-width: 80px;
   margin-right: 40px;
@@ -21,10 +23,10 @@ const Rows = styled(Flex)`
   justify-content: flex-start;
   margin-bottom: 26px;
   textarea {
-    background: #292d34;
+    background: ${({ theme }) => theme.colors.backgroundTextArea};
     width: 381px;
     height: 210px;
-    color: #b5b5b5;
+    color: ${({ theme }) => theme.colors.textTips};
     padding: 15px;
     border-radius: 10px;
     border: none;
@@ -36,23 +38,23 @@ const Rows = styled(Flex)`
     height: 50px;
     padding: 16px;
     border-radius: 10px;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.text};
     border: none;
     outline: none;
-    background: #292d34;
+    background: ${({ theme }) => theme.colors.inputSelect};
   }
 `;
 const InputRows = styled(Flex)`
   justify-content: space-between;
   border-radius: 10px;
   padding: 13px 9px;
-  background: #292d34;
+  background:${({ theme }) => theme.colors.input};
   width: 381px;
   height: 50px;
   input {
-    color: #b5b5b5;
+    color: ${({ theme }) => theme.colors.textTips};
     padding: 14px 13px 14px 0;
-    background: #292d34;
+    background: transparent;
     border: none;
     outline: none;
   }
@@ -61,23 +63,23 @@ const Uaddres = styled.div`
   width: 124px;
   height: 26px;
   line-height: 26px;
-  color: #fff;
-  background: #4d535f;
+  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 10px;
   text-align: center;
   font-size: 14px;
 `;
 const Msg = styled.div`
   margin-top: 14px;
-  color: #b5b5b5;
-  font-size: #b5b5b5;
+  color: ${({ theme }) => theme.colors.textTips};
+  font-size: 14px;
 `;
 const RadioBox = styled.div`
   width: 381px;
   height: 50px;
   line-height: 50px;
   span {
-    color: #fff;
+    color: ${({ theme }) => theme.colors.text};
     margin-right: 38px;
   }
 `;

@@ -8,7 +8,7 @@ const LikeSet = React.lazy(() => import('./LikeSet'));
 
 const Set = props => {
   return (
-    <Container>
+    <Container {...props}>
       <Switch>
         <Route path={`${props.match.path}/safeset`} component={SafeSet} />
         <Route path={`${props.match.path}/noticeset`} component={NoticeSet} />
