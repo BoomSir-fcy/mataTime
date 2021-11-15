@@ -16,7 +16,6 @@ import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
-import useEagerConnect from './hooks/useEagerConnect';
 
 moment.locale('zh-cn');
 

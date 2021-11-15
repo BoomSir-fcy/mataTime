@@ -5,7 +5,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { getNftsList, getNftInfo } from 'apis/DsgRequest';
 import { useTranslation } from 'contexts/Localization';
-import { useFetchNftApproval, useFetchNftStakeType } from '../hook';
+import { useFetchNftApproval, FetchNftStakeType, FetchNftsList } from '../hook';
 import { NftButton } from './approve';
 
 const SignUpWarpper = styled(Flex)`
@@ -41,20 +41,27 @@ export const StakeNFT: React.FC = () => {
   // nft列表
   const fetchData = async () => {
     if (account) {
-      const result = await getNftsList(account)
-      setNftList(result)
-      GetStakeInfo(result)
+      try {
+        const result = FetchNftsList(account)
+        // const result = await getNftsList(account) || []
+        // if (result.length) {
+        //   setNftList(result)
+        //   GetStakeInfo(result)
+        // }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   // 获取授权信息
   const GetApprovalInfo = async (list) => {
     const nftApprove = await useFetchNftApproval(account, list)
-    const ApproveList = await getNftApprovalType(list, nftApprove)
+    const ApproveList = getNftApprovalType(list, nftApprove)
     setNftList(ApproveList)
   }
   // 获取质押信息
   const GetStakeInfo = async (list) => {
-    const nftStake = await useFetchNftStakeType(account)
+    const nftStake = await FetchNftStakeType(account)
     if (nftStake[0].token_id) {
       let result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
       result.isStakeMarket = true

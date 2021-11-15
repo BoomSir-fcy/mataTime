@@ -9,6 +9,7 @@ import multicall from 'utils/multicall';
 import dsgnftAbi from 'config/abi/dsgnft.json'
 import nftSocialAbi from 'config/abi/nftSocial.json'
 import { NftInfo } from 'store/app/type';
+import { getNftsList } from 'apis/DsgRequest';
 
 // 获取nft头像授权信息
 export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
@@ -32,8 +33,49 @@ export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
     return []
   }
 }
+
+// 获取Nft头像列表并筛选出头像
+export const FetchNftsList = async (account) => {
+
+  // 筛选可用Nft地址
+  const filterAddress = (Nftlist, supAddress) => {
+    let list = []
+    for (let i = 0; i < Nftlist.length; i++) {
+      for (let j = 0; j < supAddress.length; j++) {
+        console.log(Nftlist[i].properties.token, supAddress[j], String(Nftlist[i].properties.token) === String(supAddress[j]));
+        if (Nftlist[i].properties.token == supAddress[j]) {
+          list.push(Nftlist[i])
+          console.log(list);
+
+        }
+      }
+    }
+    return list
+  }
+
+  const SocialAddress = getNftSocialAddress()
+  const Nftlist = await getNftsList(account) || []
+  const calls = [
+    {
+      address: SocialAddress,
+      name: 'getSupportNFT',
+    },
+  ]
+  try {
+    // 获取可用的Nft头像地址
+    const result = await multicall(nftSocialAbi, calls)
+    const supAddress = result.map(item => (item.sup[0]))
+    const list = filterAddress(Nftlist, supAddress)
+    console.log(list);
+    return
+  } catch (error) {
+    console.log(error);
+    return []
+  }
+}
+
 // 获取Nft头像质押情况
-export const useFetchNftStakeType = async (account) => {
+export const FetchNftStakeType = async (account) => {
   const SocialAddress = getNftSocialAddress()
   const calls = [
     {

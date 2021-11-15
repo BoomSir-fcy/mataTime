@@ -187,50 +187,6 @@
   {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_nft_address",
-        "type": "address[]"
-      }
-    ],
-    "name": "addSupportNFTaddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "nftAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenID",
-        "type": "uint256"
-      }
-    ],
-    "name": "depositeNFT",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -286,23 +242,45 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "toNFT",
+        "name": "newOwner",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenID",
-        "type": "uint256"
       }
     ],
-    "name": "replaceNFT",
-    "outputs": [
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_nft_address",
+        "type": "address[]"
+      }
+    ],
+    "name": "addSupportNFTaddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "bool",
-        "name": "",
+        "name": "withdraw",
         "type": "bool"
       }
     ],
+    "name": "switchWithdraw",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -335,26 +313,24 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "nftAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
+      }
+    ],
+    "name": "depositeNFT",
+    "outputs": [
+      {
         "internalType": "bool",
-        "name": "withdraw",
+        "name": "",
         "type": "bool"
       }
     ],
-    "name": "switchWithdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -369,6 +345,43 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "toNFT",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
+      }
+    ],
+    "name": "replaceNFT",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSupportNFT",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "sup",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]
