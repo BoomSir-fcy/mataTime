@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Flex, Box } from 'uikit';
+import { Crumbs } from 'components';
+
 import { Menu } from './menu/menu';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
-import Header from './Header';
 
 const PageContainer = styled.div`
   width: 1200px;
@@ -31,7 +32,7 @@ export const Container = props => {
           <Menu />
         </LeftCard>
         <CenterCard>
-          <Header />
+          <Crumbs title="设置" />
           {props.children}
         </CenterCard>
         <RightCard>

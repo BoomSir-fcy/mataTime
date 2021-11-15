@@ -63,6 +63,7 @@ export const lightColors: Colors = {
   textTips: '#B5B5B5',
   textDisabled: '#BDC2C4',
   textOrigin: '#EC612B',
+  textgrey: '#7A83A0',
   disabled: '#E9EAEB',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
@@ -113,6 +114,7 @@ export const darkColors: Colors = {
   textTips: '#B5B5B5',
   textDisabled: '#666171',
   textOrigin: '#EC612B',
+  textgrey: '#B4C8A9',
   disabled: '#524B63',
   gradients: {
     footer: '#191F2D',

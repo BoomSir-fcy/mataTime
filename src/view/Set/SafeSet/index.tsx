@@ -1,50 +1,49 @@
-import React from 'react'
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import { Flex, Box, Text, Button } from 'uikit';
 import { useWeb3React } from '@web3-react/core';
 import { Api } from 'apis';
 
 const SafeSetBox = styled.div`
-height: 707px;
-background: #191F2D;
-margin-top: 16px;
-padding: 27px 29px;
-border-radius: 10px;
-`
+  height: 707px;
+  background: #191f2d;
+  margin-top: 16px;
+  padding: 27px 29px;
+  border-radius: 10px;
+`;
 const Rows = styled(Flex)`
-justify-content: space-between;
-padding-bottom:23px;
-margin-bottom:22px;
-border-bottom: 1px solid #4D535F;
-`
+  justify-content: space-between;
+  padding-bottom: 23px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #4d535f;
+`;
 const Title = styled.div`
-color:#fff;
-font-weight: bold;
-`
+  color: #fff;
+  font-weight: bold;
+`;
 const Address = styled.div`
-color:#fff;
-font-weight: bold;
-`
+  color: #fff;
+  font-weight: bold;
+`;
 const Column = styled(Flex)`
-flex-direction:column;
-justify-content: space-around;
-`
+  flex-direction: column;
+  justify-content: space-around;
+`;
 const Msg = styled(Text)`
-color:#B5B5B5;
-font-size:16px;
-`
-
+  color: #b5b5b5;
+  font-size: 16px;
+`;
 
 const SafeSet = () => {
   // 更新邮箱
   const updateEmail = async (email: string) => {
     try {
-      const res = await Api.SetApi.updateEmail(email)
+      const res = await Api.SetApi.updateEmail(email);
       console.log('更新邮箱', res);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   console.log('钱包地址', useWeb3React());
 
   return (
@@ -64,7 +63,7 @@ const SafeSet = () => {
         <Button onClick={() => updateEmail('liujiaqi@qgx.com')}>立即绑定</Button>
       </Rows>
     </SafeSetBox>
-  )
-}
+  );
+};
 
 export default SafeSet;
