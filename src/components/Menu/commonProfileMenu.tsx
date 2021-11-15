@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { useStore } from 'store';
 import { Flex, Box } from 'uikit';
 import { Avatar } from 'components';
+import { shortenAddress } from 'utils/contract';
 
 const UserTitle = styled.div`
   margin: 0 12px;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 18px;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white_black};
   ::after {
     position: relative;
     right: -50px;
@@ -17,7 +18,7 @@ const UserTitle = styled.div`
     width: 0px;
     height: 0px;
     border-bottom: 7px solid transparent;
-    border-left: 7px solid #fff;
+    border-left: 7px solid ${({ theme }) => theme.colors.white_black};
     border-right: 7px solid transparent;
     border-top: 7px solid transparent;
   }
@@ -26,7 +27,7 @@ const UserDesc = styled.div`
   margin: 0 12px;
   font-size: 16px;
   font-weight: 400;
-  color: #b5b5b5;
+  color: ${({ theme }) => theme.colors.textTips};
 `;
 
 export const ProfileMenu = React.memo(() => {
@@ -38,7 +39,7 @@ export const ProfileMenu = React.memo(() => {
           <Avatar src={userInfo?.NftImage} scale="sm" />
           <Box>
             <UserTitle>OliNe</UserTitle>
-            <UserDesc>@0x3...d39</UserDesc>
+            <UserDesc>@{shortenAddress(userInfo.Address)}</UserDesc>
           </Box>
         </Flex>
       ) : (

@@ -22,13 +22,14 @@ const Background = styled(Flex)`
   justify-content: center;
 `;
 
-export const Header = styled(Flex)`
+const Header = styled(Flex)`
+  height: 60px;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 16px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: 10px;
+  padding: 0 16px;
   margin-bottom: 12px;
+  background: ${({ theme }) => theme.colors.backgroundCard};
+  border-radius: ${({ theme }) => theme.radii.card};
 `;
 
 const Edit: React.FC = () => {
