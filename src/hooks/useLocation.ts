@@ -9,7 +9,7 @@ export function useLocation() {
   const { languange } = setting;
 
   const request = async () => {
-    const systemLang = languange?.value.code;
+    const systemLang = languange?.value?.code;
     try {
       const res = await Api.UserApi.getLocation();
       if (Api.isSuccess(res)) {

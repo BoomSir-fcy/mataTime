@@ -20,6 +20,7 @@ const Collect = props => {
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
+  const [total, setTotal] = useState(0);
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
@@ -48,7 +49,7 @@ const Collect = props => {
           <Text fontWeight="bold" mr="10px" fontSize="14px">
             我的收藏
           </Text>
-          <Text fontSize="14px">{listData.length}条</Text>
+          <Text fontSize="14px">{total}条</Text>
         </Flex>
       </CrumbsHead>
       <List
@@ -62,6 +63,7 @@ const Collect = props => {
             if (res.msg === 'success') {
               setPage(page + 1);
               setTotalPage(res.data.total_num);
+              setTotal(res.data.total_num);
               setListData([...listData, ...res.data.list]);
             }
           });

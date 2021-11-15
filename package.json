@@ -1,6 +1,6 @@
 {
   "name": "dev_projetc",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
@@ -194,5 +194,5 @@
   "resolutions": {
     "styled-components": "^5"
   },
-  "proxy": "http://192.168.101.129:8888/"
+  "proxy": "https://api.social.qgx.io/"
 }

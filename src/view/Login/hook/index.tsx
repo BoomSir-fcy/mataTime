@@ -97,7 +97,7 @@ export const FetchNftsList = async (account) => {
     const supAddress = result.map(item => (item.sup[0]))
     const list = filterAddress(Nftlist, supAddress)
     let AllList = []
-    if (list.length) {
+    if (Nftlist.length) {
       let stake = await GetStakeInfo(list)
       AllList = await GetApprovalInfo(stake)
     }
@@ -120,6 +120,7 @@ export const FetchNftStakeType = async (account) => {
   ]
   try {
     const userInfo = await multicall(nftSocialAbi, calls)
+    console.log(userInfo);
     return userInfo.map((item, index) => ({
       token_id: Number(new BigNumber(item.token_id.toJSON().hex)),
       NFT_address: item.NFT_address,
