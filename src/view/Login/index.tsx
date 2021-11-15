@@ -6,8 +6,9 @@ import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box } from 'uikit';
 import { Logo, Footer } from 'components';
-import { LoginJoin, SignUp, StakeNFT } from './components';
+import { LoginJoin, SignUp } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
+import { StakeNFT } from './components/StakeNFT';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
@@ -20,7 +21,6 @@ const Content = styled(Card)`
   width: 600px;
   height: 700px;
   padding: 25px 40px 0;
-  margin-left: 40px;
 `;
 const LogoWarpper = styled(Box)`
   width: 337px;

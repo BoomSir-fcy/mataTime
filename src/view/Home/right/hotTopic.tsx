@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Card, Text } from 'uikit'
+import { useTranslation } from 'contexts/Localization'
 import { Avatar, Icon } from 'components';
 import { Api } from 'apis'
 import { toast } from 'react-toastify';

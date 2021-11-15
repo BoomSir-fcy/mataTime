@@ -10,7 +10,6 @@ import {
 import {FollowPopup} from 'components'
 import {MentionBox} from './style'
 export const Mention = ({ attributes, children, element }) => {
-  console.log(element);
   const selected = useSelected()
   const focused = useFocused()
   return (
@@ -32,7 +31,7 @@ export const Mention = ({ attributes, children, element }) => {
     </MentionBox>
   )
 }
-const InlineChromiumBugfix = () => (
+export const InlineChromiumBugfix = () => (
   <span
     contentEditable={false}
     style={{fontSize:0}}
@@ -43,12 +42,11 @@ const InlineChromiumBugfix = () => (
 export const  TopicElement = ({ attributes, children, element }) => {
   return (
     <>
-          {children}
     <span {...attributes}>
       {/* {children} */}
       #
       <InlineChromiumBugfix />
-      {element.character}
+      {children}
       <InlineChromiumBugfix />
       #
     </span>

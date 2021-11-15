@@ -14,6 +14,7 @@ import { WalletAddress } from './signUp';
 
 import { useTranslation } from 'contexts/Localization';
 
+const InputItems = styled(Flex)``;
 const InputText = styled(Text)`
   width: 100px;
   min-width: 100px;
@@ -68,14 +69,14 @@ export const SignUpSetName = React.memo(() => {
       </Text>
       <WalletAddress address={account} />
       <Box paddingTop="25px">
-        <Flex marginBottom="32px" alignItems="center">
+        <InputItems marginBottom="32px" alignItems="center">
           <InputText>{t('loginInputTitleAvatar')}</InputText>
           <Flex alignItems="flex-end">
             <InputNftImg src={nft.nftUrl} />
             <Text color="#B5B5B5">{t('loginInputValueAvatar')}</Text>
           </Flex>
-        </Flex>
-        <Flex alignItems="center">
+        </InputItems>
+        <InputItems alignItems="center">
           <InputText>{t('loginInputTitleNickname')}</InputText>
           <InputNickName
             onChange={event => {
@@ -86,7 +87,7 @@ export const SignUpSetName = React.memo(() => {
             maxLength={20}
             placeholder={t('loginInputValueNickname')}
           />
-        </Flex>
+        </InputItems>
       </Box>
       <Flex justifyContent="center">
         <Submit scale="ld" onClick={submitProfile}>

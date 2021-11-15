@@ -125,32 +125,4 @@ Tabs.defaultProps = {
   currentRight: 0,
   tabLeftChange: () => { },
   tabRightChange: () => { },
-  // tabLeftArr: [
-  //   {
-  //     label: '全部',
-  //     value: '1'
-  //   },
-  //   {
-  //     label: '原创',
-  //     value: '2'
-  //   },
-  //   {
-  //     label: '文章',
-  //     value: '3'
-  //   },
-  // ],
-  // tabRightArr: [
-  //   {
-  //     label: '全站最新',
-  //     value: '1'
-  //   },
-  //   {
-  //     label: '热门推荐',
-  //     value: '2'
-  //   },
-  //   {
-  //     label: '仅关注',
-  //     value: '3'
-  //   },
-  // ],
 }

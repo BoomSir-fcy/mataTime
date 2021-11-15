@@ -1,18 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Box, Button } from 'uikit';
-import { Avatar, Icon, Logo, SubMenu } from 'components';
+import { Link } from 'react-router-dom';
+import { Flex, Card, Box, Button } from 'uikit';
+import { Avatar, Icon, Logo, SubMenu, ProfileMenu } from 'components';
 
 import menuData from './menuData';
 
-const MenuBox = styled(Flex)`
+const MenuBox = styled(Card)`
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 13px;
   width: 200px;
   height: calc(100vh - 150px);
-  background: #191f2d;
-  border-radius: 10px;
 `;
 const LogoWarpper = styled(Box)`
   width: 175px;
@@ -66,6 +65,13 @@ const BackWarpper = styled(Box)`
   }
 `;
 
+const User = styled(Flex)`
+  display: block;
+  margin-top: auto;
+  flex: 1;
+  flex-grow: inherit;
+`;
+
 export const Menu: React.FC<any> = props => {
   const { history } = props;
 
@@ -84,17 +90,13 @@ export const Menu: React.FC<any> = props => {
           <span>返回</span>
         </BackWarpper>
         <SubMenu menuList={menuData} />
-        <Btn>
+        {/* <Btn>
           <Button scale="ld">断开钱包</Button>
-        </Btn>
+        </Btn> */}
       </Box>
-      <Flex>
-        <Avatar src="" scale="sm" />
-        <Box>
-          <UserTitle>OliNe</UserTitle>
-          <UserDesc>@0x3...d39</UserDesc>
-        </Box>
-      </Flex>
+      <User as={Link} to="/me">
+        <ProfileMenu />
+      </User>
     </MenuBox>
   );
 };

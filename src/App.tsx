@@ -41,7 +41,7 @@ function App() {
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
   const [isDark] = useThemeManager();
-  useEagerConnect()
+
   React.useEffect(() => {
     if (store.connectWallet) {
       const changeHandler = () => {

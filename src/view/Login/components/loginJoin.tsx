@@ -13,6 +13,13 @@ import { useTranslation } from 'contexts/Localization';
 import useAuth from 'hooks/useAuth';
 import { FetchNftStakeType } from '../hook';
 
+const SubTitle = styled(Text)`
+  color: ${({ theme }) => theme.colors.textOrigin};
+`;
+const TextTips = styled(Text)`
+  color: ${({ theme }) => theme.colors.textTips};
+  text-align: justify;
+`;
 const ConnectWallet = styled(Flex)`
   flex-direction: column;
   justify-content: center;
@@ -91,12 +98,12 @@ export const LoginJoin: React.FC = React.memo(() => {
       <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
         {t('loginWelcome')}
       </Text>
-      <Text color="textOrigin">{t('loginSubTitle')}</Text>
+      <SubTitle>{t('loginSubTitle')}</SubTitle>
       <ConnectWallet>
         <img width="40%" src={require('../images/login_right_images.png').default} />
         <ConnectWalletButton />
       </ConnectWallet>
-      <Text color="textTips">{t('loginSubTips')}</Text>
+      <TextTips>{t('loginSubTips')}</TextTips>
     </Box>
   );
 });
