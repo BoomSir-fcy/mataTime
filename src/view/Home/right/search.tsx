@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from "styled-components";
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Button, Card } from 'uikit';
 import { Icon } from 'components';
 import searchImg from 'assets/images/common/search.png'
@@ -44,6 +45,7 @@ border-radius: 20px;
 `
 
 export const Search: React.FC = () => {
+  const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [value, setValue] = useState('')
   const searchChange = (e) => {
@@ -63,7 +65,7 @@ export const Search: React.FC = () => {
         top: '8px',
         left: '25px',
       }} size={28} color={isDark ? '#FFFFFF' : '#7A83A0'}></Icon>
-      <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder="搜索 SOFI" />
+      <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder={t('SearchPlaceholder')} />
     </SearchBox>
   )
 }
