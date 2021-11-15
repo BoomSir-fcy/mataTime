@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
-import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Button, Card, Text } from 'uikit';
 import { Avatar, Icon } from 'components';
 import { Api } from 'apis';
@@ -49,7 +48,6 @@ type Iprops = {
   // dataList:any[]
 };
 export const RecommendPeople: React.FC<Iprops> = props => {
-  const { t } = useTranslation()
   const [list, setList] = useState([]);
   useEffect(() => {
     getManList();
@@ -77,8 +75,8 @@ export const RecommendPeople: React.FC<Iprops> = props => {
   return (
     <RecommendPeopleBox>
       <Flex justifyContent="space-between">
-        <TitleText>{t('recommendPeopleTitle')}</TitleText>
-        <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
+        <TitleText>可能感兴趣的人</TitleText>
+        <MoreBtn onClick={getManList}>更多</MoreBtn>
       </Flex>
       {list.map((item, index) => (
         <Flex key={item.uid} alignItems="center" justifyContent="space-between" style={{ marginTop: '17px' }}>
@@ -94,7 +92,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
           </Flex>
           <FollowBtn onClick={() => {
             onAttentionFocusRequest(item.uid)
-          }}>+{t('followText')}</FollowBtn>
+          }}>+关注</FollowBtn>
         </Flex>
       ))}
     </RecommendPeopleBox>

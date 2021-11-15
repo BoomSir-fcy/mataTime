@@ -11,8 +11,14 @@ import { useLogin, useSignIn } from '../hooks';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import useAuth from 'hooks/useAuth';
-import { FetchNftStakeType } from '../hook';
 
+const SubTitle = styled(Text)`
+  color: ${({ theme }) => theme.colors.textOrigin};
+`;
+const TextTips = styled(Text)`
+  color: ${({ theme }) => theme.colors.textTips};
+  text-align: justify;
+`;
 const ConnectWallet = styled(Flex)`
   flex-direction: column;
   justify-content: center;
@@ -58,8 +64,6 @@ export const LoginJoin: React.FC = React.memo(() => {
 
   const init = async () => {
     const [verify, nft] = await Promise.all([siginInVerify(account), getNftUrl(account)]);
-    const nftStake = await FetchNftStakeType(account)
-
     // 用户登录
     Boolean(verify) &&
       setState(p => {
@@ -67,11 +71,8 @@ export const LoginJoin: React.FC = React.memo(() => {
       });
     if (!Boolean(verify)) {
       dispatch(storeAction.changeSignUp({ isSignup: true }));
-      // if (nft === 20104) {
-      //   dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-      // }
-      if (!(nftStake[0].token_id)) {
-        // dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+      if (nft === 20104) {
+        dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
       }
     }
   };
@@ -94,12 +95,12 @@ export const LoginJoin: React.FC = React.memo(() => {
       <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
         {t('loginWelcome')}
       </Text>
-      <Text color="textOrigin">{t('loginSubTitle')}</Text>
+      <SubTitle>{t('loginSubTitle')}</SubTitle>
       <ConnectWallet>
         <img width="40%" src={require('../images/login_right_images.png').default} />
         <ConnectWalletButton />
       </ConnectWallet>
-      <Text color="textTips">{t('loginSubTips')}</Text>
+      <TextTips>{t('loginSubTips')}</TextTips>
     </Box>
   );
 });

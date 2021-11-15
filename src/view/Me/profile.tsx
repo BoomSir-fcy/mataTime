@@ -1,18 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
-import { Crumbs, Avatar, Certification, List, MoreOperatorEnum } from 'components';
+import { Crumbs, Avatar, Certification } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
-
-import { shortenAddress } from 'utils/contract';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Api } from 'apis';
-
-import { Tabs } from './components';
-import { MeItemWrapper } from 'view/News/Me/style';
-import MentionItem from 'view/News/components/MentionItem';
-import MentionOperator from 'view/News/components/MentionOperator';
 
 import defaultImages from 'assets/images/default_me_background.jpg';
 
@@ -93,70 +85,31 @@ const Content = styled(Box)`
 `;
 
 const Profile: React.FC<any> = React.memo(props => {
-  const [state, setState] = useImmer({
-    profile: {
-      UID: 0,
-      nick_name: '',
-      fans_num: 0,
-      attention_num: 0,
-      email: '',
-      introduction: '',
-      location: '',
-      label_list: []
-    } as Api.User.userInfoParams,
-    loading: false,
-    list: [],
-    page: 1,
-    totalPage: 0
+  const [stateUserInfo, setUserInfo] = useState<Api.User.userInfoParams>({
+    UID: 0,
+    nick_name: '',
+    fans_num: 0,
+    attention_num: 0,
+    email: '',
+    introduction: '',
+    location: '',
+    label_list: []
   });
   const uid = props.match?.params?.uid;
-  const { profile, loading, page, totalPage, list } = state;
 
-  const init = async () => {
+  const getUserInfo = async () => {
     try {
-      setState(p => {
-        p.loading = true;
-      });
-      const [profile, tweet] = await Promise.all([Api.MeApi.getProfile(uid), Api.MeApi.getProfileMsg(page, uid)]);
-      setState(p => {
-        p.profile = profile.data;
-        p.list = tweet.data.list;
-        p.page = page + 1;
-        p.totalPage = tweet.data.total_page;
+      const res = await Api.MeApi.getProfile(uid);
+      setUserInfo({
+        ...res.data
       });
     } catch (error) {
       console.log(error);
-    } finally {
-      setState(p => {
-        p.loading = false;
-      });
     }
   };
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    let arr = [];
-    list.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
-      }
-      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
-        // 屏蔽、删除
-      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
-        // 置顶
-        arr.unshift(obj);
-      } else {
-        arr.push(obj);
-      }
-    });
-    setState(p => {
-      p.list = [...arr];
-    });
-  };
-
-  React.useEffect(() => {
-    init();
+  useEffect(() => {
+    getUserInfo();
   }, []);
 
   return (
@@ -167,19 +120,19 @@ const Profile: React.FC<any> = React.memo(props => {
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end">
-              <Avatar scale="xl" src={profile.nft_image} />
+              <Avatar scale="xl" src={stateUserInfo.nft_image} />
               <Desc>
-                <Text className="name">{profile.nick_name}</Text>
+                <Text className="name">{stateUserInfo.nick_name}</Text>
                 <Flex mb="5px">
                   <Flex>
                     <Certification />
-                    <Text className="text">@{shortenAddress(profile.address)}</Text>
+                    <Text className="text">@0x3...d39</Text>
                   </Flex>
                   <Flex className="marginLeft">
-                    <Text className="text">{profile.location}</Text>
+                    <Text className="text">{stateUserInfo.location}</Text>
                   </Flex>
                 </Flex>
-                <Text className="text">{totalPage}条动态</Text>
+                <Text className="text">177条动态</Text>
               </Desc>
             </Flex>
             {!uid && (
@@ -190,29 +143,29 @@ const Profile: React.FC<any> = React.memo(props => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text">{profile.Introduction}</Text>
-              {/* <Text className="text">
+              <Text className="text">{stateUserInfo.Introduction}</Text>
+              <Text className="text">
                 Web:{' '}
                 <Text as={Link} to="/">
                   http://dsgmetaverse.com/#/
                 </Text>
               </Text>
-              <Text className="text">Email：{profile.email}</Text> */}
+              <Text className="text">Email：{stateUserInfo.email}</Text>
             </Box>
             <Flex className="number">
               <Text className="text">
-                粉丝 <Text className="value">{profile.fans_num}</Text>
+                粉丝 <Text className="value">{stateUserInfo.fans_num}</Text>
               </Text>
               <Text className="text">
-                关注 <Text className="value">{profile.attention_num}</Text>
+                关注 <Text className="value">{stateUserInfo.attention_num}</Text>
               </Text>
               <Text className="text">
-                动态 <Text className="value">{profile.fans_num}</Text>
+                动态 <Text className="value">{stateUserInfo.fans_num}</Text>
               </Text>
             </Flex>
             <Flex className="topic">
               <Text className="text">活跃话题</Text>
-              {profile?.label_list.map((row: string, index: number) => (
+              {stateUserInfo?.label_list.map((row: string, index: number) => (
                 <Button variant="secondary" key={index}>
                   #{row}
                 </Button>
@@ -221,60 +174,6 @@ const Profile: React.FC<any> = React.memo(props => {
           </Content>
         </ProfileInfo>
       </ProfileCard>
-      <Tabs />
-      <List
-        marginTop={13}
-        loading={loading}
-        renderList={() => {
-          if (loading || page > totalPage) return false;
-          setState(p => {
-            p.loading = true;
-          });
-          Api.MeApi.getProfileMsg(page, uid).then(res => {
-            setState(p => {
-              p.loading = false;
-            });
-            if (Api.isSuccess(res)) {
-              setState(p => {
-                p.page = page + 1;
-                p.list = [...list, ...res.data.list];
-              });
-            }
-          });
-        }}
-      >
-        {list.map((item, index) => (
-          <MeItemWrapper key={`${item.id}+${index}`}>
-            <MentionItem
-              {...props}
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
-                  ...item,
-                  post_id: item.id
-                }
-              }}
-              callback={(item: any, type: MoreOperatorEnum) => {
-                updateList(item, type);
-              }}
-            />
-            <MentionOperator
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
-                  ...item,
-                  post_id: item.id
-                }
-              }}
-              callback={(item: any) => {
-                updateList(item);
-              }}
-            />
-          </MeItemWrapper>
-        ))}
-      </List>
     </Box>
   );
 });
