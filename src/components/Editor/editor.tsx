@@ -153,7 +153,7 @@ export const Editor = (props: Iprops) => {
       insertMention(editor, { uid: data.uid, character: '@' + data.nick_name })
     }
     if (type === 'topic') {
-      insertTopic(editor, { character: 'hhhhh' })
+      insertTopic(editor, { character: data.topic_name })
     }
   }
   return (

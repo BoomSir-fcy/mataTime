@@ -43,8 +43,10 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   }
   useEffect(() => {
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
-      setItemData(res.data)
-      setRefresh(refresh === 1 ? 2 : 1)
+      if(Api.isSuccess(res)){
+        setItemData(res.data)
+        setRefresh(refresh === 1 ? 2 : 1)
+      }
     })
   }, [])
   return (
