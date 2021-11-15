@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from "styled-components";
-import { useTranslation } from 'contexts/Localization'
 import { Flex, Button, Card } from 'uikit'
 export const TabsBox = styled(Card)`
   margin-bottom: 12px;
@@ -45,38 +44,11 @@ interface propsType {
   defCurrentRight?: number
   tabLeftChange?: (item) => void
   tabRightChange?: (item) => void
-  tabRightArr?: any[]
-  tabLeftArr?: any[]
+  tabRightArr: any[]
+  tabLeftArr: any[]
 }
 export const Tabs = (props: propsType) => {
-  const { t } = useTranslation()
-  const { defCurrentLeft, defCurrentRight, tabLeftChange, tabRightChange, tabRightArr = [
-    {
-      label: t('homeTabLatest'),
-      value: '1'
-    },
-    {
-      label: t('homeTabPopular'),
-      value: '2'
-    },
-    {
-      label: t('homeTabFocus'),
-      value: '3'
-    },
-  ], tabLeftArr = [
-    {
-      label: t('homeTabAll'),
-      value: '1'
-    },
-    {
-      label: t('homeTabOriginal'),
-      value: '2'
-    },
-    {
-      label: t('homeTabArticle'),
-      value: '3'
-    },
-  ] } = props
+  const { defCurrentLeft, defCurrentRight, tabLeftChange, tabRightChange, tabRightArr, tabLeftArr } = props
   const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0)
   const [currentRightIndex, setCurrentRightIndex] = useState(defCurrentRight || 0)
   const leftTabClick = (item, index) => {
@@ -125,32 +97,32 @@ Tabs.defaultProps = {
   currentRight: 0,
   tabLeftChange: () => { },
   tabRightChange: () => { },
-  // tabLeftArr: [
-  //   {
-  //     label: '全部',
-  //     value: '1'
-  //   },
-  //   {
-  //     label: '原创',
-  //     value: '2'
-  //   },
-  //   {
-  //     label: '文章',
-  //     value: '3'
-  //   },
-  // ],
-  // tabRightArr: [
-  //   {
-  //     label: '全站最新',
-  //     value: '1'
-  //   },
-  //   {
-  //     label: '热门推荐',
-  //     value: '2'
-  //   },
-  //   {
-  //     label: '仅关注',
-  //     value: '3'
-  //   },
-  // ],
+  tabLeftArr: [
+    {
+      label: '全部',
+      value: '1'
+    },
+    {
+      label: '原创',
+      value: '2'
+    },
+    {
+      label: '文章',
+      value: '3'
+    },
+  ],
+  tabRightArr: [
+    {
+      label: '全站最新',
+      value: '1'
+    },
+    {
+      label: '热门推荐',
+      value: '2'
+    },
+    {
+      label: '仅关注',
+      value: '3'
+    },
+  ],
 }

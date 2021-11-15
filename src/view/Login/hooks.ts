@@ -86,8 +86,7 @@ export function useLogin() {
           throw new Error(`not support ChainID: ${chainId}`);
         }
         const sign = {
-          // network: networks[chainId],
-          network: 1,
+          network: networks[chainId],
           sign_time: Math.floor(new Date().getTime() / 1000),
           operation_type: operationType,
           nonce: random(0xffff_ffff, 0xffff_ffff_ffff)

@@ -28,25 +28,10 @@ const MentionItem: React.FC<IProps> = (props) => {
 
   const [position, setPosition] = useState([-999, -999])
   const [uid, setUid] = useState<string | number>(0)
-  const [content, setContent] = useState<any[]>([])
 
   useEffect(() => {
     handleUserHover()
   }, [])
-
-  useEffect(() => {
-    if (itemData.content) {
-      let arr = []
-      try {
-        arr = JSON.parse(itemData.content)
-        setContent(arr || [])
-      } catch (err: any) {
-        arr = []
-      }
-
-    }
-
-  }, [itemData.content])
 
   // 用户hover  
   const handleUserHover = () => {
@@ -84,37 +69,7 @@ const MentionItem: React.FC<IProps> = (props) => {
       }} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
         {/* <p><a>#Dinosaur Eggs#</a></p> */}
-        {/* <div onClick={contentClick} dangerouslySetInnerHTML={{ __html: itemData.content }}></div> */}
-        {
-          content.map((item: any) => {
-            return (
-              <div className="paragraph-item">
-                {
-                  item.children.map((child: any) => {
-                    return (
-                      <>
-                        {
-                          child.type === 'mention' ? (
-                            <p>
-                              <FollowPopup uid={child?.attrs?.userid || 0}>
-                                <a>{child.character}</a>
-                              </FollowPopup>
-                            </p>
-                          ) : child.type === 'mention' ? (
-                            <p><a>#Dinosaur Eggs#</a></p>
-                          ) : (
-                            <p>{child.text || ''}</p>
-                          )
-                        }
-                      </>
-                    )
-                  })
-                }
-              </div>
-            )
-          })
-        }
-
+        <div onClick={contentClick} dangerouslySetInnerHTML={{ __html: itemData.content }}></div>
         {/* <p>
           <FollowPopup>
             <a>@Baby fuck me</a>

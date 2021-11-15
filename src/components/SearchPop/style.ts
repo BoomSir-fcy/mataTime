@@ -4,7 +4,7 @@ export const SearchPopBox = styled(Flex)`
 margin-top:35px;
 justify-content:space-between;
 position:fixed;
-z-index:999999;
+z-index:999;
 top:0;
 right:0;
 .search-box{

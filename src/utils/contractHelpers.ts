@@ -1,13 +1,10 @@
 import { ethers } from 'ethers'
 import { simpleRpcProvider } from 'utils/providers'
-import dsgnftAbi from 'config/abi/dsgnft.json'
-import nftSocialAbi from 'config/abi/nftSocial.json'
 
 // Addresses
 import {
   getAddress,
   getMulticallAddress,
-  getNftSocialAddress
 } from 'utils/addressHelpers'
 
 // ABI
@@ -30,11 +27,4 @@ export const getErc721Contract = (address: string, signer?: ethers.Signer | ethe
 
 export const getMulticallContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(MultiCallAbi, getMulticallAddress(), signer)
-}
-
-export const getDsgNftContract = (address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(dsgnftAbi, address, signer)
-}
-export const getErc20EarnNftPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(nftSocialAbi, getNftSocialAddress(), signer)
 }
