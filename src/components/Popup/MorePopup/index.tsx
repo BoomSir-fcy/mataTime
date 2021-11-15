@@ -37,18 +37,11 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   useEffect(() => {
     init()
-    addEventListener()
   }, [])
 
   //  初始化
   const init = () => {
     UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
-  }
-
-  const addEventListener = () => {
-    document.addEventListener('click', (e) => {
-      setVisible(false)
-    })
   }
 
   // 收藏
@@ -118,14 +111,20 @@ export const MorePopup = React.memo((props: Iprops) => {
   }
 
   return (
-    <PopupWrapper onClick={(e: any) => {
+    <PopupWrapper onMouseOver={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(true)
+    }} onMouseLeave={(e: any) => {
+      e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+      setVisible(false)
     }}>
       {children}
       {
         visible ? (
-          <PopupContentWrapper>
+          <PopupContentWrapper onMouseLeave={(e: any) => {
+            e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+            setVisible(false)
+          }}>
             {
               isOwn ? (
                 <>

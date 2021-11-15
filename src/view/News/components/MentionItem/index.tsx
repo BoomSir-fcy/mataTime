@@ -84,7 +84,6 @@ const MentionItem: React.FC<IProps> = (props) => {
         callback(data, type)
       }} />
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
-        {/* <p><a>#Dinosaur Eggs#</a></p> */}
         {/* <div onClick={contentClick} dangerouslySetInnerHTML={{ __html: itemData.content }}></div> */}
         {
           content.map((item: any) => {

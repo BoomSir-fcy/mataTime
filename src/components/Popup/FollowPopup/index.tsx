@@ -25,10 +25,6 @@ export const FollowPopup = React.memo((props: Iprops) => {
   const [userInfo, setUserInfo] = useState<any>({});
 
   useEffect(() => {
-    addEventListener()
-  }, [])
-
-  useEffect(() => {
     uid && getUserInfo()
   }, [uid])
 
@@ -63,22 +59,22 @@ export const FollowPopup = React.memo((props: Iprops) => {
   }
 
 
-  const addEventListener = () => {
-    document.addEventListener('click', (e) => {
-      setVisible(false)
-    })
-  }
-
   return (
-    <PopupWrapper onMouseEnter={(e: any) => {
-      e.stopPropagation()
+    <PopupWrapper onMouseOver={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(true)
+    }} onMouseLeave={(e: any) => {
+      e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+      setVisible(false)
     }}>
       {children}
       {
         visible ? (
-          <PopupContentWrapper>
+          <PopupContentWrapper onMouseLeave={(e: any) => {
+            e.stopPropagation()
+            e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+            setVisible(false)
+          }}>
             <div className="content">
               <div className="left-box">
                 <div className="img-box">
