@@ -68,11 +68,6 @@ const MentionItem: React.FC<IProps> = props => {
     if (props.match.path === '/articleDetils/:id') return;
     props.history.push('/articleDetils/' + itemData.id);
   };
-  const contentClick = e => {
-    e.stopPropagation();
-    const itemBox = document.querySelector('.mention-content');
-    console.log(itemBox.getElementsByTagName('a'));
-  };
   return (
     <MentionItemWrapper ref={mentionRef}>
       <MentionItemUser

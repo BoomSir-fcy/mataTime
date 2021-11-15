@@ -145,11 +145,11 @@ export const Editor = (props: Iprops) => {
     input.click()
   }
   const restInput = () => {
-    setValue([])
+    setValue(initialValue)
   }
   const sendArticle = () => {
-    console.log(value, imgList.join(','));
-    console.log(JSON.stringify(value), restInput, imgList.join(','));
+    // console.log(value, imgList.join(','));
+    // console.log(JSON.stringify(value), restInput, imgList.join(','));
     props.sendArticle(JSON.stringify(value), restInput, imgList.join(','))
   }
   const searchSelect = (data, type) => {

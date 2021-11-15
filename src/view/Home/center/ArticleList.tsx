@@ -79,7 +79,7 @@ export const ArticleList = (props) => {
               updateList(item, type)
             }}>
             </MentionItem>
-            <MentionOperator itemData={{
+            <MentionOperator {...props} itemData={{
               ...item,
               post_id: item.id,
               post: {
@@ -96,5 +96,4 @@ export const ArticleList = (props) => {
   )
 }
 ArticleList.defaultProps = {
-  data: Array(6).fill(null)
 }
