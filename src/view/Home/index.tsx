@@ -103,8 +103,8 @@ const Home: React.FC = props => {
           <ArticleList key={refresh} {...props}></ArticleList>
         </CenterCard>
         <RightCard>
-          <Search></Search>
-          <Swap></Swap>
+          {/* <Search></Search> */}
+          {/* <Swap></Swap> */}
           <RecommendPeople></RecommendPeople>
           <HotTopic></HotTopic>
           <FooterCopyright></FooterCopyright>

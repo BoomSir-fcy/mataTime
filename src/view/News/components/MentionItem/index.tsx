@@ -29,7 +29,6 @@ const MentionItem: React.FC<IProps> = (props) => {
   const [position, setPosition] = useState([-999, -999])
   const [uid, setUid] = useState<string | number>(0)
   const [content, setContent] = useState<any[]>([])
-
   useEffect(() => {
     handleUserHover()
   }, [])
@@ -39,7 +38,8 @@ const MentionItem: React.FC<IProps> = (props) => {
       let arr = []
       try {
         arr = JSON.parse(itemData.content)
-        setContent(arr || [])
+        
+        setContent(Array.isArray(arr)?arr : [])
         console.log(arr)
       } catch (err: any) {
         arr = []
@@ -86,9 +86,9 @@ const MentionItem: React.FC<IProps> = (props) => {
       <div className="mention-content" onClick={(e) => { goDetils(e) }}>
         {/* <div onClick={contentClick} dangerouslySetInnerHTML={{ __html: itemData.content }}></div> */}
         {
-          content.map((item: any) => {
+          content.map((item: any,index) => {
             return (
-              <div className="paragraph-item">
+              <div className="paragraph-item" key={index}>
                 {
                   item.children.map((child: any) => {
                     return (
