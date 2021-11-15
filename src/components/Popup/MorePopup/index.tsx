@@ -118,7 +118,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   }
 
   return (
-    <PopupWrapper onClick={(e: any) => {
+    <PopupWrapper onMouseEnter={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(true)
     }}>

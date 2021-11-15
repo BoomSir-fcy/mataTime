@@ -14,17 +14,53 @@ import {
 import { Api } from 'apis';
 
 type Iprops = {
-  children: React.ReactElement
+  children: React.ReactElement;
+  uid?: number | string;
 }
 
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation()
-  const { children } = props
+  const { children, uid = 0 } = props
   const [visible, setVisible] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<any>({});
 
   useEffect(() => {
     addEventListener()
   }, [])
+
+  useEffect(() => {
+    uid && getUserInfo()
+  }, [uid])
+
+  // 获取个人信息
+  const getUserInfo = async () => {
+    const res = await Api.UserApi.getUserInfoByUID('167004880' || uid)
+    if (Api.isSuccess(res)) {
+      setUserInfo(res.data)
+    }
+  }
+
+  // 关注用户
+  const onAttentionFocusRequest = async () => {
+    const res = await Api.AttentionApi.onAttentionFocus('167004880' || uid);
+    if (Api.isSuccess(res)) {
+      toast.success(res.data)
+      getUserInfo()
+    } else {
+      toast.error(res.data)
+    }
+  }
+
+  // 取消关注用户
+  const cancelAttentionFocusRequest = async () => {
+    const res = await Api.AttentionApi.cancelAttentionFocus('167004880' || uid);
+    if (Api.isSuccess(res)) {
+      toast.success(res.data)
+      getUserInfo()
+    } else {
+      toast.error(res.data)
+    }
+  }
 
   const addEventListener = () => {
     document.addEventListener('click', (e) => {
@@ -33,10 +69,12 @@ export const FollowPopup = React.memo((props: Iprops) => {
   }
 
   return (
-    <PopupWrapper onClick={(e: any) => {
+    <PopupWrapper onMouseEnter={(e: any) => {
       e.stopPropagation()
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(true)
+    }} onMouseLeave={() => {
+      // setVisible(false)
     }}>
       {children}
       {
@@ -44,19 +82,25 @@ export const FollowPopup = React.memo((props: Iprops) => {
           <PopupContentWrapper>
             <div className="content">
               <div className="left-box">
-                <div className="img-box"></div>
+                <div className="img-box">
+                  <Avatar className="avatar" src={userInfo.NftImage || '  '} scale="md" />
+                </div>
               </div>
               <div className="right-box">
-                <div className="name">Others</div>
+                <div className="name">{userInfo.NickName || '  '}</div>
                 <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon> @0x32...9239</div>
                 <div className="number">
-                  <p>{t('followFans')}<strong>299</strong></p>
-                  <p>{t('followText')}<strong>29</strong></p>
+                  <p>{t('followFans')}<strong>{userInfo.FansNum || 0}</strong></p>
+                  <p>{t('followText')}<strong>{userInfo.AttentionNum || 0}</strong></p>
                 </div>
               </div>
             </div>
             <div className="btn">
-              <FollowBtn>+{t('followText')}</FollowBtn>
+              <FollowBtn onClick={(e: any) => {
+                e.stopPropagation()
+                e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+                userInfo.IsAttention === 1 ? cancelAttentionFocusRequest() : onAttentionFocusRequest()
+              }}>{userInfo.IsAttention === 1 ? t('followCancelText') : '+' + t('followText')}</FollowBtn>
             </div>
           </PopupContentWrapper>
         ) : null
