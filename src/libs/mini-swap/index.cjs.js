@@ -4,8 +4,8 @@ var tslib = require('tslib');
 var jsxRuntime = require('react/jsx-runtime');
 var React = require('react');
 var dsgswapSdk = require('dsgswap-sdk');
-var core = require('@web3-react/core');
 var ethers = require('ethers');
+var core = require('@web3-react/core');
 var sample = require('lodash/sample');
 var reactRedux = require('react-redux');
 var toolkit = require('@reduxjs/toolkit');
@@ -57,16 +57,14 @@ var isEqual__default = /*#__PURE__*/_interopDefaultLegacy(isEqual);
 var axios__default = /*#__PURE__*/_interopDefaultLegacy(axios);
 var merge__default = /*#__PURE__*/_interopDefaultLegacy(merge);
 
-var getNodeUrl = function () {
+var getNodeUrl = function (chainId) {
     // return process.env.REACT_APP_NODE_3
-    return sample__default["default"](dsgswapSdk.ETHEREUM_CHAIN[dsgswapSdk.chainIdProxy.chainId].rpcUrls);
+    return sample__default["default"](dsgswapSdk.ETHEREUM_CHAIN[chainId || dsgswapSdk.chainIdProxy.chainId].rpcUrls);
     // return 'https://polygon-mumbai.infura.io/v3/330472ed44dd4692a16dfcb4cc41f122'
 };
 
-var RPC_URL = getNodeUrl();
+var RPC_URL = getNodeUrl(97);
 var simpleRpcProvider = new ethers.ethers.providers.JsonRpcProvider(RPC_URL);
-
-console.log(RPC_URL)
 
 /**
  * Provides a web3 provider with or without user's signer
@@ -78,17 +76,17 @@ var useActiveWeb3React = function () {
     var _b = tslib.__read(React.useState(library || simpleRpcProvider), 2), provider = _b[0], setprovider = _b[1];
     React.useEffect(function () {
         if (library !== refEth.current) {
-            setprovider(library || simpleRpcProvider);
+            setprovider(library || new ethers.ethers.providers.JsonRpcProvider(getNodeUrl(chainId)));
             refEth.current = library;
         }
-    }, [library]);
+    }, [library, chainId]);
     return tslib.__assign({ library: provider, chainId: chainId !== null && chainId !== void 0 ? chainId : dsgswapSdk.chainIdProxy.chainId }, web3React);
 };
 
-var _a$b, _b$4, _c, _d, _e, _f;
+var _a$c, _b$4, _c, _d, _e, _f;
 // used to construct intermediary pairs for trading
-var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
-    _a$b[dsgswapSdk.ChainId.MATIC_TESTNET] = [
+var BASES_TO_CHECK_TRADES_AGAINST = (_a$c = {},
+    _a$c[dsgswapSdk.ChainId.MATIC_TESTNET] = [
         dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET],
         dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET],
         dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET],
@@ -96,7 +94,7 @@ var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
         dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET],
         dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_TESTNET],
     ],
-    _a$b[dsgswapSdk.ChainId.MATIC_MAINNET] = [
+    _a$c[dsgswapSdk.ChainId.MATIC_MAINNET] = [
         dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET],
         dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET],
         dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET],
@@ -106,21 +104,21 @@ var BASES_TO_CHECK_TRADES_AGAINST = (_a$b = {},
         // USDC[ChainId.MATIC_MAINNET],
         // DAI,
     ],
-    _a$b[dsgswapSdk.ChainId.MAINNET] = [
+    _a$c[dsgswapSdk.ChainId.MAINNET] = [
         dsgswapSdk.WETHER[dsgswapSdk.ChainId.MAINNET],
         dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET],
         dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET],
         dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET],
         dsgswapSdk.USDC[dsgswapSdk.ChainId.MAINNET],
     ],
-    _a$b[dsgswapSdk.ChainId.TESTNET] = [
+    _a$c[dsgswapSdk.ChainId.TESTNET] = [
         dsgswapSdk.WETHER[dsgswapSdk.ChainId.TESTNET],
         dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET],
         dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET],
         dsgswapSdk.USDT[dsgswapSdk.ChainId.TESTNET],
         dsgswapSdk.USDC[dsgswapSdk.ChainId.TESTNET],
     ],
-    _a$b);
+    _a$c);
 /**
  * Addittional bases for specific tokens
  * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
@@ -664,7 +662,7 @@ var UNSUPPORTED_TOKEN_LIST = {
 	tokens: tokens
 };
 
-var _a$a;
+var _a$b;
 // use ordering of default list of lists to assign priority
 function sortByListPriority(urlA, urlB) {
     var first = getTokenDefaultList().includes(urlA) ? getTokenDefaultList().indexOf(urlA) : Number.MAX_SAFE_INTEGER;
@@ -699,12 +697,12 @@ var WrappedTokenInfo = /** @class */ (function (_super) {
 /**
  * An empty result, useful as a default.
  */
-var EMPTY_LIST = (_a$a = {},
-    _a$a[dsgswapSdk.ChainId.MAINNET] = {},
-    _a$a[dsgswapSdk.ChainId.TESTNET] = {},
-    _a$a[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
-    _a$a[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
-    _a$a);
+var EMPTY_LIST = (_a$b = {},
+    _a$b[dsgswapSdk.ChainId.MAINNET] = {},
+    _a$b[dsgswapSdk.ChainId.TESTNET] = {},
+    _a$b[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
+    _a$b[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
+    _a$b);
 var listCache = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
 function listToTokenMap(list) {
     var result = listCache === null || listCache === void 0 ? void 0 : listCache.get(list);
@@ -1022,14 +1020,14 @@ function useUserAddedTokens() {
     }, [serializedTokensMap, chainId]);
 }
 
-var _a$9;
+var _a$a;
 var contracts = {
-    SwapRouter: (_a$9 = {},
-        _a$9[dsgswapSdk.ChainId.MAINNET] = '0xe9c7650b97712c0ec958ff270fbf4189fb99c071',
-        _a$9[dsgswapSdk.ChainId.TESTNET] = '0x41Dc515AAA85239302dc95638dFbf5Ee954304b0',
-        _a$9[dsgswapSdk.ChainId.MATIC_MAINNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$9[dsgswapSdk.ChainId.MATIC_TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$9)
+    SwapRouter: (_a$a = {},
+        _a$a[dsgswapSdk.ChainId.MAINNET] = '0xe9c7650b97712c0ec958ff270fbf4189fb99c071',
+        _a$a[dsgswapSdk.ChainId.TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$a[dsgswapSdk.ChainId.MATIC_MAINNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$a[dsgswapSdk.ChainId.MATIC_TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$a)
 };
 
 var swapRouterAbi = [
@@ -6628,27 +6626,27 @@ var variants$5 = {
     RIGHT: "right",
 };
 
-var _a$8, _b$3;
-var scaleVariants$1 = (_a$8 = {},
-    _a$8[scales$9.LD] = {
+var _a$9, _b$3;
+var scaleVariants$1 = (_a$9 = {},
+    _a$9[scales$9.LD] = {
         height: "36px",
         minWidth: "108px",
         padding: "0 24px",
     },
-    _a$8[scales$9.MD] = {
+    _a$9[scales$9.MD] = {
         height: "36px",
         padding: "0 24px",
     },
-    _a$8[scales$9.SM] = {
+    _a$9[scales$9.SM] = {
         height: "32px",
         padding: "0 16px",
     },
-    _a$8[scales$9.XS] = {
+    _a$9[scales$9.XS] = {
         height: "20px",
         fontSize: "12px",
         padding: "0 8px",
     },
-    _a$8);
+    _a$9);
 var styleVariants$2 = (_b$3 = {},
     _b$3[variants$5.PRIMARY] = {
         backgroundColor: "primary",
@@ -6938,7 +6936,7 @@ var getHeight = function (_a) {
             return "40px";
     }
 };
-var Input$4 = styled__default["default"].input(templateObject_1$1e || (templateObject_1$1e = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"], ["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"])), function (_a) {
+var Input$5 = styled__default["default"].input(templateObject_1$1e || (templateObject_1$1e = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"], ["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.input;
 }, getBoxShadow$2, function (_a) {
@@ -6960,7 +6958,7 @@ var Input$4 = styled__default["default"].input(templateObject_1$1e || (templateO
     var theme = _a.theme, noShadow = _a.noShadow;
     return noShadow ? 'none' : theme.shadows.focus;
 });
-Input$4.defaultProps = {
+Input$5.defaultProps = {
     scale: scales$8.MD,
     isSuccess: false,
     isWarning: false,
@@ -6982,7 +6980,7 @@ styled__default["default"](Box)(templateObject_3$m || (templateObject_3$m = tsli
     var theme = _a.theme, isWarning = _a.isWarning;
     return theme.shadows[isWarning ? "warning" : "inset"];
 });
-styled__default["default"](Input$4)(templateObject_4$c || (templateObject_4$c = tslib.__makeTemplateObject(["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"], ["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"])), function (_a) {
+styled__default["default"](Input$5)(templateObject_4$c || (templateObject_4$c = tslib.__makeTemplateObject(["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"], ["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"])), function (_a) {
     var _b = _a.textAlign, textAlign = _b === void 0 ? "right" : _b;
     return textAlign;
 }, function (_a) {
@@ -7270,53 +7268,53 @@ var scales$6 = {
     XXLD: 'xxld'
 };
 
-var _a$7;
-var style = (_a$7 = {},
-    _a$7[scales$6.SM] = {
+var _a$8;
+var style = (_a$8 = {},
+    _a$8[scales$6.SM] = {
         fontSize: "12px",
         fontSizeLg: "12px",
     },
-    _a$7[scales$6.LD] = {
+    _a$8[scales$6.LD] = {
         fontSize: "14px",
         fontSizeLg: "16px",
     },
-    _a$7[scales$6.MD] = {
+    _a$8[scales$6.MD] = {
         fontSize: "16px",
         fontSizeLg: "20px",
     },
-    _a$7[scales$6.LG] = {
+    _a$8[scales$6.LG] = {
         fontSize: "24px",
         fontSizeLg: "24px",
     },
-    _a$7[scales$6.LGG] = {
+    _a$8[scales$6.LGG] = {
         fontSize: "18px",
         fontSizeLg: "34px",
     },
-    _a$7[scales$6.LX] = {
+    _a$8[scales$6.LX] = {
         fontSize: "24px",
         fontSizeLg: "32px",
     },
-    _a$7[scales$6.XL] = {
+    _a$8[scales$6.XL] = {
         fontSize: "32px",
         fontSizeLg: "40px",
     },
-    _a$7[scales$6.XLD] = {
+    _a$8[scales$6.XLD] = {
         fontSize: "32px",
         fontSizeLg: "48px",
     },
-    _a$7[scales$6.XXL] = {
+    _a$8[scales$6.XXL] = {
         fontSize: "48px",
         fontSizeLg: "64px",
     },
-    _a$7[scales$6.XXLD] = {
+    _a$8[scales$6.XXLD] = {
         fontSize: "54px",
         fontSizeLg: "80px",
     },
-    _a$7[scales$6.XXXL] = {
+    _a$8[scales$6.XXXL] = {
         fontSize: "44px",
         fontSizeLg: "90px",
     },
-    _a$7);
+    _a$8);
 var Heading = styled__default["default"](Text).attrs({ bold: true })(templateObject_1$11 || (templateObject_1$11 = tslib.__makeTemplateObject(["\n  font-size: ", ";\n  font-weight: 600;\n  line-height: 1.1;\n\n  ", " {\n    font-size: ", ";\n  }\n"], ["\n  font-size: ", ";\n  font-weight: 600;\n  line-height: 1.1;\n\n  ", " {\n    font-size: ", ";\n  }\n"])), function (_a) {
     var scale = _a.scale;
     return style[scale || scales$6.MD].fontSize;
@@ -7421,13 +7419,13 @@ var variants$3 = {
     BINARY: "binary",
 };
 
-var _a$6, _b$2;
+var _a$7, _b$2;
 styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y = tslib.__makeTemplateObject(["\n  position: absolute;\n  border-radius: 50%;\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"], ["\n  position: absolute;\n  border-radius: 50%;\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"])), function (_a) {
     var variant = _a.variant;
     return variant === variants$3.DEFAULT ? "82%" : "70%";
 }, styledSystem.variant({
-    variants: (_a$6 = {},
-        _a$6[variants$3.DEFAULT] = {
+    variants: (_a$7 = {},
+        _a$7[variants$3.DEFAULT] = {
             width: '82%',
             bottom: "auto",
             left: 0,
@@ -7435,7 +7433,7 @@ styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y
             top: 0,
             zIndex: 5,
         },
-        _a$6[variants$3.INVERTED] = {
+        _a$7[variants$3.INVERTED] = {
             width: '70%',
             bottom: 0,
             left: "auto",
@@ -7443,7 +7441,7 @@ styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y
             top: "auto",
             zIndex: 6,
         },
-        _a$6[variants$3.BINARY] = {
+        _a$7[variants$3.BINARY] = {
             width: '100%',
             height: '100%',
             bottom: 0,
@@ -7453,7 +7451,7 @@ styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y
             top: "auto",
             zIndex: 5,
         },
-        _a$6),
+        _a$7),
 }));
 styled__default["default"](TokenImage)(templateObject_2$w || (templateObject_2$w = tslib.__makeTemplateObject(["\n  position: absolute;\n  transform: scale(0.95);\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"], ["\n  position: absolute;\n  transform: scale(0.95);\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"])), function (_a) {
     var variant = _a.variant;
@@ -7496,7 +7494,7 @@ styled__default["default"](Flex)(templateObject_1$X || (templateObject_1$X = tsl
     var theme = _a.theme;
     return theme.colors.primary;
 });
-styled__default["default"](Input$4)(templateObject_2$v || (templateObject_2$v = tslib.__makeTemplateObject(["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"], ["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"])), function (_a) {
+styled__default["default"](Input$5)(templateObject_2$v || (templateObject_2$v = tslib.__makeTemplateObject(["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"], ["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.white;
 });
@@ -7677,15 +7675,15 @@ var scales$4 = {
     SM: "sm",
 };
 
-var _a$5, _b$1;
-var styleVariants$1 = (_a$5 = {},
-    _a$5[variants$1.ROUND] = {
+var _a$6, _b$1;
+var styleVariants$1 = (_a$6 = {},
+    _a$6[variants$1.ROUND] = {
         borderRadius: "32px",
     },
-    _a$5[variants$1.FLAT] = {
+    _a$6[variants$1.FLAT] = {
         borderRadius: 0,
     },
-    _a$5);
+    _a$6);
 var styleScales = (_b$1 = {},
     _b$1[scales$4.MD] = {
         height: "16px",
@@ -7956,19 +7954,19 @@ var scales$2 = {
     SM: "sm",
 };
 
-var _a$4, _b;
-var scaleVariants = (_a$4 = {},
-    _a$4[scales$2.MD] = {
+var _a$5, _b;
+var scaleVariants = (_a$5 = {},
+    _a$5[scales$2.MD] = {
         height: "28px",
         padding: "0 8px",
         fontSize: "14px",
     },
-    _a$4[scales$2.SM] = {
+    _a$5[scales$2.SM] = {
         height: "24px",
         padding: "0 4px",
         fontSize: "12px",
     },
-    _a$4);
+    _a$5);
 var styleVariants = (_b = {},
     _b[variants.PRIMARY] = {
         backgroundColor: "primary",
@@ -8062,7 +8060,7 @@ var Handle = styled__default["default"].div(templateObject_1$D || (templateObjec
     var theme = _a.theme;
     return theme.toggle.handleBackground;
 }, getScale("handleHeight"), getScale("handleLeft"), getScale("handleTop"), getScale("handleWidth"));
-var Input$3 = styled__default["default"].input(templateObject_2$l || (templateObject_2$l = tslib.__makeTemplateObject(["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"], ["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"])), Handle, getScale("checkedLeft"), Handle, function (_a) {
+var Input$4 = styled__default["default"].input(templateObject_2$l || (templateObject_2$l = tslib.__makeTemplateObject(["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"], ["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"])), Handle, getScale("checkedLeft"), Handle, function (_a) {
     var theme = _a.theme;
     return theme.shadows.focus;
 }, Handle, function (_a) {
@@ -8086,7 +8084,7 @@ var scales$1 = {
 var Toggle = function (_a) {
     var checked = _a.checked, _b = _a.scale, scale = _b === void 0 ? scales$1.MD : _b, props = tslib.__rest(_a, ["checked", "scale"]);
     var isChecked = !!checked;
-    return (jsxRuntime.jsxs(StyledToggle, tslib.__assign({ checked: isChecked, scale: scale }, { children: [jsxRuntime.jsx(Input$3, tslib.__assign({ checked: checked, scale: scale }, props, { type: "checkbox" }), void 0), jsxRuntime.jsx(Handle, { scale: scale }, void 0)] }), void 0));
+    return (jsxRuntime.jsxs(StyledToggle, tslib.__assign({ checked: isChecked, scale: scale }, { children: [jsxRuntime.jsx(Input$4, tslib.__assign({ checked: checked, scale: scale }, props, { type: "checkbox" }), void 0), jsxRuntime.jsx(Handle, { scale: scale }, void 0)] }), void 0));
 };
 Toggle.defaultProps = {
     scale: scales$1.MD,
@@ -8147,194 +8145,194 @@ var languages = {
 };
 Object.values(languages);
 
-var dataFormat = "YYYY-MM-DD";
-var airTime = "HHA, MMM-DD";
-var Exchange = "Exchange";
-var Locked = "Locked";
-var Finished = "Finished";
-var Total = "Total";
-var End = "End";
-var Close = "Close";
-var Max = "Max";
-var Cancel = "Cancel";
-var Confirm = "Confirm";
-var Warning = "Warning";
-var Core = "Core";
-var Available = "Available";
-var Select = "Select";
-var Connect = "Connect";
-var Details = "Details";
-var Trade = "Trade";
-var More = "More";
-var Liquidity = "Liquidity";
-var Token = "Token";
-var Pairs = "Pairs";
-var Accounts = "Accounts";
-var Active = "Active";
-var Inactive = "Inactive";
-var Dual = "Dual";
-var Compound = "Compound";
-var Search = "Search";
-var History = "History";
-var Burned = "Burned";
-var Logout = "Logout";
-var Confirmed = "Confirmed";
-var Show = "Show";
-var Hide = "Hide";
-var Stake = "Stake";
-var Balance$1 = "Balance";
-var Live = "Live";
-var Start = "Start";
-var Finish = "Finish";
-var Enable = "Enable";
-var Enabling = "Enabling";
-var Expired = "Expired";
-var Calculating = "Calculating";
-var All = "All";
-var d = "d";
-var h = "h";
-var m = "m";
-var Blocks = "Blocks";
-var Buy = "Buy";
-var Filter = "Filter";
-var Volume = "Volume";
-var Tokens = "Tokens";
-var Contact = "Contact";
-var Merch = "Merch";
-var New = "New";
-var Rates = "Rates";
-var Price = "Price";
-var Prices = "Prices";
-var Amount = "Amount";
-var Simple = "Simple";
-var Detailed = "Detailed";
-var Remove = "Remove";
-var Input$2 = "Input";
-var Output = "Output";
-var From = "From";
-var To = "To";
-var Swap$1 = "Swap";
-var Audio$1 = "Audio";
-var minutes = "minutes";
-var Manage$1 = "Manage";
-var Import = "Import";
-var via = "via";
-var Lists = "Lists";
-var See = "See";
-var Loaded = "Loaded";
-var Loading$1 = "Loading";
-var Recipient = "Recipient";
-var Dismiss = "Dismiss";
-var Latest = "Latest";
-var Claimed = "Claimed";
-var Settings = "Settings";
-var Supply = "Supply";
-var Learn = "Learn";
-var translationLast = "translationLast";
-var translationEnd = "translationEnd";
+var dataFormat$1 = "YYYY-MM-DD";
+var airTime$1 = "HHA, MMM-DD";
+var Exchange$1 = "Exchange";
+var Locked$1 = "Locked";
+var Finished$1 = "Finished";
+var Total$1 = "Total";
+var End$1 = "End";
+var Close$1 = "Close";
+var Max$1 = "Max";
+var Cancel$1 = "Cancel";
+var Confirm$1 = "Confirm";
+var Warning$1 = "Warning";
+var Core$1 = "Core";
+var Available$1 = "Available";
+var Select$1 = "Select";
+var Connect$1 = "Connect";
+var Details$1 = "Details";
+var Trade$1 = "Trade";
+var More$1 = "More";
+var Liquidity$1 = "Liquidity";
+var Token$1 = "Token";
+var Pairs$1 = "Pairs";
+var Accounts$1 = "Accounts";
+var Active$1 = "Active";
+var Inactive$1 = "Inactive";
+var Dual$1 = "Dual";
+var Compound$1 = "Compound";
+var Search$1 = "Search";
+var History$1 = "History";
+var Burned$1 = "Burned";
+var Logout$1 = "Logout";
+var Confirmed$1 = "Confirmed";
+var Show$1 = "Show";
+var Hide$1 = "Hide";
+var Stake$1 = "Stake";
+var Balance$2 = "Balance";
+var Live$1 = "Live";
+var Start$1 = "Start";
+var Finish$1 = "Finish";
+var Enable$1 = "Enable";
+var Enabling$1 = "Enabling";
+var Expired$1 = "Expired";
+var Calculating$1 = "Calculating";
+var All$1 = "All";
+var d$1 = "d";
+var h$1 = "h";
+var m$1 = "m";
+var Blocks$1 = "Blocks";
+var Buy$1 = "Buy";
+var Filter$1 = "Filter";
+var Volume$1 = "Volume";
+var Tokens$1 = "Tokens";
+var Contact$1 = "Contact";
+var Merch$1 = "Merch";
+var New$1 = "New";
+var Rates$1 = "Rates";
+var Price$1 = "Price";
+var Prices$1 = "Prices";
+var Amount$1 = "Amount";
+var Simple$1 = "Simple";
+var Detailed$1 = "Detailed";
+var Remove$1 = "Remove";
+var Input$3 = "Input";
+var Output$1 = "Output";
+var From$1 = "From";
+var To$1 = "To";
+var Swap$2 = "Swap";
+var Audio$2 = "Audio";
+var minutes$1 = "minutes";
+var Manage$2 = "Manage";
+var Import$1 = "Import";
+var via$1 = "via";
+var Lists$1 = "Lists";
+var See$1 = "See";
+var Loaded$1 = "Loaded";
+var Loading$2 = "Loading";
+var Recipient$1 = "Recipient";
+var Dismiss$1 = "Dismiss";
+var Latest$1 = "Latest";
+var Claimed$1 = "Claimed";
+var Settings$1 = "Settings";
+var Supply$1 = "Supply";
+var Learn$1 = "Learn";
+var translationLast$1 = "translationLast";
+var translationEnd$1 = "translationEnd";
 var translations = {
-	dataFormat: dataFormat,
-	airTime: airTime,
-	Exchange: Exchange,
+	dataFormat: dataFormat$1,
+	airTime: airTime$1,
+	Exchange: Exchange$1,
 	"Connect Wallet": "Connect Wallet",
 	"Your %asset% Balance": "Your %asset% Balance",
 	"My %asset%": "My %asset%",
 	"Total %asset% Supply": "Total %asset% Supply",
-	Locked: Locked,
+	Locked: Locked$1,
 	"Total Liquidity": "Total Liquidity",
 	"View on PolygonScan": "View on PolygonScan",
-	Finished: Finished,
+	Finished: Finished$1,
 	"Project site": "Project site",
 	"Project Site": "Project Site",
 	"See Token Info": "See Token Info",
-	Total: Total,
-	End: End,
+	Total: Total$1,
+	End: End$1,
 	"View Project Site": "View Project Site",
 	"Create a pool for your token": "Create a pool for your token",
-	Close: Close,
-	Max: Max,
+	Close: Close$1,
+	Max: Max$1,
 	"%num% %symbol% Available": "%num% %symbol% Available",
-	Cancel: Cancel,
-	Confirm: Confirm,
-	Warning: Warning,
+	Cancel: Cancel$1,
+	Confirm: Confirm$1,
+	Warning: Warning$1,
 	"I understand": "I understand",
 	"Pending Confirmation": "Pending Confirmation",
 	"Buy new tokens with a brand new token sale model.": "Buy new tokens with a brand new token sale model.",
 	"You get the tokens.": "You get the tokens.",
 	"Want to launch your own IFO?": "Want to launch your own IFO?",
 	"Apply to launch": "Apply to launch",
-	Core: Core,
-	Available: Available,
+	Core: Core$1,
+	Available: Available$1,
 	"Sign out": "Sign out",
-	Select: Select,
+	Select: Select$1,
 	"Launch Time": "Launch Time",
 	"For Sale": "For Sale",
 	"Done!": "Done!",
 	"Read more": "Read more",
-	Connect: Connect,
+	Connect: Connect$1,
 	"Loading…": "Loading…",
-	Details: Details,
+	Details: Details$1,
 	"Wallet Disconnected": "Wallet Disconnected",
-	Trade: Trade,
-	More: More,
-	Liquidity: Liquidity,
-	Token: Token,
-	Pairs: Pairs,
-	Accounts: Accounts,
-	Active: Active,
-	Inactive: Inactive,
-	Dual: Dual,
-	Compound: Compound,
+	Trade: Trade$1,
+	More: More$1,
+	Liquidity: Liquidity$1,
+	Token: Token$1,
+	Pairs: Pairs$1,
+	Accounts: Accounts$1,
+	Active: Active$1,
+	Inactive: Inactive$1,
+	Dual: Dual$1,
+	Compound: Compound$1,
 	"In Wallet": "In Wallet",
 	"Loading...": "Loading...",
-	Search: Search,
-	History: History,
-	Burned: Burned,
+	Search: Search$1,
+	History: History$1,
+	Burned: Burned$1,
 	"To burn": "To burn",
 	"Total Value Locked": "Total Value Locked",
 	"Your wallet": "Your wallet",
-	Logout: Logout,
-	Confirmed: Confirmed,
-	Show: Show,
-	Hide: Hide,
+	Logout: Logout$1,
+	Confirmed: Confirmed$1,
+	Show: Show$1,
+	Hide: Hide$1,
 	"Stake LP tokens": "Stake LP tokens",
-	Stake: Stake,
+	Stake: Stake$1,
 	"I understand that people can view my wallet if they know my username": "I understand that people can view my wallet if they know my username",
 	"Please connect your wallet to continue": "Please connect your wallet to continue",
 	"Get %symbol%": "Get %symbol%",
-	Balance: Balance$1,
+	Balance: Balance$2,
 	"Oops, page not found.": "Oops, page not found.",
 	"Back Home": "Back Home",
-	Live: Live,
-	Start: Start,
-	Finish: Finish,
+	Live: Live$1,
+	Start: Start$1,
+	Finish: Finish$1,
 	"Connect wallet to view": "Connect wallet to view",
 	"Your volume": "Your volume",
 	"Since start": "Since start",
-	Enable: Enable,
-	Enabling: Enabling,
-	Expired: Expired,
-	Calculating: Calculating,
+	Enable: Enable$1,
+	Enabling: Enabling$1,
+	Expired: Expired$1,
+	Calculating: Calculating$1,
 	"Your history": "Your history",
-	All: All,
+	All: All$1,
 	"%num%d": "%num%d",
-	d: d,
-	h: h,
-	m: m,
+	d: d$1,
+	h: h$1,
+	m: m$1,
 	"Success!": "Success!",
-	Blocks: Blocks,
+	Blocks: Blocks$1,
 	"Add to Metamask": "Add to Metamask",
 	"Insufficient %symbol% balance": "Insufficient %symbol% balance",
-	Buy: Buy,
+	Buy: Buy$1,
 	"Locate Assets": "Locate Assets",
 	"%symbol% required": "%symbol% required",
 	"Your History": "Your History",
-	Filter: Filter,
-	Volume: Volume,
-	Tokens: Tokens,
-	Contact: Contact,
-	Merch: Merch,
-	New: New,
+	Filter: Filter$1,
+	Volume: Volume$1,
+	Tokens: Tokens$1,
+	Contact: Contact$1,
+	Merch: Merch$1,
+	New: New$1,
 	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "Output is estimated. If the price changes by more than %slippage%% your transaction will revert.",
 	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "Supplying %amountA% %symbolA% and %amountB% %symbolB%",
 	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "Removing %amountA% %symbolA% and %amountB% %symbolB%",
@@ -8354,7 +8352,7 @@ var translations = {
 	"Share of Pool": "Share of Pool",
 	"%assetA% per %assetB%": "%assetA% per %assetB%",
 	"%asset% Deposited": "%asset% Deposited",
-	Rates: Rates,
+	Rates: Rates$1,
 	"Create Pool & Supply": "Create Pool & Supply",
 	"Confirm Supply": "Confirm Supply",
 	"Confirm Swap": "Confirm Swap",
@@ -8374,29 +8372,29 @@ var translations = {
 	"Invalid pair.": "Invalid pair.",
 	"You don’t have liquidity in this pool yet.": "You don’t have liquidity in this pool yet.",
 	"%assetA%/%assetB% Burned": "%assetA%/%assetB% Burned",
-	Price: Price,
-	Prices: Prices,
+	Price: Price$1,
+	Prices: Prices$1,
 	"Remove %assetA%-%assetB% liquidity": "Remove %assetA%-%assetB% liquidity",
-	Amount: Amount,
-	Simple: Simple,
-	Detailed: Detailed,
+	Amount: Amount$1,
+	Simple: Simple$1,
+	Detailed: Detailed$1,
 	"Receive WBNB": "Receive WBNB",
 	"Receive BNB": "Receive BNB",
-	Remove: Remove,
-	Input: Input$2,
-	Output: Output,
+	Remove: Remove$1,
+	Input: Input$3,
+	Output: Output$1,
 	"Trade tokens in an instant": "Trade tokens in an instant",
 	"From (estimated)": "From (estimated)",
-	From: From,
+	From: From$1,
 	"To (estimated)": "To (estimated)",
-	To: To,
+	To: To$1,
 	"+ Add a send (optional)": "+ Add a send (optional)",
 	"- Remove send": "- Remove send",
 	"Slippage Tolerance": "Slippage Tolerance",
 	"Insufficient liquidity for this trade.": "Insufficient liquidity for this trade.",
 	"Try enabling multi-hop trades.": "Try enabling multi-hop trades.",
 	"Price Impact High": "Price Impact High",
-	Swap: Swap$1,
+	Swap: Swap$2,
 	"Swap Anyway": "Swap Anyway",
 	"Recent Transactions": "Recent Transactions",
 	"clear all": "clear all",
@@ -8412,14 +8410,14 @@ var translations = {
 	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "Bypasses confirmation modals and allows high slippage trades. Use at your own risk.",
 	"Disable Multihops": "Disable Multihops",
 	"Restricts swaps to direct pairs only.": "Restricts swaps to direct pairs only.",
-	Audio: Audio$1,
+	Audio: Audio$2,
 	"🐰 Turn down your volume a bit before you swap": "🐰 Turn down your volume a bit before you swap",
 	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "Your transaction will revert if the price changes unfavorably by more than this percentage.",
 	"Enter a valid slippage percentage": "Enter a valid slippage percentage",
 	"Your transaction may fail": "Your transaction may fail",
 	"Your transaction may be frontrun": "Your transaction may be frontrun",
 	"Your transaction will revert if it is pending for more than this long.": "Your transaction will revert if it is pending for more than this long.",
-	minutes: minutes,
+	minutes: minutes$1,
 	"Token Amount": "Token Amount",
 	"Balance: %amount%": "Balance: %amount%",
 	"LP tokens in your wallet": "LP tokens in your wallet",
@@ -8430,24 +8428,24 @@ var translations = {
 	"Expanded results from inactive Token Lists": "Expanded results from inactive Token Lists",
 	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
 	"No results found.": "No results found.",
-	Manage: Manage$1,
+	Manage: Manage$2,
 	"Manage Tokens": "Manage Tokens",
 	"Import Tokens": "Import Tokens",
 	"Import List": "Import List",
 	"Import at your own risk": "Import at your own risk",
 	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.",
 	"If you purchase a token from this list, you may not be able to sell it back.": "If you purchase a token from this list, you may not be able to sell it back.",
-	Import: Import,
-	via: via,
+	Import: Import$1,
+	via: via$1,
 	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.",
 	"If you purchase an arbitrary token, you may be unable to sell it back.": "If you purchase an arbitrary token, you may be unable to sell it back.",
 	"Unknown Source": "Unknown Source",
-	Lists: Lists,
-	See: See,
+	Lists: Lists$1,
+	See: See$1,
 	"Update list": "Update list",
 	"https:// or ipfs:// or ENS name": "https:// or ipfs:// or ENS name",
-	Loaded: Loaded,
-	Loading: Loading$1,
+	Loaded: Loaded$1,
+	Loading: Loading$2,
 	"Enter valid token address": "Enter valid token address",
 	"Custom Token": "Custom Token",
 	"Custom Tokens": "Custom Tokens",
@@ -8458,11 +8456,11 @@ var translations = {
 	"Added %asset%": "Added %asset%",
 	"Transaction Submitted": "Transaction Submitted",
 	"Wallet Address or ENS name": "Wallet Address or ENS name",
-	Recipient: Recipient,
+	Recipient: Recipient$1,
 	"Waiting For Confirmation": "Waiting For Confirmation",
 	"Confirm this transaction in your wallet": "Confirm this transaction in your wallet",
-	Dismiss: Dismiss,
-	Latest: Latest,
+	Dismiss: Dismiss$1,
+	Latest: Latest$1,
 	"Notice for trading %symbol%": "Notice for trading %symbol%",
 	"To trade SAFEMOON, you must:": "To trade SAFEMOON, you must:",
 	"Click on the settings icon": "Click on the settings icon",
@@ -8471,41 +8469,384 @@ var translations = {
 	"5% fee = redistributed to all existing holders": "5% fee = redistributed to all existing holders",
 	"5% fee = used to add liquidity": "5% fee = used to add liquidity",
 	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "Warning: BONDLY has been compromised. Please remove liqudity until further notice.",
-	Claimed: Claimed,
-	Settings: Settings,
+	Claimed: Claimed$1,
+	Settings: Settings$1,
 	"Transaction deadline": "Transaction deadline",
 	"Convert ERC-20 to BEP-20": "Convert ERC-20 to BEP-20",
 	"Need help ?": "Need help ?",
 	"Select a token": "Select a token",
 	"Enter a recipient": "Enter a recipient",
 	"Invalid recipient": "Invalid recipient",
-	Supply: Supply,
+	Supply: Supply$1,
 	"Your Liquidity": "Your Liquidity",
 	"Remove liquidity to receive tokens back": "Remove liquidity to receive tokens back",
 	"Trade anything. No registration, no hassle.": "Trade anything. No registration, no hassle.",
 	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.",
-	Learn: Learn,
+	Learn: Learn$1,
 	"BNB token": "BNB token",
 	"BTC token": "BTC token",
 	"Earn passive income with crypto.": "Earn passive income with crypto.",
+	translationLast: translationLast$1,
+	translationEnd: translationEnd$1
+};
+
+var dataFormat = "YYYY-MM-DD";
+var airTime = "HHA, MMM-DD";
+var Exchange = "兑换";
+var Locked = "已锁定";
+var Finished = "已完成";
+var Total = "总计";
+var End = "结束";
+var Close = "关闭";
+var Max = "最大";
+var Cancel = "取消";
+var Confirm = "确认";
+var Warning = "警告";
+var Core = "核心";
+var Available = "可用";
+var Select = "选择";
+var Connect = "连接";
+var Details = "详情";
+var Trade = "交易";
+var More = "更多";
+var Liquidity = "流动性";
+var Token = "代币";
+var Pairs = "币对";
+var Accounts = "账户";
+var Active = "有效";
+var Inactive = "停用";
+var Dual = "双重";
+var Compound = "复利";
+var Search = "搜索";
+var History = "历史记录";
+var Burned = "销毁";
+var Logout = "退出";
+var Confirmed = "已确认";
+var Show = "显示";
+var Hide = "隐藏";
+var Stake = "质押";
+var Balance$1 = "余额";
+var Live = "实时";
+var Start = "开始";
+var Finish = "完成";
+var Enable = "启用";
+var Enabling = "正在启用";
+var Expired = "已过期";
+var Calculating = "正在计算";
+var All = "全部";
+var d = "天";
+var h = "小时";
+var m = "分钟";
+var Blocks = "区块";
+var Buy = "购买";
+var Filter = "筛选器";
+var Volume = "交易量";
+var Tokens = "代币";
+var Contact = "联系";
+var Merch = "商品";
+var New = "新";
+var Rates = "汇率";
+var Price = "价格";
+var Prices = "价格";
+var Amount = "金额";
+var Simple = "简单";
+var Detailed = "详细";
+var Remove = "移除";
+var Input$2 = "输入";
+var Output = "输出";
+var From = "从";
+var To = "到";
+var Swap$1 = "交换";
+var Audio$1 = "音频";
+var minutes = "分钟";
+var Manage$1 = "管理";
+var Import = "导入";
+var via = "通过";
+var Lists = "列表";
+var See = "查看";
+var Loaded = "已加载";
+var Loading$1 = "正在加载";
+var Recipient = "接收人";
+var Dismiss = "取消";
+var Latest = "最新";
+var Claimed = "已领取";
+var Settings = "设置";
+var Supply = "供应";
+var Learn = "了解";
+var translationLast = "translationLast";
+var translationEnd = "translationEnd";
+var translationsZhCN = {
+	dataFormat: dataFormat,
+	airTime: airTime,
+	Exchange: Exchange,
+	"Connect Wallet": "连接钱包",
+	"Your %asset% Balance": "您的 %asset% 余额",
+	"My %asset%": "我的 %asset%",
+	"Total %asset% Supply": "%asset% 总供应量",
+	Locked: Locked,
+	"Total Liquidity": "总流动性",
+	"View on PolygonScan": "在 PolygonScan 上查看",
+	Finished: Finished,
+	"Project site": "项目网站",
+	"Project Site": "Project Site",
+	"See Token Info": "查看代币信息",
+	Total: Total,
+	End: End,
+	"View Project Site": "查看项目网站",
+	"Create a pool for your token": "为您的代币创建资金池",
+	Close: Close,
+	Max: Max,
+	"%num% %symbol% Available": "%num% %symbol% 可用",
+	Cancel: Cancel,
+	Confirm: Confirm,
+	Warning: Warning,
+	"I understand": "我了解",
+	"Pending Confirmation": "等待确认",
+	"Buy new tokens with a brand new token sale model.": "使用全新的代币销售模型购买新代币。",
+	"You get the tokens.": "您获得了代币。",
+	"Want to launch your own IFO?": "想要发起您自己的 IFO？",
+	"Apply to launch": "申请发起",
+	Core: Core,
+	Available: Available,
+	"Sign out": "退出",
+	Select: Select,
+	"Launch Time": "发起时间",
+	"For Sale": "待售",
+	"Done!": "完成！",
+	"Read more": "阅读更多",
+	Connect: Connect,
+	"Loading…": "正在加载…",
+	Details: Details,
+	"Wallet Disconnected": "钱包已断开连接",
+	Trade: Trade,
+	More: More,
+	Liquidity: Liquidity,
+	Token: Token,
+	Pairs: Pairs,
+	Accounts: Accounts,
+	Active: Active,
+	Inactive: Inactive,
+	Dual: Dual,
+	Compound: Compound,
+	"In Wallet": "钱包中",
+	"Loading...": "正在加载…",
+	Search: Search,
+	History: History,
+	Burned: Burned,
+	"To burn": "要焚毁",
+	"Total Value Locked": "锁定的总价值",
+	"Your wallet": "您的钱包",
+	Logout: Logout,
+	Confirmed: Confirmed,
+	Show: Show,
+	Hide: Hide,
+	"Stake LP tokens": "质押 LP 代币",
+	Stake: Stake,
+	"I understand that people can view my wallet if they know my username": "我了解，如果其他人知道我的用户名，他们就可以查看我的钱包",
+	"Please connect your wallet to continue": "请连接您的钱包以继续",
+	"Get %symbol%": "获取 %symbol%",
+	Balance: Balance$1,
+	"Oops, page not found.": "糟糕，找不到页面",
+	"Back Home": "返回首页",
+	Live: Live,
+	Start: Start,
+	Finish: Finish,
+	"Connect wallet to view": "连接要查看的钱包",
+	"Your volume": "交易量",
+	"Since start": "自开始以来的时间",
+	Enable: Enable,
+	Enabling: Enabling,
+	Expired: Expired,
+	Calculating: Calculating,
+	"Your history": "历史记录",
+	All: All,
+	"%num%d": "%num%d",
+	d: d,
+	h: h,
+	m: m,
+	"Success!": "成功！",
+	Blocks: Blocks,
+	"Add to Metamask": "添加到 Metamask",
+	"Insufficient %symbol% balance": "%symbol% 余额不足",
+	Buy: Buy,
+	"Locate Assets": "查找资产",
+	"%symbol% required": "需要 %symbol%",
+	"Your History": "历史记录",
+	Filter: Filter,
+	Volume: Volume,
+	Tokens: Tokens,
+	Contact: Contact,
+	Merch: Merch,
+	New: New,
+	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "输出为估值。如果价格变化超过 %slippage%%，则您的交易将被撤回。",
+	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "正在供应 %amountA% %symbolA% 和 %amountB% %symbolB%",
+	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "正在移除 %amountA% %symbolA% 和 %amountB% %symbolB%",
+	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 交换为 %amountB% %symbolB%",
+	"Add Liquidity": "增加流动性",
+	"Add liquidity to receive LP tokens": "增加流动性以接收 LP 代币",
+	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "流动性供应商将对该代币对的所有交易赚取 0.1% 的交易费，与他们在流动性资金池中的份额成正比。",
+	"You are creating a pool": "您正在创建资金池",
+	"You are the first liquidity provider.": "您是第一个流动性供应商。",
+	"The ratio of tokens you add will set the price of this pool.": "您添加的代币比率将设置此资金池的价格。",
+	"Once you are happy with the rate click supply to review.": "如果您对汇率满意，请点击“供应”以进行检查。",
+	"Initial prices and pool share": "初始价格和资金池份额",
+	"Prices and pool share": "价格和资金池份额",
+	"Unsupported Asset": "不受支持的资产",
+	"Enabling %asset%": "正在批准 %asset%",
+	"Enable %asset%": "批准 %asset%",
+	"Share of Pool": "资金池中的份额",
+	"%assetA% per %assetB%": "%assetA%/%assetB%",
+	"%asset% Deposited": "已入金 %asset%",
+	Rates: Rates,
+	"Create Pool & Supply": "创建资金池和供应",
+	"Confirm Supply": "确认供应",
+	"Confirm Swap": "确认交换",
+	"Connect to a wallet to view your liquidity.": "连接到钱包以查看您的流动性。",
+	"Connect to a wallet to find pools": "连接到钱包以查找资金池",
+	"Select a token to find your liquidity.": "选择代币以查找您的流动性。",
+	"No liquidity found.": "未找到流动性。",
+	"Don't see a pool you joined?": "未看到您加入的资金池？",
+	"Find other LP tokens": "查找其他 LP 代币",
+	"Import Pool": "导入资金池",
+	"Import an existing pool": "导入现有资金池",
+	"Select a Token": "选择代币",
+	"Pool Found!": "发现资金池！",
+	"No pool found.": "未找到资金池。",
+	"Create pool.": "创建资金池。",
+	"Manage this pool.": "管理此资金池。",
+	"Invalid pair.": "币对无效。",
+	"You don’t have liquidity in this pool yet.": "您在此资金池中还没有流动性。",
+	"%assetA%/%assetB% Burned": "已焚毁 %assetA%/%assetB%",
+	Price: Price,
+	Prices: Prices,
+	"Remove %assetA%-%assetB% liquidity": "移除 %assetA%-%assetB% 流动性",
+	Amount: Amount,
+	Simple: Simple,
+	Detailed: Detailed,
+	"Receive WBNB": "接收 WBNB",
+	"Receive BNB": "接收 BNB",
+	Remove: Remove,
+	Input: Input$2,
+	Output: Output,
+	"Trade tokens in an instant": "即时交易兑换代币",
+	"From (estimated)": "从（估计）",
+	From: From,
+	"To (estimated)": "到（估计）",
+	To: To,
+	"+ Add a send (optional)": "+ 添加发送（可选）",
+	"- Remove send": "- 移除发送",
+	"Slippage Tolerance": "滑点容差",
+	"Insufficient liquidity for this trade.": "此交易的流动性不足。",
+	"Try enabling multi-hop trades.": "尝试启用多跳交易。",
+	"Price Impact High": "价格影响较高",
+	Swap: Swap$1,
+	"Swap Anyway": "仍要交换",
+	"Recent Transactions": "最近的交易",
+	"clear all": "全部清除",
+	"Clear all": "全部清除",
+	"No recent transactions": "最近没有交易",
+	"Are you sure?": "您确定吗？",
+	"Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.": "专家模式会关闭“确认”交易提示，并允许进行常会导致汇率不佳和资金损失的高滑点交易。",
+	"Only use this mode if you know what you’re doing.": "请仅在您清楚自身需求时才使用此模式。",
+	"Turn On Expert Mode": "开启专家模式",
+	"Transaction Settings": "交易设置",
+	"Interface Settings": "界面设置",
+	"Toggle Expert Mode": "切换专家模式",
+	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "绕过确认模式并允许高滑点交易。使用风险自负。",
+	"Disable Multihops": "禁用多跳",
+	"Restricts swaps to direct pairs only.": "将交换限制为仅限直接币对。",
+	Audio: Audio$1,
+	"🐰 Turn down your volume a bit before you swap": "🐰 在您交换之前略微调低音量",
+	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果价格变动幅度超过此百分比，您的交易将被撤回。",
+	"Enter a valid slippage percentage": "输入有效的滑点百分比",
+	"Your transaction may fail": "您的交易可能会失败",
+	"Your transaction may be frontrun": "您的交易可能会被超前交易",
+	"Your transaction will revert if it is pending for more than this long.": "如果您的交易等待处理的时间超过此时间，它将被撤回。",
+	minutes: minutes,
+	"Token Amount": "代币金额",
+	"Balance: %amount%": "余额：%amount%",
+	"LP tokens in your wallet": "您的钱包中的 LP 代币",
+	"Pooled %asset%": "已入池 %asset%",
+	"By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.": "通过添加流动性，您将赚取该币对所有交易额的0.1%，与您在资金池中的份额成正比。每天累计的费用将在次日添加到资金池中，可通过解除流动性来领取收益。",
+	"Common bases": "一般基准",
+	"These tokens are commonly paired with other tokens.": "这些代币通常与其他代币配对。",
+	"Expanded results from inactive Token Lists": "来自停用代币列表的扩展结果",
+	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "代币来自停用列表。在下方导入特定代币或点击“管理”以激活更多列表。",
+	"No results found.": "未找到结果。",
+	Manage: Manage$1,
+	"Manage Tokens": "管理代币",
+	"Import Tokens": "导入代币",
+	"Import List": "导入列表",
+	"Import at your own risk": "导入风险自负",
+	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "添加此列表，即表示您完全信任数据的正确性。任何人都可以创建列表，包括创建现有列表的虚假版本和声称代表没有列表的项目的列表。",
+	"If you purchase a token from this list, you may not be able to sell it back.": "如果您购买了此列表中的代币，则可能无法将其出售。",
+	Import: Import,
+	via: via,
+	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "任何人都可以在 BSC 上使用任意名称创建 BEP20 代币，包括创建虚假版本的现有代币和声称代表没有代币的项目的代币。",
+	"If you purchase an arbitrary token, you may be unable to sell it back.": "如果您购买任意代币，可能无法将其出售。",
+	"Unknown Source": "未知来源",
+	Lists: Lists,
+	See: See,
+	"Update list": "更新列表",
+	"https:// or ipfs:// or ENS name": "https:// 或 ipfs:// 或 ENS 名称",
+	Loaded: Loaded,
+	Loading: Loading$1,
+	"Enter valid token address": "输入有效的代币地址",
+	"Custom Token": "自定义代币",
+	"Custom Tokens": "自定义代币",
+	"Unknown Error": "未知错误",
+	"Select a currency": "选择币种",
+	"Search name or paste address": "搜索名称或粘贴地址",
+	"Add %asset% to Metamask": "将 %asset% 添加到 Metamask",
+	"Added %asset%": "已添加 %asset%",
+	"Transaction Submitted": "已提交交易",
+	"Wallet Address or ENS name": "钱包地址或 ENS 名称",
+	Recipient: Recipient,
+	"Waiting For Confirmation": "正在等待确认",
+	"Confirm this transaction in your wallet": "在您的钱包中确认此交易",
+	Dismiss: Dismiss,
+	Latest: Latest,
+	"Notice for trading %symbol%": "关于 %symbol% 的交易须知",
+	"To trade SAFEMOON, you must:": "若要交易 SafeMoon，您必须：",
+	"Click on the settings icon": "点击设置图标",
+	"Set your slippage tolerance to 12%+": "把滑点设置为 12% 或更高",
+	"This is because SafeMoon taxes a 10% fee on each transaction:": "这是因为交易 SafeMoon 时需支付 10% 的费用：",
+	"5% fee = redistributed to all existing holders": "5% 费用 = 分配给所有持有者",
+	"5% fee = used to add liquidity": "5% 费用 = 用于添加流动性",
+	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "警告：BONDLY 已被攻击，在得到进一步通知之前，请移除流动性",
+	Claimed: Claimed,
+	Settings: Settings,
+	"Transaction deadline": "交易截止期",
+	"Convert ERC-20 to BEP-20": "将 ERC-20 转换为 BEP-20",
+	"Need help ?": "需要帮助？",
+	"Select a token": "选择代币",
+	"Enter a recipient": "输入接收人",
+	"Invalid recipient": "接收人无效",
+	Supply: Supply,
+	"Your Liquidity": "您的流动性",
+	"Remove liquidity to receive tokens back": "移除流动性以收回代币",
+	"Trade anything. No registration, no hassle.": "交易任何代币。无需注册，不必麻烦。",
+	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "只需连接您的钱包，即可在 Binance Smart Chain 上快速交易任何代币。",
+	Learn: Learn,
+	"BNB token": "BNB 代币",
+	"BTC token": "BTC 代币",
+	"Earn passive income with crypto.": "利用加密货币赚取被动收入。",
 	translationLast: translationLast,
 	translationEnd: translationEnd
 };
 
-var publicUrl = process.env.PUBLIC_URL;
+var _a$4;
+var translation = (_a$4 = {},
+    _a$4[EN.locale] = translations,
+    _a$4[ZHCN.locale] = translationsZhCN,
+    _a$4);
+// const publicUrl = process.env.PUBLIC_URL
 var LS_KEY = 'storage_language';
 var fetchLocale = function (locale) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-    var response, data;
     return tslib.__generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, fetch(publicUrl + "/locales/" + locale + ".json")];
-            case 1:
-                response = _a.sent();
-                return [4 /*yield*/, response.json()];
-            case 2:
-                data = _a.sent();
-                return [2 /*return*/, data];
-        }
+        // const response = await fetch(`${publicUrl}/locales/${locale}.json`)
+        // const data = await response.json()
+        return [2 /*return*/, translation[locale]];
     });
 }); };
 var getLanguageCodeFromLS = function () {
@@ -9935,10 +10276,42 @@ function useHttpLocations(uri) {
     }, [ens, resolvedContentHash.contenthash, uri]);
 }
 
+new BigNumber__default["default"](0);
+new BigNumber__default["default"](1);
+new BigNumber__default["default"](9);
+var BIG_TEN = new BigNumber__default["default"](10);
+new BigNumber__default["default"](1000000000);
+
+BigNumber__default["default"].config({
+    EXPONENTIAL_AT: 1000,
+    DECIMAL_PLACES: 80,
+});
+var BSC_BLOCK_TIME = 2.5;
+// export const BASE_BSC_SCAN_URLS = {
+//   [ChainId.MAINNET]: 'https://polygonscan.com',
+//   [ChainId.MATIC_TESTNET]: 'https://mumbai.polygonscan.com',
+//   [ChainId.TESTNET]: 'https://mumbai.polygonscan.com',
+// }
+// CAKE_PER_BLOCK details
+// 40 CAKE is minted per block
+// 20 CAKE per block is sent to Burn pool (A farm just for burning cake)
+// 10 CAKE per block goes to CAKE syrup pool
+// 9 CAKE per block goes to Yield farms and lottery
+// CAKE_PER_BLOCK in config/index.ts = 40 as we only change the amount sent to the burn pool which is effectively a farm.
+var CAKE_PER_BLOCK = new BigNumber__default["default"](40);
+var BLOCKS_PER_YEAR = new BigNumber__default["default"]((60 / BSC_BLOCK_TIME) * 60 * 24 * 365); // 10512000
+new BigNumber__default["default"]((60 / BSC_BLOCK_TIME) * 60 * 24);
+CAKE_PER_BLOCK.times(BLOCKS_PER_YEAR);
+var BASE_TOKEN_URL = 'https://dsgmetaverse.com/images/tokens/';
+dsgswapSdk.BASE_BSC_SCAN_URLS[dsgswapSdk.ChainId.MAINNET];
+BIG_TEN.pow(18);
+new BigNumber__default["default"](3).div(1000);
+new BigNumber__default["default"](1); // 每算力价值多少USD
+
 var getTokenLogoURL = function (address) {
     return "https://assets.trustwalletapp.com/blockchains/smartchain/assets/" + address + "/logo.png";
 };
-var getSymbolLogoUrl = function (address) { return "/images/tokens/" + address + ".png"; };
+var getSymbolLogoUrl = function (address) { return "" + BASE_TOKEN_URL + address + ".png"; };
 
 var BAD_SRCS = {};
 /**
@@ -10212,38 +10585,6 @@ var GreyCard = styled__default["default"](Card)(templateObject_4$3 || (templateO
 });
 var templateObject_1$l, templateObject_2$d, templateObject_3$8, templateObject_4$3;
 
-new BigNumber__default["default"](0);
-new BigNumber__default["default"](1);
-new BigNumber__default["default"](9);
-var BIG_TEN = new BigNumber__default["default"](10);
-new BigNumber__default["default"](1000000000);
-
-BigNumber__default["default"].config({
-    EXPONENTIAL_AT: 1000,
-    DECIMAL_PLACES: 80,
-});
-var BSC_BLOCK_TIME = 2.5;
-// export const BASE_BSC_SCAN_URLS = {
-//   [ChainId.MAINNET]: 'https://polygonscan.com',
-//   [ChainId.MATIC_TESTNET]: 'https://mumbai.polygonscan.com',
-//   [ChainId.TESTNET]: 'https://mumbai.polygonscan.com',
-// }
-// CAKE_PER_BLOCK details
-// 40 CAKE is minted per block
-// 20 CAKE per block is sent to Burn pool (A farm just for burning cake)
-// 10 CAKE per block goes to CAKE syrup pool
-// 9 CAKE per block goes to Yield farms and lottery
-// CAKE_PER_BLOCK in config/index.ts = 40 as we only change the amount sent to the burn pool which is effectively a farm.
-var CAKE_PER_BLOCK = new BigNumber__default["default"](40);
-var BLOCKS_PER_YEAR = new BigNumber__default["default"]((60 / BSC_BLOCK_TIME) * 60 * 24 * 365); // 10512000
-new BigNumber__default["default"]((60 / BSC_BLOCK_TIME) * 60 * 24);
-CAKE_PER_BLOCK.times(BLOCKS_PER_YEAR);
-var BASE_URL = window.location.origin + "/#";
-dsgswapSdk.BASE_BSC_SCAN_URLS[dsgswapSdk.ChainId.MAINNET];
-BIG_TEN.pow(18);
-new BigNumber__default["default"](3).div(1000);
-new BigNumber__default["default"](1); // 每算力价值多少USD
-
 // Set of helper functions to facilitate wallet setup
 /**
  * Prompt the user to add a custom token to metamask
@@ -10264,7 +10605,7 @@ var registerToken = function (tokenAddress, tokenSymbol, tokenDecimals) { return
                             address: tokenAddress,
                             symbol: tokenSymbol,
                             decimals: tokenDecimals,
-                            image: BASE_URL + "/images/tokens/" + tokenAddress + ".png",
+                            image: "" + BASE_TOKEN_URL + tokenAddress + ".png",
                         },
                     },
                 })];
@@ -10967,7 +11308,7 @@ function CurrencySearch(_a) {
     // if no results on main list, show option to expand into inactive
     var inactiveTokens = useFoundOnInactiveList(debouncedQuery);
     var filteredInactiveTokens = useSortedTokensByQuery(inactiveTokens, debouncedQuery);
-    return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "16px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$4, { id: "token-search-input", placeholder: t('Search name or paste address'), scale: "lg", autoComplete: "off", value: searchQuery, ref: inputRef, onChange: handleInput, onKeyDown: handleEnter }, void 0) }, void 0), showCommonBases && (jsxRuntime.jsx(CommonBases, { chainId: chainId, onSelect: handleCurrencySelect, selectedCurrency: selectedCurrency }, void 0))] }), void 0), searchToken && !searchTokenIsAdded ? (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px 0', height: '100%' } }, { children: jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (filteredSortedTokens === null || filteredSortedTokens === void 0 ? void 0 : filteredSortedTokens.length) > 0 || (filteredInactiveTokens === null || filteredInactiveTokens === void 0 ? void 0 : filteredInactiveTokens.length) > 0 ? (jsxRuntime.jsx(Box, tslib.__assign({ margin: "24px -24px" }, { children: jsxRuntime.jsx(CurrencyList, { height: 390, showETH: showETH, currencies: filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens, breakIndex: inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined, onCurrencySelect: handleCurrencySelect, otherCurrency: otherSelectedCurrency, selectedCurrency: selectedCurrency, fixedListRef: fixedList, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px', height: '100%' } }, { children: jsxRuntime.jsx(Text, tslib.__assign({ color: "textSubtle", textAlign: "center", mb: "20px" }, { children: t('No results found.') }), void 0) }), void 0))] }, void 0) }, void 0));
+    return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "16px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$5, { id: "token-search-input", placeholder: t('Search name or paste address'), scale: "lg", autoComplete: "off", value: searchQuery, ref: inputRef, onChange: handleInput, onKeyDown: handleEnter }, void 0) }, void 0), showCommonBases && (jsxRuntime.jsx(CommonBases, { chainId: chainId, onSelect: handleCurrencySelect, selectedCurrency: selectedCurrency }, void 0))] }), void 0), searchToken && !searchTokenIsAdded ? (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px 0', height: '100%' } }, { children: jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (filteredSortedTokens === null || filteredSortedTokens === void 0 ? void 0 : filteredSortedTokens.length) > 0 || (filteredInactiveTokens === null || filteredInactiveTokens === void 0 ? void 0 : filteredInactiveTokens.length) > 0 ? (jsxRuntime.jsx(Box, tslib.__assign({ margin: "24px -24px" }, { children: jsxRuntime.jsx(CurrencyList, { height: 390, showETH: showETH, currencies: filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens, breakIndex: inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined, onCurrencySelect: handleCurrencySelect, otherCurrency: otherSelectedCurrency, selectedCurrency: selectedCurrency, fixedListRef: fixedList, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px', height: '100%' } }, { children: jsxRuntime.jsx(Text, tslib.__assign({ color: "textSubtle", textAlign: "center", mb: "20px" }, { children: t('No results found.') }), void 0) }), void 0))] }, void 0) }, void 0));
 }
 
 function ImportToken(_a) {
@@ -11145,7 +11486,7 @@ function ManageLists(_a) {
         setModalView(CurrencyModalView.importList);
         setListUrl(listUrlInput);
     }, [listUrlInput, setImportList, setListUrl, setModalView, tempList]);
-    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$4, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
+    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$5, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
 }
 var templateObject_1$c, templateObject_2$7, templateObject_3$3;
 
@@ -11180,7 +11521,7 @@ function ManageTokens(_a) {
             userAddedTokens.map(function (token) { return (jsxRuntime.jsxs(RowBetween, tslib.__assign({ width: "100%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: token, size: "20px" }, void 0), jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(token.address, 'address', chainId), color: "textSubtle", ml: "10px" }, { children: token.symbol }), void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(IconButton, tslib.__assign({ variant: "text", onClick: function () { return removeToken(chainId, token.address); } }, { children: jsxRuntime.jsx(Icon$7, {}, void 0) }), void 0), jsxRuntime.jsx(LinkExternal, { href: getBscScanLink(token.address, 'address', chainId) }, void 0)] }, void 0)] }), token.address)); }));
     }, [userAddedTokens, chainId, removeToken]);
     var isAddressValid = searchQuery === '' || isAddress(searchQuery);
-    return (jsxRuntime.jsx(Wrapper$1, { children: jsxRuntime.jsxs(Column, tslib.__assign({ style: { width: '100%', flex: '1 1' } }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$4, { id: "token-search-input", scale: "lg", placeholder: "0x0000", value: searchQuery, autoComplete: "off", ref: inputRef, onChange: handleInput, isWarning: !isAddressValid }, void 0) }, void 0), !isAddressValid && jsxRuntime.jsx(Text, tslib.__assign({ color: "failure" }, { children: t('Enter valid token address') }), void 0), searchToken && (jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken, style: { height: 'fit-content' } }, void 0))] }), void 0), tokenList, jsxRuntime.jsxs(Footer$1, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ bold: true, color: "textSubtle" }, { children: [userAddedTokens === null || userAddedTokens === void 0 ? void 0 : userAddedTokens.length, " ", userAddedTokens.length === 1 ? t('Custom Token') : t('Custom Tokens')] }), void 0), userAddedTokens.length > 0 && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", onClick: handleRemoveAll }, { children: t('Clear all') }), void 0))] }, void 0)] }), void 0) }, void 0));
+    return (jsxRuntime.jsx(Wrapper$1, { children: jsxRuntime.jsxs(Column, tslib.__assign({ style: { width: '100%', flex: '1 1' } }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$5, { id: "token-search-input", scale: "lg", placeholder: "0x0000", value: searchQuery, autoComplete: "off", ref: inputRef, onChange: handleInput, isWarning: !isAddressValid }, void 0) }, void 0), !isAddressValid && jsxRuntime.jsx(Text, tslib.__assign({ color: "failure" }, { children: t('Enter valid token address') }), void 0), searchToken && (jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken, style: { height: 'fit-content' } }, void 0))] }), void 0), tokenList, jsxRuntime.jsxs(Footer$1, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ bold: true, color: "textSubtle" }, { children: [userAddedTokens === null || userAddedTokens === void 0 ? void 0 : userAddedTokens.length, " ", userAddedTokens.length === 1 ? t('Custom Token') : t('Custom Tokens')] }), void 0), userAddedTokens.length > 0 && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", onClick: handleRemoveAll }, { children: t('Clear all') }), void 0))] }, void 0)] }), void 0) }, void 0));
 }
 var templateObject_1$b, templateObject_2$6;
 
@@ -11579,7 +11920,7 @@ function SlippageTabs(_a) {
                                         }, variant: rawSlippage === 50 ? 'primary' : 'tertiary' }, { children: "0.5%" }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ scale: "sm", onClick: function () {
                                             setSlippageInput('');
                                             setRawSlippage(100);
-                                        }, variant: rawSlippage === 100 ? 'primary' : 'tertiary' }, { children: "1%" }), void 0)] }), void 0), jsxRuntime.jsxs(Flex, tslib.__assign({ width: "102px" }, { children: [jsxRuntime.jsx(Input$4, { scale: "sm", placeholder: (rawSlippage / 100).toFixed(2), value: slippageInput, onBlur: function () {
+                                        }, variant: rawSlippage === 100 ? 'primary' : 'tertiary' }, { children: "1%" }), void 0)] }), void 0), jsxRuntime.jsxs(Flex, tslib.__assign({ width: "102px" }, { children: [jsxRuntime.jsx(Input$5, { scale: "sm", placeholder: (rawSlippage / 100).toFixed(2), value: slippageInput, onBlur: function () {
                                             parseCustomSlippage((rawSlippage / 100).toFixed(2));
                                         }, onChange: function (e) { return parseCustomSlippage(e.target.value); }, isWarning: !slippageInputIsValid, isSuccess: ![10, 50, 100].includes(rawSlippage) }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: "primary", bold: true, ml: "8px" }, { children: "%" }), void 0)] }), void 0)] }), void 0), !!slippageError && (jsxRuntime.jsx(RowBetween, tslib.__assign({ style: {
                             fontSize: '14px',
@@ -11589,7 +11930,7 @@ function SlippageTabs(_a) {
                             ? t('Enter a valid slippage percentage')
                             : slippageError === SlippageError.RiskyLow
                                 ? t('Your transaction may fail')
-                                : t('Your transaction may be frontrun') }), void 0))] }), void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ style: { marginTop: '8px' }, gap: "sm" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t('Transaction deadline') }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Your transaction will revert if it is pending for more than this long.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, tslib.__assign({ style: { width: '182px' } }, { children: [jsxRuntime.jsx(Input$4, { scale: "md", color: deadlineError ? 'red' : undefined, onBlur: function () {
+                                : t('Your transaction may be frontrun') }), void 0))] }), void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ style: { marginTop: '8px' }, gap: "sm" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t('Transaction deadline') }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Your transaction will revert if it is pending for more than this long.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, tslib.__assign({ style: { width: '182px' } }, { children: [jsxRuntime.jsx(Input$5, { scale: "md", color: deadlineError ? 'red' : undefined, onBlur: function () {
                                     parseCustomDeadline((deadline / 60).toString());
                                 }, placeholder: (deadline / 60).toString(), value: deadlineInput, onChange: function (e) { return parseCustomDeadline(e.target.value); } }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ width: "80px", pl: "8px", fontSize: "14px" }, { children: t('minutes') }), void 0)] }), void 0)] }), void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "sm" }, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ mt: "8px", width: "98%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, { children: t('Aggregate trading') }, void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Unable to get trading pool rewards using Aggregate trading'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(Toggle, { checked: userUsePoly, scale: "sm", onChange: function () { return setUserUsePoly(!userUsePoly); } }, void 0)] }), void 0) }), void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "sm" }, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ mt: "8px", width: "98%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, { children: t('Disable Route') }, void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Restricts swaps to direct pairs only.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(Toggle, { checked: singleHopOnly, scale: "sm", onChange: function () { return setSingleHopOnly(!singleHopOnly); } }, void 0)] }), void 0) }), void 0)] }), void 0));
 }
@@ -13730,7 +14071,7 @@ function Blocklist(_a) {
 var MiniSwap = function (_a) {
     var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onLoaded = _a.onLoaded, onConnectWallet = _a.onConnectWallet, chainId = _a.chainId;
     React.useEffect(function () {
-        console.debug("chainId is change " + chainId);
+        console.debug("chainId is change " + chainId, chainId);
         dsgswapSdk.setChainId(chainId);
     }, [chainId]);
     var _b = tslib.__read(React.useState(false), 2), loaded = _b[0], setLoaded = _b[1];

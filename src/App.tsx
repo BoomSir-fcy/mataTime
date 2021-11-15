@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -34,6 +35,7 @@ const Container = styled(Box) <{
 `;
 
 function App() {
+  useEagerConnect()
   const dispatch = useDispatch();
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
