@@ -4,19 +4,26 @@ var tslib = require('tslib');
 var jsxRuntime = require('react/jsx-runtime');
 var React = require('react');
 var dsgswapSdk = require('dsgswap-sdk');
+var units = require('@ethersproject/units');
+var BigNumber = require('bignumber.js');
 var ethers = require('ethers');
-var core = require('@web3-react/core');
-var sample = require('lodash/sample');
-var reactRedux = require('react-redux');
-var toolkit = require('@reduxjs/toolkit');
-var tokenLists = require('@uniswap/token-lists');
-var strings = require('@ethersproject/strings');
 var utils = require('ethers/lib/utils');
+var isEqual = require('lodash/isEqual');
+var reactRedux = require('react-redux');
 var contracts$1 = require('@ethersproject/contracts');
 var address = require('@ethersproject/address');
 var constants = require('@ethersproject/constants');
 var bignumber = require('@ethersproject/bignumber');
+var core = require('@web3-react/core');
+var sample = require('lodash/sample');
+var toolkit = require('@reduxjs/toolkit');
 var abi$1 = require('@ethersproject/abi');
+var strings = require('@ethersproject/strings');
+var flatMap = require('lodash/flatMap');
+require('qs');
+var reactRouterDom = require('react-router-dom');
+var axios = require('axios');
+var tokenLists = require('@uniswap/token-lists');
 var Ajv = require('ajv');
 var CID = require('cids');
 var multicodec = require('multicodec');
@@ -31,14 +38,7 @@ var reactPopper = require('react-popper');
 require('lodash/noop');
 require('lodash/debounce');
 require('react-transition-group');
-var flatMap = require('lodash/flatMap');
-var BigNumber = require('bignumber.js');
 var reactWindow = require('react-window');
-var reactRouterDom = require('react-router-dom');
-var units = require('@ethersproject/units');
-var isEqual = require('lodash/isEqual');
-require('qs');
-var axios = require('axios');
 var reactHelmetAsync = require('react-helmet-async');
 var merge = require('lodash/merge');
 var reduxLocalstorageSimple = require('redux-localstorage-simple');
@@ -46,172 +46,796 @@ var reduxLocalstorageSimple = require('redux-localstorage-simple');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var BigNumber__default = /*#__PURE__*/_interopDefaultLegacy(BigNumber);
+var isEqual__default = /*#__PURE__*/_interopDefaultLegacy(isEqual);
 var sample__default = /*#__PURE__*/_interopDefaultLegacy(sample);
+var flatMap__default = /*#__PURE__*/_interopDefaultLegacy(flatMap);
+var axios__default = /*#__PURE__*/_interopDefaultLegacy(axios);
 var Ajv__default = /*#__PURE__*/_interopDefaultLegacy(Ajv);
 var CID__default = /*#__PURE__*/_interopDefaultLegacy(CID);
 var styled__default = /*#__PURE__*/_interopDefaultLegacy(styled);
 var get__default = /*#__PURE__*/_interopDefaultLegacy(get);
-var flatMap__default = /*#__PURE__*/_interopDefaultLegacy(flatMap);
-var BigNumber__default = /*#__PURE__*/_interopDefaultLegacy(BigNumber);
-var isEqual__default = /*#__PURE__*/_interopDefaultLegacy(isEqual);
-var axios__default = /*#__PURE__*/_interopDefaultLegacy(axios);
 var merge__default = /*#__PURE__*/_interopDefaultLegacy(merge);
 
-var getNodeUrl = function (chainId) {
-    // return process.env.REACT_APP_NODE_3
-    return sample__default["default"](dsgswapSdk.ETHEREUM_CHAIN[chainId || dsgswapSdk.chainIdProxy.chainId].rpcUrls);
-    // return 'https://polygon-mumbai.infura.io/v3/330472ed44dd4692a16dfcb4cc41f122'
+var EN = { locale: 'en-US', language: 'English', code: 'en' };
+var ZHCN = { locale: 'zh-CN', language: '简体中文', code: 'CN' };
+var languages = {
+    // 'ar-SA': AR,
+    // 'bn-BD': BN,
+    'en-US': EN,
+    // 'de-DE': DE,
+    // 'el-GR': EL,
+    // 'es-ES': ESES,
+    // 'fi-FI': FI,
+    // 'fil-PH': FIL,
+    // 'fr-FR': FR,
+    // 'hi-IN': HI,
+    // 'hu-HU': HU,
+    // 'id-ID': ID,
+    // 'it-IT': IT,
+    // 'ja-JP': JA,
+    // 'ko-KR': KO,
+    // 'nl-NL': NL,
+    // 'pl-PL': PL,
+    // 'pt-BR': PTBR,
+    // 'pt-PT': PTPT,
+    // 'ro-RO': RO,
+    // 'ru-RU': RU,
+    // 'sv-SE': SVSE,
+    // 'ta-IN': TA,
+    // 'tr-TR': TR,
+    // 'uk-UA': UK,
+    // 'vi-VN': VI,
+    'zh-CN': ZHCN,
+    // 'zh-TW': ZHTW,
+};
+Object.values(languages);
+
+var dataFormat$1 = "YYYY-MM-DD";
+var airTime$1 = "HHA, MMM-DD";
+var Exchange$1 = "Exchange";
+var Locked$1 = "Locked";
+var Finished$1 = "Finished";
+var Total$1 = "Total";
+var End$1 = "End";
+var Close$1 = "Close";
+var Max$1 = "Max";
+var Cancel$1 = "Cancel";
+var Confirm$1 = "Confirm";
+var Warning$1 = "Warning";
+var Core$1 = "Core";
+var Available$1 = "Available";
+var Select$1 = "Select";
+var Connect$1 = "Connect";
+var Details$1 = "Details";
+var Trade$1 = "Trade";
+var More$1 = "More";
+var Liquidity$1 = "Liquidity";
+var Token$1 = "Token";
+var Pairs$1 = "Pairs";
+var Accounts$1 = "Accounts";
+var Active$1 = "Active";
+var Inactive$1 = "Inactive";
+var Dual$1 = "Dual";
+var Compound$1 = "Compound";
+var Search$1 = "Search";
+var History$1 = "History";
+var Burned$1 = "Burned";
+var Logout$1 = "Logout";
+var Confirmed$1 = "Confirmed";
+var Show$1 = "Show";
+var Hide$1 = "Hide";
+var Stake$1 = "Stake";
+var Balance$2 = "Balance";
+var Live$1 = "Live";
+var Start$1 = "Start";
+var Finish$1 = "Finish";
+var Enable$1 = "Enable";
+var Enabling$1 = "Enabling";
+var Expired$1 = "Expired";
+var Calculating$1 = "Calculating";
+var All$1 = "All";
+var d$1 = "d";
+var h$1 = "h";
+var m$1 = "m";
+var Blocks$1 = "Blocks";
+var Buy$1 = "Buy";
+var Filter$1 = "Filter";
+var Volume$1 = "Volume";
+var Tokens$1 = "Tokens";
+var Contact$1 = "Contact";
+var Merch$1 = "Merch";
+var New$1 = "New";
+var Rates$1 = "Rates";
+var Price$1 = "Price";
+var Prices$1 = "Prices";
+var Amount$1 = "Amount";
+var Simple$1 = "Simple";
+var Detailed$1 = "Detailed";
+var Remove$1 = "Remove";
+var Input$5 = "Input";
+var Output$1 = "Output";
+var From$1 = "From";
+var To$1 = "To";
+var Swap$2 = "Swap";
+var Audio$2 = "Audio";
+var minutes$1 = "minutes";
+var Manage$2 = "Manage";
+var Import$1 = "Import";
+var via$1 = "via";
+var Lists$1 = "Lists";
+var See$1 = "See";
+var Loaded$1 = "Loaded";
+var Loading$2 = "Loading";
+var Recipient$1 = "Recipient";
+var Dismiss$1 = "Dismiss";
+var Latest$1 = "Latest";
+var Claimed$1 = "Claimed";
+var Settings$1 = "Settings";
+var Supply$1 = "Supply";
+var Learn$1 = "Learn";
+var translationLast$1 = "translationLast";
+var translationEnd$1 = "translationEnd";
+var translations = {
+	dataFormat: dataFormat$1,
+	airTime: airTime$1,
+	Exchange: Exchange$1,
+	"Connect Wallet": "Connect Wallet",
+	"Your %asset% Balance": "Your %asset% Balance",
+	"My %asset%": "My %asset%",
+	"Total %asset% Supply": "Total %asset% Supply",
+	Locked: Locked$1,
+	"Total Liquidity": "Total Liquidity",
+	"View on PolygonScan": "View on PolygonScan",
+	Finished: Finished$1,
+	"Project site": "Project site",
+	"Project Site": "Project Site",
+	"See Token Info": "See Token Info",
+	Total: Total$1,
+	End: End$1,
+	"View Project Site": "View Project Site",
+	"Create a pool for your token": "Create a pool for your token",
+	Close: Close$1,
+	Max: Max$1,
+	"%num% %symbol% Available": "%num% %symbol% Available",
+	Cancel: Cancel$1,
+	Confirm: Confirm$1,
+	Warning: Warning$1,
+	"I understand": "I understand",
+	"Pending Confirmation": "Pending Confirmation",
+	"Buy new tokens with a brand new token sale model.": "Buy new tokens with a brand new token sale model.",
+	"You get the tokens.": "You get the tokens.",
+	"Want to launch your own IFO?": "Want to launch your own IFO?",
+	"Apply to launch": "Apply to launch",
+	Core: Core$1,
+	Available: Available$1,
+	"Sign out": "Sign out",
+	Select: Select$1,
+	"Launch Time": "Launch Time",
+	"For Sale": "For Sale",
+	"Done!": "Done!",
+	"Read more": "Read more",
+	Connect: Connect$1,
+	"Loading…": "Loading…",
+	Details: Details$1,
+	"Wallet Disconnected": "Wallet Disconnected",
+	Trade: Trade$1,
+	More: More$1,
+	Liquidity: Liquidity$1,
+	Token: Token$1,
+	Pairs: Pairs$1,
+	Accounts: Accounts$1,
+	Active: Active$1,
+	Inactive: Inactive$1,
+	Dual: Dual$1,
+	Compound: Compound$1,
+	"In Wallet": "In Wallet",
+	"Loading...": "Loading...",
+	Search: Search$1,
+	History: History$1,
+	Burned: Burned$1,
+	"To burn": "To burn",
+	"Total Value Locked": "Total Value Locked",
+	"Your wallet": "Your wallet",
+	Logout: Logout$1,
+	Confirmed: Confirmed$1,
+	Show: Show$1,
+	Hide: Hide$1,
+	"Stake LP tokens": "Stake LP tokens",
+	Stake: Stake$1,
+	"I understand that people can view my wallet if they know my username": "I understand that people can view my wallet if they know my username",
+	"Please connect your wallet to continue": "Please connect your wallet to continue",
+	"Get %symbol%": "Get %symbol%",
+	Balance: Balance$2,
+	"Oops, page not found.": "Oops, page not found.",
+	"Back Home": "Back Home",
+	Live: Live$1,
+	Start: Start$1,
+	Finish: Finish$1,
+	"Connect wallet to view": "Connect wallet to view",
+	"Your volume": "Your volume",
+	"Since start": "Since start",
+	Enable: Enable$1,
+	Enabling: Enabling$1,
+	Expired: Expired$1,
+	Calculating: Calculating$1,
+	"Your history": "Your history",
+	All: All$1,
+	"%num%d": "%num%d",
+	d: d$1,
+	h: h$1,
+	m: m$1,
+	"Success!": "Success!",
+	Blocks: Blocks$1,
+	"Add to Metamask": "Add to Metamask",
+	"Insufficient %symbol% balance": "Insufficient %symbol% balance",
+	Buy: Buy$1,
+	"Locate Assets": "Locate Assets",
+	"%symbol% required": "%symbol% required",
+	"Your History": "Your History",
+	Filter: Filter$1,
+	Volume: Volume$1,
+	Tokens: Tokens$1,
+	Contact: Contact$1,
+	Merch: Merch$1,
+	New: New$1,
+	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "Output is estimated. If the price changes by more than %slippage%% your transaction will revert.",
+	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "Supplying %amountA% %symbolA% and %amountB% %symbolB%",
+	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "Removing %amountA% %symbolA% and %amountB% %symbolB%",
+	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "Swapping %amountA% %symbolA% for %amountB% %symbolB%",
+	"Add Liquidity": "Add Liquidity",
+	"Add liquidity to receive LP tokens": "Add liquidity to receive LP tokens",
+	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.",
+	"You are creating a pool": "You are creating a pool",
+	"You are the first liquidity provider.": "You are the first liquidity provider.",
+	"The ratio of tokens you add will set the price of this pool.": "The ratio of tokens you add will set the price of this pool.",
+	"Once you are happy with the rate click supply to review.": "Once you are happy with the rate click supply to review.",
+	"Initial prices and pool share": "Initial prices and pool share",
+	"Prices and pool share": "Prices and pool share",
+	"Unsupported Asset": "Unsupported Asset",
+	"Enabling %asset%": "Enabling %asset%",
+	"Enable %asset%": "Enable %asset%",
+	"Share of Pool": "Share of Pool",
+	"%assetA% per %assetB%": "%assetA% per %assetB%",
+	"%asset% Deposited": "%asset% Deposited",
+	Rates: Rates$1,
+	"Create Pool & Supply": "Create Pool & Supply",
+	"Confirm Supply": "Confirm Supply",
+	"Confirm Swap": "Confirm Swap",
+	"Connect to a wallet to view your liquidity.": "Connect to a wallet to view your liquidity.",
+	"Connect to a wallet to find pools": "Connect to a wallet to find pools",
+	"Select a token to find your liquidity.": "Select a token to find your liquidity.",
+	"No liquidity found.": "No liquidity found.",
+	"Don't see a pool you joined?": "Don't see a pool you joined?",
+	"Find other LP tokens": "Find other LP tokens",
+	"Import Pool": "Import Pool",
+	"Import an existing pool": "Import an existing pool",
+	"Select a Token": "Select a Token",
+	"Pool Found!": "Pool Found!",
+	"No pool found.": "No pool found.",
+	"Create pool.": "Create pool.",
+	"Manage this pool.": "Manage this pool.",
+	"Invalid pair.": "Invalid pair.",
+	"You don’t have liquidity in this pool yet.": "You don’t have liquidity in this pool yet.",
+	"%assetA%/%assetB% Burned": "%assetA%/%assetB% Burned",
+	Price: Price$1,
+	Prices: Prices$1,
+	"Remove %assetA%-%assetB% liquidity": "Remove %assetA%-%assetB% liquidity",
+	Amount: Amount$1,
+	Simple: Simple$1,
+	Detailed: Detailed$1,
+	"Receive WBNB": "Receive WBNB",
+	"Receive BNB": "Receive BNB",
+	Remove: Remove$1,
+	Input: Input$5,
+	Output: Output$1,
+	"Trade tokens in an instant": "Trade tokens in an instant",
+	"From (estimated)": "From (estimated)",
+	From: From$1,
+	"To (estimated)": "To (estimated)",
+	To: To$1,
+	"+ Add a send (optional)": "+ Add a send (optional)",
+	"- Remove send": "- Remove send",
+	"Slippage Tolerance": "Slippage Tolerance",
+	"Insufficient liquidity for this trade.": "Insufficient liquidity for this trade.",
+	"Try enabling multi-hop trades.": "Try enabling multi-hop trades.",
+	"Price Impact High": "Price Impact High",
+	Swap: Swap$2,
+	"Swap Anyway": "Swap Anyway",
+	"Recent Transactions": "Recent Transactions",
+	"clear all": "clear all",
+	"Clear all": "Clear all",
+	"No recent transactions": "No recent transactions",
+	"Are you sure?": "Are you sure?",
+	"Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.": "Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.",
+	"Only use this mode if you know what you’re doing.": "Only use this mode if you know what you’re doing.",
+	"Turn On Expert Mode": "Turn On Expert Mode",
+	"Transaction Settings": "Transaction Settings",
+	"Interface Settings": "Interface Settings",
+	"Toggle Expert Mode": "Toggle Expert Mode",
+	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "Bypasses confirmation modals and allows high slippage trades. Use at your own risk.",
+	"Disable Multihops": "Disable Multihops",
+	"Restricts swaps to direct pairs only.": "Restricts swaps to direct pairs only.",
+	Audio: Audio$2,
+	"🐰 Turn down your volume a bit before you swap": "🐰 Turn down your volume a bit before you swap",
+	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "Your transaction will revert if the price changes unfavorably by more than this percentage.",
+	"Enter a valid slippage percentage": "Enter a valid slippage percentage",
+	"Your transaction may fail": "Your transaction may fail",
+	"Your transaction may be frontrun": "Your transaction may be frontrun",
+	"Your transaction will revert if it is pending for more than this long.": "Your transaction will revert if it is pending for more than this long.",
+	minutes: minutes$1,
+	"Token Amount": "Token Amount",
+	"Balance: %amount%": "Balance: %amount%",
+	"LP tokens in your wallet": "LP tokens in your wallet",
+	"Pooled %asset%": "Pooled %asset%",
+	"By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.": "By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.",
+	"Common bases": "Common bases",
+	"These tokens are commonly paired with other tokens.": "These tokens are commonly paired with other tokens.",
+	"Expanded results from inactive Token Lists": "Expanded results from inactive Token Lists",
+	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
+	"No results found.": "No results found.",
+	Manage: Manage$2,
+	"Manage Tokens": "Manage Tokens",
+	"Import Tokens": "Import Tokens",
+	"Import List": "Import List",
+	"Import at your own risk": "Import at your own risk",
+	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.",
+	"If you purchase a token from this list, you may not be able to sell it back.": "If you purchase a token from this list, you may not be able to sell it back.",
+	Import: Import$1,
+	via: via$1,
+	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.",
+	"If you purchase an arbitrary token, you may be unable to sell it back.": "If you purchase an arbitrary token, you may be unable to sell it back.",
+	"Unknown Source": "Unknown Source",
+	Lists: Lists$1,
+	See: See$1,
+	"Update list": "Update list",
+	"https:// or ipfs:// or ENS name": "https:// or ipfs:// or ENS name",
+	Loaded: Loaded$1,
+	Loading: Loading$2,
+	"Enter valid token address": "Enter valid token address",
+	"Custom Token": "Custom Token",
+	"Custom Tokens": "Custom Tokens",
+	"Unknown Error": "Unknown Error",
+	"Select a currency": "Select a currency",
+	"Search name or paste address": "Search name or paste address",
+	"Add %asset% to Metamask": "Add %asset% to Metamask",
+	"Added %asset%": "Added %asset%",
+	"Transaction Submitted": "Transaction Submitted",
+	"Wallet Address or ENS name": "Wallet Address or ENS name",
+	Recipient: Recipient$1,
+	"Waiting For Confirmation": "Waiting For Confirmation",
+	"Confirm this transaction in your wallet": "Confirm this transaction in your wallet",
+	Dismiss: Dismiss$1,
+	Latest: Latest$1,
+	"Notice for trading %symbol%": "Notice for trading %symbol%",
+	"To trade SAFEMOON, you must:": "To trade SAFEMOON, you must:",
+	"Click on the settings icon": "Click on the settings icon",
+	"Set your slippage tolerance to 12%+": "Set your slippage tolerance to 12%+",
+	"This is because SafeMoon taxes a 10% fee on each transaction:": "This is because SafeMoon taxes a 10% fee on each transaction:",
+	"5% fee = redistributed to all existing holders": "5% fee = redistributed to all existing holders",
+	"5% fee = used to add liquidity": "5% fee = used to add liquidity",
+	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "Warning: BONDLY has been compromised. Please remove liqudity until further notice.",
+	Claimed: Claimed$1,
+	Settings: Settings$1,
+	"Transaction deadline": "Transaction deadline",
+	"Convert ERC-20 to BEP-20": "Convert ERC-20 to BEP-20",
+	"Need help ?": "Need help ?",
+	"Select a token": "Select a token",
+	"Enter a recipient": "Enter a recipient",
+	"Invalid recipient": "Invalid recipient",
+	Supply: Supply$1,
+	"Your Liquidity": "Your Liquidity",
+	"Remove liquidity to receive tokens back": "Remove liquidity to receive tokens back",
+	"Trade anything. No registration, no hassle.": "Trade anything. No registration, no hassle.",
+	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.",
+	Learn: Learn$1,
+	"BNB token": "BNB token",
+	"BTC token": "BTC token",
+	"Earn passive income with crypto.": "Earn passive income with crypto.",
+	translationLast: translationLast$1,
+	translationEnd: translationEnd$1
 };
 
-var RPC_URL = getNodeUrl();
-var simpleRpcProvider = new ethers.ethers.providers.JsonRpcProvider(RPC_URL);
-
-/**
- * Provides a web3 provider with or without user's signer
- * Recreate web3 instance only if the provider change
- */
-var useActiveWeb3React = function () {
-    var _a = core.useWeb3React(), library = _a.library, chainId = _a.chainId, web3React = tslib.__rest(_a, ["library", "chainId"]);
-    var refEth = React.useRef(library);
-    var _b = tslib.__read(React.useState(library || simpleRpcProvider), 2), provider = _b[0], setprovider = _b[1];
-    React.useEffect(function () {
-        if (library !== refEth.current) {
-            setprovider(library || new ethers.ethers.providers.JsonRpcProvider(getNodeUrl(chainId)));
-            refEth.current = library;
-        }
-    }, [library, chainId]);
-    return tslib.__assign({ library: provider, chainId: chainId !== null && chainId !== void 0 ? chainId : dsgswapSdk.chainIdProxy.chainId }, web3React);
+var dataFormat = "YYYY-MM-DD";
+var airTime = "HHA, MMM-DD";
+var Exchange = "兑换";
+var Locked = "已锁定";
+var Finished = "已完成";
+var Total = "总计";
+var End = "结束";
+var Close = "关闭";
+var Max = "最大";
+var Cancel = "取消";
+var Confirm = "确认";
+var Warning = "警告";
+var Core = "核心";
+var Available = "可用";
+var Select = "选择";
+var Connect = "连接";
+var Details = "详情";
+var Trade = "交易";
+var More = "更多";
+var Liquidity = "流动性";
+var Token = "代币";
+var Pairs = "币对";
+var Accounts = "账户";
+var Active = "有效";
+var Inactive = "停用";
+var Dual = "双重";
+var Compound = "复利";
+var Search = "搜索";
+var History = "历史记录";
+var Burned = "销毁";
+var Logout = "退出";
+var Confirmed = "已确认";
+var Show = "显示";
+var Hide = "隐藏";
+var Stake = "质押";
+var Balance$1 = "余额";
+var Live = "实时";
+var Start = "开始";
+var Finish = "完成";
+var Enable = "启用";
+var Enabling = "正在启用";
+var Expired = "已过期";
+var Calculating = "正在计算";
+var All = "全部";
+var d = "天";
+var h = "小时";
+var m = "分钟";
+var Blocks = "区块";
+var Buy = "购买";
+var Filter = "筛选器";
+var Volume = "交易量";
+var Tokens = "代币";
+var Contact = "联系";
+var Merch = "商品";
+var New = "新";
+var Rates = "汇率";
+var Price = "价格";
+var Prices = "价格";
+var Amount = "金额";
+var Simple = "简单";
+var Detailed = "详细";
+var Remove = "移除";
+var Input$4 = "输入";
+var Output = "输出";
+var From = "从";
+var To = "到";
+var Swap$1 = "交换";
+var Audio$1 = "音频";
+var minutes = "分钟";
+var Manage$1 = "管理";
+var Import = "导入";
+var via = "通过";
+var Lists = "列表";
+var See = "查看";
+var Loaded = "已加载";
+var Loading$1 = "正在加载";
+var Recipient = "接收人";
+var Dismiss = "取消";
+var Latest = "最新";
+var Claimed = "已领取";
+var Settings = "设置";
+var Supply = "供应";
+var Learn = "了解";
+var translationLast = "translationLast";
+var translationEnd = "translationEnd";
+var translationsZhCN = {
+	dataFormat: dataFormat,
+	airTime: airTime,
+	Exchange: Exchange,
+	"Connect Wallet": "连接钱包",
+	"Your %asset% Balance": "您的 %asset% 余额",
+	"My %asset%": "我的 %asset%",
+	"Total %asset% Supply": "%asset% 总供应量",
+	Locked: Locked,
+	"Total Liquidity": "总流动性",
+	"View on PolygonScan": "在 PolygonScan 上查看",
+	Finished: Finished,
+	"Project site": "项目网站",
+	"Project Site": "Project Site",
+	"See Token Info": "查看代币信息",
+	Total: Total,
+	End: End,
+	"View Project Site": "查看项目网站",
+	"Create a pool for your token": "为您的代币创建资金池",
+	Close: Close,
+	Max: Max,
+	"%num% %symbol% Available": "%num% %symbol% 可用",
+	Cancel: Cancel,
+	Confirm: Confirm,
+	Warning: Warning,
+	"I understand": "我了解",
+	"Pending Confirmation": "等待确认",
+	"Buy new tokens with a brand new token sale model.": "使用全新的代币销售模型购买新代币。",
+	"You get the tokens.": "您获得了代币。",
+	"Want to launch your own IFO?": "想要发起您自己的 IFO？",
+	"Apply to launch": "申请发起",
+	Core: Core,
+	Available: Available,
+	"Sign out": "退出",
+	Select: Select,
+	"Launch Time": "发起时间",
+	"For Sale": "待售",
+	"Done!": "完成！",
+	"Read more": "阅读更多",
+	Connect: Connect,
+	"Loading…": "正在加载…",
+	Details: Details,
+	"Wallet Disconnected": "钱包已断开连接",
+	Trade: Trade,
+	More: More,
+	Liquidity: Liquidity,
+	Token: Token,
+	Pairs: Pairs,
+	Accounts: Accounts,
+	Active: Active,
+	Inactive: Inactive,
+	Dual: Dual,
+	Compound: Compound,
+	"In Wallet": "钱包中",
+	"Loading...": "正在加载…",
+	Search: Search,
+	History: History,
+	Burned: Burned,
+	"To burn": "要焚毁",
+	"Total Value Locked": "锁定的总价值",
+	"Your wallet": "您的钱包",
+	Logout: Logout,
+	Confirmed: Confirmed,
+	Show: Show,
+	Hide: Hide,
+	"Stake LP tokens": "质押 LP 代币",
+	Stake: Stake,
+	"I understand that people can view my wallet if they know my username": "我了解，如果其他人知道我的用户名，他们就可以查看我的钱包",
+	"Please connect your wallet to continue": "请连接您的钱包以继续",
+	"Get %symbol%": "获取 %symbol%",
+	Balance: Balance$1,
+	"Oops, page not found.": "糟糕，找不到页面",
+	"Back Home": "返回首页",
+	Live: Live,
+	Start: Start,
+	Finish: Finish,
+	"Connect wallet to view": "连接要查看的钱包",
+	"Your volume": "交易量",
+	"Since start": "自开始以来的时间",
+	Enable: Enable,
+	Enabling: Enabling,
+	Expired: Expired,
+	Calculating: Calculating,
+	"Your history": "历史记录",
+	All: All,
+	"%num%d": "%num%d",
+	d: d,
+	h: h,
+	m: m,
+	"Success!": "成功！",
+	Blocks: Blocks,
+	"Add to Metamask": "添加到 Metamask",
+	"Insufficient %symbol% balance": "%symbol% 余额不足",
+	Buy: Buy,
+	"Locate Assets": "查找资产",
+	"%symbol% required": "需要 %symbol%",
+	"Your History": "历史记录",
+	Filter: Filter,
+	Volume: Volume,
+	Tokens: Tokens,
+	Contact: Contact,
+	Merch: Merch,
+	New: New,
+	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "输出为估值。如果价格变化超过 %slippage%%，则您的交易将被撤回。",
+	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "正在供应 %amountA% %symbolA% 和 %amountB% %symbolB%",
+	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "正在移除 %amountA% %symbolA% 和 %amountB% %symbolB%",
+	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 交换为 %amountB% %symbolB%",
+	"Add Liquidity": "增加流动性",
+	"Add liquidity to receive LP tokens": "增加流动性以接收 LP 代币",
+	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "流动性供应商将对该代币对的所有交易赚取 0.1% 的交易费，与他们在流动性资金池中的份额成正比。",
+	"You are creating a pool": "您正在创建资金池",
+	"You are the first liquidity provider.": "您是第一个流动性供应商。",
+	"The ratio of tokens you add will set the price of this pool.": "您添加的代币比率将设置此资金池的价格。",
+	"Once you are happy with the rate click supply to review.": "如果您对汇率满意，请点击“供应”以进行检查。",
+	"Initial prices and pool share": "初始价格和资金池份额",
+	"Prices and pool share": "价格和资金池份额",
+	"Unsupported Asset": "不受支持的资产",
+	"Enabling %asset%": "正在批准 %asset%",
+	"Enable %asset%": "批准 %asset%",
+	"Share of Pool": "资金池中的份额",
+	"%assetA% per %assetB%": "%assetA%/%assetB%",
+	"%asset% Deposited": "已入金 %asset%",
+	Rates: Rates,
+	"Create Pool & Supply": "创建资金池和供应",
+	"Confirm Supply": "确认供应",
+	"Confirm Swap": "确认交换",
+	"Connect to a wallet to view your liquidity.": "连接到钱包以查看您的流动性。",
+	"Connect to a wallet to find pools": "连接到钱包以查找资金池",
+	"Select a token to find your liquidity.": "选择代币以查找您的流动性。",
+	"No liquidity found.": "未找到流动性。",
+	"Don't see a pool you joined?": "未看到您加入的资金池？",
+	"Find other LP tokens": "查找其他 LP 代币",
+	"Import Pool": "导入资金池",
+	"Import an existing pool": "导入现有资金池",
+	"Select a Token": "选择代币",
+	"Pool Found!": "发现资金池！",
+	"No pool found.": "未找到资金池。",
+	"Create pool.": "创建资金池。",
+	"Manage this pool.": "管理此资金池。",
+	"Invalid pair.": "币对无效。",
+	"You don’t have liquidity in this pool yet.": "您在此资金池中还没有流动性。",
+	"%assetA%/%assetB% Burned": "已焚毁 %assetA%/%assetB%",
+	Price: Price,
+	Prices: Prices,
+	"Remove %assetA%-%assetB% liquidity": "移除 %assetA%-%assetB% 流动性",
+	Amount: Amount,
+	Simple: Simple,
+	Detailed: Detailed,
+	"Receive WBNB": "接收 WBNB",
+	"Receive BNB": "接收 BNB",
+	Remove: Remove,
+	Input: Input$4,
+	Output: Output,
+	"Trade tokens in an instant": "即时交易兑换代币",
+	"From (estimated)": "从（估计）",
+	From: From,
+	"To (estimated)": "到（估计）",
+	To: To,
+	"+ Add a send (optional)": "+ 添加发送（可选）",
+	"- Remove send": "- 移除发送",
+	"Slippage Tolerance": "滑点容差",
+	"Insufficient liquidity for this trade.": "此交易的流动性不足。",
+	"Try enabling multi-hop trades.": "尝试启用多跳交易。",
+	"Price Impact High": "价格影响较高",
+	Swap: Swap$1,
+	"Swap Anyway": "仍要交换",
+	"Recent Transactions": "最近的交易",
+	"clear all": "全部清除",
+	"Clear all": "全部清除",
+	"No recent transactions": "最近没有交易",
+	"Are you sure?": "您确定吗？",
+	"Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.": "专家模式会关闭“确认”交易提示，并允许进行常会导致汇率不佳和资金损失的高滑点交易。",
+	"Only use this mode if you know what you’re doing.": "请仅在您清楚自身需求时才使用此模式。",
+	"Turn On Expert Mode": "开启专家模式",
+	"Transaction Settings": "交易设置",
+	"Interface Settings": "界面设置",
+	"Toggle Expert Mode": "切换专家模式",
+	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "绕过确认模式并允许高滑点交易。使用风险自负。",
+	"Disable Multihops": "禁用多跳",
+	"Restricts swaps to direct pairs only.": "将交换限制为仅限直接币对。",
+	Audio: Audio$1,
+	"🐰 Turn down your volume a bit before you swap": "🐰 在您交换之前略微调低音量",
+	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果价格变动幅度超过此百分比，您的交易将被撤回。",
+	"Enter a valid slippage percentage": "输入有效的滑点百分比",
+	"Your transaction may fail": "您的交易可能会失败",
+	"Your transaction may be frontrun": "您的交易可能会被超前交易",
+	"Your transaction will revert if it is pending for more than this long.": "如果您的交易等待处理的时间超过此时间，它将被撤回。",
+	minutes: minutes,
+	"Token Amount": "代币金额",
+	"Balance: %amount%": "余额：%amount%",
+	"LP tokens in your wallet": "您的钱包中的 LP 代币",
+	"Pooled %asset%": "已入池 %asset%",
+	"By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.": "通过添加流动性，您将赚取该币对所有交易额的0.1%，与您在资金池中的份额成正比。每天累计的费用将在次日添加到资金池中，可通过解除流动性来领取收益。",
+	"Common bases": "一般基准",
+	"These tokens are commonly paired with other tokens.": "这些代币通常与其他代币配对。",
+	"Expanded results from inactive Token Lists": "来自停用代币列表的扩展结果",
+	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "代币来自停用列表。在下方导入特定代币或点击“管理”以激活更多列表。",
+	"No results found.": "未找到结果。",
+	Manage: Manage$1,
+	"Manage Tokens": "管理代币",
+	"Import Tokens": "导入代币",
+	"Import List": "导入列表",
+	"Import at your own risk": "导入风险自负",
+	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "添加此列表，即表示您完全信任数据的正确性。任何人都可以创建列表，包括创建现有列表的虚假版本和声称代表没有列表的项目的列表。",
+	"If you purchase a token from this list, you may not be able to sell it back.": "如果您购买了此列表中的代币，则可能无法将其出售。",
+	Import: Import,
+	via: via,
+	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "任何人都可以在 BSC 上使用任意名称创建 BEP20 代币，包括创建虚假版本的现有代币和声称代表没有代币的项目的代币。",
+	"If you purchase an arbitrary token, you may be unable to sell it back.": "如果您购买任意代币，可能无法将其出售。",
+	"Unknown Source": "未知来源",
+	Lists: Lists,
+	See: See,
+	"Update list": "更新列表",
+	"https:// or ipfs:// or ENS name": "https:// 或 ipfs:// 或 ENS 名称",
+	Loaded: Loaded,
+	Loading: Loading$1,
+	"Enter valid token address": "输入有效的代币地址",
+	"Custom Token": "自定义代币",
+	"Custom Tokens": "自定义代币",
+	"Unknown Error": "未知错误",
+	"Select a currency": "选择币种",
+	"Search name or paste address": "搜索名称或粘贴地址",
+	"Add %asset% to Metamask": "将 %asset% 添加到 Metamask",
+	"Added %asset%": "已添加 %asset%",
+	"Transaction Submitted": "已提交交易",
+	"Wallet Address or ENS name": "钱包地址或 ENS 名称",
+	Recipient: Recipient,
+	"Waiting For Confirmation": "正在等待确认",
+	"Confirm this transaction in your wallet": "在您的钱包中确认此交易",
+	Dismiss: Dismiss,
+	Latest: Latest,
+	"Notice for trading %symbol%": "关于 %symbol% 的交易须知",
+	"To trade SAFEMOON, you must:": "若要交易 SafeMoon，您必须：",
+	"Click on the settings icon": "点击设置图标",
+	"Set your slippage tolerance to 12%+": "把滑点设置为 12% 或更高",
+	"This is because SafeMoon taxes a 10% fee on each transaction:": "这是因为交易 SafeMoon 时需支付 10% 的费用：",
+	"5% fee = redistributed to all existing holders": "5% 费用 = 分配给所有持有者",
+	"5% fee = used to add liquidity": "5% 费用 = 用于添加流动性",
+	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "警告：BONDLY 已被攻击，在得到进一步通知之前，请移除流动性",
+	Claimed: Claimed,
+	Settings: Settings,
+	"Transaction deadline": "交易截止期",
+	"Convert ERC-20 to BEP-20": "将 ERC-20 转换为 BEP-20",
+	"Need help ?": "需要帮助？",
+	"Select a token": "选择代币",
+	"Enter a recipient": "输入接收人",
+	"Invalid recipient": "接收人无效",
+	Supply: Supply,
+	"Your Liquidity": "您的流动性",
+	"Remove liquidity to receive tokens back": "移除流动性以收回代币",
+	"Trade anything. No registration, no hassle.": "交易任何代币。无需注册，不必麻烦。",
+	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "只需连接您的钱包，即可在 Binance Smart Chain 上快速交易任何代币。",
+	Learn: Learn,
+	"BNB token": "BNB 代币",
+	"BTC token": "BTC 代币",
+	"Earn passive income with crypto.": "利用加密货币赚取被动收入。",
+	translationLast: translationLast,
+	translationEnd: translationEnd
 };
 
-var _a$c, _b$4, _c, _d, _e, _f;
-// used to construct intermediary pairs for trading
-var BASES_TO_CHECK_TRADES_AGAINST = (_a$c = {},
-    _a$c[dsgswapSdk.ChainId.MATIC_TESTNET] = [
-        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET],
-        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET],
-        dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET],
-        dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET],
-        dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET],
-        dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_TESTNET],
-    ],
-    _a$c[dsgswapSdk.ChainId.MATIC_MAINNET] = [
-        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET],
-        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET],
-        dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET],
-        dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET],
-        dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_MAINNET],
-        // ETH,
-        // USDC[ChainId.MATIC_MAINNET],
-        // DAI,
-    ],
-    _a$c[dsgswapSdk.ChainId.MAINNET] = [
-        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MAINNET],
-        dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET],
-        dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET],
-        dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET],
-        dsgswapSdk.USDC[dsgswapSdk.ChainId.MAINNET],
-    ],
-    _a$c[dsgswapSdk.ChainId.TESTNET] = [
-        dsgswapSdk.WETHER[dsgswapSdk.ChainId.TESTNET],
-        dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET],
-        dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET],
-        dsgswapSdk.USDT[dsgswapSdk.ChainId.TESTNET],
-        dsgswapSdk.USDC[dsgswapSdk.ChainId.TESTNET],
-    ],
+var _a$c;
+var translation = (_a$c = {},
+    _a$c[EN.locale] = translations,
+    _a$c[ZHCN.locale] = translationsZhCN,
     _a$c);
+// const publicUrl = process.env.PUBLIC_URL
+var LS_KEY = 'storage_language';
+var fetchLocale = function (locale) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+    return tslib.__generator(this, function (_a) {
+        // const response = await fetch(`${publicUrl}/locales/${locale}.json`)
+        // const data = await response.json()
+        return [2 /*return*/, translation[locale]];
+    });
+}); };
+var getLanguageCodeFromLS = function () {
+    try {
+        var codeFromStorage = localStorage.getItem(LS_KEY);
+        return codeFromStorage || EN.locale;
+    }
+    catch (_a) {
+        return EN.locale;
+    }
+};
+
+new BigNumber__default["default"](0);
+new BigNumber__default["default"](1);
+new BigNumber__default["default"](9);
+var BIG_TEN = new BigNumber__default["default"](10);
+new BigNumber__default["default"](1000000000);
+
 /**
- * Addittional bases for specific tokens
- * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
+ * Take a formatted amount, e.g. 15 BNB and convert it to full decimal value, e.g. 15000000000000000
  */
-var ADDITIONAL_BASES = (_b$4 = {},
-    _b$4[dsgswapSdk.ChainId.MAINNET] = {},
-    _b$4[dsgswapSdk.ChainId.TESTNET] = {},
-    _b$4[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
-    _b$4[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
-    _b$4);
-/**
- * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
- * tokens.
- * @example [AMPL.address]: [DAI, WETHER[ChainId.MAINNET]]
- */
-var CUSTOM_BASES = (_c = {},
-    _c[dsgswapSdk.ChainId.MAINNET] = {},
-    _c[dsgswapSdk.ChainId.TESTNET] = {},
-    _c[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
-    _c[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
-    _c);
-// used for display in the default list when adding liquidity
-var SUGGESTED_BASES = (_d = {},
-    _d[dsgswapSdk.ChainId.MATIC_MAINNET] = [
-        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET],
-        dsgswapSdk.DSG[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.DAI[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_MAINNET]
-    ],
-    _d[dsgswapSdk.ChainId.MATIC_TESTNET] = [
-        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET],
-        dsgswapSdk.DSG[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.DAI[dsgswapSdk.ChainId.MATIC_TESTNET]
-    ],
-    _d[dsgswapSdk.ChainId.MAINNET] = [dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.VAI[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.XVS[dsgswapSdk.ChainId.MAINNET]],
-    _d[dsgswapSdk.ChainId.TESTNET] = [dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.VAI[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.XVS[dsgswapSdk.ChainId.TESTNET]],
-    _d);
-// used to construct the list of all pairs we consider by default in the frontend
-(_e = {},
-    _e[dsgswapSdk.ChainId.MATIC_MAINNET] = [
-        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET]
-    ],
-    _e[dsgswapSdk.ChainId.MATIC_TESTNET] = [
-        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET]
-    ],
-    _e[dsgswapSdk.ChainId.MAINNET] = [dsgswapSdk.WETH[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET]],
-    _e[dsgswapSdk.ChainId.TESTNET] = [dsgswapSdk.WETH[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET]],
-    _e);
-(_f = {},
-    _f[dsgswapSdk.ChainId.MAINNET] = [
-        [dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.WETHER[dsgswapSdk.ChainId.MAINNET]],
-        [dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET]],
-        [dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET]],
-    ],
-    _f[dsgswapSdk.ChainId.MATIC_TESTNET] = [
-        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET]],
-        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET]],
-        [dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET]],
-        [dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET]],
-    ],
-    _f[dsgswapSdk.ChainId.MATIC_MAINNET] = [
-        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET]],
-        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET]],
-        [dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET]],
-        [dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET]],
-    ],
-    _f);
-// default allowed slippage, in bips
-var INITIAL_ALLOWED_SLIPPAGE = 50;
-// 20 minutes, denominated in seconds
-var DEFAULT_DEADLINE_FROM_NOW = 60 * 20;
-dsgswapSdk.JSBI.BigInt(0);
-// one basis point
-var ONE_BIPS = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(1), dsgswapSdk.JSBI.BigInt(10000));
-var BIPS_BASE = dsgswapSdk.JSBI.BigInt(10000);
-// used for warning states
-var ALLOWED_PRICE_IMPACT_LOW = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(100), BIPS_BASE); // 1%
-var ALLOWED_PRICE_IMPACT_MEDIUM = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(300), BIPS_BASE); // 3%
-var ALLOWED_PRICE_IMPACT_HIGH = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(500), BIPS_BASE); // 5%
-// if the price slippage exceeds this number, force the user to type 'confirm' to execute
-var PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(1000), BIPS_BASE); // 10%
-// for non expert mode disable swaps above this
-var BLOCKED_PRICE_IMPACT_NON_EXPERT = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(1500), BIPS_BASE); // 15%
-// used to ensure the user doesn't send so much BNB so they end up with <.01
-var MIN_BNB = dsgswapSdk.JSBI.exponentiate(dsgswapSdk.JSBI.BigInt(10), dsgswapSdk.JSBI.BigInt(16)); // .01 BNB
-var BETTER_TRADE_LESS_HOPS_THRESHOLD = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(50), dsgswapSdk.JSBI.BigInt(10000));
-var ZERO_PERCENT = new dsgswapSdk.Percent('0');
-var ONE_HUNDRED_PERCENT$1 = new dsgswapSdk.Percent('1');
-// SDN OFAC addresses(美国海外资产控制办公室地址)
-var BLOCKED_ADDRESSES = [
-    '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
-    '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
-    '0x901bb9583b24D97e995513C6778dc6888AB6870e',
-    '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
-    '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C',
+var getDecimalAmount = function (amount, decimals) {
+    if (decimals === void 0) { decimals = 18; }
+    return new BigNumber__default["default"](amount).times(BIG_TEN.pow(decimals));
+};
+
+var supportChainIds = [
+    1,
+    56,
+    137,
+    10,
+    42161,
 ];
+var isSupportChainId = function (chainId) {
+    return supportChainIds.includes(Number(chainId));
+};
+var ETHER_1INCH_ADDRESS = {
+    1: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    56: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    137: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    // 10,
+    // 42161,
+};
 
 // modified from https://usehooks.com/useDebounce/
 function useDebounce(value, delay) {
@@ -231,803 +855,14 @@ function useDebounce(value, delay) {
     return debouncedValue;
 }
 
-var VISIBILITY_STATE_SUPPORTED = 'visibilityState' in document;
-function isWindowVisible() {
-    return !VISIBILITY_STATE_SUPPORTED || document.visibilityState !== 'hidden';
-}
-/**
- * Returns whether the window is currently visible to the user.
- */
-function useIsWindowVisible() {
-    var _a = tslib.__read(React.useState(isWindowVisible()), 2), focused = _a[0], setFocused = _a[1];
-    var listener = React.useCallback(function () {
-        setFocused(isWindowVisible());
-    }, [setFocused]);
-    React.useEffect(function () {
-        if (!VISIBILITY_STATE_SUPPORTED)
-            return undefined;
-        document.addEventListener('visibilitychange', listener);
-        return function () {
-            document.removeEventListener('visibilitychange', listener);
-        };
-    }, [listener]);
-    return focused;
-}
-
-var updateBlockNumber = toolkit.createAction('application/updateBlockNumber');
-
-function Updater$3() {
-    var _a = useActiveWeb3React(), library = _a.library, chainId = _a.chainId;
-    var dispatch = reactRedux.useDispatch();
-    var windowVisible = useIsWindowVisible();
-    var _b = tslib.__read(React.useState({
-        chainId: chainId,
-        blockNumber: null,
-    }), 2), state = _b[0], setState = _b[1];
-    var blockNumberCallback = React.useCallback(function (blockNumber) {
-        setState(function (prev) {
-            if (chainId === prev.chainId) {
-                if (typeof prev.blockNumber !== 'number')
-                    return { chainId: chainId, blockNumber: blockNumber };
-                return { chainId: chainId, blockNumber: Math.max(blockNumber, prev.blockNumber) };
-            }
-            return prev;
-        });
-    }, [chainId, setState]);
-    // attach/detach listeners
-    React.useEffect(function () {
-        if (!library || !chainId || !windowVisible)
-            return undefined;
-        setState({ chainId: chainId, blockNumber: null });
-        library
-            .getBlockNumber()
-            .then(blockNumberCallback)
-            .catch(function (error) { return console.error("Failed to get block number for chainId: " + chainId, error); });
-        library.on('block', blockNumberCallback);
-        return function () {
-            library.removeListener('block', blockNumberCallback);
-        };
-    }, [dispatch, chainId, library, blockNumberCallback, windowVisible]);
-    var debouncedState = useDebounce(state, 100);
-    React.useEffect(function () {
-        if (!debouncedState.chainId || !debouncedState.blockNumber || !windowVisible)
-            return;
-        dispatch(updateBlockNumber({ chainId: debouncedState.chainId, blockNumber: debouncedState.blockNumber }));
-    }, [windowVisible, dispatch, debouncedState.blockNumber, debouncedState.chainId]);
-    return null;
-}
-
-var getAddress = function (address) {
-    return dsgswapSdk.getValueWithChainId(address);
-};
-var getMulticallAddress = function () {
-    return getAddress(dsgswapSdk.contractAddress.multiCall);
-};
-
-var UNSUPPORTED_LIST_URLS = [];
-// lower index == higher priority for token import
-tslib.__spreadArray([
-    // PANCAKE_TOP100,
-    // PANCAKE_EXTENDED,
-    getAddress(dsgswapSdk.DSG_TOKENS_TOP100)
-], tslib.__read(UNSUPPORTED_LIST_URLS));
-var getTokenDefaultList = function () { return tslib.__spreadArray([
-    // PANCAKE_TOP100,
-    // PANCAKE_EXTENDED,
-    getAddress(dsgswapSdk.DSG_TOKENS_TOP100)
-], tslib.__read(UNSUPPORTED_LIST_URLS)); };
-// default lists to be 'active' aka searched across
-[getAddress(dsgswapSdk.DSG_TOKENS_TOP100)];
-var getTokenDefaultActiveList = function () { return [getAddress(dsgswapSdk.DSG_TOKENS_TOP100)]; };
-
-var name$1 = "Dsg Default List";
-var timestamp$1 = "2021-11-12T06:00:00Z";
-var version$1 = {
-	major: 1,
-	minor: 0,
-	patch: 1
-};
-var tags$2 = {
-};
-var logoURI$1 = "https://dsgmetaverse.com/logo.png";
-var keywords$1 = [
-	"dinosaur eggs",
-	"dsg",
-	"default"
-];
-var tokens$1 = [
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0x9A78649501BbAAC285Ea4187299471B7ad4ABD35",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://dsgmetaverse.com/images/tokens/DSG.png"
-	},
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0xf8e8c2e77c47B9da858477341a649823f500c295",
-		chainId: 97,
-		decimals: 18,
-		logoURI: "https://dsgmetaverse.com/images/tokens/DSG.png"
-	},
-	{
-		name: "Monery-hunry Dino Frament Token",
-		symbol: "DSGMDF",
-		address: "0xbc44f2408192c2F853d953b370D449B9fdb9b1F6",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://dsgmetaverse.com/images/tokens/DSGMDF.png"
-	},
-	{
-		name: "Meat Frament Token",
-		symbol: "DSGMF",
-		address: "0x8ee0eebefddc5f672680e9d3d165bc1dc7591919",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://dsgmetaverse.com/images/tokens/DSGMF.png"
-	},
-	{
-		name: "WBNB Token",
-		symbol: "WBNB",
-		address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
-	},
-	{
-		name: "WBNB Token",
-		symbol: "WBNB",
-		address: "0xD2754634e39cC8aaC7b8174af7e0552545cF63CB",
-		chainId: 97,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
-	},
-	{
-		name: "Binance Pegged BUSD",
-		symbol: "BUSD",
-		address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png"
-	},
-	{
-		name: "BUSD",
-		symbol: "BUSD",
-		address: "0x0858241B08b1335d7711838D6cC9C60a72c92C4B",
-		chainId: 97,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png"
-	},
-	{
-		name: "USDT",
-		symbol: "USDT",
-		address: "0x865746A11eC78819c0067a031e9dd8D69F0B319d",
-		chainId: 97,
-		decimals: 18,
-		logoURI: "https://dsgmetaverse.com/images/tokens/USDT.png"
-	},
-	{
-		name: "Binance Pegged ETH",
-		symbol: "ETH",
-		address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0x2170Ed0880ac9A755fd29B2688956BD959F933F8.png"
-	},
-	{
-		name: "Binance Pegged Bitcoin",
-		symbol: "BTCB",
-		address: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png"
-	},
-	{
-		name: "Binance Pegged USDT",
-		symbol: "USDT",
-		address: "0x55d398326f99059fF775485246999027B3197955",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://dsgmetaverse.com/images/tokens/USDT.png"
-	},
-	{
-		name: "Venus Token",
-		symbol: "XVS",
-		address: "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63.png"
-	},
-	{
-		name: "Venus",
-		symbol: "XVS",
-		address: "0x997003114c52945798c48757021938c257c76A57",
-		chainId: 97,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63.png"
-	},
-	{
-		name: "VAI Stablecoin",
-		symbol: "VAI",
-		address: "0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
-		chainId: 56,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7.png"
-	},
-	{
-		name: "VAI Stablecoin",
-		symbol: "VAI",
-		address: "0x5b0663Ecb9cdFe770214AA6324DE5253F15FF2E1",
-		chainId: 97,
-		decimals: 18,
-		logoURI: "https://tokens.pancakeswap.finance/images/0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7.png"
-	},
-	{
-		name: "Dai Stablecoin",
-		address: "0xe9C570f7775E5e7232590cD17438D99ec02cDfeB",
-		symbol: "DAI",
-		decimals: 18,
-		chainId: 80001,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
-	},
-	{
-		name: "Dai Stablecoin",
-		address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-		symbol: "DAI",
-		decimals: 18,
-		chainId: 137,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
-	},
-	{
-		name: "Tether USD",
-		address: "0x363B097cc4EbA999a6555427CB1b77d943FF43c1",
-		symbol: "USDT",
-		decimals: 6,
-		chainId: 80001,
-		logoURI: "/images/tokens/USDT.png"
-	},
-	{
-		name: "Tether USD",
-		address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-		symbol: "USDT",
-		decimals: 6,
-		chainId: 137,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
-	},
-	{
-		name: "Wrapped Matic",
-		address: "0x9eeD3ab1c437b63C0A96ED9A7854593addc66aC5",
-		symbol: "WMATIC",
-		decimals: 18,
-		chainId: 80001,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
-	},
-	{
-		name: "Wrapped Matic",
-		address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
-		symbol: "WMATIC",
-		decimals: 18,
-		chainId: 137,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
-	},
-	{
-		name: "USDC",
-		symbol: "USDC",
-		address: "0xCE8dca0BF7c5625A056B804A5e94F419480ba5a5",
-		chainId: 80001,
-		decimals: 6,
-		logoURI: "https://magicianmetaverse.com/images/tokens/USDC.png"
-	},
-	{
-		name: "USDC",
-		symbol: "USDC",
-		address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-		chainId: 137,
-		decimals: 6,
-		logoURI: "https://magicianmetaverse.com/images/tokens/USDC.png"
-	},
-	{
-		name: "WETH",
-		symbol: "WETH",
-		address: "0x09AB0a23e4e10aE30988cc11103aF1255142c2B1",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
-	},
-	{
-		name: "WETH",
-		symbol: "WETH",
-		address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
-	},
-	{
-		name: "WBTC",
-		symbol: "WBTC",
-		address: "0x6696143F1814E5d2A3EAFad16E2C51a25c809430",
-		chainId: 80001,
-		decimals: 8,
-		logoURI: "https://magicianmetaverse.com/images/tokens/WBTC.png"
-	},
-	{
-		name: "WBTC",
-		symbol: "WBTC",
-		address: "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
-		chainId: 137,
-		decimals: 8,
-		logoURI: "https://magicianmetaverse.com/images/tokens/WBTC.png"
-	},
-	{
-		name: "MagicBallToken",
-		symbol: "MBT",
-		address: "0xCb071b023a2D434cEE80ae0Fb19a46C1b5Ec38b8",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/MBT.png"
-	},
-	{
-		name: "MagicBallToken",
-		symbol: "MBT",
-		address: "0x9e5cc3aF2c87527Fdb48eb783E84E0fD9a59918a",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/MBT.png"
-	},
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0x683915d350824D6f046d67949359Fc8b9F8EeB28",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/DSG.png"
-	},
-	{
-		name: "DSG",
-		symbol: "DSG",
-		address: "0xb65Ce345e1d6786C55c847076563b24B8B34bc2A",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/DSG.png"
-	},
-	{
-		name: "MBT Crystal Fragment",
-		symbol: "MBTCF",
-		address: "0xD6d8f98BDE2AC5DfC941269ea18803D72086427d",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/MBTCF.png"
-	},
-	{
-		name: "MBT Crystal Fragment",
-		symbol: "MBTCF",
-		address: "0x4aB731C693D54188C3bC9762f61829D06f7afdC4",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/MBTCF.png"
-	},
-	{
-		name: "MBT Potion Fragment",
-		symbol: "MBTPF",
-		address: "0x2f94dC2009494680CeC2C23bc49198434B802b18",
-		chainId: 80001,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/MBTPF.png"
-	},
-	{
-		name: "MBT Potion Fragment",
-		symbol: "MBTPF",
-		address: "0x437c7C0460E8b795C67872E8D0fB441ef6cc1E68",
-		chainId: 137,
-		decimals: 18,
-		logoURI: "https://magicianmetaverse.com/images/tokens/MBTPF.png"
-	}
-];
-var DEFAULT_TOKEN_LIST = {
-	name: name$1,
-	timestamp: timestamp$1,
-	version: version$1,
-	tags: tags$2,
-	logoURI: logoURI$1,
-	keywords: keywords$1,
-	tokens: tokens$1
-};
-
-var name = "Dsg Unsupported List";
-var timestamp = "2021-01-05T20:47:02.923Z";
-var version = {
-	major: 1,
-	minor: 0,
-	patch: 0
-};
-var tags$1 = {
-};
-var logoURI = "";
-var keywords = [
-	"dinosaur eggs",
-	"dsg",
-	"unsupported"
-];
-var tokens = [
-];
-var UNSUPPORTED_TOKEN_LIST = {
-	name: name,
-	timestamp: timestamp,
-	version: version,
-	tags: tags$1,
-	logoURI: logoURI,
-	keywords: keywords,
-	tokens: tokens
-};
-
 var _a$b;
-// use ordering of default list of lists to assign priority
-function sortByListPriority(urlA, urlB) {
-    var first = getTokenDefaultList().includes(urlA) ? getTokenDefaultList().indexOf(urlA) : Number.MAX_SAFE_INTEGER;
-    var second = getTokenDefaultList().includes(urlB) ? getTokenDefaultList().indexOf(urlB) : Number.MAX_SAFE_INTEGER;
-    // need reverse order to make sure mapping includes top priority last
-    if (first < second)
-        return 1;
-    if (first > second)
-        return -1;
-    return 0;
-}
-/**
- * Token instances created from token info.
- */
-var WrappedTokenInfo = /** @class */ (function (_super) {
-    tslib.__extends(WrappedTokenInfo, _super);
-    function WrappedTokenInfo(tokenInfo, tags) {
-        var _this = _super.call(this, tokenInfo.chainId, tokenInfo.address, tokenInfo.decimals, tokenInfo.symbol, tokenInfo.name) || this;
-        _this.tokenInfo = tokenInfo;
-        _this.tags = tags;
-        return _this;
-    }
-    Object.defineProperty(WrappedTokenInfo.prototype, "logoURI", {
-        get: function () {
-            return this.tokenInfo.logoURI;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WrappedTokenInfo;
-}(dsgswapSdk.Token));
-/**
- * An empty result, useful as a default.
- */
-var EMPTY_LIST = (_a$b = {},
-    _a$b[dsgswapSdk.ChainId.MAINNET] = {},
-    _a$b[dsgswapSdk.ChainId.TESTNET] = {},
-    _a$b[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
-    _a$b[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
-    _a$b);
-var listCache = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
-function listToTokenMap(list) {
-    var result = listCache === null || listCache === void 0 ? void 0 : listCache.get(list);
-    if (result)
-        return result;
-    // const renderList = list.tokens.filter(item => item.chainId === 65)
-    var map = list.tokens.reduce(function (tokenMap, tokenInfo) {
-        var _a, _b;
-        var _c, _d, _e;
-        var tags = (_e = (_d = (_c = tokenInfo.tags) === null || _c === void 0 ? void 0 : _c.map(function (tagId) {
-            var _a;
-            if (!((_a = list.tags) === null || _a === void 0 ? void 0 : _a[tagId]))
-                return undefined;
-            return tslib.__assign(tslib.__assign({}, list.tags[tagId]), { id: tagId });
-        })) === null || _d === void 0 ? void 0 : _d.filter(function (x) { return Boolean(x); })) !== null && _e !== void 0 ? _e : [];
-        var token = new WrappedTokenInfo(tokenInfo, tags);
-        if (tokenMap[token.chainId][token.address] !== undefined) {
-            console.debug(tokenMap[token.chainId][token.address]);
-            throw Error('Duplicate tokens.');
-        }
-        return tslib.__assign(tslib.__assign({}, tokenMap), (_a = {}, _a[token.chainId] = tslib.__assign(tslib.__assign({}, tokenMap[token.chainId]), (_b = {}, _b[token.address] = {
-            token: token,
-            list: list,
-        }, _b)), _a));
-    }, tslib.__assign({}, EMPTY_LIST));
-    listCache === null || listCache === void 0 ? void 0 : listCache.set(list, map);
-    return map;
-}
-function useAllLists() {
-    return reactRedux.useSelector(function (state) { return state.lists.byUrl; });
-}
-function combineMaps(map1, map2) {
-    var _a;
-    return _a = {},
-        _a[dsgswapSdk.ChainId.MAINNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.MAINNET]), map2[dsgswapSdk.ChainId.MAINNET]),
-        _a[dsgswapSdk.ChainId.TESTNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.TESTNET]), map2[dsgswapSdk.ChainId.TESTNET]),
-        _a[dsgswapSdk.ChainId.MATIC_MAINNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.MATIC_MAINNET]), map2[dsgswapSdk.ChainId.MATIC_MAINNET]),
-        _a[dsgswapSdk.ChainId.MATIC_TESTNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.MATIC_TESTNET]), map2[dsgswapSdk.ChainId.MATIC_TESTNET]),
-        _a;
-}
-// merge tokens contained within lists from urls
-function useCombinedTokenMapFromUrls(urls) {
-    var lists = useAllLists();
-    return React.useMemo(function () {
-        if (!urls)
-            return EMPTY_LIST;
-        return (urls
-            .slice()
-            // sort by priority so top priority goes last
-            .sort(sortByListPriority)
-            .reduce(function (allTokens, currentUrl) {
-            var _a;
-            var current = (_a = lists[currentUrl]) === null || _a === void 0 ? void 0 : _a.current;
-            if (!current)
-                return allTokens;
-            try {
-                var newTokens = Object.assign(listToTokenMap(current));
-                return combineMaps(allTokens, newTokens);
-            }
-            catch (error) {
-                console.error('Could not show token list due to error', error);
-                return allTokens;
-            }
-        }, EMPTY_LIST));
-    }, [lists, urls]);
-}
-// filter out unsupported lists
-function useActiveListUrls() {
-    var _a;
-    return (_a = reactRedux.useSelector(function (state) { return state.lists.activeListUrls; })) === null || _a === void 0 ? void 0 : _a.filter(function (url) { return !UNSUPPORTED_LIST_URLS.includes(url); });
-}
-function useInactiveListUrls() {
-    var lists = useAllLists();
-    var allActiveListUrls = useActiveListUrls();
-    return Object.keys(lists).filter(function (url) { return !(allActiveListUrls === null || allActiveListUrls === void 0 ? void 0 : allActiveListUrls.includes(url)) && !UNSUPPORTED_LIST_URLS.includes(url); });
-}
-// get all the tokens from active lists, combine with local default tokens
-function useCombinedActiveList() {
-    var activeListUrls = useActiveListUrls();
-    var activeTokens = useCombinedTokenMapFromUrls(activeListUrls);
-    var defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST);
-    return combineMaps(activeTokens, defaultTokenMap);
-}
-// all tokens from inactive lists
-function useCombinedInactiveList() {
-    var allInactiveListUrls = useInactiveListUrls();
-    return useCombinedTokenMapFromUrls(allInactiveListUrls);
-}
-// list of tokens not supported on interface, used to show warnings and prevent swaps and adds
-function useUnsupportedTokenList() {
-    // get hard coded unsupported tokens
-    var localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST);
-    // get any loaded unsupported tokens
-    var loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS);
-    // format into one token address map
-    return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap);
-}
-function useIsListActive(url) {
-    var activeListUrls = useActiveListUrls();
-    return Boolean(activeListUrls === null || activeListUrls === void 0 ? void 0 : activeListUrls.includes(url));
-}
-
-function useBlockNumber() {
-    var chainId = useActiveWeb3React().chainId;
-    return reactRedux.useSelector(function (state) { return state.application.blockNumber[chainId !== null && chainId !== void 0 ? chainId : -1]; });
-}
-
-var ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
-var LOWER_HEX_REGEX = /^0x[a-f0-9]*$/;
-function toCallKey(call) {
-    if (!ADDRESS_REGEX.test(call.address)) {
-        throw new Error("Invalid address: " + call.address);
-    }
-    if (!LOWER_HEX_REGEX.test(call.callData)) {
-        throw new Error("Invalid hex: " + call.callData);
-    }
-    return call.address + "-" + call.callData;
-}
-function parseCallKey(callKey) {
-    var pcs = callKey.split('-');
-    if (pcs.length !== 2) {
-        throw new Error("Invalid call key: " + callKey);
-    }
-    return {
-        address: pcs[0],
-        callData: pcs[1],
-    };
-}
-var addMulticallListeners = toolkit.createAction('multicall/addMulticallListeners');
-var removeMulticallListeners = toolkit.createAction('multicall/removeMulticallListeners');
-var fetchingMulticallResults = toolkit.createAction('multicall/fetchingMulticallResults');
-var errorFetchingMulticallResults = toolkit.createAction('multicall/errorFetchingMulticallResults');
-var updateMulticallResults = toolkit.createAction('multicall/updateMulticallResults');
-
-function isMethodArg(x) {
-    return ['string', 'number'].indexOf(typeof x) !== -1;
-}
-function isValidMethodArgs(x) {
-    return (x === undefined ||
-        (Array.isArray(x) && x.every(function (xi) { return isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg)); })));
-}
-var INVALID_RESULT = { valid: false, blockNumber: undefined, data: undefined };
-// use this options object
-var NEVER_RELOAD = {
-    blocksPerFetch: Infinity,
-};
-// the lowest level call for subscribing to contract data
-function useCallsData(calls, options) {
-    var chainId = useActiveWeb3React().chainId;
-    var callResults = reactRedux.useSelector(function (state) { return state.multicall.callResults; });
-    var dispatch = reactRedux.useDispatch();
-    var serializedCallKeys = React.useMemo(function () {
-        var _a, _b, _c;
-        return JSON.stringify((_c = (_b = (_a = calls === null || calls === void 0 ? void 0 : calls.filter(function (c) { return Boolean(c); })) === null || _a === void 0 ? void 0 : _a.map(toCallKey)) === null || _b === void 0 ? void 0 : _b.sort()) !== null && _c !== void 0 ? _c : []);
-    }, [calls]);
-    // update listeners when there is an actual change that persists for at least 100ms
-    React.useEffect(function () {
-        var callKeys = JSON.parse(serializedCallKeys);
-        if (!chainId || callKeys.length === 0)
-            return undefined;
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        var calls = callKeys.map(function (key) { return parseCallKey(key); });
-        dispatch(addMulticallListeners({
-            chainId: chainId,
-            calls: calls,
-            options: options,
-        }));
-        return function () {
-            dispatch(removeMulticallListeners({
-                chainId: chainId,
-                calls: calls,
-                options: options,
-            }));
-        };
-    }, [chainId, dispatch, options, serializedCallKeys]);
-    return React.useMemo(function () {
-        return calls.map(function (call) {
-            var _a;
-            if (!chainId || !call)
-                return INVALID_RESULT;
-            var result = (_a = callResults[chainId]) === null || _a === void 0 ? void 0 : _a[toCallKey(call)];
-            var data;
-            if ((result === null || result === void 0 ? void 0 : result.data) && (result === null || result === void 0 ? void 0 : result.data) !== '0x') {
-                // eslint-disable-next-line prefer-destructuring
-                data = result.data;
-            }
-            return { valid: true, data: data, blockNumber: result === null || result === void 0 ? void 0 : result.blockNumber };
-        });
-    }, [callResults, calls, chainId]);
-}
-var INVALID_CALL_STATE = { valid: false, result: undefined, loading: false, syncing: false, error: false };
-var LOADING_CALL_STATE = { valid: true, result: undefined, loading: true, syncing: true, error: false };
-function toCallState(callResult, contractInterface, fragment, latestBlockNumber) {
-    if (!callResult)
-        return INVALID_CALL_STATE;
-    var valid = callResult.valid, data = callResult.data, blockNumber = callResult.blockNumber;
-    if (!valid)
-        return INVALID_CALL_STATE;
-    if (valid && !blockNumber)
-        return LOADING_CALL_STATE;
-    if (!contractInterface || !fragment || !latestBlockNumber)
-        return LOADING_CALL_STATE;
-    var success = data && data.length > 2;
-    var syncing = (blockNumber !== null && blockNumber !== void 0 ? blockNumber : 0) < latestBlockNumber;
-    var result;
-    if (success && data) {
-        try {
-            result = contractInterface.decodeFunctionResult(fragment, data);
-        }
-        catch (error) {
-            console.debug('Result data parsing failed', fragment, data);
-            return {
-                valid: true,
-                loading: false,
-                error: true,
-                syncing: syncing,
-                result: result,
-            };
-        }
-    }
-    return {
-        valid: true,
-        loading: false,
-        syncing: syncing,
-        result: result,
-        error: !success,
-    };
-}
-function useSingleContractMultipleData(contract, methodName, callInputs, options) {
-    var fragment = React.useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
-    var calls = React.useMemo(function () {
-        return contract && fragment && callInputs && callInputs.length > 0
-            ? callInputs.map(function (inputs) {
-                return {
-                    address: contract.address,
-                    callData: contract.interface.encodeFunctionData(fragment, inputs),
-                };
-            })
-            : [];
-    }, [callInputs, contract, fragment]);
-    var results = useCallsData(calls, options);
-    var latestBlockNumber = useBlockNumber();
-    return React.useMemo(function () {
-        return results.map(function (result) { return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber); });
-    }, [fragment, contract, results, latestBlockNumber]);
-}
-function useMultipleContractSingleData(addresses, contractInterface, methodName, callInputs, options) {
-    var fragment = React.useMemo(function () { return contractInterface.getFunction(methodName); }, [contractInterface, methodName]);
-    var callData = React.useMemo(function () {
-        return fragment && isValidMethodArgs(callInputs)
-            ? contractInterface.encodeFunctionData(fragment, callInputs)
-            : undefined;
-    }, [callInputs, contractInterface, fragment]);
-    var calls = React.useMemo(function () {
-        return fragment && addresses && addresses.length > 0 && callData
-            ? addresses.map(function (address) {
-                return address && callData
-                    ? {
-                        address: address,
-                        callData: callData,
-                    }
-                    : undefined;
-            })
-            : [];
-    }, [addresses, callData, fragment]);
-    var results = useCallsData(calls, options);
-    var latestBlockNumber = useBlockNumber();
-    return React.useMemo(function () {
-        return results.map(function (result) { return toCallState(result, contractInterface, fragment, latestBlockNumber); });
-    }, [fragment, results, contractInterface, latestBlockNumber]);
-}
-function useSingleCallResult(contract, methodName, inputs, options) {
-    var fragment = React.useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
-    var calls = React.useMemo(function () {
-        return contract && fragment && isValidMethodArgs(inputs)
-            ? [
-                {
-                    address: contract.address,
-                    callData: contract.interface.encodeFunctionData(fragment, inputs),
-                },
-            ]
-            : [];
-    }, [contract, fragment, inputs]);
-    var result = useCallsData(calls, options)[0];
-    var latestBlockNumber = useBlockNumber();
-    return React.useMemo(function () {
-        return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber);
-    }, [result, contract, fragment, latestBlockNumber]);
-}
-
-function serializeToken(token) {
-    return {
-        chainId: token.chainId,
-        address: token.address,
-        decimals: token.decimals,
-        symbol: token.symbol,
-        name: token.name,
-    };
-}
-function deserializeToken(serializedToken) {
-    return new dsgswapSdk.Token(serializedToken.chainId, serializedToken.address, serializedToken.decimals, serializedToken.symbol, serializedToken.name);
-}
-
-function useUserAddedTokens() {
-    var chainId = useActiveWeb3React().chainId;
-    var serializedTokensMap = reactRedux.useSelector(function (_a) {
-        var tokens = _a.user.tokens;
-        return tokens;
-    });
-    return React.useMemo(function () {
-        var _a;
-        if (!chainId)
-            return [];
-        return Object.values((_a = serializedTokensMap === null || serializedTokensMap === void 0 ? void 0 : serializedTokensMap[chainId]) !== null && _a !== void 0 ? _a : {}).map(deserializeToken);
-    }, [serializedTokensMap, chainId]);
-}
-
-var _a$a;
 var contracts = {
-    SwapRouter: (_a$a = {},
-        _a$a[dsgswapSdk.ChainId.MAINNET] = '0xe9c7650b97712c0ec958ff270fbf4189fb99c071',
-        _a$a[dsgswapSdk.ChainId.TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$a[dsgswapSdk.ChainId.MATIC_MAINNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$a[dsgswapSdk.ChainId.MATIC_TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
-        _a$a)
+    SwapRouter: (_a$b = {},
+        _a$b[dsgswapSdk.ChainId.MAINNET] = '0xe9c7650b97712c0ec958ff270fbf4189fb99c071',
+        _a$b[dsgswapSdk.ChainId.TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$b[dsgswapSdk.ChainId.MATIC_MAINNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$b[dsgswapSdk.ChainId.MATIC_TESTNET] = '0xddb1a59ad3b87b914c4466dc6c39c2542ec565a1',
+        _a$b)
 };
 
 var swapRouterAbi = [
@@ -2447,6 +2282,235 @@ function isTokenOnList(defaultTokens, currency) {
         return true;
     return Boolean(currency instanceof dsgswapSdk.Token && ((_a = defaultTokens[currency.chainId]) === null || _a === void 0 ? void 0 : _a[currency.address]));
 }
+
+var getNodeUrl = function (chainId) {
+    // return process.env.REACT_APP_NODE_3
+    return sample__default["default"](dsgswapSdk.ETHEREUM_CHAIN[chainId || dsgswapSdk.chainIdProxy.chainId].rpcUrls);
+    // return 'https://polygon-mumbai.infura.io/v3/330472ed44dd4692a16dfcb4cc41f122'
+};
+
+var RPC_URL = getNodeUrl();
+var simpleRpcProvider = new ethers.ethers.providers.JsonRpcProvider(RPC_URL);
+
+/**
+ * Provides a web3 provider with or without user's signer
+ * Recreate web3 instance only if the provider change
+ */
+var useActiveWeb3React = function () {
+    var _a = core.useWeb3React(), library = _a.library, chainId = _a.chainId, web3React = tslib.__rest(_a, ["library", "chainId"]);
+    var refEth = React.useRef(library);
+    var _b = tslib.__read(React.useState(library || simpleRpcProvider), 2), provider = _b[0], setprovider = _b[1];
+    React.useEffect(function () {
+        if (library !== refEth.current) {
+            setprovider(library || new ethers.ethers.providers.JsonRpcProvider(getNodeUrl(chainId)));
+            refEth.current = library;
+        }
+    }, [library, chainId]);
+    return tslib.__assign({ library: provider, chainId: chainId !== null && chainId !== void 0 ? chainId : dsgswapSdk.chainIdProxy.chainId }, web3React);
+};
+
+function useBlockNumber() {
+    var chainId = useActiveWeb3React().chainId;
+    return reactRedux.useSelector(function (state) { return state.application.blockNumber[chainId !== null && chainId !== void 0 ? chainId : -1]; });
+}
+
+var ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+var LOWER_HEX_REGEX = /^0x[a-f0-9]*$/;
+function toCallKey(call) {
+    if (!ADDRESS_REGEX.test(call.address)) {
+        throw new Error("Invalid address: " + call.address);
+    }
+    if (!LOWER_HEX_REGEX.test(call.callData)) {
+        throw new Error("Invalid hex: " + call.callData);
+    }
+    return call.address + "-" + call.callData;
+}
+function parseCallKey(callKey) {
+    var pcs = callKey.split('-');
+    if (pcs.length !== 2) {
+        throw new Error("Invalid call key: " + callKey);
+    }
+    return {
+        address: pcs[0],
+        callData: pcs[1],
+    };
+}
+var addMulticallListeners = toolkit.createAction('multicall/addMulticallListeners');
+var removeMulticallListeners = toolkit.createAction('multicall/removeMulticallListeners');
+var fetchingMulticallResults = toolkit.createAction('multicall/fetchingMulticallResults');
+var errorFetchingMulticallResults = toolkit.createAction('multicall/errorFetchingMulticallResults');
+var updateMulticallResults = toolkit.createAction('multicall/updateMulticallResults');
+
+function isMethodArg(x) {
+    return ['string', 'number'].indexOf(typeof x) !== -1;
+}
+function isValidMethodArgs(x) {
+    return (x === undefined ||
+        (Array.isArray(x) && x.every(function (xi) { return isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg)); })));
+}
+var INVALID_RESULT = { valid: false, blockNumber: undefined, data: undefined };
+// use this options object
+var NEVER_RELOAD = {
+    blocksPerFetch: Infinity,
+};
+// the lowest level call for subscribing to contract data
+function useCallsData(calls, options) {
+    var chainId = useActiveWeb3React().chainId;
+    var callResults = reactRedux.useSelector(function (state) { return state.multicall.callResults; });
+    var dispatch = reactRedux.useDispatch();
+    var serializedCallKeys = React.useMemo(function () {
+        var _a, _b, _c;
+        return JSON.stringify((_c = (_b = (_a = calls === null || calls === void 0 ? void 0 : calls.filter(function (c) { return Boolean(c); })) === null || _a === void 0 ? void 0 : _a.map(toCallKey)) === null || _b === void 0 ? void 0 : _b.sort()) !== null && _c !== void 0 ? _c : []);
+    }, [calls]);
+    // update listeners when there is an actual change that persists for at least 100ms
+    React.useEffect(function () {
+        var callKeys = JSON.parse(serializedCallKeys);
+        if (!chainId || callKeys.length === 0)
+            return undefined;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        var calls = callKeys.map(function (key) { return parseCallKey(key); });
+        dispatch(addMulticallListeners({
+            chainId: chainId,
+            calls: calls,
+            options: options,
+        }));
+        return function () {
+            dispatch(removeMulticallListeners({
+                chainId: chainId,
+                calls: calls,
+                options: options,
+            }));
+        };
+    }, [chainId, dispatch, options, serializedCallKeys]);
+    return React.useMemo(function () {
+        return calls.map(function (call) {
+            var _a;
+            if (!chainId || !call)
+                return INVALID_RESULT;
+            var result = (_a = callResults[chainId]) === null || _a === void 0 ? void 0 : _a[toCallKey(call)];
+            var data;
+            if ((result === null || result === void 0 ? void 0 : result.data) && (result === null || result === void 0 ? void 0 : result.data) !== '0x') {
+                // eslint-disable-next-line prefer-destructuring
+                data = result.data;
+            }
+            return { valid: true, data: data, blockNumber: result === null || result === void 0 ? void 0 : result.blockNumber };
+        });
+    }, [callResults, calls, chainId]);
+}
+var INVALID_CALL_STATE = { valid: false, result: undefined, loading: false, syncing: false, error: false };
+var LOADING_CALL_STATE = { valid: true, result: undefined, loading: true, syncing: true, error: false };
+function toCallState(callResult, contractInterface, fragment, latestBlockNumber) {
+    if (!callResult)
+        return INVALID_CALL_STATE;
+    var valid = callResult.valid, data = callResult.data, blockNumber = callResult.blockNumber;
+    if (!valid)
+        return INVALID_CALL_STATE;
+    if (valid && !blockNumber)
+        return LOADING_CALL_STATE;
+    if (!contractInterface || !fragment || !latestBlockNumber)
+        return LOADING_CALL_STATE;
+    var success = data && data.length > 2;
+    var syncing = (blockNumber !== null && blockNumber !== void 0 ? blockNumber : 0) < latestBlockNumber;
+    var result;
+    if (success && data) {
+        try {
+            result = contractInterface.decodeFunctionResult(fragment, data);
+        }
+        catch (error) {
+            console.debug('Result data parsing failed', fragment, data);
+            return {
+                valid: true,
+                loading: false,
+                error: true,
+                syncing: syncing,
+                result: result,
+            };
+        }
+    }
+    return {
+        valid: true,
+        loading: false,
+        syncing: syncing,
+        result: result,
+        error: !success,
+    };
+}
+function useSingleContractMultipleData(contract, methodName, callInputs, options) {
+    var fragment = React.useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
+    var calls = React.useMemo(function () {
+        return contract && fragment && callInputs && callInputs.length > 0
+            ? callInputs.map(function (inputs) {
+                return {
+                    address: contract.address,
+                    callData: contract.interface.encodeFunctionData(fragment, inputs),
+                };
+            })
+            : [];
+    }, [callInputs, contract, fragment]);
+    var results = useCallsData(calls, options);
+    var latestBlockNumber = useBlockNumber();
+    return React.useMemo(function () {
+        return results.map(function (result) { return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber); });
+    }, [fragment, contract, results, latestBlockNumber]);
+}
+function useMultipleContractSingleData(addresses, contractInterface, methodName, callInputs, options) {
+    var fragment = React.useMemo(function () { return contractInterface.getFunction(methodName); }, [contractInterface, methodName]);
+    var callData = React.useMemo(function () {
+        return fragment && isValidMethodArgs(callInputs)
+            ? contractInterface.encodeFunctionData(fragment, callInputs)
+            : undefined;
+    }, [callInputs, contractInterface, fragment]);
+    var calls = React.useMemo(function () {
+        return fragment && addresses && addresses.length > 0 && callData
+            ? addresses.map(function (address) {
+                return address && callData
+                    ? {
+                        address: address,
+                        callData: callData,
+                    }
+                    : undefined;
+            })
+            : [];
+    }, [addresses, callData, fragment]);
+    var results = useCallsData(calls, options);
+    var latestBlockNumber = useBlockNumber();
+    return React.useMemo(function () {
+        return results.map(function (result) { return toCallState(result, contractInterface, fragment, latestBlockNumber); });
+    }, [fragment, results, contractInterface, latestBlockNumber]);
+}
+function useSingleCallResult(contract, methodName, inputs, options) {
+    var fragment = React.useMemo(function () { var _a; return (_a = contract === null || contract === void 0 ? void 0 : contract.interface) === null || _a === void 0 ? void 0 : _a.getFunction(methodName); }, [contract, methodName]);
+    var calls = React.useMemo(function () {
+        return contract && fragment && isValidMethodArgs(inputs)
+            ? [
+                {
+                    address: contract.address,
+                    callData: contract.interface.encodeFunctionData(fragment, inputs),
+                },
+            ]
+            : [];
+    }, [contract, fragment, inputs]);
+    var result = useCallsData(calls, options)[0];
+    var latestBlockNumber = useBlockNumber();
+    return React.useMemo(function () {
+        return toCallState(result, contract === null || contract === void 0 ? void 0 : contract.interface, fragment, latestBlockNumber);
+    }, [result, contract, fragment, latestBlockNumber]);
+}
+
+/**
+ * Returns true if the string value is zero in hex
+ * @param hexNumberString
+ */
+function isZero(hexNumberString) {
+    return /^0x0*$/.test(hexNumberString);
+}
+
+var getAddress = function (address) {
+    return dsgswapSdk.getValueWithChainId(address);
+};
+var getMulticallAddress = function () {
+    return getAddress(dsgswapSdk.contractAddress.multiCall);
+};
 
 var Erc20Abi = [
 	{
@@ -5362,6 +5426,665 @@ function useMulticallContract() {
     return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false);
 }
 
+/**
+ * Does a lookup for an ENS name to find its address.
+ */
+function useENSAddress(ensName) {
+    var _a, _b, _c;
+    var debouncedName = useDebounce(ensName, 200);
+    var ensNodeArgument = React.useMemo(function () {
+        if (!debouncedName)
+            return [undefined];
+        try {
+            return debouncedName ? [utils.namehash(debouncedName)] : [undefined];
+        }
+        catch (error) {
+            return [undefined];
+        }
+    }, [debouncedName]);
+    var registrarContract = useENSRegistrarContract(false);
+    var resolverAddress = useSingleCallResult(registrarContract, 'resolver', ensNodeArgument);
+    var resolverAddressResult = (_a = resolverAddress.result) === null || _a === void 0 ? void 0 : _a[0];
+    var resolverContract = useENSResolverContract(resolverAddressResult && !isZero(resolverAddressResult) ? resolverAddressResult : undefined, false);
+    var addr = useSingleCallResult(resolverContract, 'addr', ensNodeArgument);
+    var changed = debouncedName !== ensName;
+    return {
+        address: changed ? null : (_c = (_b = addr.result) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : null,
+        loading: changed || resolverAddress.loading || addr.loading,
+    };
+}
+
+/**
+ * Does a reverse lookup for an address to find its ENS name.
+ * Note this is not the same as looking up an ENS name to find an address.
+ */
+function useENSName(address) {
+    var _a, _b, _c;
+    var debouncedAddress = useDebounce(address, 200);
+    var ensNodeArgument = React.useMemo(function () {
+        if (!debouncedAddress || !isAddress(debouncedAddress))
+            return [undefined];
+        try {
+            return debouncedAddress ? [utils.namehash(debouncedAddress.toLowerCase().substr(2) + ".addr.reverse")] : [undefined];
+        }
+        catch (error) {
+            return [undefined];
+        }
+    }, [debouncedAddress]);
+    var registrarContract = useENSRegistrarContract(false);
+    var resolverAddress = useSingleCallResult(registrarContract, 'resolver', ensNodeArgument);
+    var resolverAddressResult = (_a = resolverAddress.result) === null || _a === void 0 ? void 0 : _a[0];
+    var resolverContract = useENSResolverContract(resolverAddressResult && !isZero(resolverAddressResult) ? resolverAddressResult : undefined, false);
+    var name = useSingleCallResult(resolverContract, 'name', ensNodeArgument);
+    var changed = debouncedAddress !== address;
+    return {
+        ENSName: changed ? null : (_c = (_b = name.result) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : null,
+        loading: changed || resolverAddress.loading || name.loading,
+    };
+}
+
+/**
+ * Given a name or address, does a lookup to resolve to an address and name
+ * @param nameOrAddress ENS name or address
+ */
+function useENS(nameOrAddress) {
+    var validated = isAddress(nameOrAddress);
+    var reverseLookup = useENSName(validated || undefined);
+    var lookup = useENSAddress(nameOrAddress);
+    return {
+        loading: reverseLookup.loading || lookup.loading,
+        address: validated || lookup.address,
+        name: reverseLookup.ENSName ? reverseLookup.ENSName : !validated && lookup.address ? nameOrAddress || null : null,
+    };
+}
+
+function wrappedCurrency(currency, chainId) {
+    return chainId && currency === dsgswapSdk.getActiveETHERWidthChainId() ? dsgswapSdk.WETHER[chainId] : currency instanceof dsgswapSdk.Token ? currency : undefined;
+}
+function unwrappedToken(token) {
+    if (token.equals(dsgswapSdk.WETHER[token.chainId]))
+        return dsgswapSdk.getActiveETHERWidthChainId();
+    return token;
+}
+
+var PAIR_INTERFACE = new abi$1.Interface(abi);
+var PairState;
+(function (PairState) {
+    PairState[PairState["LOADING"] = 0] = "LOADING";
+    PairState[PairState["NOT_EXISTS"] = 1] = "NOT_EXISTS";
+    PairState[PairState["EXISTS"] = 2] = "EXISTS";
+    PairState[PairState["INVALID"] = 3] = "INVALID";
+})(PairState || (PairState = {}));
+function usePairs(currencies) {
+    var chainId = useActiveWeb3React().chainId;
+    var tokens = React.useMemo(function () {
+        return currencies.map(function (_a) {
+            var _b = tslib.__read(_a, 2), currencyA = _b[0], currencyB = _b[1];
+            return [
+                wrappedCurrency(currencyA, chainId),
+                wrappedCurrency(currencyB, chainId),
+            ];
+        });
+    }, [chainId, currencies]);
+    var pairAddresses = React.useMemo(function () {
+        return tokens.map(function (_a) {
+            var _b = tslib.__read(_a, 2), tokenA = _b[0], tokenB = _b[1];
+            return tokenA && tokenB && !tokenA.equals(tokenB) ? dsgswapSdk.Pair.getAddress(tokenA, tokenB) : undefined;
+        });
+    }, [tokens]);
+    var results = useMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves');
+    return React.useMemo(function () {
+        return results.map(function (result, i) {
+            var reserves = result.result, loading = result.loading;
+            var tokenA = tokens[i][0];
+            var tokenB = tokens[i][1];
+            if (loading)
+                return [PairState.LOADING, null];
+            if (!tokenA || !tokenB || tokenA.equals(tokenB))
+                return [PairState.INVALID, null];
+            if (!reserves)
+                return [PairState.NOT_EXISTS, null];
+            var reserve0 = reserves.reserve0, reserve1 = reserves.reserve1;
+            var _a = tslib.__read(tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA], 2), token0 = _a[0], token1 = _a[1];
+            return [
+                PairState.EXISTS,
+                new dsgswapSdk.Pair(new dsgswapSdk.TokenAmount(token0, reserve0.toString()), new dsgswapSdk.TokenAmount(token1, reserve1.toString())),
+            ];
+        });
+    }, [results, tokens]);
+}
+function usePair(tokenA, tokenB) {
+    return usePairs([[tokenA, tokenB]])[0];
+}
+
+var UNSUPPORTED_LIST_URLS = [];
+// lower index == higher priority for token import
+tslib.__spreadArray([
+    // PANCAKE_TOP100,
+    // PANCAKE_EXTENDED,
+    getAddress(dsgswapSdk.DSG_TOKENS_TOP100)
+], tslib.__read(UNSUPPORTED_LIST_URLS));
+var getTokenDefaultList = function () { return tslib.__spreadArray([
+    // PANCAKE_TOP100,
+    // PANCAKE_EXTENDED,
+    getAddress(dsgswapSdk.DSG_TOKENS_TOP100)
+], tslib.__read(UNSUPPORTED_LIST_URLS)); };
+// default lists to be 'active' aka searched across
+[getAddress(dsgswapSdk.DSG_TOKENS_TOP100)];
+var getTokenDefaultActiveList = function () { return [getAddress(dsgswapSdk.DSG_TOKENS_TOP100)]; };
+
+var name$1 = "Dsg Default List";
+var timestamp$1 = "2021-11-12T06:00:00Z";
+var version$1 = {
+	major: 1,
+	minor: 0,
+	patch: 1
+};
+var tags$2 = {
+};
+var logoURI$1 = "https://dsgmetaverse.com/logo.png";
+var keywords$1 = [
+	"dinosaur eggs",
+	"dsg",
+	"default"
+];
+var tokens$1 = [
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0x9A78649501BbAAC285Ea4187299471B7ad4ABD35",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0xf8e8c2e77c47B9da858477341a649823f500c295",
+		chainId: 97,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "Monery-hunry Dino Frament Token",
+		symbol: "DSGMDF",
+		address: "0xbc44f2408192c2F853d953b370D449B9fdb9b1F6",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSGMDF.png"
+	},
+	{
+		name: "Meat Frament Token",
+		symbol: "DSGMF",
+		address: "0x8ee0eebefddc5f672680e9d3d165bc1dc7591919",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/DSGMF.png"
+	},
+	{
+		name: "WBNB Token",
+		symbol: "WBNB",
+		address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
+	},
+	{
+		name: "WBNB Token",
+		symbol: "WBNB",
+		address: "0xD2754634e39cC8aaC7b8174af7e0552545cF63CB",
+		chainId: 97,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
+	},
+	{
+		name: "Binance Pegged BUSD",
+		symbol: "BUSD",
+		address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png"
+	},
+	{
+		name: "BUSD",
+		symbol: "BUSD",
+		address: "0x0858241B08b1335d7711838D6cC9C60a72c92C4B",
+		chainId: 97,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56.png"
+	},
+	{
+		name: "USDT",
+		symbol: "USDT",
+		address: "0x865746A11eC78819c0067a031e9dd8D69F0B319d",
+		chainId: 97,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/USDT.png"
+	},
+	{
+		name: "Binance Pegged ETH",
+		symbol: "ETH",
+		address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x2170Ed0880ac9A755fd29B2688956BD959F933F8.png"
+	},
+	{
+		name: "Binance Pegged Bitcoin",
+		symbol: "BTCB",
+		address: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png"
+	},
+	{
+		name: "Binance Pegged USDT",
+		symbol: "USDT",
+		address: "0x55d398326f99059fF775485246999027B3197955",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://dsgmetaverse.com/images/tokens/USDT.png"
+	},
+	{
+		name: "Venus Token",
+		symbol: "XVS",
+		address: "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63.png"
+	},
+	{
+		name: "Venus",
+		symbol: "XVS",
+		address: "0x997003114c52945798c48757021938c257c76A57",
+		chainId: 97,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63.png"
+	},
+	{
+		name: "VAI Stablecoin",
+		symbol: "VAI",
+		address: "0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
+		chainId: 56,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7.png"
+	},
+	{
+		name: "VAI Stablecoin",
+		symbol: "VAI",
+		address: "0x5b0663Ecb9cdFe770214AA6324DE5253F15FF2E1",
+		chainId: 97,
+		decimals: 18,
+		logoURI: "https://tokens.pancakeswap.finance/images/0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7.png"
+	},
+	{
+		name: "Dai Stablecoin",
+		address: "0xe9C570f7775E5e7232590cD17438D99ec02cDfeB",
+		symbol: "DAI",
+		decimals: 18,
+		chainId: 80001,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+	},
+	{
+		name: "Dai Stablecoin",
+		address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+		symbol: "DAI",
+		decimals: 18,
+		chainId: 137,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+	},
+	{
+		name: "Tether USD",
+		address: "0x363B097cc4EbA999a6555427CB1b77d943FF43c1",
+		symbol: "USDT",
+		decimals: 6,
+		chainId: 80001,
+		logoURI: "/images/tokens/USDT.png"
+	},
+	{
+		name: "Tether USD",
+		address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+		symbol: "USDT",
+		decimals: 6,
+		chainId: 137,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+	},
+	{
+		name: "Wrapped Matic",
+		address: "0x9eeD3ab1c437b63C0A96ED9A7854593addc66aC5",
+		symbol: "WMATIC",
+		decimals: 18,
+		chainId: 80001,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
+	},
+	{
+		name: "Wrapped Matic",
+		address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+		symbol: "WMATIC",
+		decimals: 18,
+		chainId: 137,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
+	},
+	{
+		name: "USDC",
+		symbol: "USDC",
+		address: "0xCE8dca0BF7c5625A056B804A5e94F419480ba5a5",
+		chainId: 80001,
+		decimals: 6,
+		logoURI: "https://magicianmetaverse.com/images/tokens/USDC.png"
+	},
+	{
+		name: "USDC",
+		symbol: "USDC",
+		address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+		chainId: 137,
+		decimals: 6,
+		logoURI: "https://magicianmetaverse.com/images/tokens/USDC.png"
+	},
+	{
+		name: "WETH",
+		symbol: "WETH",
+		address: "0x09AB0a23e4e10aE30988cc11103aF1255142c2B1",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+	},
+	{
+		name: "WETH",
+		symbol: "WETH",
+		address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+	},
+	{
+		name: "WBTC",
+		symbol: "WBTC",
+		address: "0x6696143F1814E5d2A3EAFad16E2C51a25c809430",
+		chainId: 80001,
+		decimals: 8,
+		logoURI: "https://magicianmetaverse.com/images/tokens/WBTC.png"
+	},
+	{
+		name: "WBTC",
+		symbol: "WBTC",
+		address: "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
+		chainId: 137,
+		decimals: 8,
+		logoURI: "https://magicianmetaverse.com/images/tokens/WBTC.png"
+	},
+	{
+		name: "MagicBallToken",
+		symbol: "MBT",
+		address: "0xCb071b023a2D434cEE80ae0Fb19a46C1b5Ec38b8",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBT.png"
+	},
+	{
+		name: "MagicBallToken",
+		symbol: "MBT",
+		address: "0x9e5cc3aF2c87527Fdb48eb783E84E0fD9a59918a",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBT.png"
+	},
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0x683915d350824D6f046d67949359Fc8b9F8EeB28",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "DSG",
+		symbol: "DSG",
+		address: "0xb65Ce345e1d6786C55c847076563b24B8B34bc2A",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/DSG.png"
+	},
+	{
+		name: "MBT Crystal Fragment",
+		symbol: "MBTCF",
+		address: "0xD6d8f98BDE2AC5DfC941269ea18803D72086427d",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTCF.png"
+	},
+	{
+		name: "MBT Crystal Fragment",
+		symbol: "MBTCF",
+		address: "0x4aB731C693D54188C3bC9762f61829D06f7afdC4",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTCF.png"
+	},
+	{
+		name: "MBT Potion Fragment",
+		symbol: "MBTPF",
+		address: "0x2f94dC2009494680CeC2C23bc49198434B802b18",
+		chainId: 80001,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTPF.png"
+	},
+	{
+		name: "MBT Potion Fragment",
+		symbol: "MBTPF",
+		address: "0x437c7C0460E8b795C67872E8D0fB441ef6cc1E68",
+		chainId: 137,
+		decimals: 18,
+		logoURI: "https://magicianmetaverse.com/images/tokens/MBTPF.png"
+	}
+];
+var DEFAULT_TOKEN_LIST = {
+	name: name$1,
+	timestamp: timestamp$1,
+	version: version$1,
+	tags: tags$2,
+	logoURI: logoURI$1,
+	keywords: keywords$1,
+	tokens: tokens$1
+};
+
+var name = "Dsg Unsupported List";
+var timestamp = "2021-01-05T20:47:02.923Z";
+var version = {
+	major: 1,
+	minor: 0,
+	patch: 0
+};
+var tags$1 = {
+};
+var logoURI = "";
+var keywords = [
+	"dinosaur eggs",
+	"dsg",
+	"unsupported"
+];
+var tokens = [
+];
+var UNSUPPORTED_TOKEN_LIST = {
+	name: name,
+	timestamp: timestamp,
+	version: version,
+	tags: tags$1,
+	logoURI: logoURI,
+	keywords: keywords,
+	tokens: tokens
+};
+
+var _a$a;
+// use ordering of default list of lists to assign priority
+function sortByListPriority(urlA, urlB) {
+    var first = getTokenDefaultList().includes(urlA) ? getTokenDefaultList().indexOf(urlA) : Number.MAX_SAFE_INTEGER;
+    var second = getTokenDefaultList().includes(urlB) ? getTokenDefaultList().indexOf(urlB) : Number.MAX_SAFE_INTEGER;
+    // need reverse order to make sure mapping includes top priority last
+    if (first < second)
+        return 1;
+    if (first > second)
+        return -1;
+    return 0;
+}
+/**
+ * Token instances created from token info.
+ */
+var WrappedTokenInfo = /** @class */ (function (_super) {
+    tslib.__extends(WrappedTokenInfo, _super);
+    function WrappedTokenInfo(tokenInfo, tags) {
+        var _this = _super.call(this, tokenInfo.chainId, tokenInfo.address, tokenInfo.decimals, tokenInfo.symbol, tokenInfo.name) || this;
+        _this.tokenInfo = tokenInfo;
+        _this.tags = tags;
+        return _this;
+    }
+    Object.defineProperty(WrappedTokenInfo.prototype, "logoURI", {
+        get: function () {
+            return this.tokenInfo.logoURI;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return WrappedTokenInfo;
+}(dsgswapSdk.Token));
+/**
+ * An empty result, useful as a default.
+ */
+var EMPTY_LIST = (_a$a = {},
+    _a$a[dsgswapSdk.ChainId.MAINNET] = {},
+    _a$a[dsgswapSdk.ChainId.TESTNET] = {},
+    _a$a[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
+    _a$a[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
+    _a$a);
+var listCache = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
+function listToTokenMap(list) {
+    var result = listCache === null || listCache === void 0 ? void 0 : listCache.get(list);
+    if (result)
+        return result;
+    // const renderList = list.tokens.filter(item => item.chainId === 65)
+    var map = list.tokens.reduce(function (tokenMap, tokenInfo) {
+        var _a, _b;
+        var _c, _d, _e;
+        var tags = (_e = (_d = (_c = tokenInfo.tags) === null || _c === void 0 ? void 0 : _c.map(function (tagId) {
+            var _a;
+            if (!((_a = list.tags) === null || _a === void 0 ? void 0 : _a[tagId]))
+                return undefined;
+            return tslib.__assign(tslib.__assign({}, list.tags[tagId]), { id: tagId });
+        })) === null || _d === void 0 ? void 0 : _d.filter(function (x) { return Boolean(x); })) !== null && _e !== void 0 ? _e : [];
+        var token = new WrappedTokenInfo(tokenInfo, tags);
+        if (tokenMap[token.chainId][token.address] !== undefined) {
+            console.debug(tokenMap[token.chainId][token.address]);
+            throw Error('Duplicate tokens.');
+        }
+        return tslib.__assign(tslib.__assign({}, tokenMap), (_a = {}, _a[token.chainId] = tslib.__assign(tslib.__assign({}, tokenMap[token.chainId]), (_b = {}, _b[token.address] = {
+            token: token,
+            list: list,
+        }, _b)), _a));
+    }, tslib.__assign({}, EMPTY_LIST));
+    listCache === null || listCache === void 0 ? void 0 : listCache.set(list, map);
+    return map;
+}
+function useAllLists() {
+    return reactRedux.useSelector(function (state) { return state.lists.byUrl; });
+}
+function combineMaps(map1, map2) {
+    var _a;
+    return _a = {},
+        _a[dsgswapSdk.ChainId.MAINNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.MAINNET]), map2[dsgswapSdk.ChainId.MAINNET]),
+        _a[dsgswapSdk.ChainId.TESTNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.TESTNET]), map2[dsgswapSdk.ChainId.TESTNET]),
+        _a[dsgswapSdk.ChainId.MATIC_MAINNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.MATIC_MAINNET]), map2[dsgswapSdk.ChainId.MATIC_MAINNET]),
+        _a[dsgswapSdk.ChainId.MATIC_TESTNET] = tslib.__assign(tslib.__assign({}, map1[dsgswapSdk.ChainId.MATIC_TESTNET]), map2[dsgswapSdk.ChainId.MATIC_TESTNET]),
+        _a;
+}
+// merge tokens contained within lists from urls
+function useCombinedTokenMapFromUrls(urls) {
+    var lists = useAllLists();
+    return React.useMemo(function () {
+        if (!urls)
+            return EMPTY_LIST;
+        return (urls
+            .slice()
+            // sort by priority so top priority goes last
+            .sort(sortByListPriority)
+            .reduce(function (allTokens, currentUrl) {
+            var _a;
+            var current = (_a = lists[currentUrl]) === null || _a === void 0 ? void 0 : _a.current;
+            if (!current)
+                return allTokens;
+            try {
+                var newTokens = Object.assign(listToTokenMap(current));
+                return combineMaps(allTokens, newTokens);
+            }
+            catch (error) {
+                console.error('Could not show token list due to error', error);
+                return allTokens;
+            }
+        }, EMPTY_LIST));
+    }, [lists, urls]);
+}
+// filter out unsupported lists
+function useActiveListUrls() {
+    var _a;
+    return (_a = reactRedux.useSelector(function (state) { return state.lists.activeListUrls; })) === null || _a === void 0 ? void 0 : _a.filter(function (url) { return !UNSUPPORTED_LIST_URLS.includes(url); });
+}
+function useInactiveListUrls() {
+    var lists = useAllLists();
+    var allActiveListUrls = useActiveListUrls();
+    return Object.keys(lists).filter(function (url) { return !(allActiveListUrls === null || allActiveListUrls === void 0 ? void 0 : allActiveListUrls.includes(url)) && !UNSUPPORTED_LIST_URLS.includes(url); });
+}
+// get all the tokens from active lists, combine with local default tokens
+function useCombinedActiveList() {
+    var activeListUrls = useActiveListUrls();
+    var activeTokens = useCombinedTokenMapFromUrls(activeListUrls);
+    var defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST);
+    return combineMaps(activeTokens, defaultTokenMap);
+}
+// all tokens from inactive lists
+function useCombinedInactiveList() {
+    var allInactiveListUrls = useInactiveListUrls();
+    return useCombinedTokenMapFromUrls(allInactiveListUrls);
+}
+// list of tokens not supported on interface, used to show warnings and prevent swaps and adds
+function useUnsupportedTokenList() {
+    // get hard coded unsupported tokens
+    var localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST);
+    // get any loaded unsupported tokens
+    var loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS);
+    // format into one token address map
+    return combineMaps(localUnsupportedListMap, loadedUnsupportedListMap);
+}
+function useIsListActive(url) {
+    var activeListUrls = useActiveListUrls();
+    return Boolean(activeListUrls === null || activeListUrls === void 0 ? void 0 : activeListUrls.includes(url));
+}
+
+function serializeToken(token) {
+    return {
+        chainId: token.chainId,
+        address: token.address,
+        decimals: token.decimals,
+        symbol: token.symbol,
+        name: token.name,
+    };
+}
+function deserializeToken(serializedToken) {
+    return new dsgswapSdk.Token(serializedToken.chainId, serializedToken.address, serializedToken.decimals, serializedToken.symbol, serializedToken.name);
+}
+
+function useUserAddedTokens() {
+    var chainId = useActiveWeb3React().chainId;
+    var serializedTokensMap = reactRedux.useSelector(function (_a) {
+        var tokens = _a.user.tokens;
+        return tokens;
+    });
+    return React.useMemo(function () {
+        var _a;
+        if (!chainId)
+            return [];
+        return Object.values((_a = serializedTokensMap === null || serializedTokensMap === void 0 ? void 0 : serializedTokensMap[chainId]) !== null && _a !== void 0 ? _a : {}).map(deserializeToken);
+    }, [serializedTokensMap, chainId]);
+}
+
 function filterTokens(tokens, search) {
     if (search.length === 0)
         return tokens;
@@ -5551,6 +6274,1255 @@ function useCurrency(currencyId) {
     var isBNB = (currencyId === null || currencyId === void 0 ? void 0 : currencyId.toUpperCase()) === ((_a = ETHER.symbol) === null || _a === void 0 ? void 0 : _a.toUpperCase());
     var token = useToken(isBNB ? undefined : currencyId);
     return isBNB ? ETHER : token;
+}
+
+var _a$9, _b$4, _c, _d, _e, _f;
+// used to construct intermediary pairs for trading
+var BASES_TO_CHECK_TRADES_AGAINST = (_a$9 = {},
+    _a$9[dsgswapSdk.ChainId.MATIC_TESTNET] = [
+        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET],
+        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET],
+        dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET],
+        dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET],
+        dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET],
+        dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_TESTNET],
+    ],
+    _a$9[dsgswapSdk.ChainId.MATIC_MAINNET] = [
+        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET],
+        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET],
+        dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET],
+        dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET],
+        dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_MAINNET],
+        // ETH,
+        // USDC[ChainId.MATIC_MAINNET],
+        // DAI,
+    ],
+    _a$9[dsgswapSdk.ChainId.MAINNET] = [
+        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MAINNET],
+        dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET],
+        dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET],
+        dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET],
+        dsgswapSdk.USDC[dsgswapSdk.ChainId.MAINNET],
+    ],
+    _a$9[dsgswapSdk.ChainId.TESTNET] = [
+        dsgswapSdk.WETHER[dsgswapSdk.ChainId.TESTNET],
+        dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET],
+        dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET],
+        dsgswapSdk.USDT[dsgswapSdk.ChainId.TESTNET],
+        dsgswapSdk.USDC[dsgswapSdk.ChainId.TESTNET],
+    ],
+    _a$9);
+/**
+ * Addittional bases for specific tokens
+ * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
+ */
+var ADDITIONAL_BASES = (_b$4 = {},
+    _b$4[dsgswapSdk.ChainId.MAINNET] = {},
+    _b$4[dsgswapSdk.ChainId.TESTNET] = {},
+    _b$4[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
+    _b$4[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
+    _b$4);
+/**
+ * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
+ * tokens.
+ * @example [AMPL.address]: [DAI, WETHER[ChainId.MAINNET]]
+ */
+var CUSTOM_BASES = (_c = {},
+    _c[dsgswapSdk.ChainId.MAINNET] = {},
+    _c[dsgswapSdk.ChainId.TESTNET] = {},
+    _c[dsgswapSdk.ChainId.MATIC_MAINNET] = {},
+    _c[dsgswapSdk.ChainId.MATIC_TESTNET] = {},
+    _c);
+// used for display in the default list when adding liquidity
+var SUGGESTED_BASES = (_d = {},
+    _d[dsgswapSdk.ChainId.MATIC_MAINNET] = [
+        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET],
+        dsgswapSdk.DSG[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.DAI[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.WBTC[dsgswapSdk.ChainId.MATIC_MAINNET]
+    ],
+    _d[dsgswapSdk.ChainId.MATIC_TESTNET] = [
+        dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET],
+        dsgswapSdk.DSG[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.DAI[dsgswapSdk.ChainId.MATIC_TESTNET]
+    ],
+    _d[dsgswapSdk.ChainId.MAINNET] = [dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.VAI[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.XVS[dsgswapSdk.ChainId.MAINNET]],
+    _d[dsgswapSdk.ChainId.TESTNET] = [dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.VAI[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.XVS[dsgswapSdk.ChainId.TESTNET]],
+    _d);
+// used to construct the list of all pairs we consider by default in the frontend
+(_e = {},
+    _e[dsgswapSdk.ChainId.MATIC_MAINNET] = [
+        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_MAINNET]
+    ],
+    _e[dsgswapSdk.ChainId.MATIC_TESTNET] = [
+        dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MATIC_TESTNET]
+    ],
+    _e[dsgswapSdk.ChainId.MAINNET] = [dsgswapSdk.WETH[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET]],
+    _e[dsgswapSdk.ChainId.TESTNET] = [dsgswapSdk.WETH[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.DSG[dsgswapSdk.ChainId.TESTNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.TESTNET]],
+    _e);
+(_f = {},
+    _f[dsgswapSdk.ChainId.MAINNET] = [
+        [dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.WETHER[dsgswapSdk.ChainId.MAINNET]],
+        [dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.USDT[dsgswapSdk.ChainId.MAINNET]],
+        [dsgswapSdk.DSG[dsgswapSdk.ChainId.MAINNET], dsgswapSdk.BUSD[dsgswapSdk.ChainId.MAINNET]],
+    ],
+    _f[dsgswapSdk.ChainId.MATIC_TESTNET] = [
+        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET]],
+        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET]],
+        [dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET]],
+        [dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_TESTNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_TESTNET]],
+    ],
+    _f[dsgswapSdk.ChainId.MATIC_MAINNET] = [
+        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET]],
+        [dsgswapSdk.MBT[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET]],
+        [dsgswapSdk.WETHER[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET]],
+        [dsgswapSdk.WETH[dsgswapSdk.ChainId.MATIC_MAINNET], dsgswapSdk.USDC[dsgswapSdk.ChainId.MATIC_MAINNET]],
+    ],
+    _f);
+// default allowed slippage, in bips
+var INITIAL_ALLOWED_SLIPPAGE = 50;
+// 20 minutes, denominated in seconds
+var DEFAULT_DEADLINE_FROM_NOW = 60 * 20;
+dsgswapSdk.JSBI.BigInt(0);
+// one basis point
+var ONE_BIPS = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(1), dsgswapSdk.JSBI.BigInt(10000));
+var BIPS_BASE = dsgswapSdk.JSBI.BigInt(10000);
+// used for warning states
+var ALLOWED_PRICE_IMPACT_LOW = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(100), BIPS_BASE); // 1%
+var ALLOWED_PRICE_IMPACT_MEDIUM = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(300), BIPS_BASE); // 3%
+var ALLOWED_PRICE_IMPACT_HIGH = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(500), BIPS_BASE); // 5%
+// if the price slippage exceeds this number, force the user to type 'confirm' to execute
+var PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(1000), BIPS_BASE); // 10%
+// for non expert mode disable swaps above this
+var BLOCKED_PRICE_IMPACT_NON_EXPERT = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(1500), BIPS_BASE); // 15%
+// used to ensure the user doesn't send so much BNB so they end up with <.01
+var MIN_BNB = dsgswapSdk.JSBI.exponentiate(dsgswapSdk.JSBI.BigInt(10), dsgswapSdk.JSBI.BigInt(16)); // .01 BNB
+var BETTER_TRADE_LESS_HOPS_THRESHOLD = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(50), dsgswapSdk.JSBI.BigInt(10000));
+var ZERO_PERCENT = new dsgswapSdk.Percent('0');
+var ONE_HUNDRED_PERCENT$1 = new dsgswapSdk.Percent('1');
+// SDN OFAC addresses(美国海外资产控制办公室地址)
+var BLOCKED_ADDRESSES = [
+    '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
+    '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
+    '0x901bb9583b24D97e995513C6778dc6888AB6870e',
+    '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
+    '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C',
+];
+
+// returns whether tradeB is better than tradeA by at least a threshold percentage amount
+function isTradeBetter(tradeA, tradeB, minimumDelta) {
+    if (minimumDelta === void 0) { minimumDelta = ZERO_PERCENT; }
+    if (tradeA && !tradeB)
+        return false;
+    if (tradeB && !tradeA)
+        return true;
+    if (!tradeA || !tradeB)
+        return undefined;
+    if (tradeA.tradeType !== tradeB.tradeType ||
+        !dsgswapSdk.currencyEquals(tradeA.inputAmount.currency, tradeB.inputAmount.currency) ||
+        !dsgswapSdk.currencyEquals(tradeB.outputAmount.currency, tradeB.outputAmount.currency)) {
+        throw new Error('Trades are not comparable');
+    }
+    if (minimumDelta.equalTo(ZERO_PERCENT)) {
+        return tradeA.executionPrice.lessThan(tradeB.executionPrice);
+    }
+    return tradeA.executionPrice.raw.multiply(minimumDelta.add(ONE_HUNDRED_PERCENT$1)).lessThan(tradeB.executionPrice);
+}
+
+var updateUserExpertMode = toolkit.createAction('user/updateUserExpertMode');
+var updateUserUsePloy = toolkit.createAction('user/updateUserUsePloy');
+var updateSystemUsePloy = toolkit.createAction('user/updateSystemUsePloy');
+var updateUserSingleHopOnly = toolkit.createAction('user/updateUserSingleHopOnly');
+var updateUserSlippageTolerance = toolkit.createAction('user/updateUserSlippageTolerance');
+var updateUserDeadline = toolkit.createAction('user/updateUserDeadline');
+var addSerializedToken = toolkit.createAction('user/addSerializedToken');
+var removeSerializedToken = toolkit.createAction('user/removeSerializedToken');
+var addSerializedPair = toolkit.createAction('user/addSerializedPair');
+var removeSerializedPair = toolkit.createAction('user/removeSerializedPair');
+var muteAudio = toolkit.createAction('user/muteAudio');
+var unmuteAudio = toolkit.createAction('user/unmuteAudio');
+var toggleTheme = toolkit.createAction('user/toggleTheme');
+var setVDsgInviteAddress = toolkit.createAction('user/setVDsgInviteAddress');
+var updateUseFarmGet = toolkit.createAction('user/updateUseFarmGet');
+var updateUseFarmPledge = toolkit.createAction('user/updateUseFarmPledge');
+var updateUseNestGet = toolkit.createAction('user/updateUseNestGet');
+var updateUseNestPledge = toolkit.createAction('user/updateUseNestPledge');
+
+function useAudioModeManager() {
+    var dispatch = reactRedux.useDispatch();
+    var audioPlay = reactRedux.useSelector(function (state) { return state.user.audioPlay; });
+    var toggleSetAudioMode = React.useCallback(function () {
+        if (audioPlay) {
+            dispatch(muteAudio());
+        }
+        else {
+            dispatch(unmuteAudio());
+        }
+    }, [audioPlay, dispatch]);
+    return [audioPlay, toggleSetAudioMode];
+}
+function useIsExpertMode() {
+    return reactRedux.useSelector(function (state) { return state.user.userExpertMode; });
+}
+function useExpertModeManager() {
+    var dispatch = reactRedux.useDispatch();
+    var expertMode = useIsExpertMode();
+    var toggleSetExpertMode = React.useCallback(function () {
+        dispatch(updateUserExpertMode({ userExpertMode: !expertMode }));
+    }, [expertMode, dispatch]);
+    return [expertMode, toggleSetExpertMode];
+}
+function useThemeManager() {
+    var dispatch = reactRedux.useDispatch();
+    var isDark = reactRedux.useSelector(function (state) { return state.user.isDark; });
+    var toggleTheme$1 = React.useCallback(function () {
+        dispatch(toggleTheme());
+    }, [dispatch]);
+    return [isDark, toggleTheme$1];
+}
+function useUserSingleHopOnly() {
+    var dispatch = reactRedux.useDispatch();
+    var singleHopOnly = reactRedux.useSelector(function (state) { return state.user.userSingleHopOnly; });
+    var setSingleHopOnly = React.useCallback(function (newSingleHopOnly) {
+        dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }));
+    }, [dispatch]);
+    return [singleHopOnly, setSingleHopOnly];
+}
+function useUserSlippageTolerance() {
+    var dispatch = reactRedux.useDispatch();
+    var userSlippageTolerance = reactRedux.useSelector(function (state) {
+        return state.user.userSlippageTolerance;
+    });
+    var setUserSlippageTolerance = React.useCallback(function (slippage) {
+        dispatch(updateUserSlippageTolerance({ userSlippageTolerance: slippage }));
+    }, [dispatch]);
+    return [userSlippageTolerance, setUserSlippageTolerance];
+}
+function useUserUsePoly() {
+    var dispatch = reactRedux.useDispatch();
+    var userUsePoly = reactRedux.useSelector(function (state) {
+        return state.user.userUsePoly;
+    });
+    var setUserUsePoly = React.useCallback(function (usePoly) {
+        dispatch(updateUserUsePloy({ userUsePoly: usePoly }));
+    }, [dispatch]);
+    return [userUsePoly, setUserUsePoly];
+}
+function useSystemUsePoly() {
+    var dispatch = reactRedux.useDispatch();
+    var userUsePoly = reactRedux.useSelector(function (state) {
+        return state.user.systemUsePoly;
+    });
+    var setSystemUsePoly = React.useCallback(function (usePoly) {
+        dispatch(updateSystemUsePloy({ systemUsePoly: usePoly }));
+    }, [dispatch]);
+    return [userUsePoly, setSystemUsePoly];
+}
+function useUserTransactionTTL() {
+    var dispatch = reactRedux.useDispatch();
+    var userDeadline = reactRedux.useSelector(function (state) {
+        return state.user.userDeadline;
+    });
+    var setUserDeadline = React.useCallback(function (deadline) {
+        dispatch(updateUserDeadline({ userDeadline: deadline }));
+    }, [dispatch]);
+    return [userDeadline, setUserDeadline];
+}
+function useAddUserToken() {
+    var dispatch = reactRedux.useDispatch();
+    return React.useCallback(function (token) {
+        dispatch(addSerializedToken({ serializedToken: serializeToken(token) }));
+    }, [dispatch]);
+}
+function useRemoveUserAddedToken() {
+    var dispatch = reactRedux.useDispatch();
+    return React.useCallback(function (chainId, address) {
+        dispatch(removeSerializedToken({ chainId: chainId, address: address }));
+    }, [dispatch]);
+}
+
+function useAllCommonPairs(currencyA, currencyB, poly) {
+    var chainId = useActiveWeb3React().chainId;
+    var _a = tslib.__read(chainId
+        ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
+        : [undefined, undefined], 2), tokenA = _a[0], tokenB = _a[1];
+    var bases = React.useMemo(function () {
+        var _a, _b, _c, _d, _e;
+        if (!chainId)
+            return [];
+        var common = (_a = BASES_TO_CHECK_TRADES_AGAINST[chainId]) !== null && _a !== void 0 ? _a : [];
+        var additionalA = tokenA ? (_c = (_b = ADDITIONAL_BASES[chainId]) === null || _b === void 0 ? void 0 : _b[tokenA.address]) !== null && _c !== void 0 ? _c : [] : [];
+        var additionalB = tokenB ? (_e = (_d = ADDITIONAL_BASES[chainId]) === null || _d === void 0 ? void 0 : _d[tokenB.address]) !== null && _e !== void 0 ? _e : [] : [];
+        return tslib.__spreadArray(tslib.__spreadArray(tslib.__spreadArray([], tslib.__read(common)), tslib.__read(additionalA)), tslib.__read(additionalB));
+    }, [chainId, tokenA, tokenB]);
+    var basePairs = React.useMemo(function () { return flatMap__default["default"](bases, function (base) { return bases.map(function (otherBase) { return [base, otherBase]; }); }); }, [bases]);
+    var allPairCombinations = React.useMemo(function () {
+        return tokenA && tokenB
+            ? tslib.__spreadArray(tslib.__spreadArray(tslib.__spreadArray([
+                // the direct pair
+                [tokenA, tokenB]
+            ], tslib.__read(bases.map(function (base) { return [tokenA, base]; }))), tslib.__read(bases.map(function (base) { return [tokenB, base]; }))), tslib.__read(basePairs)).filter(function (tokens) { return Boolean(tokens[0] && tokens[1]); })
+                .filter(function (_a) {
+                var _b = tslib.__read(_a, 2), t0 = _b[0], t1 = _b[1];
+                return t0.address !== t1.address;
+            })
+                .filter(function (_a) {
+                var _b = tslib.__read(_a, 2), tokenA_ = _b[0], tokenB_ = _b[1];
+                if (!chainId)
+                    return true;
+                var customBases = CUSTOM_BASES[chainId];
+                var customBasesA = customBases === null || customBases === void 0 ? void 0 : customBases[tokenA_.address];
+                var customBasesB = customBases === null || customBases === void 0 ? void 0 : customBases[tokenB_.address];
+                if (!customBasesA && !customBasesB)
+                    return true;
+                if (customBasesA && !customBasesA.find(function (base) { return tokenB_.equals(base); }))
+                    return false;
+                if (customBasesB && !customBasesB.find(function (base) { return tokenA_.equals(base); }))
+                    return false;
+                return true;
+            })
+            : [];
+    }, [tokenA, tokenB, bases, basePairs, chainId]);
+    var allPairs = usePairs(allPairCombinations);
+    // only pass along valid pairs, non-duplicated pairs
+    return React.useMemo(function () {
+        return Object.values(allPairs
+            // filter out invalid pairs
+            .filter(function (result) { return Boolean(result[0] === PairState.EXISTS && result[1]); })
+            // filter out duplicated pairs
+            .reduce(function (memo, _a) {
+            var _b;
+            var _c = tslib.__read(_a, 2), curr = _c[1];
+            memo[curr.liquidityToken.address] = (_b = memo[curr.liquidityToken.address]) !== null && _b !== void 0 ? _b : curr;
+            return memo;
+        }, {}));
+    }, [allPairs]);
+}
+var MAX_HOPS = 3;
+/**
+ * Returns the best trade for the exact amount of tokens in to the given token out
+ */
+function useTradeExactIn(currencyAmountIn, currencyOut, poly) {
+    var allowedPairs = useAllCommonPairs(currencyAmountIn === null || currencyAmountIn === void 0 ? void 0 : currencyAmountIn.currency, currencyOut);
+    var _a = tslib.__read(useUserSingleHopOnly(), 1), singleHopOnly = _a[0];
+    return React.useMemo(function () {
+        var _a, _b;
+        if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
+            if (singleHopOnly || poly) {
+                return ((_a = dsgswapSdk.Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: 1, maxNumResults: 1 })[0]) !== null && _a !== void 0 ? _a : null);
+            }
+            // search through trades with varying hops, find best trade out of them
+            var bestTradeSoFar = null;
+            for (var i = 1; i <= MAX_HOPS; i++) {
+                var currentTrade = (_b = dsgswapSdk.Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: i, maxNumResults: 1 })[0]) !== null && _b !== void 0 ? _b : null;
+                // if current trade is best yet, save it
+                if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
+                    bestTradeSoFar = currentTrade;
+                }
+            }
+            return bestTradeSoFar;
+        }
+        return null;
+    }, [allowedPairs, currencyAmountIn, currencyOut, singleHopOnly, poly]);
+}
+/**
+ * Returns the best trade for the token in to the exact amount of token out
+ */
+function useTradeExactOut(currencyIn, currencyAmountOut, poly) {
+    var allowedPairs = useAllCommonPairs(currencyIn, currencyAmountOut === null || currencyAmountOut === void 0 ? void 0 : currencyAmountOut.currency);
+    var _a = tslib.__read(useUserSingleHopOnly(), 1), singleHopOnly = _a[0];
+    return React.useMemo(function () {
+        var _a, _b;
+        if (currencyIn && currencyAmountOut && allowedPairs.length > 0) {
+            if (singleHopOnly || poly) {
+                return ((_a = dsgswapSdk.Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, { maxHops: 1, maxNumResults: 1 })[0]) !== null && _a !== void 0 ? _a : null);
+            }
+            // search through trades with varying hops, find best trade out of them
+            var bestTradeSoFar = null;
+            for (var i = 1; i <= MAX_HOPS; i++) {
+                var currentTrade = (_b = dsgswapSdk.Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, { maxHops: i, maxNumResults: 1 })[0]) !== null && _b !== void 0 ? _b : null;
+                if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
+                    bestTradeSoFar = currentTrade;
+                }
+            }
+            return bestTradeSoFar;
+        }
+        return null;
+    }, [currencyIn, currencyAmountOut, allowedPairs, singleHopOnly, poly]);
+}
+function useIsTransactionUnsupported(currencyIn, currencyOut) {
+    var unsupportedTokens = useUnsupportedTokens();
+    var chainId = useActiveWeb3React().chainId;
+    var tokenIn = wrappedCurrency(currencyIn, chainId);
+    var tokenOut = wrappedCurrency(currencyOut, chainId);
+    // if unsupported list loaded & either token on list, mark as unsupported
+    if (unsupportedTokens) {
+        if (tokenIn && Object.keys(unsupportedTokens).includes(tokenIn.address)) {
+            return true;
+        }
+        if (tokenOut && Object.keys(unsupportedTokens).includes(tokenOut.address)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+var initialState$9 = {
+    isFetching: true,
+    currentLanguage: EN,
+};
+var saveLang = {};
+// Export the translations directly
+var languageMap = new Map();
+languageMap.set(EN.locale, translations);
+var LanguageContext = React.createContext(undefined);
+var LanguageProvider = function (_a) {
+    var lang = _a.lang, children = _a.children;
+    var _b = tslib.__read(React.useState(function () {
+        var codeFromStorage = getLanguageCodeFromLS();
+        return tslib.__assign(tslib.__assign({}, initialState$9), { currentLanguage: languages[codeFromStorage] });
+    }), 2), state = _b[0], setState = _b[1];
+    var currentLanguage = state.currentLanguage;
+    React.useEffect(function () {
+        var fetchInitialLocales = function () { return tslib.__awaiter(void 0, void 0, void 0, function () {
+            var codeFromStorage, enLocale, currentLocale;
+            return tslib.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        codeFromStorage = getLanguageCodeFromLS();
+                        if (!(codeFromStorage !== EN.locale)) return [3 /*break*/, 2];
+                        enLocale = languageMap.get(EN.locale);
+                        return [4 /*yield*/, fetchLocale(codeFromStorage)];
+                    case 1:
+                        currentLocale = _a.sent();
+                        languageMap.set(codeFromStorage, tslib.__assign(tslib.__assign({}, enLocale), currentLocale));
+                        _a.label = 2;
+                    case 2:
+                        setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false })); });
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        fetchInitialLocales();
+    }, [setState]);
+    var setLanguage = function (language) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+        var locale, enLocale;
+        return tslib.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!!languageMap.has(language.locale)) return [3 /*break*/, 2];
+                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: true })); });
+                    return [4 /*yield*/, fetchLocale(language.locale)];
+                case 1:
+                    locale = _a.sent();
+                    enLocale = languageMap.get(EN.locale);
+                    // Merge the EN locale to ensure that any locale fetched has all the keys
+                    languageMap.set(language.locale, tslib.__assign(tslib.__assign({}, enLocale), locale));
+                    localStorage.setItem(LS_KEY, language.locale);
+                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: language })); });
+                    return [3 /*break*/, 3];
+                case 2:
+                    localStorage.setItem(LS_KEY, language.locale);
+                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: language })); });
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); };
+    var setLanguageOfLocale = function (localeKeys) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+        var locale, enLocale;
+        return tslib.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!languages[localeKeys])
+                        return [2 /*return*/];
+                    if (!!languageMap.has(localeKeys)) return [3 /*break*/, 2];
+                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: true })); });
+                    return [4 /*yield*/, fetchLocale(localeKeys)];
+                case 1:
+                    locale = _a.sent();
+                    enLocale = languageMap.get(EN.locale);
+                    // Merge the EN locale to ensure that any locale fetched has all the keys
+                    languageMap.set(localeKeys, tslib.__assign(tslib.__assign({}, enLocale), locale));
+                    localStorage.setItem(LS_KEY, localeKeys);
+                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: languages[localeKeys] })); });
+                    return [3 /*break*/, 3];
+                case 2:
+                    localStorage.setItem(LS_KEY, localeKeys);
+                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: languages[localeKeys] })); });
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); };
+    var translate = React.useCallback(function (key, data) {
+        saveLang[key] = key;
+        var translationSet = languageMap.has(currentLanguage.locale)
+            ? languageMap.get(currentLanguage.locale)
+            : languageMap.get(EN.locale);
+        var translatedText = translationSet[key] || key || '';
+        // Check the existence of at least one combination of %%, separated by 1 or more non space characters
+        var includesVariable = translatedText.match(/%\S+?%/gm);
+        if (includesVariable && data) {
+            var interpolatedText_1 = translatedText;
+            Object.keys(data).forEach(function (dataKey) {
+                var templateKey = new RegExp("%" + dataKey + "%", 'g');
+                interpolatedText_1 = interpolatedText_1.replace(templateKey, data[dataKey].toString());
+            });
+            return interpolatedText_1;
+        }
+        return translatedText;
+    }, [currentLanguage]);
+    var getHTML = React.useCallback(function (key, data) {
+        var translationSet = languageMap.has(currentLanguage.locale)
+            ? languageMap.get(currentLanguage.locale)
+            : languageMap.get(EN.locale);
+        var translatedText = translationSet[key] || key;
+        // Check the existence of at least one combination of %%, separated by 1 or more non space characters
+        var includesVariable = translatedText.match(/%\S+?%/gm);
+        if (includesVariable && data) {
+            var interpolatedText_2 = translatedText;
+            Object.keys(data).forEach(function (dataKey) {
+                var templateKey = new RegExp("%" + dataKey + "%", 'g');
+                interpolatedText_2 = interpolatedText_2.replace(templateKey, data[dataKey].toString());
+            });
+            var el = React__default["default"].createElement('span', {
+                dangerouslySetInnerHTML: {
+                    __html: interpolatedText_2,
+                },
+            });
+            // when key exists, it should still return element if there's defaultMessage() after getHTML()
+            return el;
+        }
+        return translatedText;
+    }, [currentLanguage]);
+    React.useEffect(function () {
+        if (lang) {
+            setLanguageOfLocale(lang);
+        }
+    }, [lang]);
+    return (jsxRuntime.jsx(LanguageContext.Provider, tslib.__assign({ value: tslib.__assign(tslib.__assign({}, state), { setLanguage: setLanguage, getHTML: getHTML, t: translate }) }, { children: children }), void 0));
+};
+
+var useTranslation = function () {
+    var languageContext = React.useContext(LanguageContext);
+    if (languageContext === undefined) {
+        throw new Error('Language context is undefined');
+    }
+    return languageContext;
+};
+
+var Field$2;
+(function (Field) {
+    Field["INPUT"] = "INPUT";
+    Field["OUTPUT"] = "OUTPUT";
+})(Field$2 || (Field$2 = {}));
+var selectCurrency = toolkit.createAction('swap/selectCurrency');
+var switchCurrencies = toolkit.createAction('swap/switchCurrencies');
+var typeInput$2 = toolkit.createAction('swap/typeInput');
+var replaceSwapState = toolkit.createAction('swap/replaceSwapState');
+var setRecipient = toolkit.createAction('swap/setRecipient');
+var updatePolyDataIndex = toolkit.createAction('swap/updatePolyDataIndex');
+var resetPolyData = toolkit.createAction('swap/resetPolyDataIndex');
+
+var BASE_FEE = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(30), dsgswapSdk.JSBI.BigInt(10000));
+var ONE_HUNDRED_PERCENT = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(10000), dsgswapSdk.JSBI.BigInt(10000));
+var INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE);
+// computes price breakdown for the trade
+function computeTradePriceBreakdown(trade) {
+    // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
+    // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
+    var realizedLPFee = !trade
+        ? undefined
+        : ONE_HUNDRED_PERCENT.subtract(trade.route.pairs.reduce(function (currentFee) { return currentFee.multiply(INPUT_FRACTION_AFTER_FEE); }, ONE_HUNDRED_PERCENT));
+    // remove lp fees from price impact
+    var priceImpactWithoutFeeFraction = trade && realizedLPFee ? trade.priceImpact.subtract(realizedLPFee) : undefined;
+    // the x*y=k impact
+    var priceImpactWithoutFeePercent = priceImpactWithoutFeeFraction
+        ? new dsgswapSdk.Percent(priceImpactWithoutFeeFraction === null || priceImpactWithoutFeeFraction === void 0 ? void 0 : priceImpactWithoutFeeFraction.numerator, priceImpactWithoutFeeFraction === null || priceImpactWithoutFeeFraction === void 0 ? void 0 : priceImpactWithoutFeeFraction.denominator)
+        : undefined;
+    // the amount of the input that accrues to LPs
+    var realizedLPFeeAmount = realizedLPFee &&
+        trade &&
+        (trade.inputAmount instanceof dsgswapSdk.TokenAmount
+            ? new dsgswapSdk.TokenAmount(trade.inputAmount.token, realizedLPFee.multiply(trade.inputAmount.raw).quotient)
+            : dsgswapSdk.CurrencyAmount.ether(realizedLPFee.multiply(trade.inputAmount.raw).quotient));
+    return { priceImpactWithoutFee: priceImpactWithoutFeePercent, realizedLPFee: realizedLPFeeAmount };
+}
+// computes the minimum amount out and maximum amount in for a trade given a user specified allowed slippage in bips
+function computeSlippageAdjustedAmounts(trade, allowedSlippage) {
+    var _a;
+    var pct = basisPointsToPercent(allowedSlippage);
+    return _a = {},
+        _a[Field$2.INPUT] = trade === null || trade === void 0 ? void 0 : trade.maximumAmountIn(pct),
+        _a[Field$2.OUTPUT] = trade === null || trade === void 0 ? void 0 : trade.minimumAmountOut(pct),
+        _a;
+}
+function warningSeverity(priceImpact, UserSlippageTolerance) {
+    if (UserSlippageTolerance === void 0) { UserSlippageTolerance = 50; }
+    // if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4
+    var ALLOWED_PRICE_IMPACT_USER = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(UserSlippageTolerance), BIPS_BASE);
+    var IMPACT_NON_EXPERT = (BLOCKED_PRICE_IMPACT_NON_EXPERT === null || BLOCKED_PRICE_IMPACT_NON_EXPERT === void 0 ? void 0 : BLOCKED_PRICE_IMPACT_NON_EXPERT.lessThan(ALLOWED_PRICE_IMPACT_USER))
+        ? ALLOWED_PRICE_IMPACT_USER
+        : BLOCKED_PRICE_IMPACT_NON_EXPERT;
+    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(IMPACT_NON_EXPERT)))
+        return 4;
+    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(ALLOWED_PRICE_IMPACT_HIGH)))
+        return 3;
+    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)))
+        return 2;
+    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(ALLOWED_PRICE_IMPACT_LOW)))
+        return 1;
+    return 0;
+}
+function formatExecutionPrice(trade, inverted) {
+    if (!trade) {
+        return '';
+    }
+    return inverted
+        ? trade.executionPrice.invert().toSignificant(6) + " " + trade.inputAmount.currency.symbol + " / " + trade.outputAmount.currency.symbol
+        : trade.executionPrice.toSignificant(6) + " " + trade.outputAmount.currency.symbol + " / " + trade.inputAmount.currency.symbol;
+}
+
+/**
+ * Returns a map of the given addresses to their eventually consistent BNB balances.
+ */
+function useBNBBalances(uncheckedAddresses) {
+    var multicallContract = useMulticallContract();
+    var addresses = React.useMemo(function () {
+        return uncheckedAddresses
+            ? uncheckedAddresses
+                .map(isAddress)
+                .filter(function (a) { return a !== false; })
+                .sort()
+            : [];
+    }, [uncheckedAddresses]);
+    var results = useSingleContractMultipleData(multicallContract, 'getEthBalance', addresses.map(function (address) { return [address]; }));
+    return React.useMemo(function () {
+        return addresses.reduce(function (memo, address, i) {
+            var _a, _b;
+            var value = (_b = (_a = results === null || results === void 0 ? void 0 : results[i]) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b[0];
+            if (value)
+                memo[address] = dsgswapSdk.CurrencyAmount.ether(dsgswapSdk.JSBI.BigInt(value.toString()));
+            return memo;
+        }, {});
+    }, [addresses, results]);
+}
+/**
+ * Returns a map of token addresses to their eventually consistent token balances for a single account.
+ */
+function useTokenBalancesWithLoadingIndicator(address, tokens) {
+    var validatedTokens = React.useMemo(function () { var _a; return (_a = tokens === null || tokens === void 0 ? void 0 : tokens.filter(function (t) { return isAddress(t === null || t === void 0 ? void 0 : t.address) !== false; })) !== null && _a !== void 0 ? _a : []; }, [tokens]);
+    var validatedTokenAddresses = React.useMemo(function () { return validatedTokens.map(function (vt) { return vt.address; }); }, [validatedTokens]);
+    var balances = useMultipleContractSingleData(validatedTokenAddresses, ERC20_INTERFACE, 'balanceOf', [address]);
+    var anyLoading = React.useMemo(function () { return balances.some(function (callState) { return callState.loading; }); }, [balances]);
+    return [
+        React.useMemo(function () {
+            return address && validatedTokens.length > 0
+                ? validatedTokens.reduce(function (memo, token, i) {
+                    var _a, _b;
+                    var value = (_b = (_a = balances === null || balances === void 0 ? void 0 : balances[i]) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b[0];
+                    var amount = value ? dsgswapSdk.JSBI.BigInt(value.toString()) : undefined;
+                    if (amount) {
+                        memo[token.address] = new dsgswapSdk.TokenAmount(token, amount);
+                    }
+                    return memo;
+                }, {})
+                : {};
+        }, [address, validatedTokens, balances]),
+        anyLoading,
+    ];
+}
+function useTokenBalances(address, tokens) {
+    return useTokenBalancesWithLoadingIndicator(address, tokens)[0];
+}
+function useCurrencyBalances(account, currencies) {
+    var tokens = React.useMemo(function () { var _a; return (_a = currencies === null || currencies === void 0 ? void 0 : currencies.filter(function (currency) { return currency instanceof dsgswapSdk.Token; })) !== null && _a !== void 0 ? _a : []; }, [currencies]);
+    var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
+    var tokenBalances = useTokenBalances(account, tokens);
+    var containsBNB = React.useMemo(function () { var _a; return (_a = currencies === null || currencies === void 0 ? void 0 : currencies.some(function (currency) { return currency === ETHER; })) !== null && _a !== void 0 ? _a : false; }, [currencies, ETHER]);
+    var ethBalance = useBNBBalances(containsBNB ? [account] : []);
+    return React.useMemo(function () {
+        var _a;
+        return (_a = currencies === null || currencies === void 0 ? void 0 : currencies.map(function (currency) {
+            if (!account || !currency)
+                return undefined;
+            if (currency instanceof dsgswapSdk.Token)
+                return tokenBalances[currency.address];
+            if (currency === ETHER)
+                return ethBalance[account];
+            return undefined;
+        })) !== null && _a !== void 0 ? _a : [];
+    }, [account, currencies, ETHER, ethBalance, tokenBalances]);
+}
+function useCurrencyBalance(account, currency) {
+    return useCurrencyBalances(account, [currency])[0];
+}
+// mimics useAllBalances
+function useAllTokenBalances() {
+    var account = core.useWeb3React().account;
+    var allTokens = useAllTokens();
+    var allTokensArray = React.useMemo(function () { return Object.values(allTokens !== null && allTokens !== void 0 ? allTokens : {}); }, [allTokens]);
+    var balances = useTokenBalances(account !== null && account !== void 0 ? account : undefined, allTokensArray);
+    return balances !== null && balances !== void 0 ? balances : {};
+}
+
+axios__default["default"].defaults.timeout = 30 * 1000;
+axios__default["default"].defaults.withCredentials = false;
+// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+axios__default["default"].defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios__default["default"].defaults.headers.get.Accept = 'application/json';
+function resetConfig(config) {
+    var resConfig = tslib.__assign({}, config);
+    if (resConfig.noLang)
+        return resConfig;
+    if (!resConfig.data) {
+        resConfig.data = {};
+    }
+    if (!resConfig.params) {
+        resConfig.params = {};
+    }
+    return resConfig;
+}
+var request = axios__default["default"].create();
+request.interceptors.request.use(function (config) {
+    return resetConfig(config);
+}, function (error) { return Promise.reject(error); });
+// Add a response interceptor
+request.interceptors.response.use(function (response) {
+    return response.data;
+}, function (error) {
+    return Promise.reject(error);
+});
+
+var get1inch = function (url, params) {
+    return request({
+        url: url,
+        params: params,
+        method: 'get',
+        withCredentials: false,
+        baseURL: dsgswapSdk.getValueWithChainId(dsgswapSdk.POLY_BASE_URL),
+    });
+};
+var get1inchQuoteData = function (chainId, data) { return get1inch("/" + chainId + "/quote", data); };
+var get1inchSwapData = function (chainId, data) { return get1inch("/" + chainId + "/swap", data); };
+var get1inchApproveSpender = function (chainId, data) { return get1inch("/" + chainId + "/approve/spender", data); };
+
+var multicall$1 = function (abi, calls) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+    var multi, itf_1, calldata, returnData, res, error_1;
+    return tslib.__generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                multi = getMulticallContract();
+                itf_1 = new ethers.ethers.utils.Interface(abi);
+                calldata = calls.map(function (call) { return [call.address.toLowerCase(), itf_1.encodeFunctionData(call.name, call.params)]; });
+                return [4 /*yield*/, multi.aggregate(calldata)];
+            case 1:
+                returnData = (_a.sent()).returnData;
+                res = returnData.map(function (call, i) { return itf_1.decodeFunctionResult(calls[i].name, call); });
+                return [2 /*return*/, res];
+            case 2:
+                error_1 = _a.sent();
+                // console.error(error)
+                // return null
+                throw new Error(error_1);
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+
+var fetchPolyQuoteData = function (chanId, data) {
+    if (!isSupportChainId(chanId))
+        return null;
+    try {
+        return get1inchQuoteData(chanId, data);
+    }
+    catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+var fetchSpenderAddress = function (chanId) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+    var address, error_1;
+    return tslib.__generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!isSupportChainId(chanId))
+                    return [2 /*return*/, null];
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, get1inchApproveSpender(chanId)];
+            case 2:
+                address = (_a.sent()).address;
+                return [2 /*return*/, address];
+            case 3:
+                error_1 = _a.sent();
+                console.error(error_1);
+                return [2 /*return*/, ''];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var fetchAllowancceAmount = function (spender, account, tokenAddress) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+    var calls, _a, allowance, error_2;
+    return tslib.__generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                calls = [
+                    {
+                        address: spender,
+                        name: 'allowance',
+                        params: [account, tokenAddress],
+                    }
+                ];
+                return [4 /*yield*/, multicall$1(Erc20Abi, calls)];
+            case 1:
+                _a = tslib.__read.apply(void 0, [_b.sent(), 1]), allowance = _a[0];
+                return [2 /*return*/, allowance[0].toJSON().hex];
+            case 2:
+                error_2 = _b.sent();
+                console.error(error_2);
+                return [2 /*return*/, '0'];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+
+var _a$8;
+var initialState$8 = (_a$8 = {
+        independentField: Field$2.INPUT,
+        typedValue: ''
+    },
+    _a$8[Field$2.INPUT] = {
+        currencyId: '',
+    },
+    _a$8[Field$2.OUTPUT] = {
+        currencyId: '',
+    },
+    _a$8.recipient = null,
+    _a$8.polyDataIndex = {
+        lastQueryTimestamp: 0,
+    },
+    _a$8);
+// Async thunks
+var fetchPolySwapDataAsync = toolkit.createAsyncThunk('swap/fetchPolySwapDataAsync', function (_a) {
+    var chainId = _a.chainId, polyQueryData = _a.polyQueryData;
+    return tslib.__awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return tslib.__generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, fetchPolyQuoteData(chainId, polyQueryData)];
+                case 1:
+                    res = _b.sent();
+                    return [2 /*return*/, res];
+            }
+        });
+    });
+});
+var fetchPolyAllowaceAsync = toolkit.createAsyncThunk('swap/fetchSpenderAddressAsync', function (_a, _b) {
+    var chainId = _a.chainId, account = _a.account, tokenAddress = _a.tokenAddress;
+    var getState = _b.getState;
+    return tslib.__awaiter(void 0, void 0, void 0, function () {
+        var swap, spender, allowance;
+        return tslib.__generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    swap = getState().swap;
+                    spender = swap.polySpender;
+                    if (!!spender) return [3 /*break*/, 2];
+                    return [4 /*yield*/, fetchSpenderAddress(chainId)];
+                case 1:
+                    spender = _c.sent();
+                    _c.label = 2;
+                case 2: return [4 /*yield*/, fetchAllowancceAmount(spender, account, tokenAddress)];
+                case 3:
+                    allowance = _c.sent();
+                    return [2 /*return*/, {
+                            spender: spender,
+                            allowance: {
+                                tokenAddress: tokenAddress,
+                                allowance: allowance,
+                            },
+                        }];
+            }
+        });
+    });
+});
+var fetchPolySpenderAsync = toolkit.createAsyncThunk('swap/fetchPolySpenderAsync', function (chainId, _a) {
+    var getState = _a.getState;
+    return tslib.__awaiter(void 0, void 0, void 0, function () {
+        var swap, spender;
+        return tslib.__generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    swap = getState().swap;
+                    spender = swap.polySpender;
+                    if (!!spender) return [3 /*break*/, 2];
+                    return [4 /*yield*/, fetchSpenderAddress(chainId)];
+                case 1:
+                    spender = _b.sent();
+                    _b.label = 2;
+                case 2: return [2 /*return*/, spender];
+            }
+        });
+    });
+});
+// export const fetchPolyAllowaceAsync = createAsyncThunk<PolyData, { chainId: number, polyQueryData: PolyDataIndex } >(
+//   'swap/fetchPolySwapDataAsync',
+//   async ({ chainId, polyQueryData }) => {
+//     const res: PolyData = await get1inchSwapData(chainId, polyQueryData)
+//     return res
+//   },
+// )
+var swap = toolkit.createReducer(initialState$8, function (builder) {
+    return builder
+        .addCase(replaceSwapState, function (state, _a) {
+        var _b;
+        var _c = _a.payload, typedValue = _c.typedValue, recipient = _c.recipient, field = _c.field, inputCurrencyId = _c.inputCurrencyId, outputCurrencyId = _c.outputCurrencyId;
+        return tslib.__assign(tslib.__assign({}, state), (_b = {}, _b[Field$2.INPUT] = {
+            currencyId: inputCurrencyId,
+        }, _b[Field$2.OUTPUT] = {
+            currencyId: outputCurrencyId,
+        }, _b.independentField = field, _b.typedValue = typedValue, _b.recipient = recipient, _b));
+    })
+        .addCase(selectCurrency, function (state, _a) {
+        var _b, _c;
+        var _d = _a.payload, currencyId = _d.currencyId, field = _d.field;
+        var otherField = field === Field$2.INPUT ? Field$2.OUTPUT : Field$2.INPUT;
+        if (currencyId === state[otherField].currencyId) {
+            // the case where we have to swap the order
+            return tslib.__assign(tslib.__assign({}, state), (_b = { independentField: state.independentField === Field$2.INPUT ? Field$2.OUTPUT : Field$2.INPUT }, _b[field] = { currencyId: currencyId }, _b[otherField] = { currencyId: state[field].currencyId }, _b));
+        }
+        // the normal case
+        return tslib.__assign(tslib.__assign({}, state), (_c = {}, _c[field] = { currencyId: currencyId }, _c));
+    })
+        .addCase(switchCurrencies, function (state) {
+        var _a;
+        return tslib.__assign(tslib.__assign({}, state), (_a = { independentField: state.independentField === Field$2.INPUT ? Field$2.OUTPUT : Field$2.INPUT }, _a[Field$2.INPUT] = { currencyId: state[Field$2.OUTPUT].currencyId }, _a[Field$2.OUTPUT] = { currencyId: state[Field$2.INPUT].currencyId }, _a));
+    })
+        .addCase(typeInput$2, function (state, _a) {
+        var _b = _a.payload, field = _b.field, typedValue = _b.typedValue;
+        return tslib.__assign(tslib.__assign({}, state), { independentField: field, typedValue: typedValue });
+    })
+        .addCase(setRecipient, function (state, _a) {
+        var recipient = _a.payload.recipient;
+        state.recipient = recipient;
+    })
+        .addCase(updatePolyDataIndex, function (state, _a) {
+        var payload = _a.payload;
+        state.polyDataIndex = tslib.__assign(tslib.__assign({}, state.polyDataIndex), payload.data);
+    })
+        .addCase(resetPolyData, function (state) {
+        state.polyData = null;
+    })
+        .addCase(fetchPolyAllowaceAsync.fulfilled, function (state, _a) {
+        var payload = _a.payload;
+        var spender = payload.spender, allowance = payload.allowance;
+        var allowanceString = allowance.allowance, tokenAddress = allowance.tokenAddress;
+        state.polySpender = spender;
+        state.polyAllowance[tokenAddress] = allowanceString;
+    })
+        .addCase(fetchPolySpenderAsync.fulfilled, function (state, _a) {
+        var payload = _a.payload;
+        state.polySpender = payload;
+    })
+        .addCase(fetchPolySwapDataAsync.fulfilled, function (state, _a) {
+        var payload = _a.payload;
+        state.polyData = payload;
+    });
+});
+
+var PolyDataIndexStatus;
+(function (PolyDataIndexStatus) {
+    PolyDataIndexStatus[PolyDataIndexStatus["NOT_SWAP_DATA"] = 0] = "NOT_SWAP_DATA";
+    PolyDataIndexStatus[PolyDataIndexStatus["NEED_QUERY"] = 1] = "NEED_QUERY";
+    PolyDataIndexStatus[PolyDataIndexStatus["NEED_REFRESH"] = 2] = "NEED_REFRESH";
+    PolyDataIndexStatus[PolyDataIndexStatus["LOADED"] = 3] = "LOADED";
+})(PolyDataIndexStatus || (PolyDataIndexStatus = {}));
+
+// ETHER_1INCH_ADDRESS
+var POLY_REFRESH_INTERVAL = 10 * 1000;
+var POLY_MAX_SLIPPAGE = 50;
+var currentTimestamp$1 = function () { return new Date().getTime(); };
+function useSwapState() {
+    return reactRedux.useSelector(function (state) { return state.swap; });
+}
+function useSwapActionHandlers() {
+    var dispatch = reactRedux.useDispatch();
+    var onCurrencySelection = React.useCallback(function (field, currency) {
+        var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
+        dispatch(selectCurrency({
+            field: field,
+            currencyId: currency instanceof dsgswapSdk.Token ? currency.address : currency === ETHER ? ETHER.symbol : '',
+        }));
+    }, [dispatch]);
+    var onSwitchTokens = React.useCallback(function () {
+        dispatch(switchCurrencies());
+    }, [dispatch]);
+    var onUserInput = React.useCallback(function (field, typedValue) {
+        dispatch(typeInput$2({ field: field, typedValue: typedValue }));
+    }, [dispatch]);
+    var onChangeRecipient = React.useCallback(function (recipient) {
+        dispatch(setRecipient({ recipient: recipient }));
+    }, [dispatch]);
+    return {
+        onSwitchTokens: onSwitchTokens,
+        onCurrencySelection: onCurrencySelection,
+        onUserInput: onUserInput,
+        onChangeRecipient: onChangeRecipient,
+    };
+}
+// try to parse a user entered amount for a given token
+function tryParseAmount(value, currency) {
+    if (!value || !currency) {
+        return undefined;
+    }
+    try {
+        var typedValueParsed = units.parseUnits(value, currency.decimals).toString();
+        if (typedValueParsed !== '0') {
+            return currency instanceof dsgswapSdk.Token
+                ? new dsgswapSdk.TokenAmount(currency, dsgswapSdk.JSBI.BigInt(typedValueParsed))
+                : dsgswapSdk.CurrencyAmount.ether(dsgswapSdk.JSBI.BigInt(typedValueParsed));
+        }
+    }
+    catch (error) {
+        // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
+        console.debug("Failed to parse input amount: \"" + value + "\"", error);
+    }
+    // necessary for all paths to return a value
+    return undefined;
+}
+var BAD_RECIPIENT_ADDRESSES = [
+    '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a',
+    '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+    '0x89f1DeC8297eF2cBB47a4894089E5f6aa2888c44',
+];
+/**
+ * Returns true if any of the pairs or tokens in a trade have the given checksummed address
+ * @param trade to check for the given address
+ * @param checksummedAddress address to check in the pairs and tokens
+ */
+function involvesAddress(trade, checksummedAddress) {
+    return (trade.route.path.some(function (token) { return token.address === checksummedAddress; }) ||
+        trade.route.pairs.some(function (pair) { return pair.liquidityToken.address === checksummedAddress; }));
+}
+function useCheckUpdatePolyIndex() {
+    var _a = useActiveWeb3React(), account = _a.account, chainId = _a.chainId;
+    var polyDataIndex = useSwapState().polyDataIndex;
+    var _b = tslib.__read(useUserUsePoly(), 1), userUsePoly = _b[0];
+    var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
+    var dispatch = reactRedux.useDispatch();
+    var _c = useSwapState(), independentField = _c.independentField, typedValue = _c.typedValue, _d = Field$2.INPUT, inputCurrencyId = _c[_d].currencyId, _e = Field$2.OUTPUT, outputCurrencyId = _c[_e].currencyId; _c.recipient;
+    var _f = tslib.__read(useUserSlippageTolerance(), 1), allowedSlippage = _f[0];
+    var inputCurrency = useCurrency(inputCurrencyId);
+    var outputCurrency = useCurrency(outputCurrencyId);
+    var debouncedValue = useDebounce(typedValue, 300);
+    if (!chainId || !outputCurrency || !outputCurrency || !Number(debouncedValue) || !userUsePoly)
+        return [PolyDataIndexStatus.NOT_SWAP_DATA, null];
+    if ((inputCurrency === ETHER || outputCurrency === ETHER) && dsgswapSdk.currencyEquals(dsgswapSdk.WETHER[chainId], outputCurrency)) {
+        return [PolyDataIndexStatus.NOT_SWAP_DATA, null];
+    }
+    var isExactIn = independentField === Field$2.INPUT;
+    if (!isExactIn)
+        return [PolyDataIndexStatus.NOT_SWAP_DATA, null];
+    var slippage = allowedSlippage > POLY_MAX_SLIPPAGE ? POLY_MAX_SLIPPAGE : allowedSlippage;
+    var data = {
+        slippage: slippage,
+        lastQueryTimestamp: polyDataIndex === null || polyDataIndex === void 0 ? void 0 : polyDataIndex.lastQueryTimestamp,
+        fromTokenAddress: inputCurrency === ETHER ? ETHER_1INCH_ADDRESS[chainId] : inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.address,
+        toTokenAddress: outputCurrency === ETHER ? ETHER_1INCH_ADDRESS[chainId] : outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.address,
+        amount: debouncedValue,
+        amountDecimal: getDecimalAmount(new BigNumber__default["default"](debouncedValue), inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.decimals).toString(),
+        fromAddress: account,
+    };
+    var timestamp = currentTimestamp$1();
+    if (!isEqual__default["default"](data, polyDataIndex)) {
+        dispatch(resetPolyData());
+        dispatch(updatePolyDataIndex({ data: tslib.__assign(tslib.__assign({}, data), { lastQueryTimestamp: timestamp }) }));
+        return [PolyDataIndexStatus.NEED_REFRESH, data];
+    }
+    if (timestamp - (polyDataIndex === null || polyDataIndex === void 0 ? void 0 : polyDataIndex.lastQueryTimestamp) > POLY_REFRESH_INTERVAL) {
+        dispatch(updatePolyDataIndex({ data: tslib.__assign(tslib.__assign({}, data), { lastQueryTimestamp: timestamp }) }));
+        return [PolyDataIndexStatus.NEED_REFRESH, data];
+    }
+    return [PolyDataIndexStatus.LOADED, data];
+}
+// from the current swap inputs, compute the best trade and return it.
+function useDerivedSwapInfo() {
+    var _a, _b;
+    var _c, _d;
+    var _e = useActiveWeb3React(), account = _e.account, chainId = _e.chainId;
+    var t = useTranslation().t;
+    var dispatch = reactRedux.useDispatch();
+    var _f = useSwapState(), independentField = _f.independentField, typedValue = _f.typedValue, _g = Field$2.INPUT, inputCurrencyId = _f[_g].currencyId, _h = Field$2.OUTPUT, outputCurrencyId = _f[_h].currencyId, recipient = _f.recipient;
+    var inputCurrency = useCurrency(inputCurrencyId);
+    var outputCurrency = useCurrency(outputCurrencyId);
+    var recipientLookup = useENS(recipient !== null && recipient !== void 0 ? recipient : undefined);
+    var to = (_c = (recipient === null ? account : recipientLookup.address)) !== null && _c !== void 0 ? _c : null;
+    var relevantTokenBalances = useCurrencyBalances(account !== null && account !== void 0 ? account : undefined, [
+        inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined,
+        outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined,
+    ]);
+    var isExactIn = independentField === Field$2.INPUT;
+    var parsedAmount = tryParseAmount(typedValue, (_d = (isExactIn ? inputCurrency : outputCurrency)) !== null && _d !== void 0 ? _d : undefined);
+    var bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined);
+    var bestTradeExactOut = useTradeExactOut(inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined, !isExactIn ? parsedAmount : undefined);
+    var _j = tslib.__read(usePair(inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined, outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined), 1), pairStateIn = _j[0];
+    var _k = tslib.__read(usePair(inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined, outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined), 1), pairStateOut = _k[0];
+    // const bestPolyTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined, true)
+    // const bestPolyTradeExactOut = useTradeExactOut(
+    //   inputCurrency ?? undefined,
+    //   !isExactIn ? parsedAmount : undefined,
+    //   true,
+    // )
+    var v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut;
+    // const v2TradePoly = isExactIn ? bestPolyTradeExactIn : bestPolyTradeExactOut
+    var pairState = isExactIn ? pairStateIn : pairStateOut;
+    // let polyPairs = null
+    // if (v2TradePoly?.route?.pairs?.length === 1) {
+    //   polyPairs = v2TradePoly.route.pairs[0]
+    // }
+    var currencyBalances = (_a = {},
+        _a[Field$2.INPUT] = relevantTokenBalances[0],
+        _a[Field$2.OUTPUT] = relevantTokenBalances[1],
+        _a);
+    var currencies = (_b = {},
+        _b[Field$2.INPUT] = inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined,
+        _b[Field$2.OUTPUT] = outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined,
+        _b);
+    var inputError;
+    if (!account) {
+        inputError = t('Connect Wallet');
+    }
+    if (!parsedAmount) {
+        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Enter an amount');
+    }
+    if (!currencies[Field$2.INPUT] || !currencies[Field$2.OUTPUT]) {
+        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Select a token');
+    }
+    var formattedTo = isAddress(to);
+    if (!to || !formattedTo) {
+        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Enter a recipient');
+    }
+    else if (BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
+        (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
+        (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))) {
+        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Invalid recipient');
+    }
+    var _l = tslib.__read(useUserSlippageTolerance(), 1), allowedSlippage = _l[0];
+    var _m = tslib.__read(useSystemUsePoly(), 1); _m[0];
+    var slippageAdjustedAmounts = v2Trade && allowedSlippage && computeSlippageAdjustedAmounts(v2Trade, allowedSlippage);
+    // compare input balance to max input based on version
+    var _o = tslib.__read([
+        currencyBalances[Field$2.INPUT],
+        slippageAdjustedAmounts ? slippageAdjustedAmounts[Field$2.INPUT] : null,
+    ], 2), balanceIn = _o[0], amountIn = _o[1];
+    if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
+        inputError = t('Insufficient %symbol% balance', { symbol: amountIn.currency.symbol });
+    }
+    var _p = tslib.__read(useCheckUpdatePolyIndex(), 2), checkUpdatePolyIndex = _p[0], polyIndex = _p[1];
+    if (checkUpdatePolyIndex === PolyDataIndexStatus.NEED_REFRESH && !inputError) {
+        var polyQueryData = tslib.__assign(tslib.__assign({}, polyIndex), { amount: polyIndex === null || polyIndex === void 0 ? void 0 : polyIndex.amountDecimal, slippage: new BigNumber__default["default"](polyIndex === null || polyIndex === void 0 ? void 0 : polyIndex.slippage).div(100).toNumber() });
+        dispatch(fetchPolySwapDataAsync({ chainId: chainId, polyQueryData: polyQueryData }));
+        dispatch(fetchPolySpenderAsync(chainId));
+        // dispatch(fetchPolySwapDataAsync({ chainId, polyQueryData }))
+    }
+    else if (checkUpdatePolyIndex === PolyDataIndexStatus.NOT_SWAP_DATA) {
+        dispatch(resetPolyData());
+    }
+    else if (checkUpdatePolyIndex === PolyDataIndexStatus.LOADED) {
+        var inputCurrencyAmount = new dsgswapSdk.TokenAmount(inputCurrency, polyIndex.amountDecimal);
+        if (balanceIn && inputCurrencyAmount && balanceIn.lessThan(inputCurrencyAmount)) {
+            inputError = t('Insufficient %symbol% balance', { symbol: inputCurrency.symbol });
+        }
+    }
+    return {
+        pairState: pairState,
+        currencies: currencies,
+        currencyBalances: currencyBalances,
+        parsedAmount: parsedAmount,
+        v2Trade: v2Trade !== null && v2Trade !== void 0 ? v2Trade : undefined,
+        inputError: inputError,
+        // polyPairs: polyPairs ?? undefined,
+    };
+}
+function useSwapCurrencies() {
+    var _a = useSwapState(), _b = Field$2.INPUT, inputCurrencyId = _a[_b].currencyId, _c = Field$2.OUTPUT, outputCurrencyId = _a[_c].currencyId;
+    var inputCurrency = useCurrency(inputCurrencyId);
+    var outputCurrency = useCurrency(outputCurrencyId);
+    return React.useMemo(function () {
+        return {
+            inputCurrency: inputCurrency,
+            outputCurrency: outputCurrency,
+        };
+    }, [outputCurrency, inputCurrency]);
+}
+
+var VISIBILITY_STATE_SUPPORTED = 'visibilityState' in document;
+function isWindowVisible() {
+    return !VISIBILITY_STATE_SUPPORTED || document.visibilityState !== 'hidden';
+}
+/**
+ * Returns whether the window is currently visible to the user.
+ */
+function useIsWindowVisible() {
+    var _a = tslib.__read(React.useState(isWindowVisible()), 2), focused = _a[0], setFocused = _a[1];
+    var listener = React.useCallback(function () {
+        setFocused(isWindowVisible());
+    }, [setFocused]);
+    React.useEffect(function () {
+        if (!VISIBILITY_STATE_SUPPORTED)
+            return undefined;
+        document.addEventListener('visibilitychange', listener);
+        return function () {
+            document.removeEventListener('visibilitychange', listener);
+        };
+    }, [listener]);
+    return focused;
+}
+
+var updateBlockNumber = toolkit.createAction('application/updateBlockNumber');
+
+function Updater$3() {
+    var _a = useActiveWeb3React(), library = _a.library, chainId = _a.chainId;
+    var dispatch = reactRedux.useDispatch();
+    var windowVisible = useIsWindowVisible();
+    var _b = tslib.__read(React.useState({
+        chainId: chainId,
+        blockNumber: null,
+    }), 2), state = _b[0], setState = _b[1];
+    var blockNumberCallback = React.useCallback(function (blockNumber) {
+        setState(function (prev) {
+            if (chainId === prev.chainId) {
+                if (typeof prev.blockNumber !== 'number')
+                    return { chainId: chainId, blockNumber: blockNumber };
+                return { chainId: chainId, blockNumber: Math.max(blockNumber, prev.blockNumber) };
+            }
+            return prev;
+        });
+    }, [chainId, setState]);
+    // attach/detach listeners
+    React.useEffect(function () {
+        if (!library || !chainId || !windowVisible)
+            return undefined;
+        setState({ chainId: chainId, blockNumber: null });
+        library
+            .getBlockNumber()
+            .then(blockNumberCallback)
+            .catch(function (error) { return console.error("Failed to get block number for chainId: " + chainId, error); });
+        library.on('block', blockNumberCallback);
+        return function () {
+            library.removeListener('block', blockNumberCallback);
+        };
+    }, [dispatch, chainId, library, blockNumberCallback, windowVisible]);
+    var debouncedState = useDebounce(state, 100);
+    React.useEffect(function () {
+        if (!debouncedState.chainId || !debouncedState.blockNumber || !windowVisible)
+            return;
+        dispatch(updateBlockNumber({ chainId: debouncedState.chainId, blockNumber: debouncedState.blockNumber }));
+    }, [windowVisible, dispatch, debouncedState.blockNumber, debouncedState.chainId]);
+    return null;
 }
 
 var fetchTokenList = {
@@ -6626,27 +8598,27 @@ var variants$5 = {
     RIGHT: "right",
 };
 
-var _a$9, _b$3;
-var scaleVariants$1 = (_a$9 = {},
-    _a$9[scales$9.LD] = {
+var _a$7, _b$3;
+var scaleVariants$1 = (_a$7 = {},
+    _a$7[scales$9.LD] = {
         height: "36px",
         minWidth: "108px",
         padding: "0 24px",
     },
-    _a$9[scales$9.MD] = {
+    _a$7[scales$9.MD] = {
         height: "36px",
         padding: "0 24px",
     },
-    _a$9[scales$9.SM] = {
+    _a$7[scales$9.SM] = {
         height: "32px",
         padding: "0 16px",
     },
-    _a$9[scales$9.XS] = {
+    _a$7[scales$9.XS] = {
         height: "20px",
         fontSize: "12px",
         padding: "0 8px",
     },
-    _a$9);
+    _a$7);
 var styleVariants$2 = (_b$3 = {},
     _b$3[variants$5.PRIMARY] = {
         backgroundColor: "primary",
@@ -6936,7 +8908,7 @@ var getHeight = function (_a) {
             return "40px";
     }
 };
-var Input$5 = styled__default["default"].input(templateObject_1$1e || (templateObject_1$1e = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"], ["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"])), function (_a) {
+var Input$3 = styled__default["default"].input(templateObject_1$1e || (templateObject_1$1e = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"], ["\n  background-color: ", ";\n  border: 0;\n  border-radius: 16px;\n  box-shadow: ", ";\n  color: ", ";\n  display: block;\n  font-size: 16px;\n  height: ", ";\n  outline: 0;\n  padding: 0 16px;\n  width: 100%;\n  border: none;\n  padding-left: ", ";;\n\n  &::placeholder {\n    color: ", ";\n  }\n\n  &:disabled {\n    background-color: ", ";\n    box-shadow: none;\n    color: ", ";\n    cursor: not-allowed;\n  }\n  &:read-only {\n    box-shadow: none;\n  }\n\n  &:focus:not(:disabled):not(:readonly) {\n    box-shadow: ", ";\n  }\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.input;
 }, getBoxShadow$2, function (_a) {
@@ -6958,7 +8930,7 @@ var Input$5 = styled__default["default"].input(templateObject_1$1e || (templateO
     var theme = _a.theme, noShadow = _a.noShadow;
     return noShadow ? 'none' : theme.shadows.focus;
 });
-Input$5.defaultProps = {
+Input$3.defaultProps = {
     scale: scales$8.MD,
     isSuccess: false,
     isWarning: false,
@@ -6980,7 +8952,7 @@ styled__default["default"](Box)(templateObject_3$m || (templateObject_3$m = tsli
     var theme = _a.theme, isWarning = _a.isWarning;
     return theme.shadows[isWarning ? "warning" : "inset"];
 });
-styled__default["default"](Input$5)(templateObject_4$c || (templateObject_4$c = tslib.__makeTemplateObject(["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"], ["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"])), function (_a) {
+styled__default["default"](Input$3)(templateObject_4$c || (templateObject_4$c = tslib.__makeTemplateObject(["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"], ["\n  background: transparent;\n  border-radius: 0;\n  box-shadow: none;\n  padding-left: 0;\n  padding-right: 0;\n  text-align: ", ";\n  border: none;\n\n  ::placeholder {\n    color: ", ";\n  }\n\n  &:focus:not(:disabled) {\n    box-shadow: none;\n  }\n"])), function (_a) {
     var _b = _a.textAlign, textAlign = _b === void 0 ? "right" : _b;
     return textAlign;
 }, function (_a) {
@@ -7268,53 +9240,53 @@ var scales$6 = {
     XXLD: 'xxld'
 };
 
-var _a$8;
-var style = (_a$8 = {},
-    _a$8[scales$6.SM] = {
+var _a$6;
+var style = (_a$6 = {},
+    _a$6[scales$6.SM] = {
         fontSize: "12px",
         fontSizeLg: "12px",
     },
-    _a$8[scales$6.LD] = {
+    _a$6[scales$6.LD] = {
         fontSize: "14px",
         fontSizeLg: "16px",
     },
-    _a$8[scales$6.MD] = {
+    _a$6[scales$6.MD] = {
         fontSize: "16px",
         fontSizeLg: "20px",
     },
-    _a$8[scales$6.LG] = {
+    _a$6[scales$6.LG] = {
         fontSize: "24px",
         fontSizeLg: "24px",
     },
-    _a$8[scales$6.LGG] = {
+    _a$6[scales$6.LGG] = {
         fontSize: "18px",
         fontSizeLg: "34px",
     },
-    _a$8[scales$6.LX] = {
+    _a$6[scales$6.LX] = {
         fontSize: "24px",
         fontSizeLg: "32px",
     },
-    _a$8[scales$6.XL] = {
+    _a$6[scales$6.XL] = {
         fontSize: "32px",
         fontSizeLg: "40px",
     },
-    _a$8[scales$6.XLD] = {
+    _a$6[scales$6.XLD] = {
         fontSize: "32px",
         fontSizeLg: "48px",
     },
-    _a$8[scales$6.XXL] = {
+    _a$6[scales$6.XXL] = {
         fontSize: "48px",
         fontSizeLg: "64px",
     },
-    _a$8[scales$6.XXLD] = {
+    _a$6[scales$6.XXLD] = {
         fontSize: "54px",
         fontSizeLg: "80px",
     },
-    _a$8[scales$6.XXXL] = {
+    _a$6[scales$6.XXXL] = {
         fontSize: "44px",
         fontSizeLg: "90px",
     },
-    _a$8);
+    _a$6);
 var Heading = styled__default["default"](Text).attrs({ bold: true })(templateObject_1$11 || (templateObject_1$11 = tslib.__makeTemplateObject(["\n  font-size: ", ";\n  font-weight: 600;\n  line-height: 1.1;\n\n  ", " {\n    font-size: ", ";\n  }\n"], ["\n  font-size: ", ";\n  font-weight: 600;\n  line-height: 1.1;\n\n  ", " {\n    font-size: ", ";\n  }\n"])), function (_a) {
     var scale = _a.scale;
     return style[scale || scales$6.MD].fontSize;
@@ -7419,13 +9391,13 @@ var variants$3 = {
     BINARY: "binary",
 };
 
-var _a$7, _b$2;
+var _a$5, _b$2;
 styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y = tslib.__makeTemplateObject(["\n  position: absolute;\n  border-radius: 50%;\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"], ["\n  position: absolute;\n  border-radius: 50%;\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"])), function (_a) {
     var variant = _a.variant;
     return variant === variants$3.DEFAULT ? "82%" : "70%";
 }, styledSystem.variant({
-    variants: (_a$7 = {},
-        _a$7[variants$3.DEFAULT] = {
+    variants: (_a$5 = {},
+        _a$5[variants$3.DEFAULT] = {
             width: '82%',
             bottom: "auto",
             left: 0,
@@ -7433,7 +9405,7 @@ styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y
             top: 0,
             zIndex: 5,
         },
-        _a$7[variants$3.INVERTED] = {
+        _a$5[variants$3.INVERTED] = {
             width: '70%',
             bottom: 0,
             left: "auto",
@@ -7441,7 +9413,7 @@ styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y
             top: "auto",
             zIndex: 6,
         },
-        _a$7[variants$3.BINARY] = {
+        _a$5[variants$3.BINARY] = {
             width: '100%',
             height: '100%',
             bottom: 0,
@@ -7451,7 +9423,7 @@ styled__default["default"](TokenImage)(templateObject_1$Y || (templateObject_1$Y
             top: "auto",
             zIndex: 5,
         },
-        _a$7),
+        _a$5),
 }));
 styled__default["default"](TokenImage)(templateObject_2$w || (templateObject_2$w = tslib.__makeTemplateObject(["\n  position: absolute;\n  transform: scale(0.95);\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"], ["\n  position: absolute;\n  transform: scale(0.95);\n  /* width: ", "; // 92, 82 are arbitrary numbers to fit the variant */\n\n  ", "\n"])), function (_a) {
     var variant = _a.variant;
@@ -7494,7 +9466,7 @@ styled__default["default"](Flex)(templateObject_1$X || (templateObject_1$X = tsl
     var theme = _a.theme;
     return theme.colors.primary;
 });
-styled__default["default"](Input$5)(templateObject_2$v || (templateObject_2$v = tslib.__makeTemplateObject(["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"], ["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"])), function (_a) {
+styled__default["default"](Input$3)(templateObject_2$v || (templateObject_2$v = tslib.__makeTemplateObject(["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"], ["\n  width: 50px;\n  padding: 5px;\n  min-width: 50px;\n  box-shadow: none;\n  text-align: center;\n  font-weight: bold;\n  font-size: 20px;\n  color: ", ";\n  background: transparent;\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.white;
 });
@@ -7675,15 +9647,15 @@ var scales$4 = {
     SM: "sm",
 };
 
-var _a$6, _b$1;
-var styleVariants$1 = (_a$6 = {},
-    _a$6[variants$1.ROUND] = {
+var _a$4, _b$1;
+var styleVariants$1 = (_a$4 = {},
+    _a$4[variants$1.ROUND] = {
         borderRadius: "32px",
     },
-    _a$6[variants$1.FLAT] = {
+    _a$4[variants$1.FLAT] = {
         borderRadius: 0,
     },
-    _a$6);
+    _a$4);
 var styleScales = (_b$1 = {},
     _b$1[scales$4.MD] = {
         height: "16px",
@@ -7954,19 +9926,19 @@ var scales$2 = {
     SM: "sm",
 };
 
-var _a$5, _b;
-var scaleVariants = (_a$5 = {},
-    _a$5[scales$2.MD] = {
+var _a$3, _b;
+var scaleVariants = (_a$3 = {},
+    _a$3[scales$2.MD] = {
         height: "28px",
         padding: "0 8px",
         fontSize: "14px",
     },
-    _a$5[scales$2.SM] = {
+    _a$3[scales$2.SM] = {
         height: "24px",
         padding: "0 4px",
         fontSize: "12px",
     },
-    _a$5);
+    _a$3);
 var styleVariants = (_b = {},
     _b[variants.PRIMARY] = {
         backgroundColor: "primary",
@@ -8060,7 +10032,7 @@ var Handle = styled__default["default"].div(templateObject_1$D || (templateObjec
     var theme = _a.theme;
     return theme.toggle.handleBackground;
 }, getScale("handleHeight"), getScale("handleLeft"), getScale("handleTop"), getScale("handleWidth"));
-var Input$4 = styled__default["default"].input(templateObject_2$l || (templateObject_2$l = tslib.__makeTemplateObject(["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"], ["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"])), Handle, getScale("checkedLeft"), Handle, function (_a) {
+var Input$2 = styled__default["default"].input(templateObject_2$l || (templateObject_2$l = tslib.__makeTemplateObject(["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"], ["\n  cursor: pointer;\n  opacity: 0;\n  height: 100%;\n  position: absolute;\n  width: 100%;\n  z-index: 3;\n\n  &:checked + ", " {\n    left: ", ";\n  }\n\n  &:focus + ", " {\n    box-shadow: ", ";\n  }\n\n  &:hover + ", ":not(:disabled):not(:checked) {\n    box-shadow: ", ";\n  }\n"])), Handle, getScale("checkedLeft"), Handle, function (_a) {
     var theme = _a.theme;
     return theme.shadows.focus;
 }, Handle, function (_a) {
@@ -8084,7 +10056,7 @@ var scales$1 = {
 var Toggle = function (_a) {
     var checked = _a.checked, _b = _a.scale, scale = _b === void 0 ? scales$1.MD : _b, props = tslib.__rest(_a, ["checked", "scale"]);
     var isChecked = !!checked;
-    return (jsxRuntime.jsxs(StyledToggle, tslib.__assign({ checked: isChecked, scale: scale }, { children: [jsxRuntime.jsx(Input$4, tslib.__assign({ checked: checked, scale: scale }, props, { type: "checkbox" }), void 0), jsxRuntime.jsx(Handle, { scale: scale }, void 0)] }), void 0));
+    return (jsxRuntime.jsxs(StyledToggle, tslib.__assign({ checked: isChecked, scale: scale }, { children: [jsxRuntime.jsx(Input$2, tslib.__assign({ checked: checked, scale: scale }, props, { type: "checkbox" }), void 0), jsxRuntime.jsx(Handle, { scale: scale }, void 0)] }), void 0));
 };
 Toggle.defaultProps = {
     scale: scales$1.MD,
@@ -8111,914 +10083,21 @@ var scales = {
     LG: "lg",
 };
 
-var EN = { locale: 'en-US', language: 'English', code: 'en' };
-var ZHCN = { locale: 'zh-CN', language: '简体中文', code: 'CN' };
-var languages = {
-    // 'ar-SA': AR,
-    // 'bn-BD': BN,
-    'en-US': EN,
-    // 'de-DE': DE,
-    // 'el-GR': EL,
-    // 'es-ES': ESES,
-    // 'fi-FI': FI,
-    // 'fil-PH': FIL,
-    // 'fr-FR': FR,
-    // 'hi-IN': HI,
-    // 'hu-HU': HU,
-    // 'id-ID': ID,
-    // 'it-IT': IT,
-    // 'ja-JP': JA,
-    // 'ko-KR': KO,
-    // 'nl-NL': NL,
-    // 'pl-PL': PL,
-    // 'pt-BR': PTBR,
-    // 'pt-PT': PTPT,
-    // 'ro-RO': RO,
-    // 'ru-RU': RU,
-    // 'sv-SE': SVSE,
-    // 'ta-IN': TA,
-    // 'tr-TR': TR,
-    // 'uk-UA': UK,
-    // 'vi-VN': VI,
-    'zh-CN': ZHCN,
-    // 'zh-TW': ZHTW,
-};
-Object.values(languages);
-
-var dataFormat$1 = "YYYY-MM-DD";
-var airTime$1 = "HHA, MMM-DD";
-var Exchange$1 = "Exchange";
-var Locked$1 = "Locked";
-var Finished$1 = "Finished";
-var Total$1 = "Total";
-var End$1 = "End";
-var Close$1 = "Close";
-var Max$1 = "Max";
-var Cancel$1 = "Cancel";
-var Confirm$1 = "Confirm";
-var Warning$1 = "Warning";
-var Core$1 = "Core";
-var Available$1 = "Available";
-var Select$1 = "Select";
-var Connect$1 = "Connect";
-var Details$1 = "Details";
-var Trade$1 = "Trade";
-var More$1 = "More";
-var Liquidity$1 = "Liquidity";
-var Token$1 = "Token";
-var Pairs$1 = "Pairs";
-var Accounts$1 = "Accounts";
-var Active$1 = "Active";
-var Inactive$1 = "Inactive";
-var Dual$1 = "Dual";
-var Compound$1 = "Compound";
-var Search$1 = "Search";
-var History$1 = "History";
-var Burned$1 = "Burned";
-var Logout$1 = "Logout";
-var Confirmed$1 = "Confirmed";
-var Show$1 = "Show";
-var Hide$1 = "Hide";
-var Stake$1 = "Stake";
-var Balance$2 = "Balance";
-var Live$1 = "Live";
-var Start$1 = "Start";
-var Finish$1 = "Finish";
-var Enable$1 = "Enable";
-var Enabling$1 = "Enabling";
-var Expired$1 = "Expired";
-var Calculating$1 = "Calculating";
-var All$1 = "All";
-var d$1 = "d";
-var h$1 = "h";
-var m$1 = "m";
-var Blocks$1 = "Blocks";
-var Buy$1 = "Buy";
-var Filter$1 = "Filter";
-var Volume$1 = "Volume";
-var Tokens$1 = "Tokens";
-var Contact$1 = "Contact";
-var Merch$1 = "Merch";
-var New$1 = "New";
-var Rates$1 = "Rates";
-var Price$1 = "Price";
-var Prices$1 = "Prices";
-var Amount$1 = "Amount";
-var Simple$1 = "Simple";
-var Detailed$1 = "Detailed";
-var Remove$1 = "Remove";
-var Input$3 = "Input";
-var Output$1 = "Output";
-var From$1 = "From";
-var To$1 = "To";
-var Swap$2 = "Swap";
-var Audio$2 = "Audio";
-var minutes$1 = "minutes";
-var Manage$2 = "Manage";
-var Import$1 = "Import";
-var via$1 = "via";
-var Lists$1 = "Lists";
-var See$1 = "See";
-var Loaded$1 = "Loaded";
-var Loading$2 = "Loading";
-var Recipient$1 = "Recipient";
-var Dismiss$1 = "Dismiss";
-var Latest$1 = "Latest";
-var Claimed$1 = "Claimed";
-var Settings$1 = "Settings";
-var Supply$1 = "Supply";
-var Learn$1 = "Learn";
-var translationLast$1 = "translationLast";
-var translationEnd$1 = "translationEnd";
-var translations = {
-	dataFormat: dataFormat$1,
-	airTime: airTime$1,
-	Exchange: Exchange$1,
-	"Connect Wallet": "Connect Wallet",
-	"Your %asset% Balance": "Your %asset% Balance",
-	"My %asset%": "My %asset%",
-	"Total %asset% Supply": "Total %asset% Supply",
-	Locked: Locked$1,
-	"Total Liquidity": "Total Liquidity",
-	"View on PolygonScan": "View on PolygonScan",
-	Finished: Finished$1,
-	"Project site": "Project site",
-	"Project Site": "Project Site",
-	"See Token Info": "See Token Info",
-	Total: Total$1,
-	End: End$1,
-	"View Project Site": "View Project Site",
-	"Create a pool for your token": "Create a pool for your token",
-	Close: Close$1,
-	Max: Max$1,
-	"%num% %symbol% Available": "%num% %symbol% Available",
-	Cancel: Cancel$1,
-	Confirm: Confirm$1,
-	Warning: Warning$1,
-	"I understand": "I understand",
-	"Pending Confirmation": "Pending Confirmation",
-	"Buy new tokens with a brand new token sale model.": "Buy new tokens with a brand new token sale model.",
-	"You get the tokens.": "You get the tokens.",
-	"Want to launch your own IFO?": "Want to launch your own IFO?",
-	"Apply to launch": "Apply to launch",
-	Core: Core$1,
-	Available: Available$1,
-	"Sign out": "Sign out",
-	Select: Select$1,
-	"Launch Time": "Launch Time",
-	"For Sale": "For Sale",
-	"Done!": "Done!",
-	"Read more": "Read more",
-	Connect: Connect$1,
-	"Loading…": "Loading…",
-	Details: Details$1,
-	"Wallet Disconnected": "Wallet Disconnected",
-	Trade: Trade$1,
-	More: More$1,
-	Liquidity: Liquidity$1,
-	Token: Token$1,
-	Pairs: Pairs$1,
-	Accounts: Accounts$1,
-	Active: Active$1,
-	Inactive: Inactive$1,
-	Dual: Dual$1,
-	Compound: Compound$1,
-	"In Wallet": "In Wallet",
-	"Loading...": "Loading...",
-	Search: Search$1,
-	History: History$1,
-	Burned: Burned$1,
-	"To burn": "To burn",
-	"Total Value Locked": "Total Value Locked",
-	"Your wallet": "Your wallet",
-	Logout: Logout$1,
-	Confirmed: Confirmed$1,
-	Show: Show$1,
-	Hide: Hide$1,
-	"Stake LP tokens": "Stake LP tokens",
-	Stake: Stake$1,
-	"I understand that people can view my wallet if they know my username": "I understand that people can view my wallet if they know my username",
-	"Please connect your wallet to continue": "Please connect your wallet to continue",
-	"Get %symbol%": "Get %symbol%",
-	Balance: Balance$2,
-	"Oops, page not found.": "Oops, page not found.",
-	"Back Home": "Back Home",
-	Live: Live$1,
-	Start: Start$1,
-	Finish: Finish$1,
-	"Connect wallet to view": "Connect wallet to view",
-	"Your volume": "Your volume",
-	"Since start": "Since start",
-	Enable: Enable$1,
-	Enabling: Enabling$1,
-	Expired: Expired$1,
-	Calculating: Calculating$1,
-	"Your history": "Your history",
-	All: All$1,
-	"%num%d": "%num%d",
-	d: d$1,
-	h: h$1,
-	m: m$1,
-	"Success!": "Success!",
-	Blocks: Blocks$1,
-	"Add to Metamask": "Add to Metamask",
-	"Insufficient %symbol% balance": "Insufficient %symbol% balance",
-	Buy: Buy$1,
-	"Locate Assets": "Locate Assets",
-	"%symbol% required": "%symbol% required",
-	"Your History": "Your History",
-	Filter: Filter$1,
-	Volume: Volume$1,
-	Tokens: Tokens$1,
-	Contact: Contact$1,
-	Merch: Merch$1,
-	New: New$1,
-	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "Output is estimated. If the price changes by more than %slippage%% your transaction will revert.",
-	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "Supplying %amountA% %symbolA% and %amountB% %symbolB%",
-	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "Removing %amountA% %symbolA% and %amountB% %symbolB%",
-	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "Swapping %amountA% %symbolA% for %amountB% %symbolB%",
-	"Add Liquidity": "Add Liquidity",
-	"Add liquidity to receive LP tokens": "Add liquidity to receive LP tokens",
-	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.",
-	"You are creating a pool": "You are creating a pool",
-	"You are the first liquidity provider.": "You are the first liquidity provider.",
-	"The ratio of tokens you add will set the price of this pool.": "The ratio of tokens you add will set the price of this pool.",
-	"Once you are happy with the rate click supply to review.": "Once you are happy with the rate click supply to review.",
-	"Initial prices and pool share": "Initial prices and pool share",
-	"Prices and pool share": "Prices and pool share",
-	"Unsupported Asset": "Unsupported Asset",
-	"Enabling %asset%": "Enabling %asset%",
-	"Enable %asset%": "Enable %asset%",
-	"Share of Pool": "Share of Pool",
-	"%assetA% per %assetB%": "%assetA% per %assetB%",
-	"%asset% Deposited": "%asset% Deposited",
-	Rates: Rates$1,
-	"Create Pool & Supply": "Create Pool & Supply",
-	"Confirm Supply": "Confirm Supply",
-	"Confirm Swap": "Confirm Swap",
-	"Connect to a wallet to view your liquidity.": "Connect to a wallet to view your liquidity.",
-	"Connect to a wallet to find pools": "Connect to a wallet to find pools",
-	"Select a token to find your liquidity.": "Select a token to find your liquidity.",
-	"No liquidity found.": "No liquidity found.",
-	"Don't see a pool you joined?": "Don't see a pool you joined?",
-	"Find other LP tokens": "Find other LP tokens",
-	"Import Pool": "Import Pool",
-	"Import an existing pool": "Import an existing pool",
-	"Select a Token": "Select a Token",
-	"Pool Found!": "Pool Found!",
-	"No pool found.": "No pool found.",
-	"Create pool.": "Create pool.",
-	"Manage this pool.": "Manage this pool.",
-	"Invalid pair.": "Invalid pair.",
-	"You don’t have liquidity in this pool yet.": "You don’t have liquidity in this pool yet.",
-	"%assetA%/%assetB% Burned": "%assetA%/%assetB% Burned",
-	Price: Price$1,
-	Prices: Prices$1,
-	"Remove %assetA%-%assetB% liquidity": "Remove %assetA%-%assetB% liquidity",
-	Amount: Amount$1,
-	Simple: Simple$1,
-	Detailed: Detailed$1,
-	"Receive WBNB": "Receive WBNB",
-	"Receive BNB": "Receive BNB",
-	Remove: Remove$1,
-	Input: Input$3,
-	Output: Output$1,
-	"Trade tokens in an instant": "Trade tokens in an instant",
-	"From (estimated)": "From (estimated)",
-	From: From$1,
-	"To (estimated)": "To (estimated)",
-	To: To$1,
-	"+ Add a send (optional)": "+ Add a send (optional)",
-	"- Remove send": "- Remove send",
-	"Slippage Tolerance": "Slippage Tolerance",
-	"Insufficient liquidity for this trade.": "Insufficient liquidity for this trade.",
-	"Try enabling multi-hop trades.": "Try enabling multi-hop trades.",
-	"Price Impact High": "Price Impact High",
-	Swap: Swap$2,
-	"Swap Anyway": "Swap Anyway",
-	"Recent Transactions": "Recent Transactions",
-	"clear all": "clear all",
-	"Clear all": "Clear all",
-	"No recent transactions": "No recent transactions",
-	"Are you sure?": "Are you sure?",
-	"Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.": "Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.",
-	"Only use this mode if you know what you’re doing.": "Only use this mode if you know what you’re doing.",
-	"Turn On Expert Mode": "Turn On Expert Mode",
-	"Transaction Settings": "Transaction Settings",
-	"Interface Settings": "Interface Settings",
-	"Toggle Expert Mode": "Toggle Expert Mode",
-	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "Bypasses confirmation modals and allows high slippage trades. Use at your own risk.",
-	"Disable Multihops": "Disable Multihops",
-	"Restricts swaps to direct pairs only.": "Restricts swaps to direct pairs only.",
-	Audio: Audio$2,
-	"🐰 Turn down your volume a bit before you swap": "🐰 Turn down your volume a bit before you swap",
-	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "Your transaction will revert if the price changes unfavorably by more than this percentage.",
-	"Enter a valid slippage percentage": "Enter a valid slippage percentage",
-	"Your transaction may fail": "Your transaction may fail",
-	"Your transaction may be frontrun": "Your transaction may be frontrun",
-	"Your transaction will revert if it is pending for more than this long.": "Your transaction will revert if it is pending for more than this long.",
-	minutes: minutes$1,
-	"Token Amount": "Token Amount",
-	"Balance: %amount%": "Balance: %amount%",
-	"LP tokens in your wallet": "LP tokens in your wallet",
-	"Pooled %asset%": "Pooled %asset%",
-	"By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.": "By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.",
-	"Common bases": "Common bases",
-	"These tokens are commonly paired with other tokens.": "These tokens are commonly paired with other tokens.",
-	"Expanded results from inactive Token Lists": "Expanded results from inactive Token Lists",
-	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
-	"No results found.": "No results found.",
-	Manage: Manage$2,
-	"Manage Tokens": "Manage Tokens",
-	"Import Tokens": "Import Tokens",
-	"Import List": "Import List",
-	"Import at your own risk": "Import at your own risk",
-	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.",
-	"If you purchase a token from this list, you may not be able to sell it back.": "If you purchase a token from this list, you may not be able to sell it back.",
-	Import: Import$1,
-	via: via$1,
-	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.",
-	"If you purchase an arbitrary token, you may be unable to sell it back.": "If you purchase an arbitrary token, you may be unable to sell it back.",
-	"Unknown Source": "Unknown Source",
-	Lists: Lists$1,
-	See: See$1,
-	"Update list": "Update list",
-	"https:// or ipfs:// or ENS name": "https:// or ipfs:// or ENS name",
-	Loaded: Loaded$1,
-	Loading: Loading$2,
-	"Enter valid token address": "Enter valid token address",
-	"Custom Token": "Custom Token",
-	"Custom Tokens": "Custom Tokens",
-	"Unknown Error": "Unknown Error",
-	"Select a currency": "Select a currency",
-	"Search name or paste address": "Search name or paste address",
-	"Add %asset% to Metamask": "Add %asset% to Metamask",
-	"Added %asset%": "Added %asset%",
-	"Transaction Submitted": "Transaction Submitted",
-	"Wallet Address or ENS name": "Wallet Address or ENS name",
-	Recipient: Recipient$1,
-	"Waiting For Confirmation": "Waiting For Confirmation",
-	"Confirm this transaction in your wallet": "Confirm this transaction in your wallet",
-	Dismiss: Dismiss$1,
-	Latest: Latest$1,
-	"Notice for trading %symbol%": "Notice for trading %symbol%",
-	"To trade SAFEMOON, you must:": "To trade SAFEMOON, you must:",
-	"Click on the settings icon": "Click on the settings icon",
-	"Set your slippage tolerance to 12%+": "Set your slippage tolerance to 12%+",
-	"This is because SafeMoon taxes a 10% fee on each transaction:": "This is because SafeMoon taxes a 10% fee on each transaction:",
-	"5% fee = redistributed to all existing holders": "5% fee = redistributed to all existing holders",
-	"5% fee = used to add liquidity": "5% fee = used to add liquidity",
-	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "Warning: BONDLY has been compromised. Please remove liqudity until further notice.",
-	Claimed: Claimed$1,
-	Settings: Settings$1,
-	"Transaction deadline": "Transaction deadline",
-	"Convert ERC-20 to BEP-20": "Convert ERC-20 to BEP-20",
-	"Need help ?": "Need help ?",
-	"Select a token": "Select a token",
-	"Enter a recipient": "Enter a recipient",
-	"Invalid recipient": "Invalid recipient",
-	Supply: Supply$1,
-	"Your Liquidity": "Your Liquidity",
-	"Remove liquidity to receive tokens back": "Remove liquidity to receive tokens back",
-	"Trade anything. No registration, no hassle.": "Trade anything. No registration, no hassle.",
-	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.",
-	Learn: Learn$1,
-	"BNB token": "BNB token",
-	"BTC token": "BTC token",
-	"Earn passive income with crypto.": "Earn passive income with crypto.",
-	translationLast: translationLast$1,
-	translationEnd: translationEnd$1
-};
-
-var dataFormat = "YYYY-MM-DD";
-var airTime = "HHA, MMM-DD";
-var Exchange = "兑换";
-var Locked = "已锁定";
-var Finished = "已完成";
-var Total = "总计";
-var End = "结束";
-var Close = "关闭";
-var Max = "最大";
-var Cancel = "取消";
-var Confirm = "确认";
-var Warning = "警告";
-var Core = "核心";
-var Available = "可用";
-var Select = "选择";
-var Connect = "连接";
-var Details = "详情";
-var Trade = "交易";
-var More = "更多";
-var Liquidity = "流动性";
-var Token = "代币";
-var Pairs = "币对";
-var Accounts = "账户";
-var Active = "有效";
-var Inactive = "停用";
-var Dual = "双重";
-var Compound = "复利";
-var Search = "搜索";
-var History = "历史记录";
-var Burned = "销毁";
-var Logout = "退出";
-var Confirmed = "已确认";
-var Show = "显示";
-var Hide = "隐藏";
-var Stake = "质押";
-var Balance$1 = "余额";
-var Live = "实时";
-var Start = "开始";
-var Finish = "完成";
-var Enable = "启用";
-var Enabling = "正在启用";
-var Expired = "已过期";
-var Calculating = "正在计算";
-var All = "全部";
-var d = "天";
-var h = "小时";
-var m = "分钟";
-var Blocks = "区块";
-var Buy = "购买";
-var Filter = "筛选器";
-var Volume = "交易量";
-var Tokens = "代币";
-var Contact = "联系";
-var Merch = "商品";
-var New = "新";
-var Rates = "汇率";
-var Price = "价格";
-var Prices = "价格";
-var Amount = "金额";
-var Simple = "简单";
-var Detailed = "详细";
-var Remove = "移除";
-var Input$2 = "输入";
-var Output = "输出";
-var From = "从";
-var To = "到";
-var Swap$1 = "交换";
-var Audio$1 = "音频";
-var minutes = "分钟";
-var Manage$1 = "管理";
-var Import = "导入";
-var via = "通过";
-var Lists = "列表";
-var See = "查看";
-var Loaded = "已加载";
-var Loading$1 = "正在加载";
-var Recipient = "接收人";
-var Dismiss = "取消";
-var Latest = "最新";
-var Claimed = "已领取";
-var Settings = "设置";
-var Supply = "供应";
-var Learn = "了解";
-var translationLast = "translationLast";
-var translationEnd = "translationEnd";
-var translationsZhCN = {
-	dataFormat: dataFormat,
-	airTime: airTime,
-	Exchange: Exchange,
-	"Connect Wallet": "连接钱包",
-	"Your %asset% Balance": "您的 %asset% 余额",
-	"My %asset%": "我的 %asset%",
-	"Total %asset% Supply": "%asset% 总供应量",
-	Locked: Locked,
-	"Total Liquidity": "总流动性",
-	"View on PolygonScan": "在 PolygonScan 上查看",
-	Finished: Finished,
-	"Project site": "项目网站",
-	"Project Site": "Project Site",
-	"See Token Info": "查看代币信息",
-	Total: Total,
-	End: End,
-	"View Project Site": "查看项目网站",
-	"Create a pool for your token": "为您的代币创建资金池",
-	Close: Close,
-	Max: Max,
-	"%num% %symbol% Available": "%num% %symbol% 可用",
-	Cancel: Cancel,
-	Confirm: Confirm,
-	Warning: Warning,
-	"I understand": "我了解",
-	"Pending Confirmation": "等待确认",
-	"Buy new tokens with a brand new token sale model.": "使用全新的代币销售模型购买新代币。",
-	"You get the tokens.": "您获得了代币。",
-	"Want to launch your own IFO?": "想要发起您自己的 IFO？",
-	"Apply to launch": "申请发起",
-	Core: Core,
-	Available: Available,
-	"Sign out": "退出",
-	Select: Select,
-	"Launch Time": "发起时间",
-	"For Sale": "待售",
-	"Done!": "完成！",
-	"Read more": "阅读更多",
-	Connect: Connect,
-	"Loading…": "正在加载…",
-	Details: Details,
-	"Wallet Disconnected": "钱包已断开连接",
-	Trade: Trade,
-	More: More,
-	Liquidity: Liquidity,
-	Token: Token,
-	Pairs: Pairs,
-	Accounts: Accounts,
-	Active: Active,
-	Inactive: Inactive,
-	Dual: Dual,
-	Compound: Compound,
-	"In Wallet": "钱包中",
-	"Loading...": "正在加载…",
-	Search: Search,
-	History: History,
-	Burned: Burned,
-	"To burn": "要焚毁",
-	"Total Value Locked": "锁定的总价值",
-	"Your wallet": "您的钱包",
-	Logout: Logout,
-	Confirmed: Confirmed,
-	Show: Show,
-	Hide: Hide,
-	"Stake LP tokens": "质押 LP 代币",
-	Stake: Stake,
-	"I understand that people can view my wallet if they know my username": "我了解，如果其他人知道我的用户名，他们就可以查看我的钱包",
-	"Please connect your wallet to continue": "请连接您的钱包以继续",
-	"Get %symbol%": "获取 %symbol%",
-	Balance: Balance$1,
-	"Oops, page not found.": "糟糕，找不到页面",
-	"Back Home": "返回首页",
-	Live: Live,
-	Start: Start,
-	Finish: Finish,
-	"Connect wallet to view": "连接要查看的钱包",
-	"Your volume": "交易量",
-	"Since start": "自开始以来的时间",
-	Enable: Enable,
-	Enabling: Enabling,
-	Expired: Expired,
-	Calculating: Calculating,
-	"Your history": "历史记录",
-	All: All,
-	"%num%d": "%num%d",
-	d: d,
-	h: h,
-	m: m,
-	"Success!": "成功！",
-	Blocks: Blocks,
-	"Add to Metamask": "添加到 Metamask",
-	"Insufficient %symbol% balance": "%symbol% 余额不足",
-	Buy: Buy,
-	"Locate Assets": "查找资产",
-	"%symbol% required": "需要 %symbol%",
-	"Your History": "历史记录",
-	Filter: Filter,
-	Volume: Volume,
-	Tokens: Tokens,
-	Contact: Contact,
-	Merch: Merch,
-	New: New,
-	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "输出为估值。如果价格变化超过 %slippage%%，则您的交易将被撤回。",
-	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "正在供应 %amountA% %symbolA% 和 %amountB% %symbolB%",
-	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "正在移除 %amountA% %symbolA% 和 %amountB% %symbolB%",
-	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 交换为 %amountB% %symbolB%",
-	"Add Liquidity": "增加流动性",
-	"Add liquidity to receive LP tokens": "增加流动性以接收 LP 代币",
-	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "流动性供应商将对该代币对的所有交易赚取 0.1% 的交易费，与他们在流动性资金池中的份额成正比。",
-	"You are creating a pool": "您正在创建资金池",
-	"You are the first liquidity provider.": "您是第一个流动性供应商。",
-	"The ratio of tokens you add will set the price of this pool.": "您添加的代币比率将设置此资金池的价格。",
-	"Once you are happy with the rate click supply to review.": "如果您对汇率满意，请点击“供应”以进行检查。",
-	"Initial prices and pool share": "初始价格和资金池份额",
-	"Prices and pool share": "价格和资金池份额",
-	"Unsupported Asset": "不受支持的资产",
-	"Enabling %asset%": "正在批准 %asset%",
-	"Enable %asset%": "批准 %asset%",
-	"Share of Pool": "资金池中的份额",
-	"%assetA% per %assetB%": "%assetA%/%assetB%",
-	"%asset% Deposited": "已入金 %asset%",
-	Rates: Rates,
-	"Create Pool & Supply": "创建资金池和供应",
-	"Confirm Supply": "确认供应",
-	"Confirm Swap": "确认交换",
-	"Connect to a wallet to view your liquidity.": "连接到钱包以查看您的流动性。",
-	"Connect to a wallet to find pools": "连接到钱包以查找资金池",
-	"Select a token to find your liquidity.": "选择代币以查找您的流动性。",
-	"No liquidity found.": "未找到流动性。",
-	"Don't see a pool you joined?": "未看到您加入的资金池？",
-	"Find other LP tokens": "查找其他 LP 代币",
-	"Import Pool": "导入资金池",
-	"Import an existing pool": "导入现有资金池",
-	"Select a Token": "选择代币",
-	"Pool Found!": "发现资金池！",
-	"No pool found.": "未找到资金池。",
-	"Create pool.": "创建资金池。",
-	"Manage this pool.": "管理此资金池。",
-	"Invalid pair.": "币对无效。",
-	"You don’t have liquidity in this pool yet.": "您在此资金池中还没有流动性。",
-	"%assetA%/%assetB% Burned": "已焚毁 %assetA%/%assetB%",
-	Price: Price,
-	Prices: Prices,
-	"Remove %assetA%-%assetB% liquidity": "移除 %assetA%-%assetB% 流动性",
-	Amount: Amount,
-	Simple: Simple,
-	Detailed: Detailed,
-	"Receive WBNB": "接收 WBNB",
-	"Receive BNB": "接收 BNB",
-	Remove: Remove,
-	Input: Input$2,
-	Output: Output,
-	"Trade tokens in an instant": "即时交易兑换代币",
-	"From (estimated)": "从（估计）",
-	From: From,
-	"To (estimated)": "到（估计）",
-	To: To,
-	"+ Add a send (optional)": "+ 添加发送（可选）",
-	"- Remove send": "- 移除发送",
-	"Slippage Tolerance": "滑点容差",
-	"Insufficient liquidity for this trade.": "此交易的流动性不足。",
-	"Try enabling multi-hop trades.": "尝试启用多跳交易。",
-	"Price Impact High": "价格影响较高",
-	Swap: Swap$1,
-	"Swap Anyway": "仍要交换",
-	"Recent Transactions": "最近的交易",
-	"clear all": "全部清除",
-	"Clear all": "全部清除",
-	"No recent transactions": "最近没有交易",
-	"Are you sure?": "您确定吗？",
-	"Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.": "专家模式会关闭“确认”交易提示，并允许进行常会导致汇率不佳和资金损失的高滑点交易。",
-	"Only use this mode if you know what you’re doing.": "请仅在您清楚自身需求时才使用此模式。",
-	"Turn On Expert Mode": "开启专家模式",
-	"Transaction Settings": "交易设置",
-	"Interface Settings": "界面设置",
-	"Toggle Expert Mode": "切换专家模式",
-	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "绕过确认模式并允许高滑点交易。使用风险自负。",
-	"Disable Multihops": "禁用多跳",
-	"Restricts swaps to direct pairs only.": "将交换限制为仅限直接币对。",
-	Audio: Audio$1,
-	"🐰 Turn down your volume a bit before you swap": "🐰 在您交换之前略微调低音量",
-	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果价格变动幅度超过此百分比，您的交易将被撤回。",
-	"Enter a valid slippage percentage": "输入有效的滑点百分比",
-	"Your transaction may fail": "您的交易可能会失败",
-	"Your transaction may be frontrun": "您的交易可能会被超前交易",
-	"Your transaction will revert if it is pending for more than this long.": "如果您的交易等待处理的时间超过此时间，它将被撤回。",
-	minutes: minutes,
-	"Token Amount": "代币金额",
-	"Balance: %amount%": "余额：%amount%",
-	"LP tokens in your wallet": "您的钱包中的 LP 代币",
-	"Pooled %asset%": "已入池 %asset%",
-	"By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.": "通过添加流动性，您将赚取该币对所有交易额的0.1%，与您在资金池中的份额成正比。每天累计的费用将在次日添加到资金池中，可通过解除流动性来领取收益。",
-	"Common bases": "一般基准",
-	"These tokens are commonly paired with other tokens.": "这些代币通常与其他代币配对。",
-	"Expanded results from inactive Token Lists": "来自停用代币列表的扩展结果",
-	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "代币来自停用列表。在下方导入特定代币或点击“管理”以激活更多列表。",
-	"No results found.": "未找到结果。",
-	Manage: Manage$1,
-	"Manage Tokens": "管理代币",
-	"Import Tokens": "导入代币",
-	"Import List": "导入列表",
-	"Import at your own risk": "导入风险自负",
-	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "添加此列表，即表示您完全信任数据的正确性。任何人都可以创建列表，包括创建现有列表的虚假版本和声称代表没有列表的项目的列表。",
-	"If you purchase a token from this list, you may not be able to sell it back.": "如果您购买了此列表中的代币，则可能无法将其出售。",
-	Import: Import,
-	via: via,
-	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "任何人都可以在 BSC 上使用任意名称创建 BEP20 代币，包括创建虚假版本的现有代币和声称代表没有代币的项目的代币。",
-	"If you purchase an arbitrary token, you may be unable to sell it back.": "如果您购买任意代币，可能无法将其出售。",
-	"Unknown Source": "未知来源",
-	Lists: Lists,
-	See: See,
-	"Update list": "更新列表",
-	"https:// or ipfs:// or ENS name": "https:// 或 ipfs:// 或 ENS 名称",
-	Loaded: Loaded,
-	Loading: Loading$1,
-	"Enter valid token address": "输入有效的代币地址",
-	"Custom Token": "自定义代币",
-	"Custom Tokens": "自定义代币",
-	"Unknown Error": "未知错误",
-	"Select a currency": "选择币种",
-	"Search name or paste address": "搜索名称或粘贴地址",
-	"Add %asset% to Metamask": "将 %asset% 添加到 Metamask",
-	"Added %asset%": "已添加 %asset%",
-	"Transaction Submitted": "已提交交易",
-	"Wallet Address or ENS name": "钱包地址或 ENS 名称",
-	Recipient: Recipient,
-	"Waiting For Confirmation": "正在等待确认",
-	"Confirm this transaction in your wallet": "在您的钱包中确认此交易",
-	Dismiss: Dismiss,
-	Latest: Latest,
-	"Notice for trading %symbol%": "关于 %symbol% 的交易须知",
-	"To trade SAFEMOON, you must:": "若要交易 SafeMoon，您必须：",
-	"Click on the settings icon": "点击设置图标",
-	"Set your slippage tolerance to 12%+": "把滑点设置为 12% 或更高",
-	"This is because SafeMoon taxes a 10% fee on each transaction:": "这是因为交易 SafeMoon 时需支付 10% 的费用：",
-	"5% fee = redistributed to all existing holders": "5% 费用 = 分配给所有持有者",
-	"5% fee = used to add liquidity": "5% 费用 = 用于添加流动性",
-	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "警告：BONDLY 已被攻击，在得到进一步通知之前，请移除流动性",
-	Claimed: Claimed,
-	Settings: Settings,
-	"Transaction deadline": "交易截止期",
-	"Convert ERC-20 to BEP-20": "将 ERC-20 转换为 BEP-20",
-	"Need help ?": "需要帮助？",
-	"Select a token": "选择代币",
-	"Enter a recipient": "输入接收人",
-	"Invalid recipient": "接收人无效",
-	Supply: Supply,
-	"Your Liquidity": "您的流动性",
-	"Remove liquidity to receive tokens back": "移除流动性以收回代币",
-	"Trade anything. No registration, no hassle.": "交易任何代币。无需注册，不必麻烦。",
-	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "只需连接您的钱包，即可在 Binance Smart Chain 上快速交易任何代币。",
-	Learn: Learn,
-	"BNB token": "BNB 代币",
-	"BTC token": "BTC 代币",
-	"Earn passive income with crypto.": "利用加密货币赚取被动收入。",
-	translationLast: translationLast,
-	translationEnd: translationEnd
-};
-
-var _a$4;
-var translation = (_a$4 = {},
-    _a$4[EN.locale] = translations,
-    _a$4[ZHCN.locale] = translationsZhCN,
-    _a$4);
-// const publicUrl = process.env.PUBLIC_URL
-var LS_KEY = 'storage_language';
-var fetchLocale = function (locale) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-    return tslib.__generator(this, function (_a) {
-        // const response = await fetch(`${publicUrl}/locales/${locale}.json`)
-        // const data = await response.json()
-        return [2 /*return*/, translation[locale]];
-    });
-}); };
-var getLanguageCodeFromLS = function () {
-    try {
-        var codeFromStorage = localStorage.getItem(LS_KEY);
-        return codeFromStorage || EN.locale;
-    }
-    catch (_a) {
-        return EN.locale;
-    }
-};
-
-var initialState$9 = {
-    isFetching: true,
-    currentLanguage: EN,
-};
-var saveLang = {};
-// Export the translations directly
-var languageMap = new Map();
-languageMap.set(EN.locale, translations);
-var LanguageContext = React.createContext(undefined);
-var LanguageProvider = function (_a) {
-    var lang = _a.lang, children = _a.children;
-    var _b = tslib.__read(React.useState(function () {
-        var codeFromStorage = getLanguageCodeFromLS();
-        return tslib.__assign(tslib.__assign({}, initialState$9), { currentLanguage: languages[codeFromStorage] });
-    }), 2), state = _b[0], setState = _b[1];
-    var currentLanguage = state.currentLanguage;
-    React.useEffect(function () {
-        var fetchInitialLocales = function () { return tslib.__awaiter(void 0, void 0, void 0, function () {
-            var codeFromStorage, enLocale, currentLocale;
-            return tslib.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        codeFromStorage = getLanguageCodeFromLS();
-                        if (!(codeFromStorage !== EN.locale)) return [3 /*break*/, 2];
-                        enLocale = languageMap.get(EN.locale);
-                        return [4 /*yield*/, fetchLocale(codeFromStorage)];
-                    case 1:
-                        currentLocale = _a.sent();
-                        languageMap.set(codeFromStorage, tslib.__assign(tslib.__assign({}, enLocale), currentLocale));
-                        _a.label = 2;
-                    case 2:
-                        setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false })); });
-                        return [2 /*return*/];
-                }
-            });
-        }); };
-        fetchInitialLocales();
-    }, [setState]);
-    var setLanguage = function (language) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-        var locale, enLocale;
-        return tslib.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!!languageMap.has(language.locale)) return [3 /*break*/, 2];
-                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: true })); });
-                    return [4 /*yield*/, fetchLocale(language.locale)];
-                case 1:
-                    locale = _a.sent();
-                    enLocale = languageMap.get(EN.locale);
-                    // Merge the EN locale to ensure that any locale fetched has all the keys
-                    languageMap.set(language.locale, tslib.__assign(tslib.__assign({}, enLocale), locale));
-                    localStorage.setItem(LS_KEY, language.locale);
-                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: language })); });
-                    return [3 /*break*/, 3];
-                case 2:
-                    localStorage.setItem(LS_KEY, language.locale);
-                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: language })); });
-                    _a.label = 3;
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); };
-    var setLanguageOfLocale = function (localeKeys) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-        var locale, enLocale;
-        return tslib.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!languages[localeKeys])
-                        return [2 /*return*/];
-                    if (!!languageMap.has(localeKeys)) return [3 /*break*/, 2];
-                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: true })); });
-                    return [4 /*yield*/, fetchLocale(localeKeys)];
-                case 1:
-                    locale = _a.sent();
-                    enLocale = languageMap.get(EN.locale);
-                    // Merge the EN locale to ensure that any locale fetched has all the keys
-                    languageMap.set(localeKeys, tslib.__assign(tslib.__assign({}, enLocale), locale));
-                    localStorage.setItem(LS_KEY, localeKeys);
-                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: languages[localeKeys] })); });
-                    return [3 /*break*/, 3];
-                case 2:
-                    localStorage.setItem(LS_KEY, localeKeys);
-                    setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: languages[localeKeys] })); });
-                    _a.label = 3;
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); };
-    var translate = React.useCallback(function (key, data) {
-        saveLang[key] = key;
-        var translationSet = languageMap.has(currentLanguage.locale)
-            ? languageMap.get(currentLanguage.locale)
-            : languageMap.get(EN.locale);
-        var translatedText = translationSet[key] || key || '';
-        // Check the existence of at least one combination of %%, separated by 1 or more non space characters
-        var includesVariable = translatedText.match(/%\S+?%/gm);
-        if (includesVariable && data) {
-            var interpolatedText_1 = translatedText;
-            Object.keys(data).forEach(function (dataKey) {
-                var templateKey = new RegExp("%" + dataKey + "%", 'g');
-                interpolatedText_1 = interpolatedText_1.replace(templateKey, data[dataKey].toString());
-            });
-            return interpolatedText_1;
-        }
-        return translatedText;
-    }, [currentLanguage]);
-    var getHTML = React.useCallback(function (key, data) {
-        var translationSet = languageMap.has(currentLanguage.locale)
-            ? languageMap.get(currentLanguage.locale)
-            : languageMap.get(EN.locale);
-        var translatedText = translationSet[key] || key;
-        // Check the existence of at least one combination of %%, separated by 1 or more non space characters
-        var includesVariable = translatedText.match(/%\S+?%/gm);
-        if (includesVariable && data) {
-            var interpolatedText_2 = translatedText;
-            Object.keys(data).forEach(function (dataKey) {
-                var templateKey = new RegExp("%" + dataKey + "%", 'g');
-                interpolatedText_2 = interpolatedText_2.replace(templateKey, data[dataKey].toString());
-            });
-            var el = React__default["default"].createElement('span', {
-                dangerouslySetInnerHTML: {
-                    __html: interpolatedText_2,
-                },
-            });
-            // when key exists, it should still return element if there's defaultMessage() after getHTML()
-            return el;
-        }
-        return translatedText;
-    }, [currentLanguage]);
-    React.useEffect(function () {
-        if (lang) {
-            setLanguageOfLocale(lang);
-        }
-    }, [lang]);
-    return (jsxRuntime.jsx(LanguageContext.Provider, tslib.__assign({ value: tslib.__assign(tslib.__assign({}, state), { setLanguage: setLanguage, getHTML: getHTML, t: translate }) }, { children: children }), void 0));
-};
-
-var useTranslation = function () {
-    var languageContext = React.useContext(LanguageContext);
-    if (languageContext === undefined) {
-        throw new Error('Language context is undefined');
-    }
-    return languageContext;
-};
-
-var _a$3;
-(_a$3 = {},
-    _a$3[scales.LG] = {
+var _a$2;
+(_a$2 = {},
+    _a$2[scales.LG] = {
         width: 496,
         height: 700
     },
-    _a$3[scales.MD] = {
+    _a$2[scales.MD] = {
         width: 248,
         height: 350.8
     },
-    _a$3[scales.SM] = {
+    _a$2[scales.SM] = {
         width: 146,
         height: 177
     },
-    _a$3);
+    _a$2);
 
 var breakpointMap = {
     xxs: 369,
@@ -9550,14 +10629,14 @@ var types = {
     CUSTOM: "custom",
 };
 
-var _a$2;
-(_a$2 = {},
-    _a$2[types.INFO] = variants$4.INFO,
-    _a$2[types.SUCCESS] = variants$4.SUCCESS,
-    _a$2[types.DANGER] = variants$4.DANGER,
-    _a$2[types.WARNING] = variants$4.WARNING,
-    _a$2[types.CUSTOM] = variants$4.CUSTOM,
-    _a$2);
+var _a$1;
+(_a$1 = {},
+    _a$1[types.INFO] = variants$4.INFO,
+    _a$1[types.SUCCESS] = variants$4.SUCCESS,
+    _a$1[types.DANGER] = variants$4.DANGER,
+    _a$1[types.WARNING] = variants$4.WARNING,
+    _a$1[types.CUSTOM] = variants$4.CUSTOM,
+    _a$1);
 styled__default["default"].div(templateObject_1$y || (templateObject_1$y = tslib.__makeTemplateObject(["\n  right: 16px;\n  position: fixed;\n  max-width: calc(100% - 32px);\n  transition: all 250ms ease-in;\n  width: 100%;\n\n  ", " {\n    max-width: 400px;\n  }\n"], ["\n  right: 16px;\n  position: fixed;\n  max-width: calc(100% - 32px);\n  transition: all 250ms ease-in;\n  width: 100%;\n\n  ", " {\n    max-width: 400px;\n  }\n"])), function (_a) {
     var theme = _a.theme;
     return theme.mediaQueries.sm;
@@ -9866,323 +10945,6 @@ function Updater() {
     return null;
 }
 
-// returns whether tradeB is better than tradeA by at least a threshold percentage amount
-function isTradeBetter(tradeA, tradeB, minimumDelta) {
-    if (minimumDelta === void 0) { minimumDelta = ZERO_PERCENT; }
-    if (tradeA && !tradeB)
-        return false;
-    if (tradeB && !tradeA)
-        return true;
-    if (!tradeA || !tradeB)
-        return undefined;
-    if (tradeA.tradeType !== tradeB.tradeType ||
-        !dsgswapSdk.currencyEquals(tradeA.inputAmount.currency, tradeB.inputAmount.currency) ||
-        !dsgswapSdk.currencyEquals(tradeB.outputAmount.currency, tradeB.outputAmount.currency)) {
-        throw new Error('Trades are not comparable');
-    }
-    if (minimumDelta.equalTo(ZERO_PERCENT)) {
-        return tradeA.executionPrice.lessThan(tradeB.executionPrice);
-    }
-    return tradeA.executionPrice.raw.multiply(minimumDelta.add(ONE_HUNDRED_PERCENT$1)).lessThan(tradeB.executionPrice);
-}
-
-var updateUserExpertMode = toolkit.createAction('user/updateUserExpertMode');
-var updateUserUsePloy = toolkit.createAction('user/updateUserUsePloy');
-var updateSystemUsePloy = toolkit.createAction('user/updateSystemUsePloy');
-var updateUserSingleHopOnly = toolkit.createAction('user/updateUserSingleHopOnly');
-var updateUserSlippageTolerance = toolkit.createAction('user/updateUserSlippageTolerance');
-var updateUserDeadline = toolkit.createAction('user/updateUserDeadline');
-var addSerializedToken = toolkit.createAction('user/addSerializedToken');
-var removeSerializedToken = toolkit.createAction('user/removeSerializedToken');
-var addSerializedPair = toolkit.createAction('user/addSerializedPair');
-var removeSerializedPair = toolkit.createAction('user/removeSerializedPair');
-var muteAudio = toolkit.createAction('user/muteAudio');
-var unmuteAudio = toolkit.createAction('user/unmuteAudio');
-var toggleTheme = toolkit.createAction('user/toggleTheme');
-var setVDsgInviteAddress = toolkit.createAction('user/setVDsgInviteAddress');
-var updateUseFarmGet = toolkit.createAction('user/updateUseFarmGet');
-var updateUseFarmPledge = toolkit.createAction('user/updateUseFarmPledge');
-var updateUseNestGet = toolkit.createAction('user/updateUseNestGet');
-var updateUseNestPledge = toolkit.createAction('user/updateUseNestPledge');
-
-function useAudioModeManager() {
-    var dispatch = reactRedux.useDispatch();
-    var audioPlay = reactRedux.useSelector(function (state) { return state.user.audioPlay; });
-    var toggleSetAudioMode = React.useCallback(function () {
-        if (audioPlay) {
-            dispatch(muteAudio());
-        }
-        else {
-            dispatch(unmuteAudio());
-        }
-    }, [audioPlay, dispatch]);
-    return [audioPlay, toggleSetAudioMode];
-}
-function useIsExpertMode() {
-    return reactRedux.useSelector(function (state) { return state.user.userExpertMode; });
-}
-function useExpertModeManager() {
-    var dispatch = reactRedux.useDispatch();
-    var expertMode = useIsExpertMode();
-    var toggleSetExpertMode = React.useCallback(function () {
-        dispatch(updateUserExpertMode({ userExpertMode: !expertMode }));
-    }, [expertMode, dispatch]);
-    return [expertMode, toggleSetExpertMode];
-}
-function useThemeManager() {
-    var dispatch = reactRedux.useDispatch();
-    var isDark = reactRedux.useSelector(function (state) { return state.user.isDark; });
-    var toggleTheme$1 = React.useCallback(function () {
-        dispatch(toggleTheme());
-    }, [dispatch]);
-    return [isDark, toggleTheme$1];
-}
-function useUserSingleHopOnly() {
-    var dispatch = reactRedux.useDispatch();
-    var singleHopOnly = reactRedux.useSelector(function (state) { return state.user.userSingleHopOnly; });
-    var setSingleHopOnly = React.useCallback(function (newSingleHopOnly) {
-        dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }));
-    }, [dispatch]);
-    return [singleHopOnly, setSingleHopOnly];
-}
-function useUserSlippageTolerance() {
-    var dispatch = reactRedux.useDispatch();
-    var userSlippageTolerance = reactRedux.useSelector(function (state) {
-        return state.user.userSlippageTolerance;
-    });
-    var setUserSlippageTolerance = React.useCallback(function (slippage) {
-        dispatch(updateUserSlippageTolerance({ userSlippageTolerance: slippage }));
-    }, [dispatch]);
-    return [userSlippageTolerance, setUserSlippageTolerance];
-}
-function useUserUsePoly() {
-    var dispatch = reactRedux.useDispatch();
-    var userUsePoly = reactRedux.useSelector(function (state) {
-        return state.user.userUsePoly;
-    });
-    var setUserUsePoly = React.useCallback(function (usePoly) {
-        dispatch(updateUserUsePloy({ userUsePoly: usePoly }));
-    }, [dispatch]);
-    return [userUsePoly, setUserUsePoly];
-}
-function useSystemUsePoly() {
-    var dispatch = reactRedux.useDispatch();
-    var userUsePoly = reactRedux.useSelector(function (state) {
-        return state.user.systemUsePoly;
-    });
-    var setSystemUsePoly = React.useCallback(function (usePoly) {
-        dispatch(updateSystemUsePloy({ systemUsePoly: usePoly }));
-    }, [dispatch]);
-    return [userUsePoly, setSystemUsePoly];
-}
-function useUserTransactionTTL() {
-    var dispatch = reactRedux.useDispatch();
-    var userDeadline = reactRedux.useSelector(function (state) {
-        return state.user.userDeadline;
-    });
-    var setUserDeadline = React.useCallback(function (deadline) {
-        dispatch(updateUserDeadline({ userDeadline: deadline }));
-    }, [dispatch]);
-    return [userDeadline, setUserDeadline];
-}
-function useAddUserToken() {
-    var dispatch = reactRedux.useDispatch();
-    return React.useCallback(function (token) {
-        dispatch(addSerializedToken({ serializedToken: serializeToken(token) }));
-    }, [dispatch]);
-}
-function useRemoveUserAddedToken() {
-    var dispatch = reactRedux.useDispatch();
-    return React.useCallback(function (chainId, address) {
-        dispatch(removeSerializedToken({ chainId: chainId, address: address }));
-    }, [dispatch]);
-}
-
-function wrappedCurrency(currency, chainId) {
-    return chainId && currency === dsgswapSdk.getActiveETHERWidthChainId() ? dsgswapSdk.WETHER[chainId] : currency instanceof dsgswapSdk.Token ? currency : undefined;
-}
-function unwrappedToken(token) {
-    if (token.equals(dsgswapSdk.WETHER[token.chainId]))
-        return dsgswapSdk.getActiveETHERWidthChainId();
-    return token;
-}
-
-var PAIR_INTERFACE = new abi$1.Interface(abi);
-var PairState;
-(function (PairState) {
-    PairState[PairState["LOADING"] = 0] = "LOADING";
-    PairState[PairState["NOT_EXISTS"] = 1] = "NOT_EXISTS";
-    PairState[PairState["EXISTS"] = 2] = "EXISTS";
-    PairState[PairState["INVALID"] = 3] = "INVALID";
-})(PairState || (PairState = {}));
-function usePairs(currencies) {
-    var chainId = useActiveWeb3React().chainId;
-    var tokens = React.useMemo(function () {
-        return currencies.map(function (_a) {
-            var _b = tslib.__read(_a, 2), currencyA = _b[0], currencyB = _b[1];
-            return [
-                wrappedCurrency(currencyA, chainId),
-                wrappedCurrency(currencyB, chainId),
-            ];
-        });
-    }, [chainId, currencies]);
-    var pairAddresses = React.useMemo(function () {
-        return tokens.map(function (_a) {
-            var _b = tslib.__read(_a, 2), tokenA = _b[0], tokenB = _b[1];
-            return tokenA && tokenB && !tokenA.equals(tokenB) ? dsgswapSdk.Pair.getAddress(tokenA, tokenB) : undefined;
-        });
-    }, [tokens]);
-    var results = useMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves');
-    return React.useMemo(function () {
-        return results.map(function (result, i) {
-            var reserves = result.result, loading = result.loading;
-            var tokenA = tokens[i][0];
-            var tokenB = tokens[i][1];
-            if (loading)
-                return [PairState.LOADING, null];
-            if (!tokenA || !tokenB || tokenA.equals(tokenB))
-                return [PairState.INVALID, null];
-            if (!reserves)
-                return [PairState.NOT_EXISTS, null];
-            var reserve0 = reserves.reserve0, reserve1 = reserves.reserve1;
-            var _a = tslib.__read(tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA], 2), token0 = _a[0], token1 = _a[1];
-            return [
-                PairState.EXISTS,
-                new dsgswapSdk.Pair(new dsgswapSdk.TokenAmount(token0, reserve0.toString()), new dsgswapSdk.TokenAmount(token1, reserve1.toString())),
-            ];
-        });
-    }, [results, tokens]);
-}
-function usePair(tokenA, tokenB) {
-    return usePairs([[tokenA, tokenB]])[0];
-}
-
-function useAllCommonPairs(currencyA, currencyB, poly) {
-    var chainId = useActiveWeb3React().chainId;
-    var _a = tslib.__read(chainId
-        ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
-        : [undefined, undefined], 2), tokenA = _a[0], tokenB = _a[1];
-    var bases = React.useMemo(function () {
-        var _a, _b, _c, _d, _e;
-        if (!chainId)
-            return [];
-        var common = (_a = BASES_TO_CHECK_TRADES_AGAINST[chainId]) !== null && _a !== void 0 ? _a : [];
-        var additionalA = tokenA ? (_c = (_b = ADDITIONAL_BASES[chainId]) === null || _b === void 0 ? void 0 : _b[tokenA.address]) !== null && _c !== void 0 ? _c : [] : [];
-        var additionalB = tokenB ? (_e = (_d = ADDITIONAL_BASES[chainId]) === null || _d === void 0 ? void 0 : _d[tokenB.address]) !== null && _e !== void 0 ? _e : [] : [];
-        return tslib.__spreadArray(tslib.__spreadArray(tslib.__spreadArray([], tslib.__read(common)), tslib.__read(additionalA)), tslib.__read(additionalB));
-    }, [chainId, tokenA, tokenB]);
-    var basePairs = React.useMemo(function () { return flatMap__default["default"](bases, function (base) { return bases.map(function (otherBase) { return [base, otherBase]; }); }); }, [bases]);
-    var allPairCombinations = React.useMemo(function () {
-        return tokenA && tokenB
-            ? tslib.__spreadArray(tslib.__spreadArray(tslib.__spreadArray([
-                // the direct pair
-                [tokenA, tokenB]
-            ], tslib.__read(bases.map(function (base) { return [tokenA, base]; }))), tslib.__read(bases.map(function (base) { return [tokenB, base]; }))), tslib.__read(basePairs)).filter(function (tokens) { return Boolean(tokens[0] && tokens[1]); })
-                .filter(function (_a) {
-                var _b = tslib.__read(_a, 2), t0 = _b[0], t1 = _b[1];
-                return t0.address !== t1.address;
-            })
-                .filter(function (_a) {
-                var _b = tslib.__read(_a, 2), tokenA_ = _b[0], tokenB_ = _b[1];
-                if (!chainId)
-                    return true;
-                var customBases = CUSTOM_BASES[chainId];
-                var customBasesA = customBases === null || customBases === void 0 ? void 0 : customBases[tokenA_.address];
-                var customBasesB = customBases === null || customBases === void 0 ? void 0 : customBases[tokenB_.address];
-                if (!customBasesA && !customBasesB)
-                    return true;
-                if (customBasesA && !customBasesA.find(function (base) { return tokenB_.equals(base); }))
-                    return false;
-                if (customBasesB && !customBasesB.find(function (base) { return tokenA_.equals(base); }))
-                    return false;
-                return true;
-            })
-            : [];
-    }, [tokenA, tokenB, bases, basePairs, chainId]);
-    var allPairs = usePairs(allPairCombinations);
-    // only pass along valid pairs, non-duplicated pairs
-    return React.useMemo(function () {
-        return Object.values(allPairs
-            // filter out invalid pairs
-            .filter(function (result) { return Boolean(result[0] === PairState.EXISTS && result[1]); })
-            // filter out duplicated pairs
-            .reduce(function (memo, _a) {
-            var _b;
-            var _c = tslib.__read(_a, 2), curr = _c[1];
-            memo[curr.liquidityToken.address] = (_b = memo[curr.liquidityToken.address]) !== null && _b !== void 0 ? _b : curr;
-            return memo;
-        }, {}));
-    }, [allPairs]);
-}
-var MAX_HOPS = 3;
-/**
- * Returns the best trade for the exact amount of tokens in to the given token out
- */
-function useTradeExactIn(currencyAmountIn, currencyOut, poly) {
-    var allowedPairs = useAllCommonPairs(currencyAmountIn === null || currencyAmountIn === void 0 ? void 0 : currencyAmountIn.currency, currencyOut);
-    var _a = tslib.__read(useUserSingleHopOnly(), 1), singleHopOnly = _a[0];
-    return React.useMemo(function () {
-        var _a, _b;
-        if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
-            if (singleHopOnly || poly) {
-                return ((_a = dsgswapSdk.Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: 1, maxNumResults: 1 })[0]) !== null && _a !== void 0 ? _a : null);
-            }
-            // search through trades with varying hops, find best trade out of them
-            var bestTradeSoFar = null;
-            for (var i = 1; i <= MAX_HOPS; i++) {
-                var currentTrade = (_b = dsgswapSdk.Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: i, maxNumResults: 1 })[0]) !== null && _b !== void 0 ? _b : null;
-                // if current trade is best yet, save it
-                if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
-                    bestTradeSoFar = currentTrade;
-                }
-            }
-            return bestTradeSoFar;
-        }
-        return null;
-    }, [allowedPairs, currencyAmountIn, currencyOut, singleHopOnly, poly]);
-}
-/**
- * Returns the best trade for the token in to the exact amount of token out
- */
-function useTradeExactOut(currencyIn, currencyAmountOut, poly) {
-    var allowedPairs = useAllCommonPairs(currencyIn, currencyAmountOut === null || currencyAmountOut === void 0 ? void 0 : currencyAmountOut.currency);
-    var _a = tslib.__read(useUserSingleHopOnly(), 1), singleHopOnly = _a[0];
-    return React.useMemo(function () {
-        var _a, _b;
-        if (currencyIn && currencyAmountOut && allowedPairs.length > 0) {
-            if (singleHopOnly || poly) {
-                return ((_a = dsgswapSdk.Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, { maxHops: 1, maxNumResults: 1 })[0]) !== null && _a !== void 0 ? _a : null);
-            }
-            // search through trades with varying hops, find best trade out of them
-            var bestTradeSoFar = null;
-            for (var i = 1; i <= MAX_HOPS; i++) {
-                var currentTrade = (_b = dsgswapSdk.Trade.bestTradeExactOut(allowedPairs, currencyIn, currencyAmountOut, { maxHops: i, maxNumResults: 1 })[0]) !== null && _b !== void 0 ? _b : null;
-                if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
-                    bestTradeSoFar = currentTrade;
-                }
-            }
-            return bestTradeSoFar;
-        }
-        return null;
-    }, [currencyIn, currencyAmountOut, allowedPairs, singleHopOnly, poly]);
-}
-function useIsTransactionUnsupported(currencyIn, currencyOut) {
-    var unsupportedTokens = useUnsupportedTokens();
-    var chainId = useActiveWeb3React().chainId;
-    var tokenIn = wrappedCurrency(currencyIn, chainId);
-    var tokenOut = wrappedCurrency(currencyOut, chainId);
-    // if unsupported list loaded & either token on list, mark as unsupported
-    if (unsupportedTokens) {
-        if (tokenIn && Object.keys(unsupportedTokens).includes(tokenIn.address)) {
-            return true;
-        }
-        if (tokenOut && Object.keys(unsupportedTokens).includes(tokenOut.address)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 var Row = styled__default["default"](Box)(templateObject_1$t || (templateObject_1$t = tslib.__makeTemplateObject(["\n  width: ", ";\n  display: flex;\n  padding: 0;\n  align-items: ", ";\n  justify-content: ", ";\n  padding: ", ";\n  border: ", ";\n  border-radius: ", ";\n"], ["\n  width: ", ";\n  display: flex;\n  padding: 0;\n  align-items: ", ";\n  justify-content: ", ";\n  padding: ", ";\n  border: ", ";\n  border-radius: ", ";\n"])), function (_a) {
     var width = _a.width;
     return width !== null && width !== void 0 ? width : '100%';
@@ -10232,14 +10994,6 @@ var AutoColumn = styled__default["default"].div(templateObject_3$a || (templateO
 var templateObject_1$s, templateObject_2$f, templateObject_3$a;
 
 /**
- * Returns true if the string value is zero in hex
- * @param hexNumberString
- */
-function isZero(hexNumberString) {
-    return /^0x0*$/.test(hexNumberString);
-}
-
-/**
  * Does a lookup for an ENS name to find its contenthash.
  */
 function useENSContentHash(ensName) {
@@ -10275,12 +11029,6 @@ function useHttpLocations(uri) {
         return uri ? uriToHttp(uri) : [];
     }, [ens, resolvedContentHash.contenthash, uri]);
 }
-
-new BigNumber__default["default"](0);
-new BigNumber__default["default"](1);
-new BigNumber__default["default"](9);
-var BIG_TEN = new BigNumber__default["default"](10);
-new BigNumber__default["default"](1000000000);
 
 BigNumber__default["default"].config({
     EXPONENTIAL_AT: 1000,
@@ -10427,78 +11175,6 @@ var SwapWarningTokens = {
 
 var Dots = styled__default["default"].span(templateObject_1$n || (templateObject_1$n = tslib.__makeTemplateObject(["\n  &::after {\n    display: inline-block;\n    animation: ellipsis 1.25s infinite;\n    content: '.';\n    width: 1em;\n    text-align: left;\n  }\n  @keyframes ellipsis {\n    0% {\n      content: '.';\n    }\n    33% {\n      content: '..';\n    }\n    66% {\n      content: '...';\n    }\n  }\n"], ["\n  &::after {\n    display: inline-block;\n    animation: ellipsis 1.25s infinite;\n    content: '.';\n    width: 1em;\n    text-align: left;\n  }\n  @keyframes ellipsis {\n    0% {\n      content: '.';\n    }\n    33% {\n      content: '..';\n    }\n    66% {\n      content: '...';\n    }\n  }\n"])));
 var templateObject_1$n;
-
-/**
- * Does a lookup for an ENS name to find its address.
- */
-function useENSAddress(ensName) {
-    var _a, _b, _c;
-    var debouncedName = useDebounce(ensName, 200);
-    var ensNodeArgument = React.useMemo(function () {
-        if (!debouncedName)
-            return [undefined];
-        try {
-            return debouncedName ? [utils.namehash(debouncedName)] : [undefined];
-        }
-        catch (error) {
-            return [undefined];
-        }
-    }, [debouncedName]);
-    var registrarContract = useENSRegistrarContract(false);
-    var resolverAddress = useSingleCallResult(registrarContract, 'resolver', ensNodeArgument);
-    var resolverAddressResult = (_a = resolverAddress.result) === null || _a === void 0 ? void 0 : _a[0];
-    var resolverContract = useENSResolverContract(resolverAddressResult && !isZero(resolverAddressResult) ? resolverAddressResult : undefined, false);
-    var addr = useSingleCallResult(resolverContract, 'addr', ensNodeArgument);
-    var changed = debouncedName !== ensName;
-    return {
-        address: changed ? null : (_c = (_b = addr.result) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : null,
-        loading: changed || resolverAddress.loading || addr.loading,
-    };
-}
-
-/**
- * Does a reverse lookup for an address to find its ENS name.
- * Note this is not the same as looking up an ENS name to find an address.
- */
-function useENSName(address) {
-    var _a, _b, _c;
-    var debouncedAddress = useDebounce(address, 200);
-    var ensNodeArgument = React.useMemo(function () {
-        if (!debouncedAddress || !isAddress(debouncedAddress))
-            return [undefined];
-        try {
-            return debouncedAddress ? [utils.namehash(debouncedAddress.toLowerCase().substr(2) + ".addr.reverse")] : [undefined];
-        }
-        catch (error) {
-            return [undefined];
-        }
-    }, [debouncedAddress]);
-    var registrarContract = useENSRegistrarContract(false);
-    var resolverAddress = useSingleCallResult(registrarContract, 'resolver', ensNodeArgument);
-    var resolverAddressResult = (_a = resolverAddress.result) === null || _a === void 0 ? void 0 : _a[0];
-    var resolverContract = useENSResolverContract(resolverAddressResult && !isZero(resolverAddressResult) ? resolverAddressResult : undefined, false);
-    var name = useSingleCallResult(resolverContract, 'name', ensNodeArgument);
-    var changed = debouncedAddress !== address;
-    return {
-        ENSName: changed ? null : (_c = (_b = name.result) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : null,
-        loading: changed || resolverAddress.loading || name.loading,
-    };
-}
-
-/**
- * Given a name or address, does a lookup to resolve to an address and name
- * @param nameOrAddress ENS name or address
- */
-function useENS(nameOrAddress) {
-    var validated = isAddress(nameOrAddress);
-    var reverseLookup = useENSName(validated || undefined);
-    var lookup = useENSAddress(nameOrAddress);
-    return {
-        loading: reverseLookup.loading || lookup.loading,
-        address: validated || lookup.address,
-        name: reverseLookup.ENSName ? reverseLookup.ENSName : !validated && lookup.address ? nameOrAddress || null : null,
-    };
-}
 
 var InputPanel$1 = styled__default["default"].div(templateObject_1$m || (templateObject_1$m = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: 1.25rem;\n  background-color: ", ";\n  z-index: 1;\n  width: 100%;\n"], ["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: 1.25rem;\n  background-color: ", ";\n  z-index: 1;\n  width: 100%;\n"])), function (_a) {
     var theme = _a.theme;
@@ -10655,78 +11331,6 @@ var TransactionConfirmationModal = function (_a) {
     return (jsxRuntime.jsx(Modal, tslib.__assign({ title: title, headerBackground: "gradients.cardHeader", onDismiss: handleDismiss }, { children: attemptingTxn ? (jsxRuntime.jsx(ConfirmationPendingContent, { pendingText: pendingText }, void 0)) : hash ? (jsxRuntime.jsx(TransactionSubmittedContent, { chainId: chainId, hash: hash, onDismiss: onDismiss, currencyToAdd: currencyToAdd }, void 0)) : (content()) }), void 0));
 };
 var templateObject_1$k, templateObject_2$c, templateObject_3$7;
-
-var Field$2;
-(function (Field) {
-    Field["INPUT"] = "INPUT";
-    Field["OUTPUT"] = "OUTPUT";
-})(Field$2 || (Field$2 = {}));
-var selectCurrency = toolkit.createAction('swap/selectCurrency');
-var switchCurrencies = toolkit.createAction('swap/switchCurrencies');
-var typeInput$2 = toolkit.createAction('swap/typeInput');
-var replaceSwapState = toolkit.createAction('swap/replaceSwapState');
-var setRecipient = toolkit.createAction('swap/setRecipient');
-var updatePolyDataIndex = toolkit.createAction('swap/updatePolyDataIndex');
-var resetPolyData = toolkit.createAction('swap/resetPolyDataIndex');
-
-var BASE_FEE = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(30), dsgswapSdk.JSBI.BigInt(10000));
-var ONE_HUNDRED_PERCENT = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(10000), dsgswapSdk.JSBI.BigInt(10000));
-var INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE);
-// computes price breakdown for the trade
-function computeTradePriceBreakdown(trade) {
-    // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
-    // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
-    var realizedLPFee = !trade
-        ? undefined
-        : ONE_HUNDRED_PERCENT.subtract(trade.route.pairs.reduce(function (currentFee) { return currentFee.multiply(INPUT_FRACTION_AFTER_FEE); }, ONE_HUNDRED_PERCENT));
-    // remove lp fees from price impact
-    var priceImpactWithoutFeeFraction = trade && realizedLPFee ? trade.priceImpact.subtract(realizedLPFee) : undefined;
-    // the x*y=k impact
-    var priceImpactWithoutFeePercent = priceImpactWithoutFeeFraction
-        ? new dsgswapSdk.Percent(priceImpactWithoutFeeFraction === null || priceImpactWithoutFeeFraction === void 0 ? void 0 : priceImpactWithoutFeeFraction.numerator, priceImpactWithoutFeeFraction === null || priceImpactWithoutFeeFraction === void 0 ? void 0 : priceImpactWithoutFeeFraction.denominator)
-        : undefined;
-    // the amount of the input that accrues to LPs
-    var realizedLPFeeAmount = realizedLPFee &&
-        trade &&
-        (trade.inputAmount instanceof dsgswapSdk.TokenAmount
-            ? new dsgswapSdk.TokenAmount(trade.inputAmount.token, realizedLPFee.multiply(trade.inputAmount.raw).quotient)
-            : dsgswapSdk.CurrencyAmount.ether(realizedLPFee.multiply(trade.inputAmount.raw).quotient));
-    return { priceImpactWithoutFee: priceImpactWithoutFeePercent, realizedLPFee: realizedLPFeeAmount };
-}
-// computes the minimum amount out and maximum amount in for a trade given a user specified allowed slippage in bips
-function computeSlippageAdjustedAmounts(trade, allowedSlippage) {
-    var _a;
-    var pct = basisPointsToPercent(allowedSlippage);
-    return _a = {},
-        _a[Field$2.INPUT] = trade === null || trade === void 0 ? void 0 : trade.maximumAmountIn(pct),
-        _a[Field$2.OUTPUT] = trade === null || trade === void 0 ? void 0 : trade.minimumAmountOut(pct),
-        _a;
-}
-function warningSeverity(priceImpact, UserSlippageTolerance) {
-    if (UserSlippageTolerance === void 0) { UserSlippageTolerance = 50; }
-    // if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4
-    var ALLOWED_PRICE_IMPACT_USER = new dsgswapSdk.Percent(dsgswapSdk.JSBI.BigInt(UserSlippageTolerance), BIPS_BASE);
-    var IMPACT_NON_EXPERT = (BLOCKED_PRICE_IMPACT_NON_EXPERT === null || BLOCKED_PRICE_IMPACT_NON_EXPERT === void 0 ? void 0 : BLOCKED_PRICE_IMPACT_NON_EXPERT.lessThan(ALLOWED_PRICE_IMPACT_USER))
-        ? ALLOWED_PRICE_IMPACT_USER
-        : BLOCKED_PRICE_IMPACT_NON_EXPERT;
-    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(IMPACT_NON_EXPERT)))
-        return 4;
-    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(ALLOWED_PRICE_IMPACT_HIGH)))
-        return 3;
-    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)))
-        return 2;
-    if (!(priceImpact === null || priceImpact === void 0 ? void 0 : priceImpact.lessThan(ALLOWED_PRICE_IMPACT_LOW)))
-        return 1;
-    return 0;
-}
-function formatExecutionPrice(trade, inverted) {
-    if (!trade) {
-        return '';
-    }
-    return inverted
-        ? trade.executionPrice.invert().toSignificant(6) + " " + trade.inputAmount.currency.symbol + " / " + trade.outputAmount.currency.symbol
-        : trade.executionPrice.toSignificant(6) + " " + trade.outputAmount.currency.symbol + " / " + trade.inputAmount.currency.symbol;
-}
 
 var QuestionWrapper = styled__default["default"].div(templateObject_1$j || (templateObject_1$j = tslib.__makeTemplateObject(["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"], ["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"])));
 var QuestionHelper = function (_a) {
@@ -10886,89 +11490,6 @@ var ConfirmSwapModal = function (_a) {
 };
 
 /**
- * Returns a map of the given addresses to their eventually consistent BNB balances.
- */
-function useBNBBalances(uncheckedAddresses) {
-    var multicallContract = useMulticallContract();
-    var addresses = React.useMemo(function () {
-        return uncheckedAddresses
-            ? uncheckedAddresses
-                .map(isAddress)
-                .filter(function (a) { return a !== false; })
-                .sort()
-            : [];
-    }, [uncheckedAddresses]);
-    var results = useSingleContractMultipleData(multicallContract, 'getEthBalance', addresses.map(function (address) { return [address]; }));
-    return React.useMemo(function () {
-        return addresses.reduce(function (memo, address, i) {
-            var _a, _b;
-            var value = (_b = (_a = results === null || results === void 0 ? void 0 : results[i]) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b[0];
-            if (value)
-                memo[address] = dsgswapSdk.CurrencyAmount.ether(dsgswapSdk.JSBI.BigInt(value.toString()));
-            return memo;
-        }, {});
-    }, [addresses, results]);
-}
-/**
- * Returns a map of token addresses to their eventually consistent token balances for a single account.
- */
-function useTokenBalancesWithLoadingIndicator(address, tokens) {
-    var validatedTokens = React.useMemo(function () { var _a; return (_a = tokens === null || tokens === void 0 ? void 0 : tokens.filter(function (t) { return isAddress(t === null || t === void 0 ? void 0 : t.address) !== false; })) !== null && _a !== void 0 ? _a : []; }, [tokens]);
-    var validatedTokenAddresses = React.useMemo(function () { return validatedTokens.map(function (vt) { return vt.address; }); }, [validatedTokens]);
-    var balances = useMultipleContractSingleData(validatedTokenAddresses, ERC20_INTERFACE, 'balanceOf', [address]);
-    var anyLoading = React.useMemo(function () { return balances.some(function (callState) { return callState.loading; }); }, [balances]);
-    return [
-        React.useMemo(function () {
-            return address && validatedTokens.length > 0
-                ? validatedTokens.reduce(function (memo, token, i) {
-                    var _a, _b;
-                    var value = (_b = (_a = balances === null || balances === void 0 ? void 0 : balances[i]) === null || _a === void 0 ? void 0 : _a.result) === null || _b === void 0 ? void 0 : _b[0];
-                    var amount = value ? dsgswapSdk.JSBI.BigInt(value.toString()) : undefined;
-                    if (amount) {
-                        memo[token.address] = new dsgswapSdk.TokenAmount(token, amount);
-                    }
-                    return memo;
-                }, {})
-                : {};
-        }, [address, validatedTokens, balances]),
-        anyLoading,
-    ];
-}
-function useTokenBalances(address, tokens) {
-    return useTokenBalancesWithLoadingIndicator(address, tokens)[0];
-}
-function useCurrencyBalances(account, currencies) {
-    var tokens = React.useMemo(function () { var _a; return (_a = currencies === null || currencies === void 0 ? void 0 : currencies.filter(function (currency) { return currency instanceof dsgswapSdk.Token; })) !== null && _a !== void 0 ? _a : []; }, [currencies]);
-    var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
-    var tokenBalances = useTokenBalances(account, tokens);
-    var containsBNB = React.useMemo(function () { var _a; return (_a = currencies === null || currencies === void 0 ? void 0 : currencies.some(function (currency) { return currency === ETHER; })) !== null && _a !== void 0 ? _a : false; }, [currencies, ETHER]);
-    var ethBalance = useBNBBalances(containsBNB ? [account] : []);
-    return React.useMemo(function () {
-        var _a;
-        return (_a = currencies === null || currencies === void 0 ? void 0 : currencies.map(function (currency) {
-            if (!account || !currency)
-                return undefined;
-            if (currency instanceof dsgswapSdk.Token)
-                return tokenBalances[currency.address];
-            if (currency === ETHER)
-                return ethBalance[account];
-            return undefined;
-        })) !== null && _a !== void 0 ? _a : [];
-    }, [account, currencies, ETHER, ethBalance, tokenBalances]);
-}
-function useCurrencyBalance(account, currency) {
-    return useCurrencyBalances(account, [currency])[0];
-}
-// mimics useAllBalances
-function useAllTokenBalances() {
-    var account = core.useWeb3React().account;
-    var allTokens = useAllTokens();
-    var allTokensArray = React.useMemo(function () { return Object.values(allTokens !== null && allTokens !== void 0 ? allTokens : {}); }, [allTokens]);
-    var balances = useTokenBalances(account !== null && account !== void 0 ? account : undefined, allTokensArray);
-    return balances !== null && balances !== void 0 ? balances : {};
-}
-
-/**
  * Returns the previous value of the given value
  *
  * @see https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state
@@ -11065,13 +11586,14 @@ function CommonBases(_a) {
     var chainId = _a.chainId, onSelect = _a.onSelect, selectedCurrency = _a.selectedCurrency;
     var t = useTranslation().t;
     var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
+    var inactiveTokens = useAllTokens();
     return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(AutoRow, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t('Common bases') }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('These tokens are commonly paired with other tokens.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(AutoRow, tslib.__assign({ gap: "auto" }, { children: jsxRuntime.jsxs(FlexAutoWarpper, tslib.__assign({ lineMax: 4 }, { children: [jsxRuntime.jsxs(BaseWrapper, tslib.__assign({ onClick: function () {
                                 if (!selectedCurrency || !dsgswapSdk.currencyEquals(selectedCurrency, ETHER)) {
                                     onSelect(ETHER);
                                 }
                             }, disable: selectedCurrency === ETHER }, { children: [jsxRuntime.jsx(CurrencyLogo, { symbol: ETHER.symbol, style: { marginRight: 8 } }, void 0), jsxRuntime.jsx(Text, { children: ETHER === null || ETHER === void 0 ? void 0 : ETHER.symbol }, void 0)] }), void 0), (chainId ? (SUGGESTED_BASES[chainId] || []) : []).map(function (token) {
                             var selected = selectedCurrency instanceof dsgswapSdk.Token && selectedCurrency.address === token.address;
-                            return (jsxRuntime.jsxs(BaseWrapper, tslib.__assign({ onClick: function () { return !selected && onSelect(token); }, disable: selected }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: token, style: { marginRight: 8 } }, void 0), jsxRuntime.jsx(Text, { children: token.symbol }, void 0)] }), token.address));
+                            return (jsxRuntime.jsxs(BaseWrapper, tslib.__assign({ onClick: function () { return !selected && onSelect(token); }, disable: selected }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: inactiveTokens[token.address] || token, style: { marginRight: 8 } }, void 0), jsxRuntime.jsx(Text, { children: token.symbol }, void 0)] }), token.address));
                         })] }), void 0) }), void 0)] }), void 0));
 }
 var templateObject_1$g;
@@ -11308,7 +11830,7 @@ function CurrencySearch(_a) {
     // if no results on main list, show option to expand into inactive
     var inactiveTokens = useFoundOnInactiveList(debouncedQuery);
     var filteredInactiveTokens = useSortedTokensByQuery(inactiveTokens, debouncedQuery);
-    return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "16px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$5, { id: "token-search-input", placeholder: t('Search name or paste address'), scale: "lg", autoComplete: "off", value: searchQuery, ref: inputRef, onChange: handleInput, onKeyDown: handleEnter }, void 0) }, void 0), showCommonBases && (jsxRuntime.jsx(CommonBases, { chainId: chainId, onSelect: handleCurrencySelect, selectedCurrency: selectedCurrency }, void 0))] }), void 0), searchToken && !searchTokenIsAdded ? (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px 0', height: '100%' } }, { children: jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (filteredSortedTokens === null || filteredSortedTokens === void 0 ? void 0 : filteredSortedTokens.length) > 0 || (filteredInactiveTokens === null || filteredInactiveTokens === void 0 ? void 0 : filteredInactiveTokens.length) > 0 ? (jsxRuntime.jsx(Box, tslib.__assign({ margin: "24px -24px" }, { children: jsxRuntime.jsx(CurrencyList, { height: 390, showETH: showETH, currencies: filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens, breakIndex: inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined, onCurrencySelect: handleCurrencySelect, otherCurrency: otherSelectedCurrency, selectedCurrency: selectedCurrency, fixedListRef: fixedList, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px', height: '100%' } }, { children: jsxRuntime.jsx(Text, tslib.__assign({ color: "textSubtle", textAlign: "center", mb: "20px" }, { children: t('No results found.') }), void 0) }), void 0))] }, void 0) }, void 0));
+    return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "16px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "token-search-input", placeholder: t('Search name or paste address'), scale: "lg", autoComplete: "off", value: searchQuery, ref: inputRef, onChange: handleInput, onKeyDown: handleEnter }, void 0) }, void 0), showCommonBases && (jsxRuntime.jsx(CommonBases, { chainId: chainId, onSelect: handleCurrencySelect, selectedCurrency: selectedCurrency }, void 0))] }), void 0), searchToken && !searchTokenIsAdded ? (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px 0', height: '100%' } }, { children: jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (filteredSortedTokens === null || filteredSortedTokens === void 0 ? void 0 : filteredSortedTokens.length) > 0 || (filteredInactiveTokens === null || filteredInactiveTokens === void 0 ? void 0 : filteredInactiveTokens.length) > 0 ? (jsxRuntime.jsx(Box, tslib.__assign({ margin: "24px -24px" }, { children: jsxRuntime.jsx(CurrencyList, { height: 390, showETH: showETH, currencies: filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens, breakIndex: inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined, onCurrencySelect: handleCurrencySelect, otherCurrency: otherSelectedCurrency, selectedCurrency: selectedCurrency, fixedListRef: fixedList, showImportView: showImportView, setImportToken: setImportToken }, void 0) }), void 0)) : (jsxRuntime.jsx(Column, tslib.__assign({ style: { padding: '20px', height: '100%' } }, { children: jsxRuntime.jsx(Text, tslib.__assign({ color: "textSubtle", textAlign: "center", mb: "20px" }, { children: t('No results found.') }), void 0) }), void 0))] }, void 0) }, void 0));
 }
 
 function ImportToken(_a) {
@@ -11486,7 +12008,7 @@ function ManageLists(_a) {
         setModalView(CurrencyModalView.importList);
         setListUrl(listUrlInput);
     }, [listUrlInput, setImportList, setListUrl, setModalView, tempList]);
-    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$5, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
+    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
 }
 var templateObject_1$c, templateObject_2$7, templateObject_3$3;
 
@@ -11521,7 +12043,7 @@ function ManageTokens(_a) {
             userAddedTokens.map(function (token) { return (jsxRuntime.jsxs(RowBetween, tslib.__assign({ width: "100%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: token, size: "20px" }, void 0), jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(token.address, 'address', chainId), color: "textSubtle", ml: "10px" }, { children: token.symbol }), void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(IconButton, tslib.__assign({ variant: "text", onClick: function () { return removeToken(chainId, token.address); } }, { children: jsxRuntime.jsx(Icon$7, {}, void 0) }), void 0), jsxRuntime.jsx(LinkExternal, { href: getBscScanLink(token.address, 'address', chainId) }, void 0)] }, void 0)] }), token.address)); }));
     }, [userAddedTokens, chainId, removeToken]);
     var isAddressValid = searchQuery === '' || isAddress(searchQuery);
-    return (jsxRuntime.jsx(Wrapper$1, { children: jsxRuntime.jsxs(Column, tslib.__assign({ style: { width: '100%', flex: '1 1' } }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$5, { id: "token-search-input", scale: "lg", placeholder: "0x0000", value: searchQuery, autoComplete: "off", ref: inputRef, onChange: handleInput, isWarning: !isAddressValid }, void 0) }, void 0), !isAddressValid && jsxRuntime.jsx(Text, tslib.__assign({ color: "failure" }, { children: t('Enter valid token address') }), void 0), searchToken && (jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken, style: { height: 'fit-content' } }, void 0))] }), void 0), tokenList, jsxRuntime.jsxs(Footer$1, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ bold: true, color: "textSubtle" }, { children: [userAddedTokens === null || userAddedTokens === void 0 ? void 0 : userAddedTokens.length, " ", userAddedTokens.length === 1 ? t('Custom Token') : t('Custom Tokens')] }), void 0), userAddedTokens.length > 0 && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", onClick: handleRemoveAll }, { children: t('Clear all') }), void 0))] }, void 0)] }), void 0) }, void 0));
+    return (jsxRuntime.jsx(Wrapper$1, { children: jsxRuntime.jsxs(Column, tslib.__assign({ style: { width: '100%', flex: '1 1' } }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "token-search-input", scale: "lg", placeholder: "0x0000", value: searchQuery, autoComplete: "off", ref: inputRef, onChange: handleInput, isWarning: !isAddressValid }, void 0) }, void 0), !isAddressValid && jsxRuntime.jsx(Text, tslib.__assign({ color: "failure" }, { children: t('Enter valid token address') }), void 0), searchToken && (jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken, style: { height: 'fit-content' } }, void 0))] }), void 0), tokenList, jsxRuntime.jsxs(Footer$1, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ bold: true, color: "textSubtle" }, { children: [userAddedTokens === null || userAddedTokens === void 0 ? void 0 : userAddedTokens.length, " ", userAddedTokens.length === 1 ? t('Custom Token') : t('Custom Tokens')] }), void 0), userAddedTokens.length > 0 && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", onClick: handleRemoveAll }, { children: t('Clear all') }), void 0))] }, void 0)] }), void 0) }, void 0));
 }
 var templateObject_1$b, templateObject_2$6;
 
@@ -11920,7 +12442,7 @@ function SlippageTabs(_a) {
                                         }, variant: rawSlippage === 50 ? 'primary' : 'tertiary' }, { children: "0.5%" }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ scale: "sm", onClick: function () {
                                             setSlippageInput('');
                                             setRawSlippage(100);
-                                        }, variant: rawSlippage === 100 ? 'primary' : 'tertiary' }, { children: "1%" }), void 0)] }), void 0), jsxRuntime.jsxs(Flex, tslib.__assign({ width: "102px" }, { children: [jsxRuntime.jsx(Input$5, { scale: "sm", placeholder: (rawSlippage / 100).toFixed(2), value: slippageInput, onBlur: function () {
+                                        }, variant: rawSlippage === 100 ? 'primary' : 'tertiary' }, { children: "1%" }), void 0)] }), void 0), jsxRuntime.jsxs(Flex, tslib.__assign({ width: "102px" }, { children: [jsxRuntime.jsx(Input$3, { scale: "sm", placeholder: (rawSlippage / 100).toFixed(2), value: slippageInput, onBlur: function () {
                                             parseCustomSlippage((rawSlippage / 100).toFixed(2));
                                         }, onChange: function (e) { return parseCustomSlippage(e.target.value); }, isWarning: !slippageInputIsValid, isSuccess: ![10, 50, 100].includes(rawSlippage) }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: "primary", bold: true, ml: "8px" }, { children: "%" }), void 0)] }), void 0)] }), void 0), !!slippageError && (jsxRuntime.jsx(RowBetween, tslib.__assign({ style: {
                             fontSize: '14px',
@@ -11930,7 +12452,7 @@ function SlippageTabs(_a) {
                             ? t('Enter a valid slippage percentage')
                             : slippageError === SlippageError.RiskyLow
                                 ? t('Your transaction may fail')
-                                : t('Your transaction may be frontrun') }), void 0))] }), void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ style: { marginTop: '8px' }, gap: "sm" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t('Transaction deadline') }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Your transaction will revert if it is pending for more than this long.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, tslib.__assign({ style: { width: '182px' } }, { children: [jsxRuntime.jsx(Input$5, { scale: "md", color: deadlineError ? 'red' : undefined, onBlur: function () {
+                                : t('Your transaction may be frontrun') }), void 0))] }), void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ style: { marginTop: '8px' }, gap: "sm" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t('Transaction deadline') }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Your transaction will revert if it is pending for more than this long.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, tslib.__assign({ style: { width: '182px' } }, { children: [jsxRuntime.jsx(Input$3, { scale: "md", color: deadlineError ? 'red' : undefined, onBlur: function () {
                                     parseCustomDeadline((deadline / 60).toString());
                                 }, placeholder: (deadline / 60).toString(), value: deadlineInput, onChange: function (e) { return parseCustomDeadline(e.target.value); } }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ width: "80px", pl: "8px", fontSize: "14px" }, { children: t('minutes') }), void 0)] }), void 0)] }), void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "sm" }, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ mt: "8px", width: "98%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, { children: t('Aggregate trading') }, void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Unable to get trading pool rewards using Aggregate trading'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(Toggle, { checked: userUsePoly, scale: "sm", onChange: function () { return setUserUsePoly(!userUsePoly); } }, void 0)] }), void 0) }), void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "sm" }, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ mt: "8px", width: "98%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, { children: t('Disable Route') }, void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t('Restricts swaps to direct pairs only.'), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(Toggle, { checked: singleHopOnly, scale: "sm", onChange: function () { return setSingleHopOnly(!singleHopOnly); } }, void 0)] }), void 0) }), void 0)] }), void 0));
 }
@@ -12435,516 +12957,6 @@ function usePolySwap(polyData, trade, showWrap) {
     var polyDataRes = tslib.__assign(tslib.__assign({}, polyData), { isPolyMethed: isPolyMethed, price: polyCurrencyData.price, currencyAmount: polyCurrencyData.currencyAmount, fromCurrencyTokenAmount: polyCurrencyData.fromCurrencyTokenAmount, fromCurrencyToken: polyCurrencyData.fromCurrencyToken, toCurrencyAmount: polyCurrencyData.toTokenAmount });
     return {
         polyData: polyDataRes,
-    };
-}
-
-/**
- * Take a formatted amount, e.g. 15 BNB and convert it to full decimal value, e.g. 15000000000000000
- */
-var getDecimalAmount = function (amount, decimals) {
-    if (decimals === void 0) { decimals = 18; }
-    return new BigNumber__default["default"](amount).times(BIG_TEN.pow(decimals));
-};
-
-var supportChainIds = [
-    1,
-    56,
-    137,
-    10,
-    42161,
-];
-var isSupportChainId = function (chainId) {
-    return supportChainIds.includes(Number(chainId));
-};
-var ETHER_1INCH_ADDRESS = {
-    1: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    56: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    137: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    // 10,
-    // 42161,
-};
-
-axios__default["default"].defaults.timeout = 30 * 1000;
-axios__default["default"].defaults.withCredentials = false;
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-axios__default["default"].defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-axios__default["default"].defaults.headers.get.Accept = 'application/json';
-function resetConfig(config) {
-    var resConfig = tslib.__assign({}, config);
-    if (resConfig.noLang)
-        return resConfig;
-    if (!resConfig.data) {
-        resConfig.data = {};
-    }
-    if (!resConfig.params) {
-        resConfig.params = {};
-    }
-    return resConfig;
-}
-var request = axios__default["default"].create();
-request.interceptors.request.use(function (config) {
-    return resetConfig(config);
-}, function (error) { return Promise.reject(error); });
-// Add a response interceptor
-request.interceptors.response.use(function (response) {
-    return response.data;
-}, function (error) {
-    return Promise.reject(error);
-});
-
-var get1inch = function (url, params) {
-    return request({
-        url: url,
-        params: params,
-        method: 'get',
-        withCredentials: false,
-        baseURL: dsgswapSdk.getValueWithChainId(dsgswapSdk.POLY_BASE_URL),
-    });
-};
-var get1inchQuoteData = function (chainId, data) { return get1inch("/" + chainId + "/quote", data); };
-var get1inchSwapData = function (chainId, data) { return get1inch("/" + chainId + "/swap", data); };
-var get1inchApproveSpender = function (chainId, data) { return get1inch("/" + chainId + "/approve/spender", data); };
-
-var multicall$1 = function (abi, calls) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-    var multi, itf_1, calldata, returnData, res, error_1;
-    return tslib.__generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                multi = getMulticallContract();
-                itf_1 = new ethers.ethers.utils.Interface(abi);
-                calldata = calls.map(function (call) { return [call.address.toLowerCase(), itf_1.encodeFunctionData(call.name, call.params)]; });
-                return [4 /*yield*/, multi.aggregate(calldata)];
-            case 1:
-                returnData = (_a.sent()).returnData;
-                res = returnData.map(function (call, i) { return itf_1.decodeFunctionResult(calls[i].name, call); });
-                return [2 /*return*/, res];
-            case 2:
-                error_1 = _a.sent();
-                // console.error(error)
-                // return null
-                throw new Error(error_1);
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-
-var fetchPolyQuoteData = function (chanId, data) {
-    if (!isSupportChainId(chanId))
-        return null;
-    try {
-        return get1inchQuoteData(chanId, data);
-    }
-    catch (error) {
-        console.error(error);
-        return null;
-    }
-};
-var fetchSpenderAddress = function (chanId) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-    var address, error_1;
-    return tslib.__generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                if (!isSupportChainId(chanId))
-                    return [2 /*return*/, null];
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, get1inchApproveSpender(chanId)];
-            case 2:
-                address = (_a.sent()).address;
-                return [2 /*return*/, address];
-            case 3:
-                error_1 = _a.sent();
-                console.error(error_1);
-                return [2 /*return*/, ''];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-var fetchAllowancceAmount = function (spender, account, tokenAddress) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-    var calls, _a, allowance, error_2;
-    return tslib.__generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                calls = [
-                    {
-                        address: spender,
-                        name: 'allowance',
-                        params: [account, tokenAddress],
-                    }
-                ];
-                return [4 /*yield*/, multicall$1(Erc20Abi, calls)];
-            case 1:
-                _a = tslib.__read.apply(void 0, [_b.sent(), 1]), allowance = _a[0];
-                return [2 /*return*/, allowance[0].toJSON().hex];
-            case 2:
-                error_2 = _b.sent();
-                console.error(error_2);
-                return [2 /*return*/, '0'];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-
-var _a$1;
-var initialState$8 = (_a$1 = {
-        independentField: Field$2.INPUT,
-        typedValue: ''
-    },
-    _a$1[Field$2.INPUT] = {
-        currencyId: '',
-    },
-    _a$1[Field$2.OUTPUT] = {
-        currencyId: '',
-    },
-    _a$1.recipient = null,
-    _a$1.polyDataIndex = {
-        lastQueryTimestamp: 0,
-    },
-    _a$1);
-// Async thunks
-var fetchPolySwapDataAsync = toolkit.createAsyncThunk('swap/fetchPolySwapDataAsync', function (_a) {
-    var chainId = _a.chainId, polyQueryData = _a.polyQueryData;
-    return tslib.__awaiter(void 0, void 0, void 0, function () {
-        var res;
-        return tslib.__generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, fetchPolyQuoteData(chainId, polyQueryData)];
-                case 1:
-                    res = _b.sent();
-                    return [2 /*return*/, res];
-            }
-        });
-    });
-});
-var fetchPolyAllowaceAsync = toolkit.createAsyncThunk('swap/fetchSpenderAddressAsync', function (_a, _b) {
-    var chainId = _a.chainId, account = _a.account, tokenAddress = _a.tokenAddress;
-    var getState = _b.getState;
-    return tslib.__awaiter(void 0, void 0, void 0, function () {
-        var swap, spender, allowance;
-        return tslib.__generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    swap = getState().swap;
-                    spender = swap.polySpender;
-                    if (!!spender) return [3 /*break*/, 2];
-                    return [4 /*yield*/, fetchSpenderAddress(chainId)];
-                case 1:
-                    spender = _c.sent();
-                    _c.label = 2;
-                case 2: return [4 /*yield*/, fetchAllowancceAmount(spender, account, tokenAddress)];
-                case 3:
-                    allowance = _c.sent();
-                    return [2 /*return*/, {
-                            spender: spender,
-                            allowance: {
-                                tokenAddress: tokenAddress,
-                                allowance: allowance,
-                            },
-                        }];
-            }
-        });
-    });
-});
-var fetchPolySpenderAsync = toolkit.createAsyncThunk('swap/fetchPolySpenderAsync', function (chainId, _a) {
-    var getState = _a.getState;
-    return tslib.__awaiter(void 0, void 0, void 0, function () {
-        var swap, spender;
-        return tslib.__generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    swap = getState().swap;
-                    spender = swap.polySpender;
-                    if (!!spender) return [3 /*break*/, 2];
-                    return [4 /*yield*/, fetchSpenderAddress(chainId)];
-                case 1:
-                    spender = _b.sent();
-                    _b.label = 2;
-                case 2: return [2 /*return*/, spender];
-            }
-        });
-    });
-});
-// export const fetchPolyAllowaceAsync = createAsyncThunk<PolyData, { chainId: number, polyQueryData: PolyDataIndex } >(
-//   'swap/fetchPolySwapDataAsync',
-//   async ({ chainId, polyQueryData }) => {
-//     const res: PolyData = await get1inchSwapData(chainId, polyQueryData)
-//     return res
-//   },
-// )
-var swap = toolkit.createReducer(initialState$8, function (builder) {
-    return builder
-        .addCase(replaceSwapState, function (state, _a) {
-        var _b;
-        var _c = _a.payload, typedValue = _c.typedValue, recipient = _c.recipient, field = _c.field, inputCurrencyId = _c.inputCurrencyId, outputCurrencyId = _c.outputCurrencyId;
-        return tslib.__assign(tslib.__assign({}, state), (_b = {}, _b[Field$2.INPUT] = {
-            currencyId: inputCurrencyId,
-        }, _b[Field$2.OUTPUT] = {
-            currencyId: outputCurrencyId,
-        }, _b.independentField = field, _b.typedValue = typedValue, _b.recipient = recipient, _b));
-    })
-        .addCase(selectCurrency, function (state, _a) {
-        var _b, _c;
-        var _d = _a.payload, currencyId = _d.currencyId, field = _d.field;
-        var otherField = field === Field$2.INPUT ? Field$2.OUTPUT : Field$2.INPUT;
-        if (currencyId === state[otherField].currencyId) {
-            // the case where we have to swap the order
-            return tslib.__assign(tslib.__assign({}, state), (_b = { independentField: state.independentField === Field$2.INPUT ? Field$2.OUTPUT : Field$2.INPUT }, _b[field] = { currencyId: currencyId }, _b[otherField] = { currencyId: state[field].currencyId }, _b));
-        }
-        // the normal case
-        return tslib.__assign(tslib.__assign({}, state), (_c = {}, _c[field] = { currencyId: currencyId }, _c));
-    })
-        .addCase(switchCurrencies, function (state) {
-        var _a;
-        return tslib.__assign(tslib.__assign({}, state), (_a = { independentField: state.independentField === Field$2.INPUT ? Field$2.OUTPUT : Field$2.INPUT }, _a[Field$2.INPUT] = { currencyId: state[Field$2.OUTPUT].currencyId }, _a[Field$2.OUTPUT] = { currencyId: state[Field$2.INPUT].currencyId }, _a));
-    })
-        .addCase(typeInput$2, function (state, _a) {
-        var _b = _a.payload, field = _b.field, typedValue = _b.typedValue;
-        return tslib.__assign(tslib.__assign({}, state), { independentField: field, typedValue: typedValue });
-    })
-        .addCase(setRecipient, function (state, _a) {
-        var recipient = _a.payload.recipient;
-        state.recipient = recipient;
-    })
-        .addCase(updatePolyDataIndex, function (state, _a) {
-        var payload = _a.payload;
-        state.polyDataIndex = tslib.__assign(tslib.__assign({}, state.polyDataIndex), payload.data);
-    })
-        .addCase(resetPolyData, function (state) {
-        state.polyData = null;
-    })
-        .addCase(fetchPolyAllowaceAsync.fulfilled, function (state, _a) {
-        var payload = _a.payload;
-        var spender = payload.spender, allowance = payload.allowance;
-        var allowanceString = allowance.allowance, tokenAddress = allowance.tokenAddress;
-        state.polySpender = spender;
-        state.polyAllowance[tokenAddress] = allowanceString;
-    })
-        .addCase(fetchPolySpenderAsync.fulfilled, function (state, _a) {
-        var payload = _a.payload;
-        state.polySpender = payload;
-    })
-        .addCase(fetchPolySwapDataAsync.fulfilled, function (state, _a) {
-        var payload = _a.payload;
-        state.polyData = payload;
-    });
-});
-
-var PolyDataIndexStatus;
-(function (PolyDataIndexStatus) {
-    PolyDataIndexStatus[PolyDataIndexStatus["NOT_SWAP_DATA"] = 0] = "NOT_SWAP_DATA";
-    PolyDataIndexStatus[PolyDataIndexStatus["NEED_QUERY"] = 1] = "NEED_QUERY";
-    PolyDataIndexStatus[PolyDataIndexStatus["NEED_REFRESH"] = 2] = "NEED_REFRESH";
-    PolyDataIndexStatus[PolyDataIndexStatus["LOADED"] = 3] = "LOADED";
-})(PolyDataIndexStatus || (PolyDataIndexStatus = {}));
-
-// ETHER_1INCH_ADDRESS
-var POLY_REFRESH_INTERVAL = 10 * 1000;
-var POLY_MAX_SLIPPAGE = 50;
-var currentTimestamp$1 = function () { return new Date().getTime(); };
-function useSwapState() {
-    return reactRedux.useSelector(function (state) { return state.swap; });
-}
-function useSwapActionHandlers() {
-    var dispatch = reactRedux.useDispatch();
-    var onCurrencySelection = React.useCallback(function (field, currency) {
-        var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
-        dispatch(selectCurrency({
-            field: field,
-            currencyId: currency instanceof dsgswapSdk.Token ? currency.address : currency === ETHER ? ETHER.symbol : '',
-        }));
-    }, [dispatch]);
-    var onSwitchTokens = React.useCallback(function () {
-        dispatch(switchCurrencies());
-    }, [dispatch]);
-    var onUserInput = React.useCallback(function (field, typedValue) {
-        dispatch(typeInput$2({ field: field, typedValue: typedValue }));
-    }, [dispatch]);
-    var onChangeRecipient = React.useCallback(function (recipient) {
-        dispatch(setRecipient({ recipient: recipient }));
-    }, [dispatch]);
-    return {
-        onSwitchTokens: onSwitchTokens,
-        onCurrencySelection: onCurrencySelection,
-        onUserInput: onUserInput,
-        onChangeRecipient: onChangeRecipient,
-    };
-}
-// try to parse a user entered amount for a given token
-function tryParseAmount(value, currency) {
-    if (!value || !currency) {
-        return undefined;
-    }
-    try {
-        var typedValueParsed = units.parseUnits(value, currency.decimals).toString();
-        if (typedValueParsed !== '0') {
-            return currency instanceof dsgswapSdk.Token
-                ? new dsgswapSdk.TokenAmount(currency, dsgswapSdk.JSBI.BigInt(typedValueParsed))
-                : dsgswapSdk.CurrencyAmount.ether(dsgswapSdk.JSBI.BigInt(typedValueParsed));
-        }
-    }
-    catch (error) {
-        // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
-        console.debug("Failed to parse input amount: \"" + value + "\"", error);
-    }
-    // necessary for all paths to return a value
-    return undefined;
-}
-var BAD_RECIPIENT_ADDRESSES = [
-    '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
-    '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a',
-    '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
-    '0x89f1DeC8297eF2cBB47a4894089E5f6aa2888c44',
-];
-/**
- * Returns true if any of the pairs or tokens in a trade have the given checksummed address
- * @param trade to check for the given address
- * @param checksummedAddress address to check in the pairs and tokens
- */
-function involvesAddress(trade, checksummedAddress) {
-    return (trade.route.path.some(function (token) { return token.address === checksummedAddress; }) ||
-        trade.route.pairs.some(function (pair) { return pair.liquidityToken.address === checksummedAddress; }));
-}
-function useCheckUpdatePolyIndex() {
-    var _a = useActiveWeb3React(), account = _a.account, chainId = _a.chainId;
-    var polyDataIndex = useSwapState().polyDataIndex;
-    var _b = tslib.__read(useUserUsePoly(), 1), userUsePoly = _b[0];
-    var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
-    var dispatch = reactRedux.useDispatch();
-    var _c = useSwapState(), independentField = _c.independentField, typedValue = _c.typedValue, _d = Field$2.INPUT, inputCurrencyId = _c[_d].currencyId, _e = Field$2.OUTPUT, outputCurrencyId = _c[_e].currencyId; _c.recipient;
-    var _f = tslib.__read(useUserSlippageTolerance(), 1), allowedSlippage = _f[0];
-    var inputCurrency = useCurrency(inputCurrencyId);
-    var outputCurrency = useCurrency(outputCurrencyId);
-    var debouncedValue = useDebounce(typedValue, 300);
-    if (!chainId || !outputCurrency || !outputCurrency || !Number(debouncedValue) || !userUsePoly)
-        return [PolyDataIndexStatus.NOT_SWAP_DATA, null];
-    if ((inputCurrency === ETHER || outputCurrency === ETHER) && dsgswapSdk.currencyEquals(dsgswapSdk.WETHER[chainId], outputCurrency)) {
-        return [PolyDataIndexStatus.NOT_SWAP_DATA, null];
-    }
-    var isExactIn = independentField === Field$2.INPUT;
-    if (!isExactIn)
-        return [PolyDataIndexStatus.NOT_SWAP_DATA, null];
-    var slippage = allowedSlippage > POLY_MAX_SLIPPAGE ? POLY_MAX_SLIPPAGE : allowedSlippage;
-    var data = {
-        slippage: slippage,
-        lastQueryTimestamp: polyDataIndex === null || polyDataIndex === void 0 ? void 0 : polyDataIndex.lastQueryTimestamp,
-        fromTokenAddress: inputCurrency === ETHER ? ETHER_1INCH_ADDRESS[chainId] : inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.address,
-        toTokenAddress: outputCurrency === ETHER ? ETHER_1INCH_ADDRESS[chainId] : outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.address,
-        amount: debouncedValue,
-        amountDecimal: getDecimalAmount(new BigNumber__default["default"](debouncedValue), inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.decimals).toString(),
-        fromAddress: account,
-    };
-    var timestamp = currentTimestamp$1();
-    if (!isEqual__default["default"](data, polyDataIndex)) {
-        dispatch(resetPolyData());
-        dispatch(updatePolyDataIndex({ data: tslib.__assign(tslib.__assign({}, data), { lastQueryTimestamp: timestamp }) }));
-        return [PolyDataIndexStatus.NEED_REFRESH, data];
-    }
-    if (timestamp - (polyDataIndex === null || polyDataIndex === void 0 ? void 0 : polyDataIndex.lastQueryTimestamp) > POLY_REFRESH_INTERVAL) {
-        dispatch(updatePolyDataIndex({ data: tslib.__assign(tslib.__assign({}, data), { lastQueryTimestamp: timestamp }) }));
-        return [PolyDataIndexStatus.NEED_REFRESH, data];
-    }
-    return [PolyDataIndexStatus.LOADED, data];
-}
-// from the current swap inputs, compute the best trade and return it.
-function useDerivedSwapInfo() {
-    var _a, _b;
-    var _c, _d;
-    var _e = useActiveWeb3React(), account = _e.account, chainId = _e.chainId;
-    var t = useTranslation().t;
-    var dispatch = reactRedux.useDispatch();
-    var _f = useSwapState(), independentField = _f.independentField, typedValue = _f.typedValue, _g = Field$2.INPUT, inputCurrencyId = _f[_g].currencyId, _h = Field$2.OUTPUT, outputCurrencyId = _f[_h].currencyId, recipient = _f.recipient;
-    var inputCurrency = useCurrency(inputCurrencyId);
-    var outputCurrency = useCurrency(outputCurrencyId);
-    var recipientLookup = useENS(recipient !== null && recipient !== void 0 ? recipient : undefined);
-    var to = (_c = (recipient === null ? account : recipientLookup.address)) !== null && _c !== void 0 ? _c : null;
-    var relevantTokenBalances = useCurrencyBalances(account !== null && account !== void 0 ? account : undefined, [
-        inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined,
-        outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined,
-    ]);
-    var isExactIn = independentField === Field$2.INPUT;
-    var parsedAmount = tryParseAmount(typedValue, (_d = (isExactIn ? inputCurrency : outputCurrency)) !== null && _d !== void 0 ? _d : undefined);
-    var bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined);
-    var bestTradeExactOut = useTradeExactOut(inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined, !isExactIn ? parsedAmount : undefined);
-    var _j = tslib.__read(usePair(inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined, outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined), 1), pairStateIn = _j[0];
-    var _k = tslib.__read(usePair(inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined, outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined), 1), pairStateOut = _k[0];
-    // const bestPolyTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined, true)
-    // const bestPolyTradeExactOut = useTradeExactOut(
-    //   inputCurrency ?? undefined,
-    //   !isExactIn ? parsedAmount : undefined,
-    //   true,
-    // )
-    var v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut;
-    // const v2TradePoly = isExactIn ? bestPolyTradeExactIn : bestPolyTradeExactOut
-    var pairState = isExactIn ? pairStateIn : pairStateOut;
-    // let polyPairs = null
-    // if (v2TradePoly?.route?.pairs?.length === 1) {
-    //   polyPairs = v2TradePoly.route.pairs[0]
-    // }
-    var currencyBalances = (_a = {},
-        _a[Field$2.INPUT] = relevantTokenBalances[0],
-        _a[Field$2.OUTPUT] = relevantTokenBalances[1],
-        _a);
-    var currencies = (_b = {},
-        _b[Field$2.INPUT] = inputCurrency !== null && inputCurrency !== void 0 ? inputCurrency : undefined,
-        _b[Field$2.OUTPUT] = outputCurrency !== null && outputCurrency !== void 0 ? outputCurrency : undefined,
-        _b);
-    var inputError;
-    if (!account) {
-        inputError = t('Connect Wallet');
-    }
-    if (!parsedAmount) {
-        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Enter an amount');
-    }
-    if (!currencies[Field$2.INPUT] || !currencies[Field$2.OUTPUT]) {
-        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Select a token');
-    }
-    var formattedTo = isAddress(to);
-    if (!to || !formattedTo) {
-        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Enter a recipient');
-    }
-    else if (BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
-        (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
-        (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))) {
-        inputError = inputError !== null && inputError !== void 0 ? inputError : t('Invalid recipient');
-    }
-    var _l = tslib.__read(useUserSlippageTolerance(), 1), allowedSlippage = _l[0];
-    var _m = tslib.__read(useSystemUsePoly(), 1); _m[0];
-    var slippageAdjustedAmounts = v2Trade && allowedSlippage && computeSlippageAdjustedAmounts(v2Trade, allowedSlippage);
-    // compare input balance to max input based on version
-    var _o = tslib.__read([
-        currencyBalances[Field$2.INPUT],
-        slippageAdjustedAmounts ? slippageAdjustedAmounts[Field$2.INPUT] : null,
-    ], 2), balanceIn = _o[0], amountIn = _o[1];
-    if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-        inputError = t('Insufficient %symbol% balance', { symbol: amountIn.currency.symbol });
-    }
-    var _p = tslib.__read(useCheckUpdatePolyIndex(), 2), checkUpdatePolyIndex = _p[0], polyIndex = _p[1];
-    if (checkUpdatePolyIndex === PolyDataIndexStatus.NEED_REFRESH && !inputError) {
-        var polyQueryData = tslib.__assign(tslib.__assign({}, polyIndex), { amount: polyIndex === null || polyIndex === void 0 ? void 0 : polyIndex.amountDecimal, slippage: new BigNumber__default["default"](polyIndex === null || polyIndex === void 0 ? void 0 : polyIndex.slippage).div(100).toNumber() });
-        dispatch(fetchPolySwapDataAsync({ chainId: chainId, polyQueryData: polyQueryData }));
-        dispatch(fetchPolySpenderAsync(chainId));
-        // dispatch(fetchPolySwapDataAsync({ chainId, polyQueryData }))
-    }
-    else if (checkUpdatePolyIndex === PolyDataIndexStatus.NOT_SWAP_DATA) {
-        dispatch(resetPolyData());
-    }
-    else if (checkUpdatePolyIndex === PolyDataIndexStatus.LOADED) {
-        var inputCurrencyAmount = new dsgswapSdk.TokenAmount(inputCurrency, polyIndex.amountDecimal);
-        if (balanceIn && inputCurrencyAmount && balanceIn.lessThan(inputCurrencyAmount)) {
-            inputError = t('Insufficient %symbol% balance', { symbol: inputCurrency.symbol });
-        }
-    }
-    return {
-        pairState: pairState,
-        currencies: currencies,
-        currencyBalances: currencyBalances,
-        parsedAmount: parsedAmount,
-        v2Trade: v2Trade !== null && v2Trade !== void 0 ? v2Trade : undefined,
-        inputError: inputError,
-        // polyPairs: polyPairs ?? undefined,
     };
 }
 
@@ -14069,7 +14081,7 @@ function Blocklist(_a) {
     return jsxRuntime.jsx(jsxRuntime.Fragment, { children: children }, void 0);
 }
 var MiniSwap = function (_a) {
-    var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onLoaded = _a.onLoaded, onConnectWallet = _a.onConnectWallet, chainId = _a.chainId;
+    var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onLoaded = _a.onLoaded, onInputCurrencyChange = _a.onInputCurrencyChange, onOutputCurrencyChange = _a.onOutputCurrencyChange, onConnectWallet = _a.onConnectWallet, chainId = _a.chainId;
     React.useEffect(function () {
         console.debug("chainId is change " + chainId);
         dsgswapSdk.setChainId(chainId);
@@ -14081,6 +14093,25 @@ var MiniSwap = function (_a) {
             onLoaded();
         }
     }, [onLoaded, loaded]);
+    var _c = useSwapCurrencies(), inputCurrency = _c.inputCurrency, outputCurrency = _c.outputCurrency;
+    var _d = tslib.__read(React.useState(inputCurrency), 2), oldInputCurrency = _d[0], setOldInputCurrency = _d[1];
+    var _e = tslib.__read(React.useState(outputCurrency), 2), oldOutputCurrency = _e[0], setOldOutputCurrency = _e[1];
+    React.useEffect(function () {
+        if ((inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.symbol) !== (oldInputCurrency === null || oldInputCurrency === void 0 ? void 0 : oldInputCurrency.symbol) || (inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.name) !== (oldInputCurrency === null || oldInputCurrency === void 0 ? void 0 : oldInputCurrency.name)) {
+            setOldInputCurrency(inputCurrency);
+            if (typeof onInputCurrencyChange === 'function') {
+                onInputCurrencyChange(inputCurrency);
+            }
+        }
+    }, [inputCurrency, oldInputCurrency, onInputCurrencyChange]);
+    React.useEffect(function () {
+        if ((outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.symbol) !== (oldOutputCurrency === null || oldOutputCurrency === void 0 ? void 0 : oldOutputCurrency.symbol) || (outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.name) !== (oldOutputCurrency === null || oldOutputCurrency === void 0 ? void 0 : oldOutputCurrency.name)) {
+            setOldOutputCurrency(outputCurrency);
+            if (typeof onOutputCurrencyChange === 'function') {
+                onOutputCurrencyChange(outputCurrency);
+            }
+        }
+    }, [outputCurrency, oldOutputCurrency, onOutputCurrencyChange]);
     return (jsxRuntime.jsxs(Providers, tslib.__assign({ resetTheme: resetTheme, lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsxRuntime.jsx(Updaters, {}, void 0), jsxRuntime.jsx(Blocklist, { children: jsxRuntime.jsx(Swap, {}, void 0) }, void 0)] }), void 0));
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from "styled-components";
 import MiniSwap from 'libs/mini-swap'
 import { useWeb3React } from '@web3-react/core';
@@ -18,10 +18,15 @@ export const Swap: React.FC = () => {
   const { onConnectWallet } = useConnectWallet()
 
   // TODO: 样式不统一  待优化
+  const handleInputChange = useCallback((currency) => {
+    console.log(currency)
+  }, [])
 
   return (
     <SwapBox>
-      <MiniSwap resetTheme={{
+      <MiniSwap
+        onInputCurrencyChange={handleInputChange}
+        resetTheme={{
         dark: {
           colors: {
             primary: '#4168ED',
@@ -38,7 +43,7 @@ export const Swap: React.FC = () => {
         }
       }}
         onConnectWallet={onConnectWallet}
-        chainId={chainId} isDark={isDark} lang={languange} />
+        chainId={chainId} isDark={isDark} lang={languange?.value?.locale} />
     </SwapBox>
   )
 }
