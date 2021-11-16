@@ -39,6 +39,7 @@ declare namespace Api {
     interface userInfoCallback extends Api.Error {
       data: userInfoParams;
     }
+
     interface referrerMans {
       num: number;
     }
