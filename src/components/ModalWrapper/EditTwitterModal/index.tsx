@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Icon } from 'components';
+import { Icon, Editor } from 'components';
 import { toast } from 'react-toastify';
 import {
   ModalWrapper,
@@ -10,13 +10,15 @@ import {
 
 type IProp = {
   show: boolean;
-  pid: number;
   onClose: Function;
-  onQuery: Function;
+  content?: any[];
 }
 
 export const EditTwitterModal = React.memo((props: IProp) => {
-  const { show, onClose, pid, onQuery } = props
+  const { show, onClose, content = [] } = props
+  const sendArticle = () => {
+
+  }
   return (
     <>
       {
@@ -32,9 +34,7 @@ export const EditTwitterModal = React.memo((props: IProp) => {
                 </div>
               </ModalTitleWrapper>
               <ReportContentWrapper>
-
-
-
+                <Editor type="post" initValue={content} sendArticle={sendArticle}></Editor>
               </ReportContentWrapper>
             </ReportModalWrapper>
           </ModalWrapper>

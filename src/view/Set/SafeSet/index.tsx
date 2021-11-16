@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Flex, Card, Text, Button } from 'uikit';
 import { Api } from 'apis';
+import { shortenAddress } from 'utils/contract';
 
 const SafeSetBox = styled(Card)`
   height: 700px;
@@ -43,7 +44,7 @@ const SafeSet = () => {
             登录该账号的钱包地址，无法更改
           </Text>
         </Column>
-        <Title>0x0FC6C…………961214d2</Title>
+        <Title>{shortenAddress('')}</Title>
       </Rows>
       {/* <Rows>
         <Column>

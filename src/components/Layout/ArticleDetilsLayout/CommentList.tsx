@@ -62,6 +62,9 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
       if (res.code === 1) {
         setPage(page + 1)
         setListData([...listData, ...res.data.list])
+        // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
+        console.log(listData,res.data.list);
+        
         setTotalPage(res.data.total_page)
       }
     })
@@ -104,11 +107,13 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
                   </div>)}
                 </Flex>
                 <Flex>
-                <MorePopup data={new Object()}>
+                {/* <MorePopup data={new Object()}> */}
                   <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
-              </MorePopup>
+              {/* </MorePopup> */}
                 </Flex>
               </CommentHeader>
+              {/* <CommentContent  dangerouslySetInnerHTML={{ __html: item.comment }}>
+              </CommentContent> */}
               <CommentContent  dangerouslySetInnerHTML={{ __html: item.comment }}>
               </CommentContent>
             </div>

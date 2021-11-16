@@ -1,25 +1,19 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { toast } from 'react-toastify';
 import { Avatar, List } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import { Api } from 'apis';
-import { toast } from 'react-toastify';
+import { shortenAddress } from 'utils/contract';
 
 import { CrumbsHead } from './components';
 
-const Msg = styled(Box)`
-  color: #b5b5b5;
-  font-size: 14px;
-`;
 const Content = styled(Card)`
   width: 100%;
   min-height: 700px;
   padding: 29px 19px;
   margin-top: 13px;
-  .username {
-    color: #fff;
-  }
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -135,9 +129,9 @@ const Follow = React.memo(() => {
                     <Text color="white_black" mr="13px">
                       {item.nick_name}
                     </Text>
-                    <Text color="textTips">@0x32...9239</Text>
+                    <Text color="textTips">@{shortenAddress(item.address)}</Text>
                   </Flex>
-                  <Msg>{item.introduction}</Msg>
+                  <Text color="textTips">{item.introduction}</Text>
                 </Column>
                 <Button onClick={() => unFollowUser(item.uid)} variant="tertiary">
                   取消关注

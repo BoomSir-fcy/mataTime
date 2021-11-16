@@ -43,8 +43,10 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   }
   useEffect(() => {
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
-      setItemData(res.data)
-      setRefresh(refresh === 1 ? 2 : 1)
+      if(Api.isSuccess(res)){
+        setItemData(res.data)
+        setRefresh(refresh === 1 ? 2 : 1)
+      }
     })
   }, [])
   return (
@@ -56,7 +58,14 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
         <CenterCard>
           <Header back title="返回" {...props}></Header>
           <MeItemWrapper>
-            <MentionItem {...props} itemData={itemData} more={false} />
+            <MentionItem {...props} itemData={{
+              ...itemData,
+              post_id: itemData.id,
+              post: {
+                ...itemData,
+                post_id: itemData.id
+              }
+            }} more={false} />
             <MentionOperator itemData={{
               ...itemData, post_id: itemData.id, post: {
                 ...itemData
