@@ -26,7 +26,7 @@ export const Header = (props: { title?: string, back?: boolean, clickTitle?: () 
   }
   // const back = props.location.pathname!=='/'
   return (
-    <HeaderBox style={{justifyContent:align}}>
+    <HeaderBox style={{justifyContent:align,paddingLeft:back&&align!=='center'?'60px':null}}>
       {back && <Icon name="icon-fanhui" onClick={clickBack} margin="0px 10px 0 0" size={23} color="#fff"  />}
       <span onClick={clickTitle.bind(this)}>{title || '首页'}</span>
     </HeaderBox>

@@ -19,10 +19,12 @@ import { SlateBox, SendButton } from './style'
 import { MentionElement } from './custom-types'
 import { SearchPop, FollowPopup } from 'components'
 import { Mention, TopicElement } from './elements'
+import { useTranslation } from 'contexts/Localization'
+
 type Iprops = {
   type: any
   sendArticle: any
-  initValue?: any[]
+  initValue?: any
 }
 
 const DefaultElement = props => {
@@ -73,8 +75,6 @@ const insertTopic = (editor, { character = '' }) => {
     children: [{ text: character }],
   }
   Transforms.insertNodes(editor, topic)
-  // Transforms.wrapNodes(editor, topic, { split: true })
-  // Transforms.collapse(editor, { edge: 'end' })
 }
 export const Editor = (props: Iprops) => {
   const ref = useRef<HTMLDivElement | null>()
@@ -82,6 +82,8 @@ export const Editor = (props: Iprops) => {
   const [imgList, setImgList] = useState([])
   const [searchUser, setSearchUser] = useState(false)
   const [searcTopic, setSearcTopic] = useState(false)
+  const [refresh,setRefresh] = useState(1)
+  const {t} = useTranslation()
   const renderElement = useCallback(props => {
     switch (props.element.type) {
       case 'mention':
@@ -97,10 +99,11 @@ export const Editor = (props: Iprops) => {
     []
   )
   useEffect(() => {
-    setValue(props.initValue)
-    // if (props.initValue.length) {
-    //   setValue(props.initValue)
-    // }
+    try{
+      setValue(JSON.parse(props.initValue)||initialValue)
+      setRefresh(refresh===1?2:1)
+    }catch(err){
+    }
   }, [props.initValue])
   // 扩大focus距离
   useEffect(() => {
@@ -116,7 +119,7 @@ export const Editor = (props: Iprops) => {
     return () => {
       el.removeEventListener('click', eventFn)
     }
-  }, [])
+  })
 
   const callbackSelectImg = e => {
     const input = document.createElement('input');
@@ -127,7 +130,7 @@ export const Editor = (props: Iprops) => {
     input.onchange = async (e: any) => {
       const selectFiles = e.target.files
       if (!selectFiles[0]) return false;
-      if (imgList.length+selectFiles.length > 9) return toast.error('最多上传九张');
+      if (imgList.length+selectFiles.length > 9) return toast.error(t('uploadImgMaxMsg'));
       const fileList:string[] = []
       for(let file of selectFiles){
         let fr: any = new FileReader();
@@ -140,35 +143,39 @@ export const Editor = (props: Iprops) => {
               Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
               if (Api.isSuccess(res)) {
                 setImgList([...imgList, ...res.data.map(item=>item.full_path)]);
-                toast.success('上传成功');
+                toast.success(t('uploadImgSuccessMsg'));
                 console.log(imgList);
               } else {
-                toast.error('上传失败');
+                toast.error(t('uploadImgErrorMsg'));
               }
             })
           }
-          // uploadImgList
-          // Api.CommonApi.uploadImg({ dir_name: props.type, base64: fr.result }).then(res => {
-          //   if (Api.isSuccess(res)) {
-          //     setImgList([...imgList, res.data.full_path]);
-          //     toast.success('上传成功');
-          //   } else {
-          //     toast.error('上传失败');
-          //   }
-          // })
         }
       }
-      // const file = e.target.files[0];
     }
     input.click() 
   }
   const restInput = () => {
     setValue(initialValue)
+    setRefresh(refresh===1?2:1)
   }
   const sendArticle = () => {
     // console.log(value, imgList.join(','));
-    // console.log(JSON.stringify(value), restInput, imgList.join(','));
-    props.sendArticle(JSON.stringify(value), restInput, imgList.join(','))
+    let arr = value
+    console.log(arr);
+    
+    const userIdList = []
+    arr.forEach((child:any)=>{
+      child.children.forEach((node:any)=>{
+        if(node.type==='mention'){
+          if(!userIdList.find(item=>item===node.attrs.userid)){
+            userIdList.push(node.character.slice(1)+'_'+node.attrs.userid)
+          }
+        }
+      })
+    })
+    props.sendArticle(JSON.stringify(value), restInput, imgList.join(','),userIdList.join(','));
+    // restInput()
   }
   const searchSelect = (data, type) => {
     setSearcTopic(false)
@@ -182,7 +189,7 @@ export const Editor = (props: Iprops) => {
     }
   }
   return (
-    <SlateBox>
+    <SlateBox key={refresh}>
       <SearchPop type={searchUser ? 'user' : 'topic'} show={searcTopic || searchUser} callback={searchSelect}></SearchPop>
       <Slate
         editor={editor}
@@ -193,7 +200,7 @@ export const Editor = (props: Iprops) => {
           <Editable
             autoFocus
             renderElement={renderElement}
-            placeholder="分享新鲜事"
+            placeholder={t('editorPlaceholder')}
           />
         </div>
         <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
@@ -204,7 +211,7 @@ export const Editor = (props: Iprops) => {
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
           ></Toolbar>
-          <SendButton onClick={sendArticle}>发表</SendButton>
+          <SendButton onClick={sendArticle}>{t('sendBtnText')}</SendButton>
         </Flex>
       </Slate>
     </SlateBox>

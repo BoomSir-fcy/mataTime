@@ -17,7 +17,6 @@ type IProp = {
 export const EditTwitterModal = React.memo((props: IProp) => {
   const { show, onClose, content = [] } = props
   const sendArticle = () => {
-
   }
   return (
     <>

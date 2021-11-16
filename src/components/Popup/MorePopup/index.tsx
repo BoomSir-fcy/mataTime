@@ -205,7 +205,7 @@ export const MorePopup = React.memo((props: Iprops) => {
       {/* 编辑twitter */}
       <EditTwitterModal
         show={editShow}
-        content={[]}
+        content={data.content}
         onClose={() => {
           setEditShow(false)
         }}
