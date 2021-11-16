@@ -42,7 +42,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   //  初始化
   const init = () => {
     // UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
-    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(true)
+    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
   }
 
   // 收藏
@@ -133,10 +133,10 @@ export const MorePopup = React.memo((props: Iprops) => {
               {
                 isOwn ? (
                   <>
-                    <p onClick={() => {
+                    {/* <p onClick={() => {
                       setVisible(false)
                       setEditShow(true)
-                    }}>{t('moreEdit')}</p>
+                    }}>{t('moreEdit')}</p> */}
                     <p onClick={() => {
                       onPostDelRequest(data.post.post_id)
                     }}>{t('moreDelete')}</p>
