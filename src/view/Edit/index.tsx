@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { toast } from 'react-toastify';
 import { useLocation } from 'hooks';
 import { Box, Flex, Button, Text } from 'uikit';
 import { Upload } from 'components';
@@ -12,7 +13,6 @@ import { Api } from 'apis';
 import FormInput from './center/formInput';
 
 import defaultImages from 'assets/images/default_me_background.jpg';
-import { toast } from 'react-toastify';
 
 const Background = styled(Flex)`
   width: 100%;
@@ -45,7 +45,7 @@ const Edit: React.FC = () => {
     try {
       const res = await Api.UserApi.updateUserInfo({ ...params, background_image: state.background });
       if (Api.isSuccess(res)) {
-        toast.success('修改成功');
+        toast.success(res.msg);
       } else {
         toast.error(res.msg);
       }

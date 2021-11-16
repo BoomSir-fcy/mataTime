@@ -31,15 +31,15 @@ const UserDesc = styled.div`
 `;
 
 export const ProfileMenu = React.memo(() => {
-  const userInfo: any = useStore(p => p.loginReducer.userInfo);
+  const userInfo = useStore(p => p.loginReducer.userInfo);
   return (
     <React.Fragment>
-      {userInfo.UID ? (
+      {userInfo.uid ? (
         <Flex alignItems="center">
-          <Avatar src={userInfo?.NftImage} scale="sm" />
+          <Avatar src={userInfo?.nft_image} scale="sm" />
           <Box>
             <UserTitle>OliNe</UserTitle>
-            <UserDesc>@{shortenAddress(userInfo.Address)}</UserDesc>
+            <UserDesc>@{shortenAddress(userInfo.address)}</UserDesc>
           </Box>
         </Flex>
       ) : (
