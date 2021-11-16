@@ -403,7 +403,7 @@ var tokens$1 = [
 	{
 		name: "USDT",
 		symbol: "USDT",
-		address: "0xF1ED7fc67777eB6868f9c4B2b081aaC85c10b1b9",
+		address: "0x865746A11eC78819c0067a031e9dd8D69F0B319d",
 		chainId: 97,
 		decimals: 18,
 		logoURI: "https://dsgmetaverse.com/images/tokens/USDT.png"
