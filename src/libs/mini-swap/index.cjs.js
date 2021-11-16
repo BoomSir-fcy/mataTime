@@ -7448,9 +7448,9 @@ function useDerivedSwapInfo() {
     };
 }
 function useSwapCurrencies() {
-    var _a = useSwapState(), _b = Field$2.INPUT, inputCurrencyId = _a[_b].currencyId, _c = Field$2.OUTPUT, outputCurrencyId = _a[_c].currencyId;
-    var inputCurrency = useCurrency(inputCurrencyId);
-    var outputCurrency = useCurrency(outputCurrencyId);
+    var _a = useSwapState(), _b = Field$2.INPUT, inputStateCurrency = _a[_b], _c = Field$2.OUTPUT, outputStateCurrency = _a[_c];
+    var inputCurrency = useCurrency(inputStateCurrency === null || inputStateCurrency === void 0 ? void 0 : inputStateCurrency.currencyId);
+    var outputCurrency = useCurrency(outputStateCurrency === null || outputStateCurrency === void 0 ? void 0 : outputStateCurrency.currencyId);
     return React.useMemo(function () {
         return {
             inputCurrency: inputCurrency,
