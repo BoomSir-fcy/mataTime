@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization'
-import { List } from 'components';
+import { List, ContentParsing } from 'components';
 import { Api } from 'apis';
 import {
   NewsCommentWrapper,
@@ -56,7 +56,9 @@ const NewsComment: React.FC = (props) => {
               updateList(data)
             }} />
             <div className="reply-wrapper">
-              {t('newsCommentReply')}<a>@{item.comment.comment_user_name}</a><p>{item.comment.comment}</p>
+              {t('newsCommentReply')}
+              <a>@{item.comment.comment_user_name}</a>
+              <ContentParsing content={item.comment.comment}></ContentParsing>
             </div>
             <div className="comment-content">
               <MentionItem itemData={{
