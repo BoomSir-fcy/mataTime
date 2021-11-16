@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Flex } from 'uikit';
 import { Select } from 'components';
+import { shortenAddress } from 'utils/contract';
 import { useStore } from 'store';
 
 const FormBox = styled.div`
@@ -48,7 +49,7 @@ const InputRows = styled(Flex)`
   justify-content: space-between;
   border-radius: 10px;
   padding: 13px 9px;
-  background:${({ theme }) => theme.colors.input};
+  background: ${({ theme }) => theme.colors.input};
   width: 381px;
   height: 50px;
   input {
@@ -86,13 +87,14 @@ const RadioBox = styled.div`
 
 const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
-  const profile: any = useStore(p => p.loginReducer.userInfo);
+  const profile = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
-    nick_name: profile.NickName,
-    display_format: profile.DisplayFormat,
-    introduction: profile.Introduction,
-    background_image: profile.BackgroundImage,
-    location: profile.Location
+    nick_name: profile.nick_name,
+    display_format: profile.display_format,
+    introduction: profile.introduction,
+    background_image: profile.background_image,
+    location: profile.location || (country.length > 0 && country[0]?.value),
+    default_location: country.find(({ value }) => value === profile.location).id || 1
   });
 
   useImperativeHandle(ref, () => ({
@@ -116,7 +118,7 @@ const FormInput = React.forwardRef((props, ref) => {
               }
               value={state.nick_name}
             />
-            <Uaddres>0x259.....d59w5</Uaddres>
+            <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
           <Msg>4~32个字符，支持中英文、数字</Msg>
         </div>
@@ -169,9 +171,10 @@ const FormInput = React.forwardRef((props, ref) => {
         <Title>*所在国家</Title>
         <Select
           options={country}
-          defaultId={1}
+          defaultId={state.default_location}
           onChange={(val: any) =>
             setState(p => {
+              p.default_location = val.ID;
               p.location = val.value;
             })
           }

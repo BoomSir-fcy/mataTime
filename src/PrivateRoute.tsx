@@ -3,14 +3,14 @@ import { useProvideAuth } from 'hooks';
 
 export const PrivateRoute = ({ component, ...rest }) => {
   const authInfo = useProvideAuth();
-  const { UID } = authInfo;
+  const { uid } = authInfo;
   const Component = component;
 
   return (
     <Route
       {...rest}
       render={props =>
-        Boolean(UID) ? (
+        Boolean(uid) ? (
           <Component {...props} />
         ) : (
           <Redirect
