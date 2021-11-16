@@ -62,6 +62,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
   return (
     <PopupWrapper onMouseOver={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+      if(visible)return
       uid && getUserInfo()
       setVisible(true)
     }} onMouseLeave={(e: any) => {

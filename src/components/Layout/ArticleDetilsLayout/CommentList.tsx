@@ -4,7 +4,7 @@ import { Flex, Button, Box } from 'uikit'
 import { relativeTime } from 'utils'
 import { SortIcon } from './SortIcon'
 import MentionOperator from 'view/News/components/MentionOperator';
-import { FollowPopup, MorePopup,List } from 'components'
+import { FollowPopup, MorePopup,List,ContentParsing } from 'components'
 import {Api} from 'apis'
 import {
   CommentListBox,
@@ -61,7 +61,7 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
       console.log(res);
       if (res.code === 1) {
         setPage(page + 1)
-        setListData([...listData, ...res.data.list])
+        setListData([...listData, ...(res.data.list||[])])
         // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
         console.log(listData,res.data.list);
         
@@ -89,7 +89,7 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
         getList()
       }}>
       {listData.map((item,index) => (
-        <CommentItem key={item.uid}>
+        <CommentItem key={item.id}>
           <Flex>
             <Avatar src={item.user_avator_url} style={{ width: '50px', height: '50px' }} scale="md" />
             <div style={{ flex: 1, marginLeft: '22px' }}>
@@ -108,17 +108,14 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
                 </Flex>
                 <Flex>
                 {/* <MorePopup data={new Object()}> */}
-                  <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
+                  {/* <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon> */}
               {/* </MorePopup> */}
                 </Flex>
               </CommentHeader>
-              {/* <CommentContent  dangerouslySetInnerHTML={{ __html: item.comment }}>
-              </CommentContent> */}
-              <CommentContent  dangerouslySetInnerHTML={{ __html: item.comment }}>
-              </CommentContent>
+              <ContentParsing content={item.comment}></ContentParsing>
             </div>
           </Flex>
-          <MentionOperator type={Response['Comment']}  itemData={item} ></MentionOperator>
+          <MentionOperator type={'Comment'} callback={initList}  itemData={item} ></MentionOperator>
           {/* <CommentFooter>
             <div> <Icon name="icon-retweet" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>

@@ -22,5 +22,10 @@ declare namespace Api {
       topic_name:string
       per_page:number
     }
+    type findByHotTopicIdList={
+      page:number
+      topic_id:string|number
+      per_page:number
+    }
   }
 }

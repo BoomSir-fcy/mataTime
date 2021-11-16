@@ -68,6 +68,7 @@ function App() {
           <Router>
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
+              <Route path="/topicList/:id" exact render={props => <Home {...props} />} />
               {process.env.NODE_ENV === 'development' && (
                 <Route path="/test" exact>
                   <Test />

@@ -21,4 +21,14 @@ export class CommentApi extends Http {
     const res = await this.post('/v1/comment/create', params);
     return res;
   }
+  // 对评论点赞
+  async commentLike(params: Api.Comment.commentLike) {
+    const res = await this.post('/v1/comment/like_plus_one', params);
+    return res;
+  }
+  // 对评论取消点赞
+  async commentCancelLike(params: Api.Comment.commentLike) {
+    const res = await this.post('/v1/comment/like_sub_one', params);
+    return res;
+  }
 }
