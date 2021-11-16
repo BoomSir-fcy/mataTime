@@ -1,19 +1,21 @@
 import styled from 'styled-components';
-import { Flex, Button, Box } from 'uikit'
+import { Flex, Card, Box } from 'uikit'
 export const ModalWrapper = styled(Box)`
-  /* width: 100%;
+  width: 100%;
   height: 100%;
   position: fixed;
   left: 0;
-  top: 0; */
-  /* background: rgba(98, 98, 98, 0.3); */
-  /* z-index: 99999; */
+  top: 0;
+  background: rgba(98, 98, 98, 0.3);
+  z-index: 99999;
 `
 export const ModalTitleWrapper = styled(Box)`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
+  padding: 35px 35px 0 35px;
   h4{
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
@@ -22,6 +24,7 @@ export const ModalTitleWrapper = styled(Box)`
   }
   .close{
     width: 20px;
+    cursor: pointer;
   }
 
 `
@@ -35,13 +38,12 @@ export const ReportModalWrapper = styled(Box)`
   margin-left: -400px;
   margin-top: -150px;
   box-sizing: border-box;
-  padding: 35px;
-  box-shadow: 0px 0px 2px 1px rgba(180, 200, 169, 0.3);
-  z-index: 99999;
 `
 
 export const ReportContentWrapper = styled(Box)`
-  margin-top: 20px;
+  margin-top: 5px;
+  padding: 0 20px;
+  box-sizing: border-box;
   p{
     font-size: 16px;
     font-family: Alibaba PuHuiTi;

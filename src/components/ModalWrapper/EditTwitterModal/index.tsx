@@ -11,11 +11,11 @@ import {
 type IProp = {
   show: boolean;
   onClose: Function;
-  content?: any[];
+  content?: any;
 }
 
 export const EditTwitterModal = React.memo((props: IProp) => {
-  const { show, onClose, content = [] } = props
+  const { show, onClose, content = '' } = props
   const sendArticle = () => {
 
   }
