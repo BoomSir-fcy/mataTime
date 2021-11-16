@@ -28,39 +28,38 @@ const menuArr = [
   {
     icon: 'icon-gerenxinxi',
     activeIcon: 'icon-gerenxinxi1',
-    title: '主页',
+    title: 'meMenuHome',
     path: '/me'
   },
   {
     icon: 'icon-e31guanzhu',
     activeIcon: 'icon-e31guanzhuxuanzhong',
-    title: '关注',
+    title: 'meMenuFollow',
     path: '/me/follow'
-    // badge: true
   },
   {
     icon: 'icon-a-tianjiaguanzhuguanzhu',
     activeIcon: 'icon-gerenxinxi1',
-    title: '粉丝',
+    title: 'meMenuFans',
     path: '/me/fans'
   },
   {
     icon: 'icon-dianzan1',
     activeIcon: 'icon-e31guanzhuxuanzhong',
-    title: '点赞',
+    title: 'meMenuLink',
     path: '/me/praise'
   },
   {
     icon: 'icon-shoucang',
     activeIcon: 'icon-shoucang1',
-    title: '收藏',
+    title: 'meMenuFav',
     path: '/me/collect',
     badge: true
   }
   // {
   //   icon: 'icon-pingbi1',
   //   activeIcon: 'icon-pingbi',
-  //   title: '屏蔽列表',
+  //   title: 'meMenuShield',
   //   path: '/me/shield',
   // },
 ];

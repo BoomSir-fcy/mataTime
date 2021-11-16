@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Flex ,Box} from 'uikit';
+import { Flex, Box, Card } from 'uikit';
 import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 
 export const PageContainer = styled.div`
@@ -20,12 +20,12 @@ export const CenterCard = styled(Box)`
 export const RightCard = styled.div`
   // width: 375px;
 `
-export const CommentListBox = styled.div`
-background-color:#191F2D;
+export const CommentListBox = styled(Card)`
+/* background-color:#191F2D; */
 border-radius: 10px;
 overflow: hidden;
 margin-bottom:50px;
-color:#fff;
+/* color:#fff; */
 `
 export const CommentTitle = styled(Flex)`
 padding-left:29px;
@@ -52,7 +52,7 @@ padding:18px 18px 0 28px;
 border-bottom: solid 1px #4D535F;
 }
 `
-export const CommentHeader  = styled(Flex)`
+export const CommentHeader = styled(Flex)`
 .relative-time{
   margin-top:8px;
   font-size: 14px;
@@ -88,7 +88,7 @@ export const CommentContent = styled(Box)`
 padding-right:30px;
 margin:20px 0;
 `
-export const CommentFooter  = styled(Flex)`
+export const CommentFooter = styled(Flex)`
 padding-left:100px;
 align-items:center;
 height:60px;

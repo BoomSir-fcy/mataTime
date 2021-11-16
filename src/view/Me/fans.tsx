@@ -2,30 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
-import { Avatar, Icon, List } from 'components';
+import { Avatar, List } from 'components';
 import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { Api } from 'apis';
 
 import { CrumbsHead } from './components';
 
-const Msg = styled(Box)`
-  color: #b5b5b5;
-  font-size: 14px;
-`;
 const Content = styled(Card)`
   width: 100%;
   height: 705px;
   padding: 29px 19px;
   margin-top: 10px;
-  overflow: hidden;
-  .msg {
-    color: #b5b5b5;
-    font-size: 14px;
-  }
-  .username {
-    color: #fff;
-  }
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -100,6 +88,10 @@ const Fans = React.memo(() => {
     try {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = [];
+          p.page = 1;
+        });
         getFansList();
         toast.success(res.data);
       } else {
@@ -157,10 +149,11 @@ const Fans = React.memo(() => {
                     </Text>
                     <Text color="textTips">@{shortenAddress(item.address)}</Text>
                   </Flex>
-                  <Msg>{item.introduction}</Msg>
+                  <Text color="textTips">{item.introduction}</Text>
                 </Column>
-                {item.attention_status === 0 && <Button onClick={() => followUser(item.uid)}>未关注</Button>}
-                {item.attention_status === 1 && (
+                {item.attention_status === 0 ? (
+                  <Button onClick={() => followUser(item.uid)}>未关注</Button>
+                ) : (
                   <Button onClick={() => unFollowUser(item.uid)} variant="tertiary">
                     相互关注
                   </Button>

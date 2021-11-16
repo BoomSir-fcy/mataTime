@@ -20,7 +20,20 @@ height: 35px;
 border-radius: 10px;
 background-color:#4168ED;
 margin-top:12px;
+padding: 0;
 `;
+
+export const CancelButton = styled(Button)`
+  border-radius: ${({ theme }) => theme.radii.card};
+  width: 100px;
+  height: 35px;
+  border-radius: 10px;
+  background: #4D535F;
+  margin-top:12px;
+  padding: 0;
+  margin-right: 20px;
+`;
+
 export const SlateBox = styled.div`
 background: #191F2D;
 margin-bottom: 10px;

@@ -15,7 +15,7 @@ import {
   useFocused,
   useSlate
 } from 'slate-react'
-import { SlateBox, SendButton } from './style'
+import { SlateBox, SendButton, CancelButton } from './style'
 import { MentionElement } from './custom-types'
 import { SearchPop, FollowPopup } from 'components'
 import { Mention, TopicElement } from './elements'
@@ -23,8 +23,10 @@ import { useTranslation } from 'contexts/Localization'
 
 type Iprops = {
   type: any
+  initValue?: any
   sendArticle: any
   initValue?: any
+  cancelSendArticle?: any
 }
 
 const DefaultElement = props => {
@@ -77,6 +79,7 @@ const insertTopic = (editor, { character = '' }) => {
   Transforms.insertNodes(editor, topic)
 }
 export const Editor = (props: Iprops) => {
+  const { initValue = null, cancelSendArticle = () => { } } = props
   const ref = useRef<HTMLDivElement | null>()
   const [value, setValue] = useState<Descendant[]>(initialValue)
   const [imgList, setImgList] = useState([])
@@ -139,8 +142,8 @@ export const Editor = (props: Iprops) => {
         // 将文件转为base64
         fr.onload = () => {
           fileList.push(fr.result)
-          if(fileList.length===selectFiles.length){
-              Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
+          if (fileList.length === selectFiles.length) {
+            Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
               if (Api.isSuccess(res)) {
                 setImgList([...imgList, ...res.data.map(item=>item.full_path)]);
                 toast.success(t('uploadImgSuccessMsg'));
@@ -153,7 +156,7 @@ export const Editor = (props: Iprops) => {
         }
       }
     }
-    input.click() 
+    input.click()
   }
   const restInput = () => {
     setValue(initialValue)
@@ -211,7 +214,15 @@ export const Editor = (props: Iprops) => {
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
           ></Toolbar>
-          <SendButton onClick={sendArticle}>{t('sendBtnText')}</SendButton>
+          {
+            initValue ? (<div>
+              <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
+              <SendButton onClick={sendArticle}>保存并发布</SendButton>
+            </div>
+            ) : (
+              <SendButton onClick={sendArticle}>{t('sendBtnText')}</SendButton>
+            )
+          }
         </Flex>
       </Slate>
     </SlateBox>
