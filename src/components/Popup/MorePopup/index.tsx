@@ -41,7 +41,8 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   //  初始化
   const init = () => {
-    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
+    // UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
+    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(true)
   }
 
   // 收藏
@@ -117,6 +118,9 @@ export const MorePopup = React.memo((props: Iprops) => {
     }} onMouseLeave={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       setVisible(false)
+    }} onClick={(e: any) => {
+      e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+      setVisible(false)
     }}>
       {children}
       {
@@ -129,6 +133,7 @@ export const MorePopup = React.memo((props: Iprops) => {
               isOwn ? (
                 <>
                   <p onClick={() => {
+                    setVisible(false)
                     setEditShow(true)
                   }}>{t('moreEdit')}</p>
                   <p onClick={() => {
@@ -200,11 +205,8 @@ export const MorePopup = React.memo((props: Iprops) => {
       {/* 编辑twitter */}
       <EditTwitterModal
         show={editShow}
-        pid={data.post.post_id}
+        content={[]}
         onClose={() => {
-          setEditShow(false)
-        }}
-        onQuery={() => {
           setEditShow(false)
         }}
       ></EditTwitterModal>

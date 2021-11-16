@@ -34,11 +34,15 @@ export const SearchPop = (props: Iprops) => {
     if (isInit) return setIsInit(false)
     if (topicTimeId) { clearTimeout(topicTimeId) }
     setTopicTimeId(setTimeout(() => {
-      // Api.UserApi.searchUser(nicKName).then(res => {
-      //   if (Api.isSuccess(res)) {
-      //     res.data && setUserList(res.data)
-      //   }
-      // })
+      Api.HomeApi.queryHotTopicList({
+        page:1,
+        per_page:50,
+        topic_name:topicValue
+      }).then(res => {
+        if(Api.isSuccess(res)){
+          setTopicList(res.data.List||[])
+        }
+      })
     }, 400))
   }, [topicValue])
   return (
@@ -89,16 +93,9 @@ export const SearchPop = (props: Iprops) => {
               </div>
               <div className="search-res-list">
                 {
-                  Array(13).fill(null).map((item, index) => (
-                    <Flex key={index} className="search-res-list-item" onClick={(e) => callback({}, type)}>
-                      <Avatar src={'https://avatars.githubusercontent.com/u/8140841?v=4'} style={{ width: '50px', height: '50px' }} scale="md" />
-                      <div style={{ flex: 1 }}>
-                        <Flex >
-                          <UserTitle style={{ flex: 1 }} title={index + '我是名字'}>{index + '我是名1111111111111111111111111111111111111111字'}</UserTitle>
-                          <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon>
-                        </Flex>
-                        <UserDesc title={index + '我是desc'}>{index + '我是desc'}</UserDesc>
-                      </div>
+                  topicList.map((item, index) => (
+                    <Flex key={item.topic_id} className="search-res-list-item" onClick={(e) => callback(item, type)}>
+                          <UserTitle style={{ flex: 1 }} title={item.topic_name}>#{item.topic_name}#</UserTitle>
                     </Flex>
                   ))
                 }

@@ -22,6 +22,7 @@ import { Mention, TopicElement } from './elements'
 type Iprops = {
   type: any
   sendArticle: any
+  initValue?: any[]
 }
 
 const DefaultElement = props => {
@@ -95,6 +96,12 @@ export const Editor = (props: Iprops) => {
     () => withTopics(withMentions(withReact(withHistory(createEditor())))),
     []
   )
+  useEffect(() => {
+    setValue(props.initValue)
+    // if (props.initValue.length) {
+    //   setValue(props.initValue)
+    // }
+  }, [])
   // 扩大focus距离
   useEffect(() => {
     const el: any = ref.current
@@ -112,37 +119,55 @@ export const Editor = (props: Iprops) => {
   }, [])
 
   const callbackSelectImg = e => {
-    if (imgList.length >= 9) return toast.error('最多上传九张');
     const input = document.createElement('input');
     input.type = 'file';
     input.name = 'file';
-    input.accept = '.png,.jpg,.jpeg,.gif';
+    input.multiple = true;
+    input.accept = '.png,.jpg,.jpeg';
     input.onchange = async (e: any) => {
-      if (!e.target.files[0]) return false;
-      const file = e.target.files[0];
-      let fr: any = new FileReader();
-      // 读取文件
-      fr.readAsDataURL(file);
-      // 将文件转为base64
-      fr.onload = () => {
-        Api.CommonApi.uploadImg({ dir_name: props.type, base64: fr.result }).then(res => {
-          if (Api.isSuccess(res)) {
-            setImgList([...imgList, res.data.full_path]);
-            toast.success('上传成功');
-          } else {
-            toast.error('上传失败');
+      const selectFiles = e.target.files
+      if (!selectFiles[0]) return false;
+      if (imgList.length+selectFiles.length > 9) return toast.error('最多上传九张');
+      const fileList:string[] = []
+      for(let file of selectFiles){
+        let fr: any = new FileReader();
+        // 读取文件
+        fr.readAsDataURL(file);
+        // 将文件转为base64
+        fr.onload = () => {
+          fileList.push(fr.result)
+          if(fileList.length===selectFiles.length){
+              Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
+              if (Api.isSuccess(res)) {
+                setImgList([...imgList, ...res.data.map(item=>item.full_path)]);
+                toast.success('上传成功');
+                console.log(imgList);
+              } else {
+                toast.error('上传失败');
+              }
+            })
           }
-        })
+          // uploadImgList
+          // Api.CommonApi.uploadImg({ dir_name: props.type, base64: fr.result }).then(res => {
+          //   if (Api.isSuccess(res)) {
+          //     setImgList([...imgList, res.data.full_path]);
+          //     toast.success('上传成功');
+          //   } else {
+          //     toast.error('上传失败');
+          //   }
+          // })
+        }
       }
+      // const file = e.target.files[0];
     }
-    input.click()
+    input.click() 
   }
   const restInput = () => {
-    setValue([])
+    setValue(initialValue)
   }
   const sendArticle = () => {
-    console.log(value, imgList.join(','));
-    console.log(JSON.stringify(value), restInput, imgList.join(','));
+    // console.log(value, imgList.join(','));
+    // console.log(JSON.stringify(value), restInput, imgList.join(','));
     props.sendArticle(JSON.stringify(value), restInput, imgList.join(','))
   }
   const searchSelect = (data, type) => {
@@ -153,7 +178,7 @@ export const Editor = (props: Iprops) => {
       insertMention(editor, { uid: data.uid, character: '@' + data.nick_name })
     }
     if (type === 'topic') {
-      insertTopic(editor, { character: 'hhhhh' })
+      insertTopic(editor, { character: data.topic_name })
     }
   }
   return (

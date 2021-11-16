@@ -17,5 +17,10 @@ declare namespace Api {
     type queryHotTopic={
       page:number
     }
+    type queryHotTopicList={
+      page:number
+      topic_name:string
+      per_page:number
+    }
   }
 }

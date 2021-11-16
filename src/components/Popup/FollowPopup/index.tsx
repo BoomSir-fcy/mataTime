@@ -25,8 +25,8 @@ export const FollowPopup = React.memo((props: Iprops) => {
   const [userInfo, setUserInfo] = useState<any>({});
 
   useEffect(() => {
-    uid && getUserInfo()
-  }, [uid])
+    visible && getUserInfo()
+  }, [visible])
 
   // 获取个人信息
   const getUserInfo = async () => {
@@ -62,6 +62,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
   return (
     <PopupWrapper onMouseOver={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+      // uid && getUserInfo()
       setVisible(true)
     }} onMouseLeave={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡

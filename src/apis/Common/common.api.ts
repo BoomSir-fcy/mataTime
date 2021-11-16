@@ -6,4 +6,9 @@ export class CommonApi extends Http {
     const res = await this.post('/v1/upload/img', params);
     return res;
   }
+  // 上传多张图片
+  async uploadImgList(params:Api.Common.uploadImg) {
+    const res = await this.post('/v1/upload/img_multi', params);
+    return res;
+  }
 }
