@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, Header, Toast } from 'components';
-import useEagerConnect from 'hooks/useEagerConnect';
 // WalletModal
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';

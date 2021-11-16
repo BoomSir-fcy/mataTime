@@ -104,7 +104,7 @@ const Home: React.FC = props => {
         </CenterCard>
         <RightCard>
           {/* <Search></Search> */}
-          {/* <Swap></Swap> */}
+          <Swap></Swap>
           <RecommendPeople></RecommendPeople>
           <HotTopic></HotTopic>
           <FooterCopyright></FooterCopyright>

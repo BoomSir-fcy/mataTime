@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Card, Text, Button, Toggle } from 'uikit';
 import { useImmer } from 'use-immer';
+import { Flex, Card, Text, Button, Toggle } from 'uikit';
+import { useStore } from 'store';
+import { Api } from 'apis';
+import { toast } from 'react-toastify';
 
 const NoticeSetBox = styled(Card)`
   height: 707px;
@@ -29,22 +32,31 @@ const Column = styled(Flex)`
 `;
 
 const NoticeSet = () => {
+  const setting: any = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer({
-    isFilted: false,
-    isNews: false,
-    isEmail: false
+    msg_remind: setting.MsgRemind === 1 ? true : false
   });
 
-  // 质量过滤
-  const filter = () => {
-    setState(p => {
-      p.isFilted = !p.isFilted;
-    });
+  const setNotice = async (params: Api.Set.likeSetParams) => {
+    const keys: any = Object.keys(params);
+    try {
+      const res = await Api.SetApi.likeSet(params);
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p[keys] = params[keys] === 1 ? true : false;
+        });
+        toast.success(res.msg);
+      } else {
+        toast.error(res.msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // 消息通知
   const newsNotice = () => {
-    if (state.isNews === false) {
+    if (state.msg_remind === false) {
       // 用于检查浏览器是否支持这个API。
       if (window.Notification) {
         // 支持
@@ -69,47 +81,37 @@ const NoticeSet = () => {
         }
       });
     }
-    setState(p => {
-      p.isNews = !p.isNews;
-    });
-  };
-
-  // 邮箱通知
-  const emailNotice = () => {
-    setState(p => {
-      p.isEmail = !p.isEmail;
-    });
   };
 
   return (
     <NoticeSetBox>
-      <Column>
+      {/* <Column>
         <Rows>
           <Title>质量过滤</Title>
-          <Toggle checked={state.isFilted} onClick={filter} />
+          <Toggle />
         </Rows>
         <Text color="textTips" mt="11px">
           选择过滤重复或自动发送的文章等内容，将只会展示您喜欢的文章
         </Text>
-      </Column>
+      </Column> */}
       <Column>
         <Rows>
           <Title>消息通知</Title>
-          <Toggle checked={state.isNews} onClick={newsNotice} />
+          <Toggle checked={state.msg_remind} onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })} />
         </Rows>
         <Text color="textTips" mt="11px">
           开启或关闭来自浏览器的授权消息通知，开启后将会通过浏览器的消息提醒您
         </Text>
       </Column>
-      <Column>
+      {/* <Column>
         <Rows>
           <Title>电子邮件通知</Title>
-          <Toggle checked={state.isEmail} onClick={emailNotice} />
+          <Toggle />
         </Rows>
         <Text color="textTips" mt="11px">
           开启或关闭来自邮件的消息通知，但在这之前，您需绑定您的邮箱账号
         </Text>
-      </Column>
+      </Column> */}
     </NoticeSetBox>
   );
 };

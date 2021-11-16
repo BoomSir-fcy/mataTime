@@ -1,4 +1,4 @@
-import { Http } from "../http";
+import { Http } from '../http';
 
 export class SetApi extends Http {
   // 偏好设置
