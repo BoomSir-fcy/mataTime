@@ -13,8 +13,6 @@ width: 300px;
 export const Swap: React.FC = () => {
   const { chainId } = useWeb3React()
 
-  console.log(chainId)
-
   const [languange] = useLanguange()
   const [isDark] = useThemeManager()
   const { onConnectWallet } = useConnectWallet()
