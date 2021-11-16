@@ -40,7 +40,6 @@ export const StakeNFT: React.FC = () => {
   const [activeNft, setactiveNft] = useState(0)
   useFetchNftList()
   const NftList = useStore(p => p.loginReducer.nftList);
-  console.log(NftList);
   if (!NftList.length) {
     dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
   } else {
