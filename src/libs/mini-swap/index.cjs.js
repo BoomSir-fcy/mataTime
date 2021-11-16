@@ -7448,7 +7448,7 @@ function useDerivedSwapInfo() {
     };
 }
 function useSwapCurrencies() {
-    var _a = useSwapState(), _b = Field$2.INPUT, inputStateCurrency = _a[_b], _c = Field$2.OUTPUT, outputStateCurrency = _a[_c];
+    var _a = useSwapState() || {}, _b = Field$2.INPUT, inputStateCurrency = _a[_b], _c = Field$2.OUTPUT, outputStateCurrency = _a[_c];
     var inputCurrency = useCurrency(inputStateCurrency === null || inputStateCurrency === void 0 ? void 0 : inputStateCurrency.currencyId);
     var outputCurrency = useCurrency(outputStateCurrency === null || outputStateCurrency === void 0 ? void 0 : outputStateCurrency.currencyId);
     return React.useMemo(function () {
@@ -14071,6 +14071,29 @@ var Providers = function (_a) {
 function Updaters() {
     return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(Updater$2, {}, void 0), jsxRuntime.jsx(Updater$3, {}, void 0), jsxRuntime.jsx(Updater, {}, void 0), jsxRuntime.jsx(Updater$1, {}, void 0)] }, void 0));
 }
+function ListenerCurrencyChange(_a) {
+    var onInputCurrencyChange = _a.onInputCurrencyChange, onOutputCurrencyChange = _a.onOutputCurrencyChange;
+    var _b = useSwapCurrencies(), inputCurrency = _b.inputCurrency, outputCurrency = _b.outputCurrency;
+    var _c = tslib.__read(React.useState(inputCurrency), 2), oldInputCurrency = _c[0], setOldInputCurrency = _c[1];
+    var _d = tslib.__read(React.useState(outputCurrency), 2), oldOutputCurrency = _d[0], setOldOutputCurrency = _d[1];
+    React.useEffect(function () {
+        if ((inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.symbol) !== (oldInputCurrency === null || oldInputCurrency === void 0 ? void 0 : oldInputCurrency.symbol) || (inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.name) !== (oldInputCurrency === null || oldInputCurrency === void 0 ? void 0 : oldInputCurrency.name)) {
+            setOldInputCurrency(inputCurrency);
+            if (typeof onInputCurrencyChange === 'function') {
+                onInputCurrencyChange(inputCurrency);
+            }
+        }
+    }, [inputCurrency, oldInputCurrency, onInputCurrencyChange]);
+    React.useEffect(function () {
+        if ((outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.symbol) !== (oldOutputCurrency === null || oldOutputCurrency === void 0 ? void 0 : oldOutputCurrency.symbol) || (outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.name) !== (oldOutputCurrency === null || oldOutputCurrency === void 0 ? void 0 : oldOutputCurrency.name)) {
+            setOldOutputCurrency(outputCurrency);
+            if (typeof onOutputCurrencyChange === 'function') {
+                onOutputCurrencyChange(outputCurrency);
+            }
+        }
+    }, [outputCurrency, oldOutputCurrency, onOutputCurrencyChange]);
+    return null;
+}
 function Blocklist(_a) {
     var children = _a.children;
     var account = useActiveWeb3React().account;
@@ -14093,26 +14116,7 @@ var MiniSwap = function (_a) {
             onLoaded();
         }
     }, [onLoaded, loaded]);
-    var _c = useSwapCurrencies(), inputCurrency = _c.inputCurrency, outputCurrency = _c.outputCurrency;
-    var _d = tslib.__read(React.useState(inputCurrency), 2), oldInputCurrency = _d[0], setOldInputCurrency = _d[1];
-    var _e = tslib.__read(React.useState(outputCurrency), 2), oldOutputCurrency = _e[0], setOldOutputCurrency = _e[1];
-    React.useEffect(function () {
-        if ((inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.symbol) !== (oldInputCurrency === null || oldInputCurrency === void 0 ? void 0 : oldInputCurrency.symbol) || (inputCurrency === null || inputCurrency === void 0 ? void 0 : inputCurrency.name) !== (oldInputCurrency === null || oldInputCurrency === void 0 ? void 0 : oldInputCurrency.name)) {
-            setOldInputCurrency(inputCurrency);
-            if (typeof onInputCurrencyChange === 'function') {
-                onInputCurrencyChange(inputCurrency);
-            }
-        }
-    }, [inputCurrency, oldInputCurrency, onInputCurrencyChange]);
-    React.useEffect(function () {
-        if ((outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.symbol) !== (oldOutputCurrency === null || oldOutputCurrency === void 0 ? void 0 : oldOutputCurrency.symbol) || (outputCurrency === null || outputCurrency === void 0 ? void 0 : outputCurrency.name) !== (oldOutputCurrency === null || oldOutputCurrency === void 0 ? void 0 : oldOutputCurrency.name)) {
-            setOldOutputCurrency(outputCurrency);
-            if (typeof onOutputCurrencyChange === 'function') {
-                onOutputCurrencyChange(outputCurrency);
-            }
-        }
-    }, [outputCurrency, oldOutputCurrency, onOutputCurrencyChange]);
-    return (jsxRuntime.jsxs(Providers, tslib.__assign({ resetTheme: resetTheme, lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsxRuntime.jsx(Updaters, {}, void 0), jsxRuntime.jsx(Blocklist, { children: jsxRuntime.jsx(Swap, {}, void 0) }, void 0)] }), void 0));
+    return (jsxRuntime.jsxs(Providers, tslib.__assign({ resetTheme: resetTheme, lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsxRuntime.jsx(Updaters, {}, void 0), jsxRuntime.jsx(ListenerCurrencyChange, { onInputCurrencyChange: onInputCurrencyChange, onOutputCurrencyChange: onOutputCurrencyChange }, void 0), jsxRuntime.jsx(Blocklist, { children: jsxRuntime.jsx(Swap, {}, void 0) }, void 0)] }), void 0));
 };
 
 module.exports = MiniSwap;
