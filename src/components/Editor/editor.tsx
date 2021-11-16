@@ -203,7 +203,7 @@ export const Editor = (props: Iprops) => {
           ></Toolbar>
           {
             initValue ? (<div>
-              <CancelButton onClick={cancelSendArticle}>保存并发布</CancelButton>
+              <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
               <SendButton onClick={sendArticle}>保存并发布</SendButton>
             </div>
             ) : (
