@@ -67,7 +67,7 @@ const CancelFollow = () => {
     </FollowContainer>
   );
 };
-const Home: React.FC = props => {
+const Home: React.FC = (props:any) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
@@ -88,6 +88,7 @@ const Home: React.FC = props => {
       }
     });
   };
+  const  {match} = props
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -96,9 +97,15 @@ const Home: React.FC = props => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header {...props} title={t('homeHeaderTitle')}></Header>
-          <Editor type="post" sendArticle={sendArticle}></Editor>
-          <Tabs></Tabs>
+          <Header {...props} back={ match.path==='/topicList/:id'} align={ match.path==='/topicList/:id'?'center':null} title={t('homeHeaderTitle')}></Header>
+          {
+            match.path==='/'?
+            <>
+            <Editor type="post" sendArticle={sendArticle}></Editor>
+            <Tabs></Tabs>
+            </>
+            :null
+          }
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} {...props}></ArticleList>
         </CenterCard>
@@ -106,7 +113,7 @@ const Home: React.FC = props => {
           {/* <Search></Search> */}
           <Swap></Swap>
           <RecommendPeople></RecommendPeople>
-          <HotTopic></HotTopic>
+          <HotTopic {...props}></HotTopic>
           <FooterCopyright></FooterCopyright>
         </RightCard>
       </Flex>

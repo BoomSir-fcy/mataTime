@@ -37,7 +37,7 @@ color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
 const HotItem = styled(Flex)`
 margin-top:20px;
 `
-export const HotTopic: React.FC = () => {
+export const HotTopic: React.FC = (props:any) => {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [hotTopicList, setHotTopicList] = useState([])
@@ -54,6 +54,9 @@ export const HotTopic: React.FC = () => {
       }
     })
   }
+  const goDetils=(item)=>{
+    props.history.push('/topicList/' + item.tid)
+  }
   return (
     <HotTopicBox>
       <Flex justifyContent="space-between">
@@ -64,7 +67,7 @@ export const HotTopic: React.FC = () => {
         {
           hotTopicList.map((item, index) => (
             <HotItem key={item.tid} justifyContent="space-between">
-              <Hot>#{item.topic_name}#</Hot>
+              <Hot onClick={()=>goDetils(item)}>#{item.topic_name}#</Hot>
               <HotCount>{item.post_num > 50 ? 50 : item.post_num}{t('HotTopicUnit')}</HotCount>
             </HotItem>
           ))

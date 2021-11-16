@@ -1,34 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
-import { Icon } from 'components';
+import { Icon, ReplyModal } from 'components';
 import {
   MentionOperatorWrapper
 } from './style';
 import { Api } from 'apis';
 
-enum MentionObjEnum {
-  Article,
-  Comment
-}
+// enum MentionObjEnum {
+//   Article,
+//   Comment
+// }
 
 type IProps = {
   itemData: any,
   hasLike?: boolean,
-  type?: MentionObjEnum,
+  type?: 'Article' | 'Comment',
   callback?: Function,
-  history?:any,
-  match?:any
+  history?: any,
+  match?: any
 }
 
-const MentionOperator: React.FC<IProps> = ({match,history, itemData, type = 'Article', hasLike = true, callback }) => {
-  const goDetils = ()=> {
-    if(!match||!history)return
+const MentionOperator: React.FC<IProps> = ({ match, history, itemData, type = 'Article', hasLike = true, callback }) => {
+  const goDetils = () => {
+    if (!match || !history) return
     if (match.path === '/articleDetils/:id') return;
     history.push('/articleDetils/' + itemData.id);
   }
   const [isLike, setIsLike] = useState<number>(itemData.is_like)
+  const [replyVisible, setReplyVisible] = useState<boolean>(false)
   const changeLike = () => {
-    if(type==='Article'){
+    if (type === 'Article') {
       Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({ post_id: itemData.post_id }).then(res => {
         if (Api.isSuccess(res)) {
           callback({
@@ -44,6 +45,20 @@ const MentionOperator: React.FC<IProps> = ({match,history, itemData, type = 'Art
         }
       })
     }
+    if (type === 'Comment') {
+      Api.CommentApi[isLike === 1 ? 'commentCancelLike' : 'commentLike']({ comment_id: itemData.id }).then(res => {
+        if (Api.isSuccess(res)) {
+          setIsLike(isLike === 1 ? 0 : 1)
+          callback({
+            ...itemData,
+            like_num: isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1
+          })
+          toast.success(res.data)
+        } else {
+          toast.error(res.data)
+        }
+      })
+    }
   }
   useEffect(() => {
     setIsLike(itemData.is_like)
@@ -52,7 +67,9 @@ const MentionOperator: React.FC<IProps> = ({match,history, itemData, type = 'Art
     <MentionOperatorWrapper>
       <div className="mention-operator">
         <div className="operator-item">
-          <Icon name={'icon-pinglun'} color={'#B5B5B5'} onClick={goDetils}></Icon>
+          <Icon name={'icon-pinglun'} color={'#B5B5B5'} onClick={() => {
+            setReplyVisible(true)
+          }}></Icon>
           {itemData.comment_num || 0}
         </div>
         <div className="operator-item">
@@ -74,6 +91,15 @@ const MentionOperator: React.FC<IProps> = ({match,history, itemData, type = 'Art
         }
 
       </div>
+      {/* 回复 */}
+      <ReplyModal
+        show={replyVisible}
+        itemData={itemData}
+        onClose={() => {
+          setReplyVisible(false)
+        }}
+      />
+
     </MentionOperatorWrapper>
   )
 }

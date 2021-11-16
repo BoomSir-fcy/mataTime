@@ -23,7 +23,7 @@ export const SignUpcomplete = React.memo(() => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const redict = location?.state?.from;
+  const redict = location?.state?.from?.pathname;
   const [state, setState] = useImmer({
     list: []
   });
@@ -37,7 +37,7 @@ export const SignUpcomplete = React.memo(() => {
           p.list = res.data || [];
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const complete = () => {

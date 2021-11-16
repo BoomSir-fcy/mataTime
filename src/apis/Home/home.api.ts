@@ -26,4 +26,9 @@ export class HomeApi extends Http {
     const res = await this.get('/v1/topic/list', params);
     return res;
   }
+  // 话题大类列表
+  async findByHotTopicIdList (params:Api.Home.findByHotTopicIdList) {
+    const res = await this.get('/v1/topic/square', params);
+    return res;
+  }
 }

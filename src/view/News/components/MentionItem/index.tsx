@@ -4,7 +4,7 @@ import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD } from 'components';
+import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD, ContentParsing } from 'components';
 import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
 
 import { Api } from 'apis';
@@ -18,31 +18,31 @@ type IProps = {
 };
 
 const MentionItem: React.FC<IProps> = props => {
-  const { children, size = 'nomal', itemData = {}, callback = () => { } } = props;
+  const { children, size = 'nomal', itemData = {}, callback = () => {} } = props;
   const mentionRef: any = useRef();
 
   const [position, setPosition] = useState([-999, -999]);
   const [uid, setUid] = useState<string | number>(0);
-  const [content, setContent] = useState<any[]>([]);
+  // const [content, setContent] = useState<any[]>([]);
 
   useEffect(() => {
     handleUserHover();
   }, []);
 
-  useEffect(() => {
-    if (itemData.content) {
-      let arr = [];
-      try {
-        if (itemData.content.match(/\[.*?\]/g)) {
-          arr = JSON.parse(itemData.content)
-        }
+  // useEffect(() => {
+  //   if (itemData.content) {
+  //     let arr = [];
+  //     try {
+  //       if (itemData.content.match(/\[.*?\]/g)) {
+  //         arr = JSON.parse(itemData.content)
+  //       }
 
-        setContent(arr || [])
-      } catch (err: any) {
-        arr = [];
-      }
-    }
-  }, [itemData.content]);
+  //       setContent(arr || [])
+  //     } catch (err: any) {
+  //       arr = [];
+  //     }
+  //   }
+  // }, [itemData.content]);
 
   // 用户hover
   const handleUserHover = () => {
@@ -84,43 +84,7 @@ const MentionItem: React.FC<IProps> = props => {
           goDetils(e);
         }}
       >
-        {/* <div onClick={contentClick} dangerouslySetInnerHTML={{ __html: itemData.content }}></div> */}
-        {content &&
-          content.length > 0 &&
-          content?.map((item: any) => {
-            return (
-              <div className="paragraph-item">
-                {item.children.map((child: any) => {
-                  return (
-                    <>
-                      {child.type === 'mention' ? (
-                        <p>
-                          <FollowPopup uid={child?.attrs?.userid || 0}>
-                            <a>{child.character}</a>
-                          </FollowPopup>
-                        </p>
-                      ) : child.type === 'topic' ? (
-                        <p>
-                          {(child.children || []).map((topic: any) => {
-                            if (topic.text) {
-                              return <a>#{topic.text}#</a>;
-                            }
-                          })}
-                        </p>
-                      ) : (
-                        <p>{child.text || ''}</p>
-                      )}
-                    </>
-                  );
-                })}
-              </div>
-            );
-          })}
-        {/* <p>
-          <FollowPopup>
-            <a>@Baby fuck me</a>
-          </FollowPopup>
-        </p> */}
+        <ContentParsing content={itemData.content}></ContentParsing>
         <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}
@@ -145,7 +109,7 @@ type UserProps = {
   callback?: Function;
 };
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => {} }) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
@@ -182,8 +146,8 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
           <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
           <div className="user-info">
             <div>
-              <div className="user-name">{itemData.user_name}</div>
-              <div className="time">{itemData.add_time_desc}</div>
+              <div className="user-name">{itemData.user_name || itemData.nick_name}</div>
+              <div className="time">{itemData.add_time_desc || itemData.post_time_desc}</div>
             </div>
             {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>

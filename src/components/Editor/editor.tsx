@@ -15,14 +15,15 @@ import {
   useFocused,
   useSlate
 } from 'slate-react'
-import { SlateBox, SendButton } from './style'
+import { SlateBox, SendButton, CancelButton } from './style'
 import { MentionElement } from './custom-types'
 import { SearchPop, FollowPopup } from 'components'
 import { Mention, TopicElement } from './elements'
 type Iprops = {
   type: any
+  initValue?: any
   sendArticle: any
-  initValue?: any[]
+  cancelSendArticle?: any
 }
 
 const DefaultElement = props => {
@@ -77,6 +78,7 @@ const insertTopic = (editor, { character = '' }) => {
   // Transforms.collapse(editor, { edge: 'end' })
 }
 export const Editor = (props: Iprops) => {
+  const { initValue = null, cancelSendArticle = () => { } } = props
   const ref = useRef<HTMLDivElement | null>()
   const [value, setValue] = useState<Descendant[]>(initialValue)
   const [imgList, setImgList] = useState([])
@@ -96,12 +98,7 @@ export const Editor = (props: Iprops) => {
     () => withTopics(withMentions(withReact(withHistory(createEditor())))),
     []
   )
-  useEffect(() => {
-    setValue(props.initValue)
-    // if (props.initValue.length) {
-    //   setValue(props.initValue)
-    // }
-  }, [])
+
   // 扩大focus距离
   useEffect(() => {
     const el: any = ref.current
@@ -127,19 +124,19 @@ export const Editor = (props: Iprops) => {
     input.onchange = async (e: any) => {
       const selectFiles = e.target.files
       if (!selectFiles[0]) return false;
-      if (imgList.length+selectFiles.length > 9) return toast.error('最多上传九张');
-      const fileList:string[] = []
-      for(let file of selectFiles){
+      if (imgList.length + selectFiles.length > 9) return toast.error('最多上传九张');
+      const fileList: string[] = []
+      for (let file of selectFiles) {
         let fr: any = new FileReader();
         // 读取文件
         fr.readAsDataURL(file);
         // 将文件转为base64
         fr.onload = () => {
           fileList.push(fr.result)
-          if(fileList.length===selectFiles.length){
-              Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
+          if (fileList.length === selectFiles.length) {
+            Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
               if (Api.isSuccess(res)) {
-                setImgList([...imgList, ...res.data.map(item=>item.full_path)]);
+                setImgList([...imgList, ...res.data.map(item => item.full_path)]);
                 toast.success('上传成功');
                 console.log(imgList);
               } else {
@@ -160,7 +157,7 @@ export const Editor = (props: Iprops) => {
       }
       // const file = e.target.files[0];
     }
-    input.click() 
+    input.click()
   }
   const restInput = () => {
     setValue(initialValue)
@@ -204,7 +201,15 @@ export const Editor = (props: Iprops) => {
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
           ></Toolbar>
-          <SendButton onClick={sendArticle}>发表</SendButton>
+          {
+            initValue ? (<div>
+              <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
+              <SendButton onClick={sendArticle}>保存并发布</SendButton>
+            </div>
+            ) : (
+              <SendButton onClick={sendArticle}>发表</SendButton>
+            )
+          }
         </Flex>
       </Slate>
     </SlateBox>
