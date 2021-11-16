@@ -47,7 +47,9 @@ const Submit = styled(Button)`
 `;
 const NameVerify = styled(Text)`
   position: absolute;
-`;
+  left: 150px;
+  bottom: -22px;
+`
 
 export const SignUpSetName = React.memo(() => {
   const dispatch = useDispatch();
