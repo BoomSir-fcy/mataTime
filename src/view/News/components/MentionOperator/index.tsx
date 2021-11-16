@@ -6,15 +6,15 @@ import {
 } from './style';
 import { Api } from 'apis';
 
-enum MentionObjEnum {
-  Article,
-  Comment
-}
+// enum MentionObjEnum {
+//   Article,
+//   Comment
+// }
 
 type IProps = {
   itemData: any,
   hasLike?: boolean,
-  type?: MentionObjEnum,
+  type?: 'Article' | 'Comment' ,
   callback?: Function,
   history?:any,
   match?:any
@@ -43,6 +43,20 @@ const MentionOperator: React.FC<IProps> = ({match,history, itemData, type = 'Art
           toast.success(res.data)
         }
       })
+    }
+    if(type==='Comment'){
+        Api.CommentApi[isLike===1?'commentCancelLike':'commentLike']({comment_id:itemData.id}).then(res=>{
+          if (Api.isSuccess(res)) {
+            setIsLike(isLike === 1 ? 0 : 1)
+            callback({
+              ...itemData,
+              like_num:isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1
+            })
+            toast.success(res.data)
+          }else{
+          toast.error(res.data)
+          }
+        })
     }
   }
   useEffect(() => {

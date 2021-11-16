@@ -101,7 +101,7 @@ export const Editor = (props: Iprops) => {
     // if (props.initValue.length) {
     //   setValue(props.initValue)
     // }
-  }, [])
+  }, [props.initValue])
   // 扩大focus距离
   useEffect(() => {
     const el: any = ref.current

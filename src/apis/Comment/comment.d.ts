@@ -18,5 +18,8 @@ declare namespace Api {
       pid:string
       comment:string
     }
+    type commentLike = {
+      comment_id:string
+    }
   }
 }

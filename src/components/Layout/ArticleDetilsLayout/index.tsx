@@ -79,10 +79,10 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <CommentList key={refresh} itemData={itemData}></CommentList>
         </CenterCard>
         <RightCard>
-          <Search></Search>
-          <Swap></Swap>
+          {/* <Search></Search> */}
+          {/* <Swap></Swap> */}
           <RecommendPeople></RecommendPeople>
-          <HotTopic></HotTopic>
+          <HotTopic {...props}></HotTopic>
           <FooterCopyright></FooterCopyright>
         </RightCard>
       </Flex>
