@@ -1,6 +1,7 @@
-import React,{ useState,useEffect,useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, Icon } from 'components';
 import { Flex, Button, Box } from 'uikit'
+import { useTranslation } from 'contexts/Localization'
 import { relativeTime } from 'utils'
 import { SortIcon } from './SortIcon'
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -16,11 +17,12 @@ import {
   CommentListFooter
 } from './style'
 type Iprops = {
-  itemData:any
+  itemData: any
 }
 
-export const CommentList: React.FC<Iprops> = (props:Iprops) => {
-  const {itemData} = props
+export const CommentList: React.FC<Iprops> = (props: Iprops) => {
+  const { t } = useTranslation()
+  const { itemData } = props
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
@@ -28,34 +30,34 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
   const [sortTime, setSortTime] = useState(1)
   const [sortLike, setSortLike] = useState(1)
   const [refresh, setRefresh] = useState(false)
-  let listRef:any = useRef()
-  useEffect(()=>{
+  let listRef: any = useRef()
+  useEffect(() => {
     listRef.current.loadList()
-  },[refresh])
-  const initList=()=>{
+  }, [refresh])
+  const initList = () => {
     setListData([])
     setPage(1)
     setTotalPage(2)
     setRefresh(!refresh)
   }
-  const changeSortTime=()=>{
-    setSortTime(sortTime===1?0:1)  
+  const changeSortTime = () => {
+    setSortTime(sortTime === 1 ? 0 : 1)
     initList()
   }
-  const changeSortLike=()=>{
-    setSortLike(sortLike===1?0:1)
+  const changeSortLike = () => {
+    setSortLike(sortLike === 1 ? 0 : 1)
     initList()
   }
-  const getList = ()=>{
-    if(!itemData.id)return
-    console.log(page,sortTime);
-    
+  const getList = () => {
+    if (!itemData.id) return
+    console.log(page, sortTime);
+
     Api.CommentApi.getCommentList({
-      pid:itemData.id,
-      prepage:20,
-      page:page,
-      sort_add_time:sortTime,
-      sort_like:sortLike
+      pid: itemData.id,
+      prepage: 20,
+      page: page,
+      sort_add_time: sortTime,
+      sort_like: sortLike
     }).then(res => {
       setLoading(false)
       console.log(res);
@@ -63,8 +65,8 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
         setPage(page + 1)
         setListData([...listData, ...(res.data.list||[])])
         // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
-        console.log(listData,res.data.list);
-        
+        console.log(listData, res.data.list);
+
         setTotalPage(res.data.total_page)
       }
     })
@@ -72,18 +74,18 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
   return (
     <CommentListBox>
       <CommentTitle justifyContent="space-between" alignItems="center">
-        <span>评论</span>
+        <span>{t('newsCommentMenuTitle')}</span>
         <div className="sort-box">
           <div>
-            热度 <SortIcon changeSort={changeSortLike} flag={sortLike===0}></SortIcon>
+            {t('detailHeat')} <SortIcon changeSort={changeSortLike} flag={sortLike === 0}></SortIcon>
           </div>
           <div>
-            时间 <SortIcon changeSort={changeSortTime} flag={sortTime===0}></SortIcon>
+            {t('detailTime')} <SortIcon changeSort={changeSortTime} flag={sortTime === 0}></SortIcon>
           </div>
         </div>
       </CommentTitle>
-      <List  ref={listRef} marginTop={410} renderList={() => {
-        if(!itemData.id)return
+      <List ref={listRef} marginTop={410} renderList={() => {
+        if (!itemData.id) return
         if (loading || page > totalPage) return false
         setLoading(true)
         getList()
@@ -121,10 +123,10 @@ export const CommentList: React.FC<Iprops> = (props:Iprops) => {
             <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-aixin" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
           </CommentFooter> */}
-        </CommentItem>
-      ))}
+          </CommentItem>
+        ))}
       </List>
-      <CommentListFooter>没有更多内容了</CommentListFooter>
+      {/* <CommentListFooter>没有更多内容了</CommentListFooter> */}
     </CommentListBox>
   )
 }

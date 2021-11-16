@@ -120,7 +120,6 @@ export const FetchNftStakeType = async (account) => {
   ]
   try {
     const userInfo = await multicall(nftSocialAbi, calls)
-    console.log(userInfo);
     return userInfo.map((item, index) => ({
       token_id: Number(new BigNumber(item.token_id.toJSON().hex)),
       NFT_address: item.NFT_address,
