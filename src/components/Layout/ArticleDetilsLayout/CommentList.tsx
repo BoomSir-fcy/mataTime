@@ -65,8 +65,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         setPage(page + 1)
         setListData([...listData, ...(res.data.list||[])])
         // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
-        console.log(listData, res.data.list);
-
         setTotalPage(res.data.total_page)
       }
     })

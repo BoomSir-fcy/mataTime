@@ -53,7 +53,7 @@ export class List extends React.Component<Iprops>{
   }
   scrollRenderHandler() {
     if (!this.listBox.current) return false
-    if (window.pageYOffset + window.innerHeight >= this.listBox.current.offsetHeight + this.props.marginTop) {
+    if (window.pageYOffset + window.innerHeight >= this.listBox.current.offsetHeight + this.listBox.current.offsetTop) {
       this.loadList()
     }
   }

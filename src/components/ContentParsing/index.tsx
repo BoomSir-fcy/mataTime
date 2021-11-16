@@ -1,5 +1,6 @@
 import React,{useEffect,useState} from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom'
 import {FollowPopup} from 'components';
 type IProps = {
   content:string
@@ -51,7 +52,7 @@ return (
                   <p>
                     {(child.children || []).map((topic: any) => {
                       if (topic.text) {
-                        return <a>#{topic.text}#</a>;
+                        return <Link to={ `/topicList/0/${topic.text}`}>#{topic.text}#</Link>;
                       }
                     })}
                   </p>
