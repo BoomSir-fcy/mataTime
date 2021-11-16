@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Card } from 'uikit';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'contexts/Localization'
 import { Link } from 'react-router-dom';
 import { ProfileMenu, Icon, Logo, Badge } from 'components';
 
@@ -42,6 +43,7 @@ const User = styled(Flex)`
 `;
 
 export const MenuList = (props: { menuList: any[] }) => {
+  const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { menuList } = props;
@@ -65,7 +67,7 @@ export const MenuList = (props: { menuList: any[] }) => {
               {item.badge && <Badge count={0} />}
               <Icon name={currentIndex === index ? item.activeIcon : item.icon} margin="10px 14px" color={isDark ? '#ffffff' : '#7A83A0'}></Icon>
             </div>
-            <span style={{ marginLeft: '5px' }}>{item.title}</span>
+            <span style={{ marginLeft: '5px' }}>{t(item.transaltion)}</span>
           </ItemLink>
         );
       })}
