@@ -44,11 +44,6 @@ const Edit: React.FC = () => {
     const params = form.current.getFrom();
     try {
       const res = await Api.UserApi.updateUserInfo({ ...params, background_image: state.background });
-      if (Api.isSuccess(res)) {
-        toast.success('修改成功');
-      } else {
-        toast.error(res.msg);
-      }
     } catch (error) {
       console.log(error);
     }

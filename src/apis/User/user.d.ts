@@ -1,23 +1,28 @@
 declare namespace Api {
   namespace User {
     interface userInfoParams {
-      UID: number;
-      uid?: number;
-      nick_name?: string;
-      NickName?: string;
+      uid: number;
       address?: string;
-      display_format?: number;
-      introduction?: string;
-      location?: string;
-      background_image?: string;
-      fans_num?: number;
-      attention_num?: number;
-      email?: string;
-      introduction?: string;
-      Introduction?: string;
-      location?: string;
-      Location?: string;
-      nft_image?: string;
+      nick_name: string;
+      display_format: number;
+      introduction: string;
+      location: string;
+      nft_image: string;
+      nft_id: string;
+      background_image: string;
+      email: string;
+      status: number;
+      color_model: number;
+      msg_remind: number;
+      language: number;
+      translation: number;
+      last_signin_time: number;
+      attention_num: number;
+      fans_num: number;
+      add_time: string;
+      update_time: string;
+      is_attention: number;
+      address: string;
       label_list?: string[];
       post_num?: number;
     }
@@ -28,6 +33,7 @@ declare namespace Api {
       introduction?: string;
       location?: string;
       background_image?: string;
+      default_location?: number;
     }
 
     interface userInfoCallback extends Api.Error {
