@@ -18,7 +18,7 @@ type IProps = {
 };
 
 const MentionItem: React.FC<IProps> = props => {
-  const { children, size = 'nomal', itemData = {}, callback = () => { } } = props;
+  const { children, size = 'nomal', itemData = {}, callback = () => {} } = props;
   const mentionRef: any = useRef();
 
   const [position, setPosition] = useState([-999, -999]);
@@ -34,10 +34,10 @@ const MentionItem: React.FC<IProps> = props => {
       let arr = [];
       try {
         if (itemData.content.match(/\[.*?\]/g)) {
-          arr = JSON.parse(itemData.content)
+          arr = JSON.parse(itemData.content);
         }
 
-        setContent(arr || [])
+        setContent(arr || []);
       } catch (err: any) {
         arr = [];
       }
@@ -145,7 +145,7 @@ type UserProps = {
   callback?: Function;
 };
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => {} }) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
@@ -182,8 +182,8 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
           <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
           <div className="user-info">
             <div>
-              <div className="user-name">{itemData.user_name}</div>
-              <div className="time">{itemData.add_time_desc}</div>
+              <div className="user-name">{itemData.user_name || itemData.nick_name}</div>
+              <div className="time">{itemData.add_time_desc || itemData.post_time_desc}</div>
             </div>
             {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
