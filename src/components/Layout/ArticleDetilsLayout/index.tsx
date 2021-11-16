@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { About, Avatar, Editor, ModalWrapper } from 'components';
+import { useTranslation } from 'contexts/Localization'
 import { Route } from 'react-router-dom'
 import { Flex, Box } from 'uikit';
 import { Menu } from 'view/Home/left';
@@ -25,6 +26,7 @@ type Iprops = {
   [name: string]: any
 }
 export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
+  const { t } = useTranslation()
   const [itemData, setItemData] = useState<any>({})
   const [refresh, setRefresh] = useState(1)
   const sendArticle = (res, resetInput: () => void) => {
@@ -43,7 +45,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   }
   useEffect(() => {
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
-      if(Api.isSuccess(res)){
+      if (Api.isSuccess(res)) {
         setItemData(res.data)
         setRefresh(refresh === 1 ? 2 : 1)
       }
@@ -56,7 +58,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header back title="返回" {...props}></Header>
+          <Header back title={t('newsBack')} {...props}></Header>
           <MeItemWrapper>
             <MentionItem {...props} itemData={{
               ...itemData,
