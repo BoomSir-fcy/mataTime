@@ -10,24 +10,6 @@ export const MentionItemWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
-      .paragraph-item{
-        display: flex;
-        flex-wrap: wrap;
-      }
-      p{
-        font-size: 18px;
-        font-family: Alibaba PuHuiTi;
-        font-weight: 400;
-      }
-      a{
-        color: #4168ED;
-        cursor: pointer;
-        margin: 0 10px;
-      }
-      span {
-        color: #4168ED;
-        cursor: pointer;
-      }
     }
 `
 
