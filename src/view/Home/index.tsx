@@ -111,7 +111,7 @@ const Home: React.FC = (props:any) => {
         </CenterCard>
         <RightCard>
           {/* <Search></Search> */}
-          {/* <Swap></Swap> */}
+          <Swap></Swap>
           <RecommendPeople></RecommendPeople>
           <HotTopic {...props}></HotTopic>
           <FooterCopyright></FooterCopyright>

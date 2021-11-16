@@ -5289,10 +5289,10 @@ dotenv@^10.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
-dsgswap-sdk@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.11.tgz#7a6426c2c4343629fa37f60e0742b96b8b358a94"
-  integrity sha512-joFaKEPGIi+dSTx7IOA7rHbj3XLTSD1T/YSKSwHDE5Hh92QieaLrrmNDAri/NpG9cLyqjM+00kMzeB/9u+93Nw==
+dsgswap-sdk@1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.17.tgz#576863184ad88487945bf55ccb61791f82a46c4d"
+  integrity sha512-dFQkDcgp4kvhoxyD5EkVRQUtiTHLKo8uSWYbewuPxf0eUA0z03M1h638WsagNY+KQxvOsJ7eChVZ4rcJkuAOyg==
   dependencies:
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
@@ -8626,7 +8626,7 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-multicodec@^3.0.1, multicodec@^3.2.1:
+multicodec@^3.0.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/multicodec/-/multicodec-3.2.1.tgz#82de3254a0fb163a107c1aab324f2a91ef51efb2"
   integrity sha512-+expTPftro8VAW8kfvcuNNNBgb9gPeNYV9dn+z1kJRWF2vih+/S79f2RVeIwmrJBUJ6NT9IUPWnZDQvegEh5pw==
@@ -8639,7 +8639,7 @@ multiformats@^9.4.2:
   resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.4.10.tgz#d654d06b28cc066506e4e59b246d65267fb6b93b"
   integrity sha512-BwWGvgqB/5J/cnWaOA0sXzJ+UGl+kyFAw3Sw1L6TN4oad34C9OpW+GCpYTYPDp4pUaXDC1EjvB3yv9Iodo1EhA==
 
-multihashes@^4.0.1, multihashes@^4.0.3:
+multihashes@^4.0.1:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/multihashes/-/multihashes-4.0.3.tgz#426610539cd2551edbf533adeac4c06b3b90fb05"
   integrity sha512-0AhMH7Iu95XjDLxIeuCOOE4t9+vQZsACyKZ9Fxw2pcsRmlX4iCn1mby0hS0bb+nQOVpdQYWPpnyusw4da5RPhA==

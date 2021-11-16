@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { toast } from 'react-toastify';
 import { Avatar, Icon, List } from 'components';
 import { Box, Button, Flex, Card, Text } from 'uikit';
+import { shortenAddress } from 'utils/contract';
 import { Api } from 'apis';
-import { toast } from 'react-toastify';
 
 import { CrumbsHead } from './components';
 
@@ -79,7 +80,11 @@ const Fans = React.memo(() => {
   const followUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = [];
+          p.page = 1;
+        });
         getFansList();
         toast.success(res.data);
       } else {
@@ -94,7 +99,7 @@ const Fans = React.memo(() => {
   const unFollowUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.unFollowUser(focus_uid);
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
         getFansList();
         toast.success(res.data);
       } else {
@@ -146,22 +151,18 @@ const Fans = React.memo(() => {
               <ContentBox key={index}>
                 <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
                 <Column>
-                  <div>
+                  <Flex>
                     <Text color="white_black" mr="13px">
                       {item.nick_name}
                     </Text>
-                    <Text color="textTips">{item.present}</Text>
-                  </div>
+                    <Text color="textTips">@{shortenAddress(item.address)}</Text>
+                  </Flex>
                   <Msg>{item.introduction}</Msg>
                 </Column>
-                {item.attention_status_name === '相互关注' && (
-                  <Button onClick={() => unFollowUser(item.uid)} style={{ background: '#4168ED' }}>
-                    {item.attention_status_name}
-                  </Button>
-                )}
-                {item.attention_status_name !== '相互关注' && (
-                  <Button onClick={() => followUser(item.uid)} style={{ background: '#4168ED' }}>
-                    {item.attention_status_name}
+                {item.attention_status === 0 && <Button onClick={() => followUser(item.uid)}>未关注</Button>}
+                {item.attention_status === 1 && (
+                  <Button onClick={() => unFollowUser(item.uid)} variant="tertiary">
+                    相互关注
                   </Button>
                 )}
               </ContentBox>
