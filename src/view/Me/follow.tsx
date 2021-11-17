@@ -114,7 +114,7 @@ const Follow = React.memo(() => {
               if (Api.isSuccess(res)) {
                 setState(p => {
                   p.page = page + 1;
-                  p.list = [...list, ...res.data.list];
+                  p.list = [...list, ...(res.data.list || [])];
                 });
               }
             });

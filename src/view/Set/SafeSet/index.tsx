@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Card, Text, Button } from 'uikit';
+import { useStore } from 'store';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
 
@@ -25,6 +26,8 @@ const Column = styled(Flex)`
 `;
 
 const SafeSet = () => {
+  const userInfo = useStore(p => p.loginReducer.userInfo);
+
   // 更新邮箱
   const updateEmail = async (email: string) => {
     try {
@@ -44,7 +47,7 @@ const SafeSet = () => {
             登录该账号的钱包地址，无法更改
           </Text>
         </Column>
-        <Title>{shortenAddress('')}</Title>
+        <Title>{shortenAddress(userInfo.address)}</Title>
       </Rows>
       {/* <Rows>
         <Column>
