@@ -32,7 +32,6 @@ export const Header = styled(Flex)`
 `;
 
 const Edit: React.FC = () => {
-  useLocation();
   const form = React.useRef<any>();
   const profile: any = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer({

@@ -214,7 +214,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
       } */}
       {containerSize.width !== 0 && (
         <DropDownHeader onClick={toggling}>
-          <Text ellipsis>{options[selectedOptionIndex].label}</Text>
+          <Text ellipsis>{options[selectedOptionIndex]?.label}</Text>
           {children}
         </DropDownHeader>
       )}

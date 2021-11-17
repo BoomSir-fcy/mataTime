@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text } from 'uikit';
+import { Box, Flex, Text, Card } from 'uikit';
 import { List } from 'components';
 
 import { CrumbsHead } from './components';
@@ -52,57 +52,59 @@ const Collect = props => {
           <Text fontSize="14px">{total}条</Text>
         </Flex>
       </CrumbsHead>
-      <List
-        marginTop={14}
-        loading={page <= totalPage}
-        renderList={() => {
-          if (loading || page > totalPage) return false;
-          setLoading(true);
-          Api.MeApi.collectList(page).then(res => {
-            setLoading(false);
-            if (res.msg === 'success') {
-              setPage(page + 1);
-              setTotalPage(res.data.total_num);
-              setTotal(res.data.total_num);
-              setListData([...listData, ...res.data.list]);
-            }
-          });
-        }}
-      >
-        {listData.map((item, index) => {
-          return (
-            <MeItemWrapper key={index}>
-              <MentionItem
-                {...props}
-                itemData={{
-                  ...item,
-                  post_id: item.id,
-                  post: {
+      <Card>
+        <List
+          marginTop={14}
+          loading={page <= totalPage}
+          renderList={() => {
+            if (loading || page > totalPage) return false;
+            setLoading(true);
+            Api.MeApi.collectList(page).then(res => {
+              setLoading(false);
+              if (res.msg === 'success') {
+                setPage(page + 1);
+                setTotalPage(res.data.total_num);
+                setTotal(res.data.total_num);
+                setListData([...listData, ...(res.data?.list || [])]);
+              }
+            });
+          }}
+        >
+          {listData.map((item, index) => {
+            return (
+              <MeItemWrapper key={index}>
+                <MentionItem
+                  {...props}
+                  itemData={{
                     ...item,
-                    post_id: item.id
-                  }
-                }}
-                callback={(item: any, type: MoreOperatorEnum) => {
-                  updateList(item, type);
-                }}
-              ></MentionItem>
-              <MentionOperator
-                itemData={{
-                  ...item,
-                  post_id: item.id,
-                  post: {
+                    post_id: item.id,
+                    post: {
+                      ...item,
+                      post_id: item.id
+                    }
+                  }}
+                  callback={(item: any, type: MoreOperatorEnum) => {
+                    updateList(item, type);
+                  }}
+                ></MentionItem>
+                <MentionOperator
+                  itemData={{
                     ...item,
-                    post_id: item.id
-                  }
-                }}
-                callback={(item: any) => {
-                  updateList(item);
-                }}
-              />
-            </MeItemWrapper>
-          );
-        })}
-      </List>
+                    post_id: item.id,
+                    post: {
+                      ...item,
+                      post_id: item.id
+                    }
+                  }}
+                  callback={(item: any) => {
+                    updateList(item);
+                  }}
+                />
+              </MeItemWrapper>
+            );
+          })}
+        </List>
+      </Card>
     </Box>
   );
 };
