@@ -10,6 +10,7 @@ declare namespace Api {
     interface createArticle {
       content: string
       image_urls: string[]
+      remind_user:string
     }
     interface articleFindById {
       id:string

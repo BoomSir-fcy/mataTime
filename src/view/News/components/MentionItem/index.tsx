@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD, ContentParsing } from 'components';
 import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
+import { useTranslation } from 'contexts/Localization'
 
 import { Api } from 'apis';
 
@@ -85,6 +86,7 @@ const MentionItem: React.FC<IProps> = props => {
         }}
       >
         <ContentParsing content={itemData.content}></ContentParsing>
+       
         <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}
@@ -113,7 +115,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
   const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
-
+  const {t} = useTranslation()
   useEffect(() => {
     init();
   }, []);
@@ -163,7 +165,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
                   onAttentionFocusRequest(itemData.user_id);
                 }}
               >
-                +关注
+                +{t('followText')}
               </FollowBtn>
             ) : null}
 
