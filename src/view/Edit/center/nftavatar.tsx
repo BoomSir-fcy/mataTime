@@ -62,39 +62,37 @@ const NftAvatar: React.FC = () => {
   const NftList = useStore(p => p.loginReducer.nftList);
 
   return (
-    <div>
-      <Nft>
-        <Flex>
-          <Title>NFT 头像</Title>
-          <Point>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
-        </Flex>
-        <div>
-          <Rows>
-            <Avatar src={userInfo.NftImage} scale="ld" style={{ marginRight: '18px' }} />
-            <Column>
-              <UserName>{userInfo.NickName}</UserName>
-              <Text color={'textTips'}>#{userInfo.NftID}</Text>
-            </Column>
-          </Rows>
-          {/* <Authorize>
+    <Nft>
+      <Flex>
+        <Title>NFT 头像</Title>
+        <Point>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
+      </Flex>
+      <div>
+        <Rows>
+          <Avatar src={userInfo.NftImage} scale="ld" style={{ marginRight: '18px' }} />
+          <Column>
+            <UserName>{userInfo.NickName}</UserName>
+            <Text color={'textTips'}>#{userInfo.NftID}</Text>
+          </Column>
+        </Rows>
+        {/* <Authorize>
             <Button>授权获取</Button>
           </Authorize> */}
-          <GetAuthorizeBox>
-            <Point style={{ textAlign: 'center' }}>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
-            <GetAuthorize>
-              {
-                NftList.map(item => (
-                  <Column>
-                    <Avatar src={item.image} scale="ld" />
-                    <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
-                  </Column>
-                ))
-              }
-            </GetAuthorize>
-          </GetAuthorizeBox>
-        </div>
-      </Nft>
-    </div>
+        <GetAuthorizeBox>
+          <Point style={{ textAlign: 'center' }}>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
+          <GetAuthorize>
+            {
+              NftList.map(item => (
+                <Column>
+                  <Avatar src={item.image} scale="ld" />
+                  <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
+                </Column>
+              ))
+            }
+          </GetAuthorize>
+        </GetAuthorizeBox>
+      </div>
+    </Nft>
   )
 }
 export default NftAvatar

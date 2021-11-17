@@ -8,15 +8,18 @@ import { Box, Flex, Text, Button, Card } from 'uikit';
 import { getNftsList, getNftInfo } from 'apis/DsgRequest';
 import { useTranslation } from 'contexts/Localization';
 import { useFetchNftApproval, FetchNftStakeType, FetchNftsList, useFetchNftList, useApproveNftsFarm, useFetchSupportNFT } from '../hook';
-import { NftButton } from './approve';
+// import { NftButton } from './approve';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
+import NftAvatar from 'components/NftList';
 
-const SignUpWarpper = styled(Flex)`
-  padding-top: 50px;
-  padding-bottom: 100px;
-  flex-direction: column;
-  align-items: center;
-`;
+const Nft = styled(Box)`
+  background:${({ theme }) => theme.colors.backgroundCard};
+  margin-top:19px;
+  padding:27px 26px 38px 34px;
+  border-radius: 10px;
+  width: 40vw;
+  min-width: 600px;
+`
 const NftCard = styled.div`
   margin: 20px;
   display: flex;
@@ -34,46 +37,64 @@ cursor: pointer;
 
 
 export const StakeNFT: React.FC = () => {
-  useFetchSupportNFT()
-  useFetchNftList()
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const [activeNft, setactiveNft] = useState(0)
-  const [isAllApprove, setisAllApprove] = useState(true)
+  // 是否授权
+  const [isAllApprove, setisAllApprove] = useState([])
+  // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
+  // Nft地址  可用列表
   const NftAddrList = useStore(p => p.loginReducer.nftAddr);
 
-
   const getIsAllApprove = (list) => {
+    console.log(list, NftAddrList);
+    let myList = []
     for (let i = 0; i < list.length; i++) {
-      // 是否需要一键授权
-      if (!list[i].isApprovedMarket) {
-        setisAllApprove(false)
-      } else {
-        setisAllApprove(true)
-        return
+      // 当前NFT地址 是否授权
+      for (let j = 0; j < NftAddrList.length; j++) {
+        if (list[i].properties.token.toLowerCase() === NftAddrList[j].toLowerCase()) {
+          if (!list[i].isApprovedMarket) {
+            myList[j] = {
+              address: list[i].properties.token.toLowerCase(),
+              needApprove: true
+            }
+          } else if (list[i].isApprovedMarket) {
+            myList[j] = {
+              address: list[i].properties.token.toLowerCase(),
+              needApprove: false
+            }
+          }
+        }
       }
     }
+    console.log(myList);
+    setisAllApprove(myList)
   }
 
   useEffect(() => {
     if (!NftList.length) {
       dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
     } else {
-      getIsAllApprove(NftList)
+      NftAddrList.length && getIsAllApprove(NftList)
       dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
     }
     return () => {
-      setisAllApprove(false)
+      const arr = []
+      setisAllApprove(arr)
     }
   }, [NftList])
   return (
-    <Box>
-      {!isAllApprove && NftAddrList.map(item => (
-        <StakeAllBtn key={item} token={item} account={account} />
+    <Nft>
+      <Text fontSize='30px'>选择并质押头像</Text>
+      {isAllApprove.map(item => (
+        <NftAvatar key={item.address} NftInfo={item} />
       ))}
-      <Flex>
+      {/* {!isAllApprove && NftAddrList.map(item => (
+        <StakeAllBtn key={item} token={item} account={account} />
+      ))} */}
+      {/* <Flex>
         {
           NftList.map((item) => (
             <NftCard key={item.properties.id}>
@@ -82,8 +103,8 @@ export const StakeNFT: React.FC = () => {
             </NftCard>
           ))
         }
-      </Flex>
-    </Box>
+      </Flex> */}
+    </Nft>
   );
 };
 

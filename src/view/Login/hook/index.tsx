@@ -113,8 +113,8 @@ export const FetchSupportNFT = async () => {
   try {
     // 获取可用的Nft头像地址
     const result = await multicall(nftSocialAbi, calls)
-    const supAddress = result.map(item => (item.sup[0]))
-    return supAddress
+    const supAddress = result.map(item => (item.sup))
+    return supAddress[0]
   } catch (error) {
     console.log(error);
     return []
@@ -135,6 +135,8 @@ export const useFetchSupportNFT = () => {
 }
 // 获取Nft头像质押情况
 export const FetchNftStakeType = async (account) => {
+  console.log(account);
+
   const SocialAddress = getNftSocialAddress()
   const calls = [
     {
@@ -241,8 +243,8 @@ export const useNftStakeFarms = () => {
 export const useCancelNftStake = () => {
   const masterChefContract = useErc20EarnNftPool()
   const handleStake = useCallback(
-    async () => {
-      await CancelNftStake(masterChefContract)
+    async (address, nftId) => {
+      await CancelNftStake(masterChefContract, address, nftId)
     },
     [masterChefContract],
   )

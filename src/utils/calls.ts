@@ -5,8 +5,8 @@ export const stakeNftFarm = async (masterChefContract, address, nftsId) => {
   const receipt = await tx.wait()
   return receipt.status
 }
-export const CancelNftStake = async (masterChefContract) => {
-  const tx = await masterChefContract.withdraw()
+export const CancelNftStake = async (masterChefContract, address, nftsId) => {
+  const tx = await masterChefContract.replaceNFT(address, nftsId)
   const receipt = await tx.wait()
   return receipt.status
 }
