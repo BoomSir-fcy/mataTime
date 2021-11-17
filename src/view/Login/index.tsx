@@ -5,15 +5,17 @@ import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
-import { Flex, Card, Box } from 'uikit';
+import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
-import { StakeNFT } from './components/StakeNFT';
 import { useFetchSupportNFT, useFetchNftList } from './hook';
+import { StakeNFT } from 'components/NftList';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
+  justify-content: center;
+  flex-wrap: wrap;
   ${mediaQueries.xxl} {
     padding-left: 160px;
     padding-right: 160px;
@@ -29,6 +31,22 @@ const LogoWarpper = styled(Box)`
   height: 60px;
   ${mediaQueriesSize.marginbmd}
 `;
+const Nft = styled(Box)`
+  background:${({ theme }) => theme.colors.backgroundCard};
+  padding:30px;
+  border-radius: 10px;
+  width: 40vw;
+  min-width: 400px;
+  height: 100%;
+`
+const LeftBox = styled.div`
+${mediaQueries.sm} {
+  margin-right: 20px;
+
+  }
+margin-right: 40px;
+`
+
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchSupportNFT()
@@ -57,12 +75,19 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   return (
     <React.Fragment>
       <LoginContainer>
-        {
-          !isStakeNft && singUpStep === 1 && account ? <StakeNFT /> :
-            <Flex flex="1">
-              <img src={require('./images/logo_left_images.jpg').default} />
-            </Flex>
-        }
+        <LeftBox>
+          {
+            !isStakeNft && singUpStep === 1 && account ?
+              <Nft>
+                <Text fontSize='30px'>选择并质押头像</Text>
+                <StakeNFT />
+              </Nft>
+              :
+              <Flex flex="1">
+                <img src={require('./images/logo_left_images.jpg').default} />
+              </Flex>
+          }
+        </LeftBox>
         <Content>
           <LogoWarpper>
             <Logo url="/" src={`${require(isDark ? './images/logo.svg' : './images/light_logo.svg').default}`} />

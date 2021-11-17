@@ -3,14 +3,9 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
-import { toast } from 'react-toastify';
 import { Box, Flex, Text, Button, Card } from 'uikit';
-import { getNftsList, getNftInfo } from 'apis/DsgRequest';
 import { useTranslation } from 'contexts/Localization';
-import { useFetchNftApproval, FetchNftStakeType, FetchNftsList, useFetchNftList, useApproveNftsFarm, useFetchSupportNFT } from '../hook';
-// import { NftButton } from './approve';
-import { fetchUserNftInfoAsync } from 'store/login/reducer';
-import NftAvatar from 'components/NftList';
+// import NftAvatar from 'components/NftList';
 
 const Nft = styled(Box)`
   background:${({ theme }) => theme.colors.backgroundCard};
@@ -40,7 +35,6 @@ export const StakeNFT: React.FC = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { t } = useTranslation();
-  const [activeNft, setactiveNft] = useState(0)
   // 是否授权
   const [isAllApprove, setisAllApprove] = useState([])
   // 自己的Nft列表
@@ -49,7 +43,6 @@ export const StakeNFT: React.FC = () => {
   const NftAddrList = useStore(p => p.loginReducer.nftAddr);
 
   const getIsAllApprove = (list) => {
-    console.log(list, NftAddrList);
     let myList = []
     for (let i = 0; i < list.length; i++) {
       // 当前NFT地址 是否授权
@@ -69,7 +62,6 @@ export const StakeNFT: React.FC = () => {
         }
       }
     }
-    console.log(myList);
     setisAllApprove(myList)
   }
 
@@ -86,11 +78,10 @@ export const StakeNFT: React.FC = () => {
     }
   }, [NftList])
   return (
-    <Nft>
-      <Text fontSize='30px'>选择并质押头像</Text>
-      {isAllApprove.map(item => (
+    <>
+      {/* {isAllApprove.map(item => (
         <NftAvatar key={item.address} NftInfo={item} />
-      ))}
+      ))} */}
       {/* {!isAllApprove && NftAddrList.map(item => (
         <StakeAllBtn key={item} token={item} account={account} />
       ))} */}
@@ -104,39 +95,6 @@ export const StakeNFT: React.FC = () => {
           ))
         }
       </Flex> */}
-    </Nft>
-  );
-};
-
-const StakeAllBtn = ({ token, account }) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const { onApprove } = useApproveNftsFarm(token)
-  const [pendingTx, setPendingTx] = useState(false)
-
-  // 授权
-  const handleApprove = useCallback(async () => {
-    try {
-      // 一键授权
-      await onApprove()
-      dispatch(fetchUserNftInfoAsync(account));
-    } catch (e) {
-      throw e;
-    }
-  }, [onApprove])
-  return (
-    <Button disabled={pendingTx} onClick={async () => {
-      setPendingTx(true)
-      try {
-        // 授权 
-        await handleApprove()
-        toast.success('授权成功');
-      } catch (error) {
-        console.error(error)
-        toast.error('操作失败');
-      } finally {
-        setPendingTx(false)
-      }
-    }}>一键授权</Button>
+    </>
   );
 };
