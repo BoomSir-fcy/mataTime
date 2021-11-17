@@ -19,22 +19,20 @@ const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
   height: 60px;
-  float: left;
   margin-left: 22px;
 `;
-const ContentBox = styled(Box)`
-  float: left;
+const ContentBox = styled(Flex)`
   width: 100%;
   height: 60px;
   margin-bottom: 28px;
-  button {
-    float: right;
-    margin-top: 15px;
-  }
+  justify-content: space-between;
+  align-content: center;
 `;
 
 const Follow = React.memo(() => {
   const [state, setState] = useImmer({
+    hoverIndex: 0,
+    hoverStatus: false,
     loading: false,
     page: 1,
     total: 0,
@@ -43,16 +41,18 @@ const Follow = React.memo(() => {
   });
   const { loading, page, totalPage, list } = state;
 
-  const getFollowList = async () => {
+  const getFollowList = async (offest?: number) => {
     try {
       setState(p => {
         p.loading = true;
       });
-      const res = await Api.MeApi.followList(state.page);
+      const res = await Api.MeApi.followList(offest || page);
       if (Api.isSuccess(res)) {
         setState(p => {
-          p.list = [...state.list, ...(res.data.list || [])];
-          p.page = state.page + 1;
+          p.list = offest
+            ? [...(res.data.list || [])]
+            : [...state.list, ...(res.data.list || [])];
+          p.page = offest || state.page + 1;
           p.total = res.data.total_num;
         });
       }
@@ -65,17 +65,27 @@ const Follow = React.memo(() => {
     }
   };
 
+  const followUser = async (focus_uid: number) => {
+    try {
+      const res = await Api.MeApi.followUser(focus_uid);
+      if (Api.isSuccess(res)) {
+        getFollowList(1);
+        toast.success(res.data);
+      } else {
+        toast.warning(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // 取消关注
   const unFollowUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
-        setState(p => {
-          p.list = [];
-          p.page = 1;
-        });
+        getFollowList(1);
         toast.success(res.data);
-        getFollowList();
       } else {
         toast.error(res.data);
       }
@@ -120,22 +130,82 @@ const Follow = React.memo(() => {
             });
           }}
         >
-          {state.list.map(item => {
+          {state.list.map((item, index) => {
             return (
               <ContentBox key={item.uid}>
-                <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
-                <Column>
-                  <Flex>
-                    <Text color="white_black" mr="13px">
-                      {item.nick_name}
-                    </Text>
-                    <Text color="textTips">@{shortenAddress(item.address)}</Text>
-                  </Flex>
-                  <Text color="textTips">{item.introduction}</Text>
-                </Column>
-                <Button onClick={() => unFollowUser(item.uid)} variant="tertiary">
-                  取消关注
-                </Button>
+                <Flex>
+                  <Avatar src={item.nft_image} scale="md" />
+                  <Column>
+                    <Flex>
+                      <Text color="white_black" mr="13px">
+                        {item.nick_name}
+                      </Text>
+                      <Text color="textTips">
+                        @{shortenAddress(item.address)}
+                      </Text>
+                    </Flex>
+                    <Text color="textTips">{item.introduction}</Text>
+                  </Column>
+                </Flex>
+                {item.attention_status === 0 ? (
+                  <React.Fragment>
+                    {state.hoverStatus && state.hoverIndex === index ? (
+                      <Button
+                        onClick={() => followUser(item.uid)}
+                        onMouseLeave={() =>
+                          setState(p => {
+                            p.hoverIndex = 0;
+                            p.hoverStatus = false;
+                          })
+                        }
+                      >
+                        +关注
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => followUser(item.uid)}
+                        onMouseEnter={() =>
+                          setState(p => {
+                            p.hoverIndex = index;
+                            p.hoverStatus = true;
+                          })
+                        }
+                        variant="secondary"
+                      >
+                        未关注
+                      </Button>
+                    )}
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    {state.hoverStatus && state.hoverIndex === index ? (
+                      <Button
+                        onClick={() => unFollowUser(item.uid)}
+                        variant="tertiary"
+                        onMouseLeave={() =>
+                          setState(p => {
+                            p.hoverIndex = 0;
+                            p.hoverStatus = false;
+                          })
+                        }
+                      >
+                        取消关注
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => unFollowUser(item.uid)}
+                        onMouseEnter={() =>
+                          setState(p => {
+                            p.hoverIndex = index;
+                            p.hoverStatus = true;
+                          })
+                        }
+                      >
+                        相互关注
+                      </Button>
+                    )}
+                  </React.Fragment>
+                )}
               </ContentBox>
             );
           })}
