@@ -25,7 +25,7 @@ axios.interceptors.response.use(
 export class Http {
   async request(configs: AxiosRequestConfig) {
     let response;
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Mzc3Mzk0NzIsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNzEzNDY3MiwidWlkIjoiMjYyMDY4MDYwNCIsImFkZHJlc3MiOiIweDc4YWY3MGZGMjBlODJhQ0M5MkI1YjQyYzBBNzMyNDM5M0YwRDgxOTUifQ.uRtCeVGCfKNRqfc4dsa4HX0IfvsrxxV7OBoZ-jg54PA';
 
     try {
       response = await axios({ ...configs, headers: { ...configs.headers, token: token } });

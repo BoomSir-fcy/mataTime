@@ -72,10 +72,10 @@ const MentionOperator: React.FC<IProps> = ({ match, history, itemData, type = 'A
           }}></Icon>
           {itemData.comment_num || 0}
         </div>
-        <div className="operator-item">
+        {/* <div className="operator-item">
           <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
           {itemData.share_num || 0}
-        </div>
+        </div> */}
         {
           hasLike ? (
             <div className="operator-item" onClick={changeLike}>

@@ -51,16 +51,16 @@ export const ArticleList = (props) => {
   return (
     <ArticleListBox>
       <List marginTop={320} loading={page <= totalPage} renderList={() => {
-        console.log(loading ,page ,totalPage);
+        console.log(loading, page, totalPage);
         if (loading || page > totalPage) return false
         setLoading(true)
-        if(props.match.path==='/topicList/:id/:name'){
+        if (props.match.path === '/topicList/:id/:name') {
           Api.HomeApi.findByHotTopicIdList({
             page: page,
             per_page: 10,
-            topic_id:9
-          }).then(res=>{
-               setLoading(false)
+            topic_id: 9
+          }).then(res => {
+            setLoading(false)
             if (Api.isSuccess(res)) {
               setLoading(false)
               setPage(page + 1)
@@ -68,11 +68,11 @@ export const ArticleList = (props) => {
               setListData([...listData, ...res.data.List])
             }
           })
-        }else{
+        } else {
           Api.HomeApi.getArticleList({
             attention: 1,
             page: page,
-            per_page: 10
+            per_page: 50
           }).then(res => {
             setLoading(false)
             if (Api.isSuccess(res)) {
