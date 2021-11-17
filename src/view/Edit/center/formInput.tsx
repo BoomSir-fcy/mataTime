@@ -102,9 +102,6 @@ const FormInput = React.forwardRef((props, ref) => {
       return state;
     }
   }));
-
-  console.log(country);
-
   return (
     <FormBox>
       <Rows>
