@@ -18,6 +18,7 @@ declare namespace Api {
       location?: string;
       Location?: string;
       nft_image?: string;
+      NftImage?: string;
       label_list?: string[];
       post_num?: number;
     }

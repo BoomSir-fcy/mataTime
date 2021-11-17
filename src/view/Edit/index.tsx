@@ -8,7 +8,7 @@ import { useStore } from 'store';
 
 import { Api } from 'apis';
 
-// import NftAvatar from './center/nftavatar';
+import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
 
 import defaultImages from 'assets/images/default_me_background.jpg';
@@ -72,6 +72,7 @@ const Edit: React.FC = () => {
           }
         />
       </Background>
+      <NftAvatar />
       <FormInput ref={form} />
     </Box>
   );
