@@ -8,6 +8,7 @@ declare namespace Api {
       introduction: string;
       location: string;
       nft_image: string;
+      NftImage?: string;
       nft_id: string;
       background_image: string;
       email: string;

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box } from 'uikit';
@@ -9,6 +10,7 @@ import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 import { StakeNFT } from './components/StakeNFT';
+import { useFetchSupportNFT, useFetchNftList } from './hook';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
@@ -29,10 +31,13 @@ const LogoWarpper = styled(Box)`
 `;
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
+  useFetchSupportNFT()
+  useFetchNftList()
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
-  const { isSignup, signUpFail, isStakeNft } = loginReduce;
+  const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
   const [isDark] = useThemeManager();
+  const { account } = useWeb3React();
 
   const checkNetwork = async () => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
@@ -49,13 +54,15 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
     };
   }, []);
-
   return (
     <React.Fragment>
       <LoginContainer>
-        <Flex flex="1">
-          <img src={require('./images/logo_left_images.png').default} />
-        </Flex>
+        {
+          !isStakeNft && singUpStep === 1 && account ? <StakeNFT /> :
+            <Flex flex="1">
+              <img src={require('./images/logo_left_images.jpg').default} />
+            </Flex>
+        }
         <Content>
           <LogoWarpper>
             <Logo url="/" src={`${require(isDark ? './images/logo.svg' : './images/light_logo.svg').default}`} />
@@ -63,7 +70,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
           {isSignup ? <SignUp isSignup={signUpFail} isStakeNft={isStakeNft} /> : <LoginJoin />}
         </Content>
       </LoginContainer>
-      <StakeNFT />
       <Footer />
     </React.Fragment>
   );
