@@ -5,18 +5,18 @@ import { Box, Flex, Text, Button, Card } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
-import { storeAction } from 'store';
+import { storeAction, useStore } from 'store';
 import { toast } from 'react-toastify';
-import { useApproveNftsFarm, useApproveOneNfts, useNftStakeFarms, useCancelNftStake } from 'view/Login/hook';
+import { useNftStakeFarms, useCancelNftStake } from 'view/Login/hook';
 
 
 export const NftButton: React.FC<{ item: any }> = ({ item }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
-  // const { onApprove } = useApproveNftsFarm(token)
-  // const { onApprove: Approve } = useApproveOneNfts(token, item?.properties?.token_id)
   const { onStake: onNftsStake } = useNftStakeFarms()
   const { onStake: onCancelNftStake } = useCancelNftStake()
+  const isStakeNft = useStore(p => p.loginReducer.isStakeNft);
+  const userInfo: any = useStore(p => p.loginReducer.userInfo);
   const [pendingTx, setPendingTx] = useState(false)
   const dispatch = useDispatch()
 
@@ -38,10 +38,14 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
       if (item.isApprovedMarket) {
         setPendingTx(true)
         try {
-          if (item.isStakeMarket) {
+          if (isStakeNft) {
             // 替换质押
-            await handleStakeOrUnstake(0, item.properties.token, item.properties.token_id)
-            toast.success('更换成功');
+            if (userInfo.nft_id === item.properties.token_id) {
+              toast.error('不能选择当前质押头像');
+            } else {
+              await handleStakeOrUnstake(0, item.properties.token, item.properties.token_id)
+              toast.success('更换成功');
+            }
           } else {
             // 质押
             await handleStakeOrUnstake(1, item.properties.token, item.properties.token_id)
@@ -58,6 +62,6 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
         toast.error('请先选择头像');
       }
 
-    }} >{item.isStakeMarket ? '替换质押' : '质押'}</Button>
+    }} >{isStakeNft ? '替换质押' : '质押'}</Button>
   );
 }

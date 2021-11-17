@@ -25,7 +25,7 @@ export type Login = typeof initialState;
 export const fetchUserInfoAsync = createAsyncThunk('fetch/getUserInfo', async () => {
   let response = await Api.UserApi.getUserInfo();
   // 查询Nft头像地址
-  const NftImg = await getUrl(response.data.NftImage)
+  const NftImg = await getUrl(response.data.nft_image)
   response.data.NftImage = response.data.nft_image = NftImg.image
   window.localStorage.setItem(storage.UserInfo, JSON.stringify(response.data));
   return response;

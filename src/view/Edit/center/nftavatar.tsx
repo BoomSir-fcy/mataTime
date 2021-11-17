@@ -11,6 +11,7 @@ const Nft = styled(Box)`
   margin-top:19px;
   padding:27px 26px 38px 34px;
   border-radius: 10px;
+  max-width: 670px;
 `
 const Title = styled(Text)`
   color:${({ theme }) => theme.colors.text};

@@ -82,19 +82,6 @@ export const StakeNFT: React.FC = () => {
       {isAllApprove.map(item => (
         <NftAvatar key={item.address} NftInfo={item} />
       ))}
-      {/* {!isAllApprove && NftAddrList.map(item => (
-        <StakeAllBtn key={item} token={item} account={account} />
-      ))} */}
-      {/* <Flex>
-        {
-          NftList.map((item) => (
-            <NftCard key={item.properties.id}>
-              <NftImg src={item.image} onClick={() => setactiveNft(item.properties.token_id)} />
-              {activeNft === item.properties.token_id && item.isApprovedMarket && <NftButton item={item} token={item.properties.token} />}
-            </NftCard>
-          ))
-        }
-      </Flex> */}
     </>
   );
 };

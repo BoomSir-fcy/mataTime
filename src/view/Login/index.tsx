@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,16 +9,16 @@ import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
-import { useFetchSupportNFT, useFetchNftList } from './hook';
+import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
 import { StakeNFT } from 'components/NftList';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
   justify-content: center;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   ${mediaQueries.xxl} {
-    padding-left: 160px;
-    padding-right: 160px;
+    /* padding-left: 160px; */
+    /* padding-right: 160px; */
   }
 `;
 const Content = styled(Card)`
@@ -42,7 +42,6 @@ const Nft = styled(Box)`
 const LeftBox = styled.div`
 ${mediaQueries.sm} {
   margin-right: 20px;
-
   }
 margin-right: 40px;
 `
@@ -56,13 +55,23 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
+  // 自己的Nft列表
+  const NftList = useStore(p => p.loginReducer.nftList);
+
+  const getStakeType = async (account) => {
+    const nftStake = await FetchNftStakeType(account)
+    if (nftStake[0].token_id) {
+      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+      dispatch(storeAction.changeSignUp({ isSignup: true }));
+    }
+  }
 
   const checkNetwork = async () => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
     dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     checkNetwork();
     window.ethereum.on('chainChanged', (chainId: string) => {
       dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
@@ -72,6 +81,16 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
     };
   }, []);
+  useEffect(() => {
+    if (!NftList.length) {
+      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+    } else {
+      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    }
+  }, [NftList])
+  useEffect(() => {
+    Boolean(account) && getStakeType(account)
+  }, [account])
   return (
     <React.Fragment>
       <LoginContainer>
@@ -83,7 +102,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
                 <StakeNFT />
               </Nft>
               :
-              <Flex flex="1">
+              <Flex>
                 <img src={require('./images/logo_left_images.jpg').default} />
               </Flex>
           }
