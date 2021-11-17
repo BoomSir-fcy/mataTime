@@ -30,7 +30,10 @@ const Collect = props => {
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
       }
-      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+      if (
+        item.id === newItem.id &&
+        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
+      ) {
         // 屏蔽、删除
       } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
         // 置顶
@@ -52,59 +55,57 @@ const Collect = props => {
           <Text fontSize="14px">{total}条</Text>
         </Flex>
       </CrumbsHead>
-      <Card>
-        <List
-          marginTop={14}
-          loading={page <= totalPage}
-          renderList={() => {
-            if (loading || page > totalPage) return false;
-            setLoading(true);
-            Api.MeApi.collectList(page).then(res => {
-              setLoading(false);
-              if (res.msg === 'success') {
-                setPage(page + 1);
-                setTotalPage(res.data.total_num);
-                setTotal(res.data.total_num);
-                setListData([...listData, ...(res.data?.list || [])]);
-              }
-            });
-          }}
-        >
-          {listData.map((item, index) => {
-            return (
-              <MeItemWrapper key={index}>
-                <MentionItem
-                  {...props}
-                  itemData={{
+      <List
+        marginTop={14}
+        loading={page <= totalPage}
+        renderList={() => {
+          if (loading || page > totalPage) return false;
+          setLoading(true);
+          Api.MeApi.collectList(page).then(res => {
+            setLoading(false);
+            if (res.msg === 'success') {
+              setPage(page + 1);
+              setTotalPage(res.data.total_num);
+              setTotal(res.data.total_num);
+              setListData([...listData, ...(res.data?.list || [])]);
+            }
+          });
+        }}
+      >
+        {listData.map((item, index) => {
+          return (
+            <MeItemWrapper key={index}>
+              <MentionItem
+                {...props}
+                itemData={{
+                  ...item,
+                  post_id: item.id,
+                  post: {
                     ...item,
-                    post_id: item.id,
-                    post: {
-                      ...item,
-                      post_id: item.id
-                    }
-                  }}
-                  callback={(item: any, type: MoreOperatorEnum) => {
-                    updateList(item, type);
-                  }}
-                ></MentionItem>
-                <MentionOperator
-                  itemData={{
+                    post_id: item.id
+                  }
+                }}
+                callback={(item: any, type: MoreOperatorEnum) => {
+                  updateList(item, type);
+                }}
+              ></MentionItem>
+              <MentionOperator
+                itemData={{
+                  ...item,
+                  post_id: item.id,
+                  post: {
                     ...item,
-                    post_id: item.id,
-                    post: {
-                      ...item,
-                      post_id: item.id
-                    }
-                  }}
-                  callback={(item: any) => {
-                    updateList(item);
-                  }}
-                />
-              </MeItemWrapper>
-            );
-          })}
-        </List>
-      </Card>
+                    post_id: item.id
+                  }
+                }}
+                callback={(item: any) => {
+                  updateList(item);
+                }}
+              />
+            </MeItemWrapper>
+          );
+        })}
+      </List>
     </Box>
   );
 };
