@@ -25,7 +25,6 @@ type Iprops = {
   type: any
   initValue?: any
   sendArticle: any
-  initValue?: any
   cancelSendArticle?: any
 }
 
