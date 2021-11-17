@@ -94,7 +94,7 @@ const FormInput = React.forwardRef((props, ref) => {
     introduction: profile.introduction,
     background_image: profile.background_image,
     location: profile.location || (country.length > 0 && country[0]?.value),
-    default_location: country.find(({ value }) => value === profile.location).id || 1
+    default_location: country.find(({ value }) => value === profile.location)?.id || 1
   });
 
   useImperativeHandle(ref, () => ({
