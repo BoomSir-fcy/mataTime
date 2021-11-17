@@ -19,7 +19,7 @@ type IProps = {
 };
 
 const MentionItem: React.FC<IProps> = props => {
-  const { children, size = 'nomal', itemData = {}, callback = () => {} } = props;
+  const { children, size = 'nomal', itemData = {}, callback = () => { } } = props;
   const mentionRef: any = useRef();
 
   const [position, setPosition] = useState([-999, -999]);
@@ -86,7 +86,7 @@ const MentionItem: React.FC<IProps> = props => {
         }}
       >
         <ContentParsing content={itemData.content}></ContentParsing>
-       
+
         <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}
@@ -111,11 +111,11 @@ type UserProps = {
   callback?: Function;
 };
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => {} }) => {
-  const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
+  const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   useEffect(() => {
     init();
   }, []);
