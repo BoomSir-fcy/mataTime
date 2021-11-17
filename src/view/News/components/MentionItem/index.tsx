@@ -4,8 +4,9 @@ import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD,ContentParsing } from 'components';
+import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD, ContentParsing } from 'components';
 import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
+import { useTranslation } from 'contexts/Localization'
 
 import { Api } from 'apis';
 
@@ -18,7 +19,7 @@ type IProps = {
 };
 
 const MentionItem: React.FC<IProps> = props => {
-  const { children, size = 'nomal', itemData = {}, callback = () => { } } = props;
+  const { children, size = 'nomal', itemData = {}, callback = () => {} } = props;
   const mentionRef: any = useRef();
 
   const [position, setPosition] = useState([-999, -999]);
@@ -85,6 +86,7 @@ const MentionItem: React.FC<IProps> = props => {
         }}
       >
         <ContentParsing content={itemData.content}></ContentParsing>
+       
         <ImgList list={itemData.image_list}></ImgList>
       </div>
       {children}
@@ -109,11 +111,11 @@ type UserProps = {
   callback?: Function;
 };
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
+export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => {} }) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
-
+  const {t} = useTranslation()
   useEffect(() => {
     init();
   }, []);
@@ -146,8 +148,8 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
           <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
           <div className="user-info">
             <div>
-              <div className="user-name">{itemData.user_name}</div>
-              <div className="time">{itemData.add_time_desc}</div>
+              <div className="user-name">{itemData.user_name || itemData.nick_name}</div>
+              <div className="time">{itemData.add_time_desc || itemData.post_time_desc}</div>
             </div>
             {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
@@ -163,7 +165,7 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
                   onAttentionFocusRequest(itemData.user_id);
                 }}
               >
-                +关注
+                +{t('followText')}
               </FollowBtn>
             ) : null}
 

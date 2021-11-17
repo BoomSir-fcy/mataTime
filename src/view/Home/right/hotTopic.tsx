@@ -55,7 +55,7 @@ export const HotTopic: React.FC = (props:any) => {
     })
   }
   const goDetils=(item)=>{
-    props.history.push('/topicList/' + item.tid)
+    props.history.push('/topicList/' + item.tid+'/'+item.topic_name)
   }
   return (
     <HotTopicBox>

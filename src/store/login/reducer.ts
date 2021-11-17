@@ -10,9 +10,7 @@ const initialState = {
   signUpFail: false,
   isStakeNft: false,
   singUpStep: 1,
-  userInfo: {
-    UID: 0
-  },
+  userInfo: {} as Api.User.userInfoParams,
   nft: {
     nftID: 0,
     nftUrl: ''
@@ -33,9 +31,9 @@ export const fetchUserInfoAsync = createAsyncThunk('fetch/getUserInfo', async ()
   return response;
 });
 // Async thunks
-export const fetchUserNftInfoAsync = createAsyncThunk<any, string>('fetch/getNftInfo', async (account) => {
-  const info = await FetchNftsList(account)
-  return info
+export const fetchUserNftInfoAsync = createAsyncThunk<any, string>('fetch/getNftInfo', async account => {
+  const info = await FetchNftsList(account);
+  return info;
 });
 
 export const login = createSlice({

@@ -42,7 +42,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   //  初始化
   const init = () => {
     // UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
-    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(true)
+    UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
   }
 
   // 收藏
@@ -112,67 +112,69 @@ export const MorePopup = React.memo((props: Iprops) => {
   }
 
   return (
-    <PopupWrapper onMouseOver={(e: any) => {
-      e.nativeEvent.stopImmediatePropagation() //阻止冒泡
-      setVisible(true)
-    }} onMouseLeave={(e: any) => {
-      e.nativeEvent.stopImmediatePropagation() //阻止冒泡
-      setVisible(false)
-    }} onClick={(e: any) => {
-      e.nativeEvent.stopImmediatePropagation() //阻止冒泡
-      setVisible(false)
-    }}>
-      {children}
-      {
-        visible ? (
-          <PopupContentWrapper onMouseLeave={(e: any) => {
-            e.nativeEvent.stopImmediatePropagation() //阻止冒泡
-            setVisible(false)
-          }}>
-            {
-              isOwn ? (
-                <>
-                  <p onClick={() => {
-                    setVisible(false)
-                    setEditShow(true)
-                  }}>{t('moreEdit')}</p>
-                  <p onClick={() => {
-                    onPostDelRequest(data.post.post_id)
-                  }}>{t('moreDelete')}</p>
-                  <p onClick={() => {
-                    onTopPostRequest(data.post.post_id)
-                  }}>{t('moreTop')}</p>
-                </>
-              ) : null
-            }
+    <>
+      <PopupWrapper onMouseOver={(e: any) => {
+        e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+        setVisible(true)
+      }} onMouseLeave={(e: any) => {
+        e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+        setVisible(false)
+      }} onClick={(e: any) => {
+        e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+        setVisible(false)
+      }}>
+        {children}
+        {
+          visible ? (
+            <PopupContentWrapper onMouseLeave={(e: any) => {
+              e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+              setVisible(false)
+            }}>
+              {
+                isOwn ? (
+                  <>
+                    {/* <p onClick={() => {
+                      setVisible(false)
+                      setEditShow(true)
+                    }}>{t('moreEdit')}</p> */}
+                    <p onClick={() => {
+                      onPostDelRequest(data.post.post_id)
+                    }}>{t('moreDelete')}</p>
+                    <p onClick={() => {
+                      onTopPostRequest(data.post.post_id)
+                    }}>{t('moreTop')}</p>
+                  </>
+                ) : null
+              }
 
-            <p onClick={() => {
-              onShareTwitterClick()
-            }}>{t('moreShareTwitter')}</p>
-            <p onClick={() => {
-              copyContent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id || '')
-            }}>{t('moreCopyAddress')}</p>
-            <p onClick={() => {
-              data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
-            }}>{data.post.is_fav === 1 ? t('moreCancelCollection') : t('moreCollection')}</p>
-            {
-              !isOwn ? (
-                <>
-                  <p onClick={() => {
-                    setVisible(false)
-                    setReportShow(true)
-                  }}>{t('moreReport')}</p>
-                  <p onClick={() => {
-                    setVisible(false)
-                    setShieldShow(true)
-                  }}>{t('moreShield')}</p>
-                </>
-              ) : null
-            }
+              <p onClick={() => {
+                onShareTwitterClick()
+              }}>{t('moreShareTwitter')}</p>
+              <p onClick={() => {
+                copyContent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id || '')
+              }}>{t('moreCopyAddress')}</p>
+              <p onClick={() => {
+                data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
+              }}>{data.post.is_fav === 1 ? t('moreCancelCollection') : t('moreCollection')}</p>
+              {
+                !isOwn ? (
+                  <>
+                    <p onClick={() => {
+                      setVisible(false)
+                      setReportShow(true)
+                    }}>{t('moreReport')}</p>
+                    <p onClick={() => {
+                      setVisible(false)
+                      setShieldShow(true)
+                    }}>{t('moreShield')}</p>
+                  </>
+                ) : null
+              }
 
-          </PopupContentWrapper>
-        ) : null
-      }
+            </PopupContentWrapper>
+          ) : null
+        }
+      </PopupWrapper>
       {/* 举报 */}
       <ReportModal
         show={reportShow}
@@ -201,15 +203,14 @@ export const MorePopup = React.memo((props: Iprops) => {
           setVisible(false)
         }}
       ></ShieldModal>
-
       {/* 编辑twitter */}
       <EditTwitterModal
         show={editShow}
-        content={[]}
+        content={data.post.content}
         onClose={() => {
           setEditShow(false)
         }}
       ></EditTwitterModal>
-    </PopupWrapper>
+    </>
   )
 });

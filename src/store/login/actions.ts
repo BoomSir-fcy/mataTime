@@ -1,9 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Address } from 'cluster';
 
-interface profile {
-  UID: number;
-  uuid?: number;
+interface profile extends Api.User.userInfoParams {
   token: string;
 }
 

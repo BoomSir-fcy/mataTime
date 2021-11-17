@@ -95,14 +95,7 @@ const Content = styled(Box)`
 const Profile: React.FC<any> = React.memo(props => {
   const [state, setState] = useImmer({
     profile: {
-      UID: 0,
-      address: '',
-      nick_name: '',
-      fans_num: 0,
-      attention_num: 0,
-      email: '',
-      introduction: '',
-      location: '',
+      post_num: 0,
       label_list: []
     } as Api.User.userInfoParams,
     loading: false,
@@ -191,7 +184,7 @@ const Profile: React.FC<any> = React.memo(props => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text">{profile.Introduction}</Text>
+              <Text className="text">{profile.introduction}</Text>
               {/* <Text className="text">
                 Web:{' '}
                 <Text as={Link} to="/">

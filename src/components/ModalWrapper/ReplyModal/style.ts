@@ -29,14 +29,13 @@ export const ModalTitleWrapper = styled(Box)`
 
 `
 export const ReportModalWrapper = styled(Box)`
-  width: 800px;
+  width: 668px;
   background: #191F2D;
   border-radius: 10px;
   position: fixed;
   left: 50%;
-  top: 50%;
-  margin-left: -400px;
-  margin-top: -150px;
+  top: 100px;
+  margin-left: -334px;
   box-sizing: border-box;
 `
 
@@ -44,18 +43,43 @@ export const ReportContentWrapper = styled(Box)`
   margin-top: 5px;
   padding: 0 20px;
   box-sizing: border-box;
-  p{
-    font-size: 16px;
-    font-family: Alibaba PuHuiTi;
-    font-weight: 400;
-    color: #FFFFFF;
-    line-height: 54px;
+`
+
+export const ReplyTargetWrapper = styled(Box)`
+  position: relative;
+  &::before{
+    left: 27px;
+    top: 75px;
+    width: 5px;
+    height: calc(100% - 75px);
+    background: #4D535F;
+    border-radius: 3px;
+    position: absolute;
+    content: '';
+    display: block;
+  }
+`
+
+export const ReplyConentWrapper = styled(Box)`
+  display: flex;
+  .left{
+    width: 60px;
     box-sizing: border-box;
-    padding: 0 12px;
-    border-bottom: 1px solid #4D535F;
-    cursor: pointer;
-    &:last-child{
-      border: 0;
+    padding-top: 15px;
+    padding-left: -2px;
+    .img-box{
+      width: 60px;
+      height: 60px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
+  }
+  .right{
+    flex: 1;
   }
 `

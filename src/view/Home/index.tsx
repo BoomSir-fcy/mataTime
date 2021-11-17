@@ -71,11 +71,12 @@ const Home: React.FC = (props:any) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
-  const sendArticle = (content: string, resetInput: () => void, image_urls) => {
+  const sendArticle = (content: string, resetInput: () => void, image_urls,remind_user) => {
     if (!content) return false;
     Api.HomeApi.createArticle({
       content: content,
-      image_urls: image_urls
+      image_urls: image_urls,
+      remind_user
     }).then(res => {
       if (res.code === 1) {
         setRefresh(!refresh);
@@ -89,6 +90,7 @@ const Home: React.FC = (props:any) => {
     });
   };
   const  {match} = props
+  console.log(props);
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -97,7 +99,7 @@ const Home: React.FC = (props:any) => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header {...props} back={ match.path==='/topicList/:id'} align={ match.path==='/topicList/:id'?'center':null} title={t('homeHeaderTitle')}></Header>
+          <Header {...props} back={ match.path==='/topicList/:id/:name'} align={ match.path==='/topicList/:id/:name'?'center':null} title={match.path==='/topicList/:id/:name'?'#'+match.params.name+'#':t('homeHeaderTitle')}></Header>
           {
             match.path==='/'?
             <>
