@@ -116,7 +116,7 @@ export const SignUp: React.FC<{
     if (Boolean(res)) {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
     }
-  }, []);
+  }, [account]);
 
   useEffect(() => {
     Boolean(account) && getStakeType(account)

@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { Address } from 'cluster';
 
 interface profile extends Api.User.userInfoParams {
   token: string;
@@ -10,3 +11,4 @@ export const changeSignUpStep = createAction<{ singUpStep: number }>('login/chan
 export const changeUpdateProfile = createAction<profile>('login/changeUpdateProfile');
 export const setUserNft = createAction<Api.SignIn.nftParams>('login/setUserNft');
 export const setUserNftStake = createAction<{ isStakeNft: boolean }>('login/setUserNftList');
+export const setNftAddr = createAction<any[]>('login/setNftAddr');

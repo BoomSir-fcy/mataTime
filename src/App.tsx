@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
@@ -17,9 +17,7 @@ import { PrivateRoute } from './PrivateRoute';
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
 
-import config from '../package.json';
-
-console.log(config.version);
+import history from './routerHistory';
 
 moment.locale('zh-cn');
 
@@ -65,30 +63,28 @@ function App() {
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
-          <Router>
-            <Switch>
-              <Route path="/" exact render={props => <Home {...props} />} />
-              <Route path="/topicList/:id/:name" exact render={props => <Home {...props} />} />
-              {process.env.NODE_ENV === 'development' && (
-                <Route path="/test" exact>
-                  <Test />
-                </Route>
+          <Router history={history}>
+            <Route path="/" exact render={props => <Home {...props} />} />
+            <Route path="/topicList/:id/:name" exact render={props => <Home {...props} />} />
+            {process.env.NODE_ENV === 'development' && (
+              <Route path="/test" exact>
+                <Test />
+              </Route>
+            )}
+            <Route
+              path="/articleDetils/:id"
+              exact
+              render={props => (
+                <>
+                  <Header {...props} />
+                  <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
+                </>
               )}
-              <Route
-                path="/articleDetils/:id"
-                exact
-                render={props => (
-                  <>
-                    <Header {...props} />
-                    <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
-                  </>
-                )}
-              ></Route>
-              <Route path="/news" render={props => <CommonLayout {...props}></CommonLayout>}></Route>
-              <Route path="/login" component={Login} />
-              <PrivateRoute path="/me" component={Me} />
-              <PrivateRoute path="/set" component={Set} />
-            </Switch>
+            ></Route>
+            <Route path="/news" render={props => <CommonLayout {...props}></CommonLayout>}></Route>
+            <Route path="/login" component={Login} />
+            <PrivateRoute path="/me" component={Me} />
+            <PrivateRoute path="/set" component={Set} />
           </Router>
         </React.Suspense>
       </Container>

@@ -26,7 +26,7 @@ type Iprops = {
 
 export const MorePopup = React.memo((props: Iprops) => {
   const { t } = useTranslation()
-  const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
+  const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
 
   const { children, data, callback = () => { } } = props
   const [visible, setVisible] = useState<boolean>(false);

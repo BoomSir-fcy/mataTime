@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { About, Avatar, Editor, ModalWrapper} from 'components';
 import { withRouter } from 'react-router-dom';
-import { useTranslation } from 'contexts/Localization'
+import { useTranslation } from 'contexts/Localization';
 import { ToastContainer, toast } from 'react-toastify';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
@@ -35,7 +35,7 @@ const Home: React.FC = (props:any) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
-  const sendArticle = (content: string, resetInput: () => void, image_urls,remind_user) => {
+  const sendArticle = (content: string, resetInput: () => void, image_urls, remind_user) => {
     if (!content) return false;
     Api.HomeApi.createArticle({
       content: content,
@@ -53,8 +53,7 @@ const Home: React.FC = (props:any) => {
       }
     });
   };
-  const  {match} = props
-  console.log(props);
+  const { match } = props;
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -63,15 +62,18 @@ const Home: React.FC = (props:any) => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header {...props} back={ match.path==='/topicList/:id/:name'} align={ match.path==='/topicList/:id/:name'?'center':null} title={match.path==='/topicList/:id/:name'?'#'+match.params.name+'#':t('homeHeaderTitle')}></Header>
-          {
-            match.path==='/'?
+          <Header
+            {...props}
+            back={match.path === '/topicList/:id/:name'}
+            align={match.path === '/topicList/:id/:name' ? 'center' : null}
+            title={match.path === '/topicList/:id/:name' ? '#' + match.params.name + '#' : t('homeHeaderTitle')}
+          ></Header>
+          {match.path === '/' ? (
             <>
-            <Editor type="post" sendArticle={sendArticle}></Editor>
-            <Tabs></Tabs>
+              <Editor type="post" sendArticle={sendArticle}></Editor>
+              <Tabs></Tabs>
             </>
-            :null
-          }
+          ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} {...props}></ArticleList>
         </CenterCard>

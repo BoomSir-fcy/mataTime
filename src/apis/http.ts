@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { toast } from 'react-toastify';
-import { Dispatch } from 'store';
+import history from '../routerHistory';
 
 const baseURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
 
@@ -30,11 +29,9 @@ export class Http {
 
     try {
       response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
-      // response.data.code === 0 && toast.error("Token expiration");
       return response.data;
-    } catch (e) {
-      console.log(e);
-      // Dispatch.toast.show({ type: 'error', text: 'error' });
+    } catch (e: any) {
+      if (e?.status === 401) return history.push('/login');
     }
   }
 

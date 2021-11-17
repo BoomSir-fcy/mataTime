@@ -10,6 +10,7 @@ import random from 'lodash/random';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { FetchNftStakeType } from './hook';
 import { getNftInfo } from 'apis/DsgRequest';
+import { useWeb3React } from '@web3-react/core';
 
 enum LoginNetwork {
   BSC = 1,
@@ -27,6 +28,7 @@ const networks = {
 export function useSignIn() {
   const dispatch = useDispatch();
   const { chainId } = useActiveWeb3React();
+  const { account } = useWeb3React();
   // 验证地址是否注册
   const siginInVerify = useCallback(async (address: string) => {
     try {
@@ -40,7 +42,7 @@ export function useSignIn() {
     }
   }, []);
 
-  const getNftUrl = async (address?: string) => {
+  const getNftUrl = async (address: string) => {
     try {
       const nftStake = await FetchNftStakeType(address)
       try {
