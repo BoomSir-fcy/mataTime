@@ -2,7 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
-import { Crumbs, Avatar, Certification, List, MoreOperatorEnum } from 'components';
+import { useLocation } from 'hooks';
+import {
+  Crumbs,
+  Avatar,
+  Certification,
+  List,
+  MoreOperatorEnum
+} from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 
 import { shortenAddress } from 'utils/contract';
@@ -93,6 +100,7 @@ const Content = styled(Box)`
 `;
 
 const Profile: React.FC<any> = React.memo(props => {
+  useLocation();
   const [state, setState] = useImmer({
     profile: {
       post_num: 0,
@@ -111,7 +119,10 @@ const Profile: React.FC<any> = React.memo(props => {
       setState(p => {
         p.loading = true;
       });
-      const [profile, tweet] = await Promise.all([Api.MeApi.getProfile(uid), Api.MeApi.getProfileMsg(page, uid)]);
+      const [profile, tweet] = await Promise.all([
+        Api.MeApi.getProfile(uid),
+        Api.MeApi.getProfileMsg(page, uid)
+      ]);
       setState(p => {
         p.profile = profile.data;
         p.list = tweet.data.list;
@@ -135,7 +146,10 @@ const Profile: React.FC<any> = React.memo(props => {
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
       }
-      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+      if (
+        item.id === newItem.id &&
+        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
+      ) {
         // 屏蔽、删除
       } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
         // 置顶
@@ -167,13 +181,14 @@ const Profile: React.FC<any> = React.memo(props => {
                 <Flex mb="5px">
                   <Flex>
                     <Certification />
-                    <Text className="text">@{shortenAddress(profile.address)}</Text>
+                    <Text className="text">
+                      @{shortenAddress(profile.address)}
+                    </Text>
                   </Flex>
                   <Flex className="marginLeft">
                     <Text className="text">{profile.location}</Text>
                   </Flex>
                 </Flex>
-                <Text className="text">{profile.post_num}条动态</Text>
               </Desc>
             </Flex>
             {!uid && (
@@ -201,7 +216,7 @@ const Profile: React.FC<any> = React.memo(props => {
                 关注 <Text className="value">{profile.attention_num}</Text>
               </Text>
               <Text className="text">
-                动态 <Text className="value">{profile.fans_num}</Text>
+                动态 <Text className="value">{profile.post_num}</Text>
               </Text>
             </Flex>
             <Flex className="topic">

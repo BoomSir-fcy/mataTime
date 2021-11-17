@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text } from 'uikit';
+import { Box, Flex, Text, Card } from 'uikit';
 import { List } from 'components';
 
 import { CrumbsHead } from './components';
@@ -30,7 +30,10 @@ const Collect = props => {
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
       }
-      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+      if (
+        item.id === newItem.id &&
+        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
+      ) {
         // 屏蔽、删除
       } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
         // 置顶
@@ -64,7 +67,7 @@ const Collect = props => {
               setPage(page + 1);
               setTotalPage(res.data.total_num);
               setTotal(res.data.total_num);
-              setListData([...listData, ...res.data.list]);
+              setListData([...listData, ...(res.data?.list || [])]);
             }
           });
         }}
