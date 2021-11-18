@@ -109,6 +109,7 @@ export function useLogin() {
         };
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
+        // 1注册 2登录
         const response = operationType === 1 ? await Api.SignInApi.signUp(params) : await Api.SignInApi.signIn(params);
         if (Api.isSuccess(response)) {
           const { token } = response.data;
