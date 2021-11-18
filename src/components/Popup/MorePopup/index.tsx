@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReportModal, ShieldModal, EditTwitterModal } from 'components';
+import { ReportModal, EditTwitterModal, CommonInquiryModal } from 'components';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'contexts/Localization'
@@ -35,9 +35,11 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { children, data, callback = () => { } } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
-  const [shieldShow, setShieldShow] = useState<boolean>(false);
   const [editShow, setEditShow] = useState<boolean>(false);
   const [isOwn, setIsOwn] = useState<boolean>(false);
+
+  const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
+  const [inqueryType, setInqueryType] = useState<string>('shield');
 
   useEffect(() => {
     init()
@@ -89,6 +91,18 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onShareTwitterClick = () => {
     window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('share')).concat(' ').concat(encodeURIComponent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id)))
     setVisible(false)
+  }
+
+  // 屏蔽
+  const onShieldRequest = async (pid: number) => {
+    const res = await Api.AttentionApi.addShield(pid);
+    if (Api.isSuccess(res)) {
+      callback(data, MoreOperatorEnum.SHIELD)
+      toast.success(t('shieldModalShieldSuccess'))
+    } else {
+      toast.error(res.data || t('shieldModalShieldError'))
+
+    }
   }
 
   // 置顶
@@ -154,10 +168,17 @@ export const MorePopup = React.memo((props: Iprops) => {
                       setEditShow(true)
                     }}>{t('moreEdit')}</p> */}
                     <p onClick={() => {
-                      onPostDelRequest(data.post.post_id)
+                      setInqueryType('delete')
+                      setCommonInqueryShow(true)
                     }}>{t('moreDelete')}</p>
                     <p onClick={() => {
-                      data.post.is_top === 1 ? onCancelTopPostRequest(data.post.post_id) : onTopPostRequest(data.post.post_id)
+                      if (data.post.is_top === 1) {
+                        setInqueryType('cancelTopping')
+                        setCommonInqueryShow(true)
+                      } else {
+                        setInqueryType('topping')
+                        setCommonInqueryShow(true)
+                      }
                     }}>{data.post.is_top === 1 ? t('moreCancelTop') : t('moreTop')}</p>
                   </>
                 ) : null
@@ -181,8 +202,8 @@ export const MorePopup = React.memo((props: Iprops) => {
                       setReportShow(true)
                     }}>{t('moreReport')}</p>
                     <p onClick={() => {
-                      setVisible(false)
-                      setShieldShow(true)
+                      setInqueryType('shield')
+                      setCommonInqueryShow(true)
                     }}>{t('moreShield')}</p>
                   </>
                 ) : null
@@ -207,7 +228,7 @@ export const MorePopup = React.memo((props: Iprops) => {
         }}
       ></ReportModal>
       {/* 屏蔽推特 */}
-      <ShieldModal
+      {/* <ShieldModal
         show={shieldShow}
         pid={data.post.post_id}
         onClose={() => {
@@ -219,7 +240,35 @@ export const MorePopup = React.memo((props: Iprops) => {
           callback(data, MoreOperatorEnum.SHIELD)
           setVisible(false)
         }}
-      ></ShieldModal>
+      ></ShieldModal> */}
+
+      {/* 统一询问框 */}
+      <CommonInquiryModal
+        show={commonInqueryShow}
+        type={inqueryType}
+        onClose={() => {
+          setCommonInqueryShow(false)
+          setVisible(false)
+        }}
+        onQuery={() => {
+          if (inqueryType === 'shield') {
+            onShieldRequest(data.post.post_id)
+          }
+          if (inqueryType === 'topping') {
+            onTopPostRequest(data.post.post_id)
+          }
+          if (inqueryType === 'cancelTopping') {
+            onCancelTopPostRequest(data.post.post_id)
+          }
+          if (inqueryType === 'delete') {
+            onPostDelRequest(data.post.post_id)
+          }
+          setCommonInqueryShow(false)
+          setVisible(false)
+        }}
+      ></CommonInquiryModal>
+
+
       {/* 编辑twitter */}
       <EditTwitterModal
         show={editShow}

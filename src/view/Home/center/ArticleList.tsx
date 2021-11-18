@@ -78,7 +78,11 @@ export const ArticleList = (props) => {
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     console.log(type)
 
-    if (type === MoreOperatorEnum.FOLLOW || type === MoreOperatorEnum.CANCEL_FOLLOW) {
+    if (type === MoreOperatorEnum.FOLLOW ||
+      type === MoreOperatorEnum.CANCEL_FOLLOW ||
+      type === MoreOperatorEnum.SETTOP ||
+      type === MoreOperatorEnum.CANCEL_SETTOP
+    ) {
       setPage(1)
       getList(1)
       return
@@ -92,9 +96,6 @@ export const ArticleList = (props) => {
       }
       if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
         // 屏蔽、删除
-      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
-        // 置顶
-        // arr.unshift(obj)
       } else {
         arr.push(obj)
       }
