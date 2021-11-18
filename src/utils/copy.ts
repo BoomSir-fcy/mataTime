@@ -5,8 +5,8 @@ export const copyContent = (content: string) => {
   oInput.value = content;
   document.body.appendChild(oInput);
   oInput.select(); // 选择对象
-  document.execCommand("Copy"); // 执行浏览器复制命令
+  document.execCommand('Copy'); // 执行浏览器复制命令
   oInput.className = 'oInput';
   oInput.style.display = 'none';
   toast.success('复制成功！');
-}
+};

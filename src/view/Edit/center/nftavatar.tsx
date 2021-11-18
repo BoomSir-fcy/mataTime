@@ -11,7 +11,6 @@ const Nft = styled(Box)`
   margin-top:19px;
   padding:27px 26px 38px 34px;
   border-radius: 10px;
-  max-width: 670px;
 `
 const Title = styled(Text)`
   color:${({ theme }) => theme.colors.text};
@@ -71,29 +70,16 @@ const NftAvatar: React.FC = () => {
       </Flex>
       <div>
         <Rows>
-          <Avatar src={userInfo.NftImage} scale="ld" style={{ marginRight: '18px' }} />
+          <Avatar src={userInfo.nft_image} scale="ld" style={{ marginRight: '18px' }} />
           <Column>
-            <UserName>{userInfo.NickName}</UserName>
-            <Text color={'textTips'}>#{userInfo.NftID}</Text>
+            <UserName>{userInfo.nick_name}</UserName>
+            <Text color={'textTips'}>#{userInfo.nft_id}</Text>
           </Column>
         </Rows>
         < StakeNFT />
         {/* <Authorize>
             <Button>授权获取</Button>
           </Authorize> */}
-        {/* <GetAuthorizeBox>
-          <Point style={{ textAlign: 'center' }}>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
-          <GetAuthorize>
-            {
-              NftList.map(item => (
-                <Column>
-                  <Avatar src={item.image} scale="ld" />
-                  <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
-                </Column>
-              ))
-            }
-          </GetAuthorize>
-        </GetAuthorizeBox> */}
       </div>
     </Nft>
   )

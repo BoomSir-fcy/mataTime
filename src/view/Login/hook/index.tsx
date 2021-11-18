@@ -13,7 +13,7 @@ import { getNftsList, getNftInfo } from 'apis/DsgRequest';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
-import { storeAction } from 'store';
+import { storeAction, useStore } from 'store';
 
 // 获取nft头像授权信息
 export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
@@ -53,17 +53,17 @@ export const FetchNftsList = async (account) => {
     return list
   }
   // 获取质押信息
-  const GetStakeInfo = async (list) => {
-    const nftStake = await FetchNftStakeType(account)
-    if (nftStake[0].token_id) {
-      let result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
-      result.isStakeMarket = true
-      let AddStakeNftList = list
-      AddStakeNftList.push(result)
-      return AddStakeNftList
-    }
-    return list
-  }
+  // const GetStakeInfo = async (list) => {
+  //   const nftStake = await FetchNftStakeType(account)
+  //   // if (nftStake[0].token_id) {
+  //   //   let result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
+  //   //   result.isStakeMarket = true
+  //   //   let AddStakeNftList = list
+  //   //   AddStakeNftList.push(result)
+  //   //   return AddStakeNftList
+  //   // }
+  //   return list
+  // }
 
   // 获取授权信息
   const GetApprovalInfo = async (list) => {
@@ -90,9 +90,9 @@ export const FetchNftsList = async (account) => {
     const supAddress = await FetchSupportNFT()
     const list = filterAddress(Nftlist, supAddress)
     let AllList = []
-    let stake = await GetStakeInfo(list)
-    if (stake.length) {
-      AllList = await GetApprovalInfo(stake)
+    // let stake = await GetStakeInfo(list)
+    if (list.length) {
+      AllList = await GetApprovalInfo(list)
     }
     return AllList
   } catch (error) {
@@ -159,9 +159,11 @@ export const FetchNftStakeType = async (account) => {
 export const useFetchNftList = () => {
   const dispatch = useDispatch()
   const { account } = useWeb3React()
+  const profile = useStore(p => p.loginReducer.userInfo);
+  let address = profile.address ? profile.address : account
   useEffect(() => {
-    dispatch(fetchUserNftInfoAsync(account));
-  }, [dispatch, account])
+    dispatch(fetchUserNftInfoAsync(address));
+  }, [dispatch, address])
 }
 
 // 授权当前类型全部Nft

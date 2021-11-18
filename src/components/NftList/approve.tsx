@@ -8,6 +8,7 @@ import { fetchUserNftInfoAsync } from 'store/login/reducer';
 import { storeAction, useStore } from 'store';
 import { toast } from 'react-toastify';
 import { useNftStakeFarms, useCancelNftStake } from 'view/Login/hook';
+import Dots from '../Loader/Dots';
 
 
 export const NftButton: React.FC<{ item: any }> = ({ item }) => {
@@ -16,7 +17,6 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
   const { onStake: onNftsStake } = useNftStakeFarms()
   const { onStake: onCancelNftStake } = useCancelNftStake()
   const isStakeNft = useStore(p => p.loginReducer.isStakeNft);
-  const userInfo: any = useStore(p => p.loginReducer.userInfo);
   const [pendingTx, setPendingTx] = useState(false)
   const dispatch = useDispatch()
 
@@ -40,12 +40,8 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
         try {
           if (isStakeNft) {
             // 替换质押
-            if (userInfo.nft_id === item.properties.token_id) {
-              toast.error('不能选择当前质押头像');
-            } else {
-              await handleStakeOrUnstake(0, item.properties.token, item.properties.token_id)
-              toast.success('更换成功');
-            }
+            await handleStakeOrUnstake(0, item.properties.token, item.properties.token_id)
+            toast.success('更换成功');
           } else {
             // 质押
             await handleStakeOrUnstake(1, item.properties.token, item.properties.token_id)
@@ -62,6 +58,7 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
         toast.error('请先选择头像');
       }
 
-    }} >{isStakeNft ? '替换质押' : '质押'}</Button>
+    }} >{pendingTx ? (<Dots>{t('质押中')}</Dots>) : isStakeNft ? t('替换质押') : t('质押')}
+    </Button>
   );
 }
