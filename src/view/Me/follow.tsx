@@ -10,7 +10,6 @@ import { shortenAddress } from 'utils/contract';
 import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
-  width: 100%;
   min-height: 700px;
   padding: 29px 19px;
   margin-top: 13px;
@@ -18,17 +17,22 @@ const Content = styled(Card)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  height: 60px;
+  min-height: 60px;
   margin-left: 22px;
+  width: calc(100% - 108px);
 `;
 const ContentBox = styled(Flex)`
-  width: 100%;
-  height: 60px;
+  min-height: 60px;
   margin-bottom: 28px;
   justify-content: space-between;
   align-content: center;
 `;
-
+const WrapText = styled(Text)`
+  word-wrap: break-word;
+`;
+const MinWidthButton = styled(Button)`
+  width: max-content;
+`;
 const Follow = React.memo(() => {
   const [state, setState] = useImmer({
     hoverIndex: 0,
@@ -133,10 +137,10 @@ const Follow = React.memo(() => {
           {state.list.map((item, index) => {
             return (
               <ContentBox key={item.uid}>
-                <Flex>
+                <Flex style={{ width: 'calc(100% - 108px)' }}>
                   <Avatar src={item.nft_image} scale="md" />
                   <Column>
-                    <Flex>
+                    <Flex >
                       <Text color="white_black" mr="13px">
                         {item.nick_name}
                       </Text>
@@ -144,13 +148,13 @@ const Follow = React.memo(() => {
                         @{shortenAddress(item.address)}
                       </Text>
                     </Flex>
-                    <Text color="textTips">{item.introduction}</Text>
+                    <WrapText color="textTips">{item.introduction}</WrapText>
                   </Column>
                 </Flex>
                 {item.attention_status === 0 ? (
                   <React.Fragment>
                     {state.hoverStatus && state.hoverIndex === index ? (
-                      <Button
+                      <MinWidthButton
                         onClick={() => followUser(item.uid)}
                         onMouseLeave={() =>
                           setState(p => {
@@ -160,9 +164,9 @@ const Follow = React.memo(() => {
                         }
                       >
                         +关注
-                      </Button>
+                      </MinWidthButton>
                     ) : (
-                      <Button
+                      <MinWidthButton
                         onClick={() => followUser(item.uid)}
                         onMouseEnter={() =>
                           setState(p => {
@@ -173,13 +177,13 @@ const Follow = React.memo(() => {
                         variant="secondary"
                       >
                         未关注
-                      </Button>
+                      </MinWidthButton>
                     )}
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
                     {state.hoverStatus && state.hoverIndex === index ? (
-                      <Button
+                      <MinWidthButton
                         onClick={() => unFollowUser(item.uid)}
                         variant="tertiary"
                         onMouseLeave={() =>
@@ -190,9 +194,9 @@ const Follow = React.memo(() => {
                         }
                       >
                         取消关注
-                      </Button>
+                      </MinWidthButton>
                     ) : (
-                      <Button
+                      <MinWidthButton
                         onClick={() => unFollowUser(item.uid)}
                         onMouseEnter={() =>
                           setState(p => {
@@ -202,7 +206,7 @@ const Follow = React.memo(() => {
                         }
                       >
                         相互关注
-                      </Button>
+                      </MinWidthButton>
                     )}
                   </React.Fragment>
                 )}

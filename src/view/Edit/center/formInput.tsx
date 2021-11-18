@@ -112,14 +112,14 @@ const FormInput = React.forwardRef((props, ref) => {
               type="text"
               onChange={event =>
                 setState(p => {
-                  p.nick_name = event.target.value;
+                  p.nick_name = event.target.value.substr(0, 20);
                 })
               }
               value={state.nick_name}
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
-          <Msg>4~32个字符，支持中英文、数字</Msg>
+          <Msg>1~20个字符，支持中英文、数字</Msg>
         </div>
       </Rows>
       <Rows>
@@ -158,7 +158,7 @@ const FormInput = React.forwardRef((props, ref) => {
             placeholder="请填写您的个人资料简介"
             onChange={event =>
               setState(p => {
-                p.introduction = event.target.value;
+                p.introduction = event.target.value.substr(0, 140);
               })
             }
             value={state.introduction}

@@ -5,14 +5,13 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'hooks';
 import { Box, Flex, Button, Text } from 'uikit';
 import { Upload } from 'components';
-import { useStore } from 'store';
-
+import { useStore, storeAction } from 'store';
+import { useDispatch } from 'react-redux';
 import { Api } from 'apis';
-
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
-
 import defaultImages from 'assets/images/default_me_background.jpg';
+import { useFetchNftList } from '../Login/hook';
 
 const Background = styled(Flex)`
   width: 100%;
@@ -32,18 +31,20 @@ export const Header = styled(Flex)`
 `;
 
 const Edit: React.FC = () => {
+  useFetchNftList()
+  const dispatch = useDispatch();
   const form = React.useRef<any>();
   const profile: any = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer({
     value: 1,
-    background: profile.BackgroundImage || defaultImages
+    background: profile.background_image || defaultImages
   });
-
   const updateUserInfo = async () => {
     const params = form.current.getFrom();
     try {
       const res = await Api.UserApi.updateUserInfo({ ...params, background_image: state.background });
       if (Api.isSuccess(res)) {
+        dispatch(storeAction.changeUpdateProfile({ ...res.data }));
         toast.success(res.msg);
       } else {
         toast.error(res.msg);

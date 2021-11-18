@@ -75,7 +75,9 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
     dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   };
-
+  useEffect(() => {
+    isStakeNft && setshowStakeNft(false)
+  }, [isStakeNft])
   useEffect(() => {
     checkNetwork();
     window.ethereum.on('chainChanged', (chainId: string) => {

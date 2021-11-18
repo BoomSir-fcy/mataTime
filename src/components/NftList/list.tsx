@@ -83,11 +83,16 @@ const NftAvatar: React.FC<{
   const { account } = useWeb3React();
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem)
   const NftList = useStore(p => p.loginReducer.nftList);
+  const { t } = useTranslation();
 
   return (
     <GetAuthorizeBox>
       {
-        Nodata ? <NodataDom>获取更多NTF头像可更换头像</NodataDom>
+        Nodata ?
+          <NodataDom>
+            <Text mb='10px'>获取更多NTF头像可更换头像</Text>
+            <Button>{t('loginGetNft')}</Button>
+          </NodataDom>
           :
           <>
             <Flex justifyContent='space-between' alignItems='center'>

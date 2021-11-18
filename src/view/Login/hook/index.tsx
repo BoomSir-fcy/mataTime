@@ -13,7 +13,7 @@ import { getNftsList, getNftInfo } from 'apis/DsgRequest';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
-import { storeAction } from 'store';
+import { storeAction, useStore } from 'store';
 
 // 获取nft头像授权信息
 export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
@@ -159,9 +159,11 @@ export const FetchNftStakeType = async (account) => {
 export const useFetchNftList = () => {
   const dispatch = useDispatch()
   const { account } = useWeb3React()
+  const profile = useStore(p => p.loginReducer.userInfo);
+  let address = profile.address ? profile.address : account
   useEffect(() => {
-    dispatch(fetchUserNftInfoAsync(account));
-  }, [dispatch, account])
+    dispatch(fetchUserNftInfoAsync(address));
+  }, [dispatch, address])
 }
 
 // 授权当前类型全部Nft

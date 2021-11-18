@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'hooks';
+import { useStore } from 'store';
 import {
   Crumbs,
   Avatar,
@@ -20,9 +21,10 @@ import { Tabs } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-
 import defaultImages from 'assets/images/default_me_background.jpg';
 
+const Center = styled(Box)`
+`;
 const ProfileCard = styled(Card)`
   position: relative;
 `;
@@ -113,6 +115,7 @@ const Profile: React.FC<any> = React.memo(props => {
   });
   const uid = props.match?.params?.uid;
   const { profile, loading, page, totalPage, list } = state;
+  const userInfo: any = useStore(p => p.loginReducer.userInfo);
 
   const init = async () => {
     try {
@@ -168,10 +171,10 @@ const Profile: React.FC<any> = React.memo(props => {
   }, []);
 
   return (
-    <Box>
+    <Center>
       <Crumbs title="个人主页" />
       <ProfileCard>
-        <HeadTop style={{ backgroundImage: `url(${defaultImages})` }} />
+        <HeadTop style={{ backgroundImage: `url(${userInfo.background_image ? userInfo.background_image : defaultImages})` }} />
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end">
@@ -284,7 +287,7 @@ const Profile: React.FC<any> = React.memo(props => {
           </MeItemWrapper>
         ))}
       </List>
-    </Box>
+    </Center>
   );
 });
 
