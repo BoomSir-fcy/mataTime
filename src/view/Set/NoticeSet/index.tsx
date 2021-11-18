@@ -34,7 +34,7 @@ const Column = styled(Flex)`
 const NoticeSet = () => {
   const setting: any = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer({
-    msg_remind: setting.MsgRemind === 1 ? true : false
+    msg_remind: setting.msg_remind === 1 ? true : false
   });
 
   const setNotice = async (params: Api.Set.likeSetParams) => {
@@ -97,7 +97,10 @@ const NoticeSet = () => {
       <Column>
         <Rows>
           <Title>消息通知</Title>
-          <Toggle checked={state.msg_remind} onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })} />
+          <Toggle
+            checked={state.msg_remind}
+            onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })}
+          />
         </Rows>
         <Text color="textTips" mt="11px">
           开启或关闭来自浏览器的授权消息通知，开启后将会通过浏览器的消息提醒您
