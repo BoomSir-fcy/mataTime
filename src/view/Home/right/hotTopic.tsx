@@ -68,7 +68,7 @@ export const HotTopic: React.FC = (props:any) => {
           hotTopicList.map((item, index) => (
             <HotItem key={item.tid} justifyContent="space-between">
               <Hot onClick={()=>goDetils(item)}>#{item.topic_name}#</Hot>
-              <HotCount>{item.post_num > 50 ? 50 : item.post_num}{t('HotTopicUnit')}</HotCount>
+              <HotCount>{item.post_num > 999 ? 999 : item.post_num}{t('HotTopicUnit')}</HotCount>
             </HotItem>
           ))
         }

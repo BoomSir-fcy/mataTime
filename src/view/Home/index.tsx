@@ -71,14 +71,15 @@ const Home: React.FC = (props:any) => {
           {match.path === '/' ? (
             <>
               <Editor type="post" sendArticle={sendArticle}></Editor>
-              <Tabs></Tabs>
+              {/* <Tabs></Tabs> */}
             </>
           ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} {...props}></ArticleList>
         </CenterCard>
         <RightCard>
-          {/* <Search></Search> */}
+          <Search></Search>
+          {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
           <Swap></Swap>
           <RecommendPeople></RecommendPeople>
           <HotTopic {...props}></HotTopic>

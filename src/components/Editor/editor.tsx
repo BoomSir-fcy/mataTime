@@ -147,6 +147,7 @@ export const Editor = (props: Iprops) => {
   };
   const restInput = () => {
     setValue(initialValue);
+    setImgList([])
     setRefresh(refresh === 1 ? 2 : 1);
   };
   const sendArticle = () => {
