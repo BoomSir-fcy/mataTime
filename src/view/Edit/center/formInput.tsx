@@ -116,11 +116,13 @@ const FormInput = React.forwardRef((props, ref) => {
                   p.nick_name = event.target.value;
                 })
               }
+              minLength={1}
+              maxLength={20}
               value={state.nick_name}
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
-          <Msg>4~32个字符，支持中英文、数字</Msg>
+          <Msg>1-20个字，支持中英文、数字</Msg>
         </div>
       </Rows>
       <Rows>

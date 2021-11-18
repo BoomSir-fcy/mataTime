@@ -6,6 +6,7 @@ import { Avatar, List, CancelAttentionModal } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
 
 import { CrumbsHead } from './components';
 
@@ -30,6 +31,7 @@ const ContentBox = styled(Flex)`
 `;
 
 const Follow = React.memo(() => {
+  const { t } = useTranslation();
   const [state, setState] = useImmer({
     cancelFollow: false,
     cancelParams: {
@@ -109,10 +111,17 @@ const Follow = React.memo(() => {
     <Box>
       <CrumbsHead>
         <Flex>
-          <Text fontWeight="bold" mr="10px" fontSize="14px">
-            我的关注
+          <Text
+            fontWeight="bold"
+            mr="10px"
+            fontSize="14px"
+            style={{ textTransform: 'capitalize' }}
+          >
+            {t('meHeaderFollow')}
           </Text>
-          <Text fontSize="14px">{state.total}人</Text>
+          <Text fontSize="14px">
+            {t('meHeaderPeople%value%', { value: state.total })}
+          </Text>
         </Flex>
       </CrumbsHead>
       <Content>

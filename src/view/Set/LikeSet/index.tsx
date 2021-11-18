@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
-import { useThemeManager, useLanguange, useNotification } from 'store/app/hooks';
+import {
+  useThemeManager,
+  useLanguange,
+  useNotification
+} from 'store/app/hooks';
 import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
 import { languages } from 'config/localization';

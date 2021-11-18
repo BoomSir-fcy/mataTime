@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
 import {
@@ -7,15 +7,17 @@ import {
   Avatar,
   Certification,
   List,
-  MoreOperatorEnum
+  MoreOperatorEnum,
+  Icon
 } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 
 import { shortenAddress } from 'utils/contract';
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
-import { Tabs } from './components';
+import { Tabs, Popup } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -24,6 +26,7 @@ import defaultImages from 'assets/images/default_me_background.jpg';
 
 const ProfileCard = styled(Card)`
   position: relative;
+  overflow: visible;
 `;
 const HeadTop = styled(Box)`
   width: 100%;
@@ -32,7 +35,7 @@ const HeadTop = styled(Box)`
   background-size: 100% auto;
 `;
 const ProfileInfo = styled(Box)`
-  margin-top: -85px;
+  margin-top: -75px;
   ${mediaQueriesSize.padding}
 `;
 const Info = styled(Flex)`
@@ -43,6 +46,7 @@ const Info = styled(Flex)`
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
   .name {
+    word-wrap: break-word;
     font-size: 28px;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.text};
@@ -109,7 +113,9 @@ const Profile: React.FC<any> = React.memo(props => {
     page: 1,
     totalPage: 0
   });
+  const { t } = useTranslation();
   const uid = props.match?.params?.uid;
+  const gray = useTheme().colors.textTips;
   const { profile, loading, page, totalPage, list } = state;
 
   const init = async () => {
@@ -167,12 +173,12 @@ const Profile: React.FC<any> = React.memo(props => {
 
   return (
     <Box>
-      <Crumbs title="个人主页" />
+      <Crumbs title={t('meHome')} />
       <ProfileCard>
         <HeadTop style={{ backgroundImage: `url(${defaultImages})` }} />
         <ProfileInfo>
           <Info>
-            <Flex alignItems="flex-end">
+            <Flex alignItems="flex-end" style={{ flex: 1 }}>
               <Avatar scale="xl" src={profile.nft_image} />
               <Desc>
                 <Text className="name">{profile.nick_name}</Text>
@@ -183,16 +189,21 @@ const Profile: React.FC<any> = React.memo(props => {
                       @{shortenAddress(profile.address)}
                     </Text>
                   </Flex>
-                  <Flex className="marginLeft">
-                    <Text className="text">{profile.location}</Text>
-                  </Flex>
+                  {profile.location && (
+                    <Flex className="marginLeft" alignItems="center">
+                      <Icon name="icon-dizhi" color={gray} />
+                      <Text className="text">{profile.location}</Text>
+                    </Flex>
+                  )}
                 </Flex>
               </Desc>
             </Flex>
-            {!uid && (
+            {!uid ? (
               <Button as={Link} to="/me/edit">
                 编辑资料
               </Button>
+            ) : (
+              <Popup />
             )}
           </Info>
           <Content>

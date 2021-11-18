@@ -4,6 +4,7 @@ import { Flex, Card, Text, Button } from 'uikit';
 import { useStore } from 'store';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
 
 const SafeSetBox = styled(Card)`
   height: 700px;
@@ -17,6 +18,7 @@ const Rows = styled(Flex)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.tertiary};
 `;
 const Title = styled.div`
+  text-transform: capitalize;
   color: ${({ theme }) => theme.colors.white_black};
   font-weight: bold;
 `;
@@ -26,6 +28,7 @@ const Column = styled(Flex)`
 `;
 
 const SafeSet = () => {
+  const { t } = useTranslation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
 
   // 更新邮箱
@@ -42,9 +45,9 @@ const SafeSet = () => {
     <SafeSetBox>
       <Rows>
         <Column>
-          <Title>钱包地址</Title>
+          <Title>{t('setWalletAddress')}</Title>
           <Text color="textTips" mt="11px">
-            登录该账号的钱包地址，无法更改
+            {t('setWalletAddressTips')}
           </Text>
         </Column>
         <Title>{shortenAddress(userInfo.address)}</Title>

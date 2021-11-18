@@ -6,14 +6,15 @@ import { Flex, Card, Text, Toggle } from 'uikit';
 import { useStore, fetchThunk } from 'store';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'contexts/Localization';
 
 const NoticeSetBox = styled(Card)`
-  height: 707px;
-  margin-top: 16px;
+  height: 700px;
+  margin-top: 13px;
   padding: 27px 29px;
-  border-radius: 10px;
 `;
 const Title = styled.div`
+  text-transform: capitalize;
   color: ${({ theme }) => theme.colors.white_black};
   font-weight: bold;
 `;
@@ -31,6 +32,7 @@ const Column = styled(Flex)`
 const NoticeSet = () => {
   const dispatch = useDispatch();
   const setting = useStore(p => p.loginReducer.userInfo);
+  const { t } = useTranslation();
   const [state, setState] = useImmer({
     msg_remind: setting.msg_remind === 1 ? true : false
   });
@@ -95,14 +97,14 @@ const NoticeSet = () => {
       </Column> */}
       <Column>
         <Rows>
-          <Title>消息通知</Title>
+          <Title>{t('setMsgNotification')}</Title>
           <Toggle
             checked={state.msg_remind}
             onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })}
           />
         </Rows>
         <Text color="textTips" mt="11px">
-          开启或关闭来自浏览器的授权消息通知，开启后将会通过浏览器的消息提醒您
+          {t('setMsgNotificationTips')}
         </Text>
       </Column>
       {/* <Column>

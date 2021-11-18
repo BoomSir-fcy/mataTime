@@ -2,9 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Flex, Box } from 'uikit';
 import { Crumbs, CommonMenu } from 'components';
-
+import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
-import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
+import {
+  Search,
+  Swap,
+  RecommendPeople,
+  HotTopic,
+  FooterCopyright
+} from '../Home/right';
 
 const PageContainer = styled.div`
   width: 1200px;
@@ -44,6 +50,8 @@ const menuArr = [
 ];
 
 export const Container = props => {
+  const { t } = useTranslation();
+
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
@@ -51,7 +59,7 @@ export const Container = props => {
           <CommonMenu menu={menuArr} {...props} />
         </LeftCard>
         <CenterCard>
-          <Crumbs title="设置" />
+          <Crumbs title={t('homeMenuSet')} />
           {props.children}
         </CenterCard>
         <RightCard>

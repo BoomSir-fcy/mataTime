@@ -29,29 +29,24 @@ const Praise = React.memo(props => {
   });
   const { loading, page, totalPage, list } = state;
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    let arr = [];
-    list.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
-      }
-      if (
-        item.id === newItem.id &&
-        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
-      ) {
-        // 屏蔽、删除
-      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
-        // 置顶
-        arr.unshift(obj);
-      } else {
-        arr.push(obj);
-      }
-    });
+  const init = async () => {
     setState(p => {
-      p.list = [...arr];
+      p.loading = true;
     });
+    try {
+      const res = await Api.MeApi.praiseList(1);
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.loading = false;
+        });
+        if (Api.isSuccess(res)) {
+          setState(p => {
+            p.page = page + 1;
+            p.list = [...(res.data.list || [])];
+          });
+        }
+      }
+    } catch (error) {}
   };
 
   return (
@@ -89,29 +84,23 @@ const Praise = React.memo(props => {
               {...props}
               itemData={{
                 ...item,
-                post_id: item.id,
+                is_like: item.like_status,
                 post: {
-                  ...item,
-                  post_id: item.id
+                  ...item
                 }
               }}
-              callback={(item: any, type: MoreOperatorEnum) => {
-                updateList(item, type);
-              }}
+              callback={() => init()}
             />
             <MentionOperator
               type="Article"
               itemData={{
                 ...item,
-                post_id: item.id,
+                is_like: item.like_status,
                 post: {
-                  ...item,
-                  post_id: item.id
+                  ...item
                 }
               }}
-              callback={(item: any) => {
-                updateList(item);
-              }}
+              callback={() => init()}
             />
           </MeItemWrapper>
         ))}

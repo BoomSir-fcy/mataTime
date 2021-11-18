@@ -59,7 +59,7 @@ const MentionOperator: React.FC<IProps> = ({
           setIsLike(isLike === 1 ? 0 : 1);
           toast.success(res.data);
         } else {
-          toast.error(res.data);
+          toast.error(res?.data);
         }
       });
     }

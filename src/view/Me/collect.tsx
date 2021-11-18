@@ -63,7 +63,7 @@ const Collect = props => {
           setLoading(true);
           Api.MeApi.collectList(page).then(res => {
             setLoading(false);
-            if (res.msg === 'success') {
+            if (Api.isSuccess(res)) {
               setPage(page + 1);
               setTotalPage(res.data.total_num);
               setTotal(res.data.total_num);
@@ -79,10 +79,9 @@ const Collect = props => {
                 {...props}
                 itemData={{
                   ...item,
-                  post_id: item.id,
+                  is_like: item.like_status,
                   post: {
-                    ...item,
-                    post_id: item.id
+                    ...item
                   }
                 }}
                 callback={(item: any, type: MoreOperatorEnum) => {
@@ -92,10 +91,9 @@ const Collect = props => {
               <MentionOperator
                 itemData={{
                   ...item,
-                  post_id: item.id,
+                  is_like: item.like_status,
                   post: {
-                    ...item,
-                    post_id: item.id
+                    ...item
                   }
                 }}
                 callback={(item: any) => {
