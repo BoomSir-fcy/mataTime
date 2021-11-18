@@ -46,13 +46,13 @@ export const ContentParsing = (props: IProps) => {
       {
         parsingResult &&
         parsingResult.length > 0 &&
-        parsingResult.map((item: any, index) => {
+        parsingResult.map((item: any, index: number) => {
           return (
             <ParagraphItem key={index}>
-              {item.children.map((child: any) => {
+              {item.children.map((child: any, childIdx: number) => {
                 return (
                   child.type === 'mention' ? (
-                    <p>
+                    <p key={childIdx}>
                       <FollowPopup
                         callback={(type: MoreOperatorEnum) => {
                           callback(type)
@@ -62,7 +62,7 @@ export const ContentParsing = (props: IProps) => {
                       </FollowPopup>
                     </p>
                   ) : child.type === 'topic' ? (
-                    <p>
+                    <p key={childIdx}>
                       {(child.children || []).map((topic: any) => {
                         if (topic.text) {
                           return <Link to={`/topicList/0/${topic.text}`}>#{topic.text}#</Link>;
@@ -71,6 +71,7 @@ export const ContentParsing = (props: IProps) => {
                     </p>
                   ) : (
                     <p
+                      key={childIdx}
                       dangerouslySetInnerHTML={{
                         __html: parseText(child.text)
                       }}></p>

@@ -155,12 +155,13 @@ export const MorePopup = React.memo((props: Iprops) => {
               <p onClick={() => {
                 copyContent(process.env.REACT_APP_WEB_URL + '/articleDetils/' + data.post.post_id || '')
               }}>{t('moreCopyAddress')}</p>
-              <p onClick={() => {
-                data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
-              }}>{data.post.is_fav === 1 ? t('moreCancelCollection') : t('moreCollection')}</p>
+
               {
                 !isOwn ? (
                   <>
+                    <p onClick={() => {
+                      data.post.is_fav === 1 ? onFavCancelRequest(data.post.post_id) : onFavAgreeRequest(data.post.post_id)
+                    }}>{data.post.is_fav === 1 ? t('moreCancelCollection') : t('moreCollection')}</p>
                     <p onClick={() => {
                       setVisible(false)
                       setReportShow(true)
