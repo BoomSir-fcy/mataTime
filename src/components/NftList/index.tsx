@@ -80,7 +80,7 @@ export const StakeNFT: React.FC = () => {
   return (
     <>
       {isAllApprove.map(item => (
-        <NftAvatar key={item.address} NftInfo={item} />
+        <NftAvatar key={item.address} NftInfo={item} Nodata={false} />
       ))}
       {!isAllApprove.length && < NftAvatar Nodata={true} />}
     </>
