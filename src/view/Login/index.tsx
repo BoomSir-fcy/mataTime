@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -53,16 +53,21 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
   const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
+  const [showStakeNft, setshowStakeNft] = useState(false)
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
 
+  // 查询是否有质押的NFT
   const getStakeType = async (account) => {
     const nftStake = await FetchNftStakeType(account)
     if (nftStake[0].token_id) {
+      setshowStakeNft(false)
       dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-      dispatch(storeAction.changeSignUp({ isSignup: true }));
+      // dispatch(storeAction.changeSignUp({ isSignup: true }));
+    } else {
+      setshowStakeNft(true)
     }
   }
 
@@ -96,13 +101,13 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       <LoginContainer>
         <LeftBox>
           {
-            !isStakeNft && singUpStep === 1 && account ?
+            showStakeNft && singUpStep === 1 && account ?
               <Nft>
                 <Text fontSize='30px'>选择并质押头像</Text>
                 <StakeNFT />
               </Nft>
               :
-              <Flex>
+              <Flex style={{ height: '100%' }}>
                 <img src={require('./images/logo_left_images.jpg').default} />
               </Flex>
           }
@@ -111,7 +116,8 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
           <LogoWarpper>
             <Logo url="/" src={`${require(isDark ? './images/logo.svg' : './images/light_logo.svg').default}`} />
           </LogoWarpper>
-          {isSignup ? <SignUp isSignup={signUpFail} isStakeNft={isStakeNft} /> : <LoginJoin />}
+          {/* 登录或注册 */}
+          {isSignup ? <SignUp signUpFail={signUpFail} isStakeNft={isStakeNft} /> : <LoginJoin />}
         </Content>
       </LoginContainer>
       <Footer />
