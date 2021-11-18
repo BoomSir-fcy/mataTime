@@ -116,6 +116,8 @@ const FormInput = React.forwardRef((props, ref) => {
                   p.nick_name = event.target.value.substr(0, 20);
                 })
               }
+              minLength={1}
+              maxLength={20}
               value={state.nick_name}
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
