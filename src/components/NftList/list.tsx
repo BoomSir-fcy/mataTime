@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { NftButton } from './approve';
+import Dots from '../Loader/Dots';
 
 const Point = styled(Text)`
   color:${({ theme }) => theme.colors.textTips};
@@ -46,6 +47,10 @@ top:0;
 right: 30px;
 width: 30px;
 `
+const NodataDom = styled.div`
+color:${({ theme }) => theme.colors.textTips};
+text-align: center;
+`
 
 const NftItem = {
   description: '',
@@ -72,35 +77,43 @@ interface Nft {
   needApprove: boolean
 }
 const NftAvatar: React.FC<{
-  NftInfo: Nft
-}> = ({ NftInfo }) => {
+  NftInfo?: Nft,
+  Nodata?: boolean
+}> = ({ NftInfo, Nodata }) => {
   const { account } = useWeb3React();
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem)
   const NftList = useStore(p => p.loginReducer.nftList);
 
   return (
     <GetAuthorizeBox>
-      <Flex justifyContent='space-between' alignItems='center'>
-        <Point>支持部分主流NFT系列，即将支持更多的NFT系列头像</Point>
-        {NftInfo.needApprove ? <StakeAllBtn token={NftInfo.address} account={account} /> : <NftButton item={ActiveAvInfo} />}
-      </Flex>
-      <GetAuthorize>
-        {
-          NftList.map(item => (
-            NftInfo.address === item.properties.token ?
-              < Column key={item.properties.token_id} >
-                {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />}
-                < Avatar src={item.image} scale="ld" onClick={() => {
-                  if (!NftInfo.needApprove) {
-                    setActiveAvInfo(item)
-                  }
-                }} />
-                <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
-              </Column>
-              : <></>
-          ))
-        }
-      </GetAuthorize>
+      {
+        Nodata ? <NodataDom>获取更多NTF头像可更换头像</NodataDom>
+          :
+          <>
+            <Flex justifyContent='space-between' alignItems='center'>
+              <Point>支持部分主流NFT系列，即将支持更多的NFT系列头像</Point>
+              {NftInfo?.needApprove ? <StakeAllBtn token={NftInfo.address} account={account} /> : <NftButton item={ActiveAvInfo} />}
+            </Flex >
+            <GetAuthorize>
+              {
+                (NftList.map(item => (
+                  NftInfo.address === item.properties.token ?
+                    < Column key={item.properties.token_id} >
+                      {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />}
+                      < Avatar src={item.image} scale="ld" onClick={() => {
+                        if (!NftInfo.needApprove) {
+                          setActiveAvInfo(item)
+                        }
+                      }} />
+                      <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
+                    </Column>
+                    : <></>
+                )))
+              }
+            </GetAuthorize>
+          </>
+      }
+
     </GetAuthorizeBox >
   )
 }
@@ -134,7 +147,7 @@ const StakeAllBtn = ({ token, account }) => {
       } finally {
         setPendingTx(false)
       }
-    }}>授权</Button>
+    }}>{pendingTx ? (<Dots>{t('授权中')}</Dots>) : (t('授权'))}</Button>
   );
 };
 export default NftAvatar

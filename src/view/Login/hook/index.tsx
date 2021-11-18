@@ -53,17 +53,17 @@ export const FetchNftsList = async (account) => {
     return list
   }
   // 获取质押信息
-  const GetStakeInfo = async (list) => {
-    const nftStake = await FetchNftStakeType(account)
-    if (nftStake[0].token_id) {
-      let result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
-      result.isStakeMarket = true
-      let AddStakeNftList = list
-      AddStakeNftList.push(result)
-      return AddStakeNftList
-    }
-    return list
-  }
+  // const GetStakeInfo = async (list) => {
+  //   const nftStake = await FetchNftStakeType(account)
+  //   // if (nftStake[0].token_id) {
+  //   //   let result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
+  //   //   result.isStakeMarket = true
+  //   //   let AddStakeNftList = list
+  //   //   AddStakeNftList.push(result)
+  //   //   return AddStakeNftList
+  //   // }
+  //   return list
+  // }
 
   // 获取授权信息
   const GetApprovalInfo = async (list) => {
@@ -90,9 +90,9 @@ export const FetchNftsList = async (account) => {
     const supAddress = await FetchSupportNFT()
     const list = filterAddress(Nftlist, supAddress)
     let AllList = []
-    let stake = await GetStakeInfo(list)
-    if (stake.length) {
-      AllList = await GetApprovalInfo(stake)
+    // let stake = await GetStakeInfo(list)
+    if (list.length) {
+      AllList = await GetApprovalInfo(list)
     }
     return AllList
   } catch (error) {

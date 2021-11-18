@@ -137,7 +137,7 @@ const FormInput = React.forwardRef((props, ref) => {
             value="1"
           />
           <span>0x格式</span>
-          <input
+          {/* <input
             type="radio"
             name="gs"
             checked={state.display_format === 2}
@@ -148,7 +148,7 @@ const FormInput = React.forwardRef((props, ref) => {
             }
             value="2"
           />
-          <span>域名格式</span>
+          <span>域名格式</span> */}
         </RadioBox>
       </Rows>
       <Rows>
