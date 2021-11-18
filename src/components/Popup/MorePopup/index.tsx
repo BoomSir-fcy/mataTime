@@ -14,9 +14,11 @@ import { copyContent } from 'utils/copy';
 export enum MoreOperatorEnum {
   SHIELD = 'SHIELD', // 屏蔽
   SETTOP = 'SETTOP',
+  CANCEL_SETTOP = 'CANCEL_SETTOP',
   DELPOST = 'DELPOST',
   FOLLOW = 'FOLLOW',
-  CANCEL_FOLLOW = 'CANCEL_FOLLOW'
+  CANCEL_FOLLOW = 'CANCEL_FOLLOW',
+
 }
 
 
@@ -101,6 +103,18 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false)
   }
 
+  // 取消置顶
+  const onCancelTopPostRequest = async (pid: number) => {
+    const res = await Api.AttentionApi.cancelTopPost(pid);
+    if (Api.isSuccess(res)) {
+      callback(data, MoreOperatorEnum.CANCEL_SETTOP)
+      toast.success(t('moreCancelTopSuccess'))
+    } else {
+      toast.error(res.data || t('moreCancelTopError'))
+    }
+    setVisible(false)
+  }
+
   // 删除
   const onPostDelRequest = async (pid: number) => {
     const res = await Api.AttentionApi.delPost(pid);
@@ -143,8 +157,8 @@ export const MorePopup = React.memo((props: Iprops) => {
                       onPostDelRequest(data.post.post_id)
                     }}>{t('moreDelete')}</p>
                     <p onClick={() => {
-                      onTopPostRequest(data.post.post_id)
-                    }}>{t('moreTop')}</p>
+                      data.post.is_top === 1 ? onCancelTopPostRequest(data.post.post_id) : onTopPostRequest(data.post.post_id)
+                    }}>{data.post.is_top === 1 ? t('moreCancelTop') : t('moreTop')}</p>
                   </>
                 ) : null
               }
