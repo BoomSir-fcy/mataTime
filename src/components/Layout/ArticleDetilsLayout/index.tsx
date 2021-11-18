@@ -73,6 +73,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
                 ...itemData
               }
             }} callback={(data) => {
+              console.log(data);
               setItemData(data)
             }} />
           </MeItemWrapper>
