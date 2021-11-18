@@ -1,13 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import history from '../routerHistory';
 
-const baseURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
+const baseURL =
+  process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
 // axios.defaults.headers.common['token'] = "";
 
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] =
+  'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.headers.get.Accept = 'application/json';
 
 axios.interceptors.response.use(
@@ -28,7 +30,10 @@ export class Http {
     let token = localStorage.getItem('token');
 
     try {
-      response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
+      response = await axios({
+        ...configs,
+        headers: { ...configs.headers, token: token }
+      });
       return response.data;
     } catch (e: any) {
       if (e?.status === 401) return history.push('/login');

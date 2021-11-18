@@ -3,6 +3,7 @@ import { Box, Text, Flex, Button } from 'uikit';
 import styled from "styled-components";
 import { Avatar } from 'components';
 import { useStore } from 'store';
+import { StakeNFT } from 'components/NftList';
 
 const Nft = styled(Box)`
   overflow:hidden;
@@ -10,6 +11,7 @@ const Nft = styled(Box)`
   margin-top:19px;
   padding:27px 26px 38px 34px;
   border-radius: 10px;
+  max-width: 670px;
 `
 const Title = styled(Text)`
   color:${({ theme }) => theme.colors.text};
@@ -75,10 +77,11 @@ const NftAvatar: React.FC = () => {
             <Text color={'textTips'}>#{userInfo.NftID}</Text>
           </Column>
         </Rows>
+        < StakeNFT />
         {/* <Authorize>
             <Button>授权获取</Button>
           </Authorize> */}
-        <GetAuthorizeBox>
+        {/* <GetAuthorizeBox>
           <Point style={{ textAlign: 'center' }}>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
           <GetAuthorize>
             {
@@ -90,7 +93,7 @@ const NftAvatar: React.FC = () => {
               ))
             }
           </GetAuthorize>
-        </GetAuthorizeBox>
+        </GetAuthorizeBox> */}
       </div>
     </Nft>
   )

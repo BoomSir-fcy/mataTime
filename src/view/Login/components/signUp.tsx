@@ -97,12 +97,13 @@ export const SignUp: React.FC<{
   const { t } = useTranslation();
 
 
-  const getStakeType = async (account) => {
-    const nftStake = await FetchNftStakeType(account)
-    if (nftStake[0].token_id) {
-      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-    }
-  }
+  // const getStakeType = async (account) => {
+  //   const nftStake = await FetchNftStakeType(account)
+  //   if (nftStake[0].token_id) {
+  //     dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+  //     dispatch(storeAction.changeSignUp({ isSignup: true }));
+  //   }
+  // }
 
   const signHandle = React.useCallback(async () => {
     const res = await loginCallback(1);
@@ -118,9 +119,9 @@ export const SignUp: React.FC<{
     }
   }, [account]);
 
-  useEffect(() => {
-    Boolean(account) && getStakeType(account)
-  }, [account])
+  // useEffect(() => {
+  //   Boolean(account) && getStakeType(account)
+  // }, [account])
 
   return (
     <Box>

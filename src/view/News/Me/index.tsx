@@ -48,7 +48,7 @@ const NewsMe: React.FC = (props) => {
       <List marginTop={410} loading={page <= totalPage} renderList={() => {
         if (loading || page > totalPage) return false
         setLoading(true)
-        Api.NewsApi.getMessageList(1, page, 20).then(res => {
+        Api.NewsApi.getMessageList(1, page, 50).then(res => {
           setLoading(false)
           if (Api.isSuccess(res)) {
             setPage(page + 1)

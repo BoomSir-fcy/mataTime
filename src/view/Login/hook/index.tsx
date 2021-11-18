@@ -135,8 +135,6 @@ export const useFetchSupportNFT = () => {
 }
 // 获取Nft头像质押情况
 export const FetchNftStakeType = async (account) => {
-  console.log(account);
-
   const SocialAddress = getNftSocialAddress()
   const calls = [
     {

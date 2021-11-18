@@ -79,15 +79,15 @@ export const FollowPopup = React.memo((props: Iprops) => {
             <div className="content">
               <div className="left-box">
                 <div className="img-box">
-                  <Avatar className="avatar" src={userInfo.NftImage || '  '} scale="md" />
+                  <Avatar className="avatar" src={userInfo.nft_image || '  '} scale="md" />
                 </div>
               </div>
               <div className="right-box">
-                <div className="name">{userInfo.NickName || '  '}</div>
+                <div className="name">{userInfo.nick_name || '  '}</div>
                 <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon> @0x32...9239</div>
                 <div className="number">
-                  <p>{t('followFans')}<strong>{userInfo.FansNum || 0}</strong></p>
-                  <p>{t('followText')}<strong>{userInfo.AttentionNum || 0}</strong></p>
+                  <p>{t('followFans')}<strong>{userInfo.fans_num || 0}</strong></p>
+                  <p>{t('followText')}<strong>{userInfo.attention_num || 0}</strong></p>
                 </div>
               </div>
             </div>
@@ -95,8 +95,8 @@ export const FollowPopup = React.memo((props: Iprops) => {
               <FollowBtn onClick={(e: any) => {
                 e.stopPropagation()
                 e.nativeEvent.stopImmediatePropagation() //阻止冒泡
-                userInfo.IsAttention === 1 ? cancelAttentionFocusRequest() : onAttentionFocusRequest()
-              }}>{userInfo.IsAttention === 1 ? t('followCancelText') : '+' + t('followText')}</FollowBtn>
+                userInfo.is_attention === 1 ? cancelAttentionFocusRequest() : onAttentionFocusRequest()
+              }}>{userInfo.is_attention === 1 ? t('followCancelText') : '+' + t('followText')}</FollowBtn>
             </div>
           </PopupContentWrapper>
         ) : null

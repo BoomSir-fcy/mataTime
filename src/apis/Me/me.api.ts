@@ -12,7 +12,7 @@ export class MeApi extends Http {
     return res;
   }
   // 取消关注
-  async unFollowUser(focus_uid: number) {
+  async unFollowUser(focus_uid: number|string) {
     const res = await this.get('/v1/attention/cancel', { focus_uid });
     return res;
   }

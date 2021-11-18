@@ -1,141 +1,87 @@
-import React, { useCallback, useState } from 'react';
-import { Box, Text, Flex, Button } from 'uikit';
-import styled from "styled-components";
-import { Avatar } from 'components';
-import { useStore } from 'store';
-import { useTranslation } from 'contexts/Localization';
-import { useApproveNftsFarm } from 'view/Login/hook';
-import { fetchUserNftInfoAsync } from 'store/login/reducer';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState, useCallback } from 'react';
+import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
-import { NftButton } from './approve';
+import { storeAction, useStore } from 'store';
+import { Box, Flex, Text, Button, Card } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
+import NftAvatar from './list';
 
-const Point = styled(Text)`
-  color:${({ theme }) => theme.colors.textTips};
-  font-size:16px;
+const Nft = styled(Box)`
+  background:${({ theme }) => theme.colors.backgroundCard};
+  margin-top:19px;
+  padding:27px 26px 38px 34px;
+  border-radius: 10px;
+  width: 40vw;
+  min-width: 600px;
 `
-const Column = styled(Flex)`
-  flex-direction: column;
-  justify-content: space-around;
+const NftCard = styled.div`
+  margin: 20px;
+  display: flex;
   align-items: center;
-  min-width: 160px;
-  margin-bottom: 20px;
-  position: relative;
+  justify-content: center;
+  flex-direction: column;
 `
-const GetAuthorizeBox = styled(Box)`
-padding:17px;
-margin-top:28px;
-border-radius:10px;
-background: ${({ theme }) => theme.colors.backgroundTextArea};
-`
-const GetAuthorize = styled(Flex)`
-/* justify-content: space-between; */
-margin-top:26px;
-overflow-x: auto;
-`
-const AvatarName = styled(Text)`
-text-align: center;
-margin-top: 14px;
-font-size:14px;
-color:${({ theme }) => theme.colors.textTips};
-`
-const ActiveImg = styled.img`
-position: absolute;
-top:0;
-right: 30px;
-width: 30px;
+const NftImg = styled.img`
+width: 200px;
+height: 200px;
+display: block;
+margin-bottom: 10px;
+cursor: pointer;
 `
 
-const NftItem = {
-  description: '',
-  image: '',
-  isApprovedMarket: false,
-  isStakeMarket: false,
-  name: '',
-  properties: {
-    author: '',
-    createdTime: 0,
-    id: '',
-    level: 0,
-    owner: '',
-    owner_status: 0,
-    power: 0,
-    res: '',
-    token: '',
-    token_id: ''
-  }
-}
 
-interface Nft {
-  address: string,
-  needApprove: boolean
-}
-const NftAvatar: React.FC<{
-  NftInfo: Nft
-}> = ({ NftInfo }) => {
-  const { account } = useWeb3React();
-  const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem)
-  const NftList = useStore(p => p.loginReducer.nftList);
-
-  return (
-    <GetAuthorizeBox>
-      <Flex justifyContent='space-between' alignItems='center'>
-        <Point style={{ textAlign: 'center' }}>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
-        {NftInfo.needApprove ? <StakeAllBtn token={NftInfo.address} account={account} /> : <NftButton item={ActiveAvInfo} />}
-      </Flex>
-      <GetAuthorize>
-        {
-          NftList.map(item => (
-            NftInfo.address === item.properties.token ?
-              < Column key={item.properties.token_id} >
-                {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />}
-                < Avatar src={item.image} scale="ld" onClick={() => {
-                  if (!NftInfo.needApprove) {
-                    setActiveAvInfo(item)
-                  }
-                }} />
-                <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
-              </Column>
-              : <></>
-          ))
-        }
-      </GetAuthorize>
-    </GetAuthorizeBox >
-  )
-}
-
-const StakeAllBtn = ({ token, account }) => {
-  const { t } = useTranslation();
+export const StakeNFT: React.FC = () => {
   const dispatch = useDispatch();
-  const { onApprove } = useApproveNftsFarm(token)
-  const [pendingTx, setPendingTx] = useState(false)
+  const { account } = useWeb3React();
+  const { t } = useTranslation();
+  // 是否授权
+  const [isAllApprove, setisAllApprove] = useState([])
+  // 自己的Nft列表
+  const NftList = useStore(p => p.loginReducer.nftList);
+  // Nft地址  可用列表
+  const NftAddrList = useStore(p => p.loginReducer.nftAddr);
 
-  // 授权
-  const handleApprove = useCallback(async () => {
-    try {
-      // 一键授权
-      await onApprove()
-      dispatch(fetchUserNftInfoAsync(account));
-    } catch (e) {
-      throw e;
-    }
-  }, [onApprove])
-  return (
-    <Button disabled={pendingTx} onClick={async () => {
-      setPendingTx(true)
-      try {
-        // 授权 
-        await handleApprove()
-        toast.success('授权成功');
-      } catch (error) {
-        console.error(error)
-        toast.error('操作失败');
-      } finally {
-        setPendingTx(false)
+  const getIsAllApprove = (list) => {
+    let myList = []
+    for (let i = 0; i < list.length; i++) {
+      // 当前NFT地址 是否授权
+      for (let j = 0; j < NftAddrList.length; j++) {
+        if (list[i].properties.token.toLowerCase() === NftAddrList[j].toLowerCase()) {
+          if (!list[i].isApprovedMarket) {
+            myList[j] = {
+              address: list[i].properties.token.toLowerCase(),
+              needApprove: true
+            }
+          } else if (list[i].isApprovedMarket) {
+            myList[j] = {
+              address: list[i].properties.token.toLowerCase(),
+              needApprove: false
+            }
+          }
+        }
       }
-    }}>授权</Button>
+    }
+    setisAllApprove(myList)
+  }
+
+  useEffect(() => {
+    if (!NftList.length) {
+      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+    } else {
+      NftAddrList.length && getIsAllApprove(NftList)
+      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    }
+    return () => {
+      const arr = []
+      setisAllApprove(arr)
+    }
+  }, [NftList])
+  return (
+    <>
+      {isAllApprove.map(item => (
+        <NftAvatar key={item.address} NftInfo={item} />
+      ))}
+    </>
   );
 };
-export default NftAvatar
-
