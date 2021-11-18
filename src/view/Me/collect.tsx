@@ -57,7 +57,7 @@ const Collect = props => {
       </CrumbsHead>
       <List
         marginTop={14}
-        loading={page <= totalPage}
+        loading={loading}
         renderList={() => {
           if (loading || page > totalPage) return false;
           setLoading(true);

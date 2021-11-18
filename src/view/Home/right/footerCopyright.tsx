@@ -1,27 +1,38 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Flex, Box, Button } from 'uikit';
-const FooterCopyrightBox = styled.div`
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'contexts/Localization';
+import { Flex, Box, Text } from 'uikit';
+
+const FooterCopyrightBox = styled(Box)`
   padding: 0 20px;
   width: 300px;
   margin-top: 10px;
   font-size: 16px;
-  color: #b5b5b5;
+  color: ${({ theme }) => theme.colors.textTips};
   line-height: 35px;
-  span {
+  a {
     text-decoration: underline;
   }
 `;
+
 export const FooterCopyright: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <FooterCopyrightBox>
       <Flex justifyContent="space-between">
-        <span>Terms of Service </span>
-        <span>Privacy Policy</span>
+        <Text color="textTips" as={Link} to="/">
+          {t('loginTeamText')}
+        </Text>
+        <Text color="textTips" as={Link} to="/">
+          {t('loginPrivacyPolicyText')}
+        </Text>
       </Flex>
-      <div style={{ textAlign: 'center' }}>
-        © Copyright 2021 Metatime. All Rights Reserved.
-      </div>
+      <Box style={{ textAlign: 'center' }} mt="12px">
+        <Text color="textTips">
+          © Copyright 2021 Metatime. All Rights Reserved.
+        </Text>
+      </Box>
     </FooterCopyrightBox>
   );
 };

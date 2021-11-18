@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
-import { Avatar, List } from 'components';
+import { Avatar, List, CancelAttentionModal } from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
@@ -31,6 +31,12 @@ const ContentBox = styled(Flex)`
 
 const Follow = React.memo(() => {
   const [state, setState] = useImmer({
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: ''
+    },
     hoverIndex: 0,
     hoverStatus: false,
     loading: false,
@@ -54,6 +60,7 @@ const Follow = React.memo(() => {
             : [...state.list, ...(res.data.list || [])];
           p.page = offest || state.page + 1;
           p.total = res.data.total_num;
+          p.cancelFollow = false;
         });
       }
     } catch (error) {
@@ -180,7 +187,12 @@ const Follow = React.memo(() => {
                   <React.Fragment>
                     {state.hoverStatus && state.hoverIndex === index ? (
                       <Button
-                        onClick={() => unFollowUser(item.uid)}
+                        onClick={() =>
+                          setState(p => {
+                            p.cancelFollow = true;
+                            p.cancelParams = item;
+                          })
+                        }
                         variant="tertiary"
                         onMouseLeave={() =>
                           setState(p => {
@@ -201,7 +213,7 @@ const Follow = React.memo(() => {
                           })
                         }
                       >
-                        相互关注
+                        已关注
                       </Button>
                     )}
                   </React.Fragment>
@@ -211,6 +223,17 @@ const Follow = React.memo(() => {
           })}
         </List>
       </Content>
+      <CancelAttentionModal
+        title="是否取消关注Ta？"
+        show={state.cancelFollow}
+        params={state.cancelParams}
+        confirm={() => unFollowUser(state.cancelParams.uid)}
+        onClose={() =>
+          setState(p => {
+            p.cancelFollow = false;
+          })
+        }
+      />
     </Box>
   );
 });

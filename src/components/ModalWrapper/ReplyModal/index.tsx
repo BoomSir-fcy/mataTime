@@ -28,7 +28,8 @@ export const ReplyModal = React.memo((props: IProp) => {
     console.log(res);
     if (!res) return
     Api.CommentApi.createComment({
-      pid: itemData.id,
+      pid: itemData.pid,
+      comment_id:itemData.id,
       comment: res,
     }).then(res => {
       if (Api.isSuccess(res)) {

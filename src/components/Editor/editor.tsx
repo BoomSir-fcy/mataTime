@@ -14,11 +14,11 @@ import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
 
 type Iprops = {
-  type: any;
-  sendArticle: any;
-  initValue?: any;
-  cancelSendArticle?: any;
-};
+  type: any
+  initValue?: any
+  sendArticle: any
+  cancelSendArticle?: any
+}
 
 const DefaultElement = props => {
   return <p {...props.attributes}>{props.children}</p>;
@@ -147,6 +147,7 @@ export const Editor = (props: Iprops) => {
   };
   const restInput = () => {
     setValue(initialValue);
+    setImgList([])
     setRefresh(refresh === 1 ? 2 : 1);
   };
   const sendArticle = () => {

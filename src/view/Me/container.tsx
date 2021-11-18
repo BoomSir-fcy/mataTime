@@ -1,9 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HashRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 import { Flex, Box } from 'uikit';
 import { CommonMenu } from 'components';
-import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from '../Home/right';
+import { useLocation } from 'hooks';
+import {
+  Search,
+  Swap,
+  RecommendPeople,
+  HotTopic,
+  FooterCopyright
+} from '../Home/right';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 const PageContainer = styled.div`
@@ -65,6 +72,7 @@ const menuArr = [
 ];
 
 export const Container = props => {
+  useLocation();
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">

@@ -87,7 +87,6 @@ const MentionItem: React.FC<IProps> = props => {
         ></ImgList>
       </div>
       {children}
-
       {/* 关注提示 */}
       <FollowPopupD
         uid={uid}
