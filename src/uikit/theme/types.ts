@@ -69,7 +69,9 @@ export type Gradients = {
 };
 
 export type Colors = {
+  upPrice: string;
   white: string;
+  downPrice: string;
   primary: string;
   primaryBright: string;
   primaryDark: string;

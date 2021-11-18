@@ -5,6 +5,7 @@ import { ContentApi } from './Content';
 import { HomeApi } from './Home';
 import { CommentApi } from './Comment';
 import { CommonApi } from './Common';
+import { CoinsApi } from './Coins';
 import { MeApi } from './Me';
 import { SetApi } from './Set';
 import { AttentionApi } from './Attention';
@@ -22,6 +23,7 @@ export const Api = {
   CommentApi: new CommentApi(),
   CommonApi: new CommonApi(),
   ContentApi: new ContentApi(),
+  CoinsApi: new CoinsApi(),
   MeApi: new MeApi(),
   SetApi: new SetApi(),
   AttentionApi: new AttentionApi()

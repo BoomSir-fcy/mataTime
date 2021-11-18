@@ -4,9 +4,10 @@ import MiniSwap from 'libs/mini-swap'
 import { useWeb3React } from '@web3-react/core';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import useConnectWallet from 'hooks/useConnectWallet';
+import { CoinMarketCap } from 'components/CoinMarketCap';
 
 const SwapBox = styled.div`
-margin-top:15px;
+/* margin-top:15px; */
 width: 300px;
 /* height: 436px; */
 `
@@ -24,24 +25,25 @@ export const Swap: React.FC = () => {
 
   return (
     <SwapBox>
+      <CoinMarketCap mb="15px" />
       <MiniSwap
         onInputCurrencyChange={handleInputChange}
         resetTheme={{
-        dark: {
-          colors: {
-            primary: '#4168ED',
-            textSubtle: '#7393ff',
-            backgroundAlt: '#212827'
+          dark: {
+            colors: {
+              primary: '#4168ED',
+              textSubtle: '#7393ff',
+              backgroundAlt: '#212827'
+            }
+          },
+          light: {
+            colors: {
+              primary: '#4168ED',
+              textSubtle: '#7393ff',
+              backgroundAlt: '#FFFFFF'
+            }
           }
-        },
-        light: {
-          colors: {
-            primary: '#4168ED',
-            textSubtle: '#7393ff',
-            backgroundAlt: '#FFFFFF'
-          }
-        }
-      }}
+        }}
         onConnectWallet={onConnectWallet}
         chainId={chainId} isDark={isDark} lang={languange?.value?.locale} />
     </SwapBox>

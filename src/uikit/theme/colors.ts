@@ -20,7 +20,9 @@ export const additionalColors = {
   gold: '#FFC700',
   silver: '#B2B2B2',
   bronze: '#E7974D',
-  orange: '#FF780B'
+  orange: '#FF780B',
+  upPrice: '#9AF170',
+  downPrice: '#ec612b',
 };
 
 export const nftTokenColors = {
@@ -61,7 +63,7 @@ export const lightColors: Colors = {
   white_black: '#000',
   member_num: '#549A23',
   textValue: '#7E7E7E',
-  textPrimary: '#ADE58A',
+  textPrimary: '#7393FF',
   textSubtle: '#EAEAEA',
   textTips: '#B5B5B5',
   textDisabled: '#BDC2C4',
@@ -115,7 +117,7 @@ export const darkColors: Colors = {
   white_black: '#FFFFFF',
   member_num: '#FFFFFF',
   textValue: '#7E7E7E',
-  textPrimary: '#ADE58A',
+  textPrimary: '#7393FF',
   textSubtle: '#EAEAEA',
   textTips: '#B5B5B5',
   textDisabled: '#666171',

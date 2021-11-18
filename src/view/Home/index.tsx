@@ -67,11 +67,11 @@ const CancelFollow = () => {
     </FollowContainer>
   );
 };
-const Home: React.FC = (props:any) => {
+const Home: React.FC = (props: any) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
-  const sendArticle = (content: string, resetInput: () => void, image_urls,remind_user) => {
+  const sendArticle = (content: string, resetInput: () => void, image_urls, remind_user) => {
     if (!content) return false;
     Api.HomeApi.createArticle({
       content: content,
@@ -89,7 +89,7 @@ const Home: React.FC = (props:any) => {
       }
     });
   };
-  const  {match} = props
+  const { match } = props
   console.log(props);
   return (
     <PageContainer>
@@ -99,14 +99,14 @@ const Home: React.FC = (props:any) => {
           <Menu></Menu>
         </LeftCard>
         <CenterCard>
-          <Header {...props} back={ match.path==='/topicList/:id/:name'} align={ match.path==='/topicList/:id/:name'?'center':null} title={match.path==='/topicList/:id/:name'?'#'+match.params.name+'#':t('homeHeaderTitle')}></Header>
+          <Header {...props} back={match.path === '/topicList/:id/:name'} align={match.path === '/topicList/:id/:name' ? 'center' : null} title={match.path === '/topicList/:id/:name' ? '#' + match.params.name + '#' : t('homeHeaderTitle')}></Header>
           {
-            match.path==='/'?
-            <>
-            <Editor type="post" sendArticle={sendArticle}></Editor>
-            <Tabs></Tabs>
-            </>
-            :null
+            match.path === '/' ?
+              <>
+                <Editor type="post" sendArticle={sendArticle}></Editor>
+                <Tabs></Tabs>
+              </>
+              : null
           }
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} {...props}></ArticleList>
