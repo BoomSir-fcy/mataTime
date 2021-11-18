@@ -115,7 +115,6 @@ const Profile: React.FC<any> = React.memo(props => {
   });
   const uid = props.match?.params?.uid;
   const { profile, loading, page, totalPage, list } = state;
-  const userInfo: any = useStore(p => p.loginReducer.userInfo);
 
   const init = async () => {
     try {
@@ -174,7 +173,7 @@ const Profile: React.FC<any> = React.memo(props => {
     <Center>
       <Crumbs title="个人主页" />
       <ProfileCard>
-        <HeadTop style={{ backgroundImage: `url(${userInfo.background_image ? userInfo.background_image : defaultImages})` }} />
+        <HeadTop style={{ backgroundImage: `url(${profile.background_image})` }} />
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end">
@@ -183,7 +182,7 @@ const Profile: React.FC<any> = React.memo(props => {
                 <Text className="name">{profile.nick_name}</Text>
                 <Flex mb="5px">
                   <Flex>
-                    <Certification />
+                    {/* <Certification /> */}
                     <Text className="text">
                       @{shortenAddress(profile.address)}
                     </Text>
