@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
-import { Avatar, List } from 'components';
+import { Avatar, List, CancelAttentionModal } from 'components';
 import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { Api } from 'apis';
@@ -32,6 +32,12 @@ const ContentBox = styled(Flex)`
 
 const Fans = React.memo(() => {
   const [state, setState] = useImmer({
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: ''
+    },
     hoverIndex: 0,
     hoverStatus: false,
     loading: false,
@@ -55,6 +61,7 @@ const Fans = React.memo(() => {
             : [...state.list, ...(res.data.list || [])];
           p.page = offest || state.page + 1;
           p.total = res.data.total_num;
+          p.cancelFollow = false;
         });
       }
     } catch (error) {
@@ -186,7 +193,12 @@ const Fans = React.memo(() => {
                   <React.Fragment>
                     {state.hoverStatus && state.hoverIndex === index ? (
                       <Button
-                        onClick={() => unFollowUser(item.uid)}
+                        onClick={() =>
+                          setState(p => {
+                            p.cancelFollow = true;
+                            p.cancelParams = item;
+                          })
+                        }
                         variant="tertiary"
                         onMouseLeave={() =>
                           setState(p => {
@@ -217,6 +229,17 @@ const Fans = React.memo(() => {
           })}
         </List>
       </Content>
+      <CancelAttentionModal
+        title="是否取消关注Ta？"
+        show={state.cancelFollow}
+        params={state.cancelParams}
+        confirm={() => unFollowUser(state.cancelParams.uid)}
+        onClose={() =>
+          setState(p => {
+            p.cancelFollow = false;
+          })
+        }
+      />
     </Box>
   );
 });

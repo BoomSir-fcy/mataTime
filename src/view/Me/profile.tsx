@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'hooks';
 import {
   Crumbs,
   Avatar,
@@ -100,7 +99,6 @@ const Content = styled(Box)`
 `;
 
 const Profile: React.FC<any> = React.memo(props => {
-  useLocation();
   const [state, setState] = useImmer({
     profile: {
       post_num: 0,

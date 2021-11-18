@@ -99,14 +99,10 @@ const MentionItem: React.FC<IProps> = props => {
           goDetils(e);
         }}
       >
-        <ContentParsing content={itemData.content}></ContentParsing>
-
-        <ImgList
-          list={itemData.image_list || itemData.image_url_list}
-        ></ImgList>
+        <ContentParsing content={itemData.content} />
+        <ImgList list={itemData.image_list || itemData.image_url_list} />
       </div>
       {children}
-
       {/* 关注提示 */}
       <FollowPopupD
         uid={uid}

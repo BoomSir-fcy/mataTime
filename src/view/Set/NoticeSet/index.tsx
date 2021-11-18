@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
-import { Flex, Card, Text, Button, Toggle } from 'uikit';
-import { useStore } from 'store';
+import { Flex, Card, Text, Toggle } from 'uikit';
+import { useStore, fetchThunk } from 'store';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
 
@@ -16,10 +17,6 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.white_black};
   font-weight: bold;
 `;
-const Msg = styled(Text)`
-  color: #b5b5b5;
-  font-size: 16px;
-`;
 const Rows = styled(Flex)`
   justify-content: space-between;
 `;
@@ -32,7 +29,8 @@ const Column = styled(Flex)`
 `;
 
 const NoticeSet = () => {
-  const setting: any = useStore(p => p.loginReducer.userInfo);
+  const dispatch = useDispatch();
+  const setting = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer({
     msg_remind: setting.msg_remind === 1 ? true : false
   });
@@ -45,6 +43,7 @@ const NoticeSet = () => {
         setState(p => {
           p[keys] = params[keys] === 1 ? true : false;
         });
+        dispatch(fetchThunk.fetchUserInfoAsync());
         toast.success(res.msg);
       } else {
         toast.error(res.msg);

@@ -94,7 +94,8 @@ const FormInput = React.forwardRef((props, ref) => {
     introduction: profile.introduction,
     background_image: profile.background_image,
     location: profile.location || (country.length > 0 && country[0]?.value),
-    default_location: country.find(({ value }) => value === profile.location)?.id || 1
+    default_location:
+      country.find(({ value }) => value === profile.location)?.id || 1
   });
 
   useImperativeHandle(ref, () => ({
@@ -137,7 +138,7 @@ const FormInput = React.forwardRef((props, ref) => {
             value="1"
           />
           <span>0x格式</span>
-          <input
+          {/* <input
             type="radio"
             name="gs"
             checked={state.display_format === 2}
@@ -148,7 +149,7 @@ const FormInput = React.forwardRef((props, ref) => {
             }
             value="2"
           />
-          <span>域名格式</span>
+          <span>域名格式</span> */}
         </RadioBox>
       </Rows>
       <Rows>

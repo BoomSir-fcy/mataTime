@@ -23,9 +23,10 @@ const Background = styled(Flex)`
 `;
 
 export const Header = styled(Flex)`
+  height: 60px;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 16px;
+  padding: 0 16px;
   background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: 10px;
   margin-bottom: 12px;
@@ -42,7 +43,10 @@ const Edit: React.FC = () => {
   const updateUserInfo = async () => {
     const params = form.current.getFrom();
     try {
-      const res = await Api.UserApi.updateUserInfo({ ...params, background_image: state.background });
+      const res = await Api.UserApi.updateUserInfo({
+        ...params,
+        background_image: state.background
+      });
       if (Api.isSuccess(res)) {
         toast.success(res.msg);
       } else {
