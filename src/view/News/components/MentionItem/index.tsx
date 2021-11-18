@@ -38,26 +38,10 @@ const MentionItem: React.FC<IProps> = props => {
 
   const [position, setPosition] = useState([-999, -999]);
   const [uid, setUid] = useState<string | number>(0);
-  // const [content, setContent] = useState<any[]>([]);
 
   useEffect(() => {
     handleUserHover();
   }, []);
-
-  // useEffect(() => {
-  //   if (itemData.content) {
-  //     let arr = [];
-  //     try {
-  //       if (itemData.content.match(/\[.*?\]/g)) {
-  //         arr = JSON.parse(itemData.content)
-  //       }
-
-  //       setContent(arr || [])
-  //     } catch (err: any) {
-  //       arr = [];
-  //     }
-  //   }
-  // }, [itemData.content]);
 
   // 用户hover
   const handleUserHover = () => {
@@ -72,10 +56,6 @@ const MentionItem: React.FC<IProps> = props => {
           setPosition([e.clientX, e.clientY]);
         }
       });
-      // dom.addEventListener('mouseout', (e: any) => {
-      //   console.log('mouseout:', e)
-      //   setPosition([-999, -999])
-      // })
     });
   };
 
@@ -100,7 +80,6 @@ const MentionItem: React.FC<IProps> = props => {
         }}
       >
         <ContentParsing content={itemData.content}></ContentParsing>
-
         <ImgList
           list={itemData.image_list || itemData.image_url_list}
         ></ImgList>
@@ -151,13 +130,15 @@ export const MentionItemUser: React.FC<UserProps> = ({
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback({
-        ...itemData,
-        post: {
-          ...itemData.post,
-          is_attention: 0
-        }
-      });
+      // callback({
+      //   ...itemData,
+      //   post: {
+      //     ...itemData.post,
+      //     is_attention: 0
+      //   }
+      // });
+      // callback()
+      callback(itemData, MoreOperatorEnum.FOLLOW)
     } else {
       toast.error(res.data);
     }
@@ -177,7 +158,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 {itemData.user_name || itemData.nick_name}
               </div>
               <div className="time">
-                <span>@0x99..21313</span>
+                <span>@{(itemData.user_address || '').slice(0, 3) + '...' + (itemData.user_address || '').slice(35)}</span>
                 {itemData.add_time_desc || itemData.post_time_desc}
               </div>
             </div>

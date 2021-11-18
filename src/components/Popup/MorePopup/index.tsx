@@ -14,7 +14,9 @@ import { copyContent } from 'utils/copy';
 export enum MoreOperatorEnum {
   SHIELD = 'SHIELD', // 屏蔽
   SETTOP = 'SETTOP',
-  DELPOST = 'DELPOST'
+  DELPOST = 'DELPOST',
+  FOLLOW = 'FOLLOW',
+  CANCEL_FOLLOW = 'CANCEL_FOLLOW'
 }
 
 
@@ -91,7 +93,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const onTopPostRequest = async (pid: number) => {
     const res = await Api.AttentionApi.setTopPost(pid);
     if (Api.isSuccess(res)) {
-      // callback(data, MoreOperatorEnum.SETTOP)
+      callback(data, MoreOperatorEnum.SETTOP)
       toast.success(t('moreTopSuccess'))
     } else {
       toast.error(res.data || t('moreTopError'))

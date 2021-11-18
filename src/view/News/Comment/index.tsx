@@ -56,8 +56,12 @@ const NewsComment: React.FC = (props) => {
               updateList(data)
             }} />
             <div className="reply-wrapper">
-              {t('newsCommentReply')}
-              <a>@{item.comment.comment_user_name}</a>
+              {item.comment.comment_user_name ? t('newsCommentReply') : t('newsCommentMenuTitle')}：
+              {
+                item.comment.comment_user_name ? (
+                  <a>@{item.comment.comment_user_name}</a>
+                ) : null
+              }
               <ContentParsing content={item.comment.comment}></ContentParsing>
             </div>
             <div className="comment-content">
