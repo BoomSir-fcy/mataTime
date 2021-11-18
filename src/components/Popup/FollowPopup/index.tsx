@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Icon, Avatar } from 'components';
+import { Icon, Avatar, MoreOperatorEnum } from 'components';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization'
 import {
@@ -16,11 +16,12 @@ import { Api } from 'apis';
 type Iprops = {
   children: React.ReactElement;
   uid?: number | string;
+  callback?: Function;
 }
 
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation()
-  const { children, uid = 0 } = props
+  const { children, uid = 0, callback = () => { } } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
@@ -42,6 +43,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       toast.success(res.data)
       getUserInfo()
+      callback(MoreOperatorEnum.CANCEL_FOLLOW)
     } else {
       toast.error(res.data)
     }
@@ -53,6 +55,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       toast.success(res.data)
       getUserInfo()
+      callback(MoreOperatorEnum.CANCEL_FOLLOW)
     } else {
       toast.error(res.data)
     }

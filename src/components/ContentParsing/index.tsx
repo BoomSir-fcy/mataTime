@@ -1,9 +1,10 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom'
-import {FollowPopup} from 'components';
+import { Link } from 'react-router-dom'
+import { FollowPopup, MoreOperatorEnum } from 'components';
 type IProps = {
-  content:string
+  content: string;
+  callback?: Function;
 }
 const ParagraphItem = styled.div`
 display: flex;
@@ -23,48 +24,53 @@ span {
   cursor: pointer;
 }
 `
-export const ContentParsing = (props:IProps)=>{
-  const [parsingResult,setParsingResult]= useState([])
-  useEffect(()=>{
-  const {content} = props
-  try{
-    setParsingResult(Array.isArray(JSON.parse(content))?JSON.parse(content):[])
-  } catch (err: any) {
-  }
-  },[props.content])
-return (
-  <>
-  {
-    parsingResult &&
-    parsingResult.length > 0 &&
-    parsingResult.map((item: any,index) => {
-      return (
-        <ParagraphItem key={index}>
-          {item.children.map((child: any) => {
-            return (
-                child.type === 'mention' ? (
-                  <p>
-                    <FollowPopup uid={child?.attrs?.userid || 0}>
-                      <a>{child.character}</a>
-                    </FollowPopup>
-                  </p>
-                ) : child.type === 'topic' ? (
-                  <p>
-                    {(child.children || []).map((topic: any) => {
-                      if (topic.text) {
-                        return <Link to={ `/topicList/0/${topic.text}`}>#{topic.text}#</Link>;
-                      }
-                    })}
-                  </p>
-                ) : (
-                  <p>{child.text || ''}</p>
-                )
+export const ContentParsing = (props: IProps) => {
+  const { content, callback = () => { } } = props
+  const [parsingResult, setParsingResult] = useState([])
+  useEffect(() => {
+    try {
+      setParsingResult(Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [])
+    } catch (err: any) {
+    }
+  }, [props.content])
+  return (
+    <>
+      {
+        parsingResult &&
+        parsingResult.length > 0 &&
+        parsingResult.map((item: any, index) => {
+          return (
+            <ParagraphItem key={index}>
+              {item.children.map((child: any) => {
+                return (
+                  child.type === 'mention' ? (
+                    <p>
+                      <FollowPopup
+                        uid={child?.attrs?.userid || 0}
+                        callback={(type: MoreOperatorEnum) => {
+                          callback(type)
+                        }}
+                      >
+                        <a>{child.character}</a>
+                      </FollowPopup>
+                    </p>
+                  ) : child.type === 'topic' ? (
+                    <p>
+                      {(child.children || []).map((topic: any) => {
+                        if (topic.text) {
+                          return <Link to={`/topicList/0/${topic.text}`}>#{topic.text}#</Link>;
+                        }
+                      })}
+                    </p>
+                  ) : (
+                    <p>{child.text || ''}</p>
+                  )
                 )
               })}
-        </ParagraphItem>
-      );
-    })
-    }
+            </ParagraphItem>
+          );
+        })
+      }
     </>
-)
+  )
 }
