@@ -70,7 +70,7 @@ const insertTopic = (editor, { character = '' }) => {
   Transforms.insertNodes(editor, topic);
 };
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {} } = props;
+  const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const ref = useRef<HTMLDivElement | null>();
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
@@ -93,7 +93,7 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) {}
+    } catch (err) { }
   }, [props.initValue]);
   // 扩大focus距离
   useEffect(() => {
@@ -183,7 +183,7 @@ export const Editor = (props: Iprops) => {
       <SearchPop type={searchUser ? 'user' : 'topic'} show={searcTopic || searchUser} callback={searchSelect}></SearchPop>
       <Slate editor={editor} value={value} onChange={value => setValue(value)}>
         <div className="text-box" ref={ref}>
-          <Editable autoFocus renderElement={renderElement} placeholder={t('editorPlaceholder')} />
+          <Editable autoFocus renderElement={renderElement} placeholder={type === 'comment' ? t('newsCommentReply') : t('editorPlaceholder')} />
         </div>
         <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
         <Flex justifyContent="space-between" alignItems="center">
@@ -199,7 +199,7 @@ export const Editor = (props: Iprops) => {
               <SendButton onClick={sendArticle}>保存并发布</SendButton>
             </div>
           ) : (
-            <SendButton onClick={sendArticle}>{t('sendBtnText')}</SendButton>
+            <SendButton onClick={sendArticle}>{type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}</SendButton>
           )}
         </Flex>
       </Slate>

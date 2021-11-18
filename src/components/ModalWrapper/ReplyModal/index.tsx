@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Editor, Avatar } from 'components';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux'
 import MentionItem from 'view/News/components/MentionItem';
 import { Api } from 'apis';
 import {
@@ -19,6 +20,7 @@ type IProp = {
 }
 
 export const ReplyModal = React.memo((props: IProp) => {
+  const userInfo = useSelector((state: any) => state.loginReducer.userInfo);
   const { show, onClose, itemData } = props
 
   // 评论
@@ -58,7 +60,7 @@ export const ReplyModal = React.memo((props: IProp) => {
                   <div className="left">
                     <div className="img-box">
                       {/* <img src="" alt="" /> */}
-                      <Avatar className="avatar" scale="md" />
+                      <Avatar className="avatar" src={userInfo.nft_image} scale="md" />
                     </div>
                   </div>
                   <div className="right">

@@ -32,7 +32,7 @@ const MentionItem: React.FC<IProps> = props => {
     children,
     size = 'nomal',
     itemData = {},
-    callback = () => {}
+    callback = () => { }
   } = props;
   const mentionRef: any = useRef();
 
@@ -131,7 +131,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
   more = true,
   size = 'nomal',
   itemData = {},
-  callback = () => {}
+  callback = () => { }
 }) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
   const [isOwn, setIsOwn] = useState<boolean>(false);
@@ -177,6 +177,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 {itemData.user_name || itemData.nick_name}
               </div>
               <div className="time">
+                <span>@0x99..21313</span>
                 {itemData.add_time_desc || itemData.post_time_desc}
               </div>
             </div>
