@@ -69,10 +69,12 @@ export const LoginJoin: React.FC = React.memo(() => {
     //1.1 验证是否注册
     const [verify] = await Promise.all([siginInVerify(account)]);
     // 用户登录
-    Boolean(verify) &&
+    if (Boolean(verify)) {
       setState(p => {
         p.isSignIn = true;
       });
+      const Avatar = await getNftUrl(account);
+    }
     if (!Boolean(verify)) {
       //1.2 未注册——设置成需要注册
       dispatch(storeAction.changeSignUp({ isSignup: true }));
