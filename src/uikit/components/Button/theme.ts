@@ -105,7 +105,7 @@ export const styleVariants = {
     color: 'primary',
     boxShadow: 'none',
     ':disabled': {
-      color: 'white_black'
+      color: 'white'
     }
   },
   [variants.CIRCULAR]: {
