@@ -68,14 +68,17 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
                 post_id: itemData.id
               }
             }} more={false} />
-            <MentionOperator replyType="twitter" itemData={{
-              ...itemData, post_id: itemData.id, post: {
-                ...itemData
-              }
-            }} callback={(data) => {
-              console.log(data);
-              setItemData(data)
-            }} />
+            <MentionOperator
+              replyType="twitter"
+              postId={itemData.id}
+              itemData={{
+                ...itemData, post_id: itemData.id, post: {
+                  ...itemData
+                }
+              }} callback={(data) => {
+                console.log(data);
+                setItemData(data)
+              }} />
           </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
           <Editor type="comment" sendArticle={sendArticle}></Editor>

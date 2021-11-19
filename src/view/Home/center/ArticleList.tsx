@@ -76,7 +76,6 @@ export const ArticleList = (props) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    console.log(type)
     if (type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
       type === MoreOperatorEnum.SETTOP ||
@@ -121,16 +120,22 @@ export const ArticleList = (props) => {
               updateList(item, type)
             }}>
             </MentionItem>
-            <MentionOperator {...props} replyType="twitter" itemData={{
-              ...item,
-              post_id: item.id,
-              post: {
+            <MentionOperator
+              {...props}
+              replyType="twitter"
+              postId={item.id}
+              itemData={{
                 ...item,
-                post_id: item.id
-              }
-            }} callback={(item: any, type?: MoreOperatorEnum) => {
-              updateList(item, type)
-            }} />
+                post_id: item.id,
+                post: {
+                  ...item,
+                  post_id: item.id
+                }
+              }}
+              callback={(item: any, type?: MoreOperatorEnum) => {
+                updateList(item, type)
+              }}
+            />
           </MeItemWrapper>
         ))}
       </List>

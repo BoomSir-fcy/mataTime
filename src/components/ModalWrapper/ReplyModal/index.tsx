@@ -18,19 +18,21 @@ type IProp = {
   itemData: any;
   onClose: Function;
   replyType: string;
+  commentId?: string;
+  postId?: string;
 }
 
 export const ReplyModal = React.memo((props: IProp) => {
   const userInfo = useSelector((state: any) => state.loginReducer.userInfo);
-  const { show, onClose, itemData, replyType } = props
+  const { show, onClose, itemData, replyType, commentId = '', postId = '' } = props
 
   // 评论
   const sendArticle = (res, resetInput: () => void) => {
     if (!res) return
     if (replyType === 'comment') { // 针对评论
       Api.CommentApi.createComment({
-        pid: itemData.pid,
-        comment_id: itemData.id,
+        pid: postId,
+        comment_id: commentId,
         comment: res,
       }).then(res => {
         if (Api.isSuccess(res)) {
@@ -41,7 +43,7 @@ export const ReplyModal = React.memo((props: IProp) => {
     }
     if (replyType === 'twitter') { // 针对推文
       Api.CommentApi.createComment({
-        pid: itemData.id,
+        pid: postId,
         comment: res,
       }).then(res => {
         if (Api.isSuccess(res)) {

@@ -17,6 +17,8 @@ type IProps = {
   history?: any;
   match?: any;
   replyType?: string;
+  commentId?: string;
+  postId?: string;
 };
 
 const MentionOperator: React.FC<IProps> = ({
@@ -26,7 +28,9 @@ const MentionOperator: React.FC<IProps> = ({
   type = 'Article',
   hasLike = true,
   callback,
-  replyType = 'comment'
+  replyType = 'comment',
+  commentId = '',
+  postId = ''
 }) => {
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
@@ -114,6 +118,8 @@ const MentionOperator: React.FC<IProps> = ({
       <ReplyModal
         replyType={replyType}
         show={replyVisible}
+        commentId={commentId}
+        postId={postId}
         itemData={itemData}
         onClose={() => {
           setReplyVisible(false);
