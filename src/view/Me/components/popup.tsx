@@ -30,12 +30,13 @@ const PopupContentWrapper = styled(Card)`
   padding: 15px 30px;
   display: flex;
   flex-direction: column;
+  background-color: #4d535f;
   button {
     justify-content: flex-start;
     font-size: 14px;
     font-weight: 400;
     line-height: 36px;
-    color: ${({ theme }) => theme.colors.white_black};
+    color: ${({ theme }) => theme.colors.white};
     padding: 0;
     &:disabled {
       opacity: 0.5;
