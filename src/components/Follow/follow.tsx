@@ -1,9 +1,9 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Text, Button } from 'uikit';
 import { Avatar } from '../Avatar';
-import {Api} from 'apis'
-import {toast} from 'react-toastify'
+import { Api } from 'apis'
+import { toast } from 'react-toastify'
 const FolloWarpper = styled(Flex)`
   justify-content: space-between;
   align-items: center;
@@ -21,9 +21,25 @@ export const Follow: React.FC<{
   rows: {
     nft_image: string;
     nick_name: string;
+    address: string;
     attention_status: number;
+    uid: number
   };
-}> = ({ rows }) => {
+  getManList: () => void
+}> = ({ rows, getManList }) => {
+  const followUser = async (focus_uid: number) => {
+    try {
+      const res = await Api.MeApi.followUser(focus_uid);
+      if (Api.isSuccess(res)) {
+        toast.success('关注成功！');
+        getManList()
+      } else {
+        toast.warning(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <FolloWarpper>
       <Flex alignItems="center">
@@ -32,10 +48,10 @@ export const Follow: React.FC<{
           <Flex alignItems="center">
             <Name>{rows.nick_name}</Name>
           </Flex>
-          <Desc>@0x32...9239</Desc>
+          <Desc>@{rows.address}</Desc>
         </Flex>
       </Flex>
-      <Button variant="secondary">+关注</Button>
+      <Button variant="secondary" onClick={() => followUser(rows.uid)} >+关注</Button>
     </FolloWarpper>
   );
 };
@@ -85,27 +101,27 @@ const FollowBody = styled(Flex)`
     margin-left:30px;
   }
 `;
-type  IProps = {
-  userId:string|number,
-  callBack:(data)=>void
+type IProps = {
+  userId: string | number,
+  callBack: (data) => void
 }
-export const CancelFollow = (props:IProps) => {
+export const CancelFollow = (props: IProps) => {
   const [userInfo, setUserInfo] = useState<any>({});
-  const {callBack} = props
+  const { callBack } = props
   useEffect(() => {
-    if(props.userId){
-      const {userId} = props
+    if (props.userId) {
+      const { userId } = props
       Api.UserApi.getUserInfoByUID(userId).then(res => {
         if (Api.isSuccess(res)) {
           setUserInfo(res.data)
         }
       })
     }
-  },[props.userId])
-  const clickBtn = (flag)=>{
-    const {userId} = props
-    if(flag){
-      Api.MeApi.unFollowUser(userId).then(res=>{
+  }, [props.userId])
+  const clickBtn = (flag) => {
+    const { userId } = props
+    if (flag) {
+      Api.MeApi.unFollowUser(userId).then(res => {
         console.log(res);
         if (Api.isSuccess(res)) {
           toast.success(res.data);
@@ -114,7 +130,7 @@ export const CancelFollow = (props:IProps) => {
         }
         callBack(true)
       })
-    }else{
+    } else {
       callBack(false)
     }
   }
@@ -128,8 +144,8 @@ export const CancelFollow = (props:IProps) => {
         </div>
       </FollowBody>
       <div className="btns">
-        <Button style={{backgroundColor:'#4D535F'}} onClick={()=>{clickBtn(true)}}>确定</Button>
-        <Button  onClick={()=>{clickBtn(false)}}>取消</Button>
+        <Button style={{ backgroundColor: '#4D535F' }} onClick={() => { clickBtn(true) }}>确定</Button>
+        <Button onClick={() => { clickBtn(false) }}>取消</Button>
       </div>
     </FollowContainer>
   );

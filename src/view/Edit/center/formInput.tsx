@@ -94,9 +94,8 @@ const FormInput = React.forwardRef((props, ref) => {
     introduction: profile.introduction,
     background_image: profile.background_image,
     location: profile.location || (country.length > 0 && country[0]?.value),
-    default_location:
-      country.find(({ value }) => value === profile.location)?.id || 1
   });
+  const [defaultLocationId, setdefaultLocationId] = useState(country.find(({ value }) => value === profile.location)?.id || 1)
 
   useImperativeHandle(ref, () => ({
     getFrom() {
@@ -173,12 +172,14 @@ const FormInput = React.forwardRef((props, ref) => {
         <Title>*所在国家</Title>
         <Select
           options={country}
-          defaultId={state.default_location}
-          onChange={(val: any) =>
+          defaultId={defaultLocationId}
+          childrenHeight='120px'
+          onChange={(val: any) => {
+            setdefaultLocationId(val.ID);
             setState(p => {
-              p.default_location = val.ID;
               p.location = val.value;
             })
+          }
           }
         />
       </Rows>

@@ -6,12 +6,10 @@ import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Api } from 'apis';
-
+import { toast } from 'react-toastify';
 import { useStore, storeAction } from 'store';
 import { useSignIn } from '../hooks';
-
 import { WalletAddress } from './signUp';
-
 import { useTranslation } from 'contexts/Localization';
 
 const InputItems = styled(Flex)`
@@ -68,9 +66,14 @@ export const SignUpSetName = React.memo(() => {
       return
     }
     const res = await addNickName(state.nickName);
-    console.log(res);
     if (Api.isSuccess(res)) {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
+    } else {
+      if (res.code === 20106) {
+        toast.error('昵称已存在!');
+      } else {
+        toast.error('设置昵称失败,请重试');
+      }
     }
   }, [state]);
 
@@ -85,7 +88,7 @@ export const SignUpSetName = React.memo(() => {
           <InputText>{t('loginInputTitleAvatar')}</InputText>
           <Flex alignItems="flex-end">
             <InputNftImg src={nft.nftUrl} />
-            <Text color="#B5B5B5">{t('loginInputValueAvatar')}</Text>
+            <Text color="textTips">{t('loginInputValueAvatar')}</Text>
           </Flex>
         </InputItems>
         <InputItems alignItems="center">

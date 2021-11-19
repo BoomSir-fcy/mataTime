@@ -65,7 +65,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     if (nftStake[0].token_id) {
       setshowStakeNft(false)
       dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-      // dispatch(storeAction.changeSignUp({ isSignup: true }));
     } else {
       setshowStakeNft(true)
     }
@@ -89,7 +88,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     };
   }, []);
   useEffect(() => {
-    if (!NftList.length) {
+    if (!NftList.length && !isStakeNft) {
       dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
     } else {
       dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
