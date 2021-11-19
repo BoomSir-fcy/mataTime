@@ -45,6 +45,8 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
     return new BigNumber(currentCoin?.circulating_supply).times(currentCoin?.current_price).toFixed(0)
   }, [currentCoin])
 
+  // TODO: 价格数据有数字滚动的动效，看起来是刷新过的最新数据
+
   return (
     <StyledPage {...props}>
       <StyledPageItem pt="8px">
