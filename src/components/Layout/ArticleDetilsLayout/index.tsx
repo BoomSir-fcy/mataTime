@@ -68,7 +68,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
                 post_id: itemData.id
               }
             }} more={false} />
-            <MentionOperator itemData={{
+            <MentionOperator replyType="twitter" itemData={{
               ...itemData, post_id: itemData.id, post: {
                 ...itemData
               }

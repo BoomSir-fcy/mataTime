@@ -77,11 +77,11 @@ export const ArticleList = (props) => {
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     console.log(type)
-
     if (type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
       type === MoreOperatorEnum.SETTOP ||
-      type === MoreOperatorEnum.CANCEL_SETTOP
+      type === MoreOperatorEnum.CANCEL_SETTOP ||
+      type === MoreOperatorEnum.COMMONT
     ) {
       setPage(1)
       getList(1)
@@ -107,37 +107,6 @@ export const ArticleList = (props) => {
       <List marginTop={320} loading={page <= totalPage} renderList={() => {
         console.log(loading, page, totalPage);
         getList()
-        // if (loading || page > totalPage) return false
-        // setLoading(true)
-        // if (props.match.path === '/topicList/:id/:name') {
-        //   Api.HomeApi.findByHotTopicIdList({
-        //     page: page,
-        //     per_page: 10,
-        //     topic_id: 9
-        //   }).then(res => {
-        //     setLoading(false)
-        //     if (Api.isSuccess(res)) {
-        //       setLoading(false)
-        //       setPage(page + 1)
-        //       setTotalPage(res.data.total_page)
-        //       setListData([...listData, ...res.data.List])
-        //     }
-        //   })
-        // } else {
-        //   Api.HomeApi.getArticleList({
-        //     attention: 1,
-        //     page: page,
-        //     per_page: 50
-        //   }).then(res => {
-        //     setLoading(false)
-        //     if (Api.isSuccess(res)) {
-        //       setLoading(false)
-        //       setPage(page + 1)
-        //       setTotalPage(res.data.total_page)
-        //       setListData([...listData, ...res.data.List])
-        //     }
-        //   })
-        // }
       }}>
         {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >
@@ -152,15 +121,15 @@ export const ArticleList = (props) => {
               updateList(item, type)
             }}>
             </MentionItem>
-            <MentionOperator {...props} itemData={{
+            <MentionOperator {...props} replyType="twitter" itemData={{
               ...item,
               post_id: item.id,
               post: {
                 ...item,
                 post_id: item.id
               }
-            }} callback={(item: any) => {
-              updateList(item)
+            }} callback={(item: any, type?: MoreOperatorEnum) => {
+              updateList(item, type)
             }} />
           </MeItemWrapper>
         ))}

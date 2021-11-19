@@ -18,7 +18,7 @@ export enum MoreOperatorEnum {
   DELPOST = 'DELPOST',
   FOLLOW = 'FOLLOW',
   CANCEL_FOLLOW = 'CANCEL_FOLLOW',
-
+  COMMONT = 'COMMONT'
 }
 
 

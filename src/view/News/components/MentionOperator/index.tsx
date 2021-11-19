@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Icon, ReplyModal } from 'components';
+import { Icon, ReplyModal, MoreOperatorEnum } from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
 
@@ -16,6 +16,7 @@ type IProps = {
   callback?: Function;
   history?: any;
   match?: any;
+  replyType?: string;
 };
 
 const MentionOperator: React.FC<IProps> = ({
@@ -24,14 +25,9 @@ const MentionOperator: React.FC<IProps> = ({
   itemData,
   type = 'Article',
   hasLike = true,
-  callback
+  callback,
+  replyType = 'comment'
 }) => {
-  // const goDetils = () => {
-  //   if (!match || !history) return;
-  //   if (match.path === '/articleDetils/:id') return;
-  //   history.push('/articleDetils/' + itemData.id);
-  // };
-
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
@@ -116,10 +112,12 @@ const MentionOperator: React.FC<IProps> = ({
       </div>
       {/* 回复 */}
       <ReplyModal
+        replyType={replyType}
         show={replyVisible}
         itemData={itemData}
         onClose={() => {
           setReplyVisible(false);
+          callback(itemData, MoreOperatorEnum.COMMONT)
         }}
       />
     </MentionOperatorWrapper>

@@ -17,26 +17,40 @@ type IProp = {
   show: boolean;
   itemData: any;
   onClose: Function;
+  replyType: string;
 }
 
 export const ReplyModal = React.memo((props: IProp) => {
   const userInfo = useSelector((state: any) => state.loginReducer.userInfo);
-  const { show, onClose, itemData } = props
+  const { show, onClose, itemData, replyType } = props
 
   // 评论
   const sendArticle = (res, resetInput: () => void) => {
-    console.log(res);
     if (!res) return
-    Api.CommentApi.createComment({
-      pid: itemData.pid,
-      comment_id:itemData.id,
-      comment: res,
-    }).then(res => {
-      if (Api.isSuccess(res)) {
-        toast.success(res.data)
-        onClose()
-      }
-    })
+    if (replyType === 'comment') { // 针对评论
+      Api.CommentApi.createComment({
+        pid: itemData.pid,
+        comment_id: itemData.id,
+        comment: res,
+      }).then(res => {
+        if (Api.isSuccess(res)) {
+          toast.success(res.data)
+          onClose()
+        }
+      })
+    }
+    if (replyType === 'twitter') { // 针对推文
+      Api.CommentApi.createComment({
+        pid: itemData.id,
+        comment: res,
+      }).then(res => {
+        if (Api.isSuccess(res)) {
+          toast.success(res.data)
+          onClose()
+        }
+      })
+    }
+
   }
   return (
     <>
