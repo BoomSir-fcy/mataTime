@@ -31,7 +31,7 @@ export const ArticleList = (props) => {
 
   // 获取列表
   const getList = (current = 0) => {
-    if (loading || page > totalPage) return false
+    if ((loading || page > totalPage) && !current) return false
     setLoading(true)
     if (props.match.path === '/topicList/:id/:name') {
       Api.HomeApi.findByHotTopicIdList({

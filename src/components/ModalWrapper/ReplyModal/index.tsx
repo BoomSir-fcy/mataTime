@@ -71,7 +71,7 @@ export const ReplyModal = React.memo((props: IProp) => {
               </ModalTitleWrapper>
               <ReportContentWrapper>
                 <ReplyTargetWrapper>
-                  <MentionItem itemData={itemData} more={false} />
+                  <MentionItem itemData={replyType === 'twitter' ? itemData : itemData.comment} more={false} />
                 </ReplyTargetWrapper>
                 <ReplyConentWrapper>
                   <div className="left">

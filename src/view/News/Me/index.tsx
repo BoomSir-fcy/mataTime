@@ -16,8 +16,7 @@ const NewsMe: React.FC = (props) => {
 
   // 获取列表
   const getList = (current = 0) => {
-    // if (loading || page > totalPage) return false
-    if (loading || page > totalPage) {
+    if ((loading || page > totalPage) && !current) {
       return false
     }
     setLoading(true)
@@ -38,14 +37,11 @@ const NewsMe: React.FC = (props) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    console.log(type)
     if (type === MoreOperatorEnum.COMMONT) {
       setPage(1)
       getList(1)
       return
     }
-
-
     let arr = []
     listData.forEach((item: any) => {
       let obj = item
@@ -80,12 +76,18 @@ const NewsMe: React.FC = (props) => {
             }} {...props} callback={(data, type: MoreOperatorEnum) => {
               updateList(data, type)
             }} />
-            <MentionOperator replyType={item.comment.pid ? 'comment' : 'twitter'} hasLike={false} itemData={{
-              ...item,
-              ...item.post
-            }} callback={(item: any, type?: MoreOperatorEnum) => {
-              updateList(item, type)
-            }} />
+            <MentionOperator
+              replyType={item.comment.pid ? 'comment' : 'twitter'}
+              hasLike={false}
+              postId={item.post.post_id}
+              itemData={{
+                ...item,
+                ...item.post
+              }}
+              callback={(item: any, type?: MoreOperatorEnum) => {
+                updateList(item, type)
+              }}
+            />
           </MeItemWrapper>
         ))}
       </List>

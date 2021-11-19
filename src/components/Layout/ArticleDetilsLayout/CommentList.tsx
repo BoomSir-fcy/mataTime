@@ -118,7 +118,13 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             <MentionOperator
               type={'Comment'}
               callback={initList}
-              itemData={item}
+              itemData={{
+                ...item,
+                comment: {
+                  ...item,
+                  content: item.comment
+                }
+              }}
               postId={item.pid}
               commentId={item.id}
             ></MentionOperator>
