@@ -1,5 +1,6 @@
 export * from './modal';
 export * from './ReportModal';
+export * from './ReportModal/reportUserModal';
 export * from './ShieldModal';
 export * from './EditTwitterModal';
 export * from './ReplyModal';

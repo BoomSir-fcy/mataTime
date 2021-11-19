@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Flex, Button, Box, Card } from 'uikit';
-import { CancelAttentionModal } from 'components';
+import { CancelAttentionModal, ReportUserModal } from 'components';
 import { Api } from 'apis';
 
 import { copyContent } from 'utils';
 import { useTranslation } from 'contexts/Localization';
+import { toast } from 'react-toastify';
+import { debounce } from 'lodash';
 
 const PopupContainer = styled(Box)`
   position: relative;
@@ -44,24 +46,44 @@ const PopupContentWrapper = styled(Card)`
   }
 `;
 
-export const Popup = React.memo(() => {
+export const Popup: React.FC<{
+  user: any;
+  onCallback: Function;
+}> = React.memo(({ user, onCallback }) => {
   const { t } = useTranslation();
-
   const [state, setState] = useImmer({
     visible: false,
-    cancelFollow: false,
-    cancelParams: {
-      uid: 0,
-      address: '',
-      nft_image: ''
-    }
+    reportVisible: false,
+    cancelFollow: false
   });
+
+  const followUser = async (focus_uid: number) => {
+    try {
+      const res = await Api.MeApi.followUser(focus_uid);
+      if (Api.isSuccess(res)) {
+        onCallback();
+        toast.success(res.msg);
+      } else {
+        toast.error(res.msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // 取消关注
   const unFollowUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.unFollowUser(focus_uid);
-      console.log(res);
+      if (Api.isSuccess(res)) {
+        onCallback();
+        setState(p => {
+          p.cancelFollow = false;
+        });
+        toast.success(res.msg);
+      } else {
+        toast.error(res.msg);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +92,21 @@ export const Popup = React.memo(() => {
   return (
     <Box>
       <Flex alignItems="center">
-        <Button>取消关注</Button>
+        {user.is_attention === 1 ? (
+          <Button
+            onClick={() =>
+              setState(p => {
+                p.cancelFollow = true;
+              })
+            }
+          >
+            {t('meUnsubscribe')}
+          </Button>
+        ) : (
+          <Button onClick={debounce(() => followUser(user.uid), 1000)}>
+            {t('meFocusOn')}
+          </Button>
+        )}
         <PopupContainer
           onMouseLeave={() =>
             setState(p => {
@@ -98,27 +134,45 @@ export const Popup = React.memo(() => {
               }}
             >
               <Button variant="text" disabled>
-                私信
+                {t('mePopupMenuPrivateLetters')}
               </Button>
               <Button
                 variant="text"
                 onClick={() => copyContent(window.location.href || '')}
               >
-                复制主页地址
+                {t('mePopupMenuCopyAddress')}
               </Button>
-              {/* <Button variant="text">投诉用户</Button> */}
+              <Button
+                variant="text"
+                onClick={() =>
+                  setState(p => {
+                    p.reportVisible = !state.reportVisible;
+                  })
+                }
+              >
+                {t('mePopupMenuComplainAgainstUsers')}
+              </Button>
             </PopupContentWrapper>
           )}
         </PopupContainer>
       </Flex>
       <CancelAttentionModal
-        title="是否取消关注Ta？"
+        title={t('meUnsubscribeTips')}
         show={state.cancelFollow}
-        params={state.cancelParams}
-        confirm={() => unFollowUser(state.cancelParams.uid)}
+        params={user}
+        confirm={debounce(() => unFollowUser(user.uid), 1000)}
         onClose={() =>
           setState(p => {
             p.cancelFollow = false;
+          })
+        }
+      />
+      <ReportUserModal
+        visible={state.reportVisible}
+        userInfo={user}
+        onClose={() =>
+          setState(p => {
+            p.reportVisible = false;
           })
         }
       />

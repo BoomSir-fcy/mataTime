@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
-import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
@@ -12,7 +12,6 @@ import { CommonLayout, Header, Toast } from 'components';
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
 import { useThemeManager } from 'store/app/hooks';
-import { PrivateRoute } from './PrivateRoute';
 
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +22,9 @@ moment.locale('zh-cn');
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
-const ArticleDetilsLayout = React.lazy(() => import('./components/Layout/ArticleDetilsLayout'));
+const ArticleDetilsLayout = React.lazy(
+  () => import('./components/Layout/ArticleDetilsLayout')
+);
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
@@ -32,7 +33,12 @@ const Test = React.lazy(() => import('./view/Test'));
 const Container = styled(Box)<{
   dark: boolean;
 }>`
-  background-image: ${({ dark }) => `url(${require(dark ? 'assets/images/dark_background.jpg' : 'assets/images/light_background.jpg').default})`};
+  background-image: ${({ dark }) =>
+    `url(${
+      require(dark
+        ? 'assets/images/dark_background.jpg'
+        : 'assets/images/light_background.jpg').default
+    })`};
   background-attachment: fixed;
   min-height: 100vh;
 `;
@@ -65,7 +71,11 @@ function App() {
         <React.Suspense fallback={<PageLoader />}>
           <Router history={history}>
             <Route path="/" exact render={props => <Home {...props} />} />
-            <Route path="/topicList/:id/:name" exact render={props => <Home {...props} />} />
+            <Route
+              path="/topicList/:id/:name"
+              exact
+              render={props => <Home {...props} />}
+            />
             {process.env.NODE_ENV === 'development' && (
               <Route path="/test" exact>
                 <Test />
@@ -81,10 +91,13 @@ function App() {
                 </>
               )}
             ></Route>
-            <Route path="/news" render={props => <CommonLayout {...props}></CommonLayout>}></Route>
-            <Route path="/login" component={Login} />
-            <PrivateRoute path="/me" component={Me} />
-            <PrivateRoute path="/set" component={Set} />
+            <Route
+              path="/news"
+              render={props => <CommonLayout {...props}></CommonLayout>}
+            ></Route>
+            <Route path="/login" exact component={Login} />
+            <Route path="/me" component={Me} />
+            <Route path="/set" component={Set} />
           </Router>
         </React.Suspense>
       </Container>

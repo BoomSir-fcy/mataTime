@@ -122,7 +122,7 @@ const FormInput = React.forwardRef((props, ref) => {
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
-          <Msg>1~20个字符，支持中英文、数字</Msg>
+          <Msg>1~20个字符</Msg>
         </div>
       </Rows>
       <Rows>

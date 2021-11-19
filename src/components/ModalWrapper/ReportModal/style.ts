@@ -23,7 +23,7 @@ export const ModalTitleWrapper = styled(Box)`
   }
   .close {
     width: 20px;
-    i{
+    i {
       color: ${({ theme }) => theme.colors.white_black} !important;
     }
   }
@@ -56,5 +56,24 @@ export const ReportContentWrapper = styled(Box)`
     &:last-child {
       border: 0;
     }
+  }
+`;
+
+export const ModalContent = styled(Box)`
+  margin-top: 20px;
+  textarea {
+    background: ${({ theme }) => theme.colors.backgroundTextArea};
+    width: 100%;
+    height: 210px;
+    margin: 5px 0 15px;
+    color: ${({ theme }) => theme.colors.textTips};
+    padding: 15px;
+    border-radius: ${({ theme }) => theme.radii.card};
+    border: none;
+    outline: none;
+    resize: none;
+  }
+  button {
+    width: 150px;
   }
 `;
