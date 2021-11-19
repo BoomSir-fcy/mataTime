@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useRef, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, AppState } from '../index'
-import { fetchCoinsListAsync } from './reducer'
+import { fetchCoinInfoAsync, fetchCoinsListAsync } from './reducer'
 
 const REFRESH_INTERVAL = 5 * 1000 * 1000
 
@@ -51,6 +51,16 @@ export const useFetchCoinsList = () => {
   }, [refresh])
 }
 
+export const useFetchCoinInfo = (coinId) => {
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    if (coinId) {
+      dispatch(fetchCoinInfoAsync(coinId))
+    }
+  }, [coinId])
+}
+
 
 export function useCoinsState(): AppState['coins'] {
   return useSelector<AppState, AppState['coins']>((state) => state.coins)
@@ -65,6 +75,5 @@ export function useCoinsMap(): {
 
 export function useCoinsList(): Api.Coins.CoinInfo[] {
   const { data } = useCoinsState()
-  console.log(data, Object.values(data), 'data')
   return Object.values(data)
 }

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js';
 import styled from 'styled-components'
 import { Card, BoxProps, Flex, Box, Text } from 'uikit'
 import { languagesOptions } from 'config/localization';
 import { Select } from 'components';
 import { useTranslation } from 'contexts/Localization'
 import { useLanguange } from 'store/app/hooks';
-import { useCoinsList, useFetchCoinsList } from 'store/coins/hooks';
+import { useCoinsList, useFetchCoinInfo, useFetchCoinsList } from 'store/coins/hooks';
 import CoinItem from './CoinItem'
 import { DropDown } from '../DropDown'
 
@@ -18,20 +19,20 @@ const StyledPage = styled(Card)`
 `
 
 const StyledPageItem = styled(Box)`
-  padding: 0 16px;
+  margin: 0 16px;
 `
 
 
 export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   const [languange, setUseLanguage] = useLanguange();
+  const { t } = useTranslation()
 
   const [isOpen, setIsOpen] = useState(false);
 
   useFetchCoinsList()
   const coinsList = useCoinsList()
   const [currentCoin, setCurrentCoin] = useState(coinsList[0])
-
-  console.log(currentCoin, coinsList)
+  useFetchCoinInfo(currentCoin?.coin_id)
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {
@@ -39,29 +40,41 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
     }
   }, [currentCoin, coinsList])
 
+  const marketCap = useMemo(() => {
+    if (!currentCoin) return '--'
+    return new BigNumber(currentCoin?.circulating_supply).times(currentCoin?.current_price).toFixed(0)
+  }, [currentCoin])
+
   return (
     <StyledPage {...props}>
-      <StyledPageItem>
-        <CoinItem onTouch={() => setIsOpen(!isOpen)} coinInfo={currentCoin} />
+      <StyledPageItem pt="8px">
+        <CoinItem showHelp onTouch={() => setIsOpen(!isOpen)} coinInfo={currentCoin} />
       </StyledPageItem>
       <Box>
         <DropDown fillWidth isOpen={isOpen} setIsOpen={setIsOpen}>
           <StyledPageItem>
             {
-              coinsList.map(item => (<CoinItem key={item.coin_id} coinInfo={item} />))
+              coinsList.map(item => (<CoinItem key={item.coin_id}
+                fillClickArea
+                isActive={item.coin_id === currentCoin?.coin_id}
+                onClick={(coin) => {
+                  setIsOpen(!isOpen)
+                  setCurrentCoin(coin)
+                }}
+                coinInfo={item} />))
             }
           </StyledPageItem>
         </DropDown>
       </Box>
       <StyledPageItem>
-        <Flex justifyContent="space-between">
+        <Flex mt="8px" justifyContent="space-between">
           <Box>
-            <Text fontSize="14px" color="textTips">MARKET CAP</Text>
-            <Text bold color="textPrimary" fontSize="14px">$16M</Text>
+            <Text fontSize="14px" color="textTips">{t('MARKET CAP')}</Text>
+            <Text bold color="textPrimary" fontSize="14px">${marketCap}</Text>
           </Box>
           <Box>
-            <Text fontSize="14px" color="textTips" textAlign="right">VOLUME</Text>
-            <Text bold color="textPrimary" fontSize="14px" textAlign="right">$16M</Text>
+            <Text fontSize="14px" color="textTips" textAlign="right">{t('VOLUME')}</Text>
+            <Text bold color="textPrimary" fontSize="14px" textAlign="right">$--</Text>
           </Box>
         </Flex>
       </StyledPageItem>
