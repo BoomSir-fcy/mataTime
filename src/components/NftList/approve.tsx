@@ -10,6 +10,10 @@ import { toast } from 'react-toastify';
 import { useNftStakeFarms, useCancelNftStake } from 'view/Login/hook';
 import Dots from '../Loader/Dots';
 
+const NowrapBtn = styled(Button)`
+width: max-content;
+word-break: keep-all;
+`
 
 export const NftButton: React.FC<{ item: any }> = ({ item }) => {
   const { t } = useTranslation();
@@ -33,7 +37,7 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
     [onNftsStake, onCancelNftStake, account],
   )
   return (
-    <Button disabled={pendingTx} onClick={async () => {
+    <NowrapBtn disabled={pendingTx} onClick={async () => {
       if (item.isApprovedMarket) {
         setPendingTx(true)
         try {
@@ -65,6 +69,6 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
       }
 
     }} >{pendingTx ? (<Dots>{t('质押中')}</Dots>) : isStakeNft ? t('替换质押') : t('质押')}
-    </Button>
+    </NowrapBtn>
   );
 }

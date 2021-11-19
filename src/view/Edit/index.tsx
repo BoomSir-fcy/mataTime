@@ -42,6 +42,17 @@ const Edit: React.FC = () => {
   });
   const updateUserInfo = async () => {
     const params = form.current.getFrom();
+    const myInfo = {
+      nick_name: profile.nick_name,
+      display_format: profile.display_format,
+      introduction: profile.introduction,
+      background_image: profile.background_image,
+      location: profile.location,
+    }
+    if (isObjectValueEqual(params, myInfo) && state.background === profile.background_image) {
+      toast.error('没有任何修改!');
+      return
+    }
     try {
       const res = await Api.UserApi.updateUserInfo({
         ...params,
@@ -51,12 +62,34 @@ const Edit: React.FC = () => {
         dispatch(storeAction.changeUpdateProfile({ ...res.data }));
         toast.success(res.msg);
       } else {
-        toast.error(res.msg);
+        if (res.code === 20106) {
+          toast.error('昵称已存在!');
+        } else {
+          toast.error('修改失败');
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const isObjectValueEqual = (a, b) => {
+    //取对象a和b的属性名
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
+    //判断属性名的length是否一致
+    if (aProps.length != bProps.length) {
+      return false;
+    }
+    //循环取出属性名，再判断属性值是否一致
+    for (var i = 0; i < aProps.length; i++) {
+      var propName = aProps[i];
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   return (
     <Box>
