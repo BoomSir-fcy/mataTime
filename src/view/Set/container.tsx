@@ -19,13 +19,15 @@ const PageContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
-const LeftCard = styled(Flex)``;
+const LeftCard = styled(Flex)`
+  width: 200px;
+`;
 const CenterCard = styled(Box)`
   flex: 1;
   ${mediaQueriesSize.marginLRmd}
 `;
 const RightCard = styled.div`
-  width: 375px;
+  width: 300px;
 `;
 
 const menuArr = [

@@ -11,7 +11,7 @@ import { Api } from 'apis';
 import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
-  height: 705px;
+  min-height: 705px;
   padding: 29px 19px;
   margin-top: 10px;
 `;

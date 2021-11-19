@@ -118,23 +118,26 @@ const Profile: React.FC<any> = React.memo(props => {
   const gray = useTheme().colors.textTips;
   const { profile, loading, page, totalPage, list } = state;
 
-  const init = async () => {
+  const init = async (offset?: number) => {
     try {
       setState(p => {
         p.loading = true;
       });
       const [profile, tweet] = await Promise.all([
         Api.MeApi.getProfile(uid),
-        Api.MeApi.getProfileMsg(page, uid)
+        Api.MeApi.getProfileMsg(offset || page, uid)
       ]);
-      setState(p => {
-        p.profile = profile.data;
-        p.list = tweet.data.list;
-        p.page = page + 1;
-        p.totalPage = tweet.data.total_page;
-      });
+      if (Api.isSuccess(profile) || Api.isSuccess(tweet)) {
+        setState(p => {
+          p.profile = profile.data;
+          p.list = offset
+            ? [...(tweet.data?.list || [])]
+            : [...state.list, ...(tweet.data?.list || [])];
+          p.page = (offset || page) + 1;
+          p.totalPage = tweet.data.total_page;
+        });
+      }
     } catch (error) {
-      console.log(error);
     } finally {
       setState(p => {
         p.loading = false;
@@ -176,7 +179,9 @@ const Profile: React.FC<any> = React.memo(props => {
       <Crumbs title={t('meHome')} />
       <ProfileCard>
         <HeadTop
-          style={{ backgroundImage: `url(${profile.background_image})` }}
+          style={{
+            backgroundImage: `url(${profile.background_image || defaultImages})`
+          }}
         />
         <ProfileInfo>
           <Info>
@@ -202,10 +207,10 @@ const Profile: React.FC<any> = React.memo(props => {
             </Flex>
             {!uid ? (
               <Button as={Link} to="/me/edit">
-                编辑资料
+                {t('meEditProfile')}
               </Button>
             ) : (
-              <Popup />
+              <Popup user={profile} onCallback={() => init(1)} />
             )}
           </Info>
           <Content>
@@ -221,17 +226,20 @@ const Profile: React.FC<any> = React.memo(props => {
             </Box>
             <Flex className="number">
               <Text className="text">
-                粉丝 <Text className="value">{profile.fans_num}</Text>
+                {t('meFans')}
+                <Text className="value"> {profile.fans_num}</Text>
               </Text>
               <Text className="text">
-                关注 <Text className="value">{profile.attention_num}</Text>
+                {t('meFollow')}
+                <Text className="value"> {profile.attention_num}</Text>
               </Text>
               <Text className="text">
-                动态 <Text className="value">{profile.post_num}</Text>
+                {t('meDynamic')}
+                <Text className="value"> {profile.post_num}</Text>
               </Text>
             </Flex>
             <Flex className="topic">
-              <Text className="text">活跃话题</Text>
+              <Text className="text">{t('meActiveTopic')}</Text>
               {profile?.label_list.map((row: string, index: number) => (
                 <Button variant="secondary" key={index}>
                   #{row}

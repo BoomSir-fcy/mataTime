@@ -25,8 +25,8 @@ const LeftCard = styled(Flex)`
 `;
 const CenterCard = styled(Box)`
   /* flex: 1; */
- width: 670px;
-word-wrap: break-word;
+  width: 670px;
+  word-wrap: break-word;
   ${mediaQueriesSize.marginLRmd}
 `;
 const RightCard = styled.div`
@@ -63,7 +63,7 @@ const menuArr = [
     activeIcon: 'icon-shoucang1',
     title: 'meMenuFav',
     path: '/me/collect',
-    badge: true
+    badge: false
   }
   // {
   //   icon: 'icon-pingbi1',
