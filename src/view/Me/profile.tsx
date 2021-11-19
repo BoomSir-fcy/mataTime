@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Crumbs,
   Avatar,
@@ -22,6 +22,11 @@ import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
 import defaultImages from 'assets/images/default_me_background.jpg';
+
+import { clear } from 'redux-localstorage-simple';
+import useAuth from 'hooks/useAuth';
+
+
 
 const Center = styled(Box)``;
 const ProfileCard = styled(Card)`
@@ -117,6 +122,8 @@ const Profile: React.FC<any> = React.memo(props => {
   const uid = props.match?.params?.uid;
   const gray = useTheme().colors.textTips;
   const { profile, loading, page, totalPage, list } = state;
+  const history = useHistory();
+  const { logout } = useAuth();
 
   const init = async (offset?: number) => {
     try {
@@ -170,6 +177,14 @@ const Profile: React.FC<any> = React.memo(props => {
     });
   };
 
+  const signOut = () => {
+    logout()
+    localStorage.clear()
+    clear()
+    history.push('/login')
+  }
+
+
   React.useEffect(() => {
     init();
   }, []);
@@ -206,9 +221,14 @@ const Profile: React.FC<any> = React.memo(props => {
               </Desc>
             </Flex>
             {!uid ? (
-              <Button as={Link} to="/me/edit">
-                {t('meEditProfile')}
-              </Button>
+              <>
+                <Button as={Link} to="/me/edit">
+                  {t('meEditProfile')}
+                </Button>
+                {/* <Button onClick={() => { signOut() }}>
+                  {t('退出账号')}
+                </Button> */}
+              </>
             ) : (
               <Popup user={profile} onCallback={() => init(1)} />
             )}

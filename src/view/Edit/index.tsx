@@ -50,7 +50,7 @@ const Edit: React.FC = () => {
       location: profile.location,
     }
     if (isObjectValueEqual(params, myInfo) && state.background === profile.background_image) {
-      toast.error('没有任何修改!');
+      // toast.error('没有任何修改!');
       return
     }
     try {
