@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 import { Avatar, List, CancelAttentionModal } from 'components';
@@ -145,11 +146,12 @@ const Fans = React.memo(() => {
           {list.map((item, index) => {
             return (
               <ContentBox key={index}>
-                <Flex style={{ width: 'calc(100% - 108px)' }}>
-                  <Avatar
-                    src={item.nft_image}
-                    scale="md"
-                  />
+                <Flex
+                  as={Link}
+                  to={`/me/profile/${item.uid}`}
+                  style={{ width: 'calc(100% - 108px)' }}
+                >
+                  <Avatar src={item.nft_image} scale="md" />
                   <Column>
                     <Flex>
                       <Text color="white_black" mr="13px">

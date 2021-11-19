@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 import { Avatar, List, CancelAttentionModal } from 'components';
@@ -153,10 +154,14 @@ const Follow = React.memo(() => {
           {state.list.map((item, index) => {
             return (
               <ContentBox key={item.uid}>
-                <Flex style={{ width: 'calc(100% - 108px)' }}>
+                <Flex
+                  as={Link}
+                  to={`/me/profile/${item.uid}`}
+                  style={{ width: 'calc(100% - 108px)' }}
+                >
                   <Avatar src={item.nft_image} scale="md" />
                   <Column>
-                    <Flex >
+                    <Flex>
                       <Text color="white_black" mr="13px">
                         {item.nick_name}
                       </Text>
