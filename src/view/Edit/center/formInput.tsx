@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Flex } from 'uikit';
+import { Flex, Radio } from 'uikit';
 import { Select } from 'components';
 import { shortenAddress } from 'utils/contract';
 import { useStore } from 'store';
@@ -34,22 +34,12 @@ const Rows = styled(Flex)`
     outline: none;
     resize: none;
   }
-  select {
-    width: 381px;
-    height: 50px;
-    padding: 16px;
-    border-radius: 10px;
-    color: ${({ theme }) => theme.colors.text};
-    border: none;
-    outline: none;
-    background: ${({ theme }) => theme.colors.inputSelect};
-  }
 `;
 const InputRows = styled(Flex)`
   justify-content: space-between;
   border-radius: 10px;
   padding: 13px 9px;
-  background: ${({ theme }) => theme.colors.input};
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
   width: 381px;
   height: 50px;
   input {
@@ -79,9 +69,12 @@ const RadioBox = styled.div`
   width: 381px;
   height: 50px;
   line-height: 50px;
-  span {
-    color: ${({ theme }) => theme.colors.text};
-    margin-right: 38px;
+  color: ${({ theme }) => theme.colors.text};
+  display: flex;
+  align-items: center;
+  label {
+    cursor: pointer;
+    margin-left: 10px;
   }
 `;
 
@@ -127,9 +120,10 @@ const FormInput = React.forwardRef((props, ref) => {
       <Rows>
         <Title>*显示格式</Title>
         <RadioBox>
-          <input
+          <Radio
+            scale='sm'
             type="radio"
-            name="gs"
+            id="gs"
             checked={state.display_format === 1}
             onChange={event =>
               setState(p => {
@@ -138,7 +132,7 @@ const FormInput = React.forwardRef((props, ref) => {
             }
             value="1"
           />
-          <span>0x格式</span>
+          <label htmlFor="gs">0x格式</label>
           {/* <input
             type="radio"
             name="gs"
