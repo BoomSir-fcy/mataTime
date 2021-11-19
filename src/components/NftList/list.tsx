@@ -51,7 +51,10 @@ const NodataDom = styled.div`
 color:${({ theme }) => theme.colors.textTips};
 text-align: center;
 `
-
+const NowrapBtn = styled(Button)`
+width: max-content;
+word-break: keep-all;
+`
 const NftItem = {
   description: '',
   image: '',
@@ -140,7 +143,7 @@ const StakeAllBtn = ({ token, account }) => {
     }
   }, [onApprove])
   return (
-    <Button disabled={pendingTx} onClick={async () => {
+    <NowrapBtn disabled={pendingTx} onClick={async () => {
       setPendingTx(true)
       try {
         // 授权 
@@ -152,7 +155,7 @@ const StakeAllBtn = ({ token, account }) => {
       } finally {
         setPendingTx(false)
       }
-    }}>{pendingTx ? (<Dots>{t('授权中')}</Dots>) : (t('授权'))}</Button>
+    }}>{pendingTx ? (<Dots>{t('授权中')}</Dots>) : (t('授权'))}</NowrapBtn>
   );
 };
 export default NftAvatar

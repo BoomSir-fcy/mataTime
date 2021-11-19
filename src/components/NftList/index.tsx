@@ -41,6 +41,8 @@ export const StakeNFT: React.FC = () => {
   const NftList = useStore(p => p.loginReducer.nftList);
   // Nft地址  可用列表
   const NftAddrList = useStore(p => p.loginReducer.nftAddr);
+  const signUpFail = useStore(p => p.loginReducer.signUpFail);
+  const isStakeNft = useStore(p => p.loginReducer.isStakeNft);
 
   const getIsAllApprove = (list) => {
     let myList = []
@@ -66,7 +68,7 @@ export const StakeNFT: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!NftList.length) {
+    if (!NftList.length && !isStakeNft) {
       dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
     } else {
       NftAddrList.length && getIsAllApprove(NftList)
@@ -82,7 +84,7 @@ export const StakeNFT: React.FC = () => {
       {isAllApprove.map(item => (
         <NftAvatar key={item.address} NftInfo={item} Nodata={false} />
       ))}
-      {!isAllApprove.length && < NftAvatar Nodata={true} />}
+      {!signUpFail && !isAllApprove && < NftAvatar Nodata={true} />}
     </>
   );
 };

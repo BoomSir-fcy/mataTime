@@ -56,7 +56,7 @@ export const SignUpcomplete = React.memo(() => {
       </Text>
       <Box>
         {state.list.map((row, index: number) => (
-          <Follow key={index} rows={row} />
+          <Follow key={index} rows={row} getManList={getManList} />
         ))}
       </Box>
       <FlexButton>
