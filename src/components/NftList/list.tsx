@@ -78,7 +78,7 @@ interface Nft {
 }
 const NftAvatar: React.FC<{
   NftInfo?: Nft,
-  Nodata?: boolean
+  Nodata: boolean
 }> = ({ NftInfo, Nodata }) => {
   const { account } = useWeb3React();
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem)
