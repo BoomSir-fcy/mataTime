@@ -7,12 +7,12 @@ export const EmojiView: React.FC<{
   selectedEmoji: (data: string) => void
 }> = React.memo(({ selectedEmoji }) => {
   return(
-    <Picker 
+    <Picker
       set="twitter"
       tooltip
       showPreview={false} 
       showSkinTones={false} 
-      style={{ position: 'absolute', left: 0, top: 40 }}
+      style={{ position: 'absolute', left: 0, top: 40, zIndex:99 }}
       onClick={(emoji, e) => e.nativeEvent.stopImmediatePropagation()}
       onSelect={emoji => selectedEmoji(emoji.native)} />
   )

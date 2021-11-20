@@ -35,17 +35,19 @@ export const CancelButton = styled(Button)`
 `;
 
 export const SlateBox = styled.div`
-background: #191F2D;
+background: ${({ theme }) => theme.colors.editorBoxBg};
 margin-bottom: 10px;
 border-radius: ${({ theme }) => theme.radii.card};
 padding: 15px;
 padding-bottom:20px;
   div.text-box{
-    color:#fff;
+    color: ${({ theme }) => theme.colors.editorText};
     background: ${({ theme }) => theme.colors.backgroundTextArea};
     padding:15px;
     padding-bottom:0px;
     border-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
     min-height: 112px !important;
     max-height: 120px;
     overflow-y:auto;

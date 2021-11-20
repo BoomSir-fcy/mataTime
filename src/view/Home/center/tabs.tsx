@@ -43,51 +43,55 @@ align-items: center;
 interface propsType {
   defCurrentLeft?: number
   defCurrentRight?: number
-  tabLeftChange?: (item) => void
-  tabRightChange?: (item) => void
+  // tabLeftChange?: (item) => void
+  // tabRightChange?: (item) => void
+  tabsChange?: (item) => void
   tabRightArr?: any[]
   tabLeftArr?: any[]
 }
 export const Tabs = (props: propsType) => {
   const { t } = useTranslation()
-  const { defCurrentLeft, defCurrentRight, tabLeftChange, tabRightChange, tabRightArr = [
+  const { defCurrentLeft, defCurrentRight, tabsChange, tabRightArr = [
     {
       label: t('homeTabLatest'),
-      value: '1'
+      value: '1',
+      paramsName:'newest_sort'
     },
-    {
-      label: t('homeTabPopular'),
-      value: '2'
-    },
+    // {
+    //   label: t('homeTabPopular'),
+    //   value: '2'
+    // },
     {
       label: t('homeTabFocus'),
-      value: '3'
+      value: '2',
+      paramsName:'attention'
     },
   ], tabLeftArr = [
     {
       label: t('homeTabAll'),
-      value: '1'
+      value: '1',
+      paramsName:'attention'
     },
-    {
-      label: t('homeTabOriginal'),
-      value: '2'
-    },
-    {
-      label: t('homeTabArticle'),
-      value: '3'
-    },
+    // {
+    //   label: t('homeTabOriginal'),
+    //   value: '2'
+    // },
+    // {
+    //   label: t('homeTabArticle'),
+    //   value: '3'
+    // },
   ] } = props
   const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0)
   const [currentRightIndex, setCurrentRightIndex] = useState(defCurrentRight || 0)
   const leftTabClick = (item, index) => {
-    if (index === currentLeftIndex) return
+    // if (index === currentLeftIndex) return
     setCurrentLeftIndex(index)
-    tabLeftChange(item)
+    tabsChange(item)
   }
   const rightTabClick = (item, index) => {
-    if (index === currentRightIndex) return
+    // if (index === currentRightIndex) return
     setCurrentRightIndex(index)
-    tabRightChange(item)
+    tabsChange(item)
   }
   return (
     <TabsBox>
@@ -123,6 +127,7 @@ export const Tabs = (props: propsType) => {
 Tabs.defaultProps = {
   currentLeft: 0,
   currentRight: 0,
-  tabLeftChange: () => { },
-  tabRightChange: () => { },
+  // tabLeftChange: () => { },
+  // tabRightChange: () => { },
+  tabsChange: () => { }
 }
