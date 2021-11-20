@@ -47,8 +47,10 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
     }}>
       <Flex width="100%" alignItems="center" justifyContent="space-between">
         <Flex onClick={(subEvent) => {
-          toggling(subEvent);
-          onTouch && onTouch(coinInfo);
+          if (onTouch) {
+            toggling(subEvent);
+            onTouch && onTouch(coinInfo);
+          }
         }} style={{ cursor: isActive ? 'default' : 'pointer' }} alignItems="center">
           <Box width="40px">
             <Image width={40} height={40} src={coinInfo?.coin_image_url} />
