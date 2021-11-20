@@ -17,8 +17,8 @@ const Balance: React.FC<BalanceProps> = ({
   color = 'text',
   decimals = 3,
   isDisabled = false,
-  unit,
-  prefix,
+  unit = '',
+  prefix = '',
   onClick,
   ...props
 }) => {

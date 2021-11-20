@@ -23,6 +23,9 @@ const Column = styled(Flex)`
   min-width: 160px;
   margin-bottom: 20px;
   position: relative;
+  .active{
+    box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.backgroundPrimary};
+  }
 `
 const GetAuthorizeBox = styled(Box)`
 padding:17px;
@@ -32,7 +35,7 @@ background: ${({ theme }) => theme.colors.backgroundTextArea};
 `
 const GetAuthorize = styled(Flex)`
 /* justify-content: space-between; */
-margin-top:26px;
+padding-top:26px;
 overflow-x: auto;
 `
 const AvatarName = styled(Text)`
@@ -55,6 +58,11 @@ const NowrapBtn = styled(Button)`
 width: max-content;
 word-break: keep-all;
 `
+const AvatarBox = styled.div`
+border: 2px solid #E0F9D0;
+border-radius: 10px;
+`
+
 const NftItem = {
   description: '',
   image: '',
@@ -107,12 +115,14 @@ const NftAvatar: React.FC<{
                 (NftList.map(item => (
                   NftInfo.address === item.properties.token ?
                     < Column key={item.properties.token_id} >
-                      {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />}
-                      < Avatar src={item.image} scale="ld" onClick={() => {
-                        if (!NftInfo.needApprove) {
-                          setActiveAvInfo(item)
-                        }
-                      }} />
+                      {/* {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />} */}
+                      <AvatarBox className={ActiveAvInfo.properties?.token_id === item.properties.token_id && 'active'}>
+                        < Avatar src={item.image} scale="ld" onClick={() => {
+                          if (!NftInfo.needApprove) {
+                            setActiveAvInfo(item)
+                          }
+                        }} />
+                      </AvatarBox>
                       <AvatarName>{item.name} #{item.properties.token_id}</AvatarName>
                     </Column>
                     : <></>
