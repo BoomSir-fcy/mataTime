@@ -121,7 +121,7 @@ const Profile: React.FC<any> = React.memo(props => {
   const gray = useTheme().colors.textTips;
   const history = useHistory();
   const { profile, loading, page, totalPage, list } = state;
-  const { logout } = useAuth();
+  const { signOut } = useAuth();
 
   const init = async (offset?: number) => {
     try {
@@ -150,12 +150,6 @@ const Profile: React.FC<any> = React.memo(props => {
     }
   };
 
-  const signOut = () => {
-    logout();
-    localStorage.clear();
-    clear();
-    history.push('/login');
-  };
 
   React.useEffect(() => {
     init();

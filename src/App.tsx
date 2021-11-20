@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import useEagerConnect from 'hooks/useEagerConnect';
@@ -12,11 +12,13 @@ import { CommonLayout, Header, Toast } from 'components';
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
 import { useThemeManager } from 'store/app/hooks';
+import { useWeb3React } from '@web3-react/core';
 
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
 
 import history from './routerHistory';
+import useAuth from './hooks/useAuth';
 
 moment.locale('zh-cn');
 
@@ -30,14 +32,13 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 
-const Container = styled(Box)<{
+const Container = styled(Box) <{
   dark: boolean;
 }>`
   background-image: ${({ dark }) =>
-    `url(${
-      require(dark
-        ? 'assets/images/dark_background.jpg'
-        : 'assets/images/light_background.jpg').default
+    `url(${require(dark
+      ? 'assets/images/dark_background.jpg'
+      : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed;
   min-height: 100vh;
@@ -49,8 +50,22 @@ function App() {
   const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
   const [isDark] = useThemeManager();
+  const { account } = useWeb3React();
+  const [ConnectAddr, setConnectAddr] = useState('0')
+  const { signOut } = useAuth();
 
-  React.useEffect(() => {
+  // 查询是否切换账户
+  const isChangeAddr = () => {
+    if (ConnectAddr === '0') {
+      // 赋值初始化地址
+      setConnectAddr(account)
+    } else if (ConnectAddr !== account) {
+      // 切换了地址就清除数据 重新登陆
+      signOut()
+    }
+  }
+
+  useEffect(() => {
     if (store.connectWallet) {
       const changeHandler = () => {
         dispatch(storeAction.connectWallet({ connectWallet: false }));
@@ -60,10 +75,21 @@ function App() {
     }
   }, [store.connectWallet]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token]);
-
+  useEffect(() => {
+    if (account) {
+      // 1.1判断链接钱包后是否切换了钱包账户
+      isChangeAddr()
+    } else {
+      if (ConnectAddr !== '0') {
+        signOut()
+      }
+    }
+    return () => {
+    }
+  }, [account])
   return (
     <React.Fragment>
       <GlobalStyle />
