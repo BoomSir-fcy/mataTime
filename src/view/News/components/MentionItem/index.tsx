@@ -4,16 +4,8 @@ import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import {
-  FollowPopup,
-  MorePopup,
-  Icon,
-  Avatar,
-  MoreOperatorEnum,
-  ImgList,
-  FollowPopupD,
-  ContentParsing
-} from 'components';
+import {Link } from 'react-router-dom'
+import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD, ContentParsing } from 'components';
 import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
 import { useTranslation } from 'contexts/Localization';
 
@@ -148,11 +140,9 @@ export const MentionItemUser: React.FC<UserProps> = ({
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
         <div className="user-left-wrapper">
-          <Avatar
-            className="avatar"
-            src={itemData.user_avator_url}
-            scale="md"
-          />
+          <Link to={'/me/profile/'+itemData.user_id}>
+            <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
+          </Link>
           <div className="user-info">
             <div>
               <div className="user-name">

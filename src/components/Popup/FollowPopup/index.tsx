@@ -21,13 +21,15 @@ type Iprops = {
 
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation()
-  const { children, uid = 0, callback = () => { } } = props
+  const { children, uid } = props
   const [visible, setVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
   useEffect(() => {
-    visible && getUserInfo()
-  }, [visible])
+    if(uid){
+      visible && getUserInfo()
+    }
+}, [visible])
 
   // 获取个人信息
   const getUserInfo = async () => {
@@ -82,12 +84,12 @@ export const FollowPopup = React.memo((props: Iprops) => {
             <div className="content">
               <div className="left-box">
                 <div className="img-box">
-                  <Avatar className="avatar" src={userInfo.nft_image || '  '} scale="md" />
+                  <Avatar className="avatar" src={userInfo.NftImage||userInfo.nft_image || '  '} scale="md" />
                 </div>
               </div>
               <div className="right-box">
-                <div className="name">{userInfo.nick_name || '  '}</div>
-                <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon> @0x32...9239</div>
+                <div className="name">{userInfo.NickName ||userInfo.nick_name|| '  '}</div>
+                <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon> {userInfo.address}</div>
                 <div className="number">
                   <p>{t('followFans')}<strong>{userInfo.fans_num || 0}</strong></p>
                   <p>{t('followText')}<strong>{userInfo.attention_num || 0}</strong></p>

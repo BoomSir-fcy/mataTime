@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import styled from "styled-components";
 import { Flex, Button, Box } from 'uikit'
 import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
@@ -24,6 +24,7 @@ export const ArticleList = (props) => {
     props.history.push('/articleDetils')
   }
   // const [size, setSize] = useState(20)
+  const listRef:any = useRef()
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
@@ -101,11 +102,49 @@ export const ArticleList = (props) => {
     })
     setListData([...arr])
   }
+  useEffect(() => {
+    setLoading(false)
+    setPage(1)
+    setTotalPage(1)
+    listRef.current.loadList()
+    setListData([])
+  },[props.match.params.id,props.match.params.name])
   return (
     <ArticleListBox>
-      <List marginTop={320} loading={page <= totalPage} renderList={() => {
-        console.log(loading, page, totalPage);
-        getList()
+      <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={() => {
+        console.log(loading ,page ,totalPage);
+        if (loading || page > totalPage) return false
+        setLoading(true)
+        if(props.match.path==='/topicList/:id/:name'){
+          Api.HomeApi.findByHotTopicIdList({
+            page: page,
+            per_page: 10,
+            topic_id:props.match.params.id==='empty'?null:props.match.params.id,
+            topic_name:props.match.params.name
+          }).then(res=>{
+               setLoading(false)
+            if (Api.isSuccess(res)) {
+              setLoading(false)
+              setPage(page + 1)
+              setTotalPage(res.data.total_page)
+              setListData([...listData, ...res.data.List])
+            }
+          })
+        }else{
+          Api.HomeApi.getArticleList({
+            attention: 1,
+            page: page,
+            per_page: 10
+          }).then(res => {
+            setLoading(false)
+            if (Api.isSuccess(res)) {
+              setLoading(false)
+              setPage(page + 1)
+              setTotalPage(res.data.total_page)
+              setListData([...listData, ...res.data.List])
+            }
+          })
+        }
       }}>
         {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >

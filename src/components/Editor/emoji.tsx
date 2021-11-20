@@ -30,7 +30,7 @@ export const Emoji: React.FC<{
   }, [])
 
   return(
-    <EmojiWarpper>
+    <EmojiWarpper onClick={(e)=>e.stopPropagation()}>
       <ButtonIcon variant="text" onClick={(e) => {
         e.nativeEvent.stopImmediatePropagation();
         setState(p  => {

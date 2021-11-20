@@ -72,14 +72,15 @@ const NewsComment: React.FC = (props) => {
             }} callback={(data) => {
               updateList(data)
             }} />
-            <div className="reply-wrapper">
-              {item.comment.comment_user_name ? t('newsCommentReply') : t('newsCommentMenuTitle')}：
-              {
-                item.comment.comment_user_name ? (
-                  <a>@{item.comment.comment_user_name}</a>
-                ) : null
-              }
-              <ContentParsing content={item.comment.comment}></ContentParsing>
+            <div className="reply-wrapper" style={{height:item.comment.comment_user_name?'50px':'20px'}}>
+              {item.comment.comment_user_name?
+              <>
+                {t('newsCommentReply')}
+                <a>@{item.comment.comment_user_name}</a>
+                <ContentParsing content={item.comment.comment}></ContentParsing>
+              </>
+              :null
+            }
             </div>
             <div className="comment-content">
               <MentionItem itemData={{

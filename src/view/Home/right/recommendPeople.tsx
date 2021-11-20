@@ -22,6 +22,7 @@ const MoreBtn = styled.span`
 `;
 export const UserTitle = styled.div`
   margin: 0 12px;
+  margin-right:5px;
   font-weight: 700;
   font-size: 18px;
   color: ${({ theme }) => theme.isDark ? '#fff' : '#000'};
@@ -35,7 +36,7 @@ export const UserDesc = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
-  width: 100px;
+  width: 80px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -87,10 +88,10 @@ export const RecommendPeople: React.FC<Iprops> = props => {
         <Flex key={item.uid} alignItems="center" justifyContent="space-between" style={{ marginTop: '17px' }}>
           <Flex>
             <Avatar src={item.nft_image} style={{ width: '50px', height: '50px' }} scale="md" />
-            <UserInfo style={{ flex: 1 }}>
+            <UserInfo >
               <Flex>
                 <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
-                <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon>
+                {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
               </Flex>
               <UserDesc title={item.introduction}>{item.introduction}</UserDesc>
             </UserInfo>

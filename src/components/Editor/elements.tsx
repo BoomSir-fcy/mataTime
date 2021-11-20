@@ -20,7 +20,7 @@ export const Mention = ({ attributes, children, element }) => {
         boxShadow: selected && focused ? '0 0 0 2px #B4D5FF' : 'none',
       }}
     >
-       <FollowPopup>
+       <FollowPopup uid={element.attrs.userid}>
          <span 
       {...element.attrs}
       >
