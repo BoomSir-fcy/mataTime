@@ -149,7 +149,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 {itemData.user_name || itemData.nick_name}
               </div>
               <div className="time">
-                <span>@{(itemData.user_address || '').slice(0, 3) + '...' + (itemData.user_address || '').slice(itemData.user_address.length - 4)}</span>
+                <span>@{(itemData.user_address || '').slice(0, 3) + '...' + (itemData.user_address || '').slice(38)}</span>
                 {itemData.add_time_desc || itemData.post_time_desc}
               </div>
             </div>

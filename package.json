@@ -44,6 +44,7 @@
     "dsgswap-sdk": "1.0.20",
     "emoji-mart": "^3.0.1",
     "emotion": "^11.0.0",
+    "escape-html": "^1.0.3",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^6.0.0",
