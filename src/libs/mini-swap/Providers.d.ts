@@ -1,6 +1,6 @@
 import { DeepPartial } from 'redux';
 import React from 'react';
-import { PancakeTheme } from './pancake-uikit';
+import { PancakeTheme } from 'pancake-uikit';
 import { SupportLanguage } from 'config/localization/languages';
 export declare type Theme = DeepPartial<PancakeTheme>;
 interface ThemeProps {

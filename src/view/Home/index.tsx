@@ -1,13 +1,19 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { About, Avatar, Editor, ModalWrapper} from 'components';
+import { About, Avatar, Editor, ModalWrapper } from 'components';
 import { withRouter } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { ToastContainer, toast } from 'react-toastify';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
 import { Header, Tabs, ArticleList } from './center';
-import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from './right';
+import {
+  Search,
+  Swap,
+  RecommendPeople,
+  HotTopic,
+  FooterCopyright
+} from './right';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 // const NewsMe = React.lazy(() => import('view/News/Me'));
 import { Api } from 'apis';
@@ -31,11 +37,16 @@ const RightCard = styled.div`
   // width: 375px;
 `;
 
-const Home: React.FC = (props:any) => {
-  const { t } = useTranslation()
+const Home: React.FC = (props: any) => {
+  const { t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
-  const sendArticle = (content: string, resetInput: () => void, image_urls, remind_user) => {
+  const sendArticle = (
+    content: string,
+    resetInput: () => void,
+    image_urls,
+    remind_user
+  ) => {
     if (!content) return false;
     Api.HomeApi.createArticle({
       content: content,
@@ -59,31 +70,35 @@ const Home: React.FC = (props:any) => {
       <Flex justifyContent="space-between">
         <LeftCard>
           {/* <About /> */}
-          <Menu></Menu>
+          <Menu />
         </LeftCard>
         <CenterCard>
           <Header
             {...props}
             back={match.path === '/topicList/:id/:name'}
             align={match.path === '/topicList/:id/:name' ? 'center' : null}
-            title={match.path === '/topicList/:id/:name' ? '#' + match.params.name + '#' : t('homeHeaderTitle')}
-          ></Header>
+            title={
+              match.path === '/topicList/:id/:name'
+                ? '#' + match.params.name + '#'
+                : t('homeHeaderTitle')
+            }
+          />
           {match.path === '/' ? (
             <>
-              <Editor type="post" sendArticle={sendArticle}></Editor>
+              <Editor type="post" sendArticle={sendArticle} />
               {/* <Tabs></Tabs> */}
             </>
           ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
-          <ArticleList key={refresh} {...props}></ArticleList>
+          <ArticleList key={refresh} {...props} />
         </CenterCard>
         <RightCard>
-          <Search></Search>
+          <Search />
           {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
-          <Swap></Swap>
-          <RecommendPeople></RecommendPeople>
-          <HotTopic {...props}></HotTopic>
-          <FooterCopyright></FooterCopyright>
+          <Swap />
+          <RecommendPeople />
+          <HotTopic {...props} />
+          <FooterCopyright />
         </RightCard>
       </Flex>
       {/* <ModalWrapper>

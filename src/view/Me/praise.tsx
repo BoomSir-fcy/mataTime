@@ -92,7 +92,9 @@ const Praise = React.memo(props => {
               callback={() => init()}
             />
             <MentionOperator
+              replyType="twitter"
               type="Article"
+              postId={item.post_id}
               itemData={{
                 ...item,
                 is_like: item.like_status,

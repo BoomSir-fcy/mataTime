@@ -5,10 +5,13 @@ import { ToastContainerProps } from 'react-toastify';
 import { appReducer, appAction, App } from './app';
 import { toastContainer } from './app/actions';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from './login';
+import coinsReduce from './coins/reducer';
+import type { CoinsState } from './coins/reducer';
 
 export interface Store {
   appReducer: App;
   loginReducer: Login;
+  coins: CoinsState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -17,7 +20,8 @@ const PERSISTED_KEYS: string[] = ['appReducer', 'loginReducer'];
 export const store = configureStore({
   reducer: {
     appReducer,
-    loginReducer
+    loginReducer,
+    coins: coinsReduce,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
