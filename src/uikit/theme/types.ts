@@ -126,6 +126,8 @@ export type Colors = {
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;
+  editorText: string;
+  editorBoxBg: string;
 };
 
 export type Filters = {

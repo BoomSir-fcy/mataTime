@@ -60,16 +60,16 @@ return (
     parsingResult.map((item: any,index) => {
       return (
         <ParagraphItem ref={ref} key={index}>
-          {item.children.map((child: any) => {
+          {item.children.map((child: any,childIndex) => {
             return (
                 child.type === 'mention' ? (
-                  <p>
+                  <p key={childIndex}>
                     <FollowPopup uid={child?.attrs?.userid || 0}>
                       <a>{child.character}</a>
                     </FollowPopup>
                   </p>
                 ) : child.type === 'topic' ? (
-                  <p>
+                  <p key={childIndex}>
                     {(child.children || []).map((topic: any) => {
                       if (topic.text) {
                         return <Link to={ `/topicList/empty/${topic.text}`}>#{topic.text}#</Link>;
@@ -77,7 +77,7 @@ return (
                     })}
                   </p>
                 ) : (
-                  <p
+                  <p key={childIndex}
                   dangerouslySetInnerHTML= {{
                     __html: parseText(child.text)
                   }}></p>

@@ -132,9 +132,10 @@ export const ArticleList = (props) => {
           })
         }else{
           Api.HomeApi.getArticleList({
-            attention: 1,
+            attention:1,
             page: page,
-            per_page: 10
+            per_page: 10,
+            ...props.filterValObj
           }).then(res => {
             setLoading(false)
             if (Api.isSuccess(res)) {
@@ -182,4 +183,5 @@ export const ArticleList = (props) => {
   )
 }
 ArticleList.defaultProps = {
+  filterValObj:{}
 }

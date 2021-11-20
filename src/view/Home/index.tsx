@@ -34,6 +34,7 @@ const RightCard = styled.div`
 const Home: React.FC = (props:any) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false);
+  const [filterVal, setFilterVal] = useState({});
   // const  editorRef = useRef()
   const sendArticle = (content: string, resetInput: () => void, image_urls, remind_user) => {
     if (!content) return false;
@@ -53,6 +54,16 @@ const Home: React.FC = (props:any) => {
       }
     });
   };
+  const tabsChange = (item)=>{
+    console.log(item);
+    
+    const temp = {
+      ...filterVal
+    }
+    temp[item.paramsName] = item.value
+    setFilterVal(temp)
+    setRefresh(!refresh)
+  }
   const { match } = props;
   return (
     <PageContainer>
@@ -71,11 +82,11 @@ const Home: React.FC = (props:any) => {
           {match.path === '/' ? (
             <>
               <Editor type="post" sendArticle={sendArticle}></Editor>
-              {/* <Tabs></Tabs> */}
+              <Tabs tabsChange={tabsChange}></Tabs>
             </>
           ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
-          <ArticleList key={refresh} {...props}></ArticleList>
+          <ArticleList key={refresh} filterValObj={filterVal} {...props}></ArticleList>
         </CenterCard>
         <RightCard>
           <Search></Search>
