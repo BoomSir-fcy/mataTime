@@ -32,20 +32,20 @@ const RightCard = styled.div`
 
 const menuArr = [
   {
-    icon: 'icon-shouye',
-    activeIcon: 'icon-shouye1',
+    icon: 'icon-gerenxinxi',
+    activeIcon: 'icon-gerenxinxi1',
     title: 'setMenuAccountSecurity',
     path: '/set/safeset'
   },
   {
-    icon: 'icon-xingqiu',
-    activeIcon: 'icon-xingqiu1',
+    icon: 'icon-xiaoxi',
+    activeIcon: 'icon-xiaoxi1',
     title: 'setMenuNotification',
     path: '/set/noticeset'
   },
   {
-    icon: 'icon-xiaoxi',
-    activeIcon: 'icon-xiaoxi1',
+    icon: 'icon-aixin',
+    activeIcon: 'icon-aixin1',
     title: 'setMenuPreference',
     path: '/set/likeset'
   }

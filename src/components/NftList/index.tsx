@@ -68,11 +68,14 @@ export const StakeNFT: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!NftList.length && !isStakeNft) {
-      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    } else {
-      NftAddrList.length && getIsAllApprove(NftList)
-      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    // if (!NftList.length && !isStakeNft) {
+    //   dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+    // } else {
+    //   NftAddrList.length && getIsAllApprove(NftList)
+    //   dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    // }
+    if (NftList.length && NftAddrList.length) {
+      getIsAllApprove(NftList)
     }
     return () => {
       const arr = []

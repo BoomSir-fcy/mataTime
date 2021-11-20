@@ -163,7 +163,7 @@ export const useFetchNftList = () => {
   let address = profile.address ? profile.address : account
   useEffect(() => {
     dispatch(fetchUserNftInfoAsync(address));
-  }, [dispatch, address])
+  }, [dispatch, account])
 }
 
 // 授权当前类型全部Nft

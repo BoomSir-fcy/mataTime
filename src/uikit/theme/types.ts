@@ -114,7 +114,9 @@ export type Colors = {
   textOrigin: string;
   textgrey: string;
   disabled: string;
-
+  borderColor: string;
+  searchTopicBg:string;
+  searchTopicTxt:string;
   // Gradients
   gradients: Gradients;
 
@@ -128,6 +130,8 @@ export type Colors = {
   // NFT Token Colors
   triangleDinosaur: string;
   meat: string;
+  editorText: string;
+  editorBoxBg: string;
 };
 
 export type Filters = {

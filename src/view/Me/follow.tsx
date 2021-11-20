@@ -159,7 +159,7 @@ const Follow = React.memo(() => {
                 <Flex
                   as={Link}
                   to={`/me/profile/${item.uid}`}
-                  style={{ width: 'calc(100% - 108px)' }}
+                  style={{ width: 'calc(100% - 140px)' }}
                 >
                   <Avatar src={item.nft_image} scale="md" />
                   <Column>

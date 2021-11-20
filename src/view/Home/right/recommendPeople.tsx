@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Button, Card, Text } from 'uikit';
 import { Avatar, Icon } from 'components';
+import{Link} from 'react-router-dom'
 import { Api } from 'apis';
 const RecommendPeopleBox = styled(Card)`
   // margin-top: 15px;
@@ -87,7 +88,9 @@ export const RecommendPeople: React.FC<Iprops> = props => {
       {list.map((item, index) => (
         <Flex key={item.uid} alignItems="center" justifyContent="space-between" style={{ marginTop: '17px' }}>
           <Flex>
-            <Avatar src={item.nft_image} style={{ width: '50px', height: '50px' }} scale="md" />
+            <Link to={'/me/profile/'+item.uid}>
+              <Avatar src={item.nft_image} style={{ width: '50px', height: '50px' }} scale="md" />
+            </Link>
             <UserInfo >
               <Flex>
                 <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>

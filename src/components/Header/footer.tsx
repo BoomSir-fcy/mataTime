@@ -8,9 +8,10 @@ import { Logo } from './logo';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 
 const FooterWarpper = styled(Flex)`
+  position: fixed;
+  bottom: 0;
   width: 100%;
   height: 125px;
-  margin-top: 67px;
   background: ${({ theme }) => theme.colors.gradients.footer};
   padding: 21px 0 29px;
   ${mediaQueries.xxl} {

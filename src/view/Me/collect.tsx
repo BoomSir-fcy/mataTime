@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Card } from 'uikit';
 import { List } from 'components';
+import { useTranslation } from 'contexts/Localization';
 
 import { CrumbsHead } from './components';
+
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -21,6 +23,7 @@ const Collect = props => {
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
   const [total, setTotal] = useState(0);
+  const { t } = useTranslation();
 
   const init = async (current?: number) => {
     setLoading(true);
@@ -48,9 +51,11 @@ const Collect = props => {
       <CrumbsHead>
         <Flex>
           <Text fontWeight="bold" mr="10px" fontSize="14px">
-            我的收藏
+            {t('meHeaderMyCollection')}
           </Text>
-          <Text fontSize="14px">{total}条</Text>
+          <Text fontSize="14px">
+            {t('meHeaderNum%value%', { value: total })}
+          </Text>
         </Flex>
       </CrumbsHead>
       <List
@@ -69,23 +74,32 @@ const Collect = props => {
                 itemData={{
                   ...item,
                   is_like: item.like_status,
+                  user_id: item.uid,
+                  user_avator_url: item.nft_image,
                   post: {
                     ...item,
-                    is_fav: 1
+                    is_fav: 1,
+                    user_id: item.uid
                   }
                 }}
-                callback={(item: any, type: MoreOperatorEnum) => init(1)}
+                callback={() => init(1)}
               ></MentionItem>
               <MentionOperator
+                replyType="twitter"
+                type="Article"
+                postId={item.post_id}
                 itemData={{
                   ...item,
                   is_like: item.like_status,
+                  user_id: item.uid,
+                  user_avator_url: item.nft_image,
                   post: {
                     ...item,
+                    user_id: item.uid,
                     is_fav: 1
                   }
                 }}
-                callback={(item: any) => init(1)}
+                callback={() => init(1)}
               />
             </MeItemWrapper>
           );
