@@ -51,7 +51,7 @@ export const ProfileMenu = React.memo(() => {
               <Text className="name">{userInfo.nick_name}</Text>
               <Box className="icon"></Box>
             </UserTitle>
-            <UserDesc>@{shortenAddress(userInfo.address)}</UserDesc>
+            <UserDesc>@{shortenAddress(userInfo.address, 1)}</UserDesc>
           </Content>
         </Flex>
       ) : (

@@ -75,8 +75,8 @@ export const ModalOperator = React.memo((props: OperatorIprop) => {
   const { onQuery, onClose } = props
   return (
     <ModalOperatorWrapper>
-      <ModalOperatorQueryWrapper onClick={() => { onQuery() }}>{t('modalQuery')}</ModalOperatorQueryWrapper>
-      <ModalOperatorCancerWrapper onClick={() => { onClose() }}>{t('modalCancel')}</ModalOperatorCancerWrapper>
+      <ModalOperatorQueryWrapper onClick={() => { onQuery() }}>{t('modalCancel')}</ModalOperatorQueryWrapper>
+      <ModalOperatorCancerWrapper onClick={() => { onClose() }}>{t('modalQuery')}</ModalOperatorCancerWrapper>
     </ModalOperatorWrapper>
   )
 })
