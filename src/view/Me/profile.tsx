@@ -138,8 +138,8 @@ const Profile: React.FC<any> = React.memo(props => {
         setState(p => {
           p.profile = profile.data;
           p.list = offset
-            ? [...(tweet.data?.list || [])]
-            : [...state.list, ...(tweet.data?.list || [])];
+            ? [...(tweet?.data?.list || [])]
+            : [...state.list, ...(tweet?.data?.list || [])];
           p.page = (offset || page) + 1;
           p.totalPage = tweet.data.total_page;
         });
