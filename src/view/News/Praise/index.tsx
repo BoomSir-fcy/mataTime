@@ -31,10 +31,10 @@ const NewsPraise: React.FC = (props) => {
       if (Api.isSuccess(res)) {
         setTotalPage(res.data.total_page)
         if (current === 1 || page === 1) {
-          setListData([...res.data.list])
+          setListData([...(res.data.list || [])])
           setPage(2)
         } else {
-          setListData([...listData, ...res.data.list])
+          setListData([...listData, ...(res.data.list || [])])
           setPage(page + 1)
         }
       }
@@ -63,50 +63,54 @@ const NewsPraise: React.FC = (props) => {
       <List marginTop={410} loading={page <= totalPage} renderList={() => {
         getList()
       }}>
-        {listData.map(item => (
-          <PraiseItemWrapper key={item.id}>
-            <MentionItemUser more={false} itemData={{
-              ...item,
-              ...item.post,
-              ...item.comment,
-              user_name: item.send_name,
-              user_avator_url: item.send_image
-            }} callback={(data) => {
-              updateList(data)
-            }} />
-            <div className="reply-wrapper">
-              <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> {t('newsPraiseContent')}
-            </div>
-            <div className="comment-content">
-              <MentionItem itemData={{
-                ...item,
-                ...item.comment,
-                ...item.post,
-                user_name: item.post.nick_name,
-                user_avator_url: item.post.nft_image
-              }} {...props} more={false} size={'small'}></MentionItem>
-            </div>
-            <MentionOperator
-              hasLike={false}
-              replyType={'comment'}
-              postId={item.post.post_id}
-              commentId={item.id}
-              itemData={{
-                ...item,
-                ...item.post,
-                comment: {
+        {listData.map(item => {
+          if (item?.post?.content_status === 1) {
+            return (
+              <PraiseItemWrapper key={item.id}>
+                <MentionItemUser more={false} itemData={{
+                  ...item,
+                  ...item.post,
                   ...item.comment,
-                  content: item.comment.comment,
-                  user_name: item.send_winner,
+                  user_name: item.send_name,
                   user_avator_url: item.send_image
-                }
-              }}
-              callback={(item: any, type?: MoreOperatorEnum) => {
-                updateList(item, type)
-              }}
-            />
-          </PraiseItemWrapper>
-        ))}
+                }} callback={(data) => {
+                  updateList(data)
+                }} />
+                <div className="reply-wrapper">
+                  <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> {t('newsPraiseContent')}
+                </div>
+                <div className="comment-content">
+                  <MentionItem itemData={{
+                    ...item,
+                    ...item.comment,
+                    ...item.post,
+                    user_name: item.post.nick_name,
+                    user_avator_url: item.post.nft_image
+                  }} {...props} more={false} size={'small'}></MentionItem>
+                </div>
+                <MentionOperator
+                  hasLike={false}
+                  replyType={'comment'}
+                  postId={item.post.post_id}
+                  commentId={item.id}
+                  itemData={{
+                    ...item,
+                    ...item.post,
+                    comment: {
+                      ...item.comment,
+                      content: item.comment.comment,
+                      user_name: item.send_winner,
+                      user_avator_url: item.send_image
+                    }
+                  }}
+                  callback={(item: any, type?: MoreOperatorEnum) => {
+                    updateList(item, type)
+                  }}
+                />
+              </PraiseItemWrapper>
+            )
+          }
+        })}
       </List>
     </NewsPraiseWrapper>
   )

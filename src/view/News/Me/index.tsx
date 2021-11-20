@@ -25,10 +25,10 @@ const NewsMe: React.FC = (props) => {
       if (Api.isSuccess(res)) {
         setTotalPage(res.data.total_page)
         if (current === 1 || page === 1) {
-          setListData([...res.data.list])
+          setListData([...(res.data.list || [])])
           setPage(2)
         } else {
-          setListData([...listData, ...res.data.list])
+          setListData([...listData, ...(res.data.list || [])])
           setPage(page + 1)
         }
       }
@@ -65,31 +65,35 @@ const NewsMe: React.FC = (props) => {
       <List marginTop={410} loading={page <= totalPage} renderList={() => {
         getList()
       }}>
-        {listData.map(item => (
-          <MeItemWrapper key={item.id} >
-            <MentionItem more={false} itemData={{
-              ...item,
-              ...item.comment,
-              ...item.post,
-              user_name: item.send_name,
-              user_avator_url: item.send_image
-            }} {...props} callback={(data, type: MoreOperatorEnum) => {
-              updateList(data, type)
-            }} />
-            <MentionOperator
-              replyType={item.comment.pid ? 'comment' : 'twitter'}
-              hasLike={false}
-              postId={item.post.post_id}
-              itemData={{
-                ...item,
-                ...item.post
-              }}
-              callback={(item: any, type?: MoreOperatorEnum) => {
-                updateList(item, type)
-              }}
-            />
-          </MeItemWrapper>
-        ))}
+        {listData.map(item => {
+          if (item?.post?.content_status === 1) {
+            return (
+              <MeItemWrapper key={item.id} >
+                <MentionItem more={false} itemData={{
+                  ...item,
+                  ...item.comment,
+                  ...item.post,
+                  user_name: item.send_name,
+                  user_avator_url: item.send_image
+                }} {...props} callback={(data, type: MoreOperatorEnum) => {
+                  updateList(data, type)
+                }} />
+                <MentionOperator
+                  replyType={item.comment.pid ? 'comment' : 'twitter'}
+                  hasLike={false}
+                  postId={item.post.post_id}
+                  itemData={{
+                    ...item,
+                    ...item.post
+                  }}
+                  callback={(item: any, type?: MoreOperatorEnum) => {
+                    updateList(item, type)
+                  }}
+                />
+              </MeItemWrapper>
+            )
+          }
+        })}
       </List>
     </NewsMeWrapper>
   )

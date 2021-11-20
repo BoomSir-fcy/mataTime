@@ -19,7 +19,6 @@ const NewsNotice: React.FC = () => {
   const [totalPage, setTotalPage] = useState(2)
   return (
     <NoticeWrapper>
-      <Header title={t('newsNotice')} />
       <NoticeContentWrapper>
         <List marginTop={410} loading={page <= totalPage} renderList={() => {
           if (loading || page > totalPage) return false
