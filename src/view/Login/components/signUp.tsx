@@ -86,23 +86,15 @@ export const WalletAddress: React.FC<{
 };
 
 export const SignUp: React.FC<{
-  isSignup?: boolean;
+  signUpFail?: boolean;
   isStakeNft?: boolean;
-}> = ({ isSignup, isStakeNft }) => {
+}> = ({ signUpFail, isStakeNft }) => {
   const dispatch = useDispatch();
   const { singUpStep } = useStore(p => p.loginReducer);
   const { loginCallback } = useLogin();
   const { account } = useWeb3React();
   const { getNftUrl } = useSignIn();
   const { t } = useTranslation();
-
-
-  const getStakeType = async (account) => {
-    const nftStake = await FetchNftStakeType(account)
-    if (nftStake[0].token_id) {
-      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-    }
-  }
 
   const signHandle = React.useCallback(async () => {
     const res = await loginCallback(1);
@@ -116,11 +108,7 @@ export const SignUp: React.FC<{
     if (Boolean(res)) {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
     }
-  }, []);
-
-  useEffect(() => {
-    Boolean(account) && getStakeType(account)
-  }, [account])
+  }, [account]);
 
   return (
     <Box>
@@ -132,7 +120,7 @@ export const SignUp: React.FC<{
           <SubTitle>{t('loginSubTitle')}</SubTitle>
           <SignUpWarpper>
             <WalletAddress address={account} />
-            {!isSignup ? (
+            {!signUpFail ? (
               <Button disabled={!isStakeNft} scale="ld" style={{ width: '205px', fontSize: '18px' }} onClick={() => signHandle()}>
                 钱包签名
               </Button>

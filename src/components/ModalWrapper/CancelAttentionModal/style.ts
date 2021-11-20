@@ -1,52 +1,37 @@
 import styled from 'styled-components';
-import { Flex, Button, Box } from 'uikit'
+import { Flex, Button, Box } from 'uikit';
+
 export const ModalOperatorWrapper = styled(Box)`
   width: 300px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 export const ModalOperatorQueryWrapper = styled(Button)`
   width: 100px;
   height: 35px;
-  background: #4D535F;
+  background: #4d535f;
   border-radius: 10px;
-`
+`;
 export const ModalOperatorCancerWrapper = styled(Button)`
   width: 100px;
   height: 35px;
-  background: #4168ED;
+  background: #4168ed;
   border-radius: 10px;
-`
-
+`;
 
 export const CancelAttentionContentWrapper = styled(Box)`
   width: 100%;
   display: flex;
   margin-top: 25px;
   margin-bottom: 30px;
-  .img-box{
-    width: 60px;
-    height: 60px;
-    border-radius: 10px;
-    background-color: #f0f0f0;
-    overflow: hidden;
-    img{
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .des-box{
+  .des-box {
     flex: 1;
     font-size: 16px;
-    font-family: Alibaba PuHuiTi;
     font-weight: 400;
-    color: #FFFFFF;
+    color: ${({ theme }) => theme.colors.white_black};
     margin-left: 28px;
-    a{
-      color: #4168ED;
-    }
   }
-`
+`;

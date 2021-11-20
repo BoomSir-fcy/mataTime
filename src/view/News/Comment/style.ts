@@ -16,7 +16,7 @@ export const CommentItemWrapper = styled(Card)`
       font-size: 16px;
       font-family: Alibaba PuHuiTi;
       font-weight: 400;
-      color: #B5B5B5;
+      color: ${({ theme }) => theme.colors.white_black};
       line-height: 50px;
       display: flex;
       box-sizing: border-box;
@@ -28,7 +28,7 @@ export const CommentItemWrapper = styled(Card)`
       }
       p{
         font-size: 16px;
-        color: #FFFFFF;
+        color: ${({ theme }) => theme.colors.white_black};
       }
     }
     .comment-content{

@@ -4,6 +4,7 @@ import { Link, useLocation, History } from 'react-router-dom';
 import { Flex, Card, Box, Button } from 'uikit';
 import { Icon, Badge, Logo, ProfileMenu } from 'components';
 import { useStore } from 'store';
+import { useTranslation } from 'contexts/Localization';
 
 const MenuBox = styled(Card)`
   position: relative;
@@ -53,7 +54,6 @@ const User = styled(Flex)`
 const ItemLink = styled(Link)`
   margin-top: 20px;
   display: flex;
-  width: 144px;
   height: 40px;
   border-radius: 18px;
   font-size: 18px;
@@ -67,6 +67,7 @@ const ItemLink = styled(Link)`
 
 export const SubMenu = (props: { menuList: any[] }) => {
   const { menuList } = props;
+  const { t } = useTranslation();
   const location = useLocation();
   const iconColor = useTheme().colors.backgroundMenuIcon;
 
@@ -79,7 +80,7 @@ export const SubMenu = (props: { menuList: any[] }) => {
               {item.badge && <Badge count={0} />}
               <Icon name={location.pathname === item.path ? item.activeIcon : item.icon} margin="10px 14px" color={iconColor} />
             </div>
-            <span style={{ marginLeft: '5px' }}>{item.title}</span>
+            <span style={{ marginLeft: '5px' }}>{t(item.title)}</span>
           </ItemLink>
         );
       })}
@@ -93,6 +94,7 @@ export const CommonMenu: React.FC<{
   history: History;
 }> = React.memo(props => {
   const { history, menu } = props;
+  const { t } = useTranslation();
   const isDark = useStore(p => p.appReducer.systemCustom.isDark);
   const iconColor = useTheme().colors.backgroundMenuBack;
 
@@ -108,7 +110,7 @@ export const CommonMenu: React.FC<{
         </LogoWrapper>
         <BackWarpper onClick={goback}>
           <Icon name={'icon-fanhui'} color={iconColor} />
-          <span>返回</span>
+          <span>{t('newsBack')}</span>
         </BackWarpper>
         <SubMenu menuList={menu} />
       </Box>

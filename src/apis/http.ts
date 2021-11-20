@@ -1,14 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { toast } from 'react-toastify';
-import { Dispatch } from 'store';
+import history from '../routerHistory';
 
-const baseURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
+const baseURL =
+  process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
 // axios.defaults.headers.common['token'] = "";
 
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] =
+  'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.headers.get.Accept = 'application/json';
 
 axios.interceptors.response.use(
@@ -26,17 +27,16 @@ axios.interceptors.response.use(
 export class Http {
   async request(configs: AxiosRequestConfig) {
     let response;
-    let token =
-      localStorage.getItem('token') ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzcxMzQ0ODYsImlzcyI6ImRpbm9zYXVyMzM4OSIsIm5iZiI6MTYzNjUyOTY4NiwidWlkIjoiMTY3MDA0ODgwIiwiYWRkcmVzcyI6IjB4NmYzMGFkNmNBMTY2NGRmRDBiQjFGNjM5ZDlGYzgwNzE0OUNDMTNBYSJ9.kYbyMXHQYG03jHrDySEQ_EWRAwCIdktiMulClzsJ5sE';
+    let token = localStorage.getItem('token');
 
     try {
-      response = await axios({ ...configs, headers: { ...configs.headers, token: token } });
-      // response.data.code === 0 && toast.error("Token expiration");
+      response = await axios({
+        ...configs,
+        headers: { ...configs.headers, token: token }
+      });
       return response.data;
-    } catch (e) {
-      console.log(e);
-      // Dispatch.toast.show({ type: 'error', text: 'error' });
+    } catch (e: any) {
+      if (e?.status === 401) return history.push('/login');
     }
   }
 

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization'
-import { Icon } from 'components';
-import { List } from 'components';
+import { Icon, MoreOperatorEnum, List } from 'components';
 import { Api } from 'apis';
 import loveIcn from 'assets/images/social/at.png';
 
@@ -21,8 +20,34 @@ const NewsPraise: React.FC = (props) => {
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
 
+  // 获取列表
+  const getList = (current = 0) => {
+    if ((loading || page > totalPage) && !current) {
+      return false
+    }
+    setLoading(true)
+    Api.NewsApi.getMessageList(3, current || page, 50).then(res => {
+      setLoading(false)
+      if (Api.isSuccess(res)) {
+        setTotalPage(res.data.total_page)
+        if (current === 1 || page === 1) {
+          setListData([...res.data.list])
+          setPage(2)
+        } else {
+          setListData([...listData, ...res.data.list])
+          setPage(page + 1)
+        }
+      }
+    })
+  }
+
   // 更新列表
-  const updateList = (newItem: any) => {
+  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    if (type === MoreOperatorEnum.COMMONT) {
+      setPage(1)
+      getList(1)
+      return
+    }
     listData.map((item: any) => {
       if (item.id === newItem.id) {
         const obj = item
@@ -36,16 +61,7 @@ const NewsPraise: React.FC = (props) => {
   return (
     <NewsPraiseWrapper>
       <List marginTop={410} loading={page <= totalPage} renderList={() => {
-        if (loading || page > totalPage) return false
-        setLoading(true)
-        Api.NewsApi.getMessageList(3, page, 20).then(res => {
-          setLoading(false)
-          if (Api.isSuccess(res)) {
-            setPage(page + 1)
-            setListData([...listData, ...(res.data.list || [])])
-            setTotalPage(res.data.total_page)
-          }
-        })
+        getList()
       }}>
         {listData.map(item => (
           <PraiseItemWrapper key={item.id}>
@@ -70,12 +86,25 @@ const NewsPraise: React.FC = (props) => {
                 user_avator_url: item.post.nft_image
               }} {...props} more={false} size={'small'}></MentionItem>
             </div>
-            <MentionOperator hasLike={false} itemData={{
-              ...item,
-              ...item.post
-            }} callback={(item: any) => {
-              updateList(item)
-            }} />
+            <MentionOperator
+              hasLike={false}
+              replyType={'comment'}
+              postId={item.post.post_id}
+              commentId={item.id}
+              itemData={{
+                ...item,
+                ...item.post,
+                comment: {
+                  ...item.comment,
+                  content: item.comment.comment,
+                  user_name: item.send_winner,
+                  user_avator_url: item.send_image
+                }
+              }}
+              callback={(item: any, type?: MoreOperatorEnum) => {
+                updateList(item, type)
+              }}
+            />
           </PraiseItemWrapper>
         ))}
       </List>

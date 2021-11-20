@@ -1,24 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
-import { Flex, Card, Text, Button, Toggle } from 'uikit';
-import { useStore } from 'store';
+import { Flex, Card, Text, Toggle } from 'uikit';
+import { useStore, fetchThunk } from 'store';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'contexts/Localization';
 
 const NoticeSetBox = styled(Card)`
-  height: 707px;
-  margin-top: 16px;
+  height: 700px;
+  margin-top: 13px;
   padding: 27px 29px;
-  border-radius: 10px;
 `;
 const Title = styled.div`
+  text-transform: capitalize;
   color: ${({ theme }) => theme.colors.white_black};
   font-weight: bold;
-`;
-const Msg = styled(Text)`
-  color: #b5b5b5;
-  font-size: 16px;
 `;
 const Rows = styled(Flex)`
   justify-content: space-between;
@@ -32,9 +30,11 @@ const Column = styled(Flex)`
 `;
 
 const NoticeSet = () => {
-  const setting: any = useStore(p => p.loginReducer.userInfo);
+  const dispatch = useDispatch();
+  const setting = useStore(p => p.loginReducer.userInfo);
+  const { t } = useTranslation();
   const [state, setState] = useImmer({
-    msg_remind: setting.MsgRemind === 1 ? true : false
+    msg_remind: setting.msg_remind === 1 ? true : false
   });
 
   const setNotice = async (params: Api.Set.likeSetParams) => {
@@ -45,6 +45,7 @@ const NoticeSet = () => {
         setState(p => {
           p[keys] = params[keys] === 1 ? true : false;
         });
+        dispatch(fetchThunk.fetchUserInfoAsync());
         toast.success(res.msg);
       } else {
         toast.error(res.msg);
@@ -96,11 +97,14 @@ const NoticeSet = () => {
       </Column> */}
       <Column>
         <Rows>
-          <Title>消息通知</Title>
-          <Toggle checked={state.msg_remind} onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })} />
+          <Title>{t('setMsgNotification')}</Title>
+          <Toggle
+            checked={state.msg_remind}
+            onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })}
+          />
         </Rows>
         <Text color="textTips" mt="11px">
-          开启或关闭来自浏览器的授权消息通知，开启后将会通过浏览器的消息提醒您
+          {t('setMsgNotificationTips')}
         </Text>
       </Column>
       {/* <Column>

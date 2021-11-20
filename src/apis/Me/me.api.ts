@@ -12,7 +12,7 @@ export class MeApi extends Http {
     return res;
   }
   // 取消关注
-  async unFollowUser(focus_uid: number) {
+  async unFollowUser(focus_uid: number | string) {
     const res = await this.get('/v1/attention/cancel', { focus_uid });
     return res;
   }
@@ -93,6 +93,14 @@ export class MeApi extends Http {
   // 个人(他人)主页
   async getProfileMsg(page: number, uid?: number) {
     const res = await this.get('/v1/user/home_msg', { page, uid });
+    return res;
+  }
+
+  async reportUser(uid: number, reason: string) {
+    const res = await this.post('/v1/user/report_user', {
+      to_uid: uid,
+      reason
+    });
     return res;
   }
 }

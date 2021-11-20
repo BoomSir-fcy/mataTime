@@ -51,12 +51,14 @@ type Iprops = {
 export const RecommendPeople: React.FC<Iprops> = props => {
   const { t } = useTranslation()
   const [list, setList] = useState([]);
+  const [isInit, setIsInit] = useState(true);
   useEffect(() => {
     getManList();
   }, []);
   const getManList = () => {
     Api.UserApi.referrerMans({ num: 3 }).then(res => {
       if (Api.isSuccess(res)) {
+        setIsInit(true)
         setList(res.data || []);
       }
     });
@@ -75,6 +77,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
 
 
   return (
+    isInit&&list.length<1?null:
     <RecommendPeopleBox>
       <Flex justifyContent="space-between">
         <TitleText>{t('recommendPeopleTitle')}</TitleText>

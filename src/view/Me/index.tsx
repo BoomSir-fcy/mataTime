@@ -1,5 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  withRouter
+} from 'react-router-dom';
 import { Container } from './container';
 
 const Account = React.lazy(() => import('./account'));
@@ -20,7 +25,10 @@ const Me = props => {
             <Container {...props}>
               <Route path={`${props.match.path}`} exact component={Profile} />
               <Route path={`${props.match.path}/account`} component={Account} />
-              <Route path={`${props.match.path}/profile/:uid`} component={Profile} />
+              <Route
+                path={`${props.match.path}/profile/:uid`}
+                component={Profile}
+              />
               <Route path={`${props.match.path}/edit`} component={Edit} />
               <Route path={`${props.match.path}/follow`} component={Follow} />
               <Route path={`${props.match.path}/fans`} component={Fans} />

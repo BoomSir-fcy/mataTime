@@ -48,7 +48,7 @@ export const Footer = React.memo(() => {
         <SubText as={Link} to="/">
           {t('loginPrivacyPolicyText')}
         </SubText>
-        <SubText>@2021 Twitter,Inc</SubText>
+        <SubText>© Copyright 2021 Metatime. All Rights Reserved.</SubText>
       </Flex>
     </FooterWarpper>
   );

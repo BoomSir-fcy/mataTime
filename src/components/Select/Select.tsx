@@ -69,7 +69,7 @@ const DropDownListContainer = styled.div<{ scale: Scale }>`
   }
 `;
 
-const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Scale; fillWidth: boolean; height: number }>`
+const DropDownContainer = styled.div<{ isOpen: boolean, width: number, scale: Scale, fillWidth: boolean, height: number, childrenHeight: string }>`
   cursor: pointer;
   width: ${({ width, fillWidth }) => (fillWidth ? '100%' : `${width}px`)};
   position: relative;
@@ -105,7 +105,20 @@ const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Sc
         box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
       }
     `}
-
+    ${props =>
+    props.isOpen && props.childrenHeight &&
+    css`
+      ${DropDownListContainer} {
+        height:${props.childrenHeight};
+        overflow-y: auto;
+        transform: scaleY(1);
+        opacity: 1;
+        border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+        border-top-width: 0;
+        border-radius: 0 0 16px 16px;
+        box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
+      }
+    `}
   .drop-svg {
     position: absolute;
     right: 16px;
@@ -146,6 +159,7 @@ export interface SelectProps {
   onSortClick?: () => void;
   scale?: Scale;
   sort?: SortType;
+  childrenHeight?: string
 }
 
 export interface OptionProps {
@@ -154,7 +168,7 @@ export interface OptionProps {
   id?: string | number;
 }
 
-export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children }) => {
+export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children, childrenHeight }) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -202,7 +216,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
   }, []);
 
   return (
-    <DropDownContainer scale={scale} isOpen={isOpen} fillWidth={fillWidth} ref={containerRef} {...containerSize}>
+    <DropDownContainer childrenHeight={childrenHeight} scale={scale} isOpen={isOpen} fillWidth={fillWidth} ref={containerRef} {...containerSize}>
       {/* {
         sort && (
           sort === SortType.DOWN
@@ -214,7 +228,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
       } */}
       {containerSize.width !== 0 && (
         <DropDownHeader onClick={toggling}>
-          <Text ellipsis>{options[selectedOptionIndex].label}</Text>
+          <Text ellipsis>{options[selectedOptionIndex]?.label}</Text>
           {children}
         </DropDownHeader>
       )}

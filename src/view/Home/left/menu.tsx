@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization'
 import { Link } from 'react-router-dom';
 import { ProfileMenu, Icon, Logo, Badge } from 'components';
-
+import {toast} from 'react-toastify'
 import menuData from './menuData';
 
 const MenuBox = styled(Card)`
@@ -47,7 +47,13 @@ export const MenuList = (props: { menuList: any[] }) => {
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { menuList } = props;
-  const itemClick = index => {
+  const underdevelopmentList = [1,3,4,5]
+  const itemClick = (e,index) => {
+    if(underdevelopmentList.includes(index)){
+      e.preventDefault();
+      e.stopPropagation();
+      return toast.success('coming soon')
+    }
     setCurrentIndex(index);
   };
   return (
@@ -55,7 +61,7 @@ export const MenuList = (props: { menuList: any[] }) => {
       {menuList.map((item, index) => {
         return (
           <ItemLink
-            onClick={itemClick.bind(this, index)}
+            onClick={(e)=>itemClick(e, index)}
             to={item.path}
             key={index}
             style={{

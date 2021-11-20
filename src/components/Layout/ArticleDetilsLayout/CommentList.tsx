@@ -5,8 +5,8 @@ import { useTranslation } from 'contexts/Localization'
 import { relativeTime } from 'utils'
 import { SortIcon } from './SortIcon'
 import MentionOperator from 'view/News/components/MentionOperator';
-import { FollowPopup, MorePopup,List,ContentParsing } from 'components'
-import {Api} from 'apis'
+import { FollowPopup, MorePopup, List, ContentParsing } from 'components'
+import { Api } from 'apis'
 import {
   CommentListBox,
   CommentTitle,
@@ -63,7 +63,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       console.log(res);
       if (Api.isSuccess(res)) {
         setPage(page + 1)
-        setListData([...listData, ...(res.data.list||[])])
+        setListData([...listData, ...(res.data.list || [])])
         // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
         setTotalPage(res.data.total_page)
       }
@@ -88,35 +88,47 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         setLoading(true)
         getList()
       }}>
-      {listData.map((item,index) => (
-        <CommentItem key={item.id}>
-          <Flex>
-            <Avatar src={item.user_avator_url} style={{ width: '50px', height: '50px' }} scale="md" />
-            <div style={{ flex: 1, marginLeft: '22px' }}>
-              <CommentHeader justifyContent="space-between">
-                <Flex>
-                  <div>
-                    <div>{item.user_name}</div>
-                    <div className="relative-time">{relativeTime(item.add_time)}</div>
-                  </div>
-                  {item.comment_user_name&&( <div className="reply">
-                    回复 和 
-                    <FollowPopup>
-                      <span>{item.comment_user_name}</span>
-                    </FollowPopup>
-                  </div>)}
-                </Flex>
-                <Flex>
-                {/* <MorePopup data={new Object()}> */}
-                  {/* <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon> */}
-              {/* </MorePopup> */}
-                </Flex>
-              </CommentHeader>
-              <ContentParsing content={item.comment}></ContentParsing>
-            </div>
-          </Flex>
-          <MentionOperator type={'Comment'} callback={initList}  itemData={item} ></MentionOperator>
-          {/* <CommentFooter>
+        {listData.map((item, index) => (
+          <CommentItem key={item.id}>
+            <Flex>
+              <Avatar src={item.user_avator_url} style={{ width: '50px', height: '50px' }} scale="md" />
+              <div style={{ flex: 1, marginLeft: '22px' }}>
+                <CommentHeader justifyContent="space-between">
+                  <Flex>
+                    <div>
+                      <div>{item.user_name}</div>
+                      <div className="relative-time">{relativeTime(item.add_time)}</div>
+                    </div>
+                    {item.comment_user_name && (<div className="reply">
+                      回复 和
+                      <FollowPopup>
+                        <span>{item.comment_user_name}</span>
+                      </FollowPopup>
+                    </div>)}
+                  </Flex>
+                  <Flex>
+                    {/* <MorePopup data={new Object()}> */}
+                    {/* <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon> */}
+                    {/* </MorePopup> */}
+                  </Flex>
+                </CommentHeader>
+                <ContentParsing content={item.comment}></ContentParsing>
+              </div>
+            </Flex>
+            <MentionOperator
+              type={'Comment'}
+              callback={initList}
+              itemData={{
+                ...item,
+                comment: {
+                  ...item,
+                  content: item.comment
+                }
+              }}
+              postId={item.pid}
+              commentId={item.id}
+            ></MentionOperator>
+            {/* <CommentFooter>
             <div> <Icon name="icon-retweet" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
             <div><Icon name="icon-aixin" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>

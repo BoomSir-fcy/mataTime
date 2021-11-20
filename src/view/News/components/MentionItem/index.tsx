@@ -4,9 +4,18 @@ import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD,ContentParsing } from 'components';
+import {
+  FollowPopup,
+  MorePopup,
+  Icon,
+  Avatar,
+  MoreOperatorEnum,
+  ImgList,
+  FollowPopupD,
+  ContentParsing
+} from 'components';
 import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
-import { useTranslation } from 'contexts/Localization'
+import { useTranslation } from 'contexts/Localization';
 
 import { Api } from 'apis';
 
@@ -19,31 +28,20 @@ type IProps = {
 };
 
 const MentionItem: React.FC<IProps> = props => {
-  const { children, size = 'nomal', itemData = {}, callback = () => { } } = props;
+  const {
+    children,
+    size = 'nomal',
+    itemData = {},
+    callback = () => { }
+  } = props;
   const mentionRef: any = useRef();
 
   const [position, setPosition] = useState([-999, -999]);
   const [uid, setUid] = useState<string | number>(0);
-  // const [content, setContent] = useState<any[]>([]);
 
   useEffect(() => {
     handleUserHover();
   }, []);
-
-  // useEffect(() => {
-  //   if (itemData.content) {
-  //     let arr = [];
-  //     try {
-  //       if (itemData.content.match(/\[.*?\]/g)) {
-  //         arr = JSON.parse(itemData.content)
-  //       }
-
-  //       setContent(arr || [])
-  //     } catch (err: any) {
-  //       arr = [];
-  //     }
-  //   }
-  // }, [itemData.content]);
 
   // 用户hover
   const handleUserHover = () => {
@@ -58,10 +56,6 @@ const MentionItem: React.FC<IProps> = props => {
           setPosition([e.clientX, e.clientY]);
         }
       });
-      // dom.addEventListener('mouseout', (e: any) => {
-      //   console.log('mouseout:', e)
-      //   setPosition([-999, -999])
-      // })
     });
   };
 
@@ -85,12 +79,14 @@ const MentionItem: React.FC<IProps> = props => {
           goDetils(e);
         }}
       >
-        <ContentParsing content={itemData.content}></ContentParsing>
-       
-        <ImgList list={itemData.image_list}></ImgList>
+        <ContentParsing content={itemData.content} callback={(type: MoreOperatorEnum) => {
+          callback(itemData, type);
+        }}></ContentParsing>
+        <ImgList
+          list={itemData.image_list || itemData.image_url_list}
+        ></ImgList>
       </div>
       {children}
-
       {/* 关注提示 */}
       <FollowPopupD
         uid={uid}
@@ -111,11 +107,16 @@ type UserProps = {
   callback?: Function;
 };
 
-export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'nomal', itemData = {}, callback = () => { } }) => {
-  const UID = useSelector((state: any) => state.loginReducer.userInfo.UID);
+export const MentionItemUser: React.FC<UserProps> = ({
+  more = true,
+  size = 'nomal',
+  itemData = {},
+  callback = () => { }
+}) => {
+  const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   useEffect(() => {
     init();
   }, []);
@@ -130,13 +131,15 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback({
-        ...itemData,
-        post: {
-          ...itemData.post,
-          is_attention: 0
-        }
-      });
+      // callback({
+      //   ...itemData,
+      //   post: {
+      //     ...itemData.post,
+      //     is_attention: 0
+      //   }
+      // });
+      // callback()
+      callback(itemData, MoreOperatorEnum.FOLLOW)
     } else {
       toast.error(res.data);
     }
@@ -145,11 +148,20 @@ export const MentionItemUser: React.FC<UserProps> = ({ more = true, size = 'noma
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
         <div className="user-left-wrapper">
-          <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
+          <Avatar
+            className="avatar"
+            src={itemData.user_avator_url}
+            scale="md"
+          />
           <div className="user-info">
             <div>
-              <div className="user-name">{itemData.user_name}</div>
-              <div className="time">{itemData.add_time_desc}</div>
+              <div className="user-name">
+                {itemData.user_name || itemData.nick_name}
+              </div>
+              <div className="time">
+                <span>@{(itemData.user_address || '').slice(0, 3) + '...' + (itemData.user_address || '').slice(35)}</span>
+                {itemData.add_time_desc || itemData.post_time_desc}
+              </div>
             </div>
             {/* <div className="topic">
               <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
