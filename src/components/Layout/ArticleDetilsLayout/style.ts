@@ -43,7 +43,8 @@ font-weight: bold;
 `
 export const CommentItem = styled.div`
 :hover{
-  background-color: #1F2534;
+  /* background-color: #1F2534; */
+  background-color: ${({ theme }) => theme.colors.backgroundCard};
   transition:all 0.3s;
 }
 padding:18px 18px 0 28px;

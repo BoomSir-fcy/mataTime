@@ -25,13 +25,16 @@ export const ModalTitleWrapper = styled(Box)`
   .close{
     width: 20px;
     cursor: pointer;
+    i {
+      color: ${({ theme }) => theme.colors.white_black} !important;
+    }
   }
 
 `
 export const ReportModalWrapper = styled(Box)`
   width: 668px;
-  background: #191F2D;
-  border-radius: 10px;
+  background: ${({ theme }) => theme.colors.backgroundCard};
+  border-radius: ${({ theme }) => theme.radii.card};
   position: fixed;
   left: 50%;
   top: 100px;

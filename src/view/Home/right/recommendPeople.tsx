@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Button, Card, Text } from 'uikit';
 import { Avatar, Icon } from 'components';
-import{Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Api } from 'apis';
 const RecommendPeopleBox = styled(Card)`
   // margin-top: 15px;
@@ -79,31 +79,31 @@ export const RecommendPeople: React.FC<Iprops> = props => {
 
 
   return (
-    isInit&&list.length<1?null:
-    <RecommendPeopleBox>
-      <Flex justifyContent="space-between">
-        <TitleText>{t('recommendPeopleTitle')}</TitleText>
-        <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
-      </Flex>
-      {list.map((item, index) => (
-        <Flex key={item.uid} alignItems="center" justifyContent="space-between" style={{ marginTop: '17px' }}>
-          <Flex>
-            <Link to={'/me/profile/'+item.uid}>
-              <Avatar src={item.nft_image} style={{ width: '50px', height: '50px' }} scale="md" />
-            </Link>
-            <UserInfo >
-              <Flex>
-                <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
-                {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
-              </Flex>
-              <UserDesc title={item.introduction}>{item.introduction}</UserDesc>
-            </UserInfo>
-          </Flex>
-          <FollowBtn onClick={() => {
-            onAttentionFocusRequest(item.uid)
-          }}>+{t('followText')}</FollowBtn>
+    isInit && list.length < 1 ? null :
+      <RecommendPeopleBox>
+        <Flex justifyContent="space-between" alignItems="center">
+          <TitleText>{t('recommendPeopleTitle')}</TitleText>
+          <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
         </Flex>
-      ))}
-    </RecommendPeopleBox>
+        {list.map((item, index) => (
+          <Flex key={item.uid} alignItems="center" justifyContent="space-between" style={{ marginTop: '17px' }}>
+            <Flex>
+              <Link to={'/me/profile/' + item.uid}>
+                <Avatar src={item.nft_image} style={{ width: '50px', height: '50px' }} scale="md" />
+              </Link>
+              <UserInfo >
+                <Flex>
+                  <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
+                  {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
+                </Flex>
+                <UserDesc title={item.introduction}>{item.introduction}</UserDesc>
+              </UserInfo>
+            </Flex>
+            <FollowBtn onClick={() => {
+              onAttentionFocusRequest(item.uid)
+            }}>+{t('followText')}</FollowBtn>
+          </Flex>
+        ))}
+      </RecommendPeopleBox>
   );
 };
