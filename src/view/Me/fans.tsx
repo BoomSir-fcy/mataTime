@@ -112,7 +112,6 @@ const Fans = React.memo(() => {
     getFansList();
   }, []);
 
-  console.log(state.page);
   return (
     <Box>
       <CrumbsHead>

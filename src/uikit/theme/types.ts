@@ -114,7 +114,7 @@ export type Colors = {
   textOrigin: string;
   textgrey: string;
   disabled: string;
-
+  borderColor: string;
   // Gradients
   gradients: Gradients;
 

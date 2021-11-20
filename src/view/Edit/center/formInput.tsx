@@ -55,7 +55,7 @@ const Uaddres = styled.div`
   height: 26px;
   line-height: 26px;
   color: ${({ theme }) => theme.colors.text};
-  background: ${({ theme }) => theme.colors.tertiary};
+  background: ${({ theme }) => theme.colors.borderColor};
   border-radius: 10px;
   text-align: center;
   font-size: 14px;
@@ -81,14 +81,17 @@ const RadioBox = styled.div`
 const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
   const profile = useStore(p => p.loginReducer.userInfo);
+  const defaultId = country?.length > 0 && country[0].id;
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
     nick_name: profile.nick_name,
     display_format: profile.display_format,
     introduction: profile.introduction,
     background_image: profile.background_image,
-    location: profile.location || (country.length > 0 && country[0]?.value),
+    location: profile.location || (country.length > 0 && country[0]?.value)
   });
-  const [defaultLocationId, setdefaultLocationId] = useState(country.find(({ value }) => value === profile.location)?.id || 1)
+  const [defaultLocationId, setdefaultLocationId] = useState(
+    country.find(({ value }) => value === profile.location)?.id || defaultId
+  );
 
   useImperativeHandle(ref, () => ({
     getFrom() {
@@ -121,7 +124,7 @@ const FormInput = React.forwardRef((props, ref) => {
         <Title>*显示格式</Title>
         <RadioBox>
           <Radio
-            scale='sm'
+            scale="sm"
             type="radio"
             id="gs"
             checked={state.display_format === 1}
@@ -167,14 +170,13 @@ const FormInput = React.forwardRef((props, ref) => {
         <Select
           options={country}
           defaultId={defaultLocationId}
-          childrenHeight='120px'
+          childrenHeight="120px"
           onChange={(val: any) => {
             setdefaultLocationId(val.ID);
             setState(p => {
               p.location = val.value;
-            })
-          }
-          }
+            });
+          }}
         />
       </Rows>
     </FormBox>

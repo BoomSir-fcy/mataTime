@@ -75,10 +75,20 @@ export const SubMenu = (props: { menuList: any[] }) => {
     <React.Fragment>
       {menuList.map((item, index) => {
         return (
-          <ItemLink to={item.path} key={index} className={`${location.pathname === item.path && 'active'}`}>
+          <ItemLink
+            to={item.path}
+            key={index}
+            className={`${location.pathname === item.path && 'active'}`}
+          >
             <div style={{ position: 'relative' }} title={item.title}>
               {item.badge && <Badge count={0} />}
-              <Icon name={location.pathname === item.path ? item.activeIcon : item.icon} margin="10px 14px" color={iconColor} />
+              <Icon
+                name={
+                  location.pathname === item.path ? item.activeIcon : item.icon
+                }
+                margin="10px 14px"
+                color={iconColor}
+              />
             </div>
             <span style={{ marginLeft: '5px' }}>{t(item.title)}</span>
           </ItemLink>
@@ -99,14 +109,22 @@ export const CommonMenu: React.FC<{
   const iconColor = useTheme().colors.backgroundMenuBack;
 
   const goback = () => {
-    history.goBack();
+    // history.goBack();
+    history.push('/');
   };
 
   return (
     <MenuBox>
       <Box>
         <LogoWrapper>
-          <Logo url="/" src={require(isDark ? 'assets/images/logo.svg' : 'assets/images/light_logo.svg').default} />
+          <Logo
+            url="/"
+            src={
+              require(isDark
+                ? 'assets/images/logo.svg'
+                : 'assets/images/light_logo.svg').default
+            }
+          />
         </LogoWrapper>
         <BackWarpper onClick={goback}>
           <Icon name={'icon-fanhui'} color={iconColor} />

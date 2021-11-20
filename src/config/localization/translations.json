@@ -127,6 +127,8 @@
   "meHome": "Homepage",
   "meHeaderFollow": "my focus",
   "meHeaderFans": "my fans",
+  "meHeaderMyCollection": "My Collection",
+  "meHeaderNum%value%": "%value% num",
   "meHeaderPeople%value%": "%value% people",
   "meEditProfile": "Edit Information",
   "meFans": "Fan ",
