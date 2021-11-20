@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Box, Flex, Image, Text, RefreshRingIcon, Button } from 'uikit'
+import { Box, Flex, Image, Text, RefreshRingIcon, BalanceText } from 'uikit'
 import QuestionHelper from '../QuestionHelper'
 
 const CoinItemStyled = styled(Flex) <{ fillClickArea?: boolean; isActive?: boolean }>`
@@ -33,6 +33,11 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
   const toggling = (event: React.MouseEvent<HTMLDivElement | HTMLOrSVGElement>) => {
     event.stopPropagation()
   }
+
+  const currentPrice = useMemo(() => {
+    if (!Number(coinInfo?.current_price)) return 0
+    return Number(coinInfo?.current_price)
+  }, [coinInfo?.current_price])
 
   return (
     <CoinItemStyled isActive={isActive} fillClickArea={fillClickArea} onClick={(event) => {
@@ -66,14 +71,30 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
               }
               {onTouch && (<StyledTriangle />)}
             </Flex>
-            <Text color="textTips" fontSize="14px">{coinInfo?.coin_name}</Text>
+            <Text ellipsis width="120px" color="textTips" fontSize="14px">{coinInfo?.coin_name}</Text>
           </Box>
         </Flex>
         {
           !!Number(coinInfo?.current_price) && (<Box>
-            <Text bold color="primary" fontSize="18px" textAlign="right">${coinInfo?.current_price}</Text>
+            {
+              !!currentPrice
+                ?
+                (
+                  <BalanceText textAlign="right" prefix="$ " bold color="textPrimary" value={currentPrice} decimals={0} />
+                )
+                :
+
+                <Text bold color="primary" fontSize="18px" textAlign="right">--</Text>
+            }
             <Flex>
-              <Text color="upPrice" fontSize="14px" textAlign="right">+{coinInfo?.price_change_percentage_24h}%</Text>
+              {
+                Number(coinInfo?.price_change_percentage_24h) >= 0
+                  ?
+                  <Text color="upPrice" fontSize="14px" textAlign="right">+{coinInfo?.price_change_percentage_24h}%</Text>
+                  :
+                  <Text color="downPrice" fontSize="14px" textAlign="right">{coinInfo?.price_change_percentage_24h}%</Text>
+
+              }
               {
                 onRefresh && (
                   <RefreshRingIcon

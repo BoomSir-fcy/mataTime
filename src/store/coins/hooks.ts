@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, AppState } from '../index'
 import { fetchCoinInfoAsync, fetchCoinsListAsync } from './reducer'
 
-const REFRESH_INTERVAL = 5 * 1000 * 1000
+const REFRESH_INTERVAL = 5 * 60 * 1000
 
 // Check if the tab is active in the user browser
 const useIsBrowserTabActive = () => {

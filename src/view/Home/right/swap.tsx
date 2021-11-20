@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import MiniSwap from 'libs/mini-swap';
 import { useWeb3React } from '@web3-react/core';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
+import { light, dark } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 
@@ -31,18 +32,24 @@ export const Swap: React.FC = () => {
         resetTheme={{
           dark: {
             colors: {
-              primary: '#4168ED',
-              textSubtle: '#7393ff',
-              backgroundAlt: '#212827',
-              invertedContrast: '#191f2d',
+              primary: dark.colors.backgroundPrimary,
+              textSubtle: dark.colors.textPrimary,
+              backgroundAlt: dark.colors.dropdownDeep,
+              invertedContrast: dark.colors.backgroundCard,
+            },
+            card: {
+              boxShadow: dark.shadows.box
             }
           },
           light: {
             colors: {
-              primary: '#4168ED',
-              textSubtle: '#7393ff',
-              backgroundAlt: '#FFFFFF',
-              invertedContrast: '#FFFFFF',
+              primary: light.colors.backgroundPrimary,
+              textSubtle: light.colors.textPrimary,
+              backgroundAlt: light.colors.backgroundAlt,
+              invertedContrast: light.colors.invertedContrast,
+            },
+            card: {
+              boxShadow: light.shadows.box
             }
           }
         }}
