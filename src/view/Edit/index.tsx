@@ -15,9 +15,10 @@ import { useFetchNftList } from '../Login/hook';
 
 const Background = styled(Flex)`
   width: 100%;
+  height: 280px;
   background-size: 100%;
   border-radius: 10px;
-  padding: 190px 0 55px;
+  padding: 190px 0 0;
   justify-content: center;
 `;
 
@@ -32,7 +33,7 @@ export const Header = styled(Flex)`
 `;
 
 const Edit: React.FC = () => {
-  useFetchNftList()
+  useFetchNftList();
   const dispatch = useDispatch();
   const form = React.useRef<any>();
   const profile: any = useStore(p => p.loginReducer.userInfo);
@@ -47,11 +48,14 @@ const Edit: React.FC = () => {
       display_format: profile.display_format,
       introduction: profile.introduction,
       background_image: profile.background_image,
-      location: profile.location,
-    }
-    if (isObjectValueEqual(params, myInfo) && state.background === profile.background_image) {
+      location: profile.location
+    };
+    if (
+      isObjectValueEqual(params, myInfo) &&
+      state.background === profile.background_image
+    ) {
       // toast.error('没有任何修改!');
-      return
+      return;
     }
     try {
       const res = await Api.UserApi.updateUserInfo({
@@ -89,7 +93,7 @@ const Edit: React.FC = () => {
       }
     }
     return true;
-  }
+  };
 
   return (
     <Box>

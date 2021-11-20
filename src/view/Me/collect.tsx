@@ -77,6 +77,9 @@ const Collect = props => {
                 callback={(item: any, type: MoreOperatorEnum) => init(1)}
               ></MentionItem>
               <MentionOperator
+                replyType="twitter"
+                type="Article"
+                postId={item.post_id}
                 itemData={{
                   ...item,
                   is_like: item.like_status,

@@ -56,7 +56,7 @@ export const lightColors: Colors = {
   inpuShadows: 'inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)',
   inputSecondary: '#7393FF',
   inputSelect: '#DBDBDB',
-  tertiary: '#EFF4F5',
+  tertiary: '#4D535F',
   text: '#283433',
   white_black: '#000',
   member_num: '#549A23',
