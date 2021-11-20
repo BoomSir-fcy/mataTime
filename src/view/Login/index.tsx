@@ -11,6 +11,8 @@ import { LoginJoin, SignUp } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
 import { StakeNFT } from 'components/NftList';
+import { clear } from 'redux-localstorage-simple';
+import useAuth from 'hooks/useAuth';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
@@ -50,12 +52,14 @@ margin-right: 40px;
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchSupportNFT()
   useFetchNftList()
+  const { logout } = useAuth();
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
   const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
   const [showStakeNft, setshowStakeNft] = useState(false)
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
+  const [ConnectAddr, setConnectAddr] = useState('0')
   // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
 
@@ -74,6 +78,24 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
     dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   };
+
+  const signOut = () => {
+    logout()
+    localStorage.clear()
+    clear({ namespace: 'redux_localstorage_simple_loginReducer' })
+    // history.push('/login')
+  }
+
+  const isChangeAddr = () => {
+    if (ConnectAddr === '0') {
+      // 赋值初始化地址
+      setConnectAddr(account)
+    } else if (ConnectAddr !== account) {
+      // 切换了地址就清除数据 重新登陆
+      signOut()
+    }
+  }
+
   useEffect(() => {
     isStakeNft && setshowStakeNft(false)
   }, [isStakeNft])
@@ -95,7 +117,10 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     }
   }, [NftList])
   useEffect(() => {
-    Boolean(account) && getStakeType(account)
+    if (account) {
+      // isChangeAddr()
+      getStakeType(account)
+    }
   }, [account])
   return (
     <React.Fragment>
