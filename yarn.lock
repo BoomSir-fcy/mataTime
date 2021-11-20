@@ -10642,8 +10642,8 @@ react-helmet-async@^1.1.2:
 
 react-images@^1.2.0-beta.7:
   version "1.2.0-beta.7"
-  resolved "https://registry.nlark.com/react-images/download/react-images-1.2.0-beta.7.tgz#8a5804f8a5d08a25e64180eecb43a77d4e023e16"
-  integrity sha1-ilgE+KXQiiXmQYDuy0OnfU4CPhY=
+  resolved "https://registry.yarnpkg.com/react-images/-/react-images-1.2.0-beta.7.tgz#8a5804f8a5d08a25e64180eecb43a77d4e023e16"
+  integrity sha512-/ewkPwkwJDqTmc0HMPccFPE5H4A6JVRCfMahBc2j9DTBPmdANSXAglTlYLgZC8Q7iZQjGFado3OxixSrog/02w==
   dependencies:
     a11y-focus-store "^1.0.0"
     cross-env "^7.0.3"
