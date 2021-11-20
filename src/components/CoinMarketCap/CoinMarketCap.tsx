@@ -62,8 +62,6 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
     return `$ ${formatLocalisedCompactNumber(Number(currentCoin?.total_volume))}`
   }, [currentCoin?.total_volume])
 
-  // TODO: 价格数据有数字滚动的动效，看起来是刷新过的最新数据
-
   return (
     <StyledPage {...props}>
       {

@@ -36,7 +36,7 @@ export class Http {
       });
       return response.data;
     } catch (e: any) {
-      // if (e?.status === 401) return history.push('/login');
+      if (e?.status === 401) return history.push('/login');
     }
   }
 
