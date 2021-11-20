@@ -4,7 +4,7 @@ export const baseColors = {
   failure: '#ED4B9E',
   primary: '#FFFFFF',
   primaryBright: '#FFFFFF',
-  primaryDark: '#FFFFFF',
+  primaryDark: '#000',
   secondary: '#7645D9',
   success: '#4168ED',
   warning: '#FFB237',
@@ -80,7 +80,11 @@ export const lightColors: Colors = {
     violet: 'linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)',
     violetAlt: 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
-  }
+  },
+  editorText: '#000',
+  editorBoxBg: '#fff',
+  searchTopicBg:'#fff',
+  searchTopicTxt:'#000'
 };
 
 export const darkColors: Colors = {
@@ -135,5 +139,9 @@ export const darkColors: Colors = {
     violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
     violetAlt: 'linear-gradient(180deg, #434575 0%, #66578D 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
-  }
+  },
+  editorText: '#FFFFFF',
+  editorBoxBg: '#191f2d',
+  searchTopicBg:'#2F3749',
+  searchTopicTxt:'#fff'
 };

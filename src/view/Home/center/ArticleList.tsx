@@ -112,7 +112,6 @@ export const ArticleList = (props) => {
   return (
     <ArticleListBox>
       <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={() => {
-        console.log(loading ,page ,totalPage);
         if (loading || page > totalPage) return false
         setLoading(true)
         if(props.match.path==='/topicList/:id/:name'){
@@ -132,9 +131,10 @@ export const ArticleList = (props) => {
           })
         }else{
           Api.HomeApi.getArticleList({
-            attention: 1,
+            attention:1,
             page: page,
-            per_page: 10
+            per_page: 10,
+            ...props.filterValObj
           }).then(res => {
             setLoading(false)
             if (Api.isSuccess(res)) {
@@ -182,4 +182,5 @@ export const ArticleList = (props) => {
   )
 }
 ArticleList.defaultProps = {
+  filterValObj:{}
 }

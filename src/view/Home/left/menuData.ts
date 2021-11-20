@@ -18,6 +18,8 @@ const menuArr = [
     activeIcon: 'icon-xiaoxi1',
     title: '消息',
     path: '/news/me',
+    badge: true,
+    count:0,
     transaltion: 'homeMenuNews'
   },
   {
@@ -26,6 +28,7 @@ const menuArr = [
     title: '私信',
     path: '/',
     badge: true,
+    count:0,
     transaltion: 'homeMenuLetter'
   },
   {
