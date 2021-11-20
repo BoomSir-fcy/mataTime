@@ -80,27 +80,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   }
-  const signOut = () => {
-    logout()
-    localStorage.clear()
-    clear({ namespace: 'redux_localstorage_simple_loginReducer' })
-    // dispatch(storeAction.changeSignUp({ isSignup: false }));
-    // dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
-    // dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    // dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
-    location.reload()
-    // history.push('/login')
-  }
-  // 查询是否切换账户
-  const isChangeAddr = () => {
-    if (ConnectAddr === '0') {
-      // 赋值初始化地址
-      setConnectAddr(account)
-    } else if (ConnectAddr !== account) {
-      // 切换了地址就清除数据 重新登陆
-      signOut()
-    }
-  }
   useEffect(() => {
     checkNetwork();
     window.ethereum.on('chainChanged', (chainId: string) => {
@@ -114,15 +93,8 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
     if (account) {
-      // 1.1判断链接钱包后是否切换了钱包账户
-      isChangeAddr()
-      // 1.2查询是否有质押
+      // 1.1查询是否有质押
       getStakeType(account)
-    } else {
-      console.log(ConnectAddr, account);
-      if (ConnectAddr !== '0') {
-        signOut()
-      }
     }
     // 页面销毁清除登录状态数据
     return () => {
