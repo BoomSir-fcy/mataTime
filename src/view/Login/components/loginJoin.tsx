@@ -42,7 +42,7 @@ export const LoginJoin: React.FC = React.memo(() => {
   });
 
   const signIn = async () => {
-    //2.1 登录
+    //2.1 登录 钱包签名
     const res = await loginCallback(2);
     setState(p => {
       p.isSignIn = false;
@@ -52,11 +52,13 @@ export const LoginJoin: React.FC = React.memo(() => {
       const user: any = await getUserName();
       //2.3  
       if (Api.isSuccess(user)) {
-        // 存储userinfo
+        // 存储userinfo 跳转首页
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
         history.replace(`${redict || '/'}`);
       } else if (user.code === 20103) {
         // 20103 已注册未添加昵称 跳转到第三步去填写昵称——进入signUp文件
+        // 获取用户头像
+        const Avatar = await getNftUrl(account);
         dispatch(storeAction.changeSignUp({ isSignup: true }));
         dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
       }
@@ -68,12 +70,11 @@ export const LoginJoin: React.FC = React.memo(() => {
   const init = async () => {
     //1.1 验证是否注册
     const [verify] = await Promise.all([siginInVerify(account)]);
-    // 用户登录
     if (Boolean(verify)) {
+      //1.2 已经注册过了 去登录
       setState(p => {
         p.isSignIn = true;
       });
-      const Avatar = await getNftUrl(account);
     }
     if (!Boolean(verify)) {
       //1.2 未注册——设置成需要注册

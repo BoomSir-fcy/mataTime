@@ -56,10 +56,6 @@ export function useSignIn() {
       } catch (error) {
         return 0;
       }
-      // const res: Api.SignIn.nftCallback = await Api.SignInApi.getNft(networks[chainId], address);
-      // if (Api.isSuccess(res)) {
-      //   dispatch(storeAction.setUserNft({ ...res.data }));
-      // }
     } catch (error) {
       return 0;
     }
@@ -96,7 +92,7 @@ export function useLogin() {
   const { account, chainId, library } = useActiveWeb3React();
 
   const loginCallback = useCallback(
-    async (operationType: Api.SignIn.OperationType) => {
+    async (operationType: Api.SignIn.OperationType, nickName?: string) => {
       try {
         if (!networks[chainId]) {
           throw new Error(`not support ChainID: ${chainId}`);
@@ -109,8 +105,9 @@ export function useLogin() {
         };
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
+        const signUpParams = { ...sign, encode_data: res, nick_name: nickName };
         // 1注册 2登录
-        const response = operationType === 1 ? await Api.SignInApi.signUp(params) : await Api.SignInApi.signIn(params);
+        const response = operationType === 1 ? await Api.SignInApi.signUp(signUpParams) : await Api.SignInApi.signIn(params);
         if (Api.isSuccess(response)) {
           const { token } = response.data;
           window.localStorage.setItem(storage.Token, token);

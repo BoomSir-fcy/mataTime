@@ -14,6 +14,8 @@ import { StakeNFT } from 'components/NftList';
 import { clear } from 'redux-localstorage-simple';
 import useAuth from 'hooks/useAuth';
 
+/* eslint-disable */
+
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
   justify-content: center;
@@ -37,8 +39,6 @@ const Nft = styled(Box)`
   background:${({ theme }) => theme.colors.backgroundCard};
   padding:30px;
   border-radius: 10px;
-  width: 40vw;
-  min-width: 400px;
   height: 100%;
 `
 const LeftBox = styled.div`
@@ -46,6 +46,8 @@ ${mediaQueries.sm} {
   margin-right: 20px;
   }
 margin-right: 40px;
+width: 40vw;
+min-width: 400px;
 `
 
 
@@ -62,30 +64,34 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const [ConnectAddr, setConnectAddr] = useState('0')
   // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
-
-  // 查询是否有质押的NFT
-  const getStakeType = async (account) => {
-    const nftStake = await FetchNftStakeType(account)
-    if (nftStake[0].token_id) {
-      setshowStakeNft(false)
-      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-    } else {
-      setshowStakeNft(true)
-    }
-  }
-
+  // 选择链
   const checkNetwork = async () => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
     dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   };
 
+  // 查询是否有质押的NFT
+  const getStakeType = async (account) => {
+    const nftStake = await FetchNftStakeType(account)
+    if (nftStake[0].token_id) {
+      // 已经质押
+      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+    } else {
+      dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
+    }
+  }
   const signOut = () => {
     logout()
     localStorage.clear()
     clear({ namespace: 'redux_localstorage_simple_loginReducer' })
+    // dispatch(storeAction.changeSignUp({ isSignup: false }));
+    // dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
+    // dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    // dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
+    location.reload()
     // history.push('/login')
   }
-
+  // 查询是否切换账户
   const isChangeAddr = () => {
     if (ConnectAddr === '0') {
       // 赋值初始化地址
@@ -95,10 +101,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       signOut()
     }
   }
-
-  useEffect(() => {
-    isStakeNft && setshowStakeNft(false)
-  }, [isStakeNft])
   useEffect(() => {
     checkNetwork();
     window.ethereum.on('chainChanged', (chainId: string) => {
@@ -109,19 +111,40 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
     };
   }, []);
-  useEffect(() => {
-    if (!NftList.length && !isStakeNft) {
-      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    } else {
-      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    }
-  }, [NftList])
+  // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
     if (account) {
-      // isChangeAddr()
+      // 1.1判断链接钱包后是否切换了钱包账户
+      isChangeAddr()
+      // 1.2查询是否有质押
       getStakeType(account)
+    } else {
+      console.log(ConnectAddr, account);
+      if (ConnectAddr !== '0') {
+        signOut()
+      }
+    }
+    // 页面销毁清除登录状态数据
+    return () => {
+      // dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   }, [account])
+  useEffect(() => {
+    // 2没有质押的情况下
+    if (!NftList.length && !isStakeNft) {
+      // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
+      setshowStakeNft(false)
+      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+    } else if (NftList.length && !isStakeNft) {
+      // 有可用的头像 显示头像列表——可以注册，显示钱包签名
+      setshowStakeNft(true)
+      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    }
+    return () => {
+      setshowStakeNft(false)
+      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    }
+  }, [NftList, isStakeNft])
   return (
     <React.Fragment>
       <LoginContainer>
