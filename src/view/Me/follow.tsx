@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 import { Avatar, List, CancelAttentionModal } from 'components';
@@ -35,6 +36,7 @@ const WrapText = styled(Text)`
 const MinWidthButton = styled(Button)`
   width: max-content;
 `;
+
 const Follow = React.memo(() => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
@@ -84,9 +86,9 @@ const Follow = React.memo(() => {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
         getFollowList(1);
-        toast.success(res.data);
+        toast.success(t('commonMsgFollowSuccess') || res.data);
       } else {
-        toast.warning(res.data);
+        toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.log(error);
@@ -99,9 +101,9 @@ const Follow = React.memo(() => {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
         getFollowList(1);
-        toast.success(res.data);
+        toast.success(t('commonMsgFollowError') || res.data);
       } else {
-        toast.error(res.data);
+        toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.log(error);
@@ -184,11 +186,11 @@ const Follow = React.memo(() => {
                           })
                         }
                       >
-                        +关注
+                        {t('meFocusOn')}
                       </MinWidthButton>
                     ) : (
                       <MinWidthButton
-                        onClick={() => followUser(item.uid)}
+                        onClick={debounce(() => followUser(item.uid), 1000)}
                         onMouseEnter={() =>
                           setState(p => {
                             p.hoverIndex = index;
@@ -197,7 +199,7 @@ const Follow = React.memo(() => {
                         }
                         variant="secondary"
                       >
-                        未关注
+                        {t('meNotFollowed')}
                       </MinWidthButton>
                     )}
                   </React.Fragment>
@@ -219,7 +221,7 @@ const Follow = React.memo(() => {
                           })
                         }
                       >
-                        取消关注
+                        {t('meUnsubscribe')}
                       </MinWidthButton>
                     ) : (
                       <MinWidthButton
@@ -231,7 +233,7 @@ const Follow = React.memo(() => {
                           })
                         }
                       >
-                        已关注
+                        {t('meFollowed')}
                       </MinWidthButton>
                     )}
                   </React.Fragment>
@@ -242,10 +244,10 @@ const Follow = React.memo(() => {
         </List>
       </Content>
       <CancelAttentionModal
-        title="是否取消关注Ta？"
+        title={t('meUnsubscribeTips')}
         show={state.cancelFollow}
         params={state.cancelParams}
-        confirm={() => unFollowUser(state.cancelParams.uid)}
+        confirm={debounce(() => unFollowUser(state.cancelParams.uid), 1000)}
         onClose={() =>
           setState(p => {
             p.cancelFollow = false;
