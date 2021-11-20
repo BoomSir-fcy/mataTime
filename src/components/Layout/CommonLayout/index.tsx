@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 import { Header, CommonLeftMenu } from 'components';
 import { HotTopic, RecommendPeople, Search, Swap, FooterCopyright } from 'view/Home/right';
+import {Header as CenterHeader}from'view/Home/center'
 import menu from './menuData';
 import {
   CommonLayoutWrapper,
@@ -35,6 +36,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           />
         </LayoutLeftWrapper>
         <LayoutMiddleWrapper>
+        <CenterHeader title="消息"></CenterHeader>
           <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
           <Route path={'/news/me'} render={(props) => {
             return (<NewsMe {...props} />)

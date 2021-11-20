@@ -42,17 +42,21 @@ export const LoginJoin: React.FC = React.memo(() => {
   });
 
   const signIn = async () => {
+    //2.1 登录
     const res = await loginCallback(2);
     setState(p => {
       p.isSignIn = false;
     });
     if (res) {
+      //2.2 获取用户信息
       const user: any = await getUserName();
-      // 20103 已注册未添加昵称
+      //2.3  
       if (Api.isSuccess(user)) {
+        // 存储userinfo
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
         history.replace(`${redict || '/'}`);
       } else if (user.code === 20103) {
+        // 20103 已注册未添加昵称 跳转到第三步去填写昵称——进入signUp文件
         dispatch(storeAction.changeSignUp({ isSignup: true }));
         dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
       }
@@ -62,23 +66,28 @@ export const LoginJoin: React.FC = React.memo(() => {
   };
 
   const init = async () => {
+    //1.1 验证是否注册
     const [verify] = await Promise.all([siginInVerify(account)]);
-
     // 用户登录
-    Boolean(verify) &&
+    if (Boolean(verify)) {
       setState(p => {
         p.isSignIn = true;
       });
+      const Avatar = await getNftUrl(account);
+    }
     if (!Boolean(verify)) {
+      //1.2 未注册——设置成需要注册
       dispatch(storeAction.changeSignUp({ isSignup: true }));
     }
   };
 
   React.useEffect(() => {
+    // 2.已经注册过并且链接了钱包——去登录
     state.isSignIn && Boolean(account) && signIn();
   }, [state.isSignIn]);
 
   React.useEffect(() => {
+    // 1.链接钱包后
     Boolean(account) && init();
     return () => {
       setState(p => {

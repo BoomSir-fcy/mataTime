@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
-import { useThemeManager, useLanguange, useNotification } from 'store/app/hooks';
+import {
+  useThemeManager,
+  useLanguange,
+  useNotification
+} from 'store/app/hooks';
 import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
 import { languages } from 'config/localization';
@@ -90,7 +94,7 @@ const LikeSet: React.FC = () => {
           onChange={(val: any) => setUseLanguage(val)}
         />
       </Column>
-      <Column>
+      {/* <Column>
         <Rows>
           <Title>信息自动翻译</Title>
           <Text color="textTips" mt="11px">
@@ -98,7 +102,7 @@ const LikeSet: React.FC = () => {
           </Text>
         </Rows>
         <Toggle checked={state.isTranslation} onClick={setTranslation} />
-      </Column>
+      </Column> */}
     </NoticeSetBox>
   );
 };

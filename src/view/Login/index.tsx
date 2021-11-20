@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
-import { Flex, Card, Box } from 'uikit';
+import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
-import { StakeNFT } from './components/StakeNFT';
-import { useFetchSupportNFT, useFetchNftList } from './hook';
+import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
+import { StakeNFT } from 'components/NftList';
 
 const LoginContainer = styled(Flex)`
   padding-top: 58px;
+  justify-content: center;
+  /* flex-wrap: wrap; */
   ${mediaQueries.xxl} {
-    padding-left: 160px;
-    padding-right: 160px;
+    /* padding-left: 160px; */
+    /* padding-right: 160px; */
   }
 `;
 const Content = styled(Card)`
@@ -29,6 +31,21 @@ const LogoWarpper = styled(Box)`
   height: 60px;
   ${mediaQueriesSize.marginbmd}
 `;
+const Nft = styled(Box)`
+  background:${({ theme }) => theme.colors.backgroundCard};
+  padding:30px;
+  border-radius: 10px;
+  width: 40vw;
+  min-width: 400px;
+  height: 100%;
+`
+const LeftBox = styled.div`
+${mediaQueries.sm} {
+  margin-right: 20px;
+  }
+margin-right: 40px;
+`
+
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchSupportNFT()
@@ -36,15 +53,31 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
   const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
+  const [showStakeNft, setshowStakeNft] = useState(false)
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
+  // 自己的Nft列表
+  const NftList = useStore(p => p.loginReducer.nftList);
+
+  // 查询是否有质押的NFT
+  const getStakeType = async (account) => {
+    const nftStake = await FetchNftStakeType(account)
+    if (nftStake[0].token_id) {
+      setshowStakeNft(false)
+      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+    } else {
+      setshowStakeNft(true)
+    }
+  }
 
   const checkNetwork = async () => {
     const chainId: any = await window.ethereum.request({ method: 'eth_chainId' });
     dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   };
-
-  React.useEffect(() => {
+  useEffect(() => {
+    isStakeNft && setshowStakeNft(false)
+  }, [isStakeNft])
+  useEffect(() => {
     checkNetwork();
     window.ethereum.on('chainChanged', (chainId: string) => {
       dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
@@ -54,20 +87,38 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
     };
   }, []);
+  useEffect(() => {
+    if (!NftList.length && !isStakeNft) {
+      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+    } else {
+      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    }
+  }, [NftList])
+  useEffect(() => {
+    Boolean(account) && getStakeType(account)
+  }, [account])
   return (
     <React.Fragment>
       <LoginContainer>
-        {
-          !isStakeNft && singUpStep === 1 && account ? <StakeNFT /> :
-            <Flex flex="1">
-              <img src={require('./images/logo_left_images.jpg').default} />
-            </Flex>
-        }
+        <LeftBox>
+          {
+            showStakeNft && singUpStep === 1 && account ?
+              <Nft>
+                <Text fontSize='30px'>选择并质押头像</Text>
+                <StakeNFT />
+              </Nft>
+              :
+              <Flex style={{ height: '100%' }}>
+                <img src={require('./images/logo_left_images.jpg').default} />
+              </Flex>
+          }
+        </LeftBox>
         <Content>
           <LogoWarpper>
             <Logo url="/" src={`${require(isDark ? './images/logo.svg' : './images/light_logo.svg').default}`} />
           </LogoWarpper>
-          {isSignup ? <SignUp isSignup={signUpFail} isStakeNft={isStakeNft} /> : <LoginJoin />}
+          {/* 登录或注册 */}
+          {isSignup ? <SignUp signUpFail={signUpFail} isStakeNft={isStakeNft} /> : <LoginJoin />}
         </Content>
       </LoginContainer>
       <Footer />

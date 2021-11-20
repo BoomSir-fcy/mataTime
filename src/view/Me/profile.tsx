@@ -1,23 +1,37 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Link } from 'react-router-dom';
-import { Crumbs, Avatar, Certification, List, MoreOperatorEnum } from 'components';
+import { Link, useHistory } from 'react-router-dom';
+import {
+  Crumbs,
+  Avatar,
+  Certification,
+  List,
+  MoreOperatorEnum,
+  Icon
+} from 'components';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 
 import { shortenAddress } from 'utils/contract';
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
-import { Tabs } from './components';
+import { Tabs, Popup } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-
 import defaultImages from 'assets/images/default_me_background.jpg';
 
+import { clear } from 'redux-localstorage-simple';
+import useAuth from 'hooks/useAuth';
+
+
+
+const Center = styled(Box)``;
 const ProfileCard = styled(Card)`
   position: relative;
+  overflow: visible;
 `;
 const HeadTop = styled(Box)`
   width: 100%;
@@ -26,7 +40,7 @@ const HeadTop = styled(Box)`
   background-size: 100% auto;
 `;
 const ProfileInfo = styled(Box)`
-  margin-top: -85px;
+  margin-top: -75px;
   ${mediaQueriesSize.padding}
 `;
 const Info = styled(Flex)`
@@ -37,6 +51,7 @@ const Info = styled(Flex)`
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
   .name {
+    word-wrap: break-word;
     font-size: 28px;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.text};
@@ -103,23 +118,33 @@ const Profile: React.FC<any> = React.memo(props => {
     page: 1,
     totalPage: 0
   });
+  const { t } = useTranslation();
   const uid = props.match?.params?.uid;
+  const gray = useTheme().colors.textTips;
   const { profile, loading, page, totalPage, list } = state;
+  const history = useHistory();
+  const { logout } = useAuth();
 
-  const init = async () => {
+  const init = async (offset?: number) => {
     try {
       setState(p => {
         p.loading = true;
       });
-      const [profile, tweet] = await Promise.all([Api.MeApi.getProfile(uid), Api.MeApi.getProfileMsg(page, uid)]);
-      setState(p => {
-        p.profile = profile.data;
-        p.list = tweet.data.list;
-        p.page = page + 1;
-        p.totalPage = tweet.data.total_page;
-      });
+      const [profile, tweet] = await Promise.all([
+        Api.MeApi.getProfile(uid),
+        Api.MeApi.getProfileMsg(offset || page, uid)
+      ]);
+      if (Api.isSuccess(profile) || Api.isSuccess(tweet)) {
+        setState(p => {
+          p.profile = profile.data;
+          p.list = offset
+            ? [...(tweet?.data?.list || [])]
+            : [...state.list, ...(tweet?.data?.list || [])];
+          p.page = (offset || page) + 1;
+          p.totalPage = tweet.data.total_page;
+        });
+      }
     } catch (error) {
-      console.log(error);
     } finally {
       setState(p => {
         p.loading = false;
@@ -135,7 +160,10 @@ const Profile: React.FC<any> = React.memo(props => {
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
       }
-      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
+      if (
+        item.id === newItem.id &&
+        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
+      ) {
         // 屏蔽、删除
       } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
         // 置顶
@@ -149,37 +177,60 @@ const Profile: React.FC<any> = React.memo(props => {
     });
   };
 
+  const signOut = () => {
+    logout()
+    localStorage.clear()
+    clear()
+    history.push('/login')
+  }
+
+
   React.useEffect(() => {
     init();
   }, []);
 
   return (
-    <Box>
-      <Crumbs title="个人主页" />
+    <Center>
+      <Crumbs title={t('meHome')} />
       <ProfileCard>
-        <HeadTop style={{ backgroundImage: `url(${defaultImages})` }} />
+        <HeadTop
+          style={{
+            backgroundImage: `url(${profile.background_image || defaultImages})`
+          }}
+        />
         <ProfileInfo>
           <Info>
-            <Flex alignItems="flex-end">
+            <Flex alignItems="flex-end" style={{ flex: 1 }}>
               <Avatar scale="xl" src={profile.nft_image} />
               <Desc>
                 <Text className="name">{profile.nick_name}</Text>
                 <Flex mb="5px">
                   <Flex>
-                    <Certification />
-                    <Text className="text">@{shortenAddress(profile.address)}</Text>
+                    {/* <Certification /> */}
+                    <Text className="text">
+                      @{shortenAddress(profile.address)}
+                    </Text>
                   </Flex>
-                  <Flex className="marginLeft">
-                    <Text className="text">{profile.location}</Text>
-                  </Flex>
+                  {profile.location && (
+                    <Flex className="marginLeft" alignItems="center">
+                      <Icon name="icon-dizhi" color={gray} />
+                      <Text className="text">{profile.location}</Text>
+                    </Flex>
+                  )}
                 </Flex>
-                <Text className="text">{profile.post_num}条动态</Text>
               </Desc>
             </Flex>
-            {!uid && (
-              <Button as={Link} to="/me/edit">
-                编辑资料
-              </Button>
+            {!uid ? (
+              <>
+                <Button as={Link} to="/me/edit">
+                  {t('meEditProfile')}
+                </Button>
+                {/* <Button onClick={() => { signOut() }}>
+                  {t('退出账号')}
+                </Button> */}
+              </>
+            ) : (
+              <Popup user={profile} onCallback={() => init(1)} />
             )}
           </Info>
           <Content>
@@ -195,17 +246,20 @@ const Profile: React.FC<any> = React.memo(props => {
             </Box>
             <Flex className="number">
               <Text className="text">
-                粉丝 <Text className="value">{profile.fans_num}</Text>
+                {t('meFans')}
+                <Text className="value"> {profile.fans_num}</Text>
               </Text>
               <Text className="text">
-                关注 <Text className="value">{profile.attention_num}</Text>
+                {t('meFollow')}
+                <Text className="value"> {profile.attention_num}</Text>
               </Text>
               <Text className="text">
-                动态 <Text className="value">{profile.fans_num}</Text>
+                {t('meDynamic')}
+                <Text className="value"> {profile.post_num}</Text>
               </Text>
             </Flex>
             <Flex className="topic">
-              <Text className="text">活跃话题</Text>
+              <Text className="text">{t('meActiveTopic')}</Text>
               {profile?.label_list.map((row: string, index: number) => (
                 <Button variant="secondary" key={index}>
                   #{row}
@@ -269,7 +323,7 @@ const Profile: React.FC<any> = React.memo(props => {
           </MeItemWrapper>
         ))}
       </List>
-    </Box>
+    </Center>
   );
 });
 

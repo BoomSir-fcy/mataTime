@@ -1,40 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { ModalOperator } from 'components';
+import React from 'react';
+import useTheme from 'hooks/useTheme';
+import { Text } from 'uikit';
+import { Avatar, ModalOperator } from 'components';
+import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
 import {
   ModalWrapper,
   ModalTitleWrapper,
   ReportModalWrapper
-} from 'components/ModalWrapper/ReportModal/style';
+} from '../ReportModal/style';
 
-import {
-  CancelAttentionContentWrapper
-} from './style';
+import { CancelAttentionContentWrapper } from './style';
 
 type IProp = {
   show: boolean;
+  title: string;
+  params: {
+    uid: number;
+    address: string;
+    nft_image: string;
+  };
   onClose: Function;
-}
+  confirm: Function;
+};
 
 export const CancelAttentionModal = React.memo((props: IProp) => {
-  const { show, onClose } = props
+  const { t, getHTML } = useTranslation();
+  const { theme } = useTheme();
+  const { show, onClose, title, params, confirm } = props;
   return (
     <>
-      {
-        show ? (
-          <ModalWrapper>
-            <ReportModalWrapper>
-              <ModalTitleWrapper>
-                <h4>是否屏蔽Ta?</h4>
-              </ModalTitleWrapper>
-              <CancelAttentionContentWrapper>
-                <div className="img-box"></div>
-                <div className="des-box">取消关注用户<a>@0x5...684</a>，将无法获取Ta的最新动态、信息</div>
-              </CancelAttentionContentWrapper>
-              <ModalOperator onClose={onClose} onQuery={() => { }}></ModalOperator>
-            </ReportModalWrapper>
-          </ModalWrapper>
-        ) : null
-      }
+      {show && (
+        <ModalWrapper>
+          <ReportModalWrapper>
+            <ModalTitleWrapper>
+              <Text fontWeight="bold" fontSize="18px" color="white_black">
+                {title || t('meTitle')}
+              </Text>
+            </ModalTitleWrapper>
+            <CancelAttentionContentWrapper>
+              <Avatar scale="md" src={params.nft_image} />
+              <div className="des-box">
+                {getHTML('meUnsubscribeContent', {
+                  value: `<span style="color:${
+                    theme.colors.backgroundPrimary
+                  }">${shortenAddress(params.address)}</span>`
+                })}
+              </div>
+            </CancelAttentionContentWrapper>
+            <ModalOperator onClose={onClose} onQuery={confirm} />
+          </ReportModalWrapper>
+        </ModalWrapper>
+      )}
     </>
-  )
+  );
 });

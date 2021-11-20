@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text } from 'uikit';
+import { Box, Flex, Text, Card } from 'uikit';
 import { List } from 'components';
 
 import { CrumbsHead } from './components';
@@ -22,24 +22,25 @@ const Collect = props => {
   const [totalPage, setTotalPage] = useState(2);
   const [total, setTotal] = useState(0);
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    let arr = [];
-    listData.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
+  const init = async (current?: number) => {
+    setLoading(true);
+    try {
+      const res = await Api.MeApi.collectList(current || page);
+      setLoading(false);
+      if (Api.isSuccess(res)) {
+        setPage((current || page) + 1);
+        setTotalPage(res.data.total_num);
+        setTotal(res.data.total_num);
+        setListData(
+          current
+            ? [...(res.data?.list || [])]
+            : [...listData, ...(res.data?.list || [])]
+        );
       }
-      if (item.id === newItem.id && (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)) {
-        // 屏蔽、删除
-      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
-        // 置顶
-        arr.unshift(obj);
-      } else {
-        arr.push(obj);
-      }
-    });
-    setListData([...arr]);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,19 +55,10 @@ const Collect = props => {
       </CrumbsHead>
       <List
         marginTop={14}
-        loading={page <= totalPage}
+        loading={loading}
         renderList={() => {
           if (loading || page > totalPage) return false;
-          setLoading(true);
-          Api.MeApi.collectList(page).then(res => {
-            setLoading(false);
-            if (res.msg === 'success') {
-              setPage(page + 1);
-              setTotalPage(res.data.total_num);
-              setTotal(res.data.total_num);
-              setListData([...listData, ...res.data.list]);
-            }
-          });
+          init();
         }}
       >
         {listData.map((item, index) => {
@@ -76,28 +68,24 @@ const Collect = props => {
                 {...props}
                 itemData={{
                   ...item,
-                  post_id: item.id,
+                  is_like: item.like_status,
                   post: {
                     ...item,
-                    post_id: item.id
+                    is_fav: 1
                   }
                 }}
-                callback={(item: any, type: MoreOperatorEnum) => {
-                  updateList(item, type);
-                }}
+                callback={(item: any, type: MoreOperatorEnum) => init(1)}
               ></MentionItem>
               <MentionOperator
                 itemData={{
                   ...item,
-                  post_id: item.id,
+                  is_like: item.like_status,
                   post: {
                     ...item,
-                    post_id: item.id
+                    is_fav: 1
                   }
                 }}
-                callback={(item: any) => {
-                  updateList(item);
-                }}
+                callback={(item: any) => init(1)}
               />
             </MeItemWrapper>
           );

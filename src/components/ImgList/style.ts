@@ -13,7 +13,7 @@ margin-right:10px;
 export const  MoreImg = styled(Flex)`
 align-items: center;
 justify-content: center;
-width: 100%;
+// width: 100%;
 background: #232A3D;
 border-radius: 5px;
 font-size: 18px;

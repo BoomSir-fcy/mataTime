@@ -1,4 +1,4 @@
-import { Http } from "../http";
+import { Http } from '../http';
 
 export class CommentApi extends Http {
   // 评论列表

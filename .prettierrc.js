@@ -6,7 +6,7 @@ module.exports = {
   ],
   "tabWidth": 2,
   "useTabs": false, 
-  "printWidth": 200, // 超过最大值换行
+  "printWidth": 80, // 超过最大值换行
   "htmlWhitespaceSensitivity": "ignore",
   "jsxSingQuote": true,
   "semi": true, // 结尾不用分号

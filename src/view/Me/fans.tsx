@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
-import { Avatar, List } from 'components';
+import { Avatar, List, CancelAttentionModal } from 'components';
 import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { Api } from 'apis';
@@ -10,31 +11,39 @@ import { Api } from 'apis';
 import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
-  width: 100%;
-  height: 705px;
+  min-height: 705px;
   padding: 29px 19px;
   margin-top: 10px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  height: 60px;
-  float: left;
+  min-height: 60px;
   margin-left: 22px;
+  width: calc(100% - 108px);
 `;
-const ContentBox = styled(Box)`
-  float: left;
-  width: 100%;
-  height: 60px;
+const ContentBox = styled(Flex)`
+  min-height: 60px;
   margin-bottom: 28px;
-  button {
-    float: right;
-    margin-top: 15px;
-  }
+  justify-content: space-between;
+  align-content: center;
 `;
-
+const WrapText = styled(Text)`
+  word-wrap: break-word;
+`;
+const MinWidthButton = styled(Button)`
+  width: max-content;
+`;
 const Fans = React.memo(() => {
   const [state, setState] = useImmer({
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: ''
+    },
+    hoverIndex: 0,
+    hoverStatus: false,
     loading: false,
     page: 1,
     total: 0,
@@ -43,17 +52,20 @@ const Fans = React.memo(() => {
   });
   const { loading, page, total, totalPage, list } = state;
 
-  const getFansList = async () => {
+  const getFansList = async (offest?: number) => {
     setState(p => {
       p.loading = true;
     });
     try {
-      const res = await Api.MeApi.fansList(page);
+      const res = await Api.MeApi.fansList(offest || page);
       if (Api.isSuccess(res)) {
         setState(p => {
-          p.list = [...state.list, ...(res.data.list || [])];
-          p.page = state.page + 1;
+          p.list = offest
+            ? [...(res.data.list || [])]
+            : [...state.list, ...(res.data.list || [])];
+          p.page = offest || state.page + 1;
           p.total = res.data.total_num;
+          p.cancelFollow = false;
         });
       }
     } catch (error) {
@@ -69,11 +81,7 @@ const Fans = React.memo(() => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
-        setState(p => {
-          p.list = [];
-          p.page = 1;
-        });
-        getFansList();
+        getFansList(1);
         toast.success(res.data);
       } else {
         toast.warning(res.data);
@@ -88,11 +96,7 @@ const Fans = React.memo(() => {
     try {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
-        setState(p => {
-          p.list = [];
-          p.page = 1;
-        });
-        getFansList();
+        getFansList(1);
         toast.success(res.data);
       } else {
         toast.warning(res.data);
@@ -106,6 +110,7 @@ const Fans = React.memo(() => {
     getFansList();
   }, []);
 
+  console.log(state.page);
   return (
     <Box>
       <CrumbsHead>
@@ -141,28 +146,104 @@ const Fans = React.memo(() => {
           {list.map((item, index) => {
             return (
               <ContentBox key={index}>
-                <Avatar src={item.nft_image} scale="md" style={{ float: 'left' }} />
-                <Column>
-                  <Flex>
-                    <Text color="white_black" mr="13px">
-                      {item.nick_name}
-                    </Text>
-                    <Text color="textTips">@{shortenAddress(item.address)}</Text>
-                  </Flex>
-                  <Text color="textTips">{item.introduction}</Text>
-                </Column>
+                <Flex
+                  as={Link}
+                  to={`/me/profile/${item.uid}`}
+                  style={{ width: 'calc(100% - 108px)' }}
+                >
+                  <Avatar src={item.nft_image} scale="md" />
+                  <Column>
+                    <Flex>
+                      <Text color="white_black" mr="13px">
+                        {item.nick_name}
+                      </Text>
+                      <Text color="textTips">
+                        @{shortenAddress(item.address)}
+                      </Text>
+                    </Flex>
+                    <WrapText color="textTips">{item.introduction}</WrapText>
+                  </Column>
+                </Flex>
                 {item.attention_status === 0 ? (
-                  <Button onClick={() => followUser(item.uid)}>未关注</Button>
+                  <React.Fragment>
+                    {state.hoverStatus && state.hoverIndex === index ? (
+                      <MinWidthButton
+                        onClick={() => followUser(item.uid)}
+                        onMouseLeave={() =>
+                          setState(p => {
+                            p.hoverIndex = 0;
+                            p.hoverStatus = false;
+                          })
+                        }
+                      >
+                        +关注
+                      </MinWidthButton>
+                    ) : (
+                      <MinWidthButton
+                        onClick={() => followUser(item.uid)}
+                        onMouseEnter={() =>
+                          setState(p => {
+                            p.hoverIndex = index;
+                            p.hoverStatus = true;
+                          })
+                        }
+                        variant="secondary"
+                      >
+                        未关注
+                      </MinWidthButton>
+                    )}
+                  </React.Fragment>
                 ) : (
-                  <Button onClick={() => unFollowUser(item.uid)} variant="tertiary">
-                    相互关注
-                  </Button>
+                  <React.Fragment>
+                    {state.hoverStatus && state.hoverIndex === index ? (
+                      <MinWidthButton
+                        onClick={() =>
+                          setState(p => {
+                            p.cancelFollow = true;
+                            p.cancelParams = item;
+                          })
+                        }
+                        variant="tertiary"
+                        onMouseLeave={() =>
+                          setState(p => {
+                            p.hoverIndex = 0;
+                            p.hoverStatus = false;
+                          })
+                        }
+                      >
+                        取消关注
+                      </MinWidthButton>
+                    ) : (
+                      <MinWidthButton
+                        onClick={() => unFollowUser(item.uid)}
+                        onMouseEnter={() =>
+                          setState(p => {
+                            p.hoverIndex = index;
+                            p.hoverStatus = true;
+                          })
+                        }
+                      >
+                        相互关注
+                      </MinWidthButton>
+                    )}
+                  </React.Fragment>
                 )}
               </ContentBox>
             );
           })}
         </List>
       </Content>
+      <CancelAttentionModal
+        title="是否取消关注Ta？"
+        show={state.cancelFollow}
+        params={state.cancelParams}
+        confirm={() => unFollowUser(state.cancelParams.uid)}
+        onClose={() =>
+          setState(p => {
+            p.cancelFollow = false;
+          })
+        }
+      />
     </Box>
   );
 });
