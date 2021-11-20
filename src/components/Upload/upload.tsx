@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
-import { Flex } from 'uikit';
+import { Flex, Text } from 'uikit';
 import { Api } from 'apis';
 
 interface upload {
@@ -10,7 +10,10 @@ interface upload {
 }
 
 const Container = styled(Flex)`
+  width: 100%;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   input {
     position: absolute;
     left: -9999em;
@@ -30,18 +33,30 @@ const Container = styled(Flex)`
   }
 `;
 
+const Mask = styled(Flex)`
+  width: 100%;
+  height: 42px;
+  margin-top: 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 0 ${({ theme }) => theme.radii.card}
+    ${({ theme }) => theme.radii.card};
+  background-color: rgba(25, 31, 45, 0.5);
+`;
+
 export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
   const imageInput = React.useRef<HTMLInputElement>();
   // 上传图片
   const uploadFile = async () => {
     const file: any = new FileReader();
     const imageFile = imageInput.current.files;
-    const imgMaxSize = 1024 * 1024 * 8;
+    const imgMaxSize = 1024 * 1024 * 2;
 
     if (imageFile.length > 0) {
       for (let i = 0; i < imageFile.length; i++) {
         // 限制图片大小
-        if (imageFile[i].size > imgMaxSize) return toast.error('超过图片上传大小');
+        if (imageFile[i].size > imgMaxSize)
+          return toast.error('超过图片上传大小');
         // 读取文件
         file.readAsDataURL(imageFile[i]);
         file.onload = async () => {
@@ -60,7 +75,17 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
   return (
     <Container>
       <label htmlFor="upload-images">上传背景墙</label>
-      <input id="upload-images" ref={imageInput} onChange={() => uploadFile()} multiple={multiple} type="file" accept="image/*" />
+      <input
+        id="upload-images"
+        ref={imageInput}
+        onChange={() => uploadFile()}
+        multiple={multiple}
+        type="file"
+        accept="image/*"
+      />
+      <Mask>
+        <Text color="textTips">规格:1200x500，2MB以下</Text>
+      </Mask>
     </Container>
   );
 };

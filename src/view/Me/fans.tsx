@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { Avatar, List, CancelAttentionModal } from 'components';
 import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
 import { CrumbsHead } from './components';
@@ -35,6 +36,7 @@ const MinWidthButton = styled(Button)`
   width: max-content;
 `;
 const Fans = React.memo(() => {
+  const { t } = useTranslation();
   const [state, setState] = useImmer({
     cancelFollow: false,
     cancelParams: {
@@ -115,10 +117,17 @@ const Fans = React.memo(() => {
     <Box>
       <CrumbsHead>
         <Flex>
-          <Text fontWeight="bold" mr="10px" fontSize="14px">
-            我的粉丝
+          <Text
+            fontWeight="bold"
+            mr="10px"
+            fontSize="14px"
+            style={{ textTransform: 'capitalize' }}
+          >
+            {t('meHeaderFans')}
           </Text>
-          <Text fontSize="14px">{total}人</Text>
+          <Text fontSize="14px">
+            {t('meHeaderPeople%value%', { value: total })}
+          </Text>
         </Flex>
       </CrumbsHead>
       <Content>
@@ -149,7 +158,7 @@ const Fans = React.memo(() => {
                 <Flex
                   as={Link}
                   to={`/me/profile/${item.uid}`}
-                  style={{ width: 'calc(100% - 108px)' }}
+                  style={{ width: 'calc(100% - 140px)' }}
                 >
                   <Avatar src={item.nft_image} scale="md" />
                   <Column>
@@ -176,7 +185,7 @@ const Fans = React.memo(() => {
                           })
                         }
                       >
-                        +关注
+                        {t('meFocusOn')}
                       </MinWidthButton>
                     ) : (
                       <MinWidthButton
@@ -189,7 +198,7 @@ const Fans = React.memo(() => {
                         }
                         variant="secondary"
                       >
-                        未关注
+                        {t('meNotFollowed')}
                       </MinWidthButton>
                     )}
                   </React.Fragment>
@@ -211,7 +220,7 @@ const Fans = React.memo(() => {
                           })
                         }
                       >
-                        取消关注
+                        {t('meUnsubscribe')}
                       </MinWidthButton>
                     ) : (
                       <MinWidthButton
@@ -223,7 +232,7 @@ const Fans = React.memo(() => {
                           })
                         }
                       >
-                        相互关注
+                        {t('meMutualAttention')}
                       </MinWidthButton>
                     )}
                   </React.Fragment>
@@ -234,7 +243,7 @@ const Fans = React.memo(() => {
         </List>
       </Content>
       <CancelAttentionModal
-        title="是否取消关注Ta？"
+        title={t('meUnsubscribeTips')}
         show={state.cancelFollow}
         params={state.cancelParams}
         confirm={() => unFollowUser(state.cancelParams.uid)}

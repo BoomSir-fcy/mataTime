@@ -11,6 +11,8 @@ import {
   HotTopic,
   FooterCopyright
 } from '../Home/right';
+import { Menu } from 'view/Home/left/menu';
+
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 const PageContainer = styled.div`
@@ -24,7 +26,6 @@ const LeftCard = styled(Flex)`
   width: 200px;
 `;
 const CenterCard = styled(Box)`
-  /* flex: 1; */
   width: 670px;
   word-wrap: break-word;
   ${mediaQueriesSize.marginLRmd}
@@ -53,8 +54,8 @@ const menuArr = [
     path: '/me/fans'
   },
   {
-    icon: 'icon-dianzan1',
-    activeIcon: 'icon-e31guanzhuxuanzhong',
+    icon: 'icon-dianzan',
+    activeIcon: 'icon-dianzan1',
     title: 'meMenuLink',
     path: '/me/praise'
   },
@@ -75,11 +76,12 @@ const menuArr = [
 
 export const Container = props => {
   useLocation();
+  const index = props.location.pathname.indexOf('/me/profile');
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
         <LeftCard>
-          <CommonMenu menu={menuArr} {...props} />
+          {index > -1 ? <Menu /> : <CommonMenu menu={menuArr} {...props} />}
         </LeftCard>
         <CenterCard>{props.children}</CenterCard>
         <RightCard>
