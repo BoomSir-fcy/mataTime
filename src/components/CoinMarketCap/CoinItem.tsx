@@ -58,6 +58,7 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
                     <Text fontSize="14px">{t('Powered by CoinMarketCap')}</Text>
                   </>}
                   ml="4px"
+                  mr="8px"
                   onClick={toggling}
                   placement="top-start"
                   style={{ cursor: 'auto' }}
@@ -68,25 +69,28 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
             <Text color="textTips" fontSize="14px">{coinInfo?.coin_name}</Text>
           </Box>
         </Flex>
-        <Box>
-          <Text bold color="primary" fontSize="18px" textAlign="right">${coinInfo?.current_price}</Text>
-          <Flex>
-            <Text color="upPrice" fontSize="14px" textAlign="right">+{coinInfo?.price_change_percentage_24h}%</Text>
-            {
-              onRefresh && (
-                <RefreshRingIcon
-                  onClick={(subEvent) => {
-                    toggling(subEvent);
-                    onRefresh(coinInfo)
-                  }}
-                  style={{ cursor: 'pointer' }}
-                  ml="4px"
-                  color="textPrimary"
-                  width="16px" />
-              )
-            }
-          </Flex>
-        </Box>
+        {
+          !!Number(coinInfo?.current_price) && (<Box>
+            <Text bold color="primary" fontSize="18px" textAlign="right">${coinInfo?.current_price}</Text>
+            <Flex>
+              <Text color="upPrice" fontSize="14px" textAlign="right">+{coinInfo?.price_change_percentage_24h}%</Text>
+              {
+                onRefresh && (
+                  <RefreshRingIcon
+                    onClick={(subEvent) => {
+                      toggling(subEvent);
+                      onRefresh(coinInfo)
+                    }}
+                    style={{ cursor: 'pointer' }}
+                    ml="4px"
+                    color="textPrimary"
+                    width="16px" />
+                )
+              }
+            </Flex>
+          </Box>)
+
+        }
       </Flex>
     </CoinItemStyled>
   )

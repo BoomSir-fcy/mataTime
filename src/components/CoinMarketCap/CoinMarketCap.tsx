@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components'
-import { Card, BoxProps, Flex, Box, Text } from 'uikit'
+import { Card, BoxProps, Flex, Box, Text, BalanceText } from 'uikit'
 import { languagesOptions } from 'config/localization';
 import { Select } from 'components';
 import { useTranslation } from 'contexts/Localization'
@@ -69,16 +69,26 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
         </DropDown>
       </Box>
       <StyledPageItem>
-        <Flex mt="8px" justifyContent="space-between">
-          <Box>
-            <Text fontSize="14px" color="textTips">{t('MARKET CAP')}</Text>
-            <Text bold color="textPrimary" fontSize="14px">${marketCap}</Text>
-          </Box>
-          <Box>
-            <Text fontSize="14px" color="textTips" textAlign="right">{t('VOLUME')}</Text>
-            <Text bold color="textPrimary" fontSize="14px" textAlign="right">$--</Text>
-          </Box>
-        </Flex>
+        {
+          !!Number(currentCoin?.current_price)
+            ?
+            (
+              <Flex mt="8px" justifyContent="space-between">
+                <Box>
+                  <Text fontSize="14px" color="textTips">{t('MARKET CAP')}</Text>
+                  <Text bold color="textPrimary" fontSize="14px">${marketCap}</Text>
+                </Box>
+                <Box>
+                  <Text fontSize="14px" color="textTips" textAlign="right">{t('VOLUME')}</Text>
+                  <Text bold color="textPrimary" fontSize="14px" textAlign="right">${currentCoin?.total_volume}</Text>
+                </Box>
+              </Flex>
+            )
+            :
+            (
+              <Text fontSize="14px" textAlign="center" mt="16px" color="textTips">该币种暂未收录，无法显示价格</Text>
+            )
+        }
       </StyledPageItem>
     </StyledPage>
   )
