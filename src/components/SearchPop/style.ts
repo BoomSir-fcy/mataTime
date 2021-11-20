@@ -7,6 +7,7 @@ position:fixed;
 z-index:999;
 top:0;
 right:0;
+color: ${({ theme }) => theme.colors.searchTopicTxt};
 .search-box{
   margin-right:24px;
   .title{
@@ -15,12 +16,13 @@ right:0;
       padding:0  55px;
       width: 300px;
       height: 50px;
-      background: #191F2D;
+      background: ${({ theme }) => theme.colors.searchTopicBg};
       border: 2px solid #4168ED;
       outline:none;
       border-radius: 20px;
-     &::-webkit-input-placeholder{
-          color: #b5b5b5;
+      color: ${({ theme }) => theme.colors.searchTopicTxt};
+      &::-webkit-input-placeholder{
+          // color: #b5b5b5;
       }
     }
     i{
@@ -40,7 +42,7 @@ right:0;
     margin-top:20px;
     width: 300px;
     height: 571px;
-    background: #2F3749;
+    background: ${({ theme }) => theme.colors.searchTopicBg};
     box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     &::-webkit-scrollbar {

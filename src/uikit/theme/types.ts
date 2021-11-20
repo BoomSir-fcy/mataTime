@@ -112,7 +112,8 @@ export type Colors = {
   textOrigin: string;
   textgrey: string;
   disabled: string;
-
+  searchTopicBg:string;
+  searchTopicTxt:string;
   // Gradients
   gradients: Gradients;
 

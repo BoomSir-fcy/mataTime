@@ -112,7 +112,6 @@ export const ArticleList = (props) => {
   return (
     <ArticleListBox>
       <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={() => {
-        console.log(loading ,page ,totalPage);
         if (loading || page > totalPage) return false
         setLoading(true)
         if(props.match.path==='/topicList/:id/:name'){

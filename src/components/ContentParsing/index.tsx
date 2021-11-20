@@ -7,8 +7,6 @@ type IProps = {
   callback?: Function;
 }
 const ParagraphItem = styled.div`
-display: flex;
-flex-wrap: wrap;
 p{
   font-size: 18px;
   font-family: Alibaba PuHuiTi;
@@ -26,9 +24,13 @@ span {
 `
 const parseText = (val = '') => {
   const reg = new RegExp(/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g)
-  return val.replace(reg,function (e){
+  val.replace(reg,function (e){
     return `<a href="${e}" target="_blank" onclick="event.stopPropagation()"> ${e} </a>`
   })
+  val.replace(/[#＃][^#＃]+[#＃]/g, function(word) {
+    return `<a  href="${1}" onclick="event.stopPropagation()">${word}</a>`;
+  });
+  return val
 }
 export const ContentParsing = (props:IProps)=>{
   const ref:any = useRef()
@@ -62,27 +64,26 @@ return (
         <ParagraphItem ref={ref} key={index}>
           {item.children.map((child: any,childIndex) => {
             return (
+              <span key={childIndex}>
+                {
                 child.type === 'mention' ? (
-                  <p key={childIndex}>
                     <FollowPopup uid={child?.attrs?.userid || 0}>
                       <a>{child.character}</a>
                     </FollowPopup>
-                  </p>
                 ) : child.type === 'topic' ? (
-                  <p key={childIndex}>
-                    {(child.children || []).map((topic: any) => {
+                    (child.children || []).map((topic: any) => {
                       if (topic.text) {
                         return <Link to={ `/topicList/empty/${topic.text}`}>#{topic.text}#</Link>;
                       }
-                    })}
-                  </p>
+                    })
                 ) : (
-                  <p key={childIndex}
+                  <span key={childIndex}
                   dangerouslySetInnerHTML= {{
                     __html: parseText(child.text)
-                  }}></p>
+                  }}></span>
                 )
-                )
+              }
+                </span> )
               })}
             </ParagraphItem>
           );
