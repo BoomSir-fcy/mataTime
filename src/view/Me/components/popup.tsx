@@ -21,14 +21,13 @@ const PopupIcon = styled.img`
   width: 25px;
   height: 25px;
   cursor: pointer;
-  margin-left: 10px;
 `;
 const PopupContentWrapper = styled(Card)`
   width: 150px;
   position: absolute;
   z-index: 9998;
   left: -60px;
-  top: 30px;
+  top: 35px;
   padding: 15px 30px;
   display: flex;
   flex-direction: column;
