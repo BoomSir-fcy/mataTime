@@ -69,6 +69,7 @@ export type Gradients = {
 };
 
 export type Colors = {
+  protrudeColor: string;
   upPrice: string;
   white: string;
   downPrice: string;
@@ -115,8 +116,8 @@ export type Colors = {
   textgrey: string;
   disabled: string;
   borderColor: string;
-  searchTopicBg:string;
-  searchTopicTxt:string;
+  searchTopicBg: string;
+  searchTopicTxt: string;
   // Gradients
   gradients: Gradients;
 
