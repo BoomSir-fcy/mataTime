@@ -62,9 +62,9 @@ export const Popup: React.FC<{
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
         onCallback();
-        toast.success(res.msg);
+        toast.success(t('commonMsgFollowSuccess') || res.data);
       } else {
-        toast.error(res.msg);
+        toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.log(error);
@@ -80,9 +80,9 @@ export const Popup: React.FC<{
         setState(p => {
           p.cancelFollow = false;
         });
-        toast.success(res.msg);
+        toast.success(t('commonMsgFollowError') || res.data);
       } else {
-        toast.error(res.msg);
+        toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.log(error);
