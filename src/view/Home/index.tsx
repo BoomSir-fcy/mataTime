@@ -7,7 +7,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
 import { Header, Tabs, ArticleList } from './center';
-import { Search, Swap, RecommendPeople, HotTopic, FooterCopyright } from './right';
+import {
+  Search,
+  Swap,
+  RecommendPeople,
+  HotTopic,
+  FooterCopyright
+} from './right';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 // const NewsMe = React.lazy(() => import('view/News/Me'));
 import { Api } from 'apis';
@@ -31,47 +37,16 @@ const RightCard = styled.div`
   // width: 375px;
 `;
 
-const FollowContainer = styled.div`
-  padding: 36px;
-`;
-
-const FollowTitle = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  color: #ffffff;
-`;
-
-const FollowBody = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  color: #ffffff;
-  margin: 25px 0 38px;
-  line-height: 1.5;
-  a {
-    color: rgba(65, 104, 237, 1);
-  }
-`;
-
-const CancelFollow = () => {
-  return (
-    <FollowContainer>
-      <FollowTitle>是否取消关注Ta?</FollowTitle>
-      <FollowBody>
-        <Avatar src="" />
-        屏蔽用户<a>@0x5...684</a>，将无法获取查看Ta的最 新动态、信息，屏蔽后可在“个人主页”取消 屏蔽
-      </FollowBody>
-      <div className="button">
-        <button>确认</button>
-        <button>取消</button>
-      </div>
-    </FollowContainer>
-  );
-};
 const Home: React.FC = (props: any) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
   // const  editorRef = useRef()
-  const sendArticle = (content: string, resetInput: () => void, image_urls, remind_user) => {
+  const sendArticle = (
+    content: string,
+    resetInput: () => void,
+    image_urls,
+    remind_user
+  ) => {
     if (!content) return false;
     Api.HomeApi.createArticle({
       content: content,
@@ -95,40 +70,35 @@ const Home: React.FC = (props: any) => {
       <Flex justifyContent="space-between">
         <LeftCard>
           {/* <About /> */}
-          <Menu></Menu>
+          <Menu />
         </LeftCard>
         <CenterCard>
-          <Header {...props} back={match.path === '/topicList/:id/:name'} align={match.path === '/topicList/:id/:name' ? 'center' : null} title={match.path === '/topicList/:id/:name' ? '#' + match.params.name + '#' : t('homeHeaderTitle')}></Header>
-          {
-            match.path === '/' ?
-              <>
-                <Editor type="post" sendArticle={sendArticle}></Editor>
-                <Tabs></Tabs>
-              </>
-              : null
-          }
           <Header
             {...props}
             back={match.path === '/topicList/:id/:name'}
             align={match.path === '/topicList/:id/:name' ? 'center' : null}
-            title={match.path === '/topicList/:id/:name' ? '#' + match.params.name + '#' : t('homeHeaderTitle')}
-          ></Header>
+            title={
+              match.path === '/topicList/:id/:name'
+                ? '#' + match.params.name + '#'
+                : t('homeHeaderTitle')
+            }
+          />
           {match.path === '/' ? (
             <>
-              <Editor type="post" sendArticle={sendArticle}></Editor>
+              <Editor type="post" sendArticle={sendArticle} />
               {/* <Tabs></Tabs> */}
             </>
           ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
-          <ArticleList key={refresh} {...props}></ArticleList>
+          <ArticleList key={refresh} {...props} />
         </CenterCard>
         <RightCard>
-          <Search></Search>
+          <Search />
           {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
-          <Swap></Swap>
-          <RecommendPeople></RecommendPeople>
-          <HotTopic {...props}></HotTopic>
-          <FooterCopyright></FooterCopyright>
+          <Swap />
+          <RecommendPeople />
+          <HotTopic {...props} />
+          <FooterCopyright />
         </RightCard>
       </Flex>
       {/* <ModalWrapper>
