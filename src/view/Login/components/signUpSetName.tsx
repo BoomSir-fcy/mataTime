@@ -8,7 +8,7 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
 import { useStore, storeAction } from 'store';
-import { useSignIn } from '../hooks';
+import { useLogin, useSignIn } from '../hooks';
 import { WalletAddress } from './signUp';
 import { useTranslation } from 'contexts/Localization';
 
@@ -57,17 +57,17 @@ export const SignUpSetName = React.memo(() => {
   });
   const [haveNickName, sethaveNickName] = useState(true)
   const { account } = useWeb3React();
-  const { addNickName } = useSignIn();
   const { t } = useTranslation();
+  const { loginCallback } = useLogin();
 
   const submitProfile = React.useCallback(async () => {
     if (!state.nickName) {
       sethaveNickName(false)
       return
     }
-    const res = await addNickName(state.nickName);
+    const res = await loginCallback(1, state.nickName);
     if (Api.isSuccess(res)) {
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
+      dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
     } else {
       if (res.code === 20106) {
         toast.error('昵称已存在!');

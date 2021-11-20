@@ -91,22 +91,18 @@ export const SignUp: React.FC<{
 }> = ({ signUpFail, isStakeNft }) => {
   const dispatch = useDispatch();
   const { singUpStep } = useStore(p => p.loginReducer);
-  const { loginCallback } = useLogin();
   const { account } = useWeb3React();
   const { getNftUrl } = useSignIn();
   const { t } = useTranslation();
-
+  // 已经注册完成，跳转第4步
   const signHandle = React.useCallback(async () => {
-    const res = await loginCallback(1);
-    if (Api.isSuccess(res)) {
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 2 }));
-    }
-  }, [dispatch, loginCallback]);
-
-  const changeNftUrl = React.useCallback(async () => {
+    dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
+  }, [dispatch]);
+  // 去注册、设置昵称
+  const setNickName = React.useCallback(async () => {
     const res: number = await getNftUrl(account);
     if (Boolean(res)) {
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
+      dispatch(storeAction.changeSignUpStep({ singUpStep: 2 }));
     }
   }, [account]);
 
@@ -120,18 +116,21 @@ export const SignUp: React.FC<{
           <SubTitle>{t('loginSubTitle')}</SubTitle>
           <SignUpWarpper>
             <WalletAddress address={account} />
-            {!signUpFail ? (
-              <Button disabled={!isStakeNft} scale="ld" style={{ width: '205px', fontSize: '18px' }} onClick={() => signHandle()}>
-                钱包签名
-              </Button>
-            ) : (
+            {signUpFail ? (
+              // 注册失败
               <SignUpFail />
+            ) : (
+              // 可以注册
+              <Button disabled={!isStakeNft} scale="ld" style={{ textTransform: 'capitalize' }} onClick={() => setNickName()}>
+                {t('loginSignupSuccessNextText')}
+              </Button>
             )}
           </SignUpWarpper>
           <TextTips>{t('loginSubTips')}</TextTips>
         </React.Fragment>
       )}
-      {singUpStep === 2 && (
+      {singUpStep === 2 && <SignUpSetName />}
+      {singUpStep === 3 && (
         <Box>
           <Text fontSize="34px" marginBottom="24px" bold style={{ textTransform: 'uppercase' }}>
             {t('loginWelcome')}
@@ -141,13 +140,12 @@ export const SignUp: React.FC<{
             <img width="230px" src={require('../images/login_right_images.png').default} />
             <SignUpText>{t('loginSignupSuccess')}</SignUpText>
             <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
-            <Button scale="ld" onClick={() => changeNftUrl()} style={{ textTransform: 'capitalize' }}>
-              {t('loginSignupSuccessNextText')}
+            <Button scale="ld" onClick={() => signHandle()} style={{ textTransform: 'capitalize' }}>
+              {t('loginSignUpNext')}
             </Button>
           </Flex>
         </Box>
       )}
-      {singUpStep === 3 && <SignUpSetName />}
       {singUpStep === 4 && <SignUpcomplete />}
     </Box>
   );
