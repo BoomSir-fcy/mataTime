@@ -26,7 +26,7 @@ const Column = styled(Flex)`
   justify-content: space-around;
   padding-bottom: 23px;
   margin-bottom: 22px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.tertiary};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
 `;
 
 const NoticeSet = () => {

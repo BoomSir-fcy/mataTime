@@ -1,4 +1,4 @@
-import { MediaQueries, Breakpoints, Spacing, MediaQueriesSize } from "./types";
+import { MediaQueries, Breakpoints, Spacing, MediaQueriesSize } from './types';
 
 export const breakpointMap: { [key: string]: number } = {
   xxs: 369,
@@ -7,10 +7,12 @@ export const breakpointMap: { [key: string]: number } = {
   md: 852,
   lg: 968,
   xl: 1280,
-  xxl: 1600,
+  xxl: 1600
 };
 
-const breakpoints: Breakpoints = Object.values(breakpointMap).map((breakpoint) => `${breakpoint}px`);
+const breakpoints: Breakpoints = Object.values(breakpointMap).map(
+  breakpoint => `${breakpoint}px`
+);
 
 export const mediaQueries: MediaQueries = {
   xxs: `@media screen and (max-width: ${breakpointMap.xs}px)`,
@@ -20,7 +22,7 @@ export const mediaQueries: MediaQueries = {
   lg: `@media screen and (min-width: ${breakpointMap.lg}px)`,
   xl: `@media screen and (min-width: ${breakpointMap.xl}px)`,
   xxl: `@media screen and (min-width: ${breakpointMap.xxl}px)`,
-  nav: `@media screen and (min-width: ${breakpointMap.lg}px)`,
+  nav: `@media screen and (min-width: ${breakpointMap.lg}px)`
 };
 
 const mediaMarginUpAndDown = `
@@ -30,7 +32,7 @@ const mediaMarginUpAndDown = `
   ${mediaQueries.xl} {
     margin: 24px 0 12px;
   }
-`
+`;
 
 const mediaMarginLeftAndRightMd = `
   ${mediaQueries.lg} {
@@ -39,7 +41,7 @@ const mediaMarginLeftAndRightMd = `
   ${mediaQueries.xl} {
     margin: 0 15px;
   }
-`
+`;
 
 const mediaQueriesMargin = `
   ${mediaQueries.xxs} {
@@ -59,7 +61,7 @@ const mediaQueriesMargin = `
   ${mediaQueries.xl} {
     margin: 24px 32px;
   }
-`
+`;
 
 const mediaMarginBottom = `
   ${mediaQueries.lg} {
@@ -68,7 +70,7 @@ const mediaMarginBottom = `
   ${mediaQueries.xl} {
     margin-bottom: 32px;
   }
-`
+`;
 const mediaMarginBottomMd = `
   ${mediaQueries.lg} {
     margin-bottom: 10px;
@@ -76,7 +78,7 @@ const mediaMarginBottomMd = `
   ${mediaQueries.xl} {
     margin-bottom: 20px;
   }
-`
+`;
 
 const mediaMarginBottomSm = `
   ${mediaQueries.lg} {
@@ -85,7 +87,7 @@ const mediaMarginBottomSm = `
   ${mediaQueries.xl} {
     margin-bottom: 12px;
   }
-`
+`;
 
 const mediaMarginTop = `
   ${mediaQueries.xxs} {
@@ -105,16 +107,16 @@ const mediaMarginTop = `
   ${mediaQueries.xl} {
     margin-top: 30px;
   }
-`
+`;
 
 const mediaMarginLeft = `
   ${mediaQueries.lg} {
     margin-left: 10px;
   }
   ${mediaQueries.xl} {
-    margin-left: 18px;
+    margin-left: 15px;
   }
-`
+`;
 
 const mediaMarginLeftMd = `
   ${mediaQueries.lg} {
@@ -123,7 +125,7 @@ const mediaMarginLeftMd = `
   ${mediaQueries.xl} {
     margin-left: 8px;
   }
-`
+`;
 
 const mediaQueriesMarginRight = `
   ${mediaQueries.xxs} {
@@ -144,7 +146,7 @@ const mediaQueriesMarginRight = `
     margin-right: 32px;
   }
 
-`
+`;
 
 const mediaMarginRightMd = `
   ${mediaQueries.lg} {
@@ -153,7 +155,7 @@ const mediaMarginRightMd = `
   ${mediaQueries.xl} {
     margin-right: 14px;
   }
-`
+`;
 
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
@@ -174,7 +176,7 @@ const mediaQueriesPadding = `
   ${mediaQueries.lg} {
     padding: 20px 25px;
   }
-`
+`;
 
 const mediaPaddingSM = `
   ${mediaQueries.sm} {
@@ -183,7 +185,7 @@ const mediaPaddingSM = `
   ${mediaQueries.lg} {
     padding: 15px 12px;
   }
-`
+`;
 
 const mediaPaddingXs = `
   ${mediaQueries.sm} {
@@ -192,7 +194,7 @@ const mediaPaddingXs = `
   ${mediaQueries.lg} {
     padding: 14px 18px;
   }
-`
+`;
 
 export const mediaQueriesSize: MediaQueriesSize = {
   margin: mediaQueriesMargin,
@@ -209,16 +211,17 @@ export const mediaQueriesSize: MediaQueriesSize = {
   padding: mediaQueriesPadding,
   paddingsm: mediaPaddingSM,
   paddingxs: mediaPaddingXs
-}
+};
 
 export const shadows = {
-  level1: "0px 2px 12px -8px rgba(25, 19, 38, 0.1), 0px 1px 1px rgba(25, 19, 38, 0.05)",
-  active: "0px 0px 0px 1px #0098A1, 0px 0px 4px 8px rgba(31, 199, 212, 0.4)",
-  success: "0px 0px 0px 1px #4168ED, 0px 0px 0px 4px rgba(52, 86, 199, 0.2)",
-  warning: "0px 0px 0px 1px #ED4B9E, 0px 0px 0px 4px rgba(237, 75, 158, 0.2)",
-  focus: "0px 0px 0px 1px #00000000, 0px 0px 0px 2px rgba(65, 104, 237,0.6)",
-  input: "inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21);",
-  inset: "inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21)",
+  level1:
+    '0px 2px 12px -8px rgba(25, 19, 38, 0.1), 0px 1px 1px rgba(25, 19, 38, 0.05)',
+  active: '0px 0px 0px 1px #0098A1, 0px 0px 4px 8px rgba(31, 199, 212, 0.4)',
+  success: '0px 0px 0px 1px #4168ED, 0px 0px 0px 4px rgba(52, 86, 199, 0.2)',
+  warning: '0px 0px 0px 1px #ED4B9E, 0px 0px 0px 4px rgba(237, 75, 158, 0.2)',
+  focus: '0px 0px 0px 1px #00000000, 0px 0px 0px 2px rgba(65, 104, 237,0.6)',
+  input: 'inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21);',
+  inset: 'inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21)',
   box: '0px 0px 21px 0px rgba(25, 95, 81, 0.2)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)'
 };
@@ -226,16 +229,16 @@ export const shadows = {
 const spacing: Spacing = [0, 4, 8, 16, 24, 32, 48, 64];
 
 const radii = {
-  small: "4px",
-  default: "16px",
-  nftImage: "10px",
-  card: "10px",
-  circle: "50%",
+  small: '4px',
+  default: '16px',
+  nftImage: '10px',
+  card: '10px',
+  circle: '50%'
 };
 
 const zIndices = {
   dropdown: 10,
-  modal: 100,
+  modal: 100
 };
 
 /* eslint-disable */
@@ -247,6 +250,6 @@ export default {
   shadows,
   radii,
   zIndices,
-  mediaQueriesSize,
+  mediaQueriesSize
   // breakpointMap,
 };

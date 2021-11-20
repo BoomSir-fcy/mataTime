@@ -47,6 +47,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false);
   };
 
+  console.log(UID, data.post.user_id);
   // 收藏
   const onFavAgreeRequest = async (post_id: number) => {
     const res = await Api.ContentApi.onFavAgree(post_id);

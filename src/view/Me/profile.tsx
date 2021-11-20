@@ -26,8 +26,6 @@ import defaultImages from 'assets/images/default_me_background.jpg';
 import { clear } from 'redux-localstorage-simple';
 import useAuth from 'hooks/useAuth';
 
-
-
 const Center = styled(Box)``;
 const ProfileCard = styled(Card)`
   position: relative;
@@ -121,8 +119,8 @@ const Profile: React.FC<any> = React.memo(props => {
   const { t } = useTranslation();
   const uid = props.match?.params?.uid;
   const gray = useTheme().colors.textTips;
-  const { profile, loading, page, totalPage, list } = state;
   const history = useHistory();
+  const { profile, loading, page, totalPage, list } = state;
   const { logout } = useAuth();
 
   const init = async (offset?: number) => {
@@ -152,46 +150,21 @@ const Profile: React.FC<any> = React.memo(props => {
     }
   };
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    let arr = [];
-    list.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
-      }
-      if (
-        item.id === newItem.id &&
-        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
-      ) {
-        // 屏蔽、删除
-      } else if (item.id === newItem.id && type === MoreOperatorEnum.SETTOP) {
-        // 置顶
-        arr.unshift(obj);
-      } else {
-        arr.push(obj);
-      }
-    });
-    setState(p => {
-      p.list = [...arr];
-    });
-  };
-
   const signOut = () => {
-    logout()
-    localStorage.clear()
-    clear()
-    history.push('/login')
-  }
-
+    logout();
+    localStorage.clear();
+    clear();
+    history.push('/login');
+  };
 
   React.useEffect(() => {
     init();
   }, []);
 
+  console.log(profile.uid, uid);
   return (
     <Center>
-      <Crumbs title={t('meHome')} />
+      <Crumbs title={t('meHome')} back={Boolean(uid)} />
       <ProfileCard>
         <HeadTop
           style={{
@@ -204,7 +177,7 @@ const Profile: React.FC<any> = React.memo(props => {
               <Avatar scale="xl" src={profile.nft_image} />
               <Desc>
                 <Text className="name">{profile.nick_name}</Text>
-                <Flex mb="5px">
+                <Flex mt="5px">
                   <Flex>
                     {/* <Certification /> */}
                     <Text className="text">
@@ -220,7 +193,7 @@ const Profile: React.FC<any> = React.memo(props => {
                 </Flex>
               </Desc>
             </Flex>
-            {!uid ? (
+            {!uid || Number(uid) === profile.uid ? (
               <>
                 <Button as={Link} to="/me/edit">
                   {t('meEditProfile')}
@@ -275,20 +248,7 @@ const Profile: React.FC<any> = React.memo(props => {
         loading={loading}
         renderList={() => {
           if (loading || page > totalPage) return false;
-          setState(p => {
-            p.loading = true;
-          });
-          Api.MeApi.getProfileMsg(page, uid).then(res => {
-            setState(p => {
-              p.loading = false;
-            });
-            if (Api.isSuccess(res)) {
-              setState(p => {
-                p.page = page + 1;
-                p.list = [...list, ...res.data.list];
-              });
-            }
-          });
+          init();
         }}
       >
         {list.map((item, index) => (
@@ -303,11 +263,12 @@ const Profile: React.FC<any> = React.memo(props => {
                   post_id: item.id
                 }
               }}
-              callback={(item: any, type: MoreOperatorEnum) => {
-                updateList(item, type);
-              }}
+              callback={() => init(1)}
             />
             <MentionOperator
+              replyType="twitter"
+              type="Article"
+              postId={item.id}
               itemData={{
                 ...item,
                 post_id: item.id,
@@ -316,9 +277,7 @@ const Profile: React.FC<any> = React.memo(props => {
                   post_id: item.id
                 }
               }}
-              callback={(item: any) => {
-                updateList(item);
-              }}
+              callback={() => init(1)}
             />
           </MeItemWrapper>
         ))}
