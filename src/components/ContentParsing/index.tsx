@@ -23,6 +23,13 @@ span {
   cursor: pointer;
 }
 `
+const parseText =(val='')=>{
+  const reg = new RegExp(/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g)
+  return val.replace(reg,function (e){
+    console.log(e);
+    return `<a href="${e}" target="_blank"> ${e} </a>`
+  })
+}
 export const ContentParsing = (props:IProps)=>{
   const [parsingResult,setParsingResult]= useState([])
   useEffect(()=>{
@@ -57,7 +64,10 @@ return (
                     })}
                   </p>
                 ) : (
-                  <p>{child.text || ''}</p>
+                  <p 
+                  dangerouslySetInnerHTML= {{
+                    __html: parseText(child.text)
+                  }}></p>
                 )
                 )
               })}

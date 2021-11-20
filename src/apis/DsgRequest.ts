@@ -25,4 +25,7 @@ export const post = (url: string, data?: QueryParams, config = {}): Promise<any>
   })
 // 获取NFT列表
 export const getNftsList = (account: string): Promise<any> => get(`/nfts/${account.toLowerCase()}`)
+// Nft详情
 export const getNftInfo = (token: string, id: string | number): Promise<any> => get(`/nft/${token}/${id}`)
+// 获取接口返回的请求地址
+export const getUrl = (url: string): Promise<any> => get(url)

@@ -34,6 +34,7 @@ const MentionOperator: React.FC<IProps> = ({ match, history, itemData, type = 'A
         if (Api.isSuccess(res)) {
           callback({
             ...itemData,
+            like_num: isLike === 1 ? itemData.post.like_num - 1 : itemData.post.like_num + 1,
             post: {
               ...itemData.post,
               like_num: isLike === 1 ? itemData.post.like_num - 1 : itemData.post.like_num + 1,

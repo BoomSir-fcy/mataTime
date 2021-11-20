@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { About, Avatar, Editor, ModalWrapper } from 'components';
 import { withRouter } from 'react-router-dom';
-import { useTranslation } from 'contexts/Localization'
+import { useTranslation } from 'contexts/Localization';
 import { ToastContainer, toast } from 'react-toastify';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
@@ -89,8 +89,7 @@ const Home: React.FC = (props: any) => {
       }
     });
   };
-  const { match } = props
-  console.log(props);
+  const { match } = props;
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
@@ -108,11 +107,24 @@ const Home: React.FC = (props: any) => {
               </>
               : null
           }
+          <Header
+            {...props}
+            back={match.path === '/topicList/:id/:name'}
+            align={match.path === '/topicList/:id/:name' ? 'center' : null}
+            title={match.path === '/topicList/:id/:name' ? '#' + match.params.name + '#' : t('homeHeaderTitle')}
+          ></Header>
+          {match.path === '/' ? (
+            <>
+              <Editor type="post" sendArticle={sendArticle}></Editor>
+              {/* <Tabs></Tabs> */}
+            </>
+          ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} {...props}></ArticleList>
         </CenterCard>
         <RightCard>
-          {/* <Search></Search> */}
+          <Search></Search>
+          {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
           <Swap></Swap>
           <RecommendPeople></RecommendPeople>
           <HotTopic {...props}></HotTopic>

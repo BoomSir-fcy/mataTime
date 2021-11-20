@@ -45,9 +45,18 @@ export const SearchPop = (props: Iprops) => {
       })
     }, 400))
   }, [topicValue])
+  useEffect(() => {
+    const fn = (e)=>{
+      if(show){
+        callback({},'')
+      }
+    }
+    document.addEventListener('click',fn)
+    return ()=>document.removeEventListener('click',fn)
+  })
   return (
     show ?
-      <SearchPopBox>
+      <SearchPopBox onClick={(e)=>e.nativeEvent.stopImmediatePropagation()}>
         {
           type === 'user' ?
             <div className="search-box">

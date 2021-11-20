@@ -63,7 +63,8 @@ export const SignUpSetName = React.memo(() => {
   const { t } = useTranslation();
 
   const submitProfile = React.useCallback(async () => {
-    if (!haveNickName) {
+    if (!state.nickName) {
+      sethaveNickName(false)
       return
     }
     const res = await addNickName(state.nickName);
