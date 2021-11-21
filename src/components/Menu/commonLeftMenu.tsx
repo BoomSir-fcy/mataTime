@@ -111,6 +111,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
     const res = await Api.NewsApi.getUnreadMsgNum();
     if (Api.isSuccess(res)) {
       setMsgNum(res.data);
+      getMsgReadRequest('message_at_me')
     }
   };
 
