@@ -30,7 +30,10 @@ export const CommonInquiryModal = React.memo((props: IProp) => {
     <>
       {
         show ? (
-          <ModalWrapper>
+          <>
+            <ModalWrapper onClick={() => {
+              onClose()
+            }}></ModalWrapper>
             <ReportModalWrapper>
               <ModalTitleWrapper>
                 <h4>{t(type + 'ModalTitle')}</h4>
@@ -38,11 +41,11 @@ export const CommonInquiryModal = React.memo((props: IProp) => {
               <ShieldContentWrapper>
                 <div className="des-box">{t(type + 'ModalDes')}</div>
               </ShieldContentWrapper>
-              <ModalOperator onClose={onClose} onQuery={() => {
+              <ModalOperator onClose={() => { onClose() }} onQuery={() => {
                 onQuery()
               }}></ModalOperator>
             </ReportModalWrapper>
-          </ModalWrapper>
+          </>
         ) : null
       }
     </>

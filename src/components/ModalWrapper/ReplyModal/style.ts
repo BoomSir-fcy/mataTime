@@ -40,6 +40,7 @@ export const ReportModalWrapper = styled(Box)`
   top: 100px;
   margin-left: -334px;
   box-sizing: border-box;
+  z-index: 99999;
 `
 
 export const ReportContentWrapper = styled(Box)`

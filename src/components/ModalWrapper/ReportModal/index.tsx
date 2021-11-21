@@ -46,7 +46,8 @@ export const ReportModal = React.memo((props: IProp) => {
     <>
       {
         show ? (
-          <ModalWrapper>
+          <>
+            <ModalWrapper onClick={() => { onClose() }}></ModalWrapper>
             <ReportModalWrapper>
               <ModalTitleWrapper>
                 <h4>{t('ReportModalTitle')}</h4>
@@ -66,7 +67,7 @@ export const ReportModal = React.memo((props: IProp) => {
                 }
               </ReportContentWrapper>
             </ReportModalWrapper>
-          </ModalWrapper>
+          </>
         ) : null
       }
     </>
