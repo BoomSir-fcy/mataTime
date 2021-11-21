@@ -5,16 +5,16 @@ interface iocnType {
   color?: string;
   margin?: string;
   bold?: boolean;
-  onClick?: () => void;
+  // onClick?: () => void;
   cur?: boolean;
   [propName: string]: any;
 }
 export const Icon = (props: iocnType) => {
-  const { size, name, color, bold, margin, style = {}, cur, onClick } = props;
+  const { size, name, color, bold, margin, style = {}, cur } = props;
   return (
     <i
       className={classnames('iconfont ' + name)}
-      onClick={onClick.bind(this)}
+      // onClick={onClick.bind(this)}
       style={{
         fontSize: size || 20,
         color: color || '#fff',
@@ -23,9 +23,10 @@ export const Icon = (props: iocnType) => {
         fontWeight: bold ? 'bold' : '',
         ...style
       }}
-    ></i>
+      {...props}
+      ></i>
   );
 };
 Icon.defaultProps = {
-  onClick: () => {}
+  // onClick: () => {}
 };

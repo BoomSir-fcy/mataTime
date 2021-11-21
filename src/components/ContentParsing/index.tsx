@@ -79,7 +79,7 @@ export const ContentParsing = (props: IProps) => {
       return `<a href=${a} target='_blank'>${a}</a>`;
     });
     s=s.replace(/[#＃][^#＃]+[#＃]/g, function (word) {
-      return `<a  href="/topicList/empty/${word.slice(1).slice(0,-1)}" onclick="event.stopPropagation()">${word}</a>`;
+      return `<a  href="/#/topicList/empty/${word.slice(1).slice(0,-1)}" onclick="event.stopPropagation()">${word}</a>`;
     })
     return s;
   }

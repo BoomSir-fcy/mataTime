@@ -10,6 +10,7 @@ onChange:(data)=>void
 const AffixBox = styled.div`
 height:100vh;
 padding-bottom:30px;
+overflow-y:auto;
 `
 export const Affix =(props:IProps)=>{
 const {children,offsetTop,positionObj,onChange}=props
@@ -22,10 +23,10 @@ const [windowOffsetTop,setWindowOffsetTop] = useState(0)
     document.addEventListener('scroll',fn)
     return ()=> document.removeEventListener('scroll',fn)
   })
+  // overflowY:windowOffsetTop>offsetTop ?'auto':'visible',
 return (
   <AffixBox style={{
     position: windowOffsetTop>offsetTop ?'fixed':'static',
-    overflowY:windowOffsetTop>offsetTop ?'auto':'visible',
     ...positionObj
   }}>
    {children}

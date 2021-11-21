@@ -10,7 +10,7 @@ export const EditorWarpper = styled(Box)`
   ${mediaQueriesSize.marginbsm}
 `
 export const MentionBox = styled.span`
-color:blue;
+color:#7393ff;
 cursor:pointer;
 `
 export const SendButton = styled(Button)`

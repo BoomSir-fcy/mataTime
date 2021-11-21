@@ -82,7 +82,7 @@ const Home: React.FC = (props: any) => {
           {/* <About /> */}
           <Affix offsetTop={100} positionObj={{
               top:'10px',
-              left:'300px'
+              left:'390px'
             }}>
             <Menu />
           </Affix>
@@ -110,7 +110,7 @@ const Home: React.FC = (props: any) => {
         <RightCard>
         <Affix offsetTop={100} positionObj={{
               top:'10px',
-              right:'196px'
+              right:'280px'
             }}>
               <>
               <Search />

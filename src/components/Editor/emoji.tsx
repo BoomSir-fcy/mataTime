@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { EmojiView } from 'components';
+import { EmojiView, Icon } from 'components';
 import { Box, Flex, Button, Svg } from 'uikit';
 
 const EmojiWarpper = styled(Box)`
@@ -23,15 +23,15 @@ export const Emoji: React.FC<{
 
   React.useEffect(() => {
     const changeHandler = () => {
-      setState(p=> {p.visible = false});
-    } 
+      setState(p => { p.visible = false });
+    }
     document.body.addEventListener('click', changeHandler)
     return () => document.body.removeEventListener('click', changeHandler)
   }, [])
 
-  return(
-    <EmojiWarpper onClick={(e)=>e.stopPropagation()}>
-      <ButtonIcon variant="text" onClick={(e) => {
+  return (
+    <EmojiWarpper onClick={(e) => e.stopPropagation()}>
+      {/* <ButtonIcon variant="text" onClick={(e) => {
         e.nativeEvent.stopImmediatePropagation();
         setState(p  => {
           p.visible = !state.visible
@@ -40,7 +40,13 @@ export const Emoji: React.FC<{
         <Svg viewBox="0 0 45 45" width="25px">
           <image xlinkHref={require('./images/icon_emoji.png').default}/>
         </Svg>
-      </ButtonIcon>
+      </ButtonIcon> */}
+      <Icon size={25} color={'#7393ff'} cur name="icon-xiaolian" onClick={(e) => {
+        e.nativeEvent.stopImmediatePropagation();
+        setState(p => {
+          p.visible = !state.visible
+        })
+      }}></Icon>
       {
         state.visible && <EmojiView selectedEmoji={(data) => onChange(data)} />
       }
