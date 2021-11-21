@@ -38,3 +38,9 @@ export * from "./widgets/Toast";
 export * from "./widgets/Loading";
 export { default as ResetCSS } from "./ResetCSS";
 export * from "./theme";
+export declare enum ConnectorNames {
+    Injected = "injected",
+    WalletConnect = "walletconnect",
+    BSC = "bsc"
+}
+export declare const connectorLocalStorageKey = "connectorIdv2";

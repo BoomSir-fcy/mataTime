@@ -5336,10 +5336,10 @@ dotenv@^10.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
-dsgswap-sdk@1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.17.tgz#576863184ad88487945bf55ccb61791f82a46c4d"
-  integrity sha512-dFQkDcgp4kvhoxyD5EkVRQUtiTHLKo8uSWYbewuPxf0eUA0z03M1h638WsagNY+KQxvOsJ7eChVZ4rcJkuAOyg==
+dsgswap-sdk@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/dsgswap-sdk/-/dsgswap-sdk-1.0.20.tgz#2525ac380e9d76e9c12bae8430c8269538df8d6c"
+  integrity sha512-rv/0KODxzDXlThWlnVE2+vMTkjWIkljtHMYG4icbRrdWl8rt1HV7GuvfZ8Q+47ZBoQFnoNESnUlzVgyah6wqzA==
   dependencies:
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
@@ -5568,7 +5568,7 @@ escalade@^3.0.2, escalade@^3.1.1:
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
   integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
 
-escape-html@~1.0.3:
+escape-html@^1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=

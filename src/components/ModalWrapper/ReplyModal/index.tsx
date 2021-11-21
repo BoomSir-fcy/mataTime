@@ -65,7 +65,7 @@ export const ReplyModal = React.memo((props: IProp) => {
                 <div className="close" onClick={() => {
                   onClose()
                 }}>
-                  <Icon name={'icon-guanbi'} color={'#ffffff'}></Icon>
+                  <Icon name={'icon-guanbi'}></Icon>
 
                 </div>
               </ModalTitleWrapper>

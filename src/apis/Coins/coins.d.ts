@@ -9,6 +9,7 @@ declare namespace Api {
       coin_symbol: string
       current_price: string
       price_change_24h: string
+      total_volume: string
       price_change_percentage_24h: string
     }
     interface FetchCoinsListParams {

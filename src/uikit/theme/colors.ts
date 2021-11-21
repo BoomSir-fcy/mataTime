@@ -71,6 +71,7 @@ export const lightColors: Colors = {
   textgrey: '#7A83A0',
   disabled: '#E9EAEB',
   borderColor: '#EFF4F5',
+  protrudeColor: '#FFFFFF',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
@@ -133,6 +134,7 @@ export const darkColors: Colors = {
   textgrey: '#B4C8A9',
   disabled: '#524B63',
   borderColor: '#4D535F',
+  protrudeColor: '#4168ED',
   gradients: {
     footer: '#191F2D',
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',

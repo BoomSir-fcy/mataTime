@@ -22,7 +22,6 @@ export declare const styleVariants: {
     primary: {
         backgroundColor: string;
         color: string;
-        boxShadow: string;
     };
     secondary: {
         backgroundColor: string;

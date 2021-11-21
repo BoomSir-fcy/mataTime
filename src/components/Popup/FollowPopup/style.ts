@@ -7,7 +7,7 @@ export const PopupWrapper = styled.span`
 
 export const PopupContentWrapper = styled(Box)`
   width: 300px;
-  height: 150px;
+  min-height: 150px;
   position: absolute;
   left: 10px;
   overflow: hidden;
@@ -17,6 +17,7 @@ export const PopupContentWrapper = styled(Box)`
   border-radius: 10px;
   box-sizing: border-box;
   padding: 15px;
+  z-index: 99;
 
   .content{
     display: flex;

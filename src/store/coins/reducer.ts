@@ -13,7 +13,7 @@ export interface CoinsState {
 
 const initialState: CoinsState = {
   total: 0,
-  pageSize: 20,
+  pageSize: 200,
   page: 1,
   loaded: false,
   data: {},
@@ -52,6 +52,7 @@ export const coins = createSlice({
           }
         })
         state.total = total_count
+        state.loaded = true
       })
       .addCase(fetchCoinInfoAsync.fulfilled, (state, { payload: coinInfo }) => {
         if (coinInfo) {

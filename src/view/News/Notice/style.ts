@@ -10,10 +10,14 @@ export const NoticeWrapper = styled.div`
       border-radius: 10px;
     }
 `
+interface NoticeContentProps {
+  len: number
+}
 
 export const NoticeContentWrapper = styled(Card)`
   width: 100%;
-  /* height: 700px; */
+  box-shadow: ${(props: NoticeContentProps) => props.len || 'none'};
+  background-color: ${(props: NoticeContentProps) => props.len || 'rgba(0,0,0,0)'};
 `
 
 export const NoticeItemWrapper = styled.div`

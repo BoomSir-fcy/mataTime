@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Box, Flex, Image, Text, RefreshRingIcon, Button } from 'uikit'
+import { Box, Flex, Image, Text, RefreshRingIcon, BalanceText } from 'uikit'
 import QuestionHelper from '../QuestionHelper'
 
 const CoinItemStyled = styled(Flex) <{ fillClickArea?: boolean; isActive?: boolean }>`
@@ -34,6 +34,11 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
     event.stopPropagation()
   }
 
+  const currentPrice = useMemo(() => {
+    if (!Number(coinInfo?.current_price)) return 0
+    return Number(coinInfo?.current_price)
+  }, [coinInfo?.current_price])
+
   return (
     <CoinItemStyled isActive={isActive} fillClickArea={fillClickArea} onClick={(event) => {
       toggling(event);
@@ -42,8 +47,10 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
     }}>
       <Flex width="100%" alignItems="center" justifyContent="space-between">
         <Flex onClick={(subEvent) => {
-          toggling(subEvent);
-          onTouch && onTouch(coinInfo);
+          if (onTouch) {
+            toggling(subEvent);
+            onTouch && onTouch(coinInfo);
+          }
         }} style={{ cursor: isActive ? 'default' : 'pointer' }} alignItems="center">
           <Box width="40px">
             <Image width={40} height={40} src={coinInfo?.coin_image_url} />
@@ -58,6 +65,7 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
                     <Text fontSize="14px">{t('Powered by CoinMarketCap')}</Text>
                   </>}
                   ml="4px"
+                  mr="8px"
                   onClick={toggling}
                   placement="top-start"
                   style={{ cursor: 'auto' }}
@@ -65,28 +73,47 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
               }
               {onTouch && (<StyledTriangle />)}
             </Flex>
-            <Text color="textTips" fontSize="14px">{coinInfo?.coin_name}</Text>
+            <Text ellipsis width="120px" color="textTips" fontSize="14px">{coinInfo?.coin_name}</Text>
           </Box>
         </Flex>
-        <Box>
-          <Text bold color="primary" fontSize="18px" textAlign="right">${coinInfo?.current_price}</Text>
-          <Flex>
-            <Text color="upPrice" fontSize="14px" textAlign="right">+{coinInfo?.price_change_percentage_24h}%</Text>
+        {
+          !!Number(coinInfo?.current_price) && (<Box>
             {
-              onRefresh && (
-                <RefreshRingIcon
-                  onClick={(subEvent) => {
-                    toggling(subEvent);
-                    onRefresh(coinInfo)
-                  }}
-                  style={{ cursor: 'pointer' }}
-                  ml="4px"
-                  color="textPrimary"
-                  width="16px" />
-              )
+              !!currentPrice
+                ?
+                (
+                  <BalanceText textAlign="right" prefix="$ " bold color="textPrimary" value={currentPrice} decimals={0} />
+                )
+                :
+
+                <Text bold color="primary" fontSize="18px" textAlign="right">--</Text>
             }
-          </Flex>
-        </Box>
+            <Flex>
+              {
+                Number(coinInfo?.price_change_percentage_24h) >= 0
+                  ?
+                  <Text color="upPrice" fontSize="14px" textAlign="right">+{coinInfo?.price_change_percentage_24h}%</Text>
+                  :
+                  <Text color="downPrice" fontSize="14px" textAlign="right">{coinInfo?.price_change_percentage_24h}%</Text>
+
+              }
+              {
+                onRefresh && (
+                  <RefreshRingIcon
+                    onClick={(subEvent) => {
+                      toggling(subEvent);
+                      onRefresh(coinInfo)
+                    }}
+                    style={{ cursor: 'pointer' }}
+                    ml="4px"
+                    color="textPrimary"
+                    width="16px" />
+                )
+              }
+            </Flex>
+          </Box>)
+
+        }
       </Flex>
     </CoinItemStyled>
   )

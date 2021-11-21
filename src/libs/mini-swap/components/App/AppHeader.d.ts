@@ -1,9 +1,10 @@
 import React from 'react';
 interface Props {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     helper?: string;
     backTo?: string;
+    tips?: React.ReactNode;
     noConfig?: boolean;
     hideSetting?: boolean;
 }
