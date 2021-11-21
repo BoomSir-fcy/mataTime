@@ -42,7 +42,7 @@ export const InlineChromiumBugfix = () => (
 export const  TopicElement = ({ attributes, children, element }) => {
   return (
     <>
-    <span {...attributes}>
+    <span  {...attributes}>
       {/* {children} */}
       #
       <InlineChromiumBugfix />

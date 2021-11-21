@@ -23,17 +23,15 @@ export const Affix = (props: IProps) => {
     document.addEventListener('scroll', fn)
     return () => document.removeEventListener('scroll', fn)
   })
-  return (
-    <AffixBox style={{
-      position: windowOffsetTop > offsetTop ? 'fixed' : 'static',
-      ...positionObj
-    }}>
-      {children}
-    </AffixBox>
-    // <AffixBox>
-    //   {children}
-    // </AffixBox>
-  )
+  // overflowY:windowOffsetTop>offsetTop ?'auto':'visible',
+return (
+  <AffixBox style={{
+    position: windowOffsetTop>offsetTop ?'fixed':'static',
+    ...positionObj
+  }}>
+   {children}
+  </AffixBox>
+)
 }
 
 Affix.defaultProps = {
