@@ -8,6 +8,8 @@ type IProps = {
   onChange: (data) => void
 }
 const AffixBox = styled.div`
+height:100vh;
+padding-bottom:30px;
 `
 export const Affix = (props: IProps) => {
   const { children, offsetTop, positionObj, onChange } = props

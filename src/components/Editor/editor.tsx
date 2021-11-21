@@ -71,6 +71,7 @@ const insertTopic = (editor, { character = '' }) => {
 };
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => { }, type } = props;
+  const [isDisabledSend,setIsDisabledSend] = useState(true)
   const ref = useRef<HTMLDivElement | null>();
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
@@ -150,6 +151,28 @@ export const Editor = (props: Iprops) => {
     setImgList([])
     setRefresh(refresh === 1 ? 2 : 1);
   };
+const deepContent = (arr)=>{
+  let content= '',
+  userIdList=[]
+  const deepArr = (data)=>{
+    data.forEach(item=>{
+        if(item.type==='mention'){
+          userIdList.push(item.character.slice(1) + '_' + item.attrs.userid)
+        }
+        if(item.text||item.character){
+          content+=(item.text||item.character)
+        }
+        if(item.children){
+        deepArr(item.children)
+      }
+    })
+  }
+  deepArr(arr)
+  return {
+    content,
+    userIdList
+  }
+}
   const [timeId,setTimeId] = useState(null)
   const sendArticle = () => {
     if(timeId) return toast.warning('间隔时间需超过3秒!')
@@ -158,22 +181,16 @@ export const Editor = (props: Iprops) => {
         setTimeId(null)
       },3000)
     )
-    // console.log(value, imgList.join(','));
-    let arr = value;
-    console.log(arr);
-
-    const userIdList = [];
-    arr.forEach((child: any) => {
-      child.children.forEach((node: any) => {
-        if (node.type === 'mention') {
-          if (!userIdList.find(item => item === node.attrs.userid)) {
-            userIdList.push(node.character.slice(1) + '_' + node.attrs.userid);
-          }
-        }
-      });
-    });
+    // 递归收集字符和@的id
+    // let userIdList = []
+    // let content = ''
+    let {userIdList,content} = deepContent(value)
+    if(content.length>140){
+      setTimeId(null)
+      return toast.warning('字数不可超过140')
+    }
     props.sendArticle(JSON.stringify(value), restInput, imgList.join(','), userIdList.join(','));
-    // restInput()
+    restInput()
   };
   const searchSelect = (data, type) => {
     setSearcTopic(false);
@@ -189,7 +206,11 @@ export const Editor = (props: Iprops) => {
   return (
     <SlateBox key={refresh}>
       <SearchPop type={searchUser ? 'user' : 'topic'} show={searcTopic || searchUser} callback={searchSelect}></SearchPop>
-      <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <Slate editor={editor} value={value} onChange={value => {
+        const {content} = deepContent(value)
+          setValue(value)
+        setIsDisabledSend(!content)
+      }}>
         <div className="text-box" ref={ref}>
           <Editable autoFocus renderElement={renderElement} placeholder={type === 'comment' ? t('newsCommentReply') : t('editorPlaceholder')} />
         </div>
@@ -205,10 +226,10 @@ export const Editor = (props: Iprops) => {
           {initValue ? (
             <div>
               <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
-              <SendButton onClick={sendArticle}>保存并发布</SendButton>
+              <SendButton disabled={isDisabledSend} onClick={sendArticle}>保存并发布</SendButton>
             </div>
           ) : (
-            <SendButton onClick={sendArticle}>{type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}</SendButton>
+            <SendButton disabled={isDisabledSend}  onClick={sendArticle}>{type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}</SendButton>
           )}
         </Flex>
       </Slate>

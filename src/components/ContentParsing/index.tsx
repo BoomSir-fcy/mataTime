@@ -38,16 +38,16 @@ span {
   cursor: pointer;
 }
 `
-const parseText = (val = '') => {
-  const reg = new RegExp(/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g)
-  val.replace(reg, function (e) {
-    return `<a href="${e}" target="_blank" onclick="event.stopPropagation()"> ${e} </a>`
-  })
-  val.replace(/[#＃][^#＃]+[#＃]/g, function (word) {
-    return `<a  href="${1}" onclick="event.stopPropagation()">${word}</a>`;
-  });
-  return val
-}
+// const parseText = (val = '') => {
+//   const reg = new RegExp(/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g)
+//   val.replace(reg, function (e) {
+//     return `<a href="${e}" target="_blank" onclick="event.stopPropagation()"> ${e} </a>`
+//   })
+//   val.replace(/[#＃][^#＃]+[#＃]/g, function (word) {
+//     return `<a  href="/topicList/empty${word}" onclick="event.stopPropagation()">${word}</a>`;
+//   });
+//   return val
+// }
 export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation()
   const ref: any = useRef()
@@ -75,10 +75,13 @@ export const ContentParsing = (props: IProps) => {
   }, [])
 
   const parseText2 = (text = '') => {
-    var re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
-    var s = text.replace(re, function (a) {
+    const re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
+    let s:string = text.replace(re, function (a) {
       return `<a href=${a} target='_blank'>${a}</a>`;
     });
+    s=s.replace(/[#＃][^#＃]+[#＃]/g, function (word) {
+      return `<a  href="/topicList/empty/${word.slice(1).slice(0,-1)}" onclick="event.stopPropagation()">${word}</a>`;
+    })
     return s;
   }
 
@@ -88,7 +91,7 @@ export const ContentParsing = (props: IProps) => {
       case 'paragraph':
         return <ParagraphItem>{children ? children.map(n => serialize2(n)) : ''}</ParagraphItem>;
       case 'topic':
-        return <Link to={`/topicList/empty/${children ? children.map(n => serialize2(n, 'topic')) : ''}`}>#{children ? children.map(n => serialize2(n)) : ''}#</Link>;
+        return <Link onClick={(e)=>e.stopPropagation()} to={`/topicList/empty/${children ? children.map(n => serialize2(n, 'topic')) : ''}`}>#{children ? children.map(n => serialize2(n)) : ''}#</Link>;
       case 'mention':
         return <FollowPopup uid={node?.attrs?.userid || 0}>
           <a>{node.character}</a>

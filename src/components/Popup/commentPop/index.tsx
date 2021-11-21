@@ -17,15 +17,14 @@ export const CommentPop = React.memo((props: Iprops) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
   const { children, data={}, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
+  const [isCurrentUser,setIsCurrentUser] = useState(false)
   useEffect(() => {
     init();
   }, []);
 
   //  初始化
   const init = () => {
-    console.log(data);
-    
-    // UID === data.post.user_id
+    setIsCurrentUser(UID === data.user_id)
   }
 const  delComment = ()=>{
   Api.MeApi.removeContentDetail(data.id).then(res=>{
@@ -64,10 +63,10 @@ const  reportComment = ()=>{
         }}
       >
         {children}
-        {visible ? (
+        {visible&&isCurrentUser ? (
           <PopupContentWrapper>
-            <p onClick={delComment}>{t('moreDelete')}</p>
-            <p onClick={reportComment}>{t('moreReport')}</p>
+              <p onClick={delComment}>{t('moreDelete')}</p>
+            {/* <p onClick={reportComment}>{t('moreReport')}</p> */}
           </PopupContentWrapper>
         ) : null}
       </PopupWrapper>
