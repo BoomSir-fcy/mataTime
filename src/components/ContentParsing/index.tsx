@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'contexts/Localization'
 import escapeHtml from 'escape-html'
 import { Node, Text } from 'slate'
 import { Link } from 'react-router-dom';
@@ -8,6 +9,18 @@ type IProps = {
   content: string;
   callback?: Function;
 };
+const ContentParsingWrapper = styled.div`
+
+`
+const ExpandWrapper = styled.div`
+  width: 100%;
+  text-align: center;
+  span{
+    cursor: pointer;
+    color: #7393ff;
+    font-size: 12px;
+  }
+`
 const ParagraphItem = styled.div`
 p{
   font-size: 18px;
@@ -15,7 +28,7 @@ p{
   font-weight: 400;
 }
 a{
-  color: #4168ED;
+  color: #7393ff;
   cursor: pointer;
   margin: 0 10px;
 }
@@ -35,8 +48,10 @@ span {
 //   return val
 // }
 export const ContentParsing = (props: IProps) => {
+  const { t } = useTranslation()
   const ref: any = useRef()
   const [parsingResult, setParsingResult] = useState([])
+  const [expand, setExpand] = useState<boolean>(false)
   useEffect(() => {
     const { content } = props
     try {
@@ -87,44 +102,31 @@ export const ContentParsing = (props: IProps) => {
 
 
   return (
-    <>
+    <ContentParsingWrapper>
       {
         parsingResult &&
         parsingResult.length > 0 &&
         parsingResult.map((item: any, index) => {
-          return serialize2(item)
-          // return (
-          //   <ParagraphItem ref={ref} key={index}>
-          //     {item.children.map((child: any, childIndex) => {
-          //       return (
-          //         <span key={childIndex}>
-          //           {
-          //             child.type === 'mention' ? (
-          //               <FollowPopup uid={child?.attrs?.userid || 0}>
-          //                 <a>{child.character}</a>
-          //               </FollowPopup>
-          //             ) : child.type === 'topic' ? (
-          //               (child.children || []).map((topic: any) => {
-          //                 if (topic.text) {
-          //                   return (
-          //                     <Link to={`/topicList/empty/${topic.text}`}>
-          //                       #{topic.text}#
-          //                     </Link>
-          //                   );
-          //                 }
-          //               })
-          //             ) : (
-          //               <span key={childIndex}
-          //                 dangerouslySetInnerHTML={{
-          //                   __html: parseText(child.text)
-          //                 }}></span>
-          //             )
-          //           }
-          //         </span>)
-          //     })}
-          //   </ParagraphItem>
-          // );
-        })}
-    </>
+          if (!expand) {
+            return index < 8 && serialize2(item)
+          } else {
+            return serialize2(item)
+          }
+
+        })
+      }
+      {
+        parsingResult &&
+          parsingResult.length > 8 ? (
+          <ExpandWrapper>
+            <span onClick={(e: any) => {
+              e.stopPropagation()
+              e.nativeEvent.stopImmediatePropagation() //阻止冒泡
+              setExpand(!expand)
+            }}>{expand ? t('homePutAway') : t('homeOpen')}</span>
+          </ExpandWrapper>
+        ) : null
+      }
+    </ContentParsingWrapper>
   );
 };
