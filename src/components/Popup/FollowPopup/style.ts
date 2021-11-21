@@ -16,6 +16,7 @@ export const PopupContentWrapper = styled(Box)`
   border-radius: 10px;
   box-sizing: border-box;
   padding: 15px;
+  z-index: 99;
 
   .content{
     display: flex;
