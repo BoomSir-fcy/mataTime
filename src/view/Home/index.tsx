@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { About, Avatar, Editor, ModalWrapper } from 'components';
+import { About, Avatar, Editor, ModalWrapper,Affix } from 'components';
 import { withRouter } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { ToastContainer, toast } from 'react-toastify';
@@ -54,14 +54,13 @@ const Home: React.FC = (props: any) => {
       image_urls: image_urls,
       remind_user
     }).then(res => {
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
         setRefresh(!refresh);
         resetInput();
-      }
-      if (res.code === 0) {
-        toast.error(res.msg, {
-          position: toast.POSITION.TOP_RIGHT
-        });
+      }else{
+        // toast.error(res.msg, {
+        //   position: toast.POSITION.TOP_RIGHT
+        // })
       }
     });
   };
@@ -81,7 +80,12 @@ const Home: React.FC = (props: any) => {
       <Flex justifyContent="space-between">
         <LeftCard>
           {/* <About /> */}
-          <Menu />
+          <Affix offsetTop={100} positionObj={{
+              top:'10px',
+              left:'300px'
+            }}>
+            <Menu />
+          </Affix>
         </LeftCard>
         <CenterCard>
           <Header
@@ -104,12 +108,19 @@ const Home: React.FC = (props: any) => {
           <ArticleList key={refresh} filterValObj={filterVal} {...props}></ArticleList>
         </CenterCard>
         <RightCard>
-          <Search />
-          {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
-          <Swap />
-          <RecommendPeople />
-          <HotTopic {...props} />
-          <FooterCopyright />
+        <Affix offsetTop={100} positionObj={{
+              top:'10px',
+              right:'196px'
+            }}>
+              <>
+              <Search />
+              {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
+              <Swap />
+              <RecommendPeople />
+              <HotTopic {...props} />
+              <FooterCopyright />
+          </>
+          </Affix>
         </RightCard>
       </Flex>
       {/* <ModalWrapper>

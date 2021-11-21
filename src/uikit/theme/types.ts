@@ -132,6 +132,9 @@ export type Colors = {
   meat: string;
   editorText: string;
   editorBoxBg: string;
+  searchTopicHoverBg: string;
+  commentHoverBg: string;
+  commentBorder: string;
 };
 
 export type Filters = {

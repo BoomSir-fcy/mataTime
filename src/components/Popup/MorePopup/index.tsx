@@ -47,7 +47,6 @@ export const MorePopup = React.memo((props: Iprops) => {
     UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false);
   };
 
-  console.log(UID, data.post.user_id);
   // 收藏
   const onFavAgreeRequest = async (post_id: number) => {
     const res = await Api.ContentApi.onFavAgree(post_id);
@@ -148,31 +147,37 @@ export const MorePopup = React.memo((props: Iprops) => {
     }
     setVisible(false);
   };
-
+  useEffect(() => {
+    const fn = (e)=>{
+      setVisible(false)
+    }
+    document.addEventListener('click',fn)
+    return ()=>document.removeEventListener('click',fn)
+  })
   return (
     <>
-      <PopupWrapper
-        onMouseOver={(e: any) => {
+        {/* onMouseOver={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(true);
         }}
         onMouseLeave={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(false);
-        }}
+        }} */}
+      <PopupWrapper
         onClick={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-          setVisible(false);
+          setVisible(!visible);
         }}
       >
         {children}
         {visible ? (
           <PopupContentWrapper
-            onMouseLeave={(e: any) => {
+          >
+            {/* onMouseLeave={(e: any) => {
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
               setVisible(false);
-            }}
-          >
+            }} */}
             {isOwn ? (
               <>
                 {/* <p onClick={() => {

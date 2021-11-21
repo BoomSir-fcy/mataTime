@@ -4,9 +4,9 @@ export const SearchPopBox = styled(Flex)`
 margin-top:35px;
 justify-content:space-between;
 position:fixed;
-z-index:999;
+z-index:1002;
 top:0;
-right:0;
+right:245px;
 color: ${({ theme }) => theme.colors.searchTopicTxt};
 .search-box{
   margin-right:24px;
@@ -59,6 +59,8 @@ color: ${({ theme }) => theme.colors.searchTopicTxt};
       &:hover{
         transition: all 0.3s;
         background-color:#191f2d;
+    background: ${({ theme }) => theme.colors.searchTopicHoverBg};
+        
       }
     }
   }

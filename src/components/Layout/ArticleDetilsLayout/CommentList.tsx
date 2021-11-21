@@ -4,8 +4,9 @@ import { Flex, Button, Box } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { relativeTime } from 'utils'
 import { SortIcon } from './SortIcon'
+import { Link } from 'react-router-dom'
 import MentionOperator from 'view/News/components/MentionOperator';
-import { FollowPopup, MorePopup, List, ContentParsing } from 'components'
+import { FollowPopup, CommentPop, List, ContentParsing } from 'components'
 import { Api } from 'apis'
 import {
   CommentListBox,
@@ -107,8 +108,12 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     </div>)}
                   </Flex>
                   <Flex>
+                  <CommentPop data={item} 
+              callback={initList}
+              >
+                    <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
+                  </CommentPop>
                     {/* <MorePopup data={new Object()}> */}
-                    {/* <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon> */}
                     {/* </MorePopup> */}
                   </Flex>
                 </CommentHeader>

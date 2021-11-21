@@ -43,7 +43,7 @@ font-weight: bold;
 `
 export const CommentItem = styled.div`
 :hover{
-  background-color: #1F2534;
+  background-color: ${({ theme }) => theme.colors.commentHoverBg};;
   transition:all 0.3s;
 }
 padding:18px 18px 0 28px;
@@ -93,7 +93,7 @@ padding-left:100px;
 align-items:center;
 height:60px;
 color:#B5B5B5;
-border-bottom: solid 1px #4D535F;
+border-bottom: solid 1px ${({ theme }) => theme.colors.commentBorder};;
 & div{
   padding:  10px;
   margin-right:30px;

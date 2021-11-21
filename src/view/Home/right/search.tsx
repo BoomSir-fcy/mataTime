@@ -58,6 +58,7 @@ export const Search: React.FC = () => {
 
   }
   return (
+    true?null:
     <SearchBox>
       {/* <img src={searchImg} alt="" /> */}
       <Icon name={'icon-sousuo'} style={{

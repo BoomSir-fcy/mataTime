@@ -8,6 +8,7 @@ export const  ImgItem = styled.img`
 width: 164px;
 height: 164px;
 border-radius: 5px;
+border:slid 1px #6E6E6E;
 margin-right:10px;
 `
 export const  MoreImg = styled(Flex)`

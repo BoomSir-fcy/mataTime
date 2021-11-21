@@ -84,7 +84,10 @@ export const lightColors: Colors = {
   editorText: '#000',
   editorBoxBg: '#fff',
   searchTopicBg:'#fff',
-  searchTopicTxt:'#000'
+  searchTopicTxt:'#000',
+  searchTopicHoverBg:'#eaf2ff',
+  commentBorder:'#ccc',
+  commentHoverBg:'#eaf2ff',
 };
 
 export const darkColors: Colors = {
@@ -143,5 +146,8 @@ export const darkColors: Colors = {
   editorText: '#FFFFFF',
   editorBoxBg: '#191f2d',
   searchTopicBg:'#2F3749',
-  searchTopicTxt:'#fff'
+  searchTopicHoverBg:'#191f2d',
+  searchTopicTxt:'#fff',
+  commentHoverBg:'#1F2534',
+  commentBorder:'#ccc'
 };

@@ -150,7 +150,14 @@ export const Editor = (props: Iprops) => {
     setImgList([])
     setRefresh(refresh === 1 ? 2 : 1);
   };
+  const [timeId,setTimeId] = useState(null)
   const sendArticle = () => {
+    if(timeId) return toast.warning('间隔时间需超过3秒!')
+    setTimeId(
+      setTimeout(() =>{
+        setTimeId(null)
+      },3000)
+    )
     // console.log(value, imgList.join(','));
     let arr = value;
     console.log(arr);
@@ -189,6 +196,7 @@ export const Editor = (props: Iprops) => {
         <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
         <Flex justifyContent="space-between" alignItems="center">
           <Toolbar
+          type={type}
             callbackEmoji={data => editor.insertText(data)}
             callbackSelectImg={callbackSelectImg}
             callbackInserAt={() => setSearchUser(!searchUser)}

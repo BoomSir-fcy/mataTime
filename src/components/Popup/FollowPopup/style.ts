@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Flex, Button, Box } from 'uikit'
 export const PopupWrapper = styled.span`
   position: relative;
+  z-index: 1000;
 `
 
 export const PopupContentWrapper = styled(Box)`
@@ -10,7 +11,7 @@ export const PopupContentWrapper = styled(Box)`
   position: absolute;
   left: 10px;
   overflow: hidden;
-  top: 25px;
+  top: 22px;
   background: #4D535F;
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
@@ -44,6 +45,13 @@ export const PopupContentWrapper = styled(Box)`
         font-family: Alibaba PuHuiTi;
         font-weight: bold;
         color: #FFFFFF;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
       }
       .des{
         font-size: 14px;

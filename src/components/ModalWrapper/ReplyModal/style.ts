@@ -30,7 +30,7 @@ export const ModalTitleWrapper = styled(Box)`
 `
 export const ReportModalWrapper = styled(Box)`
   width: 668px;
-  background: #191F2D;
+background: ${({ theme }) => theme.colors.editorBoxBg};
   border-radius: 10px;
   position: fixed;
   left: 50%;

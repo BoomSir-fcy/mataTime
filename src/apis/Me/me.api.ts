@@ -80,6 +80,12 @@ export class MeApi extends Http {
 
   // 删除评论
   async removeContentDetail(id: number) {
+    const res = await this.post('/v1/comment/del', {id:id});
+    return res;
+  }
+
+  // 举报评论
+  async reportComment(id: number) {
     const res = await this.post('/v1/comment/del', id);
     return res;
   }

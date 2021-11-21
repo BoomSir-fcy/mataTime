@@ -28,11 +28,15 @@ export const Toolbar: React.FC<{
   callbackSelectImg?: (data: string) => void
   callbackInserTopic?: (data: string) => void
   callbackInserAt?: (data: string) => void
-}> = React.memo(({ callbackEmoji ,callbackSelectImg,callbackInserTopic,callbackInserAt}) => {
+  type?:string
+}> = React.memo(({ callbackEmoji ,callbackSelectImg,callbackInserTopic,callbackInserAt,type}) => {
 
   return (
     <EditorToolbar>
       <EmojiButton callbackEmoji={callbackEmoji}></EmojiButton>
+      {
+        type==='post'?
+        <>
       <ToolbarButton variant="text" onClick={callbackSelectImg}>
         <Svg viewBox="0 0 45 45" width="25px">
           <image xlinkHref={require('./images/icon_img.png').default}/>
@@ -53,6 +57,9 @@ export const Toolbar: React.FC<{
           <image xlinkHref={require('./images/icon_topic.png').default}/>
         </Svg>
       </ToolbarButton>
+      </>
+      :null
+      }
     </EditorToolbar>
   )
 })
