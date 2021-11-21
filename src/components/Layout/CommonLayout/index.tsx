@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Redirect } from "react-router-dom";
 import { useTranslation } from 'contexts/Localization'
 import { Header, CommonLeftMenu, Affix } from 'components';
@@ -25,23 +25,28 @@ type IProps = {
 export const CommonLayout: React.FC<IProps> = (props: any) => {
   const { t } = useTranslation()
   const { match, location } = props
+  const [screenWid, setScreenWid] = useState<number>(0);
+  useEffect(() => {
+    const wid = document.body.clientWidth
+    setScreenWid(wid)
+  }, [])
   return (
     <CommonLayoutWrapper>
       {/* <Header></Header> */}
       <LayoutContentWrapper>
-
-        <LayoutLeftWrapper>
-          <Affix offsetTop={100} positionObj={{
-            top: '10px',
-            left: '300px'
-          }}>
+        <Affix offsetTop={100} positionObj={{
+          top: '10px',
+          left: '50%',
+          marginLeft: '-550px'
+        }}>
+          <LayoutLeftWrapper>
             <CommonLeftMenu
               menu={menu[match.url]}
               route={location}
               {...props}
             />
-          </Affix>
-        </LayoutLeftWrapper>
+          </LayoutLeftWrapper>
+        </Affix>
         <LayoutMiddleWrapper>
           <CenterHeader title={t('newsNotice')}></CenterHeader>
           <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
@@ -54,12 +59,12 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           <Route path={'/news/praise'} component={NewsPraise}></Route>
           <Route path={'/news/notice'} component={NewsNotice}></Route>
         </LayoutMiddleWrapper>
-
-        <LayoutRightWrapper>
-          <Affix offsetTop={100} positionObj={{
-            top: '10px',
-            right: '196px'
-          }}>
+        <Affix offsetTop={100} positionObj={{
+          top: '10px',
+          right: '50%',
+          marginRight: '-660px'
+        }}>
+          <LayoutRightWrapper>
             <>
               <Search />
               <Swap />
@@ -67,8 +72,8 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
               <HotTopic />
               <FooterCopyright />
             </>
-          </Affix>
-        </LayoutRightWrapper>
+          </LayoutRightWrapper>
+        </Affix>
 
       </LayoutContentWrapper>
     </CommonLayoutWrapper>

@@ -10,6 +10,7 @@ type IProps = {
 const AffixBox = styled.div`
 height:100vh;
 padding-bottom:30px;
+overflow-y: auto;
 `
 export const Affix = (props: IProps) => {
   const { children, offsetTop, positionObj, onChange } = props
@@ -23,15 +24,15 @@ export const Affix = (props: IProps) => {
     return () => document.removeEventListener('scroll', fn)
   })
   return (
-    // <AffixBox style={{
-    //   position: windowOffsetTop>offsetTop ?'fixed':'static',
-    //   ...positionObj
-    // }}>
-    //  {children}
-    // </AffixBox>
-    <AffixBox>
+    <AffixBox style={{
+      position: windowOffsetTop > offsetTop ? 'fixed' : 'static',
+      ...positionObj
+    }}>
       {children}
     </AffixBox>
+    // <AffixBox>
+    //   {children}
+    // </AffixBox>
   )
 }
 

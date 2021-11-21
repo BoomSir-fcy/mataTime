@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { About, Avatar, Editor, ModalWrapper,Affix } from 'components';
+import { About, Avatar, Editor, ModalWrapper, Affix } from 'components';
 import { withRouter } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { ToastContainer, toast } from 'react-toastify';
@@ -57,16 +57,16 @@ const Home: React.FC = (props: any) => {
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
         resetInput();
-      }else{
+      } else {
         // toast.error(res.msg, {
         //   position: toast.POSITION.TOP_RIGHT
         // })
       }
     });
   };
-  const tabsChange = (item)=>{
+  const tabsChange = (item) => {
     console.log(item);
-    
+
     const temp = {
       ...filterVal
     }
@@ -78,15 +78,16 @@ const Home: React.FC = (props: any) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
-        <LeftCard>
-          {/* <About /> */}
-          <Affix offsetTop={100} positionObj={{
-              top:'10px',
-              left:'300px'
-            }}>
+        <Affix offsetTop={100} positionObj={{
+          top: '10px',
+          left: '50%',
+          marginLeft: '-550px'
+        }}>
+          <LeftCard>
+            {/* <About /> */}
             <Menu />
-          </Affix>
-        </LeftCard>
+          </LeftCard>
+        </Affix>
         <CenterCard>
           <Header
             {...props}
@@ -107,21 +108,22 @@ const Home: React.FC = (props: any) => {
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} filterValObj={filterVal} {...props}></ArticleList>
         </CenterCard>
-        <RightCard>
         <Affix offsetTop={100} positionObj={{
-              top:'10px',
-              right:'196px'
-            }}>
-              <>
+          top: '10px',
+          right: '50%',
+          marginRight: '-660px'
+        }}>
+          <RightCard>
+            <>
               <Search />
               {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
               <Swap />
               <RecommendPeople />
               <HotTopic {...props} />
               <FooterCopyright />
-          </>
-          </Affix>
-        </RightCard>
+            </>
+          </RightCard>
+        </Affix>
       </Flex>
       {/* <ModalWrapper>
           <button>Open Modal</button>
