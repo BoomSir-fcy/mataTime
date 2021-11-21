@@ -42,12 +42,6 @@ export const ContentParsing = (props: IProps) => {
     try {
       let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
       setParsingResult(arr)
-
-      arr.forEach(item => {
-        let str = serialize(item)
-        console.log('str:', str)
-
-      })
     } catch (err: any) {
     }
   }, [props.content]);
@@ -63,28 +57,6 @@ export const ContentParsing = (props: IProps) => {
       }
     }, 0);
   }, [])
-
-  // 序列化
-  const serialize = node => {
-    if (Text.isText(node)) {
-      return escapeHtml(parseText(node.text))
-    }
-    const children = node.children.map(n => serialize(n)).join('')
-    switch (node.type) {
-      case 'quote':
-        return `<blockquote><p>${children}</p></blockquote>`
-      case 'paragraph':
-        return `<p>${children}</p>`
-      case 'link':
-        return `<a href=${escapeHtml(node.url)}>${children}</a>`
-      case 'mention':
-        return `<a>${node.character}</a>`
-      case 'topic':
-        return `<a href=${process.env.REACT_APP_WEB_URL}/topicList/empty/${node.children.map(n => serialize(n)).join('')}>#${node.children.map(n => serialize(n)).join('')}#</a>`
-      default:
-        return children
-    }
-  }
 
   const parseText2 = (text = '') => {
     var re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
