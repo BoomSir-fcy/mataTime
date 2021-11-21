@@ -88,7 +88,7 @@ export const Menu: React.FC = () => {
       const res = await Api.NewsApi.getUnreadMsgNum();
       if (Api.isSuccess(res)) {
         let tempMenuData:any = paresMenuData.slice()
-        
+      tempMenuData[2].count = 0
         for(let key in res.data||{}){
           tempMenuData[2].count+=res.data[key]
         }

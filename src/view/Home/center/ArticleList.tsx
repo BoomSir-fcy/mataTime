@@ -34,6 +34,7 @@ export const ArticleList = (props) => {
   const getList = (current = 0) => {
     if ((loading || page > totalPage) && !current) return false
     setLoading(true)
+    console.log(props);
     if (props.match.path === '/topicList/:id/:name') {
       Api.HomeApi.findByHotTopicIdList({
         page: current || page,
@@ -103,6 +104,7 @@ export const ArticleList = (props) => {
     setListData([...arr])
   }
   useEffect(() => {
+    console.log(props);
     setLoading(false)
     setPage(1)
     setTotalPage(1)

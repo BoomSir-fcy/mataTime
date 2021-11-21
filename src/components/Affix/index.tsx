@@ -8,6 +8,8 @@ positionObj:any,
 onChange:(data)=>void
 }
 const AffixBox = styled.div`
+height:100vh;
+padding-bottom:30px;
 `
 export const Affix =(props:IProps)=>{
 const {children,offsetTop,positionObj,onChange}=props
@@ -23,6 +25,7 @@ const [windowOffsetTop,setWindowOffsetTop] = useState(0)
 return (
   <AffixBox style={{
     position: windowOffsetTop>offsetTop ?'fixed':'static',
+    overflowY:windowOffsetTop>offsetTop ?'auto':'visible',
     ...positionObj
   }}>
    {children}
