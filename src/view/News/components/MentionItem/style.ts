@@ -45,6 +45,7 @@ export const MentionItemUserWrapper = styled.div`
           font-size: 14px;
           font-family: Alibaba PuHuiTi;
           font-weight: 400;
+          color: #B5B5B5;
           span{
             margin-right: 20px;
           }
@@ -108,6 +109,7 @@ export const MentionItemUserWrapper = styled.div`
             font-size: 14px;
             font-family: Alibaba PuHuiTi;
             font-weight: 400;
+            color: #B5B5B5;
             span{
               margin-right: 20px;
             }
