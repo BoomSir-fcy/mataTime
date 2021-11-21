@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from "react-router-dom";
 import { useTranslation } from 'contexts/Localization'
-import { Header, CommonLeftMenu } from 'components';
+import { Header, CommonLeftMenu, Affix } from 'components';
 import { HotTopic, RecommendPeople, Search, Swap, FooterCopyright } from 'view/Home/right';
 import { Header as CenterHeader } from 'view/Home/center'
 import menu from './menuData';
@@ -29,12 +29,18 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
     <CommonLayoutWrapper>
       {/* <Header></Header> */}
       <LayoutContentWrapper>
+
         <LayoutLeftWrapper>
-          <CommonLeftMenu
-            menu={menu[match.url]}
-            route={location}
-            {...props}
-          />
+          <Affix offsetTop={100} positionObj={{
+            top: '10px',
+            left: '300px'
+          }}>
+            <CommonLeftMenu
+              menu={menu[match.url]}
+              route={location}
+              {...props}
+            />
+          </Affix>
         </LayoutLeftWrapper>
         <LayoutMiddleWrapper>
           <CenterHeader title={t('newsNotice')}></CenterHeader>
@@ -48,13 +54,22 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           <Route path={'/news/praise'} component={NewsPraise}></Route>
           <Route path={'/news/notice'} component={NewsNotice}></Route>
         </LayoutMiddleWrapper>
+
         <LayoutRightWrapper>
-          <Search />
-          <Swap />
-          <RecommendPeople />
-          <HotTopic />
-          <FooterCopyright />
+          <Affix offsetTop={100} positionObj={{
+            top: '10px',
+            right: '196px'
+          }}>
+            <>
+              <Search />
+              <Swap />
+              <RecommendPeople />
+              <HotTopic />
+              <FooterCopyright />
+            </>
+          </Affix>
         </LayoutRightWrapper>
+
       </LayoutContentWrapper>
     </CommonLayoutWrapper>
   )

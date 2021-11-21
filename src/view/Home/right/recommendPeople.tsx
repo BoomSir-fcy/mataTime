@@ -7,7 +7,7 @@ import { Avatar, Icon } from 'components';
 import { Link } from 'react-router-dom'
 import { Api } from 'apis';
 const RecommendPeopleBox = styled(Card)`
-  // margin-top: 15px;
+  margin-top: 15px;
   padding: 20px 18px;
   width: 298px;
   border-radius: 10px;
