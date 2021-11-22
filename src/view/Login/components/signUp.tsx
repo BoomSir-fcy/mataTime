@@ -110,7 +110,12 @@ export const SignUp: React.FC<{
     <Box>
       {singUpStep === 1 && (
         <React.Fragment>
-          <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+          <Text
+            fontSize="34px"
+            marginBottom="29px"
+            bold
+            style={{ textTransform: 'uppercase' }}
+          >
             {t('loginWelcome')}
           </Text>
           <SubTitle>{t('loginSubTitle')}</SubTitle>
@@ -121,7 +126,12 @@ export const SignUp: React.FC<{
               <SignUpFail />
             ) : (
               // 可以注册
-              <Button disabled={!isStakeNft} scale="ld" style={{ textTransform: 'capitalize' }} onClick={() => setNickName()}>
+              <Button
+                disabled={!isStakeNft}
+                scale="ld"
+                style={{ textTransform: 'capitalize' }}
+                onClick={() => setNickName()}
+              >
                 {t('loginSignupSuccessNextText')}
               </Button>
             )}
@@ -132,15 +142,31 @@ export const SignUp: React.FC<{
       {singUpStep === 2 && <SignUpSetName />}
       {singUpStep === 3 && (
         <Box>
-          <Text fontSize="34px" marginBottom="24px" bold style={{ textTransform: 'uppercase' }}>
+          <Text
+            fontSize="34px"
+            marginBottom="24px"
+            bold
+            style={{ textTransform: 'uppercase' }}
+          >
             {t('loginWelcome')}
           </Text>
           <WalletAddress address={account} />
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-            <img width="230px" src={require('../images/login_right_images.png').default} />
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <img
+              width="230px"
+              src={require('../images/login_right_images.png').default}
+            />
             <SignUpText>{t('loginSignupSuccess')}</SignUpText>
             <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
-            <Button scale="ld" onClick={() => signHandle()} style={{ textTransform: 'capitalize' }}>
+            <Button
+              scale="ld"
+              onClick={() => signHandle()}
+              style={{ textTransform: 'capitalize' }}
+            >
               {t('loginSignUpNext')}
             </Button>
           </Flex>

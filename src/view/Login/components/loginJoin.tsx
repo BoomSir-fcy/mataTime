@@ -50,7 +50,7 @@ export const LoginJoin: React.FC = React.memo(() => {
     if (res) {
       //2.2 获取用户信息
       const user: any = await getUserName();
-      //2.3  
+      //2.3
       if (Api.isSuccess(user)) {
         // 存储userinfo 跳转首页
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
@@ -99,12 +99,20 @@ export const LoginJoin: React.FC = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+      <Text
+        fontSize="34px"
+        marginBottom="29px"
+        bold
+        style={{ textTransform: 'uppercase' }}
+      >
         {t('loginWelcome')}
       </Text>
       <SubTitle>{t('loginSubTitle')}</SubTitle>
       <ConnectWallet>
-        <img width="40%" src={require('../images/login_right_images.png').default} />
+        <img
+          width="40%"
+          src={require('../images/login_right_images.png').default}
+        />
         <ConnectWalletButton />
       </ConnectWallet>
       <TextTips>{t('loginSubTips')}</TextTips>

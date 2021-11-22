@@ -44,13 +44,16 @@ export function useSignIn() {
 
   const getNftUrl = async (address: string) => {
     try {
-      const nftStake = await FetchNftStakeType(address)
+      const nftStake = await FetchNftStakeType(address);
       try {
-        const result = await getNftInfo(nftStake[0].NFT_address, nftStake[0].token_id)
+        const result = await getNftInfo(
+          nftStake[0].NFT_address,
+          nftStake[0].token_id
+        );
         const data = {
           nftID: result.properties.token_id,
           nftUrl: result.image
-        }
+        };
         dispatch(storeAction.setUserNft(data));
         return 1;
       } catch (error) {
@@ -107,7 +110,10 @@ export function useLogin() {
         const params = { ...sign, encode_data: res };
         const signUpParams = { ...sign, encode_data: res, nick_name: nickName };
         // 1注册 2登录
-        const response = operationType === 1 ? await Api.SignInApi.signUp(signUpParams) : await Api.SignInApi.signIn(params);
+        const response =
+          operationType === 1
+            ? await Api.SignInApi.signUp(signUpParams)
+            : await Api.SignInApi.signIn(params);
         if (Api.isSuccess(response)) {
           const { token } = response.data;
           window.localStorage.setItem(storage.Token, token);

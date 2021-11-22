@@ -32,13 +32,14 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 
-const Container = styled(Box) <{
+const Container = styled(Box)<{
   dark: boolean;
 }>`
   background-image: ${({ dark }) =>
-    `url(${require(dark
-      ? 'assets/images/dark_background.jpg'
-      : 'assets/images/light_background.jpg').default
+    `url(${
+      require(dark
+        ? 'assets/images/dark_background.jpg'
+        : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed;
   min-height: 100vh;
@@ -51,19 +52,19 @@ function App() {
   const token = window.localStorage.getItem(storage.Token);
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
-  const [ConnectAddr, setConnectAddr] = useState('0')
+  const [ConnectAddr, setConnectAddr] = useState('0');
   const { signOut } = useAuth();
 
   // 查询是否切换账户
   const isChangeAddr = () => {
     if (ConnectAddr === '0') {
       // 赋值初始化地址
-      setConnectAddr(account)
+      setConnectAddr(account);
     } else if (ConnectAddr !== account) {
       // 切换了地址就清除数据 重新登陆
-      signOut()
+      signOut();
     }
-  }
+  };
 
   useEffect(() => {
     if (store.connectWallet) {
@@ -81,15 +82,14 @@ function App() {
   useEffect(() => {
     if (account) {
       // 1.1判断链接钱包后是否切换了钱包账户
-      isChangeAddr()
+      isChangeAddr();
     } else {
       if (ConnectAddr !== '0') {
-        signOut()
+        signOut();
       }
     }
-    return () => {
-    }
-  }, [account])
+    return () => {};
+  }, [account]);
   return (
     <React.Fragment>
       <GlobalStyle />
@@ -128,7 +128,6 @@ function App() {
         </React.Suspense>
       </Container>
       <Toast />
-      {/* <WalletModal onClick={() => dispatch(storeAction.connectWallet({ connectWallet: false }))} show={store.connectWallet} /> */}
     </React.Fragment>
   );
 }

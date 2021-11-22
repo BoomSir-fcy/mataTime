@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Card } from 'uikit';
-import { List } from 'components';
+import { List, TopicEmpty } from 'components';
 import { useTranslation } from 'contexts/Localization';
 
 import { CrumbsHead } from './components';
@@ -67,40 +67,47 @@ const Collect = props => {
         }}
       >
         {listData.map((item, index) => {
+          console.log(item.post_status);
           return (
             <MeItemWrapper key={index}>
-              <MentionItem
-                {...props}
-                itemData={{
-                  ...item,
-                  is_like: item.like_status,
-                  user_id: item.uid,
-                  user_avator_url: item.nft_image,
-                  post: {
-                    ...item,
-                    is_fav: 1,
-                    user_id: item.uid
-                  }
-                }}
-                callback={() => init(1)}
-              ></MentionItem>
-              <MentionOperator
-                replyType="twitter"
-                type="Article"
-                postId={item.post_id}
-                itemData={{
-                  ...item,
-                  is_like: item.like_status,
-                  user_id: item.uid,
-                  user_avator_url: item.nft_image,
-                  post: {
-                    ...item,
-                    user_id: item.uid,
-                    is_fav: 1
-                  }
-                }}
-                callback={() => init(1)}
-              />
+              {item.post_status === 2 ? (
+                <TopicEmpty item={item} callback={() => init(1)} />
+              ) : (
+                <React.Fragment>
+                  <MentionItem
+                    {...props}
+                    itemData={{
+                      ...item,
+                      is_like: item.like_status,
+                      user_id: item.uid,
+                      user_avator_url: item.nft_image,
+                      post: {
+                        ...item,
+                        is_fav: 1,
+                        user_id: item.uid
+                      }
+                    }}
+                    callback={() => init(1)}
+                  />
+                  <MentionOperator
+                    replyType="twitter"
+                    type="Article"
+                    postId={item.post_id}
+                    itemData={{
+                      ...item,
+                      is_like: item.like_status,
+                      user_id: item.uid,
+                      user_avator_url: item.nft_image,
+                      post: {
+                        ...item,
+                        user_id: item.uid,
+                        is_fav: 1
+                      }
+                    }}
+                    callback={() => init(1)}
+                  />
+                </React.Fragment>
+              )}
             </MeItemWrapper>
           );
         })}

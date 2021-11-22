@@ -161,6 +161,12 @@
   "commonMsgUnFollowSuccess": "Unfollow successfully",
   "commonMsgFollowError": "Cancel success",
   "commonMsgUnFollowError": "Unfollow failed",
+  "commonUnlike": "Unlike",
+  "commonMsgUnlikeSuccess": "Like success",
+  "commonMsgUnUnlikeSuccess": "Cancel the like successfully",
+  "commonMsgUnlikeError": "Cancel success",
+  "commonMsgUnUnlikeError": "Cancel like failed",
+  "commonunCollection": "Sorry, this content was deleted by the author and can no longer be viewed.",
   "******end*****@kksam********": "@kksam翻译结束",
   "******start*****@bigCongee********": "@bigCongee翻译开始",
   "******end*****@bigCongee********": "@bigCongee翻译结束"
