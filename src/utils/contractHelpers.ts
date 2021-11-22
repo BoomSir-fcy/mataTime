@@ -7,6 +7,7 @@ import nftSocialAbi from 'config/abi/nftSocial.json'
 // Addresses
 import {
   getAddress,
+  getLiquidityPool,
   getMulticallAddress,
   getNftSocialAddress
 } from 'utils/addressHelpers'
@@ -38,4 +39,7 @@ export const getDsgNftContract = (address: string, signer?: ethers.Signer | ethe
 }
 export const getErc20EarnNftPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(nftSocialAbi, getNftSocialAddress(), signer)
+}
+export const getLiquidityPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(nftSocialAbi, getLiquidityPool(), signer)
 }

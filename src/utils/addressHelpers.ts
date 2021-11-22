@@ -18,3 +18,11 @@ export const getMulticallAddress = () => {
 export const getNftSocialAddress = () => {
   return getAddress(addresses.nftSocial)
 }
+
+export const getLiquidityPool = () => {
+  return getAddress(addresses.liquidityPool)
+}
+
+export const getSinglePool = () => {
+  return getAddress(addresses.singlePool)
+}

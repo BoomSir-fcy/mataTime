@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ThemeProvider } from 'styled-components';
 import { LanguageProvider } from 'contexts/Localization';
+import { RefreshContextProvider } from 'contexts/RefreshContext'
 import { ConnectWalletProvider } from 'contexts/ConnectWalletContext';
 import { store } from 'store';
 import { getLibrary } from 'utils';
@@ -20,9 +21,11 @@ const Providers: React.FC = ({ children }) => {
       <Provider store={store}>
         <ThemeProviderWrapper>
           <LanguageProvider>
-            <ConnectWalletProvider>
-              {children}
-            </ConnectWalletProvider>
+            <RefreshContextProvider>
+              <ConnectWalletProvider>
+                {children}
+              </ConnectWalletProvider>
+            </RefreshContextProvider>
           </LanguageProvider>
         </ThemeProviderWrapper>
       </Provider>
