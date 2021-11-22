@@ -23,6 +23,7 @@ const Column = styled(Flex)`
   min-width: 160px;
   margin-bottom: 20px;
   position: relative;
+  cursor: pointer;
   .active {
     box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.backgroundPrimary};
   }
@@ -165,6 +166,7 @@ const StakeAllBtn = ({ token, account }) => {
       throw e;
     }
   }, [onApprove]);
+
   return (
     <NowrapBtn
       disabled={pendingTx}
@@ -176,7 +178,7 @@ const StakeAllBtn = ({ token, account }) => {
           toast.success('授权成功');
         } catch (error) {
           console.error(error);
-          toast.error('操作失败');
+          toast.error('授权操作失败');
         } finally {
           setPendingTx(false);
         }

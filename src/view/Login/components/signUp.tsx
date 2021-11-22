@@ -36,12 +36,6 @@ const WalletBody = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;
-const SubTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.textOrigin};
-`;
-const TextTips = styled(Text)`
-  color: ${({ theme }) => theme.colors.textTips};
-`;
 const FailButton = styled(Button)`
   width: 205px;
   margin-bottom: 23px;
@@ -78,7 +72,7 @@ const SignUpFail = () => {
           {t('loginGetNft')}
         </FailButton>
       </Flex>
-      <SubTitle>{t('loginSignUpFail')}</SubTitle>
+      <Text color="textOrigin">{t('loginSignUpFail')}</Text>
     </Flex>
   );
 };
@@ -108,10 +102,12 @@ export const SignUp: React.FC<{
   const { account } = useWeb3React();
   const { getNftUrl } = useSignIn();
   const { t } = useTranslation();
+
   // 已经注册完成，跳转第4步
   const signHandle = React.useCallback(async () => {
     dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
   }, [dispatch]);
+
   // 去注册、设置昵称
   const setNickName = React.useCallback(async () => {
     const res: number = await getNftUrl(account);
@@ -121,8 +117,9 @@ export const SignUp: React.FC<{
   }, [account]);
 
   return (
-    <Box>
-      {singUpStep === 1 && (
+    <Box width="100%">
+      {/* 没有nft，不能注册，注册失败 */}
+      {singUpStep === 1 && signUpFail && (
         <React.Fragment>
           <Text
             fontSize="34px"
@@ -132,30 +129,27 @@ export const SignUp: React.FC<{
           >
             {t('loginWelcome')}
           </Text>
-          <SubTitle>{t('loginSubTitle')}</SubTitle>
+          <Text color="textOrigin">{t('loginSubTitle')}</Text>
           <SignUpWarpper>
             <WalletAddress address={account} />
-            {signUpFail ? (
-              // 注册失败
-              <SignUpFail />
-            ) : (
-              // 可以注册
-              <Button
-                disabled={!isStakeNft}
-                scale="ld"
-                style={{ textTransform: 'capitalize' }}
-                onClick={() => setNickName()}
-              >
-                {t('loginSignupSuccessNextText')}
-              </Button>
-            )}
+            <SignUpFail />
           </SignUpWarpper>
-          <TextTips>{t('loginSubTips')}</TextTips>
+          <Text color="textTips">{t('loginSubTips')}</Text>
         </React.Fragment>
       )}
+      {/* <Button
+        disabled={!isStakeNft}
+        scale="ld"
+        style={{ textTransform: 'capitalize' }}
+        onClick={() => setNickName()}
+      >
+        {t('loginSignupSuccessNextText')}
+      </Button> */}
+      {/* 正常情况下走注册流程 */}
+      {singUpStep === 1 && !signUpFail && <SignUpSetName status={isStakeNft} />}
       {singUpStep === 2 && <SignUpSetName />}
       {singUpStep === 3 && (
-        <Box>
+        <Box width="100%">
           <Text
             fontSize="34px"
             marginBottom="24px"

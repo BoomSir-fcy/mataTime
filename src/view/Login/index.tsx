@@ -55,6 +55,7 @@ const LogoWarpper = styled(Box)`
   ${mediaQueriesSize.marginbmd}
 `;
 const Container = styled(Box)`
+  width: 100%;
   height: calc(100vh - 125px);
   padding: 55px 45px 0;
   ${({ theme }) => theme.mediaQueries.md} {
@@ -100,7 +101,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   // 查询是否有质押的NFT
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
-    if (nftStake[0].token_id) {
+    if (nftStake[0]?.token_id) {
       // 已经质押
       dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
     } else {
@@ -110,9 +111,9 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   useEffect(() => {
     checkNetwork();
-    window.ethereum.on('chainChanged', (chainId: string) => {
-      dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
-    });
+    // window.ethereum.on('chainChanged', (chainId: string) => {
+    //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
+    // });
     return () => {
       dispatch(storeAction.changeSignUp({ isSignup: false }));
       dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
@@ -133,6 +134,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   useEffect(() => {
     // 2没有质押的情况下
+    dispatch(storeAction.setSigninLoading(false));
     if (!NftList.length && !isStakeNft) {
       // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
       setshowStakeNft(false);

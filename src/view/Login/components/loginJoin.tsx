@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text } from 'uikit';
-import { storeAction } from 'store';
+import { storeAction, useStore } from 'store';
 import { ConnectWalletButton } from 'components';
 import { useLogin, useSignIn } from '../hooks';
 import { Api } from 'apis';
@@ -29,15 +29,16 @@ export const LoginJoin: React.FC = React.memo(() => {
   const { siginInVerify, getUserName, getNftUrl } = useSignIn();
   const { account } = useWeb3React();
   const { t } = useTranslation();
+  const loading = useStore(p => p.loginReducer.signinLoading);
   const redict = location?.state?.from?.pathname;
   const [state, setState] = useImmer({
-    isSignIn: false,
-    loading: false
+    isSignIn: false
   });
 
   const signIn = async () => {
     //2.1 登录 钱包签名
     const res = await loginCallback(2);
+    dispatch(storeAction.setSigninLoading(false));
     setState(p => {
       p.isSignIn = false;
     });
@@ -62,22 +63,19 @@ export const LoginJoin: React.FC = React.memo(() => {
   };
 
   const init = async () => {
-    setState(p => {
-      p.loading = !state.loading;
-    });
+    dispatch(storeAction.setSigninLoading(true));
     //1.1 验证是否注册
     const [verify] = await Promise.all([siginInVerify(account)]);
     if (Boolean(verify)) {
       //1.2 已经注册过了 去登录
       setState(p => {
         p.isSignIn = true;
-        p.loading = !state.loading;
       });
     }
-    if (!Boolean(verify)) {
-      //1.2 未注册——设置成需要注册
-      dispatch(storeAction.changeSignUp({ isSignup: true }));
-    }
+    // if (!Boolean(verify)) {
+    //   //1.2 未注册——设置成需要注册
+    //   dispatch(storeAction.changeSignUp({ isSignup: true }));
+    // }
   };
 
   React.useEffect(() => {
@@ -111,7 +109,7 @@ export const LoginJoin: React.FC = React.memo(() => {
           width="35%"
           src={require('../images/login_right_images.png').default}
         />
-        <ConnectWalletButton loading={state.loading ? 1 : 0} />
+        <ConnectWalletButton loading={loading ? 1 : 0} />
       </ConnectWallet>
       <Text color="textTips">{t('loginSubTips')}</Text>
     </Box>
