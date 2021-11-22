@@ -19,7 +19,8 @@ const LoginContainer = styled(Flex)`
   width: 100vw;
   height: 100vh;
   background: ${({ theme }) => theme.colors.gradients.signinBackground};
-  @media screen and (max-width: 768px) {
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: column-reverse;
     height: auto;
     min-height: 100vh;
   }
@@ -32,8 +33,8 @@ const LeftBox = styled(Box)<{
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center bottom;
-  @media screen and (max-width: 768px) {
-    display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 100%;
   }
 `;
 const Content = styled(Card)`
@@ -43,8 +44,9 @@ const Content = styled(Card)`
   width: 37.5vw;
   border-radius: 0;
   background-color: ${({ theme }) => theme.colors.backgroundCard};
-  @media screen and (max-width: 768px) {
+  ${({ theme }) => theme.mediaQueries.md} {
     width: 100%;
+    align-items: baseline;
   }
 `;
 const LogoWarpper = styled(Box)`
@@ -55,8 +57,10 @@ const LogoWarpper = styled(Box)`
 const Container = styled(Box)`
   height: calc(100vh - 125px);
   padding: 55px 45px 0;
-  @media screen and (max-width: 768px) {
-    overflow: scroll;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 100%;
+    height: 100%;
+    padding: 20px 15px 0;
   }
 `;
 const Nft = styled(Flex)`
@@ -64,6 +68,10 @@ const Nft = styled(Flex)`
   justify-content: center;
   flex-direction: column;
   padding: 0 100px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-top: 15px;
+    padding: 0 15px;
+  }
 `;
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {

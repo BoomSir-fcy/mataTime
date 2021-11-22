@@ -14,6 +14,9 @@ const FooterWarpper = styled(Flex)`
   padding-left: 45px;
   border-top: 1px solid ${({ theme }) => theme.colors.borderColor};
   background: ${({ theme }) => theme.colors.gradients.footer};
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: none;
+  }
 `;
 
 const LogoWrapper = styled(Box)`

@@ -23,6 +23,9 @@ const SignUpWarpper = styled(Flex)`
   padding-bottom: 100px;
   flex-direction: column;
   align-items: center;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-bottom: 50px;
+  }
 `;
 const WalletBody = styled(Flex)`
   justify-content: center;
@@ -42,6 +45,10 @@ const TextTips = styled(Text)`
 const FailButton = styled(Button)`
   width: 205px;
   margin-bottom: 23px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 45%;
+    margin-bottom: 15px;
+  }
 `;
 const SignUpText = styled(Text)`
   font-size: 34px;
