@@ -25,7 +25,7 @@ const LoginContainer = styled(Flex)`
   }
 `;
 const LeftBox = styled(Box)<{
-  isbackground: boolean;
+  isbackground?: boolean;
 }>`
   width: 62.5vw;
   background-image: url(${({ isbackground }) => !isbackground && sloganImg});
@@ -77,7 +77,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   const [ConnectAddr, setConnectAddr] = useState('0');
-  const nftBoolean = Boolean(showStakeNft && singUpStep === 1 && account);
+  const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
@@ -140,10 +140,9 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     };
   }, [NftList, isStakeNft]);
 
-  console.log(nftBoolean);
   return (
     <LoginContainer>
-      <LeftBox isbackground={nftBoolean}>
+      <LeftBox isbackground={Boolean(nftBoolean)}>
         {nftBoolean && (
           <Nft>
             <Text fontSize="30px">选择并质押头像</Text>

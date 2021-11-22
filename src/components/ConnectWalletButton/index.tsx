@@ -10,7 +10,7 @@ const WalletButton = styled(Button)`
 `;
 
 export const ConnectWalletButton: React.FC<{
-  loading?: boolean;
+  loading?: number;
 }> = props => {
   const { loading } = props;
   const { t } = useTranslation();
@@ -25,7 +25,11 @@ export const ConnectWalletButton: React.FC<{
       }}
     >
       <WalletButton onClick={onConnectWallet} {...props}>
-        {loading ? <Dots>{t('Connect Wallet')}</Dots> : t('Connect Wallet')}
+        {Boolean(loading) ? (
+          <Dots>{t('Connect Wallet')}</Dots>
+        ) : (
+          t('Connect Wallet')
+        )}
       </WalletButton>
     </Box>
   );

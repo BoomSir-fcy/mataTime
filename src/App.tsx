@@ -66,6 +66,35 @@ function App() {
     }
   };
 
+  // 消息通知
+  const newsNotice = () => {
+    if (state.msg_remind === false) {
+      // 用于检查浏览器是否支持这个API。
+      if (window.Notification) {
+        // 支持
+      } else {
+        // 不支持
+      }
+
+      // 检查当前浏览器是否支持Notification对象，并且当前用户准许使用该对象，然后调用Notification.requestPermission方法，向用户弹出一条通知
+      if (window.Notification && Notification.permission !== 'denied') {
+        Notification.requestPermission(function (status) {
+          var n = new Notification('通知标题', { body: '这里是通知内容！' });
+        });
+      }
+
+      // Notification.requestPermission方法用于让用户做出选择，到底是否接收通知。它的参数是一个回调函数，该函数可以接收用户授权状态作为参数。
+      Notification.requestPermission(function (status) {
+        if (status === 'granted') {
+          var n = new Notification('Hi!');
+          console.log('n', n);
+        } else {
+          alert('Hi!');
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     if (store.connectWallet) {
       const changeHandler = () => {
@@ -79,6 +108,7 @@ function App() {
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token]);
+
   useEffect(() => {
     if (account) {
       // 1.1判断链接钱包后是否切换了钱包账户
@@ -90,6 +120,7 @@ function App() {
     }
     return () => {};
   }, [account]);
+
   return (
     <React.Fragment>
       <GlobalStyle />

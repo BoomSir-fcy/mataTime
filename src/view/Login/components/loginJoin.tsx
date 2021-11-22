@@ -111,7 +111,7 @@ export const LoginJoin: React.FC = React.memo(() => {
           width="35%"
           src={require('../images/login_right_images.png').default}
         />
-        <ConnectWalletButton loading={state.loading} />
+        <ConnectWalletButton loading={state.loading ? 1 : 0} />
       </ConnectWallet>
       <Text color="textTips">{t('loginSubTips')}</Text>
     </Box>
