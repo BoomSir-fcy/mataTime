@@ -74,6 +74,7 @@ export const lightColors: Colors = {
   protrudeColor: '#FFFFFF',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
+    signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     inverseBubblegum: 'linear-gradient(139.73deg, #F3EFFF 0%, #E5FDFF 100%)',
     cardHeader: 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)',
@@ -84,11 +85,11 @@ export const lightColors: Colors = {
   },
   editorText: '#000',
   editorBoxBg: '#fff',
-  searchTopicBg:'#fff',
-  searchTopicTxt:'#000',
-  searchTopicHoverBg:'#eaf2ff',
-  commentBorder:'#ccc',
-  commentHoverBg:'#eaf2ff',
+  searchTopicBg: '#fff',
+  searchTopicTxt: '#000',
+  searchTopicHoverBg: '#eaf2ff',
+  commentBorder: '#ccc',
+  commentHoverBg: '#eaf2ff'
 };
 
 export const darkColors: Colors = {
@@ -137,6 +138,7 @@ export const darkColors: Colors = {
   protrudeColor: '#4168ED',
   gradients: {
     footer: '#191F2D',
+    signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
     bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
     inverseBubblegum: 'linear-gradient(139.73deg, #3D2A54 0%, #313D5C 100%)',
     cardHeader: 'linear-gradient(166.77deg, #3B4155 0%, #3A3045 100%)',
@@ -147,9 +149,9 @@ export const darkColors: Colors = {
   },
   editorText: '#FFFFFF',
   editorBoxBg: '#191f2d',
-  searchTopicBg:'#2F3749',
-  searchTopicHoverBg:'#191f2d',
-  searchTopicTxt:'#fff',
-  commentHoverBg:'#1F2534',
-  commentBorder:'#ccc'
+  searchTopicBg: '#2F3749',
+  searchTopicHoverBg: '#191f2d',
+  searchTopicTxt: '#fff',
+  commentHoverBg: '#1F2534',
+  commentBorder: '#ccc'
 };

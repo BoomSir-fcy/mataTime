@@ -1,11 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { toggleTheme, setSystemCustom, setLocation, toastContainer, connectWallet, setChainId } from './actions';
+import {
+  toggleTheme,
+  setSystemCustom,
+  setLocation,
+  toastContainer,
+  connectWallet,
+  setChainId
+} from './actions';
 import { languange } from './type';
 
 const initialState = {
   connectWallet: false,
   chainId: 0,
   show: false,
+  loading: false,
   localtion: [],
   toast: {
     type: '',

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import history from 'routerHistory';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { useStore, storeAction } from 'store';
-import { Api } from 'apis';
 
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
@@ -23,11 +23,14 @@ const SignUpWarpper = styled(Flex)`
   padding-bottom: 100px;
   flex-direction: column;
   align-items: center;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-bottom: 50px;
+  }
 `;
 const WalletBody = styled(Flex)`
   justify-content: center;
   align-items: center;
-  width: 510px;
+  width: 100%;
   height: 70px;
   background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: ${({ theme }) => theme.radii.card};
@@ -42,6 +45,10 @@ const TextTips = styled(Text)`
 const FailButton = styled(Button)`
   width: 205px;
   margin-bottom: 23px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 45%;
+    margin-bottom: 15px;
+  }
 `;
 const SignUpText = styled(Text)`
   font-size: 34px;
@@ -56,13 +63,20 @@ const SignUpSubText = styled(Text)`
 
 const SignUpFail = () => {
   const { t } = useTranslation();
+
+  const goRouter = () => {
+    history.push('/');
+  };
+
   return (
     <Flex width="100%" flexDirection="column">
       <Flex justifyContent="space-between">
         <FailButton scale="ld" variant="tertiary" disabled>
           {t('loginCreatAccount')}
         </FailButton>
-        <FailButton scale="ld"> {t('loginGetNft')}</FailButton>
+        <FailButton scale="ld" onClick={goRouter}>
+          {t('loginGetNft')}
+        </FailButton>
       </Flex>
       <SubTitle>{t('loginSignUpFail')}</SubTitle>
     </Flex>
@@ -79,7 +93,7 @@ export const WalletAddress: React.FC<{
     <WalletBody>
       <Icon width="40px" mr="30px" />
       <Text fontSize="18px" fontWeight="bold">
-        {address && shortenAddress(address)}
+        {address && shortenAddress(address, 4)}
       </Text>
     </WalletBody>
   );
@@ -110,7 +124,12 @@ export const SignUp: React.FC<{
     <Box>
       {singUpStep === 1 && (
         <React.Fragment>
-          <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+          <Text
+            fontSize="34px"
+            marginBottom="29px"
+            bold
+            style={{ textTransform: 'capitalize' }}
+          >
             {t('loginWelcome')}
           </Text>
           <SubTitle>{t('loginSubTitle')}</SubTitle>
@@ -121,7 +140,12 @@ export const SignUp: React.FC<{
               <SignUpFail />
             ) : (
               // 可以注册
-              <Button disabled={!isStakeNft} scale="ld" style={{ textTransform: 'capitalize' }} onClick={() => setNickName()}>
+              <Button
+                disabled={!isStakeNft}
+                scale="ld"
+                style={{ textTransform: 'capitalize' }}
+                onClick={() => setNickName()}
+              >
                 {t('loginSignupSuccessNextText')}
               </Button>
             )}
@@ -132,15 +156,31 @@ export const SignUp: React.FC<{
       {singUpStep === 2 && <SignUpSetName />}
       {singUpStep === 3 && (
         <Box>
-          <Text fontSize="34px" marginBottom="24px" bold style={{ textTransform: 'uppercase' }}>
+          <Text
+            fontSize="34px"
+            marginBottom="24px"
+            bold
+            style={{ textTransform: 'capitalize' }}
+          >
             {t('loginWelcome')}
           </Text>
           <WalletAddress address={account} />
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-            <img width="230px" src={require('../images/login_right_images.png').default} />
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <img
+              width="230px"
+              src={require('../images/login_right_images.png').default}
+            />
             <SignUpText>{t('loginSignupSuccess')}</SignUpText>
             <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
-            <Button scale="ld" onClick={() => signHandle()} style={{ textTransform: 'capitalize' }}>
+            <Button
+              scale="ld"
+              onClick={() => signHandle()}
+              style={{ textTransform: 'capitalize' }}
+            >
               {t('loginSignUpNext')}
             </Button>
           </Flex>

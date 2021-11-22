@@ -1,24 +1,36 @@
-import React from 'react'
-import { Box, Button } from 'uikit'
-import styled from "styled-components";
-import { useTranslation } from 'contexts/Localization'
+import React from 'react';
+import styled from 'styled-components';
+import { Box, Button } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
+import Dots from 'components/Loader/Dots';
 import useConnectWallet from 'hooks/useConnectWallet';
 
 const WalletButton = styled(Button)`
   width: 205px;
 `;
 
-export const ConnectWalletButton: React.FC = (props) => {
-  const { t } = useTranslation()
+export const ConnectWalletButton: React.FC<{
+  loading?: number;
+}> = props => {
+  const { loading } = props;
+  const { t } = useTranslation();
 
-  const { onConnectWallet } = useConnectWallet()
+  const { onConnectWallet } = useConnectWallet();
 
   return (
-    <Box>
+    <Box
+      style={{
+        position: 'absolute',
+        bottom: '-10px'
+      }}
+    >
       <WalletButton onClick={onConnectWallet} {...props}>
-        {t('Connect Wallet')}
+        {Boolean(loading) ? (
+          <Dots>{t('Connect Wallet')}</Dots>
+        ) : (
+          t('Connect Wallet')
+        )}
       </WalletButton>
     </Box>
   );
 };
-

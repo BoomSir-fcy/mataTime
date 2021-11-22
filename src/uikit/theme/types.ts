@@ -59,6 +59,7 @@ export type Shadows = {
 
 export type Gradients = {
   footer: string;
+  signinBackground: string;
   bubblegum: string;
   inverseBubblegum: string;
   cardHeader: string;

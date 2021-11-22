@@ -12,18 +12,11 @@ import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import useAuth from 'hooks/useAuth';
 
-const SubTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.textOrigin};
-`;
-const TextTips = styled(Text)`
-  color: ${({ theme }) => theme.colors.textTips};
-  text-align: justify;
-`;
 const ConnectWallet = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px 0 79px;
+  margin: 100px 0;
   position: relative;
 `;
 
@@ -38,7 +31,8 @@ export const LoginJoin: React.FC = React.memo(() => {
   const { t } = useTranslation();
   const redict = location?.state?.from?.pathname;
   const [state, setState] = useImmer({
-    isSignIn: false
+    isSignIn: false,
+    loading: false
   });
 
   const signIn = async () => {
@@ -50,7 +44,7 @@ export const LoginJoin: React.FC = React.memo(() => {
     if (res) {
       //2.2 获取用户信息
       const user: any = await getUserName();
-      //2.3  
+      //2.3
       if (Api.isSuccess(user)) {
         // 存储userinfo 跳转首页
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
@@ -68,12 +62,16 @@ export const LoginJoin: React.FC = React.memo(() => {
   };
 
   const init = async () => {
+    setState(p => {
+      p.loading = !state.loading;
+    });
     //1.1 验证是否注册
     const [verify] = await Promise.all([siginInVerify(account)]);
     if (Boolean(verify)) {
       //1.2 已经注册过了 去登录
       setState(p => {
         p.isSignIn = true;
+        p.loading = !state.loading;
       });
     }
     if (!Boolean(verify)) {
@@ -99,15 +97,23 @@ export const LoginJoin: React.FC = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="29px" bold style={{ textTransform: 'uppercase' }}>
+      <Text
+        fontSize="34px"
+        marginBottom="29px"
+        bold
+        style={{ textTransform: 'capitalize' }}
+      >
         {t('loginWelcome')}
       </Text>
-      <SubTitle>{t('loginSubTitle')}</SubTitle>
+      <Text color="textOrigin">{t('loginSubTitle')}</Text>
       <ConnectWallet>
-        <img width="40%" src={require('../images/login_right_images.png').default} />
-        <ConnectWalletButton />
+        <img
+          width="35%"
+          src={require('../images/login_right_images.png').default}
+        />
+        <ConnectWalletButton loading={state.loading ? 1 : 0} />
       </ConnectWallet>
-      <TextTips>{t('loginSubTips')}</TextTips>
+      <Text color="textTips">{t('loginSubTips')}</Text>
     </Box>
   );
 });
