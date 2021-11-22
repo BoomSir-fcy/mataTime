@@ -16,7 +16,7 @@ const ConnectWallet = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 70px 0 85px;
+  margin: 100px 0;
   position: relative;
 `;
 
@@ -31,7 +31,8 @@ export const LoginJoin: React.FC = React.memo(() => {
   const { t } = useTranslation();
   const redict = location?.state?.from?.pathname;
   const [state, setState] = useImmer({
-    isSignIn: false
+    isSignIn: false,
+    loading: false
   });
 
   const signIn = async () => {
@@ -61,12 +62,16 @@ export const LoginJoin: React.FC = React.memo(() => {
   };
 
   const init = async () => {
+    setState(p => {
+      p.loading = !state.loading;
+    });
     //1.1 验证是否注册
     const [verify] = await Promise.all([siginInVerify(account)]);
     if (Boolean(verify)) {
       //1.2 已经注册过了 去登录
       setState(p => {
         p.isSignIn = true;
+        p.loading = !state.loading;
       });
     }
     if (!Boolean(verify)) {
@@ -106,7 +111,7 @@ export const LoginJoin: React.FC = React.memo(() => {
           width="35%"
           src={require('../images/login_right_images.png').default}
         />
-        <ConnectWalletButton />
+        <ConnectWalletButton loading={state.loading} />
       </ConnectWallet>
       <Text color="textTips">{t('loginSubTips')}</Text>
     </Box>

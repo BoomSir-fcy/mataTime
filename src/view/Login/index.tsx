@@ -19,20 +19,33 @@ const LoginContainer = styled(Flex)`
   width: 100vw;
   height: 100vh;
   background: ${({ theme }) => theme.colors.gradients.signinBackground};
+  @media screen and (max-width: 768px) {
+    height: auto;
+    min-height: 100vh;
+  }
 `;
-const LeftBox = styled.div`
+const LeftBox = styled(Box)<{
+  isbackground: boolean;
+}>`
   width: 62.5vw;
-  background-image: url(${sloganImg});
+  background-image: url(${({ isbackground }) => !isbackground && sloganImg});
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center bottom;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 const Content = styled(Card)`
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   width: 37.5vw;
+  border-radius: 0;
   background-color: ${({ theme }) => theme.colors.backgroundCard};
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 const LogoWarpper = styled(Box)`
   width: 337px;
@@ -41,13 +54,16 @@ const LogoWarpper = styled(Box)`
 `;
 const Container = styled(Box)`
   height: calc(100vh - 125px);
-  padding: 85px 40px 0;
+  padding: 55px 45px 0;
+  @media screen and (max-width: 768px) {
+    overflow: scroll;
+  }
 `;
-const Nft = styled(Box)`
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  padding: 30px;
-  border-radius: 10px;
+const Nft = styled(Flex)`
   height: 100%;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 100px;
 `;
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
@@ -61,6 +77,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   const [ConnectAddr, setConnectAddr] = useState('0');
+  const nftBoolean = Boolean(showStakeNft && singUpStep === 1 && account);
 
   // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
@@ -123,10 +140,11 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     };
   }, [NftList, isStakeNft]);
 
+  console.log(nftBoolean);
   return (
     <LoginContainer>
-      <LeftBox>
-        {showStakeNft && singUpStep === 1 && account && (
+      <LeftBox isbackground={nftBoolean}>
+        {nftBoolean && (
           <Nft>
             <Text fontSize="30px">选择并质押头像</Text>
             <StakeNFT />

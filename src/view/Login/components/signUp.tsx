@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import history from 'routerHistory';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { useStore, storeAction } from 'store';
-import { Api } from 'apis';
 
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
@@ -27,7 +27,7 @@ const SignUpWarpper = styled(Flex)`
 const WalletBody = styled(Flex)`
   justify-content: center;
   align-items: center;
-  width: 510px;
+  width: 100%;
   height: 70px;
   background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: ${({ theme }) => theme.radii.card};
@@ -56,13 +56,20 @@ const SignUpSubText = styled(Text)`
 
 const SignUpFail = () => {
   const { t } = useTranslation();
+
+  const goRouter = () => {
+    history.push('/');
+  };
+
   return (
     <Flex width="100%" flexDirection="column">
       <Flex justifyContent="space-between">
         <FailButton scale="ld" variant="tertiary" disabled>
           {t('loginCreatAccount')}
         </FailButton>
-        <FailButton scale="ld"> {t('loginGetNft')}</FailButton>
+        <FailButton scale="ld" onClick={goRouter}>
+          {t('loginGetNft')}
+        </FailButton>
       </Flex>
       <SubTitle>{t('loginSignUpFail')}</SubTitle>
     </Flex>
@@ -79,7 +86,7 @@ export const WalletAddress: React.FC<{
     <WalletBody>
       <Icon width="40px" mr="30px" />
       <Text fontSize="18px" fontWeight="bold">
-        {address && shortenAddress(address)}
+        {address && shortenAddress(address, 4)}
       </Text>
     </WalletBody>
   );
@@ -114,7 +121,7 @@ export const SignUp: React.FC<{
             fontSize="34px"
             marginBottom="29px"
             bold
-            style={{ textTransform: 'uppercase' }}
+            style={{ textTransform: 'capitalize' }}
           >
             {t('loginWelcome')}
           </Text>
@@ -146,7 +153,7 @@ export const SignUp: React.FC<{
             fontSize="34px"
             marginBottom="24px"
             bold
-            style={{ textTransform: 'uppercase' }}
+            style={{ textTransform: 'capitalize' }}
           >
             {t('loginWelcome')}
           </Text>
