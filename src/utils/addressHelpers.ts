@@ -18,3 +18,14 @@ export const getMulticallAddress = () => {
 export const getNftSocialAddress = () => {
   return getAddress(addresses.nftSocial)
 }
+
+export const getTimeShopAddress = () => {
+  return getAddress(addresses.TimeShop)
+}
+
+export const getDsgAddress = () => {
+  return getAddress(addresses.Dsg)
+}
+export const getTimeAddress = () => {
+  return getAddress(addresses.TimeToken)
+}

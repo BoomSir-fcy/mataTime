@@ -31,6 +31,7 @@ const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
+const Exchange = React.lazy(() => import('./view/exchange'));
 
 const Container = styled(Box) <{
   dark: boolean;
@@ -122,6 +123,7 @@ function App() {
               render={props => <CommonLayout {...props}></CommonLayout>}
             ></Route>
             <Route path="/login" exact component={Login} />
+            <Route path="/exchange" component={Exchange} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
           </Router>

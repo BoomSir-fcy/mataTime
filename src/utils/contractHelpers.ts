@@ -2,13 +2,15 @@ import { ethers } from 'ethers'
 import { simpleRpcProvider } from 'utils/providers'
 import dsgnftAbi from 'config/abi/dsgnft.json'
 import nftSocialAbi from 'config/abi/nftSocial.json'
+import timeShopAbi from 'config/abi/TimeShop.json'
 
 
 // Addresses
 import {
   getAddress,
   getMulticallAddress,
-  getNftSocialAddress
+  getNftSocialAddress,
+  getTimeShopAddress
 } from 'utils/addressHelpers'
 
 // ABI
@@ -38,4 +40,7 @@ export const getDsgNftContract = (address: string, signer?: ethers.Signer | ethe
 }
 export const getErc20EarnNftPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(nftSocialAbi, getNftSocialAddress(), signer)
+}
+export const getTimeShopContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(timeShopAbi, getTimeShopAddress(), signer)
 }

@@ -12,5 +12,17 @@ export default {
   nftSocial: {
     56: '0x0ED1086B0FcDFAC4D0fed4aCc5EB1a17ab47117C',
     97: '0x0ED1086B0FcDFAC4D0fed4aCc5EB1a17ab47117C'
+  },
+  TimeShop: {
+    56: '0xFDB65F33Cab0bA52757f6666e44AEDf3A3Fb61BA',
+    97: '0xFDB65F33Cab0bA52757f6666e44AEDf3A3Fb61BA'
+  },
+  TimeToken: {
+    56: '0xb04a48615d1df2a2a6c11dcb3f297df44f143ea5',
+    97: '0xb04a48615d1df2a2a6c11dcb3f297df44f143ea5'
+  },
+  Dsg: {
+    56: '0x1cd884c01376F795017ba16b15193D82a1cb4BeD',
+    97: '0x1cd884c01376F795017ba16b15193D82a1cb4BeD'
   }
 };
