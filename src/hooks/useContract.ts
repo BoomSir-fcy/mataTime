@@ -6,7 +6,7 @@ import {
   getMulticallContract,
   getDsgNftContract,
   getErc20EarnNftPoolContract,
-  getTimeShopContract
+  getTimeShopContract,
   getLiquidityPoolContract
 } from 'utils/contractHelpers'
 import { getContract } from 'utils/contract'
