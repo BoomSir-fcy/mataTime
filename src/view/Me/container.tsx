@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import { Flex, Box } from 'uikit';
-import { CommonMenu } from 'components';
+import { CommonMenu, Affix } from 'components';
 import { useLocation } from 'hooks';
 import {
   Search,
@@ -23,15 +23,14 @@ const PageContainer = styled.div`
   justify-content: center;
 `;
 const LeftCard = styled(Flex)`
-  width: 200px;
+  /* width: 200px; */
 `;
 const CenterCard = styled(Box)`
   width: 670px;
-  word-wrap: break-word;
   ${mediaQueriesSize.marginLRmd}
 `;
 const RightCard = styled.div`
-  width: 300px;
+  /* width: 300px; */
 `;
 
 const menuArr = [
@@ -79,18 +78,36 @@ export const Container = props => {
   const index = props.location.pathname.indexOf('/me/profile');
   return (
     <PageContainer>
-      <Flex justifyContent="space-between" width="100%">
-        <LeftCard>
-          {index > -1 ? <Menu /> : <CommonMenu menu={menuArr} {...props} />}
-        </LeftCard>
+      <Flex justifyContent="space-between">
+        <Affix
+          offsetTop={100}
+          positionObj={{
+            top: '10px',
+            left: '50%',
+            marginLeft: '-550px'
+          }}
+        >
+          <LeftCard>
+            {index > -1 ? <Menu /> : <CommonMenu menu={menuArr} {...props} />}
+          </LeftCard>
+        </Affix>
         <CenterCard>{props.children}</CenterCard>
-        <RightCard>
-          <Route path="/" component={Search}></Route>
-          <Route path="/" component={Swap}></Route>
-          <Route path="/" component={RecommendPeople}></Route>
-          <Route path="/" component={HotTopic}></Route>
-          <Route path="/" component={FooterCopyright}></Route>
-        </RightCard>
+        <Affix
+          offsetTop={100}
+          positionObj={{
+            top: '10px',
+            right: '50%',
+            marginRight: '-660px'
+          }}
+        >
+          <RightCard>
+            <Route path="/" component={Search}></Route>
+            <Route path="/" component={Swap}></Route>
+            <Route path="/" component={RecommendPeople}></Route>
+            <Route path="/" component={HotTopic}></Route>
+            <Route path="/" component={FooterCopyright}></Route>
+          </RightCard>
+        </Affix>
       </Flex>
     </PageContainer>
   );

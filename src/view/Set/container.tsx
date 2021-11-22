@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Box } from 'uikit';
-import { Crumbs, CommonMenu } from 'components';
+import { Crumbs, CommonMenu, Affix } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import {
@@ -20,14 +20,14 @@ const PageContainer = styled.div`
   justify-content: center;
 `;
 const LeftCard = styled(Flex)`
-  width: 200px;
+  /* width: 200px; */
 `;
 const CenterCard = styled(Box)`
   flex: 1;
   ${mediaQueriesSize.marginLRmd}
 `;
 const RightCard = styled.div`
-  width: 300px;
+  /* width: 300px; */
 `;
 
 const menuArr = [
@@ -56,21 +56,39 @@ export const Container = props => {
 
   return (
     <PageContainer>
-      <Flex justifyContent="space-between" width="100%">
-        <LeftCard>
-          <CommonMenu menu={menuArr} {...props} />
-        </LeftCard>
+      <Flex justifyContent="space-between">
+        <Affix
+          offsetTop={100}
+          positionObj={{
+            top: '10px',
+            left: '50%',
+            marginLeft: '-550px'
+          }}
+        >
+          <LeftCard>
+            <CommonMenu menu={menuArr} {...props} />
+          </LeftCard>
+        </Affix>
         <CenterCard>
           <Crumbs title={t('homeMenuSet')} />
           {props.children}
         </CenterCard>
-        <RightCard>
-          <Search />
-          <Swap />
-          <RecommendPeople />
-          <HotTopic />
-          <FooterCopyright />
-        </RightCard>
+        <Affix
+          offsetTop={100}
+          positionObj={{
+            top: '10px',
+            right: '50%',
+            marginRight: '-660px'
+          }}
+        >
+          <RightCard>
+            <Search />
+            <Swap />
+            <RecommendPeople />
+            <HotTopic />
+            <FooterCopyright />
+          </RightCard>
+        </Affix>
       </Flex>
     </PageContainer>
   );
