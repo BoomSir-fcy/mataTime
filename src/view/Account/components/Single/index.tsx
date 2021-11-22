@@ -3,13 +3,13 @@ import { Flex, Box, Text } from 'uikit';
 import { Container } from 'components'
 
 
-const Pools: React.FC = () => {
+const Single: React.FC = () => {
 
   return (
     <Container>
-      <Text>Pools</Text>
+      <Text>Single</Text>
     </Container>
   )
 }
 
-export default Pools;
+export default Single;

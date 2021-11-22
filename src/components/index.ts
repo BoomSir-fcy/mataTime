@@ -9,6 +9,7 @@ export * from './Profile';
 export * from './Editor';
 export * from './Menu';
 export * from './Layout';
+export * from './TokenImage';
 export * from './Icon';
 export * from './Popup';
 export * from './List';

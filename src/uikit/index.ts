@@ -9,6 +9,8 @@ export * from "./components/Input";
 export * from "./components/Radio";
 export * from "./components/Toggle";
 export * from "./components/Image";
+export * from "./components/Heading";
+export * from "./components/Link";
 export * from "./widgets/Menu";
 export * from "./theme";
 

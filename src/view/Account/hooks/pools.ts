@@ -40,29 +40,29 @@ export const useHarvestPools = (pid: number) => {
     return receipt.status
   }, [pid, masterChefContract])
 
-  return { onReward: handleHarvest }
+  return { onHarvest: handleHarvest }
 }
 
 export const useStakePools = (pid: number, decimal?: string) => {
   const masterChefContract = useLiquidityPool()
-  const handleHarvest = useCallback(async (amount) => {
+  const handleStake = useCallback(async (amount) => {
     const value = new BigNumber(amount).times(getDecimal(decimal)).toString()
     const tx = await masterChefContract.deposit(pid, value, harvestOptions)
     const receipt = await tx.wait()
     return receipt.status
   }, [pid, masterChefContract])
 
-  return { onReward: handleHarvest }
+  return { onStake: handleStake }
 }
 
 export const useWithdrawPools = (pid: number, decimal?: string) => {
   const masterChefContract = useLiquidityPool()
-  const handleHarvest = useCallback(async (amount) => {
+  const handleWithdraw = useCallback(async (amount) => {
     const value = new BigNumber(amount).times(getDecimal(decimal)).toString()
     const tx = await masterChefContract.depwithdrawosit(pid, value, harvestOptions)
     const receipt = await tx.wait()
     return receipt.status
   }, [pid, masterChefContract])
 
-  return { onReward: handleHarvest }
+  return { onWithdraw: handleWithdraw }
 }

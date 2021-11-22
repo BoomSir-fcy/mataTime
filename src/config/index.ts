@@ -1,4 +1,4 @@
-import { BIG_TEN } from 'src/utils/bigNumber';
+import { BIG_TEN } from 'utils/bigNumber';
 import { ChainId } from './wallet/config';
 
 export const BASE_URL = `${window.location.origin}/#`;

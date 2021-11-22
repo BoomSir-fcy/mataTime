@@ -17,6 +17,7 @@ export interface PoolDataBase {
   poolAddress: address
   stakeToken: address
   poolId: string
+  finished?: boolean
 }
 export interface LiquidityPoolData extends PoolDataBase {
   token0: address
