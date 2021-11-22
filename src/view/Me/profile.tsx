@@ -181,7 +181,7 @@ const Profile: React.FC<any> = React.memo(props => {
                   {profile.location && (
                     <Flex className="marginLeft" alignItems="center">
                       <Icon name="icon-dizhi" color={gray} />
-                      <Text className="text">{profile.location}</Text>
+                      <Text className="text" >{profile.location}</Text>
                     </Flex>
                   )}
                 </Flex>
@@ -202,7 +202,7 @@ const Profile: React.FC<any> = React.memo(props => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text">{profile.introduction}</Text>
+              <Text className="text" style={{ wordBreak: 'break-all' }}>{profile.introduction}</Text>
               {/* <Text className="text">
                 Web:{' '}
                 <Text as={Link} to="/">
