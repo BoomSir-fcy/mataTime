@@ -31,7 +31,7 @@ p{
 a{
   color: #7393ff;
   cursor: pointer;
-  margin: 0 10px;
+  margin: 0 5px;
 }
 span {
   /* color: #4168ED; */

@@ -1,5 +1,6 @@
 import React, { useState ,useEffect} from 'react';
 import styled from 'styled-components';
+import { useStore } from 'store';
 import { Flex, Box, Card } from 'uikit';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization'
@@ -14,7 +15,7 @@ const MenuBox = styled(Card)`
   flex-direction: column;
   padding: 20px 13px;
   width: 200px;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 35px);
   border-radius: 10px;
 `;
 
@@ -43,6 +44,7 @@ const User = styled(Flex)`
 `;
 
 export const MenuList = (props: { menuList: any[] }) => {
+  const isNotification = useStore(p => p.appReducer.systemCustom.notification)
   const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -70,7 +72,7 @@ export const MenuList = (props: { menuList: any[] }) => {
             }}
           >
             <div style={{ position: 'relative' }} title={item.title}>
-              {item.badge && <Badge count={item.count>99?'99+':item.count} />}
+              {isNotification&&item.badge && <Badge count={item.count>99?'99+':item.count} />}
               <Icon name={currentIndex === index ? item.activeIcon : item.icon} margin="10px 14px" color={isDark ? '#ffffff' : '#7A83A0'}></Icon>
             </div>
             <span style={{ marginLeft: '5px' }}>{t(item.transaltion)}</span>
