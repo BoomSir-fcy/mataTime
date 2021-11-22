@@ -31,6 +31,7 @@ const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
+const Account = React.lazy(() => import('./view/Account'));
 
 const Container = styled(Box) <{
   dark: boolean;
@@ -124,6 +125,7 @@ function App() {
             <Route path="/login" exact component={Login} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
+            <Route path="/account" component={Account} />
           </Router>
         </React.Suspense>
       </Container>
