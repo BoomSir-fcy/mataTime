@@ -62,12 +62,13 @@ const insertMention = (editor, { character, uid }) => {
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
 };
-const insertTopic = (editor, { character = '' }) => {
-  const topic: any = {
-    type: 'topic',
-    children: [{ text: character }]
-  };
-  Transforms.insertNodes(editor, topic);
+const insertTopic = (editor, character ='') => {
+  // const topic: any = {
+  //   type: 'topic',
+  //   children: [{ text: character }]
+  // };
+  Transforms.insertText(editor,`#${character}#`)
+  // Transforms.insertNodes(editor, topic);
 };
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => { }, type } = props;
@@ -83,8 +84,8 @@ export const Editor = (props: Iprops) => {
     switch (props.element.type) {
       case 'mention':
         return <Mention {...props} />;
-      case 'topic':
-        return <TopicElement {...props} />;
+      // case 'topic':
+      //   return <TopicElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
@@ -110,14 +111,16 @@ export const Editor = (props: Iprops) => {
     return () => {
       el.removeEventListener('click', eventFn);
     };
-  });
-
+  },[])
+useEffect(() => {
+  if(imgList.length>0)setIsDisabledSend(false)
+},[imgList])
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
     input.name = 'file';
     input.multiple = true;
-    input.accept = '.png,.jpg,.jpeg';
+    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp'
     input.onchange = async (e: any) => {
       const selectFiles = e.target.files;
       if (!selectFiles[0]) return false;
@@ -200,7 +203,7 @@ const deepContent = (arr)=>{
       insertMention(editor, { uid: data.uid, character: '@' + data.nick_name });
     }
     if (type === 'topic') {
-      insertTopic(editor, { character: data.topic_name });
+      insertTopic(editor, data.topic_name );
     }
   };
   return (
