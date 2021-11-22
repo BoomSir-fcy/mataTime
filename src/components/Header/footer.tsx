@@ -1,23 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'contexts/Localization';
 import { Flex, Box, Text } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 import { Logo } from './logo';
 
-import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
+import { mediaQueriesSize } from 'uikit/theme/base';
 
 const FooterWarpper = styled(Flex)`
-  position: fixed;
-  bottom: 0;
+  justify-content: center;
   width: 100%;
   height: 125px;
+  padding-left: 45px;
+  border-top: 1px solid ${({ theme }) => theme.colors.borderColor};
   background: ${({ theme }) => theme.colors.gradients.footer};
-  padding: 21px 0 29px;
-  ${mediaQueries.xxl} {
-    padding-left: 160px;
-    padding-right: 160px;
-  }
 `;
 
 const LogoWrapper = styled(Box)`
@@ -30,7 +26,10 @@ const SubText = styled(Text)<{
   to?: string;
 }>`
   color: ${({ theme }) => theme.colors.textTips};
-  ${mediaQueriesSize.marginr};
+  margin-right: 15px;
+  &::last-child {
+    margin-right: 0;
+  }
   text-decoration: ${({ to }) => to && 'underline'};
 `;
 

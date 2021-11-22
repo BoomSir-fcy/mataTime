@@ -14,7 +14,12 @@ export const ConnectWalletButton: React.FC = props => {
   const { onConnectWallet } = useConnectWallet();
 
   return (
-    <Box>
+    <Box
+      style={{
+        position: 'absolute',
+        bottom: '-10px'
+      }}
+    >
       <WalletButton onClick={onConnectWallet} {...props}>
         {t('Connect Wallet')}
       </WalletButton>

@@ -12,18 +12,11 @@ import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import useAuth from 'hooks/useAuth';
 
-const SubTitle = styled(Text)`
-  color: ${({ theme }) => theme.colors.textOrigin};
-`;
-const TextTips = styled(Text)`
-  color: ${({ theme }) => theme.colors.textTips};
-  text-align: justify;
-`;
 const ConnectWallet = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px 0 79px;
+  margin: 70px 0 85px;
   position: relative;
 `;
 
@@ -103,19 +96,19 @@ export const LoginJoin: React.FC = React.memo(() => {
         fontSize="34px"
         marginBottom="29px"
         bold
-        style={{ textTransform: 'uppercase' }}
+        style={{ textTransform: 'capitalize' }}
       >
         {t('loginWelcome')}
       </Text>
-      <SubTitle>{t('loginSubTitle')}</SubTitle>
+      <Text color="textOrigin">{t('loginSubTitle')}</Text>
       <ConnectWallet>
         <img
-          width="40%"
+          width="35%"
           src={require('../images/login_right_images.png').default}
         />
         <ConnectWalletButton />
       </ConnectWallet>
-      <TextTips>{t('loginSubTips')}</TextTips>
+      <Text color="textTips">{t('loginSubTips')}</Text>
     </Box>
   );
 });

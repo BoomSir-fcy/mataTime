@@ -6,29 +6,42 @@ import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box, Text } from 'uikit';
-import { Logo } from 'components';
+import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
-import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
+import { mediaQueriesSize } from 'uikit/theme/base';
 import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
 import { StakeNFT } from 'components/NftList';
 
-import useAuth from 'hooks/useAuth';
+import sloganImg from 'assets/images/login_slogan_img.png';
 
 /* eslint-disable */
 const LoginContainer = styled(Flex)`
-  min-height: 100vh;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
   background: ${({ theme }) => theme.colors.gradients.signinBackground};
 `;
+const LeftBox = styled.div`
+  width: 62.5vw;
+  background-image: url(${sloganImg});
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+`;
 const Content = styled(Card)`
-  width: 600px;
-  height: 700px;
-  padding: 25px 40px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  width: 37.5vw;
+  background-color: ${({ theme }) => theme.colors.backgroundCard};
 `;
 const LogoWarpper = styled(Box)`
   width: 337px;
   height: 60px;
   ${mediaQueriesSize.marginbmd}
+`;
+const Container = styled(Box)`
+  height: calc(100vh - 125px);
+  padding: 85px 40px 0;
 `;
 const Nft = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundCard};
@@ -36,19 +49,11 @@ const Nft = styled(Box)`
   border-radius: 10px;
   height: 100%;
 `;
-const LeftBox = styled.div`
-  ${mediaQueries.sm} {
-    margin-right: 20px;
-  }
-  margin-right: 40px;
-  width: 40vw;
-  min-width: 400px;
-`;
 
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchSupportNFT();
   useFetchNftList();
-  const { logout } = useAuth();
+
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
   const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
@@ -56,6 +61,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   const [ConnectAddr, setConnectAddr] = useState('0');
+
   // 自己的Nft列表
   const NftList = useStore(p => p.loginReducer.nftList);
   // 选择链
@@ -76,6 +82,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   };
+
   useEffect(() => {
     checkNetwork();
     window.ethereum.on('chainChanged', (chainId: string) => {
@@ -86,6 +93,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
     };
   }, []);
+
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
     if (account) {
@@ -97,6 +105,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       // dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     };
   }, [account]);
+
   useEffect(() => {
     // 2没有质押的情况下
     if (!NftList.length && !isStakeNft) {
@@ -113,22 +122,19 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
     };
   }, [NftList, isStakeNft]);
+
   return (
-    <React.Fragment>
-      <LoginContainer>
-        <LeftBox>
-          {showStakeNft && singUpStep === 1 && account ? (
-            <Nft>
-              <Text fontSize="30px">选择并质押头像</Text>
-              <StakeNFT />
-            </Nft>
-          ) : (
-            <Flex style={{ height: '100%' }}>
-              <img src={require('./images/logo_left_images.jpg').default} />
-            </Flex>
-          )}
-        </LeftBox>
-        <Content>
+    <LoginContainer>
+      <LeftBox>
+        {showStakeNft && singUpStep === 1 && account && (
+          <Nft>
+            <Text fontSize="30px">选择并质押头像</Text>
+            <StakeNFT />
+          </Nft>
+        )}
+      </LeftBox>
+      <Content>
+        <Container>
           <LogoWarpper>
             <Logo
               url="/"
@@ -145,9 +151,10 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
           ) : (
             <LoginJoin />
           )}
-        </Content>
-      </LoginContainer>
-    </React.Fragment>
+        </Container>
+        <Footer />
+      </Content>
+    </LoginContainer>
   );
 });
 
