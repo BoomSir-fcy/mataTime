@@ -79,12 +79,13 @@ const NewsMe: React.FC = (props) => {
                   updateList(data, type)
                 }} />
                 <MentionOperator
-                  replyType={'comment'}
+                  replyType={'twitter'}
                   hasLike={false}
                   postId={item.post.post_id}
                   itemData={{
                     ...item,
-                    ...item.post
+                    ...item.post,
+                    user_avator_url: item.post.nft_image
                   }}
                   callback={(item: any, type?: MoreOperatorEnum) => {
                     updateList(item, type)
