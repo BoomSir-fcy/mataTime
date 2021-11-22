@@ -1,11 +1,11 @@
-export type address = string
+declare type address = string
 
 export interface PoolUserData {
   allowance: string
   stakedBalance: string // 质押数量
   tokenBalance: string // 质押代币余额
   earnings: string // 待领取金额
-  poolId: string // 待领取金额
+  poolId: string // 池子id
 }
 export interface PoolsBase {
   loaded: boolean
@@ -14,7 +14,8 @@ export interface PoolsBase {
 
 export interface PoolDataBase {
   totalAmount: string // 当前总质押量
-  poolAddress: address
+  poolAddress: address // 池子地址
+  stakeAddress: address // 质押币种地址
   stakeToken: address
   poolId: string
   finished?: boolean

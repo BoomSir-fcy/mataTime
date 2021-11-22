@@ -16,8 +16,7 @@ const getDecimal = (decimal?: string) => {
   return DEFAULT_TOKEN_DECIMAL
 }
 
-export const useApproveErc20Pools = (address: string) => {
-  const lpAddress = getLiquidityPool()
+export const useApproveErc20Pool = (address: string, lpAddress: string) => {
   const lpContract = useERC20(address)
   const handleApprove = useCallback(async () => {
     try {
@@ -27,12 +26,12 @@ export const useApproveErc20Pools = (address: string) => {
     } catch (e) {
       return false
     }
-  }, [lpContract])
+  }, [lpContract, lpAddress])
 
   return { onApprove: handleApprove }
 }
 
-export const useHarvestPools = (pid: number) => {
+export const useHarvestPool = (pid: string) => {
   const masterChefContract = useLiquidityPool()
   const handleHarvest = useCallback(async () => {
     const tx = await masterChefContract.withdraw(pid, '0', harvestOptions)
@@ -43,7 +42,7 @@ export const useHarvestPools = (pid: number) => {
   return { onHarvest: handleHarvest }
 }
 
-export const useStakePools = (pid: number, decimal?: string) => {
+export const useStakePool = (pid: string, decimal?: string) => {
   const masterChefContract = useLiquidityPool()
   const handleStake = useCallback(async (amount) => {
     const value = new BigNumber(amount).times(getDecimal(decimal)).toString()
@@ -55,7 +54,7 @@ export const useStakePools = (pid: number, decimal?: string) => {
   return { onStake: handleStake }
 }
 
-export const useWithdrawPools = (pid: number, decimal?: string) => {
+export const useWithdrawPool = (pid: string, decimal?: string) => {
   const masterChefContract = useLiquidityPool()
   const handleWithdraw = useCallback(async (amount) => {
     const value = new BigNumber(amount).times(getDecimal(decimal)).toString()

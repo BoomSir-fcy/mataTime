@@ -37,7 +37,7 @@ export const lightColors: Colors = {
   white: 'white',
   background: '#FAF9FA',
   backgroundPage: '#f5fdfc',
-  backgroundLight: '#F6FFF0',
+  backgroundLight: '#EAF2FF',
   backgroundSelect: '#ceece7',
   backgroundDisabled: '#E9EAEB',
   backgroundPrimary: '#4168ED',
@@ -84,11 +84,11 @@ export const lightColors: Colors = {
   },
   editorText: '#000',
   editorBoxBg: '#fff',
-  searchTopicBg:'#fff',
-  searchTopicTxt:'#000',
-  searchTopicHoverBg:'#eaf2ff',
-  commentBorder:'#ccc',
-  commentHoverBg:'#eaf2ff',
+  searchTopicBg: '#fff',
+  searchTopicTxt: '#000',
+  searchTopicHoverBg: '#eaf2ff',
+  commentBorder: '#ccc',
+  commentHoverBg: '#eaf2ff',
 };
 
 export const darkColors: Colors = {
@@ -99,7 +99,7 @@ export const darkColors: Colors = {
   secondary: '#9A6AFF',
   background: '#08060B',
   backgroundPage: '#0B1513',
-  backgroundLight: '#334542',
+  backgroundLight: '#2B303F',
   backgroundSelect: '#4168ED',
   backgroundDisabled: '#3c3742',
   backgroundPrimary: '#4168ED',
@@ -147,9 +147,9 @@ export const darkColors: Colors = {
   },
   editorText: '#FFFFFF',
   editorBoxBg: '#191f2d',
-  searchTopicBg:'#2F3749',
-  searchTopicHoverBg:'#191f2d',
-  searchTopicTxt:'#fff',
-  commentHoverBg:'#1F2534',
-  commentBorder:'#ccc'
+  searchTopicBg: '#2F3749',
+  searchTopicHoverBg: '#191f2d',
+  searchTopicTxt: '#fff',
+  commentHoverBg: '#1F2534',
+  commentBorder: '#ccc'
 };
