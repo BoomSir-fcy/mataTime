@@ -79,7 +79,7 @@ const NewsMe: React.FC = (props) => {
                   updateList(data, type)
                 }} />
                 <MentionOperator
-                  replyType={item.comment.pid ? 'comment' : 'twitter'}
+                  replyType={'comment'}
                   hasLike={false}
                   postId={item.post.post_id}
                   itemData={{

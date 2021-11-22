@@ -37,7 +37,7 @@ export const UserDesc = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
-  width: 80px;
+  width: 105px;
   overflow: hidden;
   // white-space: nowrap;
   // text-overflow: ellipsis;
@@ -96,7 +96,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
                   <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
                   {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
                 </Flex>
-                <UserDesc title={item.introduction}>{item.introduction}</UserDesc>
+                <UserDesc title={item.address}>@{(item.address || '').slice(0, 4) + '...' + (item.address || '').slice(38)}</UserDesc>
               </UserInfo>
             </Flex>
             <FollowBtn onClick={() => {
