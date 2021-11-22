@@ -15,6 +15,7 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
+import { useStore } from 'store';
 import { Api } from 'apis';
 
 import { Tabs, Popup } from './components';
@@ -117,6 +118,7 @@ const Profile: React.FC<any> = React.memo(props => {
     totalPage: 0
   });
   const { t } = useTranslation();
+  const currentUid = useStore(p => p.loginReducer.userInfo);
   const uid = props.match?.params?.uid;
   const gray = useTheme().colors.textTips;
   const history = useHistory();
@@ -150,12 +152,10 @@ const Profile: React.FC<any> = React.memo(props => {
     }
   };
 
-
   React.useEffect(() => {
     init();
   }, []);
 
-  console.log(profile.uid, uid);
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
@@ -187,7 +187,7 @@ const Profile: React.FC<any> = React.memo(props => {
                 </Flex>
               </Desc>
             </Flex>
-            {!uid || Number(uid) === profile.uid ? (
+            {!uid || Number(uid) === currentUid.uid ? (
               <>
                 <Button as={Link} to="/me/edit">
                   {t('meEditProfile')}

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { List, MoreOperatorEnum } from 'components';
+import { List, TopicEmpty } from 'components';
 import { Box, Button, Text, Card, Flex } from 'uikit';
 
 import { Api } from 'apis';
@@ -61,36 +61,42 @@ const Praise = React.memo(props => {
       >
         {list.map((item, index) => (
           <MeItemWrapper key={`${item.id}+${index}`}>
-            <MentionItem
-              {...props}
-              itemData={{
-                ...item,
-                is_like: item.like_status,
-                user_id: item.uid,
-                user_avator_url: item.nft_image,
-                post: {
-                  user_id: item.uid,
-                  ...item
-                }
-              }}
-              callback={() => init(1)}
-            />
-            <MentionOperator
-              replyType="twitter"
-              type="Article"
-              postId={item.post_id}
-              itemData={{
-                ...item,
-                is_like: item.like_status,
-                user_id: item.uid,
-                user_avator_url: item.nft_image,
-                post: {
-                  user_id: item.uid,
-                  ...item
-                }
-              }}
-              callback={() => init(1)}
-            />
+            {item.post_status === 2 ? (
+              <TopicEmpty type="like" item={item} callback={() => init(1)} />
+            ) : (
+              <React.Fragment>
+                <MentionItem
+                  {...props}
+                  itemData={{
+                    ...item,
+                    is_like: item.like_status,
+                    user_id: item.uid,
+                    user_avator_url: item.nft_image,
+                    post: {
+                      user_id: item.uid,
+                      ...item
+                    }
+                  }}
+                  callback={() => init(1)}
+                />
+                <MentionOperator
+                  replyType="twitter"
+                  type="Article"
+                  postId={item.post_id}
+                  itemData={{
+                    ...item,
+                    is_like: item.like_status,
+                    user_id: item.uid,
+                    user_avator_url: item.nft_image,
+                    post: {
+                      user_id: item.uid,
+                      ...item
+                    }
+                  }}
+                  callback={() => init(1)}
+                />
+              </React.Fragment>
+            )}
           </MeItemWrapper>
         ))}
       </List>

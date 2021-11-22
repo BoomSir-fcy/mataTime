@@ -23,7 +23,7 @@ const LeftCard = styled(Flex)`
   /* width: 200px; */
 `;
 const CenterCard = styled(Box)`
-  flex: 1;
+  width: 670px;
   ${mediaQueriesSize.marginLRmd}
 `;
 const RightCard = styled.div`

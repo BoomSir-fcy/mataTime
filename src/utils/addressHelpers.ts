@@ -19,6 +19,16 @@ export const getNftSocialAddress = () => {
   return getAddress(addresses.nftSocial)
 }
 
+export const getTimeShopAddress = () => {
+  return getAddress(addresses.TimeShop)
+}
+
+export const getDsgAddress = () => {
+  return getAddress(addresses.Dsg)
+}
+export const getTimeAddress = () => {
+  return getAddress(addresses.TimeToken)
+}
 export const getLiquidityPool = () => {
   return getAddress(addresses.liquidityPool)
 }
