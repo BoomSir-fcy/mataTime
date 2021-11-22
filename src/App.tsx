@@ -32,15 +32,15 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
+const Account = React.lazy(() => import('./view/Account'));
 
-const Container = styled(Box)<{
+const Container = styled(Box) <{
   dark: boolean;
 }>`
   background-image: ${({ dark }) =>
-    `url(${
-      require(dark
-        ? 'assets/images/dark_background.jpg'
-        : 'assets/images/light_background.jpg').default
+    `url(${require(dark
+      ? 'assets/images/dark_background.jpg'
+      : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed;
   min-height: 100vh;
@@ -117,7 +117,7 @@ function App() {
         signOut();
       }
     }
-    return () => {};
+    return () => { };
   }, [account]);
 
   return (
@@ -155,6 +155,7 @@ function App() {
             <Route path="/exchange" component={Exchange} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
+            <Route path="/account" component={Account} />
           </Router>
         </React.Suspense>
       </Container>

@@ -29,3 +29,10 @@ export const getDsgAddress = () => {
 export const getTimeAddress = () => {
   return getAddress(addresses.TimeToken)
 }
+export const getLiquidityPool = () => {
+  return getAddress(addresses.liquidityPool)
+}
+
+export const getSinglePool = () => {
+  return getAddress(addresses.singlePool)
+}

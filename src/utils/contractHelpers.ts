@@ -8,6 +8,7 @@ import timeShopAbi from 'config/abi/TimeShop.json'
 // Addresses
 import {
   getAddress,
+  getLiquidityPool,
   getMulticallAddress,
   getNftSocialAddress,
   getTimeShopAddress
@@ -43,4 +44,8 @@ export const getErc20EarnNftPoolContract = (signer?: ethers.Signer | ethers.prov
 }
 export const getTimeShopContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(timeShopAbi, getTimeShopAddress(), signer)
+}
+
+export const getLiquidityPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(nftSocialAbi, getLiquidityPool(), signer)
 }

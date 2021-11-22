@@ -1,4 +1,6 @@
+import { BIG_TEN } from 'utils/bigNumber';
 import { ChainId } from './wallet/config';
+
 export const BASE_URL = `${window.location.origin}/#`;
 
 export const BASE_BSC_SCAN_URLS = {
@@ -11,3 +13,6 @@ export const storage = {
   UserInfo: 'userInfo',
   systemCustom: 'systemCustom'
 };
+
+export const DEFAULT_GAS_LIMIT = 2000000
+export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)

@@ -7,6 +7,7 @@ import {
   getDsgNftContract,
   getErc20EarnNftPoolContract,
   getTimeShopContract
+  getLiquidityPoolContract
 } from 'utils/contractHelpers'
 import { getContract } from 'utils/contract'
 
@@ -69,4 +70,9 @@ export const useErc20EarnNftPool = () => {
 export const useTimeShop = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getTimeShopContract(library.getSigner()), [library])
+}
+
+export const useLiquidityPool = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getLiquidityPoolContract(library.getSigner()), [library])
 }
