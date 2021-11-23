@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   changeSignUp,
+  changeSignin,
   changeSignUpFail,
   changeSignUpStep,
   changeUpdateProfile,
+  changeReset,
   setUserNft,
   setUserNftStake,
   setNftAddr,
@@ -16,8 +18,9 @@ import { getUrl } from 'apis/DsgRequest';
 
 const initialState = {
   isSignup: false,
-  signUpFail: false,
+  isSignin: false,
   isStakeNft: false,
+  signUpFail: false,
   signinLoading: false,
   singUpStep: 1,
   userInfo: {} as Api.User.userInfoParams,
@@ -64,6 +67,9 @@ export const login = createSlice({
       .addCase(changeSignUp, (state, action) => {
         state.isSignup = action.payload.isSignup;
       })
+      .addCase(changeSignin, (state, action) => {
+        state.isSignin = action.payload.isSignin;
+      })
       .addCase(setUserNftStake, (state, action) => {
         state.isStakeNft = action.payload.isStakeNft;
       })
@@ -72,6 +78,13 @@ export const login = createSlice({
       })
       .addCase(changeSignUpStep, (state, action) => {
         state.singUpStep = action.payload.singUpStep;
+      })
+      .addCase(changeReset, (state, action) => {
+        state.isSignup = false;
+        state.isSignin = false;
+        state.isStakeNft = false;
+        state.signUpFail = false;
+        state.signinLoading = false;
       })
       .addCase(fetchUserInfoAsync.fulfilled, (state, action) => {
         state.userInfo = action.payload.data;

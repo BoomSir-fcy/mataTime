@@ -9,7 +9,12 @@ import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueriesSize } from 'uikit/theme/base';
-import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
+import {
+  useFetchSupportNFT,
+  useFetchNftList,
+  FetchNftStakeType,
+  useLogin
+} from './hook';
 import { StakeNFT } from 'components/NftList';
 
 import sloganImg from 'assets/images/login_slogan_img.png';
@@ -82,10 +87,10 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const dispatch = useDispatch();
   const loginReduce = useStore(p => p.loginReducer);
   const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
+  const { account } = useWeb3React();
+  const { loginCallback } = useLogin();
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
-  const { account } = useWeb3React();
-  const [ConnectAddr, setConnectAddr] = useState('0');
   const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 自己的Nft列表
@@ -103,22 +108,46 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     const nftStake = await FetchNftStakeType(account);
     if (nftStake[0]?.token_id) {
       // 已经质押
-      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+      dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {
       dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   };
 
+  const redict = location?.state?.from?.pathname;
+
+  const signIn = async () => {
+    //2.1 用户已经注册登录钱包签名
+    const res = await loginCallback(2);
+    dispatch(storeAction.setSigninLoading(false));
+    if (res) {
+      //2.2 获取用户信息
+      const user: any = await getUserName();
+      //2.3
+      if (Api.isSuccess(user)) {
+        // 存储userinfo 跳转首页
+        dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+        history.replace(`${redict || '/'}`);
+      } else if (user.code === 20103) {
+        // 20103 已注册未添加昵称 跳转到第三步去填写昵称——进入signUp文件
+        // 获取用户头像
+        const Avatar = await getNftUrl(account);
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
+        dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
+      }
+    } else {
+      logout();
+    }
+  };
+
   useEffect(() => {
     checkNetwork();
-    // window.ethereum.on('chainChanged', (chainId: string) => {
-    //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
-    // });
     return () => {
-      dispatch(storeAction.changeSignUp({ isSignup: false }));
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
+      dispatch(storeAction.changeReset());
     };
   }, []);
+
+  useEffect(() => {}, []);
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
@@ -127,27 +156,20 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       getStakeType(account);
     }
     // 页面销毁清除登录状态数据
-    return () => {
-      // dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
-    };
   }, [account]);
 
   useEffect(() => {
     // 2没有质押的情况下
     dispatch(storeAction.setSigninLoading(false));
-    if (!NftList.length && !isStakeNft) {
-      // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
-      setshowStakeNft(false);
-      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    } else if (NftList.length && !isStakeNft) {
-      // 有可用的头像 显示头像列表——可以注册，显示钱包签名
-      setshowStakeNft(true);
-      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    }
-    return () => {
-      setshowStakeNft(false);
-      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    };
+    // if (!NftList.length && !isStakeNft) {
+    //   // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
+    //   setshowStakeNft(false);
+    //   dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+    // } else if (NftList.length && !isStakeNft) {
+    //   // 有可用的头像 显示头像列表——可以注册，显示钱包签名
+    //   setshowStakeNft(true);
+    //   dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    // }
   }, [NftList, isStakeNft]);
 
   return (
