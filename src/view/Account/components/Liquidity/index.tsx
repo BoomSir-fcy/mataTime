@@ -9,9 +9,9 @@ const Liquidity: React.FC = () => {
     <Container>
       <FlexLayout>
         <FlexAutoWarpper>
+          {/* <PoolCard />
           <PoolCard />
-          <PoolCard />
-          <PoolCard />
+          <PoolCard /> */}
         </FlexAutoWarpper>
       </FlexLayout>
     </Container>

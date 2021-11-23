@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
-import { useERC20, useLiquidityPool } from 'hooks/useContract'
+import { useERC20, useSinglePool } from 'hooks/useContract'
 import { DEFAULT_GAS_LIMIT, DEFAULT_TOKEN_DECIMAL } from 'config'
-import { getLiquidityPool } from 'src/utils/addressHelpers'
 import { BIG_TEN } from 'utils/bigNumber'
 
 const harvestOptions = {
@@ -31,10 +30,21 @@ export const useApproveErc20Pool = (address: string, lpAddress: string) => {
   return { onApprove: handleApprove }
 }
 
-export const useHarvestPool = (pid: string) => {
-  const masterChefContract = useLiquidityPool()
+export const useHarvestStakeId = () => {
+  const masterChefContract = useSinglePool()
+  const handleHarvest = useCallback(async (stakingId: string) => {
+    const tx = await masterChefContract.harvest(stakingId, harvestOptions)
+    const receipt = await tx.wait()
+    return receipt.status
+  }, [masterChefContract])
+
+  return { onHarvest: handleHarvest }
+}
+
+export const useHarvesPoolId = (pid: string) => {
+  const masterChefContract = useSinglePool()
   const handleHarvest = useCallback(async () => {
-    const tx = await masterChefContract.withdraw(pid, '0', harvestOptions)
+    const tx = await masterChefContract.harvestPool(pid, harvestOptions)
     const receipt = await tx.wait()
     return receipt.status
   }, [pid, masterChefContract])
@@ -42,8 +52,19 @@ export const useHarvestPool = (pid: string) => {
   return { onHarvest: handleHarvest }
 }
 
+export const useHarvestAllPool = () => {
+  const masterChefContract = useSinglePool()
+  const handleHarvest = useCallback(async () => {
+    const tx = await masterChefContract.harvestAll(harvestOptions)
+    const receipt = await tx.wait()
+    return receipt.status
+  }, [masterChefContract])
+
+  return { onHarvest: handleHarvest }
+}
+
 export const useStakePool = (pid: string, decimal?: string) => {
-  const masterChefContract = useLiquidityPool()
+  const masterChefContract = useSinglePool()
   const handleStake = useCallback(async (amount) => {
     const value = new BigNumber(amount).times(getDecimal(decimal)).toString()
     const tx = await masterChefContract.deposit(pid, value, harvestOptions)
@@ -54,14 +75,13 @@ export const useStakePool = (pid: string, decimal?: string) => {
   return { onStake: handleStake }
 }
 
-export const useWithdrawPool = (pid: string, decimal?: string) => {
-  const masterChefContract = useLiquidityPool()
-  const handleWithdraw = useCallback(async (amount) => {
-    const value = new BigNumber(amount).times(getDecimal(decimal)).toString()
-    const tx = await masterChefContract.depwithdrawosit(pid, value, harvestOptions)
+export const useWithdrawPool = () => {
+  const masterChefContract = useSinglePool()
+  const handleWithdraw = useCallback(async (stakingId: string) => {
+    const tx = await masterChefContract.depwithdrawosit(stakingId, harvestOptions)
     const receipt = await tx.wait()
     return receipt.status
-  }, [pid, masterChefContract])
+  }, [masterChefContract])
 
   return { onWithdraw: handleWithdraw }
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Flex, Box, Heading, LinkExternal, Card, Text } from 'uikit';
 import styled from 'styled-components'
 import { Container } from 'components'
-import { TokenPairImage } from 'components';
+import { TokenPairImage, TokenImage } from 'components';
 import { getBscScanLink } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
 
@@ -39,22 +39,25 @@ const TextTipsStyled = styled(Text)`
   white-space: nowrap;
 `
 
+type address = string
 interface PoolCardHeader {
-  singleToken?: boolean
-  primaryAddress?: string
-  secondaryAddress?: string
-  secondarySymbol?: string
-  primarySymbol?: string
-  lpAddress?: string
+  depositToken: address
+  rewardToken0: address
+  rewardToken1: address
+  depositSymbol: string
+  rewardToken0Symbol: string
+  rewardToken1Symbol: string
+  poolAddress: string
 }
 
 const PoolCardHeader: React.FC<PoolCardHeader> = ({
-  singleToken,
-  primaryAddress,
-  secondaryAddress,
-  primarySymbol,
-  secondarySymbol,
-  lpAddress,
+  depositToken,
+  rewardToken0,
+  rewardToken1,
+  depositSymbol,
+  rewardToken0Symbol,
+  rewardToken1Symbol,
+  poolAddress
 }) => {
   const { t } = useTranslation()
 
@@ -62,21 +65,20 @@ const PoolCardHeader: React.FC<PoolCardHeader> = ({
     <BoxHeaderStyled>
       <ContainerStyled>
         <Flex>
-          {singleToken ? (
-            <TokenPairImage variant="binary" primaryAddress={primaryAddress} secondaryAddress={secondaryAddress} width={55} height={55} />
-          ) : (
-            <TokenPairImage variant="inverted" primaryAddress={primaryAddress} secondaryAddress={secondaryAddress} width={55} height={55} />
-          )}
+          <TokenImage tokenAddress="0x9A78649501BbAAC285Ea4187299471B7ad4ABD35" width={55} height={55} />
+
           <Box ml="8px">
-            <Heading>{primarySymbol}-{secondarySymbol}</Heading>
-            <LinkExternal fontSize="16px" href={getBscScanLink(lpAddress, 'token')}>
+            <Heading>{depositSymbol}</Heading>
+            <LinkExternal fontSize="16px" href={getBscScanLink(poolAddress, 'token')}>
               {t('View Contract')}
             </LinkExternal>
           </Box>
         </Flex>
       </ContainerStyled>
       <CardTipsStyled>
-        <TextTipsStyled textAlign="center" color="white">赚取 BNB</TextTipsStyled>
+        <TextTipsStyled textAlign="center" color="white">赚取 {rewardToken0Symbol}
+          &#38;
+          {rewardToken1Symbol}</TextTipsStyled>
       </CardTipsStyled>
     </BoxHeaderStyled>
   )
