@@ -86,6 +86,8 @@ export const StakeNFT: React.FC<{
       setisAllApprove(arr);
     };
   }, [NftList]);
+
+  console.log(isAllApprove);
   return (
     <>
       {isAllApprove.map(item => (
@@ -97,7 +99,7 @@ export const StakeNFT: React.FC<{
         />
       ))}
       {!signUpFail && !isAllApprove && (
-        <NftAvatar status={status} Nodata={true} />
+        <NftAvatar status={status} Nodata={true} key={'nft-avatar-address'} />
       )}
     </>
   );

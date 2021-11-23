@@ -137,7 +137,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     const nftStake = await FetchNftStakeType(account);
     // 已经质押走登录
     if (nftStake.length > 0 && nftStake[0].token_id) {
-      dispatch(storeAction.setSigninLoading(true));
       dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {
       dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
@@ -161,6 +160,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useEffect(() => {
     if (account) {
       // 1.1查询是否有质押
+      dispatch(storeAction.setSigninLoading(true));
       getStakeType(account);
     }
   }, [account]);
@@ -179,6 +179,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         dispatch(storeAction.changeSignUp({ isSignup: true }));
         dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
       }
+      dispatch(storeAction.setSigninLoading(false));
     }
   }, [nftStatus, isSignin, NftList, isStakeNft]);
 

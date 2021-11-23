@@ -32,10 +32,12 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
       } else {
         // 更换头像
         await onCancelNftStake(address, tokenId);
-        dispatch(fetchUserNftInfoAsync(account));
-        dispatch(fetchThunk.fetchUserInfoAsync());
-        setPendingTx(false);
-        toast.success('更换成功');
+        setTimeout(() => {
+          dispatch(fetchUserNftInfoAsync(account));
+          dispatch(fetchThunk.fetchUserInfoAsync());
+          setPendingTx(false);
+          toast.success('更换成功');
+        }, 15000);
       }
     },
     [onNftsStake, onCancelNftStake, account]
