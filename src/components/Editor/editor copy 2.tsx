@@ -211,7 +211,6 @@ const deepContent = (arr)=>{
     // let content = ''
     let {userIdList,content} = deepContent(value)
     const newValue = parseValue(value)
-    console.log(newValue);
     if(content.length>140){
       setTimeId(null)
       return toast.warning('字数不可超过140')

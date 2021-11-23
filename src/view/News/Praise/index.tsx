@@ -3,6 +3,7 @@ import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization'
 import { Icon, MoreOperatorEnum, List } from 'components';
+import { Header as CenterHeader ,Tabs} from 'view/Home/center'
 import { Api } from 'apis';
 import loveIcn from 'assets/images/social/at.png';
 
@@ -19,7 +20,9 @@ const NewsPraise: React.FC = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
-
+  const tabsChange = (val)=>{
+    console.log(val)
+  }
   // 获取列表
   const getList = (current = 0) => {
     if ((loading || page > totalPage) && !current) {
@@ -60,6 +63,24 @@ const NewsPraise: React.FC = (props) => {
 
   return (
     <NewsPraiseWrapper>
+      <Tabs tabsChange={tabsChange} tabLeftArr={[
+              {
+                label: t('newsNotice'),
+                value: '3',
+                paramsName:'message_type'
+              }
+            ]} tabRightArr={[
+              {
+                label: '全部点赞',
+                value: '2',
+                paramsName:'message_type'
+              },
+              {
+                label: '今日点赞',
+                value: '3',
+                paramsName:'message_type'
+              },
+            ]}></Tabs>
       <List marginTop={410} loading={page <= totalPage} renderList={() => {
         getList()
       }}>
