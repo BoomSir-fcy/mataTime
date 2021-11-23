@@ -133,6 +133,7 @@ export { default as SortUpIcon } from "./Icons/SortUp";
 export { default as PoolsIcon } from "./Icons/Pools";
 export { default as BlockTimeIcon } from "./Icons/BlockTime";
 export { default as MinusBtnIcon } from "./Icons/MinusBtn";
+export { default as CloseLineIcon } from "./Icons/CloseLine";
 export { default as AddBtnIcon } from "./Icons/AddBtn";
 export { default as SvgText } from "./Icons/SvgText";
 export { default as Svg } from "./Svg";

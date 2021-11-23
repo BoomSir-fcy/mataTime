@@ -24,7 +24,7 @@ export const Icon = (props: iocnType) => {
         ...style
       }}
       {...props}
-      ></i>
+    ></i>
   );
 };
 Icon.defaultProps = {
