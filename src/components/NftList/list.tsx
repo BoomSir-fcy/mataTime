@@ -1,15 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import { Box, Text, Flex, Button } from 'uikit';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Box, Text, Flex, Button } from 'uikit';
 import { Avatar } from 'components';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { useApproveNftsFarm } from 'view/Login/hook';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
+import { storeAction } from 'store';
+
 import { NftButton } from './approve';
+
 import Dots from '../Loader/Dots';
 
 const Point = styled(Text)`
@@ -91,11 +94,13 @@ interface Nft {
 const NftAvatar: React.FC<{
   NftInfo?: Nft;
   Nodata: boolean;
-}> = ({ NftInfo, Nodata }) => {
+  status?: number;
+}> = ({ NftInfo, Nodata, status }) => {
+  const dispatch = useDispatch();
   const { account } = useWeb3React();
+  const { t } = useTranslation();
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem);
   const NftList = useStore(p => p.loginReducer.nftList);
-  const { t } = useTranslation();
 
   return (
     <GetAuthorizeBox>
@@ -111,7 +116,9 @@ const NftAvatar: React.FC<{
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
             ) : (
-              <NftButton item={ActiveAvInfo} />
+              <React.Fragment>
+                {!Boolean(status) && <NftButton item={ActiveAvInfo} />}
+              </React.Fragment>
             )}
           </Flex>
           <GetAuthorize>
@@ -130,6 +137,10 @@ const NftAvatar: React.FC<{
                       scale="ld"
                       onClick={() => {
                         if (!NftInfo.needApprove) {
+                          dispatch(
+                            storeAction.setUserNftStake({ isStakeNft: true })
+                          );
+                          dispatch(storeAction.setUserNft(item));
                           setActiveAvInfo(item);
                         }
                       }}

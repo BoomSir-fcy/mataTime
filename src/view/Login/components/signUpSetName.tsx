@@ -9,8 +9,11 @@ import { Api } from 'apis';
 import { toast } from 'react-toastify';
 import { useStore, storeAction } from 'store';
 import { useLogin, useSignIn } from '../hooks';
+import { useContract } from '../hook';
 import { WalletAddress } from './signUp';
 import { useTranslation } from 'contexts/Localization';
+
+import Dots from 'components/Loader/Dots';
 
 const InputItems = styled(Flex)`
   position: relative;
@@ -49,29 +52,52 @@ export const SignUpSetName: React.FC<{
   status?: boolean;
 }> = React.memo(({ status }) => {
   const dispatch = useDispatch();
-  const nft = useStore(p => p.loginReducer.nft);
+  const { loginCallback } = useLogin();
+  const { getUserName } = useSignIn();
   const [state, setState] = useImmer({
     nickName: ''
   });
   const [haveNickName, sethaveNickName] = useState(true);
   const { account } = useWeb3React();
   const { t } = useTranslation();
-  const { loginCallback } = useLogin();
+  const { checkNickname, createUser } = useContract();
+  const nft = useStore(p => p.loginReducer.nft);
+  const loading = useStore(p => p.loginReducer.signinLoading);
+
+  const signIn = async () => {
+    const res = await loginCallback(2);
+    dispatch(storeAction.setSigninLoading(false));
+    if (Api.isSuccess(res)) {
+      const user: any = await getUserName();
+      if (Api.isSuccess(user)) {
+        dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+        dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
+      }
+    }
+  };
 
   const submitProfile = React.useCallback(async () => {
     if (!state.nickName) {
       sethaveNickName(false);
       return;
     }
-    const res = await loginCallback(1, state.nickName);
-    if (Api.isSuccess(res)) {
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
-    } else {
-      if (res.code === 20106) {
-        toast.error(t('loginSetNickNameRepeat'));
+    dispatch(storeAction.setSigninLoading(true));
+    const res = await checkNickname(state.nickName);
+    if (res) {
+      const userInfo = await createUser(
+        state.nickName,
+        nft.properties.token,
+        nft.properties.token_id
+      );
+      console.log(Boolean(userInfo), userInfo);
+      if (Boolean(userInfo)) {
+        signIn();
       } else {
-        toast.error(t('loginSetNickNameFail'));
+        toast.error(t('loginSignupFail'));
       }
+    } else {
+      dispatch(storeAction.setSigninLoading(false));
+      toast.error(t('loginSetNickNameFail'));
     }
   }, [state]);
 
@@ -90,7 +116,7 @@ export const SignUpSetName: React.FC<{
         <InputItems marginBottom="32px" alignItems="center">
           <InputText>{t('loginInputTitleAvatar')}</InputText>
           <Flex alignItems="flex-end">
-            <InputNftImg src={nft.nftUrl} />
+            {nft.image && <InputNftImg src={nft.image} />}
             <Text color="textTips">{t('loginInputValueAvatar')}</Text>
           </Flex>
         </InputItems>
@@ -107,6 +133,7 @@ export const SignUpSetName: React.FC<{
                 p.nickName = event.target.value;
               });
             }}
+            minLength={1}
             maxLength={20}
             placeholder={t('loginInputValueNickname')}
           />
@@ -119,7 +146,11 @@ export const SignUpSetName: React.FC<{
       </Box>
       <Flex justifyContent="center">
         <Submit scale="ld" onClick={submitProfile} disabled={!status}>
-          {t('loginSignUpNext')}
+          {Boolean(loading) ? (
+            <Dots>{t('loginSignUpNext')}</Dots>
+          ) : (
+            t('loginSignUpNext')
+          )}
         </Submit>
       </Flex>
     </Box>

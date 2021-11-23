@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import {
+  useHistory,
+  useLocation,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
+import { StakeNFT } from 'components/NftList';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueriesSize } from 'uikit/theme/base';
-import {
-  useFetchSupportNFT,
-  useFetchNftList,
-  FetchNftStakeType,
-  useLogin
-} from './hook';
-import { StakeNFT } from 'components/NftList';
+import { useLogin, useSignIn } from './hooks';
+import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
+import { useTranslation } from 'contexts/Localization';
+
+import { Api } from 'apis';
 
 import sloganImg from 'assets/images/login_slogan_img.png';
 
@@ -85,16 +90,21 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchNftList();
 
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
   const loginReduce = useStore(p => p.loginReducer);
-  const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
+  const NftList = useStore(p => p.loginReducer.nftList);
+  const { t } = useTranslation();
+  const { isSignup, isSignin, signUpFail, isStakeNft, singUpStep, nftStatus } =
+    loginReduce;
   const { account } = useWeb3React();
   const { loginCallback } = useLogin();
+  const { getUserName } = useSignIn();
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
+  const redict = location?.state?.from?.pathname;
   const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
-  // 自己的Nft列表
-  const NftList = useStore(p => p.loginReducer.nftList);
   // 选择链
   const checkNetwork = async () => {
     const chainId: any = await window.ethereum.request({
@@ -103,24 +113,11 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   };
 
-  // 查询是否有质押的NFT
-  const getStakeType = async account => {
-    const nftStake = await FetchNftStakeType(account);
-    if (nftStake[0]?.token_id) {
-      // 已经质押
-      dispatch(storeAction.changeSignin({ isSignin: true }));
-    } else {
-      dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
-    }
-  };
-
-  const redict = location?.state?.from?.pathname;
-
   const signIn = async () => {
     //2.1 用户已经注册登录钱包签名
     const res = await loginCallback(2);
     dispatch(storeAction.setSigninLoading(false));
-    if (res) {
+    if (Api.isSuccess(res)) {
       //2.2 获取用户信息
       const user: any = await getUserName();
       //2.3
@@ -128,15 +125,22 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         // 存储userinfo 跳转首页
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
         history.replace(`${redict || '/'}`);
-      } else if (user.code === 20103) {
-        // 20103 已注册未添加昵称 跳转到第三步去填写昵称——进入signUp文件
-        // 获取用户头像
-        const Avatar = await getNftUrl(account);
-        dispatch(storeAction.changeSignUp({ isSignup: true }));
-        dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
       }
     } else {
-      logout();
+      dispatch(storeAction.changeReset());
+      toast.error(t('loginSigninFail') || res?.msg);
+    }
+  };
+
+  // 查询是否有质押的NFT
+  const getStakeType = async account => {
+    const nftStake = await FetchNftStakeType(account);
+    // 已经质押走登录
+    if (nftStake.length > 0 && nftStake[0].token_id) {
+      dispatch(storeAction.setSigninLoading(true));
+      dispatch(storeAction.changeSignin({ isSignin: true }));
+    } else {
+      dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   };
 
@@ -147,7 +151,11 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     };
   }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (isSignin) {
+      signIn();
+    }
+  }, [isSignin]);
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
@@ -155,22 +163,24 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       // 1.1查询是否有质押
       getStakeType(account);
     }
-    // 页面销毁清除登录状态数据
   }, [account]);
 
   useEffect(() => {
     // 2没有质押的情况下
-    dispatch(storeAction.setSigninLoading(false));
-    // if (!NftList.length && !isStakeNft) {
-    //   // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
-    //   setshowStakeNft(false);
-    //   dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    // } else if (NftList.length && !isStakeNft) {
-    //   // 有可用的头像 显示头像列表——可以注册，显示钱包签名
-    //   setshowStakeNft(true);
-    //   dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    // }
-  }, [NftList, isStakeNft]);
+    if (nftStatus && !isSignin) {
+      if (!NftList.length && !isStakeNft) {
+        // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
+        setshowStakeNft(false);
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
+        dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+      } else if (NftList.length && !isStakeNft) {
+        // 有可用的头像 显示头像列表——可以注册，显示钱包签名
+        setshowStakeNft(true);
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
+        dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+      }
+    }
+  }, [nftStatus, isSignin, NftList, isStakeNft]);
 
   return (
     <LoginContainer>
@@ -178,7 +188,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         {nftBoolean && (
           <Nft>
             <Text fontSize="30px">选择并质押头像</Text>
-            <StakeNFT />
+            <StakeNFT status={1} />
           </Nft>
         )}
       </LeftBox>

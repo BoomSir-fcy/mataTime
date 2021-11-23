@@ -30,7 +30,9 @@ const NftImg = styled.img`
   cursor: pointer;
 `;
 
-export const StakeNFT: React.FC = () => {
+export const StakeNFT: React.FC<{
+  status?: number;
+}> = ({ status }) => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { t } = useTranslation();
@@ -87,9 +89,16 @@ export const StakeNFT: React.FC = () => {
   return (
     <>
       {isAllApprove.map(item => (
-        <NftAvatar key={item.address} NftInfo={item} Nodata={false} />
+        <NftAvatar
+          key={item.address}
+          status={status}
+          NftInfo={item}
+          Nodata={false}
+        />
       ))}
-      {!signUpFail && !isAllApprove && <NftAvatar Nodata={true} />}
+      {!signUpFail && !isAllApprove && (
+        <NftAvatar status={status} Nodata={true} />
+      )}
     </>
   );
 };

@@ -18,8 +18,7 @@ export const changeUpdateProfile = createAction<profile>(
   'login/changeUpdateProfile'
 );
 export const changeReset = createAction('login/changeReset');
-export const setUserNft =
-  createAction<Api.SignIn.nftParams>('signin/setUserNft');
+export const setUserNft = createAction<any>('signin/setUserNft');
 export const setUserNftStake = createAction<{ isStakeNft: boolean }>(
   'signin/setUserNftList'
 );

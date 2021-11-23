@@ -14,7 +14,6 @@ import {
 import { storage } from 'config';
 import { Api } from 'apis';
 import { FetchNftsList } from 'view/Login/hook';
-import { getUrl } from 'apis/DsgRequest';
 
 const initialState = {
   isSignup: false,
@@ -24,10 +23,8 @@ const initialState = {
   signinLoading: false,
   singUpStep: 1,
   userInfo: {} as Api.User.userInfoParams,
-  nft: {
-    nftID: 0,
-    nftUrl: ''
-  },
+  nft: {} as any,
+  nftStatus: false,
   nftList: [],
   nftAddr: []
 };
@@ -85,6 +82,7 @@ export const login = createSlice({
         state.isStakeNft = false;
         state.signUpFail = false;
         state.signinLoading = false;
+        state.nftStatus = false;
       })
       .addCase(fetchUserInfoAsync.fulfilled, (state, action) => {
         state.userInfo = action.payload.data;
@@ -102,6 +100,7 @@ export const login = createSlice({
         state.signinLoading = action.payload;
       })
       .addCase(fetchUserNftInfoAsync.fulfilled, (state, action) => {
+        state.nftStatus = true;
         state.nftList = action.payload;
       });
   }

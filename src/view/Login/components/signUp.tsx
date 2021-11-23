@@ -13,10 +13,7 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 import { shortenAddress } from 'utils/contract';
 import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
-import { useLogin, useSignIn } from '../hooks';
-
 import { useTranslation } from 'contexts/Localization';
-import { FetchNftStakeType } from '../hook';
 
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
@@ -100,21 +97,12 @@ export const SignUp: React.FC<{
   const dispatch = useDispatch();
   const { singUpStep } = useStore(p => p.loginReducer);
   const { account } = useWeb3React();
-  const { getNftUrl } = useSignIn();
   const { t } = useTranslation();
 
   // 已经注册完成，跳转第4步
   const signHandle = React.useCallback(async () => {
     dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
   }, [dispatch]);
-
-  // 去注册、设置昵称
-  const setNickName = React.useCallback(async () => {
-    const res: number = await getNftUrl(account);
-    if (Boolean(res)) {
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 2 }));
-    }
-  }, [account]);
 
   return (
     <Box width="100%">
@@ -147,7 +135,7 @@ export const SignUp: React.FC<{
       </Button> */}
       {/* 正常情况下走注册流程 */}
       {singUpStep === 1 && !signUpFail && <SignUpSetName status={isStakeNft} />}
-      {singUpStep === 2 && <SignUpSetName />}
+      {/* {singUpStep === 2 && <SignUpSetName />} */}
       {singUpStep === 3 && (
         <Box width="100%">
           <Text
