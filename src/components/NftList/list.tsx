@@ -63,6 +63,8 @@ const NowrapBtn = styled(Button)`
   word-break: keep-all;
 `;
 const AvatarBox = styled.div`
+  width: 102px;
+  height: 104px;
   border: 2px solid #e0f9d0;
   border-radius: 10px;
 `;
@@ -122,9 +124,9 @@ const NftAvatar: React.FC<{
             )}
           </Flex>
           <GetAuthorize>
-            {NftList.map(item =>
+            {NftList.map((item, index) =>
               NftInfo.address === item.properties.token ? (
-                <Column key={item.properties.token_id}>
+                <Column key={`${index}_${item.properties.token_id}`}>
                   {/* {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />} */}
                   <AvatarBox
                     className={

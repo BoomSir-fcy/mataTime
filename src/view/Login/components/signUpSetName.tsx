@@ -53,7 +53,7 @@ export const SignUpSetName: React.FC<{
 }> = React.memo(({ status }) => {
   const dispatch = useDispatch();
   const { loginCallback } = useLogin();
-  const { getUserName } = useSignIn();
+  const { getUserName, siginInVerify } = useSignIn();
   const [state, setState] = useImmer({
     nickName: ''
   });
@@ -63,8 +63,22 @@ export const SignUpSetName: React.FC<{
   const { checkNickname, createUser } = useContract();
   const nft = useStore(p => p.loginReducer.nft);
   const loading = useStore(p => p.loginReducer.signinLoading);
+  let timer: any = 0;
+
+  // 轮询查找用户是否注册
+  const verify = () => {
+    timer = setInterval(async () => {
+      toast.warning('正在查询中...');
+      const res = await siginInVerify(account.toLowerCase());
+      if (Boolean(res)) {
+        timer && clearInterval(timer);
+        signIn();
+      }
+    }, 6000);
+  };
 
   const signIn = async () => {
+    timer && clearInterval(timer);
     const res = await loginCallback(2);
     dispatch(storeAction.setSigninLoading(false));
     if (Api.isSuccess(res)) {
@@ -73,6 +87,8 @@ export const SignUpSetName: React.FC<{
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
         dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
       }
+    } else {
+      toast.error(res.data);
     }
   };
 
@@ -89,9 +105,8 @@ export const SignUpSetName: React.FC<{
         nft.properties.token,
         nft.properties.token_id
       );
-      console.log(Boolean(userInfo), userInfo);
       if (Boolean(userInfo)) {
-        signIn();
+        verify();
       } else {
         toast.error(t('loginSignupFail'));
       }
@@ -100,6 +115,12 @@ export const SignUpSetName: React.FC<{
       toast.error(t('loginSetNickNameFail'));
     }
   }, [state]);
+
+  React.useEffect(() => {
+    return () => {
+      timer && clearInterval(timer);
+    };
+  }, []);
 
   return (
     <Box>

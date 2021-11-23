@@ -136,6 +136,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
     // 已经质押走登录
+    console.log('质押:', nftStake);
     if (nftStake.length > 0 && nftStake[0].token_id) {
       dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {

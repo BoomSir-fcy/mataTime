@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { Box, Flex, Text, Button, Card } from 'uikit';
-import { useTranslation } from 'contexts/Localization';
 import NftAvatar from './list';
 
 const Nft = styled(Box)`
@@ -35,7 +34,6 @@ export const StakeNFT: React.FC<{
 }> = ({ status }) => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
-  const { t } = useTranslation();
   // 是否授权
   const [isAllApprove, setisAllApprove] = useState([]);
   // 自己的Nft列表
@@ -87,20 +85,21 @@ export const StakeNFT: React.FC<{
     };
   }, [NftList]);
 
-  console.log(isAllApprove);
   return (
-    <>
-      {isAllApprove.map(item => (
-        <NftAvatar
-          key={item.address}
-          status={status}
-          NftInfo={item}
-          Nodata={false}
-        />
-      ))}
+    <React.Fragment>
+      {isAllApprove.map((item, index) => {
+        return (
+          <NftAvatar
+            key={index}
+            status={status}
+            NftInfo={item}
+            Nodata={false}
+          />
+        );
+      })}
       {!signUpFail && !isAllApprove && (
-        <NftAvatar status={status} Nodata={true} key={'nft-avatar-address'} />
+        <NftAvatar status={status} Nodata={true} />
       )}
-    </>
+    </React.Fragment>
   );
 };
