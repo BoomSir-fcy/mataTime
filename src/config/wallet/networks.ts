@@ -209,7 +209,7 @@ export const ETHEREUM_CHAIN = {
     rpcUrls: [
       'https://data-seed-prebsc-1-s2.binance.org:8545/',
       'https://data-seed-prebsc-1-s3.binance.org:8545/',
-      'https://data-seed-prebsc-2-s1.binance.org:8545/',
+      // 'https://data-seed-prebsc-2-s1.binance.org:8545/',
     ],
     blockExplorerUrls: [`${BASE_BSC_SCAN_URLS[ChainId.MAINNET]}/`],
   },
