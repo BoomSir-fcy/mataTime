@@ -111,7 +111,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   <CommentPop data={item} 
               callback={initList}
               >
-                    <Icon name="icon-gengduo" margin="8px 15px 0 0" color="#7E7E7E"></Icon>
+                    <Icon name="icon-gengduo" cur margin="8px 15px 0 0" color="#7E7E7E"></Icon>
                   </CommentPop>
                     {/* <MorePopup data={new Object()}> */}
                     {/* </MorePopup> */}

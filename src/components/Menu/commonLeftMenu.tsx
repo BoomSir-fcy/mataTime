@@ -104,6 +104,10 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
 
   useEffect(() => {
     getMsgNumRequest();
+    const currentMenuItemKey = (props.menu.find(item=>item.link===pathname)||{}).alias
+    if(currentMenuItemKey){
+      getMsgReadRequest(currentMenuItemKey)
+    }
   }, []);
 
   // 获取未读消息数量
@@ -111,7 +115,6 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
     const res = await Api.NewsApi.getUnreadMsgNum();
     if (Api.isSuccess(res)) {
       setMsgNum(res.data);
-      getMsgReadRequest('message_at_me')
     }
   };
 

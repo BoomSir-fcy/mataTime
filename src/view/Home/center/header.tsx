@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { Icon } from 'components'
+import { useSelector } from 'react-redux'
+
 import { Flex, Card } from 'uikit'
 export const HeaderBox = styled(Card)`
 position: relative;
@@ -17,6 +19,8 @@ i.icon-fanhui{
 }
 `
 export const Header = (props: { title?: string, back?: boolean, clickTitle?: () => void,align?: string ,[propName: string]: any }) => {
+  const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
+
   const { title, back = false, align='flex-start' } = props
   const clickTitle = (e) => {
     // console.log(e);
@@ -27,7 +31,7 @@ export const Header = (props: { title?: string, back?: boolean, clickTitle?: () 
   // const back = props.location.pathname!=='/'
   return (
     <HeaderBox style={{justifyContent:align,paddingLeft:back&&align!=='center'?'60px':null}}>
-      {back && <Icon name="icon-fanhui" onClick={clickBack} margin="0px 10px 0 0" size={23} color="#fff"  />}
+      {back && <Icon name="icon-fanhui" onClick={clickBack} margin="0px 10px 0 0" size={23} color={isDark?'#fff':'#000'}  />}
       <span onClick={clickTitle.bind(this)}>{title || '首页'}</span>
     </HeaderBox>
   )
