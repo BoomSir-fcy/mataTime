@@ -1,14 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Flex, Box, Text, Image, Button, Heading, CloseLineIcon } from 'uikit';
-import { Container } from 'components'
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { ModalWrapper } from 'components'
 import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import HistoryModal from './Pops/HistoryModal';
-import { useInfo } from '../../hooks/walletInfo';
 import { Api } from 'apis';
 import { splitThousandSeparator } from 'utils/formatBalance';
+
 
 const Content = styled(Box)`
 width:50%;
@@ -77,36 +76,25 @@ ${({ theme }) => theme.mediaQueriesSize.marginr}
 
 interface Wallet {
   Token: string
+  Balance: number
+  TokenAddr: string
+  BalanceInfo: Api.Account.Balance
 }
-const WalletBox: React.FC<Wallet> = ({ Token }) => {
-
+const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo }) => {
+  // useFetchWalletInfo()
   const { account } = useWeb3React()
   const [visible, setVisible] = useState(false)
   const [visibleHistory, setVisibleHistory] = useState(false)
   const [ModalTitle, setModalTitle] = useState('')
   const [ChosenType, setChosenType] = useState(1)
   const [ActiveHistory, setActiveHistory] = useState(1)
-  const { getBalance } = useInfo()
-  const getMyBalance = async () => {
-    const res = await getBalance();
-    if (Api.isSuccess(res)) {
-      console.log(res);
-    }
-
-  }
   const openModaal = (title) => {
     const titleText = title === 1 ? '充值' : '提现'
     setModalTitle(`${titleText} ${Token}`)
     setChosenType(title)
     setVisible(true)
   }
-  const onClose = useCallback(() => setVisibleHistory(false), [setVisibleHistory])
-  useEffect(() => {
-    account && getMyBalance()
-    return () => {
-
-    }
-  }, [account])
+  const onClose = useCallback(() => setVisible(false), [setVisible])
   return (
     <Content mb='12px'>
       <TopInfo mb='4px'>
@@ -114,7 +102,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
         <Info>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >平台余额</Fount>
-            <NumText>{splitThousandSeparator(19123)}</NumText>
+            <NumText>{splitThousandSeparator(Number(BalanceInfo.available_balance))}</NumText>
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >今日收入</Fount>
@@ -122,7 +110,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >钱包余额</Fount>
-            <NumText>{splitThousandSeparator(21556233)}</NumText>
+            <NumText>{splitThousandSeparator(Balance)}</NumText>
           </Flex>
         </Info>
       </TopInfo>
@@ -133,7 +121,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
       <Flex justifyContent='space-between'>
         <Flex flexDirection='column' justifyContent='space-between'>
           <Fount >冻结金额</Fount>
-          <NumText>{splitThousandSeparator(8596)}</NumText>
+          <NumText>{splitThousandSeparator(Number(BalanceInfo.freeze_balance))}</NumText>
         </Flex>
         <Flex justifyContent='end' alignItems='center'>
           <RechargeBtn mr='20px' onClick={() => openModaal(1)}>充值</RechargeBtn>
@@ -141,9 +129,11 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
           <HistoryIcon onClick={() => setVisibleHistory(true)} src={require('assets/images/myWallet/history.png').default} />
         </Flex>
       </Flex>
+      {/* 输入框弹窗 */}
       <ModalWrapper title={ModalTitle} creactOnUse visible={visible} setVisible={setVisible}>
-        <RechargeOrWithdrawPop type={ChosenType} token={Token} balance={100000} />
+        <RechargeOrWithdrawPop onClose={onClose} TokenAddr={TokenAddr} type={ChosenType} token={Token} balance={Balance} withdrawalBalance={BalanceInfo.available_balance} />
       </ModalWrapper>
+      {/* 提币、充值记录 */}
       <ModalWrapper customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
         <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">

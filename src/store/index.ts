@@ -6,8 +6,10 @@ import { appReducer, appAction, App } from './app';
 import { toastContainer } from './app/actions';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from './login';
 import coinsReduce from './coins/reducer';
+import walletReduce from './wallet/reducer';
 import poolsReduce from './pools';
 import type { CoinsState } from './coins/reducer';
+import type { WalletState } from './wallet/reducer';
 import { PoolsState } from './pools/types';
 
 export interface Store {
@@ -15,17 +17,19 @@ export interface Store {
   loginReducer: Login;
   coins: CoinsState;
   pools: PoolsState;
+  wallet: WalletState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
 // export const store = createStore(rootReducer, composeWithDevTools());
-const PERSISTED_KEYS: string[] = ['appReducer', 'loginReducer'];
+const PERSISTED_KEYS: string[] = ['appReducer'];
 export const store = configureStore({
   reducer: {
     appReducer,
     loginReducer,
     coins: coinsReduce,
     pools: poolsReduce,
+    wallet: walletReduce,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
