@@ -36,7 +36,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       pid: itemData.id,
       comment: res,
     }).then(res => {
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
         toast.success(res.data)
         setRefresh(refresh === 1 ? 2 : 1)
         resetInput()

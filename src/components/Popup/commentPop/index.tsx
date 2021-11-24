@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReportModal, EditTwitterModal, CommonInquiryModal } from 'components';
+import { ReportModal, EditTwitterModal, CommonInquiryModal ,CommentModal} from 'components';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
@@ -23,6 +23,7 @@ export const CommentPop = React.memo((props: Iprops) => {
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [inqueryType, setInqueryType] = useState<string>('deleteComment');
 
+  const [isShowDel, setIsShowDel] = useState<boolean>(false);
   useEffect(() => {
     init();
   }, []);
@@ -68,6 +69,7 @@ export const CommentPop = React.memo((props: Iprops) => {
           setVisible(!visible);
         }}
       >
+        <CommentModal contentText={t('delCommentTitle')} titleText={t('delCommentContent')} show={isShowDel} onClose={()=>{setIsShowDel(false)}} onQuery={delComment}/>
         {children}
         {visible && isCurrentUser ? (
           <PopupContentWrapper>
@@ -76,7 +78,7 @@ export const CommentPop = React.memo((props: Iprops) => {
             }}>{t('moreDelete')}</p>
             {/* <p onClick={reportComment}>{t('moreReport')}</p> */}
           </PopupContentWrapper>
-        ) : null}
+        ) :null}
       </PopupWrapper>
 
       {/* 统一询问框 */}
