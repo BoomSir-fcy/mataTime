@@ -85,3 +85,5 @@ interface Window {
   };
   MSStream?: boolean;
 }
+
+type address = string

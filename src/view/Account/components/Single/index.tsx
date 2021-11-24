@@ -7,7 +7,7 @@ import PoolCard from '../PoolCard/PoolCard';
 const Single: React.FC = () => {
 
   useFetchSinglePool()
-  const { data, loaded, userDataMap } = useSinglePoolState()
+  const { data, loaded, userDataMap, userStakesMap } = useSinglePoolState()
   console.log(userDataMap)
 
   const poolsMemoized = useMemo(() => {
@@ -24,7 +24,12 @@ const Single: React.FC = () => {
               <FlexAutoWarpper>
                 {
                   poolsMemoized.map(poolInfo => (
-                    <PoolCard key={poolInfo.pid} poolInfo={poolInfo} userData={userDataMap[poolInfo.pid]} />
+                    <PoolCard
+                      key={poolInfo.pid}
+                      poolInfo={poolInfo}
+                      userData={userDataMap[poolInfo.pid]}
+                      userStakes={userStakesMap[poolInfo.pid]}
+                    />
                   ))
                 }
               </FlexAutoWarpper>

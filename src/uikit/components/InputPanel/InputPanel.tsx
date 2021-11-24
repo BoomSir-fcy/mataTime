@@ -26,8 +26,8 @@ const StyledErrorMessage = styled(Text)`
 `
 const InputPanelStyled = styled(Box) <InputPanelStyled>`
   border-radius: 16px;
-  background-color: ${({ theme, background }) => theme.colors[background] || theme.colors.inputPanel};
-  box-shadow: ${getBoxShadow};
+  background-color: ${({ theme, background }) => theme.colors[background] || theme.colors.backgroundTextArea};
+  /* box-shadow: ${getBoxShadow}; */
   position: relative;
   padding: 8px 20px;
 `

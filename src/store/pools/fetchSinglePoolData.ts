@@ -36,15 +36,15 @@ export const fetchSinglePoolData = async (): Promise<SinglePoolData[]> => {
         depositToken: baseInfo.depositToken_,
         depositSymbol: item.lpSymbol,
         depositName: item.lpName,
-        depositDecimals: item.lpDecimals,
+        depositDecimals: Number(item.lpDecimals),
         rewardToken0: baseInfo.rewardToken0_,
         rewardToken0Symbol: item.rewardToken0Symbol,
         rewardToken0Name: item.rewardToken0Name,
-        rewardToken0Decimals: item.rewardToken0Decimals,
+        rewardToken0Decimals: Number(item.rewardToken0Decimals),
         rewardToken1: baseInfo.rewardToken1_,
         rewardToken1Symbol: item.rewardToken1Symbol,
         rewardToken1Name: item.rewardToken1Name,
-        rewardToken1Decimals: item.rewardToken1Decimals,
+        rewardToken1Decimals: Number(item.rewardToken1Decimals),
         token0AdditionalRewardEndBlock: baseInfo.token0AdditionalRewardEndBlock_.toString(),
         token1AdditionalRewardEndBlock: baseInfo.token1AdditionalRewardEndBlock_.toString(),
         startBlock: baseInfo.startBlock_.toString(),
@@ -108,7 +108,7 @@ export const fetchSinglePoolUserData = async (account: string): Promise<PoolUser
       const poolUserData: PoolUserData = {
         pid: item.pid.toString(),  // 池子id
         stakingId: item.stakingId.toString(),
-        amount: item.amount.toString(),     // 质押的代币数量
+        stakeAmount: item.amount.toString(),     // 质押的代币数量
         token0UnclaimedRewards: item.token0UnclaimedRewards.toString(), // 奖励代币0的未收获数量
         token1UnclaimedRewards: item.token1UnclaimedRewards.toString(), // 奖励代币1的未收获数量
         time: item.time.toString(), // 质押的开始时间
@@ -133,8 +133,6 @@ export const fetchUserTokenVal = async (account: string, poolsData: SinglePoolDa
       return { address, name: 'balanceOf', params: [account] }
     })
 
-    console.log(calls0)
-    console.log(calls1)
     const allowances = await multicall(erc20ABI, calls0)
     const balances = await multicall(erc20ABI, calls1)
     return poolsData.map(pool => {

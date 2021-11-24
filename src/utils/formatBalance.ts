@@ -115,5 +115,17 @@ export const formatDisplayBalance = (stakedBalance: BigNumber, decimals = 18) =>
   return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
 }
 
+// 余额显示精度并和符合使用
+export const formatDisplayBalanceWithSymbol = (stakedBalance: BigNumber, decimals = 18) => {
+  const stakedBalanceBigNumber = getBalanceAmount(stakedBalance, decimals)
+  if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0_000_001)) {
+    return '< 0.0000001'
+  }
+  if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.001)) {
+    return getFullDisplayBalance(stakedBalance, decimals).toLocaleString()
+  }
+  return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+}
+
 
 export default formatLocalisedCompactNumber

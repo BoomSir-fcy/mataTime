@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { PoolsState, LiquidityPoolData, UserData, SinglePoolData, PoolUserData, UserTokenData } from './types'
+import { PoolsState, LiquidityPoolData, UserData, SinglePoolData, PoolUserData, UserTokenData, PoolUserDataBase } from './types'
 
 const initialState: PoolsState = {
   liquidity: {
@@ -10,7 +10,8 @@ const initialState: PoolsState = {
   single: {
     data: [],
     loaded: false,
-    userDataMap: {}
+    userDataMap: {},
+    userStakesMap: {}
   },
 };
 
@@ -50,12 +51,20 @@ export const pools = createSlice({
       })
       state.single.loaded = true
     },
-    setSpUserData: (state, { payload: userDatas }: { payload: PoolUserData[] | UserTokenData[] }) => {
-      console.log(userDatas, '=payload')
+    setSpUserData: (state, { payload: userDatas }: { payload: PoolUserDataBase[] | UserTokenData[] }) => {
       userDatas.forEach(item => {
         state.single.userDataMap[item.pid] = {
           ...state.single.userDataMap[item.pid],
           ...item
+        }
+      })
+    },
+    setSpUserStakesData: (state, { payload: userDatas }: { payload: PoolUserData[] }) => {
+      userDatas.forEach(item => {
+        if (!state.single.userStakesMap[item.pid]) {
+          state.single.userStakesMap[item.pid] = [{ ...item }]
+        } else {
+          state.single.userStakesMap[item.pid] = state.single.userStakesMap[item.pid].concat({ ...item })
         }
       })
     }
@@ -67,6 +76,7 @@ export const {
   setLpDataList,
   setSpDataList,
   setSpUserData,
+  setSpUserStakesData,
 } = pools.actions
 
 export default pools.reducer;
