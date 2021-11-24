@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components'
 import { Flex, Box, Text, Card } from 'uikit';
 import { Container } from 'components'
+import { SinglePoolData, UserData } from 'store/pools/types';
 import PoolCardHeader from './PoolCardHeader'
 import PoolAction from './PoolAction';
 
@@ -9,12 +10,16 @@ const ContainerStyled = styled(Container)`
  padding-top: 0;
 `
 
-const PoolCard: React.FC = () => {
+interface PoolCardProps {
+  poolInfo: SinglePoolData
+  userData?: UserData
+}
+const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData }) => {
 
   return (
     <Card>
       <Box>
-        <PoolCardHeader />
+        <PoolCardHeader depositToken={''} rewardToken0={''} rewardToken1={''} depositSymbol={''} rewardToken0Symbol={''} rewardToken1Symbol={''} poolAddress={''} />
         <ContainerStyled>
           <Flex justifyContent="space-between">
             <Box>
@@ -27,7 +32,7 @@ const PoolCard: React.FC = () => {
             </Box>
           </Flex>
         </ContainerStyled>
-        <PoolAction />
+        <PoolAction userData={userData} poolInfo={poolInfo} />
       </Box>
     </Card>
   )

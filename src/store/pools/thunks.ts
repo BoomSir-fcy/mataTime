@@ -1,7 +1,8 @@
 import { AppThunk } from '../types'
-import { LiquidityPoolData } from './types'
+import { LiquidityPoolData, SinglePoolData } from './types'
 import { fetchLpDataList } from './fetchLpData'
-import { setLpDataList } from '.'
+import { fetchSinglePoolData, fetchPoolTokensPrice, fetchSinglePoolUserData, fetchUserTokenVal } from './fetchSinglePoolData'
+import { setLpDataList, setSpDataList, setSpUserData } from '.'
 
 
 export const fetchLpPublicDatasAsync = (data: LiquidityPoolData[]): AppThunk => async (dispatch) => {
@@ -24,6 +25,32 @@ export const fetchLpDataListAsync =
       dispatch(fetchLpPublicDatasAsync(data))
       if (account) {
         dispatch(fetchVaultUserAsync(account))
+      }
+    }
+
+
+export const fetchSpPublicDatasAsync = (datas: SinglePoolData[]): AppThunk => async (dispatch) => {
+  const priceData = await fetchPoolTokensPrice(datas)
+  dispatch(setSpDataList(priceData))
+}
+export const fetchSpVaultUserAsync = (account: string, datas?: SinglePoolData[]): AppThunk => async (dispatch, getState) => {
+  const userPoolData = await fetchSinglePoolUserData(account)
+  dispatch(setSpUserData(userPoolData))
+  const pools = datas ? datas : getState().pools.single.data
+  const userTokens = await fetchUserTokenVal(account, pools)
+  console.log(userTokens)
+  dispatch(setSpUserData(userTokens))
+}
+
+export const fetchSinglePoolDataAsync =
+  (account?: string): AppThunk =>
+    async (dispatch, getState) => {
+      const state = getState()
+      const data = await fetchSinglePoolData()
+      dispatch(setSpDataList(data))
+      dispatch(fetchSpPublicDatasAsync(data))
+      if (account) {
+        dispatch(fetchSpVaultUserAsync(account))
       }
     }
 

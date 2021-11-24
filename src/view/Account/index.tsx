@@ -11,7 +11,7 @@ const Account: React.FC = () => {
   return (
     <PageSection>
       <TokenAccount />
-      <Liquidity />
+      {/* <Liquidity /> */}
       <Single />
     </PageSection>
   )

@@ -3,6 +3,7 @@ import { simpleRpcProvider } from 'utils/providers'
 import dsgnftAbi from 'config/abi/dsgnft.json'
 import nftSocialAbi from 'config/abi/nftSocial.json'
 import timeShopAbi from 'config/abi/TimeShop.json'
+import MutiRewardPoolAbi from 'config/abi/MutiRewardPool.json'
 
 
 // Addresses
@@ -11,6 +12,7 @@ import {
   getLiquidityPool,
   getMulticallAddress,
   getNftSocialAddress,
+  getSinglePool,
   getTimeShopAddress
 } from 'utils/addressHelpers'
 
@@ -48,4 +50,8 @@ export const getTimeShopContract = (signer?: ethers.Signer | ethers.providers.Pr
 
 export const getLiquidityPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(nftSocialAbi, getLiquidityPool(), signer)
+}
+
+export const getSinglePoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(MutiRewardPoolAbi, getSinglePool(), signer)
 }

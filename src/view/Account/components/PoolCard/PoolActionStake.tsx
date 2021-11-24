@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Text, Card, Button, MinusBtnIcon, AddBtnIcon } from 'uikit';
+import { useApproveErc20Pool, useHarvestStakeId, useStakePool } from '../../hooks/pools';
 import { Container, ModalWrapper } from 'components'
 import StakeModal from '../PoolModal/StakeModal'
 
@@ -8,12 +9,17 @@ const ButtonStyled = styled(Button)`
   padding: 0 8px;
 `
 
+interface PoolActionStakeProps {
 
+}
 
 const PoolActionStake: React.FC = () => {
 
   const [visible, setVisible] = useState(false)
   const [testVal, setTestVal] = useState(1)
+
+  // const { onApprove } = useStakePool(pid, de)
+
 
   return (
     <Box>

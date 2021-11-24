@@ -22,3 +22,11 @@ export const TokenPairImage: React.FC<TokenPairImageProps> = ({
   const secondarySrcs = getTokenLogoURLs(secondaryAddress)
   return <UIKitTokenPairImage primarySrcs={primarySrcs} secondarySrcs={secondarySrcs} {...props} />
 }
+
+interface TokenImageProps extends ImageProps {
+  tokenAddress: string
+}
+
+export const TokenImage: React.FC<TokenImageProps> = ({ tokenAddress, ...props }) => {
+  return <UIKitTokenImage srcs={getTokenLogoURLs(tokenAddress)} {...props} />
+}

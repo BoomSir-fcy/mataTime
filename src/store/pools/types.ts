@@ -1,24 +1,40 @@
 declare type address = string
 
 export interface PoolUserData {
+  pid: string,  //池子id
+  stakingId: string,
+  amount: string,     // 质押的代币数量
+  token0UnclaimedRewards: string, //奖励代币0的未收获数量
+  token1UnclaimedRewards: string, //奖励代币1的未收获数量
+  time: string, //质押的开始时间
+  unlockTime: string, //解锁时间
+}
+
+export interface UserTokenData {
   allowance: string
-  stakedBalance: string // 质押数量
+  pid: string,  //池子id
   tokenBalance: string // 质押代币余额
-  earnings: string // 待领取金额
-  poolId: string // 池子id
+}
+export interface UserData extends PoolUserData, UserTokenData { }
+
+export interface SinglePoolBaseInfo {
+  token0AdditionalRewardEndBlock: string
+  token1AdditionalRewardEndBlock: string
+  startBlock: string
+  bonusEndBlock: string
 }
 export interface PoolsBase {
   loaded: boolean
-  userData?: PoolUserData
+  userDataMap: {
+    [pid: string]: UserData
+  }
 }
 
 export interface PoolDataBase {
   totalAmount: string // 当前总质押量
-  poolAddress: address // 池子地址
-  stakeAddress: address // 质押币种地址
-  stakeToken: address
-  poolId: string
-  finished?: boolean
+  allocPoint: string // 权重
+  pid: string
+  poolAddress: address
 }
 export interface LiquidityPoolData extends PoolDataBase {
   token0: address
@@ -29,10 +45,28 @@ export interface LiquidityPoolData extends PoolDataBase {
   decimals1: string
 }
 
-export interface SinglePoolData extends PoolDataBase {
-  token: address
-  symbol: string
-  decimals: string
+export interface SinglePoolData extends PoolDataBase, SinglePoolBaseInfo {
+  duration: string  // 最小需要质押的时间，秒
+  lastRewardBlock: string  // 最后奖励区块
+  token0RewardsPerBlock: string // token0每区块奖励数
+  token1RewardsPerBlock: string // token1每区块奖励数
+  token0AdditionalRewardPerBlock: string // token0每区块附加奖励数
+  token1AdditionalRewardPerBlock: string // token1每区块附加奖励数
+  rewardToken0: address
+  rewardToken0Symbol: string
+  rewardToken0Name: string
+  rewardToken0Decimals: string
+  rewardToken1: address
+  rewardToken1Symbol: string
+  rewardToken1Name: string
+  rewardToken1Decimals: string
+  depositToken: address; // 质押代币地址
+  depositSymbol: string, //质押代币标识
+  depositName: string, //质押代币名称
+  depositDecimals: string, //质押代币小数位
+  depositTokenPrice?: string, // 代币价格
+  rewardToken0Price?: string, // 代币价格
+  rewardToken1Price?: string, // 代币价格
 }
 
 export interface LiquidityPool extends PoolsBase {

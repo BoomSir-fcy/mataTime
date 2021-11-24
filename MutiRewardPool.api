@@ -1,0 +1,107 @@
+
+contract MutiRewardPool {
+	// 质押信息
+	struct StakingInfo {
+        uint256 pid; //池子id
+        uint256 amount;     // 质押的代币数量
+        uint256 token0RewardDebt; // Reward debt. See explanation below.
+        uint256 token1RewardDebt; // Reward debt. See explanation below.
+        uint256 time; //质押的开始时间
+    }
+
+    struct StakingView {
+        uint256 pid;  //池子id
+        uint256 stakingId;
+        uint256 amount;     // 质押的代币数量
+        uint256 token0UnclaimedRewards; //奖励代币0的未收获数量
+        uint256 token1UnclaimedRewards; //奖励代币1的未收获数量
+        uint256 time; //质押的开始时间
+        uint256 unlockTime; //解锁时间
+    }
+
+    struct PoolInfo {
+        IERC20 lpToken;           // 质押代币地址
+        uint256 duration;           // 最小需要质押的时间，秒
+        uint256 allocPoint;       // 权重
+        uint256 lastRewardBlock;  // 最后奖励区块
+        uint256 token0AccRewardsPerShare; // Accumulated RewardTokens per share, times 1e12. See below.
+        uint256 token1AccRewardsPerShare; // Accumulated RewardTokens per share, times 1e12. See below.
+        uint256 token0AccAdditionalRewardsPerShare; // Accumulated Additional RewardTokens per share, times 1e12. See below.
+        uint256 token1AccAdditionalRewardsPerShare; // Accumulated Additional RewardTokens per share, times 1e12. See below.
+        uint256 token0AccDonateAmount; // token0总捐赠数
+        uint256 token1AccDonateAmount; // token1总捐赠数
+    }
+
+    struct PoolView {
+        uint256 pid; //池子id
+        address lpToken; // 质押代币地址
+        uint256 duration;  // 最小需要质押的时间，秒
+        uint256 allocPoint;       // 权重
+        uint256 lastRewardBlock;  // 最后奖励区块
+        uint256 token0AccRewardsPerShare; // Accumulated RewardTokens per share, times 1e12. See below.
+        uint256 token1AccRewardsPerShare; // Accumulated RewardTokens per share, times 1e12. See below.
+        uint256 token0AccAdditionalRewardsPerShare; // Accumulated Additional RewardTokens per share, times 1e12. See below.
+        uint256 token1AccAdditionalRewardsPerShare; // Accumulated Additional RewardTokens per share, times 1e12. See below.
+        uint256 token0AccDonateAmount; // token0总捐赠数
+        uint256 token1AccDonateAmount; // token1总捐赠数
+        uint256 token0RewardsPerBlock; // token0每区块奖励数
+        uint256 token1RewardsPerBlock; // token1每区块奖励数
+        uint256 token0AdditionalRewardPerBlock; // token0每区块附加奖励数
+        uint256 token1AdditionalRewardPerBlock; // token1每区块附加奖励数
+        string lpSymbol; //质押代币标识
+        string lpName; //质押代币名称
+        uint8 lpDecimals; //质押代币小数位
+        string rewardToken0Symbol;
+        string rewardToken0Name;
+        uint8 rewardToken0Decimals;
+        string rewardToken1Symbol;
+        string rewardToken1Name;
+        uint8 rewardToken1Decimals;
+    }
+
+
+    // 质押
+    function deposit(uint256 pid, uint256 _amount) public;
+
+    // 收获
+    // _stakingId 质押的id
+    function harvest(uint256 _stakingId) public;
+
+    // 取出，只有到期的质押才能取出
+    // _stakingId 质押的id
+    function withdraw(uint256 _stakingId) public;
+
+    // 获取用户的总质押量
+    function totalStaking(address account) public view returns(uint256 amount);
+
+    // 获取合约的基础信息
+    function getBaseInfo() public view 
+    returns (
+        address depositToken_,  // 质押代币地址
+        address rewardToken0_,  // 奖励代币0
+        address rewardToken1_,  // 奖励代币1
+        uint256 token0RewardPerBlock_,  // 奖励代币0的每区块奖励数
+        uint256 token1RewardPerBlock_,  // 奖励代币1的每区块奖励数
+        uint256 token0AdditionalRewardPerBlock_,  // 奖励代币0的附加每区块奖励数
+        uint256 token1AdditionalRewardPerBlock_,  // 奖励代币1的附加每区块奖励数
+        uint256 token0AdditionalRewardEndBlock_, // 奖励代币0的附加奖励结束区块
+        uint256 token1AdditionalRewardEndBlock_, // 奖励代币1的附加奖励结束区块
+        uint256 totalDeposit_,  //总质押量
+        uint256 totalAllocPoint_,  //总权重
+        uint256 startBlock_,  //开始区块
+        uint256 bonusEndBlock_  //结束区块
+    );
+
+    // 获取单个池子信息
+    function getPoolView(uint256 pid) public view returns(PoolView memory);
+
+    // 获取所有池子信息
+    function getAllPoolViews() external view returns (PoolView[] memory);
+
+
+    // 获取单条质押信息
+    function getStakingView(uint256 stakingId) public view returns(StakingView memory);
+
+    // 获取指定用户所有质押的信息
+    function getStakingViews(address account) public view returns(StakingView[] memory);
+}

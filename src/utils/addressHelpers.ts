@@ -24,15 +24,18 @@ export const getTimeShopAddress = () => {
 }
 
 export const getDsgAddress = () => {
-  return getAddress(addresses.Dsg)
+  return getAddress(addresses.DsgToken)
 }
 export const getTimeAddress = () => {
   return getAddress(addresses.TimeToken)
+}
+export const getOracleAddress = () => {
+  return getAddress(addresses.oracle)
 }
 export const getLiquidityPool = () => {
   return getAddress(addresses.liquidityPool)
 }
 
 export const getSinglePool = () => {
-  return getAddress(addresses.singlePool)
+  return getAddress(addresses.MutiRewardPool)
 }

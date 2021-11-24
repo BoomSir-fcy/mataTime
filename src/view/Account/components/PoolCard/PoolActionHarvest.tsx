@@ -5,7 +5,7 @@ import { fetchVaultUserAsync } from 'store/pools/thunks';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'contexts/Localization';
 import { Container } from 'components'
-import { useApproveErc20Pool, useHarvestPool } from '../../hooks/pools';
+import { useApproveErc20Pool, useHarvestStakeId } from '../../hooks/pools';
 import Dots from 'components/Loader/Dots';
 import { getBalanceAmount } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
@@ -15,19 +15,19 @@ import { BIG_ZERO } from 'utils/bigNumber';
 interface HarvestProps {
   earnings?: string
   isApproved?: boolean
-  stakeAddress: string
+  depositToken: string
   poolAddress: string
-  poolId: string
+  pid: string
   rewardTokenPrice?: BigNumber
 }
 
 // TODO: Remove Partial
-const PoolActionHarvest: React.FC<Partial<HarvestProps>> = ({
+const PoolActionHarvest: React.FC<HarvestProps> = ({
   earnings = '0',
   isApproved,
-  stakeAddress,
+  depositToken,
   poolAddress,
-  poolId,
+  pid,
   rewardTokenPrice,
 }) => {
   const { account } = useWeb3React()
@@ -48,8 +48,7 @@ const PoolActionHarvest: React.FC<Partial<HarvestProps>> = ({
     }
   }, [account, earnings, rewardTokenPrice])
 
-  // const { onApprove } = useApproveErc20Pool(stakeAddress, poolAddress)
-  const onApprove = () => { }
+  const { onApprove } = useApproveErc20Pool(depositToken, poolAddress)
   const handleApprove = useCallback(async () => {
     try {
       setPendingTx(true)
@@ -57,17 +56,23 @@ const PoolActionHarvest: React.FC<Partial<HarvestProps>> = ({
       dispatch(fetchVaultUserAsync(account))
       setPendingTx(false)
     } catch (e) {
+      setPendingTx(false)
       console.error(e)
     }
   }, [onApprove, dispatch, account])
 
-  // const { onHarvest } = useHarvestPool(poolId)
-  const onHarvest = () => { }
+  const { onHarvest } = useHarvestStakeId()
   const onHandleReward = useCallback(async () => {
-    setPendingTx(true)
-    await onHarvest()
-    setPendingTx(false)
-    dispatch(fetchVaultUserAsync(account))
+    try {
+      setPendingTx(true)
+      // TODO:
+      await onHarvest('1')
+      setPendingTx(false)
+      dispatch(fetchVaultUserAsync(account))
+    } catch (error) {
+      console.error(error)
+      setPendingTx(false)
+    }
   }, [onHarvest, dispatch, account])
 
   return (
