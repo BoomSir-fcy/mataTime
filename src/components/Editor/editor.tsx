@@ -12,6 +12,7 @@ import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
+import escapeHtml from 'escape-html'
 
 type Iprops = {
   type: any
@@ -70,6 +71,27 @@ const insertTopic = (editor, character ='') => {
   Transforms.insertText(editor,`#${character}#`)
   // Transforms.insertNodes(editor, topic);
 };
+function deep (children){
+  return children.map(item=>{
+    if(item.text){
+      return {...item,text:escapeHtml(item.text)}
+    }
+    if(item.type==='mention'){
+      return {...item,character:escapeHtml(item.character)}
+    }
+    return item
+  })
+}
+const parseValue = (value)=>{
+  let arr = value.map(item=>{
+    if(item.children){
+      return{...item, children: deep(item.children)}
+    }else{
+      return item
+    }
+  })
+  return arr
+}
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const [isDisabledSend,setIsDisabledSend] = useState(true)
@@ -188,11 +210,13 @@ const deepContent = (arr)=>{
     // let userIdList = []
     // let content = ''
     let {userIdList,content} = deepContent(value)
+    const newValue = parseValue(value)
+    console.log(newValue);
     if(content.length>140){
       setTimeId(null)
       return toast.warning('字数不可超过140')
     }
-    props.sendArticle(JSON.stringify(value), restInput, imgList.join(','), userIdList.join(','));
+    props.sendArticle(JSON.stringify(newValue), restInput, imgList.join(','), userIdList.join(','));
     restInput()
   };
   const searchSelect = (data, type) => {

@@ -96,7 +96,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
                   <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
                   {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
                 </Flex>
-                <UserDesc title={item.address}>@{(item.address || '').slice(0, 4) + '...' + (item.address || '').slice(38)}</UserDesc>
+                <UserDesc title={item.address}>@{(item.address || '').slice(0, 3) + '...' + (item.address || '').slice(38)}</UserDesc>
               </UserInfo>
             </Flex>
             <FollowBtn onClick={() => {
