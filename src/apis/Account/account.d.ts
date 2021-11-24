@@ -16,6 +16,11 @@ declare namespace Api {
       available_balance: string;
       total_balance: string;
       freeze_balance: string;
+      token_type: number,
+    }
+    interface History {
+      page?: number;
+      pageSize?: number;
     }
   }
 }

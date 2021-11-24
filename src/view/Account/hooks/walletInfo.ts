@@ -45,6 +45,15 @@ export function useInfo() {
       return error;
     }
   };
+  // 获取充提历史
+  const getHistoryList = async (page?: number, pageSize?: number) => {
+    try {
+      const res = await Api.AccountApi.history({ page, pageSize });
+      return res;
+    } catch (error) {
+      return error;
+    }
+  };
   // 获取授权数量
   const FetchApproveNum = async (address: string, account: string) => {
     const calls = [
@@ -63,7 +72,8 @@ export function useInfo() {
   }
   return {
     getBalance,
-    FetchApproveNum
+    FetchApproveNum,
+    getHistoryList
   };
 }
 // 充值、提现、授权

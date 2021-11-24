@@ -42,7 +42,7 @@ interface init {
   balance: number,
   token: string,
   TokenAddr: string,
-  upDateBalance: () => void
+  upDateBalance?: () => void
   onClose: () => void
   withdrawalBalance: string,
 }
@@ -84,7 +84,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBal
         setpending(false)
       }
     }
-    upDateBalance()
+    // upDateBalance()
   }, [Recharge, type, val])
   // 授权
   const handleApprove = useCallback(async () => {

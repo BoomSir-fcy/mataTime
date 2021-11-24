@@ -11,4 +11,8 @@ export class AccountApi extends Http {
     return res;
   }
 
+  async history(params?: Api.Account.History) {
+    const res = await this.get('/v1/wallet/chargeandwithdraw', params);
+    return res;
+  }
 }

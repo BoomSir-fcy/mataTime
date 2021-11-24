@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Flex, Box, Text, Image, Button, Heading, CloseLineIcon } from 'uikit';
-import { Container } from 'components'
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { ModalWrapper } from 'components'
 import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import HistoryModal from './Pops/HistoryModal';
-import { useInfo } from '../../hooks/walletInfo';
 import { Api } from 'apis';
 import { splitThousandSeparator } from 'utils/formatBalance';
 
@@ -80,36 +78,16 @@ interface Wallet {
   Token: string
   Balance: number
   TokenAddr: string
+  BalanceInfo: Api.Account.Balance
 }
-const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr }) => {
-
+const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo }) => {
+  // useFetchWalletInfo()
   const { account } = useWeb3React()
   const [visible, setVisible] = useState(false)
   const [visibleHistory, setVisibleHistory] = useState(false)
   const [ModalTitle, setModalTitle] = useState('')
   const [ChosenType, setChosenType] = useState(1)
   const [ActiveHistory, setActiveHistory] = useState(1)
-  const [TokenInfo, setTokenInfo] = useState({
-    address: "",
-    available_balance: "0",
-    freeze_balance: "0",
-    token_type: 1,
-    total_balance: "0",
-    uid: 0
-  })
-  const { getBalance } = useInfo()
-  const getMyBalance = async () => {
-    const res = await getBalance();
-    if (Api.isSuccess(res)) {
-      const data = res.data
-      const type = Token == 'Time' ? 1 : 2
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].token_type === type) {
-          setTokenInfo(data[i])
-        }
-      }
-    }
-  }
   const openModaal = (title) => {
     const titleText = title === 1 ? '充值' : '提现'
     setModalTitle(`${titleText} ${Token}`)
@@ -117,12 +95,6 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr }) => {
     setVisible(true)
   }
   const onClose = useCallback(() => setVisible(false), [setVisible])
-  useEffect(() => {
-    account && getMyBalance()
-    return () => {
-
-    }
-  }, [account])
   return (
     <Content mb='12px'>
       <TopInfo mb='4px'>
@@ -130,7 +102,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr }) => {
         <Info>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >平台余额</Fount>
-            <NumText>{splitThousandSeparator(Number(TokenInfo.available_balance))}</NumText>
+            <NumText>{splitThousandSeparator(Number(BalanceInfo.available_balance))}</NumText>
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >今日收入</Fount>
@@ -149,7 +121,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr }) => {
       <Flex justifyContent='space-between'>
         <Flex flexDirection='column' justifyContent='space-between'>
           <Fount >冻结金额</Fount>
-          <NumText>{splitThousandSeparator(Number(TokenInfo.freeze_balance))}</NumText>
+          <NumText>{splitThousandSeparator(Number(BalanceInfo.freeze_balance))}</NumText>
         </Flex>
         <Flex justifyContent='end' alignItems='center'>
           <RechargeBtn mr='20px' onClick={() => openModaal(1)}>充值</RechargeBtn>
@@ -159,7 +131,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr }) => {
       </Flex>
       {/* 输入框弹窗 */}
       <ModalWrapper title={ModalTitle} creactOnUse visible={visible} setVisible={setVisible}>
-        <RechargeOrWithdrawPop upDateBalance={getMyBalance} onClose={onClose} TokenAddr={TokenAddr} type={ChosenType} token={Token} balance={Balance} withdrawalBalance={TokenInfo.available_balance} />
+        <RechargeOrWithdrawPop onClose={onClose} TokenAddr={TokenAddr} type={ChosenType} token={Token} balance={Balance} withdrawalBalance={BalanceInfo.available_balance} />
       </ModalWrapper>
       {/* 提币、充值记录 */}
       <ModalWrapper customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
