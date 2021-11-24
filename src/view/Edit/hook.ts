@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import multicall from 'utils/multicall';
 import nftSocialAbi from 'config/abi/nftSocial.json';
 import { updateNickname } from 'utils/calls';
-import { useDsgNft, useErc20EarnNftPool } from 'hooks/useContract';
+import { useErc20EarnNftPool } from 'hooks/useContract';
 import { getNftSocialAddress } from 'utils/addressHelpers';
 
 // 用户验证
@@ -15,15 +15,21 @@ export const useProfileContract = () => {
       const calls = [
         {
           address: SocialAddress,
+          name: 'nicknames',
+          params: [nickname]
+        },
+        {
+          address: SocialAddress,
           name: 'checkNickname',
           params: [nickname]
         }
       ];
       try {
         const isCheck = await multicall(nftSocialAbi, calls);
-        return isCheck[0][0];
+        return [isCheck[0][0], isCheck[1][0]];
       } catch (error) {
-        return false;
+        console.log(error);
+        return [false, false];
       }
     },
     [masterChefContract]

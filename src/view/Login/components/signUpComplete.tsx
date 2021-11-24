@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { Follow } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
-import { fetchThunk } from 'store';
+import { fetchThunk, storeAction } from 'store';
 import { Api } from 'apis';
 
 import { useTranslation } from 'contexts/Localization';
@@ -41,11 +41,12 @@ export const SignUpcomplete = React.memo(() => {
           p.list = res.data || [];
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const complete = () => {
     dispatch(fetchThunk.fetchUserInfoAsync());
+    dispatch(storeAction.changeReset());
     history.replace(`${redict || '/'}`);
   };
 
@@ -55,7 +56,12 @@ export const SignUpcomplete = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="26px" bold style={{ textTransform: 'capitalize' }}>
+      <Text
+        fontSize="34px"
+        marginBottom="26px"
+        bold
+        style={{ textTransform: 'capitalize' }}
+      >
         {t('loginFollow')}
       </Text>
       <Box>

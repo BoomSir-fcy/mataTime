@@ -106,12 +106,12 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 选择链
-  const checkNetwork = async () => {
-    const chainId: any = await window.ethereum.request({
-      method: 'eth_chainId'
-    });
-    dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
-  };
+  // const checkNetwork = async () => {
+  //   const chainId: any = await window.ethereum.request({
+  //     method: 'eth_chainId'
+  //   });
+  //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
+  // };
 
   const signIn = async () => {
     //2.1 用户已经注册登录钱包签名
@@ -145,7 +145,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   };
 
   useEffect(() => {
-    checkNetwork();
     return () => {
       dispatch(storeAction.changeReset());
     };
@@ -159,6 +158,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
+    console.log(account);
     if (account) {
       // 1.1查询是否有质押
       dispatch(storeAction.setSigninLoading(true));
@@ -168,7 +168,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   useEffect(() => {
     // 2没有质押的情况下
-    if (nftStatus && !isSignin) {
+    if (account && nftStatus && !isSignin) {
       if (!NftList.length && !isStakeNft) {
         // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
         setshowStakeNft(false);
@@ -182,7 +182,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       }
       dispatch(storeAction.setSigninLoading(false));
     }
-  }, [nftStatus, isSignin, NftList, isStakeNft]);
+  }, [account, nftStatus, isSignin, NftList, isStakeNft]);
 
   return (
     <LoginContainer>

@@ -160,7 +160,7 @@ export const useFetchNftList = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const profile = useStore(p => p.loginReducer.userInfo);
-  let address = profile.address ? profile.address : account;
+  let address = account ? account : profile.address;
   useEffect(() => {
     dispatch(fetchUserNftInfoAsync(address));
   }, [dispatch, account]);
@@ -262,15 +262,21 @@ export const useContract = () => {
       const calls = [
         {
           address: SocialAddress,
+          name: 'nicknames',
+          params: [nickname]
+        },
+        {
+          address: SocialAddress,
           name: 'checkNickname',
           params: [nickname]
         }
       ];
       try {
         const isCheck = await multicall(nftSocialAbi, calls);
-        return isCheck[0][0];
+        return [isCheck[0][0], isCheck[1][0]];
       } catch (error) {
-        return false;
+        console.log(error);
+        return [false, false];
       }
     },
     [masterChefContract]

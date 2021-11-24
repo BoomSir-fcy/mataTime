@@ -103,7 +103,7 @@ export const SignUpSetName: React.FC<{
     }
     dispatch(storeAction.setSigninLoading(true));
     const res = await checkNickname(state.nickName);
-    if (res) {
+    if (!res[0] && res[1]) {
       const userInfo = await createUser(
         state.nickName,
         nft.properties.token,
@@ -114,9 +114,12 @@ export const SignUpSetName: React.FC<{
       } else {
         toast.error(t('loginSignupFail'));
       }
-    } else {
+    } else if (!res[0] && !res[1]) {
       dispatch(storeAction.setSigninLoading(false));
       toast.error(t('loginSetNickNameFail'));
+    } else {
+      dispatch(storeAction.setSigninLoading(false));
+      toast.error(t('loginSetNickNameRepeat'));
     }
   }, [state]);
 
@@ -158,7 +161,7 @@ export const SignUpSetName: React.FC<{
                 p.nickName = event.target.value;
               });
             }}
-            minLength={1}
+            minLength={6}
             maxLength={20}
             placeholder={t('loginInputValueNickname')}
           />

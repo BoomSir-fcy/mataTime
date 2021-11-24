@@ -53,9 +53,11 @@ const SignUpSubText = styled(Text)`
 `;
 
 const SignUpFail = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const goRouter = () => {
+    dispatch(storeAction.changeReset);
     history.push('/');
   };
 
@@ -78,7 +80,7 @@ export const WalletAddress: React.FC<{
   address?: string;
 }> = ({ address }) => {
   const connector = window.localStorage.getItem(walletLocalStorageKey);
-  const Icon = walletIcon[connector];
+  const Icon = connector ? walletIcon[connector] : walletIcon.Metamask;
 
   return (
     <WalletBody>

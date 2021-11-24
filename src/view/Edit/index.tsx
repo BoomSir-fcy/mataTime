@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 import { Box, Flex, Button, Text } from 'uikit';
@@ -71,9 +72,9 @@ const Edit: React.FC = () => {
     });
     if (Api.isSuccess(res)) {
       dispatch(storeAction.changeUpdateProfile({ ...res.data }));
-      toast.success(res.msg);
+      toast.success(t('loginUpdateProfileSuccess'));
     } else {
-      toast.error('修改失败');
+      toast.error(t('loginUpdateProfileFail'));
     }
   };
 
@@ -82,15 +83,18 @@ const Edit: React.FC = () => {
 
     try {
       const response = await checkNickname(params.nick_name);
-      if (response) {
+      console.log(response);
+      if (!response[0] && response[1]) {
         const res = await updateProfileNickname(params.nick_name);
         if (Boolean(res)) {
           updateProfile();
         } else {
           toast.error(t('loginSetNickNameFail'));
         }
-      } else {
+      } else if (!response[0] && !response[1]) {
         toast.error(t('loginSetNickNameFail'));
+      } else {
+        toast.error(t('loginSetNickNameRepeat'));
       }
     } catch (error) {
       console.log(error);
@@ -121,7 +125,9 @@ const Edit: React.FC = () => {
         <Text color="white_black" fontWeight="bold" fontSize="18px">
           账号资料编辑
         </Text>
-        <Button onClick={updateUserInfo}>保存最新修改</Button>
+        <Button onClick={debounce(() => updateUserInfo(), 1000)}>
+          保存最新修改
+        </Button>
       </Header>
       <Background style={{ backgroundImage: `url(${state.background})` }}>
         <Upload

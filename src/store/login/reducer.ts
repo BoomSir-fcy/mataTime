@@ -83,6 +83,7 @@ export const login = createSlice({
         state.signUpFail = false;
         state.signinLoading = false;
         state.nftStatus = false;
+        state.nft = {};
       })
       .addCase(fetchUserInfoAsync.fulfilled, (state, action) => {
         state.userInfo = action.payload.data;
