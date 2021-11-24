@@ -39,3 +39,7 @@ export const getLiquidityPool = () => {
 export const getSinglePool = () => {
   return getAddress(addresses.MutiRewardPool)
 }
+
+export const getCashierDeskAddress = () => {
+  return getAddress(addresses.CashierDesk)
+}

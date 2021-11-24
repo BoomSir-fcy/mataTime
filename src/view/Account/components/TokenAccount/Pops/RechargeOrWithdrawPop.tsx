@@ -1,8 +1,13 @@
 /* eslint-disable */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
+import BigNumber from 'bignumber.js'
 import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import { BIG_TEN } from 'utils/bigNumber';
 import { splitThousandSeparator } from 'utils/formatBalance';
+import { useDpWd, useInfo } from '../../../hooks/walletInfo';
+import Dots from 'components/Loader/Dots';
 
 const CountBox = styled(Box)`
 min-width: 20vw;
@@ -35,24 +40,79 @@ height: 50px;
 interface init {
   type: number,
   balance: number,
-  token: string
+  token: string,
+  TokenAddr: string,
+  upDateBalance: () => void
+  onClose: () => void
+  withdrawalBalance: string,
 }
 
-const MoneyModal: React.FC<init> = ({ type, balance, token }) => {
+const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBalance, onClose, withdrawalBalance }) => {
+  const { FetchApproveNum } = useInfo()
+  const { account } = useWeb3React()
 
   const [val, setVal] = useState('')
+  const { drawCallback, Recharge, onApprove } = useDpWd()
+  const [pending, setpending] = useState(false)
+  const [approvedNum, setapprovedNum] = useState(1)
 
+  // 充值/提现
+  const handSure = useCallback(async () => {
+    if (balance === 0) {
+      return
+    }
+    setpending(true)
+    if (type === 1) {
+      // 充值
+      const addPrecisionNum = new BigNumber(Number(val)).times(BIG_TEN.pow(18)).toString()
+      try {
+        await Recharge(TokenAddr, addPrecisionNum)
+        onClose()
+        setpending(false)
+      } catch (e) {
+        console.error(e)
+        setpending(false)
+      }
+    } else {
+      // 提现
+      try {
+        await drawCallback(val, TokenAddr, token === 'Time' ? 1 : 2)
+        onClose()
+        setpending(false)
+      } catch (e) {
+        console.error(e)
+        setpending(false)
+      }
+    }
+    upDateBalance()
+  }, [Recharge, type, val])
+  // 授权
+  const handleApprove = useCallback(async () => {
+    try {
+      setpending(true)
+      await onApprove()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setpending(false)
+      getApproveNum()
+    }
+  }, [onApprove, account])
+  // 输入框输入限制
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
-      const chkPrice = (obj) => {
-        obj = obj.replace(/[^\d.]/g, "");
+      const chkPrice = (val) => {
+        val = val.replace(/[^\d.]/g, "");
         //必须保证第一位为数字而不是. 
-        obj = obj.replace(/^\./g, "");
+        val = val.replace(/^\./g, "");
         //保证只有出现一个.而没有多个. 
-        obj = obj.replace(/\.{2,}/g, ".");
+        val = val.replace(/\.{2,}/g, ".");
         //保证.只出现一次，而不能出现两次以上 
-        obj = obj.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        return obj;
+        val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        if (Number(val) > (type === 1 ? balance : Number(withdrawalBalance))) {
+          return type === 1 ? String(balance) : withdrawalBalance
+        }
+        return val;
       }
       if (e.currentTarget.validity.valid) {
         setVal(chkPrice(e.currentTarget.value))
@@ -60,10 +120,23 @@ const MoneyModal: React.FC<init> = ({ type, balance, token }) => {
     },
     [setVal],
   )
+  // 获取授权数量
+  const getApproveNum = async () => {
+    const Num = await FetchApproveNum(TokenAddr, account)
+    setapprovedNum(Num)
+  }
+  useEffect(() => {
+    if (account) {
+      getApproveNum()
+    }
+    return () => {
+      setapprovedNum(0)
+    }
+  }, [account])
   return (
     <CountBox>
       <Flex justifyContent="end" mb='12px'>
-        {type === 2 && <Text fontSize='14px' color='textTips'>可用余额: {splitThousandSeparator(balance)}</Text>}
+        <Text fontSize='14px' color='textTips'>可用余额: {splitThousandSeparator(type === 1 ? balance : Number(withdrawalBalance))}</Text>
       </Flex>
       <InputBox mb='26px'>
         <MyInput
@@ -72,10 +145,20 @@ const MoneyModal: React.FC<init> = ({ type, balance, token }) => {
           onChange={handleChange}
           placeholder={type === 1 ? '请输入充值金额' : '请输入提现金额'}
         />
-        <Max onClick={() => setVal(String(balance))}>MAX</Max>
+        <Max onClick={() => setVal(String(type === 1 ? balance : withdrawalBalance))}>MAX</Max>
       </InputBox>
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
-        <SureBtn mb='10px'>确认</SureBtn>
+        <SureBtn mb='10px' disable={pending} onClick={async () => {
+          if (approvedNum > 0) {
+            // 充值、提现
+            await handSure()
+          } else {
+            // 授权
+            await handleApprove()
+          }
+        }}>
+          {pending ? <Dots>{approvedNum > 0 ? "交易中" : "授权中"}</Dots> : approvedNum > 0 ? "确认" : "授权"}
+        </SureBtn>
         <Text fontSize='14px' color='textTips'>请在Token里确认交易</Text>
       </Flex>
     </CountBox>

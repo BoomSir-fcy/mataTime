@@ -19,7 +19,7 @@ export interface Store {
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
 // export const store = createStore(rootReducer, composeWithDevTools());
-const PERSISTED_KEYS: string[] = ['appReducer', 'loginReducer'];
+const PERSISTED_KEYS: string[] = ['appReducer'];
 export const store = configureStore({
   reducer: {
     appReducer,

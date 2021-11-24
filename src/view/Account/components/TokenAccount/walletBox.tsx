@@ -10,6 +10,7 @@ import { useInfo } from '../../hooks/walletInfo';
 import { Api } from 'apis';
 import { splitThousandSeparator } from 'utils/formatBalance';
 
+
 const Content = styled(Box)`
 width:50%;
 min-width: 300px;
@@ -77,8 +78,10 @@ ${({ theme }) => theme.mediaQueriesSize.marginr}
 
 interface Wallet {
   Token: string
+  Balance: number
+  TokenAddr: string
 }
-const WalletBox: React.FC<Wallet> = ({ Token }) => {
+const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr }) => {
 
   const { account } = useWeb3React()
   const [visible, setVisible] = useState(false)
@@ -86,13 +89,26 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
   const [ModalTitle, setModalTitle] = useState('')
   const [ChosenType, setChosenType] = useState(1)
   const [ActiveHistory, setActiveHistory] = useState(1)
+  const [TokenInfo, setTokenInfo] = useState({
+    address: "",
+    available_balance: "0",
+    freeze_balance: "0",
+    token_type: 1,
+    total_balance: "0",
+    uid: 0
+  })
   const { getBalance } = useInfo()
   const getMyBalance = async () => {
     const res = await getBalance();
     if (Api.isSuccess(res)) {
-      console.log(res);
+      const data = res.data
+      const type = Token == 'Time' ? 1 : 2
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].token_type === type) {
+          setTokenInfo(data[i])
+        }
+      }
     }
-
   }
   const openModaal = (title) => {
     const titleText = title === 1 ? '充值' : '提现'
@@ -100,7 +116,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
     setChosenType(title)
     setVisible(true)
   }
-  const onClose = useCallback(() => setVisibleHistory(false), [setVisibleHistory])
+  const onClose = useCallback(() => setVisible(false), [setVisible])
   useEffect(() => {
     account && getMyBalance()
     return () => {
@@ -114,7 +130,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
         <Info>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >平台余额</Fount>
-            <NumText>{splitThousandSeparator(19123)}</NumText>
+            <NumText>{splitThousandSeparator(Number(TokenInfo.available_balance))}</NumText>
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >今日收入</Fount>
@@ -122,7 +138,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount >钱包余额</Fount>
-            <NumText>{splitThousandSeparator(21556233)}</NumText>
+            <NumText>{splitThousandSeparator(Balance)}</NumText>
           </Flex>
         </Info>
       </TopInfo>
@@ -133,7 +149,7 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
       <Flex justifyContent='space-between'>
         <Flex flexDirection='column' justifyContent='space-between'>
           <Fount >冻结金额</Fount>
-          <NumText>{splitThousandSeparator(8596)}</NumText>
+          <NumText>{splitThousandSeparator(Number(TokenInfo.freeze_balance))}</NumText>
         </Flex>
         <Flex justifyContent='end' alignItems='center'>
           <RechargeBtn mr='20px' onClick={() => openModaal(1)}>充值</RechargeBtn>
@@ -141,9 +157,11 @@ const WalletBox: React.FC<Wallet> = ({ Token }) => {
           <HistoryIcon onClick={() => setVisibleHistory(true)} src={require('assets/images/myWallet/history.png').default} />
         </Flex>
       </Flex>
+      {/* 输入框弹窗 */}
       <ModalWrapper title={ModalTitle} creactOnUse visible={visible} setVisible={setVisible}>
-        <RechargeOrWithdrawPop type={ChosenType} token={Token} balance={100000} />
+        <RechargeOrWithdrawPop upDateBalance={getMyBalance} onClose={onClose} TokenAddr={TokenAddr} type={ChosenType} token={Token} balance={Balance} withdrawalBalance={TokenInfo.available_balance} />
       </ModalWrapper>
+      {/* 提币、充值记录 */}
       <ModalWrapper customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
         <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">

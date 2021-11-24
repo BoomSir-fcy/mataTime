@@ -29,7 +29,7 @@ export enum FetchStatus {
   SUCCESS = 'success',
   FAILED = 'failed',
 }
-// 获取Dsg余额
+// 获取代币余额
 export const useTokenBalance = (tokenAddress: string) => {
   const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
   const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({

@@ -6,6 +6,7 @@ declare namespace Api {
       sign_time: number; // 签名时间
       draw_amount: string;
       draw_token_address: string;
+      draw_token_type: number;
       nonce: number; // 随机数
       encode_data: string;
     }
