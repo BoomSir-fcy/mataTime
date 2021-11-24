@@ -76,8 +76,8 @@ const Home: React.FC = (props: any) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
-        <Affix offsetTop={35} positionObj={{
-          top: '10px',
+        <Affix offsetTop={0} positionObj={{
+          top: '35px',
           left: '50%',
           marginLeft: '-550px'
         }}>
@@ -106,8 +106,8 @@ const Home: React.FC = (props: any) => {
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} filterValObj={filterVal} {...props}></ArticleList>
         </CenterCard>
-        <Affix offsetTop={35} positionObj={{
-          top: '10px',
+        <Affix offsetTop={0} positionObj={{
+          top: '35px',
           right: '50%',
           marginRight: '-660px'
         }}>

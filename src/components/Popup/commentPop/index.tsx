@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReportModal, EditTwitterModal, CommonInquiryModal } from 'components';
+import { ReportModal, EditTwitterModal, CommonInquiryModal ,CommentModal} from 'components';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
@@ -17,6 +17,7 @@ export const CommentPop = React.memo((props: Iprops) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
   const { children, data={}, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
+  const [isShowDel, setIsShowDel] = useState<boolean>(false);
   const [isCurrentUser,setIsCurrentUser] = useState(false)
   useEffect(() => {
     init();
@@ -29,13 +30,14 @@ export const CommentPop = React.memo((props: Iprops) => {
 const  delComment = ()=>{
   Api.MeApi.removeContentDetail(data.id).then(res=>{
     if(Api.isSuccess(res)){
-      console.log(res);
       callback()
-      toast.success('删除成功')
+      toast.success(t('moreDeleteSuccess'))
     }else{
       toast.success(res.msg)
+      toast.success(t('moreDeleteError'))
     }
   })
+  setIsShowDel(false)
 }
 const  reportComment = ()=>{
   Api.MeApi.reportComment(data.id).then(res=>{
@@ -62,13 +64,13 @@ const  reportComment = ()=>{
           setVisible(!visible);
         }}
       >
+        <CommentModal contentText={t('delCommentTitle')} titleText={t('delCommentContent')} show={isShowDel} onClose={()=>{setIsShowDel(false)}} onQuery={delComment}/>
         {children}
         {visible&&isCurrentUser ? (
           <PopupContentWrapper>
-              <p onClick={delComment}>{t('moreDelete')}</p>
-            {/* <p onClick={reportComment}>{t('moreReport')}</p> */}
+              <p onClick={()=>setIsShowDel(true)}>{t('moreDelete')}</p>
           </PopupContentWrapper>
-        ) : null}
+        ) :null}
       </PopupWrapper>
   );
 });
