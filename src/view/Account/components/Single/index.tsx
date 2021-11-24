@@ -7,8 +7,7 @@ import PoolCard from '../PoolCard/PoolCard';
 const Single: React.FC = () => {
 
   useFetchSinglePool()
-  const { data, loaded, userDataMap, userStakesMap } = useSinglePoolState()
-  console.log(userDataMap)
+  const { data, loaded, userDataMap, userStakesMap, poolAprMap } = useSinglePoolState()
 
   const poolsMemoized = useMemo(() => {
     return data
@@ -29,6 +28,7 @@ const Single: React.FC = () => {
                       poolInfo={poolInfo}
                       userData={userDataMap[poolInfo.pid]}
                       userStakes={userStakesMap[poolInfo.pid]}
+                      poolApr={poolAprMap[poolInfo.pid]}
                     />
                   ))
                 }

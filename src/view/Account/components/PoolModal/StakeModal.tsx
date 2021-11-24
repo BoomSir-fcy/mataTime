@@ -5,7 +5,7 @@ import { useTranslation } from 'contexts/Localization';
 import Dots from 'components/Loader/Dots';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
-import { getFullDisplayBalance } from 'utils/formatBalance';
+import { getFullDisplayBalance, formatDisplayBalance } from 'utils/formatBalance';
 
 
 const StakeModalBox = styled(Box)`
@@ -37,8 +37,11 @@ const StakeModal: React.FC<StakeModalProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  const fullBalance = useMemo(() => {
-    return getFullDisplayBalance(max, decimals)
+  const [fullBalance, displayFullBalance] = useMemo(() => {
+    const fullBalanceVal = getFullDisplayBalance(max, decimals)
+    const displayFullBalanceVal = formatDisplayBalance(max, decimals)
+    console.log(fullBalanceVal, displayFullBalanceVal, max, decimals)
+    return [fullBalanceVal, displayFullBalanceVal]
   }, [max, decimals])
 
   const [val, setVal] = useState('')
@@ -68,7 +71,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Flex alignItems="center">
             <Text fontSize="14px" color="textTips">Balance:</Text>
             <Button onClick={handleSelectMax} ml="4px" height="auto" padding="0" variant="text">
-              <Text fontSize="14px" color="textTips"> {fullBalance}</Text>
+              <Text fontSize="14px" color="textTips"> {displayFullBalance}</Text>
             </Button>
           </Flex>
         </Flex>

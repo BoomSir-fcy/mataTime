@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
-import { Flex, Box, Text, Card } from 'uikit';
+import { Flex, Box, Text, Card, Skeleton } from 'uikit';
 import { Container, Timer } from 'components'
+import { formatDisplayApr } from 'utils/formatBalance';
 import getTimePeriods from 'utils/getTimePeriods';
-import { SinglePoolData, UserData, PoolUserData } from 'store/pools/types';
+import { SinglePoolData, UserData, PoolUserData, PoolAprs } from 'store/pools/types';
 import PoolCardHeader from './PoolCardHeader'
 import PoolAction from './PoolAction';
 
@@ -14,15 +15,13 @@ const ContainerStyled = styled(Container)`
 interface PoolCardProps {
   poolInfo: SinglePoolData
   userData?: UserData
+  poolApr?: PoolAprs
   userStakes?: PoolUserData[]
 }
-const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, userStakes }) => {
+const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userStakes }) => {
 
   const { days, hours, minutes } = getTimePeriods(Number(poolInfo.duration))
 
-  const {
-    depositToken
-  } = poolInfo
   return (
     <Card>
       <Box>
@@ -38,7 +37,7 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, userStakes }) =
           <Flex justifyContent="space-between">
             <Box>
               <Text color="textTips">ARP</Text>
-              <Text bold color="white_black">253%</Text>
+              <Text bold color="white_black">{formatDisplayApr(poolApr?.totalApr)}%</Text>
             </Box>
             <Box>
               <Text color="textTips">周期</Text>
@@ -46,7 +45,14 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, userStakes }) =
             </Box>
             <Box>
               <Text color="textTips" textAlign="right">Liquidity</Text>
-              <Text bold textAlign="right">$ 111.122</Text>
+              {
+                Number(poolInfo.totalLiquidity)
+                  ?
+                  <Text bold textAlign="right">$ {Number(poolInfo.totalLiquidity).toLocaleString(undefined, { maximumFractionDigits: 0 })}</Text>
+                  :
+                  <Skeleton />
+
+              }
             </Box>
           </Flex>
         </ContainerStyled>

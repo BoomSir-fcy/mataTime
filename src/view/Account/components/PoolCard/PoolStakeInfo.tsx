@@ -31,7 +31,12 @@ interface PoolStakeInfoProps {
   depositSymbol: string
   rewardToken0Symbol: string
   rewardToken1Symbol: string
-  dispalynUserData?: PoolDispalynUserData
+  stakeAmount: BigNumber
+  token0UnclaimedRewards: BigNumber
+  token1UnclaimedRewards: BigNumber
+  dispalyStakeAmount: string
+  dispalyToken0Rewards: string
+  dispalyToken1Rewards: string
 }
 
 const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
@@ -41,7 +46,12 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
   depositSymbol,
   rewardToken0Symbol,
   rewardToken1Symbol,
-  dispalynUserData,
+  stakeAmount,
+  token0UnclaimedRewards,
+  token1UnclaimedRewards,
+  dispalyStakeAmount,
+  dispalyToken0Rewards,
+  dispalyToken1Rewards,
   children
 }) => {
 
@@ -53,9 +63,9 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
           <Box ml="8px">
             <Text fontSize="14px" color="textTips">总质押的 {depositSymbol}</Text>
             {
-              dispalynUserData?.stakeAmount.isFinite()
+              stakeAmount.isFinite()
                 ?
-                <Text bold color="white_black">{dispalynUserData?.dispalyStakeAmount}</Text>
+                <Text bold color="white_black">{dispalyStakeAmount}</Text>
                 :
                 <Skeleton />
             }
@@ -69,9 +79,9 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
           <Box ml="8px">
             <Text fontSize="14px" color="textTips">总收益的 {rewardToken0Symbol}</Text>
             {
-              dispalynUserData?.token0UnclaimedRewards.isFinite()
+              token0UnclaimedRewards.isFinite()
                 ?
-                <Text bold color="white_black">{dispalynUserData?.dispalyToken0Rewards}</Text>
+                <Text bold color="white_black">{dispalyToken0Rewards}</Text>
                 :
                 <Skeleton />
             }
@@ -81,9 +91,9 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
           <Box mr="8px">
             <Text fontSize="14px" textAlign="right" color="textTips">总收益的 {rewardToken1Symbol}</Text>
             {
-              dispalynUserData?.token1UnclaimedRewards.isFinite()
+              token1UnclaimedRewards.isFinite()
                 ?
-                <Text textAlign="right" bold color="white_black">{dispalynUserData?.dispalyToken1Rewards}</Text>
+                <Text textAlign="right" bold color="white_black">{dispalyToken1Rewards}</Text>
                 :
                 <Skeleton />
             }

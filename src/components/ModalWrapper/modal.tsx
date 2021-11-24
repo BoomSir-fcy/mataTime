@@ -6,7 +6,7 @@ import useTheme from 'hooks/useTheme'
 import { Icon } from 'components';
 import { Heading, Flex, CloseLineIcon, Button } from 'uikit'
 
-const getCustomStyles = (theme: DefaultTheme) => ({
+const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
   content: {
     top: '50%',
     left: '50%',
@@ -19,7 +19,7 @@ const getCustomStyles = (theme: DefaultTheme) => ({
     borderRadius: theme.radii.card,
     boxShadow: theme.card.boxShadow,
     border: 0,
-    padding: '18px 20px',
+    padding: fillBody ? '18px 0' : '18px 20px',
     zIndex: 200
   },
   overlay: {
@@ -28,9 +28,9 @@ const getCustomStyles = (theme: DefaultTheme) => ({
   }
 });
 
-const ModalHeaderStyled = ({ title, onClose }) => {
+const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
   return (
-    <Flex mb="8px" justifyContent="space-between" alignItems="center">
+    <Flex padding={!fillBody ? '0' : '0 20px'} mb="8px" justifyContent="space-between" alignItems="center">
       <Heading>{title}</Heading>
       <Button onClick={onClose} padding="0" variant="text">
         <CloseLineIcon width={16} color="primary"></CloseLineIcon>
@@ -45,6 +45,7 @@ interface ModalWrapperProps {
   title?: string,
   creactOnUse?: boolean,
   customizeTitle?: boolean
+  fillBody?: boolean
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
@@ -53,11 +54,12 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
   children,
   creactOnUse,
   title,
-  customizeTitle
+  customizeTitle,
+  fillBody,
 }) => {
   const { theme } = useTheme()
 
-  const customStyles = getCustomStyles(theme)
+  const customStyles = getCustomStyles(theme, fillBody)
   const onClose = useCallback(() => setVisible(false), [setVisible])
   if (!visible && creactOnUse) return null
 
@@ -68,7 +70,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
       style={customStyles}
       ariaHideApp={false}
       contentLabel="Example Modal">
-      {!customizeTitle && <ModalHeaderStyled onClose={onClose} title={title} />}
+      {!customizeTitle && <ModalHeaderStyled fillBody={fillBody} onClose={onClose} title={title} />}
       {children}
     </Modal>
   )

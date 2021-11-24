@@ -11,7 +11,7 @@ export default {
   },
   MutiRewardPool: {
     [ChainId.BSC_MAINNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
-    [ChainId.BSC_TESTNET]: '0xaa0176a455eFa4348ff9656CD29666459B74a22C'
+    [ChainId.BSC_TESTNET]: '0x0372C3429c8DAeE1Bd29eA698c5414a612d37E94'
   },
   multiCall: {
     56: '0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B',

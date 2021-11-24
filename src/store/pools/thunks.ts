@@ -3,7 +3,9 @@ import { AppThunk } from '../types'
 import { LiquidityPoolData, SinglePoolData, PoolUserDataBase } from './types'
 import { fetchLpDataList } from './fetchLpData'
 import { fetchSinglePoolData, fetchPoolTokensPrice, fetchSinglePoolUserData, fetchUserTokenVal } from './fetchSinglePoolData'
-import { setLpDataList, setSpDataList, setSpUserData, setSpUserStakesData } from '.'
+import { setLpDataList, setSpDataList, setSpUserData, setSpUserStakesData, setSpAprsData } from '.'
+import { getPoolsApr, getUserPoolsMap, getUserStakesMap } from './utils'
+import { fetchLpRewardsApr } from './fetchLpAprs'
 
 
 export const fetchLpPublicDatasAsync = (data: LiquidityPoolData[]): AppThunk => async (dispatch) => {
@@ -13,7 +15,6 @@ export const fetchLpPublicDatasAsync = (data: LiquidityPoolData[]): AppThunk => 
 export const fetchVaultUserAsync = (account: string): AppThunk => async (dispatch) => {
   // TODO:
   // dispatch(setLpDataList(data))
-  console.log(account)
 }
 
 export const fetchLpDataListAsync =
@@ -33,33 +34,27 @@ export const fetchLpDataListAsync =
 export const fetchSpPublicDatasAsync = (datas: SinglePoolData[]): AppThunk => async (dispatch) => {
   const priceData = await fetchPoolTokensPrice(datas)
   dispatch(setSpDataList(priceData))
+  dispatch(fetchSpRewardsAprAsync(priceData))
 }
+
+export const fetchSpRewardsAprAsync = (datas: SinglePoolData[]): AppThunk => async (dispatch) => {
+  const donateAprs = await fetchLpRewardsApr(datas)
+  const aprs = {}
+  datas.forEach(item => {
+    const donateApr = donateAprs.find(donate => donate.pid === item.pid)
+    aprs[item.pid] = getPoolsApr(item, donateApr?.fourRealAmount)
+  })
+  dispatch(setSpAprsData(aprs))
+}
+
 export const fetchSpVaultUserAsync = (account: string, datas?: SinglePoolData[]): AppThunk => async (dispatch, getState) => {
   const userPoolData = await fetchSinglePoolUserData(account)
-  dispatch(setSpUserStakesData(userPoolData))
-  const farmatUserPoolsMap: { [pid: string]: PoolUserDataBase } = {}
-  userPoolData.forEach(item => {
-    if (!farmatUserPoolsMap[item.pid]) {
-      farmatUserPoolsMap[item.pid] = {
-        stakeAmount: item.stakeAmount,
-        token0UnclaimedRewards: item.token0UnclaimedRewards,
-        token1UnclaimedRewards: item.token1UnclaimedRewards,
-        pid: item.pid,
-      }
-    } else {
-      const stakeAmount = new BigNumber(farmatUserPoolsMap[item.pid].stakeAmount).plus(item.stakeAmount).toString()
-      const token0UnclaimedRewards = new BigNumber(farmatUserPoolsMap[item.pid].token0UnclaimedRewards).plus(item.token0UnclaimedRewards).toString()
-      const token1UnclaimedRewards = new BigNumber(farmatUserPoolsMap[item.pid].token1UnclaimedRewards).plus(item.token1UnclaimedRewards).toString()
-      farmatUserPoolsMap[item.pid] = {
-        stakeAmount,
-        token0UnclaimedRewards,
-        token1UnclaimedRewards,
-        pid: item.pid,
-      }
-    }
-  })
+  console.log(userPoolData)
 
-  dispatch(setSpUserData(Object.values(farmatUserPoolsMap)))
+  dispatch(setSpUserStakesData(getUserStakesMap(userPoolData)))
+
+  dispatch(setSpUserData(getUserPoolsMap(userPoolData)))
+
   const pools = datas ? datas : getState().pools.single.data
   const userTokens = await fetchUserTokenVal(account, pools)
   dispatch(setSpUserData(userTokens))
@@ -68,7 +63,6 @@ export const fetchSpVaultUserAsync = (account: string, datas?: SinglePoolData[])
 export const fetchSinglePoolDataAsync =
   (account?: string): AppThunk =>
     async (dispatch, getState) => {
-      const state = getState()
       const data = await fetchSinglePoolData()
       dispatch(setSpDataList(data))
       dispatch(fetchSpPublicDatasAsync(data))

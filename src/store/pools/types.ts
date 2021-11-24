@@ -49,6 +49,18 @@ export interface LiquidityPoolData extends PoolDataBase {
   decimals1: string
 }
 
+export interface PoolAprs {
+  token0baseApr: number // 基础奖励年化收益
+  token0additionalApr: number // 附加奖励年化收益
+  token0donateApr: number  // 捐赠奖励年化收益
+  token0totalApr: number // 总年化收益
+  token1baseApr: number
+  token1additionalApr: number
+  token1donateApr: number
+  token1totalApr: number
+  totalApr: number // 池子总年化收益
+}
+
 export interface SinglePoolData extends PoolDataBase, SinglePoolBaseInfo {
   duration: string  // 最小需要质押的时间，秒
   lastRewardBlock: string  // 最后奖励区块
@@ -68,9 +80,10 @@ export interface SinglePoolData extends PoolDataBase, SinglePoolBaseInfo {
   depositSymbol: string, //质押代币标识
   depositName: string, //质押代币名称
   depositDecimals: number, //质押代币小数位
-  depositTokenPrice?: string, // 代币价格
-  rewardToken0Price?: string, // 代币价格
-  rewardToken1Price?: string, // 代币价格
+  depositTokenPrice?: string, // 代币价格 (计算精度后的值, eg: 1.237 === $1.237)
+  rewardToken0Price?: string, // 代币价格 (计算精度后的值, eg: 1.237 === $1.237)
+  rewardToken1Price?: string, // 代币价格 (计算精度后的值, eg: 1.237 === $1.237)
+  totalLiquidity?: string, // 质押代币价值(计算精度后的值, eg: 1.237 === $1.237)
 }
 
 export interface LiquidityPool extends PoolsBase {
@@ -80,6 +93,9 @@ export interface SinglePool extends PoolsBase {
   data: SinglePoolData[]
   userStakesMap: {
     [pid: string]: PoolUserData[]
+  }
+  poolAprMap: {
+    [pid: string]: PoolAprs
   }
 }
 

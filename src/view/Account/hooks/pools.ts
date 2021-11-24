@@ -78,7 +78,7 @@ export const useStakePool = (pid: string, decimal?: string) => {
 export const useWithdrawPool = () => {
   const masterChefContract = useSinglePool()
   const handleWithdraw = useCallback(async (stakingId: string) => {
-    const tx = await masterChefContract.depwithdrawosit(stakingId, harvestOptions)
+    const tx = await masterChefContract.withdraw(stakingId, harvestOptions)
     const receipt = await tx.wait()
     return receipt.status
   }, [masterChefContract])

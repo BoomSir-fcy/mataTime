@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
-import { Flex, Box, Text, Card, Button, Heading, Skeleton } from 'uikit';
+import { useDispatch } from 'react-redux';
+import { Flex, Box, Button } from 'uikit';
 import { useSinglePoolState } from 'store/pools/hooks';
-import { UserData } from 'store/pools/types';
-import BigNumber from 'bignumber.js';
-import { TokenPairImage, TokenImage } from 'components';
-import { Container, ModalWrapper } from 'components'
-import { useApproveErc20Pool, useHarvestStakeId, useStakePool } from '../../hooks/pools';
+import { fetchSpVaultUserAsync } from 'store/pools/thunks';
+import { ModalWrapper } from 'components'
+import { useStakePool, useWithdrawPool } from '../../hooks/pools';
 import StakeModal from '../PoolModal/StakeModal'
+import UnStakeModal from '../PoolModal/UnStakeModal'
 import PoolStakeInfo, { PoolDispalynUserData } from './PoolStakeInfo';
 
 const ButtonStyled = styled(Button)`
@@ -44,13 +45,20 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
   dispalynUserData,
 }) => {
 
+  const dispatch = useDispatch()
+  const { account } = useWeb3React()
+  const { userStakesMap } = useSinglePoolState()
+
   const [visible, setVisible] = useState(false)
   const [visibleView, setVisibleView] = useState(false)
-  const [testVal, setTestVal] = useState(1)
 
-  // const { onApprove } = useStakePool(pid, de)
   const { onStake } = useStakePool(pid)
-  const { userStakesMap } = useSinglePoolState()
+  const { onWithdraw } = useWithdrawPool()
+
+  const updateUserData = useCallback(() => {
+    dispatch(fetchSpVaultUserAsync(account))
+
+  }, [dispatch, account])
 
   return (
     <Box>
@@ -61,29 +69,48 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
         depositSymbol={depositSymbol}
         rewardToken0Symbol={rewardToken0Symbol}
         rewardToken1Symbol={rewardToken1Symbol}
-        dispalynUserData={dispalynUserData}
+        {...dispalynUserData}
       >
-        <Flex>
-          <Button onClick={() => setVisible(true)}>加仓</Button>
-          <Button ml="12px">查看</Button>
-        </Flex>
+        {
+          userStakesMap[pid] ? (
+            <Flex>
+              <Button onClick={() => setVisible(true)}>加仓</Button>
+              <Button onClick={() => setVisibleView(true)} ml="12px">查看</Button>
+            </Flex>
+          )
+            :
+            <Button onClick={() => setVisible(true)}>质押</Button>
+        }
       </PoolStakeInfo>
       <ModalWrapper title="质押" creactOnUse visible={visible} setVisible={setVisible}>
         <StakeModal
           max={dispalynUserData.tokenBalance}
           decimals={depositDecimals}
           depositSymbol={depositSymbol}
-          onConfirm={onStake}
+          onConfirm={async (amount) => {
+            await onStake(amount)
+            updateUserData()
+          }}
           onDismiss={() => setVisible(false)}
         />
       </ModalWrapper>
-      <ModalWrapper title="查看" creactOnUse visible={visibleView} setVisible={setVisibleView}>
-        <StakeModal
-          max={dispalynUserData.tokenBalance}
-          decimals={depositDecimals}
-          depositSymbol={depositSymbol}
-          onConfirm={onStake}
+      <ModalWrapper fillBody title="查看" creactOnUse visible={visibleView} setVisible={setVisibleView}>
+        <UnStakeModal
+          onConfirm={async (pid) => {
+            await onWithdraw(pid)
+            updateUserData()
+          }}
           onDismiss={() => setVisibleView(false)}
+          depositToken={depositToken}
+          rewardToken0={rewardToken0}
+          rewardToken1={rewardToken1}
+          depositSymbol={depositSymbol}
+          rewardToken0Symbol={rewardToken0Symbol}
+          rewardToken1Symbol={rewardToken1Symbol}
+          rewardToken0Decimals={rewardToken0Decimals}
+          rewardToken1Decimals={rewardToken1Decimals}
+          depositDecimals={depositDecimals}
+          stakes={userStakesMap[pid]}
         />
       </ModalWrapper>
     </Box>

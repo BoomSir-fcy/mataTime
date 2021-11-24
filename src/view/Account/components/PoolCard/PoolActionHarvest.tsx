@@ -5,7 +5,7 @@ import { fetchVaultUserAsync } from 'store/pools/thunks';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'contexts/Localization';
 import { Container } from 'components'
-import { useApproveErc20Pool, useHarvestStakeId } from '../../hooks/pools';
+import { useApproveErc20Pool, useHarvesPoolId } from '../../hooks/pools';
 import Dots from 'components/Loader/Dots';
 import { getBalanceAmount } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
@@ -42,18 +42,6 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
 
   const [pendingTx, setPendingTx] = useState(false)
 
-
-  const userValues = useMemo(() => {
-    const rawEarningsBalance = account ? getBalanceAmount(new BigNumber(earnings)) : BIG_ZERO
-    const displayBalance = rawEarningsBalance.toFixed(3, BigNumber.ROUND_DOWN)
-    const earningsBusd = rawEarningsBalance ? rawEarningsBalance.multipliedBy(rewardTokenPrice).toNumber() : 0
-    return {
-      rawEarningsBalance,
-      displayBalance,
-      earningsBusd,
-    }
-  }, [account, earnings, rewardTokenPrice])
-
   const { onApprove } = useApproveErc20Pool(depositToken, poolAddress)
   const handleApprove = useCallback(async () => {
     try {
@@ -67,12 +55,11 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
     }
   }, [onApprove, dispatch, account])
 
-  const { onHarvest } = useHarvestStakeId()
+  const { onHarvest } = useHarvesPoolId(pid)
   const onHandleReward = useCallback(async () => {
     try {
       setPendingTx(true)
-      // TODO:
-      await onHarvest('1')
+      await onHarvest()
       setPendingTx(false)
       dispatch(fetchVaultUserAsync(account))
     } catch (error) {
