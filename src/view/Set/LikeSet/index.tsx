@@ -13,8 +13,7 @@ import { languages } from 'config/localization';
 
 const NoticeSetBox = styled(Card)`
   height: 700px;
-  margin-top: 13px;
-  padding: 27px 29px;
+  padding: 27px 0;
 `;
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.white_black};
@@ -27,7 +26,7 @@ const Rows = styled(Flex)`
 `;
 const Column = styled(Flex)`
   justify-content: space-between;
-  padding-bottom: 23px;
+  padding: 0 30px 24px;
   margin-bottom: 22px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
 `;
@@ -51,7 +50,7 @@ const LikeSet: React.FC = () => {
   };
 
   return (
-    <NoticeSetBox>
+    <NoticeSetBox isBoxShadow>
       <Column>
         <Rows>
           <Title>{t('Dark')}</Title>

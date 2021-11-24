@@ -8,6 +8,7 @@ import { Upload } from 'components';
 import { useStore, storeAction } from 'store';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
+import { mediaQueriesSize } from 'uikit/theme/base';
 
 import { Api } from 'apis';
 import { useProfileContract } from './hook';
@@ -21,7 +22,6 @@ const Background = styled(Flex)`
   width: 100%;
   height: 280px;
   background-size: 100%;
-  border-radius: 10px;
   padding: 190px 0 0;
   justify-content: center;
 `;
@@ -30,10 +30,9 @@ export const Header = styled(Flex)`
   height: 60px;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
   background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: 10px;
-  margin-bottom: 12px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${mediaQueriesSize.paddingxs}
 `;
 
 const Edit: React.FC = () => {

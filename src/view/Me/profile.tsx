@@ -27,7 +27,9 @@ import defaultImages from 'assets/images/default_background.png';
 import { clear } from 'redux-localstorage-simple';
 import useAuth from 'hooks/useAuth';
 
-const Center = styled(Box)``;
+const Center = styled(Box)`
+  width: 100%;
+`;
 const ProfileCard = styled(Card)`
   position: relative;
   overflow: visible;
@@ -35,7 +37,6 @@ const ProfileCard = styled(Card)`
 const HeadTop = styled(Box)`
   width: 100%;
   min-height: 270px;
-  border-radius: ${({ theme }) => theme.radii.card};
   background-size: 100% auto;
 `;
 const ProfileInfo = styled(Box)`
@@ -159,7 +160,7 @@ const Profile: React.FC<any> = props => {
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
-      <ProfileCard>
+      <ProfileCard isBoxShadow>
         <HeadTop
           style={{
             backgroundImage: `url(${profile.background_image || defaultImages})`

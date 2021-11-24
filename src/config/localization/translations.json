@@ -147,7 +147,7 @@
   "meActiveTopic": "Active Topic",
   "meUnsubscribe": "Unsubscribe",
   "meUnsubscribeTips": "Do you want to unfollow Ta?",
-  "meUnsubscribeContent": "Unfollow user @%value%, you will not be able to get the latest news and information of Ta",
+  "meUnsubscribeContent": "Unfollow user %value%, you will not be able to get the latest news and information of Ta",
   "meFocusOn": "+Follow",
   "meNotFollowed": "Not Followed",
   "meFollowed": "Followed",

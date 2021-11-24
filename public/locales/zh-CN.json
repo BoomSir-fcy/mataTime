@@ -151,7 +151,7 @@
   "meActiveTopic": "活跃话题",
   "meUnsubscribe": "取消关注",
   "meUnsubscribeTips": "是否取消关注Ta？",
-  "meUnsubscribeContent": "取消关注用户@%value%，将无法获取Ta的最新动态、信息",
+  "meUnsubscribeContent": "取消关注用户%value%，将无法获取Ta的最新动态、信息",
   "meFocusOn": "+关注",
   "meNotFollowed": "未关注",
   "meFollowed": "已关注",

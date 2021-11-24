@@ -36,13 +36,14 @@ const Exchange = React.lazy(() => import('./view/exchange'));
 const Container = styled(Box)<{
   dark: boolean;
 }>`
-  background-image: ${({ dark }) =>
+  /* background-image: ${({ dark }) =>
     `url(${
       require(dark
         ? 'assets/images/dark_background.jpg'
         : 'assets/images/light_background.jpg').default
     })`};
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background-color: ${({ theme }) => theme.colors.backgroundCard};
   min-height: 100vh;
 `;
 

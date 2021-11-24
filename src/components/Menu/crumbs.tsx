@@ -7,12 +7,12 @@ import { Icon } from 'components';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
 
-const Card = styled(Box)`
+const Card = styled(Flex)`
+  align-items: center;
   width: 100%;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: ${({ theme }) => theme.radii.card};
+  height: 60px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   ${mediaQueriesSize.paddingxs}
-  ${mediaQueriesSize.marginbsm}
   .text {
     font-size: 18px;
     font-weight: bold;
