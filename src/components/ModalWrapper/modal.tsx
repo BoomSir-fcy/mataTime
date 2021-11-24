@@ -19,11 +19,12 @@ const getCustomStyles = (theme: DefaultTheme) => ({
     borderRadius: theme.radii.card,
     boxShadow: theme.card.boxShadow,
     border: 0,
-    padding: '8px 16px',
+    padding: '18px 20px',
+    zIndex: 200
   },
   overlay: {
-    backgroundColor: 'rgba(98, 98, 98, 0.3)'
-
+    backgroundColor: 'rgba(98, 98, 98, 0.3)',
+    zIndex: 200
   }
 });
 
@@ -42,7 +43,8 @@ interface ModalWrapperProps {
   visible: boolean
   setVisible: (state: boolean) => void
   title?: string,
-  creactOnUse?: boolean
+  creactOnUse?: boolean,
+  customizeTitle?: boolean
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
@@ -50,6 +52,8 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
   setVisible,
   children,
   creactOnUse,
+  title,
+  customizeTitle
 }) => {
   const { theme } = useTheme()
 
@@ -64,7 +68,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
       style={customStyles}
       ariaHideApp={false}
       contentLabel="Example Modal">
-      <ModalHeaderStyled onClose={onClose} title="test" />
+      {!customizeTitle && <ModalHeaderStyled onClose={onClose} title={title} />}
       {children}
     </Modal>
   )

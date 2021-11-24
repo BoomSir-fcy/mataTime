@@ -71,6 +71,7 @@ export type Gradients = {
 
 export type Colors = {
   protrudeColor: string;
+  ThemeText: string;
   upPrice: string;
   white: string;
   downPrice: string;

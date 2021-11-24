@@ -9,6 +9,7 @@ import { CoinsApi } from './Coins';
 import { MeApi } from './Me';
 import { SetApi } from './Set';
 import { AttentionApi } from './Attention';
+import { AccountApi } from './Account';
 
 const isSuccess = (res: Api.Error) => {
   return res && res.code === 1;
@@ -26,5 +27,6 @@ export const Api = {
   CoinsApi: new CoinsApi(),
   MeApi: new MeApi(),
   SetApi: new SetApi(),
-  AttentionApi: new AttentionApi()
+  AttentionApi: new AttentionApi(),
+  AccountApi: new AccountApi()
 };
