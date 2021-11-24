@@ -5,7 +5,6 @@ import { useStore, Dispatch } from 'store';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const Toast: React.FC = React.memo(() => {
-
   // const toastReducer = useStore(p => p.appReducer);
   // console.log(toastReducer);
   // const timer = React.<NodeJS.Timeout>();
@@ -26,14 +25,15 @@ export const Toast: React.FC = React.memo(() => {
   return (
     <ToastContainer
       position="top-right"
-      limit={3}
-      autoClose={3000}
+      limit={2}
+      autoClose={2000}
       newestOnTop={false}
       closeOnClick
       rtl={false}
       hideProgressBar
       pauseOnFocusLoss
       draggable
-      pauseOnHover />
-  )
-})
+      pauseOnHover
+    />
+  );
+});

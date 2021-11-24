@@ -112,8 +112,11 @@ export function useLogin() {
           window.localStorage.setItem(storage.Token, token);
         }
         return response;
-      } catch (error) {
-        return false;
+      } catch (error: any) {
+        console.log(error?.code);
+        return {
+          code: error?.code || 0
+        };
       }
     },
     [chainId, library, account]
