@@ -4,6 +4,7 @@ import { useImmer } from 'use-immer';
 import { Flex, Radio } from 'uikit';
 import { Select } from 'components';
 import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 
 const FormBox = styled.div`
@@ -82,6 +83,7 @@ const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
   const profile = useStore(p => p.loginReducer.userInfo);
   const defaultId = country?.length > 0 && country[0].id;
+  const { t } = useTranslation();
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
     nick_name: profile.nick_name,
     display_format: profile.display_format,
@@ -101,7 +103,7 @@ const FormInput = React.forwardRef((props, ref) => {
   return (
     <FormBox>
       <Rows>
-        <Title>*设置昵称</Title>
+        <Title>{t('loginInputTitleNickname')}</Title>
         <div>
           <InputRows>
             <input
@@ -117,7 +119,7 @@ const FormInput = React.forwardRef((props, ref) => {
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
-          <Msg>6~30个字符</Msg>
+          <Msg>{t('loginInputVerifyNickname')}</Msg>
         </div>
       </Rows>
       <Rows>

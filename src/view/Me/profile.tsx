@@ -22,7 +22,7 @@ import { Tabs, Popup } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import defaultImages from 'assets/images/default_me_background.jpg';
+import defaultImages from 'assets/images/default_background.png';
 
 import { clear } from 'redux-localstorage-simple';
 import useAuth from 'hooks/useAuth';
@@ -106,7 +106,7 @@ const Content = styled(Box)`
   }
 `;
 
-const Profile: React.FC<any> = React.memo(props => {
+const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
     profile: {
       post_num: 0,
@@ -136,7 +136,7 @@ const Profile: React.FC<any> = React.memo(props => {
       ]);
       if (Api.isSuccess(profile) || Api.isSuccess(tweet)) {
         setState(p => {
-          p.profile = profile.data;
+          p.profile = profile?.data;
           p.list = offset
             ? [...(tweet?.data?.list || [])]
             : [...state.list, ...(tweet?.data?.list || [])];
@@ -154,7 +154,7 @@ const Profile: React.FC<any> = React.memo(props => {
 
   React.useEffect(() => {
     init();
-  }, []);
+  }, [uid]);
 
   return (
     <Center>
@@ -280,6 +280,6 @@ const Profile: React.FC<any> = React.memo(props => {
       </List>
     </Center>
   );
-});
+};
 
 export default Profile;

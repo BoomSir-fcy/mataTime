@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 
 const TabsBox = styled(Card)`
   display: flex;
@@ -38,9 +39,10 @@ const TabItems = styled(Flex)`
 `;
 
 export const Tabs = React.memo(() => {
+  const { t } = useTranslation();
   const menu = [
     {
-      title: '全部',
+      title: t('homeTabAll'),
       value: '0'
     }
   ];

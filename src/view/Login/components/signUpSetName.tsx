@@ -69,7 +69,7 @@ export const SignUpSetName: React.FC<{
   // 轮询查找用户是否注册
   const verify = () => {
     timer = setInterval(async () => {
-      toast.warning('正在查询中...');
+      toast.warning(t('loginSigninSearch'));
       const res = await siginInVerify(account.toLowerCase());
       if (Boolean(res)) {
         timer && clearInterval(timer);

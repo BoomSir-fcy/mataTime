@@ -15,7 +15,7 @@ import { useFetchNftList } from '../Login/hook';
 
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
-import defaultImages from 'assets/images/default_me_background.jpg';
+import defaultImages from 'assets/images/default_background.png';
 
 const Background = styled(Flex)`
   width: 100%;
@@ -123,10 +123,10 @@ const Edit: React.FC = () => {
     <Box>
       <Header>
         <Text color="white_black" fontWeight="bold" fontSize="18px">
-          账号资料编辑
+          {t('commonAccountEdit')}
         </Text>
         <Button onClick={debounce(() => updateUserInfo(), 1000)}>
-          保存最新修改
+          {t('commonAccountSave')}
         </Button>
       </Header>
       <Background style={{ backgroundImage: `url(${state.background})` }}>
