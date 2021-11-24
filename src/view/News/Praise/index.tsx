@@ -99,7 +99,7 @@ const NewsPraise: React.FC = (props) => {
                   updateList(data)
                 }} />
                 <div className="reply-wrapper">
-                  <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> {t('newsPraiseContent')}
+                  <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> <span className={'reply-tip'}>{t('newsPraiseContent')}</span>
                   <ContentParsing content={item.comment.comment} callback={(type: MoreOperatorEnum) => {
                     updateList(item, type);
                   }}></ContentParsing>
