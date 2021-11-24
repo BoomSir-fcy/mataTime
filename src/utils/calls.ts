@@ -1,12 +1,30 @@
-
-const options = {}
+const options = {};
 export const stakeNftFarm = async (masterChefContract, address, nftsId) => {
-  const tx = await masterChefContract.depositeNFT(address, nftsId)
-  const receipt = await tx.wait()
-  return receipt.status
-}
-export const CancelNftStake = async (masterChefContract, address, nftsId) => {
-  const tx = await masterChefContract.replaceNFT(address, nftsId)
-  const receipt = await tx.wait()
-  return receipt.status
-}
+  const tx = await masterChefContract.depositeNFT(address, nftsId);
+  const receipt = await tx.wait();
+  return receipt.status;
+};
+export const CancelNftStake = async (masterChefContract, toNFT, tokenID) => {
+  const tx = await masterChefContract.replaceNFT(toNFT, tokenID);
+  const receipt = await tx.wait();
+  return receipt.status;
+};
+export const createUserContact = async (
+  masterChefContract,
+  nickname,
+  nftAddress,
+  tokenID
+) => {
+  const tx = await masterChefContract.createProfile(
+    nickname,
+    nftAddress,
+    tokenID
+  );
+  const receipt = await tx.wait();
+  return receipt.status;
+};
+export const updateNickname = async (masterChefContract, nickname) => {
+  const tx = await masterChefContract.updateNickname(nickname);
+  const receipt = await tx.wait();
+  return receipt.status;
+};

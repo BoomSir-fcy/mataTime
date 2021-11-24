@@ -48,7 +48,11 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           </LayoutLeftWrapper>
         </Affix>
         <LayoutMiddleWrapper>
-          <CenterHeader title={t('newsNotice')}></CenterHeader>
+          {
+            props.location.pathname!=='/news/praise'?
+            <CenterHeader title={t('newsNotice')}></CenterHeader>
+            :null
+          }
           <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
           <Route path={'/news/me'} render={(props) => {
             return (<NewsMe {...props} />)
@@ -56,7 +60,9 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
           <Route path={'/news/comment'} render={(props) => {
             return (<NewsComment {...props} />)
           }}></Route>
-          <Route path={'/news/praise'} component={NewsPraise}></Route>
+          <Route path={'/news/praise'} render={(props) => (
+              <NewsPraise></NewsPraise>
+          )}></Route>
           <Route path={'/news/notice'} component={NewsNotice}></Route>
         </LayoutMiddleWrapper>
         <Affix offsetTop={100} positionObj={{

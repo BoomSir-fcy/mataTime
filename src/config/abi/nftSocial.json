@@ -64,6 +64,12 @@
         "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      },
+      {
         "indexed": true,
         "internalType": "address",
         "name": "NFT",
@@ -82,7 +88,26 @@
         "type": "uint256"
       }
     ],
-    "name": "UserDepositeNFT",
+    "name": "UserNew",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      }
+    ],
+    "name": "UserUpdateNickname",
     "type": "event"
   },
   {
@@ -132,6 +157,11 @@
         "type": "address"
       },
       {
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "NFT_address",
         "type": "address"
@@ -140,6 +170,11 @@
         "internalType": "uint256",
         "name": "token_id",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -147,7 +182,7 @@
   },
   {
     "inputs": [],
-    "name": "_can_deposite",
+    "name": "_can_create",
     "outputs": [
       {
         "internalType": "bool",
@@ -174,6 +209,51 @@
   {
     "inputs": [],
     "name": "_can_withdraw",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nicknameMaxLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nicknameMinLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "nicknames",
     "outputs": [
       {
         "internalType": "bool",
@@ -313,6 +393,56 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "newLength",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateNicknameMaxLength",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newLength",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateNicknameMinLength",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      }
+    ],
+    "name": "checkNickname",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "nftAddress",
         "type": "address"
@@ -323,14 +453,8 @@
         "type": "uint256"
       }
     ],
-    "name": "depositeNFT",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "name": "createProfile",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -372,6 +496,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "nickname",
+        "type": "string"
+      }
+    ],
+    "name": "updateNickname",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "getSupportNFT",
     "outputs": [
@@ -382,6 +519,32 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "pauseUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "reactivateUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

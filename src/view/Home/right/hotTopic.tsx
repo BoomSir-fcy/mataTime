@@ -37,7 +37,7 @@ color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
 const HotItem = styled(Flex)`
 margin-top:20px;
 `
-export const HotTopic: React.FC = (props:any) => {
+export const HotTopic: React.FC = (props: any) => {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [hotTopicList, setHotTopicList] = useState([])
@@ -51,11 +51,17 @@ export const HotTopic: React.FC = (props:any) => {
         if (isToast) {
           toast.success(t('HotTopicRefreshSuccess'))
         }
+        if (page < res.data.total_page) {
+          setPage(page + 1)
+        } else {
+          setPage(1)
+        }
+
       }
     })
   }
-  const goDetils=(item)=>{
-    props.history.push('/topicList/' + item.tid+'/'+item.topic_name)
+  const goDetils = (item) => {
+    props.history.push('/topicList/' + item.tid + '/' + item.topic_name)
   }
   return (
     <HotTopicBox>
@@ -67,7 +73,7 @@ export const HotTopic: React.FC = (props:any) => {
         {
           hotTopicList.map((item, index) => (
             <HotItem key={item.tid} justifyContent="space-between">
-              <Hot onClick={()=>goDetils(item)}>#{item.topic_name}#</Hot>
+              <Hot onClick={() => goDetils(item)}>#{item.topic_name}#</Hot>
               <HotCount>{item.post_num > 999 ? '999+' : item.post_num}{t('HotTopicUnit')}</HotCount>
             </HotItem>
           ))

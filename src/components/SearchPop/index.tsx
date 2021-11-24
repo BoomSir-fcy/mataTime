@@ -35,28 +35,28 @@ export const SearchPop = (props: Iprops) => {
     if (topicTimeId) { clearTimeout(topicTimeId) }
     setTopicTimeId(setTimeout(() => {
       Api.HomeApi.queryHotTopicList({
-        page:1,
-        per_page:50,
-        topic_name:topicValue
+        page: 1,
+        per_page: 50,
+        topic_name: topicValue
       }).then(res => {
-        if(Api.isSuccess(res)){
-          setTopicList(res.data.List||[])
+        if (Api.isSuccess(res)) {
+          setTopicList(res.data.List || [])
         }
       })
     }, 400))
   }, [topicValue])
   useEffect(() => {
-    const fn = (e)=>{
-      if(show){
-        callback({},'')
+    const fn = (e) => {
+      if (show) {
+        callback({}, '')
       }
     }
-    document.addEventListener('click',fn)
-    return ()=>document.removeEventListener('click',fn)
+    document.addEventListener('click', fn)
+    return () => document.removeEventListener('click', fn)
   })
   return (
     show ?
-      <SearchPopBox onClick={(e)=>e.nativeEvent.stopImmediatePropagation()}>
+      <SearchPopBox onClick={(e) => e.nativeEvent.stopImmediatePropagation()}>
         {
           type === 'user' ?
             <div className="search-box">
@@ -77,9 +77,9 @@ export const SearchPop = (props: Iprops) => {
                       <div style={{ flex: 1 }}>
                         <Flex >
                           <UserTitle style={{ flex: 1 }} title={item.nick_name}>{item.nick_name}</UserTitle>
-                          <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon>
+                          {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
                         </Flex>
-                        <UserDesc title={item.address}>{item.address&&((item.address||'').slice(0, 3)+'...'+(item.address||'').slice(35))}</UserDesc>
+                        <UserDesc title={item.address}>{item.address && ((item.address || '').slice(0, 3) + '...' + (item.address || '').slice(35))}</UserDesc>
                       </div>
                     </Flex>
                   ))
@@ -104,7 +104,7 @@ export const SearchPop = (props: Iprops) => {
                 {
                   topicList.map((item, index) => (
                     <Flex key={item.topic_id} className="search-res-list-item" onClick={(e) => callback(item, type)}>
-                          <UserTitle style={{ flex: 1 }} title={item.topic_name}>#{item.topic_name}#</UserTitle>
+                      <UserTitle style={{ flex: 1 }} title={item.topic_name}>#{item.topic_name}#</UserTitle>
                     </Flex>
                   ))
                 }

@@ -11,7 +11,7 @@ export const CommentItemWrapper = styled(Card)`
     margin-bottom: 15px;
     box-sizing: border-box;
     padding: 25px;
-
+    overflow: inherit;
     .reply-wrapper{
       font-size: 16px;
       font-family: Alibaba PuHuiTi;

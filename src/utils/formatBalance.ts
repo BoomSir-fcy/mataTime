@@ -88,6 +88,20 @@ export const formatLocalisedCompactNumber = (number: number, maximumSignificantD
     maximumSignificantDigits,
   }).format(number)
 }
+/* eslint-disable */
+
+// 千分号
+export const splitThousandSeparator = (num: number): string => {
+  let prefix: string = "";
+  if (num < 0) {
+    num *= -1;
+    prefix = "-";
+  }
+  let DIGIT_PATTERN = /(^|\s)\d+(?=\.?\d*($|\s))/g;
+  let MILI_PATTERN = /(?=(?!\b)(\d{3})+\.?\b)/g;
+  let str: string = num.toString().replace(DIGIT_PATTERN, (m) => m.replace(MILI_PATTERN, ','));
+  return prefix + str;
+}
 
 // 余额显示精度
 export const formatDisplayBalance = (stakedBalance: BigNumber, decimals = 18) => {

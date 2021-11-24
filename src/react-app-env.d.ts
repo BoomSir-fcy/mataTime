@@ -47,9 +47,9 @@ declare module '*.webp' {
 declare module '*.svg' {
   import * as React from 'react';
 
-  export const ReactComponent: React.FunctionComponent<React.SVGProps<
-    SVGSVGElement
-  > & { title?: string }>;
+  export const ReactComponent: React.FunctionComponent<
+    React.SVGProps<SVGSVGElement> & { title?: string }
+  >;
 
   const src: string;
   export default src;
@@ -72,14 +72,18 @@ declare module '*.module.sass' {
 
 interface Window {
   ethereum?: {
-    isMetaMask?: true
-    on?: (...args: any[]) => Promise<void>
-    request?: (...args: any[]) => Promise<void>
-  }
+    isMetaMask?: true;
+    on?: (...args: any[]) => Promise<void>;
+    request?: (...args: any[]) => Promise<void>;
+    enable?: Function;
+  };
   BinanceChain?: {
-    bnbSign?: (address: string, message: string) => Promise<{ publicKey: string; signature: string }>
-  }
-  MSStream?: boolean
+    bnbSign?: (
+      address: string,
+      message: string
+    ) => Promise<{ publicKey: string; signature: string }>;
+  };
+  MSStream?: boolean;
 }
 
 type address = string

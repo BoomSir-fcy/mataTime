@@ -65,7 +65,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
 
   return (
-    <PopupWrapper onClick={(e)=>e.stopPropagation()} onMouseOver={(e: any) => {
+    <PopupWrapper onClick={(e) => e.stopPropagation()} onMouseOver={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       // uid && getUserInfo()
       setVisible(true)
@@ -85,7 +85,9 @@ export const FollowPopup = React.memo((props: Iprops) => {
               </div>
               <div className="right-box">
                 <div className="name" title={userInfo.NickName || userInfo.nick_name || '  '}>{userInfo.NickName || userInfo.nick_name || '  '}</div>
-                <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon>{(userInfo.address || '').slice(0, 3) + '...' + (userInfo.address || '').slice(35)}</div>
+                <div className="des">
+                  {/* <Icon name={'icon-dunpai'} color={'#85C558'}></Icon> */}
+                  {(userInfo.address || '').slice(0, 3) + '...' + (userInfo.address || '').slice(38)}</div>
                 <div className="number">
                   <p>{t('followFans')}<strong>{userInfo.fans_num || 0}</strong></p>
                   <p>{t('followText')}<strong>{userInfo.attention_num || 0}</strong></p>

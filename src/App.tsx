@@ -141,10 +141,7 @@ function App() {
               path="/articleDetils/:id"
               exact
               render={props => (
-                <>
-                  <Header {...props} />
-                  <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
-                </>
+                <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
               )}
             ></Route>
             <Route

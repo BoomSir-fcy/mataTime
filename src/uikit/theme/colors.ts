@@ -72,6 +72,7 @@ export const lightColors: Colors = {
   disabled: '#E9EAEB',
   borderColor: '#EFF4F5',
   protrudeColor: '#FFFFFF',
+  ThemeText: '#4168ED',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
@@ -136,6 +137,7 @@ export const darkColors: Colors = {
   disabled: '#524B63',
   borderColor: '#4D535F',
   protrudeColor: '#4168ED',
+  ThemeText: '#4168ED',
   gradients: {
     footer: '#191F2D',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',

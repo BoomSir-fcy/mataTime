@@ -65,8 +65,6 @@ const Home: React.FC = (props: any) => {
     });
   };
   const tabsChange = (item) => {
-    console.log(item);
-
     const temp = {
       ...filterVal
     }
@@ -78,7 +76,7 @@ const Home: React.FC = (props: any) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
-        <Affix offsetTop={100} positionObj={{
+        <Affix offsetTop={35} positionObj={{
           top: '10px',
           left: '50%',
           marginLeft: '-550px'
@@ -108,7 +106,7 @@ const Home: React.FC = (props: any) => {
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList key={refresh} filterValObj={filterVal} {...props}></ArticleList>
         </CenterCard>
-        <Affix offsetTop={100} positionObj={{
+        <Affix offsetTop={35} positionObj={{
           top: '10px',
           right: '50%',
           marginRight: '-660px'

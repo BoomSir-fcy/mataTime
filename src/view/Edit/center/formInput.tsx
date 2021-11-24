@@ -108,16 +108,16 @@ const FormInput = React.forwardRef((props, ref) => {
               type="text"
               onChange={event =>
                 setState(p => {
-                  p.nick_name = event.target.value.substr(0, 20);
+                  p.nick_name = event.target.value;
                 })
               }
-              minLength={1}
+              minLength={6}
               maxLength={20}
               value={state.nick_name}
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
-          <Msg>1~20个字符</Msg>
+          <Msg>6~30个字符</Msg>
         </div>
       </Rows>
       <Rows>
