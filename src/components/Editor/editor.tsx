@@ -12,6 +12,7 @@ import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
+import escapeHtml from 'escape-html'
 
 type Iprops = {
   type: any
@@ -62,13 +63,35 @@ const insertMention = (editor, { character, uid }) => {
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
 };
-const insertTopic = (editor, { character = '' }) => {
-  const topic: any = {
-    type: 'topic',
-    children: [{ text: character }]
-  };
-  Transforms.insertNodes(editor, topic);
+const insertTopic = (editor, character ='') => {
+  // const topic: any = {
+  //   type: 'topic',
+  //   children: [{ text: character }]
+  // };
+  Transforms.insertText(editor,`#${character}#`)
+  // Transforms.insertNodes(editor, topic);
 };
+function deep (children){
+  return children.map(item=>{
+    if(item.text){
+      return {...item,text:escapeHtml(item.text)}
+    }
+    if(item.type==='mention'){
+      return {...item,character:escapeHtml(item.character)}
+    }
+    return item
+  })
+}
+const parseValue = (value)=>{
+  let arr = value.map(item=>{
+    if(item.children){
+      return{...item, children: deep(item.children)}
+    }else{
+      return item
+    }
+  })
+  return arr
+}
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const [isDisabledSend,setIsDisabledSend] = useState(true)
@@ -83,8 +106,8 @@ export const Editor = (props: Iprops) => {
     switch (props.element.type) {
       case 'mention':
         return <Mention {...props} />;
-      case 'topic':
-        return <TopicElement {...props} />;
+      // case 'topic':
+      //   return <TopicElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
@@ -110,14 +133,16 @@ export const Editor = (props: Iprops) => {
     return () => {
       el.removeEventListener('click', eventFn);
     };
-  });
-
+  },[])
+useEffect(() => {
+  if(imgList.length>0)setIsDisabledSend(false)
+},[imgList])
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
     input.name = 'file';
     input.multiple = true;
-    input.accept = '.png,.jpg,.jpeg';
+    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp'
     input.onchange = async (e: any) => {
       const selectFiles = e.target.files;
       if (!selectFiles[0]) return false;
@@ -185,11 +210,13 @@ const deepContent = (arr)=>{
     // let userIdList = []
     // let content = ''
     let {userIdList,content} = deepContent(value)
+    const newValue = parseValue(value)
+    console.log(newValue);
     if(content.length>140){
       setTimeId(null)
       return toast.warning('字数不可超过140')
     }
-    props.sendArticle(JSON.stringify(value), restInput, imgList.join(','), userIdList.join(','));
+    props.sendArticle(JSON.stringify(newValue), restInput, imgList.join(','), userIdList.join(','));
     restInput()
   };
   const searchSelect = (data, type) => {
@@ -200,7 +227,7 @@ const deepContent = (arr)=>{
       insertMention(editor, { uid: data.uid, character: '@' + data.nick_name });
     }
     if (type === 'topic') {
-      insertTopic(editor, { character: data.topic_name });
+      insertTopic(editor, data.topic_name );
     }
   };
   return (

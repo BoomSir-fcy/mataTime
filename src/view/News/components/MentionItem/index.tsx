@@ -53,7 +53,7 @@ const MentionItem: React.FC<IProps> = props => {
 
   const goDetils = e => {
     if (props.match.path === '/articleDetils/:id') return;
-    props.history.push('/articleDetils/' + itemData.id);
+    props.history.push('/articleDetils/' + itemData.post_id || itemData.id);
   };
   return (
     <MentionItemWrapper ref={mentionRef}>

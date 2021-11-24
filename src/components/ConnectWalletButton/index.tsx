@@ -24,7 +24,11 @@ export const ConnectWalletButton: React.FC<{
         bottom: '-10px'
       }}
     >
-      <WalletButton onClick={onConnectWallet} {...props}>
+      <WalletButton
+        disabled={Boolean(loading)}
+        onClick={onConnectWallet}
+        {...props}
+      >
         {Boolean(loading) ? (
           <Dots>{t('Connect Wallet')}</Dots>
         ) : (
