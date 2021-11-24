@@ -42,6 +42,7 @@ export const lightColors: Colors = {
   backgroundDisabled: '#E9EAEB',
   backgroundPrimary: '#4168ED',
   backgroundMember: '#85C559',
+  backgroundThemeCard: '#1E2535',
   backgroundCard: '#FFFFFF',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#EAF2FF',
@@ -70,6 +71,7 @@ export const lightColors: Colors = {
   textOrigin: '#EC612B',
   textgrey: '#7A83A0',
   disabled: '#E9EAEB',
+  borderThemeColor: '#EAF2FF',
   borderColor: '#EFF4F5',
   protrudeColor: '#FFFFFF',
   gradients: {
@@ -105,6 +107,7 @@ export const darkColors: Colors = {
   backgroundDisabled: '#3c3742',
   backgroundPrimary: '#4168ED',
   backgroundMember: 'rgba(49, 64, 111, 0.5)',
+  backgroundThemeCard: '#1E2535',
   backgroundCard: '#191F2D',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#292D34',
@@ -134,6 +137,7 @@ export const darkColors: Colors = {
   textOrigin: '#EC612B',
   textgrey: '#B4C8A9',
   disabled: '#524B63',
+  borderThemeColor: '#3A4459',
   borderColor: '#4D535F',
   protrudeColor: '#4168ED',
   gradients: {

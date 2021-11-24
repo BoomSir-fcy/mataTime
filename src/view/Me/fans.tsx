@@ -14,7 +14,6 @@ import { CrumbsHead } from './components';
 const Content = styled(Card)`
   min-height: 705px;
   padding: 29px 19px;
-  margin-top: 10px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -129,7 +128,7 @@ const Fans = React.memo(() => {
           </Text>
         </Flex>
       </CrumbsHead>
-      <Content>
+      <Content isBoxShadow>
         <List
           marginTop={13}
           loading={loading}

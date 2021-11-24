@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HashRouter as Router, Route } from 'react-router-dom';
 import { Flex, Box } from 'uikit';
 import { CommonMenu, Affix } from 'components';
 import { useLocation } from 'hooks';
@@ -13,24 +12,28 @@ import {
 } from '../Home/right';
 import { Menu } from 'view/Home/left/menu';
 
-import { mediaQueriesSize } from 'uikit/theme/base';
-
-const PageContainer = styled.div`
+const PageContainer = styled(Box)`
+  position: relative;
   width: 1200px;
   margin: 0 auto;
-  padding-top: 35px;
   display: flex;
-  justify-content: center;
 `;
 const LeftCard = styled(Flex)`
-  /* width: 200px; */
+  width: 200px;
+  height: 100vh;
+  overflow: auto;
 `;
 const CenterCard = styled(Box)`
-  width: 670px;
-  ${mediaQueriesSize.marginLRmd}
+  flex: 1;
+  margin: 0 15px;
+  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
-const RightCard = styled.div`
-  /* width: 300px; */
+const RightCard = styled(Flex)`
+  width: 300px;
+  height: 100vh;
+  position: relative;
+  overflow: auto;
 `;
 
 const menuArr = [
@@ -47,8 +50,8 @@ const menuArr = [
     path: '/me/follow'
   },
   {
-    icon: 'icon-a-tianjiaguanzhuguanzhu',
-    activeIcon: 'icon-gerenxinxi1',
+    icon: 'icon-aixin',
+    activeIcon: 'icon-aixin1',
     title: 'meMenuFans',
     path: '/me/fans'
   },
@@ -78,36 +81,24 @@ export const Container = props => {
   const index = props.location.pathname.indexOf('/me/profile');
   return (
     <PageContainer>
-      <Flex justifyContent="space-between">
-        <Affix
-          offsetTop={100}
-          positionObj={{
-            top: '10px',
-            left: '50%',
-            marginLeft: '-550px'
-          }}
-        >
-          <LeftCard>
+      <Flex justifyContent="space-between" width="100%">
+        <LeftCard>
+          <Affix offsetTop={0} positionObj={{}}>
             {index > -1 ? <Menu /> : <CommonMenu menu={menuArr} {...props} />}
-          </LeftCard>
-        </Affix>
+          </Affix>
+        </LeftCard>
         <CenterCard>{props.children}</CenterCard>
-        <Affix
-          offsetTop={100}
-          positionObj={{
-            top: '10px',
-            right: '50%',
-            marginRight: '-660px'
-          }}
-        >
-          <RightCard>
-            <Route path="/" component={Search}></Route>
-            <Route path="/" component={Swap}></Route>
-            <Route path="/" component={RecommendPeople}></Route>
-            <Route path="/" component={HotTopic}></Route>
-            <Route path="/" component={FooterCopyright}></Route>
-          </RightCard>
-        </Affix>
+        <RightCard>
+          <Affix offsetTop={100} positionObj={{}}>
+            <>
+              <Search />
+              <Swap />
+              <RecommendPeople />
+              <HotTopic />
+              <FooterCopyright />
+            </>
+          </Affix>
+        </RightCard>
       </Flex>
     </PageContainer>
   );

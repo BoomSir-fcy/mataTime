@@ -7,7 +7,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
-import { CommonLayout, Header, Toast } from 'components';
+import { CommonLayout, Toast } from 'components';
 // WalletModal
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
@@ -33,15 +33,17 @@ const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
 
-const Container = styled(Box) <{
+const Container = styled(Box)<{
   dark: boolean;
 }>`
-  background-image: ${({ dark }) =>
-    `url(${require(dark
-      ? 'assets/images/dark_background.jpg'
-      : 'assets/images/light_background.jpg').default
+  /* background-image: ${({ dark }) =>
+    `url(${
+      require(dark
+        ? 'assets/images/dark_background.jpg'
+        : 'assets/images/light_background.jpg').default
     })`};
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background-color: ${({ theme }) => theme.colors.backgroundCard};
   min-height: 100vh;
 `;
 
@@ -116,15 +118,15 @@ function App() {
         signOut();
       }
     }
-    return () => { };
+    return () => {};
   }, [account]);
 
   return (
-    <React.Fragment>
+    <Router history={history}>
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
-          <Router history={history}>
+          <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
             <Route
               path="/topicList/:id/:name"
@@ -151,12 +153,12 @@ function App() {
             <Route path="/exchange" component={Exchange} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
-          </Router>
+          </Switch>
         </React.Suspense>
       </Container>
       <Toast />
-    </React.Fragment>
+    </Router>
   );
 }
 
-export default React.memo(App);
+export default App;
