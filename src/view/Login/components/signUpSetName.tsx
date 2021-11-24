@@ -55,6 +55,7 @@ export const SignUpSetName: React.FC<{
   const { loginCallback } = useLogin();
   const { getUserName, siginInVerify } = useSignIn();
   const [state, setState] = useImmer({
+    isSignin: false,
     nickName: ''
   });
   const [haveNickName, sethaveNickName] = useState(true);
@@ -89,6 +90,9 @@ export const SignUpSetName: React.FC<{
       }
     } else {
       toast.error(res.data);
+      setState(p => {
+        p.isSignin = true;
+      });
     }
   };
 
@@ -166,7 +170,11 @@ export const SignUpSetName: React.FC<{
         </InputItems>
       </Box>
       <Flex justifyContent="center">
-        <Submit scale="ld" onClick={submitProfile} disabled={!status}>
+        <Submit
+          scale="ld"
+          onClick={state.isSignin ? signIn : submitProfile}
+          disabled={!status}
+        >
           {Boolean(loading) ? (
             <Dots>{t('loginSignUpNext')}</Dots>
           ) : (
