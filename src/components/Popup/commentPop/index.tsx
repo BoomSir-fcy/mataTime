@@ -15,9 +15,13 @@ type Iprops = {
 export const CommentPop = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
-  const { children, data={}, callback = () => {} } = props;
+  const { children, data = {}, callback = () => { } } = props;
   const [visible, setVisible] = useState<boolean>(false);
-  const [isCurrentUser,setIsCurrentUser] = useState(false)
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
+
+  const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
+  const [inqueryType, setInqueryType] = useState<string>('deleteComment');
+
   useEffect(() => {
     init();
   }, []);
@@ -26,36 +30,37 @@ export const CommentPop = React.memo((props: Iprops) => {
   const init = () => {
     setIsCurrentUser(UID === data.user_id)
   }
-const  delComment = ()=>{
-  Api.MeApi.removeContentDetail(data.id).then(res=>{
-    if(Api.isSuccess(res)){
-      console.log(res);
-      callback()
-      toast.success('删除成功')
-    }else{
-      toast.success(res.msg)
-    }
-  })
-}
-const  reportComment = ()=>{
-  Api.MeApi.reportComment(data.id).then(res=>{
-    if(Api.isSuccess(res)){
-      console.log(res);
-      callback()
-      toast.success('举报成功')
-    }else{
-      toast.success(res.msg)
-    }
-  })
-}
+  const delComment = () => {
+    Api.MeApi.removeContentDetail(data.id).then(res => {
+      if (Api.isSuccess(res)) {
+        console.log(res);
+        callback()
+        toast.success('删除成功')
+      } else {
+        toast.success(res.msg)
+      }
+    })
+  }
+  const reportComment = () => {
+    Api.MeApi.reportComment(data.id).then(res => {
+      if (Api.isSuccess(res)) {
+        console.log(res);
+        callback()
+        toast.success('举报成功')
+      } else {
+        toast.success(res.msg)
+      }
+    })
+  }
   useEffect(() => {
-    const fn = (e)=>{
+    const fn = (e) => {
       setVisible(false)
     }
-    document.addEventListener('click',fn)
-    return ()=>document.removeEventListener('click',fn)
+    document.addEventListener('click', fn)
+    return () => document.removeEventListener('click', fn)
   })
   return (
+    <>
       <PopupWrapper
         onClick={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
@@ -63,12 +68,33 @@ const  reportComment = ()=>{
         }}
       >
         {children}
-        {visible&&isCurrentUser ? (
+        {visible && isCurrentUser ? (
           <PopupContentWrapper>
-              <p onClick={delComment}>{t('moreDelete')}</p>
+            <p onClick={() => {
+              setCommonInqueryShow(true);
+            }}>{t('moreDelete')}</p>
             {/* <p onClick={reportComment}>{t('moreReport')}</p> */}
           </PopupContentWrapper>
         ) : null}
       </PopupWrapper>
+
+      {/* 统一询问框 */}
+      <CommonInquiryModal
+        show={commonInqueryShow}
+        type={inqueryType}
+        onClose={() => {
+          setCommonInqueryShow(false);
+          setVisible(false);
+        }}
+        onQuery={() => {
+          if (inqueryType === 'deleteComment') {
+            delComment()
+          }
+          setCommonInqueryShow(false);
+          setVisible(false);
+        }
+        }
+      ></CommonInquiryModal>
+    </>
   );
 });
