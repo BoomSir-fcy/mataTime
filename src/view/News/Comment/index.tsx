@@ -79,7 +79,7 @@ const NewsComment: React.FC = (props) => {
                 {item.comment.user_name ?
                   <div className="reply-wrapper">
                     {t('newsCommentReply')}
-                    <a>@{item.comment.user_name}</a>
+                    <a>@{item.post.nick_name}</a>
                     <div>
                       <ContentParsing content={item.comment.comment}></ContentParsing>
                     </div>

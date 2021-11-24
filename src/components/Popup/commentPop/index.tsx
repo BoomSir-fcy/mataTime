@@ -10,12 +10,13 @@ type Iprops = {
   data: any;
   children: React.ReactElement;
   callback?: Function;
+  postUserId?: string | number;
 };
 
 export const CommentPop = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
-  const { children, data = {}, callback = () => { } } = props;
+  const { children, data = {}, callback = () => { }, postUserId = '' } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
 
@@ -28,7 +29,7 @@ export const CommentPop = React.memo((props: Iprops) => {
 
   //  初始化
   const init = () => {
-    setIsCurrentUser(UID === data.user_id)
+    setIsCurrentUser(UID === data.user_id || UID === postUserId)
   }
   const delComment = () => {
     Api.MeApi.removeContentDetail(data.id).then(res => {
