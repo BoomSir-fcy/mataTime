@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization'
-import { Icon, MoreOperatorEnum, List } from 'components';
-import { Header as CenterHeader ,Tabs} from 'view/Home/center'
+import { Icon, MoreOperatorEnum, List, ContentParsing } from 'components';
+import { Header as CenterHeader, Tabs } from 'view/Home/center'
 import { Api } from 'apis';
 import loveIcn from 'assets/images/social/at.png';
 import moment from 'moment';
@@ -20,16 +20,16 @@ const NewsPraise: React.FC = (props) => {
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
-  const tabsChange = ({value,paramsName})=>{
-    getList(1, paramsName==='add_Time'?value:null)
+  const tabsChange = ({ value, paramsName }) => {
+    getList(1, paramsName === 'add_Time' ? value : null)
   }
   // 获取列表
-  const getList = (current = 0,add_Time=null) => {
+  const getList = (current = 0, add_Time = null) => {
     if ((loading || page > totalPage) && !current) {
       return false
     }
     setLoading(true)
-    Api.NewsApi.getMessageList(3, current || page, 50,add_Time).then(res => {
+    Api.NewsApi.getMessageList(3, current || page, 50, add_Time).then(res => {
       setLoading(false)
       if (Api.isSuccess(res)) {
         setTotalPage(res.data.total_page)
@@ -64,23 +64,23 @@ const NewsPraise: React.FC = (props) => {
   return (
     <NewsPraiseWrapper>
       <Tabs tabsChange={tabsChange} tabLeftArr={[
-              {
-                label: t('newsNotice'),
-                value: '3',
-                paramsName:'message_type'
-              }
-            ]} tabRightArr={[
-              {
-                label: '全部点赞',
-                value: null,
-                paramsName:'add_Time'
-              },
-              {
-                label: '今日点赞',
-                value: moment().format('YYYY-MM-DD'),
-                paramsName:'add_Time'
-              },
-            ]}></Tabs>
+        {
+          label: t('newsNotice'),
+          value: '3',
+          paramsName: 'message_type'
+        }
+      ]} tabRightArr={[
+        {
+          label: '全部点赞',
+          value: null,
+          paramsName: 'add_Time'
+        },
+        {
+          label: '今日点赞',
+          value: moment().format('YYYY-MM-DD'),
+          paramsName: 'add_Time'
+        },
+      ]}></Tabs>
       <List marginTop={410} loading={page <= totalPage} renderList={() => {
         getList()
       }}>
@@ -93,12 +93,16 @@ const NewsPraise: React.FC = (props) => {
                   ...item.post,
                   ...item.comment,
                   user_name: item.send_name,
-                  user_avator_url: item.send_image
+                  user_avator_url: item.send_image,
+                  uid: item.send_uid
                 }} callback={(data) => {
                   updateList(data)
                 }} />
                 <div className="reply-wrapper">
                   <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon> {t('newsPraiseContent')}
+                  <ContentParsing content={item.comment.comment} callback={(type: MoreOperatorEnum) => {
+                    updateList(item, type);
+                  }}></ContentParsing>
                 </div>
                 <div className="comment-content">
                   <MentionItem itemData={{
