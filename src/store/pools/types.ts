@@ -1,11 +1,15 @@
 declare type address = string
 
-export interface PoolUserData {
+
+export interface PoolUserDataBase {
   pid: string,  //池子id
-  stakingId: string,
-  amount: string,     // 质押的代币数量
+  stakeAmount: string,     // 质押的代币数量
   token0UnclaimedRewards: string, //奖励代币0的未收获数量
   token1UnclaimedRewards: string, //奖励代币1的未收获数量
+}
+
+export interface PoolUserData extends PoolUserDataBase {
+  stakingId: string,
   time: string, //质押的开始时间
   unlockTime: string, //解锁时间
 }
@@ -55,15 +59,15 @@ export interface SinglePoolData extends PoolDataBase, SinglePoolBaseInfo {
   rewardToken0: address
   rewardToken0Symbol: string
   rewardToken0Name: string
-  rewardToken0Decimals: string
+  rewardToken0Decimals: number
   rewardToken1: address
   rewardToken1Symbol: string
   rewardToken1Name: string
-  rewardToken1Decimals: string
+  rewardToken1Decimals: number
   depositToken: address; // 质押代币地址
   depositSymbol: string, //质押代币标识
   depositName: string, //质押代币名称
-  depositDecimals: string, //质押代币小数位
+  depositDecimals: number, //质押代币小数位
   depositTokenPrice?: string, // 代币价格
   rewardToken0Price?: string, // 代币价格
   rewardToken1Price?: string, // 代币价格
@@ -74,6 +78,9 @@ export interface LiquidityPool extends PoolsBase {
 }
 export interface SinglePool extends PoolsBase {
   data: SinglePoolData[]
+  userStakesMap: {
+    [pid: string]: PoolUserData[]
+  }
 }
 
 export interface PoolsState {

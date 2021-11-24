@@ -1,8 +1,9 @@
+import BigNumber from 'bignumber.js'
 import { AppThunk } from '../types'
-import { LiquidityPoolData, SinglePoolData } from './types'
+import { LiquidityPoolData, SinglePoolData, PoolUserDataBase } from './types'
 import { fetchLpDataList } from './fetchLpData'
 import { fetchSinglePoolData, fetchPoolTokensPrice, fetchSinglePoolUserData, fetchUserTokenVal } from './fetchSinglePoolData'
-import { setLpDataList, setSpDataList, setSpUserData } from '.'
+import { setLpDataList, setSpDataList, setSpUserData, setSpUserStakesData } from '.'
 
 
 export const fetchLpPublicDatasAsync = (data: LiquidityPoolData[]): AppThunk => async (dispatch) => {
@@ -35,10 +36,32 @@ export const fetchSpPublicDatasAsync = (datas: SinglePoolData[]): AppThunk => as
 }
 export const fetchSpVaultUserAsync = (account: string, datas?: SinglePoolData[]): AppThunk => async (dispatch, getState) => {
   const userPoolData = await fetchSinglePoolUserData(account)
-  dispatch(setSpUserData(userPoolData))
+  dispatch(setSpUserStakesData(userPoolData))
+  const farmatUserPoolsMap: { [pid: string]: PoolUserDataBase } = {}
+  userPoolData.forEach(item => {
+    if (!farmatUserPoolsMap[item.pid]) {
+      farmatUserPoolsMap[item.pid] = {
+        stakeAmount: item.stakeAmount,
+        token0UnclaimedRewards: item.token0UnclaimedRewards,
+        token1UnclaimedRewards: item.token1UnclaimedRewards,
+        pid: item.pid,
+      }
+    } else {
+      const stakeAmount = new BigNumber(farmatUserPoolsMap[item.pid].stakeAmount).plus(item.stakeAmount).toString()
+      const token0UnclaimedRewards = new BigNumber(farmatUserPoolsMap[item.pid].token0UnclaimedRewards).plus(item.token0UnclaimedRewards).toString()
+      const token1UnclaimedRewards = new BigNumber(farmatUserPoolsMap[item.pid].token1UnclaimedRewards).plus(item.token1UnclaimedRewards).toString()
+      farmatUserPoolsMap[item.pid] = {
+        stakeAmount,
+        token0UnclaimedRewards,
+        token1UnclaimedRewards,
+        pid: item.pid,
+      }
+    }
+  })
+
+  dispatch(setSpUserData(Object.values(farmatUserPoolsMap)))
   const pools = datas ? datas : getState().pools.single.data
   const userTokens = await fetchUserTokenVal(account, pools)
-  console.log(userTokens)
   dispatch(setSpUserData(userTokens))
 }
 

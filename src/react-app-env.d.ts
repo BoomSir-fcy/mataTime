@@ -40,8 +40,8 @@ declare module '*.png' {
 }
 
 declare module '*.webp' {
-    const src: string;
-    export default src;
+  const src: string;
+  export default src;
 }
 
 declare module '*.svg' {
@@ -73,7 +73,7 @@ declare module '*.module.sass' {
 interface Window {
   ethereum?: {
     isMetaMask?: true
-    on? : (...args: any[]) => Promise<void>
+    on?: (...args: any[]) => Promise<void>
     request?: (...args: any[]) => Promise<void>
   }
   BinanceChain?: {
@@ -81,3 +81,5 @@ interface Window {
   }
   MSStream?: boolean
 }
+
+type address = string

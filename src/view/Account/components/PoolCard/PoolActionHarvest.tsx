@@ -10,7 +10,13 @@ import Dots from 'components/Loader/Dots';
 import { getBalanceAmount } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { BIG_ZERO } from 'utils/bigNumber';
+import styled from 'styled-components';
 
+const ContainerItem = styled(Container)`
+  padding-top: 12px;
+  background: ${({ theme }) => theme.card.background};
+  padding-bottom: 12px;
+`
 
 interface HarvestProps {
   earnings?: string
@@ -76,51 +82,36 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   }, [onHarvest, dispatch, account])
 
   return (
-    <Flex justifyContent="space-between" alignItems="center">
-      <Box>
-        <Text color="textTips">Rewards</Text>
-        <Flex flexDirection="column" alignItems="flex-start">
-          <Heading color={userValues.rawEarningsBalance.eq(0) ? 'textDisabled' : 'primary'}>
-            {userValues.displayBalance}
-          </Heading>
-          {userValues.earningsBusd > 0 && (
-            <BalanceText
-              fontSize="12px"
-              color="textSubtle"
-              decimals={2}
-              value={userValues.earningsBusd}
-              unit=""
-              prefix="$ " />
-          )}
-        </Flex>
-      </Box>
-      <Box>
-        {
-          !isApproved
-            ?
-            (<Button disabled={pendingTx} onClick={handleApprove}>
-              {
-                pendingTx
-                  ?
-                  <Dots>{t('Enabling')}</Dots>
-                  :
-                  t('Enable')
-              }
-            </Button>)
-            :
-            (<Button disabled={pendingTx} onClick={onHandleReward}>
-              {
-                pendingTx
-                  ?
-                  <Dots>{t('Harvesting')}</Dots>
-                  :
-                  t('Harvest')
-              }
-            </Button>)
-        }
+    <ContainerItem>
+      <Flex justifyContent="center" alignItems="center">
+        <Box>
+          {
+            !isApproved
+              ?
+              (<Button disabled={pendingTx} onClick={handleApprove}>
+                {
+                  pendingTx
+                    ?
+                    <Dots>{t('Enabling')}</Dots>
+                    :
+                    t('Enable')
+                }
+              </Button>)
+              :
+              (<Button disabled={pendingTx} onClick={onHandleReward}>
+                {
+                  pendingTx
+                    ?
+                    <Dots>{t('Harvesting')}</Dots>
+                    :
+                    t('Harvest')
+                }
+              </Button>)
+          }
 
-      </Box>
-    </Flex>
+        </Box>
+      </Flex>
+    </ContainerItem>
   )
 }
 
