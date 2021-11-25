@@ -30,52 +30,6 @@ const networks = {
   [ChainId.MATIC_MAINET]: Network.MATIC
 };
 
-// 用户
-export function useInfo() {
-  const dispatch = useDispatch();
-  const { account } = useWeb3React();
-  const CashierDesk = getCashierDeskAddress()
-
-  // 获取平台余额
-  const getBalance = async () => {
-    try {
-      const res = await Api.AccountApi.balance();
-      return res;
-    } catch (error) {
-      return error;
-    }
-  };
-  // 获取充提历史
-  const getHistoryList = async (page?: number, pageSize?: number) => {
-    try {
-      const res = await Api.AccountApi.history({ page, pageSize });
-      return res;
-    } catch (error) {
-      return error;
-    }
-  };
-  // 获取授权数量
-  const FetchApproveNum = async (address: string, account: string) => {
-    const calls = [
-      {
-        address: address,
-        name: 'allowance',
-        params: [account, CashierDesk]
-      },
-    ]
-    try {
-      const approvedNum = await multicall(erc20Abi, calls)
-      return getBalanceNumber(approvedNum)
-    } catch (error) {
-      throw error
-    }
-  }
-  return {
-    getBalance,
-    FetchApproveNum,
-    getHistoryList
-  };
-}
 // 充值、提现、授权
 export function useDpWd() {
   const { account, chainId, library } = useActiveWeb3React();

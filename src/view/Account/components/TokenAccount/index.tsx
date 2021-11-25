@@ -5,7 +5,7 @@ import { Container } from 'components'
 import WalletBox from './walletBox'
 import { getTimeAddress } from 'utils/addressHelpers';
 import { useTokenBalance } from 'view/exchange/hook';
-import { useFetchWalletInfo } from 'store/wallet/hooks';
+import { useFetchWalletInfo, useFetchApproveNum } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
 
@@ -16,6 +16,7 @@ padding-bottom: 0;
 
 const TokenAccount: React.FC = () => {
   useFetchWalletInfo()
+  useFetchApproveNum()
   const { account } = useWeb3React()
   const info = {
     address: "",
