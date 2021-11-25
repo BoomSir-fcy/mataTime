@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { storage } from 'config';
 import history from '../routerHistory';
 
 const baseURL =
@@ -27,7 +28,7 @@ axios.interceptors.response.use(
 export class Http {
   async request(configs: AxiosRequestConfig) {
     let response;
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem(storage.Token);
 
     try {
       response = await axios({

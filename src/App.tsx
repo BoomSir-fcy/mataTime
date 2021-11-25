@@ -7,7 +7,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
-import { CommonLayout, Header, Toast } from 'components';
+import { CommonLayout, Toast } from 'components';
 // WalletModal
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
@@ -19,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import history from './routerHistory';
 import useAuth from './hooks/useAuth';
+import AccountUpdater from './view/Updater/AccountUpdater'
 
 moment.locale('zh-cn');
 
@@ -37,12 +38,13 @@ const Account = React.lazy(() => import('./view/Account'));
 const Container = styled(Box) <{
   dark: boolean;
 }>`
-  background-image: ${({ dark }) =>
+  /* background-image: ${({ dark }) =>
     `url(${require(dark
       ? 'assets/images/dark_background.jpg'
       : 'assets/images/light_background.jpg').default
     })`};
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background-color: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
 `;
 
@@ -65,33 +67,6 @@ function App() {
       // 切换了地址就清除数据 重新登陆
       signOut();
     }
-  };
-
-  // 消息通知
-  const newsNotice = () => {
-    // 用于检查浏览器是否支持这个API。
-    if (window.Notification) {
-      // 支持
-    } else {
-      // 不支持
-    }
-
-    // 检查当前浏览器是否支持Notification对象，并且当前用户准许使用该对象，然后调用Notification.requestPermission方法，向用户弹出一条通知
-    if (window.Notification && Notification.permission !== 'denied') {
-      Notification.requestPermission(function (status) {
-        var n = new Notification('通知标题', { body: '这里是通知内容！' });
-      });
-    }
-
-    // Notification.requestPermission方法用于让用户做出选择，到底是否接收通知。它的参数是一个回调函数，该函数可以接收用户授权状态作为参数。
-    Notification.requestPermission(function (status) {
-      if (status === 'granted') {
-        var n = new Notification('Hi!');
-        console.log('n', n);
-      } else {
-        alert('Hi!');
-      }
-    });
   };
 
   useEffect(() => {
@@ -121,11 +96,12 @@ function App() {
   }, [account]);
 
   return (
-    <React.Fragment>
+    <Router history={history}>
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
-          <Router history={history}>
+          {/* <AccountUpdater /> */}
+          <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
             <Route
               path="/topicList/:id/:name"
@@ -153,12 +129,12 @@ function App() {
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
             <Route path="/account" component={Account} />
-          </Router>
+          </Switch>
         </React.Suspense>
       </Container>
       <Toast />
-    </React.Fragment>
+    </Router>
   );
 }
 
-export default React.memo(App);
+export default App;

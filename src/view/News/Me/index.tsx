@@ -74,7 +74,8 @@ const NewsMe: React.FC = (props) => {
                   ...item.comment,
                   ...item.post,
                   user_name: item.send_name,
-                  user_avator_url: item.send_image
+                  user_avator_url: item.send_image,
+                  uid: item.send_uid
                 }} {...props} callback={(data, type: MoreOperatorEnum) => {
                   updateList(data, type)
                 }} />

@@ -21,12 +21,14 @@ const Me = props => {
     <Router forceRefresh>
       <Switch>
         <Route
+          path={`${props.match.path}`}
           render={() => (
             <Container {...props}>
               <Route path={`${props.match.path}`} exact component={Profile} />
               <Route path={`${props.match.path}/account`} component={Account} />
               <Route
                 path={`${props.match.path}/profile/:uid`}
+                exact
                 component={Profile}
               />
               <Route path={`${props.match.path}/edit`} component={Edit} />

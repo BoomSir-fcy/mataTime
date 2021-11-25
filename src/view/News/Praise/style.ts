@@ -25,6 +25,9 @@ export const PraiseItemWrapper = styled(Card)`
       i{
         margin-right: 10px !important;
       }
+      .reply-tip{
+        margin-right: 10px;
+      }
     }
     .comment-content{
       width: calc(100% + 50px);

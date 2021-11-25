@@ -108,11 +108,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     </div>)}
                   </Flex>
                   <Flex>
-                  <CommentPop data={item} 
-              callback={initList}
-              >
-                    <Icon name="icon-gengduo" cur margin="8px 15px 0 0" color="#7E7E7E"></Icon>
-                  </CommentPop>
+                    <CommentPop postUserId={itemData.user_id} data={item}
+                      callback={initList}
+                    >
+                      <Icon name="icon-gengduo" cur margin="8px 15px 0 0" color="#7E7E7E"></Icon>
+                    </CommentPop>
                     {/* <MorePopup data={new Object()}> */}
                     {/* </MorePopup> */}
                   </Flex>

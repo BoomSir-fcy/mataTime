@@ -44,7 +44,7 @@ export const CancelAttentionModal = React.memo((props: IProp) => {
                 {getHTML('meUnsubscribeContent', {
                   value: `<span style="color:${
                     theme.colors.backgroundPrimary
-                  }">${shortenAddress(params.address)}</span>`
+                  }">@${shortenAddress(params.address)}</span>`
                 })}
               </div>
             </CancelAttentionContentWrapper>

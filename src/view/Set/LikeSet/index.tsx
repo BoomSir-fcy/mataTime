@@ -13,8 +13,8 @@ import { languages } from 'config/localization';
 
 const NoticeSetBox = styled(Card)`
   height: 700px;
-  margin-top: 13px;
-  padding: 27px 29px;
+  padding: 27px 0;
+  background-color: transparent;
 `;
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.white_black};
@@ -27,7 +27,7 @@ const Rows = styled(Flex)`
 `;
 const Column = styled(Flex)`
   justify-content: space-between;
-  padding-bottom: 23px;
+  padding: 0 30px 24px;
   margin-bottom: 22px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
 `;
@@ -51,30 +51,30 @@ const LikeSet: React.FC = () => {
   };
 
   return (
-    <NoticeSetBox>
+    <NoticeSetBox isBoxShadow>
       <Column>
         <Rows>
           <Title>{t('Dark')}</Title>
           <Text color="textTips" mt="11px">
-            可切换为深色模式，夜间浏览更舒服
+            {t('settingDarkModText')}
           </Text>
         </Rows>
         <Toggle checked={isDark} onClick={toggleThemeHandle} />
       </Column>
       <Column>
         <Rows>
-          <Title>消息红点提醒</Title>
+          <Title>{t('settingMsgtitle')}</Title>
           <Text color="textTips" mt="11px">
-            有新消息时通过红点提醒
+            {t('settingMsgText')}
           </Text>
         </Rows>
         <Toggle checked={notification} onClick={setNotification} />
       </Column>
       <Column alignItems="center">
         <Rows>
-          <Title>默认显示语言</Title>
+          <Title>{t('settingLanguagetitle')}</Title>
           <Text color="textTips" mt="11px">
-            显示更符合你的语言
+            {t('settingLanguageText')}
           </Text>
         </Rows>
         <Select
