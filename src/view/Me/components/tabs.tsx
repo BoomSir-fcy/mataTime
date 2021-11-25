@@ -8,6 +8,7 @@ const TabsBox = styled(Card)`
   align-items: center;
   height: 60px;
   padding: 0 26px;
+  background-color: transparent;
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;

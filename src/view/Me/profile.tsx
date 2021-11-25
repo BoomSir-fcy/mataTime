@@ -33,6 +33,7 @@ const Center = styled(Box)`
 const ProfileCard = styled(Card)`
   position: relative;
   overflow: visible;
+  background-color: transparent;
 `;
 const HeadTop = styled(Box)`
   width: 100%;

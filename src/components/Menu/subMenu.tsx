@@ -13,6 +13,7 @@ const MenuBox = styled(Card)`
   padding: 20px 13px;
   width: 200px;
   height: 100%;
+  background-color: transparent;
 `;
 
 const LogoWrapper = styled(Box)`

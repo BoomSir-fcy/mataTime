@@ -6,6 +6,7 @@ import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { light, dark } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
+import { backgroundColor } from 'styled-system';
 
 const SwapBox = styled.div`
   /* margin-top:15px; */
@@ -23,6 +24,7 @@ export const Swap: React.FC = () => {
     console.log(currency);
   }, []);
 
+  console.log(dark.shadows.box);
   return (
     <SwapBox>
       <CoinMarketCap mb="14px" />
@@ -37,7 +39,10 @@ export const Swap: React.FC = () => {
               invertedContrast: dark.colors.backgroundCard
             },
             card: {
-              boxShadow: dark.shadows.box
+              boxShadow: 'none'
+            },
+            zIndices: {
+              modal: 9999
             }
           },
           light: {
@@ -48,7 +53,11 @@ export const Swap: React.FC = () => {
               invertedContrast: light.colors.invertedContrast
             },
             card: {
-              boxShadow: light.shadows.box
+              boxShadow: light.shadows.box,
+              background: light.colors.backgroundCard
+            },
+            zIndices: {
+              modal: 9999
             }
           }
         }}
