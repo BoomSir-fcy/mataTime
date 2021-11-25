@@ -15,15 +15,17 @@ export interface WalletState {
     total_balance: string
     uid: number,
   }]
-  history: [
-    {
+  history: {
+    event_list: [{
       event_type: number,
       event_amount: string
       event_time: number,
       event_hash: string
-    }
-  ]
-
+    }]
+    page: number
+    page_size: number
+    totalCount: number
+  }
 }
 
 const initialState: WalletState = {
@@ -39,12 +41,17 @@ const initialState: WalletState = {
     total_balance: "0",
     uid: 0
   }],
-  history: [{
-    event_type: 0,
-    event_amount: '',
-    event_time: 0,
-    event_hash: ''
-  }]
+  history: {
+    event_list: [{
+      event_type: 0,
+      event_amount: '',
+      event_time: 0,
+      event_hash: ''
+    }],
+    page: 0,
+    page_size: 0,
+    totalCount: 0
+  }
 };
 
 // Async thunks

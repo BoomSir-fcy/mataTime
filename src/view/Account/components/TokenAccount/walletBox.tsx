@@ -137,8 +137,8 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo })
 
 
       {/* 提币、充值记录 */}
-      <ModalWrapper customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
-        <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
+      <ModalWrapper title={ModalTitle} customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
+        {/* <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">
             <HistoryHead className={ActiveHistory === 1 ? 'active' : ''} onClick={() => setActiveHistory(1)} scale='ld'>充值记录</HistoryHead>
             <HistoryHead className={ActiveHistory === 2 ? 'active' : ''} onClick={() => setActiveHistory(2)} scale='ld'>提现记录</HistoryHead>
@@ -146,7 +146,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo })
           <Button onClick={() => setVisibleHistory(false)} padding="0" variant="text">
             <CloseLineIcon width={16} color="primary"></CloseLineIcon>
           </Button>
-        </PopHeard>
+        </PopHeard> */}
         <HistoryModal token={Token} type={ActiveHistory} />
       </ModalWrapper>
     </Content>
