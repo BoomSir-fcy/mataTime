@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Flex, Radio } from 'uikit';
@@ -85,21 +85,30 @@ const FormInput = React.forwardRef((props, ref) => {
   const defaultId = country?.length > 0 && country[0].id;
   const { t } = useTranslation();
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
-    nick_name: profile.nick_name,
-    display_format: profile.display_format,
-    introduction: profile.introduction,
-    background_image: profile.background_image,
+    ...profile,
     location: profile.location || (country.length > 0 && country[0]?.value)
   });
   const [defaultLocationId, setdefaultLocationId] = useState(
     country.find(({ value }) => value === profile.location)?.id || defaultId
   );
 
+  useEffect(() => {
+    setState(p => {
+      p.nick_name = profile.nick_name;
+      p.display_format = profile.display_format;
+      p.introduction = profile.introduction;
+      p.background_image = profile.background_image;
+      p.location =
+        profile.location || (country.length > 0 && country[0]?.value);
+    });
+  }, [profile]);
+
   useImperativeHandle(ref, () => ({
     getFrom() {
       return state;
     }
   }));
+
   return (
     <FormBox>
       <Rows>
