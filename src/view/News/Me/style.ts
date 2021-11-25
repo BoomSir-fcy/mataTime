@@ -13,5 +13,6 @@ export const MeItemWrapper = styled(Card)`
   padding: 25px;
   overflow: visible;
   box-shadow: none;
+  background-color: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;

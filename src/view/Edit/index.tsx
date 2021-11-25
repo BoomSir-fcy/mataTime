@@ -30,7 +30,7 @@ export const Header = styled(Flex)`
   height: 60px;
   justify-content: space-between;
   align-items: center;
-  background: ${({ theme }) => theme.colors.backgroundCard};
+  background-color: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   ${mediaQueriesSize.paddingxs}
 `;

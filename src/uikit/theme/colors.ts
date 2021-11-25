@@ -43,7 +43,7 @@ export const lightColors: Colors = {
   backgroundPrimary: '#4168ED',
   backgroundMember: '#85C559',
   backgroundThemeCard: '#1E2535',
-  backgroundCard: '#FFFFFF',
+  backgroundCard: '#FAFCFF',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#EAF2FF',
   backgroundMenu: '#EAF2FF',

@@ -24,12 +24,13 @@ const LeftCard = styled(Flex)`
   overflow: auto;
 `;
 const CenterCard = styled(Box)`
-  width: 670px;
+  flex: 1;
+  margin: 0 15px;
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 const RightCard = styled(Flex)`
-  flex: 1;
+  width: 300px;
   height: 100vh;
   position: relative;
   overflow: auto;
