@@ -49,13 +49,18 @@ export const fetchThunk = {
 
 export const Dispatch = {
   toast: {
-    show: (params: appAction.toastInterface) => store.dispatch({ type: 'toast/show', payload: params }),
-    container: (params: ToastContainerProps) => store.dispatch(toastContainer(params)),
+    show: (params: appAction.toastInterface) =>
+      store.dispatch({ type: 'toast/show', payload: params }),
+    container: (params: ToastContainerProps) =>
+      store.dispatch(toastContainer(params)),
     hide: () => store.dispatch({ type: 'toast/hide' })
   }
 };
 
-export function useStore<TSelected>(selector: (state: Store) => TSelected, equalityFn?: (left: TSelected, right: TSelected) => boolean) {
+export function useStore<TSelected>(
+  selector: (state: Store) => TSelected,
+  equalityFn?: (left: TSelected, right: TSelected) => boolean
+) {
   return useSelector<Store, TSelected>(selector, equalityFn);
 }
 

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   changeSignUp,
   changeSignin,
@@ -9,6 +10,7 @@ import {
   setUserNft,
   setUserNftStake,
   setNftAddr,
+  resetLoginState,
   setSigninLoading
 } from './actions';
 import { storage } from 'config';
@@ -103,6 +105,12 @@ export const login = createSlice({
       .addCase(fetchUserNftInfoAsync.fulfilled, (state, action) => {
         state.nftStatus = true;
         state.nftList = action.payload;
+      })
+      .addCase(resetLoginState, (state) => {
+        // state = cloneDeep(initialState);
+        Object.keys(state).forEach(key => {
+          state[key] = cloneDeep(initialState[key])
+        })
       });
   }
 });

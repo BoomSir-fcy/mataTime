@@ -12,19 +12,13 @@ const MenuBox = styled(Card)`
   flex-direction: column;
   padding: 20px 13px;
   width: 200px;
-  height: calc(100vh - 150px);
-  border-radius: 10px;
+  height: 100%;
+  background-color: transparent;
 `;
 
 const LogoWrapper = styled(Box)`
   width: 175px;
   height: 32px;
-`;
-
-const Btn = styled.div`
-  width: 100%;
-  margin-top: 94px;
-  text-align: center;
 `;
 
 const BackWarpper = styled(Box)`
@@ -114,7 +108,7 @@ export const CommonMenu: React.FC<{
   };
 
   return (
-    <MenuBox>
+    <MenuBox isBoxShadow>
       <Box>
         <LogoWrapper>
           <Logo

@@ -15,7 +15,6 @@ import { CrumbsHead } from './components';
 const Content = styled(Card)`
   min-height: 700px;
   padding: 29px 19px;
-  margin-top: 13px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -131,7 +130,7 @@ const Follow = React.memo(() => {
           </Text>
         </Flex>
       </CrumbsHead>
-      <Content>
+      <Content isBoxShadow>
         <List
           marginTop={13}
           loading={loading}

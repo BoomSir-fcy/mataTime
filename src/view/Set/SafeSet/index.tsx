@@ -8,12 +8,12 @@ import { useTranslation } from 'contexts/Localization';
 
 const SafeSetBox = styled(Card)`
   height: 700px;
-  margin-top: 13px;
-  padding: 27px 29px;
+  padding: 27px 0;
+  background-color: transparent;
 `;
 const Rows = styled(Flex)`
   justify-content: space-between;
-  padding-bottom: 23px;
+  padding: 0 30px 24px;
   margin-bottom: 22px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
 `;
@@ -42,7 +42,7 @@ const SafeSet = () => {
   };
 
   return (
-    <SafeSetBox>
+    <SafeSetBox isBoxShadow>
       <Rows>
         <Column>
           <Title>{t('setWalletAddress')}</Title>
