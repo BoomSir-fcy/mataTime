@@ -24,7 +24,6 @@ export const Swap: React.FC = () => {
     console.log(currency);
   }, []);
 
-  console.log(dark.shadows.box);
   return (
     <SwapBox>
       <CoinMarketCap mb="14px" />

@@ -45,7 +45,7 @@ const Edit: React.FC = () => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
     value: 1,
-    background: profile.background_image || defaultImages
+    background: defaultImages
   });
 
   const updateProfile = async () => {
@@ -54,7 +54,7 @@ const Edit: React.FC = () => {
       nick_name: profile.nick_name,
       display_format: profile.display_format,
       introduction: profile.introduction,
-      background_image: profile.background_image,
+      background_image: profile.background_image || defaultImages,
       location: profile.location
     };
 
@@ -135,7 +135,7 @@ const Edit: React.FC = () => {
 
   React.useEffect(() => {
     setState(p => {
-      p.background = profile.background_image;
+      p.background = profile.background_image || defaultImages;
     });
   }, [profile]);
 

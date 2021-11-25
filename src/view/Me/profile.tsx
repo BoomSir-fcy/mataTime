@@ -155,7 +155,7 @@ const Profile: React.FC<any> = props => {
   };
 
   React.useEffect(() => {
-    init();
+    init(1);
   }, [uid]);
 
   return (
