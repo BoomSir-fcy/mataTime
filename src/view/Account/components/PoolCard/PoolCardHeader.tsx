@@ -65,12 +65,11 @@ const PoolCardHeader: React.FC<PoolCardHeader> = ({
   return (
     <BoxHeaderStyled>
       <ContainerStyled>
-        <Flex>
-          <TokenImage tokenAddress="0x9A78649501BbAAC285Ea4187299471B7ad4ABD35" width={55} height={55} />
-
+        <Flex alignItems="center">
+          <TokenImage tokenAddress={depositToken} width={45} height={45} />
           <Box ml="8px">
-            <Heading>{depositSymbol}</Heading>
-            <LinkExternal fontSize="16px" href={getBscScanLink(poolAddress, 'token')}>
+            <Text fontSize="18px" color="white_black" bold>{depositSymbol}</Text>
+            <LinkExternal height="24px" color="textPrimary" fontSize="16px" href={getBscScanLink(poolAddress, 'token')}>
               {t('View Contract')}
             </LinkExternal>
           </Box>

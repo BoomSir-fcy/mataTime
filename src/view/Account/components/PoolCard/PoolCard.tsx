@@ -37,7 +37,7 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
           <Flex justifyContent="space-between">
             <Box>
               <Text color="textTips">ARP</Text>
-              <Text bold color="white_black">{formatDisplayApr(poolApr?.totalApr)}%</Text>
+              <Text bold color="textPrimary">{formatDisplayApr(poolApr?.totalApr)}%</Text>
             </Box>
             <Box>
               <Text color="textTips">周期</Text>
