@@ -19,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import history from './routerHistory';
 import useAuth from './hooks/useAuth';
+import AccountUpdater from './view/Updater/AccountUpdater'
 
 moment.locale('zh-cn');
 
@@ -33,14 +34,13 @@ const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
 
-const Container = styled(Box)<{
+const Container = styled(Box) <{
   dark: boolean;
 }>`
   /* background-image: ${({ dark }) =>
-    `url(${
-      require(dark
-        ? 'assets/images/dark_background.jpg'
-        : 'assets/images/light_background.jpg').default
+    `url(${require(dark
+      ? 'assets/images/dark_background.jpg'
+      : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed; */
   background-color: ${({ theme }) => theme.colors.background};
@@ -68,33 +68,6 @@ function App() {
     }
   };
 
-  // 消息通知
-  const newsNotice = () => {
-    // 用于检查浏览器是否支持这个API。
-    if (window.Notification) {
-      // 支持
-    } else {
-      // 不支持
-    }
-
-    // 检查当前浏览器是否支持Notification对象，并且当前用户准许使用该对象，然后调用Notification.requestPermission方法，向用户弹出一条通知
-    if (window.Notification && Notification.permission !== 'denied') {
-      Notification.requestPermission(function (status) {
-        var n = new Notification('通知标题', { body: '这里是通知内容！' });
-      });
-    }
-
-    // Notification.requestPermission方法用于让用户做出选择，到底是否接收通知。它的参数是一个回调函数，该函数可以接收用户授权状态作为参数。
-    Notification.requestPermission(function (status) {
-      if (status === 'granted') {
-        var n = new Notification('Hi!');
-        console.log('n', n);
-      } else {
-        alert('Hi!');
-      }
-    });
-  };
-
   useEffect(() => {
     if (store.connectWallet) {
       const changeHandler = () => {
@@ -118,7 +91,7 @@ function App() {
         signOut();
       }
     }
-    return () => {};
+    return () => { };
   }, [account]);
 
   return (
@@ -126,6 +99,7 @@ function App() {
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
+          {/* <AccountUpdater /> */}
           <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
             <Route
