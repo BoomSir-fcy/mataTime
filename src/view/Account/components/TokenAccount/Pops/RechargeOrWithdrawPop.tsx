@@ -3,11 +3,14 @@ import React, { useCallback, useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js'
 import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux'
 import { useWeb3React } from '@web3-react/core';
 import { BIG_TEN } from 'utils/bigNumber';
 import { splitThousandSeparator } from 'utils/formatBalance';
-import { useDpWd, useInfo } from '../../../hooks/walletInfo';
+import { useDpWd } from '../../../hooks/walletInfo';
 import Dots from 'components/Loader/Dots';
+import { useStore } from 'store';
+import { fetchApproveNumAsync } from 'store/wallet/reducer';
 
 const CountBox = styled(Box)`
 min-width: 20vw;
@@ -48,13 +51,13 @@ interface init {
 }
 
 const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBalance, onClose, withdrawalBalance }) => {
-  const { FetchApproveNum } = useInfo()
+  const dispatch = useDispatch()
   const { account } = useWeb3React()
-
   const [val, setVal] = useState('')
   const { drawCallback, Recharge, onApprove } = useDpWd()
   const [pending, setpending] = useState(false)
-  const [approvedNum, setapprovedNum] = useState(1)
+  const approvedNum = useStore(p => token === 'Time' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter);
+
 
   // 充值/提现
   const handSure = useCallback(async () => {
@@ -95,7 +98,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBal
       console.error(e)
     } finally {
       setpending(false)
-      getApproveNum()
+      dispatch(fetchApproveNumAsync(account))
     }
   }, [onApprove, account])
   // 输入框输入限制
@@ -120,19 +123,6 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBal
     },
     [setVal],
   )
-  // 获取授权数量
-  const getApproveNum = async () => {
-    const Num = await FetchApproveNum(TokenAddr, account)
-    setapprovedNum(Num)
-  }
-  useEffect(() => {
-    if (account) {
-      getApproveNum()
-    }
-    return () => {
-      setapprovedNum(0)
-    }
-  }, [account])
   return (
     <CountBox>
       <Flex justifyContent="end" mb='12px'>

@@ -81,7 +81,6 @@ interface Wallet {
   BalanceInfo: Api.Account.Balance
 }
 const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo }) => {
-  // useFetchWalletInfo()
   const { account } = useWeb3React()
   const [visible, setVisible] = useState(false)
   const [visibleHistory, setVisibleHistory] = useState(false)
@@ -129,10 +128,14 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo })
           <HistoryIcon onClick={() => setVisibleHistory(true)} src={require('assets/images/myWallet/history.png').default} />
         </Flex>
       </Flex>
+
+
       {/* 输入框弹窗 */}
       <ModalWrapper title={ModalTitle} creactOnUse visible={visible} setVisible={setVisible}>
         <RechargeOrWithdrawPop onClose={onClose} TokenAddr={TokenAddr} type={ChosenType} token={Token} balance={Balance} withdrawalBalance={BalanceInfo.available_balance} />
       </ModalWrapper>
+
+
       {/* 提币、充值记录 */}
       <ModalWrapper customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
         <PopHeard mb="8px" justifyContent="space-between" alignItems="center">

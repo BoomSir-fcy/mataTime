@@ -6,7 +6,8 @@ import { useWeb3React } from '@web3-react/core';
 import { splitThousandSeparator } from 'utils/formatBalance';
 import { Link } from 'react-router-dom';
 import { Api } from 'apis';
-import { useInfo } from 'view/Account/hooks/walletInfo';
+import { useFetchHistoryList } from 'store/wallet/hooks';
+import { useStore } from 'store';
 
 const CountBox = styled(Box)`
 min-width: 20vw;
@@ -48,22 +49,9 @@ interface init {
 }
 
 const HistoryModal: React.FC<init> = ({ token, type }) => {
+  useFetchHistoryList()
   const { account } = useWeb3React()
-  const [List, setList] = useState([])
-  const { getHistoryList } = useInfo()
-  const getHistory = async () => {
-    const res = await getHistoryList();
-    if (Api.isSuccess(res)) {
-      const data = res.data
-      setList(data)
-    }
-  }
-  useEffect(() => {
-    account && getHistory()
-    return () => {
-
-    }
-  }, [account])
+  const BalanceList = useStore(p => p.wallet.history);
   return (
     <CountBox>
       <Table>
