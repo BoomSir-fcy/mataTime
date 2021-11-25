@@ -5,7 +5,7 @@ const getTokenLogoURLs = (address: string): string[] => {
     '/images/tokens/TIME.svg',
   ]
   if (getDsgAddress().toLowerCase() === address?.toLowerCase()) return [
-    '/images/tokens/DSG.png',
+    '/images/tokens/DSG.svg',
   ]
   return [
     `https://sv.dsgmetaverse.com/images/tokens/${address}.svg`,
