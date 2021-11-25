@@ -71,7 +71,8 @@ const NewsComment: React.FC = (props) => {
                   ...item.comment,
                   user_name: item.send_name,
                   user_avator_url: item.send_image,
-                  uid: item.send_uid
+                  uid: item.send_uid,
+                  user_address: item.send_address
                 }} callback={(data) => {
                   updateList(data)
                 }} />
