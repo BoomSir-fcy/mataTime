@@ -65,12 +65,18 @@ const Edit: React.FC = () => {
       // toast.error('没有任何修改!');
       return;
     }
+
     const res = await Api.UserApi.updateUserInfo({
       ...params,
       background_image: state.background
     });
     if (Api.isSuccess(res)) {
-      dispatch(storeAction.changeUpdateProfile({ ...res.data }));
+      dispatch(
+        storeAction.changeUpdateProfile({
+          ...res.data,
+          nick_name: params.nick_name
+        })
+      );
       toast.success(t('loginUpdateProfileSuccess'));
     } else {
       toast.error(t('loginUpdateProfileFail'));
@@ -79,6 +85,9 @@ const Edit: React.FC = () => {
 
   const updateUserInfo = async () => {
     const params = form.current.getFrom();
+    if (profile.nick_name === params.nick_name) {
+      return updateProfile();
+    }
 
     try {
       const response = await checkNickname(params.nick_name);
@@ -86,6 +95,12 @@ const Edit: React.FC = () => {
       if (!response[0] && response[1]) {
         const res = await updateProfileNickname(params.nick_name);
         if (Boolean(res)) {
+          dispatch(
+            storeAction.changeUpdateProfile({
+              ...profile,
+              nick_name: params.nick_name
+            })
+          );
           updateProfile();
         } else {
           toast.error(t('loginSetNickNameFail'));
@@ -117,6 +132,12 @@ const Edit: React.FC = () => {
     }
     return true;
   };
+
+  React.useEffect(() => {
+    setState(p => {
+      p.background = profile.background_image;
+    });
+  }, [profile]);
 
   return (
     <Box>

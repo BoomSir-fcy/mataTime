@@ -11,6 +11,9 @@ const AffixBox = styled.div`
 height:100vh;
 padding-bottom:30px;
 overflow-y: auto;
+&::-webkit-scrollbar {
+  display: none;
+}
 `
 export const Affix = (props: IProps) => {
   const { children, offsetTop, positionObj, onChange } = props

@@ -194,5 +194,7 @@
   "commonUploadBackgroundTips": "规格:1200x500，2MB以下",
   "******end*****@kksam********": "@kksam翻译结束",
   "******start*****@bigCongee********": "@bigCongee翻译开始",
+  "delCommentTitle": "是否删除这条评论?",
+  "delCommentContent": "删除该评论后，该评论将不会出现在评论列表中！",
   "******end*****@bigCongee********": "@bigCongee翻译结束"
 }
