@@ -43,7 +43,7 @@ const Container = styled(Box)<{
         : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed; */
-  background-color: ${({ theme }) => theme.colors.backgroundCard};
+  background-color: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
 `;
 

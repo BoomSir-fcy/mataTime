@@ -25,7 +25,7 @@ export const Swap: React.FC = () => {
 
   return (
     <SwapBox>
-      <CoinMarketCap mt="0px" mb="15px" />
+      <CoinMarketCap mb="14px" />
       <MiniSwap
         onInputCurrencyChange={handleInputChange}
         resetTheme={{
@@ -34,7 +34,7 @@ export const Swap: React.FC = () => {
               primary: dark.colors.backgroundPrimary,
               textSubtle: dark.colors.textPrimary,
               backgroundAlt: dark.colors.dropdownDeep,
-              invertedContrast: dark.colors.backgroundCard,
+              invertedContrast: dark.colors.backgroundCard
             },
             card: {
               boxShadow: dark.shadows.box
@@ -45,7 +45,7 @@ export const Swap: React.FC = () => {
               primary: light.colors.backgroundPrimary,
               textSubtle: light.colors.textPrimary,
               backgroundAlt: light.colors.backgroundAlt,
-              invertedContrast: light.colors.invertedContrast,
+              invertedContrast: light.colors.invertedContrast
             },
             card: {
               boxShadow: light.shadows.box
