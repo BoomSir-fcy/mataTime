@@ -172,6 +172,7 @@
   "setWalletAddressTips": "The wallet address for logging in to the account cannot be changed",
   "setMsgNotification": "notification",
   "setMsgNotificationTips": "Turn on or turn off the authorization message notification from the browser. After turning it on, you will be reminded by the browser message",
+  "setCheangeNftAvatar": "Choose and pledge an avatar",
   "setNftAvatar": "Avatar",
   "setNftAvatarList": "The platform only supports holding NFT pictures as avatars, and currently does not support uploading pictures",
   "complaintTitle": "Complain This User",

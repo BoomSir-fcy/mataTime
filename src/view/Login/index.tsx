@@ -192,7 +192,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       <LeftBox isbackground={Boolean(nftBoolean)}>
         {nftBoolean && (
           <Nft>
-            <Text fontSize="30px">选择并质押头像</Text>
+            <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>
             <StakeNFT status={1} />
           </Nft>
         )}
