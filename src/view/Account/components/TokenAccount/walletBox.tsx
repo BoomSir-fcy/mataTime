@@ -15,7 +15,6 @@ min-width: 300px;
 background:${({ theme }) => theme.colors.backgroundCard};
 ${({ theme }) => theme.mediaQueriesSize.padding}
 ${({ theme }) => theme.mediaQueriesSize.marginb}
-border-right: 1px solid #3A4459;
 `
 const TopInfo = styled(Flex)`
 align-content: center;
@@ -80,7 +79,7 @@ interface Wallet {
   TokenAddr: string
   BalanceInfo: Api.Account.Balance
 }
-const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo }) => {
+const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, ...props }) => {
   const { account } = useWeb3React()
   const [visible, setVisible] = useState(false)
   const [visibleHistory, setVisibleHistory] = useState(false)
@@ -95,20 +94,20 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo })
   }
   const onClose = useCallback(() => setVisible(false), [setVisible])
   return (
-    <Content mb='12px'>
+    <Content mb='12px' {...props}>
       <TopInfo mb='4px'>
         <Icon src={require('assets/images/myWallet/wallet.png').default} width={43} height={43} alt='' />
         <Info>
           <Flex flexDirection='column' justifyContent='space-between'>
-            <Fount >平台余额</Fount>
+            <Fount>平台余额</Fount>
             <NumText>{splitThousandSeparator(Number(BalanceInfo.available_balance))}</NumText>
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
-            <Fount >今日收入</Fount>
+            <Fount>今日收入</Fount>
             <NumText>{splitThousandSeparator(3444311)}</NumText>
           </Flex>
-          <Flex flexDirection='column' justifyContent='space-between'>
-            <Fount >钱包余额</Fount>
+          <Flex style={{ textAlign: 'right' }} flexDirection='column' justifyContent='space-between'>
+            <Fount>钱包余额</Fount>
             <NumText>{splitThousandSeparator(Balance)}</NumText>
           </Flex>
         </Info>
@@ -137,7 +136,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo })
 
 
       {/* 提币、充值记录 */}
-      <ModalWrapper title={ModalTitle} customizeTitle={true} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
+      <ModalWrapper title={`${Token}充提记录`} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
         {/* <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">
             <HistoryHead className={ActiveHistory === 1 ? 'active' : ''} onClick={() => setActiveHistory(1)} scale='ld'>充值记录</HistoryHead>

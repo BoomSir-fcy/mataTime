@@ -10,7 +10,7 @@ import { splitThousandSeparator } from 'utils/formatBalance';
 import { useDpWd } from '../../../hooks/walletInfo';
 import Dots from 'components/Loader/Dots';
 import { useStore } from 'store';
-import { fetchApproveNumAsync } from 'store/wallet/reducer';
+import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
 
 const CountBox = styled(Box)`
 min-width: 20vw;
@@ -45,12 +45,11 @@ interface init {
   balance: number,
   token: string,
   TokenAddr: string,
-  upDateBalance?: () => void
   onClose: () => void
   withdrawalBalance: string,
 }
 
-const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBalance, onClose, withdrawalBalance }) => {
+const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, withdrawalBalance }) => {
   const dispatch = useDispatch()
   const { account } = useWeb3React()
   const [val, setVal] = useState('')
@@ -61,38 +60,43 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBal
 
   // 充值/提现
   const handSure = useCallback(async () => {
-    if (balance === 0) {
-      return
-    }
     setpending(true)
     if (type === 1) {
+      if (balance === 0) {
+        setpending(false)
+        return
+      }
       // 充值
       const addPrecisionNum = new BigNumber(Number(val)).times(BIG_TEN.pow(18)).toString()
       try {
         await Recharge(TokenAddr, addPrecisionNum)
         onClose()
-        setpending(false)
       } catch (e) {
         console.error(e)
+      } finally {
         setpending(false)
       }
     } else {
+      if (Number(withdrawalBalance) === 0) {
+        setpending(false)
+        return
+      }
       // 提现
       try {
         await drawCallback(val, TokenAddr, token === 'Time' ? 1 : 2)
         onClose()
-        setpending(false)
       } catch (e) {
         console.error(e)
+      } finally {
         setpending(false)
       }
     }
-    // upDateBalance()
-  }, [Recharge, type, val])
+    dispatch(fetchWalletAsync())
+  }, [Recharge, type, balance, withdrawalBalance, TokenAddr, token, val])
   // 授权
   const handleApprove = useCallback(async () => {
+    setpending(true)
     try {
-      setpending(true)
       await onApprove()
     } catch (e) {
       console.error(e)
@@ -105,13 +109,14 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBal
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       const chkPrice = (val) => {
-        val = val.replace(/[^\d.]/g, "");
-        //必须保证第一位为数字而不是. 
-        val = val.replace(/^\./g, "");
-        //保证只有出现一个.而没有多个. 
-        val = val.replace(/\.{2,}/g, ".");
-        //保证.只出现一次，而不能出现两次以上 
-        val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        // val = val.replace(/[^\d.]/g, "");
+        // //必须保证第一位为数字而不是. 
+        // val = val.replace(/^\./g, "");
+        // //保证只有出现一个.而没有多个. 
+        // val = val.replace(/\.{2,}/g, ".");
+        // //保证.只出现一次，而不能出现两次以上 
+        // val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        val = val.replace(/\D/g, '')
         if (Number(val) > (type === 1 ? balance : Number(withdrawalBalance))) {
           return type === 1 ? String(balance) : withdrawalBalance
         }
@@ -121,7 +126,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, upDateBal
         setVal(chkPrice(e.currentTarget.value))
       }
     },
-    [setVal],
+    [setVal, balance, withdrawalBalance],
   )
   return (
     <CountBox>

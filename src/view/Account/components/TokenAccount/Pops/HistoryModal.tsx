@@ -11,20 +11,19 @@ import { useStore } from 'store';
 import dayjs from 'dayjs'
 
 const CountBox = styled(Box)`
-min-width: 20vw;
+min-width: 40vw;
 `
 const Table = styled(Flex)`
 flex-direction: column;
 align-items: center;
-justify-content: space-between;
+/* justify-content: space-between; */
 `
 const Row = styled.div`
 width: 100%;
 display: grid;
 grid-template-columns: 55% 30% 15%;
 align-items: center;
-height: 30px;
-
+min-height: 30px;
 `
 const HeadText = styled(Text)`
  color: ${({ theme }) => theme.colors.textTips};
@@ -34,16 +33,24 @@ text-align: right;
 }
 `
 const ItemText = styled(Text)`
- color: ${({ theme }) => theme.colors.white_black};
- font-size: 14px;
-&:last-child{
-text-align: right;
-img{
-  width: 20px;
-  cursor: pointer;
-}
-}
+  color: ${({ theme }) => theme.colors.white_black};
+  font-size: 14px;
+  margin-bottom: 10px;
+  &:last-child{
+    text-align: right;
+      img{
+        width: 20px;
+        cursor: pointer;
+      }
+  }
 `
+const Scroll = styled(Table)`
+min-height:200px;
+max-height: 500px;
+overflow-y: auto;
+width: 100%;
+`
+
 // type 1 充值 2 提币
 interface init {
   token: string
@@ -51,9 +58,25 @@ interface init {
 }
 
 const HistoryModal: React.FC<init> = ({ token, type }) => {
-  useFetchHistoryList()
   const { account } = useWeb3React()
+  const [page, setPageNum] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(100)
+  const [end, setEnd] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
+
   const BalanceList = useStore(p => p.wallet.history);
+  const coin_type = token === 'Time' ? 1 : 2
+  useFetchHistoryList({ coin_type, page, pageSize })
+
+  // const loadMore = useCallback((e: any) => {
+  //   const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
+  //   if (offsetHeight + scrollTop === scrollHeight) {
+  //     if (loading || end) return    // 判断是否在请求状态或者已到最后一页
+  //     setPageNum(page + 1)
+  //   }
+  // }, [loading, page, end, setPageNum])
+
+
   const openLink = (hash) => {
     window.open(`https://testnet.bscscan.com/tx/${hash}`)
   }
@@ -69,17 +92,23 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
           <HeadText>金额</HeadText>
           <HeadText>区块</HeadText>
         </Row>
-        {
-          BalanceList.event_list.map(item => (
-            <Row>
-              <ItemText>{getTime(item.event_time)}</ItemText>
-              <ItemText>{item.event_type === 1 ? '+' : '-'}{item.event_amount}</ItemText>
-              <ItemText onClick={() => openLink(item.event_hash)}>
-                <img src={require('assets/images/myWallet/BSC_logo.png').default} alt="" />
-              </ItemText>
-            </Row>
-          ))
-        }
+        <Scroll>
+          {
+            BalanceList.event_list.map(item => (
+              <Row key={item.event_hash}>
+                {item.event_time &&
+                  <>
+                    <ItemText>{getTime(item.event_time)}</ItemText>
+                    <ItemText>{item.event_type === 1 ? '+' : '-'}{item.event_amount}</ItemText>
+                    <ItemText onClick={() => openLink(item.event_hash)}>
+                      <img src={require('assets/images/myWallet/BSC_logo.png').default} alt="" />
+                    </ItemText>
+                  </>
+                }
+              </Row>
+            ))
+          }
+        </Scroll>
       </Table>
     </CountBox>
   )

@@ -11,7 +11,10 @@ import { useStore } from 'store';
 
 
 const NoPdBottom = styled(Container)`
-padding-bottom: 0;
+padding: 0;
+`
+const BorderWalletBox = styled(WalletBox)`
+border-right: 1px solid #3A4459;
 `
 
 const TokenAccount: React.FC = () => {
@@ -43,11 +46,15 @@ const TokenAccount: React.FC = () => {
   }
   useEffect(() => {
     account && BalanceList.length > 1 && getMyBalance()
+    return () => {
+      setTimeInfo(info)
+      setMatterInfo(info)
+    }
   }, [BalanceList, account])
   return (
     <NoPdBottom>
       <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
-        <WalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
+        <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
         <WalletBox BalanceInfo={MatterInfo} Token='Matter' Balance={timeBalance} TokenAddr={timeAddress} />
       </Flex>
     </NoPdBottom>

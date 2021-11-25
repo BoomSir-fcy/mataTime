@@ -107,7 +107,7 @@ const Exchange: React.FC = () => {
   const getApproveNum = async () => {
     const Num = await FetchApproveNum(account)
     setapprovedNum(Num)
-    const RewardNum = await FetchRewardNum()
+    const RewardNum = await FetchRewardNum(account)
     setrewardNum(RewardNum)
   }
   useEffect(() => {

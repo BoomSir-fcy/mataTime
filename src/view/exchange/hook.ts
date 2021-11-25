@@ -14,7 +14,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
 import { storeAction, useStore } from 'store';
-import { getBep20Contract } from 'utils/contractHelpers';
+import { getBep20Contract, getTimeShopContract } from 'utils/contractHelpers';
 import useRefresh from 'hooks/useRefresh';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { BIG_TEN } from 'utils/bigNumber';
@@ -100,7 +100,7 @@ export const useRewardErc20 = () => {
   const TimeContract = useTimeShop()
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await TimeContract.withdraw()
+      const tx = await TimeContract.withdrawAll()
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {
@@ -157,12 +157,13 @@ export const FetchApproveNum = async (account: string) => {
 }
 
 // 获取可领取数量
-export const FetchRewardNum = async () => {
+export const FetchRewardNum = async (account: string) => {
   const TimeShop = getTimeShopAddress()
   const calls = [
     {
       address: TimeShop,
-      name: 'getReward'
+      name: 'getReward',
+      params: [account]
     },
   ]
   console.log(calls);
