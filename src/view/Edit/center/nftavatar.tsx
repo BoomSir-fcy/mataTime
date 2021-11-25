@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import { Avatar } from 'components';
 import { useStore } from 'store';
 import { StakeNFT } from 'components/NftList';
+import { useTranslation } from 'contexts/Localization';
 
 const Nft = styled(Box)`
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.backgroundCard};
+  background: transparent;
   margin-top: 19px;
   padding: 27px 26px 38px 34px;
   border-radius: 10px;
@@ -61,12 +62,13 @@ const NftAvatar: React.FC = () => {
   const [state, setstate] = useState();
   const userInfo: any = useStore(p => p.loginReducer.userInfo);
   const NftList = useStore(p => p.loginReducer.nftList);
+  const { t } = useTranslation();
 
   return (
     <Nft>
       <Flex>
-        <Title>NFT 头像</Title>
-        <Point>平台仅支持将持有的NFT图片作为头像，暂不支持上传图片</Point>
+        <Title>{t('setNftAvatar')}</Title>
+        <Point>{t('setNftAvatarList')}</Point>
       </Flex>
       <div>
         <Rows>

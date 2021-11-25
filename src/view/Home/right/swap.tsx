@@ -24,10 +24,9 @@ export const Swap: React.FC = () => {
     console.log(currency);
   }, []);
 
-  console.log(dark.shadows.box);
   return (
     <SwapBox>
-      <CoinMarketCap mt="0px" mb="15px" />
+      <CoinMarketCap mb="14px" />
       <MiniSwap
         onInputCurrencyChange={handleInputChange}
         resetTheme={{

@@ -6,6 +6,7 @@ import {
   withRouter,
   RouteComponentProps
 } from 'react-router-dom';
+import useAuth from 'hooks/useAuth';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useWeb3React } from '@web3-react/core';
@@ -95,6 +96,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const loginReduce = useStore(p => p.loginReducer);
   const NftList = useStore(p => p.loginReducer.nftList);
   const { t } = useTranslation();
+  const { logout } = useAuth();
   const { isSignup, isSignin, signUpFail, isStakeNft, singUpStep, nftStatus } =
     loginReduce;
   const { account } = useWeb3React();
@@ -127,6 +129,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         history.replace(`${redict || '/'}`);
       }
     } else {
+      logout();
       dispatch(storeAction.changeReset());
       toast.error(t('loginSigninFail') || res?.msg);
     }
