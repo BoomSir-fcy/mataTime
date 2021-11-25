@@ -106,11 +106,10 @@ export const login = createSlice({
         state.nftStatus = true;
         state.nftList = action.payload;
       })
-      .addCase(resetLoginState, (state) => {
-        // state = cloneDeep(initialState);
+      .addCase(resetLoginState, state => {
         Object.keys(state).forEach(key => {
-          state[key] = cloneDeep(initialState[key])
-        })
+          state[key] = cloneDeep(initialState[key]);
+        });
       });
   }
 });
