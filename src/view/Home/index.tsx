@@ -106,7 +106,7 @@ const Home: React.FC = (props: any) => {
             </>
           ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
-          <ArticleList key={refresh} filterValObj={filterVal} {...props} />
+          <ArticleList key={refresh} topicName={match.params.name} filterValObj={filterVal} {...props} />
         </CenterCard>
         <RightCard>
           <Affix offsetTop={100} positionObj={{}}>

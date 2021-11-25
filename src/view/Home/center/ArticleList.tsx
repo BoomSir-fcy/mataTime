@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from "styled-components";
 import { Flex, Button, Box } from 'uikit'
 import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
@@ -19,16 +19,21 @@ color:#fff;
 `
 
 export const ArticleList = (props) => {
+  const { topicName = '' } = props
   const goDetils = (e) => {
     if (props.location.pathname === '/articleDetils') return
     props.history.push('/articleDetils')
   }
   // const [size, setSize] = useState(20)
-  const listRef:any = useRef()
+  const listRef: any = useRef()
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [listData, setListData] = useState([])
   const [totalPage, setTotalPage] = useState(2)
+
+  useEffect(() => {
+    topicName && getList(1)
+  }, [topicName])
 
   // 获取列表
   const getList = (current = 0) => {
@@ -110,20 +115,20 @@ export const ArticleList = (props) => {
     setTotalPage(1)
     listRef.current.loadList()
     setListData([])
-  },[props.match.params.id,props.match.params.name])
+  }, [props.match.params.id, props.match.params.name])
   return (
     <ArticleListBox>
       <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={() => {
         if (loading || page > totalPage) return false
         setLoading(true)
-        if(props.match.path==='/topicList/:id/:name'){
+        if (props.match.path === '/topicList/:id/:name') {
           Api.HomeApi.findByHotTopicIdList({
             page: page,
             per_page: 10,
-            topic_id:props.match.params.id==='empty'?null:props.match.params.id,
-            topic_name:props.match.params.name
-          }).then(res=>{
-               setLoading(false)
+            topic_id: props.match.params.id === 'empty' ? null : props.match.params.id,
+            topic_name: props.match.params.name
+          }).then(res => {
+            setLoading(false)
             if (Api.isSuccess(res)) {
               setLoading(false)
               setPage(page + 1)
@@ -131,9 +136,9 @@ export const ArticleList = (props) => {
               setListData([...listData, ...res.data.List])
             }
           })
-        }else{
+        } else {
           Api.HomeApi.getArticleList({
-            attention:1,
+            attention: 1,
             page: page,
             per_page: 10,
             ...props.filterValObj
@@ -184,5 +189,5 @@ export const ArticleList = (props) => {
   )
 }
 ArticleList.defaultProps = {
-  filterValObj:{}
+  filterValObj: {}
 }
