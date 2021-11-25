@@ -59,7 +59,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
     <Box>
       <Flex justifyContent="space-between" alignItems="center">
         <Flex alignItems="center" flex="1">
-          <TokenImage tokenAddress={depositToken} width={33} height={36} />
+          <TokenImage tokenAddress={depositToken} width={36} height={36} />
           <Box ml="8px">
             <Text fontSize="14px" color="textTips">总质押的 {depositSymbol}</Text>
             {
@@ -75,13 +75,13 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
       </Flex>
       <Flex mt="16px" justifyContent="space-between" alignItems="center">
         <Flex alignItems="center" flex="1">
-          <TokenImage tokenAddress={rewardToken0} width={33} height={36} />
+          <TokenImage tokenAddress={rewardToken0} width={36} height={36} />
           <Box ml="8px">
             <Text fontSize="14px" color="textTips">总收益的 {rewardToken0Symbol}</Text>
             {
               token0UnclaimedRewards.isFinite()
                 ?
-                <Text bold color="white_black">{dispalyToken0Rewards}</Text>
+                <Text bold color="textPrimary">{dispalyToken0Rewards}</Text>
                 :
                 <Skeleton />
             }
@@ -93,12 +93,12 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
             {
               token1UnclaimedRewards.isFinite()
                 ?
-                <Text textAlign="right" bold color="white_black">{dispalyToken1Rewards}</Text>
+                <Text textAlign="right" bold color="textPrimary">{dispalyToken1Rewards}</Text>
                 :
                 <Skeleton />
             }
           </Box>
-          <TokenImage tokenAddress={rewardToken1} width={33} height={36} />
+          <TokenImage tokenAddress={rewardToken1} width={36} height={36} />
         </Flex>
       </Flex>
     </Box>

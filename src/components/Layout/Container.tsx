@@ -9,7 +9,7 @@ const BoxStyled = styled(Box)`
 
 const Container: React.FC<BoxProps> = ({ children, ...props }) => {
   return (
-    <BoxStyled mx="auto" maxWidth="1300px" {...props}>
+    <BoxStyled mx="auto" maxWidth="1200px" {...props}>
       {children}
     </BoxStyled>
   )
