@@ -99,7 +99,7 @@ function App() {
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
-          <AccountUpdater />
+          {/* <AccountUpdater /> */}
           <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
             <Route
