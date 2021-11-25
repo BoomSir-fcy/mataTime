@@ -189,10 +189,10 @@ const mediaPaddingSM = `
 
 const mediaPaddingXs = `
   ${mediaQueries.sm} {
-    padding: 14px 18px;
+    padding: 0 14px;
   }
   ${mediaQueries.lg} {
-    padding: 14px 18px;
+    padding: 0 14px;
   }
 `;
 
@@ -232,7 +232,7 @@ const radii = {
   small: '4px',
   default: '16px',
   nftImage: '10px',
-  card: '10px',
+  card: '0',
   circle: '50%'
 };
 

@@ -140,7 +140,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
         <div className="user-left-wrapper">
-          <Link to={'/me/profile/' + itemData.user_id}>
+          <Link to={'/me/profile/' + (itemData.uid || itemData.user_id)}>
             <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
           </Link>
           <div className="user-info">

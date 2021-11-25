@@ -70,7 +70,9 @@ const NewsComment: React.FC = (props) => {
                   ...item.post,
                   ...item.comment,
                   user_name: item.send_name,
-                  user_avator_url: item.send_image
+                  user_avator_url: item.send_image,
+                  uid: item.send_uid,
+                  user_address: item.send_address
                 }} callback={(data) => {
                   updateList(data)
                 }} />
@@ -78,7 +80,7 @@ const NewsComment: React.FC = (props) => {
                 {item.comment.user_name ?
                   <div className="reply-wrapper">
                     {t('newsCommentReply')}
-                    <a>@{item.comment.user_name}</a>
+                    <a>@{item.post.nick_name}</a>
                     <div>
                       <ContentParsing content={item.comment.comment}></ContentParsing>
                     </div>

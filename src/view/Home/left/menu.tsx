@@ -15,7 +15,7 @@ const MenuBox = styled(Card)`
   flex-direction: column;
   padding: 20px 13px;
   width: 200px;
-  height: calc(100vh - 35px);
+  height: calc(100vh - 40px);
   border-radius: 10px;
 `;
 

@@ -6,3 +6,4 @@ export * from './EditTwitterModal';
 export * from './ReplyModal';
 export * from './CancelAttentionModal';
 export * from './CommonInquiryModal';
+export * from './CommentModal';

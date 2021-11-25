@@ -27,8 +27,6 @@ const networks = {
 // 用户登录
 export function useSignIn() {
   const dispatch = useDispatch();
-  const { chainId } = useActiveWeb3React();
-  const { account } = useWeb3React();
   // 验证地址是否注册
   const siginInVerify = useCallback(async (address: string) => {
     try {
@@ -95,7 +93,7 @@ export function useLogin() {
   const { account, chainId, library } = useActiveWeb3React();
 
   const loginCallback = useCallback(
-    async (operationType: Api.SignIn.OperationType, nickName?: string) => {
+    async (operationType: Api.SignIn.OperationType) => {
       try {
         if (!networks[chainId]) {
           throw new Error(`not support ChainID: ${chainId}`);
@@ -108,23 +106,22 @@ export function useLogin() {
         };
         const res = await signMessage(library, account, JSON.stringify(sign));
         const params = { ...sign, encode_data: res };
-        const signUpParams = { ...sign, encode_data: res, nick_name: nickName };
-        // 1注册 2登录
-        const response =
-          operationType === 1
-            ? await Api.SignInApi.signUp(signUpParams)
-            : await Api.SignInApi.signIn(params);
+        const response = await Api.SignInApi.signIn(params);
         if (Api.isSuccess(response)) {
           const { token } = response.data;
           window.localStorage.setItem(storage.Token, token);
         }
         return response;
-      } catch (error) {
-        return false;
+      } catch (error: any) {
+        console.log(error?.code);
+        return {
+          code: error?.code || 0
+        };
       }
     },
     [chainId, library, account]
   );
+
   return {
     loginCallback
   };

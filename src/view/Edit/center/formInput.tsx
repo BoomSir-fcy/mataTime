@@ -1,9 +1,10 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Flex, Radio } from 'uikit';
 import { Select } from 'components';
 import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 
 const FormBox = styled.div`
@@ -82,42 +83,52 @@ const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
   const profile = useStore(p => p.loginReducer.userInfo);
   const defaultId = country?.length > 0 && country[0].id;
+  const { t } = useTranslation();
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
-    nick_name: profile.nick_name,
-    display_format: profile.display_format,
-    introduction: profile.introduction,
-    background_image: profile.background_image,
+    ...profile,
     location: profile.location || (country.length > 0 && country[0]?.value)
   });
   const [defaultLocationId, setdefaultLocationId] = useState(
     country.find(({ value }) => value === profile.location)?.id || defaultId
   );
 
+  useEffect(() => {
+    setState(p => {
+      p.nick_name = profile.nick_name;
+      p.display_format = profile.display_format;
+      p.introduction = profile.introduction;
+      p.background_image = profile.background_image;
+      p.location =
+        profile.location || (country.length > 0 && country[0]?.value);
+    });
+  }, [profile]);
+
   useImperativeHandle(ref, () => ({
     getFrom() {
       return state;
     }
   }));
+
   return (
     <FormBox>
       <Rows>
-        <Title>*设置昵称</Title>
+        <Title>{t('loginInputTitleNickname')}</Title>
         <div>
           <InputRows>
             <input
               type="text"
               onChange={event =>
                 setState(p => {
-                  p.nick_name = event.target.value.substr(0, 20);
+                  p.nick_name = event.target.value;
                 })
               }
-              minLength={1}
+              minLength={6}
               maxLength={20}
               value={state.nick_name}
             />
             <Uaddres>{shortenAddress(profile.address)}</Uaddres>
           </InputRows>
-          <Msg>1~20个字符</Msg>
+          <Msg>{t('loginInputVerifyNickname')}</Msg>
         </div>
       </Rows>
       <Rows>

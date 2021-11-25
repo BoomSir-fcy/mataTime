@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 
 const TabsBox = styled(Card)`
   display: flex;
   align-items: center;
   height: 60px;
-  margin: 13px 0;
   padding: 0 26px;
-  border-radius: ${({ theme }) => theme.radii.card};
+  border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 const TabItems = styled(Flex)`
   position: relative;
@@ -38,15 +39,16 @@ const TabItems = styled(Flex)`
 `;
 
 export const Tabs = React.memo(() => {
+  const { t } = useTranslation();
   const menu = [
     {
-      title: '全部',
+      title: t('homeTabAll'),
       value: '0'
     }
   ];
 
   return (
-    <TabsBox>
+    <TabsBox isBoxShadow>
       {menu.map((row, index: number) => (
         <TabItems key={index} className="active">
           {row.title}
