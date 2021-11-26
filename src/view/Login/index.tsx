@@ -161,7 +161,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
-    console.log(account);
     if (account) {
       // 1.1查询是否有质押
       dispatch(storeAction.setSigninLoading(true));
