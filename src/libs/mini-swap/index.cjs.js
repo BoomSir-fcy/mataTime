@@ -506,7 +506,7 @@ var Live = "实时";
 var Start = "开始";
 var Finish = "完成";
 var Enable = "启用";
-var Enabling = "正在启用";
+var Enabling = "启用";
 var Expired = "已过期";
 var Calculating = "正在计算";
 var All = "全部";
@@ -532,7 +532,7 @@ var Input$4 = "输入";
 var Output = "输出";
 var From = "从";
 var To = "到";
-var Swap$1 = "交换";
+var Swap$1 = "兑换";
 var Audio$1 = "音频";
 var minutes = "分钟";
 var Manage$1 = "管理";
@@ -663,7 +663,7 @@ var translationsZhCN = {
 	"or the transaction will revert.": "否则您的交易将被撤回。",
 	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "正在供应 %amountA% %symbolA% 和 %amountB% %symbolB%",
 	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "正在移除 %amountA% %symbolA% 和 %amountB% %symbolB%",
-	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 交换为 %amountB% %symbolB%",
+	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 兑换为 %amountB% %symbolB%",
 	"Add Liquidity": "增加流动性",
 	"Add liquidity to receive LP tokens": "增加流动性以接收 LP 代币",
 	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "流动性供应商将对该代币对的所有交易赚取 0.1% 的交易费，与他们在流动性资金池中的份额成正比。",
@@ -682,7 +682,7 @@ var translationsZhCN = {
 	Rates: Rates,
 	"Create Pool & Supply": "创建资金池和供应",
 	"Confirm Supply": "确认供应",
-	"Confirm Swap": "确认交换",
+	"Confirm Swap": "确认兑换",
 	"Connect to a wallet to view your liquidity.": "连接到钱包以查看您的流动性。",
 	"Connect to a wallet to find pools": "连接到钱包以查找资金池",
 	"Select a token to find your liquidity.": "选择代币以查找您的流动性。",
@@ -722,7 +722,7 @@ var translationsZhCN = {
 	"Try enabling multi-hop trades.": "尝试启用多跳交易。",
 	"Price Impact High": "价格影响较高",
 	Swap: Swap$1,
-	"Swap Anyway": "仍要交换",
+	"Swap Anyway": "仍要兑换",
 	"Recent Transactions": "最近的交易",
 	"clear all": "全部清除",
 	"Clear all": "全部清除",
@@ -736,9 +736,9 @@ var translationsZhCN = {
 	"Toggle Expert Mode": "切换专家模式",
 	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "绕过确认模式并允许高滑点交易。使用风险自负。",
 	"Disable Multihops": "禁用多跳",
-	"Restricts swaps to direct pairs only.": "将交换限制为仅限直接币对。",
+	"Restricts swaps to direct pairs only.": "将兑换限制为仅限直接币对。",
 	Audio: Audio$1,
-	"🐰 Turn down your volume a bit before you swap": "🐰 在您交换之前略微调低音量",
+	"🐰 Turn down your volume a bit before you swap": "🐰 在您兑换之前略微调低音量",
 	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果价格变动幅度超过此百分比，您的交易将被撤回。",
 	"Enter a valid slippage percentage": "输入有效的滑点百分比",
 	"Your transaction may fail": "您的交易可能会失败",
