@@ -166,10 +166,8 @@ export const FetchRewardNum = async (account: string) => {
       params: [account]
     },
   ]
-  console.log(calls);
   try {
     const RewardNum = await multicall(timeShopAbi, calls)
-    console.log(RewardNum);
     return getBalanceNumber(new BigNumber(RewardNum[0][0].toJSON().hex))
   } catch (error) {
     throw error

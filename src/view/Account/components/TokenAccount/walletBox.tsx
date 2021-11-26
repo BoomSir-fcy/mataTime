@@ -12,7 +12,7 @@ import { splitThousandSeparator } from 'utils/formatBalance';
 const Content = styled(Box)`
 width:50%;
 min-width: 300px;
-background:${({ theme }) => theme.colors.backgroundCard};
+background:${({ theme }) => theme.card.background};
 ${({ theme }) => theme.mediaQueriesSize.padding}
 ${({ theme }) => theme.mediaQueriesSize.marginb}
 `

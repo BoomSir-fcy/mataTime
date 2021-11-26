@@ -23,7 +23,7 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
   const { days, hours, minutes } = getTimePeriods(Number(poolInfo.duration))
 
   return (
-    <Card>
+    <Card isRadius={true}>
       <Box>
         <PoolCardHeader
           depositToken={poolInfo.depositToken}

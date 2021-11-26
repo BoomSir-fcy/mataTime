@@ -9,9 +9,11 @@ import { Api } from 'apis';
 import { useFetchHistoryList } from 'store/wallet/hooks';
 import { useStore } from 'store';
 import dayjs from 'dayjs'
+import { useDispatch } from 'react-redux'
+import { fetchHistoryAsync } from 'store/wallet/reducer';
 
 const CountBox = styled(Box)`
-min-width: 40vw;
+min-width: 30vw;
 `
 const Table = styled(Flex)`
 flex-direction: column;
@@ -44,7 +46,7 @@ const ItemText = styled(Text)`
       }
   }
 `
-const Scroll = styled(Table)`
+const ScrollBox = styled(Table)`
 min-height:200px;
 max-height: 500px;
 overflow-y: auto;
@@ -59,22 +61,29 @@ interface init {
 
 const HistoryModal: React.FC<init> = ({ token, type }) => {
   const { account } = useWeb3React()
+  const dispatch = useDispatch()
   const [page, setPageNum] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(100)
+  const [pageSize, setPageSize] = useState<number>(20)
   const [end, setEnd] = useState(false)
   const [loading, setLoading] = useState<boolean>(false)
-
-  const BalanceList = useStore(p => p.wallet.history);
+  const [HistoryList, setHistoryList] = useState([])
+  const History = useStore(p => p.wallet.history);
   const coin_type = token === 'Time' ? 1 : 2
   useFetchHistoryList({ coin_type, page, pageSize })
 
-  // const loadMore = useCallback((e: any) => {
-  //   const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
-  //   if (offsetHeight + scrollTop === scrollHeight) {
-  //     if (loading || end) return    // 判断是否在请求状态或者已到最后一页
-  //     setPageNum(page + 1)
-  //   }
-  // }, [loading, page, end, setPageNum])
+  const TurnPage = (page) => {
+    // 正在请求
+    setLoading(true)
+    dispatch(fetchHistoryAsync({ coin_type, page, pageSize }))
+  }
+
+  const loadMore = useCallback((e: any) => {
+    const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;
+    if (offsetHeight + scrollTop === scrollHeight) {
+      if (loading || end) return    // 判断是否在请求状态或者已到最后一页
+      TurnPage(page + 1)
+    }
+  }, [loading, page, end])
 
 
   const openLink = (hash) => {
@@ -84,6 +93,22 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
     const filshTime = dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss')
     return filshTime
   }
+  useEffect(() => {
+    // 请求数据返回 数据变动
+    setPageNum(History.page)
+    if (History.page * History.page_size >= History.totalCount) {
+      // 是否最后一页
+      setEnd(true)
+    }
+    setHistoryList([...HistoryList, ...History.event_list])
+    setLoading(false)
+    return () => {
+      setLoading(false)
+      setPageNum(1)
+      setEnd(false)
+    }
+  }, [History])
+
   return (
     <CountBox>
       <Table>
@@ -92,11 +117,11 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
           <HeadText>金额</HeadText>
           <HeadText>区块</HeadText>
         </Row>
-        <Scroll>
+        <ScrollBox onScroll={loadMore}>
           {
-            BalanceList.event_list.map(item => (
+            HistoryList.map(item => (
               <Row key={item.event_hash}>
-                {item.event_time &&
+                {item.event_time > 0 &&
                   <>
                     <ItemText>{getTime(item.event_time)}</ItemText>
                     <ItemText>{item.event_type === 1 ? '+' : '-'}{item.event_amount}</ItemText>
@@ -108,7 +133,7 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
               </Row>
             ))
           }
-        </Scroll>
+        </ScrollBox>
       </Table>
     </CountBox>
   )

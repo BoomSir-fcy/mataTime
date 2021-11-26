@@ -21,6 +21,7 @@ declare namespace Api {
     interface History {
       page?: number;
       pageSize?: number;
+      coin_type?: number;
     }
   }
 }

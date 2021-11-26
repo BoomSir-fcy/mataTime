@@ -11,6 +11,7 @@ import { useDpWd } from '../../../hooks/walletInfo';
 import Dots from 'components/Loader/Dots';
 import { useStore } from 'store';
 import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
+import { toast } from 'react-toastify';
 
 const CountBox = styled(Box)`
 min-width: 20vw;
@@ -81,6 +82,11 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
         setpending(false)
         return
       }
+      if (Number(val) < 100) {
+        toast.error('最先提现额度100');
+        setpending(false)
+        return
+      }
       // 提现
       try {
         await drawCallback(val, TokenAddr, token === 'Time' ? 1 : 2)
@@ -143,13 +149,13 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
         <Max onClick={() => setVal(String(type === 1 ? balance : withdrawalBalance))}>MAX</Max>
       </InputBox>
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
-        <SureBtn mb='10px' disable={pending} onClick={async () => {
+        <SureBtn mb='10px' disable={pending} onClick={() => {
           if (approvedNum > 0) {
             // 充值、提现
-            await handSure()
+            handSure()
           } else {
             // 授权
-            await handleApprove()
+            handleApprove()
           }
         }}>
           {pending ? <Dots>{approvedNum > 0 ? "交易中" : "授权中"}</Dots> : approvedNum > 0 ? "确认" : "授权"}
