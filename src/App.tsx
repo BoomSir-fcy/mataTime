@@ -19,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import history from './routerHistory';
 import useAuth from './hooks/useAuth';
-import AccountUpdater from './view/Updater/AccountUpdater'
+import AccountUpdater from './view/Updater/AccountUpdater';
 
 moment.locale('zh-cn');
 
@@ -35,13 +35,14 @@ const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
 const Account = React.lazy(() => import('./view/Account'));
 
-const Container = styled(Box) <{
+const Container = styled(Box)<{
   dark: boolean;
 }>`
   /* background-image: ${({ dark }) =>
-    `url(${require(dark
-      ? 'assets/images/dark_background.jpg'
-      : 'assets/images/light_background.jpg').default
+    `url(${
+      require(dark
+        ? 'assets/images/dark_background.jpg'
+        : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed; */
   background-color: ${({ theme }) => theme.colors.background};
@@ -59,48 +60,48 @@ function App() {
   const { signOut } = useAuth();
 
   // 查询是否切换账户
-  const isChangeAddr = () => {
-    if (ConnectAddr === '0') {
-      // 赋值初始化地址
-      setConnectAddr(account);
-    } else if (ConnectAddr !== account) {
-      // 切换了地址就清除数据 重新登陆
-      signOut();
-    }
-  };
+  // const isChangeAddr = () => {
+  //   if (ConnectAddr === '0') {
+  //     // 赋值初始化地址
+  //     setConnectAddr(account);
+  //   } else if (ConnectAddr !== account) {
+  //     // 切换了地址就清除数据 重新登陆
+  //     signOut();
+  //   }
+  // };
 
-  useEffect(() => {
-    if (store.connectWallet) {
-      const changeHandler = () => {
-        dispatch(storeAction.connectWallet({ connectWallet: false }));
-      };
-      document.body.addEventListener('click', changeHandler);
-      return () => document.body.removeEventListener('click', changeHandler);
-    }
-  }, [store.connectWallet]);
+  // useEffect(() => {
+  //   if (store.connectWallet) {
+  //     const changeHandler = () => {
+  //       dispatch(storeAction.connectWallet({ connectWallet: false }));
+  //     };
+  //     document.body.addEventListener('click', changeHandler);
+  //     return () => document.body.removeEventListener('click', changeHandler);
+  //   }
+  // }, [store.connectWallet]);
 
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token]);
 
-  useEffect(() => {
-    if (account) {
-      // 1.1判断链接钱包后是否切换了钱包账户
-      isChangeAddr();
-    } else {
-      if (ConnectAddr !== '0') {
-        signOut();
-      }
-    }
-    return () => { };
-  }, [account]);
+  // useEffect(() => {
+  //   if (account) {
+  //     // 1.1判断链接钱包后是否切换了钱包账户
+  //     isChangeAddr();
+  //   } else {
+  //     if (ConnectAddr !== '0') {
+  //       signOut();
+  //     }
+  //   }
+  //   return () => { };
+  // }, [account]);
 
   return (
     <Router history={history}>
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
-          {/* <AccountUpdater /> */}
+          <AccountUpdater />
           <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
             <Route

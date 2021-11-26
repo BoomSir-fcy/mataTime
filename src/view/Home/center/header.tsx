@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 import { Icon } from 'components';
-import { useSelector } from 'react-redux';
-
 import { Flex, Card } from 'uikit';
+import { useSelector } from 'react-redux';
+import { mediaQueriesSize } from 'uikit/theme/base';
 
 export const HeaderBox = styled(Card)`
+  width: 100%;
   position: relative;
   display: flex;
-  padding-left: 16px;
+  align-items: center;
+  height: 60px;
   margin-bottom: 12px;
-  border-radius: 10px;
   font-size: 18px;
   font-weight: bold;
-  line-height: 60px;
+  background-color: transparent;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${mediaQueriesSize.paddingxs}
   i.icon-fanhui {
     position: absolute;
     left: 17px;
@@ -22,7 +25,6 @@ export const HeaderBox = styled(Card)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 500px;
     text-align: center;
   }
 `;
@@ -38,7 +40,7 @@ export const Header = (props: {
     (state: any) => state.appReducer.systemCustom.isDark
   );
 
-  const { title, back = false, align = 'flex-start' } = props;
+  const { title, back = false, align } = props;
   const clickTitle = e => {
     // console.log(e);
   };
@@ -46,10 +48,12 @@ export const Header = (props: {
     props.history.goBack();
   };
   // const back = props.location.pathname!=='/'
+
   return (
     <HeaderBox
+      isBoxShadow
       style={{
-        justifyContent: align,
+        justifyContent: align || 'flex-start',
         paddingLeft: back && align !== 'center' ? '60px' : null
       }}
     >

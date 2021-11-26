@@ -24,22 +24,28 @@ export const Swap: React.FC = () => {
     console.log(currency);
   }, []);
 
-  console.log(dark.shadows.box);
   return (
     <SwapBox>
-      <CoinMarketCap mt="0px" mb="15px" />
+      <CoinMarketCap mb="14px" />
       <MiniSwap
         onInputCurrencyChange={handleInputChange}
         resetTheme={{
           dark: {
             colors: {
-              primary: dark.colors.backgroundPrimary,
-              textSubtle: dark.colors.textPrimary,
+              dropdown: dark.colors.backgroundPrimary,
+              text: dark.colors.white_black,
+              backgroundDisabled: dark.colors.tertiary,
+              primary: dark.colors.textPrimary,
+              textSubtle: dark.colors.white_black,
               backgroundAlt: dark.colors.dropdownDeep,
               invertedContrast: dark.colors.backgroundCard
             },
+            shadows: {
+              inset: 'none'
+            },
             card: {
-              boxShadow: 'none'
+              boxShadow: dark.shadows.box,
+              background: dark.colors.backgroundCard
             },
             zIndices: {
               modal: 9999
@@ -47,10 +53,16 @@ export const Swap: React.FC = () => {
           },
           light: {
             colors: {
-              primary: light.colors.backgroundPrimary,
-              textSubtle: light.colors.textPrimary,
+              dropdown: light.colors.backgroundPrimary,
+              text: light.colors.white_black,
+              backgroundDisabled: light.colors.tertiary,
+              primary: light.colors.textPrimary,
+              textSubtle: light.colors.white_black,
               backgroundAlt: light.colors.backgroundAlt,
               invertedContrast: light.colors.invertedContrast
+            },
+            shadows: {
+              inset: 'none'
             },
             card: {
               boxShadow: light.shadows.box,

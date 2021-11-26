@@ -1,10 +1,10 @@
-import { darkColors, lightColors } from "../../theme/colors";
-import { shadows } from "../../theme/base";
-import { CardTheme } from "./types";
+import { darkColors, lightColors } from '../../theme/colors';
+import { shadows } from '../../theme/base';
+import { CardTheme } from './types';
 
 export const light: CardTheme = {
   background: lightColors.backgroundCard,
-  boxShadow: shadows.box,
+  boxShadow: lightColors.shadow.box,
   boxShadowActive: shadows.active,
   boxShadowSuccess: shadows.success,
   boxShadowWarning: shadows.warning,
@@ -12,14 +12,14 @@ export const light: CardTheme = {
     default: lightColors.gradients.cardHeader,
     blue: lightColors.gradients.blue,
     bubblegum: lightColors.gradients.bubblegum,
-    violet: lightColors.gradients.violet,
+    violet: lightColors.gradients.violet
   },
-  dropShadow: "drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))",
+  dropShadow: 'drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))'
 };
 
 export const dark: CardTheme = {
   background: darkColors.backgroundCard,
-  boxShadow: shadows.box,
+  boxShadow: darkColors.shadow.box,
   boxShadowActive: shadows.active,
   boxShadowSuccess: shadows.success,
   boxShadowWarning: shadows.warning,
@@ -27,7 +27,7 @@ export const dark: CardTheme = {
     default: darkColors.gradients.cardHeader,
     blue: darkColors.gradients.blue,
     bubblegum: lightColors.gradients.bubblegum,
-    violet: darkColors.gradients.violet,
+    violet: darkColors.gradients.violet
   },
-  dropShadow: "drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))",
+  dropShadow: 'drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))'
 };

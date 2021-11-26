@@ -108,13 +108,13 @@ const NftAvatar: React.FC<{
     <GetAuthorizeBox>
       {Nodata ? (
         <NodataDom>
-          <Text mb="10px">获取更多NTF头像可更换头像</Text>
+          <Text mb="10px">{t('setNftAvatarGetMore')}</Text>
           <Button>{t('loginGetNft')}</Button>
         </NodataDom>
       ) : (
         <>
           <Flex justifyContent="space-between" alignItems="center">
-            <Point>支持部分主流NFT系列，即将支持更多的NFT系列头像</Point>
+            <Point>{t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
             ) : (
@@ -188,16 +188,20 @@ const StakeAllBtn = ({ token, account }) => {
         try {
           // 授权
           await handleApprove();
-          toast.success('授权成功');
+          toast.success(t('setNftAuthorizationSuccess'));
         } catch (error) {
           console.error(error);
-          toast.error('授权操作失败');
+          toast.error(t('setNftAuthorizationFail'));
         } finally {
           setPendingTx(false);
         }
       }}
     >
-      {pendingTx ? <Dots>{t('授权中')}</Dots> : t('授权')}
+      {pendingTx ? (
+        <Dots>{t('setNftAuthorizationing')}</Dots>
+      ) : (
+        t('setNftAuthorization')
+      )}
     </NowrapBtn>
   );
 };

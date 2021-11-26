@@ -6,6 +6,7 @@ import {
   withRouter,
   RouteComponentProps
 } from 'react-router-dom';
+import useAuth from 'hooks/useAuth';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useWeb3React } from '@web3-react/core';
@@ -95,6 +96,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const loginReduce = useStore(p => p.loginReducer);
   const NftList = useStore(p => p.loginReducer.nftList);
   const { t } = useTranslation();
+  const { logout } = useAuth();
   const { isSignup, isSignin, signUpFail, isStakeNft, singUpStep, nftStatus } =
     loginReduce;
   const { account } = useWeb3React();
@@ -127,6 +129,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         history.replace(`${redict || '/'}`);
       }
     } else {
+      logout();
       dispatch(storeAction.changeReset());
       toast.error(t('loginSigninFail') || res?.msg);
     }
@@ -158,7 +161,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
-    console.log(account);
     if (account) {
       // 1.1查询是否有质押
       dispatch(storeAction.setSigninLoading(true));
@@ -189,7 +191,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       <LeftBox isbackground={Boolean(nftBoolean)}>
         {nftBoolean && (
           <Nft>
-            <Text fontSize="30px">选择并质押头像</Text>
+            <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>
             <StakeNFT status={1} />
           </Nft>
         )}

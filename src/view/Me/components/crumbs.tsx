@@ -10,6 +10,7 @@ const Header = styled(Card)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   ${mediaQueriesSize.paddingxs}
 `;

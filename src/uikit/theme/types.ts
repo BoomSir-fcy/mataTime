@@ -125,6 +125,11 @@ export type Colors = {
   // Gradients
   gradients: Gradients;
 
+  // box shadow
+  shadow: {
+    box: string;
+  };
+
   // Additional colors
   binance: string;
   overlay: string;
