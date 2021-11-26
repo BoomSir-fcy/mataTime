@@ -61,6 +61,7 @@ const PoolAction: React.FC<PoolActionProps> = ({ poolInfo, userData }) => {
       <ContainerItem>
         <PoolActionStake
           depositToken={poolInfo.depositToken}
+          isApproved={dispalynUserData.isApproved}
           rewardToken0={poolInfo.rewardToken0}
           rewardToken1={poolInfo.rewardToken1}
           depositSymbol={poolInfo.depositSymbol}

@@ -14,25 +14,23 @@ const Single: React.FC = () => {
   }, [data])
 
   return (
-    <Container>
+    <Box pt="16px">
       {
         loaded
           ?
           (
             <FlexLayout>
-              <FlexAutoWarpper>
-                {
-                  poolsMemoized.map(poolInfo => (
-                    <PoolCard
-                      key={poolInfo.pid}
-                      poolInfo={poolInfo}
-                      userData={userDataMap[poolInfo.pid]}
-                      userStakes={userStakesMap[poolInfo.pid]}
-                      poolApr={poolAprMap[poolInfo.pid]}
-                    />
-                  ))
-                }
-              </FlexAutoWarpper>
+              {
+                poolsMemoized.map(poolInfo => (
+                  <PoolCard
+                    key={poolInfo.pid}
+                    poolInfo={poolInfo}
+                    userData={userDataMap[poolInfo.pid]}
+                    userStakes={userStakesMap[poolInfo.pid]}
+                    poolApr={poolAprMap[poolInfo.pid]}
+                  />
+                ))
+              }
             </FlexLayout>
           )
           :
@@ -41,7 +39,7 @@ const Single: React.FC = () => {
           </Flex>
       }
 
-    </Container>
+    </Box>
   )
 }
 
