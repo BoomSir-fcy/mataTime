@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ChainId } from 'config/wallet/config';
 import { signMessage } from 'utils/web3React';
@@ -29,7 +29,39 @@ const networks = {
   [ChainId.BSC_TESTNET]: Network.BSCTEST,
   [ChainId.MATIC_MAINET]: Network.MATIC
 };
+export const useFetchHistoryList = (coin_type: number) => {
+  const { account } = useWeb3React()
+  const [list, setList] = useState([])
+  const [page, setPageNum] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
+  const [end, setEnd] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  useEffect(() => {
+    if (account) {
+      getList()
+    }
+  }, [page, account])
+  const getList = async () => {
+    setLoading(true)  // 设为请求状态
+    try {
+      const res = await Api.AccountApi.history({ coin_type, page, pageSize })
+      if (res.code === 1) {
+        const temp = res.data.event_list
+        const nowList = page === 1 ? temp : [...list, ...temp]
+        if (page * pageSize >= res.data.totalCount) {
+          setEnd(true)
+        }
+        setList(nowList)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)  // 请求完毕置为false
+    }
+  }
 
+  return { list, page, end, setPageNum, loading }
+}
 // 充值、提现、授权
 export function useDpWd() {
   const { account, chainId, library } = useActiveWeb3React();
@@ -75,11 +107,12 @@ export function useDpWd() {
         const params = { ...sign, encode_data: res };
         const response = await Api.AccountApi.withdraw(params);
         if (Api.isSuccess(response)) {
-
+          return response;
+        } else {
+          throw new Error("fail");
         }
-        return response;
       } catch (error) {
-        return false;
+        throw error
       }
     },
     [chainId, library, account]

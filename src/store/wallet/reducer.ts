@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 import { FetchApproveNum } from './hooks';
 
@@ -15,17 +15,6 @@ export interface WalletState {
     total_balance: string
     uid: number,
   }]
-  history: {
-    event_list: [{
-      event_type: number,
-      event_amount: string
-      event_time: number,
-      event_hash: string
-    }]
-    page: number
-    page_size: number
-    totalCount: number
-  }
 }
 
 const initialState: WalletState = {
@@ -40,18 +29,7 @@ const initialState: WalletState = {
     token_type: 1,
     total_balance: "0",
     uid: 0
-  }],
-  history: {
-    event_list: [{
-      event_type: 0,
-      event_amount: '',
-      event_time: 0,
-      event_hash: ''
-    }],
-    page: 0,
-    page_size: 0,
-    totalCount: 0
-  }
+  }]
 };
 
 // Async thunks
@@ -65,11 +43,6 @@ export const fetchApproveNumAsync = createAsyncThunk<any, string>('wallet/fetchA
   const res = await FetchApproveNum(account);
   return res
 });
-// 充提记录
-export const fetchHistoryAsync = createAsyncThunk<any, Api.Account.History>('wallet/fetchHistoryAsync', async (Page?) => {
-  const res = await Api.AccountApi.history(Page);
-  return res.data
-});
 
 export const wallet = createSlice({
   name: 'wallet',
@@ -79,9 +52,6 @@ export const wallet = createSlice({
     builder
       .addCase(fetchWalletAsync.fulfilled, (state, action) => {
         state.wallet = action.payload;
-      })
-      .addCase(fetchHistoryAsync.fulfilled, (state, action) => {
-        state.history = action.payload;
       })
       .addCase(fetchApproveNumAsync.fulfilled, (state, action) => {
         state.ApproveNum = action.payload;
