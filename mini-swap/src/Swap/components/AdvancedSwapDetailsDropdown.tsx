@@ -12,9 +12,9 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
   border-radius: 0;
   background-color: ${({ theme }) => theme.colors.invertedContrast};
 
-  transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-128%)')};
-  max-height: ${({ show }) => (show ? 'auto' : '60px')};
-  overflow: hidden;
+  /* transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-128%)')}; */
+  /* max-height: ${({ show }) => (show ? 'auto' : '60px')}; */
+  /* overflow:  ${({ show }) => (show ? 'visible' : 'hide')};; */
   transition: transform 300ms ease-in-out;
 `
 
@@ -25,7 +25,8 @@ export default function AdvancedSwapDetailsDropdown({ trade, isPolyMethed, polyD
 
   return (
     <AdvancedDetailsFooter show={show}>
-      <AdvancedSwapDetails {...rest} isPolyMethed={isPolyMethed} polyData={polyData} trade={trade ?? lastTrade ?? undefined} />
+      {show && <AdvancedSwapDetails {...rest} isPolyMethed={isPolyMethed} polyData={polyData} trade={trade ?? lastTrade ?? undefined} />}
+
     </AdvancedDetailsFooter>
   )
 }

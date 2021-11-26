@@ -15,7 +15,7 @@ const QuestionWrapper = styled.div`
   }
 `
 
-const QuestionHelper: React.FC<Props> = ({ text, color = "textSubtle", placement = 'right-end', ...props }) => {
+const QuestionHelper: React.FC<Props> = ({ text, color = "textgrey", placement = 'right-end', ...props }) => {
   const { targetRef, tooltip, tooltipVisible } = useTooltip(text, { placement, trigger: 'hover' })
 
   return (

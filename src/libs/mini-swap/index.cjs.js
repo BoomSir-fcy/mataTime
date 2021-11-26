@@ -11408,8 +11408,8 @@ var templateObject_1$l, templateObject_2$d, templateObject_3$7;
 
 var QuestionWrapper = styled__default["default"].div(templateObject_1$k || (templateObject_1$k = tslib.__makeTemplateObject(["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"], ["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"])));
 var QuestionHelper = function (_a) {
-    var text = _a.text, _b = _a.color, color = _b === void 0 ? "textSubtle" : _b, _c = _a.placement, placement = _c === void 0 ? 'right-end' : _c, props = tslib.__rest(_a, ["text", "color", "placement"]);
-    var _d = useTooltip(text, { placement: placement, trigger: 'hover' }), targetRef = _d.targetRef, tooltip = _d.tooltip, tooltipVisible = _d.tooltipVisible;
+    var text = _a.text, _b = _a.color, color = _b === void 0 ? "textSubtle" : _b, _c = _a.trigger, trigger = _c === void 0 ? 'hover' : _c, _d = _a.placement, placement = _d === void 0 ? 'right-end' : _d, props = tslib.__rest(_a, ["text", "color", "trigger", "placement"]);
+    var _e = useTooltip(text, { placement: placement, trigger: trigger }), targetRef = _e.targetRef, tooltip = _e.tooltip, tooltipVisible = _e.tooltipVisible;
     return (jsxRuntime.jsxs(Box, tslib.__assign({}, props, { children: [tooltipVisible && tooltip, jsxRuntime.jsx(QuestionWrapper, tslib.__assign({ ref: targetRef }, { children: jsxRuntime.jsx(Icon$5, { color: color, width: "16px" }, void 0) }), void 0)] }), void 0));
 };
 var templateObject_1$k;
@@ -12373,7 +12373,7 @@ function AdvancedSwapDetails(_a) {
     return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "0px" }, { children: [isPolyMethed && (jsxRuntime.jsx(TradeSummaryPloy, { polyData: polyData }, void 0)), (trade && !isPolyMethed) && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(TradeSummary, { trade: trade, allowedSlippage: allowedSlippage }, void 0), showRoute && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ style: { padding: '0' } }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ minWidth: "80px" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Route') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t("Routing through these tokens resulted in the best price for your trade."), ml: "4px", placement: "top-start" }, void 0)] }), void 0), jsxRuntime.jsx(SwapRoute, { isPolyMethed: isPolyMethed, polyData: polyData, trade: trade }, void 0)] }), void 0) }, void 0))] }, void 0))] }), void 0));
 }
 
-var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 || (templateObject_1$6 = tslib.__makeTemplateObject(["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  transform: ", ";\n  max-height: ", ";\n  overflow: hidden;\n  transition: transform 300ms ease-in-out;\n"], ["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  transform: ", ";\n  max-height: ", ";\n  overflow: hidden;\n  transition: transform 300ms ease-in-out;\n"])), function (_a) {
+var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 || (templateObject_1$6 = tslib.__makeTemplateObject(["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"], ["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"])), function (_a) {
     var show = _a.show;
     return (show ? '0' : 0);
 }, function (_a) {
@@ -12385,13 +12385,16 @@ var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 ||
 }, function (_a) {
     var show = _a.show;
     return (show ? 'auto' : '60px');
+}, function (_a) {
+    var show = _a.show;
+    return (show ? 'visible' : 'hide');
 });
 function AdvancedSwapDetailsDropdown(_a) {
     var _b;
     var trade = _a.trade, isPolyMethed = _a.isPolyMethed, polyData = _a.polyData, rest = tslib.__rest(_a, ["trade", "isPolyMethed", "polyData"]);
     var lastTrade = useLastTruthy(trade);
     var show = Boolean(isPolyMethed ? polyData : trade);
-    return (jsxRuntime.jsx(AdvancedDetailsFooter, tslib.__assign({ show: show }, { children: jsxRuntime.jsx(AdvancedSwapDetails, tslib.__assign({}, rest, { isPolyMethed: isPolyMethed, polyData: polyData, trade: (_b = trade !== null && trade !== void 0 ? trade : lastTrade) !== null && _b !== void 0 ? _b : undefined }), void 0) }), void 0));
+    return (jsxRuntime.jsx(AdvancedDetailsFooter, tslib.__assign({ show: show }, { children: show && jsxRuntime.jsx(AdvancedSwapDetails, tslib.__assign({}, rest, { isPolyMethed: isPolyMethed, polyData: polyData, trade: (_b = trade !== null && trade !== void 0 ? trade : lastTrade) !== null && _b !== void 0 ? _b : undefined }), void 0) }), void 0));
 }
 var templateObject_1$6;
 
