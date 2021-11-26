@@ -104,7 +104,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount>今日收入</Fount>
-            <NumText>{splitThousandSeparator(3444311)}</NumText>
+            <NumText>{splitThousandSeparator(0)}</NumText>
           </Flex>
           <Flex style={{ textAlign: 'right' }} flexDirection='column' justifyContent='space-between'>
             <Fount>钱包余额</Fount>

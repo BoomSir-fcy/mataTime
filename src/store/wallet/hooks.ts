@@ -9,7 +9,7 @@ import multicall from 'utils/multicall';
 import { getBalanceNumber } from 'utils/formatBalance';
 
 import { AppDispatch, AppState } from '../index'
-import { fetchHistoryAsync, fetchWalletAsync, fetchApproveNumAsync } from './reducer'
+import { fetchWalletAsync, fetchApproveNumAsync } from './reducer'
 
 
 const REFRESH_INTERVAL = 30 * 1000
@@ -86,14 +86,6 @@ export const useFetchWalletInfo = () => {
   useEffect(() => {
     account && dispatch(fetchWalletAsync())
   }, [refresh, account])
-}
-
-// 获取充提记录
-export const useFetchHistoryList = (page?) => {
-  const dispatch = useDispatch<AppDispatch>()
-  useEffect(() => {
-    dispatch(fetchHistoryAsync(page))
-  }, [])
 }
 
 
