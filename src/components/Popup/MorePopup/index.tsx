@@ -83,6 +83,29 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false);
   };
 
+  const parseComments = value => {
+    let topic = '';
+    value.replace(/[#＃][^#＃]+[#＃]/g, word => {
+      console.log(word);
+      topic = word.slice(1).slice(0, -1);
+    });
+    return topic;
+  };
+
+  let arr = [];
+  const render = newarr => {
+    let len = newarr.length;
+    for (let i = 0; i < len; i++) {
+      if (newarr[i].text) {
+        arr.push(newarr[i].text);
+      }
+      if (newarr[i].children?.length > 0) {
+        render(newarr[i].children);
+      }
+    }
+    return arr;
+  };
+
   // 分享到Twitter
   const onShareTwitterClick = () => {
     let context = [];
@@ -93,10 +116,14 @@ export const MorePopup = React.memo((props: Iprops) => {
     } catch (err) {
       console.log(err);
     }
-    const text = context[0]?.children[0]?.text || '';
+
+    const text = render(context).join('');
     const url = `${window.location.origin}/${window.location.hash}articleDetils/${data.post.post_id}`;
     window.open(
-      `https://twitter.com/intent/tweet?text=${text}&url=${url}&hashtags=Metatime`
+      `https://twitter.com/intent/tweet?text=${text.replace(
+        /#/g,
+        ''
+      )}&hashtags=${parseComments(text)}&url=${url}`
     );
     setVisible(false);
   };
@@ -148,15 +175,15 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false);
   };
   useEffect(() => {
-    const fn = (e)=>{
-      setVisible(false)
-    }
-    document.addEventListener('click',fn)
-    return ()=>document.removeEventListener('click',fn)
-  })
+    const fn = e => {
+      setVisible(false);
+    };
+    document.addEventListener('click', fn);
+    return () => document.removeEventListener('click', fn);
+  });
   return (
     <>
-        {/* onMouseOver={(e: any) => {
+      {/* onMouseOver={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(true);
         }}
@@ -172,8 +199,7 @@ export const MorePopup = React.memo((props: Iprops) => {
       >
         {children}
         {visible ? (
-          <PopupContentWrapper
-          >
+          <PopupContentWrapper>
             {/* onMouseLeave={(e: any) => {
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
               setVisible(false);

@@ -15,6 +15,7 @@ import { CrumbsHead } from './components';
 const Content = styled(Card)`
   min-height: 700px;
   padding: 29px 19px;
+  background-color: transparent;
 `;
 const Column = styled(Flex)`
   flex-direction: column;

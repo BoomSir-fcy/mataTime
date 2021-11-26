@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Flex, Radio } from 'uikit';
+import { Flex, Box, Radio } from 'uikit';
 import { Select } from 'components';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
@@ -10,7 +10,7 @@ import { useStore } from 'store';
 const FormBox = styled.div`
   padding: 35px 40px;
   margin-top: 13px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
+  background: transparent;
   border-radius: 10px;
   min-height: 70vh;
   margin-bottom: 20px;
@@ -18,8 +18,8 @@ const FormBox = styled.div`
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.text};
   line-height: 50px;
-  min-width: 80px;
-  margin-right: 40px;
+  min-width: 105px;
+  margin-right: 20px;
 `;
 const Rows = styled(Flex)`
   justify-content: flex-start;
@@ -52,7 +52,7 @@ const InputRows = styled(Flex)`
   }
 `;
 const Uaddres = styled.div`
-  width: 124px;
+  padding: 0 15px;
   height: 26px;
   line-height: 26px;
   color: ${({ theme }) => theme.colors.text};
@@ -132,7 +132,7 @@ const FormInput = React.forwardRef((props, ref) => {
         </div>
       </Rows>
       <Rows>
-        <Title>*显示格式</Title>
+        <Title>{t('loginInputTitleDisplayFormat')}</Title>
         <RadioBox>
           <Radio
             scale="sm"
@@ -146,7 +146,7 @@ const FormInput = React.forwardRef((props, ref) => {
             }
             value="1"
           />
-          <label htmlFor="gs">0x格式</label>
+          <label htmlFor="gs">{t('loginInputDisplayRadio1')}</label>
           {/* <input
             type="radio"
             name="gs"
@@ -158,14 +158,14 @@ const FormInput = React.forwardRef((props, ref) => {
             }
             value="2"
           />
-          <span>域名格式</span> */}
+          <span>{t('loginInputDisplayRadio2')}</span> */}
         </RadioBox>
       </Rows>
       <Rows>
-        <Title>*个人简介</Title>
-        <div>
+        <Title>{t('loginInputTitleIntroduction')}</Title>
+        <Box>
           <textarea
-            placeholder="请填写您的个人资料简介"
+            placeholder={t('loginInputIntroduction')}
             onChange={event =>
               setState(p => {
                 p.introduction = event.target.value.substr(0, 140);
@@ -173,11 +173,11 @@ const FormInput = React.forwardRef((props, ref) => {
             }
             value={state.introduction}
           />
-          <Msg>1~140个字符</Msg>
-        </div>
+          <Msg>{t('loginInputIntroductionVerif')}</Msg>
+        </Box>
       </Rows>
       <Rows>
-        <Title>*所在国家</Title>
+        <Title>{t('loginInputTitleCountry')}</Title>
         <Select
           options={country}
           defaultId={defaultLocationId}
