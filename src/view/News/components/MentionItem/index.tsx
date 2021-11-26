@@ -71,7 +71,7 @@ const MentionItem: React.FC<IProps> = props => {
           goDetils(e);
         }}
       >
-        <ContentParsing content={itemData.content} callback={(type: MoreOperatorEnum) => {
+        <ContentParsing {...props} content={itemData.content} callback={(type: MoreOperatorEnum) => {
           callback(itemData, type);
         }}></ContentParsing>
         <ImgList

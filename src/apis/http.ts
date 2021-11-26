@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { toast } from 'react-toastify';
 import { storage } from 'config';
 import history from '../routerHistory';
 
@@ -35,6 +36,10 @@ export class Http {
         ...configs,
         headers: { ...configs.headers, token: token }
       });
+      const { code, msg } = response.data
+      if (code === 0) {
+        toast.error(msg || '服务器出错！')
+      }
       return response.data;
     } catch (e: any) {
       if (e?.status === 401) return history.push('/login');
