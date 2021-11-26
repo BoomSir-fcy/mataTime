@@ -32,11 +32,15 @@ const InputNftImg = styled.img`
 const InputNickName = styled.input`
   width: 381px;
   height: 50px;
+  color: ${({ theme }) => theme.colors.white_black};
   background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 10px;
   padding-left: 25px;
   border: 0;
   outline: 0;
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textTips};
+  }
 `;
 const Submit = styled(Button)`
   width: 205px;
@@ -112,6 +116,7 @@ export const SignUpSetName: React.FC<{
       if (Boolean(userInfo)) {
         verify();
       } else {
+        dispatch(storeAction.setSigninLoading(false));
         toast.error(t('loginSignupFail'));
       }
     } else if (!res[0] && !res[1]) {
@@ -135,7 +140,7 @@ export const SignUpSetName: React.FC<{
         fontSize="34px"
         marginBottom="29px"
         bold
-        style={{ textTransform: 'uppercase' }}
+        style={{ textTransform: 'capitalize' }}
       >
         {t('loginWelcome')}
       </Text>

@@ -31,6 +31,7 @@ const scaleVariants = {
 
 const Img = styled.img`
   border-radius: ${({ theme }) => theme.radii.card};
+  object-fit: cover;
   ${variant({
     prop: 'scale',
     variants: scaleVariants
@@ -44,7 +45,8 @@ export const Avatar: React.FC<{
 }> = props => {
   let deepProps = Object.assign({}, props);
   if (!deepProps.src) {
-    deepProps.src = 'https://pic1.zhimg.com/50/v2-c81d57456b7886c12affc22a699983ff_720w.jpg?source=1940ef5c';
+    deepProps.src =
+      'https://pic1.zhimg.com/50/v2-c81d57456b7886c12affc22a699983ff_720w.jpg?source=1940ef5c';
   }
   return <Img {...deepProps} />;
 };
