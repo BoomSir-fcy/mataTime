@@ -8,7 +8,10 @@ import { useDispatch } from 'react-redux'
 import { useFetchHistoryList } from 'view/Account/hooks/walletInfo';
 
 const CountBox = styled(Box)`
-min-width: 30vw;
+  width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 600px;
+  }
 `
 const Table = styled(Flex)`
 flex-direction: column;
@@ -43,7 +46,7 @@ const ItemText = styled(Text)`
 `
 const ScrollBox = styled(Table)`
 min-height:200px;
-max-height: 500px;
+max-height: 400px;
 overflow-y: auto;
 width: 100%;
 `
