@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux'
 import { useWeb3React } from '@web3-react/core';
 import { BIG_TEN } from 'utils/bigNumber';
-import { splitThousandSeparator } from 'utils/formatBalance';
+import { getFullDisplayBalance } from 'utils/formatBalance';
 import { useDpWd } from '../../../hooks/walletInfo';
 import Dots from 'components/Loader/Dots';
 import { useStore } from 'store';
@@ -152,7 +152,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   return (
     <CountBox>
       <Flex justifyContent="end" mb='12px'>
-        <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {splitThousandSeparator(type === 1 ? balance : Number(withdrawalBalance))}</Text>
+        <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {getFullDisplayBalance(type === 1 ? new BigNumber(balance) : new BigNumber(Number(withdrawalBalance)), 0)}</Text>
       </Flex>
       <InputBox mb='26px'>
         <MyInput

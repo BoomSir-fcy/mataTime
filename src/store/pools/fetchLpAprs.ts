@@ -66,9 +66,11 @@ const culAprHandle = (culFarm: CulFarm, eveSales: EveDonate) => {
   console.log(totalDonate.toString(), 'totalDonate 捐赠总产出')
 
   return Object.values(culFarm).map(item => {
+    const thePoolDonate = totalDonate.times(item.allocPoint).div(totalMul)
+    console.log(thePoolDonate.toFixed(0), item.pid)
     return {
       ...item,
-      fourRealAmount: totalDonate.times(item.allocPoint).div(totalMul).times(6).times(365).times(100).toNumber()
+      fourRealAmount: thePoolDonate.times(6).times(365).times(100).toNumber()
     }
   })
 }
