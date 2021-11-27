@@ -65,6 +65,7 @@ export type Gradients = {
   cardHeader: string;
   blue: string;
   violet: string;
+  tags: string;
   violetAlt: string;
   gold: string;
 };
