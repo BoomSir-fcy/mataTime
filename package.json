@@ -91,7 +91,7 @@
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.5",
     "react-refresh": "^0.8.3",
-    "react-router-dom": "^5.3.0",
+    "react-router-dom": "^5.2.0 ",
     "react-toastify": "^8.0.3",
     "react-transition-group": "^4.4.2",
     "react-window": "^1.8.6",

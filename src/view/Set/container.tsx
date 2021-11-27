@@ -79,7 +79,7 @@ export const Container = props => {
               <Search />
               <Swap />
               <RecommendPeople />
-              <HotTopic />
+              <HotTopic {...props} />
               <FooterCopyright />
             </>
           </Affix>

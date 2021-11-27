@@ -229,14 +229,14 @@ const Profile: React.FC<any> = props => {
                 <Text className="value"> {profile.post_num}</Text>
               </Text>
             </Flex>
-            <Flex className="topic">
+            {/* <Flex className="topic">
               <Text className="text">{t('meActiveTopic')}</Text>
               {profile?.label_list.map((row: string, index: number) => (
                 <Button variant="secondary" key={index}>
                   #{row}
                 </Button>
               ))}
-            </Flex>
+            </Flex> */}
           </Content>
         </ProfileInfo>
       </ProfileCard>
