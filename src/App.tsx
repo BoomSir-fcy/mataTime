@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import moment from 'moment';
 import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { IM } from 'utils';
+import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
-import { CommonLayout, Toast } from 'components';
+import { CommonLayout, ToastComponents } from 'components';
 // WalletModal
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
@@ -19,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import history from './routerHistory';
 import useAuth from './hooks/useAuth';
+import AccountUpdater from './view/Updater/AccountUpdater';
 
 moment.locale('zh-cn');
 
@@ -43,120 +45,96 @@ const Container = styled(Box)<{
         : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed; */
-  background-color: ${({ theme }) => theme.colors.backgroundCard};
+  background-color: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
 `;
 
 function App() {
   useEagerConnect();
   const dispatch = useDispatch();
-  const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   const [ConnectAddr, setConnectAddr] = useState('0');
   const { signOut } = useAuth();
 
-  // 查询是否切换账户
-  const isChangeAddr = () => {
-    if (ConnectAddr === '0') {
-      // 赋值初始化地址
-      setConnectAddr(account);
-    } else if (ConnectAddr !== account) {
-      // 切换了地址就清除数据 重新登陆
-      signOut();
-    }
-  };
-
-  // 消息通知
-  const newsNotice = () => {
-    // 用于检查浏览器是否支持这个API。
-    if (window.Notification) {
-      // 支持
-    } else {
-      // 不支持
-    }
-
-    // 检查当前浏览器是否支持Notification对象，并且当前用户准许使用该对象，然后调用Notification.requestPermission方法，向用户弹出一条通知
-    if (window.Notification && Notification.permission !== 'denied') {
-      Notification.requestPermission(function (status) {
-        var n = new Notification('通知标题', { body: '这里是通知内容！' });
-      });
-    }
-
-    // Notification.requestPermission方法用于让用户做出选择，到底是否接收通知。它的参数是一个回调函数，该函数可以接收用户授权状态作为参数。
-    Notification.requestPermission(function (status) {
-      if (status === 'granted') {
-        var n = new Notification('Hi!');
-        console.log('n', n);
-      } else {
-        alert('Hi!');
-      }
+  const initSocket = () => {
+    let im = new IM({
+      url: 'ws://192.168.101.112:8888/v1/ws',
+      token: token
     });
+    im.init();
   };
 
-  useEffect(() => {
-    if (store.connectWallet) {
-      const changeHandler = () => {
-        dispatch(storeAction.connectWallet({ connectWallet: false }));
-      };
-      document.body.addEventListener('click', changeHandler);
-      return () => document.body.removeEventListener('click', changeHandler);
-    }
-  }, [store.connectWallet]);
+  React.useEffect(() => {
+    // initSocket();
+  }, []);
+
+  // 查询是否切换账户
+  // const isChangeAddr = () => {
+  //   if (ConnectAddr === '0') {
+  //     // 赋值初始化地址
+  //     setConnectAddr(account);
+  //   } else if (ConnectAddr !== account) {
+  //     // 切换了地址就清除数据 重新登陆
+  //     signOut();
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (store.connectWallet) {
+  //     const changeHandler = () => {
+  //       dispatch(storeAction.connectWallet({ connectWallet: false }));
+  //     };
+  //     document.body.addEventListener('click', changeHandler);
+  //     return () => document.body.removeEventListener('click', changeHandler);
+  //   }
+  // }, [store.connectWallet]);
 
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
-  }, [token]);
+  }, [token, dispatch]);
 
-  useEffect(() => {
-    if (account) {
-      // 1.1判断链接钱包后是否切换了钱包账户
-      isChangeAddr();
-    } else {
-      if (ConnectAddr !== '0') {
-        signOut();
-      }
-    }
-    return () => {};
-  }, [account]);
+  // useEffect(() => {
+  //   if (account) {
+  //     // 1.1判断链接钱包后是否切换了钱包账户
+  //     isChangeAddr();
+  //   } else {
+  //     if (ConnectAddr !== '0') {
+  //       signOut();
+  //     }
+  //   }
+  //   return () => { };
+  // }, [account]);
 
   return (
     <Router history={history}>
       <GlobalStyle />
       <Container id="bg" dark={isDark}>
         <React.Suspense fallback={<PageLoader />}>
+          <AccountUpdater />
           <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
+            <Route path="/login" exact component={Login} />
             <Route
               path="/topicList/:id/:name"
-              exact
               render={props => <Home {...props} />}
             />
-            {process.env.NODE_ENV === 'development' && (
-              <Route path="/test" exact>
-                <Test />
-              </Route>
-            )}
             <Route
               path="/articleDetils/:id"
-              exact
-              render={props => (
-                <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
-              )}
-            ></Route>
-            <Route
-              path="/news"
-              render={props => <CommonLayout {...props}></CommonLayout>}
-            ></Route>
-            <Route path="/login" exact component={Login} />
+              render={props => <ArticleDetilsLayout {...props} />}
+            />
+            <Route path="/news" render={props => <CommonLayout {...props} />} />
             <Route path="/exchange" component={Exchange} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
+            {process.env.NODE_ENV === 'development' && (
+              <Route path="/test" componen={Test} />
+            )}
           </Switch>
         </React.Suspense>
       </Container>
-      <Toast />
+      <ToastComponents />
     </Router>
   );
 }

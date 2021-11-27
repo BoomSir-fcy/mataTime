@@ -11,6 +11,7 @@ import { useTranslation } from 'contexts/Localization';
 const NoticeSetBox = styled(Card)`
   height: 700px;
   padding: 27px 0;
+  background-color: transparent;
 `;
 const Title = styled.div`
   text-transform: capitalize;

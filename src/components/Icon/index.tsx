@@ -11,6 +11,8 @@ interface iocnType {
 }
 export const Icon = (props: iocnType) => {
   const { size, name, color, bold, margin, style = {}, cur } = props;
+  const cursor = cur ? 1 : 0;
+
   return (
     <i
       className={classnames('iconfont ' + name)}
@@ -19,14 +21,15 @@ export const Icon = (props: iocnType) => {
         fontSize: size || 20,
         color: color || '#fff',
         margin: margin || '0',
-        cursor: cur ? 'pointer' : '',
+        cursor: Boolean(cur) ? 'pointer' : '',
         fontWeight: bold ? 'bold' : '',
         ...style
       }}
       {...props}
-      ></i>
+    ></i>
   );
 };
+
 Icon.defaultProps = {
   // onClick: () => {}
 };

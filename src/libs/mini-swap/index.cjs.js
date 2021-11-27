@@ -506,7 +506,7 @@ var Live = "实时";
 var Start = "开始";
 var Finish = "完成";
 var Enable = "启用";
-var Enabling = "正在启用";
+var Enabling = "启用";
 var Expired = "已过期";
 var Calculating = "正在计算";
 var All = "全部";
@@ -532,7 +532,7 @@ var Input$4 = "输入";
 var Output = "输出";
 var From = "从";
 var To = "到";
-var Swap$1 = "交换";
+var Swap$1 = "兑换";
 var Audio$1 = "音频";
 var minutes = "分钟";
 var Manage$1 = "管理";
@@ -663,7 +663,7 @@ var translationsZhCN = {
 	"or the transaction will revert.": "否则您的交易将被撤回。",
 	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "正在供应 %amountA% %symbolA% 和 %amountB% %symbolB%",
 	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "正在移除 %amountA% %symbolA% 和 %amountB% %symbolB%",
-	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 交换为 %amountB% %symbolB%",
+	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在将 %amountA% %symbolA% 兑换为 %amountB% %symbolB%",
 	"Add Liquidity": "增加流动性",
 	"Add liquidity to receive LP tokens": "增加流动性以接收 LP 代币",
 	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "流动性供应商将对该代币对的所有交易赚取 0.1% 的交易费，与他们在流动性资金池中的份额成正比。",
@@ -682,7 +682,7 @@ var translationsZhCN = {
 	Rates: Rates,
 	"Create Pool & Supply": "创建资金池和供应",
 	"Confirm Supply": "确认供应",
-	"Confirm Swap": "确认交换",
+	"Confirm Swap": "确认兑换",
 	"Connect to a wallet to view your liquidity.": "连接到钱包以查看您的流动性。",
 	"Connect to a wallet to find pools": "连接到钱包以查找资金池",
 	"Select a token to find your liquidity.": "选择代币以查找您的流动性。",
@@ -722,7 +722,7 @@ var translationsZhCN = {
 	"Try enabling multi-hop trades.": "尝试启用多跳交易。",
 	"Price Impact High": "价格影响较高",
 	Swap: Swap$1,
-	"Swap Anyway": "仍要交换",
+	"Swap Anyway": "仍要兑换",
 	"Recent Transactions": "最近的交易",
 	"clear all": "全部清除",
 	"Clear all": "全部清除",
@@ -736,9 +736,9 @@ var translationsZhCN = {
 	"Toggle Expert Mode": "切换专家模式",
 	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "绕过确认模式并允许高滑点交易。使用风险自负。",
 	"Disable Multihops": "禁用多跳",
-	"Restricts swaps to direct pairs only.": "将交换限制为仅限直接币对。",
+	"Restricts swaps to direct pairs only.": "将兑换限制为仅限直接币对。",
 	Audio: Audio$1,
-	"🐰 Turn down your volume a bit before you swap": "🐰 在您交换之前略微调低音量",
+	"🐰 Turn down your volume a bit before you swap": "🐰 在您兑换之前略微调低音量",
 	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果价格变动幅度超过此百分比，您的交易将被撤回。",
 	"Enter a valid slippage percentage": "输入有效的滑点百分比",
 	"Your transaction may fail": "您的交易可能会失败",
@@ -11408,8 +11408,8 @@ var templateObject_1$l, templateObject_2$d, templateObject_3$7;
 
 var QuestionWrapper = styled__default["default"].div(templateObject_1$k || (templateObject_1$k = tslib.__makeTemplateObject(["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"], ["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"])));
 var QuestionHelper = function (_a) {
-    var text = _a.text, _b = _a.color, color = _b === void 0 ? "textSubtle" : _b, _c = _a.placement, placement = _c === void 0 ? 'right-end' : _c, props = tslib.__rest(_a, ["text", "color", "placement"]);
-    var _d = useTooltip(text, { placement: placement, trigger: 'hover' }), targetRef = _d.targetRef, tooltip = _d.tooltip, tooltipVisible = _d.tooltipVisible;
+    var text = _a.text, _b = _a.color, color = _b === void 0 ? "textSubtle" : _b, _c = _a.trigger, trigger = _c === void 0 ? 'hover' : _c, _d = _a.placement, placement = _d === void 0 ? 'right-end' : _d, props = tslib.__rest(_a, ["text", "color", "trigger", "placement"]);
+    var _e = useTooltip(text, { placement: placement, trigger: trigger }), targetRef = _e.targetRef, tooltip = _e.tooltip, tooltipVisible = _e.tooltipVisible;
     return (jsxRuntime.jsxs(Box, tslib.__assign({}, props, { children: [tooltipVisible && tooltip, jsxRuntime.jsx(QuestionWrapper, tslib.__assign({ ref: targetRef }, { children: jsxRuntime.jsx(Icon$5, { color: color, width: "16px" }, void 0) }), void 0)] }), void 0));
 };
 var templateObject_1$k;
@@ -12373,7 +12373,7 @@ function AdvancedSwapDetails(_a) {
     return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "0px" }, { children: [isPolyMethed && (jsxRuntime.jsx(TradeSummaryPloy, { polyData: polyData }, void 0)), (trade && !isPolyMethed) && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(TradeSummary, { trade: trade, allowedSlippage: allowedSlippage }, void 0), showRoute && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ style: { padding: '0' } }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ minWidth: "80px" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Route') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t("Routing through these tokens resulted in the best price for your trade."), ml: "4px", placement: "top-start" }, void 0)] }), void 0), jsxRuntime.jsx(SwapRoute, { isPolyMethed: isPolyMethed, polyData: polyData, trade: trade }, void 0)] }), void 0) }, void 0))] }, void 0))] }), void 0));
 }
 
-var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 || (templateObject_1$6 = tslib.__makeTemplateObject(["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  transform: ", ";\n  max-height: ", ";\n  overflow: hidden;\n  transition: transform 300ms ease-in-out;\n"], ["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  transform: ", ";\n  max-height: ", ";\n  overflow: hidden;\n  transition: transform 300ms ease-in-out;\n"])), function (_a) {
+var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 || (templateObject_1$6 = tslib.__makeTemplateObject(["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"], ["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"])), function (_a) {
     var show = _a.show;
     return (show ? '0' : 0);
 }, function (_a) {
@@ -12385,13 +12385,16 @@ var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 ||
 }, function (_a) {
     var show = _a.show;
     return (show ? 'auto' : '60px');
+}, function (_a) {
+    var show = _a.show;
+    return (show ? 'visible' : 'hide');
 });
 function AdvancedSwapDetailsDropdown(_a) {
     var _b;
     var trade = _a.trade, isPolyMethed = _a.isPolyMethed, polyData = _a.polyData, rest = tslib.__rest(_a, ["trade", "isPolyMethed", "polyData"]);
     var lastTrade = useLastTruthy(trade);
     var show = Boolean(isPolyMethed ? polyData : trade);
-    return (jsxRuntime.jsx(AdvancedDetailsFooter, tslib.__assign({ show: show }, { children: jsxRuntime.jsx(AdvancedSwapDetails, tslib.__assign({}, rest, { isPolyMethed: isPolyMethed, polyData: polyData, trade: (_b = trade !== null && trade !== void 0 ? trade : lastTrade) !== null && _b !== void 0 ? _b : undefined }), void 0) }), void 0));
+    return (jsxRuntime.jsx(AdvancedDetailsFooter, tslib.__assign({ show: show }, { children: show && jsxRuntime.jsx(AdvancedSwapDetails, tslib.__assign({}, rest, { isPolyMethed: isPolyMethed, polyData: polyData, trade: (_b = trade !== null && trade !== void 0 ? trade : lastTrade) !== null && _b !== void 0 ? _b : undefined }), void 0) }), void 0));
 }
 var templateObject_1$6;
 

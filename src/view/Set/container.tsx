@@ -24,12 +24,14 @@ const LeftCard = styled(Flex)`
   overflow: auto;
 `;
 const CenterCard = styled(Box)`
+  flex: 1;
   width: 670px;
+  margin: 0 15px;
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 const RightCard = styled(Flex)`
-  flex: 1;
+  width: 300px;
   height: 100vh;
   position: relative;
   overflow: auto;
@@ -77,7 +79,7 @@ export const Container = props => {
               <Search />
               <Swap />
               <RecommendPeople />
-              <HotTopic />
+              <HotTopic {...props} />
               <FooterCopyright />
             </>
           </Affix>

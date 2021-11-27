@@ -123,15 +123,20 @@ export const FetchSupportNFT = async () => {
     return [];
   }
 };
+
+// 获取质押的nft
 export const useFetchSupportNFT = () => {
   const dispatch = useDispatch();
+  const { account } = useWeb3React();
+
   const addr = useCallback(async () => {
     const add = await FetchSupportNFT();
     dispatch(storeAction.setNftAddr(add));
   }, [dispatch]);
+
   useEffect(() => {
     addr();
-  }, [addr]);
+  }, [account, addr]);
 };
 // 获取Nft头像质押情况
 export const FetchNftStakeType = async account => {
@@ -159,10 +164,10 @@ export const FetchNftStakeType = async account => {
 export const useFetchNftList = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
-  const profile = useStore(p => p.loginReducer.userInfo);
-  let address = account ? account : profile.address;
+  // const profile = useStore(p => p.loginReducer.userInfo);
+  // let address = account ? account : profile.address;
   useEffect(() => {
-    dispatch(fetchUserNftInfoAsync(address));
+    dispatch(fetchUserNftInfoAsync(account));
   }, [dispatch, account]);
 };
 

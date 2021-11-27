@@ -14,6 +14,7 @@ import { languages } from 'config/localization';
 const NoticeSetBox = styled(Card)`
   height: 700px;
   padding: 27px 0;
+  background-color: transparent;
 `;
 const Title = styled.div`
   color: ${({ theme }) => theme.colors.white_black};

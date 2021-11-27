@@ -33,6 +33,7 @@ const Center = styled(Box)`
 const ProfileCard = styled(Card)`
   position: relative;
   overflow: visible;
+  background-color: transparent;
 `;
 const HeadTop = styled(Box)`
   width: 100%;
@@ -154,7 +155,7 @@ const Profile: React.FC<any> = props => {
   };
 
   React.useEffect(() => {
-    init();
+    init(1);
   }, [uid]);
 
   return (
@@ -228,14 +229,14 @@ const Profile: React.FC<any> = props => {
                 <Text className="value"> {profile.post_num}</Text>
               </Text>
             </Flex>
-            <Flex className="topic">
+            {/* <Flex className="topic">
               <Text className="text">{t('meActiveTopic')}</Text>
               {profile?.label_list.map((row: string, index: number) => (
                 <Button variant="secondary" key={index}>
                   #{row}
                 </Button>
               ))}
-            </Flex>
+            </Flex> */}
           </Content>
         </ProfileInfo>
       </ProfileCard>

@@ -4,6 +4,7 @@ import { useTranslation } from 'contexts/Localization'
 import { Header, CommonLeftMenu, Affix } from 'components';
 import { HotTopic, RecommendPeople, Search, Swap, FooterCopyright } from 'view/Home/right';
 import { Header as CenterHeader } from 'view/Home/center'
+import { Flex, Box } from 'uikit';
 import menu from './menuData';
 import {
   CommonLayoutWrapper,
@@ -34,52 +35,49 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
     <CommonLayoutWrapper>
       {/* <Header></Header> */}
       <LayoutContentWrapper>
-        <Affix offsetTop={100} positionObj={{
-          top: '10px',
-          left: '50%',
-          marginLeft: '-550px'
-        }}>
+        <Flex justifyContent="space-between" width="100%">
+
           <LayoutLeftWrapper>
-            <CommonLeftMenu
-              menu={menu[match.url]}
-              route={location}
-              {...props}
-            />
+            <Affix offsetTop={0} positionObj={{}}>
+              <CommonLeftMenu
+                menu={menu[match.url]}
+                route={location}
+                {...props}
+              />
+            </Affix>
           </LayoutLeftWrapper>
-        </Affix>
-        <LayoutMiddleWrapper>
-          {
-            props.location.pathname!=='/news/praise'?
-            <CenterHeader title={t('newsNotice')}></CenterHeader>
-            :null
-          }
-          <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
-          <Route path={'/news/me'} render={(props) => {
-            return (<NewsMe {...props} />)
-          }}></Route>
-          <Route path={'/news/comment'} render={(props) => {
-            return (<NewsComment {...props} />)
-          }}></Route>
-          <Route path={'/news/praise'} render={(props) => (
+
+          <LayoutMiddleWrapper>
+            {
+              props.location.pathname !== '/news/praise' ?
+                <CenterHeader title={t('newsNotice')}></CenterHeader>
+                : null
+            }
+            <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
+            <Route path={'/news/me'} render={(props) => {
+              return (<NewsMe {...props} />)
+            }}></Route>
+            <Route path={'/news/comment'} render={(props) => {
+              return (<NewsComment {...props} />)
+            }}></Route>
+            <Route path={'/news/praise'} render={(props) => (
               <NewsPraise></NewsPraise>
-          )}></Route>
-          <Route path={'/news/notice'} component={NewsNotice}></Route>
-        </LayoutMiddleWrapper>
-        <Affix offsetTop={100} positionObj={{
-          top: '10px',
-          right: '50%',
-          marginRight: '-660px'
-        }}>
+            )}></Route>
+            <Route path={'/news/notice'} component={NewsNotice}></Route>
+          </LayoutMiddleWrapper>
+
           <LayoutRightWrapper>
-            <>
-              <Search />
-              <Swap />
-              <RecommendPeople />
-              <HotTopic />
-              <FooterCopyright />
-            </>
+            <Affix offsetTop={100} positionObj={{}}>
+              <>
+                <Search />
+                <Swap />
+                <RecommendPeople />
+                <HotTopic />
+                <FooterCopyright />
+              </>
+            </Affix>
           </LayoutRightWrapper>
-        </Affix>
+        </Flex>
 
       </LayoutContentWrapper>
     </CommonLayoutWrapper>

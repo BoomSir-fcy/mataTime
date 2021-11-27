@@ -25,6 +25,7 @@ const LeftCard = styled(Flex)`
 `;
 const CenterCard = styled(Box)`
   flex: 1;
+  width: 670px;
   margin: 0 15px;
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -79,6 +80,7 @@ const menuArr = [
 export const Container = props => {
   useLocation();
   const index = props.location.pathname.indexOf('/me/profile');
+
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
@@ -94,7 +96,7 @@ export const Container = props => {
               <Search />
               <Swap />
               <RecommendPeople />
-              <HotTopic />
+              <HotTopic {...props} />
               <FooterCopyright />
             </>
           </Affix>

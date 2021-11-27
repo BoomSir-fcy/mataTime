@@ -35,7 +35,7 @@ export const lightColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   white: 'white',
-  background: '#FAF9FA',
+  background: '#FFF',
   backgroundPage: '#f5fdfc',
   backgroundLight: '#F6FFF0',
   backgroundSelect: '#ceece7',
@@ -43,7 +43,7 @@ export const lightColors: Colors = {
   backgroundPrimary: '#4168ED',
   backgroundMember: '#85C559',
   backgroundThemeCard: '#1E2535',
-  backgroundCard: '#FFFFFF',
+  backgroundCard: '#FAFCFF',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#EAF2FF',
   backgroundMenu: '#EAF2FF',
@@ -85,6 +85,9 @@ export const lightColors: Colors = {
     violetAlt: 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
   },
+  shadow: {
+    box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)'
+  },
   editorText: '#000',
   editorBoxBg: '#fff',
   searchTopicBg: '#fff',
@@ -100,7 +103,7 @@ export const darkColors: Colors = {
   ...nftTokenColors,
   white: 'white',
   secondary: '#9A6AFF',
-  background: '#08060B',
+  background: '#191F2D',
   backgroundPage: '#0B1513',
   backgroundLight: '#334542',
   backgroundSelect: '#4168ED',
@@ -108,7 +111,7 @@ export const darkColors: Colors = {
   backgroundPrimary: '#4168ED',
   backgroundMember: 'rgba(49, 64, 111, 0.5)',
   backgroundThemeCard: '#1E2535',
-  backgroundCard: '#191F2D',
+  backgroundCard: '#1E2535',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#292D34',
   backgroundMenu: '#232A3D',
@@ -150,6 +153,9 @@ export const darkColors: Colors = {
     violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
     violetAlt: 'linear-gradient(180deg, #434575 0%, #66578D 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
+  },
+  shadow: {
+    box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)'
   },
   editorText: '#FFFFFF',
   editorBoxBg: '#191f2d',

@@ -28,7 +28,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
 
-  const { children, data, callback = () => {} } = props;
+  const { children, data, callback = () => { } } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [editShow, setEditShow] = useState<boolean>(false);
@@ -83,6 +83,29 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false);
   };
 
+  const parseComments = value => {
+    let topic = '';
+    value.replace(/[#＃][^#＃]+[#＃]/g, word => {
+      console.log(word);
+      topic = word.slice(1).slice(0, -1);
+    });
+    return topic;
+  };
+
+  let arr = [];
+  const render = newarr => {
+    let len = newarr.length;
+    for (let i = 0; i < len; i++) {
+      if (newarr[i].text) {
+        arr.push(newarr[i].text);
+      }
+      if (newarr[i].children?.length > 0) {
+        render(newarr[i].children);
+      }
+    }
+    return arr;
+  };
+
   // 分享到Twitter
   const onShareTwitterClick = () => {
     let context = [];
@@ -93,10 +116,14 @@ export const MorePopup = React.memo((props: Iprops) => {
     } catch (err) {
       console.log(err);
     }
-    const text = context[0]?.children[0]?.text || '';
-    const url = `${window.location.origin}/${window.location.hash}articleDetils/${data.post.post_id}`;
+
+    const text = render(context).join('');
+    const url = `${window.location.origin}/articleDetils/${data.post.post_id}`;
     window.open(
-      `https://twitter.com/intent/tweet?text=${text}&url=${url}&hashtags=Metatime`
+      `https://twitter.com/intent/tweet?text=${text.replace(
+        /#/g,
+        ''
+      )}&hashtags=${parseComments(text)}&url=${url}`
     );
     setVisible(false);
   };
@@ -148,32 +175,41 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false);
   };
   useEffect(() => {
-    const fn = (e)=>{
-      setVisible(false)
+    const fn = e => {
+      setVisible(false);
+    };
+    document.addEventListener('click', fn);
+    initEvent();
+    return () => document.removeEventListener('click', fn);
+  }, []);
+
+  const initEvent = () => {
+    document.onclick = () => {
+      console.log('123', visible)
     }
-    document.addEventListener('click',fn)
-    return ()=>document.removeEventListener('click',fn)
-  })
+  }
+
   return (
     <>
-        {/* onMouseOver={(e: any) => {
+      <PopupWrapper
+        onMouseOver={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(true);
         }}
         onMouseLeave={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(false);
-        }} */}
-      <PopupWrapper
+        }}
+      >
+        {/* <PopupWrapper
         onClick={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(!visible);
         }}
-      >
+      > */}
         {children}
         {visible ? (
-          <PopupContentWrapper
-          >
+          <PopupContentWrapper id="more-popup-content">
             {/* onMouseLeave={(e: any) => {
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
               setVisible(false);
@@ -219,8 +255,8 @@ export const MorePopup = React.memo((props: Iprops) => {
               onClick={() => {
                 copyContent(
                   process.env.REACT_APP_WEB_URL +
-                    '/articleDetils/' +
-                    data.post.post_id || ''
+                  '/articleDetils/' +
+                  data.post.post_id || ''
                 );
               }}
             >
