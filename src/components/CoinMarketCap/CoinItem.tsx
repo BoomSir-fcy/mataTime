@@ -4,7 +4,7 @@ import { useTranslation } from 'contexts/Localization';
 import { Box, Flex, Image, Text, RefreshRingIcon, BalanceText } from 'uikit';
 import QuestionHelper from '../QuestionHelper';
 
-const CoinItemStyled = styled(Flex)<{
+const CoinItemStyled = styled(Flex) <{
   fillClickArea?: boolean;
   isActive?: boolean;
 }>`
@@ -48,10 +48,12 @@ const CoinItem: React.FC<CoinItemProps> = ({
     event.stopPropagation();
   };
 
-  const currentPrice = useMemo(() => {
-    if (!Number(coinInfo?.current_price)) return 0;
-    return Number(coinInfo?.current_price);
+  const [currentPrice, decimals] = useMemo(() => {
+    // 获取价格及小数位数显示
+    if (!Number(coinInfo?.current_price)) return [0, 0];
+    return [Number(coinInfo?.current_price), Number(coinInfo?.current_price?.split('.')[1]?.length) || 0];
   }, [coinInfo?.current_price]);
+
 
   return (
     <CoinItemStyled
@@ -109,7 +111,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
                 bold
                 color="textPrimary"
                 value={currentPrice}
-                decimals={0}
+                decimals={decimals}
               />
             ) : (
               <Text bold color="primary" fontSize="18px" textAlign="right">
