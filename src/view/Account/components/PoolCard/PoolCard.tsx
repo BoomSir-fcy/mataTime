@@ -40,7 +40,7 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
               <Text bold color="textPrimary">{formatDisplayApr(poolApr?.totalApr)}%</Text>
             </Box>
             <Box>
-              <Text color="textTips">周期</Text>
+              <Text color="textTips">锁仓时间</Text>
               <Timer bold color="white_black" itemMr="6px" minutes={minutes} hours={hours} days={days} />
             </Box>
             <Box>

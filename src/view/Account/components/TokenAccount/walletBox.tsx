@@ -6,7 +6,7 @@ import { ModalWrapper } from 'components'
 import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import HistoryModal from './Pops/HistoryModal';
 import { Api } from 'apis';
-import { splitThousandSeparator } from 'utils/formatBalance';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 
 const Content = styled(Box)`
@@ -100,15 +100,15 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
         <Info>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount>平台余额</Fount>
-            <NumText>{splitThousandSeparator(Number(BalanceInfo.available_balance))}</NumText>
+            <NumText>{formatDisplayApr(Number(BalanceInfo.available_balance))}</NumText>
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
             <Fount>今日收入</Fount>
-            <NumText>{splitThousandSeparator(0)}</NumText>
+            <NumText>{formatDisplayApr(0)}</NumText>
           </Flex>
           <Flex style={{ textAlign: 'right' }} flexDirection='column' justifyContent='space-between'>
             <Fount>钱包余额</Fount>
-            <NumText>{splitThousandSeparator(Balance)}</NumText>
+            <NumText>{formatDisplayApr(Balance)}</NumText>
           </Flex>
         </Info>
       </TopInfo>
@@ -119,7 +119,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
       <Flex justifyContent='space-between'>
         <Flex flexDirection='column' justifyContent='space-between'>
           <Fount >冻结金额</Fount>
-          <NumText>{splitThousandSeparator(Number(BalanceInfo.freeze_balance))}</NumText>
+          <NumText>{formatDisplayApr(Number(BalanceInfo.freeze_balance))}</NumText>
         </Flex>
         <Flex justifyContent='end' alignItems='center'>
           <RechargeBtn mr='20px' onClick={() => openModaal(1)}>充值</RechargeBtn>

@@ -14,7 +14,10 @@ import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
 import { toast } from 'react-toastify';
 
 const CountBox = styled(Box)`
-min-width: 20vw;
+  width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 410px;
+  }
 `
 const InputBox = styled(Flex)`
 position: relative;
