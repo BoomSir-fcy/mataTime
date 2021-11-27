@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Flex, Box, Text, Card, Button, InputPanel, Input } from 'uikit';
+import BigNumber from 'bignumber.js';
+import styled from 'styled-components';
+import { toast } from 'react-toastify'
 import { Container } from 'components'
+import { Flex, Box, Text, Card, Button, InputPanel, Input } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import Dots from 'components/Loader/Dots';
-import styled from 'styled-components';
-import BigNumber from 'bignumber.js';
 import { getFullDisplayBalance, formatDisplayBalance } from 'utils/formatBalance';
 
 
@@ -69,7 +70,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <Flex alignItems="center" justifyContent="space-between">
           <Text bold fontSize="18px">{depositSymbol}</Text>
           <Flex alignItems="center">
-            <Text fontSize="14px" color="textTips">Balance:</Text>
+            <Text fontSize="14px" color="textTips">{t('Balance')}:</Text>
             <Button onClick={handleSelectMax} ml="4px" height="auto" padding="0" variant="text">
               <Text fontSize="14px" color="textTips"> {displayFullBalance}</Text>
             </Button>
@@ -86,7 +87,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
             onChange={handleChange}
           />
           <Button onClick={handleSelectMax} padding="0" variant="text">
-            <Text color="backgroundPrimary">Max</Text>
+            <Text color="backgroundPrimary">{t('Max')}</Text>
           </Button>
         </Flex>
       </InputPanel>
@@ -98,12 +99,15 @@ const StakeModal: React.FC<StakeModalProps> = ({
             try {
               await onConfirm(val)
               onDismiss()
-              // toastSuccess(t('Staked!'), t('Your funds have been staked in the pool'))
+              toast.success(<>
+                <Text>{t('Staked!')}</Text>
+                <Text>{t('Your funds have been staked in the pool!')}</Text>
+              </>)
             } catch (e) {
-              // toastError(
-              //   t('Error'),
-              //   t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-              // )
+              toast.error(<>
+                <Text>{t('Error')}</Text>
+                <Text>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+              </>)
               console.error(e)
             } finally {
               setPendingTx(false)
@@ -118,11 +122,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           }
         </Button>
       </Flex>
-      <Text mt="12px" textAlign="center" fontSize="14px" color="textTips">*质押物时间到期后可取出</Text>
-      {/* <Text mt="8px" textAlign="center" fontSize="14px" color="textTips">
-        预计到期时间：
-        <Text color="orange" fontSize="14px" as="span">2020年02月20号</Text>
-      </Text> */}
+      <Text mt="12px" textAlign="center" fontSize="14px" color="textTips">*{t('The pledge can be taken out after the expiration of the time')}</Text>
     </StakeModalBox>
   )
 }

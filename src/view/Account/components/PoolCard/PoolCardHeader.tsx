@@ -19,10 +19,8 @@ const CardTipsStyled = styled(Card)`
   top: 0;
   right: 0;
   border-radius: ${({ theme }) => `0 ${theme.radii.card} 0 20px`};
-  /* border-radius: ${({ theme }) => `0 ${theme.radii.card} 0 ${theme.radii.card}`}; */
-  background: ${({ theme }) => theme.colors.primary};
   width: 30%;
-  background: linear-gradient(90deg, #5B3CE0, #5A7EFA);
+  background: ${({ theme }) => theme.colors.gradients.footer};
   min-width: 150px;
   &::after{
     content: '';
@@ -76,7 +74,7 @@ const PoolCardHeader: React.FC<PoolCardHeader> = ({
         </Flex>
       </ContainerStyled>
       <CardTipsStyled>
-        <TextTipsStyled textAlign="center" color="white_black">赚取 {rewardToken0Symbol}
+        <TextTipsStyled textAlign="center" color="white">{t('Earn')} {rewardToken0Symbol}
           &#38;
           {rewardToken1Symbol}</TextTipsStyled>
       </CardTipsStyled>

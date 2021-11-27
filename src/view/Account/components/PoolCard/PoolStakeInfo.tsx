@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Text, Card, Button, Heading, Skeleton } from 'uikit';
 import { UserData } from 'store/pools/types';
+import { useTranslation } from 'contexts/Localization';
 import BigNumber from 'bignumber.js';
 import { TokenPairImage, TokenImage } from 'components';
 import { Container, ModalWrapper } from 'components'
@@ -54,6 +55,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
   dispalyToken1Rewards,
   children
 }) => {
+  const { t } = useTranslation()
 
   return (
     <Box>
@@ -61,7 +63,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
         <Flex alignItems="center" flex="1">
           <TokenImage tokenAddress={depositToken} width={36} height={36} />
           <Box ml="8px">
-            <Text fontSize="14px" color="textTips">总质押的 {depositSymbol}</Text>
+            <Text fontSize="14px" color="textTips">{t('Your staked')} {depositSymbol}</Text>
             {
               stakeAmount.isFinite()
                 ?
@@ -77,7 +79,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
         <Flex alignItems="center" flex="1">
           <TokenImage tokenAddress={rewardToken0} width={36} height={36} />
           <Box ml="8px">
-            <Text fontSize="14px" color="textTips">总收益的 {rewardToken0Symbol}</Text>
+            <Text fontSize="14px" color="textTips">{t('Rewards')} {rewardToken0Symbol}</Text>
             {
               token0UnclaimedRewards.isFinite()
                 ?
@@ -89,7 +91,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
         </Flex>
         <Flex justifyContent="flex-end" alignItems="center" flex="1">
           <Box mr="8px">
-            <Text fontSize="14px" textAlign="right" color="textTips">总收益的 {rewardToken1Symbol}</Text>
+            <Text fontSize="14px" textAlign="right" color="textTips">{t('Rewards')} {rewardToken1Symbol}</Text>
             {
               token1UnclaimedRewards.isFinite()
                 ?

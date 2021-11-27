@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux'
 import { Flex, Box, Text, Card, Button, Heading, BalanceText } from 'uikit';
+import { toast } from 'react-toastify'
 import { fetchVaultUserAsync } from 'store/pools/thunks';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'contexts/Localization';
@@ -62,8 +63,15 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
       await onHarvest()
       setPendingTx(false)
       dispatch(fetchVaultUserAsync(account))
+      toast.success(<>
+        <Text>{t('Harvested!')}</Text>
+        <Text>{t('Your earnings have been harvested to your wallet')}</Text>
+      </>)
     } catch (error) {
-      console.error(error)
+      toast.error(<>
+        <Text>{t('Error')}</Text>
+        <Text>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+      </>)
       setPendingTx(false)
     }
   }, [onHarvest, dispatch, account])

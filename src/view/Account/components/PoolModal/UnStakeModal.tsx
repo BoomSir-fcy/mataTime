@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Flex, Box, Text, Card, Button, InputPanel, Input } from 'uikit';
 import Dots from 'components/Loader/Dots';
 import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
 import { useTranslation } from 'contexts/Localization';
 import { Container, } from 'components'
 import styled from 'styled-components';
@@ -57,12 +58,15 @@ const UnstakeBtn: React.FC<{
         try {
           await onConfirm(stakingId)
           onDismiss()
-          // toastSuccess(t('Staked!'), t('Your funds have been staked in the pool'))
+          toast.success(<>
+            <Text>{t('Unstaked!')}</Text>
+            <Text>{t('Your earnings have also been harvested to your wallet')}</Text>
+          </>)
         } catch (e) {
-          // toastError(
-          //   t('Error'),
-          //   t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-          // )
+          toast.error(<>
+            <Text>{t('Error')}</Text>
+            <Text>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+          </>)
           console.error(e)
         } finally {
           setPendingTx(false)
@@ -71,9 +75,9 @@ const UnstakeBtn: React.FC<{
       {
         pendingTx
           ?
-          <Dots>{t('正在取出')}</Dots>
+          <Dots>{t('Unstaking')}</Dots>
           :
-          t('取出质押')
+          t('Unstaked!')
       }
     </Button>
   )
@@ -93,7 +97,6 @@ const UnStakeModal: React.FC<UnStakeModalProps> = ({
   rewardToken1Decimals,
   depositDecimals,
 }) => {
-  const [pendingTx, setPendingTx] = useState(false)
   const { t } = useTranslation()
 
   const stakesList = useMemo(() => {
@@ -150,7 +153,7 @@ const UnStakeModal: React.FC<UnStakeModalProps> = ({
                   <UnstakeBtn stakingId={item.stakingId} onConfirm={onConfirm} onDismiss={onDismiss} />
                   :
                   <Box>
-                    <Text textAlign="right">到期时间</Text>
+                    <Text textAlign="right">{t('Ending at')}</Text>
                     <Text textAlign="right">{dayjs(Number(item.unlockTime) * 1000).format('YYYY-MM-DD HH:mm')}</Text>
                   </Box>
               }
