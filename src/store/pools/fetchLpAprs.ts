@@ -53,20 +53,12 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
 }
 
 const culAprHandle = (culFarm: CulFarm, eveSales: EveDonate) => {
-  let totalMul = new BigNumber(0)
-  Object.values(culFarm).forEach(item => {
-    totalMul = totalMul.plus(item.allocPoint)
-  })
-  let totalDonate = new BigNumber(0)
-  Object.values(eveSales).forEach(item => {
-    totalDonate = totalDonate.plus(item)
-  })
-  console.log(totalDonate.toString(), 'totalDonate 捐赠总产出')
 
   return Object.values(culFarm).map(item => {
+    console.log(eveSales[item.pid].toFixed(0), item.pid)
     return {
       ...item,
-      fourRealAmount: totalDonate.times(item.allocPoint).div(totalMul).times(6).times(365).times(100).toNumber()
+      fourRealAmount: eveSales[item.pid].times(6).times(365).times(100).toNumber()
     }
   })
 }

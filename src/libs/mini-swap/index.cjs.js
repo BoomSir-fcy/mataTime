@@ -7574,6 +7574,7 @@ function Updater$3() {
 		blockNumber: null,
 	}), 2), state = _b[0], setState = _b[1];
 	var blockNumberCallback = React.useCallback(function (blockNumber) {
+		console.log(blockNumber, 'blockNumber event')
 		setState(function (prev) {
 			if (chainId === prev.chainId) {
 				if (typeof prev.blockNumber !== 'number')
