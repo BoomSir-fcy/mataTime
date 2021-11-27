@@ -16,6 +16,7 @@ const ButtonStyled = styled(Button)`
 `
 
 interface PoolActionStakeProps {
+  isApproved: boolean
   depositToken: address
   rewardToken0: address
   rewardToken1: address
@@ -31,6 +32,7 @@ interface PoolActionStakeProps {
 }
 
 const PoolActionStake: React.FC<PoolActionStakeProps> = ({
+  isApproved,
   depositToken,
   rewardToken0,
   rewardToken1,
@@ -72,14 +74,14 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
         {...dispalynUserData}
       >
         {
-          userStakesMap[pid] ? (
+          isApproved && (userStakesMap[pid] ? (
             <Flex>
               <Button onClick={() => setVisible(true)}>加仓</Button>
               <Button onClick={() => setVisibleView(true)} ml="12px">查看</Button>
             </Flex>
           )
             :
-            <Button onClick={() => setVisible(true)}>质押</Button>
+            <Button onClick={() => setVisible(true)}>质押</Button>)
         }
       </PoolStakeInfo>
       <ModalWrapper title="质押" creactOnUse visible={visible} setVisible={setVisible}>

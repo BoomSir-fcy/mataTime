@@ -57,12 +57,12 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
           </Box>
           <Box ml="8px">
             <Flex pr="8px" alignItems="center" justifyContent="space-between">
-              <Text bold color="primary" fontSize="18px">{coinInfo?.coin_symbol}</Text>
+              <Text bold color="white_black" fontSize="18px">{coinInfo?.coin_symbol}</Text>
               {showHelp && (
                 <QuestionHelper
                   text={<>
-                    <Text fontSize="14px">{t('Update time:')} {coinInfo?.add_time}</Text>
-                    <Text fontSize="14px">{t('Powered by CoinMarketCap')}</Text>
+                    {/* <Text fontSize="14px">{t('Update time:')} {coinInfo?.add_time}</Text> */}
+                    <Text fontSize="14px">{t('Powered by CoinGecko')}</Text>
                   </>}
                   ml="4px"
                   mr="8px"
@@ -73,7 +73,7 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
               }
               {onTouch && (<StyledTriangle />)}
             </Flex>
-            <Text ellipsis width="120px" color="textTips" fontSize="14px">{coinInfo?.coin_name}</Text>
+            <Text ellipsis width="120px" color="textgrey" fontSize="14px">{coinInfo?.coin_name}</Text>
           </Box>
         </Flex>
         {
@@ -86,7 +86,7 @@ const CoinItem: React.FC<CoinItemProps> = ({ fillClickArea, showHelp, coinInfo, 
                 )
                 :
 
-                <Text bold color="primary" fontSize="18px" textAlign="right">--</Text>
+                <Text bold color="textPrimary" fontSize="18px" textAlign="right">--</Text>
             }
             <Flex>
               {

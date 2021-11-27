@@ -14,7 +14,7 @@ width:50%;
 min-width: 300px;
 background:${({ theme }) => theme.card.background};
 ${({ theme }) => theme.mediaQueriesSize.padding}
-${({ theme }) => theme.mediaQueriesSize.marginb}
+/* ${({ theme }) => theme.mediaQueriesSize.marginb} */
 `
 const TopInfo = styled(Flex)`
 align-content: center;
@@ -94,7 +94,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
   }
   const onClose = useCallback(() => setVisible(false), [setVisible])
   return (
-    <Content mb='12px' {...props}>
+    <Content mb='0' {...props}>
       <TopInfo mb='4px'>
         <Icon src={require('assets/images/myWallet/wallet.png').default} width={43} height={43} alt='' />
         <Info>

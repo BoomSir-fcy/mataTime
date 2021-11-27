@@ -9,6 +9,7 @@ import { PoolUserData } from 'store/pools/types';
 import BigNumber from 'bignumber.js';
 import { formatDisplayBalanceWithSymbol, getFullDisplayBalance } from 'utils/formatBalance';
 import PoolStakeInfo, { PoolDispalynUserData } from '../PoolCard/PoolStakeInfo';
+import { assignInWith } from 'lodash';
 
 
 const UnStakeModalBox = styled(Box)`
@@ -39,6 +40,45 @@ interface UnStakeModalProps {
   rewardToken1Decimals: number
   depositDecimals: number
 }
+
+const UnstakeBtn: React.FC<{
+  stakingId: string,
+  onConfirm?: (stakeId: string) => void
+  onDismiss?: () => void
+}> = ({ onConfirm, onDismiss, stakingId }) => {
+  const [pendingTx, setPendingTx] = useState(false)
+  const { t } = useTranslation()
+
+  return (
+    <Button
+      disabled={pendingTx}
+      onClick={async () => {
+        setPendingTx(true)
+        try {
+          await onConfirm(stakingId)
+          onDismiss()
+          // toastSuccess(t('Staked!'), t('Your funds have been staked in the pool'))
+        } catch (e) {
+          // toastError(
+          //   t('Error'),
+          //   t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+          // )
+          console.error(e)
+        } finally {
+          setPendingTx(false)
+        }
+      }}>
+      {
+        pendingTx
+          ?
+          <Dots>{t('正在取出')}</Dots>
+          :
+          t('取出质押')
+      }
+    </Button>
+  )
+}
+
 const UnStakeModal: React.FC<UnStakeModalProps> = ({
   onConfirm,
   onDismiss,
@@ -107,32 +147,7 @@ const UnStakeModal: React.FC<UnStakeModalProps> = ({
               {
                 Number(item.unlockTime) * 1000 <= nowTime
                   ?
-                  <Button
-                    disabled={pendingTx}
-                    onClick={async () => {
-                      setPendingTx(true)
-                      try {
-                        await onConfirm(item.stakingId)
-                        onDismiss()
-                        // toastSuccess(t('Staked!'), t('Your funds have been staked in the pool'))
-                      } catch (e) {
-                        // toastError(
-                        //   t('Error'),
-                        //   t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-                        // )
-                        console.error(e)
-                      } finally {
-                        setPendingTx(false)
-                      }
-                    }}>
-                    {
-                      pendingTx
-                        ?
-                        <Dots>{t('正在取出')}</Dots>
-                        :
-                        t('取出质押')
-                    }
-                  </Button>
+                  <UnstakeBtn stakingId={item.stakingId} onConfirm={onConfirm} onDismiss={onDismiss} />
                   :
                   <Box>
                     <Text textAlign="right">到期时间</Text>

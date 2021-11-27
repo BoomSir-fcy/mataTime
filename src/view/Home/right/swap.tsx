@@ -32,7 +32,7 @@ export const Swap: React.FC = () => {
         resetTheme={{
           dark: {
             colors: {
-              dropdown: dark.colors.backgroundPrimary,
+              dropdown: dark.colors.input,
               text: dark.colors.white_black,
               backgroundDisabled: dark.colors.tertiary,
               primary: dark.colors.textPrimary,
@@ -53,7 +53,7 @@ export const Swap: React.FC = () => {
           },
           light: {
             colors: {
-              dropdown: light.colors.backgroundPrimary,
+              dropdown: light.colors.input,
               text: light.colors.white_black,
               backgroundDisabled: light.colors.tertiary,
               primary: light.colors.textPrimary,

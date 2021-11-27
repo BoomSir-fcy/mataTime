@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Flex, Box } from 'uikit';
+import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
-import { PageSection, Crumbs, CommonMenu, Affix } from 'components'
+import { PageSection, Crumbs, Container, Affix } from 'components'
 import { Menu } from 'view/Home/left';
 import TokenAccount from './components/TokenAccount';
 import Liquidity from './components/Liquidity';
@@ -21,6 +21,15 @@ const CenterCard = styled(Box)`
   border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
+const ContainerStyled = styled(Container)`
+  /* background: pink; */
+  border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  padding-top: 0 !important;
+  padding-bottom: 12px !important;
+  height: 60px;
+`
+
 const Account: React.FC = () => {
   const { t } = useTranslation();
 
@@ -36,8 +45,15 @@ const Account: React.FC = () => {
         <CenterCard>
           <Crumbs title={t('homeMenuSet')} />
           <TokenAccount />
-          {/* <Liquidity /> */}
-          <Single />
+          <Box>
+            <ContainerStyled>
+              <Flex height="100%" alignItems="flex-end">
+                <Text fontSize="18px" bold>单币质押</Text>
+              </Flex>
+            </ContainerStyled>
+            {/* <Liquidity /> */}
+            <Single />
+          </Box>
         </CenterCard>
       </Flex>
 
