@@ -3,7 +3,7 @@ import { Editor as slateEditor, Transforms, Range, createEditor, Descendant, Ele
 import { Flex } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
-import { ImgList } from './ImgList';
+import { UploadList } from './UploadList';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
 import { Slate, Editable, ReactEditor, withReact, useSelected, useFocused, useSlate } from 'slate-react';
@@ -146,7 +146,7 @@ useEffect(() => {
     input.onchange = async (e: any) => {
       const selectFiles = e.target.files;
       if (!selectFiles[0]) return false;
-      if (imgList.length + selectFiles.length > 9) return toast.error(t('uploadImgMaxMsg'));
+      if (imgList.length + selectFiles.length > 4) return toast.error(t('uploadImgMaxMsg'));
       const fileList: string[] = [];
       for (let file of selectFiles) {
         let fr: any = new FileReader();
@@ -241,7 +241,7 @@ const deepContent = (arr)=>{
         <div className="text-box" ref={ref}>
           <Editable autoFocus renderElement={renderElement} placeholder={type === 'comment' ? t('newsCommentReply') : t('editorPlaceholder')} />
         </div>
-        <ImgList delImgItem={data => setImgList(data)} imgList={imgList}></ImgList>
+        <UploadList delImgItem={data => setImgList(data)} imgList={imgList}></UploadList>
         <Flex justifyContent="space-between" alignItems="center">
           <Toolbar
           type={type}

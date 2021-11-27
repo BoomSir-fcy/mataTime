@@ -89,7 +89,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
           <Flex key={item.uid} alignItems="center" justifyContent="space-between" style={{ marginTop: '17px' }}>
             <Flex>
               <Link to={'/me/profile/' + item.uid}>
-                <Avatar src={item.nft_image} style={{ width: '50px', height: '50px' }} scale="md" />
+                <Avatar src={item.nft_image} style={{ width: '50px', height: '50px',minWidth:'50px' }} scale="md" />
               </Link>
               <UserInfo >
                 <Flex>

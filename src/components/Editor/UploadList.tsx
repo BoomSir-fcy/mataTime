@@ -30,7 +30,7 @@ border-bottom-left-radius: 10px;
   }
 }
 `
-export const ImgList=(props:imgListType)=>{
+export const UploadList=(props:imgListType)=>{
   const [imgList,setImgList] = useState([])
   useEffect(()=>{
     setImgList(props.imgList)
