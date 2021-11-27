@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
+import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Button } from 'uikit';
 import { useSinglePoolState } from 'store/pools/hooks';
@@ -50,6 +51,7 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
   const dispatch = useDispatch()
   const { account } = useWeb3React()
   const { userStakesMap } = useSinglePoolState()
+  const { t } = useTranslation()
 
   const [visible, setVisible] = useState(false)
   const [visibleView, setVisibleView] = useState(false)
@@ -76,15 +78,15 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
         {
           isApproved && (userStakesMap[pid] ? (
             <Flex>
-              <Button onClick={() => setVisible(true)}>加仓</Button>
-              <Button onClick={() => setVisibleView(true)} ml="12px">查看</Button>
+              <Button onClick={() => setVisible(true)}>{t('Increase')}</Button>
+              <Button onClick={() => setVisibleView(true)} ml="12px">{t('View')}</Button>
             </Flex>
           )
             :
-            <Button onClick={() => setVisible(true)}>质押</Button>)
+            <Button onClick={() => setVisible(true)}>{t('Stake')}</Button>)
         }
       </PoolStakeInfo>
-      <ModalWrapper title="质押" creactOnUse visible={visible} setVisible={setVisible}>
+      <ModalWrapper title={t('Stake')} creactOnUse visible={visible} setVisible={setVisible}>
         <StakeModal
           max={dispalynUserData.tokenBalance}
           decimals={depositDecimals}
@@ -96,7 +98,7 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
           onDismiss={() => setVisible(false)}
         />
       </ModalWrapper>
-      <ModalWrapper fillBody title="查看" creactOnUse visible={visibleView} setVisible={setVisibleView}>
+      <ModalWrapper fillBody title={t('View')} creactOnUse visible={visibleView} setVisible={setVisibleView}>
         <UnStakeModal
           onConfirm={async (pid) => {
             await onWithdraw(pid)

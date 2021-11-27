@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import { Flex, Box, Text, Card, Skeleton } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 import { Container, Timer } from 'components'
 import { formatDisplayApr } from 'utils/formatBalance';
 import getTimePeriods from 'utils/getTimePeriods';
@@ -19,6 +20,8 @@ interface PoolCardProps {
   userStakes?: PoolUserData[]
 }
 const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userStakes }) => {
+  const { t } = useTranslation()
+
 
   const { days, hours, minutes } = getTimePeriods(Number(poolInfo.duration))
 
@@ -36,15 +39,15 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
         <ContainerStyled>
           <Flex justifyContent="space-between">
             <Box>
-              <Text color="textTips">ARP</Text>
+              <Text color="textTips">{t('ARP')}</Text>
               <Text bold color="textPrimary">{formatDisplayApr(poolApr?.totalApr)}%</Text>
             </Box>
             <Box>
-              <Text color="textTips">周期</Text>
+              <Text color="textTips">{t('Lock time')}</Text>
               <Timer bold color="white_black" itemMr="6px" minutes={minutes} hours={hours} days={days} />
             </Box>
             <Box>
-              <Text color="textTips" textAlign="right">Liquidity</Text>
+              <Text color="textTips" textAlign="right">{t('Total staked')}</Text>
               {
                 Number(poolInfo.totalLiquidity)
                   ?
