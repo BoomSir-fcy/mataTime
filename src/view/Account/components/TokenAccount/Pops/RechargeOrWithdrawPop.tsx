@@ -12,6 +12,7 @@ import Dots from 'components/Loader/Dots';
 import { useStore } from 'store';
 import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'contexts/Localization';
 
 const CountBox = styled(Box)`
   width: 88vw;
@@ -54,6 +55,7 @@ interface init {
 }
 
 const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, withdrawalBalance }) => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const { account } = useWeb3React()
   const [val, setVal] = useState('')
@@ -66,36 +68,44 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   const handSure = useCallback(async () => {
     setpending(true)
     if (type === 1) {
+      // 充值
       if (balance === 0) {
         setpending(false)
         return
       }
-      // 充值
+      if (Number(val) <= 0) {
+        setpending(false)
+        return
+      }
       const addPrecisionNum = new BigNumber(Number(val)).times(BIG_TEN.pow(18)).toString()
       try {
         await Recharge(TokenAddr, addPrecisionNum)
+        toast.success(t('Account The transaction is successful!'));
         onClose()
       } catch (e) {
         console.error(e)
+        toast.error(t('Account Recharge failed'));
       } finally {
         setpending(false)
       }
     } else {
+      // 提现
       if (Number(withdrawalBalance) === 0) {
         setpending(false)
         return
       }
       if (Number(val) < 100) {
-        toast.error('最先提现额度100');
+        toast.error(t('Account Minimum withdrawal amount %amount%', { amount: 100 }));
         setpending(false)
         return
       }
-      // 提现
       try {
         await drawCallback(val, TokenAddr, token === 'Time' ? 1 : 2)
+        toast.success(t('Account The transaction is successful!'));
         onClose()
       } catch (e) {
         console.error(e)
+        toast.error(t('Account Withdrawal failed'));
       } finally {
         setpending(false)
       }
@@ -140,14 +150,14 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   return (
     <CountBox>
       <Flex justifyContent="end" mb='12px'>
-        <Text fontSize='14px' color='textTips'>可用余额: {splitThousandSeparator(type === 1 ? balance : Number(withdrawalBalance))}</Text>
+        <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {splitThousandSeparator(type === 1 ? balance : Number(withdrawalBalance))}</Text>
       </Flex>
       <InputBox mb='26px'>
         <MyInput
           noShadow
           value={val}
           onChange={handleChange}
-          placeholder={type === 1 ? '请输入充值金额' : '请输入提现金额'}
+          placeholder={type === 1 ? t('Account Please enter the recharge amount') : t('Account Please enter the withdrawal amount')}
         />
         <Max onClick={() => setVal(String(type === 1 ? balance : withdrawalBalance))}>MAX</Max>
       </InputBox>
@@ -161,9 +171,9 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
             handleApprove()
           }
         }}>
-          {pending ? <Dots>{approvedNum > 0 ? "交易中" : "授权中"}</Dots> : approvedNum > 0 ? "确认" : "授权"}
+          {pending ? <Dots>{approvedNum > 0 ? t('Account Trading') : t('Account Approving')}</Dots> : approvedNum > 0 ? t('Account Confirm') : t('Account Approve')}
         </SureBtn>
-        <Text fontSize='14px' color='textTips'>请在Token里确认交易</Text>
+        <Text fontSize='14px' color='textTips'>{t('Account Please confirm the transaction in Token')}</Text>
       </Flex>
     </CountBox>
   )

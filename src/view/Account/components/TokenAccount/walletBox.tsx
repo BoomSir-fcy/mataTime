@@ -7,10 +7,11 @@ import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import HistoryModal from './Pops/HistoryModal';
 import { Api } from 'apis';
 import { formatDisplayApr } from 'utils/formatBalance';
+import { useTranslation } from 'contexts/Localization';
 
 
 const Content = styled(Box)`
-width:50%;
+flex: 1;
 min-width: 300px;
 background:${({ theme }) => theme.card.background};
 ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -44,12 +45,14 @@ color:${({ theme }) => theme.colors.textTips};
 font-size: 14px;
 `
 const RechargeBtn = styled(Button)`
-padding: 6px 30px;
+/* padding: 6px 30px; */
+min-width: 80px;
 background: ${({ theme }) => theme.colors.backgroundPrimary};
 `
 const WithdrawBtn = styled(Button)`
-padding: 6px 30px;
-background: #ccc;
+/* padding: 6px 30px; */
+min-width: 80px;
+background: #4D535F;
 background: ${({ theme }) => theme.colors.tertiary};
 `
 const HistoryIcon = styled.img`
@@ -80,6 +83,7 @@ interface Wallet {
   BalanceInfo: Api.Account.Balance
 }
 const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, ...props }) => {
+  const { t } = useTranslation()
   const { account } = useWeb3React()
   const [visible, setVisible] = useState(false)
   const [visibleHistory, setVisibleHistory] = useState(false)
@@ -87,7 +91,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
   const [ChosenType, setChosenType] = useState(1)
   const [ActiveHistory, setActiveHistory] = useState(1)
   const openModaal = (title) => {
-    const titleText = title === 1 ? '充值' : '提现'
+    const titleText = title === 1 ? t('AccountRecharge') : t('Accountwithdraw')
     setModalTitle(`${titleText} ${Token}`)
     setChosenType(title)
     setVisible(true)
@@ -99,31 +103,31 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
         <Icon src={require('assets/images/myWallet/wallet.png').default} width={43} height={43} alt='' />
         <Info>
           <Flex flexDirection='column' justifyContent='space-between'>
-            <Fount>平台余额</Fount>
+            <Fount>{t('AccountPlatformBalance')}</Fount>
             <NumText>{formatDisplayApr(Number(BalanceInfo.available_balance))}</NumText>
           </Flex>
           <Flex flexDirection='column' justifyContent='space-between'>
-            <Fount>今日收入</Fount>
+            <Fount>{t("AccountToday'sIncome")}</Fount>
             <NumText>{formatDisplayApr(0)}</NumText>
           </Flex>
           <Flex style={{ textAlign: 'right' }} flexDirection='column' justifyContent='space-between'>
-            <Fount>钱包余额</Fount>
+            <Fount>{t('Account balance')}</Fount>
             <NumText>{formatDisplayApr(Balance)}</NumText>
           </Flex>
         </Info>
       </TopInfo>
       <Flex mb='10px'>
         <TokenText>${Token}</TokenText>
-        {Token === 'Time' && <Fount>( 预计使用 28h )</Fount>}
+        {Token === 'Time' && <Fount>( {t('Account Estimated use of')} 28h )</Fount>}
       </Flex>
       <Flex justifyContent='space-between'>
         <Flex flexDirection='column' justifyContent='space-between'>
-          <Fount >冻结金额</Fount>
+          <Fount>{t('Account Frozen amount')}</Fount>
           <NumText>{formatDisplayApr(Number(BalanceInfo.freeze_balance))}</NumText>
         </Flex>
         <Flex justifyContent='end' alignItems='center'>
-          <RechargeBtn mr='20px' onClick={() => openModaal(1)}>充值</RechargeBtn>
-          <WithdrawBtn mr='16px' onClick={() => openModaal(2)}>提现</WithdrawBtn>
+          <RechargeBtn mr='20px' onClick={() => openModaal(1)}>{t('AccountRecharge')}</RechargeBtn>
+          <WithdrawBtn mr='16px' onClick={() => openModaal(2)}>{t('Accountwithdraw')}</WithdrawBtn>
           <HistoryIcon onClick={() => setVisibleHistory(true)} src={require('assets/images/myWallet/history.png').default} />
         </Flex>
       </Flex>
@@ -136,7 +140,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
 
 
       {/* 提币、充值记录 */}
-      <ModalWrapper title={`${Token}充提记录`} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
+      <ModalWrapper title={`${Token} ${t('Account history record')}`} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
         {/* <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">
             <HistoryHead className={ActiveHistory === 1 ? 'active' : ''} onClick={() => setActiveHistory(1)} scale='ld'>充值记录</HistoryHead>
