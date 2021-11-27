@@ -37,7 +37,6 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
     const eveSales = await contract.queryFilter(filterFrom, blockNumber - 5000, blockNumber)
     console.log(eveSales, "----eveSales-----");
 
-
     const res = {}
     eveSales.reverse().forEach((item, index) => {
       if (index > 11) return
@@ -56,23 +55,20 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
 }
 
 const culAprHandle = (culFarm: CulFarm, eveSales: EveDonate) => {
-  const culIds = Object.keys(culFarm)
-  const eveIds = Object.keys(eveSales)
   let totalMul = new BigNumber(0)
   Object.values(culFarm).forEach(item => {
     totalMul = totalMul.plus(item.allocPoint)
   })
-  const totalId = eveIds.find(item => !culIds.includes(item))
+  let totalDonate = new BigNumber(0)
+  Object.values(eveSales).forEach(item => {
+    totalDonate = totalDonate.plus(item)
+  })
+  console.log(totalDonate.toString(), 'totalDonate 捐赠总产出')
+
   return Object.values(culFarm).map(item => {
-    if (eveIds.includes(`${item.pid}`)) {
-      return {
-        ...item,
-        fourRealAmount: eveSales[totalId]?.times(item.allocPoint).div(totalMul).plus(eveSales[item.pid]).times(6).times(365).times(100).toNumber()
-      }
-    }
     return {
       ...item,
-      fourRealAmount: eveSales[totalId]?.times(item.allocPoint).div(totalMul).times(6).times(365).times(100).toNumber()
+      fourRealAmount: totalDonate.times(item.allocPoint).div(totalMul).times(6).times(365).times(100).toNumber()
     }
   })
 }

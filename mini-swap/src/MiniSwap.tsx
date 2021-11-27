@@ -8,7 +8,7 @@ import ListsUpdater from './state/lists/updater'
 import MulticallUpdater from './state/multicall/updater'
 import TransactionUpdater from './state/transactions/updater'
 import Swap, { SwapInterface } from './Swap'
-import Providers, { ProvidersPorps  } from './Providers'
+import Providers, { ProvidersPorps } from './Providers'
 
 function Updaters() {
   return (
@@ -30,7 +30,7 @@ interface MiniSwapInterface extends ProvidersPorps, SwapInterface, ListenerCurre
   onLoaded?: () => void
 }
 
-function ListenerCurrencyChange({ onInputCurrencyChange, onOutputCurrencyChange }: ListenerCurrencyChangeProps ) {
+function ListenerCurrencyChange({ onInputCurrencyChange, onOutputCurrencyChange }: ListenerCurrencyChangeProps) {
   const { inputCurrency, outputCurrency } = useSwapCurrencies()
   const [oldInputCurrency, setOldInputCurrency] = useState(inputCurrency)
   const [oldOutputCurrency, setOldOutputCurrency] = useState(outputCurrency)
@@ -43,7 +43,7 @@ function ListenerCurrencyChange({ onInputCurrencyChange, onOutputCurrencyChange 
       }
     }
   }, [inputCurrency, oldInputCurrency, onInputCurrencyChange])
-  
+
   useEffect(() => {
     if (outputCurrency?.symbol !== oldOutputCurrency?.symbol || outputCurrency?.name !== oldOutputCurrency?.name) {
       setOldOutputCurrency(outputCurrency)
@@ -65,23 +65,25 @@ function Blocklist({ children }: { children: ReactNode }) {
 }
 
 const MiniSwap: React.FC<MiniSwapInterface> = ({
-    isDark,
-    lang,
-    resetTheme,
-    onLoaded,
-    onInputCurrencyChange,
-    onOutputCurrencyChange,
-    onConnectWallet,
-    inputCurrencyId,
-    outputCurrencyId,
-    chainId
-  }) => {
+  isDark,
+  lang,
+  resetTheme,
+  onLoaded,
+  onInputCurrencyChange,
+  onOutputCurrencyChange,
+  onConnectWallet,
+  inputCurrencyId,
+  outputCurrencyId,
+  chainId,
+  subTitleTips,
+  titlehelper,
+}) => {
 
   useEffect(() => {
     console.debug(`chainId is change ${chainId}`)
     setChainId(chainId)
   }, [chainId])
-  
+
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -91,13 +93,13 @@ const MiniSwap: React.FC<MiniSwapInterface> = ({
     }
   }, [onLoaded, loaded])
 
-  
+
   return (
     <Providers resetTheme={resetTheme} lang={lang} onConnectWallet={onConnectWallet} isDark={isDark} chainId={chainId}>
       <Updaters />
-      <ListenerCurrencyChange onInputCurrencyChange={onInputCurrencyChange} onOutputCurrencyChange={onOutputCurrencyChange}/>
+      <ListenerCurrencyChange onInputCurrencyChange={onInputCurrencyChange} onOutputCurrencyChange={onOutputCurrencyChange} />
       <Blocklist>
-        <Swap outputCurrencyId={outputCurrencyId} inputCurrencyId={inputCurrencyId} />
+        <Swap subTitleTips={subTitleTips} titlehelper={titlehelper} outputCurrencyId={outputCurrencyId} inputCurrencyId={inputCurrencyId} />
       </Blocklist>
     </Providers>
   )

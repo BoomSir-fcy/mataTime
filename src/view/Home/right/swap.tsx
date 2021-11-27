@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import MiniSwap from 'libs/mini-swap';
 import { useWeb3React } from '@web3-react/core';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
-import { light, dark } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
+import { light, dark, Text } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
@@ -15,6 +16,7 @@ const SwapBox = styled.div`
 `;
 export const Swap: React.FC = () => {
   const { chainId } = useWeb3React();
+  const { t } = useTranslation();
 
   const [languange] = useLanguange();
   const [isDark] = useThemeManager();
@@ -28,6 +30,10 @@ export const Swap: React.FC = () => {
     <SwapBox>
       <CoinMarketCap mb="14px" />
       <MiniSwap
+        titlehelper={t('当您搜索一些代币话题时, 平台会自动提供代币快捷兑换功能,提供一站式加密服务,现已支持主流数字货币,后续将不断接入更多货币,敬请期待')}
+        subTitleTips={<Text>
+          推荐自@0x526w.....已自动为您匹配$To ken$
+        </Text>}
         onInputCurrencyChange={handleInputChange}
         resetTheme={{
           dark: {
