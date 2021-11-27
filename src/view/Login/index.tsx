@@ -97,8 +97,15 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const NftList = useStore(p => p.loginReducer.nftList);
   const { t } = useTranslation();
   const { logout } = useAuth();
-  const { isSignup, isSignin, signUpFail, isStakeNft, singUpStep, nftStatus } =
-    loginReduce;
+  const {
+    isSignup,
+    isSignin,
+    isGetStake,
+    nftStatus,
+    signUpFail,
+    isStakeNft,
+    singUpStep
+  } = loginReduce;
   const { account } = useWeb3React();
   const { loginCallback } = useLogin();
   const { getUserName } = useSignIn();
@@ -139,10 +146,11 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
     // 已经质押走登录
-    console.log('质押:', nftStake);
+    console.log('质押:', nftStake[0]);
     if (nftStake.length > 0 && nftStake[0].token_id) {
       dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {
+      dispatch(storeAction.changeGetStake({ isGetStake: true }));
       dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   };
@@ -170,7 +178,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   useEffect(() => {
     // 2没有质押的情况下
-    if (account && nftStatus && !isSignin) {
+    if (isGetStake && nftStatus && !isSignin) {
       if (!NftList.length && !isStakeNft) {
         // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
         setshowStakeNft(false);
@@ -184,7 +192,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
       }
       dispatch(storeAction.setSigninLoading(false));
     }
-  }, [account, nftStatus, isSignin, NftList, isStakeNft]);
+  }, [isGetStake, isSignin, nftStatus, NftList, isStakeNft]);
 
   return (
     <LoginContainer>

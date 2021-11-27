@@ -1,11 +1,11 @@
-import React from 'react'
-import { HelpIcon, useTooltip, Box, BoxProps, Placement } from 'uikit'
-import styled from 'styled-components'
+import React from 'react';
+import { HelpIcon, useTooltip, Box, BoxProps, Placement } from 'uikit';
+import styled from 'styled-components';
 
 interface Props extends BoxProps {
-  text: string | React.ReactNode
-  placement?: Placement
-  color?: string
+  text: string | React.ReactNode;
+  placement?: Placement;
+  color?: string;
 }
 
 const QuestionWrapper = styled.div`
@@ -13,10 +13,18 @@ const QuestionWrapper = styled.div`
   :focus {
     opacity: 0.7;
   }
-`
+`;
 
-const QuestionHelper: React.FC<Props> = ({ text, color = "textgrey", placement = 'right-end', ...props }) => {
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(text, { placement, trigger: 'hover' })
+const QuestionHelper: React.FC<Props> = ({
+  text,
+  color = 'white_black',
+  placement = 'right-end',
+  ...props
+}) => {
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(text, {
+    placement,
+    trigger: 'hover'
+  });
 
   return (
     <Box {...props}>
@@ -25,7 +33,7 @@ const QuestionHelper: React.FC<Props> = ({ text, color = "textgrey", placement =
         <HelpIcon color={color} width="16px" />
       </QuestionWrapper>
     </Box>
-  )
-}
+  );
+};
 
-export default QuestionHelper
+export default QuestionHelper;

@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import {
   changeSignUp,
   changeSignin,
+  changeGetStake,
   changeSignUpFail,
   changeSignUpStep,
   changeUpdateProfile,
@@ -20,6 +21,7 @@ import { FetchNftsList } from 'view/Login/hook';
 const initialState = {
   isSignup: false,
   isSignin: false,
+  isGetStake: false,
   isStakeNft: false,
   signUpFail: false,
   signinLoading: false,
@@ -69,6 +71,9 @@ export const login = createSlice({
       .addCase(changeSignin, (state, action) => {
         state.isSignin = action.payload.isSignin;
       })
+      .addCase(changeGetStake, (state, action) => {
+        state.isGetStake = action.payload.isGetStake;
+      })
       .addCase(setUserNftStake, (state, action) => {
         state.isStakeNft = action.payload.isStakeNft;
       })
@@ -80,12 +85,14 @@ export const login = createSlice({
       })
       .addCase(changeReset, (state, action) => {
         state.isSignup = false;
+        state.isGetStake = false;
         state.isSignin = false;
         state.isStakeNft = false;
         state.signUpFail = false;
         state.signinLoading = false;
         state.nftStatus = false;
         state.nft = {};
+        state.nftList = [];
       })
       .addCase(fetchUserInfoAsync.fulfilled, (state, action) => {
         state.userInfo = action.payload.data;

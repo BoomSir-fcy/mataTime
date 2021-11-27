@@ -151,7 +151,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                 mt="16px"
                 color="textgrey"
               >
-                该币种暂未收录，无法显示价格
+                {t('commonCoinMarketEmpty')}
               </Text>
             )}
           </StyledPageItem>

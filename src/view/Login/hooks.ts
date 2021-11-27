@@ -113,7 +113,7 @@ export function useLogin() {
         }
         return response;
       } catch (error: any) {
-        console.log(error?.code);
+        console.log(error);
         return {
           code: error?.code || 0
         };
