@@ -35,14 +35,13 @@ const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
 
-const Container = styled(Box)<{
+const Container = styled(Box) <{
   dark: boolean;
 }>`
   /* background-image: ${({ dark }) =>
-    `url(${
-      require(dark
-        ? 'assets/images/dark_background.jpg'
-        : 'assets/images/light_background.jpg').default
+    `url(${require(dark
+      ? 'assets/images/dark_background.jpg'
+      : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed; */
   background-color: ${({ theme }) => theme.colors.background};
@@ -93,7 +92,7 @@ function App() {
 
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
-  }, [token]);
+  }, [token, dispatch]);
 
   // useEffect(() => {
   //   if (account) {

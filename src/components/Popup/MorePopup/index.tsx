@@ -28,7 +28,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
 
-  const { children, data, callback = () => {} } = props;
+  const { children, data, callback = () => { } } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [editShow, setEditShow] = useState<boolean>(false);
@@ -179,27 +179,37 @@ export const MorePopup = React.memo((props: Iprops) => {
       setVisible(false);
     };
     document.addEventListener('click', fn);
+    initEvent();
     return () => document.removeEventListener('click', fn);
-  });
+  }, []);
+
+  const initEvent = () => {
+    document.onclick = () => {
+      console.log('123', visible)
+    }
+  }
+
   return (
     <>
-      {/* onMouseOver={(e: any) => {
+      <PopupWrapper
+        onMouseOver={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(true);
         }}
         onMouseLeave={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(false);
-        }} */}
-      <PopupWrapper
+        }}
+      >
+        {/* <PopupWrapper
         onClick={(e: any) => {
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(!visible);
         }}
-      >
+      > */}
         {children}
         {visible ? (
-          <PopupContentWrapper>
+          <PopupContentWrapper id="more-popup-content">
             {/* onMouseLeave={(e: any) => {
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
               setVisible(false);
@@ -245,8 +255,8 @@ export const MorePopup = React.memo((props: Iprops) => {
               onClick={() => {
                 copyContent(
                   process.env.REACT_APP_WEB_URL +
-                    '/articleDetils/' +
-                    data.post.post_id || ''
+                  '/articleDetils/' +
+                  data.post.post_id || ''
                 );
               }}
             >

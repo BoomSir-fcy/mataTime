@@ -5,7 +5,6 @@ import useAuth from 'hooks/useAuth'
 import useEagerConnect from 'hooks/useEagerConnect'
 import { useWeb3React } from '@web3-react/core'
 import { setChainId } from 'dsgswap-sdk'
-import Swap from './views/Swap'
 import MiniSwapLocal from './MiniSwap'
 
 
@@ -15,11 +14,11 @@ const App: React.FC = () => {
   // const chainId = useChainId()
   useEagerConnect()
 
-  
+
   const [isDark, setIsDark] = useState(false)
   const [lang, setLang] = useState<SupportLanguage>('en-US')
   const { login } = useAuth()
-  
+
   const changeDark = () => {
     setIsDark(!isDark)
   }
@@ -36,7 +35,7 @@ const App: React.FC = () => {
     console.log(122121)
     login(ConnectorNames.Injected)
   }
-  
+
   const { chainId } = useWeb3React()
   console.log(chainId)
   useEffect(() => {
@@ -51,7 +50,7 @@ const App: React.FC = () => {
       <ResetCSS />
       <button onClick={changeDark} type="button" >change</button>
       <button onClick={changeLang} type="button" >changeLang</button>
-      {isDark ? 'isDark': 'no-isDark'}
+      {isDark ? 'isDark' : 'no-isDark'}
       <MiniSwapLocal lang={lang} onConnectWallet={onConnectWallet} isDark={isDark} />
     </div>
   )

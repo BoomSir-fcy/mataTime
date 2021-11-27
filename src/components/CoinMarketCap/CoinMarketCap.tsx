@@ -123,7 +123,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
             {!!Number(currentCoin?.current_price) ? (
               <Flex mt="8px" justifyContent="space-between">
                 <Box>
-                  <Text fontSize="14px" color="textTips">
+                  <Text fontSize="14px" color="textgrey">
                     {t('MARKET CAP')}
                   </Text>
                   <Text bold color="textPrimary" fontSize="14px">
@@ -131,7 +131,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                   </Text>
                 </Box>
                 <Box>
-                  <Text fontSize="14px" color="textTips" textAlign="right">
+                  <Text fontSize="14px" color="textgrey" textAlign="right">
                     {t('VOLUME')}
                   </Text>
                   <Text
@@ -149,7 +149,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                 fontSize="14px"
                 textAlign="center"
                 mt="16px"
-                color="textTips"
+                color="textgrey"
               >
                 {t('commonCoinMarketEmpty')}
               </Text>

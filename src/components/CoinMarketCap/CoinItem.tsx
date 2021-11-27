@@ -79,21 +79,13 @@ const CoinItem: React.FC<CoinItemProps> = ({
           </Box>
           <Box ml="8px">
             <Flex pr="8px" alignItems="center" justifyContent="space-between">
-              <Text bold color="white_black" fontSize="18px">
-                {coinInfo?.coin_symbol}
-              </Text>
+              <Text bold color="white_black" fontSize="18px">{coinInfo?.coin_symbol}</Text>
               {showHelp && (
                 <QuestionHelper
-                  text={
-                    <>
-                      <Text fontSize="14px">
-                        {t('Update time:')} {coinInfo?.add_time}
-                      </Text>
-                      <Text fontSize="14px">
-                        {t('Powered by CoinMarketCap')}
-                      </Text>
-                    </>
-                  }
+                  text={<>
+                    {/* <Text fontSize="14px">{t('Update time:')} {coinInfo?.add_time}</Text> */}
+                    <Text fontSize="14px">{t('Powered by CoinGecko')}</Text>
+                  </>}
                   ml="4px"
                   mr="8px"
                   onClick={toggling}
