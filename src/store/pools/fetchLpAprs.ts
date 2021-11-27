@@ -35,6 +35,8 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
     const contract = getSinglePoolContract()
     const filterFrom = contract.filters.Donate()
     const eveSales = await contract.queryFilter(filterFrom, blockNumber - 5000, blockNumber)
+    console.log(eveSales, "----eveSales-----");
+
     const res = {}
     eveSales.reverse().forEach((item, index) => {
       if (index > 11) return

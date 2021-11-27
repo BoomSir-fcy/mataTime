@@ -33,7 +33,7 @@ const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
     <Flex padding={!fillBody ? '0' : '0 20px'} mb="8px" justifyContent="space-between" alignItems="center">
       <Heading>{title}</Heading>
       <Button onClick={onClose} padding="0" variant="text">
-        <CloseLineIcon width={16} color="primary"></CloseLineIcon>
+        <CloseLineIcon width={16} color="white_black"></CloseLineIcon>
       </Button>
     </Flex>
   )

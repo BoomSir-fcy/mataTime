@@ -48,7 +48,7 @@ const Account: React.FC = () => {
           <Box>
             <ContainerStyled>
               <Flex height="100%" alignItems="flex-end">
-                <Text fontSize="18px" bold>{t('Account Single currency pledge')}</Text>
+                <Text fontSize="18px" bold>{t('Account Pools')}</Text>
               </Flex>
             </ContainerStyled>
             {/* <Liquidity /> */}
