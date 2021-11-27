@@ -29,6 +29,7 @@ min-height: 30px;
 const HeadText = styled(Text)`
  color: ${({ theme }) => theme.colors.textTips};
  font-size: 14px;
+ margin-bottom: 10px;
 &:last-child{
 text-align: right;
 }

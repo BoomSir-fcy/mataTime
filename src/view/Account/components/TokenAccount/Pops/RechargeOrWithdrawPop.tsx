@@ -40,21 +40,23 @@ const MyInput = styled(Input)`
 border-radius: 10px;
 padding:12px 50px 12px 16px;
 height: 50px;
+background: ${({ theme }) => theme.colors.backgroundTextArea};
 &::placeholder {
     color: ${({ theme }) => theme.colors.textTips};
   }
 `
 // type 1 充值 2 提币
 interface init {
-  type: number,
-  balance: number,
-  token: string,
-  TokenAddr: string,
+  type: number
+  balance: number
+  token: string
+  TokenAddr: string
   onClose: () => void
-  withdrawalBalance: string,
+  withdrawalBalance: string
+  decimals?: number
 }
 
-const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, withdrawalBalance }) => {
+const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, withdrawalBalance, decimals = 18 }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const { account } = useWeb3React()
@@ -135,7 +137,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
         // val = val.replace(/\.{2,}/g, ".");
         // //保证.只出现一次，而不能出现两次以上 
         // val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        val = val.replace(/\D/g, '')
+        val = val.replace(/,/g, '.')
         if (Number(val) > (type === 1 ? balance : Number(withdrawalBalance))) {
           return type === 1 ? String(balance) : withdrawalBalance
         }
@@ -155,6 +157,8 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
       <InputBox mb='26px'>
         <MyInput
           noShadow
+          pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
+          inputMode="decimal"
           value={val}
           onChange={handleChange}
           placeholder={type === 1 ? t('Account Please enter the recharge amount') : t('Account Please enter the withdrawal amount')}

@@ -14,7 +14,7 @@ const NoPdBottom = styled(Container)`
 padding: 0;
 `
 const BorderWalletBox = styled(WalletBox)`
-border-right: 1px solid #3A4459;
+border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `
 
 const TokenAccount: React.FC = () => {
