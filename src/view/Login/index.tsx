@@ -8,9 +8,9 @@ import {
 } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
+import { useToast } from 'hooks';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
@@ -96,7 +96,8 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const loginReduce = useStore(p => p.loginReducer);
   const NftList = useStore(p => p.loginReducer.nftList);
   const { t } = useTranslation();
-  const { logout } = useAuth();
+  const { logout, login } = useAuth();
+  const { toastError } = useToast();
   const {
     isSignup,
     isSignin,
@@ -124,12 +125,13 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   const signIn = async () => {
     //2.1 用户已经注册登录钱包签名
+    await window.ethereum.enable();
     const res = await loginCallback(2);
-    dispatch(storeAction.setSigninLoading(false));
     if (Api.isSuccess(res)) {
       //2.2 获取用户信息
       const user: any = await getUserName();
       //2.3
+      dispatch(storeAction.setSigninLoading(false));
       if (Api.isSuccess(user)) {
         // 存储userinfo 跳转首页
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
@@ -138,7 +140,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     } else {
       logout();
       dispatch(storeAction.changeReset());
-      toast.error(t('loginSigninFail') || res?.msg);
+      toastError(t('loginSigninFail') || res?.msg);
     }
   };
 
@@ -146,7 +148,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
     // 已经质押走登录
-    console.log('质押:', nftStake[0]);
+    console.log('质押:', nftStake[0], account);
     if (nftStake.length > 0 && nftStake[0].token_id) {
       dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {
@@ -171,6 +173,8 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useEffect(() => {
     if (account) {
       // 1.1查询是否有质押
+      setshowStakeNft(false);
+      dispatch(storeAction.changeSignin({ isSignin: false }));
       dispatch(storeAction.setSigninLoading(true));
       getStakeType(account);
     }

@@ -3,7 +3,7 @@ import { light, dark } from 'uikit';
 import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ThemeProvider } from 'styled-components';
-import { LanguageProvider } from 'contexts/Localization';
+import { ToastsProvider, LanguageProvider } from 'contexts';
 import { ConnectWalletProvider } from 'contexts/ConnectWalletContext';
 import { store } from 'store';
 import { getLibrary } from 'utils';
@@ -19,11 +19,11 @@ const Providers: React.FC = ({ children }) => {
     <Web3ReactProvider getLibrary={getLibrary}>
       <Provider store={store}>
         <ThemeProviderWrapper>
-          <LanguageProvider>
-            <ConnectWalletProvider>
-              {children}
-            </ConnectWalletProvider>
-          </LanguageProvider>
+          <ToastsProvider>
+            <LanguageProvider>
+              <ConnectWalletProvider>{children}</ConnectWalletProvider>
+            </LanguageProvider>
+          </ToastsProvider>
         </ThemeProviderWrapper>
       </Provider>
     </Web3ReactProvider>

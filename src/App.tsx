@@ -8,7 +8,7 @@ import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
-import { CommonLayout, Toast } from 'components';
+import { CommonLayout, ToastComponents } from 'components';
 // WalletModal
 import { Box, Button, Spinner } from 'uikit';
 import { storage } from 'config';
@@ -35,13 +35,14 @@ const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
 
-const Container = styled(Box) <{
+const Container = styled(Box)<{
   dark: boolean;
 }>`
   /* background-image: ${({ dark }) =>
-    `url(${require(dark
-      ? 'assets/images/dark_background.jpg'
-      : 'assets/images/light_background.jpg').default
+    `url(${
+      require(dark
+        ? 'assets/images/dark_background.jpg'
+        : 'assets/images/light_background.jpg').default
     })`};
   background-attachment: fixed; */
   background-color: ${({ theme }) => theme.colors.background};
@@ -133,7 +134,7 @@ function App() {
           </Switch>
         </React.Suspense>
       </Container>
-      <Toast />
+      <ToastComponents />
     </Router>
   );
 }

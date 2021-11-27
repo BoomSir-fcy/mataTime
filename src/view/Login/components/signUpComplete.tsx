@@ -18,9 +18,10 @@ const FlexButton = styled(Flex)`
     width: 205px;
   }
 `;
+
 const CompleteButton = styled(Button)`
-  color: ${({ theme }) => theme.colors.protrudeColor};
-  background-color: ${({ theme }) => theme.colors.backgroundMenuBack};
+  color: ${({ theme }) => theme.colors.backgroundPrimary};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `;
 
 export const SignUpcomplete = React.memo(() => {
@@ -73,7 +74,7 @@ export const SignUpcomplete = React.memo(() => {
         <Button scale="ld" onClick={debounce(() => getManList(), 1000)}>
           {t('loginSignUpChangeBatch')}
         </Button>
-        <CompleteButton scale="ld" onClick={complete}>
+        <CompleteButton variant="secondary" scale="ld" onClick={complete}>
           {t('loginSignUpComplete')}
         </CompleteButton>
       </FlexButton>

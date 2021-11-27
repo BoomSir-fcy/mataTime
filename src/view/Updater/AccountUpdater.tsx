@@ -21,7 +21,7 @@ export default function AccountUpdater() {
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
     localStorage.removeItem(storage.Token);
-    logout();
+    // logout();
   }, [dispatch, history]);
 
   useEffect(() => {
