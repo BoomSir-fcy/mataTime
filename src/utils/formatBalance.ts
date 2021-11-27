@@ -124,6 +124,14 @@ export const formatDisplayBalanceWithSymbol = (stakedBalance: BigNumber, decimal
   if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.001)) {
     return getFullDisplayBalance(stakedBalance, decimals).toLocaleString()
   }
+  if (stakedBalanceBigNumber.isGreaterThanOrEqualTo(ONE_BILLION)) {
+    const codeFromStorage = getLanguageCodeFromLS()
+    return new Intl.NumberFormat(codeFromStorage, {
+      notation: 'compact',
+      // compactDisplay: 'long',
+      maximumSignificantDigits: 6,
+    }).format(stakedBalanceBigNumber.toNumber())
+  }
   return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
 }
 
