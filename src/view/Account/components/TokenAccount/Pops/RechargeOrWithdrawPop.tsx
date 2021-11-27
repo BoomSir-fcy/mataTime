@@ -119,8 +119,10 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
     setpending(true)
     try {
       await onApprove()
+      toast.success(t('setNftAuthorizationSuccess'));
     } catch (e) {
       console.error(e)
+      toast.error(t('setNftAuthorizationFail'));
     } finally {
       setpending(false)
       dispatch(fetchApproveNumAsync(account))

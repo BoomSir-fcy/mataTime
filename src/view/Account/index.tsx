@@ -23,7 +23,7 @@ const CenterCard = styled(Box)`
 
 const ContainerStyled = styled(Container)`
   /* background: pink; */
-  border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  /* border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   padding-top: 0 !important;
   padding-bottom: 12px !important;
