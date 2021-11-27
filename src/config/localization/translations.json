@@ -260,5 +260,9 @@
   "Account Approving": "Approving",
   "Account Confirm": "Confirm",
   "Account Approve": "Approve",
+  "Account Withdrawal failed!": "Withdrawal failed!",
+  "Account Recharge failed!": "Recharge failed!",
+  "Account The transaction is successful!": "The transaction is successful!",
+  "Account Single currency pledge": "Single currency pledge",
   "******end*****@FCY********": "@FCY翻译结束"
 }
