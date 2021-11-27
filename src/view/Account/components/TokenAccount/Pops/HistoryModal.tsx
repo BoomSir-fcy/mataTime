@@ -6,6 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
 import { useFetchHistoryList } from 'view/Account/hooks/walletInfo';
+import { useTranslation } from 'contexts/Localization';
 
 const CountBox = styled(Box)`
   width: 88vw;
@@ -58,6 +59,7 @@ interface init {
 }
 
 const HistoryModal: React.FC<init> = ({ token, type }) => {
+  const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
   const coin_type = token === 'Time' ? 1 : 2
@@ -82,9 +84,9 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
     <CountBox>
       <Table>
         <Row>
-          <HeadText>时间</HeadText>
-          <HeadText>金额</HeadText>
-          <HeadText>区块</HeadText>
+          <HeadText>{t('AccountTime')}</HeadText>
+          <HeadText>{t('AccountAmount')}</HeadText>
+          <HeadText>{t('AccountBlock')}</HeadText>
         </Row>
         <ScrollBox onScroll={loadMore}>
           {
