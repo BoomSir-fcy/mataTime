@@ -18,29 +18,27 @@ const Collect = React.lazy(() => import('./collect'));
 
 const Me = props => {
   return (
-    <Router forceRefresh>
-      <Switch>
-        <Route
-          path={`${props.match.path}`}
-          render={() => (
-            <Container {...props}>
-              <Route path={`${props.match.path}`} exact component={Profile} />
-              <Route path={`${props.match.path}/account`} component={Account} />
-              <Route
-                path={`${props.match.path}/profile/:uid`}
-                exact
-                component={Profile}
-              />
-              <Route path={`${props.match.path}/edit`} component={Edit} />
-              <Route path={`${props.match.path}/follow`} component={Follow} />
-              <Route path={`${props.match.path}/fans`} component={Fans} />
-              <Route path={`${props.match.path}/praise`} component={Praise} />
-              <Route path={`${props.match.path}/collect`} component={Collect} />
-            </Container>
-          )}
-        />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route
+        path={`${props.match.path}`}
+        render={() => (
+          <Container {...props}>
+            <Route path={`${props.match.path}`} exact component={Profile} />
+            <Route path={`${props.match.path}/account`} component={Account} />
+            <Route
+              path={`${props.match.path}/profile/:uid`}
+              exact
+              component={Profile}
+            />
+            <Route path={`${props.match.path}/edit`} component={Edit} />
+            <Route path={`${props.match.path}/follow`} component={Follow} />
+            <Route path={`${props.match.path}/fans`} component={Fans} />
+            <Route path={`${props.match.path}/praise`} component={Praise} />
+            <Route path={`${props.match.path}/collect`} component={Collect} />
+          </Container>
+        )}
+      />
+    </Switch>
   );
 };
 

@@ -205,6 +205,7 @@
   "commonUploadMaxSize": "超过图片上传大小",
   "commonUploadBackgroundFail": "图片上传失败",
   "commonUploadBackgroundTips": "规格:1200x500，2MB以下",
+  "commonCoinMarketEmpty": "该币种暂未收录，无法显示价格",
   "******end*****@kksam********": "@kksam翻译结束",
   "******start*****@bigCongee********": "@bigCongee翻译开始",
   "delCommentTitle": "是否删除这条评论?",

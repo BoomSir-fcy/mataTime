@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import moment from 'moment';
 import useEagerConnect from 'hooks/useEagerConnect';
 import GlobalStyle from 'style/global';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { IM } from 'utils';
+import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStore, storeAction, fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
@@ -51,12 +52,23 @@ const Container = styled(Box)<{
 function App() {
   useEagerConnect();
   const dispatch = useDispatch();
-  const store = useStore(p => p.appReducer);
   const token = window.localStorage.getItem(storage.Token);
   const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   const [ConnectAddr, setConnectAddr] = useState('0');
   const { signOut } = useAuth();
+
+  const initSocket = () => {
+    let im = new IM({
+      url: 'ws://192.168.101.112:8888/v1/ws',
+      token: token
+    });
+    im.init();
+  };
+
+  React.useEffect(() => {
+    // initSocket();
+  }, []);
 
   // 查询是否切换账户
   // const isChangeAddr = () => {
@@ -103,31 +115,22 @@ function App() {
           <AccountUpdater />
           <Switch>
             <Route path="/" exact render={props => <Home {...props} />} />
+            <Route path="/login" exact component={Login} />
             <Route
               path="/topicList/:id/:name"
-              exact
               render={props => <Home {...props} />}
             />
-            {process.env.NODE_ENV === 'development' && (
-              <Route path="/test" exact>
-                <Test />
-              </Route>
-            )}
             <Route
               path="/articleDetils/:id"
-              exact
-              render={props => (
-                <ArticleDetilsLayout {...props}></ArticleDetilsLayout>
-              )}
-            ></Route>
-            <Route
-              path="/news"
-              render={props => <CommonLayout {...props}></CommonLayout>}
-            ></Route>
-            <Route path="/login" exact component={Login} />
+              render={props => <ArticleDetilsLayout {...props} />}
+            />
+            <Route path="/news" render={props => <CommonLayout {...props} />} />
             <Route path="/exchange" component={Exchange} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
+            {process.env.NODE_ENV === 'development' && (
+              <Route path="/test" componen={Test} />
+            )}
           </Switch>
         </React.Suspense>
       </Container>

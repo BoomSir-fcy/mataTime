@@ -118,7 +118,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     }
 
     const text = render(context).join('');
-    const url = `${window.location.origin}/${window.location.hash}articleDetils/${data.post.post_id}`;
+    const url = `${window.location.origin}/articleDetils/${data.post.post_id}`;
     window.open(
       `https://twitter.com/intent/tweet?text=${text.replace(
         /#/g,

@@ -80,6 +80,7 @@ const menuArr = [
 export const Container = props => {
   useLocation();
   const index = props.location.pathname.indexOf('/me/profile');
+
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
@@ -95,7 +96,7 @@ export const Container = props => {
               <Search />
               <Swap />
               <RecommendPeople />
-              <HotTopic />
+              <HotTopic {...props} />
               <FooterCopyright />
             </>
           </Affix>
