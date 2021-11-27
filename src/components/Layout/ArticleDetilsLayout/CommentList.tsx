@@ -101,10 +101,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       <div className="relative-time">{relativeTime(item.add_time)}</div>
                     </div>
                     {item.comment_user_name && (<div className="reply">
-                      回复 和
-                      <FollowPopup>
-                        <span>{item.comment_user_name}</span>
-                      </FollowPopup>
+                      回复
+                      <span>@{item.comment_user_name}</span>
                     </div>)}
                   </Flex>
                   <Flex>
