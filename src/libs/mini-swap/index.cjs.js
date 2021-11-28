@@ -5592,7 +5592,7 @@ function usePairs(currencies) {
         return tokens.map(function (_a) {
             var _b = tslib.__read(_a, 2), tokenA = _b[0], tokenB = _b[1];
             if ((tokenA === null || tokenA === void 0 ? void 0 : tokenA.chainId) !== (tokenB === null || tokenB === void 0 ? void 0 : tokenB.chainId)) {
-                console.log(tokenA, tokenB);
+                console.debug(tokenA, tokenB);
             }
             return tokenA && tokenB && !tokenA.equals(tokenB) ? dsgswapSdk.Pair.getAddress(tokenA, tokenB) : undefined;
         });
@@ -7558,7 +7558,6 @@ function Updater$3() {
         blockNumber: null,
     }), 2), state = _b[0], setState = _b[1];
     var blockNumberCallback = React.useCallback(function (blockNumber) {
-        console.log(library, blockNumber);
         setState(function (prev) {
             if (chainId === prev.chainId) {
                 if (typeof prev.blockNumber !== 'number')
@@ -7567,7 +7566,7 @@ function Updater$3() {
             }
             return prev;
         });
-    }, [chainId, library, setState]);
+    }, [chainId, setState]);
     // attach/detach listeners
     React.useEffect(function () {
         var _a;
@@ -7578,9 +7577,7 @@ function Updater$3() {
             .getBlockNumber()
             .then(blockNumberCallback)
             .catch(function (error) { return console.error("Failed to get block number for chainId: " + chainId, error); });
-        console.log(library._events, library.onBlock);
         if (!((_a = library._events) === null || _a === void 0 ? void 0 : _a.some(function (item) { return item.type === 'block'; }))) {
-            console.log(111111111, 'once event aaaa');
             library.on('block', blockNumberCallback);
         }
         return function () {
@@ -8560,8 +8557,6 @@ function Updater$1() {
                     }));
                 })
                     .catch(function (error) {
-                    console.log(error === null || error === void 0 ? void 0 : error.isCancelledError, '=isCancelledError');
-                    console.log(error instanceof CancelledError, '=error instanceof CancelledError');
                     if (error === null || error === void 0 ? void 0 : error.isCancelledError) {
                         console.debug('Cancelled fetch for blockNumber', latestBlockNumber);
                         return;
