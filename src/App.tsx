@@ -6,20 +6,17 @@ import GlobalStyle from 'style/global';
 import { IM } from 'utils';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useStore, storeAction, fetchThunk } from 'store';
+import { fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, ToastComponents } from 'components';
-// WalletModal
-import { Box, Button, Spinner } from 'uikit';
+import { Box } from 'uikit';
 import { storage } from 'config';
-import { useThemeManager } from 'store/app/hooks';
-import { useWeb3React } from '@web3-react/core';
 
+// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
 import 'moment/locale/zh-cn';
 import 'react-toastify/dist/ReactToastify.css';
 
 import history from './routerHistory';
-import useAuth from './hooks/useAuth';
 import AccountUpdater from './view/Updater/AccountUpdater';
 
 moment.locale('zh-cn');
@@ -35,16 +32,7 @@ const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Exchange = React.lazy(() => import('./view/exchange'));
 
-const Container = styled(Box)<{
-  dark: boolean;
-}>`
-  /* background-image: ${({ dark }) =>
-    `url(${
-      require(dark
-        ? 'assets/images/dark_background.jpg'
-        : 'assets/images/light_background.jpg').default
-    })`};
-  background-attachment: fixed; */
+const Container = styled(Box)`
   background-color: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
 `;
@@ -53,10 +41,6 @@ function App() {
   useEagerConnect();
   const dispatch = useDispatch();
   const token = window.localStorage.getItem(storage.Token);
-  const [isDark] = useThemeManager();
-  const { account } = useWeb3React();
-  const [ConnectAddr, setConnectAddr] = useState('0');
-  const { signOut } = useAuth();
 
   const initSocket = () => {
     let im = new IM({
@@ -70,47 +54,16 @@ function App() {
     // initSocket();
   }, []);
 
-  // 查询是否切换账户
-  // const isChangeAddr = () => {
-  //   if (ConnectAddr === '0') {
-  //     // 赋值初始化地址
-  //     setConnectAddr(account);
-  //   } else if (ConnectAddr !== account) {
-  //     // 切换了地址就清除数据 重新登陆
-  //     signOut();
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (store.connectWallet) {
-  //     const changeHandler = () => {
-  //       dispatch(storeAction.connectWallet({ connectWallet: false }));
-  //     };
-  //     document.body.addEventListener('click', changeHandler);
-  //     return () => document.body.removeEventListener('click', changeHandler);
-  //   }
-  // }, [store.connectWallet]);
 
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token, dispatch]);
 
-  // useEffect(() => {
-  //   if (account) {
-  //     // 1.1判断链接钱包后是否切换了钱包账户
-  //     isChangeAddr();
-  //   } else {
-  //     if (ConnectAddr !== '0') {
-  //       signOut();
-  //     }
-  //   }
-  //   return () => { };
-  // }, [account]);
-
   return (
     <Router history={history}>
       <GlobalStyle />
-      <Container id="bg" dark={isDark}>
+      <Container id="bg">
+        {/* TODO: 把左侧导航栏提成公共组件 放到这个位置 */}
         <React.Suspense fallback={<PageLoader />}>
           <AccountUpdater />
           <Switch>

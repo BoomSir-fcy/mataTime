@@ -31,6 +31,11 @@ const MentionItem: React.FC<IProps> = props => {
   const [position, setPosition] = useState([-999, -999]);
   const [uid, setUid] = useState<string | number>(0);
 
+  /**
+   * @review
+   * 没看到有实际作用(除了浪费性能)
+   * 我没删，因为懒
+   */
   useEffect(() => {
     handleUserHover();
   }, []);

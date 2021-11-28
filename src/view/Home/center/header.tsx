@@ -41,6 +41,12 @@ export const Header = (props: {
   );
 
   const { title, back = false, align } = props;
+  /**
+   * 
+   * @review
+   * @bug
+   * props 参数和当前命名重复
+   */
   const clickTitle = e => {
     // console.log(e);
   };
@@ -57,6 +63,7 @@ export const Header = (props: {
         paddingLeft: back && align !== 'center' ? '60px' : null
       }}
     >
+      {/* TODO: color use theme */}
       {back && (
         <Icon
           name="icon-fanhui"

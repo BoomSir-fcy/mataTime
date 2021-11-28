@@ -43,6 +43,11 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
+
+  /**
+   * @review
+   * 看着想刷新 但在ArticleList传值是用的key
+   */
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({});
   // const  editorRef = useRef()
@@ -69,7 +74,15 @@ const Home: React.FC = (props: any) => {
     });
   };
 
+   /**
+   * @review
+   * 
+   * 1.未使用 useCallback
+   * 2.写法不规范
+   * @bug 未节流处理
+   */
   const tabsChange = item => {
+    console.log(item)
     const temp = {
       ...filterVal
     };
@@ -89,6 +102,13 @@ const Home: React.FC = (props: any) => {
           </Affix>
         </LeftCard>
         <CenterCard>
+          {/**
+           * @review
+           * 1.代码分离不清晰
+           * 2.同一页面使用差异性路由
+           * 3.Header 组件应该为公共组件
+           * 4.字符串拼接
+           */}
           <Header
             {...props}
             back={match.path === '/topicList/:id/:name'}
@@ -99,6 +119,11 @@ const Home: React.FC = (props: any) => {
                 : t('homeHeaderTitle')
             }
           />
+          {/**
+           * @review
+           * 1.应该使用Route组件
+           * 2.不应该在页面用这样的逻辑判断进行渲染 代码设计不合理
+           */}
           {match.path === '/' ? (
             <>
               <Editor type="post" sendArticle={sendArticle}></Editor>

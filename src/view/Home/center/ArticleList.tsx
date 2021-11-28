@@ -18,6 +18,11 @@ const ArticleListBox = styled.div`
 color:#fff;
 `
 
+/**
+ * 
+ * @review
+ * props 未声明类型
+ */
 export const ArticleList = (props) => {
   const { topicName = '' } = props
   const goDetils = (e) => {
@@ -108,6 +113,14 @@ export const ArticleList = (props) => {
     })
     setListData([...arr])
   }
+
+  /**
+   * @review
+   * 这样的写法我不理解
+   * 我不理解
+   * 我不理解
+   * TODO: 重构
+   */
   useEffect(() => {
     console.log(props);
     setLoading(false)
