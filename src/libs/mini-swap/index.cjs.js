@@ -7558,6 +7558,7 @@ function Updater$3() {
         blockNumber: null,
     }), 2), state = _b[0], setState = _b[1];
     var blockNumberCallback = React.useCallback(function (blockNumber) {
+        console.log(library, blockNumber);
         setState(function (prev) {
             if (chainId === prev.chainId) {
                 if (typeof prev.blockNumber !== 'number')
@@ -7566,9 +7567,10 @@ function Updater$3() {
             }
             return prev;
         });
-    }, [chainId, setState]);
+    }, [chainId, library, setState]);
     // attach/detach listeners
     React.useEffect(function () {
+        var _a;
         if (!library || !chainId || !windowVisible)
             return undefined;
         setState({ chainId: chainId, blockNumber: null });
@@ -7576,7 +7578,11 @@ function Updater$3() {
             .getBlockNumber()
             .then(blockNumberCallback)
             .catch(function (error) { return console.error("Failed to get block number for chainId: " + chainId, error); });
-        library.on('block', blockNumberCallback);
+        console.log(library._events, library.onBlock);
+        if (!((_a = library._events) === null || _a === void 0 ? void 0 : _a.some(function (item) { return item.type === 'block'; }))) {
+            console.log(111111111, 'once event aaaa');
+            library.on('block', blockNumberCallback);
+        }
         return function () {
             library.removeListener('block', blockNumberCallback);
         };
@@ -8306,7 +8312,9 @@ function waitRandom(min, max) {
 var CancelledError = /** @class */ (function (_super) {
     tslib.__extends(CancelledError, _super);
     function CancelledError() {
-        return _super.call(this, 'Cancelled') || this;
+        var _this = _super.call(this, 'Cancelled') || this;
+        _this.isCancelledError = true; // hack class and instanceof in es5
+        return _this;
     }
     return CancelledError;
 }(Error));
@@ -8316,7 +8324,9 @@ var CancelledError = /** @class */ (function (_super) {
 var RetryableError = /** @class */ (function (_super) {
     tslib.__extends(RetryableError, _super);
     function RetryableError() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.isRetryableError = true;
+        return _this;
     }
     return RetryableError;
 }(Error));
@@ -8357,7 +8367,7 @@ function retry(fn, _a) {
                     if (completed) {
                         return [3 /*break*/, 7];
                     }
-                    if (n <= 0 || !(error_1 instanceof RetryableError)) {
+                    if (n <= 0 || !(error_1 === null || error_1 === void 0 ? void 0 : error_1.isRetryableError)) {
                         reject(error_1);
                         completed = true;
                         return [3 /*break*/, 7];
@@ -8417,7 +8427,7 @@ function fetchChunk(multicallContract, chunk, minBlockNumber) {
                     _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, multicallContract.aggregate(chunk.map(function (obj) { return [obj.address, obj.callData]; }))];
                 case 2:
-                    // prettier-ignore
+                    // prettier-ignore  
                     _a = tslib.__read.apply(void 0, [_b.sent(), 2]), resultsBlockNumber = _a[0], returnData = _a[1];
                     return [3 /*break*/, 4];
                 case 3:
@@ -8426,7 +8436,7 @@ function fetchChunk(multicallContract, chunk, minBlockNumber) {
                     throw error_1;
                 case 4:
                     if (resultsBlockNumber.toNumber() < minBlockNumber) {
-                        console.debug("Fetched results for old block number: " + resultsBlockNumber.toString() + " vs. " + minBlockNumber);
+                        console.debug("Fetched results for old block number: %c " + resultsBlockNumber.toString() + " vs. " + minBlockNumber, 'color: red');
                         throw new RetryableError('Fetched for old block number');
                     }
                     return [2 /*return*/, { results: returnData, blockNumber: resultsBlockNumber.toNumber() }];
@@ -8478,7 +8488,7 @@ function outdatedListeningKeys(callResults, listeningKeys, chainId, latestBlockN
     return Object.keys(listeningKeys).filter(function (callKey) {
         var blocksPerFetch = listeningKeys[callKey];
         var data = callResults[chainId][callKey];
-        // no data, must fetch
+        //  no data, must fetch
         if (!data)
             return true;
         var minDataBlockNumber = latestBlockNumber - (blocksPerFetch - 1);
@@ -8550,7 +8560,9 @@ function Updater$1() {
                     }));
                 })
                     .catch(function (error) {
-                    if (error instanceof CancelledError) {
+                    console.log(error === null || error === void 0 ? void 0 : error.isCancelledError, '=isCancelledError');
+                    console.log(error instanceof CancelledError, '=error instanceof CancelledError');
+                    if (error === null || error === void 0 ? void 0 : error.isCancelledError) {
                         console.debug('Cancelled fetch for blockNumber', latestBlockNumber);
                         return;
                     }

@@ -34,7 +34,7 @@ async function fetchChunk(
   let resultsBlockNumber
   let returnData
   try {
-    // prettier-ignore
+    // prettier-ignore  
     [resultsBlockNumber, returnData] = await multicallContract.aggregate(
       chunk.map((obj) => [obj.address, obj.callData])
     )
@@ -43,7 +43,7 @@ async function fetchChunk(
     throw error
   }
   if (resultsBlockNumber.toNumber() < minBlockNumber) {
-    console.debug(`Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`)
+    console.debug(`Fetched results for old block number: %c ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`, 'color: red')
     throw new RetryableError('Fetched for old block number')
   }
   return { results: returnData, blockNumber: resultsBlockNumber.toNumber() }
@@ -101,7 +101,7 @@ export function outdatedListeningKeys(
     const blocksPerFetch = listeningKeys[callKey]
 
     const data = callResults[chainId][callKey]
-    // no data, must fetch
+    //  no data, must fetch
     if (!data) return true
 
     const minDataBlockNumber = latestBlockNumber - (blocksPerFetch - 1)
@@ -188,7 +188,7 @@ export default function Updater(): null {
             )
           })
           .catch((error: any) => {
-            if (error instanceof CancelledError) {
+            if (error?.isCancelledError) {
               console.debug('Cancelled fetch for blockNumber', latestBlockNumber)
               return
             }
