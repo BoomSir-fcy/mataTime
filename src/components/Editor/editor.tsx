@@ -135,7 +135,8 @@ export const Editor = (props: Iprops) => {
     };
   },[])
 useEffect(() => {
-  if(imgList.length>0)setIsDisabledSend(false)
+  console.log(imgList.length);
+  setIsDisabledSend(imgList.length<1)
 },[imgList])
   const callbackSelectImg = e => {
     const input = document.createElement('input');
