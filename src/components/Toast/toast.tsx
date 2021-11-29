@@ -8,7 +8,7 @@ export const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
     <ToastContainer
       containerId="toast"
       position="top-right"
-      limit={5}
+      limit={100}
       autoClose={3000}
       newestOnTop={false}
       closeOnClick

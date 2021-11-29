@@ -1,29 +1,51 @@
-import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import { Editor as slateEditor, Transforms, Range, createEditor, Descendant, Element as SlateElement } from 'slate';
+import React, {
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+  useState
+} from 'react';
+import {
+  Editor as slateEditor,
+  Transforms,
+  Range,
+  createEditor,
+  Descendant,
+  Element as SlateElement
+} from 'slate';
 import { Flex } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
 import { UploadList } from './UploadList';
 import { Api } from 'apis';
 import { toast } from 'react-toastify';
-import { Slate, Editable, ReactEditor, withReact, useSelected, useFocused, useSlate } from 'slate-react';
+import {
+  Slate,
+  Editable,
+  ReactEditor,
+  withReact,
+  useSelected,
+  useFocused,
+  useSlate
+} from 'slate-react';
 import { SlateBox, SendButton, CancelButton } from './style';
 import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
-import escapeHtml from 'escape-html'
+import escapeHtml from 'escape-html';
 
 type Iprops = {
-  type: any
-  initValue?: any
-  sendArticle: any
-  cancelSendArticle?: any
-}
+  type: any;
+  initValue?: any;
+  sendArticle: any;
+  cancelSendArticle?: any;
+};
 
 const DefaultElement = props => {
   return <p {...props.attributes}>{props.children}</p>;
 };
+
 const initialValue: Descendant[] = [
   {
     type: 'paragraph',
@@ -34,6 +56,7 @@ const initialValue: Descendant[] = [
     ]
   }
 ];
+
 const withMentions = editor => {
   const { isInline, isVoid } = editor;
   const tempEditor = editor;
@@ -45,6 +68,7 @@ const withMentions = editor => {
   };
   return tempEditor;
 };
+
 const withTopics = editor => {
   const { isInline, isVoid } = editor;
   const tempEditor = editor;
@@ -53,6 +77,7 @@ const withTopics = editor => {
   };
   return tempEditor;
 };
+
 const insertMention = (editor, { character, uid }) => {
   const mention: MentionElement = {
     type: 'mention',
@@ -63,45 +88,50 @@ const insertMention = (editor, { character, uid }) => {
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
 };
-const insertTopic = (editor, character ='') => {
+
+const insertTopic = (editor, character = '') => {
   // const topic: any = {
   //   type: 'topic',
   //   children: [{ text: character }]
   // };
-  Transforms.insertText(editor,`#${character}#`)
+  Transforms.insertText(editor, `#${character}#`);
   // Transforms.insertNodes(editor, topic);
 };
-function deep (children){
-  return children.map(item=>{
-    if(item.text){
-      return {...item,text:escapeHtml(item.text)}
+
+function deep(children) {
+  return children.map(item => {
+    if (item.text) {
+      return { ...item, text: escapeHtml(item.text) };
     }
-    if(item.type==='mention'){
-      return {...item,character:escapeHtml(item.character)}
+    if (item.type === 'mention') {
+      return { ...item, character: escapeHtml(item.character) };
     }
-    return item
-  })
+    return item;
+  });
 }
-const parseValue = (value)=>{
-  let arr = value.map(item=>{
-    if(item.children){
-      return{...item, children: deep(item.children)}
-    }else{
-      return item
+
+const parseValue = value => {
+  let arr = value.map(item => {
+    if (item.children) {
+      return { ...item, children: deep(item.children) };
+    } else {
+      return item;
     }
-  })
-  return arr
-}
+  });
+  return arr;
+};
+
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => { }, type } = props;
-  const [isDisabledSend,setIsDisabledSend] = useState(true)
-  const ref = useRef<HTMLDivElement | null>();
+  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const [isDisabledSend, setIsDisabledSend] = useState(true);
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
   const [searchUser, setSearchUser] = useState(false);
   const [searcTopic, setSearcTopic] = useState(false);
   const [refresh, setRefresh] = useState(1);
   const { t } = useTranslation();
+  const ref = useRef<HTMLDivElement | null>();
+
   const renderElement = useCallback(props => {
     switch (props.element.type) {
       case 'mention':
@@ -112,13 +142,19 @@ export const Editor = (props: Iprops) => {
         return <DefaultElement {...props} />;
     }
   }, []);
-  const editor = useMemo(() => withTopics(withMentions(withReact(withHistory(createEditor())))), []);
+
+  const editor = useMemo(
+    () => withTopics(withMentions(withReact(withHistory(createEditor())))),
+    []
+  );
+
   useEffect(() => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) { }
+    } catch (err) {}
   }, [props.initValue]);
+
   // 扩大focus距离
   useEffect(() => {
     const el: any = ref.current;
@@ -133,20 +169,23 @@ export const Editor = (props: Iprops) => {
     return () => {
       el.removeEventListener('click', eventFn);
     };
-  },[])
-useEffect(() => {
-  if(imgList.length>0)setIsDisabledSend(false)
-},[imgList])
+  }, []);
+
+  useEffect(() => {
+    if (imgList.length > 0) setIsDisabledSend(false);
+  }, [imgList]);
+
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
     input.name = 'file';
     input.multiple = true;
-    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp'
+    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp';
     input.onchange = async (e: any) => {
       const selectFiles = e.target.files;
       if (!selectFiles[0]) return false;
-      if (imgList.length + selectFiles.length > 4) return toast.error(t('uploadImgMaxMsg'));
+      if (imgList.length + selectFiles.length > 4)
+        return toast.error(t('uploadImgMaxMsg'));
       const fileList: string[] = [];
       for (let file of selectFiles) {
         let fr: any = new FileReader();
@@ -156,9 +195,15 @@ useEffect(() => {
         fr.onload = () => {
           fileList.push(fr.result);
           if (fileList.length === selectFiles.length) {
-            Api.CommonApi.uploadImgList({ dir_name: props.type, base64: fileList }).then(res => {
+            Api.CommonApi.uploadImgList({
+              dir_name: props.type,
+              base64: fileList
+            }).then(res => {
               if (Api.isSuccess(res)) {
-                setImgList([...imgList, ...res.data.map(item => item.full_path)]);
+                setImgList([
+                  ...imgList,
+                  ...res.data.map(item => item.full_path)
+                ]);
                 toast.success(t('uploadImgSuccessMsg'));
                 console.log(imgList);
               } else {
@@ -171,53 +216,61 @@ useEffect(() => {
     };
     input.click();
   };
+
   const restInput = () => {
     setValue(initialValue);
-    setImgList([])
+    setImgList([]);
     setRefresh(refresh === 1 ? 2 : 1);
   };
-const deepContent = (arr)=>{
-  let content= '',
-  userIdList=[]
-  const deepArr = (data)=>{
-    data.forEach(item=>{
-        if(item.type==='mention'){
-          userIdList.push(item.character.slice(1) + '_' + item.attrs.userid)
+
+  const deepContent = arr => {
+    let content = '',
+      userIdList = [];
+    const deepArr = data => {
+      data.forEach(item => {
+        if (item.type === 'mention') {
+          userIdList.push(item.character.slice(1) + '_' + item.attrs.userid);
         }
-        if(item.text||item.character){
-          content+=(item.text||item.character)
+        if (item.text || item.character) {
+          content += item.text || item.character;
         }
-        if(item.children){
-        deepArr(item.children)
-      }
-    })
-  }
-  deepArr(arr)
-  return {
-    content,
-    userIdList
-  }
-}
-  const [timeId,setTimeId] = useState(null)
+        if (item.children) {
+          deepArr(item.children);
+        }
+      });
+    };
+    deepArr(arr);
+    return {
+      content,
+      userIdList
+    };
+  };
+
+  const [timeId, setTimeId] = useState(null);
   const sendArticle = () => {
-    if(timeId) return toast.warning('间隔时间需超过3秒!')
+    if (timeId) return toast.warning('间隔时间需超过3秒!');
     setTimeId(
-      setTimeout(() =>{
-        setTimeId(null)
-      },3000)
-    )
+      setTimeout(() => {
+        setTimeId(null);
+      }, 3000)
+    );
     // 递归收集字符和@的id
     // let userIdList = []
     // let content = ''
-    let {userIdList,content} = deepContent(value)
-    const newValue = parseValue(value)
+    let { userIdList, content } = deepContent(value);
+    const newValue = parseValue(value);
     console.log(newValue);
-    if(content.length>140){
-      setTimeId(null)
-      return toast.warning('字数不可超过140')
+    if (content.length > 140) {
+      setTimeId(null);
+      return toast.warning('字数不可超过140');
     }
-    props.sendArticle(JSON.stringify(newValue), restInput, imgList.join(','), userIdList.join(','));
-    restInput()
+    props.sendArticle(
+      JSON.stringify(newValue),
+      restInput,
+      imgList.join(','),
+      userIdList.join(',')
+    );
+    restInput();
   };
   const searchSelect = (data, type) => {
     setSearcTopic(false);
@@ -227,36 +280,56 @@ const deepContent = (arr)=>{
       insertMention(editor, { uid: data.uid, character: '@' + data.nick_name });
     }
     if (type === 'topic') {
-      insertTopic(editor, data.topic_name );
+      insertTopic(editor, data.topic_name);
     }
   };
   return (
     <SlateBox key={refresh}>
-      <SearchPop type={searchUser ? 'user' : 'topic'} show={searcTopic || searchUser} callback={searchSelect}></SearchPop>
-      <Slate editor={editor} value={value} onChange={value => {
-        const {content} = deepContent(value)
-          setValue(value)
-        setIsDisabledSend(!content)
-      }}>
+      <SearchPop
+        type={searchUser ? 'user' : 'topic'}
+        show={searcTopic || searchUser}
+        callback={searchSelect}
+      />
+      <Slate
+        editor={editor}
+        value={value}
+        onChange={value => {
+          const { content } = deepContent(value);
+          setValue(value);
+          setIsDisabledSend(!content);
+        }}
+      >
         <div className="text-box" ref={ref}>
-          <Editable autoFocus renderElement={renderElement} placeholder={type === 'comment' ? t('newsCommentReply') : t('editorPlaceholder')} />
+          <Editable
+            autoFocus
+            renderElement={renderElement}
+            placeholder={
+              type === 'comment'
+                ? t('newsCommentReply')
+                : t('editorPlaceholder')
+            }
+          />
         </div>
-        <UploadList delImgItem={data => setImgList(data)} imgList={imgList}></UploadList>
+        <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
         <Flex justifyContent="space-between" alignItems="center">
           <Toolbar
-          type={type}
+            type={type}
             callbackEmoji={data => editor.insertText(data)}
             callbackSelectImg={callbackSelectImg}
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
-          ></Toolbar>
+          />
           {initValue ? (
             <div>
               <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
-              <SendButton disabled={isDisabledSend} onClick={sendArticle}>保存并发布</SendButton>
+              <SendButton disabled={isDisabledSend} onClick={sendArticle}>
+                保存并发布
+              </SendButton>
             </div>
           ) : (
-            <SendButton disabled={isDisabledSend}  onClick={sendArticle}>{type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}</SendButton>
+            <SendButton disabled={isDisabledSend} onClick={sendArticle}>
+              {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
+            </SendButton>
           )}
         </Flex>
       </Slate>

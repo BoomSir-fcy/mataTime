@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useTranslation } from 'contexts/Localization';
-import escapeHtml from 'escape-html';
-import { Node, Text } from 'slate';
 import { Link } from 'react-router-dom';
+import { Node, Text } from 'slate';
+import { useTranslation } from 'contexts/Localization';
 import { FollowPopup, MoreOperatorEnum } from 'components';
+import escapeHtml from 'escape-html';
 type IProps = {
   content: string;
   callback?: Function;
 };
+
 const ContentParsingWrapper = styled.div``;
 const ExpandWrapper = styled.div`
   width: 100%;
@@ -46,11 +47,13 @@ const ParagraphItem = styled.div`
 //   });
 //   return val
 // }
+
 export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation();
   const ref: any = useRef();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
+
   useEffect(() => {
     const { content } = props;
     try {
@@ -58,6 +61,7 @@ export const ContentParsing = (props: IProps) => {
       setParsingResult(arr);
     } catch (err: any) {}
   }, [props.content]);
+
   useEffect(() => {
     setTimeout(() => {
       if (ref.current) {
@@ -84,29 +88,29 @@ export const ContentParsing = (props: IProps) => {
     return s;
   };
 
-  const serialize2 = (node, type = null) => {
+  const serialize2 = (node, type = null, index?: number) => {
     const { children } = node;
     switch (node.type) {
       case 'paragraph':
         return (
-          <ParagraphItem>
-            {children ? children.map(n => serialize2(n)) : ''}
+          <ParagraphItem key={index}>
+            {children?.map((n, index) => serialize2(n, null, index))}
           </ParagraphItem>
         );
       case 'topic':
         return (
           <Link
             onClick={e => e.stopPropagation()}
-            to={`/topicList/empty/${
-              children ? children.map(n => serialize2(n, 'topic')) : ''
-            }`}
+            to={`/topicList/empty/${children?.map((n, index) =>
+              serialize2(n, 'topic', index)
+            )}`}
           >
-            #{children ? children.map(n => serialize2(n)) : ''}#
+            #{children?.map((n, index) => serialize2(n, null, index))}#
           </Link>
         );
       case 'mention':
         return (
-          <FollowPopup uid={node?.attrs?.userid || 0}>
+          <FollowPopup uid={node?.attrs?.userid || 0} key={index}>
             <a>{node.character}</a>
           </FollowPopup>
         );
@@ -115,8 +119,9 @@ export const ContentParsing = (props: IProps) => {
           parseText2(node.text || '')
         ) : (
           <span
+            key={index}
             dangerouslySetInnerHTML={{ __html: parseText2(node.text || '') }}
-          ></span>
+          />
         );
     }
   };
@@ -127,10 +132,9 @@ export const ContentParsing = (props: IProps) => {
         parsingResult.length > 0 &&
         parsingResult.map((item: any, index) => {
           if (!expand) {
-            return index < 8 && serialize2(item);
-          } else {
-            return serialize2(item);
+            return index < 8 && serialize2(item, null, index);
           }
+          return serialize2(item, null, index);
         })}
       {parsingResult && parsingResult.length > 8 ? (
         <ExpandWrapper>

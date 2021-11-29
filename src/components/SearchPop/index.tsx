@@ -72,16 +72,16 @@ export const SearchPop = (props: Iprops) => {
               margin="15px 0"
               size={20}
               color="#7393FF"
-            ></Icon>
+            />
             {!!nicKName ? (
               <Icon
-                cur
+                current={1}
                 name="icon-guanbi2fill"
                 margin="15px 0"
                 size={20}
                 color="#4168ED"
                 onClick={() => setNickName('')}
-              ></Icon>
+              />
             ) : null}
             <input
               placeholder="昵称搜索"
@@ -107,7 +107,7 @@ export const SearchPop = (props: Iprops) => {
                     <UserTitle style={{ flex: 1 }} title={item.nick_name}>
                       {item.nick_name}
                     </UserTitle>
-                    {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
+                    {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"/> */}
                   </Flex>
                   <UserDesc title={item.address}>
                     {item.address &&
@@ -129,7 +129,7 @@ export const SearchPop = (props: Iprops) => {
               margin="15px 0"
               size={20}
               color="#7393FF"
-            ></Icon>
+            />
             {!!topicValue ? (
               <Icon
                 cur={true}
@@ -138,7 +138,7 @@ export const SearchPop = (props: Iprops) => {
                 size={20}
                 color="#4168ED"
                 onClick={() => setTopicValue('')}
-              ></Icon>
+              />
             ) : null}
             <input
               type="text"
