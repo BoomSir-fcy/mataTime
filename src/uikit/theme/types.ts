@@ -70,6 +70,7 @@ export type Gradients = {
 };
 
 export type Colors = {
+  disableStep: string;
   protrudeColor: string;
   upPrice: string;
   white: string;

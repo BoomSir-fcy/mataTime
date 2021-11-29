@@ -16,6 +16,8 @@ const NowrapBtn = styled(Button)`
 `;
 
 export const NftButton: React.FC<{ item: any }> = ({ item }) => {
+  console.log(item);
+
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { onStake: onNftsStake } = useNftStakeFarms();

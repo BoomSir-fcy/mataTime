@@ -12,7 +12,7 @@ import { useLogin, useSignIn } from '../hooks';
 import { useContract } from '../hook';
 import { WalletAddress } from './signUp';
 import { useTranslation } from 'contexts/Localization';
-
+import { shortenAddress } from 'utils/contract';
 import Dots from 'components/Loader/Dots';
 
 const InputItems = styled(Flex)`
@@ -36,22 +36,35 @@ const InputNickName = styled.input`
   background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 10px;
   padding-left: 25px;
+  padding-right: 96px;
   border: 0;
   outline: 0;
   &::placeholder {
     color: ${({ theme }) => theme.colors.textTips};
   }
 `;
+const NickNameBox = styled.div`
+position: relative;
+`;
+
 const Submit = styled(Button)`
   width: 205px;
   text-transform: capitalize;
 `;
 const NameVerify = styled(Text)`
   position: absolute;
-  left: 150px;
-  bottom: -22px;
+  left: 2px;
+  bottom: -30px;
 `;
-
+const WalletAddr = styled.div`
+  position: absolute;
+  padding:4px 8px;
+  font-size:14px;
+  right: 10px;
+  bottom: 12px;
+  background: #4D535F;
+  border-radius: 10px;
+`;
 export const SignUpSetName: React.FC<{
   status?: boolean;
 }> = React.memo(({ status }) => {
@@ -63,7 +76,7 @@ export const SignUpSetName: React.FC<{
     isSignin: false,
     nickName: ''
   });
-  const [haveNickName, sethaveNickName] = useState(true);
+  const [haveNickName, sethaveNickName] = useState(false);
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const { checkNickname, createUser } = useContract();
@@ -137,52 +150,52 @@ export const SignUpSetName: React.FC<{
 
   return (
     <Box>
-      <Text
+      {/* <Text
         fontSize="34px"
         marginBottom="29px"
         bold
         style={{ textTransform: 'capitalize' }}
       >
         {t('loginWelcome')}
-      </Text>
-      <WalletAddress address={account} />
-      <Box paddingTop="25px">
-        <InputItems marginBottom="32px" alignItems="center">
+      </Text> */}
+      {/* <WalletAddress address={account} /> */}
+      <Box paddingTop="100px">
+        {/* <InputItems marginBottom="32px" alignItems="center">
           <InputText>{t('loginInputTitleAvatar')}</InputText>
           <Flex alignItems="flex-end">
             {nft.image && <InputNftImg src={nft.image} />}
             <Text color="textTips">{t('loginInputValueAvatar')}</Text>
           </Flex>
-        </InputItems>
+        </InputItems> */}
         <InputItems marginBottom="27px" alignItems="center">
           <InputText>{t('loginInputTitleNickname')}</InputText>
-          <InputNickName
-            onChange={event => {
-              if (event.target.value.length < 1) {
-                sethaveNickName(false);
-              } else {
-                sethaveNickName(true);
-              }
-              setState(p => {
-                p.nickName = event.target.value;
-              });
-            }}
-            minLength={6}
-            maxLength={20}
-            placeholder={t('loginInputValueNickname')}
-          />
-          {!haveNickName && (
-            <NameVerify small color="red">
-              {t('loginSetNickNameEmpty')}
+          <NickNameBox>
+            <InputNickName
+              onChange={event => {
+                if (event.target.value.length < 1) {
+                  sethaveNickName(false);
+                } else {
+                  sethaveNickName(true);
+                }
+                setState(p => {
+                  p.nickName = event.target.value;
+                });
+              }}
+              maxLength={30}
+              placeholder={t('loginSetNickNameEmpty')}
+            />
+            <WalletAddr>{shortenAddress(account)}</WalletAddr>
+            <NameVerify small color="textTips">
+              {t('loginInputValueNickname')}
             </NameVerify>
-          )}
+          </NickNameBox>
         </InputItems>
       </Box>
-      <Flex justifyContent="center">
+      <Flex justifyContent="center" pt='30px'>
         <Submit
           scale="ld"
           onClick={state.isSignin ? signIn : submitProfile}
-          disabled={!status}
+          disabled={!status || !haveNickName}
         >
           {Boolean(loading) ? (
             <Dots>{t('loginSignUpNext')}</Dots>

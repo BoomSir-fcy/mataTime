@@ -12,10 +12,10 @@ import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { useToast } from 'hooks';
 import { useThemeManager } from 'store/app/hooks';
-import { Flex, Card, Box, Text } from 'uikit';
+import { Flex, Card, Box, Text, Button } from 'uikit';
 import { Logo, Footer } from 'components';
 import { StakeNFT } from 'components/NftList';
-import { LoginJoin, SignUp } from './components';
+import { LoginJoin, SignUp, Step, WalletAddress } from './components';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useLogin, useSignIn } from './hooks';
 import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
@@ -36,11 +36,9 @@ const LoginContainer = styled(Flex)`
     min-height: 100vh;
   }
 `;
-const LeftBox = styled(Box)<{
-  isbackground?: boolean;
-}>`
+const LeftBox = styled(Box)`
   width: 62.5vw;
-  background-image: url(${({ isbackground }) => !isbackground && sloganImg});
+  background-image: url(${sloganImg});
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center bottom;
@@ -69,6 +67,7 @@ const Container = styled(Box)`
   width: 100%;
   height: calc(100vh - 125px);
   padding: 55px 45px 0;
+  overflow-y: auto;
   ${({ theme }) => theme.mediaQueries.md} {
     width: 100%;
     height: 100%;
@@ -85,7 +84,78 @@ const Nft = styled(Flex)`
     padding: 0 15px;
   }
 `;
+const FailButton = styled(Button)`
+  width: 205px;
+  margin-bottom: 23px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 45%;
+    margin-bottom: 15px;
+  }
+`;
+const SignUpWarpper = styled(Flex)`
+  padding-top: 50px;
+  padding-bottom: 100px;
+  flex-direction: column;
+  align-items: center;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-bottom: 50px;
+  }
+`;
+const SignInBox = () => {
+  const { account } = useWeb3React();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const location = useLocation();
+  const { loginCallback } = useLogin();
+  const { getUserName } = useSignIn();
+  const history = useHistory();
+  const { logout, login } = useAuth();
+  const { toastError } = useToast();
+  const redict = location?.state?.from?.pathname;
+  const [Pending, setPending] = useState(false)
 
+  const signIn = async () => {
+    setPending(true)
+    //2.1 用户已经注册登录钱包签名
+    await window.ethereum.enable();
+    const res = await loginCallback(2);
+    if (Api.isSuccess(res)) {
+      //2.2 获取用户信息
+      const user: any = await getUserName();
+      //2.3
+      dispatch(storeAction.setSigninLoading(false));
+      if (Api.isSuccess(user)) {
+        // 存储userinfo 跳转首页
+        dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+        history.replace(`${redict || '/'}`);
+      }
+    } else {
+      // logout();
+      // dispatch(storeAction.changeReset());
+      toastError(t('loginSigninFail') || res?.msg);
+    }
+    setPending(false)
+  };
+
+  return (
+    <React.Fragment>
+      <Text
+        fontSize="34px"
+        marginBottom="29px"
+        bold
+        style={{ textTransform: 'capitalize' }}
+      >
+        {t('loginWelcome')}
+      </Text>
+      <Text color="textOrigin">{t('loginSubTitle')}</Text>
+      <SignUpWarpper>
+        <WalletAddress address={account} />
+        <FailButton disabled={Pending} onClick={() => signIn()}>{t('钱包签名')}</FailButton>
+      </SignUpWarpper>
+      <Text color="textTips">{t('loginSubTips')}</Text>
+    </React.Fragment>
+  );
+};
 const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchSupportNFT();
   useFetchNftList();
@@ -113,7 +183,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
   const redict = location?.state?.from?.pathname;
-  const nftBoolean = showStakeNft && singUpStep === 1 && account;
+  // const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 选择链
   // const checkNetwork = async () => {
@@ -123,26 +193,26 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   // };
 
-  const signIn = async () => {
-    //2.1 用户已经注册登录钱包签名
-    await window.ethereum.enable();
-    const res = await loginCallback(2);
-    if (Api.isSuccess(res)) {
-      //2.2 获取用户信息
-      const user: any = await getUserName();
-      //2.3
-      dispatch(storeAction.setSigninLoading(false));
-      if (Api.isSuccess(user)) {
-        // 存储userinfo 跳转首页
-        dispatch(storeAction.changeUpdateProfile({ ...user.data }));
-        history.replace(`${redict || '/'}`);
-      }
-    } else {
-      logout();
-      dispatch(storeAction.changeReset());
-      toastError(t('loginSigninFail') || res?.msg);
-    }
-  };
+  // const signIn = async () => {
+  //   //2.1 用户已经注册登录钱包签名
+  //   await window.ethereum.enable();
+  //   const res = await loginCallback(2);
+  //   if (Api.isSuccess(res)) {
+  //     //2.2 获取用户信息
+  //     const user: any = await getUserName();
+  //     //2.3
+  //     dispatch(storeAction.setSigninLoading(false));
+  //     if (Api.isSuccess(user)) {
+  //       // 存储userinfo 跳转首页
+  //       dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+  //       history.replace(`${redict || '/'}`);
+  //     }
+  //   } else {
+  //     logout();
+  //     dispatch(storeAction.changeReset());
+  //     toastError(t('loginSigninFail') || res?.msg);
+  //   }
+  // };
 
   // 查询是否有质押的NFT
   const getStakeType = async account => {
@@ -163,11 +233,11 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (isSignin) {
-      signIn();
-    }
-  }, [isSignin]);
+  // useEffect(() => {
+  //   if (isSignin) {
+  //     signIn();
+  //   }
+  // }, [isSignin]);
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
@@ -200,32 +270,37 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
 
   return (
     <LoginContainer>
-      <LeftBox isbackground={Boolean(nftBoolean)}>
-        {nftBoolean && (
+      <LeftBox>
+        {/* {nftBoolean && (
           <Nft>
             <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>
             <StakeNFT status={1} />
           </Nft>
-        )}
+        )} */}
       </LeftBox>
       <Content>
         <Container>
-          <LogoWarpper>
+          {singUpStep === 0 && <LogoWarpper>
             <Logo
               url="/"
-              src={`${
-                require(isDark
-                  ? './images/logo.svg'
-                  : './images/light_logo.svg').default
-              }`}
+              src={`${require(isDark
+                ? './images/LOGO2.svg'
+                : './images/light_logo.svg').default
+                }`}
             />
-          </LogoWarpper>
+          </LogoWarpper>}
           {/* 登录或注册 */}
-          {isSignup ? (
-            <SignUp signUpFail={signUpFail} isStakeNft={isStakeNft} />
-          ) : (
-            <LoginJoin />
-          )}
+          {isSignin ?
+            <SignInBox /> :
+            <>
+              {!signUpFail && singUpStep > 0 && account && <Step />}
+              {isSignup ? (
+                <SignUp signUpFail={signUpFail} isStakeNft={isStakeNft} />
+              ) : (
+                <LoginJoin />
+              )}
+            </>
+          }
         </Container>
         <Footer />
       </Content>

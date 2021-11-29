@@ -18,31 +18,46 @@ import Dots from '../Loader/Dots';
 const Point = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 16px;
+  margin-left:17px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  min-width: 160px;
+  width: max-content;
   margin-bottom: 20px;
   position: relative;
   cursor: pointer;
+  &:not(:last-child){
+    margin-right:26px;
+  }
+  &:first-child{
+    margin-left:17px;
+  }
   .active {
     box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.backgroundPrimary};
   }
 `;
 const GetAuthorizeBox = styled(Box)`
-  padding: 17px;
+  padding: 10px 17px 0 0px ;
   margin-top: 10px;
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.backgroundTextArea};
 `;
 const GetAuthorize = styled(Flex)`
   /* justify-content: space-between; */
-  padding-top: 26px;
+  padding-top: 10px;
   overflow-x: auto;
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    height: 4px;
+  }
+  ::-webkit-scrollbar-thumb {
+  background-color: ${({ theme }) => theme.colors.backgroundPrimary};
+  }
 `;
 const AvatarName = styled(Text)`
+  width: max-content;
   text-align: center;
   margin-top: 14px;
   font-size: 14px;
@@ -103,7 +118,7 @@ const NftAvatar: React.FC<{
   const { t } = useTranslation();
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem);
   const NftList = useStore(p => p.loginReducer.nftList);
-
+  const nft = useStore(p => p.loginReducer.nft);
   return (
     <GetAuthorizeBox>
       {Nodata ? (
@@ -114,12 +129,12 @@ const NftAvatar: React.FC<{
       ) : (
         <>
           <Flex justifyContent="space-between" alignItems="center">
-            <Point>{t('setNftAvatarListTips')}</Point>
+            <Point>{!Boolean(status) && t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
             ) : (
               <React.Fragment>
-                {!Boolean(status) && <NftButton item={ActiveAvInfo} />}
+                {!Boolean(status) && <NftButton item={nft} />}
               </React.Fragment>
             )}
           </Flex>
@@ -130,8 +145,8 @@ const NftAvatar: React.FC<{
                   {/* {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />} */}
                   <AvatarBox
                     className={
-                      ActiveAvInfo.properties?.token_id ===
-                        item.properties.token_id && 'active'
+                      nft.properties?.token_id ===
+                      item.properties.token_id && 'active'
                     }
                   >
                     <Avatar
@@ -143,7 +158,6 @@ const NftAvatar: React.FC<{
                             storeAction.setUserNftStake({ isStakeNft: true })
                           );
                           dispatch(storeAction.setUserNft(item));
-                          setActiveAvInfo(item);
                         }
                       }}
                     />
