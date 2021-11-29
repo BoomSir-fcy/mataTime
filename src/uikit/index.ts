@@ -11,6 +11,8 @@ export * from "./components/Toggle";
 export * from "./components/Image";
 export * from "./components/Heading";
 export * from "./components/Link";
+export * from "./components/InputPanel";
+export * from "./components/Skeleton";
 export * from "./widgets/Menu";
 export * from "./theme";
 

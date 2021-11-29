@@ -9,6 +9,11 @@ export const CancelNftStake = async (masterChefContract, toNFT, tokenID) => {
   const receipt = await tx.wait();
   return receipt.status;
 };
+export const RechargeToken = async (masterChefContract, tokenAddress, amount) => {
+  const tx = await masterChefContract.chargeToken(tokenAddress, amount);
+  const receipt = await tx.wait();
+  return receipt.status;
+};
 export const createUserContact = async (
   masterChefContract,
   nickname,

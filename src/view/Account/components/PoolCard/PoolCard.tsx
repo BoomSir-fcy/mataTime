@@ -1,26 +1,65 @@
 import React, { useState } from 'react';
-import { Flex, Box, Text, Card } from 'uikit';
-import { Container } from 'components'
+import styled from 'styled-components'
+import { Flex, Box, Text, Card, Skeleton } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
+import { Container, Timer } from 'components'
+import { formatDisplayApr } from 'utils/formatBalance';
+import getTimePeriods from 'utils/getTimePeriods';
+import { SinglePoolData, UserData, PoolUserData, PoolAprs } from 'store/pools/types';
 import PoolCardHeader from './PoolCardHeader'
 import PoolAction from './PoolAction';
 
-const PoolCard: React.FC = () => {
+const ContainerStyled = styled(Container)`
+ padding-top: 0;
+`
+
+interface PoolCardProps {
+  poolInfo: SinglePoolData
+  userData?: UserData
+  poolApr?: PoolAprs
+  userStakes?: PoolUserData[]
+}
+const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userStakes }) => {
+  const { t } = useTranslation()
+
+
+  const { days, hours, minutes } = getTimePeriods(Number(poolInfo.duration))
 
   return (
-    <Card>
+    <Card isRadius={true}>
       <Box>
-        <PoolCardHeader />
-        <Flex justifyContent="space-between">
-          <Box>
-            <Text>ARP</Text>
-            <Text>253%</Text>
-          </Box>
-          <Box>
-            <Text textAlign="right">Liquidity</Text>
-            <Text textAlign="right">$ 111.122</Text>
-          </Box>
-        </Flex>
-        <PoolAction />
+        <PoolCardHeader
+          depositToken={poolInfo.depositToken}
+          rewardToken0={poolInfo.rewardToken0}
+          rewardToken1={poolInfo.rewardToken1}
+          depositSymbol={poolInfo.depositSymbol}
+          rewardToken0Symbol={poolInfo.rewardToken0Symbol}
+          rewardToken1Symbol={poolInfo.rewardToken1Symbol}
+          poolAddress={poolInfo.poolAddress} />
+        <ContainerStyled>
+          <Flex justifyContent="space-between">
+            <Box>
+              <Text color="textTips">{t('ARP')}</Text>
+              <Text bold color="textPrimary">{formatDisplayApr(poolApr?.totalApr)}%</Text>
+            </Box>
+            <Box>
+              <Text color="textTips">{t('Lock time')}</Text>
+              <Timer bold color="white_black" itemMr="6px" minutes={minutes} hours={hours} days={days} />
+            </Box>
+            <Box>
+              <Text color="textTips" textAlign="right">{t('Total staked')}</Text>
+              {
+                Number(poolInfo.totalLiquidity)
+                  ?
+                  <Text bold textAlign="right">$ {Number(poolInfo.totalLiquidity).toLocaleString(undefined, { maximumFractionDigits: 0 })}</Text>
+                  :
+                  <Skeleton />
+
+              }
+            </Box>
+          </Flex>
+        </ContainerStyled>
+        <PoolAction userData={userData} poolInfo={poolInfo} />
       </Box>
     </Card>
   )

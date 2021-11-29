@@ -65,6 +65,7 @@ export type Gradients = {
   cardHeader: string;
   blue: string;
   violet: string;
+  tags: string;
   violetAlt: string;
   gold: string;
 };
@@ -72,6 +73,7 @@ export type Gradients = {
 export type Colors = {
   disableStep: string;
   protrudeColor: string;
+  ThemeText: string;
   upPrice: string;
   white: string;
   downPrice: string;

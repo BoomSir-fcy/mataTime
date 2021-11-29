@@ -111,7 +111,7 @@
     "name": "m_dsg_token",
     "outputs": [
       {
-        "internalType": "contract DSGToken",
+        "internalType": "contract IBurnableERC20",
         "name": "",
         "type": "address"
       }
@@ -124,7 +124,7 @@
     "name": "m_time_pool",
     "outputs": [
       {
-        "internalType": "contract TimePool",
+        "internalType": "contract MutiRewardPool",
         "name": "",
         "type": "address"
       }
@@ -137,7 +137,7 @@
     "name": "m_time_token",
     "outputs": [
       {
-        "internalType": "contract ERC20",
+        "internalType": "contract IERC20",
         "name": "",
         "type": "address"
       }
@@ -150,7 +150,7 @@
     "name": "m_vdsg_token",
     "outputs": [
       {
-        "internalType": "contract vDSGToken",
+        "internalType": "contract IvDsgToken",
         "name": "",
         "type": "address"
       }
@@ -247,19 +247,32 @@
   },
   {
     "inputs": [],
-    "name": "withdraw",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "name": "withdrawAll",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "idx",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
     "name": "getReward",
     "outputs": [
       {
@@ -380,7 +393,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct TimeShop.dsg_time_token_rate[]",
+        "internalType": "struct TimeShop.DsgTimeTokenRate[]",
         "name": "vv",
         "type": "tuple[]"
       }
@@ -450,9 +463,55 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct TimeShop.debtRecord",
+        "internalType": "struct TimeShop.DebtRecord",
         "name": "",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "getUserBuyRecords",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "round",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "latestTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "debtAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TimeShop.DebtRecord[]",
+        "name": "records",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

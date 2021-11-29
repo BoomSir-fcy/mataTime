@@ -3,6 +3,7 @@ import { simpleRpcProvider } from 'utils/providers'
 import dsgnftAbi from 'config/abi/dsgnft.json'
 import nftSocialAbi from 'config/abi/nftSocial.json'
 import timeShopAbi from 'config/abi/TimeShop.json'
+import MutiRewardPoolAbi from 'config/abi/MutiRewardPool.json'
 
 
 // Addresses
@@ -11,13 +12,16 @@ import {
   getLiquidityPool,
   getMulticallAddress,
   getNftSocialAddress,
-  getTimeShopAddress
+  getSinglePool,
+  getTimeShopAddress,
+  getCashierDeskAddress
 } from 'utils/addressHelpers'
 
 // ABI
 import bep20Abi from 'config/abi/erc20.json'
 import erc721Abi from 'config/abi/erc721.json'
 import MultiCallAbi from 'config/abi/Multicall.json'
+import CashierDeskAbi from 'config/abi/CashierDesk.json'
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
   const signerOrProvider = signer ?? simpleRpcProvider
@@ -48,4 +52,12 @@ export const getTimeShopContract = (signer?: ethers.Signer | ethers.providers.Pr
 
 export const getLiquidityPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(nftSocialAbi, getLiquidityPool(), signer)
+}
+
+export const getSinglePoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(MutiRewardPoolAbi, getSinglePool(), signer)
+}
+
+export const getCashierDeskContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(CashierDeskAbi, getCashierDeskAddress(), signer)
 }

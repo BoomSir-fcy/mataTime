@@ -37,7 +37,7 @@ export const lightColors: Colors = {
   white: 'white',
   background: '#FFF',
   backgroundPage: '#f5fdfc',
-  backgroundLight: '#F6FFF0',
+  backgroundLight: '#EAF2FF',
   backgroundSelect: '#ceece7',
   backgroundDisabled: '#E9EAEB',
   backgroundPrimary: '#4168ED',
@@ -75,6 +75,7 @@ export const lightColors: Colors = {
   borderColor: '#EFF4F5',
   protrudeColor: '#FFFFFF',
   disableStep: '#4D535F',
+  ThemeText: '#4168ED',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
@@ -82,6 +83,7 @@ export const lightColors: Colors = {
     inverseBubblegum: 'linear-gradient(139.73deg, #F3EFFF 0%, #E5FDFF 100%)',
     cardHeader: 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)',
     blue: 'linear-gradient(180deg, #A7E8F1 0%, #94E1F2 100%)',
+    tags: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     violet: 'linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)',
     violetAlt: 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
@@ -106,7 +108,7 @@ export const darkColors: Colors = {
   secondary: '#9A6AFF',
   background: '#191F2D',
   backgroundPage: '#0B1513',
-  backgroundLight: '#334542',
+  backgroundLight: '#2B303F',
   backgroundSelect: '#4168ED',
   backgroundDisabled: '#3c3742',
   backgroundPrimary: '#4168ED',
@@ -145,6 +147,7 @@ export const darkColors: Colors = {
   borderColor: '#4D535F',
   protrudeColor: '#4168ED',
   disableStep: '#4D535F',
+  ThemeText: '#4168ED',
   gradients: {
     footer: '#191F2D',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
@@ -154,6 +157,7 @@ export const darkColors: Colors = {
     blue: 'linear-gradient(180deg, #00707F 0%, #19778C 100%)',
     violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
     violetAlt: 'linear-gradient(180deg, #434575 0%, #66578D 100%)',
+    tags: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
   },
   shadow: {

@@ -82,6 +82,7 @@ function App() {
             <Route path="/exchange" component={Exchange} />
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
+            <Route path="/account" component={Account} />
             {process.env.NODE_ENV === 'development' && (
               <Route path="/test" componen={Test} />
             )}
