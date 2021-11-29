@@ -1,11 +1,56 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ImgListBox, ImgItem, MoreImg } from './style'
+import { ImgListBox } from './style'
 import Carousel, { Modal, ModalGateway } from 'react-images'
 type Iprops = {
   list: string[]
 }
+// export const UploadList = (props: Iprops) => {
+//   const { list = [] } = props
+//   const [modalIsOpen, setModalIsOpen] = useState(false)
+//   const [isMore, setIsore] = useState(false)
+//   const [previewImgList, setPreviewImgList] = useState([])
+//   const clickMore = (e) => {
+//     e.stopPropagation()
+//     setIsore(true)
+//   }
+//   const preViewImg = (index) => {
+//     setPreviewImgList([...list.slice(index), ...list.slice(0, index)].map(item => ({ source: item })))
+//     setModalIsOpen(true)
+//   }
+//   return (
+//     list.length > 0 ?
+//         <ImgListBox style={{ overflowX: isMore ? 'auto' : 'hidden' }} onClick={(e) => e.stopPropagation()}>
+//         {
+//           modalIsOpen ?
+//             <ModalGateway>
+//               <Modal onClose={() => setModalIsOpen(false)}>
+//                 <Carousel views={previewImgList} />
+//               </Modal>
+//             </ModalGateway>
+//             : null
+//         }
+//           {
+//             Array(isMore ? list.length : list.length > 3 ? 3 : list.length).fill(null).map((item, index) => (
+//               <ImgItem src={list[index]} key={index} onClick={() => preViewImg(index)}>
+//               </ImgItem>
+//             ))
+//           }
+//           {
+//             !isMore && list.length > 3 ?
+//               <MoreImg onClick={clickMore}>
+//                 +
+//                 <br />
+//                 3
+//               </MoreImg>
+//               : null
+//           }
+//         </ImgListBox>
+//       : null
+//   )
+// }
 export const ImgList = (props: Iprops) => {
   const { list = [] } = props
+  // const list = ['https://static.social.qgx.io/post/8d579491-4519-4a15-8f9b-14e58524a376.jpg','https://static.social.qgx.io/post/8d579491-4519-4a15-8f9b-14e58524a376.jpg','https://static.social.qgx.io/post/8d579491-4519-4a15-8f9b-14e58524a376.jpg']
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [isMore, setIsore] = useState(false)
   const [previewImgList, setPreviewImgList] = useState([])
@@ -19,8 +64,8 @@ export const ImgList = (props: Iprops) => {
   }
   return (
     list.length > 0 ?
-        <ImgListBox style={{ overflowX: isMore ? 'auto' : 'hidden' }} onClick={(e) => e.stopPropagation()}>
-        {
+      <ImgListBox  onClick={(e) => e.stopPropagation()}>
+      {
           modalIsOpen ?
             <ModalGateway>
               <Modal onClose={() => setModalIsOpen(false)}>
@@ -29,22 +74,23 @@ export const ImgList = (props: Iprops) => {
             </ModalGateway>
             : null
         }
-          {
-            Array(isMore ? list.length : list.length > 3 ? 3 : list.length).fill(null).map((item, index) => (
-              <ImgItem src={list[index]} key={index} onClick={() => preViewImg(index)}>
-              </ImgItem>
-            ))
-          }
-          {
-            !isMore && list.length > 3 ?
-              <MoreImg onClick={clickMore}>
-                +
-                <br />
-                3
-              </MoreImg>
-              : null
-          }
-        </ImgListBox>
-      : null
+      {
+        list.length===3?
+        (
+          <>
+            <img onClick={(e)=>preViewImg(0)} src={list[0]} alt="" />
+            <div className="imgListRightBox">
+              <img onClick={(e)=>preViewImg(1)} src={list[1]} alt="" />
+              <img onClick={(e)=>preViewImg(0)} src={list[2]} alt="" />
+            </div>
+          </>
+        )
+        :
+        list.map((item,index)=>(
+          <img style={{width:list.length===1?'100%':null}} onClick={(e)=>preViewImg(index)} src={item} key={index} alt="" />
+        ))
+      }
+      </ImgListBox>
+    : null
   )
 }

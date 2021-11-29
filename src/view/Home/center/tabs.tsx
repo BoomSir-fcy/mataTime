@@ -55,7 +55,7 @@ export const Tabs = (props: propsType) => {
     {
       label: t('homeTabLatest'),
       value: '1',
-      paramsName:'newest_sort'
+      paramsName:'attention'
     },
     // {
     //   label: t('homeTabPopular'),

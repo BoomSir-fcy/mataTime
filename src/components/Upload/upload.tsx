@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { Flex, Text } from 'uikit';
 import { Api } from 'apis';
-
+import { useTranslation } from 'contexts/Localization';
 interface upload {
   multiple?: boolean;
   uploadSuccess: (imgSrc: string) => void;
@@ -46,6 +46,7 @@ const Mask = styled(Flex)`
 
 export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
   const imageInput = React.useRef<HTMLInputElement>();
+  const { t } = useTranslation();
   // 上传图片
   const uploadFile = async () => {
     const file: any = new FileReader();
@@ -56,7 +57,7 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
       for (let i = 0; i < imageFile.length; i++) {
         // 限制图片大小
         if (imageFile[i].size > imgMaxSize)
-          return toast.error('超过图片上传大小');
+          return toast.error(t('commonUploadMaxSize'));
         // 读取文件
         file.readAsDataURL(imageFile[i]);
         file.onload = async () => {
@@ -65,7 +66,7 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
             base64: file.result,
             dir_name: 'common'
           });
-          if (!Api.isSuccess(res)) toast.error('图片上传失败');
+          if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
           uploadSuccess(res.data.full_path);
         };
       }
@@ -74,7 +75,7 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
 
   return (
     <Container>
-      <label htmlFor="upload-images">上传背景墙</label>
+      <label htmlFor="upload-images">{t('commonUploadBackground')}</label>
       <input
         id="upload-images"
         ref={imageInput}
@@ -84,7 +85,7 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
         accept="image/*"
       />
       <Mask>
-        <Text color="textTips">规格:1200x500，2MB以下</Text>
+        <Text color="textTips">{t('commonUploadBackgroundTips')}</Text>
       </Mask>
     </Container>
   );

@@ -6,6 +6,7 @@ import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { light, dark } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
+import { backgroundColor } from 'styled-system';
 
 const SwapBox = styled.div`
   /* margin-top:15px; */
@@ -25,30 +26,50 @@ export const Swap: React.FC = () => {
 
   return (
     <SwapBox>
-      <CoinMarketCap mt="0px" mb="15px" />
+      <CoinMarketCap mb="14px" />
       <MiniSwap
         onInputCurrencyChange={handleInputChange}
         resetTheme={{
           dark: {
             colors: {
-              primary: dark.colors.backgroundPrimary,
-              textSubtle: dark.colors.textPrimary,
+              dropdown: dark.colors.input,
+              text: dark.colors.white_black,
+              backgroundDisabled: dark.colors.tertiary,
+              primary: dark.colors.textPrimary,
+              textSubtle: dark.colors.white_black,
               backgroundAlt: dark.colors.dropdownDeep,
-              invertedContrast: dark.colors.backgroundCard,
+              invertedContrast: dark.colors.backgroundCard
+            },
+            shadows: {
+              inset: 'none'
             },
             card: {
-              boxShadow: dark.shadows.box
+              boxShadow: dark.shadows.box,
+              background: dark.colors.backgroundCard
+            },
+            zIndices: {
+              modal: 9999
             }
           },
           light: {
             colors: {
-              primary: light.colors.backgroundPrimary,
-              textSubtle: light.colors.textPrimary,
+              dropdown: light.colors.input,
+              text: light.colors.white_black,
+              backgroundDisabled: light.colors.tertiary,
+              primary: light.colors.textPrimary,
+              textSubtle: light.colors.white_black,
               backgroundAlt: light.colors.backgroundAlt,
-              invertedContrast: light.colors.invertedContrast,
+              invertedContrast: light.colors.invertedContrast
+            },
+            shadows: {
+              inset: 'none'
             },
             card: {
-              boxShadow: light.shadows.box
+              boxShadow: light.shadows.box,
+              background: light.colors.backgroundCard
+            },
+            zIndices: {
+              modal: 9999
             }
           }
         }}

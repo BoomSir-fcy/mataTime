@@ -31,6 +31,11 @@ const MentionItem: React.FC<IProps> = props => {
   const [position, setPosition] = useState([-999, -999]);
   const [uid, setUid] = useState<string | number>(0);
 
+  /**
+   * @review
+   * 没看到有实际作用(除了浪费性能)
+   * 我没删，因为懒
+   */
   useEffect(() => {
     handleUserHover();
   }, []);
@@ -53,7 +58,7 @@ const MentionItem: React.FC<IProps> = props => {
 
   const goDetils = e => {
     if (props.match.path === '/articleDetils/:id') return;
-    props.history.push('/articleDetils/' + itemData.id);
+    props.history.push('/articleDetils/' + itemData.post_id || itemData.id);
   };
   return (
     <MentionItemWrapper ref={mentionRef}>
@@ -71,7 +76,7 @@ const MentionItem: React.FC<IProps> = props => {
           goDetils(e);
         }}
       >
-        <ContentParsing content={itemData.content} callback={(type: MoreOperatorEnum) => {
+        <ContentParsing {...props} content={itemData.content} callback={(type: MoreOperatorEnum) => {
           callback(itemData, type);
         }}></ContentParsing>
         <ImgList
@@ -140,7 +145,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
         <div className="user-left-wrapper">
-          <Link to={'/me/profile/' + itemData.user_id}>
+          <Link to={'/me/profile/' + (itemData.uid || itemData.user_id)}>
             <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
           </Link>
           <div className="user-info">

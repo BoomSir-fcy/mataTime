@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon, Avatar, MoreOperatorEnum } from 'components';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization'
 import {
@@ -17,6 +18,7 @@ type Iprops = {
   children: React.ReactElement;
   uid?: number | string;
   callback?: Function;
+
 }
 
 export const FollowPopup = React.memo((props: Iprops) => {
@@ -65,7 +67,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
 
   return (
-    <PopupWrapper onClick={(e)=>e.stopPropagation()} onMouseOver={(e: any) => {
+    <PopupWrapper onClick={(e) => e.stopPropagation()} onMouseOver={(e: any) => {
       e.nativeEvent.stopImmediatePropagation() //阻止冒泡
       // uid && getUserInfo()
       setVisible(true)
@@ -77,21 +79,25 @@ export const FollowPopup = React.memo((props: Iprops) => {
       {
         visible ? (
           <PopupContentWrapper >
-            <div className="content">
+            <Link
+              className="content"
+              to={'/me/profile/' + userInfo.uid}>
               <div className="left-box">
                 <div className="img-box">
-                  <Avatar className="avatar" src={userInfo.NftImage || userInfo.nft_image || '  '} scale="md" />
+                  <Avatar className="avatar" src={userInfo.nft_image || userInfo.NftImage || '  '} scale="md" />
                 </div>
               </div>
               <div className="right-box">
                 <div className="name" title={userInfo.NickName || userInfo.nick_name || '  '}>{userInfo.NickName || userInfo.nick_name || '  '}</div>
-                <div className="des"><Icon name={'icon-dunpai'} color={'#85C558'}></Icon>{(userInfo.address || '').slice(0, 3) + '...' + (userInfo.address || '').slice(35)}</div>
+                <div className="des">
+                  {/* <Icon name={'icon-dunpai'} color={'#85C558'}></Icon> */}
+                  {(userInfo.address || '').slice(0, 3) + '...' + (userInfo.address || '').slice(38)}</div>
                 <div className="number">
                   <p>{t('followFans')}<strong>{userInfo.fans_num || 0}</strong></p>
                   <p>{t('followText')}<strong>{userInfo.attention_num || 0}</strong></p>
                 </div>
               </div>
-            </div>
+            </Link>
             <div className="btn">
               <FollowBtn onClick={(e: any) => {
                 e.stopPropagation()

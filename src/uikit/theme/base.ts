@@ -189,10 +189,10 @@ const mediaPaddingSM = `
 
 const mediaPaddingXs = `
   ${mediaQueries.sm} {
-    padding: 14px 18px;
+    padding: 0 14px;
   }
   ${mediaQueries.lg} {
-    padding: 14px 18px;
+    padding: 0 14px;
   }
 `;
 
@@ -222,7 +222,7 @@ export const shadows = {
   focus: '0px 0px 0px 1px #00000000, 0px 0px 0px 2px rgba(65, 104, 237,0.6)',
   input: 'inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21);',
   inset: 'inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21)',
-  box: '0px 0px 21px 0px rgba(25, 95, 81, 0.2)',
+  box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)',
   nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)'
 };
 

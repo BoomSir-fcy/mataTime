@@ -10,8 +10,8 @@ import { useTranslation } from 'contexts/Localization';
 
 const NoticeSetBox = styled(Card)`
   height: 700px;
-  margin-top: 13px;
-  padding: 27px 29px;
+  padding: 27px 0;
+  background-color: transparent;
 `;
 const Title = styled.div`
   text-transform: capitalize;
@@ -24,7 +24,7 @@ const Rows = styled(Flex)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  padding-bottom: 23px;
+  padding: 0 30px 24px;
   margin-bottom: 22px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
 `;
@@ -56,7 +56,7 @@ const NoticeSet = () => {
   };
 
   return (
-    <NoticeSetBox>
+    <NoticeSetBox isBoxShadow>
       {/* <Column>
         <Rows>
           <Title>质量过滤</Title>

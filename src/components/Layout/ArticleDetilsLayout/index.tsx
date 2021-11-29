@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { About, Avatar, Editor, ModalWrapper } from 'components';
+import { About, Avatar, Editor, ModalWrapper, Affix } from 'components';
 import { useTranslation } from 'contexts/Localization'
 import { Route } from 'react-router-dom'
 import { Flex, Box } from 'uikit';
@@ -36,7 +36,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       pid: itemData.id,
       comment: res,
     }).then(res => {
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
         toast.success(res.data)
         setRefresh(refresh === 1 ? 2 : 1)
         resetInput()
@@ -54,9 +54,15 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
-        <LeftCard>
-          <Menu></Menu>
-        </LeftCard>
+        <Affix offsetTop={100} positionObj={{
+          top: '10px',
+          left: '50%',
+          marginLeft: '-550px'
+        }}>
+          <LeftCard>
+            <Menu></Menu>
+          </LeftCard>
+        </Affix>
         <CenterCard>
           <Header back title={t('newsBack')} {...props}></Header>
           <MeItemWrapper>
@@ -84,13 +90,21 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <Editor type="comment" sendArticle={sendArticle}></Editor>
           <CommentList key={refresh} itemData={itemData}></CommentList>
         </CenterCard>
-        <RightCard>
-          {/* <Search></Search> */}
-          {/* <Swap></Swap> */}
-          <RecommendPeople></RecommendPeople>
-          <HotTopic {...props}></HotTopic>
-          <FooterCopyright></FooterCopyright>
-        </RightCard>
+        <Affix offsetTop={100} positionObj={{
+          top: '10px',
+          right: '50%',
+          marginRight: '-660px'
+        }}>
+          <RightCard style={{
+            marginTop: '-15px'
+          }}>
+            {/* <Search></Search> */}
+            {/* <Swap></Swap> */}
+            <RecommendPeople></RecommendPeople>
+            <HotTopic {...props}></HotTopic>
+            <FooterCopyright></FooterCopyright>
+          </RightCard>
+        </Affix>
       </Flex>
     </PageContainer>
   )

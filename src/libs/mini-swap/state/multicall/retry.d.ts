@@ -3,11 +3,13 @@
  */
 export declare class CancelledError extends Error {
     constructor();
+    isCancelledError: boolean;
 }
 /**
  * Throw this error if the function should retry
  */
 export declare class RetryableError extends Error {
+    isRetryableError: boolean;
 }
 /**
  * Retries the function that returns the promise until the promise successfully resolves up to n retries

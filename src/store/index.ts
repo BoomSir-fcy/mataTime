@@ -19,13 +19,12 @@ export interface Store {
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
 // export const store = createStore(rootReducer, composeWithDevTools());
-const PERSISTED_KEYS: string[] = ['appReducer', 'loginReducer'];
+const PERSISTED_KEYS: string[] = ['appReducer'];
 export const store = configureStore({
   reducer: {
     appReducer,
     loginReducer,
-    coins: coinsReduce,
-    pools: poolsReduce,
+    coins: coinsReduce
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -45,13 +44,18 @@ export const fetchThunk = {
 
 export const Dispatch = {
   toast: {
-    show: (params: appAction.toastInterface) => store.dispatch({ type: 'toast/show', payload: params }),
-    container: (params: ToastContainerProps) => store.dispatch(toastContainer(params)),
+    show: (params: appAction.toastInterface) =>
+      store.dispatch({ type: 'toast/show', payload: params }),
+    container: (params: ToastContainerProps) =>
+      store.dispatch(toastContainer(params)),
     hide: () => store.dispatch({ type: 'toast/hide' })
   }
 };
 
-export function useStore<TSelected>(selector: (state: Store) => TSelected, equalityFn?: (left: TSelected, right: TSelected) => boolean) {
+export function useStore<TSelected>(
+  selector: (state: Store) => TSelected,
+  equalityFn?: (left: TSelected, right: TSelected) => boolean
+) {
   return useSelector<Store, TSelected>(selector, equalityFn);
 }
 

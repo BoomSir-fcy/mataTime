@@ -22,20 +22,22 @@ import { Tabs, Popup } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import defaultImages from 'assets/images/default_me_background.jpg';
+import defaultImages from 'assets/images/default_background.png';
 
 import { clear } from 'redux-localstorage-simple';
 import useAuth from 'hooks/useAuth';
 
-const Center = styled(Box)``;
+const Center = styled(Box)`
+  width: 100%;
+`;
 const ProfileCard = styled(Card)`
   position: relative;
   overflow: visible;
+  background-color: transparent;
 `;
 const HeadTop = styled(Box)`
   width: 100%;
   min-height: 270px;
-  border-radius: ${({ theme }) => theme.radii.card};
   background-size: 100% auto;
 `;
 const ProfileInfo = styled(Box)`
@@ -106,7 +108,7 @@ const Content = styled(Box)`
   }
 `;
 
-const Profile: React.FC<any> = React.memo(props => {
+const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
     profile: {
       post_num: 0,
@@ -136,7 +138,7 @@ const Profile: React.FC<any> = React.memo(props => {
       ]);
       if (Api.isSuccess(profile) || Api.isSuccess(tweet)) {
         setState(p => {
-          p.profile = profile.data;
+          p.profile = profile?.data;
           p.list = offset
             ? [...(tweet?.data?.list || [])]
             : [...state.list, ...(tweet?.data?.list || [])];
@@ -153,13 +155,13 @@ const Profile: React.FC<any> = React.memo(props => {
   };
 
   React.useEffect(() => {
-    init();
-  }, []);
+    init(1);
+  }, [uid]);
 
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
-      <ProfileCard>
+      <ProfileCard isBoxShadow>
         <HeadTop
           style={{
             backgroundImage: `url(${profile.background_image || defaultImages})`
@@ -181,7 +183,7 @@ const Profile: React.FC<any> = React.memo(props => {
                   {profile.location && (
                     <Flex className="marginLeft" alignItems="center">
                       <Icon name="icon-dizhi" color={gray} />
-                      <Text className="text" >{profile.location}</Text>
+                      <Text className="text">{profile.location}</Text>
                     </Flex>
                   )}
                 </Flex>
@@ -202,7 +204,9 @@ const Profile: React.FC<any> = React.memo(props => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text" style={{ wordBreak: 'break-all' }}>{profile.introduction}</Text>
+              <Text className="text" style={{ wordBreak: 'break-all' }}>
+                {profile.introduction}
+              </Text>
               {/* <Text className="text">
                 Web:{' '}
                 <Text as={Link} to="/">
@@ -225,14 +229,14 @@ const Profile: React.FC<any> = React.memo(props => {
                 <Text className="value"> {profile.post_num}</Text>
               </Text>
             </Flex>
-            <Flex className="topic">
+            {/* <Flex className="topic">
               <Text className="text">{t('meActiveTopic')}</Text>
               {profile?.label_list.map((row: string, index: number) => (
                 <Button variant="secondary" key={index}>
                   #{row}
                 </Button>
               ))}
-            </Flex>
+            </Flex> */}
           </Content>
         </ProfileInfo>
       </ProfileCard>
@@ -278,6 +282,6 @@ const Profile: React.FC<any> = React.memo(props => {
       </List>
     </Center>
   );
-});
+};
 
 export default Profile;

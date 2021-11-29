@@ -1,20 +1,34 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { changeSignUp, changeSignUpFail, changeSignUpStep, changeUpdateProfile, setUserNft, setUserNftStake, setNftAddr } from './actions';
+import cloneDeep from 'lodash/cloneDeep';
+import {
+  changeSignUp,
+  changeSignin,
+  changeGetStake,
+  changeSignUpFail,
+  changeSignUpStep,
+  changeUpdateProfile,
+  changeReset,
+  setUserNft,
+  setUserNftStake,
+  setNftAddr,
+  resetLoginState,
+  setSigninLoading
+} from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
 import { FetchNftsList } from 'view/Login/hook';
-import { getUrl } from 'apis/DsgRequest';
 
 const initialState = {
   isSignup: false,
-  signUpFail: false,
+  isSignin: false,
+  isGetStake: false,
   isStakeNft: false,
+  signUpFail: false,
+  signinLoading: false,
   singUpStep: 1,
   userInfo: {} as Api.User.userInfoParams,
-  nft: {
-    nftID: 0,
-    nftUrl: ''
-  },
+  nft: {} as any,
+  nftStatus: false,
   nftList: [],
   nftAddr: []
 };
@@ -22,19 +36,28 @@ const initialState = {
 export type Login = typeof initialState;
 
 // Async thunks
-export const fetchUserInfoAsync = createAsyncThunk('fetch/getUserInfo', async () => {
-  let response = await Api.UserApi.getUserInfo();
-  // 查询Nft头像地址
-  // const NftImg = await getUrl(response.data.nft_image)
-  // response.data.NftImage = response.data.nft_image = NftImg.image
-  window.localStorage.setItem(storage.UserInfo, JSON.stringify(response.data));
-  return response;
-});
+export const fetchUserInfoAsync = createAsyncThunk(
+  'fetch/getUserInfo',
+  async () => {
+    let response = await Api.UserApi.getUserInfo();
+    // 查询Nft头像地址
+    // const NftImg = await getUrl(response.data.nft_image)
+    // response.data.NftImage = response.data.nft_image = NftImg.image
+    window.localStorage.setItem(
+      storage.UserInfo,
+      JSON.stringify(response.data)
+    );
+    return response;
+  }
+);
 // Async thunks
-export const fetchUserNftInfoAsync = createAsyncThunk<any, string>('fetch/getNftInfo', async account => {
-  const info = await FetchNftsList(account);
-  return info;
-});
+export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
+  'fetch/getNftInfo',
+  async account => {
+    const info = await FetchNftsList(account);
+    return info;
+  }
+);
 
 export const login = createSlice({
   name: 'login',
@@ -45,6 +68,12 @@ export const login = createSlice({
       .addCase(changeSignUp, (state, action) => {
         state.isSignup = action.payload.isSignup;
       })
+      .addCase(changeSignin, (state, action) => {
+        state.isSignin = action.payload.isSignin;
+      })
+      .addCase(changeGetStake, (state, action) => {
+        state.isGetStake = action.payload.isGetStake;
+      })
       .addCase(setUserNftStake, (state, action) => {
         state.isStakeNft = action.payload.isStakeNft;
       })
@@ -53,6 +82,17 @@ export const login = createSlice({
       })
       .addCase(changeSignUpStep, (state, action) => {
         state.singUpStep = action.payload.singUpStep;
+      })
+      .addCase(changeReset, (state, action) => {
+        state.isSignup = false;
+        state.isGetStake = false;
+        state.isSignin = false;
+        state.isStakeNft = false;
+        state.signUpFail = false;
+        state.signinLoading = false;
+        state.nftStatus = false;
+        state.nft = {};
+        state.nftList = [];
       })
       .addCase(fetchUserInfoAsync.fulfilled, (state, action) => {
         state.userInfo = action.payload.data;
@@ -66,8 +106,17 @@ export const login = createSlice({
       .addCase(setNftAddr, (state, action) => {
         state.nftAddr = action.payload;
       })
+      .addCase(setSigninLoading, (state, action) => {
+        state.signinLoading = action.payload;
+      })
       .addCase(fetchUserNftInfoAsync.fulfilled, (state, action) => {
+        state.nftStatus = true;
         state.nftList = action.payload;
+      })
+      .addCase(resetLoginState, state => {
+        Object.keys(state).forEach(key => {
+          state[key] = cloneDeep(initialState[key]);
+        });
       });
   }
 });

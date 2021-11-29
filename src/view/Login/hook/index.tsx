@@ -1,13 +1,13 @@
-import BigNumber from 'bignumber.js'
-import { useCallback, useEffect } from 'react'
-import { ethers, Contract } from 'ethers'
-import { useDsgNft, useErc20EarnNftPool } from 'hooks/useContract'
+import BigNumber from 'bignumber.js';
+import { useCallback, useEffect } from 'react';
+import { ethers, Contract } from 'ethers';
+import { useDsgNft, useErc20EarnNftPool } from 'hooks/useContract';
 import { getNftSocialAddress } from 'utils/addressHelpers';
-import { stakeNftFarm, CancelNftStake } from 'utils/calls';
+import { stakeNftFarm, CancelNftStake, createUserContact } from 'utils/calls';
 import { uniq } from 'lodash';
 import multicall from 'utils/multicall';
-import dsgnftAbi from 'config/abi/dsgnft.json'
-import nftSocialAbi from 'config/abi/nftSocial.json'
+import dsgnftAbi from 'config/abi/dsgnft.json';
+import nftSocialAbi from 'config/abi/nftSocial.json';
 import { NftInfo } from 'store/app/type';
 import { getNftsList, getNftInfo } from 'apis/DsgRequest';
 import { useWeb3React } from '@web3-react/core';
@@ -17,41 +17,44 @@ import { storeAction, useStore } from 'store';
 
 // 获取nft头像授权信息
 export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
-  const SocialAddress = getNftSocialAddress()
-  const tokens = NftList.map((item) => item.properties.token)
-  const tokensUniq = uniq(tokens)
+  const SocialAddress = getNftSocialAddress();
+  const tokens = NftList.map(item => item.properties.token);
+  const tokensUniq = uniq(tokens);
   try {
-    const calls = tokensUniq.map((token) => {
+    const calls = tokensUniq.map(token => {
       return {
         address: token,
         name: 'isApprovedForAll',
-        params: [account, SocialAddress],
-      }
-    })
-    const approveInfo = await multicall(dsgnftAbi, calls)
+        params: [account, SocialAddress]
+      };
+    });
+    const approveInfo = await multicall(dsgnftAbi, calls);
     return approveInfo.map((item, index) => ({
       token: tokensUniq[index],
-      isApprovedMarket: item[0],
-    }))
+      isApprovedMarket: item[0]
+    }));
   } catch (error) {
-    return []
+    return [];
   }
-}
+};
 
 // 获取Nft头像列表并筛选出头像
-export const FetchNftsList = async (account) => {
+export const FetchNftsList = async account => {
   // 筛选可用Nft地址
   const filterAddress = (Nftlist, supAddress) => {
-    let list = []
+    let list = [];
     for (let i = 0; i < Nftlist.length; i++) {
       for (let j = 0; j < supAddress.length; j++) {
-        if (Nftlist[i].properties.token.toLowerCase() === supAddress[j].toLowerCase()) {
-          list.push(Nftlist[i])
+        if (
+          Nftlist[i].properties.token.toLowerCase() ===
+          supAddress[j].toLowerCase()
+        ) {
+          list.push(Nftlist[i]);
         }
       }
     }
-    return list
-  }
+    return list;
+  };
   // 获取质押信息
   // const GetStakeInfo = async (list) => {
   //   const nftStake = await FetchNftStakeType(account)
@@ -66,139 +69,141 @@ export const FetchNftsList = async (account) => {
   // }
 
   // 获取授权信息
-  const GetApprovalInfo = async (list) => {
-    const nftApprove = await useFetchNftApproval(account, list)
-    const ApproveList = getNftApprovalType(list, nftApprove)
-    return ApproveList
-  }
+  const GetApprovalInfo = async list => {
+    const nftApprove = await useFetchNftApproval(account, list);
+    const ApproveList = getNftApprovalType(list, nftApprove);
+    return ApproveList;
+  };
   // 数据合并
   const getNftApprovalType = (nftlist, approveList) => {
-    let list = []
+    let list = [];
     for (let i = 0; i < nftlist.length; i++) {
-      list.push(nftlist[i])
+      list.push(nftlist[i]);
       for (let j = 0; j < approveList.length; j++) {
         if (approveList[j].token === nftlist[i].properties.token) {
-          list[i].isApprovedMarket = approveList[j].isApprovedMarket
+          list[i].isApprovedMarket = approveList[j].isApprovedMarket;
         }
       }
     }
-    return list
-  }
-  const Nftlist = await getNftsList(account) || []
+    return list;
+  };
+  const Nftlist = (await getNftsList(account)) || [];
   try {
     // 获取可用的Nft头像地址
-    const supAddress = await FetchSupportNFT()
-    const list = filterAddress(Nftlist, supAddress)
-    let AllList = []
+    const supAddress = await FetchSupportNFT();
+    const list = filterAddress(Nftlist, supAddress);
+    let AllList = [];
     // let stake = await GetStakeInfo(list)
     if (list.length) {
-      AllList = await GetApprovalInfo(list)
+      AllList = await GetApprovalInfo(list);
     }
-    return AllList
+    return AllList;
   } catch (error) {
     console.log(error);
-    return []
+    return [];
   }
-}
+};
 
 export const FetchSupportNFT = async () => {
   // const dispatch = useDispatch();
-  const SocialAddress = getNftSocialAddress()
+  const SocialAddress = getNftSocialAddress();
   const calls = [
     {
       address: SocialAddress,
-      name: 'getSupportNFT',
-    },
-  ]
+      name: 'getSupportNFT'
+    }
+  ];
   try {
     // 获取可用的Nft头像地址
-    const result = await multicall(nftSocialAbi, calls)
-    const supAddress = result.map(item => (item.sup))
-    return supAddress[0]
+    const result = await multicall(nftSocialAbi, calls);
+    const supAddress = result.map(item => item.sup);
+    return supAddress[0];
   } catch (error) {
     console.log(error);
-    return []
+    return [];
   }
-}
+};
+
+// 获取质押的nft
 export const useFetchSupportNFT = () => {
-  const dispatch = useDispatch()
-  const addr = useCallback(
-    async () => {
-      const add = await FetchSupportNFT()
-      dispatch(storeAction.setNftAddr(add));
-    },
-    [dispatch],
-  )
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+
+  const addr = useCallback(async () => {
+    const add = await FetchSupportNFT();
+    dispatch(storeAction.setNftAddr(add));
+  }, [dispatch]);
+
   useEffect(() => {
-    addr()
-  }, [addr])
-}
+    addr();
+  }, [account, addr]);
+};
 // 获取Nft头像质押情况
-export const FetchNftStakeType = async (account) => {
-  const SocialAddress = getNftSocialAddress()
+export const FetchNftStakeType = async account => {
+  const SocialAddress = getNftSocialAddress();
   const calls = [
     {
       address: SocialAddress,
       name: 'Users',
       params: [account]
-    },
-  ]
+    }
+  ];
   try {
-    const userInfo = await multicall(nftSocialAbi, calls)
+    const userInfo = await multicall(nftSocialAbi, calls);
     return userInfo.map((item, index) => ({
       token_id: Number(new BigNumber(item.token_id.toJSON().hex)),
       NFT_address: item.NFT_address,
-      user_id: item.user_id,
-    }))
+      user_id: item.user_id
+    }));
   } catch (error) {
     console.log(error);
-    return []
+    return [];
   }
-}
+};
 
 export const useFetchNftList = () => {
-  const dispatch = useDispatch()
-  const { account } = useWeb3React()
-  const profile = useStore(p => p.loginReducer.userInfo);
-  let address = profile.address ? profile.address : account
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+  // const profile = useStore(p => p.loginReducer.userInfo);
+  // let address = account ? account : profile.address;
   useEffect(() => {
-    dispatch(fetchUserNftInfoAsync(address));
-  }, [dispatch, account])
-}
+    dispatch(fetchUserNftInfoAsync(account));
+  }, [dispatch, account]);
+};
 
 // 授权当前类型全部Nft
 export const useApproveNftsFarm = (nftAddress: string) => {
-  const dsgNftContract = useDsgNft(nftAddress)
-  const SocialAddress = getNftSocialAddress()
+  const dsgNftContract = useDsgNft(nftAddress);
+  const SocialAddress = getNftSocialAddress();
   const handleApprove = useCallback(async () => {
     try {
       // true授权 false取消授权
-      const tx = await dsgNftContract.setApprovalForAll(SocialAddress, true)
-      const receipt = await tx.wait()
-      return receipt.status
+      const tx = await dsgNftContract.setApprovalForAll(SocialAddress, true);
+      const receipt = await tx.wait();
+      return receipt.status;
     } catch (e) {
-      throw e
+      throw e;
     }
-  }, [dsgNftContract, SocialAddress])
+  }, [dsgNftContract, SocialAddress]);
 
-  return { onApprove: handleApprove }
-}
+  return { onApprove: handleApprove };
+};
 // 授权当前选择的NFT
 export const useApproveOneNfts = (nftAddress: string, tokenId: string) => {
-  const dsgNftContract = useDsgNft(nftAddress)
-  const SocialAddress = getNftSocialAddress()
+  const dsgNftContract = useDsgNft(nftAddress);
+  const SocialAddress = getNftSocialAddress();
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await dsgNftContract.approve(SocialAddress, tokenId)
-      const receipt = await tx.wait()
-      return receipt.status
+      const tx = await dsgNftContract.approve(SocialAddress, tokenId);
+      const receipt = await tx.wait();
+      return receipt.status;
     } catch (e) {
-      throw e
+      throw e;
     }
-  }, [dsgNftContract, SocialAddress])
+  }, [dsgNftContract, SocialAddress]);
 
-  return { onApprove: handleApprove }
-}
+  return { onApprove: handleApprove };
+};
 
 // 获取质押地址
 export const FetchApproveAddr = async (nftAddress: string, tokenId: string) => {
@@ -207,13 +212,13 @@ export const FetchApproveAddr = async (nftAddress: string, tokenId: string) => {
       address: nftAddress,
       name: 'getApproved',
       params: [tokenId]
-    },
-  ]
+    }
+  ];
   try {
-    const approvedAddr = await multicall(dsgnftAbi, calls)
-    return approvedAddr
+    const approvedAddr = await multicall(dsgnftAbi, calls);
+    return approvedAddr;
   } catch (error) {
-    throw error
+    throw error;
   }
   // 查询当前nft授权
   // try {
@@ -225,29 +230,81 @@ export const FetchApproveAddr = async (nftAddress: string, tokenId: string) => {
   // } catch (error) {
   //   throw error
   // }
-}
+};
 
-// 质押Nft
+// 质押Nft 已废弃
 export const useNftStakeFarms = () => {
-  const masterChefContract = useErc20EarnNftPool()
+  const masterChefContract = useErc20EarnNftPool();
   const handleStake = useCallback(
     async (address, nftId) => {
-      await stakeNftFarm(masterChefContract, address, nftId)
+      await stakeNftFarm(masterChefContract, address, nftId);
     },
-    [masterChefContract],
-  )
+    [masterChefContract]
+  );
 
-  return { onStake: handleStake }
-}
-// 取消质押Nft
+  return { onStake: handleStake };
+};
+
+// 更换Nft头像
 export const useCancelNftStake = () => {
-  const masterChefContract = useErc20EarnNftPool()
+  const masterChefContract = useErc20EarnNftPool();
   const handleStake = useCallback(
     async (address, nftId) => {
-      await CancelNftStake(masterChefContract, address, nftId)
+      await CancelNftStake(masterChefContract, address, nftId);
     },
-    [masterChefContract],
-  )
+    [masterChefContract]
+  );
+  return { onStake: handleStake };
+};
 
-  return { onStake: handleStake }
-}
+// 用户验证
+export const useContract = () => {
+  const masterChefContract = useErc20EarnNftPool();
+  const SocialAddress = getNftSocialAddress();
+
+  const checkNickname = useCallback(
+    async (nickname: string) => {
+      const calls = [
+        {
+          address: SocialAddress,
+          name: 'nicknames',
+          params: [nickname]
+        },
+        {
+          address: SocialAddress,
+          name: 'checkNickname',
+          params: [nickname]
+        }
+      ];
+      try {
+        const isCheck = await multicall(nftSocialAbi, calls);
+        return [isCheck[0][0], isCheck[1][0]];
+      } catch (error) {
+        console.log(error);
+        return [false, false];
+      }
+    },
+    [masterChefContract]
+  );
+
+  // 创建用户
+  const createUser = useCallback(
+    async (nickname: string, nftAddress: string, tokenID: number) => {
+      try {
+        const userinfo = await createUserContact(
+          masterChefContract,
+          nickname,
+          nftAddress,
+          tokenID
+        );
+        return userinfo;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    },
+    [masterChefContract]
+  );
+
+  return { checkNickname, createUser };
+};

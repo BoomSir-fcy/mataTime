@@ -11,7 +11,7 @@ export const PraiseItemWrapper = styled(Card)`
     margin-bottom: 15px;
     box-sizing: border-box;
     padding: 25px;
-
+    overflow: inherit;
     .reply-wrapper{
       font-size: 16px;
       font-family: Alibaba PuHuiTi;
@@ -24,6 +24,9 @@ export const PraiseItemWrapper = styled(Card)`
       align-items: center;
       i{
         margin-right: 10px !important;
+      }
+      .reply-tip{
+        margin-right: 10px;
       }
     }
     .comment-content{

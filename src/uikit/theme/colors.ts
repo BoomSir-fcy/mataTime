@@ -35,14 +35,15 @@ export const lightColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   white: 'white',
-  background: '#FAF9FA',
+  background: '#FFF',
   backgroundPage: '#f5fdfc',
   backgroundLight: '#F6FFF0',
   backgroundSelect: '#ceece7',
   backgroundDisabled: '#E9EAEB',
   backgroundPrimary: '#4168ED',
   backgroundMember: '#85C559',
-  backgroundCard: '#FFFFFF',
+  backgroundThemeCard: '#1E2535',
+  backgroundCard: '#FAFCFF',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#EAF2FF',
   backgroundMenu: '#EAF2FF',
@@ -70,6 +71,7 @@ export const lightColors: Colors = {
   textOrigin: '#EC612B',
   textgrey: '#7A83A0',
   disabled: '#E9EAEB',
+  borderThemeColor: '#EAF2FF',
   borderColor: '#EFF4F5',
   protrudeColor: '#FFFFFF',
   gradients: {
@@ -82,6 +84,9 @@ export const lightColors: Colors = {
     violet: 'linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)',
     violetAlt: 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
+  },
+  shadow: {
+    box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)'
   },
   editorText: '#000',
   editorBoxBg: '#fff',
@@ -98,14 +103,15 @@ export const darkColors: Colors = {
   ...nftTokenColors,
   white: 'white',
   secondary: '#9A6AFF',
-  background: '#08060B',
+  background: '#191F2D',
   backgroundPage: '#0B1513',
   backgroundLight: '#334542',
   backgroundSelect: '#4168ED',
   backgroundDisabled: '#3c3742',
   backgroundPrimary: '#4168ED',
   backgroundMember: 'rgba(49, 64, 111, 0.5)',
-  backgroundCard: '#191F2D',
+  backgroundThemeCard: '#1E2535',
+  backgroundCard: '#1E2535',
   backgroundAlt: '#FFFFFF',
   backgroundTextArea: '#292D34',
   backgroundMenu: '#232A3D',
@@ -134,6 +140,7 @@ export const darkColors: Colors = {
   textOrigin: '#EC612B',
   textgrey: '#B4C8A9',
   disabled: '#524B63',
+  borderThemeColor: '#3A4459',
   borderColor: '#4D535F',
   protrudeColor: '#4168ED',
   gradients: {
@@ -146,6 +153,9 @@ export const darkColors: Colors = {
     violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
     violetAlt: 'linear-gradient(180deg, #434575 0%, #66578D 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
+  },
+  shadow: {
+    box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)'
   },
   editorText: '#FFFFFF',
   editorBoxBg: '#191f2d',

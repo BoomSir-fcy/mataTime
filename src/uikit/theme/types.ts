@@ -99,6 +99,7 @@ export type Colors = {
   backgroundDisabled: string;
   backgroundPrimary: string;
   backgroundMember: string;
+  backgroundThemeCard: string;
   backgroundCard: string;
   backgroundTextArea: string;
   backgroundMenu: string;
@@ -116,11 +117,17 @@ export type Colors = {
   textOrigin: string;
   textgrey: string;
   disabled: string;
+  borderThemeColor: string;
   borderColor: string;
   searchTopicBg: string;
   searchTopicTxt: string;
   // Gradients
   gradients: Gradients;
+
+  // box shadow
+  shadow: {
+    box: string;
+  };
 
   // Additional colors
   binance: string;

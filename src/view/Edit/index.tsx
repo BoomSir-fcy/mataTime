@@ -1,23 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
+import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
-import { toast } from 'react-toastify';
-import { useLocation } from 'hooks';
+import { useToast } from 'hooks';
 import { Box, Flex, Button, Text } from 'uikit';
 import { Upload } from 'components';
 import { useStore, storeAction } from 'store';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'contexts/Localization';
+import { mediaQueriesSize } from 'uikit/theme/base';
+
 import { Api } from 'apis';
+import { useProfileContract } from './hook';
+import { useFetchNftList } from '../Login/hook';
+
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
-import defaultImages from 'assets/images/default_me_background.jpg';
-import { useFetchNftList } from '../Login/hook';
+import defaultImages from 'assets/images/default_background.png';
 
 const Background = styled(Flex)`
   width: 100%;
   height: 280px;
   background-size: 100%;
-  border-radius: 10px;
   padding: 190px 0 0;
   justify-content: center;
 `;
@@ -26,51 +30,86 @@ export const Header = styled(Flex)`
   height: 60px;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: 10px;
-  margin-bottom: 12px;
+  background-color: transparent;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${mediaQueriesSize.paddingxs}
 `;
 
 const Edit: React.FC = () => {
   useFetchNftList();
+
   const dispatch = useDispatch();
   const form = React.useRef<any>();
   const profile: any = useStore(p => p.loginReducer.userInfo);
+  const { checkNickname, updateProfileNickname } = useProfileContract();
+  const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const [state, setState] = useImmer({
     value: 1,
-    background: profile.background_image || defaultImages
+    background: defaultImages
   });
-  const updateUserInfo = async () => {
+
+  const updateProfile = async () => {
     const params = form.current.getFrom();
     const myInfo = {
       nick_name: profile.nick_name,
       display_format: profile.display_format,
       introduction: profile.introduction,
-      background_image: profile.background_image,
+      background_image: profile.background_image || defaultImages,
       location: profile.location
     };
+
     if (
       isObjectValueEqual(params, myInfo) &&
       state.background === profile.background_image
     ) {
-      // toast.error('没有任何修改!');
+      // toastError('没有任何修改!');
       return;
     }
+
+    const res = await Api.UserApi.updateUserInfo({
+      ...params,
+      background_image: state.background
+    });
+    if (Api.isSuccess(res)) {
+      dispatch(
+        storeAction.changeUpdateProfile({
+          ...res.data,
+          nick_name: params.nick_name
+        })
+      );
+      toastSuccess(t('loginUpdateProfileSuccess'));
+    } else {
+      toastError(t('loginUpdateProfileFail'));
+    }
+  };
+
+  const updateUserInfo = async () => {
+    const params = form.current.getFrom();
+    if (profile.nick_name === params.nick_name) {
+      return updateProfile();
+    }
+
     try {
-      const res = await Api.UserApi.updateUserInfo({
-        ...params,
-        background_image: state.background
-      });
-      if (Api.isSuccess(res)) {
-        dispatch(storeAction.changeUpdateProfile({ ...res.data }));
-        toast.success(res.msg);
-      } else {
-        if (res.code === 20106) {
-          toast.error('昵称已存在!');
+      const response = await checkNickname(params.nick_name);
+      console.log(response);
+      if (!response[0] && response[1]) {
+        const res = await updateProfileNickname(params.nick_name);
+        if (Boolean(res)) {
+          dispatch(
+            storeAction.changeUpdateProfile({
+              ...profile,
+              nick_name: params.nick_name
+            })
+          );
+          updateProfile();
         } else {
-          toast.error('修改失败');
+          toastError(t('loginSetNickNameFail'));
         }
+      } else if (!response[0] && !response[1]) {
+        toastError(t('loginSetNickNameFail'));
+      } else {
+        toastError(t('loginSetNickNameRepeat'));
       }
     } catch (error) {
       console.log(error);
@@ -95,13 +134,21 @@ const Edit: React.FC = () => {
     return true;
   };
 
+  React.useEffect(() => {
+    setState(p => {
+      p.background = profile.background_image || defaultImages;
+    });
+  }, [profile]);
+
   return (
     <Box>
       <Header>
         <Text color="white_black" fontWeight="bold" fontSize="18px">
-          账号资料编辑
+          {t('commonAccountEdit')}
         </Text>
-        <Button onClick={() => updateUserInfo()}>保存最新修改</Button>
+        <Button onClick={debounce(() => updateUserInfo(), 1000)}>
+          {t('commonAccountSave')}
+        </Button>
       </Header>
       <Background style={{ backgroundImage: `url(${state.background})` }}>
         <Upload

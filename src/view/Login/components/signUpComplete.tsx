@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { Follow } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
 import { useDispatch } from 'react-redux';
-import { fetchThunk } from 'store';
+import { fetchThunk, storeAction } from 'store';
 import { Api } from 'apis';
 
 import { useTranslation } from 'contexts/Localization';
@@ -18,9 +18,10 @@ const FlexButton = styled(Flex)`
     width: 205px;
   }
 `;
+
 const CompleteButton = styled(Button)`
-  color: ${({ theme }) => theme.colors.protrudeColor};
-  background-color: ${({ theme }) => theme.colors.backgroundMenuBack};
+  color: ${({ theme }) => theme.colors.backgroundPrimary};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `;
 
 export const SignUpcomplete = React.memo(() => {
@@ -41,11 +42,12 @@ export const SignUpcomplete = React.memo(() => {
           p.list = res.data || [];
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const complete = () => {
     dispatch(fetchThunk.fetchUserInfoAsync());
+    dispatch(storeAction.changeReset());
     history.replace(`${redict || '/'}`);
   };
 
@@ -55,7 +57,12 @@ export const SignUpcomplete = React.memo(() => {
 
   return (
     <Box>
-      <Text fontSize="34px" marginBottom="26px" bold style={{ textTransform: 'capitalize' }}>
+      <Text
+        fontSize="34px"
+        marginBottom="26px"
+        bold
+        style={{ textTransform: 'capitalize' }}
+      >
         {t('loginFollow')}
       </Text>
       <Box>
@@ -67,7 +74,7 @@ export const SignUpcomplete = React.memo(() => {
         <Button scale="ld" onClick={debounce(() => getManList(), 1000)}>
           {t('loginSignUpChangeBatch')}
         </Button>
-        <CompleteButton scale="ld" onClick={complete}>
+        <CompleteButton variant="secondary" scale="ld" onClick={complete}>
           {t('loginSignUpComplete')}
         </CompleteButton>
       </FlexButton>

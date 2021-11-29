@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import {
+  useHistory,
+  useLocation,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom';
+import useAuth from 'hooks/useAuth';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
+import { useToast } from 'hooks';
 import { useThemeManager } from 'store/app/hooks';
 import { Flex, Card, Box, Text } from 'uikit';
 import { Logo, Footer } from 'components';
+import { StakeNFT } from 'components/NftList';
 import { LoginJoin, SignUp } from './components';
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useLogin, useSignIn } from './hooks';
 import { useFetchSupportNFT, useFetchNftList, FetchNftStakeType } from './hook';
-import { StakeNFT } from 'components/NftList';
+import { useTranslation } from 'contexts/Localization';
+
+import { Api } from 'apis';
 
 import sloganImg from 'assets/images/login_slogan_img.png';
 
@@ -55,6 +66,7 @@ const LogoWarpper = styled(Box)`
   ${mediaQueriesSize.marginbmd}
 `;
 const Container = styled(Box)`
+  width: 100%;
   height: calc(100vh - 125px);
   padding: 55px 45px 0;
   ${({ theme }) => theme.mediaQueries.md} {
@@ -79,82 +91,120 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchNftList();
 
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
   const loginReduce = useStore(p => p.loginReducer);
-  const { isSignup, signUpFail, isStakeNft, singUpStep } = loginReduce;
+  const NftList = useStore(p => p.loginReducer.nftList);
+  const { t } = useTranslation();
+  const { logout, login } = useAuth();
+  const { toastError } = useToast();
+  const {
+    isSignup,
+    isSignin,
+    isGetStake,
+    nftStatus,
+    signUpFail,
+    isStakeNft,
+    singUpStep
+  } = loginReduce;
+  const { account } = useWeb3React();
+  const { loginCallback } = useLogin();
+  const { getUserName } = useSignIn();
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
-  const { account } = useWeb3React();
-  const [ConnectAddr, setConnectAddr] = useState('0');
+  const redict = location?.state?.from?.pathname;
   const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
-  // 自己的Nft列表
-  const NftList = useStore(p => p.loginReducer.nftList);
   // 选择链
-  const checkNetwork = async () => {
-    const chainId: any = await window.ethereum.request({
-      method: 'eth_chainId'
-    });
-    dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
+  // const checkNetwork = async () => {
+  //   const chainId: any = await window.ethereum.request({
+  //     method: 'eth_chainId'
+  //   });
+  //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
+  // };
+
+  const signIn = async () => {
+    //2.1 用户已经注册登录钱包签名
+    await window.ethereum.enable();
+    const res = await loginCallback(2);
+    if (Api.isSuccess(res)) {
+      //2.2 获取用户信息
+      const user: any = await getUserName();
+      //2.3
+      dispatch(storeAction.setSigninLoading(false));
+      if (Api.isSuccess(user)) {
+        // 存储userinfo 跳转首页
+        dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+        history.replace(`${redict || '/'}`);
+      }
+    } else {
+      logout();
+      dispatch(storeAction.changeReset());
+      toastError(t('loginSigninFail') || res?.msg);
+    }
   };
 
   // 查询是否有质押的NFT
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
-    if (nftStake[0].token_id) {
-      // 已经质押
-      dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+    // 已经质押走登录
+    console.log('质押:', nftStake[0], account);
+    if (nftStake.length > 0 && nftStake[0].token_id) {
+      dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {
+      dispatch(storeAction.changeGetStake({ isGetStake: true }));
       dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
     }
   };
 
   useEffect(() => {
-    checkNetwork();
-    window.ethereum.on('chainChanged', (chainId: string) => {
-      dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
-    });
     return () => {
-      dispatch(storeAction.changeSignUp({ isSignup: false }));
-      dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
+      dispatch(storeAction.changeReset());
     };
   }, []);
+
+  useEffect(() => {
+    if (isSignin) {
+      signIn();
+    }
+  }, [isSignin]);
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
     if (account) {
       // 1.1查询是否有质押
+      setshowStakeNft(false);
+      dispatch(storeAction.changeSignin({ isSignin: false }));
+      dispatch(storeAction.setSigninLoading(true));
       getStakeType(account);
     }
-    // 页面销毁清除登录状态数据
-    return () => {
-      // dispatch(storeAction.setUserNftStake({ isStakeNft: false }));
-    };
   }, [account]);
 
   useEffect(() => {
     // 2没有质押的情况下
-    if (!NftList.length && !isStakeNft) {
-      // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
-      setshowStakeNft(false);
-      dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    } else if (NftList.length && !isStakeNft) {
-      // 有可用的头像 显示头像列表——可以注册，显示钱包签名
-      setshowStakeNft(true);
-      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+    if (isGetStake && nftStatus && !isSignin) {
+      if (!NftList.length && !isStakeNft) {
+        // 没有可用头像，不显示头像列表——注册失败，显示去获取Nft
+        setshowStakeNft(false);
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
+        dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
+      } else if (NftList.length && !isStakeNft) {
+        // 有可用的头像 显示头像列表——可以注册，显示钱包签名
+        setshowStakeNft(true);
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
+        dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
+      }
+      dispatch(storeAction.setSigninLoading(false));
     }
-    return () => {
-      setshowStakeNft(false);
-      dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    };
-  }, [NftList, isStakeNft]);
+  }, [isGetStake, isSignin, nftStatus, NftList, isStakeNft]);
 
   return (
     <LoginContainer>
       <LeftBox isbackground={Boolean(nftBoolean)}>
         {nftBoolean && (
           <Nft>
-            <Text fontSize="30px">选择并质押头像</Text>
-            <StakeNFT />
+            <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>
+            <StakeNFT status={1} />
           </Nft>
         )}
       </LeftBox>

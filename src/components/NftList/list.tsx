@@ -1,15 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import { Box, Text, Flex, Button } from 'uikit';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Box, Text, Flex, Button } from 'uikit';
 import { Avatar } from 'components';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { useApproveNftsFarm } from 'view/Login/hook';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
+import { storeAction } from 'store';
+
 import { NftButton } from './approve';
+
 import Dots from '../Loader/Dots';
 
 const Point = styled(Text)`
@@ -23,6 +26,7 @@ const Column = styled(Flex)`
   min-width: 160px;
   margin-bottom: 20px;
   position: relative;
+  cursor: pointer;
   .active {
     box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.backgroundPrimary};
   }
@@ -59,6 +63,8 @@ const NowrapBtn = styled(Button)`
   word-break: keep-all;
 `;
 const AvatarBox = styled.div`
+  width: 102px;
+  height: 104px;
   border: 2px solid #e0f9d0;
   border-radius: 10px;
 `;
@@ -90,33 +96,37 @@ interface Nft {
 const NftAvatar: React.FC<{
   NftInfo?: Nft;
   Nodata: boolean;
-}> = ({ NftInfo, Nodata }) => {
+  status?: number;
+}> = ({ NftInfo, Nodata, status }) => {
+  const dispatch = useDispatch();
   const { account } = useWeb3React();
+  const { t } = useTranslation();
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem);
   const NftList = useStore(p => p.loginReducer.nftList);
-  const { t } = useTranslation();
 
   return (
     <GetAuthorizeBox>
       {Nodata ? (
         <NodataDom>
-          <Text mb="10px">获取更多NTF头像可更换头像</Text>
+          <Text mb="10px">{t('setNftAvatarGetMore')}</Text>
           <Button>{t('loginGetNft')}</Button>
         </NodataDom>
       ) : (
         <>
           <Flex justifyContent="space-between" alignItems="center">
-            <Point>支持部分主流NFT系列，即将支持更多的NFT系列头像</Point>
+            <Point>{t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
             ) : (
-              <NftButton item={ActiveAvInfo} />
+              <React.Fragment>
+                {!Boolean(status) && <NftButton item={ActiveAvInfo} />}
+              </React.Fragment>
             )}
           </Flex>
           <GetAuthorize>
-            {NftList.map(item =>
+            {NftList.map((item, index) =>
               NftInfo.address === item.properties.token ? (
-                <Column key={item.properties.token_id}>
+                <Column key={`${index}_${item.properties.token_id}`}>
                   {/* {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />} */}
                   <AvatarBox
                     className={
@@ -129,6 +139,10 @@ const NftAvatar: React.FC<{
                       scale="ld"
                       onClick={() => {
                         if (!NftInfo.needApprove) {
+                          dispatch(
+                            storeAction.setUserNftStake({ isStakeNft: true })
+                          );
+                          dispatch(storeAction.setUserNft(item));
                           setActiveAvInfo(item);
                         }
                       }}
@@ -165,6 +179,7 @@ const StakeAllBtn = ({ token, account }) => {
       throw e;
     }
   }, [onApprove]);
+
   return (
     <NowrapBtn
       disabled={pendingTx}
@@ -173,16 +188,20 @@ const StakeAllBtn = ({ token, account }) => {
         try {
           // 授权
           await handleApprove();
-          toast.success('授权成功');
+          toast.success(t('setNftAuthorizationSuccess'));
         } catch (error) {
           console.error(error);
-          toast.error('操作失败');
+          toast.error(t('setNftAuthorizationFail'));
         } finally {
           setPendingTx(false);
         }
       }}
     >
-      {pendingTx ? <Dots>{t('授权中')}</Dots> : t('授权')}
+      {pendingTx ? (
+        <Dots>{t('setNftAuthorizationing')}</Dots>
+      ) : (
+        t('setNftAuthorization')
+      )}
     </NowrapBtn>
   );
 };

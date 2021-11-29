@@ -19,6 +19,7 @@ const BoxStyled = styled(Box)`
 
 export const Header = React.memo((props) => {
   return (
+    false?
     <BoxStyled>
       <Flex alignItems="center" justifyContent="space-between" height="100%">
         <Flex justifyContent="space-between" alignItems="center"> 
@@ -29,5 +30,6 @@ export const Header = React.memo((props) => {
         {props.children}
       </Flex>
     </BoxStyled>
+    :null
   )
 })

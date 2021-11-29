@@ -1,7 +1,6 @@
 import { BIG_TEN } from 'utils/bigNumber';
 import { ChainId } from './wallet/config';
-
-export const BASE_URL = `${window.location.origin}/#`;
+export const BASE_URL = `${window.location.origin}/`;
 
 export const BASE_BSC_SCAN_URLS = {
   [ChainId.BSC_MAINNET]: 'https://bscscan.com',
