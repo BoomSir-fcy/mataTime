@@ -120,6 +120,7 @@ const Profile: React.FC<any> = props => {
     totalPage: 0
   });
   const { t } = useTranslation();
+  const country = useStore(p => p.appReducer.localtion);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const uid = props.match?.params?.uid;
   const gray = useTheme().colors.textTips;
@@ -158,6 +159,10 @@ const Profile: React.FC<any> = props => {
     init(1);
   }, [uid]);
 
+  const locationDisplay = React.useMemo(() => {
+    return country?.find(item => item.ID === profile.location)?.LocationEn
+  }, [country, profile.location]);
+
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
@@ -180,10 +185,10 @@ const Profile: React.FC<any> = props => {
                       @{shortenAddress(profile.address)}
                     </Text>
                   </Flex>
-                  {profile.location && (
+                  {locationDisplay && (
                     <Flex className="marginLeft" alignItems="center">
                       <Icon name="icon-dizhi" color={gray} />
-                      <Text className="text">{profile.location}</Text>
+                      <Text className="text">{locationDisplay}</Text>
                     </Flex>
                   )}
                 </Flex>
@@ -204,7 +209,7 @@ const Profile: React.FC<any> = props => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text" style={{ wordBreak: 'break-all' }}>
+              <Text className="text" style={{ wordBreak: 'break-word' }}>
                 {profile.introduction}
               </Text>
               {/* <Text className="text">

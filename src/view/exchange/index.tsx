@@ -60,7 +60,7 @@ const Exchange: React.FC = () => {
       total_dsg: 0
     }
     for (let i = 0; i < info.length; i++) {
-      if (info[i].right_now_release <= info[i].max_dsg_token) {
+      if (info[i].total_dsg < info[i].max_dsg_token) {
         nowTimeInfo = info[i];
         break
       }
@@ -107,7 +107,7 @@ const Exchange: React.FC = () => {
   const getApproveNum = async () => {
     const Num = await FetchApproveNum(account)
     setapprovedNum(Num)
-    const RewardNum = await FetchRewardNum()
+    const RewardNum = await FetchRewardNum(account)
     setrewardNum(RewardNum)
   }
   useEffect(() => {
@@ -122,7 +122,7 @@ const Exchange: React.FC = () => {
   return (
     <Center flexDirection='column' justifyContent='center' alignItems='center'>
       <div>
-        当前周期：{TimeShopInfo.long_time} <br />
+        当前周期：{TimeShopInfo.times} <br />
         最大Dsg兑换量：{TimeShopInfo.max_dsg_token}<br />
         最大Time兑换量：{TimeShopInfo.max_time_token}<br />
         立即获得百分比：{new BigNumber(TimeShopInfo.right_now_release).div(10000).times(100).toString()}%<br />

@@ -6,31 +6,27 @@ import { Box, Flex, Button, Svg } from 'uikit';
 
 const EmojiWarpper = styled(Box)`
   position: relative;
-  padding-right: 10px;
-`
-
-const ButtonIcon = styled(Button)`
-  padding: 0;
-`
+`;
 
 export const Emoji: React.FC<{
-  onChange: (e: string) => void
-}> = (({ onChange }) => {
-
+  onChange: (e: string) => void;
+}> = ({ onChange }) => {
   const [state, setState] = useImmer({
     visible: false
-  })
+  });
 
   React.useEffect(() => {
     const changeHandler = () => {
-      setState(p => { p.visible = false });
-    }
-    document.body.addEventListener('click', changeHandler)
-    return () => document.body.removeEventListener('click', changeHandler)
-  }, [])
+      setState(p => {
+        p.visible = false;
+      });
+    };
+    document.body.addEventListener('click', changeHandler);
+    return () => document.body.removeEventListener('click', changeHandler);
+  }, []);
 
   return (
-    <EmojiWarpper onClick={(e) => e.stopPropagation()}>
+    <EmojiWarpper onClick={e => e.stopPropagation()}>
       {/* <ButtonIcon variant="text" onClick={(e) => {
         e.nativeEvent.stopImmediatePropagation();
         setState(p  => {
@@ -41,15 +37,19 @@ export const Emoji: React.FC<{
           <image xlinkHref={require('./images/icon_emoji.png').default}/>
         </Svg>
       </ButtonIcon> */}
-      <Icon size={25} color={'#7393ff'} cur name="icon-xiaolian" onClick={(e) => {
-        e.nativeEvent.stopImmediatePropagation();
-        setState(p => {
-          p.visible = !state.visible
-        })
-      }}></Icon>
-      {
-        state.visible && <EmojiView selectedEmoji={(data) => onChange(data)} />
-      }
+      <Icon
+        size={25}
+        color={'#7393ff'}
+        current={1}
+        name="icon-xiaolian"
+        onClick={e => {
+          e.nativeEvent.stopImmediatePropagation();
+          setState(p => {
+            p.visible = !state.visible;
+          });
+        }}
+      />
+      {state.visible && <EmojiView selectedEmoji={data => onChange(data)} />}
     </EmojiWarpper>
-  )
-})
+  );
+};

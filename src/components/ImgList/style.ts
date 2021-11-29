@@ -10,6 +10,7 @@ img{
   width:50%;
   display: block;
   cursor: pointer;
+  max-height:640px;
 }
 .imgListRightBox{
   flex:50%;

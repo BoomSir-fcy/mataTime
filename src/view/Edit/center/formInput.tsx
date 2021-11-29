@@ -82,15 +82,11 @@ const RadioBox = styled.div`
 const FormInput = React.forwardRef((props, ref) => {
   const country = useStore(p => p.appReducer.localtion);
   const profile = useStore(p => p.loginReducer.userInfo);
-  const defaultId = country?.length > 0 && country[0].id;
   const { t } = useTranslation();
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
     ...profile,
-    location: profile.location || (country.length > 0 && country[0]?.value)
   });
-  const [defaultLocationId, setdefaultLocationId] = useState(
-    country.find(({ value }) => value === profile.location)?.id || defaultId
-  );
+  const [defaultLocationId, setdefaultLocationId] = useState(profile.location);
 
   useEffect(() => {
     setState(p => {
@@ -98,8 +94,7 @@ const FormInput = React.forwardRef((props, ref) => {
       p.display_format = profile.display_format;
       p.introduction = profile.introduction;
       p.background_image = profile.background_image;
-      p.location =
-        profile.location || (country.length > 0 && country[0]?.value);
+      p.location = profile.location
     });
   }, [profile]);
 
@@ -185,7 +180,7 @@ const FormInput = React.forwardRef((props, ref) => {
           onChange={(val: any) => {
             setdefaultLocationId(val.ID);
             setState(p => {
-              p.location = val.value;
+              p.location = val.ID;
             });
           }}
         />

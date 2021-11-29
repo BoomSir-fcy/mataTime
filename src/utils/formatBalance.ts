@@ -88,6 +88,20 @@ export const formatLocalisedCompactNumber = (number: number, maximumSignificantD
     maximumSignificantDigits,
   }).format(number)
 }
+/* eslint-disable */
+
+// 千分号
+export const splitThousandSeparator = (num: number): string => {
+  let prefix: string = "";
+  if (num < 0) {
+    num *= -1;
+    prefix = "-";
+  }
+  let DIGIT_PATTERN = /(^|\s)\d+(?=\.?\d*($|\s))/g;
+  let MILI_PATTERN = /(?=(?!\b)(\d{3})+\.?\b)/g;
+  let str: string = num.toString().replace(DIGIT_PATTERN, (m) => m.replace(MILI_PATTERN, ','));
+  return prefix + str;
+}
 
 // 余额显示精度
 export const formatDisplayBalance = (stakedBalance: BigNumber, decimals = 18) => {
@@ -97,6 +111,26 @@ export const formatDisplayBalance = (stakedBalance: BigNumber, decimals = 18) =>
   }
   if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.001)) {
     return getFullDisplayBalance(stakedBalance, decimals).toLocaleString()
+  }
+  return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+}
+
+// 余额显示精度并和符合使用
+export const formatDisplayBalanceWithSymbol = (stakedBalance: BigNumber, decimals = 18) => {
+  const stakedBalanceBigNumber = getBalanceAmount(stakedBalance, decimals)
+  if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0_000_001)) {
+    return '< 0.0000001'
+  }
+  if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.001)) {
+    return getFullDisplayBalance(stakedBalance, decimals).toLocaleString()
+  }
+  if (stakedBalanceBigNumber.isGreaterThanOrEqualTo(ONE_BILLION)) {
+    const codeFromStorage = getLanguageCodeFromLS()
+    return new Intl.NumberFormat(codeFromStorage, {
+      notation: 'compact',
+      // compactDisplay: 'long',
+      maximumSignificantDigits: 6,
+    }).format(stakedBalanceBigNumber.toNumber())
   }
   return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
 }
