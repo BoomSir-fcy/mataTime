@@ -9,6 +9,7 @@ export const EmojiView: React.FC<{
   return (
     <Picker
       tooltip
+      set="apple"
       color="#4168ED"
       showPreview={false}
       showSkinTones={false}
