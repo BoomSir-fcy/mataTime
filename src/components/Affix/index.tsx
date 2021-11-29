@@ -25,12 +25,12 @@ export const Affix = (props: IProps) => {
     };
     document.addEventListener('scroll', fn);
     return () => document.removeEventListener('scroll', fn);
-  });
+  })
   // overflowY:windowOffsetTop>offsetTop ?'auto':'visible',
   return (
     <AffixBox
       style={{
-        position: windowOffsetTop > offsetTop ? 'fixed' : 'static',
+        position: windowOffsetTop >= offsetTop ? 'fixed' : 'static',
         ...positionObj
       }}
     >

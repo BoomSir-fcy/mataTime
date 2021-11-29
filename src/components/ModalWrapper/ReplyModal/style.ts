@@ -33,6 +33,8 @@ export const ModalTitleWrapper = styled(Box)`
 `
 export const ReportModalWrapper = styled(Box)`
   width: 668px;
+  max-height:500px;
+  overflow-y: auto;
   background: ${({ theme }) => theme.colors.backgroundCard};
   border-radius: ${({ theme }) => theme.radii.card};
   position: fixed;

@@ -20,6 +20,8 @@ border-bottom-left-radius: 10px;
     width: 53px;
     height: 53px;
     border-radius:5px;
+    border:solid 1px #6E6E6E;
+    object-fit: cover;
   }
   i{
     padding:5px;

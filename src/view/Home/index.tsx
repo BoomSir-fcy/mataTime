@@ -109,7 +109,7 @@ const Home: React.FC = (props: any) => {
           <ArticleList key={refresh} topicName={match.params.name} filterValObj={filterVal} {...props} />
         </CenterCard>
         <RightCard>
-          <Affix offsetTop={100} positionObj={{}}>
+          <Affix offsetTop={0} positionObj={{}}>
             <>
               <Search />
               {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
