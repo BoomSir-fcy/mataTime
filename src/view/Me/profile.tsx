@@ -180,6 +180,7 @@ const Profile: React.FC<any> = props => {
                       @{shortenAddress(profile.address)}
                     </Text>
                   </Flex>
+                  {/* FIXME: */}
                   {profile.location && (
                     <Flex className="marginLeft" alignItems="center">
                       <Icon name="icon-dizhi" color={gray} />
