@@ -15,12 +15,15 @@ export class CancelledError extends Error {
   constructor() {
     super('Cancelled')
   }
+  isCancelledError = true // hack class and instanceof in es5
 }
 
 /**
  * Throw this error if the function should retry
  */
-export class RetryableError extends Error {}
+export class RetryableError extends Error {
+  isRetryableError = true
+}
 
 /**
  * Retries the function that returns the promise until the promise successfully resolves up to n retries
@@ -46,11 +49,11 @@ export function retry<T>(
           completed = true
         }
         break
-      } catch (error) {
+      } catch (error: any) {
         if (completed) {
           break
         }
-        if (n <= 0 || !(error instanceof RetryableError)) {
+        if (n <= 0 || !(error?.isRetryableError)) {
           reject(error)
           completed = true
           break

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
-import { toast } from 'react-toastify';
+import { useToast } from 'hooks';
 import { Box, Flex, Button, Text } from 'uikit';
 import { Upload } from 'components';
 import { useStore, storeAction } from 'store';
@@ -43,6 +43,7 @@ const Edit: React.FC = () => {
   const profile: any = useStore(p => p.loginReducer.userInfo);
   const { checkNickname, updateProfileNickname } = useProfileContract();
   const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const [state, setState] = useImmer({
     value: 1,
     background: defaultImages
@@ -62,7 +63,7 @@ const Edit: React.FC = () => {
       isObjectValueEqual(params, myInfo) &&
       state.background === profile.background_image
     ) {
-      // toast.error('没有任何修改!');
+      // toastError('没有任何修改!');
       return;
     }
 
@@ -77,9 +78,9 @@ const Edit: React.FC = () => {
           nick_name: params.nick_name
         })
       );
-      toast.success(t('loginUpdateProfileSuccess'));
+      toastSuccess(t('loginUpdateProfileSuccess'));
     } else {
-      toast.error(t('loginUpdateProfileFail'));
+      toastError(t('loginUpdateProfileFail'));
     }
   };
 
@@ -103,12 +104,12 @@ const Edit: React.FC = () => {
           );
           updateProfile();
         } else {
-          toast.error(t('loginSetNickNameFail'));
+          toastError(t('loginSetNickNameFail'));
         }
       } else if (!response[0] && !response[1]) {
-        toast.error(t('loginSetNickNameFail'));
+        toastError(t('loginSetNickNameFail'));
       } else {
-        toast.error(t('loginSetNickNameRepeat'));
+        toastError(t('loginSetNickNameRepeat'));
       }
     } catch (error) {
       console.log(error);

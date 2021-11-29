@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction, useStore } from 'store';
 import { Box, Flex, Text, Button, Card } from 'uikit';
+import { useFetchSupportNFT } from 'view/Login/hook';
+
 import NftAvatar from './list';
 
 const Nft = styled(Box)`
@@ -32,6 +34,8 @@ const NftImg = styled.img`
 export const StakeNFT: React.FC<{
   status?: number;
 }> = ({ status }) => {
+  useFetchSupportNFT();
+
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   // 是否授权
@@ -79,10 +83,6 @@ export const StakeNFT: React.FC<{
     if (NftList.length && NftAddrList.length) {
       getIsAllApprove(NftList);
     }
-    return () => {
-      const arr = [];
-      setisAllApprove(arr);
-    };
   }, [NftList]);
 
   return (
@@ -97,9 +97,7 @@ export const StakeNFT: React.FC<{
           />
         );
       })}
-      {!signUpFail && !isAllApprove && (
-        <NftAvatar status={status} Nodata={true} />
-      )}
+      {!isAllApprove.length && <NftAvatar status={status} Nodata={true} />}
     </React.Fragment>
   );
 };

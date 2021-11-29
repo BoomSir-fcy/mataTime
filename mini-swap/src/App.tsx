@@ -32,12 +32,10 @@ const App: React.FC = () => {
   }
 
   const onConnectWallet = () => {
-    console.log(122121)
     login(ConnectorNames.Injected)
   }
 
   const { chainId } = useWeb3React()
-  console.log(chainId)
   useEffect(() => {
     if (chainId) {
       setChainId(chainId)

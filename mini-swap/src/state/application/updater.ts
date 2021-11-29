@@ -41,7 +41,9 @@ export default function Updater(): null {
       .then(blockNumberCallback)
       .catch((error) => console.error(`Failed to get block number for chainId: ${chainId}`, error))
 
-    library.on('block', blockNumberCallback)
+    if (!library._events?.some(item => item.type === 'block')) {
+      library.on('block', blockNumberCallback)
+    }
     return () => {
       library.removeListener('block', blockNumberCallback)
     }

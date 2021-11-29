@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
-import { toast } from 'react-toastify';
 import { Flex, Box, Text, Button } from 'uikit';
+import { useToast } from 'hooks';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
@@ -44,15 +44,16 @@ export const Follow: React.FC<{
   getManList: () => void;
 }> = ({ rows, getManList }) => {
   const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
 
   const followUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
         getManList();
-        toast.success(t('commonMsgFollowSuccess') || res.data);
+        toastSuccess(t('commonMsgFollowSuccess') || res.data);
       } else {
-        toast.error(t('commonMsgUnFollowError') || res.data);
+        toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.log(error);
@@ -129,6 +130,7 @@ type IProps = {
 };
 export const CancelFollow = (props: IProps) => {
   const [userInfo, setUserInfo] = useState<any>({});
+  const { toastSuccess, toastError } = useToast();
   const { callBack } = props;
   useEffect(() => {
     if (props.userId) {
@@ -146,9 +148,9 @@ export const CancelFollow = (props: IProps) => {
       Api.MeApi.unFollowUser(userId).then(res => {
         console.log(res);
         if (Api.isSuccess(res)) {
-          toast.success(res.data);
+          toastSuccess(res.data);
         } else {
-          toast.error(res.data);
+          toastError(res.data);
         }
         callBack(true);
       });

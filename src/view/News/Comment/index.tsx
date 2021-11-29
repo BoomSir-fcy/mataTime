@@ -77,15 +77,19 @@ const NewsComment: React.FC = (props) => {
                   updateList(data)
                 }} />
 
-                {item.comment.user_name ?
+                {item.comment.comment_user_name ?
                   <div className="reply-wrapper">
                     {t('newsCommentReply')}
-                    <a>@{item.post.nick_name}</a>
+                    <a>@{item.comment.comment_user_name}</a>
                     <div>
                       <ContentParsing content={item.comment.comment}></ContentParsing>
                     </div>
                   </div>
-                  : null
+                  : (
+                    <div className="reply-wrapper">
+                      <ContentParsing content={item.comment.comment}></ContentParsing>
+                    </div>
+                  )
                 }
 
                 <div className="comment-content">

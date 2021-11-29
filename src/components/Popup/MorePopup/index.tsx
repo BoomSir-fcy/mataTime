@@ -193,6 +193,13 @@ export const MorePopup = React.memo((props: Iprops) => {
     <>
       <PopupWrapper
         onMouseOver={(e: any) => {
+          /**
+           * @review
+           * @link https://developer.mozilla.org/zh-CN/docs/Web/API/Event/stopImmediatePropagation
+           * 
+           * 建议使用stopPropagation
+           * 如果一定要使用 stopImmediatePropagation, 我认为是代码设计不合理
+           */
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(true);
         }}

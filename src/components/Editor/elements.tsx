@@ -6,50 +6,48 @@ import {
   useSelected,
   useFocused,
   useSlate
-} from 'slate-react'
-import {FollowPopup} from 'components'
-import {MentionBox} from './style'
+} from 'slate-react';
+import { FollowPopup } from 'components';
+import { MentionBox } from './style';
+
 export const Mention = ({ attributes, children, element }) => {
-  const selected = useSelected()
-  const focused = useFocused()
+  const selected = useSelected();
+  const focused = useFocused();
   return (
     <MentionBox
       {...attributes}
+      {...element.attrs}
       contentEditable={false}
+      data-cy={`mention-${element.character.replace(' ', '-')}`}
       style={{
-        boxShadow: selected && focused ? '0 0 0 2px #B4D5FF' : 'none',
+        margin: '0 8px',
+        verticalAlign: 'baseline',
+        display: 'inline-block',
+        fontSize: '0.9em'
       }}
     >
-       {/* <FollowPopup uid={element.attrs.userid}> */}
-         <span 
-      {...element.attrs}
-      >
-          {element.character}
-         </span>
-       {/* </FollowPopup> */}
+      {element.character}
       {children}
     </MentionBox>
-  )
-}
+  );
+};
+
 export const InlineChromiumBugfix = () => (
-  <span
-    contentEditable={false}
-    style={{fontSize:0}}
-  >
+  <span contentEditable={false} style={{ fontSize: 0 }}>
     {String.fromCodePoint(160) /* Non-breaking space */}
   </span>
-)
-export const  TopicElement = ({ attributes, children, element }) => {
+);
+
+export const TopicElement = ({ attributes, children, element }) => {
   return (
     <>
-    <span  {...attributes}>
-      {/* {children} */}
-      #
-      <InlineChromiumBugfix />
-      {children}
-      <InlineChromiumBugfix />
-      #
-    </span>
+      <span {...attributes}>
+        {/* {children} */}
+        #
+        <InlineChromiumBugfix />
+        {children}
+        <InlineChromiumBugfix />#
+      </span>
     </>
-  )
-}
+  );
+};

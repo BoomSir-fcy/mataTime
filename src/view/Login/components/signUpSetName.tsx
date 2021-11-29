@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
+import { useToast } from 'hooks';
 import { Box, Flex, Text, Button } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Api } from 'apis';
-import { toast } from 'react-toastify';
 import { useStore, storeAction } from 'store';
 import { useLogin, useSignIn } from '../hooks';
 import { useContract } from '../hook';
@@ -58,6 +58,7 @@ export const SignUpSetName: React.FC<{
   const dispatch = useDispatch();
   const { loginCallback } = useLogin();
   const { getUserName, siginInVerify } = useSignIn();
+  const { toastWarning, toastError } = useToast();
   const [state, setState] = useImmer({
     isSignin: false,
     nickName: ''
@@ -73,7 +74,7 @@ export const SignUpSetName: React.FC<{
   // 轮询查找用户是否注册
   const verify = () => {
     timer = setInterval(async () => {
-      toast.warning(t('loginSigninSearch'));
+      toastWarning(t('loginSigninSearch'));
       const res = await siginInVerify(account.toLowerCase());
       if (Boolean(res)) {
         timer && clearInterval(timer);
@@ -93,7 +94,7 @@ export const SignUpSetName: React.FC<{
         dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
       }
     } else {
-      toast.error(res.data);
+      toastError(res.data);
       setState(p => {
         p.isSignin = true;
       });
@@ -110,23 +111,23 @@ export const SignUpSetName: React.FC<{
     if (!res[0] && res[1]) {
       const userInfo = await createUser(
         state.nickName,
-        nft.properties.token,
-        nft.properties.token_id
+        nft.properties?.token,
+        nft.properties?.token_id
       );
       if (Boolean(userInfo)) {
         verify();
       } else {
         dispatch(storeAction.setSigninLoading(false));
-        toast.error(t('loginSignupFail'));
+        toastError(t('loginSignupFail'));
       }
     } else if (!res[0] && !res[1]) {
       dispatch(storeAction.setSigninLoading(false));
-      toast.error(t('loginSetNickNameFail'));
+      toastError(t('loginSetNickNameFail'));
     } else {
       dispatch(storeAction.setSigninLoading(false));
-      toast.error(t('loginSetNickNameRepeat'));
+      toastError(t('loginSetNickNameRepeat'));
     }
-  }, [state]);
+  }, [state, nft]);
 
   React.useEffect(() => {
     return () => {

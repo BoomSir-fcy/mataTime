@@ -18,6 +18,11 @@ const ArticleListBox = styled.div`
 color:#fff;
 `
 
+/**
+ * 
+ * @review
+ * props 未声明类型
+ */
 export const ArticleList = (props) => {
   const { topicName = '' } = props
   const goDetils = (e) => {
@@ -108,6 +113,14 @@ export const ArticleList = (props) => {
     })
     setListData([...arr])
   }
+
+  /**
+   * @review
+   * 这样的写法我不理解
+   * 我不理解
+   * 我不理解
+   * TODO: 重构
+   */
   useEffect(() => {
     console.log(props);
     setLoading(false)
@@ -115,43 +128,12 @@ export const ArticleList = (props) => {
     setTotalPage(1)
     listRef.current.loadList()
     setListData([])
-  }, [props.match.params.id, props.match.params.name])
+    getList(1)
+  }, [props.match.params.id, props.match.params.name, props.match])
   return (
     <ArticleListBox>
       <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={() => {
-        if (loading || page > totalPage) return false
-        setLoading(true)
-        if (props.match.path === '/topicList/:id/:name') {
-          Api.HomeApi.findByHotTopicIdList({
-            page: page,
-            per_page: 10,
-            topic_id: props.match.params.id === 'empty' ? null : props.match.params.id,
-            topic_name: props.match.params.name
-          }).then(res => {
-            setLoading(false)
-            if (Api.isSuccess(res)) {
-              setLoading(false)
-              setPage(page + 1)
-              setTotalPage(res.data.total_page)
-              setListData([...listData, ...res.data.List])
-            }
-          })
-        } else {
-          Api.HomeApi.getArticleList({
-            attention: 1,
-            page: page,
-            per_page: 10,
-            ...props.filterValObj
-          }).then(res => {
-            setLoading(false)
-            if (Api.isSuccess(res)) {
-              setLoading(false)
-              setPage(page + 1)
-              setTotalPage(res.data.total_page)
-              setListData([...listData, ...res.data.List])
-            }
-          })
-        }
+        getList()
       }}>
         {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >

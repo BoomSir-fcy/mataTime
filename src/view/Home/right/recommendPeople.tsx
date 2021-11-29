@@ -95,7 +95,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
             <Link to={'/me/profile/' + item.uid}>
               <Avatar
                 src={item.nft_image}
-                style={{ width: '50px', height: '50px' }}
+                style={{ width: '50px', height: '50px' ,minWidth:'50px'}}
                 scale="md"
               />
             </Link>
