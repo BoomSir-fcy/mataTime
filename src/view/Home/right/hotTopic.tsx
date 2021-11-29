@@ -70,12 +70,12 @@ export const HotTopic: React.FC = (props: any) => {
       <Flex justifyContent="space-between">
         <TitleText>{t('HotTopicTitle')}</TitleText>
         <Icon
-          cur
+          current={1}
           onClick={getList.bind(this, true)}
           name="icon-jiazai_shuaxin"
           margin="0"
           color="#7393FF"
-        ></Icon>
+        />
       </Flex>
       <Box>
         {hotTopicList.map((item, index) => (
