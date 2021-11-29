@@ -203,5 +203,5 @@
   "resolutions": {
     "styled-components": "^5"
   },
-  "proxy": ""
+  "proxy": "https://api.social.qgx.io/"
 }
