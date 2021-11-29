@@ -36,7 +36,7 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
           dispatch(fetchUserNftInfoAsync(account));
           dispatch(fetchThunk.fetchUserInfoAsync());
           setPendingTx(false);
-          toast.success('更换成功');
+          toast.success(t('NFT Replaced successfully'));
         }, 15000);
       }
     },
@@ -59,33 +59,29 @@ export const NftButton: React.FC<{ item: any }> = ({ item }) => {
               );
             } else {
               // 质押
-              await handleStakeOrUnstake(
-                1,
-                item.properties.token,
-                item.properties.token_id
-              );
-              dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
-              dispatch(fetchUserNftInfoAsync(account));
-              toast.success('质押成功');
-              setPendingTx(false);
+              // await handleStakeOrUnstake(
+              //   1,
+              //   item.properties.token,
+              //   item.properties.token_id
+              // );
+              // dispatch(storeAction.setUserNftStake({ isStakeNft: true }));
+              // dispatch(fetchUserNftInfoAsync(account));
+              // toast.success('质押成功');
+              // setPendingTx(false);
             }
           } catch (e) {
             console.error(e);
-            toast.error('操作失败');
+            toast.error(t('NFT Operation failed'));
             setPendingTx(false);
           }
         } else {
-          toast.error('请先选择头像');
+          toast.error(t('NFT Please select an avatar first'));
         }
       }}
     >
       {pendingTx ? (
-        <Dots>{t('质押中')}</Dots>
-      ) : isStakeNft ? (
-        t('替换质押')
-      ) : (
-        t('质押')
-      )}
+        <Dots>{t('NFT Staking')}</Dots>
+      ) : t('NFT Replacement Stake')}
     </NowrapBtn>
   );
 };

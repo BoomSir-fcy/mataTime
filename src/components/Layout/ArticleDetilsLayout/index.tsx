@@ -54,8 +54,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between">
-        <Affix offsetTop={100} positionObj={{
-          top: '10px',
+        <Affix offsetTop={0} positionObj={{
+          top: '0',
           left: '50%',
           marginLeft: '-550px'
         }}>
@@ -90,8 +90,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <Editor type="comment" sendArticle={sendArticle}></Editor>
           <CommentList key={refresh} itemData={itemData}></CommentList>
         </CenterCard>
-        <Affix offsetTop={100} positionObj={{
-          top: '10px',
+        <Affix offsetTop={0} positionObj={{
+          top: '0',
           right: '50%',
           marginRight: '-660px'
         }}>

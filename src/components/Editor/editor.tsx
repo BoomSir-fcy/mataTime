@@ -245,12 +245,11 @@ export const Editor = (props: Iprops) => {
     return () => {
       el.removeEventListener('click', eventFn);
     };
-  }, []);
-
-  useEffect(() => {
-    if (imgList.length > 0) setIsDisabledSend(false);
-  }, [imgList]);
-
+  },[])
+useEffect(() => {
+  console.log(imgList.length);
+  setIsDisabledSend(imgList.length<1)
+},[imgList])
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';

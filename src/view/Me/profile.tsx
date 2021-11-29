@@ -209,7 +209,7 @@ const Profile: React.FC<any> = props => {
           </Info>
           <Content>
             <Box className="desc">
-              <Text className="text" style={{ wordBreak: 'break-all' }}>
+              <Text className="text" style={{ wordBreak: 'break-word' }}>
                 {profile.introduction}
               </Text>
               {/* <Text className="text">
