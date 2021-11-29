@@ -19,7 +19,7 @@ const menuArr = [
     title: '消息',
     path: '/news/me',
     badge: true,
-    count:0,
+    count: 0,
     transaltion: 'homeMenuNews'
   },
   {
@@ -28,7 +28,7 @@ const menuArr = [
     title: '私信',
     path: '/',
     badge: true,
-    count:0,
+    count: 0,
     transaltion: 'homeMenuLetter'
   },
   {
@@ -42,7 +42,7 @@ const menuArr = [
     icon: 'icon-qianbao',
     activeIcon: 'icon-qianbao1',
     title: '钱包',
-    path: '/',
+    path: '/account',
     transaltion: 'homeMenuWallet'
   },
   {

@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useStore } from 'store';
 import { Flex, Box, Card } from 'uikit';
@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization'
 import { Link } from 'react-router-dom';
 import { ProfileMenu, Icon, Logo, Badge } from 'components';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import menuData from './menuData';
-import {Api} from 'apis'
+import { Api } from 'apis'
 const MenuBox = styled(Card)`
   position: relative;
   display: flex;
@@ -49,9 +49,9 @@ export const MenuList = (props: { menuList: any[] }) => {
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { menuList } = props;
-  const underdevelopmentList = [1,3,4,5]
-  const itemClick = (e,index) => {
-    if(underdevelopmentList.includes(index)){
+  const underdevelopmentList = [1, 3, 4, 5]
+  const itemClick = (e, index) => {
+    if (underdevelopmentList.includes(index)) {
       e.preventDefault();
       e.stopPropagation();
       return toast.success('coming soon')
@@ -63,7 +63,7 @@ export const MenuList = (props: { menuList: any[] }) => {
       {menuList.map((item, index) => {
         return (
           <ItemLink
-            onClick={(e)=>itemClick(e, index)}
+            onClick={(e) => itemClick(e, index)}
             to={item.path}
             key={index}
             style={{
@@ -72,7 +72,7 @@ export const MenuList = (props: { menuList: any[] }) => {
             }}
           >
             <div style={{ position: 'relative' }} title={item.title}>
-              {isNotification&&item.badge && <Badge count={item.count>99?'99+':item.count} />}
+              {isNotification && item.badge && <Badge count={item.count > 99 ? '99+' : item.count} />}
               <Icon name={currentIndex === index ? item.activeIcon : item.icon} margin="10px 14px" color={isDark ? '#ffffff' : '#7A83A0'}></Icon>
             </div>
             <span style={{ marginLeft: '5px' }}>{t(item.transaltion)}</span>
@@ -84,23 +84,23 @@ export const MenuList = (props: { menuList: any[] }) => {
 };
 
 export const Menu: React.FC = () => {
-  const [paresMenuData ,setParesMenuData] = useState(menuData) 
-    // 获取未读消息数量
-    const getMsgNumRequest = async () => {
-      const res = await Api.NewsApi.getUnreadMsgNum();
-      if (Api.isSuccess(res)) {
-        let tempMenuData:any = paresMenuData.slice()
+  const [paresMenuData, setParesMenuData] = useState(menuData)
+  // 获取未读消息数量
+  const getMsgNumRequest = async () => {
+    const res = await Api.NewsApi.getUnreadMsgNum();
+    if (Api.isSuccess(res)) {
+      let tempMenuData: any = paresMenuData.slice()
       tempMenuData[2].count = 0
-        for(let key in res.data||{}){
-          tempMenuData[2].count+=res.data[key]
-        }
-        setParesMenuData(tempMenuData)
+      for (let key in res.data || {}) {
+        tempMenuData[2].count += res.data[key]
       }
-    };
-  
+      setParesMenuData(tempMenuData)
+    }
+  };
+
   useEffect(() => {
     getMsgNumRequest()
-  },[])
+  }, [])
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   return (
     <MenuBox>

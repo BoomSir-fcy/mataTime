@@ -25,7 +25,7 @@ const initialState = {
   isStakeNft: false,
   signUpFail: false,
   signinLoading: false,
-  singUpStep: 1,
+  singUpStep: 0,
   userInfo: {} as Api.User.userInfoParams,
   nft: {} as any,
   nftStatus: false,

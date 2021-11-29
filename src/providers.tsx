@@ -3,6 +3,7 @@ import { light, dark } from 'uikit';
 import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ThemeProvider } from 'styled-components';
+import { RefreshContextProvider } from 'contexts/RefreshContext'
 import { ToastsProvider, LanguageProvider } from 'contexts';
 import { ConnectWalletProvider } from 'contexts/ConnectWalletContext';
 import { store } from 'store';

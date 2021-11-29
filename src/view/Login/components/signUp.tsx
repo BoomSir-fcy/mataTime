@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { useStore, storeAction } from 'store';
+import { StakeNFT } from 'components/NftList';
 
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
@@ -14,6 +15,8 @@ import { shortenAddress } from 'utils/contract';
 import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
 import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'hooks';
+
 
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
@@ -51,7 +54,19 @@ const SignUpSubText = styled(Text)`
   font-size: 20px;
   ${mediaQueriesSize.marginb}
 `;
-
+const Nft = styled(Flex)`
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-top: 15px;
+    padding: 0 15px;
+  }
+`;
+const NftTitle = styled(Text)`
+font-weight: bold;
+  ${mediaQueriesSize.marginr}
+`;
 const SignUpFail = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -100,6 +115,7 @@ export const SignUp: React.FC<{
   const { singUpStep } = useStore(p => p.loginReducer);
   const { account } = useWeb3React();
   const { t } = useTranslation();
+  const { toastWarning, toastError } = useToast();
 
   // 已经注册完成，跳转第4步
   const signHandle = React.useCallback(async () => {
@@ -108,8 +124,29 @@ export const SignUp: React.FC<{
 
   return (
     <Box width="100%">
+      {/* 创建账户 */}
+      {singUpStep === 0 && !signUpFail && (
+        <React.Fragment>
+          <Text
+            fontSize="34px"
+            marginBottom="29px"
+            bold
+            style={{ textTransform: 'capitalize' }}
+          >
+            {t('loginWelcome')}
+          </Text>
+          <Text color="textOrigin">{t('loginSubTitle')}</Text>
+          <SignUpWarpper>
+            <WalletAddress address={account} />
+            <FailButton onClick={() => {
+              dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
+            }}>{t('loginCreatAccount')}</FailButton>
+          </SignUpWarpper>
+          <Text color="textTips">{t('loginSubTips')}</Text>
+        </React.Fragment>
+      )}
       {/* 没有nft，不能注册，注册失败 */}
-      {singUpStep === 1 && signUpFail && (
+      {singUpStep === 0 && signUpFail && (
         <React.Fragment>
           <Text
             fontSize="34px"
@@ -136,18 +173,38 @@ export const SignUp: React.FC<{
         {t('loginSignupSuccessNextText')}
       </Button> */}
       {/* 正常情况下走注册流程 */}
-      {singUpStep === 1 && !signUpFail && <SignUpSetName status={isStakeNft} />}
+      {/* 选择头像 */}
+      {singUpStep === 1 && !signUpFail &&
+        <Nft>
+          <Flex alignItems="baseline">
+            <NftTitle fontSize="18px">{t('login Already have an NFT avatar')}</NftTitle>
+            <Text fontSize="14px">{t('login After you hold and pledge your NFT avatar, you can register successfully')}</Text>
+          </Flex>
+          <StakeNFT status={1} />
+          <Flex pt='20px' justifyContent='center'>
+            <FailButton onClick={() => {
+              if (!isStakeNft) {
+                toastError(t('login Please approve and select an avatar'))
+                return
+              }
+              dispatch(storeAction.changeSignUpStep({ singUpStep: 2 }));
+            }}>{t('loginSignUpNext')}</FailButton>
+          </Flex>
+        </Nft>
+      }
+      {/* 设置昵称 */}
+      {singUpStep === 2 && <SignUpSetName status={isStakeNft} />}
       {/* {singUpStep === 2 && <SignUpSetName />} */}
       {singUpStep === 3 && (
         <Box width="100%">
-          <Text
+          {/* <Text
             fontSize="34px"
             marginBottom="24px"
             bold
             style={{ textTransform: 'capitalize' }}
           >
             {t('loginWelcome')}
-          </Text>
+          </Text> */}
           <WalletAddress address={account} />
           <Flex
             flexDirection="column"

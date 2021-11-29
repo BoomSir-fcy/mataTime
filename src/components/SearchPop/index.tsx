@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { Icon, Avatar } from 'components';
 import { SearchPopBox } from './style';
 import { Flex } from 'uikit';
 import { UserTitle, UserDesc } from 'view/Home/right/recommendPeople';
 import { Api } from 'apis';
+
 type Iprops = {
   show: boolean;
   callback?: (data, type) => void;
   type: 'user' | 'topic';
 };
+
 export const SearchPop = (props: Iprops) => {
   const [nicKName, setNickName] = useState('');
   const [nicKNameTimeId, setNicKNameTimeId] = useState(null);
@@ -19,6 +20,8 @@ export const SearchPop = (props: Iprops) => {
   const [topicTimeId, setTopicTimeId] = useState(null);
   const [isInit, setIsInit] = useState(true);
   const { show, type, callback } = props;
+
+  // todo
   useEffect(() => {
     if (isInit) return setIsInit(false);
     if (nicKNameTimeId) {
@@ -34,6 +37,7 @@ export const SearchPop = (props: Iprops) => {
       }, 400)
     );
   }, [nicKName]);
+
   useEffect(() => {
     if (isInit) return setIsInit(false);
     if (topicTimeId) {
@@ -53,15 +57,13 @@ export const SearchPop = (props: Iprops) => {
       }, 400)
     );
   }, [topicValue]);
+
   useEffect(() => {
-    const fn = e => {
-      if (show) {
-        callback({}, '');
-      }
-    };
-    document.addEventListener('click', fn);
-    return () => document.removeEventListener('click', fn);
-  });
+    const fn = e => callback({}, '');
+    document.body.addEventListener('click', fn);
+    return () => document.body.removeEventListener('click', fn);
+  }, []);
+
   return show ? (
     <SearchPopBox onClick={e => e.nativeEvent.stopImmediatePropagation()}>
       {type === 'user' ? (
@@ -72,16 +74,16 @@ export const SearchPop = (props: Iprops) => {
               margin="15px 0"
               size={20}
               color="#7393FF"
-            ></Icon>
+            />
             {!!nicKName ? (
               <Icon
-                cur
+                current={1}
                 name="icon-guanbi2fill"
                 margin="15px 0"
                 size={20}
                 color="#4168ED"
                 onClick={() => setNickName('')}
-              ></Icon>
+              />
             ) : null}
             <input
               placeholder="昵称搜索"
@@ -107,7 +109,7 @@ export const SearchPop = (props: Iprops) => {
                     <UserTitle style={{ flex: 1 }} title={item.nick_name}>
                       {item.nick_name}
                     </UserTitle>
-                    {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
+                    {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"/> */}
                   </Flex>
                   <UserDesc title={item.address}>
                     {item.address &&
@@ -129,7 +131,7 @@ export const SearchPop = (props: Iprops) => {
               margin="15px 0"
               size={20}
               color="#7393FF"
-            ></Icon>
+            />
             {!!topicValue ? (
               <Icon
                 cur={true}
@@ -138,7 +140,7 @@ export const SearchPop = (props: Iprops) => {
                 size={20}
                 color="#4168ED"
                 onClick={() => setTopicValue('')}
-              ></Icon>
+              />
             ) : null}
             <input
               type="text"
