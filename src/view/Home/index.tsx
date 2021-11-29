@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Editor, Affix } from 'components';
 import { withRouter } from 'react-router-dom';
+import useReadArticle from 'contexts/ImContext/hooks/useReadArticle';
 import { useTranslation } from 'contexts/Localization';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
@@ -15,6 +16,7 @@ import {
 } from './right';
 
 import { Api } from 'apis';
+
 
 const PageContainer = styled(Box)`
   position: relative;
@@ -43,6 +45,7 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
+  useReadArticle()
 
   /**
    * @review

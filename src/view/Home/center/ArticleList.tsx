@@ -13,6 +13,7 @@ import {
   MeItemWrapper
 } from 'view/News/Me/style';
 import { Api } from 'apis'
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 const ArticleListBox = styled.div`
 color:#fff;
@@ -137,6 +138,7 @@ export const ArticleList = (props) => {
       }}>
         {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >
+            <SpendTimeViewWithArticle articleId={item.id} />
             <MentionItem {...props} itemData={{
               ...item,
               post_id: item.id,

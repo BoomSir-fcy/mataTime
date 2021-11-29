@@ -42,19 +42,6 @@ function App() {
   const dispatch = useDispatch();
   const token = window.localStorage.getItem(storage.Token);
 
-  const initSocket = () => {
-    let im = new IM({
-      url: 'ws://192.168.101.112:8888/v1/ws',
-      token: token
-    });
-    im.init();
-  };
-
-  React.useEffect(() => {
-    // initSocket();
-  }, []);
-
-
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token, dispatch]);
@@ -82,7 +69,7 @@ function App() {
             <Route path="/me" component={Me} />
             <Route path="/set" component={Set} />
             {process.env.NODE_ENV === 'development' && (
-              <Route path="/test" componen={Test} />
+              <Route path="/test" component={Test} />
             )}
           </Switch>
         </React.Suspense>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { Button, Box, Text, Toggle, Card, Flex } from 'uikit'
+import { IM } from 'utils';
 import { languagesOptions } from 'config/localization';
 import { useTranslation } from 'contexts/Localization'
 import { Select } from 'components';
@@ -28,10 +29,40 @@ const Test = () => {
   const { t } = useTranslation()
   const [languange, setUseLanguage] = useLanguange();
   const [isDark, toggleThemeHandle] = useThemeManager();
+  const [ws, setWs] = useState<IM>(null)
 
   const handleTest = useCallback(() => {
-    console.debug('test')
-  }, [])
+    console.log(ws, 'test')
+    ws?.send(IM.MessageProtocol.WSProtocol_SYSTEM_NOTIFY, { test: '211221' })
+  }, [ws])
+
+  const handleClose = useCallback(() => {
+    ws?.close()
+    console.log('211221')
+  }, [ws])
+
+  const initSocket = () => {
+    let im = new IM();
+    im.on('open', (event) => {
+      console.log('=============open', event)
+    })
+    im.on('message', (event) => {
+      console.log('=======message======message', event)
+    })
+    im.on('close', (event) => {
+      console.log('=======close======close', event)
+    })
+    im.on('error', (event) => {
+      console.log('=======error======error', event)
+    })
+    setWs(im)
+  };
+
+  React.useEffect(() => {
+    // initSocket();
+  }, []);
+
+
 
   return (
     <StyledNotFound>
@@ -47,6 +78,9 @@ const Test = () => {
       </Box>
       <Button mt="16px" onClick={() => handleTest()} scale="sm">
         {t('Test')}
+      </Button>
+      <Button mt="16px" onClick={() => handleClose()} scale="sm">
+        {t('Close')}
       </Button>
       <Box mt="16px">
         <Toggle checked={isDark} onClick={toggleThemeHandle} />
