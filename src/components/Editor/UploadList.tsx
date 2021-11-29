@@ -14,7 +14,6 @@ display: flex;
 background: ${({ theme }) => theme.colors.backgroundTextArea};
 border-bottom-right-radius: 10px;
 border-bottom-left-radius: 10px;
-}
 &>div{
   position:relative;
   margin-left:15px;
@@ -33,19 +32,8 @@ border-bottom-left-radius: 10px;
     transition:all 0.3s ;
   }
 }
-`
-export const UploadList=(props:imgListType)=>{
-  const [imgList,setImgList] = useState([])
-  useEffect(()=>{
-    setImgList(props.imgList)
-  },[props.imgList])
-  const delImgItem =(index)=>{
-    const temp = [...imgList]
-    temp.splice(index,1)
-    setImgList(temp)
-    props.delImgItem(temp)
-  }
 `;
+
 export const UploadList = (props: imgListType) => {
   const [imgList, setImgList] = useState([]);
   useEffect(() => {
