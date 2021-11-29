@@ -247,7 +247,6 @@ export const Editor = (props: Iprops) => {
     };
   },[])
 useEffect(() => {
-  console.log(imgList.length);
   setIsDisabledSend(imgList.length<1)
 },[imgList])
   const callbackSelectImg = e => {
@@ -413,7 +412,10 @@ useEffect(() => {
           setIsDisabledSend(!content);
         }}
       >
-        <div className="text-box" ref={ref}>
+        <div className="text-box" ref={ref} style={{
+            borderBottomRightRadius: imgList.length>0?'0px':'5px',
+            borderBottomLeftRadius: imgList.length>0?'0px':'5px'
+              }}>
           <Editable
             autoFocus
             renderElement={renderElement}

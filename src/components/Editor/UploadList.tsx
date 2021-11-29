@@ -45,19 +45,8 @@ export const UploadList=(props:imgListType)=>{
     setImgList(temp)
     props.delImgItem(temp)
   }
-`;
-export const UploadList = (props: imgListType) => {
-  const [imgList, setImgList] = useState([]);
-  useEffect(() => {
-    setImgList(props.imgList);
-  }, [props.imgList]);
-  const delImgItem = index => {
-    const temp = [...imgList];
-    temp.splice(index, 1);
-    setImgList(temp);
-    props.delImgItem(temp);
-  };
   return (
+    imgList.length>0?
     <ImgListBox>
       {imgList.map((item, index) => (
         <div key={index}>
@@ -72,5 +61,6 @@ export const UploadList = (props: imgListType) => {
         </div>
       ))}
     </ImgListBox>
+    :null
   );
 };

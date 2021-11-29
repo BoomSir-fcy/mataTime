@@ -9,7 +9,7 @@ import { ProfileMenu, Icon, Logo, Badge } from 'components';
 import { toast } from 'react-toastify'
 import menuData from './menuData';
 import { Api } from 'apis'
-const MenuBox = styled(Card)`
+const MenuBox = styled(Box)`
   position: relative;
   display: flex;
   flex-direction: column;

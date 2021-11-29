@@ -49,8 +49,6 @@ export const SlateBox = styled.div`
     padding: 15px;
     padding-bottom: 0px;
     border-radius: 5px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
     min-height: 112px !important;
     max-height: 120px;
     overflow-y: auto;
