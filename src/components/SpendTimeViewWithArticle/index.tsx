@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useIm from "contexts/ImContext/hooks/useIm";
+import { Text, Button } from "uikit";
 import observerOptions from "./options";
 
 interface SpendTimeViewWithArticleProps {
@@ -10,21 +11,22 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ art
   const imgRef = useRef<HTMLDivElement>(null);
   const { addArticleId, removeArticleId } = useIm()
   const [isLoaded, setIsLoaded] = useState(false);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
+    console.log('=========================qqqqqqqqqq')
     let observer: IntersectionObserver;
-    if (isLoaded) return
     if (imgRef.current) {
       observer = new IntersectionObserver((entries) => {
-        console.log('===================')
         entries.forEach((entry) => {
           const { isIntersecting } = entry;
           if (isIntersecting) {
-            addArticleId(articleId)
-            setIsLoaded(true)
+            // addArticleId(articleId)
+            // setIsLoaded(true)
+            // setActive(true)
             // observer.disconnect();
-          } else {
-            // TODO:
+          } else if (active) {
+            // setActive(false)
             // removeArticleId(articleId)
           }
         });
@@ -37,9 +39,20 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ art
         observer.disconnect();
       }
     };
-  }, [articleId, removeArticleId, addArticleId]);
+  }, [articleId,addArticleId]);
 
-  return <div ref={imgRef}>articleId: {articleId}</div>
+  const remove = useCallback((articleId) => {
+    removeArticleId(articleId)
+  }, [removeArticleId])
+  const add = useCallback((articleId) => {
+    addArticleId(articleId)
+  }, [addArticleId])
+
+  return <div ref={imgRef}>
+    <Text>articleId: {articleId}</Text>
+    <Button onClick={() => add(articleId)}>add</Button>
+    <Button onClick={() => remove(articleId)}>remove</Button>
+  </div>
 }
 
 export default SpendTimeViewWithArticle

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import useIm from './useIm'
 
 const useReadArticle = () => {
-  const { im, articleIds } = useIm()
+  const { im, articleIds, addArticleId, removeArticleId } = useIm()
   const timeStep = 1 // 推送时间间隔
   const [nowTime, setNowTime] = useState(0)
   const [fetchReadTime, setFetchReadTime] = useState(0)
@@ -17,6 +17,7 @@ const useReadArticle = () => {
   useEffect(() => {
     if (nowTime === fetchReadTime) return
     setFetchReadTime(nowTime)
+    console.log(articleIds, 'articleIds')
   }, [nowTime, articleIds, fetchReadTime])
 }
 

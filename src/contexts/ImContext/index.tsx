@@ -14,18 +14,25 @@ const ImContext = React.createContext({ } as ProviderState)
 const ImContextProvider = ({ children }) => {
 
   const [im, setWs] = useState<IM>(null)
-  const [articleIds, setArticleIds] = useState<number[]>([12,33, 4])
+  const [articleIds, setArticleIds] = useState<number[]>([])
 
   const addArticleId = useCallback((id: number) => {
-    console.log([...articleIds, id])
-    console.log(id, Array.from(new Set([...articleIds, id])), 'Array.from(new Set([...articleIds, id]))')
+    // console.log([...articleIds, id])
+    // console.log(id, Array.from(new Set([...articleIds, id])), 'Array.from(new Set([...articleIds, id]))')
     setArticleIds(Array.from(new Set([...articleIds, id])))
   }, [articleIds, setArticleIds])
 
   const removeArticleId = useCallback((id: number) => {
-    console.log(id, articleIds.filter(item => item !== id), 'articleIds.filter(item => item !== id)')
-    setArticleIds(articleIds.filter(item => item !== id))
+    console.log([...articleIds, id])
+    setArticleIds([...articleIds].filter(item => item !== id))
+    // console.log(id, Array.from(new Set([...articleIds, id])), 'Array.from(new Set([...articleIds, id]))')
+    // setArticleIds(Array.from(new Set([...articleIds, id])))
   }, [articleIds, setArticleIds])
+
+  // const removeArticleId = useCallback((id: number) => {
+  //   console.log(id, articleIds, 'articleIds.filter(item => item !== id)')
+  //   setArticleIds(articleIds.filter(item => item !== id))
+  // }, [articleIds, setArticleIds])
 
 
   const initSocket = () => {
