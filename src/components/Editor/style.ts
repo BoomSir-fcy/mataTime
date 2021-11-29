@@ -62,6 +62,9 @@ export const SlateBox = styled.div`
       border-radius: 10px;
       background: rgba(83, 83, 83, 0.5);
     }
+    &>div{
+      min-height: 95px !important;
+    }
   }
 `;
 export const Toolbar = styled(Flex)`

@@ -232,20 +232,20 @@ export const Editor = (props: Iprops) => {
   }, [props.initValue]);
 
   // 扩大focus距离
-  useEffect(() => {
-    const el: any = ref.current;
-    const eventFn = (e: any) => {
-      if (e.target.className !== 'text-box') return false;
-      const range = window.getSelection(); //创建range
-      el.firstElementChild.focus();
-      range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
-      range.collapseToEnd(); //光标移至最后
-    };
-    el.addEventListener('click', eventFn);
-    return () => {
-      el.removeEventListener('click', eventFn);
-    };
-  },[])
+  // useEffect(() => {
+  //   const el: any = ref.current;
+  //   const eventFn = (e: any) => {
+  //     if (e.target.className !== 'text-box') return false;
+  //     const range = window.getSelection(); //创建range
+  //     el.firstElementChild.focus();
+  //     range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
+  //     range.collapseToEnd(); //光标移至最后
+  //   };
+  //   el.addEventListener('click', eventFn);
+  //   return () => {
+  //     el.removeEventListener('click', eventFn);
+  //   };
+  // },[])
 useEffect(() => {
   setIsDisabledSend(imgList.length<1)
 },[imgList])
