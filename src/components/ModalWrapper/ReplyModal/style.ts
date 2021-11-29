@@ -87,5 +87,6 @@ export const ReplyConentWrapper = styled(Box)`
   }
   .right{
     flex: 1;
+    max-width: 580px
   }
 `
