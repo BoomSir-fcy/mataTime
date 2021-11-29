@@ -1,10 +1,4 @@
-import React, {
-  useMemo,
-  useCallback,
-  useRef,
-  useEffect,
-  useState
-} from 'react';
+import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import {
   Editor as slateEditor,
   Transforms,
@@ -13,6 +7,9 @@ import {
   Descendant,
   Element as SlateElement
 } from 'slate';
+import ReactDOM from 'react-dom';
+import { useImmer } from 'use-immer';
+import { debounce } from 'lodash';
 import { Flex } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
@@ -28,7 +25,13 @@ import {
   useFocused,
   useSlate
 } from 'slate-react';
-import { SlateBox, SendButton, CancelButton } from './style';
+import {
+  SlateBox,
+  SendButton,
+  CancelButton,
+  MentionContent,
+  MentionItems
+} from './style';
 import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
@@ -40,6 +43,12 @@ type Iprops = {
   initValue?: any;
   sendArticle: any;
   cancelSendArticle?: any;
+};
+
+export const Portal = ({ children }) => {
+  return typeof document === 'object'
+    ? ReactDOM.createPortal(children, document.body)
+    : null;
 };
 
 const DefaultElement = props => {
@@ -123,14 +132,22 @@ const parseValue = value => {
 
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(true);
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
   const [searchUser, setSearchUser] = useState(false);
   const [searcTopic, setSearcTopic] = useState(false);
   const [refresh, setRefresh] = useState(1);
-  const { t } = useTranslation();
+  const [target, setTarget] = useState<Range | undefined>();
+  const [stateEdit, setStateEdit] = useImmer({
+    userList: [],
+    search: '',
+    index: 0
+  });
   const ref = useRef<HTMLDivElement | null>();
+  const mentionRef = useRef<HTMLDivElement | null>();
+  const { userList, search, index } = stateEdit;
 
   const renderElement = useCallback(props => {
     switch (props.element.type) {
@@ -148,6 +165,65 @@ export const Editor = (props: Iprops) => {
     []
   );
 
+  // 模糊查询用户
+  const atSearchUser = useCallback(
+    debounce(async (nickName: string) => {
+      console.log(nickName);
+      try {
+        const res = await Api.UserApi.searchUser(nickName);
+        if (Api.isSuccess(res)) {
+          setStateEdit(p => {
+            p.userList = res.data || [];
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, 1000),
+    []
+  );
+
+  const onKeyDown = useCallback(
+    (event: any) => {
+      if (target) {
+        switch (event.key) {
+          case 'ArrowDown':
+            event.preventDefault();
+            const prevIndex = index >= userList.length - 1 ? 0 : index + 1;
+            setStateEdit(p => {
+              p.index = prevIndex;
+            });
+            break;
+          case 'ArrowUp':
+            event.preventDefault();
+            const nextIndex = index <= 0 ? userList.length - 1 : index - 1;
+            setStateEdit(p => {
+              p.index = nextIndex;
+            });
+            break;
+          case 'Tab':
+          case 'Enter':
+            event.preventDefault();
+            Transforms.select(editor, target);
+            insertMention(editor, {
+              uid: userList[index].uid,
+              character: `@${userList[index].nick_name}`
+            });
+            setTarget(null);
+            setStateEdit(p => {
+              p.userList = [];
+            });
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setTarget(null);
+            break;
+        }
+      }
+    },
+    [index, search, target, userList]
+  );
+
   useEffect(() => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
@@ -160,8 +236,8 @@ export const Editor = (props: Iprops) => {
     const el: any = ref.current;
     const eventFn = (e: any) => {
       if (e.target.className !== 'text-box') return false;
-      el.firstElementChild.focus();
       const range = window.getSelection(); //创建range
+      el.firstElementChild.focus();
       range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
       range.collapseToEnd(); //光标移至最后
     };
@@ -259,7 +335,6 @@ export const Editor = (props: Iprops) => {
     // let content = ''
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
-    console.log(newValue);
     if (content.length > 140) {
       setTimeId(null);
       return toast.warning('字数不可超过140');
@@ -272,6 +347,7 @@ export const Editor = (props: Iprops) => {
     );
     restInput();
   };
+
   const searchSelect = (data, type) => {
     setSearcTopic(false);
     setSearchUser(false);
@@ -283,19 +359,58 @@ export const Editor = (props: Iprops) => {
       insertTopic(editor, data.topic_name);
     }
   };
+
+  // 计算模糊搜索框位置
+  useEffect(() => {
+    if (target && userList?.length > 0) {
+      const el = mentionRef.current;
+      const domRange = ReactEditor.toDOMRange(editor, target);
+      const rect = domRange.getBoundingClientRect();
+      el.style.top = `${rect.top + window.pageYOffset + 24}px`;
+      el.style.left = `${rect.left + window.pageXOffset}px`;
+    }
+  }, [userList, editor, index, search, target]);
+
   return (
     <SlateBox key={refresh}>
-      <SearchPop
-        type={searchUser ? 'user' : 'topic'}
-        show={searcTopic || searchUser}
-        callback={searchSelect}
-      />
       <Slate
         editor={editor}
         value={value}
         onChange={value => {
-          const { content } = deepContent(value);
           setValue(value);
+
+          const { content } = deepContent(value);
+          const { selection } = editor;
+
+          if (selection && Range.isCollapsed(selection)) {
+            const [start] = Range.edges(selection);
+            const wordBefore = slateEditor.before(editor, start, {
+              unit: 'word'
+            });
+            const before = wordBefore && slateEditor.before(editor, wordBefore);
+            const beforeRange =
+              before && slateEditor.range(editor, before, start);
+            const beforeText =
+              beforeRange && slateEditor.string(editor, beforeRange);
+            const beforeMatch =
+              beforeText && beforeText.match(/^@([\u4e00-\u9fa5_a-zA-Z0-9]+$)/);
+            const after = slateEditor.after(editor, start);
+            const afterRange = slateEditor.range(editor, start, after);
+            const afterText = slateEditor.string(editor, afterRange);
+            const afterMatch = afterText.match(/^(\s|$)/);
+
+            if (beforeMatch && afterMatch) {
+              atSearchUser(beforeMatch[1]);
+              setTarget(beforeRange);
+              setStateEdit(p => {
+                p.index = 0;
+                p.search = beforeMatch[1];
+              });
+              return;
+            }
+          }
+
+          setTarget(null);
           setIsDisabledSend(!content);
         }}
       >
@@ -303,6 +418,7 @@ export const Editor = (props: Iprops) => {
           <Editable
             autoFocus
             renderElement={renderElement}
+            onKeyDown={onKeyDown}
             placeholder={
               type === 'comment'
                 ? t('newsCommentReply')
@@ -332,6 +448,43 @@ export const Editor = (props: Iprops) => {
             </SendButton>
           )}
         </Flex>
+        {(searcTopic || searchUser) && (
+          <SearchPop
+            type={searchUser ? 'user' : 'topic'}
+            show={searcTopic || searchUser}
+            callback={searchSelect}
+          />
+        )}
+
+        {target && userList.length > 0 && (
+          <Portal>
+            <MentionContent ref={mentionRef} data-cy="mentions-portal">
+              {userList.map((char, i) => (
+                <MentionItems
+                  key={char.uid}
+                  onClick={event => {
+                    event.preventDefault();
+                    Transforms.select(editor, target);
+                    insertMention(editor, {
+                      uid: userList[i].uid,
+                      character: `@${userList[i].nick_name}`
+                    });
+                    setTarget(null);
+                    setStateEdit(p => {
+                      p.userList = [];
+                    });
+                  }}
+                  style={{
+                    background:
+                      i === index ? 'rgb(247, 249, 249)' : 'transparent'
+                  }}
+                >
+                  {char.nick_name}
+                </MentionItems>
+              ))}
+            </MentionContent>
+          </Portal>
+        )}
       </Slate>
     </SlateBox>
   );

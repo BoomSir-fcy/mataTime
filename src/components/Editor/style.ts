@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Box, Flex, Button, Svg } from 'uikit';
+import { style } from 'styled-system';
 
 export const EditorWarpper = styled(Box)`
   width: 100%;
@@ -36,6 +37,7 @@ export const CancelButton = styled(Button)`
 `;
 
 export const SlateBox = styled.div`
+  position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
   margin-bottom: 10px;
   border-radius: ${({ theme }) => theme.radii.card};
@@ -83,4 +85,27 @@ export const Toolbar = styled(Flex)`
       font-size: 20px;
     }
   }
+`;
+
+export const MentionContent = styled(Box)`
+  top: -9999px;
+  left: -9999px;
+  position: absolute;
+  z-index: 1;
+  width: 200px;
+  height: 300px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 4px;
+  box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
+    rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+`;
+
+export const MentionItems = styled(Box)`
+  cursor: pointer;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 10px 12px;
 `;

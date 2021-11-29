@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { Icon, Avatar } from 'components';
 import { SearchPopBox } from './style';
 import { Flex } from 'uikit';
 import { UserTitle, UserDesc } from 'view/Home/right/recommendPeople';
 import { Api } from 'apis';
+
 type Iprops = {
   show: boolean;
   callback?: (data, type) => void;
   type: 'user' | 'topic';
 };
+
 export const SearchPop = (props: Iprops) => {
   const [nicKName, setNickName] = useState('');
   const [nicKNameTimeId, setNicKNameTimeId] = useState(null);
@@ -19,6 +20,8 @@ export const SearchPop = (props: Iprops) => {
   const [topicTimeId, setTopicTimeId] = useState(null);
   const [isInit, setIsInit] = useState(true);
   const { show, type, callback } = props;
+
+  // todo
   useEffect(() => {
     if (isInit) return setIsInit(false);
     if (nicKNameTimeId) {
@@ -34,6 +37,7 @@ export const SearchPop = (props: Iprops) => {
       }, 400)
     );
   }, [nicKName]);
+
   useEffect(() => {
     if (isInit) return setIsInit(false);
     if (topicTimeId) {
@@ -53,15 +57,13 @@ export const SearchPop = (props: Iprops) => {
       }, 400)
     );
   }, [topicValue]);
+
   useEffect(() => {
-    const fn = e => {
-      if (show) {
-        callback({}, '');
-      }
-    };
-    document.addEventListener('click', fn);
-    return () => document.removeEventListener('click', fn);
-  });
+    const fn = e => callback({}, '');
+    document.body.addEventListener('click', fn);
+    return () => document.body.removeEventListener('click', fn);
+  }, []);
+
   return show ? (
     <SearchPopBox onClick={e => e.nativeEvent.stopImmediatePropagation()}>
       {type === 'user' ? (
