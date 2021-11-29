@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import styled from "styled-components";
 import { useTranslation } from 'contexts/Localization'
 import { Flex, Button, Card } from 'uikit'
-export const TabsBox = styled(Card)`
+export const TabsBox = styled.div`
+border-top: 1px solid #3A4459;
+border-bottom: 1px solid #3A4459;
   margin-bottom: 12px;
   line-height:60px;
   padding-left:16px;
-  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,10 +35,10 @@ align-items: center;
 & button{
   height: 35px;
   margin-right:10px;
-  background-color: #4d535f;
+  // background-color: #4d535f;
 }
 .rightActive{
-  background-color: #4168ED;
+  // background-color: #4168ED;
 }
  `
 interface propsType {
@@ -51,35 +52,22 @@ interface propsType {
 }
 export const Tabs = (props: propsType) => {
   const { t } = useTranslation()
-  const { defCurrentLeft, defCurrentRight, tabsChange, tabRightArr = [
-    {
-      label: t('homeTabLatest'),
-      value: '1',
-      paramsName:'attention'
-    },
-    // {
-    //   label: t('homeTabPopular'),
-    //   value: '2'
-    // },
-    {
-      label: t('homeTabFocus'),
-      value: '2',
-      paramsName:'attention'
-    },
-  ], tabLeftArr = [
+  const { defCurrentLeft, defCurrentRight, tabsChange, tabRightArr = [], tabLeftArr = [
     {
       label: t('homeTabAll'),
       value: '1',
       paramsName:'attention'
     },
-    // {
-    //   label: t('homeTabOriginal'),
-    //   value: '2'
-    // },
-    // {
-    //   label: t('homeTabArticle'),
-    //   value: '3'
-    // },
+    {
+      label: t('homeTabLatest'),
+      value: '1',
+      paramsName:'attention'
+    },
+    {
+      label: t('homeTabFocus'),
+      value: '2',
+      paramsName:'attention'
+    }
   ] } = props
   const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0)
   const [currentRightIndex, setCurrentRightIndex] = useState(defCurrentRight || 0)
@@ -100,7 +88,7 @@ export const Tabs = (props: propsType) => {
           {
             tabLeftArr.map((item, index) => {
               return (
-                <div key={item.value} onClick={leftTabClick.bind(this, item, index)} className={currentLeftIndex === index ? 'leftActive' : ''}>
+                <div key={index} onClick={leftTabClick.bind(this, item, index)} className={currentLeftIndex === index ? 'leftActive' : ''}>
                   {item.label}
                 </div>
               )
@@ -113,7 +101,7 @@ export const Tabs = (props: propsType) => {
           {
             tabRightArr.map((item, index) => {
               return (
-                <Button key={item.value} onClick={rightTabClick.bind(this, item, index)} className={currentRightIndex === index ? 'rightActive' : ''}>
+                <Button  key={item.value} onClick={rightTabClick.bind(this, item, index)} className={currentRightIndex === index ? 'rightActive' : ''}>
                   {item.label}
                 </Button>
               )

@@ -185,7 +185,6 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   const initEvent = () => {
     document.onclick = () => {
-      console.log('123', visible)
     }
   }
 

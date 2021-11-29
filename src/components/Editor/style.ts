@@ -49,8 +49,6 @@ export const SlateBox = styled.div`
     padding: 15px;
     padding-bottom: 0px;
     border-radius: 5px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
     min-height: 112px !important;
     max-height: 120px;
     overflow-y: auto;
@@ -63,6 +61,9 @@ export const SlateBox = styled.div`
       /*滚动条里面小方块*/
       border-radius: 10px;
       background: rgba(83, 83, 83, 0.5);
+    }
+    &>div{
+      min-height: 95px !important;
     }
   }
 `;

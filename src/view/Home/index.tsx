@@ -82,7 +82,7 @@ const Home: React.FC = (props: any) => {
    * @bug 未节流处理
    */
   const tabsChange = item => {
-    console.log(item)
+    console.log(item);
     const temp = {
       ...filterVal
     };
