@@ -270,5 +270,10 @@
   "Account Recharge failed!": "Recharge failed!",
   "Account The transaction is successful!": "The transaction is successful!",
   "Account Pools": "Pools",
+  "NFT Replaced successfully": "Replaced successfully",
+  "NFT Operation failed": "Operation failed",
+  "NFT Please select an avatar first": "Please select an avatar first",
+  "NFT Staking": "Staking",
+  "NFT Replacement Stake": "Replacement Stake",
   "******end*****@FCY********": "@FCY翻译结束"
 }
