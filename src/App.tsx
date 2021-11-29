@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
-import useEagerConnect from 'hooks/useEagerConnect';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import GlobalStyle from 'style/global';
-import { IM } from 'utils';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchThunk } from 'store';
-import PageLoader from 'components/Loader/PageLoader';
-import { CommonLayout, ToastComponents } from 'components';
 import { Box } from 'uikit';
+import { fetchThunk } from 'store';
 import { storage } from 'config';
 
-// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
-import 'moment/locale/zh-cn';
-import 'react-toastify/dist/ReactToastify.css';
+import useEagerConnect from 'hooks/useEagerConnect';
+import PageLoader from 'components/Loader/PageLoader';
+
+import { CommonLayout, ToastComponents } from 'components';
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 
-moment.locale('zh-cn');
+// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/es-us';
+dayjs.extend(relativeTime);
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
@@ -41,19 +42,6 @@ function App() {
   useEagerConnect();
   const dispatch = useDispatch();
   const token = window.localStorage.getItem(storage.Token);
-
-  const initSocket = () => {
-    let im = new IM({
-      url: 'ws://192.168.101.112:8888/v1/ws',
-      token: token
-    });
-    im.init();
-  };
-
-  React.useEffect(() => {
-    // initSocket();
-  }, []);
-
 
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
