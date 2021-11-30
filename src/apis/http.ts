@@ -1,10 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { toast } from 'react-toastify';
 import { storage } from 'config';
 import history from '../routerHistory';
 
 const baseURL =
-  process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : 'http://192.168.101.112:8888';
+  process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
