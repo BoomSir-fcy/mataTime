@@ -3,6 +3,7 @@ import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { Container } from 'components'
 import WalletBox from './walletBox'
+import Recharge from './Recharge'
 import { getTimeAddress } from 'utils/addressHelpers';
 import { useTokenBalance } from 'view/exchange/hook';
 import { useFetchWalletInfo, useFetchApproveNum } from 'store/wallet/hooks';
@@ -14,13 +15,10 @@ const NoPdBottom = styled(Container)`
 padding: 0;
 `
 const BorderWalletBox = styled(WalletBox)`
-
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 ${({ theme }) => theme.mediaQueries.sm} {
-  &:first-child{
-    border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  }
-  }
+  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+}
 `
 
 const TokenAccount: React.FC = () => {
@@ -61,7 +59,8 @@ const TokenAccount: React.FC = () => {
     <NoPdBottom>
       <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
         <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
-        <BorderWalletBox BalanceInfo={MatterInfo} Token='Matter' Balance={timeBalance} TokenAddr={timeAddress} />
+        <Recharge balance={timeBalance} TokenAddr={timeAddress} />
+        {/* <BorderWalletBox BalanceInfo={MatterInfo} Token='Matter' Balance={timeBalance} TokenAddr={timeAddress} /> */}
       </Flex>
     </NoPdBottom>
   )

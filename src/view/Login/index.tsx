@@ -150,7 +150,7 @@ const SignInBox = () => {
       <Text color="textOrigin">{t('loginSubTitle')}</Text>
       <SignUpWarpper>
         <WalletAddress address={account} />
-        <FailButton disabled={Pending} onClick={() => signIn()}>{t('钱包签名')}</FailButton>
+        <FailButton disabled={Pending} onClick={() => signIn()}>{t('login Log in')}</FailButton>
       </SignUpWarpper>
       <Text color="textTips">{t('loginSubTips')}</Text>
     </React.Fragment>
