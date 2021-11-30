@@ -27,7 +27,6 @@ color:#fff;
  */
 export const ArticleList = (props) => {
   const currentUid = useStore(p => p.loginReducer.userInfo);
-  console.log(currentUid)
   
   const { topicName = '' } = props
   const goDetils = (e) => {
