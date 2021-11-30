@@ -87,6 +87,7 @@
     "react-images": "^1.2.0-beta.7",
     "react-loading": "^2.0.3",
     "react-modal": "^3.14.3",
+    "react-paginate": "^8.0.1",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.5",
     "react-refresh": "^0.8.3",

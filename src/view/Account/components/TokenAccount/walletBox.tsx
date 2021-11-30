@@ -16,7 +16,7 @@ justify-content:space-between;
 min-height: 175px;
 flex: 1;
 min-width: 300px;
-background:${({ theme }) => theme.card.background};
+/* background:${({ theme }) => theme.card.background}; */
 ${({ theme }) => theme.mediaQueriesSize.padding}
 `
 const TopInfo = styled(Flex)`
@@ -29,7 +29,7 @@ ${({ theme }) => theme.mediaQueriesSize.marginr}
 min-width: 43px;
 `
 const NumText = styled(Text)`
-color: #7393FF;
+color: ${({ theme }) => theme.colors.textPrimary};
 font-weight: bold;
 `
 

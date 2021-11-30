@@ -22,7 +22,6 @@ const Content = styled(Box)`
 flex: 1;
 min-width: 60%;
 min-height: 175px;
-background:${({ theme }) => theme.card.background};
 ${({ theme }) => theme.mediaQueriesSize.padding}
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `
@@ -169,12 +168,12 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
         <LeftBox>
           <Title mb='24px'>
             <Text mr='28px' fontSize='16px'>充值Time</Text>
-            <Text style={{ cursor: 'pointer' }} fontSize='14px' color='ThemeText' onClick={() => setVisibleHistory(true)}>{t('Account history record')}</Text>
+            <Text style={{ cursor: 'pointer' }} fontSize='14px' color='textPrimary' onClick={() => setVisibleHistory(true)}>{t('Account history record')}</Text>
           </Title>
           <Flex alignItems='center' flexWrap='wrap'>
             {
               numberList.map((item, index) => (
-                <NumberBox onClick={() => {
+                <NumberBox key={item} onClick={() => {
                   const Num = Number(item) > balance ? String(balance) : item
                   setVal(Num)
                 }}>
@@ -211,7 +210,6 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
             }}>
               {pending ? <Dots>{approvedNum > 0 ? t('Account Trading') : t('Account Approving')}</Dots> : approvedNum > 0 ? t('AccountRecharge') : t('Account Approve')}
             </SureBtn>
-            {/* <Text fontSize='14px' color='textTips'>{t('Account Please confirm the transaction in Token')}</Text> */}
           </Flex>
         </RightBox>
       </Flex>

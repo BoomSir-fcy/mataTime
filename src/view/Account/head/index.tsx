@@ -18,17 +18,15 @@ const Card = styled(Flex)`
     font-weight: bold;
   }
   img{
-    height: 24px;
+    height: 18px;
     display: inline-block;
     margin-right: 10px;
-    margin-top: -4px;
   }
 `;
 
 export const WalletHead: React.FC = React.memo(() => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const colors = theme.colors.white_black;
 
   const goBack = () => {
     history.goBack();
@@ -42,10 +40,10 @@ export const WalletHead: React.FC = React.memo(() => {
         <Text mr='10px' fontSize='14px' color='textTips'>
           TIME 社区公平释放活动进行中，当前兑换系数
         </Text>
-        <Text mr='30px' fontSize='14px' color='ThemeText'>
+        <Text mr='18px' fontSize='14px' color='textPrimary'>
           100DSG = 2900,000 TIME
         </Text>
-        <Button>兑换</Button>
+        <Text mr='10px' fontSize='14px' color='textPrimary'>兑换 {'>'}</Text>
       </Flex>
     </Card>
   );
