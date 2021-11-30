@@ -57,7 +57,7 @@ export class IM extends EventTarget {
 
   // 消息协议
   static MessageProtocol = MessageProtocol
-  // ptl = MessageProtocol
+  messageProtocol = MessageProtocol // 方便在子组件调用
 
   constructor() {
     super();

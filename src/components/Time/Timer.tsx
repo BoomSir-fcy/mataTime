@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Text, TextProps, HeadingScales, HeadingTags } from 'uikit'
+import { Flex, Text, TextProps } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 
 export interface TimerProps extends TextProps {

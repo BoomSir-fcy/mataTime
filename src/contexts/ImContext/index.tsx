@@ -1,13 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { IM } from 'utils';
 
+
+
+interface ArticlePositions {
+  // [number, number] =  [top, bottom], 当前文章边界
+  [articleId: number]: [number, number],
+}
 interface ProviderState {
   im: IM
   articleIds: number[]
   setArticleIds: React.Dispatch<React.SetStateAction<number[]>>,
+  articlePositions: ArticlePositions,
+  setArticlePositions: React.Dispatch<React.SetStateAction<ArticlePositions>>,
   addArticleId: (id: number) => void
   removeArticleId: (id: number) => void
+  rendered: boolean
+  setRendered: React.Dispatch<React.SetStateAction<boolean>>
 }
+
 
 const ImContext = React.createContext({ } as ProviderState)
 
@@ -15,42 +26,22 @@ const ImContextProvider = ({ children }) => {
 
   const [im, setWs] = useState<IM>(null)
   const [articleIds, setArticleIds] = useState<number[]>([])
+  const [articlePositions, setArticlePositions] = useState<ArticlePositions>({})
+  const [rendered, setRendered] = useState(false) // 是否渲染元素
 
   const addArticleId = useCallback((id: number) => {
-    // console.log([...articleIds, id])
-    // console.log(id, Array.from(new Set([...articleIds, id])), 'Array.from(new Set([...articleIds, id]))')
-    setArticleIds(Array.from(new Set([...articleIds, id])))
+    if (articleIds.includes(id)) return
+    setArticleIds([...articleIds, id])
   }, [articleIds, setArticleIds])
 
   const removeArticleId = useCallback((id: number) => {
-    console.log([...articleIds, id])
+    if (!articleIds.includes(id)) return
     setArticleIds([...articleIds].filter(item => item !== id))
-    // console.log(id, Array.from(new Set([...articleIds, id])), 'Array.from(new Set([...articleIds, id]))')
-    // setArticleIds(Array.from(new Set([...articleIds, id])))
   }, [articleIds, setArticleIds])
 
-  // const removeArticleId = useCallback((id: number) => {
-  //   console.log(id, articleIds, 'articleIds.filter(item => item !== id)')
-  //   setArticleIds(articleIds.filter(item => item !== id))
-  // }, [articleIds, setArticleIds])
-
-
   const initSocket = () => {
-    console.log(122121)
     const instantMessageing = new IM();
     setWs(instantMessageing)
-    // instantMessageing.on('open', (event) => {
-    //   console.log('=============open', event)
-    // })
-    // instantMessageing.on('message', (event) => {
-    //   console.log('=======message======message', event)
-    // })
-    // instantMessageing.on('close', (event) => {
-    //   console.log('=======close======close', event)
-    // })
-    // instantMessageing.on('error', (event) => {
-    //   console.log('=======error======error', event)
-    // })
   };
 
   React.useEffect(() => {
@@ -58,10 +49,21 @@ const ImContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ImContext.Provider value={{ im, articleIds, setArticleIds, addArticleId, removeArticleId }}>
+    <ImContext.Provider value={{
+      im,
+      articleIds,
+      setArticleIds,
+      addArticleId,
+      removeArticleId,
+      articlePositions,
+      setArticlePositions,
+      rendered,
+      setRendered,
+    }}>
       {children}
     </ImContext.Provider>
   )
 }
 
-export { ImContext, ImContextProvider }
+export { ImContext,
+  ImContextProvider }

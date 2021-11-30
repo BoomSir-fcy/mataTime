@@ -2,57 +2,41 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import useIm from "contexts/ImContext/hooks/useIm";
 import { Text, Button } from "uikit";
 import observerOptions from "./options";
+import styled from "styled-components";
 
 interface SpendTimeViewWithArticleProps {
   articleId: number
 }
+
 const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ articleId }) => {
 
   const imgRef = useRef<HTMLDivElement>(null);
-  const { addArticleId, removeArticleId } = useIm()
+  const { setArticlePositions, rendered, setRendered } = useIm()
   const [isLoaded, setIsLoaded] = useState(false);
-  const [active, setActive] = useState(false);
+
+  // FIXME: 当这个文章有图片等信息的时候 获取的高度不是真实高度 需要
 
   useEffect(() => {
-    console.log('=========================qqqqqqqqqq')
-    let observer: IntersectionObserver;
-    if (imgRef.current) {
-      observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          const { isIntersecting } = entry;
-          if (isIntersecting) {
-            // addArticleId(articleId)
-            // setIsLoaded(true)
-            // setActive(true)
-            // observer.disconnect();
-          } else if (active) {
-            // setActive(false)
-            // removeArticleId(articleId)
-          }
-        });
-      }, observerOptions);
-      observer.observe(imgRef.current);
+    if (imgRef.current && !isLoaded) {
+      const offsetHeight = imgRef.current?.parentElement?.offsetHeight
+      const offsetTop = imgRef.current?.parentElement?.offsetTop
+      // const { offsetTop } = imgRef.current
+      setArticlePositions(prep => {
+        return {
+          ...prep,
+          [articleId]: [offsetTop, offsetTop + offsetHeight],
+        }
+      })
+      setIsLoaded(true)
+      if (!rendered) setRendered(true)
     }
+  }, [articleId, rendered, setRendered, setArticlePositions]);
 
-    return () => {
-      if (observer) {
-        observer.disconnect();
-      }
-    };
-  }, [articleId,addArticleId]);
 
-  const remove = useCallback((articleId) => {
-    removeArticleId(articleId)
-  }, [removeArticleId])
-  const add = useCallback((articleId) => {
-    addArticleId(articleId)
-  }, [addArticleId])
-
-  return <div ref={imgRef}>
-    <Text>articleId: {articleId}</Text>
-    <Button onClick={() => add(articleId)}>add</Button>
-    <Button onClick={() => remove(articleId)}>remove</Button>
-  </div>
+  return <div ref={imgRef} />
+  // return <div ref={imgRef}>
+  //   <Text>articleId: {articleId}</Text>
+  // </div>
 }
 
 export default SpendTimeViewWithArticle
