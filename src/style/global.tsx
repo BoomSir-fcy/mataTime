@@ -109,6 +109,12 @@ const GlobalStyle = createGlobalStyle`
       height: auto;
       max-width: 100%;
     }
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .react-images__positioner{
+      z-index:99999;
+    }
   }
 `
 

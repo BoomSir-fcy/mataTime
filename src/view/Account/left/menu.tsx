@@ -4,11 +4,14 @@ import { useStore } from 'store';
 import { Flex, Box, Card } from 'uikit';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'contexts/Localization'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { ProfileMenu, Icon, Logo, Badge } from 'components';
 import { toast } from 'react-toastify'
 import menuData from './menuData';
 import { Api } from 'apis'
+
+
+
 const MenuBox = styled(Box)`
   position: relative;
   display: flex;
@@ -27,7 +30,7 @@ const LogoWrapper = styled.div`
 const ItemLink = styled(Link)`
   margin-top: 20px;
   display: flex;
-  width: 120px;
+  min-width: 120px;
   height: 40px;
   border-radius: 18px;
   font-size: 18px;
@@ -41,6 +44,24 @@ const User = styled(Flex)`
   margin-top: auto;
   flex: 1;
   flex-grow: inherit;
+`;
+
+const BackWarpper = styled(Box)`
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  cursor: pointer;
+  i {
+    font-size: 23px !important;
+    font-weight: bold;
+  }
+  span {
+    font-size: 18px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: bold;
+    color: ${({ theme }) => (theme.isDark ? '#FFFFFF' : '#4168ED')};
+    margin-left: 10px;
+  }
 `;
 
 export const MenuList = (props: { menuList: any[] }) => {
@@ -84,6 +105,8 @@ export const MenuList = (props: { menuList: any[] }) => {
 };
 
 export const Menu: React.FC = () => {
+  const { t } = useTranslation();
+  const history = useHistory();
   const [paresMenuData, setParesMenuData] = useState(menuData)
   // 获取未读消息数量
   const getMsgNumRequest = async () => {
@@ -108,6 +131,14 @@ export const Menu: React.FC = () => {
         <LogoWrapper>
           <Logo url="/" src={require(isDark ? 'assets/images/logo.svg' : 'assets/images/light_logo.svg').default} />
         </LogoWrapper>
+        <BackWarpper
+          onClick={() => {
+            history.push('/');
+          }}
+        >
+          <Icon color={isDark ? '#ffffff' : '#4168ED'} name={'icon-fanhui'}></Icon>
+          <span>{t('newsBack')}</span>
+        </BackWarpper>
         <MenuList menuList={paresMenuData}></MenuList>
       </Box>
       <User as={Link} to="/me">
