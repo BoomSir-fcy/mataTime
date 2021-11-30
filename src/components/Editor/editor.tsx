@@ -133,7 +133,7 @@ const parseValue = value => {
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
-  const [isDisabledSend, setIsDisabledSend] = useState(true);
+  const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
   const [searchUser, setSearchUser] = useState(false);
@@ -246,9 +246,7 @@ export const Editor = (props: Iprops) => {
   //     el.removeEventListener('click', eventFn);
   //   };
   // },[])
-  useEffect(() => {
-    setIsDisabledSend(imgList.length < 1);
-  }, [imgList]);
+
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -294,6 +292,7 @@ export const Editor = (props: Iprops) => {
   const restInput = () => {
     setValue(initialValue);
     setImgList([]);
+    setIsDisabledSend(false);
     setRefresh(refresh === 1 ? 2 : 1);
   };
 
