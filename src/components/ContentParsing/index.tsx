@@ -81,8 +81,7 @@ export const ContentParsing = (props: IProps) => {
     }, 0);
   }, []);
 
-  const goRouter = (event, router) => {
-    event.stopPropagation();
+  const goRouter = router => {
     history.push(router);
   };
 
@@ -131,8 +130,10 @@ export const ContentParsing = (props: IProps) => {
       /#(\w+|[\u4E00-\u9FA5|0-9]+)#/g,
       (match, i) => (
         <a
-          href="#!"
-          onClick={event => goRouter(event, `/topicList/empty/${match}`)}
+          onClick={event => {
+            event.stopPropagation();
+            goRouter(`/topicList/empty/${match}`);
+          }}
           key={match + i}
         >
           #{match}#
