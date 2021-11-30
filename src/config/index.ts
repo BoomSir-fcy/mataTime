@@ -1,4 +1,5 @@
 import { ChainId } from './wallet/config';
+export * from './token';
 export const BASE_URL = `${window.location.origin}/`;
 
 export const BASE_BSC_SCAN_URLS = {
