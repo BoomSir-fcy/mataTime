@@ -1,10 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import reactStringReplace from 'react-string-replace';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Node, Text } from 'slate';
-import { useTranslation } from 'contexts/Localization';
 import { FollowPopup, MoreOperatorEnum } from 'components';
-import escapeHtml from 'escape-html';
+import { storeAction } from 'store';
+import { useTranslation } from 'contexts/Localization';
+import { tokens } from 'config';
+
+import history from 'routerHistory';
+
 type IProps = {
   content: string;
   callback?: Function;
@@ -49,8 +54,9 @@ const ParagraphItem = styled.div`
 // }
 
 export const ContentParsing = (props: IProps) => {
-  const { t } = useTranslation();
   const ref: any = useRef();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
 
@@ -75,17 +81,66 @@ export const ContentParsing = (props: IProps) => {
     }, 0);
   }, []);
 
+  const goRouter = router => {
+    history.push(router);
+  };
+
+  // 解析内容
   const parseText2 = (text = '') => {
-    const re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
-    let s: string = text.replace(re, function (a) {
-      return `<a href=${a} target='_blank'>${a}</a>`;
-    });
-    s = s.replace(/[#＃][^#＃]+[#＃]/g, function (word) {
-      return `<a  href="/topicList/empty/${word
-        .slice(1)
-        .slice(0, -1)}" onclick="event.stopPropagation()">${word}</a>`;
-    });
-    return s;
+    // const re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
+    let replacedText: any;
+    // Match url
+    replacedText = reactStringReplace(
+      text,
+      /(http[s]?:\/\/\S+)/g,
+      (match, i) => (
+        <a
+          key={match + i}
+          target="_blank"
+          onClick={event => event.stopPropagation()}
+          href={match}
+          title={match}
+          rel="noreferrer"
+        >
+          {match}
+        </a>
+      )
+    );
+    // Match token
+    replacedText = reactStringReplace(
+      replacedText,
+      /\$(\w+)\$/g,
+      (match, i) => (
+        <a
+          onClick={event => {
+            event.stopPropagation();
+            const coinsKey = match.toLowerCase();
+            dispatch(storeAction.setTopicCoins(tokens[coinsKey]));
+          }}
+          title={match}
+          key={match + i}
+        >
+          ${match}$
+        </a>
+      )
+    );
+    // Match hashtags
+    replacedText = reactStringReplace(
+      replacedText,
+      /#(\w+|[\u4E00-\u9FA5|0-9]+)#/g,
+      (match, i) => (
+        <a
+          onClick={event => {
+            event.stopPropagation();
+            goRouter(`/topicList/empty/${match}`);
+          }}
+          key={match + i}
+        >
+          #{match}#
+        </a>
+      )
+    );
+    return replacedText;
   };
 
   const serialize2 = (node, type = null, index?: number) => {
@@ -115,14 +170,7 @@ export const ContentParsing = (props: IProps) => {
           </FollowPopup>
         );
       default:
-        return type ? (
-          parseText2(node.text || '')
-        ) : (
-          <span
-            key={index}
-            dangerouslySetInnerHTML={{ __html: parseText2(node.text || '') }}
-          />
-        );
+        return parseText2(node.text);
     }
   };
 

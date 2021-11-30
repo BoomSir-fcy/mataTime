@@ -5,7 +5,8 @@ import {
   setLocation,
   toastContainer,
   connectWallet,
-  setChainId
+  setChainId,
+  setTopicCoins
 } from './actions';
 import { languange } from './type';
 
@@ -25,6 +26,12 @@ const initialState = {
     notification: true,
     languange: {} as languange,
     autoTranslation: false
+  },
+  coins: {
+    symbol: '',
+    projectLink: '',
+    address: {},
+    decimals: 0
   }
 };
 
@@ -49,5 +56,8 @@ export default createReducer(initialState, builder => {
     })
     .addCase(setChainId, (state, action) => {
       state.chainId = action.payload.chainId;
+    })
+    .addCase(setTopicCoins, (state, action) => {
+      state.coins = action.payload;
     });
 });
