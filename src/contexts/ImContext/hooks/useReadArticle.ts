@@ -34,10 +34,6 @@ const useReadArticle = () => {
   }, [nowTime, articleIds, fetchReadTime, fetchHandle])
   
 
-  useEffect(() => {
-    console.log(articlePositions)
-  }, [articlePositions])
-
   const handleScroll = useCallback(() => {
     const top = window.scrollY
     const bottom = top + window.innerHeight
