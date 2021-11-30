@@ -79,7 +79,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
   };
 
   return isInit && list.length < 1 ? null : (
-    <RecommendPeopleBox isShadow isRadius>
+    <RecommendPeopleBox isBoxShadow isRadius>
       <Flex justifyContent="space-between" alignItems="center">
         <TitleText>{t('recommendPeopleTitle')}</TitleText>
         <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
@@ -95,7 +95,7 @@ export const RecommendPeople: React.FC<Iprops> = props => {
             <Link to={'/me/profile/' + item.uid}>
               <Avatar
                 src={item.nft_image}
-                style={{ width: '50px', height: '50px' ,minWidth:'50px'}}
+                style={{ width: '50px', height: '50px', minWidth: '50px' }}
                 scale="md"
               />
             </Link>
