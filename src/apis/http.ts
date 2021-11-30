@@ -3,7 +3,9 @@ import { storage } from 'config';
 import history from '../routerHistory';
 
 const baseURL =
-  process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_HOST : '/';
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_API_HOST
+    : 'https://api.social.qgx.io/';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
