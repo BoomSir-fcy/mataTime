@@ -117,21 +117,14 @@ export const ArticleList = (props) => {
     setListData([...arr])
   }
 
-  /**
-   * @review
-   * 这样的写法我不理解
-   * 我不理解
-   * 我不理解
-   * TODO: 重构
-   */
   // useEffect(() => {
   //   setLoading(false)
   //   setPage(1)
   //   setTotalPage(1)
-  //   listRef.current.loadList()
+  //   // listRef.current.loadList()
   //   setListData([])
   //   getList(1)
-  // }, [props.match.params.id, props.match.params.name, props.match])
+  // }, [props.match.params.id])
   return (
     <ArticleListBox>
       <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={getList}>

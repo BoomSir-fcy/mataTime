@@ -5,21 +5,30 @@ import { mediaQueries, mediaQueriesSize } from "uikit/theme/base";
 export const PageContainer = styled.div`
   width: 1200px;
   margin: 0 auto;
-  padding-top: 35px;
   display:flex;
 justify-content:center;
 `
 export const LeftCard = styled(Flex)`
-  // width: 375px;
-`
+width: 200px;
+height: 100vh;
+overflow: auto;
+`;
 export const CenterCard = styled(Box)`
   // flex: 1;
   // ${mediaQueriesSize.marginLRmd}
-  width:670px;
+  // width:670px;
+    width: 670px;
+  flex: 1;
+  margin: 0 15px;
+  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `
-export const RightCard = styled.div`
-  // width: 375px;
-`
+export const RightCard = styled(Flex)`
+  width: 300px;
+  height: 100vh;
+  position: relative;
+  overflow: auto;
+`;
 export const CommentListBox = styled(Card)`
 /* background-color:#191F2D; */
 border-radius: 10px;

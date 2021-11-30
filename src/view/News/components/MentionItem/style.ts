@@ -10,7 +10,8 @@ export const MentionItemWrapper = styled.div`
       box-sizing: border-box;
       padding-left: 73px;
       padding-top: 10px;
-      word-wrap:break-word;
+      // word-wrap:break-word;
+      word-break: break-all;
     }
 `
 
