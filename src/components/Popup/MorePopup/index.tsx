@@ -199,10 +199,12 @@ export const MorePopup = React.memo((props: Iprops) => {
            * 建议使用stopPropagation
            * 如果一定要使用 stopImmediatePropagation, 我认为是代码设计不合理
            */
+          e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(true);
         }}
         onMouseLeave={(e: any) => {
+          e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
           setVisible(false);
         }}

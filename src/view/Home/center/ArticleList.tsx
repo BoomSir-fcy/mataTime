@@ -44,11 +44,14 @@ export const ArticleList = (props) => {
   const getList = (current = 0) => {
     if ((loading || page > totalPage) && !current) return false
     setLoading(true)
+    console.log('props:', props)
     if (props.match.path === '/topicList/:id/:name') {
+      const { id, name } = props.match.params
       Api.HomeApi.findByHotTopicIdList({
         page: current || page,
         per_page: 10,
-        topic_id: 9
+        topic_id: id === 'empty' ? null : id,
+        topic_name: name
       }).then(res => {
         setLoading(false)
         if (Api.isSuccess(res)) {
