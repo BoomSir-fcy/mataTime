@@ -246,9 +246,9 @@ export const Editor = (props: Iprops) => {
   //     el.removeEventListener('click', eventFn);
   //   };
   // },[])
-useEffect(() => {
-  setIsDisabledSend(imgList.length<1)
-},[imgList])
+  useEffect(() => {
+    setIsDisabledSend(imgList.length < 1);
+  }, [imgList]);
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -412,10 +412,14 @@ useEffect(() => {
           setIsDisabledSend(!content);
         }}
       >
-        <div className="text-box" ref={ref} style={{
-            borderBottomRightRadius: imgList.length>0?'0px':'5px',
-            borderBottomLeftRadius: imgList.length>0?'0px':'5px'
-              }}>
+        <div
+          className="text-box"
+          ref={ref}
+          style={{
+            borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
+            borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px'
+          }}
+        >
           <Editable
             autoFocus
             renderElement={renderElement}

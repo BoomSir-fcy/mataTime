@@ -46,7 +46,7 @@ export const UploadList = (props: imgListType) => {
 
   return (
     <React.Fragment>
-      {imgList.length && (
+      {imgList.length > 0 && (
         <ImgListBox>
           {imgList.map((item, index) => (
             <Box key={index}>
