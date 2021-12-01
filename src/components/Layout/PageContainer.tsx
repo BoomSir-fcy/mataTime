@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BoxProps, Box, Flex, FlexProps } from 'uikit'
+import MenuNav from 'components/MenuNav';
+import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container'
 // backgroundVariants
 
@@ -19,8 +21,16 @@ const PageContainer: React.FC = ({ children }) => {
 
   return (
     <ChildrenWrapper>
-      <Flex alignItems="flex-start" justifyContent="center">
-        {children}
+      <Flex width="100%" alignItems="flex-start" justifyContent="center">
+        <MenuNav />
+        <Flex flex="1" alignItems="flex-start" justifyContent="space-between">
+          <Flex mr="14px" flex="1" flexDirection="column">
+            <Box maxWidth="670px" width="100%">
+              {children}
+            </Box>
+          </Flex>
+          <Sidebar />
+        </Flex>
       </Flex>
     </ChildrenWrapper>
   )

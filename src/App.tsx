@@ -8,8 +8,7 @@ import { useDispatch } from 'react-redux';
 import { fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, ToastComponents } from 'components';
-import MenuNav from 'components/MenuNav';
-import PageContainer from 'components/MenuNav/PageContainer';
+import PageContainer from 'components/Layout/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
 
@@ -56,7 +55,6 @@ function App() {
       <Container id="bg">
         {/* TODO: 把左侧导航栏提成公共组件 放到这个位置 */}
         <PageContainer>
-          <MenuNav />
           <React.Suspense fallback={<PageLoader />}>
             <AccountUpdater />
             <Switch>

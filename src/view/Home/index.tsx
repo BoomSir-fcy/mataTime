@@ -20,7 +20,7 @@ import { Api } from 'apis';
 
 const PageContainer = styled(Box)`
   position: relative;
-  width: 1200px;
+  /* width: 1200px; */
   margin: 0 auto;
   display: flex;
 `;
@@ -30,9 +30,9 @@ const LeftCard = styled(Flex)`
   overflow: auto;
 `;
 const CenterCard = styled(Box)`
-  width: 670px;
+  /* width: 670px; */
   flex: 1;
-  margin: 0 15px;
+  /* margin: 0 15px; */
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
@@ -101,11 +101,11 @@ const Home: React.FC = (props: any) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
-        <LeftCard>
+        {/* <LeftCard>
           <Affix offsetTop={0} positionObj={{}}>
             <Menu />
           </Affix>
-        </LeftCard>
+        </LeftCard> */}
         <CenterCard>
           {/**
            * @review
@@ -134,18 +134,17 @@ const Home: React.FC = (props: any) => {
             {...props}
           />
         </CenterCard>
-        <RightCard>
+        {/* <RightCard>
           <Affix offsetTop={0} positionObj={{}}>
             <>
               <Search />
-              {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
               <Swap />
               <RecommendPeople />
               <HotTopic {...props} />
               <FooterCopyright />
             </>
           </Affix>
-        </RightCard>
+        </RightCard> */}
       </Flex>
     </PageContainer>
   );

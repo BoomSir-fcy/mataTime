@@ -4,7 +4,6 @@ export interface MenuNavLink {
   lable: string
   activeIcon?: React.ReactElement,
   coming?: boolean
-  showBadge?: boolean
   badge?: number
 }
 

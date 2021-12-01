@@ -75,8 +75,9 @@ const GlobalStyle = createGlobalStyle`
     border-radius: 8px;
   }
   ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px ${({ theme }) => theme.colors.input}; 
-    border-radius: 10px;
+    background: ${({ theme }) => theme.colors.background}; 
+    /* background: ${({ theme }) => theme.colors.backgroundLight};  */
+    /* border-radius: 10px; */
   }
 
   input, input::-webkit-input-placeholder {
@@ -109,9 +110,10 @@ const GlobalStyle = createGlobalStyle`
       height: auto;
       max-width: 100%;
     }
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
       display: none;
-    }
+    } */
+    /* 点击图片放大层级 */
     .react-images__positioner{
       z-index:99999;
     }
