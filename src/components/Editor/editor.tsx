@@ -107,7 +107,7 @@ const insertTopic = (editor, character = '') => {
   // Transforms.insertNodes(editor, topic);
 };
 
-function deep(children) {
+function deep (children) {
   return children.map(item => {
     if (item.text) {
       return { ...item, text: escapeHtml(item.text) };
@@ -131,9 +131,9 @@ const parseValue = value => {
 };
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const { t } = useTranslation();
-  const [isDisabledSend, setIsDisabledSend] = useState(true);
+  const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
   const [searchUser, setSearchUser] = useState(false);
@@ -228,28 +228,27 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) {}
+    } catch (err) { }
   }, [props.initValue]);
 
   // 扩大focus距离
+  // useEffect(() => {
+  //   const el: any = ref.current;
+  //   const eventFn = (e: any) => {
+  //     if (e.target.className !== 'text-box') return false;
+  //     const range = window.getSelection(); //创建range
+  //     el.firstElementChild.focus();
+  //     range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
+  //     range.collapseToEnd(); //光标移至最后
+  //   };
+  //   el.addEventListener('click', eventFn);
+  //   return () => {
+  //     el.removeEventListener('click', eventFn);
+  //   };
+  // },[])
   useEffect(() => {
-    const el: any = ref.current;
-    const eventFn = (e: any) => {
-      if (e.target.className !== 'text-box') return false;
-      const range = window.getSelection(); //创建range
-      el.firstElementChild.focus();
-      range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
-      range.collapseToEnd(); //光标移至最后
-    };
-    el.addEventListener('click', eventFn);
-    return () => {
-      el.removeEventListener('click', eventFn);
-    };
-  },[])
-useEffect(() => {
-  console.log(imgList.length);
-  setIsDisabledSend(imgList.length<1)
-},[imgList])
+    setIsDisabledSend(imgList.length < 1)
+  }, [imgList])
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -293,8 +292,13 @@ useEffect(() => {
   };
 
   const restInput = () => {
+    // https://joshtronic.com/2020/04/13/error-cannot-resolve-a-dom-point-from-slate-point/
+    const point = { path: [0, 0], offset: 0 }
+    editor.selection = { anchor: point, focus: point }
+    editor.history = { redos: [], undos: [] };
     setValue(initialValue);
     setImgList([]);
+    setIsDisabledSend(false);
     setRefresh(refresh === 1 ? 2 : 1);
   };
 
@@ -340,7 +344,7 @@ useEffect(() => {
     }
     props.sendArticle(
       JSON.stringify(newValue),
-      restInput,
+      () => { },
       imgList.join(','),
       userIdList.join(',')
     );
@@ -413,7 +417,14 @@ useEffect(() => {
           setIsDisabledSend(!content);
         }}
       >
-        <div className="text-box" ref={ref}>
+        <div
+          className="text-box"
+          ref={ref}
+          style={{
+            borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
+            borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px'
+          }}
+        >
           <Editable
             autoFocus
             renderElement={renderElement}

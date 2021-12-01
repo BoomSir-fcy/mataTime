@@ -48,12 +48,14 @@ export const ArticleList = (props) => {
   const getList = (current = 0) => {
     if ((loading || page > totalPage) && !current) return false
     setLoading(true)
-    console.log(props);
+    console.log('props:', props)
     if (props.match.path === '/topicList/:id/:name') {
+      const { id, name } = props.match.params
       Api.HomeApi.findByHotTopicIdList({
         page: current || page,
         per_page: 10,
-        topic_id: 9
+        topic_id: id === 'empty' ? null : id,
+        topic_name: name
       }).then(res => {
         setLoading(false)
         if (Api.isSuccess(res)) {
@@ -72,7 +74,8 @@ export const ArticleList = (props) => {
       Api.HomeApi.getArticleList({
         attention: 1,
         page: current || page,
-        per_page: 50
+        per_page: 50,
+        ...props.filterValObj
       }).then(res => {
         setLoading(false)
         if (Api.isSuccess(res)) {
@@ -118,27 +121,17 @@ export const ArticleList = (props) => {
     setListData([...arr])
   }
 
-  /**
-   * @review
-   * 这样的写法我不理解
-   * 我不理解
-   * 我不理解
-   * TODO: 重构
-   */
-  useEffect(() => {
-    console.log(props);
-    setLoading(false)
-    setPage(1)
-    setTotalPage(1)
-    listRef.current.loadList()
-    setListData([])
-    getList(1)
-  }, [props.match.params.id, props.match.params.name, props.match])
+  // useEffect(() => {
+  //   setLoading(false)
+  //   setPage(1)
+  //   setTotalPage(1)
+  //   // listRef.current.loadList()
+  //   setListData([])
+  //   getList(1)
+  // }, [props.match.params.id])
   return (
     <ArticleListBox>
-      <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={() => {
-        getList()
-      }}>
+      <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={getList}>
         {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >
             {

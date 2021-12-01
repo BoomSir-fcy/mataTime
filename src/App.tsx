@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
-import useEagerConnect from 'hooks/useEagerConnect';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import GlobalStyle from 'style/global';
-import { IM } from 'utils';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk } from 'store';
@@ -14,14 +13,15 @@ import PageContainer from 'components/MenuNav/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
 
-// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
-import 'moment/locale/zh-cn';
-import 'react-toastify/dist/ReactToastify.css';
+import useEagerConnect from 'hooks/useEagerConnect';
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 
-moment.locale('zh-cn');
+// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/es-us';
+dayjs.extend(relativeTime);
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));

@@ -87,7 +87,7 @@ export const FetchNftsList = async account => {
     }
     return list;
   };
-  const Nftlist = (await getNftsList(account)) || [];
+  const Nftlist = await GetNftList(account);
   try {
     // 获取可用的Nft头像地址
     const supAddress = await FetchSupportNFT();
@@ -103,7 +103,15 @@ export const FetchNftsList = async account => {
     return [];
   }
 };
-
+export const GetNftList = async (account) => {
+  try {
+    const Nftlist = await getNftsList(account);
+    return Nftlist
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
 export const FetchSupportNFT = async () => {
   // const dispatch = useDispatch();
   const SocialAddress = getNftSocialAddress();

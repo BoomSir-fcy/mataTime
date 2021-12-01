@@ -163,6 +163,17 @@ export const MorePopup = React.memo((props: Iprops) => {
     setVisible(false);
   };
 
+  // 关注用户
+  const onAttentionFocusRequest = async (focus_uid: number) => {
+    const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
+    if (Api.isSuccess(res)) {
+      toast.success(res.data);
+      callback(data, MoreOperatorEnum.FOLLOW)
+    } else {
+      toast.error(res.data);
+    }
+  };
+
   // 删除
   const onPostDelRequest = async (pid: number) => {
     const res = await Api.AttentionApi.delPost(pid);
@@ -185,7 +196,6 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   const initEvent = () => {
     document.onclick = () => {
-      console.log('123', visible)
     }
   }
 
@@ -193,40 +203,19 @@ export const MorePopup = React.memo((props: Iprops) => {
     <>
       <PopupWrapper
         onMouseOver={(e: any) => {
-          /**
-           * @review
-           * @link https://developer.mozilla.org/zh-CN/docs/Web/API/Event/stopImmediatePropagation
-           * 
-           * 建议使用stopPropagation
-           * 如果一定要使用 stopImmediatePropagation, 我认为是代码设计不合理
-           */
-          e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
+          e.stopPropagation();
           setVisible(true);
         }}
         onMouseLeave={(e: any) => {
-          e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
+          e.stopPropagation();
           setVisible(false);
         }}
       >
-        {/* <PopupWrapper
-        onClick={(e: any) => {
-          e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-          setVisible(!visible);
-        }}
-      > */}
         {children}
         {visible ? (
           <PopupContentWrapper id="more-popup-content">
-            {/* onMouseLeave={(e: any) => {
-              e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-              setVisible(false);
-            }} */}
             {isOwn ? (
               <>
-                {/* <p onClick={() => {
-                      setVisible(false)
-                      setEditShow(true)
-                    }}>{t('moreEdit')}</p> */}
                 <p
                   onClick={() => {
                     setInqueryType('delete');
@@ -250,6 +239,18 @@ export const MorePopup = React.memo((props: Iprops) => {
                 </p>
               </>
             ) : null}
+
+            {
+              !isOwn && data.is_attention === 0 ? (
+                <p
+                  onClick={() => {
+                    onAttentionFocusRequest(data.user_id);
+                  }}
+                >
+                  {t('followText')} Ta
+                </p>
+              ) : null
+            }
 
             <p
               onClick={() => {

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  withRouter
+} from 'react-router-dom';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
-import { PageSection, Crumbs, Container, Affix } from 'components'
-import { Menu } from 'view/Home/left';
-import TokenAccount from './components/TokenAccount';
-import Liquidity from './components/Liquidity';
-import Single from './components/Single';
+import { PageSection, Container, Affix } from 'components'
+import { Menu } from './left';
+import { WalletHead } from './head';
 
 const LeftCard = styled(Flex)`
   width: 200px;
@@ -30,7 +33,10 @@ const ContainerStyled = styled(Container)`
   height: 60px;
 `
 
-const Account: React.FC = () => {
+const Stake = React.lazy(() => import('./components/Single'));
+const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
+
+const Account = props => {
   const { t } = useTranslation();
 
   return (
@@ -43,7 +49,19 @@ const Account: React.FC = () => {
           </Affix>
         </LeftCard>
         <CenterCard>
-          <Crumbs title={t('homeMenuSet')} />
+          <WalletHead />
+          <Switch>
+            <Route
+              path={`${props.match.path}`}
+              render={() => (
+                <>
+                  <Route path={`${props.match.path}`} exact component={TokenAccount} />
+                  <Route path={`${props.match.path}/stake`} component={Stake} />
+                </>
+              )}
+            />
+          </Switch>
+          {/* <Crumbs title={t('homeMenuSet')} />
           <TokenAccount />
           <Box>
             <ContainerStyled>
@@ -51,9 +69,9 @@ const Account: React.FC = () => {
                 <Text fontSize="18px" bold>{t('Account Pools')}</Text>
               </Flex>
             </ContainerStyled>
-            {/* <Liquidity /> */}
+            <Liquidity />
             <Single />
-          </Box>
+          </Box> */}
         </CenterCard>
       </Flex>
 
@@ -61,4 +79,4 @@ const Account: React.FC = () => {
   )
 }
 
-export default Account;
+export default withRouter(Account);

@@ -80,7 +80,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   }, [currentCoin?.total_volume]);
 
   return (
-    <StyledPage isShadow isRadius {...props}>
+    <StyledPage isBoxShadow isRadius {...props}>
       {!loaded ? (
         <Flex height="100%" justifyContent="center" alignItems="center">
           <ReactLoading

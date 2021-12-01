@@ -30,10 +30,10 @@ export const Swap: React.FC = () => {
     <SwapBox>
       <CoinMarketCap mb="14px" />
       <MiniSwap
-        titlehelper={t('当您搜索一些代币话题时, 平台会自动提供代币快捷兑换功能,提供一站式加密服务,现已支持主流数字货币,后续将不断接入更多货币,敬请期待')}
-        subTitleTips={<Text>
-          推荐自@0x526w.....已自动为您匹配$To ken$
-        </Text>}
+        titlehelper={t(
+          '当您搜索一些代币话题时, 平台会自动提供代币快捷兑换功能,提供一站式加密服务,现已支持主流数字货币,后续将不断接入更多货币,敬请期待'
+        )}
+        subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
         onInputCurrencyChange={handleInputChange}
         resetTheme={{
           dark: {
@@ -50,7 +50,7 @@ export const Swap: React.FC = () => {
               inset: 'none'
             },
             card: {
-              boxShadow: dark.shadows.box,
+              boxShadow: '',
               background: dark.colors.backgroundCard
             },
             zIndices: {
@@ -71,7 +71,7 @@ export const Swap: React.FC = () => {
               inset: 'none'
             },
             card: {
-              boxShadow: light.shadows.box,
+              boxShadow: '',
               background: light.colors.backgroundCard
             },
             zIndices: {

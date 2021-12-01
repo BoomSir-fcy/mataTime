@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { EN, Language, languages } from 'config/localization';
 import { ContextApi, ContextData, ProviderState } from './types';
 import { LS_KEY, fetchLocale, getLanguageCodeFromLS } from './helpers';
@@ -14,7 +15,10 @@ const initialState: ProviderState = {
 };
 
 // Export the translations directly
-export const languageMap = new Map<Language['locale'], Record<string, string>>();
+export const languageMap = new Map<
+  Language['locale'],
+  Record<string, string>
+>();
 languageMap.set(EN.locale, translations);
 
 export const LanguageContext = createContext({} as ContextApi);
@@ -35,6 +39,10 @@ export const LanguageProvider: React.FC = ({ children }) => {
         const currentLocale = await fetchLocale(codeFromStorage);
         languageMap.set(codeFromStorage, { ...enLocale, ...currentLocale });
       }
+
+      codeFromStorage !== EN.locale
+        ? dayjs.locale('zh-cn')
+        : dayjs.locale('es-us');
 
       setState(prevState => ({
         ...prevState,
@@ -77,9 +85,12 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
   const translate = useCallback(
     (key: string, data?: ContextData) => {
-      const translationSet = languageMap.has(currentLanguage.locale) ? languageMap.get(currentLanguage.locale) : languageMap.get(EN.locale);
+      const translationSet = languageMap.has(currentLanguage.locale)
+        ? languageMap.get(currentLanguage.locale)
+        : languageMap.get(EN.locale);
 
-      const translatedText = (translationSet && translationSet[key]) || key || '';
+      const translatedText =
+        (translationSet && translationSet[key]) || key || '';
 
       // Check the existence of at least one combination of %%, separated by 1 or more non space characters
       const includesVariable = translatedText.match(/%\S+?%/gm);
@@ -88,7 +99,10 @@ export const LanguageProvider: React.FC = ({ children }) => {
         let interpolatedText = translatedText;
         Object.keys(data).forEach(dataKey => {
           const templateKey = new RegExp(`%${dataKey}%`, 'g');
-          interpolatedText = interpolatedText.replace(templateKey, data[dataKey].toString());
+          interpolatedText = interpolatedText.replace(
+            templateKey,
+            data[dataKey].toString()
+          );
         });
 
         return interpolatedText;
@@ -101,7 +115,9 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
   const getHTML = useCallback(
     (key: string, data?: ContextData) => {
-      const translationSet = languageMap.has(currentLanguage.locale) ? languageMap.get(currentLanguage.locale) : languageMap.get(EN.locale);
+      const translationSet = languageMap.has(currentLanguage.locale)
+        ? languageMap.get(currentLanguage.locale)
+        : languageMap.get(EN.locale);
       const translatedText = (translationSet && translationSet[key]) || key;
 
       // Check the existence of at least one combination of %%, separated by 1 or more non space characters
@@ -111,7 +127,10 @@ export const LanguageProvider: React.FC = ({ children }) => {
         let interpolatedText = translatedText;
         Object.keys(data).forEach(dataKey => {
           const templateKey = new RegExp(`%${dataKey}%`, 'g');
-          interpolatedText = interpolatedText.replace(templateKey, data[dataKey].toString());
+          interpolatedText = interpolatedText.replace(
+            templateKey,
+            data[dataKey].toString()
+          );
         });
 
         const el = React.createElement('span', {
@@ -128,5 +147,11 @@ export const LanguageProvider: React.FC = ({ children }) => {
     [currentLanguage]
   );
 
-  return <LanguageContext.Provider value={{ ...state, setLanguage, getHTML, t: translate }}>{children}</LanguageContext.Provider>;
+  return (
+    <LanguageContext.Provider
+      value={{ ...state, setLanguage, getHTML, t: translate }}
+    >
+      {children}
+    </LanguageContext.Provider>
+  );
 };

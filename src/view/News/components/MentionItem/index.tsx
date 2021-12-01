@@ -128,14 +128,6 @@ export const MentionItemUser: React.FC<UserProps> = ({
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      // callback({
-      //   ...itemData,
-      //   post: {
-      //     ...itemData.post,
-      //     is_attention: 0
-      //   }
-      // });
-      // callback()
       callback(itemData, MoreOperatorEnum.FOLLOW)
     } else {
       toast.error(res.data);
@@ -158,15 +150,11 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 {itemData.add_time_desc || itemData.post_time_desc}
               </div>
             </div>
-            {/* <div className="topic">
-              <Icon name="icon-xingqiu" margin="0 10px 0 0" color="#7393FF"></Icon>
-              老表的吃货天堂
-            </div> */}
           </div>
         </div>
         {more ? (
           <div className="user-right-wrapper">
-            {!isOwn && itemData.is_attention === 0 ? (
+            {/* {!isOwn && itemData.is_attention === 0 ? (
               <FollowBtn
                 onClick={() => {
                   onAttentionFocusRequest(itemData.user_id);
@@ -174,7 +162,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
               >
                 +{t('followText')}
               </FollowBtn>
-            ) : null}
+            ) : null} */}
 
             <MorePopup
               data={itemData}

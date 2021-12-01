@@ -1,133 +1,142 @@
-import React, { useState } from 'react'
-import styled from "styled-components";
-import { useTranslation } from 'contexts/Localization'
-import { Flex, Button, Card } from 'uikit'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useTranslation } from 'contexts/Localization';
+import { Flex, Button, Card } from 'uikit';
+import { mediaQueriesSize } from 'uikit/theme/base';
+
 export const TabsBox = styled(Card)`
   margin-bottom: 12px;
-  line-height:60px;
-  padding-left:16px;
-  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
+  height: 60px;
+  background-color: transparent;
+  border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${mediaQueriesSize.paddingxs}
+`;
+
 const TableLeftBox = styled(Flex)`
-font-size: 14px;
-font-weight: 400;
-color: ${({ theme }) => theme.isDark ? '#B5B5B5' : '#7A83A0'};
-& div{
-  padding:0 20px;
-  cursor:pointer;
-}
-.leftActive{
-  font-size: 18px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.isDark ? '#FFFFFF' : '#000000'};
-}
- `
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.textTips};
+  & div {
+    padding: 0 20px;
+    cursor: pointer;
+  }
+  .leftActive {
+    font-size: 18px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.white_black};
+  }
+`;
 const TableRightBox = styled(Flex)`
-font-size: 18px;
-font-weight: 400;
-color: #fff;
-font-weight: bold;
-align-items: center;
-& button{
-  height: 35px;
-  margin-right:10px;
-  background-color: #4d535f;
-}
-.rightActive{
-  background-color: #4168ED;
-}
- `
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  font-weight: bold;
+  align-items: center;
+  & button {
+    height: 35px;
+    margin-right: 10px;
+    // background-color: #4d535f;
+  }
+  .rightActive {
+    // background-color: #4168ED;
+  }
+`;
 interface propsType {
-  defCurrentLeft?: number
-  defCurrentRight?: number
+  defCurrentLeft?: number;
+  defCurrentRight?: number;
   // tabLeftChange?: (item) => void
   // tabRightChange?: (item) => void
-  tabsChange?: (item) => void
-  tabRightArr?: any[]
-  tabLeftArr?: any[]
+  tabsChange?: (item) => void;
+  tabRightArr?: any[];
+  tabLeftArr?: any[];
 }
 export const Tabs = (props: propsType) => {
-  const { t } = useTranslation()
-  const { defCurrentLeft, defCurrentRight, tabsChange, tabRightArr = [
-    {
-      label: t('homeTabLatest'),
-      value: '1',
-      paramsName:'attention'
-    },
-    // {
-    //   label: t('homeTabPopular'),
-    //   value: '2'
-    // },
-    {
-      label: t('homeTabFocus'),
-      value: '2',
-      paramsName:'attention'
-    },
-  ], tabLeftArr = [
-    {
-      label: t('homeTabAll'),
-      value: '1',
-      paramsName:'attention'
-    },
-    // {
-    //   label: t('homeTabOriginal'),
-    //   value: '2'
-    // },
-    // {
-    //   label: t('homeTabArticle'),
-    //   value: '3'
-    // },
-  ] } = props
-  const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0)
-  const [currentRightIndex, setCurrentRightIndex] = useState(defCurrentRight || 0)
+  const { t } = useTranslation();
+  const {
+    defCurrentLeft,
+    defCurrentRight,
+    tabsChange,
+    tabRightArr = [],
+    tabLeftArr = [
+      {
+        label: t('homeTabAll'),
+        value: '1',
+        paramsName: 'attention'
+      },
+      {
+        label: t('homeTabLatest'),
+        value: '1',
+        paramsName: 'attention'
+      },
+      {
+        label: t('homeTabFocus'),
+        value: '2',
+        paramsName: 'attention'
+      }
+    ]
+  } = props;
+  const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0);
+  const [currentRightIndex, setCurrentRightIndex] = useState(
+    defCurrentRight || 0
+  );
   const leftTabClick = (item, index) => {
     // if (index === currentLeftIndex) return
-    setCurrentLeftIndex(index)
-    tabsChange(item)
-  }
+    setCurrentLeftIndex(index);
+    tabsChange(item);
+  };
   const rightTabClick = (item, index) => {
     // if (index === currentRightIndex) return
-    setCurrentRightIndex(index)
-    tabsChange(item)
-  }
+    setCurrentRightIndex(index);
+    tabsChange(item);
+  };
   return (
-    <TabsBox>
-      {tabLeftArr.length > 0 ?
-        <TableLeftBox >
-          {
-            tabLeftArr.map((item, index) => {
-              return (
-                <div key={item.value} onClick={leftTabClick.bind(this, item, index)} className={currentLeftIndex === index ? 'leftActive' : ''}>
-                  {item.label}
-                </div>
-              )
-            })
-          }
+    <TabsBox isBoxShadow>
+      {tabLeftArr.length > 0 ? (
+        <TableLeftBox>
+          {tabLeftArr.map((item, index) => {
+            return (
+              <div
+                key={index}
+                onClick={leftTabClick.bind(this, item, index)}
+                className={currentLeftIndex === index ? 'leftActive' : ''}
+              >
+                {item.label}
+              </div>
+            );
+          })}
         </TableLeftBox>
-        : ''}
-      {tabRightArr.length > 0 ?
-        <TableRightBox >
-          {
-            tabRightArr.map((item, index) => {
-              return (
-                <Button key={item.value} onClick={rightTabClick.bind(this, item, index)} className={currentRightIndex === index ? 'rightActive' : ''}>
-                  {item.label}
-                </Button>
-              )
-            })
-          }
+      ) : (
+        ''
+      )}
+      {tabRightArr.length > 0 ? (
+        <TableRightBox>
+          {tabRightArr.map((item, index) => {
+            return (
+              <Button
+                key={item.value}
+                onClick={rightTabClick.bind(this, item, index)}
+                className={currentRightIndex === index ? 'rightActive' : ''}
+              >
+                {item.label}
+              </Button>
+            );
+          })}
         </TableRightBox>
-        : ''}
+      ) : (
+        ''
+      )}
     </TabsBox>
-  )
-}
+  );
+};
 Tabs.defaultProps = {
   currentLeft: 0,
   currentRight: 0,
   // tabLeftChange: () => { },
   // tabRightChange: () => { },
-  tabsChange: () => { }
-}
+  tabsChange: () => {}
+};

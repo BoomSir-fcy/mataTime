@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Editor, Affix } from 'components';
 import { withRouter } from 'react-router-dom';
 import useReadArticle from 'contexts/ImContext/hooks/useReadArticle';
+import { useToast } from 'hooks';
 import { useTranslation } from 'contexts/Localization';
 import { Flex, Box } from 'uikit';
 import { Menu } from './left';
@@ -53,39 +54,42 @@ const Home: React.FC = (props: any) => {
    */
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({});
-  // const  editorRef = useRef()
-  const sendArticle = (
+  const { toastError } = useToast();
+  // const  editorRef = useRef();
+
+  const sendArticle = async (
     content: string,
-    resetInput: () => void,
     image_urls,
-    remind_user
+    remind_user,
+    resetInput: () => void
   ) => {
     if (!content) return false;
-    Api.HomeApi.createArticle({
-      content: content,
-      image_urls: image_urls,
-      remind_user
-    }).then(res => {
+    try {
+      const res = await Api.HomeApi.createArticle({
+        content: content,
+        image_urls: image_urls,
+        remind_user
+      });
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
         resetInput();
       } else {
-        // toast.error(res.msg, {
-        //   position: toast.POSITION.TOP_RIGHT
-        // })
+        toastError(t('commonContactAdmin') || res.msg);
       }
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-   /**
+  /**
    * @review
-   * 
+   *
    * 1.未使用 useCallback
    * 2.写法不规范
    * @bug 未节流处理
    */
   const tabsChange = item => {
-    console.log(item)
+    console.log(item);
     const temp = {
       ...filterVal
     };
@@ -134,7 +138,12 @@ const Home: React.FC = (props: any) => {
             </>
           ) : null}
           {/* <NewsMe {...props}></NewsMe> */}
-          <ArticleList key={refresh} topicName={match.params.name} filterValObj={filterVal} {...props} />
+          <ArticleList
+            key={refresh}
+            topicName={match.params.name}
+            filterValObj={filterVal}
+            {...props}
+          />
         </CenterCard>
         <RightCard>
           <Affix offsetTop={0} positionObj={{}}>
