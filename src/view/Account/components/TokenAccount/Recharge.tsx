@@ -59,7 +59,7 @@ align-items: center;
 const Max = styled(Text)`
 position: absolute;
 right: 15px;
-color:${({ theme }) => theme.colors.ThemeText};
+color:${({ theme }) => theme.colors.textPrimary};
 cursor: pointer;
 font-size: 14px;
 `
