@@ -11,4 +11,16 @@ export class CommonApi extends Http {
     const res = await this.post('/v1/upload/img_multi', params);
     return res;
   }
+
+  // 上传多张图片
+  async getWsUrl() {
+    const res: Api.Response<Api.Common.WebSocketToken> = await this.get('/v1/getws');
+    if (Http.checkSuccess(res)) {
+      return res.data
+    }
+    return {
+      token: '',
+      expires: 0,
+    }
+  }
 }

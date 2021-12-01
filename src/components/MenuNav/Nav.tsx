@@ -1,0 +1,98 @@
+import React, { useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
+import { useLocation } from 'react-router-dom'
+import { Box, Flex } from 'uikit'
+import { useTranslation } from 'contexts/Localization'
+import { Icon } from 'components';
+import NavItem from './NavItem'
+import NavGoback from './NavGoback'
+import config from './config'
+
+export interface NavProps {
+  // seconds?: number
+}
+export interface MenuNavLink {
+  path: string,
+  icon: React.ReactElement,
+  lable: string
+  showBadge?: boolean
+  badge?: number
+}
+
+const NavStyled = styled(Box)`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+`
+
+const NavShowBox = styled(Box)<{ translateX?: string }>`
+  position: absolute;
+  width: 100%;
+  transition: transform 0.3s;
+  transform: ${({ translateX }) => `translateX(${translateX})`};
+`
+
+
+const Nav: React.FC<NavProps> = ({  }) => {
+  const { t } = useTranslation()
+  const { pathname } = useLocation()
+  const [displayChildren, setDisplayChildren] = useState([])
+
+  const activeChildren = useMemo(() => {
+    const activeConfig = config.find(item => item?.children?.some(subItem => subItem.path === pathname))
+    if (activeConfig) return activeConfig.children
+    return null
+  }, [pathname])
+
+  useEffect(() => {
+    console.log(activeChildren, '=activeChildren')
+    if (activeChildren) {
+      setDisplayChildren(activeChildren)
+    }
+  }, [activeChildren])
+
+  return (
+    <NavStyled mt="16px">
+      <NavShowBox translateX={activeChildren ? '-100%' : '0'}>
+        {
+          config.map(item => {
+            return (
+              <NavItem
+                icon={<Icon name={item.icon} />}
+                activeIcon={<Icon name={item.activeIcon} />}
+                coming={item.coming}
+                lable={item.lable}
+                path={item.path}
+                pathname={pathname}
+              />
+            )
+          })
+        }
+      </NavShowBox>
+      <NavShowBox translateX={activeChildren ? '0' : '100%'}>
+        {
+          displayChildren && (
+            <Box>
+              <NavGoback />
+              {
+                displayChildren.map(item => {
+                  return (
+                    <NavItem
+                      icon={<Icon name={item.icon} />}
+                      coming={item.coming}
+                      lable={item.lable}
+                      path={item.path}
+                      pathname={pathname}
+                    />
+                  )
+                })
+              }
+            </Box>
+          )
+        }
+      </NavShowBox>
+    </NavStyled>
+  )
+}
+export default Nav

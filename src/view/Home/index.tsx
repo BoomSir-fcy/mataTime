@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Editor, Affix } from 'components';
 import { withRouter } from 'react-router-dom';
+import useReadArticle from 'contexts/ImContext/hooks/useReadArticle';
 import { useToast } from 'hooks';
 import { useTranslation } from 'contexts/Localization';
 import { Flex, Box } from 'uikit';
@@ -16,6 +17,7 @@ import {
 } from './right';
 
 import { Api } from 'apis';
+
 
 const PageContainer = styled(Box)`
   position: relative;
@@ -44,6 +46,8 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
+  useReadArticle()
+
   /**
    * @review
    * 看着想刷新 但在ArticleList传值是用的key

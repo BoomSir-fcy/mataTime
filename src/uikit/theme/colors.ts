@@ -65,7 +65,7 @@ export const lightColors: Colors = {
   member_num: '#549A23',
   textValue: '#7E7E7E',
   textPrimary: '#7393FF',
-  textSubtle: '#EAEAEA',
+  textSubtle: '#000000',
   textTips: '#B5B5B5',
   textDisabled: '#BDC2C4',
   textOrigin: '#EC612B',

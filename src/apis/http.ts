@@ -66,6 +66,10 @@ export class Http {
     };
     return this.request(config);
   }
+
+  static checkSuccess(res: Api.Error) {
+    return res && res.code === 1;
+  };
 }
 
 export default new Http();

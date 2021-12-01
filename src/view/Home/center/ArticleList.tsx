@@ -4,6 +4,7 @@ import { Flex, Button, Box } from 'uikit'
 import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
 // import MentionItem from 'view/News/components/MentionItem';
 import { Link } from 'react-router-dom'
+import { useStore } from 'store';
 import { relativeTime } from 'utils'
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -13,6 +14,7 @@ import {
   MeItemWrapper
 } from 'view/News/Me/style';
 import { Api } from 'apis'
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 const ArticleListBox = styled.div`
 color:#fff;
@@ -24,6 +26,8 @@ color:#fff;
  * props 未声明类型
  */
 export const ArticleList = (props) => {
+  const currentUid = useStore(p => p.loginReducer.userInfo);
+  
   const { topicName = '' } = props
   const goDetils = (e) => {
     if (props.location.pathname === '/articleDetils') return
@@ -130,6 +134,12 @@ export const ArticleList = (props) => {
       <List ref={listRef} marginTop={320} loading={page <= totalPage} renderList={getList}>
         {listData.map((item, index) => (
           <MeItemWrapper key={item.id} >
+            {
+              // 浏览自己的不扣费
+              currentUid?.uid !== item.user_id && (
+                <SpendTimeViewWithArticle articleId={item.id} />
+              )
+            }
             <MentionItem {...props} itemData={{
               ...item,
               post_id: item.id,
