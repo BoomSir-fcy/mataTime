@@ -35,18 +35,21 @@ const config = [
       },
       {
         icon: 'icon-pinglun',
+        activeIcon: 'icon-pinglun1',
         path: pathConfig.messageCommentPath,
         badgeName: 'message_comment',
         lable: 'newsCommentMenuTitle'
       },
       {
         icon: 'icon-aixin',
+        activeIcon: 'icon-aixin1',
         path: pathConfig.messageLikePath,
         badgeName: 'message_like',
         lable: 'newsPraiseMenuTitle'
       },
       {
         icon: 'icon-xiaoxi',
+        activeIcon: 'icon-xiaoxi1',
         badgeName: 'message_secret',
         path: pathConfig.messageNoticePath,
         lable: 'newsNoticeMenuTitle'

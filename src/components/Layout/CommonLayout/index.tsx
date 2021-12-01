@@ -37,7 +37,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
       <LayoutContentWrapper>
         <Flex justifyContent="space-between" width="100%">
 
-          <LayoutLeftWrapper>
+          {/* <LayoutLeftWrapper>
             <Affix offsetTop={0} positionObj={{}}>
               <CommonLeftMenu
                 menu={menu[match.url]}
@@ -45,7 +45,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
                 {...props}
               />
             </Affix>
-          </LayoutLeftWrapper>
+          </LayoutLeftWrapper> */}
 
           <LayoutMiddleWrapper>
             {
@@ -66,7 +66,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
             <Route path={'/news/notice'} component={NewsNotice}></Route>
           </LayoutMiddleWrapper>
 
-          <LayoutRightWrapper>
+          {/* <LayoutRightWrapper>
             <Affix offsetTop={100} positionObj={{}}>
               <>
                 <Search />
@@ -76,7 +76,7 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
                 <FooterCopyright />
               </>
             </Affix>
-          </LayoutRightWrapper>
+          </LayoutRightWrapper> */}
         </Flex>
 
       </LayoutContentWrapper>

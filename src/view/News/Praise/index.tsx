@@ -66,18 +66,18 @@ const NewsPraise: React.FC = props => {
             paramsName: 'message_type'
           }
         ]}
-        tabRightArr={[
-          {
-            label: '全部点赞',
-            value: null,
-            paramsName: 'add_Time'
-          },
-          {
-            label: '今日点赞',
-            value: dayjs().format('YYYY-MM-DD'),
-            paramsName: 'add_Time'
-          }
-        ]}
+      // tabRightArr={[
+      //   {
+      //     label: '全部点赞',
+      //     value: null,
+      //     paramsName: 'add_Time'
+      //   },
+      //   {
+      //     label: '今日点赞',
+      //     value: dayjs().format('YYYY-MM-DD'),
+      //     paramsName: 'add_Time'
+      //   }
+      // ]}
       ></Tabs>
       <List
         marginTop={410}

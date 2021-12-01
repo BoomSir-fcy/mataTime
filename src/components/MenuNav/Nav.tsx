@@ -30,7 +30,7 @@ const NavStyled = styled(Box)`
   overflow-x: hidden;
 `
 
-const NavShowBox = styled(Box)<{ translateX?: string }>`
+const NavShowBox = styled(Box) <{ translateX?: string }>`
   position: absolute;
   width: 100%;
   transition: transform 0.3s;
@@ -38,7 +38,7 @@ const NavShowBox = styled(Box)<{ translateX?: string }>`
 `
 
 
-const Nav: React.FC<NavProps> = ({  }) => {
+const Nav: React.FC<NavProps> = ({ }) => {
   const { t } = useTranslation()
   const { pathname } = useLocation()
   const [displayChildren, setDisplayChildren] = useState([])
@@ -90,7 +90,7 @@ const Nav: React.FC<NavProps> = ({  }) => {
                 lable={item.lable}
                 path={item.path}
                 pathname={pathname}
-                badge={item.badgeName && notification &&  unReadMsg[item.badgeName] ? unReadMsg[item.badgeName] : null}
+                badge={item.badgeName && notification && unReadMsg[item.badgeName] ? unReadMsg[item.badgeName] : null}
               />
             )
           })
@@ -106,9 +106,10 @@ const Nav: React.FC<NavProps> = ({  }) => {
                   return (
                     <NavItem
                       icon={<Icon name={item.icon} />}
+                      activeIcon={<Icon name={item.activeIcon || item.icon} />}
                       coming={item.coming}
                       lable={item.lable}
-                      badge={item.badgeName && notification &&  unReadMsg[item.badgeName] ? unReadMsg[item.badgeName] : null}
+                      badge={item.badgeName && notification && unReadMsg[item.badgeName] ? unReadMsg[item.badgeName] : null}
                       path={item.path}
                       pathname={pathname}
                     />

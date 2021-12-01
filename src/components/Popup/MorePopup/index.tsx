@@ -174,6 +174,17 @@ export const MorePopup = React.memo((props: Iprops) => {
     }
   };
 
+  // 取消关注
+  const onAttentionCancelRequest = async (focus_uid: number) => {
+    const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
+    if (Api.isSuccess(res)) {
+      toast.success(res.data);
+      callback(data, MoreOperatorEnum.FOLLOW)
+    } else {
+      toast.error(res.data);
+    }
+  };
+
   // 删除
   const onPostDelRequest = async (pid: number) => {
     const res = await Api.AttentionApi.delPost(pid);
@@ -249,9 +260,16 @@ export const MorePopup = React.memo((props: Iprops) => {
                 >
                   {t('followText')} Ta
                 </p>
+              ) : !isOwn && data.is_attention === 1 ? (
+                <p
+                  onClick={() => {
+                    onAttentionCancelRequest(data.user_id);
+                  }}
+                >
+                  {t('followCancelText')} Ta
+                </p>
               ) : null
             }
-
             <p
               onClick={() => {
                 onShareTwitterClick();
