@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom'
+import { Api } from 'apis';
 import { Box, Flex } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { Icon } from 'components';
@@ -72,6 +73,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
                 lable={item.lable}
                 path={item.path}
                 pathname={pathname}
+                badge={item.badgeName && notification && unReadMsg[item.badgeName] ? unReadMsg[item.badgeName] : null}
               />
             )
           })
@@ -87,8 +89,10 @@ const Nav: React.FC<NavProps> = ({ }) => {
                   return (
                     <NavItem
                       icon={<Icon name={item.icon} />}
+                      activeIcon={<Icon name={item.activeIcon || item.icon} />}
                       coming={item.coming}
                       lable={item.lable}
+                      badge={item.badgeName && notification && unReadMsg[item.badgeName] ? unReadMsg[item.badgeName] : null}
                       path={item.path}
                       pathname={pathname}
                     />

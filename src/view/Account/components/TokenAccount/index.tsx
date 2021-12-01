@@ -11,6 +11,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
+import Chart from './Chart';
 
 const NoPdBottom = styled(Container)`
 padding: 0;
@@ -95,6 +96,7 @@ const TokenAccount: React.FC = () => {
         <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
         <Recharge balance={timeBalance} TokenAddr={timeAddress} />
       </Flex>
+      {/* tab切换 */}
       <ContentTab>
         <Flex alignItems='baseline'>
           <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
@@ -118,6 +120,7 @@ const TokenAccount: React.FC = () => {
           </IncomeBox>
         </RightBox>
       </ContentTab>
+      <Chart />
       {
         ActiveTab !== 3 && <EarningsRecord type={ActiveTab} />
       }

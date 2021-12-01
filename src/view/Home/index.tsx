@@ -18,7 +18,6 @@ import {
 
 import { Api } from 'apis';
 
-
 const PageContainer = styled(Box)`
   position: relative;
   /* width: 1200px; */
@@ -46,8 +45,7 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
-  useReadArticle()
-
+  useReadArticle();
   /**
    * @review
    * 看着想刷新 但在ArticleList传值是用的key

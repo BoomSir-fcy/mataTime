@@ -30,7 +30,7 @@ const scaleVariants = {
 };
 
 const Img = styled.img`
-  border-radius: ${({ theme }) => theme.radii.card};
+  border-radius: 50%;
   object-fit: cover;
   ${variant({
     prop: 'scale',

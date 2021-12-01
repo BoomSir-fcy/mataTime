@@ -175,7 +175,9 @@ export const useFetchNftList = () => {
   // const profile = useStore(p => p.loginReducer.userInfo);
   // let address = account ? account : profile.address;
   useEffect(() => {
-    dispatch(fetchUserNftInfoAsync(account));
+    if (account) {
+      dispatch(fetchUserNftInfoAsync(account));
+    }
   }, [dispatch, account]);
 };
 
