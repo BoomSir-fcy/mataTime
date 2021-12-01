@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom'
 import { Box, Flex } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
@@ -7,6 +8,7 @@ import { Icon } from 'components';
 import NavItem from './NavItem'
 import NavGoback from './NavGoback'
 import config from './config'
+import { useFetchUnreadMsg, useReadMsg } from './hooks';
 
 export interface NavProps {
   // seconds?: number
@@ -26,7 +28,7 @@ const NavStyled = styled(Box)`
   overflow-x: hidden;
 `
 
-const NavShowBox = styled(Box)<{ translateX?: string }>`
+const NavShowBox = styled(Box) <{ translateX?: string }>`
   position: absolute;
   width: 100%;
   transition: transform 0.3s;
@@ -34,10 +36,15 @@ const NavShowBox = styled(Box)<{ translateX?: string }>`
 `
 
 
-const Nav: React.FC<NavProps> = ({  }) => {
+const Nav: React.FC<NavProps> = ({ }) => {
   const { t } = useTranslation()
   const { pathname } = useLocation()
   const [displayChildren, setDisplayChildren] = useState([])
+  const dispatch = useDispatch();
+  const unReadMsg = useSelector((state: any) => state.loginReducer.unReadMsg);
+  const notification = useSelector((state: any) => state.appReducer.systemCustom.notification);
+  useReadMsg(pathname)
+  useFetchUnreadMsg(notification)
 
   const activeChildren = useMemo(() => {
     const activeConfig = config.find(item => item?.children?.some(subItem => subItem.path === pathname))

@@ -37,6 +37,7 @@ const Account = React.lazy(() => import('./view/Account'));
 const Container = styled(Box)`
   background-color: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
+  padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题
 `;
 
 function App() {

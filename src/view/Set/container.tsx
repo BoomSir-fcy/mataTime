@@ -25,10 +25,10 @@ const LeftCard = styled(Flex)`
 `;
 const CenterCard = styled(Box)`
   flex: 1;
-  width: 670px;
-  margin: 0 15px;
-  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  /* width: 670px; */
+  /* margin: 0 15px; */
+  /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
+  /* border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
 `;
 const RightCard = styled(Flex)`
   width: 300px;
@@ -62,29 +62,9 @@ export const Container = props => {
   const { t } = useTranslation();
 
   return (
-    <PageContainer>
-      <Flex justifyContent="space-between" width="100%">
-        <LeftCard>
-          <Affix offsetTop={100} positionObj={{}}>
-            <CommonMenu menu={menuArr} {...props} />
-          </Affix>
-        </LeftCard>
-        <CenterCard>
-          <Crumbs title={t('homeMenuSet')} />
-          {props.children}
-        </CenterCard>
-        <RightCard>
-          <Affix offsetTop={100} positionObj={{}}>
-            <>
-              <Search />
-              <Swap />
-              <RecommendPeople />
-              <HotTopic {...props} />
-              <FooterCopyright />
-            </>
-          </Affix>
-        </RightCard>
-      </Flex>
-    </PageContainer>
+    <CenterCard>
+      <Crumbs title={t('homeMenuSet')} />
+      {props.children}
+    </CenterCard>
   );
 };

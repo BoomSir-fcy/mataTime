@@ -18,10 +18,10 @@ const LeftCard = styled(Flex)`
   overflow: auto;
 `;
 const CenterCard = styled(Box)`
-  flex: 1;
-  margin: 0 15px;
-  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  /* flex: 1; */
+  /* margin: 0 15px; */
+  /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
+  /* border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
 `;
 
 const ContainerStyled = styled(Container)`
@@ -40,42 +40,33 @@ const Account = props => {
   const { t } = useTranslation();
 
   return (
-    <PageSection innerProps={{ paddingTop: '0 !important' }}>
-      <Flex justifyContent="space-between" width="100%">
-        <LeftCard>
-          <Affix offsetTop={100} positionObj={{}}>
-            {/* <CommonMenu hideGoBack menu={menuArr} history={history} /> */}
-            <Menu />
-          </Affix>
-        </LeftCard>
-        <CenterCard>
-          <WalletHead />
-          <Switch>
-            <Route
-              path={`${props.match.path}`}
-              render={() => (
-                <>
-                  <Route path={`${props.match.path}`} exact component={TokenAccount} />
-                  <Route path={`${props.match.path}/stake`} component={Stake} />
-                </>
-              )}
-            />
-          </Switch>
-          {/* <Crumbs title={t('homeMenuSet')} />
-          <TokenAccount />
-          <Box>
-            <ContainerStyled>
-              <Flex height="100%" alignItems="flex-end">
-                <Text fontSize="18px" bold>{t('Account Pools')}</Text>
-              </Flex>
-            </ContainerStyled>
-            <Liquidity />
-            <Single />
-          </Box> */}
-        </CenterCard>
-      </Flex>
-
-    </PageSection>
+    <Box width="100%">
+      <CenterCard>
+        <WalletHead />
+        <Switch>
+          <Route
+            path={`${props.match.path}`}
+            render={() => (
+              <>
+                <Route path={`${props.match.path}`} exact component={TokenAccount} />
+                <Route path={`${props.match.path}/stake`} component={Stake} />
+              </>
+            )}
+          />
+        </Switch>
+        {/* <Crumbs title={t('homeMenuSet')} />
+        <TokenAccount />
+        <Box>
+          <ContainerStyled>
+            <Flex height="100%" alignItems="flex-end">
+              <Text fontSize="18px" bold>{t('Account Pools')}</Text>
+            </Flex>
+          </ContainerStyled>
+          <Liquidity />
+          <Single />
+        </Box> */}
+      </CenterCard>
+    </Box>
   )
 }
 
