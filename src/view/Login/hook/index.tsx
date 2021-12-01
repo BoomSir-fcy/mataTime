@@ -106,8 +106,6 @@ export const FetchNftsList = async account => {
 export const GetNftList = async (account) => {
   try {
     const Nftlist = await getNftsList(account);
-    console.log(Nftlist);
-
     return Nftlist
   } catch (error) {
     console.error(error)
