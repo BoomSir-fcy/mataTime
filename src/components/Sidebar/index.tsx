@@ -7,7 +7,7 @@ import FooterCopyright from './footerCopyright';
 
 const Sidebar = () => {
   return (
-    <Box background="pink">
+    <Box>
       <Search />
       {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
       <Swap />
