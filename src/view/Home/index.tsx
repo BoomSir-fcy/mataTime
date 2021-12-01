@@ -18,7 +18,6 @@ import {
 
 import { Api } from 'apis';
 
-
 const PageContainer = styled(Box)`
   position: relative;
   /* width: 1200px; */
@@ -46,8 +45,7 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
-  useReadArticle()
-
+  useReadArticle();
   /**
    * @review
    * 看着想刷新 但在ArticleList传值是用的key
@@ -116,16 +114,7 @@ const Home: React.FC = (props: any) => {
            * 3.Header 组件应该为公共组件
            * 4.字符串拼接
            */}
-          <Header
-            {...props}
-            back={match.path === '/topicList/:id/:name'}
-            align={match.path === '/topicList/:id/:name' ? 'center' : null}
-            title={
-              match.path === '/topicList/:id/:name'
-                ? '#' + match.params.name + '#'
-                : t('homeHeaderTitle')
-            }
-          />
+          <Header {...props} title={t('homeHeaderTitle')} />
           {/**
            * @review
            * 1.应该使用Route组件

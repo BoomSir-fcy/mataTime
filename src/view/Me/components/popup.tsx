@@ -25,7 +25,7 @@ const PopupIcon = styled.img`
 const PopupContentWrapper = styled(Card)`
   width: 150px;
   position: absolute;
-  z-index: 9998;
+  z-index: 998;
   left: -60px;
   top: 35px;
   padding: 15px 30px;
@@ -91,21 +91,6 @@ export const Popup: React.FC<{
   return (
     <Box>
       <Flex alignItems="center">
-        {user.is_attention === 1 ? (
-          <Button
-            onClick={() =>
-              setState(p => {
-                p.cancelFollow = true;
-              })
-            }
-          >
-            {t('meUnsubscribe')}
-          </Button>
-        ) : (
-          <Button onClick={debounce(() => followUser(user.uid), 1000)}>
-            {t('meFocusOn')}
-          </Button>
-        )}
         <PopupContainer
           onMouseLeave={() =>
             setState(p => {
@@ -135,6 +120,28 @@ export const Popup: React.FC<{
               <Button variant="text" disabled>
                 {t('mePopupMenuPrivateLetters')}
               </Button>
+              {/* 关注取消 */}
+              <React.Fragment>
+                {user.is_attention === 1 ? (
+                  <Button
+                    variant="text"
+                    onClick={() =>
+                      setState(p => {
+                        p.cancelFollow = true;
+                      })
+                    }
+                  >
+                    {t('meUnsubscribe')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="text"
+                    onClick={debounce(() => followUser(user.uid), 1000)}
+                  >
+                    {t('meFocusOn')}
+                  </Button>
+                )}
+              </React.Fragment>
               <Button
                 variant="text"
                 onClick={() => copyContent(window.location.href || '')}
