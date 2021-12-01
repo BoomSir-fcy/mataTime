@@ -28,6 +28,7 @@ const Home = React.lazy(() => import('./view/Home'));
 const ArticleDetilsLayout = React.lazy(
   () => import('./components/Layout/ArticleDetilsLayout')
 );
+const TopicList = React.lazy(() => import('./view/TopicList'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
@@ -61,15 +62,15 @@ function App() {
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
               <Route path="/login" exact component={Login} />
-              <Route
-                path="/topicList/:id/:name"
-                render={props => <Home {...props} />}
-              />
+              <Route path="/topicList/:id/:name" component={TopicList} />
               <Route
                 path="/articleDetils/:id"
                 render={props => <ArticleDetilsLayout {...props} />}
               />
-              <Route path="/news" render={props => <CommonLayout {...props} />} />
+              <Route
+                path="/news"
+                render={props => <CommonLayout {...props} />}
+              />
               <Route path="/exchange" component={Exchange} />
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />
