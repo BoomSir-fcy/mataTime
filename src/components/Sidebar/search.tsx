@@ -44,7 +44,7 @@ border-radius: 20px;
   }
 `
 
-export const Search: React.FC = () => {
+const Search: React.FC = () => {
   const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
   const [value, setValue] = useState('')
@@ -70,3 +70,5 @@ export const Search: React.FC = () => {
     </SearchBox>
   )
 }
+
+export default Search

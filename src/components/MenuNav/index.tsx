@@ -10,7 +10,7 @@ const MenuContener = styled(Flex)`
   height: 100vh;
   width: 195px;
   /* background: pink; */
-  border: 1px red solid;
+  /* border: 1px red solid; */
   position: sticky;
   top: 0;
   flex-shrink: 0;
