@@ -17,7 +17,7 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, act
   const { toastInfo } = useToast();
 
   const badgeDispaly = useMemo(() => {
-    return badge > 99 ? `+${badge}` : `${badge}`
+    return badge > 99 ? `+99` : `${badge}`
   }, [badge])
 
   const isActive = useMemo(() => {

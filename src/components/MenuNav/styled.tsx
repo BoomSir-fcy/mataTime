@@ -22,7 +22,15 @@ import { Box, Flex, Text } from 'uikit'
  export const Badge = styled(Text)`
   position: absolute;
   background: ${({ theme }) => theme.colors.textOrigin};
-  height: 13px;
-  min-width: 13px;
+  height: 14px;
+  min-width: 18px;
+  max-width: 26px;
   border-radius: 5px;
+  padding: 0 1px;
+  top: -6px;
+  right: -8px;
+  font-size: 12px;
+  line-height: 12px;
+  display: block;
+  text-align: center;
 `

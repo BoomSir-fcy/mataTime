@@ -18,6 +18,10 @@ import { storage } from 'config';
 import { Api } from 'apis';
 import { FetchNftsList } from 'view/Login/hook';
 
+interface UnreadMsg extends Api.News.UnreadMsgNum {
+  mineTotalMsgNum: number;
+}
+
 const initialState = {
   isSignup: false,
   isSignin: false,
@@ -30,7 +34,15 @@ const initialState = {
   nft: {} as any,
   nftStatus: false,
   nftList: [],
-  nftAddr: []
+  nftAddr: [],
+  unReadMsg: {
+    message_at_me: 0,
+    message_comment: 0,
+    message_like: 0,
+    message_secret: 0,
+    message_system: 0,
+    mineTotalMsgNum: 0,
+  },
 };
 
 export type Login = typeof initialState;
@@ -56,6 +68,17 @@ export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
   async account => {
     const info = await FetchNftsList(account);
     return info;
+  }
+);
+
+// Async thunks
+export const fetchUserUnreadMsgNum = createAsyncThunk<Api.News.UnreadMsgNum>(
+  'login/fetchUserUnreadMsgNum',
+  async () => {
+    const res = await Api.NewsApi.getUnreadMsgNum();
+    if (Api.isSuccess(res)) {
+      return res.data
+    }
   }
 );
 
@@ -112,6 +135,14 @@ export const login = createSlice({
       .addCase(fetchUserNftInfoAsync.fulfilled, (state, action) => {
         state.nftStatus = true;
         state.nftList = action.payload;
+      })
+      .addCase(fetchUserUnreadMsgNum.fulfilled, (state, action) => {
+        const mineTotalMsgNum = action.payload.message_at_me + action.payload.message_like + action.payload.message_comment
+        state.unReadMsg = {
+          ...state.unReadMsg,
+          ...action.payload,
+          mineTotalMsgNum,
+        }
       })
       .addCase(resetLoginState, state => {
         Object.keys(state).forEach(key => {
