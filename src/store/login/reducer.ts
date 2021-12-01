@@ -79,6 +79,7 @@ export const fetchUserUnreadMsgNum = createAsyncThunk<Api.News.UnreadMsgNum>(
     if (Api.isSuccess(res)) {
       return res.data
     }
+    return null
   }
 );
 
@@ -137,11 +138,13 @@ export const login = createSlice({
         state.nftList = action.payload;
       })
       .addCase(fetchUserUnreadMsgNum.fulfilled, (state, action) => {
-        const mineTotalMsgNum = action.payload.message_at_me + action.payload.message_like + action.payload.message_comment
-        state.unReadMsg = {
-          ...state.unReadMsg,
-          ...action.payload,
-          mineTotalMsgNum,
+        if (action.payload) {
+          const mineTotalMsgNum = action.payload.message_at_me + action.payload.message_like + action.payload.message_comment
+          state.unReadMsg = {
+            ...state.unReadMsg,
+            ...action.payload,
+            mineTotalMsgNum,
+          }
         }
       })
       .addCase(resetLoginState, state => {

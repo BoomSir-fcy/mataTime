@@ -14,6 +14,10 @@ interface PageSectionProps extends FlexProps {
   innerProps?: BoxProps
 }
 
+const PageContainerStyled = styled(Box)`
+  padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题
+`
+
 const ChildrenWrapper = styled(Container)`
   min-height: auto;
   width: 100%;
@@ -41,30 +45,46 @@ const PageContainer: React.FC = ({ children }) => {
     return !hideSidebarPath.includes(pathname)
   }, [pathname])
 
+  const showMenuNav = useMemo(() => {
+    return !hideLeftNavPath.includes(pathname)
+  }, [pathname])
+
+  const fillPage = useMemo(() => {
+    return !showMenuNav && !showSidebar
+  }, [showMenuNav, showSidebar])
+
+  if (fillPage) {
+    return (
+      <Box>{children}</Box>
+    )
+  }
+
   return (
-    <ChildrenWrapper>
-      <Flex width="100%" alignItems="flex-start" justifyContent="center">
-        {
-          !hideLeftNavPath.includes(pathname) && (
-            <MenuNav />
-          )
-        }
-        <LineStyled />
-        <Flex flex="1" alignItems="flex-start" justifyContent="space-between">
-          <InnerBox flex="1" flexDirection="column">
-            <Box maxWidth={showSidebar ? '670px' : '984px'} width="100%">
-              {children}
-            </Box>
-          </InnerBox>
-          <LineStyled mr="14px"/>
+    <PageContainerStyled>
+      <ChildrenWrapper>
+        <Flex width="100%" alignItems="flex-start" justifyContent="center">
           {
-            showSidebar && (
-              <Sidebar />
+            showMenuNav && (
+              <MenuNav />
             )
           }
+          <LineStyled />
+          <Flex flex="1" alignItems="flex-start" justifyContent="space-between">
+            <InnerBox flex="1" flexDirection="column">
+              <Box maxWidth={showSidebar ? '670px' : '984px'} width="100%">
+                {children}
+              </Box>
+            </InnerBox>
+            <LineStyled mr="14px" />
+            {
+              showSidebar && (
+                <Sidebar />
+              )
+            }
+          </Flex>
         </Flex>
-      </Flex>
-    </ChildrenWrapper>
+      </ChildrenWrapper>
+    </PageContainerStyled>
   )
 }
 
