@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 import { fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, ToastComponents } from 'components';
+import MenuNav from 'components/MenuNav';
+import PageContainer from 'components/MenuNav/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
 
@@ -52,29 +54,32 @@ function App() {
       <GlobalStyle />
       <Container id="bg">
         {/* TODO: 把左侧导航栏提成公共组件 放到这个位置 */}
-        <React.Suspense fallback={<PageLoader />}>
-          <AccountUpdater />
-          <Switch>
-            <Route path="/" exact render={props => <Home {...props} />} />
-            <Route path="/login" exact component={Login} />
-            <Route
-              path="/topicList/:id/:name"
-              render={props => <Home {...props} />}
-            />
-            <Route
-              path="/articleDetils/:id"
-              render={props => <ArticleDetilsLayout {...props} />}
-            />
-            <Route path="/news" render={props => <CommonLayout {...props} />} />
-            <Route path="/exchange" component={Exchange} />
-            <Route path="/me" component={Me} />
-            <Route path="/set" component={Set} />
-            <Route path="/account" component={Account} />
-            {process.env.NODE_ENV === 'development' && (
-              <Route path="/test" component={Test} />
-            )}
-          </Switch>
-        </React.Suspense>
+        <PageContainer>
+          <MenuNav />
+          <React.Suspense fallback={<PageLoader />}>
+            <AccountUpdater />
+            <Switch>
+              <Route path="/" exact render={props => <Home {...props} />} />
+              <Route path="/login" exact component={Login} />
+              <Route
+                path="/topicList/:id/:name"
+                render={props => <Home {...props} />}
+              />
+              <Route
+                path="/articleDetils/:id"
+                render={props => <ArticleDetilsLayout {...props} />}
+              />
+              <Route path="/news" render={props => <CommonLayout {...props} />} />
+              <Route path="/exchange" component={Exchange} />
+              <Route path="/me" component={Me} />
+              <Route path="/set" component={Set} />
+              <Route path="/account" component={Account} />
+              {process.env.NODE_ENV === 'development' && (
+                <Route path="/test" component={Test} />
+              )}
+            </Switch>
+          </React.Suspense>
+        </PageContainer>
       </Container>
       <ToastComponents />
     </Router>

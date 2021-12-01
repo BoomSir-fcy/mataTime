@@ -23,13 +23,17 @@ export const ToastsProvider: React.FC = ({ children }) => {
   const toastWarning = (title: string) => {
     return toastFunc(title, toastTypes.WARNING);
   };
+  
+  const toastInfo = (title: string) => {
+    return toastFunc(title, toastTypes.INFO);
+  };
 
   const toastError = (title: string) => {
     return toastFunc(title, toastTypes.ERROR);
   };
 
   return (
-    <ToastsContext.Provider value={{ toastSuccess, toastWarning, toastError }}>
+    <ToastsContext.Provider value={{ toastSuccess, toastWarning, toastInfo, toastError }}>
       {children}
     </ToastsContext.Provider>
   );
