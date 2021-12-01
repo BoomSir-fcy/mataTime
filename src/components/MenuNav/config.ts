@@ -24,7 +24,7 @@ const config = [
         icon: 'icon-aite',
         path: '/news/me',
         lable: 'newsMeMenuTitle',
-        coming: false,
+        coming: false
       },
       {
         icon: 'icon-pinglun',
@@ -69,8 +69,25 @@ const config = [
     icon: 'icon-w31shezhi',
     activeIcon: 'icon-a-31shezhi1',
     path: '/set/safeset',
-    lable: 'homeMenuSet'
+    lable: 'homeMenuSet',
+    Children: [
+      {
+        icon: 'icon-gerenxinxi',
+        lable: 'setMenuAccountSecurity',
+        path: '/set/safeset'
+      },
+      {
+        icon: 'icon-xiaoxi',
+        lable: 'setMenuNotification',
+        path: '/set/noticeset'
+      },
+      {
+        icon: 'icon-aixin',
+        lable: 'setMenuPreference',
+        path: '/set/likeset'
+      }
+    ]
   }
-]
+];
 
-export default config
+export default config;

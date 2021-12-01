@@ -118,7 +118,7 @@ export const ArticleList = props => {
               callback={(item: any, type: MoreOperatorEnum) => {
                 updateList(item, type);
               }}
-            ></MentionItem>
+            />
             <MentionOperator
               {...props}
               replyType="twitter"

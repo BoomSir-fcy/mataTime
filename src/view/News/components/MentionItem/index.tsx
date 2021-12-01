@@ -4,12 +4,23 @@ import moreIcon from 'assets/images/social/more.png';
 import { relativeTime } from 'utils';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom'
-import { FollowPopup, MorePopup, Icon, Avatar, MoreOperatorEnum, ImgList, FollowPopupD, ContentParsing } from 'components';
-import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
+import { Link } from 'react-router-dom';
+import {
+  FollowPopup,
+  MorePopup,
+  Icon,
+  Avatar,
+  MoreOperatorEnum,
+  ImgList,
+  FollowPopupD,
+  ContentParsing
+} from 'components';
 import { useTranslation } from 'contexts/Localization';
+import { shortenAddress } from 'utils/contract';
 
 import { Api } from 'apis';
+
+import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
 
 type IProps = {
   more?: boolean;
@@ -24,7 +35,7 @@ const MentionItem: React.FC<IProps> = props => {
     children,
     size = 'nomal',
     itemData = {},
-    callback = () => { }
+    callback = () => {}
   } = props;
   const mentionRef: any = useRef();
 
@@ -76,9 +87,13 @@ const MentionItem: React.FC<IProps> = props => {
           goDetils(e);
         }}
       >
-        <ContentParsing {...props} content={itemData.content} callback={(type: MoreOperatorEnum) => {
-          callback(itemData, type);
-        }}></ContentParsing>
+        <ContentParsing
+          {...props}
+          content={itemData.content}
+          callback={(type: MoreOperatorEnum) => {
+            callback(itemData, type);
+          }}
+        ></ContentParsing>
         <ImgList
           list={itemData.image_list || itemData.image_url_list}
         ></ImgList>
@@ -108,12 +123,13 @@ export const MentionItemUser: React.FC<UserProps> = ({
   more = true,
   size = 'nomal',
   itemData = {},
-  callback = () => { }
+  callback = () => {}
 }) => {
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
   const [isOwn, setIsOwn] = useState<boolean>(false);
   const [followShow, setFollowShow] = useState(false);
   const { t } = useTranslation();
+
   useEffect(() => {
     init();
   }, []);
@@ -128,7 +144,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback(itemData, MoreOperatorEnum.FOLLOW)
+      callback(itemData, MoreOperatorEnum.FOLLOW);
     } else {
       toast.error(res.data);
     }
@@ -138,7 +154,11 @@ export const MentionItemUser: React.FC<UserProps> = ({
       <div className={`user-wrapper ${size}-user`}>
         <div className="user-left-wrapper">
           <Link to={'/me/profile/' + (itemData.uid || itemData.user_id)}>
-            <Avatar className="avatar" src={itemData.user_avator_url} scale="md" />
+            <Avatar
+              className="avatar"
+              src={itemData.user_avator_url}
+              scale="md"
+            />
           </Link>
           <div className="user-info">
             <div>
@@ -146,7 +166,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 {itemData.user_name || itemData.nick_name}
               </div>
               <div className="time">
-                <span>@{(itemData.user_address || '').slice(0, 3) + '...' + (itemData.user_address || '').slice(38)}</span>
+                <span>@{shortenAddress(itemData.user_address)}</span>
                 {itemData.add_time_desc || itemData.post_time_desc}
               </div>
             </div>
@@ -163,7 +183,6 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 +{t('followText')}
               </FollowBtn>
             ) : null} */}
-
             <MorePopup
               data={itemData}
               callback={(data: any, type: MoreOperatorEnum) => {
