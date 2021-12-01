@@ -106,6 +106,8 @@ export const FetchNftsList = async account => {
 export const GetNftList = async (account) => {
   try {
     const Nftlist = await getNftsList(account);
+    console.log(Nftlist);
+
     return Nftlist
   } catch (error) {
     console.error(error)
@@ -175,7 +177,9 @@ export const useFetchNftList = () => {
   // const profile = useStore(p => p.loginReducer.userInfo);
   // let address = account ? account : profile.address;
   useEffect(() => {
-    dispatch(fetchUserNftInfoAsync(account));
+    if (account) {
+      dispatch(fetchUserNftInfoAsync(account));
+    }
   }, [dispatch, account]);
 };
 
