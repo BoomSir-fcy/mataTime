@@ -18,10 +18,9 @@ import {
 
 import { Api } from 'apis';
 
-
 const PageContainer = styled(Box)`
   position: relative;
-  width: 1200px;
+  /* width: 1200px; */
   margin: 0 auto;
   display: flex;
 `;
@@ -31,9 +30,9 @@ const LeftCard = styled(Flex)`
   overflow: auto;
 `;
 const CenterCard = styled(Box)`
-  width: 670px;
+  /* width: 670px; */
   flex: 1;
-  margin: 0 15px;
+  /* margin: 0 15px; */
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
@@ -46,8 +45,7 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
-  useReadArticle()
-
+  useReadArticle();
   /**
    * @review
    * 看着想刷新 但在ArticleList传值是用的key
@@ -103,11 +101,11 @@ const Home: React.FC = (props: any) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
-        <LeftCard>
+        {/* <LeftCard>
           <Affix offsetTop={0} positionObj={{}}>
             <Menu />
           </Affix>
-        </LeftCard>
+        </LeftCard> */}
         <CenterCard>
           {/**
            * @review
@@ -116,16 +114,7 @@ const Home: React.FC = (props: any) => {
            * 3.Header 组件应该为公共组件
            * 4.字符串拼接
            */}
-          <Header
-            {...props}
-            back={match.path === '/topicList/:id/:name'}
-            align={match.path === '/topicList/:id/:name' ? 'center' : null}
-            title={
-              match.path === '/topicList/:id/:name'
-                ? '#' + match.params.name + '#'
-                : t('homeHeaderTitle')
-            }
-          />
+          <Header {...props} title={t('homeHeaderTitle')} />
           {/**
            * @review
            * 1.应该使用Route组件
@@ -145,18 +134,17 @@ const Home: React.FC = (props: any) => {
             {...props}
           />
         </CenterCard>
-        <RightCard>
+        {/* <RightCard>
           <Affix offsetTop={0} positionObj={{}}>
             <>
               <Search />
-              {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
               <Swap />
               <RecommendPeople />
               <HotTopic {...props} />
               <FooterCopyright />
             </>
           </Affix>
-        </RightCard>
+        </RightCard> */}
       </Flex>
     </PageContainer>
   );

@@ -8,8 +8,7 @@ import { useDispatch } from 'react-redux';
 import { fetchThunk } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, ToastComponents } from 'components';
-import MenuNav from 'components/MenuNav';
-import PageContainer from 'components/MenuNav/PageContainer';
+import PageContainer from 'components/Layout/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
 
@@ -28,6 +27,7 @@ const Home = React.lazy(() => import('./view/Home'));
 const ArticleDetilsLayout = React.lazy(
   () => import('./components/Layout/ArticleDetilsLayout')
 );
+const TopicList = React.lazy(() => import('./view/TopicList'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
@@ -55,21 +55,20 @@ function App() {
       <Container id="bg">
         {/* TODO: 把左侧导航栏提成公共组件 放到这个位置 */}
         <PageContainer>
-          <MenuNav />
           <React.Suspense fallback={<PageLoader />}>
             <AccountUpdater />
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
               <Route path="/login" exact component={Login} />
-              <Route
-                path="/topicList/:id/:name"
-                render={props => <Home {...props} />}
-              />
+              <Route path="/topicList/:id/:name" component={TopicList} />
               <Route
                 path="/articleDetils/:id"
                 render={props => <ArticleDetilsLayout {...props} />}
               />
-              <Route path="/news" render={props => <CommonLayout {...props} />} />
+              <Route
+                path="/news"
+                render={props => <CommonLayout {...props} />}
+              />
               <Route path="/exchange" component={Exchange} />
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />

@@ -19,10 +19,19 @@ const Card = styled(Flex)`
   }
 `;
 
+const CenterBox = styled(Box)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+`;
+
 export const Crumbs: React.FC<{
   title?: string;
+  centerTitle?: string;
   back?: boolean;
-}> = React.memo(({ back, title }) => {
+}> = React.memo(({ back, title, centerTitle }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const colors = theme.colors.white_black;
@@ -39,12 +48,21 @@ export const Crumbs: React.FC<{
         <Flex
           onClick={goBack}
           alignItems="center"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', position: 'relative', width: '100%' }}
         >
-          <Icon name={'icon-fanhui'} size={20} color={colors} bold />
-          <Text className="text" ml="16px">
-            {t('newsBack')}
-          </Text>
+          <Flex alignItems="center">
+            <Icon name={'icon-fanhui'} size={20} color={colors} bold />
+            <Text className="text" ml="16px">
+              {t('newsBack')}
+            </Text>
+          </Flex>
+          {centerTitle && (
+            <CenterBox>
+              <Text className="text" ml="16px">
+                {centerTitle}
+              </Text>
+            </CenterBox>
+          )}
         </Flex>
       )}
     </Card>

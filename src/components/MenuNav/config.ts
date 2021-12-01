@@ -1,3 +1,10 @@
+export const pathConfig = {
+  messageAtMePath: '/news/me',
+  messageCommentPath: '/news/comment',
+  messageLikePath: '/news/praise',
+  messageNoticePath: '/news/notice'
+};
+
 const config = [
   {
     icon: 'icon-shouye',
@@ -15,30 +22,33 @@ const config = [
   {
     icon: 'icon-xiaoxi',
     activeIcon: 'icon-xiaoxi1',
-    path: '/news/me',
-    badge: true,
-    count: 0,
+    path: pathConfig.messageAtMePath,
+    badgeName: 'mineTotalMsgNum',
     lable: 'homeMenuNews',
     children: [
       {
         icon: 'icon-aite',
-        path: '/news/me',
+        path: pathConfig.messageAtMePath,
         lable: 'newsMeMenuTitle',
-        coming: false,
+        badgeName: 'message_at_me',
+        coming: false
       },
       {
         icon: 'icon-pinglun',
-        path: '/news/comment',
+        path: pathConfig.messageCommentPath,
+        badgeName: 'message_comment',
         lable: 'newsCommentMenuTitle'
       },
       {
         icon: 'icon-aixin',
-        path: '/news/praise',
+        path: pathConfig.messageLikePath,
+        badgeName: 'message_like',
         lable: 'newsPraiseMenuTitle'
       },
       {
         icon: 'icon-xiaoxi',
-        path: '/news/notice',
+        badgeName: 'message_secret',
+        path: pathConfig.messageNoticePath,
         lable: 'newsNoticeMenuTitle'
       }
     ]
@@ -47,7 +57,7 @@ const config = [
     icon: 'icon-youxiang',
     activeIcon: 'icon-youxiang1',
     path: '/',
-    badge: true,
+    badgeName: 'letter',
     coming: true,
     count: 0,
     lable: 'homeMenuLetter'
@@ -69,8 +79,25 @@ const config = [
     icon: 'icon-w31shezhi',
     activeIcon: 'icon-a-31shezhi1',
     path: '/set/safeset',
-    lable: 'homeMenuSet'
+    lable: 'homeMenuSet',
+    Children: [
+      {
+        icon: 'icon-gerenxinxi',
+        lable: 'setMenuAccountSecurity',
+        path: '/set/safeset'
+      },
+      {
+        icon: 'icon-xiaoxi',
+        lable: 'setMenuNotification',
+        path: '/set/noticeset'
+      },
+      {
+        icon: 'icon-aixin',
+        lable: 'setMenuPreference',
+        path: '/set/likeset'
+      }
+    ]
   }
-]
+];
 
-export default config
+export default config;
