@@ -53,16 +53,12 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   }, [])
   return (
     <PageContainer>
-      <Flex justifyContent="space-between">
-        <Affix offsetTop={0} positionObj={{
-          top: '0',
-          left: '50%',
-          marginLeft: '-550px'
-        }}>
+      <Flex justifyContent="space-between" width="100%">
           <LeftCard>
+        <Affix offsetTop={0}>
             <Menu></Menu>
-          </LeftCard>
         </Affix>
+          </LeftCard>
         <CenterCard>
           <Header back title={t('newsBack')} {...props}></Header>
           <MeItemWrapper>
@@ -90,7 +86,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <Editor type="comment" sendArticle={sendArticle}></Editor>
           <CommentList key={refresh} itemData={itemData}></CommentList>
         </CenterCard>
-        <Affix offsetTop={0} positionObj={{
+        {/* <Affix offsetTop={0} positionObj={{
           top: '0',
           right: '50%',
           marginRight: '-660px'
@@ -98,13 +94,23 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <RightCard style={{
             marginTop: '-15px'
           }}>
-            {/* <Search></Search> */}
-            {/* <Swap></Swap> */}
             <RecommendPeople></RecommendPeople>
             <HotTopic {...props}></HotTopic>
             <FooterCopyright></FooterCopyright>
           </RightCard>
-        </Affix>
+        </Affix> */}
+        <RightCard>
+          <Affix offsetTop={0} positionObj={{}}>
+            <>
+              <Search />
+              {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
+              <Swap />
+              <RecommendPeople />
+              <HotTopic {...props} />
+              <FooterCopyright />
+            </>
+          </Affix>
+        </RightCard>
       </Flex>
     </PageContainer>
   )

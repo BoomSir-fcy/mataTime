@@ -22,7 +22,7 @@ type Iprops = {
 //         <ImgListBox style={{ overflowX: isMore ? 'auto' : 'hidden' }} onClick={(e) => e.stopPropagation()}>
 //         {
 //           modalIsOpen ?
-//             <ModalGateway>
+//             <ModalGateway >
 //               <Modal onClose={() => setModalIsOpen(false)}>
 //                 <Carousel views={previewImgList} />
 //               </Modal>
@@ -50,14 +50,8 @@ type Iprops = {
 // }
 export const ImgList = (props: Iprops) => {
   const { list = [] } = props
-  // const list = ['https://static.social.qgx.io/post/8d579491-4519-4a15-8f9b-14e58524a376.jpg','https://static.social.qgx.io/post/8d579491-4519-4a15-8f9b-14e58524a376.jpg','https://static.social.qgx.io/post/8d579491-4519-4a15-8f9b-14e58524a376.jpg']
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [isMore, setIsore] = useState(false)
   const [previewImgList, setPreviewImgList] = useState([])
-  const clickMore = (e) => {
-    e.stopPropagation()
-    setIsore(true)
-  }
   const preViewImg = (index) => {
     setPreviewImgList([...list.slice(index), ...list.slice(0, index)].map(item => ({ source: item })))
     setModalIsOpen(true)
@@ -69,7 +63,7 @@ export const ImgList = (props: Iprops) => {
           modalIsOpen ?
             <ModalGateway>
               <Modal onClose={() => setModalIsOpen(false)}>
-                <Carousel views={previewImgList} />
+                <Carousel views={previewImgList}  />
               </Modal>
             </ModalGateway>
             : null

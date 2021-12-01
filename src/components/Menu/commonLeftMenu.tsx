@@ -99,13 +99,14 @@ type IProps = {
 export const CommonLeftMenu = React.memo((props: IProps) => {
   const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
+  const notification = useSelector((state: any) => state.appReducer.systemCustom.notification);
   const { pathname } = props.route;
   const [msgNum, setMsgNum] = useState<any>({});
 
   useEffect(() => {
     getMsgNumRequest();
-    const currentMenuItemKey = (props.menu.find(item=>item.link===pathname)||{}).alias
-    if(currentMenuItemKey){
+    const currentMenuItemKey = (props.menu.find(item => item.link === pathname) || {}).alias
+    if (currentMenuItemKey) {
       getMsgReadRequest(currentMenuItemKey)
     }
   }, []);
@@ -168,7 +169,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
             >
               <MenuIcon>
                 <Icon color={isDark ? '#ffffff' : '#7A83A0'} name={item.icon}></Icon>
-                {msgNum[item.alias] ? <span>{msgNum[item.alias]}</span> : null}
+                {msgNum[item.alias] && notification ? <span>{msgNum[item.alias]}</span> : null}
               </MenuIcon>
               {/* <MenuText>{item.name}</MenuText> */}
               <MenuText>{t(item.transaltion)}</MenuText>

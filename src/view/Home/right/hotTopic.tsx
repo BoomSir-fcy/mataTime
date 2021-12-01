@@ -4,7 +4,7 @@ import { Flex, Box, Card, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { Avatar, Icon } from 'components';
 import { Api } from 'apis';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const HotTopicBox = styled(Card)`
@@ -67,7 +67,7 @@ export const HotTopic: React.FC = (props: any) => {
   };
 
   return (
-    <HotTopicBox isShadow isRadius>
+    <HotTopicBox isBoxShadow isRadius>
       <Flex justifyContent="space-between">
         <TitleText>{t('HotTopicTitle')}</TitleText>
         <Icon
@@ -81,11 +81,11 @@ export const HotTopic: React.FC = (props: any) => {
       <Box>
         {hotTopicList.map((item, index) => (
           <HotItem key={item.tid} justifyContent="space-between">
-            <Hot >
-            <Link to={'/topicList/' + item.tid + '/' + item.topic_name}>
-              #{item.topic_name}#
+            <Hot>
+              <Link to={'/topicList/' + item.tid + '/' + item.topic_name}>
+                #{item.topic_name}#
               </Link>
-              </Hot>
+            </Hot>
             <HotCount>
               {item.post_num > 999 ? '999+' : item.post_num}
               {t('HotTopicUnit')}
