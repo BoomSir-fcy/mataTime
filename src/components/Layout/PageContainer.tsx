@@ -34,6 +34,7 @@ const LineStyled = styled(Box)`
 const InnerBox = styled(Flex)`
   position: sticky;
   top: 0;
+  z-index: 2;
 `;
 
 const PageContainer: React.FC = ({ children }) => {

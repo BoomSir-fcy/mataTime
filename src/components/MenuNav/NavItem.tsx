@@ -28,20 +28,22 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, act
     return (
       <NavItemStyled onClick={() => toastInfo(t('Coming Soon!'))} mt="1px" alignItems="center" padding="28px 14px">
         <IconBox>
-          {icon}
-          { typeof badge === 'number' && <Badge>{badgeDispaly}</Badge> }
+          {/* {icon} */}
+          <Icon name={icon} color={isActive ? 'white_black' : 'textSubtle'} />
+          {typeof badge === 'number' && <Badge>{badgeDispaly}</Badge>}
         </IconBox>
-        <Text ml="20px" fontSize="18px" bold={isActive} color={isActive ? 'white_black' : 'textSubtle' } >{t(lable)}</Text>
+        <Text ml="20px" fontSize="18px" bold={isActive} color={isActive ? 'white_black' : 'textSubtle'} >{t(lable)}</Text>
       </NavItemStyled>
-    )  
+    )
   }
   return (
     <NavItemStyled active={isActive} as={Link} to={path} mt="1px" alignItems="center" padding="28px 14px">
       <IconBox>
-        { isActive ? (activeIcon || icon) : icon}
-        { typeof badge === 'number' && <Badge>{badgeDispaly}</Badge> }
+        {/* {isActive ? (activeIcon || icon) : icon} */}
+        <Icon name={isActive ? (activeIcon || icon) : icon} color={isActive ? 'white_black' : 'textSubtle'} />
+        {typeof badge === 'number' && <Badge>{badgeDispaly}</Badge>}
       </IconBox>
-      <Text ml="20px" fontSize="18px" bold={isActive} color={isActive ? 'white_black' : 'textSubtle' } >{t(lable)}</Text>
+      <Text ml="20px" fontSize="18px" bold={isActive} color={isActive ? 'white_black' : 'textSubtle'} >{t(lable)}</Text>
     </NavItemStyled>
   )
 }
