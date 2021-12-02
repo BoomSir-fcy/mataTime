@@ -119,6 +119,47 @@ const config = [
     ]
   },
   {
+    path: '/me',
+    children: [
+      {
+        icon: 'icon-gerenxinxi',
+        activeIcon: 'icon-gerenxinxi1',
+        lable: 'meMenuHome',
+        path: '/me'
+      },
+      {
+        icon: 'icon-e31guanzhu',
+        activeIcon: 'icon-e31guanzhuxuanzhong',
+        lable: 'meMenuFollow',
+        path: '/me/follow'
+      },
+      {
+        icon: 'icon-aixin',
+        activeIcon: 'icon-aixin1',
+        lable: 'meMenuFans',
+        path: '/me/fans'
+      },
+      {
+        icon: 'icon-dianzan',
+        activeIcon: 'icon-dianzan1',
+        lable: 'meMenuLink',
+        path: '/me/praise'
+      },
+      {
+        icon: 'icon-shoucang',
+        activeIcon: 'icon-shoucang1',
+        lable: 'meMenuFav',
+        path: '/me/collect'
+      }
+      // {
+      //   icon: 'icon-pingbi1',
+      //   activeIcon: 'icon-pingbi',
+      //   title: 'meMenuShield',
+      //   path: '/me/shield',
+      // },
+    ]
+  },
+  {
     icon: 'icon-w31shezhi',
     activeIcon: 'icon-a-31shezhi1',
     path: '/set/safeset',
@@ -143,8 +184,6 @@ const config = [
   }
 ];
 
-export const hideLeftNavPath = [
-  '/login'
-]
+export const hideLeftNavPath = ['/login'];
 
-export default config
+export default config;

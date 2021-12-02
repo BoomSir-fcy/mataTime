@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Editor, Avatar } from 'components';
-import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { useToast } from 'hooks';
+import { Icon, Editor, Avatar } from 'components';
+
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 import {
   ModalWrapper,
@@ -24,6 +26,8 @@ type IProp = {
 
 export const ReplyModal = React.memo((props: IProp) => {
   const userInfo = useSelector((state: any) => state.loginReducer.userInfo);
+  const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const {
     show,
     onClose,
@@ -44,8 +48,10 @@ export const ReplyModal = React.memo((props: IProp) => {
         comment: res
       }).then(res => {
         if (Api.isSuccess(res)) {
-          toast.success(res.data);
+          toastSuccess(res.data);
           onClose();
+        } else {
+          toastError(t('commonContactAdmin') || res.msg);
         }
       });
     }
@@ -56,8 +62,10 @@ export const ReplyModal = React.memo((props: IProp) => {
         comment: res
       }).then(res => {
         if (Api.isSuccess(res)) {
-          toast.success(res.data);
+          toastSuccess(res.data);
           onClose();
+        } else {
+          toastError(t('commonContactAdmin') || res.msg);
         }
       });
     }
