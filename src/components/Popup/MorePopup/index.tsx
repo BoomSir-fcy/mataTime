@@ -28,7 +28,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
 
-  const { children, data, callback = () => {} } = props;
+  const { children, data, callback = () => { } } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [editShow, setEditShow] = useState<boolean>(false);
@@ -39,11 +39,13 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   useEffect(() => {
     init();
-  }, []);
+  }, [props.data]);
 
   //  初始化
   const init = () => {
     // UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
+    console.log('UID:', UID)
+    console.log('data:', data)
     UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false);
   };
 
@@ -207,7 +209,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   }, []);
 
   const initEvent = () => {
-    document.onclick = () => {};
+    document.onclick = () => { };
   };
 
   return (
@@ -279,8 +281,8 @@ export const MorePopup = React.memo((props: Iprops) => {
               onClick={() => {
                 copyContent(
                   process.env.REACT_APP_WEB_URL +
-                    '/articleDetils/' +
-                    data.post.post_id || ''
+                  '/articleDetils/' +
+                  data.post.post_id || ''
                 );
               }}
             >

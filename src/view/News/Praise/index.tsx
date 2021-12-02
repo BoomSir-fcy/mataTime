@@ -129,7 +129,7 @@ const NewsPraise: React.FC = props => {
                     size={'small'}
                   ></MentionItem>
                 </div>
-                <MentionOperator
+                {/* <MentionOperator
                   hasLike={false}
                   replyType={'comment'}
                   postId={item.post.post_id}
@@ -147,7 +147,7 @@ const NewsPraise: React.FC = props => {
                   callback={(item: any, type?: MoreOperatorEnum) => {
                     updateList(item, type);
                   }}
-                />
+                /> */}
               </PraiseItemWrapper>
             );
           }
