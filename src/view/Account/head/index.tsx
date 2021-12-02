@@ -23,8 +23,10 @@ const Card = styled(Flex)`
     margin-right: 10px;
   }
 `;
-
-export const WalletHead: React.FC = React.memo(() => {
+interface init {
+  title: string
+}
+export const WalletHead: React.FC<init> = React.memo(({ title }) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -34,7 +36,7 @@ export const WalletHead: React.FC = React.memo(() => {
 
   return (
     <Card>
-      <Text className="text">我的钱包</Text>
+      <Text className="text">{title}</Text>
       <Flex alignItems='center'>
         <img src={require('assets/images/myWallet/broadcast.png').default} alt="" />
         <Text mr='10px' fontSize='14px' color='textTips'>

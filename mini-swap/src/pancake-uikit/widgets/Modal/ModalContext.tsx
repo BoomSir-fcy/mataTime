@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Overlay from "../../components/Overlay/Overlay";
 import { Handler } from "./types";
@@ -36,6 +36,8 @@ export const Context = createContext<ModalsContext>({
   setCloseOnOverlayClick: () => true,
 });
 
+const OPEN_CLASS_NAME = 'mini-swap-Modal__Body--open'
+
 const ModalProvider: React.FC = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalNode, setModalNode] = useState<React.ReactNode>();
@@ -59,6 +61,14 @@ const ModalProvider: React.FC = ({ children }) => {
       handleDismiss();
     }
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.className = `${document.body.className} ${OPEN_CLASS_NAME}`
+    } else {
+      document.body.className = `${document.body.className}`.replaceAll(OPEN_CLASS_NAME, '')
+    }
+  }, [isOpen])
 
   return (
     <Context.Provider

@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { Container } from 'components'
 import WalletBox from './walletBox'
 import Recharge from './Recharge'
-import { getTimeAddress } from 'utils/addressHelpers';
-import { useTokenBalance } from 'view/exchange/hook';
+import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
 import { useFetchWalletInfo, useFetchApproveNum } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
@@ -13,6 +12,9 @@ import { formatDisplayApr } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
 import Matter from './Matter';
+import { useTokenBalance } from '../ExchangeTime/hook';
+import { WalletHead } from '../../head';
+import { useTranslation } from 'contexts/Localization';
 
 const NoPdBottom = styled(Container)`
 padding: 0;
@@ -59,6 +61,7 @@ height: 36px;
 const TokenAccount: React.FC = () => {
   useFetchWalletInfo()
   useFetchApproveNum()
+  const { t } = useTranslation();
   const { account } = useWeb3React()
   const info = {
     address: "",
@@ -72,6 +75,7 @@ const TokenAccount: React.FC = () => {
   const [MatterInfo, setMatterInfo] = useState(info)
   const [ActiveTab, setActiveTab] = useState(1)
   const timeAddress = getTimeAddress()
+  const MatterAddress = getMatterAddress()
   const { balance: timeBalance } = useTokenBalance(timeAddress)
   const BalanceList = useStore(p => p.wallet.wallet);
   const getMyBalance = async () => {
@@ -93,7 +97,8 @@ const TokenAccount: React.FC = () => {
   }, [BalanceList, account])
   return (
     <NoPdBottom>
-      <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
+      <WalletHead title={t('我的钱包')} />
+      <Flex flexWrap='wrap' justifyContent='space-between'>
         <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
         <Recharge balance={timeBalance} TokenAddr={timeAddress} />
       </Flex>
@@ -128,7 +133,7 @@ const TokenAccount: React.FC = () => {
             <EarningsRecord type={ActiveTab} />
           </>
           :
-          <Matter />
+          <Matter BalanceInfo={MatterInfo} TokenAddr={MatterAddress} />
       }
     </NoPdBottom>
   )

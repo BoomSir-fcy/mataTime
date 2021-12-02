@@ -6,6 +6,7 @@ import { appReducer, appAction, App } from './app';
 import { toastContainer } from './app/actions';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from './login';
 import coinsReduce from './coins/reducer';
+import * as coinsAction from './coins/actions';
 import walletReduce from './wallet/reducer';
 import poolsReduce from './pools';
 import type { CoinsState } from './coins/reducer';
@@ -41,7 +42,8 @@ export const store = configureStore({
 
 export const storeAction = {
   ...loginAction,
-  ...appAction
+  ...appAction,
+  ...coinsAction
 };
 export const fetchThunk = {
   fetchUserInfoAsync
