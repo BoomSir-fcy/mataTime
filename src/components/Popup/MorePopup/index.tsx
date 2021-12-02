@@ -43,9 +43,6 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   //  初始化
   const init = () => {
-    // UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false)
-    console.log('UID:', UID)
-    console.log('data:', data)
     UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false);
   };
 
@@ -204,24 +201,16 @@ export const MorePopup = React.memo((props: Iprops) => {
       setVisible(false);
     };
     document.addEventListener('click', fn);
-    initEvent();
     return () => document.removeEventListener('click', fn);
   }, []);
 
-  const initEvent = () => {
-    document.onclick = () => { };
-  };
 
   return (
     <>
       <PopupWrapper
-        onMouseOver={(e: any) => {
+        onClick={(e: any) => {
           e.stopPropagation();
           setVisible(true);
-        }}
-        onMouseLeave={(e: any) => {
-          e.stopPropagation();
-          setVisible(false);
         }}
       >
         {children}
