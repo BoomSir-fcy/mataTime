@@ -12,10 +12,6 @@ const HotTopicBox = styled(Card)`
   margin-top: 15px;
   padding: 20px 18px;
 `;
-const TitleText = styled(Text)`
-  font-weight: bold;
-  font-size: 18px;
-`;
 const Hot = styled.span`
   flex: 1;
   text-overflow: ellipsis;
@@ -31,11 +27,8 @@ const Hot = styled.span`
 `;
 const HotCount = styled.span`
   font-size: 16px;
-  min-width: 80px;
+  text-align: right;
   color: ${({ theme }) => (theme.isDark ? '#B5B5B5' : '#7A83A0')};
-`;
-const HotItem = styled(Flex)`
-  margin-top: 20px;
 `;
 
 const HotTopic: React.FC = () => {
@@ -62,10 +55,13 @@ const HotTopic: React.FC = () => {
       }
     });
   };
+
   return (
     <HotTopicBox isBoxShadow isRadius>
-      <Flex justifyContent="space-between">
-        <TitleText>{t('HotTopicTitle')}</TitleText>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text fontWeight="bold" fontSize="18px">
+          {t('HotTopicTitle')}
+        </Text>
         <Icon
           current={1}
           onClick={getList.bind(this, true)}
@@ -74,23 +70,28 @@ const HotTopic: React.FC = () => {
           color="#7393FF"
         />
       </Flex>
-      <Box>
+      <Flex justifyContent="space-between" flexDirection="column">
         {hotTopicList.map((item, index) => (
-          <HotItem key={item.tid} justifyContent="space-between">
+          <Flex
+            key={`${item.tid}_${index}`}
+            mt="20px"
+            justifyContent="space-between"
+          >
             <Hot>
-              <Link to={'/topicList/' + item.tid + '/' + item.topic_name}>
+              <Link to={`/topicList/${item.tid}/${item.topic_name}`}>
                 #{item.topic_name}#
               </Link>
             </Hot>
             <HotCount>
-              {item.post_num > 999 ? '999+' : item.post_num}
-              {t('HotTopicUnit')}
+              {t('HotTopicUnit', {
+                value: item.post_num > 999 ? '999+' : item.post_num
+              })}
             </HotCount>
-          </HotItem>
+          </Flex>
         ))}
-      </Box>
+      </Flex>
     </HotTopicBox>
   );
 };
 
-export default HotTopic
+export default HotTopic;

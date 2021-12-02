@@ -31,15 +31,11 @@ export const MentionItemUserWrapper = styled.div`
         align-items: center;
         .user-name {
           font-size: 18px;
-          font-family: Alibaba PuHuiTi;
           font-weight: bold;
         }
         .time {
           margin-top: 5px;
           font-size: 14px;
-          font-family: Alibaba PuHuiTi;
-          font-weight: 400;
-          color: #b5b5b5;
           span {
             margin-right: 20px;
           }
@@ -95,13 +91,11 @@ export const MentionItemUserWrapper = styled.div`
           }
           .user-name {
             font-size: 14px;
-            font-family: Alibaba PuHuiTi;
             font-weight: bold;
           }
           .time {
             margin-top: 5px;
             font-size: 14px;
-            font-family: Alibaba PuHuiTi;
             font-weight: 400;
             color: #b5b5b5;
             span {

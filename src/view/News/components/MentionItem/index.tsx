@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import commentIcon from 'assets/images/social/comment.png';
-import moreIcon from 'assets/images/social/more.png';
-import { relativeTime } from 'utils';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -15,12 +12,17 @@ import {
   FollowPopupD,
   ContentParsing
 } from 'components';
+import { Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
+import { relativeTime } from 'utils/timeFormat';
 
 import { Api } from 'apis';
 
 import { MentionItemWrapper, MentionItemUserWrapper, FollowBtn } from './style';
+
+import commentIcon from 'assets/images/social/comment.png';
+import moreIcon from 'assets/images/social/more.png';
 
 type IProps = {
   more?: boolean;
@@ -125,30 +127,6 @@ export const MentionItemUser: React.FC<UserProps> = ({
   itemData = {},
   callback = () => {}
 }) => {
-  const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
-  const [isOwn, setIsOwn] = useState<boolean>(false);
-  const [followShow, setFollowShow] = useState(false);
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    init();
-  }, []);
-
-  //  初始化
-  const init = () => {
-    UID === itemData.user_id ? setIsOwn(true) : setIsOwn(false);
-  };
-
-  // 关注用户
-  const onAttentionFocusRequest = async (focus_uid: number) => {
-    const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
-    if (Api.isSuccess(res)) {
-      toast.success(res.data);
-      callback(itemData, MoreOperatorEnum.FOLLOW);
-    } else {
-      toast.error(res.data);
-    }
-  };
   return (
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
@@ -162,43 +140,28 @@ export const MentionItemUser: React.FC<UserProps> = ({
           </Link>
           <div className="user-info">
             <div>
-              <div className="user-name">
+              <Text className="user-name">
                 {itemData.user_name || itemData.nick_name}
-              </div>
-              <div className="time">
+              </Text>
+              <Text color="textTips" className="time">
                 <span>@{shortenAddress(itemData.user_address)}</span>
                 {itemData.add_time_desc || itemData.post_time_desc}
-              </div>
+              </Text>
             </div>
           </div>
         </div>
-        {more ? (
+        {more && (
           <div className="user-right-wrapper">
-            {/* {!isOwn && itemData.is_attention === 0 ? (
-              <FollowBtn
-                onClick={() => {
-                  onAttentionFocusRequest(itemData.user_id);
-                }}
-              >
-                +{t('followText')}
-              </FollowBtn>
-            ) : null} */}
             <MorePopup
               data={itemData}
               callback={(data: any, type: MoreOperatorEnum) => {
                 callback(data, type);
               }}
             >
-              <img
-                src={moreIcon}
-                onClick={() => {
-                  setFollowShow(true);
-                }}
-                alt="more"
-              />
+              <img src={moreIcon} alt="more" />
             </MorePopup>
           </div>
-        ) : null}
+        )}
       </div>
     </MentionItemUserWrapper>
   );
