@@ -13,7 +13,6 @@ import { useTranslation } from 'contexts/Localization';
 const Content = styled(Flex)`
 flex-direction: column;
 justify-content:space-between;
-min-height: 175px;
 flex: 1;
 min-width: 300px;
 /* background:${({ theme }) => theme.card.background}; */

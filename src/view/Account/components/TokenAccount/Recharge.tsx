@@ -21,7 +21,6 @@ import HistoryModal from './Pops/HistoryModal';
 const Content = styled(Box)`
 flex: 1;
 min-width: 60%;
-min-height: 175px;
 ${({ theme }) => theme.mediaQueriesSize.padding}
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `

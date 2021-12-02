@@ -15,6 +15,8 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import Dots from 'components/Loader/Dots';
 import { useImmer } from 'use-immer';
+import { WalletHead } from '../../head';
+import { useTranslation } from 'contexts/Localization';
 
 
 const Center = styled(Flex)`
@@ -25,6 +27,7 @@ margin: 0 auto;
 `
 
 const Exchange: React.FC = () => {
+  const { t } = useTranslation();
   const { account } = useWeb3React()
   const [approvedNum, setapprovedNum] = useState(0)
   const [TimeShopInfo, setTimeShopInfo] = useState({
@@ -120,41 +123,44 @@ const Exchange: React.FC = () => {
     }
   }, [account])
   return (
-    <Center flexDirection='column' justifyContent='center' alignItems='center'>
-      <div>
-        当前周期：{TimeShopInfo.times} <br />
-        最大Dsg兑换量：{TimeShopInfo.max_dsg_token}<br />
-        最大Time兑换量：{TimeShopInfo.max_time_token}<br />
-        立即获得百分比：{new BigNumber(TimeShopInfo.right_now_release).div(10000).times(100).toString()}%<br />
-        当前总Dsg：{TimeShopInfo.total_dsg}<br />
-        当前可领取Time：{rewardNum}<br />
-        当前Time余额：{Number(timeBalance)}<br />
-        <Button disabled={Receiving || rewardNum <= 0} onClick={handleReward}>{Receiving ? <Dots>领取中</Dots> : '领取'}</Button>
-      </div>
-      <Flex flexDirection='column'>
-        <Input type="number" value={inputNum.Dsg} onChange={event =>
-          setinputNum(p => {
-            p.Dsg = event.target.value;
-            p.Time = new BigNumber(Number(event.target.value)).times(new BigNumber(TimeShopInfo?.max_time_token).div(TimeShopInfo?.max_dsg_token)).toString()
-          })
-        } />DSG余额{Number(balance)}
-        <Input type="number" value={inputNum.Time} onChange={event =>
-          setinputNum(p => {
-            p.Dsg = new BigNumber(Number(event.target.value)).div(new BigNumber(TimeShopInfo?.max_time_token).div(TimeShopInfo?.max_dsg_token)).toString();
-            p.Time = event.target.value
-          })
-        } />Time
-        <Button disabled={pending} onClick={async () => {
-          if (approvedNum > 0) {
-            // 兑换
-            await handleExchange()
-          } else {
-            // 授权
-            await handleApprove()
-          }
-        }}>{pending ? <Dots>{approvedNum > 0 ? "兑换中" : "授权中"}</Dots> : approvedNum > 0 ? "兑换" : "授权"}</Button>
-      </Flex>
-    </Center>
+    <>
+      <WalletHead title={t('Time兑换')} />
+      <Center flexDirection='column' justifyContent='center' alignItems='center'>
+        <div>
+          当前周期：{TimeShopInfo.times} <br />
+          最大Dsg兑换量：{TimeShopInfo.max_dsg_token}<br />
+          最大Time兑换量：{TimeShopInfo.max_time_token}<br />
+          立即获得百分比：{new BigNumber(TimeShopInfo.right_now_release).div(10000).times(100).toString()}%<br />
+          当前总Dsg：{TimeShopInfo.total_dsg}<br />
+          当前可领取Time：{rewardNum}<br />
+          当前Time余额：{Number(timeBalance)}<br />
+          <Button disabled={Receiving || rewardNum <= 0} onClick={handleReward}>{Receiving ? <Dots>领取中</Dots> : '领取'}</Button>
+        </div>
+        <Flex flexDirection='column'>
+          <Input type="number" value={inputNum.Dsg} onChange={event =>
+            setinputNum(p => {
+              p.Dsg = event.target.value;
+              p.Time = new BigNumber(Number(event.target.value)).times(new BigNumber(TimeShopInfo?.max_time_token).div(TimeShopInfo?.max_dsg_token)).toString()
+            })
+          } />DSG余额{Number(balance)}
+          <Input type="number" value={inputNum.Time} onChange={event =>
+            setinputNum(p => {
+              p.Dsg = new BigNumber(Number(event.target.value)).div(new BigNumber(TimeShopInfo?.max_time_token).div(TimeShopInfo?.max_dsg_token)).toString();
+              p.Time = event.target.value
+            })
+          } />Time
+          <Button disabled={pending} onClick={async () => {
+            if (approvedNum > 0) {
+              // 兑换
+              await handleExchange()
+            } else {
+              // 授权
+              await handleApprove()
+            }
+          }}>{pending ? <Dots>{approvedNum > 0 ? "兑换中" : "授权中"}</Dots> : approvedNum > 0 ? "兑换" : "授权"}</Button>
+        </Flex>
+      </Center>
+    </>
   )
 }
 export default Exchange

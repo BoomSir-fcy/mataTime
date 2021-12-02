@@ -88,7 +88,6 @@ const config = [
       {
         icon: 'icon-qitawenti',
         activeIcon: 'icon-qitawenti1',
-        coming: true,
         title: 'Time兑换',
         path: '/account/time',
         lable: 'AccountMenu Time'

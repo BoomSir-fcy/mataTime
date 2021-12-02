@@ -76,6 +76,9 @@ export const lightColors: Colors = {
   protrudeColor: '#FFFFFF',
   disableStep: '#4D535F',
   ThemeText: '#4168ED',
+  taskDay: '#AABFFF',
+  taskWeek: '#4168ED',
+  taskAchievement: '#F5C51D',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
@@ -148,6 +151,9 @@ export const darkColors: Colors = {
   protrudeColor: '#4168ED',
   disableStep: '#4D535F',
   ThemeText: '#4168ED',
+  taskDay: '#AABFFF',
+  taskWeek: '#4168ED',
+  taskAchievement: '#F5C51D',
   gradients: {
     footer: '#191F2D',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',

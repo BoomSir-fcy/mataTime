@@ -29,6 +29,9 @@ export const getDsgAddress = () => {
 export const getTimeAddress = () => {
   return getAddress(addresses.TimeToken)
 }
+export const getMatterAddress = () => {
+  return getAddress(addresses.MatterToken)
+}
 export const getOracleAddress = () => {
   return getAddress(addresses.oracle)
 }
