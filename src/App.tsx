@@ -16,6 +16,7 @@ import useEagerConnect from 'hooks/useEagerConnect';
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
+import HttpUpdater from './view/Updater/HttpUpdater';
 
 // XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
 import 'dayjs/locale/zh-cn';
@@ -47,6 +48,11 @@ function App() {
   useEffect(() => {
     Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
   }, [token, dispatch]);
+  // useEffect(() => {
+  //   eventBus.addEventListener('http', (data) => {
+  //     console.log('==========', data)
+  //   })
+  // }, [])
 
   return (
     <Router history={history}>
@@ -56,6 +62,7 @@ function App() {
         <PageContainer>
           <React.Suspense fallback={<PageLoader />}>
             <AccountUpdater />
+            <HttpUpdater />
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
               <Route path="/login" exact component={Login} />

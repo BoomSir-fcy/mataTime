@@ -1,11 +1,12 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import eventBus from '../utils/eventBus';
 import { storage } from 'config';
 import history from '../routerHistory';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
     ? process.env.REACT_APP_API_HOST
-    : 'https://api.social.qgx.io/';
+    : 'http://192.168.101.122:8888';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
@@ -17,6 +18,9 @@ axios.defaults.headers.get.Accept = 'application/json';
 
 axios.interceptors.response.use(
   response => {
+    eventBus.dispatchEvent(new MessageEvent('http', {
+      data: response.data,
+    }))
     if (response.data) {
       return response;
     }
@@ -43,7 +47,10 @@ export class Http {
       // }
       return response.data;
     } catch (e: any) {
-      if (e?.status === 401) return history.push('/login');
+      eventBus.dispatchEvent(new MessageEvent('httpError', {
+        data: e,
+      }))
+      // if (e?.status === 401) return history.push('/login');
     }
   }
 

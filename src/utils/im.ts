@@ -43,7 +43,8 @@ interface HandleEvent<T> {
 export class IM extends EventTarget {
   connection: WebSocket;
   interval: any;
-  url: string = `${process.env.React_APP_WS_URL}/v1/ws`;
+  url: string = `ws://192.168.101.122:8888/v1/ws`;
+  // url: string = `${process.env.React_APP_WS_URL}/v1/ws`;
   token: string;
 
   expires: number;
@@ -54,6 +55,8 @@ export class IM extends EventTarget {
   handleEvents: HandleEvent<unknown>[] = [];
   endConnect: boolean = false; // 是否结束链接
   nonce = 0; // Nonce, 类似消息ID
+
+  suspendTpl: MessageProtocol[] = []
 
   // 消息协议
   static MessageProtocol = MessageProtocol
