@@ -193,32 +193,13 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   // };
 
-  // const signIn = async () => {
-  //   //2.1 用户已经注册登录钱包签名
-  //   await window.ethereum.enable();
-  //   const res = await loginCallback(2);
-  //   if (Api.isSuccess(res)) {
-  //     //2.2 获取用户信息
-  //     const user: any = await getUserName();
-  //     //2.3
-  //     dispatch(storeAction.setSigninLoading(false));
-  //     if (Api.isSuccess(user)) {
-  //       // 存储userinfo 跳转首页
-  //       dispatch(storeAction.changeUpdateProfile({ ...user.data }));
-  //       history.replace(`${redict || '/'}`);
-  //     }
-  //   } else {
-  //     logout();
-  //     dispatch(storeAction.changeReset());
-  //     toastError(t('loginSigninFail') || res?.msg);
-  //   }
-  // };
 
   // 查询是否有质押的NFT
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
     // 已经质押走登录
     console.log('质押:', nftStake[0], account);
+
     if (nftStake.length > 0 && nftStake[0].token_id) {
       dispatch(storeAction.changeSignin({ isSignin: true }));
     } else {

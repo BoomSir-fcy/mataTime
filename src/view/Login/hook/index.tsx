@@ -17,6 +17,8 @@ import { storeAction, useStore } from 'store';
 import { useToast } from 'hooks';
 import { useTranslation } from 'contexts/Localization';
 
+
+
 // 获取nft头像授权信息
 export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
   const SocialAddress = getNftSocialAddress();
@@ -116,8 +118,6 @@ export const GetNftList = async (account) => {
 }
 export const FetchSupportNFT = async () => {
   // const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const { toastWarning, toastError } = useToast();
   const SocialAddress = getNftSocialAddress();
   const calls = [
     {
@@ -131,21 +131,24 @@ export const FetchSupportNFT = async () => {
     const supAddress = result.map(item => item.sup);
     return supAddress[0];
   } catch (error) {
-    toastError(t('Network error, please refresh and try again'))
     console.log(error);
     return [];
   }
 };
 
-// 获取质押的nft
+// 获取可用的nft
 export const useFetchSupportNFT = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
-
+  const { t } = useTranslation();
+  const { toastWarning, toastError } = useToast();
   const addr = useCallback(async () => {
     const add = await FetchSupportNFT();
+    if (!add.length) {
+      toastError(t('Network error, please refresh and try again'))
+    }
     dispatch(storeAction.setNftAddr(add));
-  }, [dispatch]);
+  }, [dispatch, toastError, t]);
 
   useEffect(() => {
     addr();
