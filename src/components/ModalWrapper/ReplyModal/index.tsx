@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Icon, Editor, Avatar } from 'components';
-import { toast } from 'react-toastify';
+import React from 'react';
 import { useSelector } from 'react-redux';
+import { useToast } from 'hooks';
+import { Icon, Editor, Avatar, ModalWrapper } from 'components';
+
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 import {
-  ModalWrapper,
-  ModalTitleWrapper,
   ReportModalWrapper,
   ReportContentWrapper,
   ReplyTargetWrapper,
@@ -16,14 +16,16 @@ import MentionItem from 'view/News/components/MentionItem';
 type IProp = {
   show: boolean;
   itemData: any;
-  onClose: Function;
   replyType: string;
   commentId?: string;
   postId?: string;
+  onClose: () => void;
 };
 
 export const ReplyModal = React.memo((props: IProp) => {
   const userInfo = useSelector((state: any) => state.loginReducer.userInfo);
+  const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const {
     show,
     onClose,
@@ -44,11 +46,14 @@ export const ReplyModal = React.memo((props: IProp) => {
         comment: res
       }).then(res => {
         if (Api.isSuccess(res)) {
-          toast.success(res.data);
+          toastSuccess(res.data);
           onClose();
+        } else {
+          toastError(t('commonContactAdmin') || res.msg);
         }
       });
     }
+
     if (replyType === 'twitter') {
       // 针对推文
       Api.CommentApi.createComment({
@@ -56,57 +61,35 @@ export const ReplyModal = React.memo((props: IProp) => {
         comment: res
       }).then(res => {
         if (Api.isSuccess(res)) {
-          toast.success(res.data);
+          toastSuccess(res.data);
           onClose();
+        } else {
+          toastError(t('commonContactAdmin') || res.msg);
         }
       });
     }
   };
 
   return (
-    <>
-      {show ? (
-        <>
-          <ModalWrapper onClick={() => onClose()} />
-          <ReportModalWrapper>
-            <ModalTitleWrapper>
-              <h4></h4>
-              <div
-                className="close"
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                <Icon name={'icon-guanbi'}></Icon>
-              </div>
-            </ModalTitleWrapper>
-            <ReportContentWrapper>
-              <ReplyTargetWrapper>
-                <MentionItem
-                  itemData={
-                    replyType === 'twitter' ? itemData : itemData.comment
-                  }
-                  more={false}
-                />
-              </ReplyTargetWrapper>
-              <ReplyConentWrapper>
-                <div className="left">
-                  <div className="img-box">
-                    <Avatar
-                      className="avatar"
-                      src={userInfo.nft_image}
-                      scale="md"
-                    />
-                  </div>
-                </div>
-                <div className="right">
-                  <Editor type="comment" sendArticle={sendArticle} />
-                </div>
-              </ReplyConentWrapper>
-            </ReportContentWrapper>
-          </ReportModalWrapper>
-        </>
-      ) : null}
-    </>
+    <ModalWrapper creactOnUse visible={show} setVisible={onClose}>
+      <ReportModalWrapper>
+        <ReportContentWrapper>
+          <ReplyTargetWrapper>
+            <MentionItem
+              itemData={replyType === 'twitter' ? itemData : itemData.comment}
+              more={false}
+            />
+          </ReplyTargetWrapper>
+          <ReplyConentWrapper>
+            <div className="left">
+              <Avatar className="avatar" src={userInfo.nft_image} scale="md" />
+            </div>
+            <div className="right">
+              <Editor type="comment" sendArticle={sendArticle} />
+            </div>
+          </ReplyConentWrapper>
+        </ReportContentWrapper>
+      </ReportModalWrapper>
+    </ModalWrapper>
   );
 });

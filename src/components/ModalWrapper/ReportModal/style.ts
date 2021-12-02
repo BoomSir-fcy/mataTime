@@ -30,16 +30,6 @@ export const ModalTitleWrapper = styled(Box)`
 `;
 export const ReportModalWrapper = styled(Box)`
   width: 500px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  border-radius: ${({ theme }) => theme.radii.card};
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-left: -250px;
-  margin-top: -150px;
-  box-sizing: border-box;
-  padding: 35px;
-  z-index: 9998;
 `;
 
 export const ReportContentWrapper = styled(Box)`

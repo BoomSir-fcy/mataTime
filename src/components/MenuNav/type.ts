@@ -1,8 +1,9 @@
 export interface MenuNavLink {
   path: string,
-  icon: React.ReactElement,
+  // icon: React.ReactElement,
+  icon: string,
   lable: string
-  activeIcon?: React.ReactElement,
+  activeIcon?: string,
   coming?: boolean
   badge?: number
 }

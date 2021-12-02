@@ -2,12 +2,11 @@ import styled from 'styled-components';
 import { Flex } from 'uikit';
 
 export const SearchPopBox = styled(Flex)`
-  margin-top: 35px;
   justify-content: space-between;
   position: absolute;
-  z-index: 1002;
-  top: 207px;
-  left:15px;
+  z-index: 1004;
+  top: 180px;
+  left: 15px;
   color: ${({ theme }) => theme.colors.searchTopicTxt};
   .search-box {
     .title {

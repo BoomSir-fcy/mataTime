@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
-import { useImmer } from 'use-immer';
 import { DefaultTheme } from 'styled-components';
-import useTheme from 'hooks/useTheme'
-import { Icon } from 'components';
-import { Heading, Flex, CloseLineIcon, Button } from 'uikit'
+import { Heading, Flex, CloseLineIcon, Button } from 'uikit';
+
+import useTheme from 'hooks/useTheme';
 
 const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
   content: {
@@ -17,8 +16,9 @@ const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
     // height: '238px',
     background: theme.card.background,
     borderRadius: theme.radii.card,
-    boxShadow: theme.card.boxShadow,
+    // boxShadow: theme.card.boxShadow,
     border: 0,
+    overflow: 'visible',
     padding: fillBody ? '18px 0' : '18px 20px',
     zIndex: 200
   },
@@ -30,48 +30,62 @@ const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
 
 const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
   return (
-    <Flex padding={!fillBody ? '0' : '0 20px'} mb="8px" justifyContent="space-between" alignItems="center">
+    <Flex
+      padding={!fillBody ? '0' : '0 20px'}
+      mb="8px"
+      justifyContent="space-between"
+      alignItems="center"
+    >
       <Heading>{title}</Heading>
       <Button onClick={onClose} padding="0" variant="text">
         <CloseLineIcon width={16} color="white_black"></CloseLineIcon>
       </Button>
     </Flex>
-  )
-}
+  );
+};
 
 interface ModalWrapperProps {
-  visible: boolean
-  setVisible: (state: boolean) => void
-  title?: string,
-  creactOnUse?: boolean,
-  customizeTitle?: boolean
-  fillBody?: boolean
+  visible: boolean;
+  setVisible: (state: boolean) => void;
+  title?: string;
+  creactOnUse?: boolean;
+  customizeTitle?: boolean;
+  fillBody?: boolean;
 }
 
-export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(({
-  visible,
-  setVisible,
-  children,
-  creactOnUse,
-  title,
-  customizeTitle,
-  fillBody,
-}) => {
-  const { theme } = useTheme()
+export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
+  ({
+    visible,
+    setVisible,
+    children,
+    creactOnUse,
+    title,
+    customizeTitle,
+    fillBody
+  }) => {
+    const { theme } = useTheme();
 
-  const customStyles = getCustomStyles(theme, fillBody)
-  const onClose = useCallback(() => setVisible(false), [setVisible])
-  if (!visible && creactOnUse) return null
+    const customStyles = getCustomStyles(theme, fillBody);
+    const onClose = useCallback(() => setVisible(false), [setVisible]);
+    if (!visible && creactOnUse) return null;
 
-  return (
-    <Modal
-      isOpen={visible}
-      onRequestClose={onClose}
-      style={customStyles}
-      ariaHideApp={false}
-      contentLabel="Example Modal">
-      {!customizeTitle && <ModalHeaderStyled fillBody={fillBody} onClose={onClose} title={title} />}
-      {children}
-    </Modal>
-  )
-})
+    return (
+      <Modal
+        isOpen={visible}
+        onRequestClose={onClose}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Example Modal"
+      >
+        {!customizeTitle && (
+          <ModalHeaderStyled
+            fillBody={fillBody}
+            onClose={onClose}
+            title={title}
+          />
+        )}
+        {children}
+      </Modal>
+    );
+  }
+);
