@@ -5,6 +5,7 @@ import { useLocation } from 'hooks';
 
 const PageContainer = styled(Box)`
   position: relative;
+  max-width: 100%;
 `;
 
 export const Container = props => {

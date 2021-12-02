@@ -12,7 +12,7 @@ import {
   FollowPopupD,
   ContentParsing
 } from 'components';
-import { Text } from 'uikit';
+import { Box, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
 import { relativeTime } from 'utils/timeFormat';
@@ -69,7 +69,7 @@ const MentionItem: React.FC<IProps> = props => {
     });
   };
 
-  const goDetils = e => {
+  const goDetils = () => {
     if (props.match.path === '/articleDetils/:id') return;
     props.history.push('/articleDetils/' + itemData.post_id || itemData.id);
   };
@@ -83,10 +83,10 @@ const MentionItem: React.FC<IProps> = props => {
           callback(data, type);
         }}
       />
-      <div
+      <Box
         className="mention-content"
-        onClick={e => {
-          goDetils(e);
+        onClick={() => {
+          goDetils();
         }}
       >
         <ContentParsing
@@ -95,11 +95,9 @@ const MentionItem: React.FC<IProps> = props => {
           callback={(type: MoreOperatorEnum) => {
             callback(itemData, type);
           }}
-        ></ContentParsing>
-        <ImgList
-          list={itemData.image_list || itemData.image_url_list}
-        ></ImgList>
-      </div>
+        />
+        <ImgList list={itemData.image_list || itemData.image_url_list} />
+      </Box>
       {children}
       {/* 关注提示 */}
       <FollowPopupD

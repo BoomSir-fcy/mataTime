@@ -43,6 +43,7 @@ export const SlateBox = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};
   padding: 15px;
   padding-bottom: 20px;
+  z-index: 1004;
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
     background: ${({ theme }) => theme.colors.backgroundTextArea};
@@ -62,7 +63,7 @@ export const SlateBox = styled.div`
       border-radius: 10px;
       background: rgba(83, 83, 83, 0.5);
     }
-    &>div{
+    & > div {
       min-height: 95px !important;
     }
   }

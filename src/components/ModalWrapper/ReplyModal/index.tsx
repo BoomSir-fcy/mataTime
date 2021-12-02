@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useToast } from 'hooks';
-import { Icon, Editor, Avatar } from 'components';
+import { Icon, Editor, Avatar, ModalWrapper } from 'components';
 
 import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 import {
-  ModalWrapper,
-  ModalTitleWrapper,
   ReportModalWrapper,
   ReportContentWrapper,
   ReplyTargetWrapper,
@@ -18,10 +16,10 @@ import MentionItem from 'view/News/components/MentionItem';
 type IProp = {
   show: boolean;
   itemData: any;
-  onClose: Function;
   replyType: string;
   commentId?: string;
   postId?: string;
+  onClose: () => void;
 };
 
 export const ReplyModal = React.memo((props: IProp) => {
@@ -55,6 +53,7 @@ export const ReplyModal = React.memo((props: IProp) => {
         }
       });
     }
+
     if (replyType === 'twitter') {
       // 针对推文
       Api.CommentApi.createComment({
@@ -72,49 +71,25 @@ export const ReplyModal = React.memo((props: IProp) => {
   };
 
   return (
-    <>
-      {show ? (
-        <>
-          <ModalWrapper onClick={() => onClose()} />
-          <ReportModalWrapper>
-            <ModalTitleWrapper>
-              <h4></h4>
-              <div
-                className="close"
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                <Icon name={'icon-guanbi'}></Icon>
-              </div>
-            </ModalTitleWrapper>
-            <ReportContentWrapper>
-              <ReplyTargetWrapper>
-                <MentionItem
-                  itemData={
-                    replyType === 'twitter' ? itemData : itemData.comment
-                  }
-                  more={false}
-                />
-              </ReplyTargetWrapper>
-              <ReplyConentWrapper>
-                <div className="left">
-                  <div className="img-box">
-                    <Avatar
-                      className="avatar"
-                      src={userInfo.nft_image}
-                      scale="md"
-                    />
-                  </div>
-                </div>
-                <div className="right">
-                  <Editor type="comment" sendArticle={sendArticle} />
-                </div>
-              </ReplyConentWrapper>
-            </ReportContentWrapper>
-          </ReportModalWrapper>
-        </>
-      ) : null}
-    </>
+    <ModalWrapper creactOnUse visible={show} setVisible={onClose}>
+      <ReportModalWrapper>
+        <ReportContentWrapper>
+          <ReplyTargetWrapper>
+            <MentionItem
+              itemData={replyType === 'twitter' ? itemData : itemData.comment}
+              more={false}
+            />
+          </ReplyTargetWrapper>
+          <ReplyConentWrapper>
+            <div className="left">
+              <Avatar className="avatar" src={userInfo.nft_image} scale="md" />
+            </div>
+            <div className="right">
+              <Editor type="comment" sendArticle={sendArticle} />
+            </div>
+          </ReplyConentWrapper>
+        </ReportContentWrapper>
+      </ReportModalWrapper>
+    </ModalWrapper>
   );
 });

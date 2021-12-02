@@ -39,8 +39,6 @@ const InnerBox = styled(Flex)`
 const PageContainer: React.FC = ({ children }) => {
   const { pathname } = useLocation();
 
-  console.log(pathname, 'pathname');
-
   const showSidebar = useMemo(() => {
     return !hideSidebarPath.includes(pathname);
   }, [pathname]);

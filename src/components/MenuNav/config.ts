@@ -167,16 +167,19 @@ const config = [
     children: [
       {
         icon: 'icon-gerenxinxi',
+        activeIcon: 'icon-gerenxinxi1',
         lable: 'setMenuAccountSecurity',
         path: '/set/safeset'
       },
       {
         icon: 'icon-xiaoxi',
+        activeIcon: 'icon-xiaoxi1',
         lable: 'setMenuNotification',
         path: '/set/noticeset'
       },
       {
         icon: 'icon-aixin',
+        activeIcon: 'icon-aixin1',
         lable: 'setMenuPreference',
         path: '/set/likeset'
       }

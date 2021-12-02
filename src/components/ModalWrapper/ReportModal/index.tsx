@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Icon } from 'components';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'contexts/Localization'
-import {
-  ModalWrapper,
-  ModalTitleWrapper,
-  ReportModalWrapper,
-  ReportContentWrapper
-} from './style';
+import { ModalWrapper } from 'components';
+import { useToast } from 'hooks';
+import { Box } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
+import { ReportContentWrapper } from './style';
 
 import { Api } from 'apis';
-import { iteratorSymbol } from 'immer/dist/internal';
 
 type IProp = {
   show: boolean;
   pid: number;
-  onClose: Function;
-  onQuery: Function;
-}
+  onClose: () => void;
+  onQuery: () => void;
+};
 
 export const ReportModal = React.memo((props: IProp) => {
-  const { t } = useTranslation()
-  const { show, onClose, pid, onQuery } = props
+  const { t } = useTranslation();
+  const { show, onClose, pid, onQuery } = props;
+  const { toastSuccess, toastError } = useToast();
   const [complainContent, setComplainContent] = useState<string[]>([
     t('ReportModalComplain1'),
     t('ReportModalComplain2'),
@@ -34,42 +30,37 @@ export const ReportModal = React.memo((props: IProp) => {
   const onComplainPostRequest = async (content: string) => {
     const res = await Api.AttentionApi.complainPost(pid, content);
     if (Api.isSuccess(res)) {
-      toast.success(t('ReportModalSuccess'))
-      onQuery()
+      toastSuccess(t('ReportModalSuccess'));
+      onQuery();
     } else {
-      toast.error(res.msg || t('ReportModalError'))
-      onClose()
+      toastError(res.msg || t('ReportModalError'));
+      onClose();
     }
-  }
+  };
 
   return (
-    <>
-      {
-        show ? (
-          <>
-            <ModalWrapper onClick={() => { onClose() }}></ModalWrapper>
-            <ReportModalWrapper>
-              <ModalTitleWrapper>
-                <h4>{t('ReportModalTitle')}</h4>
-                <div className="close" onClick={() => {
-                  onClose()
-                }}>
-                  <Icon name={'icon-guanbi'}></Icon>
-                </div>
-              </ModalTitleWrapper>
-              <ReportContentWrapper>
-                {
-                  complainContent.map((item: any, index: number) => {
-                    return <p key={index} onClick={() => {
-                      onComplainPostRequest(item);
-                    }}>{item}</p>
-                  })
-                }
-              </ReportContentWrapper>
-            </ReportModalWrapper>
-          </>
-        ) : null
-      }
-    </>
-  )
+    <ModalWrapper
+      creactOnUse
+      title={t('ReportModalTitle')}
+      visible={show}
+      setVisible={onClose}
+    >
+      <Box>
+        <ReportContentWrapper>
+          {complainContent.map((item: any, index: number) => {
+            return (
+              <p
+                key={index}
+                onClick={() => {
+                  onComplainPostRequest(item);
+                }}
+              >
+                {item}
+              </p>
+            );
+          })}
+        </ReportContentWrapper>
+      </Box>
+    </ModalWrapper>
+  );
 });

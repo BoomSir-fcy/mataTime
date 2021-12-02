@@ -23,11 +23,12 @@ const TopicList = props => {
   const { loading, page, totalPage, listData } = state;
 
   const getList = async (current?: number) => {
-    if (loading || page > totalPage) return false;
+    console.log(current);
+    if (loading || page > totalPage) return;
+    console.log(222);
     setState(p => {
       p.loading = true;
     });
-    console.log(id, name);
     try {
       const res = await Api.HomeApi.findByHotTopicIdList({
         page: current || page,
@@ -51,6 +52,10 @@ const TopicList = props => {
       console.log(error);
     }
   };
+
+  React.useEffect(() => {
+    getList(1);
+  }, [id, name]);
 
   return (
     <Box>

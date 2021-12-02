@@ -8,8 +8,8 @@ export const FollowBtn = styled(Button)`
 export const MentionItemWrapper = styled.div`
   .mention-content {
     box-sizing: border-box;
-    padding-left: 73px;
-    padding-top: 10px;
+    padding: 15px 0 15px 73px;
+    color: ${({ theme }) => theme.colors.white_black};
     // word-wrap:break-word;
     word-break: break-all;
   }
