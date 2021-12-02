@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Text, TextProps } from 'uikit'
+import { Flex, HeadingScales, Text, TextProps } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 
 export interface TimerProps extends TextProps {
@@ -10,6 +10,7 @@ export interface TimerProps extends TextProps {
   days?: number
   months?: number
   years?: number
+  scale?: HeadingScales
   color?: string
   itemMr?: string
   textMr?: string
@@ -62,19 +63,19 @@ export const Timer: React.FC<TimerProps> = ({
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('d')}</StyledTimerText>
         </>
       )}
-      {Boolean(hours) && (
+      {(Boolean(hours) || days > 0) && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{hours}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('h')}</StyledTimerText>
         </>
       )}
-      {Boolean(minutes) && (
+      {(Boolean(minutes) || hours > 0 || days > 0) && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{minutes}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('m')}</StyledTimerText>
         </>
       )}
-      {Boolean(seconds) && (
+      {(Boolean(seconds) || minutes > 0 || hours > 0 || days > 0) && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{seconds}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('s')}</StyledTimerText>

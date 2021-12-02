@@ -9,8 +9,6 @@ import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
 import { PageSection, Container, Affix } from 'components'
-import { Menu } from './left';
-import { WalletHead } from './head';
 
 const LeftCard = styled(Flex)`
   width: 200px;
@@ -35,6 +33,7 @@ const ContainerStyled = styled(Container)`
 
 const Stake = React.lazy(() => import('./components/Single'));
 const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
+const Exchange = React.lazy(() => import('./components/ExchangeTime'));
 
 const Account = props => {
   const { t } = useTranslation();
@@ -42,13 +41,13 @@ const Account = props => {
   return (
     <Box width="100%">
       <CenterCard>
-        <WalletHead />
         <Switch>
           <Route
             path={`${props.match.path}`}
             render={() => (
               <>
                 <Route path={`${props.match.path}`} exact component={TokenAccount} />
+                <Route path={`${props.match.path}/time`} component={Exchange} />
                 <Route path={`${props.match.path}/stake`} component={Stake} />
               </>
             )}

@@ -71,6 +71,9 @@ export type Gradients = {
 };
 
 export type Colors = {
+  taskDay: string;
+  taskWeek: string;
+  taskAchievement: string;
   disableStep: string;
   protrudeColor: string;
   ThemeText: string;

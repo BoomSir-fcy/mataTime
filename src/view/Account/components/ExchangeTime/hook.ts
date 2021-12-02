@@ -6,10 +6,8 @@ import { getDsgAddress, getTimeShopAddress } from 'utils/addressHelpers';
 import { stakeNftFarm, CancelNftStake } from 'utils/calls';
 import { uniq } from 'lodash';
 import multicall from 'utils/multicall';
-import timeShopAbi from 'config/abi/TimeShop.json'
-import erc20Abi from 'config/abi/erc20.json'
-import { NftInfo } from 'store/app/type';
-import { getNftsList, getNftInfo } from 'apis/DsgRequest';
+import timeShopAbi from 'config/abi/TimeShop.json';
+import erc20Abi from 'config/abi/erc20.json';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
