@@ -13,7 +13,7 @@ const SidebarStyled = styled(Box)`
   top: 0;
 `;
 
-const Sidebar = () => {
+const Sidebar = props => {
   React.useEffect(() => {
     const handleScroll = e => {
       console.log(window.scrollY);
