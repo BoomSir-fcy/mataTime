@@ -16,7 +16,7 @@ ${({ theme }) => theme.mediaQueriesSize.marginb}
 opacity: 0.96; */
 `
 
-interface Chart {
+interface Init {
   Token: string
   Balance: number
   TokenAddr: string

@@ -12,6 +12,7 @@ import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
+import Matter from './Matter';
 
 const NoPdBottom = styled(Container)`
 padding: 0;
@@ -120,9 +121,14 @@ const TokenAccount: React.FC = () => {
           </IncomeBox>
         </RightBox>
       </ContentTab>
-      <Chart />
       {
-        ActiveTab !== 3 && <EarningsRecord type={ActiveTab} />
+        ActiveTab !== 3 ?
+          <>
+            <Chart />
+            <EarningsRecord type={ActiveTab} />
+          </>
+          :
+          <Matter />
       }
     </NoPdBottom>
   )

@@ -14,6 +14,8 @@ import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { fetchUserNftInfoAsync } from 'store/login/reducer';
 import { storeAction, useStore } from 'store';
+import { useToast } from 'hooks';
+import { useTranslation } from 'contexts/Localization';
 
 // 获取nft头像授权信息
 export const useFetchNftApproval = async (account, NftList: NftInfo[]) => {
@@ -114,6 +116,8 @@ export const GetNftList = async (account) => {
 }
 export const FetchSupportNFT = async () => {
   // const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { toastWarning, toastError } = useToast();
   const SocialAddress = getNftSocialAddress();
   const calls = [
     {
@@ -127,6 +131,7 @@ export const FetchSupportNFT = async () => {
     const supAddress = result.map(item => item.sup);
     return supAddress[0];
   } catch (error) {
+    toastError(t('Network error, please refresh and try again'))
     console.log(error);
     return [];
   }

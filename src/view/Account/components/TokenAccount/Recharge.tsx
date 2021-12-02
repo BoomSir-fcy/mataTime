@@ -201,7 +201,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
           <Flex flexDirection='column' justifyContent='center' alignItems='center'>
             <SureBtn disable={pending} onClick={() => {
               if (approvedNum > 0) {
-                // 充值、提现
+                // 充值
                 handSure()
               } else {
                 // 授权
