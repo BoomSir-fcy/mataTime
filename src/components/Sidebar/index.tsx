@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box } from 'uikit';
 import Search from './search';
 import Swap from './swap';
@@ -9,10 +10,20 @@ import styled from 'styled-components';
 // TODO: js 判断 滚动
 const SidebarStyled = styled(Box)`
   position: sticky;
-  top: -388px;
-`
+  top: 0;
+`;
 
 const Sidebar = () => {
+  React.useEffect(() => {
+    const handleScroll = e => {
+      console.log(window.scrollY);
+    };
+    document.addEventListener('scroll', handleScroll);
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <SidebarStyled>
       <Search />
@@ -22,7 +33,7 @@ const Sidebar = () => {
       <HotTopic />
       <FooterCopyright />
     </SidebarStyled>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
