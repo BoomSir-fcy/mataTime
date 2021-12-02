@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
-import { Container } from 'components';
-import { getTimeAddress } from 'utils/addressHelpers';
-import { useTokenBalance } from 'view/exchange/hook';
-import { useFetchWalletInfo, useFetchApproveNum } from 'store/wallet/hooks';
-import { useWeb3React } from '@web3-react/core';
-import { useStore } from 'store';
+import Header from './header';
+import MissionCard from './missionCard';
 
 const Content = styled(Box)`
   padding: 30px 18px;
@@ -14,43 +10,112 @@ ${({ theme }) => theme.mediaQueries.md}{
   padding: 15px 14px;
 }
 `
-const ContentTab = styled(Flex)`
-align-items: center;
-justify-content: space-between;
-padding-bottom: 0;
-padding-top: 0;
-border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-.active{
-    font-size: 18px;
-    color:${({ theme }) => theme.colors.white_black};
-    font-weight: bold;
+const LeftFlex = styled(Flex)`
+  justify-content: start;
+  flex-wrap: wrap;
+  &>:not(:nth-child(3)){
+    margin-right: 12px;
   }
 `
-const TabText = styled(Text)`
-  color:${({ theme }) => theme.colors.textTips};
-  ${({ theme }) => theme.mediaQueriesSize.marginr}
-  font-size: 14px;
-  cursor: pointer;
+const TaskTitle = styled(Text)`
+  padding-top: 24px;
+  padding-bottom: 16px;
+  font-size:18px;
+  font-weight: bold;
 `
-const RightBox = styled(Flex)`
-min-width: 23vw;
-`
-const IncomeBox = styled(Flex)`
-align-items: center;
-${({ theme }) => theme.mediaQueriesSize.marginr}
-width: max-content;
-`
-const Img = styled.img`
-width: 36px;
-height: 36px;
-`
+interface MatterInfo {
+  Balance?: number
+  TokenAddr: string
+  BalanceInfo: Api.Account.Balance
+}
 
-
-const Matter: React.FC = () => {
-
+const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
+  const TaskList = [{
+    taskID: 123,
+    nowTime: 1635758812,
+    endTime: 1638517726,
+    taskStatus: 1,
+    points: 100,
+    taskType: 1,
+    taskName: 'SignIn',
+    continuous: null
+  },
+  {
+    taskID: 123,
+    nowTime: 1635758812,
+    endTime: 1638517726,
+    taskStatus: 2,
+    points: 100,
+    taskType: 1,
+    taskName: 'SignIn',
+    continuous: null
+  },
+  {
+    taskID: 123,
+    nowTime: 1635758812,
+    endTime: 1638517726,
+    taskStatus: 3,
+    points: 100,
+    taskType: 1,
+    taskName: 'SignIn',
+    continuous: null
+  },
+  {
+    taskID: 123,
+    nowTime: 1635758812,
+    endTime: 1638517726,
+    taskStatus: 1,
+    points: 100,
+    taskType: 1,
+    taskName: 'SignIn',
+    continuous: null
+  }, {
+    taskID: 123,
+    nowTime: 1635758812,
+    endTime: 1638517726,
+    taskStatus: 1,
+    points: 100,
+    taskType: 2,
+    taskName: 'SignIn',
+    continuous: null
+  }, {
+    taskID: 123,
+    nowTime: 1635758812,
+    endTime: 1638517726,
+    taskStatus: 1,
+    points: 100,
+    taskType: 3,
+    taskName: 'SignIn',
+    continuous: null
+  }
+  ]
   return (
     <Content>
-      1232
+      <Header Balance={Balance} BalanceInfo={BalanceInfo} TokenAddr={TokenAddr} />
+      <TaskTitle>Matter每日任务 ( 0 / 10)</TaskTitle>
+      <LeftFlex>
+        {
+          TaskList.map(item => (
+            item.taskType == 1 ? <MissionCard key={item.taskID} info={item} /> : <></>
+          ))
+        }
+      </LeftFlex>
+      <TaskTitle>Matter每周任务 ( 0 / 5)</TaskTitle>
+      <LeftFlex>
+        {
+          TaskList.map(item => (
+            item.taskType == 2 ? <MissionCard key={item.taskID} info={item} /> : <></>
+          ))
+        }
+      </LeftFlex>
+      <TaskTitle>Matter成就任务 ( 0 / 2)</TaskTitle>
+      <LeftFlex>
+        {
+          TaskList.map(item => (
+            item.taskType == 3 ? <MissionCard key={item.taskID} info={item} /> : <></>
+          ))
+        }
+      </LeftFlex>
     </Content>
   )
 }

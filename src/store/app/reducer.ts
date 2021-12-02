@@ -6,7 +6,7 @@ import {
   toastContainer,
   connectWallet,
   setChainId,
-  setTopicCoins
+  // setTopicCoins
 } from './actions';
 import { languange } from './type';
 
@@ -27,12 +27,13 @@ const initialState = {
     languange: {} as languange,
     autoTranslation: false
   },
-  coins: {
-    symbol: '',
-    projectLink: '',
-    address: {},
-    decimals: 0
-  }
+  // coins: {
+  //   symbol: '',
+  //   projectLink: '',
+  //   address: {},
+  //   decimals: 0,
+  //   clickTime: 0, // 点击时间 = ( 时间戳 / 1000 / 3 ) 除3做节流处理 三秒内点同一个只会生效一次
+  // }
 };
 
 export type App = typeof initialState;
@@ -57,7 +58,15 @@ export default createReducer(initialState, builder => {
     .addCase(setChainId, (state, action) => {
       state.chainId = action.payload.chainId;
     })
-    .addCase(setTopicCoins, (state, action) => {
-      state.coins = action.payload;
-    });
+  // .addCase(setTopicCoins, (state, action) => {
+  //   // nowTime 做防抖处理
+  //   const nowTime = Math.floor(new Date().getTime() / 1000 / 3)
+  //   const { symbol, clickTime } = state.coins
+  //   if (symbol !== action.payload?.symbol || clickTime !== nowTime) {
+  //     state.coins = {
+  //       ...action.payload,
+  //       clickTime: nowTime,
+  //     };
+  //   }
+  // });
 });
