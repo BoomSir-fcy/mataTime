@@ -11,7 +11,7 @@ const NavGoback: React.FC = () => {
 
   return (
     <NavItemStyled onClick={() => push('/')} mt="1px" alignItems="center" padding="28px 14px">
-      <IconBox><Icon name="icon-fanhui" /></IconBox>
+      <IconBox><Icon color="textSubtle" name="icon-fanhui" /></IconBox>
       <Text ml="20px" fontSize="18px" bold color="white_black" >{t('newsBack')}</Text>
     </NavItemStyled>
   )
