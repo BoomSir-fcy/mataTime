@@ -1,8 +1,30 @@
-import { Api } from 'apis';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Api } from 'apis';
+
 import { fetchUserUnreadMsgNum } from 'store/login/reducer';
-import { useCallback, useEffect } from 'react';
 import { pathConfig } from './config'
+
+export const useFetchUnreadMsg = (notification) => {
+  const [refreshMsg, setRefreshMsg] = useState(0)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRefreshMsg(prep => prep + 1)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+
+    if (notification) {
+      dispatch(fetchUserUnreadMsgNum());
+    }
+
+  }, [dispatch, refreshMsg, notification])
+
+}
 
 // 将消息变为已读
 export const useReadMsg = (pathname) => {
@@ -16,7 +38,7 @@ export const useReadMsg = (pathname) => {
   }, [])
   useEffect(() => {
     let msgType
-    switch(pathname) {
+    switch (pathname) {
       case pathConfig.messageAtMePath:
         msgType = 1;
         break;

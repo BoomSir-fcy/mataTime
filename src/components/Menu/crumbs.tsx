@@ -12,6 +12,10 @@ const Card = styled(Flex)`
   width: 100%;
   height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  position: sticky;
+  top: 0;
+  background: ${({ theme }) => theme.colors.background};
+  z-index: 1003;
   ${mediaQueriesSize.paddingxs}
   .text {
     font-size: 18px;

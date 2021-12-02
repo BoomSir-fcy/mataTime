@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Editor, Affix } from 'components';
+import { Editor, Crumbs } from 'components';
 import { withRouter } from 'react-router-dom';
 import useReadArticle from 'contexts/ImContext/hooks/useReadArticle';
 import { useToast } from 'hooks';
@@ -33,8 +33,8 @@ const CenterCard = styled(Box)`
   /* width: 670px; */
   flex: 1;
   /* margin: 0 15px; */
-  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
 `;
 const RightCard = styled(Flex)`
   width: 300px;
@@ -114,18 +114,10 @@ const Home: React.FC = (props: any) => {
            * 3.Header 组件应该为公共组件
            * 4.字符串拼接
            */}
-          <Header {...props} title={t('homeHeaderTitle')} />
-          {/**
-           * @review
-           * 1.应该使用Route组件
-           * 2.不应该在页面用这样的逻辑判断进行渲染 代码设计不合理
-           */}
-          {match.path === '/' ? (
-            <>
-              <Editor type="post" sendArticle={sendArticle}></Editor>
-              <Tabs tabsChange={tabsChange}></Tabs>
-            </>
-          ) : null}
+          {/* <Header {...props} title={t('homeHeaderTitle')} /> */}
+          <Crumbs title={t('homeHeaderTitle')} />
+          <Editor type="post" sendArticle={sendArticle} />
+          <Tabs tabsChange={tabsChange} />
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList
             key={refresh}

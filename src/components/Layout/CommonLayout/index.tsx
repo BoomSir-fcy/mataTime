@@ -32,54 +32,24 @@ export const CommonLayout: React.FC<IProps> = (props: any) => {
     setScreenWid(wid)
   }, [])
   return (
-    <CommonLayoutWrapper>
-      {/* <Header></Header> */}
-      <LayoutContentWrapper>
-        <Flex justifyContent="space-between" width="100%">
+    <LayoutMiddleWrapper>
+      {
+        props.location.pathname !== '/news/praise' ?
+          <CenterHeader title={t('newsNotice')}></CenterHeader>
+          : null
+      }
+      <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
+      <Route path={'/news/me'} render={(props) => {
+        return (<NewsMe {...props} />)
+      }}></Route>
+      <Route path={'/news/comment'} render={(props) => {
+        return (<NewsComment {...props} />)
+      }}></Route>
+      <Route path={'/news/praise'} render={(props) => (
+        <NewsPraise></NewsPraise>
+      )}></Route>
+      <Route path={'/news/notice'} component={NewsNotice}></Route>
+    </LayoutMiddleWrapper>
 
-          <LayoutLeftWrapper>
-            <Affix offsetTop={0} positionObj={{}}>
-              <CommonLeftMenu
-                menu={menu[match.url]}
-                route={location}
-                {...props}
-              />
-            </Affix>
-          </LayoutLeftWrapper>
-
-          <LayoutMiddleWrapper>
-            {
-              props.location.pathname !== '/news/praise' ?
-                <CenterHeader title={t('newsNotice')}></CenterHeader>
-                : null
-            }
-            <Route path={'/news'} exact render={() => <Redirect to={'/news/me'} push />}></Route>
-            <Route path={'/news/me'} render={(props) => {
-              return (<NewsMe {...props} />)
-            }}></Route>
-            <Route path={'/news/comment'} render={(props) => {
-              return (<NewsComment {...props} />)
-            }}></Route>
-            <Route path={'/news/praise'} render={(props) => (
-              <NewsPraise></NewsPraise>
-            )}></Route>
-            <Route path={'/news/notice'} component={NewsNotice}></Route>
-          </LayoutMiddleWrapper>
-
-          <LayoutRightWrapper>
-            <Affix offsetTop={100} positionObj={{}}>
-              <>
-                <Search />
-                <Swap />
-                <RecommendPeople />
-                <HotTopic />
-                <FooterCopyright />
-              </>
-            </Affix>
-          </LayoutRightWrapper>
-        </Flex>
-
-      </LayoutContentWrapper>
-    </CommonLayoutWrapper>
   )
 }

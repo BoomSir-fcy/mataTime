@@ -9,7 +9,7 @@ enum MessageProtocol {
   // 未读通知
   WSProtocol_UNREAD_NOTIFY,
   // 心跳检测
-  WSProtocol_HEART_Jump_Jump  = 97,
+  WSProtocol_HEART_Jump_Jump = 97,
 }
 
 enum WSReadyState {
@@ -93,7 +93,7 @@ export class IM extends EventTarget {
       ptl,
       data,
       nonce: this.nonce,
-    } 
+    }
     if (readyState === WSReadyState.OPEN) {
       this.connection.send(JSON.stringify(sendData))
       return
@@ -121,7 +121,12 @@ export class IM extends EventTarget {
     return token
   }
 
-  // 绑定事件
+  /**
+   * @dev 绑定事件
+   * @deprecated 废弃 建议直接使用 addEventListener
+   * @param event 事件名
+   * @param handle 事件句柄
+   */
   on(event: EventType, handle: Handle<unknown>) {
     this.addEventListener(event, handle)
     this.handleEvents.push({
@@ -130,7 +135,12 @@ export class IM extends EventTarget {
     })
   }
 
-  // 移除事件
+  /**
+   * @dev 移除事件绑定
+   * @deprecated 废弃 建议直接使用 removeEventListener
+   * @param event 事件名
+   * @param handle 事件句柄
+   */
   remove(event: EventType, handle: Handle<unknown>) {
     this.removeEventListener(event, handle)
     this.handleEvents.push({
@@ -154,6 +164,17 @@ export class IM extends EventTarget {
     })
   }
 
+  // TODO: 
+  private parseMessage(event: MessageEvent) {
+    const data = JSON.parse(event.data)
+    switch (data.code) {
+      case MessageProtocol.WSProtocol_SYSTEM_NOTIFY:
+        this.dispatchEvent(new MessageEvent('systemMsg', {
+          data: data,
+        }))
+    }
+  }
+
   private onmessageHandle(event: MessageEvent) {
     this.dispatchEvent(new MessageEvent('message', {
       data: event.data,
@@ -162,6 +183,8 @@ export class IM extends EventTarget {
       source: event.source,
     }))
     this.waitMessageList = this.waitMessageList.filter(item => item.nonce !== event.data.nonce)
+    // this.parseMessage(event)
+
   }
 
   private onerrorHandle(event: Event) {
@@ -194,7 +217,7 @@ export class IM extends EventTarget {
         delete this.connection
       }
       this.connection = new WebSocket(`${this.url}/${token}`);
-      
+
       this.connection.addEventListener('open', this.onopenHandle.bind(this));
 
       this.connection.addEventListener('message', this.onmessageHandle.bind(this));

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { About, Avatar, Editor, ModalWrapper, Affix } from 'components';
+import { About, Avatar, Editor, ModalWrapper, Affix, Crumbs } from 'components';
 import { useTranslation } from 'contexts/Localization'
 import { Route } from 'react-router-dom'
 import { Flex, Box } from 'uikit';
@@ -53,65 +53,31 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   }, [])
   return (
     <PageContainer>
-      <Flex justifyContent="space-between" width="100%">
-          <LeftCard>
-        <Affix offsetTop={0}>
-            <Menu></Menu>
-        </Affix>
-          </LeftCard>
-        <CenterCard>
-          <Header back title={t('newsBack')} {...props}></Header>
-          <MeItemWrapper>
-            <MentionItem {...props} itemData={{
-              ...itemData,
-              post_id: itemData.id,
-              post: {
-                ...itemData,
-                post_id: itemData.id
-              }
-            }} more={false} />
-            <MentionOperator
-              replyType="twitter"
-              postId={itemData.id}
-              itemData={{
-                ...itemData, post_id: itemData.id, post: {
-                  ...itemData
-                }
-              }} callback={(data) => {
-                console.log(data);
-                setItemData(data)
-              }} />
-          </MeItemWrapper>
-          {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
-          <Editor type="comment" sendArticle={sendArticle}></Editor>
-          <CommentList key={refresh} itemData={itemData}></CommentList>
-        </CenterCard>
-        {/* <Affix offsetTop={0} positionObj={{
-          top: '0',
-          right: '50%',
-          marginRight: '-660px'
-        }}>
-          <RightCard style={{
-            marginTop: '-15px'
-          }}>
-            <RecommendPeople></RecommendPeople>
-            <HotTopic {...props}></HotTopic>
-            <FooterCopyright></FooterCopyright>
-          </RightCard>
-        </Affix> */}
-        <RightCard>
-          <Affix offsetTop={0} positionObj={{}}>
-            <>
-              <Search />
-              {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
-              <Swap />
-              <RecommendPeople />
-              <HotTopic {...props} />
-              <FooterCopyright />
-            </>
-          </Affix>
-        </RightCard>
-      </Flex>
+      <Crumbs back title={t('newsBack')} />
+      <MeItemWrapper>
+        <MentionItem {...props} itemData={{
+          ...itemData,
+          post_id: itemData.id,
+          post: {
+            ...itemData,
+            post_id: itemData.id
+          }
+        }} more={false} />
+        <MentionOperator
+          replyType="twitter"
+          postId={itemData.id}
+          itemData={{
+            ...itemData, post_id: itemData.id, post: {
+              ...itemData
+            }
+          }} callback={(data) => {
+            console.log(data);
+            setItemData(data)
+          }} />
+      </MeItemWrapper>
+      {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
+      <Editor type="comment" sendArticle={sendArticle}></Editor>
+      <CommentList key={refresh} itemData={itemData}></CommentList>
     </PageContainer>
   )
 }

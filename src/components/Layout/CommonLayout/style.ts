@@ -7,10 +7,10 @@ export const CommonLayoutWrapper = styled(Box)`
 `
 
 export const LayoutContentWrapper = styled(Box)`
-    width: 1200px;
+    /* width: 1200px; */
     display: flex;
     justify-content: center;
-    padding-top: 35px;
+    /* padding-top: 35px; */
     margin: 0 auto;
 `
 
@@ -20,9 +20,9 @@ export const LayoutLeftWrapper = styled(Box)`
     overflow: auto;
 `
 export const LayoutMiddleWrapper = styled(Box)`
-    width: 670px;
-    margin-left: 15px;
-    margin-right: 15px;
+    /* width: 670px; */
+    /* margin-left: 15px;
+    margin-right: 15px; */
 `
 export const LayoutRightWrapper = styled(Box)`
   width: 300px;
