@@ -55,6 +55,7 @@ const Test = () => {
     im.on('error', (event) => {
       console.log('=======error======error', event)
     })
+    // im.addEventListener('', ())
     setWs(im)
   };
 
