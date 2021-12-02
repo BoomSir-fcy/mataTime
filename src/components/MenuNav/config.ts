@@ -20,47 +20,6 @@ const config = [
     lable: 'homeMenuStar'
   },
   {
-    icon: 'icon-xingqiu',
-    activeIcon: 'icon-xingqiu1',
-    path: '/me',
-    coming: true,
-    lable: 'homeMenuStar',
-    children: [
-      {
-        icon: 'icon-gerenxinxi',
-        lable: 'meMenuHome',
-        path: '/me'
-      },
-      {
-        icon: 'icon-e31guanzhu',
-        lable: 'meMenuFollow',
-        path: '/me/follow'
-      },
-      {
-        icon: 'icon-aixin',
-        lable: 'meMenuFans',
-        path: '/me/fans'
-      },
-      {
-        icon: 'icon-dianzan',
-        lable: 'meMenuLink',
-        path: '/me/praise'
-      },
-      {
-        icon: 'icon-shoucang',
-        lable: 'meMenuFav',
-        path: '/me/collect',
-        badge: false
-      }
-      // {
-      //   icon: 'icon-pingbi1',
-      //   activeIcon: 'icon-pingbi',
-      //   title: 'meMenuShield',
-      //   path: '/me/shield',
-      // },
-    ]
-  },
-  {
     icon: 'icon-xiaoxi',
     activeIcon: 'icon-xiaoxi1',
     path: pathConfig.messageAtMePath,
