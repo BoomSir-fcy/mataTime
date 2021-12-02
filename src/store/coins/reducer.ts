@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from 'apis';
+import { setTopicCoins } from './actions';
 
 export interface CoinsState {
   total: number;
@@ -9,6 +10,14 @@ export interface CoinsState {
   data: {
     [coinId: string]: Api.Coins.CoinInfo;
   };
+  // 点击$coin$ 储存数据
+  clickCoins: {
+    symbol: string
+    projectLink: string,
+    address: {},
+    decimals: number,
+    clickTime: number, // 点击时间 = ( 时间戳 / 1000 / 3 ) 除3做节流处理 三秒内点同一个只会生效一次
+  }
 }
 
 const initialState: CoinsState = {
@@ -16,7 +25,14 @@ const initialState: CoinsState = {
   pageSize: 200,
   page: 1,
   loaded: false,
-  data: {}
+  data: {},
+  clickCoins: {
+    symbol: '',
+    projectLink: '',
+    address: {},
+    decimals: 0,
+    clickTime: 0, // 点击时间 = ( 时间戳 / 1000 / 3 ) 除3做节流处理 三秒内点同一个只会生效一次
+  }
 };
 
 // Async thunks
@@ -62,6 +78,17 @@ export const coins = createSlice({
           state.loaded = true;
         }
       )
+      .addCase(setTopicCoins, (state, action) => {
+        // nowTime 做防抖处理
+        const nowTime = Math.floor(new Date().getTime() / 1000 / 3)
+        const { symbol, clickTime } = state.clickCoins
+        if (symbol !== action.payload?.symbol || clickTime !== nowTime) {
+          state.clickCoins = {
+            ...action.payload,
+            clickTime: nowTime,
+          };
+        }
+      })
       .addCase(fetchCoinInfoAsync.fulfilled, (state, { payload: coinInfo }) => {
         if (coinInfo) {
           state.data[coinInfo.coin_id] = {

@@ -65,7 +65,7 @@ export const ContentParsing = (props: IProps) => {
     try {
       let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
       setParsingResult(arr);
-    } catch (err: any) {}
+    } catch (err: any) { }
   }, [props.content]);
 
   useEffect(() => {
