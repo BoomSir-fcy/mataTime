@@ -76,6 +76,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
               coming={item.coming}
               lable={item.lable}
               path={item.path}
+              // hide={item.hide}
               pathname={pathname}
               badge={
                 item.badgeName && notification && unReadMsg[item.badgeName]
@@ -97,6 +98,8 @@ const Nav: React.FC<NavProps> = ({ }) => {
                   activeIcon={item.activeIcon || item.icon}
                   coming={item.coming}
                   lable={item.lable}
+                  hide={item.hide}
+                  markPath={item.markPath}
                   badge={
                     item.badgeName && notification && unReadMsg[item.badgeName]
                       ? unReadMsg[item.badgeName]

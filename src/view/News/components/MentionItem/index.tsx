@@ -39,7 +39,7 @@ const MentionItem: React.FC<IProps> = props => {
     dontShowPic,
     size = 'nomal',
     itemData = {},
-    callback = () => {}
+    callback = () => { }
   } = props;
   const mentionRef: any = useRef();
 
@@ -128,7 +128,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
   more = true,
   size = 'nomal',
   itemData = {},
-  callback = () => {}
+  callback = () => { }
 }) => {
   return (
     <MentionItemUserWrapper>
@@ -138,7 +138,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
             <Avatar
               className="avatar"
               src={itemData.user_avator_url}
-              scale="md"
+              scale="sm"
             />
           </Link>
           <div className="user-info">

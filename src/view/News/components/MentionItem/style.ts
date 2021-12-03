@@ -68,7 +68,7 @@ export const MentionItemUserWrapper = styled.div`
         .avatar {
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          /* border-radius: 10px; */
           overflow: hidden;
           margin-right: 13px;
           img {
