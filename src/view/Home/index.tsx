@@ -55,12 +55,7 @@ const Home: React.FC = (props: any) => {
   const { toastError } = useToast();
   // const  editorRef = useRef();
 
-  const sendArticle = async (
-    content: string,
-    image_urls,
-    remind_user,
-    resetInput: () => void
-  ) => {
+  const sendArticle = async (content: string, image_urls, remind_user) => {
     if (!content) return false;
     try {
       const res = await Api.HomeApi.createArticle({
@@ -70,7 +65,6 @@ const Home: React.FC = (props: any) => {
       });
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
-        resetInput();
       } else {
         toastError(t('commonContactAdmin') || res.msg);
       }

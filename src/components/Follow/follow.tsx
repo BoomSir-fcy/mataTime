@@ -22,9 +22,6 @@ const Name = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
 `;
-const Desc = styled(Text)`
-  color: ${({ theme }) => theme.colors.textTips};
-`;
 const FollowContent = styled(Flex)`
   flex: 1;
   align-items: center;
@@ -67,7 +64,7 @@ export const Follow: React.FC<{
           <Flex alignItems="center">
             <Name>{rows.nick_name}</Name>
           </Flex>
-          <Desc>@{shortenAddress(rows.address)}</Desc>
+          <Text color="textTips">@{shortenAddress(rows.address)}</Text>
         </Flex>
       </FollowContent>
       <FollowButton>
