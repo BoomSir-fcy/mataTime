@@ -70,6 +70,6 @@ export const ReplyConentWrapper = styled(Box)`
   }
   .right {
     flex: 1;
-    max-width: 580px;
+    max-width: 554px;
   }
 `;
