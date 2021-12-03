@@ -27,6 +27,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const { t } = useTranslation();
   const [itemData, setItemData] = useState<any>({});
   const [refresh, setRefresh] = useState(1);
+
   const sendArticle = (res, resetInput: () => void) => {
     console.log(res);
     if (!res) return;
@@ -37,10 +38,11 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       if (Api.isSuccess(res)) {
         toast.success(res.data);
         setRefresh(refresh === 1 ? 2 : 1);
-        resetInput();
+        // resetInput();
       }
     });
   };
+
   useEffect(() => {
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
       if (Api.isSuccess(res)) {
