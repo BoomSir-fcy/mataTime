@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { Icon, ReplyModal, MoreOperatorEnum } from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
+import RewardAuthTag from 'components/RewardAuth/RewardAuthTag';
 
 // enum MentionObjEnum {
 //   Article,
@@ -114,6 +115,7 @@ const MentionOperator: React.FC<IProps> = ({
             {itemData.like_num || 0}
           </div>
         ) : null}
+        <RewardAuthTag />
       </div>
       {/* 回复 */}
       <ReplyModal

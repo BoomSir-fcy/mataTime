@@ -17,7 +17,7 @@ const RewardAuthContext = React.createContext({} as ProviderState)
 
 const RewardAuthContextProvider = ({ children }) => {
 
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
 
   return (
     <RewardAuthContext.Provider value={{
