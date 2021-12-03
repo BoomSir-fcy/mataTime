@@ -103,7 +103,7 @@ export const Tabs = (props: propsType) => {
   };
   return (
     <TabsBox isBoxShadow>
-      {tabLeftArr.length > 0 ? (
+      {tabLeftArr.length > 0 && (
         <TableLeftBox>
           {tabLeftArr.map((item, index) => {
             return (
@@ -117,10 +117,8 @@ export const Tabs = (props: propsType) => {
             );
           })}
         </TableLeftBox>
-      ) : (
-        ''
       )}
-      {tabRightArr.length > 0 ? (
+      {tabRightArr.length > 0 && (
         <TableRightBox>
           {tabRightArr.map((item, index) => {
             return (
@@ -134,8 +132,6 @@ export const Tabs = (props: propsType) => {
             );
           })}
         </TableRightBox>
-      ) : (
-        ''
       )}
     </TabsBox>
   );

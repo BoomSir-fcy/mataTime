@@ -243,6 +243,7 @@
   "commonUploadBackgroundTips": "Specification: 1200x500, below 2MB",
   "commonCoinMarketEmpty": "The currency is not yet included, and the price cannot be displayed",
   "commonContactAdmin": "Please contact the management",
+  "commonTransactionRejected": "Transaction rejected",
   "******end*****@kksam********": "@kksam翻译结束",
   "******start*****@bigCongee********": "@bigCongee翻译开始",
   "delCommentTitle": "Whether to delete this comment?",
