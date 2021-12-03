@@ -53,6 +53,16 @@ const TopicList = props => {
     }
   };
 
+  React.useEffect(() => {
+    if (state.page !== 1) {
+      setState(p => {
+        p.listData = [];
+        p.page = 1;
+        p.totalPage = 1;
+      });
+    }
+  }, [id, name]);
+
   return (
     <Box key={props.location.key}>
       <Crumbs back centerTitle={`#${name}#`} />
