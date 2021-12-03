@@ -1,4 +1,5 @@
 import React from 'react';
+import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
 import Search from './search';
 import Swap from './swap';
@@ -10,22 +11,32 @@ import styled from 'styled-components';
 // TODO: js 判断 滚动
 const SidebarStyled = styled(Box)`
   position: sticky;
+  transition: all 0.1s ease;
   top: 0;
 `;
 
 const Sidebar = props => {
+  const ref = React.useRef<HTMLDivElement | null>();
+  const [state, setState] = useImmer({
+    scroll: 0,
+    top: ''
+  });
+
   React.useEffect(() => {
-    const handleScroll = e => {
-      console.log(window.scrollY);
+    const handleScroll = () => {
+      setState(p => {
+        p.scroll = window.scrollY;
+        p.top = state.scroll <= window.scrollY ? '-320px' : '0';
+      });
     };
     document.addEventListener('scroll', handleScroll);
     return () => {
       document.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [state.scroll]);
 
   return (
-    <SidebarStyled {...props}>
+    <SidebarStyled {...props} style={{ top: state.top }} ref={ref}>
       <Search />
       {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
       <Swap />
