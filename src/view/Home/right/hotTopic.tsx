@@ -58,6 +58,8 @@ export const HotTopic: React.FC = (props: any) => {
         } else {
           setPage(1);
         }
+      } else {
+        toast.error(t('HotTopicRefreshFail'))
       }
     });
   };

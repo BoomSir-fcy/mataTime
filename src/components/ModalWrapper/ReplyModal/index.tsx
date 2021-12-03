@@ -71,11 +71,12 @@ export const ReplyModal = React.memo((props: IProp) => {
   };
 
   return (
-    <ModalWrapper creactOnUse visible={show} setVisible={onClose}>
+    <ModalWrapper creactOnUse visible={show} setVisible={onClose} top="40%">
       <ReportModalWrapper>
         <ReportContentWrapper>
           <ReplyTargetWrapper>
             <MentionItem
+              dontShowPic
               itemData={replyType === 'twitter' ? itemData : itemData.comment}
               more={false}
             />

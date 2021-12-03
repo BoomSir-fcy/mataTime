@@ -124,7 +124,8 @@ const config = [
         icon: 'icon-gerenxinxi',
         activeIcon: 'icon-gerenxinxi1',
         lable: 'meMenuHome',
-        path: '/me'
+        path: '/me',
+        markPath: ['/me/edit'],
       },
       {
         icon: 'icon-e31guanzhu',
@@ -149,7 +150,14 @@ const config = [
         activeIcon: 'icon-shoucang1',
         lable: 'meMenuFav',
         path: '/me/collect'
-      }
+      },
+      {
+        icon: 'icon-shoucang',
+        activeIcon: 'icon-shoucang1',
+        lable: 'meMenuFav',
+        hide: true,
+        path: '/me/edit'
+      },
       // {
       //   icon: 'icon-pingbi1',
       //   activeIcon: 'icon-pingbi',

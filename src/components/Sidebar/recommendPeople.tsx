@@ -91,12 +91,12 @@ const RecommendPeople: React.FC<Iprops> = props => {
           justifyContent="space-between"
           style={{ marginTop: '17px' }}
         >
-          <Flex>
+          <Flex alignItems="center">
             <Link to={'/me/profile/' + item.uid}>
               <Avatar
                 src={item.nft_image}
-                style={{ width: '50px', height: '50px', minWidth: '50px' }}
-                scale="md"
+                // style={{ width: '50px', height: '50px', minWidth: '50px' }}
+                scale="sm"
               />
             </Link>
             <UserInfo>

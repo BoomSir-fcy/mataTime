@@ -38,8 +38,8 @@ export const Emoji: React.FC<{
         </Svg>
       </ButtonIcon> */}
       <Icon
-        size={25}
-        color={'#7393ff'}
+        size={20}
+        color="textPrimary"
         current={1}
         name="icon-xiaolian"
         onClick={e => {

@@ -35,7 +35,7 @@ export const NoticeItemWrapper = styled.div`
         .avatar{
           width: 60px;
           height: 60px;
-          border-radius: 10px;
+          /* border-radius: 10px; */
           overflow: hidden;
           margin-right: 13px;
           img{

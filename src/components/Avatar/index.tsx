@@ -20,8 +20,8 @@ const scaleVariants = {
     height: '100px'
   },
   [scales.MD]: {
-    width: '60px',
-    height: '60px'
+    width: '50px',
+    height: '50px'
   },
   [scales.SM]: {
     width: '40px',
@@ -30,12 +30,13 @@ const scaleVariants = {
 };
 
 const Img = styled.img`
+  display: block;
   border-radius: 50%;
   object-fit: cover;
   ${variant({
-    prop: 'scale',
-    variants: scaleVariants
-  })}
+  prop: 'scale',
+  variants: scaleVariants
+})}
 `;
 
 export const Avatar: React.FC<{

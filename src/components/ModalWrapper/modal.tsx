@@ -5,9 +5,13 @@ import { Heading, Flex, CloseLineIcon, Button } from 'uikit';
 
 import useTheme from 'hooks/useTheme';
 
-const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
+const getCustomStyles = (
+  theme: DefaultTheme,
+  fillBody?: boolean,
+  top?: string
+) => ({
   content: {
-    top: '50%',
+    top: top ? top : '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
@@ -51,6 +55,7 @@ interface ModalWrapperProps {
   creactOnUse?: boolean;
   customizeTitle?: boolean;
   fillBody?: boolean;
+  top?: string;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -61,11 +66,12 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     creactOnUse,
     title,
     customizeTitle,
-    fillBody
+    fillBody,
+    top
   }) => {
     const { theme } = useTheme();
 
-    const customStyles = getCustomStyles(theme, fillBody);
+    const customStyles = getCustomStyles(theme, fillBody, top);
     const onClose = useCallback(() => setVisible(false), [setVisible]);
     if (!visible && creactOnUse) return null;
 

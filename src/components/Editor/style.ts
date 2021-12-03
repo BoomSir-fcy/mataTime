@@ -93,7 +93,7 @@ export const MentionContent = styled(Box)`
   top: -9999px;
   left: -9999px;
   position: absolute;
-  z-index: 1;
+  z-index: 9999;
   width: 200px;
   height: 300px;
   overflow-y: auto;

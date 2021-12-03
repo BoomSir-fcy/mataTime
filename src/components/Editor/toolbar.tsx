@@ -5,14 +5,14 @@ import { Box, Flex, Button, Svg } from 'uikit';
 import { Emoji } from './emoji';
 import { Icon } from 'components';
 import { useSlate } from 'slate-react';
+
 const EditorToolbar = styled(Flex)`
+  position: relative;
   i {
     margin-right: 20px !important;
   }
 `;
-const ToolbarButton = styled(Button)`
-  padding: 0 10px;
-`;
+
 const EmojiButton = ({ callbackEmoji }) => {
   const editor = useSlate();
   // const {insertText} = editor
@@ -42,31 +42,30 @@ export const Toolbar: React.FC<{
     callbackInserAt,
     type
   }) => {
-    const size = 25,
-      color = '#7393ff';
+    const size = 20;
     return (
-      <EditorToolbar>
-        <EmojiButton callbackEmoji={callbackEmoji}></EmojiButton>
+      <EditorToolbar alignItems="center">
+        <EmojiButton callbackEmoji={callbackEmoji} />
         {type === 'post' ? (
           <>
             <Icon
               size={size}
-              color={color}
+              color="textPrimary"
               current={1}
               name="icon-tupian"
               onClick={callbackSelectImg}
             />
-            {/* <Icon size={size} color={color} current={1} name="icon-GIF"/> */}
+            {/* <Icon size={size} color="textPrimary" current={1} name="icon-GIF"/> */}
             <Icon
               size={size}
-              color={color}
+              color="textPrimary"
               current={1}
               name="icon-aite"
               onClick={callbackInserAt}
             />
             <Icon
               size={size}
-              color={color}
+              color="textPrimary"
               current={1}
               name="icon-a-xiaoxi1"
               onClick={callbackInserTopic}

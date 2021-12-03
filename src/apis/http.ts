@@ -76,7 +76,7 @@ export class Http {
 
   static checkSuccess(res: Api.Error) {
     return res && res.code === 1;
-  };
+  }
 }
 
 export default new Http();

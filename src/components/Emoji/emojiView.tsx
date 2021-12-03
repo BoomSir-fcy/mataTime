@@ -9,11 +9,12 @@ export const EmojiView: React.FC<{
   return (
     <Picker
       tooltip
+      perLine={7}
       set="apple"
       color="#4168ED"
       showPreview={false}
       showSkinTones={false}
-      style={{ position: 'absolute', left: 0, top: 40, zIndex: 99 }}
+      style={{ position: 'absolute', left: 0, top: 40 }}
       onClick={(emoji, e) => e.nativeEvent.stopImmediatePropagation()}
       onSelect={emoji => selectedEmoji(emoji.native)}
     />

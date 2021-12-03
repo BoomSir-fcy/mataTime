@@ -12,7 +12,7 @@ export interface NavItemProps extends MenuNavLink {
   pathname: string
 }
 
-const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, activeIcon, pathname }) => {
+const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hide, activeIcon, pathname, markPath }) => {
   const { t } = useTranslation()
   const { toastInfo } = useToast();
 
@@ -21,9 +21,10 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, act
   }, [badge])
 
   const isActive = useMemo(() => {
-    return pathname === path && !coming
-  }, [pathname, path])
+    return (pathname === path || markPath?.includes(pathname)) && !coming
+  }, [pathname, markPath, path])
 
+  if (hide) return null
   if (coming) {
     return (
       <NavItemStyled onClick={() => toastInfo(t('Coming Soon!'))} mt="1px" alignItems="center" padding="28px 14px">
