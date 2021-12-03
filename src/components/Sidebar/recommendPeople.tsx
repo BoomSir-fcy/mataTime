@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { debounce } from 'lodash';
+import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization';
+import { shortenAddress } from 'utils/contract';
 import { Flex, Box, Button, Card, Text } from 'uikit';
-import { Avatar } from 'components';
-import { Link } from 'react-router-dom';
+import { Avatar, FollowButton, CancelAttentionModal } from 'components';
+import { useToast } from 'hooks';
 import { Api } from 'apis';
 
 const RecommendPeopleBox = styled(Card)`
@@ -21,108 +25,165 @@ const MoreBtn = styled.span`
   color: #7393ff;
   cursor: pointer;
 `;
-export const UserTitle = styled.div`
-  margin: 0 12px;
-  margin-right: 5px;
-  font-weight: 700;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.white_black};
-  width: 80px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+const UserInfo = styled(Flex)`
+  min-width: 0;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-left: 12px;
 `;
-export const UserDesc = styled.div`
-  margin: 0 12px;
+export const UserTitle = styled(Text)`
+  color: ${({ theme }) => theme.colors.white_black};
+  width: 100px;
+  min-width: 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+export const UserDesc = styled(Text)`
   font-size: 16px;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.textTips};
-  width: 105px;
   overflow: hidden;
   // white-space: nowrap;
   // text-overflow: ellipsis;
 `;
-const FollowBtn = styled(Button)`
-  font-size: 14px;
-  font-weight: bold;
-`;
-const UserInfo = styled(Box)``;
-type Iprops = {
-  // dataList:any[]
-};
+
+type Iprops = {};
 
 const RecommendPeople: React.FC<Iprops> = props => {
   const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const [list, setList] = useState([]);
   const [isInit, setIsInit] = useState(true);
+  const [state, setState] = useImmer({
+    list: [] as any,
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: ''
+    }
+  });
+
   useEffect(() => {
     getManList();
   }, []);
+
   const getManList = () => {
     Api.UserApi.referrerMans({ num: 3 }).then(res => {
       if (Api.isSuccess(res)) {
         setIsInit(true);
-        setList(res.data || []);
+        setState(p => {
+          p.list = res.data || [];
+        });
       }
     });
   };
 
   // 关注用户
-  const onAttentionFocusRequest = async (focus_uid: number) => {
+  const onAttentionFocusRequest = async (focus_uid: number, index: number) => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
-      toast.success(res.data);
-      getManList();
+      let followList = { ...state.list[index], attention_status: 1 };
+      let folloTemp = [...state.list];
+      folloTemp.splice(index, 1, followList);
+      setState(p => {
+        p.list = folloTemp;
+      });
+      toastSuccess(t('commonMsgFollowSuccess') || res.data);
     } else {
-      toast.error(res.data);
+      toastError(res.data);
     }
   };
 
-  return isInit && list.length < 1 ? null : (
-    <RecommendPeopleBox isBoxShadow isRadius>
-      <Flex justifyContent="space-between" alignItems="center">
-        <TitleText>{t('recommendPeopleTitle')}</TitleText>
-        <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
-      </Flex>
-      {list.map((item, index) => (
-        <Flex
-          key={item.uid}
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ marginTop: '17px' }}
-        >
-          <Flex alignItems="center">
-            <Link to={'/me/profile/' + item.uid}>
+  // 取消关注
+  const unFollowUser = async item => {
+    try {
+      const res = await Api.MeApi.unFollowUser(item.uid);
+      if (Api.isSuccess(res)) {
+        let followList = { ...state.list[item.index], attention_status: 0 };
+        let folloTemp = [...state.list];
+        folloTemp.splice(item.index, 1, followList);
+        setState(p => {
+          p.list = folloTemp;
+          p.cancelFollow = false;
+        });
+        toastSuccess(t('commonMsgFollowError') || res.data);
+      } else {
+        toastError(t('commonMsgUnFollowError') || res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    isInit &&
+    state.list.length && (
+      <RecommendPeopleBox isBoxShadow isRadius>
+        <Flex justifyContent="space-between" alignItems="center">
+          <TitleText>{t('recommendPeopleTitle')}</TitleText>
+          <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
+        </Flex>
+        {state.list.map((item, index) => (
+          <Flex
+            key={`${item.uid}_${index}`}
+            alignItems="center"
+            justifyContent="space-between"
+            mt="17px"
+          >
+            <Flex
+              alignItems="center"
+              as={Link}
+              to={`/me/profile/${item.uid}`}
+              style={{ flex: 1 }}
+            >
               <Avatar
                 src={item.nft_image}
                 // style={{ width: '50px', height: '50px', minWidth: '50px' }}
                 scale="sm"
               />
-            </Link>
-            <UserInfo>
-              <Flex>
+              <UserInfo>
                 <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
-                {/* <Icon name="icon-dunpai" margin="5px 0px 0px -10px" size={15} color="#699a4d"></Icon> */}
-              </Flex>
-              <UserDesc title={item.address}>
-                @
-                {(item.address || '').slice(0, 3) +
-                  '...' +
-                  (item.address || '').slice(38)}
-              </UserDesc>
-            </UserInfo>
+                <UserDesc title={item.address}>
+                  {shortenAddress(item.address)}
+                </UserDesc>
+              </UserInfo>
+            </Flex>
+            <FollowButton
+              key={index}
+              data={item}
+              followFunc={debounce(
+                () => onAttentionFocusRequest(item.uid, index),
+                1000
+              )}
+              unFollowFunc={() =>
+                setState(p => {
+                  p.cancelParams = { ...item, index };
+                  p.cancelFollow = true;
+                })
+              }
+            />
           </Flex>
-          <FollowBtn
-            onClick={() => {
-              onAttentionFocusRequest(item.uid);
-            }}
-          >
-            +{t('followText')}
-          </FollowBtn>
-        </Flex>
-      ))}
-    </RecommendPeopleBox>
+        ))}
+
+        <CancelAttentionModal
+          title={t('meUnsubscribeTips')}
+          show={state.cancelFollow}
+          params={state.cancelParams}
+          confirm={debounce(() => unFollowUser(state.cancelParams), 1000)}
+          onClose={() =>
+            setState(p => {
+              p.cancelFollow = false;
+            })
+          }
+        />
+      </RecommendPeopleBox>
+    )
   );
 };
 
-export default RecommendPeople
+export default RecommendPeople;

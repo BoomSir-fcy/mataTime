@@ -11,7 +11,7 @@ import styled from 'styled-components';
 // TODO: js 判断 滚动
 const SidebarStyled = styled(Box)`
   position: sticky;
-  transition: all 0.1s ease;
+  transition: all 0.2s ease-out;
   top: 0;
 `;
 
@@ -26,7 +26,10 @@ const Sidebar = props => {
     const handleScroll = () => {
       setState(p => {
         p.scroll = window.scrollY;
-        p.top = state.scroll <= window.scrollY ? '-320px' : '0';
+        p.top =
+          state.scroll <= window.scrollY
+            ? `-${ref.current.clientHeight - window.innerHeight}px`
+            : '0';
       });
     };
     document.addEventListener('scroll', handleScroll);

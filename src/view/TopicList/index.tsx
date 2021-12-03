@@ -15,6 +15,7 @@ const TopicList = props => {
   const { id, name } = props.match.params;
   const { toastError } = useToast();
   const [state, setState] = useImmer({
+    tagName: '',
     loading: false,
     page: 1,
     totalPage: 1,
@@ -37,6 +38,7 @@ const TopicList = props => {
       if (Api.isSuccess(res)) {
         setState(p => {
           p.loading = false;
+          p.tagName = name;
           p.page = (current || page) + 1;
           p.totalPage = res.data.total_page;
           p.listData = current
@@ -51,18 +53,6 @@ const TopicList = props => {
     }
   };
 
-  React.useEffect(() => {
-    if (state.page !== 1) {
-      setState(p => {
-        p.page = 1;
-        p.loading = true;
-        p.listData = [];
-        p.totalPage = 0;
-      });
-      getList(1);
-    }
-  }, [name]);
-
   return (
     <Box key={props.location.key}>
       <Crumbs back centerTitle={`#${name}#`} />
@@ -72,7 +62,9 @@ const TopicList = props => {
         loading={loading}
         renderList={() => {
           if (loading || page > totalPage) return;
-          getList();
+          Boolean(state.tagName) && state.tagName === name
+            ? getList()
+            : getList(1);
         }}
       >
         {listData.map((item, index) => (
