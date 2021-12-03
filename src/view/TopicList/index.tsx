@@ -53,9 +53,9 @@ const TopicList = props => {
     }
   };
 
-  React.useEffect(() => {
-    getList(1);
-  }, [id, name]);
+  // React.useEffect(() => {
+  //   getList(1);
+  // }, [id, name]);
 
   return (
     <Box>
@@ -64,7 +64,9 @@ const TopicList = props => {
         ref={listRef}
         marginTop={320}
         loading={loading}
-        renderList={getList}
+        renderList={() => {
+          getList()
+        }}
       >
         {listData.map((item, index) => (
           <MeItemWrapper key={`${item.id}_${index}`}>
