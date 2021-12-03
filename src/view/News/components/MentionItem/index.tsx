@@ -138,7 +138,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
             <Avatar
               className="avatar"
               src={itemData.user_avator_url}
-              scale="sm"
+              scale="md"
             />
           </Link>
           <div className="user-info">
