@@ -2,6 +2,8 @@ import { cloneDeep, throttle } from "lodash";
 import { Api } from "apis";
 
 enum MessageProtocol {
+  // 报错
+  WSProtocol_ERROR = 0,
   // 时间消耗
   WSProtocol_Spend_Time = 1,
   // 系统通知
@@ -56,7 +58,14 @@ export class IM extends EventTarget {
   endConnect: boolean = false; // 是否结束链接
   nonce = 0; // Nonce, 类似消息ID
 
-  suspendTpl: MessageProtocol[] = []
+  private suspendTpl: MessageProtocol[] = []; // 暂停的交互(不向后端发送此tpl的消息)
+
+  addSuspendTpl(...arg: MessageProtocol[]) {
+    this.suspendTpl = this.suspendTpl.concat(arg)
+  }
+  removeSuspendTpl(...arg: MessageProtocol[]) {
+    this.suspendTpl = this.suspendTpl.filter(item => !arg.includes(item))
+  }
 
   // 消息协议
   static MessageProtocol = MessageProtocol
@@ -90,6 +99,7 @@ export class IM extends EventTarget {
    * @param needWait 是否需要在重连后重新发送
    */
   send(ptl: MessageProtocol, data?: unknown, needWait?: boolean) {
+    if (this.suspendTpl.includes(ptl)) return;
     const { readyState } = this.connection || {};
     this.nonce += 1
     const sendData = {
@@ -171,10 +181,31 @@ export class IM extends EventTarget {
   private parseMessage(event: MessageEvent) {
     const data = JSON.parse(event.data)
     switch (data.code) {
-      case MessageProtocol.WSProtocol_SYSTEM_NOTIFY:
+      case IM.MessageProtocol.WSProtocol_SYSTEM_NOTIFY:
         this.dispatchEvent(new MessageEvent('systemMsg', {
-          data: data,
+          data,
         }))
+        break;
+      case IM.MessageProtocol.WSProtocol_Spend_Time:
+        this.dispatchEvent(new MessageEvent('spendTime', {
+          data
+        }))
+        break;
+      case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
+        this.dispatchEvent(new MessageEvent('unreadNotify', {
+          data
+        }))
+        break;
+      case IM.MessageProtocol.WSProtocol_HEART_Jump_Jump:
+        // 心跳检测 不做处理
+        break;
+      case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
+        // TODO: Error
+        // this.addSuspendTpl()
+        break;
+      default:
+        console.debug('unread ws code: ', data)
+        break
     }
   }
 
@@ -186,7 +217,7 @@ export class IM extends EventTarget {
       source: event.source,
     }))
     this.waitMessageList = this.waitMessageList.filter(item => item.nonce !== event.data.nonce)
-    // this.parseMessage(event)
+    this.parseMessage(event)
 
   }
 
