@@ -18,9 +18,11 @@ const PageContainerStyled = styled(Box)`
   padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题
 `;
 
-const ChildrenWrapper = styled(Container)`
+const ChildrenWrapper = styled(Box)`
   min-height: auto;
-  width: 100%;
+  max-width: 1200px;
+  width: 1200px;
+  margin: auto;
   padding-top: 0;
   padding-bottom: 0;
 `;
