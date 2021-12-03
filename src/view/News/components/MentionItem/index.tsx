@@ -27,6 +27,7 @@ import moreIcon from 'assets/images/social/more.png';
 type IProps = {
   more?: boolean;
   size?: string;
+  dontShowPic?: boolean;
   itemData: any;
   [propName: string]: any;
   callback?: Function;
@@ -35,6 +36,7 @@ type IProps = {
 const MentionItem: React.FC<IProps> = props => {
   const {
     children,
+    dontShowPic,
     size = 'nomal',
     itemData = {},
     callback = () => {}
@@ -70,9 +72,10 @@ const MentionItem: React.FC<IProps> = props => {
   };
 
   const goDetils = () => {
-    if (props.match.path === '/articleDetils/:id') return;
+    if (props?.match?.path === '/articleDetils/:id') return;
     props.history.push('/articleDetils/' + itemData.post_id || itemData.id);
   };
+
   return (
     <MentionItemWrapper ref={mentionRef}>
       <MentionItemUser
@@ -96,7 +99,9 @@ const MentionItem: React.FC<IProps> = props => {
             callback(itemData, type);
           }}
         />
-        <ImgList list={itemData.image_list || itemData.image_url_list} />
+        {!dontShowPic && (
+          <ImgList list={itemData.image_list || itemData.image_url_list} />
+        )}
       </Box>
       {children}
       {/* 关注提示 */}

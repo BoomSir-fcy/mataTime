@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Button, Box, Text, Toggle, Card, Flex } from 'uikit';
+import { Button } from 'uikit';
+
 export const FollowBtn = styled(Button)`
   margin-right: 15px;
   font-size: 14px;
@@ -14,7 +15,6 @@ export const MentionItemWrapper = styled.div`
     word-break: break-all;
   }
 `;
-
 export const MentionItemUserWrapper = styled.div`
   .user-wrapper {
     display: flex;
