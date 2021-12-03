@@ -20,8 +20,8 @@ const config = [
     lable: 'homeMenuStar'
   },
   {
-    icon: 'icon-xiaoxi',
-    activeIcon: 'icon-xiaoxi1',
+    icon: 'icon-tixing',
+    activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
     badgeName: 'mineTotalMsgNum',
     lable: 'homeMenuNews',
@@ -48,8 +48,8 @@ const config = [
         lable: 'newsPraiseMenuTitle'
       },
       {
-        icon: 'icon-xiaoxi',
-        activeIcon: 'icon-xiaoxi1',
+        icon: 'icon-tixing',
+        activeIcon: 'icon-tixing1',
         badgeName: 'message_secret',
         path: pathConfig.messageNoticePath,
         lable: 'newsNoticeMenuTitle'
@@ -73,43 +73,43 @@ const config = [
     lable: 'homeMenuOther'
   },
   {
-    icon: 'icon-qianbao',
-    activeIcon: 'icon-qianbao1',
+    icon: 'icon-qianbao2',
+    activeIcon: 'icon-a-qianbao1',
     path: '/account',
     lable: 'homeMenuWallet',
     children: [
       {
-        icon: 'icon-qianbao',
-        activeIcon: 'icon-qianbao1',
+        icon: 'icon-qianbao2',
+        activeIcon: 'icon-a-qianbao1',
         title: '钱包资产',
         path: '/account',
         lable: 'AccountMenu Wallet'
       },
       {
-        icon: 'icon-qitawenti',
-        activeIcon: 'icon-qitawenti1',
+        icon: 'icon-w59',
+        activeIcon: 'icon-w59',
         title: 'Time兑换',
         path: '/account/time',
         lable: 'AccountMenu Time'
       },
       {
-        icon: 'icon-qianbao',
-        activeIcon: 'icon-qianbao1',
+        icon: 'icon-shuichi',
+        activeIcon: 'icon-xiaofangshuixiang_shuichi',
         title: '质押Staking',
         path: '/account/stake',
         lable: 'AccountMenu Staking'
       },
       {
-        icon: 'icon-w31shezhi',
-        activeIcon: 'icon-a-31shezhi1',
+        icon: 'icon-NFTkapai1',
+        activeIcon: 'icon-NFTkapai',
         title: 'NFT',
         coming: true,
         path: '/account/safeset',
         lable: 'AccountMenu NFT'
       },
       {
-        icon: 'icon-w31shezhi',
-        activeIcon: 'icon-a-31shezhi1',
+        icon: 'icon-purse1S',
+        activeIcon: 'icon-purse1S',
         coming: true,
         title: '打赏明细',
         path: '/account/safeset',
@@ -167,8 +167,8 @@ const config = [
     ]
   },
   {
-    icon: 'icon-w31shezhi',
-    activeIcon: 'icon-a-31shezhi1',
+    icon: 'icon-shezhi',
+    activeIcon: 'icon-shezhi1',
     path: '/set/safeset',
     lable: 'homeMenuSet',
     children: [
@@ -179,8 +179,8 @@ const config = [
         path: '/set/safeset'
       },
       {
-        icon: 'icon-xiaoxi',
-        activeIcon: 'icon-xiaoxi1',
+        icon: 'icon-tixing',
+        activeIcon: 'icon-tixing1',
         lable: 'setMenuNotification',
         path: '/set/noticeset'
       },

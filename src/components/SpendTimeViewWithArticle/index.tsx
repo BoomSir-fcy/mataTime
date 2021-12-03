@@ -33,10 +33,10 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ art
   }, [articleId, rendered, setRendered, setArticlePositions]);
 
 
-  return <div ref={imgRef} />
-  // return <div ref={imgRef}>
-  //   <Text>articleId: {articleId}</Text>
-  // </div>
+  // return <div ref={imgRef} />
+  return <div ref={imgRef}>
+    <Text>articleId: {articleId}</Text>
+  </div>
 }
 
 export default SpendTimeViewWithArticle
