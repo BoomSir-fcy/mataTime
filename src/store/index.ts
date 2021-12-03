@@ -9,7 +9,7 @@ import coinsReduce from './coins/reducer';
 import walletReduce from './wallet/reducer';
 import poolsReduce from './pools';
 import type { CoinsState } from './coins/reducer';
-import type { WalletState } from './wallet/reducer';
+import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 
 export interface Store {

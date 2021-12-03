@@ -19,6 +19,15 @@ import { useTranslation } from 'contexts/Localization';
 const NoPdBottom = styled(Container)`
 padding: 0;
 `
+const ScrollBox = styled(Box)`
+height:calc(100vh - 70px);
+overflow-y: auto;
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+-ms-overflow-style: none;
+scrollbar-width: none;
+`
 const BorderWalletBox = styled(WalletBox)`
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 ${({ theme }) => theme.mediaQueries.sm} {
@@ -98,43 +107,45 @@ const TokenAccount: React.FC = () => {
   return (
     <NoPdBottom>
       <WalletHead title={t('我的钱包')} />
-      <Flex flexWrap='wrap' justifyContent='space-between'>
-        <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
-        <Recharge balance={timeBalance} TokenAddr={timeAddress} />
-      </Flex>
-      {/* tab切换 */}
-      <ContentTab>
-        <Flex alignItems='baseline'>
-          <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
-          <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>打赏收益</TabText>
-          <TabText className={ActiveTab === 3 ? 'active' : ''} onClick={() => setActiveTab(3)}>Matter收益</TabText>
+      <ScrollBox>
+        <Flex flexWrap='wrap' justifyContent='space-between'>
+          <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
+          <Recharge balance={timeBalance} TokenAddr={timeAddress} />
         </Flex>
-        <RightBox justifyContent='space-between' alignItems='center'>
-          <IncomeBox>
-            <Img src={require('assets/images/myWallet/today.png').default} />
-            <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-              <Text fontSize='14px' color='textTips'>当日收益</Text>
-              <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
-            </Flex>
-          </IncomeBox>
-          <IncomeBox>
-            <Img src={require('assets/images/myWallet/total.png').default} />
-            <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-              <Text fontSize='14px' color='textTips'>累计收益</Text>
-              <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
-            </Flex>
-          </IncomeBox>
-        </RightBox>
-      </ContentTab>
-      {
-        ActiveTab !== 3 ?
-          <>
-            <Chart />
-            <EarningsRecord type={ActiveTab} />
-          </>
-          :
-          <Matter BalanceInfo={MatterInfo} TokenAddr={MatterAddress} />
-      }
+        {/* tab切换 */}
+        <ContentTab>
+          <Flex alignItems='baseline'>
+            <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
+            <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>打赏收益</TabText>
+            <TabText className={ActiveTab === 3 ? 'active' : ''} onClick={() => setActiveTab(3)}>Matter收益</TabText>
+          </Flex>
+          <RightBox justifyContent='space-between' alignItems='center'>
+            <IncomeBox>
+              <Img src={require('assets/images/myWallet/today.png').default} />
+              <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+                <Text fontSize='14px' color='textTips'>当日收益</Text>
+                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
+              </Flex>
+            </IncomeBox>
+            <IncomeBox>
+              <Img src={require('assets/images/myWallet/total.png').default} />
+              <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+                <Text fontSize='14px' color='textTips'>累计收益</Text>
+                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
+              </Flex>
+            </IncomeBox>
+          </RightBox>
+        </ContentTab>
+        {
+          ActiveTab !== 3 ?
+            <>
+              <Chart />
+              <EarningsRecord type={ActiveTab} />
+            </>
+            :
+            <Matter BalanceInfo={MatterInfo} TokenAddr={MatterAddress} />
+        }
+      </ScrollBox>
     </NoPdBottom>
   )
 }
