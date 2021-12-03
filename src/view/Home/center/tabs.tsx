@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { debounce } from 'lodash';
 import { useTranslation } from 'contexts/Localization';
-import { Flex, Button, Card } from 'uikit';
+import { Flex, Button, Box, Card } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 export const TabsBox = styled(Card)`
@@ -106,13 +107,13 @@ export const Tabs = (props: propsType) => {
         <TableLeftBox>
           {tabLeftArr.map((item, index) => {
             return (
-              <div
+              <Box
                 key={index}
-                onClick={leftTabClick.bind(this, item, index)}
+                onClick={debounce(() => leftTabClick(item, index), 500)}
                 className={currentLeftIndex === index ? 'leftActive' : ''}
               >
                 {item.label}
-              </div>
+              </Box>
             );
           })}
         </TableLeftBox>

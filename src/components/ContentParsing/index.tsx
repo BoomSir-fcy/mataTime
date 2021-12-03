@@ -27,6 +27,7 @@ const ExpandWrapper = styled.div`
 `;
 const ParagraphItem = styled.div`
   word-wrap: break-word;
+  word-break: break-all;
   p {
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
@@ -65,7 +66,7 @@ export const ContentParsing = (props: IProps) => {
     try {
       let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
       setParsingResult(arr);
-    } catch (err: any) { }
+    } catch (err: any) {}
   }, [props.content]);
 
   useEffect(() => {
