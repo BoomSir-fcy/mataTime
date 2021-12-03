@@ -92,6 +92,7 @@ const MentionOperator: React.FC<IProps> = ({
         <div className="operator-item">
           <Icon
             name={'icon-pinglun'}
+            size={18}
             color="textTips"
             onClick={() => {
               setReplyVisible(true);
@@ -106,9 +107,9 @@ const MentionOperator: React.FC<IProps> = ({
         {hasLike ? (
           <div className="operator-item" onClick={changeLike}>
             {isLike === 1 ? (
-              <Icon name={'icon-aixin1'} color={'#EC612B'} />
+              <Icon size={18} name={'icon-aixin1'} color={'#EC612B'} />
             ) : (
-              <Icon name={'icon-aixin'} color={'#B5B5B5'} />
+              <Icon size={18} name={'icon-aixin'} color={'#B5B5B5'} />
             )}
             {itemData.like_num || 0}
           </div>

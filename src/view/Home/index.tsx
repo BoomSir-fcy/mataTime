@@ -20,7 +20,7 @@ import { Api } from 'apis';
 
 const PageContainer = styled(Box)`
   position: relative;
-  /* width: 1200px; */
+  width: 100%;
   margin: 0 auto;
   display: flex;
 `;
@@ -31,6 +31,7 @@ const LeftCard = styled(Flex)`
 `;
 const CenterCard = styled(Box)`
   /* width: 670px; */
+  width: 100%;
   flex: 1;
   /* margin: 0 15px; */
   /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -55,12 +56,7 @@ const Home: React.FC = (props: any) => {
   const { toastError } = useToast();
   // const  editorRef = useRef();
 
-  const sendArticle = async (
-    content: string,
-    image_urls,
-    remind_user,
-    resetInput: () => void
-  ) => {
+  const sendArticle = async (content: string, image_urls, remind_user) => {
     if (!content) return false;
     try {
       const res = await Api.HomeApi.createArticle({
@@ -70,7 +66,6 @@ const Home: React.FC = (props: any) => {
       });
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
-        resetInput();
       } else {
         toastError(t('commonContactAdmin') || res.msg);
       }

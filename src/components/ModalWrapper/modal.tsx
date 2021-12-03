@@ -5,9 +5,14 @@ import { Heading, Flex, CloseLineIcon, Button } from 'uikit';
 
 import useTheme from 'hooks/useTheme';
 
-const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
+const getCustomStyles = (
+  theme: DefaultTheme,
+  fillBody?: boolean,
+  top?: string,
+  padding?: string,
+) => ({
   content: {
-    top: '50%',
+    top: top ? top : '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
@@ -19,7 +24,7 @@ const getCustomStyles = (theme: DefaultTheme, fillBody?: boolean) => ({
     // boxShadow: theme.card.boxShadow,
     border: 0,
     overflow: 'visible',
-    padding: fillBody ? '18px 0' : '18px 20px',
+    padding: padding ? padding : (fillBody ? '18px 0' : '18px 20px'),
     zIndex: 200
   },
   overlay: {
@@ -46,11 +51,13 @@ const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
 
 interface ModalWrapperProps {
   visible: boolean;
-  setVisible: (state: boolean) => void;
+  setVisible?: (state: boolean) => void;
   title?: string;
   creactOnUse?: boolean;
   customizeTitle?: boolean;
   fillBody?: boolean;
+  top?: string;
+  padding?: string;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -61,12 +68,18 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     creactOnUse,
     title,
     customizeTitle,
-    fillBody
+    fillBody,
+    top,
+    padding,
   }) => {
     const { theme } = useTheme();
 
-    const customStyles = getCustomStyles(theme, fillBody);
-    const onClose = useCallback(() => setVisible(false), [setVisible]);
+    const customStyles = getCustomStyles(theme, fillBody, top, padding);
+    const onClose = useCallback(() => {
+      if (setVisible) {
+        setVisible(false)
+      }
+    }, [setVisible]);
     if (!visible && creactOnUse) return null;
 
     return (

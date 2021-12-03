@@ -27,6 +27,7 @@ const ExpandWrapper = styled.div`
 `;
 const ParagraphItem = styled.div`
   word-wrap: break-word;
+  word-break: break-all;
   p {
     font-size: 18px;
     font-family: Alibaba PuHuiTi;

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 import { useTranslation } from 'contexts/Localization';
 import { Box, Flex, Image, Text, RefreshRingIcon, BalanceText } from 'uikit';
 import QuestionHelper from '../QuestionHelper';
@@ -85,7 +86,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
               {showHelp && (
                 <QuestionHelper
                   text={<>
-                    {/* <Text fontSize="14px">{t('Update time:')} {coinInfo?.add_time}</Text> */}
+                    <Text fontSize="14px">{t('Update time:')} {dayjs(Number(coinInfo?.add_time) * 1000).format('YYYY-MM-DD HH:mm')}</Text>
                     <Text fontSize="14px">{t('Powered by CoinGecko')}</Text>
                   </>}
                   ml="4px"

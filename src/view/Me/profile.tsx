@@ -160,6 +160,7 @@ const Profile: React.FC<any> = props => {
   }, [uid]);
 
   const locationDisplay = React.useMemo(() => {
+    console.log(country, profile.location)
     return country?.find(item => item.ID === profile.location)?.LocationEn
   }, [country, profile.location]);
 

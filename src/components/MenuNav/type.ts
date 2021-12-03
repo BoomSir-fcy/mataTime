@@ -5,6 +5,8 @@ export interface MenuNavLink {
   lable: string
   activeIcon?: string,
   coming?: boolean
+  hide?: boolean
+  markPath?: string[]
   badge?: number
 }
 

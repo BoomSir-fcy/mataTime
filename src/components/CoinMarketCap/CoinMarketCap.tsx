@@ -80,7 +80,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   }, [currentCoin?.total_volume]);
 
   return (
-    <StyledPage isBoxShadow isRadius {...props}>
+    <StyledPage  {...props}>
       {!loaded ? (
         <Flex height="100%" justifyContent="center" alignItems="center">
           <ReactLoading
@@ -123,7 +123,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
             {!!Number(currentCoin?.current_price) ? (
               <Flex mt="8px" justifyContent="space-between">
                 <Box>
-                  <Text fontSize="14px" color="textgrey">
+                  <Text fontSize="14px" color="textTips">
                     {t('MARKET CAP')}
                   </Text>
                   <Text bold color="textPrimary" fontSize="14px">
@@ -131,7 +131,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                   </Text>
                 </Box>
                 <Box>
-                  <Text fontSize="14px" color="textgrey" textAlign="right">
+                  <Text fontSize="14px" color="textTips" textAlign="right">
                     {t('VOLUME')}
                   </Text>
                   <Text

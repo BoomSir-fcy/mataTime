@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
 import { Box } from 'uikit';
@@ -14,6 +15,7 @@ const TopicList = props => {
   const { id, name } = props.match.params;
   const { toastError } = useToast();
   const [state, setState] = useImmer({
+    tagName: '',
     loading: false,
     page: 1,
     totalPage: 1,
@@ -23,9 +25,6 @@ const TopicList = props => {
   const { loading, page, totalPage, listData } = state;
 
   const getList = async (current?: number) => {
-    console.log(current);
-    if (loading || page > totalPage) return;
-    console.log(222);
     setState(p => {
       p.loading = true;
     });
@@ -39,11 +38,12 @@ const TopicList = props => {
       if (Api.isSuccess(res)) {
         setState(p => {
           p.loading = false;
-          p.page = current || page + 1;
+          p.tagName = name;
+          p.page = (current || page) + 1;
           p.totalPage = res.data.total_page;
           p.listData = current
-            ? [...res.data.List]
-            : [...listData, ...res.data.List];
+            ? [...(res.data?.List || [])]
+            : [...listData, ...(res.data?.List || [])];
         });
       } else {
         toastError(res.msg);
@@ -53,18 +53,19 @@ const TopicList = props => {
     }
   };
 
-  React.useEffect(() => {
-    getList(1);
-  }, [id, name]);
-
   return (
-    <Box>
+    <Box key={props.location.key}>
       <Crumbs back centerTitle={`#${name}#`} />
       <List
         ref={listRef}
-        marginTop={320}
+        marginTop={0}
         loading={loading}
-        renderList={getList}
+        renderList={() => {
+          if (loading || page > totalPage) return;
+          Boolean(state.tagName) && state.tagName === name
+            ? getList()
+            : getList(1);
+        }}
       >
         {listData.map((item, index) => (
           <MeItemWrapper key={`${item.id}_${index}`}>
@@ -101,4 +102,4 @@ const TopicList = props => {
   );
 };
 
-export default TopicList;
+export default withRouter(TopicList);

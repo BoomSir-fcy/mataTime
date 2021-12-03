@@ -20,7 +20,7 @@ interface ProviderState {
 }
 
 
-const ImContext = React.createContext({ } as ProviderState)
+const ImContext = React.createContext({} as ProviderState)
 
 const ImContextProvider = ({ children }) => {
 
@@ -65,5 +65,7 @@ const ImContextProvider = ({ children }) => {
   )
 }
 
-export { ImContext,
-  ImContextProvider }
+export {
+  ImContext,
+  ImContextProvider
+}

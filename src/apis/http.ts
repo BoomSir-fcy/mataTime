@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import eventBus from '../utils/eventBus';
 import { storage } from 'config';
 import history from '../routerHistory';
+import { ResponseCode } from './type';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
@@ -37,13 +39,18 @@ export class Http {
         ...configs,
         headers: { ...configs.headers, token: token }
       });
-      // const { code, msg } = response.data
-      // if (code === 0) {
-      //   toast.error(msg || '服务器出错！')
-      // }
+
+      // 余额不足
+      if ((response.data as Api.Error)?.code === ResponseCode.INSUFFICIENT_BALANCE) {
+        eventBus.dispatchEvent(new MessageEvent('insufficient', {
+          data: response.data,
+        }))
+      }
       return response.data;
     } catch (e: any) {
-      if (e?.status === 401) return history.push('/login');
+      if (e?.status === 401) {
+        eventBus.dispatchEvent(new Event('unauthorized'))
+      }
     }
   }
 
@@ -69,7 +76,7 @@ export class Http {
 
   static checkSuccess(res: Api.Error) {
     return res && res.code === 1;
-  };
+  }
 }
 
 export default new Http();

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { BoxProps, Box, Flex, FlexProps } from 'uikit';
 import MenuNav from 'components/MenuNav';
 import Sidebar from 'components/Sidebar';
@@ -18,9 +18,11 @@ const PageContainerStyled = styled(Box)`
   padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题
 `;
 
-const ChildrenWrapper = styled(Container)`
+const ChildrenWrapper = styled(Box)`
   min-height: auto;
-  width: 100%;
+  max-width: 1200px;
+  width: 1200px;
+  margin: auto;
   padding-top: 0;
   padding-bottom: 0;
 `;
@@ -36,6 +38,15 @@ const InnerBox = styled(Flex)`
   top: 0;
   z-index: 2;
 `;
+
+// 解决图层问题
+const GlobalStyle = createGlobalStyle`
+  .mini-swap-Modal__Body--open {
+    .mini-swap-Modal__Body--open-sidebar{
+      z-index: 9;
+    }
+  }
+`
 
 const PageContainer: React.FC = ({ children }) => {
   const { pathname } = useLocation();
@@ -58,6 +69,7 @@ const PageContainer: React.FC = ({ children }) => {
 
   return (
     <PageContainerStyled>
+      <GlobalStyle />
       <ChildrenWrapper>
         <Flex width="100%" alignItems="flex-start" justifyContent="center">
           {showMenuNav && <MenuNav />}
@@ -69,7 +81,7 @@ const PageContainer: React.FC = ({ children }) => {
               </Box>
             </InnerBox>
             <LineStyled mr="14px" />
-            {showSidebar && <Sidebar />}
+            {showSidebar && <Sidebar className="mini-swap-Modal__Body--open-sidebar" />}
           </Flex>
         </Flex>
       </ChildrenWrapper>

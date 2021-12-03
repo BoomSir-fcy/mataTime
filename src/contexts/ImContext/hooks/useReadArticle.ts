@@ -17,9 +17,9 @@ const useReadArticle = () => {
     }, 1000);
     return () => clearInterval(timer)
   }, [])
-  
+
   const fetchHandle = useCallback(() => {
-    im.send(im.messageProtocol.WSProtocol_Spend_Time, {
+    im?.send(im.messageProtocol.WSProtocol_Spend_Time, {
       commit_time: fetchReadTime, // 提交时间
       read_type: 1, // 文章阅读
       read_uid: articleIds, // id数组 推文或者评论的
@@ -32,7 +32,7 @@ const useReadArticle = () => {
     setFetchReadTime(nowTime)
     fetchHandle()
   }, [nowTime, articleIds, fetchReadTime, fetchHandle])
-  
+
 
   const handleScroll = useCallback(() => {
     const top = window.scrollY
@@ -55,9 +55,9 @@ const useReadArticle = () => {
        * 1. 当文章过长以后 判断上边距和文章碰撞检测
        */
       if (
-          articleTop >= (top + VIEW_PADDING) && (bottom - VIEW_PADDING) >= articleTop
-          ||
-          articleBottom >= (top + VIEW_PADDING) && (bottom - VIEW_PADDING) >= articleBottom
+        articleTop >= (top + VIEW_PADDING) && (bottom - VIEW_PADDING) >= articleTop
+        ||
+        articleBottom >= (top + VIEW_PADDING) && (bottom - VIEW_PADDING) >= articleBottom
       ) {
         topViews.push(Number(item))
       } else if (top >= (articleTop + VIEW_PADDING) && (articleBottom - VIEW_PADDING) >= top) {

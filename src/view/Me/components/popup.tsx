@@ -100,7 +100,7 @@ export const Popup: React.FC<{
         >
           <PopupWrapper
             variant="text"
-            onMouseEnter={() =>
+            onClick={() =>
               setState(p => {
                 p.visible = true;
               })

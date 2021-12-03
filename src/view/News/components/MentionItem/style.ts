@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Button, Box, Text, Toggle, Card, Flex } from 'uikit';
+import { Button } from 'uikit';
+
 export const FollowBtn = styled(Button)`
   margin-right: 15px;
   font-size: 14px;
@@ -7,6 +8,7 @@ export const FollowBtn = styled(Button)`
 `;
 export const MentionItemWrapper = styled.div`
   .mention-content {
+    cursor: pointer;
     box-sizing: border-box;
     padding: 15px 0 15px 73px;
     color: ${({ theme }) => theme.colors.white_black};
@@ -14,7 +16,6 @@ export const MentionItemWrapper = styled.div`
     word-break: break-all;
   }
 `;
-
 export const MentionItemUserWrapper = styled.div`
   .user-wrapper {
     display: flex;
@@ -68,7 +69,7 @@ export const MentionItemUserWrapper = styled.div`
         .avatar {
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          /* border-radius: 10px; */
           overflow: hidden;
           margin-right: 13px;
           img {

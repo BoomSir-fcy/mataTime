@@ -12,7 +12,7 @@ export interface NavItemProps extends MenuNavLink {
   pathname: string
 }
 
-const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, activeIcon, pathname }) => {
+const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hide, activeIcon, pathname, markPath }) => {
   const { t } = useTranslation()
   const { toastInfo } = useToast();
 
@@ -21,16 +21,17 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, act
   }, [badge])
 
   const isActive = useMemo(() => {
-    return pathname === path && !coming
-  }, [pathname, path])
+    return (pathname === path || markPath?.includes(pathname)) && !coming
+  }, [pathname, markPath, path])
 
+  if (hide) return null
   if (coming) {
     return (
       <NavItemStyled onClick={() => toastInfo(t('Coming Soon!'))} mt="1px" alignItems="center" padding="28px 14px">
         <IconBox>
           {/* {icon} */}
           <Icon name={icon} color={isActive ? 'white_black' : 'textSubtle'} />
-          {typeof badge === 'number' && <Badge>{badgeDispaly}</Badge>}
+          {typeof badge === 'number' && <Badge color="white">{badgeDispaly}</Badge>}
         </IconBox>
         <Text ml="20px" fontSize="18px" bold={isActive} color={isActive ? 'white_black' : 'textSubtle'} >{t(lable)}</Text>
       </NavItemStyled>
@@ -41,7 +42,7 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, act
       <IconBox>
         {/* {isActive ? (activeIcon || icon) : icon} */}
         <Icon name={isActive ? (activeIcon || icon) : icon} color={isActive ? 'white_black' : 'textSubtle'} />
-        {typeof badge === 'number' && <Badge>{badgeDispaly}</Badge>}
+        {typeof badge === 'number' && <Badge color="white">{badgeDispaly}</Badge>}
       </IconBox>
       <Text ml="20px" fontSize="18px" bold={isActive} color={isActive ? 'white_black' : 'textSubtle'} >{t(lable)}</Text>
     </NavItemStyled>

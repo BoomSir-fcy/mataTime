@@ -39,7 +39,7 @@ export const ArticleList = props => {
     Api.HomeApi.getArticleList({
       attention: 1,
       page: current || page,
-      per_page: 50,
+      per_page: 5,
       ...props.filterValObj
     }).then(res => {
       setLoading(false);
