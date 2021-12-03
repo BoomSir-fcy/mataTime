@@ -71,6 +71,7 @@
   "HotTopicTitle": "Hot Topic",
   "HotTopicUnit": "%value% content",
   "HotTopicRefreshSuccess": "Refresh succeeded",
+  "HotTopicRefreshFail": "Refresh fail",
   "recommendPeopleTitle": "People who interested",
   "moreText": "more",
   "homeTabAll": "All",

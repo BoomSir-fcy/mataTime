@@ -71,6 +71,7 @@
   "HotTopicTitle": "热门话题",
   "HotTopicUnit": "%value%条内容",
   "HotTopicRefreshSuccess": "刷新成功",
+  "HotTopicRefreshFail": "刷新失败",
   "recommendPeopleTitle": "可能感兴趣的人",
   "moreText": "更多",
   "homeTabAll": "全部",
