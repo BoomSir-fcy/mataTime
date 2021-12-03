@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Transition } from "react-transition-group";
 import { useStore } from 'store';
-import MiniSwap from 'libs/mini-swap';
 import { useWeb3React } from '@web3-react/core';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { useTranslation } from 'contexts/Localization';
@@ -10,6 +9,9 @@ import { light, dark, Text, Box } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
+
+const MiniSwap = React.lazy(() => import('libs/mini-swap'));
+
 
 const SwapBox = styled.div`
   /* margin-top:15px; */
