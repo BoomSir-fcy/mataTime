@@ -402,7 +402,7 @@ var translations = {
 	"Custom Token": "Custom Token",
 	"Custom Tokens": "Custom Tokens",
 	"Unknown Error": "Unknown Error",
-	"Select a currency": "Select a currency",
+	"Select ": "Select",
 	"Search name or paste address": "Search name or paste address",
 	"Add %asset% to Metamask": "Add %asset% to Metamask",
 	"Added %asset%": "Added %asset%",
@@ -777,7 +777,7 @@ var translationsZhCN = {
 	"Custom Token": "自定义代币",
 	"Custom Tokens": "自定义代币",
 	"Unknown Error": "未知错误",
-	"Select a currency": "选择币种",
+	"Select ": "选择币种",
 	"Search name or paste address": "搜索名称或粘贴地址",
 	"Add %asset% to Metamask": "将 %asset% 添加到 Metamask",
 	"Added %asset%": "已添加 %asset%",
@@ -12321,7 +12321,7 @@ function CurrencyInputPanel(_a) {
                                 }
                             } }, { children: jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center", justifyContent: "space-between" }, { children: [pair ? (jsxRuntime.jsx(DoubleCurrencyLogo, { currency0: pair.token0, currency1: pair.token1, size: 16, margin: true }, void 0)) : currency ? (jsxRuntime.jsx(CurrencyLogo, { currency: currency, size: "24px", style: { marginRight: '8px' } }, void 0)) : null, pair ? (jsxRuntime.jsxs(Text, tslib.__assign({ color: 'primary', id: "pair" }, { children: [pair === null || pair === void 0 ? void 0 : pair.token0.symbol, ":", pair === null || pair === void 0 ? void 0 : pair.token1.symbol] }), void 0)) : (jsxRuntime.jsx(Text, tslib.__assign({ color: 'primary', id: "pair" }, { children: (currency && currency.symbol && currency.symbol.length > 20
                                             ? currency.symbol.slice(0, 4) + "..." + currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
-                                            : currency === null || currency === void 0 ? void 0 : currency.symbol) || t('Select a currency') }), void 0)), !disableCurrencySelect && jsxRuntime.jsx(Icon$9, { color: 'primary' }, void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0) }), void 0));
+                                            : currency === null || currency === void 0 ? void 0 : currency.symbol) || t('Select') }), void 0)), !disableCurrencySelect && jsxRuntime.jsx(Icon$9, { color: 'primary' }, void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0) }), void 0));
 }
 var templateObject_1$7, templateObject_2$4, templateObject_3$1, templateObject_4$1, templateObject_5;
 

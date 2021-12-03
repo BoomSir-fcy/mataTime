@@ -37,9 +37,11 @@ export class List extends React.Component<Iprops> {
     marginTop: 0;
     loading: true;
   };
+
   loadList() {
     this.props.renderList();
   }
+
   componentDidMount() {
     this.setState({
       isDark: store.getState().appReducer.systemCustom.isDark
@@ -47,9 +49,11 @@ export class List extends React.Component<Iprops> {
     this.loadList();
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this));
   }
+
   componentWillUnmount() {
     document.removeEventListener('scroll', this.scrollRenderHandler.bind(this));
   }
+
   scrollRenderHandler() {
     if (!this.listBox.current) return false;
     if (
@@ -59,6 +63,7 @@ export class List extends React.Component<Iprops> {
       this.loadList();
     }
   }
+
   render() {
     return (
       <div ref={this.listBox} className="list-container">

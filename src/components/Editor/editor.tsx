@@ -343,9 +343,9 @@ export const Editor = (props: Iprops) => {
       setTimeId(null);
       return toast.warning('字数不可超过140');
     }
+
     props.sendArticle(
       JSON.stringify(newValue),
-      () => {},
       imgList.join(','),
       userIdList.join(',')
     );
