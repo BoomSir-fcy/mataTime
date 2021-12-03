@@ -45,7 +45,7 @@ const ImContextProvider = ({ children }) => {
   };
 
   React.useEffect(() => {
-    // initSocket();
+    initSocket();
   }, []);
 
   return (

@@ -8,7 +8,8 @@ import useTheme from 'hooks/useTheme';
 const getCustomStyles = (
   theme: DefaultTheme,
   fillBody?: boolean,
-  top?: string
+  top?: string,
+  padding?: string,
 ) => ({
   content: {
     top: top ? top : '50%',
@@ -23,7 +24,7 @@ const getCustomStyles = (
     // boxShadow: theme.card.boxShadow,
     border: 0,
     overflow: 'visible',
-    padding: fillBody ? '18px 0' : '18px 20px',
+    padding: padding ? padding : (fillBody ? '18px 0' : '18px 20px'),
     zIndex: 200
   },
   overlay: {
@@ -50,12 +51,13 @@ const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
 
 interface ModalWrapperProps {
   visible: boolean;
-  setVisible: (state: boolean) => void;
+  setVisible?: (state: boolean) => void;
   title?: string;
   creactOnUse?: boolean;
   customizeTitle?: boolean;
   fillBody?: boolean;
   top?: string;
+  padding?: string;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -67,12 +69,17 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     title,
     customizeTitle,
     fillBody,
-    top
+    top,
+    padding,
   }) => {
     const { theme } = useTheme();
 
-    const customStyles = getCustomStyles(theme, fillBody, top);
-    const onClose = useCallback(() => setVisible(false), [setVisible]);
+    const customStyles = getCustomStyles(theme, fillBody, top, padding);
+    const onClose = useCallback(() => {
+      if (setVisible) {
+        setVisible(false)
+      }
+    }, [setVisible]);
     if (!visible && creactOnUse) return null;
 
     return (

@@ -16,12 +16,11 @@ export default function HttpUpdater() {
   const history = useHistory();
   const { t } = useTranslation()
 
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
     // TODO:
-    // alert('TOKEN 过期')
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
     localStorage.removeItem(storage.Token);
@@ -47,8 +46,17 @@ export default function HttpUpdater() {
     }
   }, [handleInsufficient])
   if (visible) return (
-    <ModalWrapper customizeTitle creactOnUse visible={visible} setVisible={setVisible}>
-      <InsufficientBalanceModal />
+    <ModalWrapper padding="0" customizeTitle creactOnUse visible={visible} >
+      <InsufficientBalanceModal
+        onConfirm={() => {
+          setVisible(false)
+          history.push('/account');
+        }}
+        onSecondary={() => {
+          setVisible(false)
+          handleReSetAccount()
+        }}
+      />
     </ModalWrapper>
   )
   return null;

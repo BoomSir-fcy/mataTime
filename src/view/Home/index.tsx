@@ -20,7 +20,7 @@ import { Api } from 'apis';
 
 const PageContainer = styled(Box)`
   position: relative;
-  /* width: 1200px; */
+  width: 100%;
   margin: 0 auto;
   display: flex;
 `;
@@ -31,6 +31,7 @@ const LeftCard = styled(Flex)`
 `;
 const CenterCard = styled(Box)`
   /* width: 670px; */
+  width: 100%;
   flex: 1;
   /* margin: 0 15px; */
   /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
