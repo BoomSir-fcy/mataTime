@@ -97,12 +97,17 @@ const Swap: React.FC = () => {
                   backgroundDisabled: dark.colors.tertiary,
                   primary: dark.colors.textPrimary,
                   textSubtle: dark.colors.white_black,
-                  backgroundAlt: dark.colors.dropdownDeep,
+                  backgroundAlt: dark.colors.backgroundCard,
+                  background: dark.colors.background,
+                  dropdownDeep: dark.colors.backgroundCard,
                   invertedContrast: dark.colors.backgroundCard
                 },
                 shadows: {
                   inset: 'none',
                   box: 'none'
+                },
+                modal: {
+                  background: dark.colors.backgroundCard,
                 },
                 card: {
                   boxShadow: '',

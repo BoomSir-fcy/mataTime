@@ -221,7 +221,7 @@
   "Custom Token": "Custom Token",
   "Custom Tokens": "Custom Tokens",
   "Unknown Error": "Unknown Error",
-  "Select a currency": "Select a currency",
+  "Select ": "Select",
   "Search name or paste address": "Search name or paste address",
   "Add %asset% to Metamask": "Add %asset% to Metamask",
   "Added %asset%": "Added %asset%",
@@ -281,7 +281,6 @@
   "Money-hungry Dino": "Money-hungry Dino",
   "Enter an amount": "Enter an amount",
   "Transaction rejected.": "Transaction rejected.",
-  
   "translationLast": "translationLast",
   "translationEnd": "translationEnd"
 }
