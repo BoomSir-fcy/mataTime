@@ -66,7 +66,15 @@ function App() {
             <Switch>
               <Route path="/" exact render={props => <Home {...props} />} />
               <Route path="/login" exact component={Login} />
-              <Route path="/topicList/:id/:name" component={TopicList} />
+              <Route
+                path="/topicList/:id/:name"
+                render={props => (
+                  <TopicList
+                    key={props.location.pathname + props.location.search}
+                    {...props}
+                  />
+                )}
+              />
               <Route
                 path="/articleDetils/:id"
                 render={props => <ArticleDetilsLayout {...props} />}

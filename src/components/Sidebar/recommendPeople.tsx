@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
-import { Flex, Box, Button, Card, Text } from 'uikit';
+import { Flex, Card, Text } from 'uikit';
 import { Avatar, FollowButton, CancelAttentionModal } from 'components';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
@@ -56,7 +55,6 @@ type Iprops = {};
 const RecommendPeople: React.FC<Iprops> = props => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
-  const [list, setList] = useState([]);
   const [isInit, setIsInit] = useState(true);
   const [state, setState] = useImmer({
     list: [] as any,
@@ -67,32 +65,50 @@ const RecommendPeople: React.FC<Iprops> = props => {
       nft_image: ''
     }
   });
+  const { list } = state;
 
   useEffect(() => {
     getManList();
   }, []);
 
-  const getManList = () => {
-    Api.UserApi.referrerMans({ num: 3 }).then(res => {
+  const getCurrentState = async () => {
+    const uids = list.map(({ uid }) => uid);
+    try {
+      const res = await Api.AttentionApi.getFollowState(uids);
+      if (Api.isSuccess(res)) {
+        const considerFocus = res.data;
+        const followTemp = list.map(row => {
+          if (considerFocus[row.uid]) {
+            return { ...row, attention_status: 1 };
+          }
+          return { ...row, attention_status: 0 };
+        });
+        console.log(followTemp);
+        setState(p => {
+          p.list = followTemp;
+          p.cancelFollow = false;
+        });
+      }
+    } catch (error) {}
+  };
+
+  const getManList = async () => {
+    try {
+      const res = await Api.UserApi.referrerMans({ num: 3 });
       if (Api.isSuccess(res)) {
         setIsInit(true);
         setState(p => {
           p.list = res.data || [];
         });
       }
-    });
+    } catch (error) {}
   };
 
   // 关注用户
-  const onAttentionFocusRequest = async (focus_uid: number, index: number) => {
+  const followRequest = async (focus_uid: number, index: number) => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
-      let followList = { ...state.list[index], attention_status: 1 };
-      let folloTemp = [...state.list];
-      folloTemp.splice(index, 1, followList);
-      setState(p => {
-        p.list = folloTemp;
-      });
+      getCurrentState();
       toastSuccess(t('commonMsgFollowSuccess') || res.data);
     } else {
       toastError(res.data);
@@ -100,17 +116,11 @@ const RecommendPeople: React.FC<Iprops> = props => {
   };
 
   // 取消关注
-  const unFollowUser = async item => {
+  const unFollowRequest = async item => {
     try {
       const res = await Api.MeApi.unFollowUser(item.uid);
       if (Api.isSuccess(res)) {
-        let followList = { ...state.list[item.index], attention_status: 0 };
-        let folloTemp = [...state.list];
-        folloTemp.splice(item.index, 1, followList);
-        setState(p => {
-          p.list = folloTemp;
-          p.cancelFollow = false;
-        });
+        getCurrentState();
         toastSuccess(t('commonMsgFollowError') || res.data);
       } else {
         toastError(t('commonMsgUnFollowError') || res.data);
@@ -141,25 +151,16 @@ const RecommendPeople: React.FC<Iprops> = props => {
               to={`/me/profile/${item.uid}`}
               style={{ flex: 1 }}
             >
-              <Avatar
-                src={item.nft_image}
-                // style={{ width: '50px', height: '50px', minWidth: '50px' }}
-                scale="sm"
-              />
+              <Avatar src={item.nft_image} scale="sm" />
               <UserInfo>
-                <UserTitle title={item.nick_name}>{item.nick_name}</UserTitle>
-                <UserDesc title={item.address}>
-                  {shortenAddress(item.address)}
-                </UserDesc>
+                <UserTitle>{item.nick_name}</UserTitle>
+                <UserDesc>{shortenAddress(item.address)}</UserDesc>
               </UserInfo>
             </Flex>
             <FollowButton
               key={index}
               data={item}
-              followFunc={debounce(
-                () => onAttentionFocusRequest(item.uid, index),
-                1000
-              )}
+              followFunc={debounce(() => followRequest(item.uid, index), 1000)}
               unFollowFunc={() =>
                 setState(p => {
                   p.cancelParams = { ...item, index };
@@ -174,7 +175,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
           title={t('meUnsubscribeTips')}
           show={state.cancelFollow}
           params={state.cancelParams}
-          confirm={debounce(() => unFollowUser(state.cancelParams), 1000)}
+          confirm={debounce(() => unFollowRequest(state.cancelParams), 1000)}
           onClose={() =>
             setState(p => {
               p.cancelFollow = false;

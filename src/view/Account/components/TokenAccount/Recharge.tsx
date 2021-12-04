@@ -11,7 +11,7 @@ import { useDpWd } from '../../hooks/walletInfo';
 import { BIG_TEN } from 'utils/bigNumber';
 import { toast } from 'react-toastify';
 import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
-import { getFullDisplayBalance } from 'utils/formatBalance';
+import { formatDisplayApr, getFullDisplayBalance } from 'utils/formatBalance';
 import Dots from 'components/Loader/Dots';
 import { ModalWrapper } from 'components';
 import HistoryModal from './Pops/HistoryModal';
@@ -96,7 +96,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
   const { Recharge, onApprove } = useDpWd()
   const approvedNum = useStore(p => p.wallet.ApproveNum.time);
 
-  const numberList = ['10', '100', '1000', '2000']
+  const numberList = ['10000', '20000', '50000', '100000']
 
   // 充值
   const handSure = useCallback(async () => {
@@ -184,7 +184,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
         </LeftBox>
         <RightBox>
           <Flex justifyContent="end" mb='12px'>
-            <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {getFullDisplayBalance(new BigNumber(balance), 0)}</Text>
+            <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {formatDisplayApr(balance)}</Text>
           </Flex>
           <InputBox mb='14px'>
             <MyInput

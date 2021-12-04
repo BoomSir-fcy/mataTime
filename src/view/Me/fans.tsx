@@ -49,7 +49,7 @@ const Fans = React.memo(() => {
     loading: false,
     page: 1,
     total: 0,
-    totalPage: 0,
+    totalPage: 1,
     list: []
   });
   const { loading, page, total, totalPage, list } = state;
@@ -65,7 +65,8 @@ const Fans = React.memo(() => {
           p.list = offest
             ? [...(res.data.list || [])]
             : [...state.list, ...(res.data.list || [])];
-          p.page = offest || state.page + 1;
+          p.page = (offest || state.page) + 1;
+          p.totalPage = res.data.total_page;
           p.total = res.data.total_num;
           p.cancelFollow = false;
         });
@@ -108,10 +109,6 @@ const Fans = React.memo(() => {
     }
   };
 
-  React.useEffect(() => {
-    getFansList();
-  }, []);
-
   return (
     <Box>
       <CrumbsHead>
@@ -135,20 +132,7 @@ const Fans = React.memo(() => {
           loading={loading}
           renderList={() => {
             if (loading || page > totalPage) return false;
-            setState(p => {
-              p.loading = true;
-            });
-            Api.MeApi.followList(page).then(res => {
-              setState(p => {
-                p.loading = false;
-              });
-              if (Api.isSuccess(res)) {
-                setState(p => {
-                  p.page = page + 1;
-                  p.list = [...list, ...res.data.list];
-                });
-              }
-            });
+            getFansList();
           }}
         >
           {list.map((item, index) => {

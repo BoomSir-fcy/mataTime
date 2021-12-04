@@ -1,26 +1,13 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
-import { FetchApproveNum } from './hooks';
-
-export interface WalletState {
-  ApproveNum: {
-    time: number
-    matter: number
-  }
-  wallet: [{
-    address: string,
-    available_balance: string,
-    freeze_balance: string,
-    token_type: number,
-    total_balance: string
-    uid: number,
-  }]
-}
+import { FetchApproveNum, FetchDSGApproveNum, FetchTimeShopInfo } from './hooks';
+import { WalletState } from './type';
 
 const initialState: WalletState = {
   ApproveNum: {
     time: 0,
-    matter: 0
+    matter: 0,
+    dsg: 0,
   },
   wallet: [{
     address: "",
@@ -29,7 +16,8 @@ const initialState: WalletState = {
     token_type: 1,
     total_balance: "0",
     uid: 0
-  }]
+  }],
+  TimeInfo: []
 };
 
 // Async thunks
@@ -43,6 +31,16 @@ export const fetchApproveNumAsync = createAsyncThunk<any, string>('wallet/fetchA
   const res = await FetchApproveNum(account);
   return res
 });
+// DSG授权数量
+export const fetchDSGApproveNumAsync = createAsyncThunk<any, string>('wallet/fetchDSGApproveNumAsync', async (account) => {
+  const res = await FetchDSGApproveNum(account);
+  return res
+});
+// Time兑换详情
+export const fetchTimeShopInfo = createAsyncThunk<any>('wallet/fetchTimeShopInfo', async () => {
+  const res = await FetchTimeShopInfo();
+  return res
+});
 
 export const wallet = createSlice({
   name: 'wallet',
@@ -54,7 +52,14 @@ export const wallet = createSlice({
         state.wallet = action.payload;
       })
       .addCase(fetchApproveNumAsync.fulfilled, (state, action) => {
-        state.ApproveNum = action.payload;
+        state.ApproveNum.time = action.payload.time;
+        state.ApproveNum.matter = action.payload.matter;
+      })
+      .addCase(fetchDSGApproveNumAsync.fulfilled, (state, action) => {
+        state.ApproveNum.dsg = action.payload;
+      })
+      .addCase(fetchTimeShopInfo.fulfilled, (state, action) => {
+        state.TimeInfo = action.payload;
       })
   }
 });

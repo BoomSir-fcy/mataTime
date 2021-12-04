@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Crumbs,
   Avatar,
@@ -22,9 +22,9 @@ import { Tabs, Popup } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import defaultImages from 'assets/images/default_background.png';
+import defaultDarkImages from 'assets/images/default_background.png';
+import defaultLightImages from 'assets/images/default_light_background.png';
 
-import { clear } from 'redux-localstorage-simple';
 import useAuth from 'hooks/useAuth';
 
 const Center = styled(Box)`
@@ -122,11 +122,15 @@ const Profile: React.FC<any> = props => {
   const { t } = useTranslation();
   const country = useStore(p => p.appReducer.localtion);
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const setting = useStore(p => p.appReducer.systemCustom);
   const uid = props.match?.params?.uid;
   const gray = useTheme().colors.textTips;
-  const history = useHistory();
   const { profile, loading, page, totalPage, list } = state;
   const { signOut } = useAuth();
+  const { isDark } = useTheme();
+  const defaultImages = isDark ? defaultDarkImages : defaultLightImages;
+  const { languange } = setting;
+  const systemLang = languange?.value?.code;
 
   const init = async (offset?: number) => {
     try {
@@ -160,8 +164,10 @@ const Profile: React.FC<any> = props => {
   }, [uid]);
 
   const locationDisplay = React.useMemo(() => {
-    console.log(country, profile.location)
-    return country?.find(item => item.ID === profile.location)?.LocationEn
+    const defaultCountry = country?.find(item => item.ID === profile.location);
+    return systemLang === 'CN'
+      ? defaultCountry?.LocaltionZh
+      : defaultCountry?.LocationEn;
   }, [country, profile.location]);
 
   return (

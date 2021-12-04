@@ -89,7 +89,8 @@ export const lightColors: Colors = {
     tags: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     violet: 'linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)',
     violetAlt: 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)',
-    gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
+    gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
+    progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)'
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)'
@@ -164,7 +165,8 @@ export const darkColors: Colors = {
     violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
     violetAlt: 'linear-gradient(180deg, #434575 0%, #66578D 100%)',
     tags: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
-    gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)'
+    gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
+    progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)'
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)'

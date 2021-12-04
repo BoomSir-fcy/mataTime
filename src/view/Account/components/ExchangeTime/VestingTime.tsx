@@ -11,6 +11,7 @@ import PaginateStyle from 'style/Paginate';
 
 const CountBox = styled(Box)`
 ${({ theme }) => theme.mediaQueriesSize.padding}
+border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `
 const Table = styled(Flex)`
 flex-direction: column;
@@ -51,54 +52,40 @@ const ItemText = styled(Text)`
 
 // type 1 内容 2 打赏
 interface init {
-  type: number
+  type?: number
 }
 
-const EarningsRecord: React.FC<init> = ({ type }) => {
+const VestingTime: React.FC<init> = ({ }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const [pageCount, setPageCount] = useState(10);
 
   const dispatch = useDispatch()
   const HistoryList = [{
-    content: '才就是当你闹事的操作下简称耨爱收到你',
-    read: 100,
-    Icome: 300,
-    total: 353231
+    Round: 1,
+    endTIME: 100,
+    Vesting: 300,
+    Claimable: 353231
   }]
   const handlePageClick = (event) => {
     console.log(event.selected);
-    // const newOffset = (event.selected * itemsPerPage) % items.length;
-    // setItemOffset(newOffset);
   };
   return (
     <CountBox>
       <Table>
-        <Row className={type === 2 ? 'Reward' : ''}>
-          <HeadText>{t('创作')}</HeadText>
-          {
-            type === 1 &&
-            <>
-              <HeadText>{t('阅读人数')}</HeadText>
-              <HeadText>{t('当日收益')}</HeadText>
-            </>
-          }
-          <HeadText>{t('累计收益')}</HeadText>
+        <Row>
+          <HeadText>{t('Round')}</HeadText>
+          <HeadText>{t('Vesting end TIME')}</HeadText>
+          <HeadText>{t('Vesting $TIME')}</HeadText>
+          <HeadText>{t('Claimable $TIME')}</HeadText>
         </Row>
         {
           HistoryList.map((item, index) => (
-            <Row className={type === 2 ? 'Reward' : ''} key={`${item.content}${index}`}>
-              <>
-                <ItemText>{item.content}</ItemText>
-                {
-                  type === 1 &&
-                  <>
-                    <ItemText>{item.read}</ItemText>
-                    <ItemText>{item.Icome}</ItemText>
-                  </>
-                }
-                <ItemText>{item.total}</ItemText>
-              </>
+            <Row key={`${item.Round}${index}`}>
+              <ItemText>{item.Round}</ItemText>
+              <ItemText>{item.endTIME}</ItemText>
+              <ItemText>{item.Vesting}</ItemText>
+              <ItemText>{item.Claimable}</ItemText>
             </Row>
           ))
         }
@@ -120,4 +107,4 @@ const EarningsRecord: React.FC<init> = ({ type }) => {
   )
 }
 
-export default EarningsRecord;
+export default VestingTime;
