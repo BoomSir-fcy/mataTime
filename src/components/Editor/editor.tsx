@@ -328,7 +328,7 @@ export const Editor = (props: Iprops) => {
 
   const [timeId, setTimeId] = useState(null);
   const sendArticle = () => {
-    if (timeId) return toast.warning('间隔时间需超过3秒!');
+    if (timeId) return toast.warning(t('sendArticleMsgMaxTime'));
     setTimeId(
       setTimeout(() => {
         setTimeId(null);
@@ -341,7 +341,7 @@ export const Editor = (props: Iprops) => {
     const newValue = parseValue(value);
     if (content.length > 140) {
       setTimeId(null);
-      return toast.warning('字数不可超过140');
+      return toast.warning(t('sendArticleMsgMaxWords')));
     }
 
     props.sendArticle(
