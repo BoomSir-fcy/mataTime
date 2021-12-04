@@ -96,9 +96,9 @@ export const useExchangeErc20 = () => {
 // 领取
 export const useRewardErc20 = () => {
   const TimeContract = useTimeShop()
-  const handleApprove = useCallback(async () => {
+  const handleApprove = useCallback(async (id: number) => {
     try {
-      const tx = await TimeContract.withdrawAll()
+      const tx = await TimeContract.withdraw(id)
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {

@@ -1,12 +1,18 @@
 /* eslint-disable */
 import React, { useCallback, useState, useEffect } from 'react';
-import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
+import { Flex, Box, Text, Button, Spinner } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
+import { useFetTimeExchangeList } from 'store/wallet/hooks';
+import { useStore } from 'store';
+import dayjs from 'dayjs'
+import { fetchTimeExchangeList } from 'store/wallet/reducer';
+import { useRewardErc20 } from './hook';
+import Dots from 'components/Loader/Dots';
 
 
 const CountBox = styled(Box)`
@@ -18,14 +24,12 @@ flex-direction: column;
 align-items: center;
 width: 100%;
 min-height:300px;
-.Reward{
-grid-template-columns: 60% 40%;
-}
+position: relative;
 `
 const Row = styled.div`
 width: 100%;
 display: grid;
-grid-template-columns: 40% 20% 20% 20%;
+grid-template-columns: 15% 23% 30% 20% 12%;
 align-items: center;
 min-height: 30px;
 `
@@ -49,6 +53,38 @@ const ItemText = styled(Text)`
       }
   }
 `
+const LoadingAnimation = styled(Box)`
+  position: absolute;
+  width: 100%;
+`
+
+const ClaimButton = ({ ReleaseAmount, id, upDate }) => {
+  const [pending, setpending] = useState(false)
+  const { onWithdraw } = useRewardErc20()
+  const dispatch = useDispatch()
+  const { t } = useTranslation()
+
+  // 领取
+  const handleReward = useCallback(async (id) => {
+    console.log(id);
+    try {
+      setpending(true)
+      await onWithdraw(id)
+      upDate()
+      // todo确认是否需要更新本轮兑换详情
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setpending(false)
+    }
+  }, [onWithdraw])
+  return (
+    <Button disabled={ReleaseAmount === 0 || pending} onClick={() => handleReward(id)}>
+      {pending ? <Dots>{t('领取中')}</Dots> : t('领取')}
+    </Button>
+  )
+}
+
 
 // type 1 内容 2 打赏
 interface init {
@@ -58,18 +94,33 @@ interface init {
 const VestingTime: React.FC<init> = ({ }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const [pageCount, setPageCount] = useState(10);
-
   const dispatch = useDispatch()
-  const HistoryList = [{
-    Round: 1,
-    endTIME: 100,
-    Vesting: 300,
-    Claimable: 353231
-  }]
+  const [pageCount, setPageCount] = useState(1);
+  const [pageSize, setpageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const [Loading, setLoading] = useState(true);
+  useFetTimeExchangeList(page, pageSize)
+
+  const HistoryList = useStore(p => p.wallet.TimeExchangeList);
+
   const handlePageClick = (event) => {
-    console.log(event.selected);
+    setLoading(true)
+    const changePage = event.selected + 1
+    dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize }))
   };
+
+  const upDate = useCallback(() => {
+    dispatch(fetchTimeExchangeList({ account, page, pageSize }))
+  }, [dispatch, account, pageSize])
+
+  useEffect(() => {
+    if (HistoryList.length > 0) {
+      // 获取总页数
+      setPageCount(HistoryList[0].totalPage)
+      setLoading(false)
+    }
+  }, [HistoryList])
+
   return (
     <CountBox>
       <Table>
@@ -78,20 +129,27 @@ const VestingTime: React.FC<init> = ({ }) => {
           <HeadText>{t('Vesting end TIME')}</HeadText>
           <HeadText>{t('Vesting $TIME')}</HeadText>
           <HeadText>{t('Claimable $TIME')}</HeadText>
+          <HeadText></HeadText>
         </Row>
         {
           HistoryList.map((item, index) => (
-            <Row key={`${item.Round}${index}`}>
-              <ItemText>{item.Round}</ItemText>
-              <ItemText>{item.endTIME}</ItemText>
-              <ItemText>{item.Vesting}</ItemText>
-              <ItemText>{item.Claimable}</ItemText>
+            <Row key={`${item.round}${index}`}>
+              <ItemText>{item.round}</ItemText>
+              <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
+              <ItemText>{item.RemainingAmount}</ItemText>
+              <ItemText>{item.ReleaseAmount}</ItemText>
+              <ItemText>
+                <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
+              </ItemText>
             </Row>
           ))
         }
+        {
+          Loading && <LoadingAnimation><Spinner /></LoadingAnimation>
+        }
       </Table>
       <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text mr='16px' fontSize='14px' color='textTips'>总共 12页</Text>
+        <Text mr='16px' fontSize='14px' color='textTips'>总共 {pageCount}页</Text>
         <ReactPaginate
           breakLabel="..."
           nextLabel=">"

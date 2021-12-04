@@ -125,18 +125,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
     const num = new BigNumber(nowRound.total_dsg).times(Proportion).toNumber();
     return num
   }, [nowRound])
-  // // 领取
-  // const handleReward = useCallback(async () => {
-  //   try {
-  //     setReceiving(true)
-  //     await onWithdraw()
-  //   } catch (e) {
-  //     console.error(e)
-  //   } finally {
-  //     setReceiving(false)
-  //     getTimeShopInfo()
-  //   }
-  // }, [onWithdraw, account])
+
   // 兑换
   const handleExchange = useCallback(async () => {
     try {
