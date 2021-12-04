@@ -16,7 +16,7 @@ const Praise = React.memo(props => {
     loading: false,
     list: [],
     page: 1,
-    totalPage: 2
+    totalPage: 1
   });
   const { loading, page, totalPage, list } = state;
 
