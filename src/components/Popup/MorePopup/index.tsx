@@ -167,7 +167,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback(data, MoreOperatorEnum.FOLLOW);
+      callback({ ...data, is_attention: 1 }, MoreOperatorEnum.FOLLOW);
     } else {
       toast.error(res.data);
     }
@@ -178,7 +178,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback(data, MoreOperatorEnum.FOLLOW);
+      callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
     } else {
       toast.error(res.data);
     }
@@ -210,6 +210,9 @@ export const MorePopup = React.memo((props: Iprops) => {
         onClick={(e: any) => {
           e.stopPropagation();
           setVisible(true);
+        }}
+        onMouseLeave={() => {
+          setVisible(false);
         }}
       >
         {children}

@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { About, Avatar, Editor, ModalWrapper, Affix, Crumbs } from 'components';
+import { toast } from 'react-toastify';
+import { Editor, Crumbs } from 'components';
 import { useTranslation } from 'contexts/Localization';
-import { Route } from 'react-router-dom';
-import { Flex, Box } from 'uikit';
-import { Menu } from 'view/Home/left';
-import { Header, Tabs, ArticleList } from 'view/Home/center';
-import {
-  Search,
-  Swap,
-  RecommendPeople,
-  HotTopic,
-  FooterCopyright
-} from 'view/Home/right';
 import { CommentList } from './CommentList';
+import { Api } from 'apis';
+
+import { MeItemWrapper } from 'view/News/Me/style';
+import { PageContainer } from './style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { toast } from 'react-toastify';
 
-import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
-import { Api } from 'apis';
-import { PageContainer, LeftCard, CenterCard, RightCard } from './style';
 type Iprops = {
   [name: string]: any;
 };
@@ -29,7 +19,6 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const [refresh, setRefresh] = useState(1);
 
   const sendArticle = (res, resetInput: () => void) => {
-    console.log(res);
     if (!res) return;
     Api.CommentApi.createComment({
       pid: itemData.id,
@@ -51,6 +40,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       }
     });
   }, []);
+
   return (
     <PageContainer>
       <Crumbs back title={t('newsBack')} />
@@ -65,6 +55,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
               post_id: itemData.id
             }
           }}
+          callback={item => setItemData({ ...item })}
           more={true}
         />
         <MentionOperator
@@ -77,10 +68,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
               ...itemData
             }
           }}
-          callback={data => {
-            console.log(data);
-            setItemData(data);
-          }}
+          callback={data => setItemData(data)}
         />
       </MeItemWrapper>
       {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}

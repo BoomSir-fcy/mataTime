@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ImgListBox } from './style'
-import Carousel, { Modal, ModalGateway } from 'react-images'
+import React, { useState } from 'react';
+import Carousel, { Modal, ModalGateway } from 'react-images';
+import { ImgListBox } from './style';
 type Iprops = {
-  list: string[]
-}
+  list: string[];
+};
 // export const UploadList = (props: Iprops) => {
 //   const { list = [] } = props
 //   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -49,42 +49,45 @@ type Iprops = {
 //   )
 // }
 export const ImgList = (props: Iprops) => {
-  const { list = [] } = props
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [previewImgList, setPreviewImgList] = useState([])
-  const preViewImg = (index) => {
-    setPreviewImgList([...list.slice(index), ...list.slice(0, index)].map(item => ({ source: item })))
-    setModalIsOpen(true)
-  }
-  return (
-    list.length > 0 ?
-      <ImgListBox  onClick={(e) => e.stopPropagation()}>
-      {
-          modalIsOpen ?
-            <ModalGateway>
-              <Modal onClose={() => setModalIsOpen(false)}>
-                <Carousel views={previewImgList}  />
-              </Modal>
-            </ModalGateway>
-            : null
-        }
-      {
-        list.length===3?
-        (
-          <>
-            <img onClick={(e)=>preViewImg(0)} src={list[0]} alt="" />
-            <div className="imgListRightBox">
-              <img onClick={(e)=>preViewImg(1)} src={list[1]} alt="" />
-              <img onClick={(e)=>preViewImg(0)} src={list[2]} alt="" />
-            </div>
-          </>
-        )
-        :
-        list.map((item,index)=>(
-          <img style={{width:list.length===1?'100%':null}} onClick={(e)=>preViewImg(index)} src={item} key={index} alt="" />
+  const { list = [] } = props;
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [previewImgList, setPreviewImgList] = useState([]);
+  const preViewImg = index => {
+    setPreviewImgList(
+      [...list.slice(index), ...list.slice(0, index)].map(item => ({
+        source: item
+      }))
+    );
+    setModalIsOpen(true);
+  };
+  return list.length > 0 ? (
+    <ImgListBox onClick={e => e.stopPropagation()}>
+      {modalIsOpen && (
+        <ModalGateway>
+          <Modal onClose={() => setModalIsOpen(false)}>
+            <Carousel views={previewImgList} />
+          </Modal>
+        </ModalGateway>
+      )}
+      {list.length === 3 ? (
+        <>
+          <img onClick={() => preViewImg(0)} src={list[0]} alt="" />
+          <div className="imgListRightBox">
+            <img onClick={() => preViewImg(1)} src={list[1]} alt="" />
+            <img onClick={() => preViewImg(0)} src={list[2]} alt="" />
+          </div>
+        </>
+      ) : (
+        list.map((item, index) => (
+          <img
+            style={{ width: list.length === 1 ? '100%' : null }}
+            onClick={() => preViewImg(index)}
+            src={item}
+            key={index}
+            alt=""
+          />
         ))
-      }
-      </ImgListBox>
-    : null
-  )
-}
+      )}
+    </ImgListBox>
+  ) : null;
+};
