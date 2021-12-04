@@ -341,7 +341,7 @@ export const Editor = (props: Iprops) => {
     const newValue = parseValue(value);
     if (content.length > 140) {
       setTimeId(null);
-      return toast.warning(t('sendArticleMsgMaxWords')));
+      return toast.warning(t('sendArticleMsgMaxWords'))
     }
 
     props.sendArticle(
