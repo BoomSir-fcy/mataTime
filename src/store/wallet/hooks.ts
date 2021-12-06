@@ -160,7 +160,7 @@ export const FetchReleaseAmount = async (list: any) => {
   }
 }
 // 获取Time详情
-export const FetchExchangeList = async (account: string, page: number, pageSize: number) => {
+export const FetchExchangeList = async (account: string, page: number, pageSize: number, LastEnd: number) => {
   const TimeShop = getTimeShopAddress()
 
   const getTotalPage = (totalNum) => {
@@ -172,17 +172,10 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
     }
   }
 
-  // const getPageIndex = (totalNum) => {
-  //   const start = (page - 1) * pageSize
-  //   const end = (start + pageSize) > totalNum ? totalNum : start + pageSize
-  //   console.log(start, end);
-  //   return ListArr(start, end)
-  // }
-
   // 获取当前页的数据
   const ListArr = (start, end) => {
     let calls = []
-    for (let i = end - 1; i >= start; i--) {
+    for (let i = start; i >= end; i--) {
       let item = {
         address: TimeShop,
         name: 'getUserRecordKey',
@@ -192,14 +185,15 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
     }
     return calls
   }
-  // TODO 需计算每页的总条数 pageSize=10 totalNum<=pageSize？ 当前页总条数 = totalNum ：当前页总条数 = (pageSize*page>totalNum?totalNum - pageSize*page:pageSize*page )
   // 获取总条数
   const totalNum = await FetchRecordLength(account)
   // 获取总页数
   const totalPage = getTotalPage(totalNum)
   // 获取当前页下标区间后返回对应请求参数列表
-  const start = (page - 1) * pageSize
-  const end = (start + pageSize) > totalNum ? totalNum : start + pageSize
+  const start = LastEnd > 0 ? LastEnd - 1 : (((totalPage * pageSize - (page - 1) * pageSize) - 1) > Number(totalNum) - 1 ? Number(totalNum) - 1 : ((totalPage * pageSize - (page - 1) * pageSize) - 1))
+  const end = start - pageSize + 1 < 0 ? 0 : start - pageSize + 1
+  console.log(totalNum, totalPage, start, end, LastEnd);
+
   const calls = ListArr(start, end)
   // const calls = [
   //   {
@@ -208,7 +202,7 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   //     params: [account]
   //   },
   // ]
-  console.log(calls);
+  console.log(calls, "calls");
   try {
     const arr = await multicall(timeShopAbi, calls)
     const List = arr.map((item, index) => ({
@@ -220,14 +214,15 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
       RemainingAmount: getBalanceNumber(new BigNumber(item[0].totalAmount.toJSON().hex).minus(new BigNumber(item[0].debtAmount.toJSON().hex))),
       totalPage: totalPage,
       page: page,
-      id: Number(end) - index - 1
+      id: Number(end) - index - 1,
+      end: end
     }))
     const AmountList = await FetchReleaseAmount(List)
     const completeList = AmountList.map((item, index) => ({
       ...List[index],
       ReleaseAmount: item
     }))
-    console.log(completeList);
+    console.log(completeList, "completeList");
     return completeList
   } catch (error) {
     console.log(error);

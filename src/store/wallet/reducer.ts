@@ -51,8 +51,8 @@ export const fetchTimeShopInfo = createAsyncThunk<any>('wallet/fetchTimeShopInfo
   return res
 });
 // Time兑换历史
-export const fetchTimeExchangeList = createAsyncThunk<any, any>('wallet/fetchTimeExchangeList', async ({ account, page, pageSize = 10 }) => {
-  const res = await FetchExchangeList(account, page, pageSize);
+export const fetchTimeExchangeList = createAsyncThunk<any, any>('wallet/fetchTimeExchangeList', async ({ account, page, pageSize = 10, end = 0 }) => {
+  const res = await FetchExchangeList(account, page, pageSize, end);
   return res
 });
 export const wallet = createSlice({

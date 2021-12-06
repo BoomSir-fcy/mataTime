@@ -36,4 +36,5 @@ export interface ExchangeList {
   totalPage: number,
   page: number
   id: number
+  end: number
 }

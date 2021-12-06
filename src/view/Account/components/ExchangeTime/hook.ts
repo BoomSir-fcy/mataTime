@@ -9,10 +9,7 @@ import multicall from 'utils/multicall';
 import timeShopAbi from 'config/abi/TimeShop.json';
 import erc20Abi from 'config/abi/erc20.json';
 import { useWeb3React } from '@web3-react/core';
-import { useDispatch } from 'react-redux';
-import { fetchUserNftInfoAsync } from 'store/login/reducer';
-import { storeAction, useStore } from 'store';
-import { getBep20Contract, getTimeShopContract } from 'utils/contractHelpers';
+import { getBep20Contract } from 'utils/contractHelpers';
 import useRefresh from 'hooks/useRefresh';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { BIG_TEN } from 'utils/bigNumber';
@@ -70,7 +67,8 @@ export const useApproveErc20Change = () => {
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {
-      return false
+      throw e
+
     }
   }, [TimeContract, TimeShopAddr])
 
@@ -86,7 +84,8 @@ export const useExchangeErc20 = () => {
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {
-      return false
+      throw e
+
     }
   }, [TimeContract])
 
@@ -102,7 +101,8 @@ export const useRewardErc20 = () => {
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {
-      return false
+      throw e
+
     }
   }, [TimeContract])
 

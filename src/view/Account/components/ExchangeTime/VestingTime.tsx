@@ -96,7 +96,7 @@ const VestingTime: React.FC<init> = ({ }) => {
   const { account } = useWeb3React()
   const dispatch = useDispatch()
   const [pageCount, setPageCount] = useState(1);
-  const [pageSize, setpageSize] = useState(10);
+  const [pageSize, setpageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [Loading, setLoading] = useState(true);
   useFetTimeExchangeList(page, pageSize)
@@ -106,7 +106,7 @@ const VestingTime: React.FC<init> = ({ }) => {
   const handlePageClick = (event) => {
     setLoading(true)
     const changePage = event.selected + 1
-    dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize }))
+    dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize, end: HistoryList[0].end }))
   };
 
   const upDate = useCallback(() => {
@@ -117,8 +117,8 @@ const VestingTime: React.FC<init> = ({ }) => {
     if (HistoryList.length > 0) {
       // 获取总页数
       setPageCount(HistoryList[0].totalPage)
-      setLoading(false)
     }
+    setLoading(false)
   }, [HistoryList])
 
   return (
