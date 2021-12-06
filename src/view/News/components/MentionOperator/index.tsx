@@ -127,7 +127,7 @@ const MentionOperator: React.FC<IProps> = ({
             </Box>
           )}
         </Flex>
-        <RewardAuthTag />
+        <RewardAuthTag data={itemData} />
       </Flex>
       {/* 回复 */}
       <ReplyModal
