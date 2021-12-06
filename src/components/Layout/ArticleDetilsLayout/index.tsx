@@ -18,7 +18,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const [itemData, setItemData] = useState<any>({});
   const [refresh, setRefresh] = useState(1);
 
-  const sendArticle = (res, resetInput: () => void) => {
+  const sendArticle = res => {
     if (!res) return;
     Api.CommentApi.createComment({
       pid: itemData.id,
@@ -27,7 +27,6 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       if (Api.isSuccess(res)) {
         toast.success(res.data);
         setRefresh(refresh === 1 ? 2 : 1);
-        // resetInput();
       }
     });
   };

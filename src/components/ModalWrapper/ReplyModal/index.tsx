@@ -36,7 +36,7 @@ export const ReplyModal = React.memo((props: IProp) => {
   } = props;
 
   // 评论
-  const sendArticle = (res, resetInput: () => void) => {
+  const sendArticle = (res) => {
     if (!res) return;
     if (replyType === 'comment') {
       // 针对评论
