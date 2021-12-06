@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
+import { changeActiveToken } from './actions';
 import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchTimeShopInfo } from './hooks';
 import { WalletState } from './type';
 
@@ -26,7 +27,8 @@ const initialState: WalletState = {
     times: 1,
     total_dsg: 0
   },
-  TimeExchangeList: []
+  TimeExchangeList: [],
+  activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'Time',
 };
 
 // Async thunks
@@ -83,6 +85,10 @@ export const wallet = createSlice({
       })
       .addCase(fetchTimeExchangeList.fulfilled, (state, action) => {
         state.TimeExchangeList = action.payload;
+      })
+      .addCase(changeActiveToken, (state, action) => {
+        state.activeToken = action.payload.activeToken;
+        localStorage.setItem("activeToken", action.payload.activeToken);
       })
   }
 });

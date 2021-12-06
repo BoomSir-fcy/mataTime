@@ -3,6 +3,8 @@ import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import Header from './header';
 import MissionCard from './missionCard';
+import Chart from '../Chart';
+import EarningsRecord from '../EarningsRecord';
 
 const Content = styled(Box)`
   padding: 30px 18px;
@@ -33,7 +35,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   const TaskList = [{
     taskID: 123,
     nowTime: 1635758812,
-    endTime: 1638517726,
+    endTime: 1638870125,
     taskStatus: 1,
     points: 100,
     taskType: 1,
@@ -43,7 +45,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   {
     taskID: 123,
     nowTime: 1635758812,
-    endTime: 1638517726,
+    endTime: 1638956525,
     taskStatus: 2,
     points: 100,
     taskType: 1,
@@ -53,7 +55,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   {
     taskID: 123,
     nowTime: 1635758812,
-    endTime: 1638517726,
+    endTime: 1638956525,
     taskStatus: 3,
     points: 100,
     taskType: 1,
@@ -63,7 +65,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   {
     taskID: 123,
     nowTime: 1635758812,
-    endTime: 1638517726,
+    endTime: 1638956525,
     taskStatus: 1,
     points: 100,
     taskType: 1,
@@ -72,7 +74,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   }, {
     taskID: 123,
     nowTime: 1635758812,
-    endTime: 1638517726,
+    endTime: 1638956525,
     taskStatus: 1,
     points: 100,
     taskType: 2,
@@ -81,7 +83,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   }, {
     taskID: 123,
     nowTime: 1635758812,
-    endTime: 1638517726,
+    endTime: 1638956525,
     taskStatus: 1,
     points: 100,
     taskType: 3,
@@ -91,8 +93,10 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   ]
   return (
     <Content>
-      <Header Balance={Balance} BalanceInfo={BalanceInfo} TokenAddr={TokenAddr} />
-      <TaskTitle>Matter每日任务 ( 0 / 10)</TaskTitle>
+      {/* <Header Balance={Balance} BalanceInfo={BalanceInfo} TokenAddr={TokenAddr} /> */}
+      <Chart />
+      <EarningsRecord token='Matter' />
+      {/* <TaskTitle>Matter每日任务 ( 0 / 10)</TaskTitle>
       <LeftFlex>
         {
           TaskList.map(item => (
@@ -115,7 +119,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
             item.taskType == 3 ? <MissionCard key={item.taskID} info={item} /> : <></>
           ))
         }
-      </LeftFlex>
+      </LeftFlex> */}
     </Content>
   )
 }
