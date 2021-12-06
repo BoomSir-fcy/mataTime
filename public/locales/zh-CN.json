@@ -57,6 +57,8 @@
   "deleteModalDes": "删除这条帖子之后，将不会在列表中显示！",
   "deleteCommentModalTitle": "删除这条评论?",
   "deleteCommentModalDes": "删除这条评论之后，将不会在列表中显示！",
+  "reportCommentModalTitle": "举报这条评论",
+  "reportCommentModalDes": "举报这条评论之后，管理员将会审核！",
   "modalQuery": "确认",
   "modalCancel": "取消",
   "ReportModalTitle": "举报信息",

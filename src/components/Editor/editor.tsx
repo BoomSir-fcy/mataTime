@@ -1,3 +1,7 @@
+/**
+ * firefox
+ * 中英文双重输入: https://github.com/ianstormtaylor/slate/pull/4702
+ */
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import {
   Editor as slateEditor,
