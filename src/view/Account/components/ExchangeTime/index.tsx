@@ -65,12 +65,16 @@ const Exchange: React.FC = () => {
   const TimeInfo = useStore(p => p.wallet.TimeInfo);
   const getTimeShopInfo = async () => {
     for (let i = 0; i < TimeInfo.length; i++) {
-      if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
+      if (i === TimeInfo.length - 1) {
         setTimeShopInfo(TimeInfo[i])
-        if (i + 1 < TimeInfo.length) {
-          setTimeNext(TimeInfo[i + 1])
+      } else {
+        if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
+          setTimeShopInfo(TimeInfo[i])
+          if (i + 1 < TimeInfo.length) {
+            setTimeNext(TimeInfo[i + 1])
+          }
+          break
         }
-        break
       }
     }
   }
