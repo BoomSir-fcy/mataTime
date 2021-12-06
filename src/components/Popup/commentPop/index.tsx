@@ -23,7 +23,7 @@ export const CommentPop = React.memo((props: Iprops) => {
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [inqueryType, setInqueryType] = useState<string>('deleteComment');
 
-  const [isShowDel, setIsShowDel] = useState<boolean>(false);
+  // const [isShowDel, setIsShowDel] = useState<boolean>(false);
   useEffect(() => {
     init();
   }, []);
@@ -37,9 +37,9 @@ export const CommentPop = React.memo((props: Iprops) => {
       if (Api.isSuccess(res)) {
         console.log(res);
         callback()
-        toast.success('删除成功')
+        toast.success(t('moreDeleteSuccess'))
       } else {
-        toast.success(res.msg)
+        toast.success(t('moreDeleteError'))
       }
     })
   }
@@ -48,9 +48,9 @@ export const CommentPop = React.memo((props: Iprops) => {
       if (Api.isSuccess(res)) {
         console.log(res);
         callback()
-        toast.success('举报成功')
+        toast.success(t('ReportModalSuccess'))
       } else {
-        toast.success(res.msg)
+        toast.success(t('ReportModalError'))
       }
     })
   }
@@ -69,16 +69,24 @@ export const CommentPop = React.memo((props: Iprops) => {
           setVisible(!visible);
         }}
       >
-        <CommentModal contentText={t('delCommentTitle')} titleText={t('delCommentContent')} show={isShowDel} onClose={()=>{setIsShowDel(false)}} onQuery={delComment}/>
+        {/* <CommentModal contentText={t('delCommentTitle')} titleText={t('delCommentContent')} show={isShowDel} onClose={()=>{setIsShowDel(false)}} onQuery={delComment}/> */}
         {children}
-        {visible && isCurrentUser ? (
+        {visible  ? (
           <PopupContentWrapper>
-            <p onClick={() => {
+          {isCurrentUser?
+          <p onClick={() => {
+            setInqueryType('deleteComment')
+            setCommonInqueryShow(true);
+          }}>{t('moreDelete')}</p>
+          : null
+        }
+            <p onClick={()=>{
+              setInqueryType('reportComment')
               setCommonInqueryShow(true);
-            }}>{t('moreDelete')}</p>
-            {/* <p onClick={reportComment}>{t('moreReport')}</p> */}
+            }
+            }>{t('moreReport')}</p>
           </PopupContentWrapper>
-        ) :null}
+            ) :null}
       </PopupWrapper>
 
       {/* 统一询问框 */}
@@ -92,6 +100,11 @@ export const CommentPop = React.memo((props: Iprops) => {
         onQuery={() => {
           if (inqueryType === 'deleteComment') {
             delComment()
+          }
+          if (inqueryType === 'reportComment') {
+            // reportComment()
+            console.log('哈哈哈');
+            
           }
           setCommonInqueryShow(false);
           setVisible(false);

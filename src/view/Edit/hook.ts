@@ -41,8 +41,8 @@ export const useProfileContract = () => {
       try {
         const userinfo = await updateNickname(masterChefContract, nickname);
         return userinfo;
-      } catch (error) {
-        return false;
+      } catch (error: any) {
+        return error?.code || false;
       }
     },
     [masterChefContract]

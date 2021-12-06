@@ -61,6 +61,7 @@ const TopicList = props => {
         marginTop={0}
         loading={loading}
         renderList={() => {
+          console.log(state.tagName, name, page, totalPage);
           if (loading || page > totalPage) return;
           Boolean(state.tagName) && state.tagName === name
             ? getList()

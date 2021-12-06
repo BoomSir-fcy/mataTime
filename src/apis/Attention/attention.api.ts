@@ -1,6 +1,14 @@
-import { Http } from "../http";
+import { Http } from '../http';
+import qs from 'qs';
 
 export class AttentionApi extends Http {
+  // 查询用户状态
+  async getFollowState(uid: string[]) {
+    const params = qs.stringify({ focus_uid: uid }, { arrayFormat: 'repeat' });
+    const res = await this.get(`/v1/attention/consider_focus?${params}`);
+    return res;
+  }
+
   // 关注用户
   async onAttentionFocus(focus_uid: number | string) {
     const res = await this.get('/v1/attention/focus', { focus_uid });

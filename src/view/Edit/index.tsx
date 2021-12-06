@@ -95,7 +95,7 @@ const Edit: React.FC = () => {
       console.log(response);
       if (!response[0] && response[1]) {
         const res = await updateProfileNickname(params.nick_name);
-        if (Boolean(res)) {
+        if (Boolean(res) && res === 1) {
           dispatch(
             storeAction.changeUpdateProfile({
               ...profile,
@@ -104,7 +104,7 @@ const Edit: React.FC = () => {
           );
           updateProfile();
         } else {
-          toastError(t('loginSetNickNameFail'));
+          toastError(t('commonTransactionRejected'));
         }
       } else if (!response[0] && !response[1]) {
         toastError(t('loginSetNickNameFail'));

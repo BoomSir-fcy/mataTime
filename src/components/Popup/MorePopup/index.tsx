@@ -28,7 +28,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
 
-  const { children, data, callback = () => { } } = props;
+  const { children, data, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [editShow, setEditShow] = useState<boolean>(false);
@@ -167,7 +167,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback(data, MoreOperatorEnum.FOLLOW);
+      callback({ ...data, is_attention: 1 }, MoreOperatorEnum.FOLLOW);
     } else {
       toast.error(res.data);
     }
@@ -178,7 +178,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       toast.success(res.data);
-      callback(data, MoreOperatorEnum.FOLLOW);
+      callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
     } else {
       toast.error(res.data);
     }
@@ -204,13 +204,15 @@ export const MorePopup = React.memo((props: Iprops) => {
     return () => document.removeEventListener('click', fn);
   }, []);
 
-
   return (
     <>
       <PopupWrapper
         onClick={(e: any) => {
           e.stopPropagation();
           setVisible(true);
+        }}
+        onMouseLeave={() => {
+          setVisible(false);
         }}
       >
         {children}
@@ -259,19 +261,19 @@ export const MorePopup = React.memo((props: Iprops) => {
                 {t('followCancelText')} Ta
               </p>
             ) : null}
-            <p
+            {/* <p
               onClick={() => {
                 onShareTwitterClick();
               }}
             >
               {t('moreShareTwitter')}
-            </p>
+            </p> */}
             <p
               onClick={() => {
                 copyContent(
                   process.env.REACT_APP_WEB_URL +
-                  '/articleDetils/' +
-                  data.post.post_id || ''
+                    '/articleDetils/' +
+                    data.post.post_id || ''
                 );
               }}
             >

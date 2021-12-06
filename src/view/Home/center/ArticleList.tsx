@@ -35,7 +35,6 @@ export const ArticleList = props => {
   const getList = (current = 0) => {
     if ((loading || page > totalPage) && !current) return false;
     setLoading(true);
-    console.log('props:', props);
     Api.HomeApi.getArticleList({
       attention: 1,
       page: current || page,

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Flex, Button, Box, Card } from 'uikit';
-export const PopupWrapper = styled.span`
+
+export const PopupWrapper = styled(Box)`
   position: relative;
 `;
 

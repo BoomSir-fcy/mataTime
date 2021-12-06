@@ -61,6 +61,7 @@ interface propsType {
   tabsChange?: (item) => void;
   tabRightArr?: any[];
   tabLeftArr?: any[];
+  isThrottle:boolean
 }
 export const Tabs = (props: propsType) => {
   const { t } = useTranslation();
@@ -69,6 +70,7 @@ export const Tabs = (props: propsType) => {
     defCurrentRight,
     tabsChange,
     tabRightArr = [],
+    isThrottle,
     tabLeftArr = [
       {
         label: t('homeTabAll'),
@@ -92,18 +94,18 @@ export const Tabs = (props: propsType) => {
     defCurrentRight || 0
   );
   const leftTabClick = (item, index) => {
-    // if (index === currentLeftIndex) return
+    if (isThrottle&&index === currentLeftIndex) return
     setCurrentLeftIndex(index);
     tabsChange(item);
   };
   const rightTabClick = (item, index) => {
-    // if (index === currentRightIndex) return
+    if (isThrottle&&index === currentRightIndex) return
     setCurrentRightIndex(index);
     tabsChange(item);
   };
   return (
     <TabsBox isBoxShadow>
-      {tabLeftArr.length > 0 ? (
+      {tabLeftArr.length > 0 && (
         <TableLeftBox>
           {tabLeftArr.map((item, index) => {
             return (
@@ -117,10 +119,8 @@ export const Tabs = (props: propsType) => {
             );
           })}
         </TableLeftBox>
-      ) : (
-        ''
       )}
-      {tabRightArr.length > 0 ? (
+      {tabRightArr.length > 0 && (
         <TableRightBox>
           {tabRightArr.map((item, index) => {
             return (
@@ -134,8 +134,6 @@ export const Tabs = (props: propsType) => {
             );
           })}
         </TableRightBox>
-      ) : (
-        ''
       )}
     </TabsBox>
   );
@@ -144,6 +142,7 @@ Tabs.defaultProps = {
   currentLeft: 0,
   currentRight: 0,
   // tabLeftChange: () => { },
+  isThrottle:true,
   // tabRightChange: () => { },
   tabsChange: () => {}
 };

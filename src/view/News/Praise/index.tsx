@@ -57,7 +57,7 @@ const NewsPraise: React.FC = props => {
 
   return (
     <NewsPraiseWrapper>
-      <Tabs
+      {/* <Tabs
         tabsChange={tabsChange}
         tabLeftArr={[
           {
@@ -66,19 +66,19 @@ const NewsPraise: React.FC = props => {
             paramsName: 'message_type'
           }
         ]}
-      // tabRightArr={[
-      //   {
-      //     label: '全部点赞',
-      //     value: null,
-      //     paramsName: 'add_Time'
-      //   },
-      //   {
-      //     label: '今日点赞',
-      //     value: dayjs().format('YYYY-MM-DD'),
-      //     paramsName: 'add_Time'
-      //   }
-      // ]}
-      ></Tabs>
+        // tabRightArr={[
+        //   {
+        //     label: '全部点赞',
+        //     value: null,
+        //     paramsName: 'add_Time'
+        //   },
+        //   {
+        //     label: '今日点赞',
+        //     value: dayjs().format('YYYY-MM-DD'),
+        //     paramsName: 'add_Time'
+        //   }
+        // ]}
+      /> */}
       <List
         marginTop={410}
         loading={page <= totalPage}

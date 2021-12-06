@@ -84,7 +84,7 @@ const FormInput = React.forwardRef((props, ref) => {
   const profile = useStore(p => p.loginReducer.userInfo);
   const { t } = useTranslation();
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
-    ...profile,
+    ...profile
   });
   const [defaultLocationId, setdefaultLocationId] = useState(profile.location);
 
@@ -94,7 +94,7 @@ const FormInput = React.forwardRef((props, ref) => {
       p.display_format = profile.display_format;
       p.introduction = profile.introduction;
       p.background_image = profile.background_image;
-      p.location = profile.location
+      p.location = profile.location;
     });
   }, [profile]);
 

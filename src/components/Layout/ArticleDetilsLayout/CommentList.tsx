@@ -158,11 +158,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               postId={item.pid}
               commentId={item.id}
             ></MentionOperator>
-            {/* <CommentFooter>
-            <div> <Icon name="icon-retweet" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-            <div><Icon name="icon-pinglun" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-            <div><Icon name="icon-aixin" margin="5px 10px 0 0" size={18} color="#7E7E7E"></Icon>36</div>
-          </CommentFooter> */}
           </CommentItem>
         ))}
       </List>

@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import qs from 'qs';
 import eventBus from '../utils/eventBus';
 import { storage } from 'config';
 import history from '../routerHistory';
@@ -41,15 +42,19 @@ export class Http {
       });
 
       // 余额不足
-      if ((response.data as Api.Error)?.code === ResponseCode.INSUFFICIENT_BALANCE) {
-        eventBus.dispatchEvent(new MessageEvent('insufficient', {
-          data: response.data,
-        }))
+      if (
+        (response.data as Api.Error)?.code === ResponseCode.INSUFFICIENT_BALANCE
+      ) {
+        eventBus.dispatchEvent(
+          new MessageEvent('insufficient', {
+            data: response.data
+          })
+        );
       }
       return response.data;
     } catch (e: any) {
       if (e?.status === 401) {
-        eventBus.dispatchEvent(new Event('unauthorized'))
+        eventBus.dispatchEvent(new Event('unauthorized'));
       }
     }
   }
