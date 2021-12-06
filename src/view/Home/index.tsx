@@ -47,10 +47,6 @@ const RightCard = styled(Flex)`
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
   useReadArticle();
-  /**
-   * @review
-   * 看着想刷新 但在ArticleList传值是用的key
-   */
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({});
   const { toastError } = useToast();
