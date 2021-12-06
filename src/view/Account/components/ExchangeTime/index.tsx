@@ -67,7 +67,9 @@ const Exchange: React.FC = () => {
     for (let i = 0; i < TimeInfo.length; i++) {
       if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
         setTimeShopInfo(TimeInfo[i])
-        setTimeNext(TimeInfo[i + 1])
+        if (i + 1 < TimeInfo.length) {
+          setTimeNext(TimeInfo[i + 1])
+        }
         break
       }
     }

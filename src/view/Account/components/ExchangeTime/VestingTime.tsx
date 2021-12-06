@@ -96,7 +96,7 @@ const VestingTime: React.FC<init> = ({ }) => {
   const { account } = useWeb3React()
   const dispatch = useDispatch()
   const [pageCount, setPageCount] = useState(1);
-  const [pageSize, setpageSize] = useState(5);
+  const [pageSize, setpageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [Loading, setLoading] = useState(true);
   useFetTimeExchangeList(page, pageSize)

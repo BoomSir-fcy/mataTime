@@ -117,6 +117,8 @@ export const FetchTimeShopInfo = async () => {
       right_now_release: Number(new BigNumber(item.right_now_release.toJSON().hex)),
       total_dsg: getBalanceNumber(new BigNumber(item.total_dsg.toJSON().hex))
     }))
+    console.log(info, "------------------------");
+
     return info
   } catch (error) {
     console.log(error);
