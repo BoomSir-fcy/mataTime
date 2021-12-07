@@ -293,5 +293,8 @@
 
   "******start*****@gww********": "@gww翻译开始",
   "homeMenuTask": "Task",
+  "Daily" : "Daily",
+  "Week" : "Week",
+  "Special" : "Special",
   "******end*****@gww********": "@gww翻译结束"
 }
