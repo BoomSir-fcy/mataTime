@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components';
 import { Flex, Button, Box, Text, Input, Progress, AnimationRingIcon } from 'uikit';
-import { getDsgAddress } from 'utils/addressHelpers';
+import { getDsgAddress, getTimeAddress } from 'utils/addressHelpers';
 import {
   useTokenBalance,
   useApproveErc20Change,
@@ -94,8 +94,8 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18, showFaq }) => {
   const approvedNum = useStore(p => p.wallet.ApproveNum.dsg);
   const address = getDsgAddress()
   const { balance: DsgBalance } = useTokenBalance(address)
-  // const timeAddress = getTimeAddress()
-  // const { balance: timeBalance } = useTokenBalance(timeAddress)
+  const timeAddress = getTimeAddress()
+  const { balance: timeBalance } = useTokenBalance(timeAddress)
   const { onApprove } = useApproveErc20Change()
   const { onExchange } = useExchangeErc20()
   const { toastError, toastWarning, toastSuccess } = useToast();
@@ -231,12 +231,18 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18, showFaq }) => {
           </Flex>
         </InputBox>
         <TimeBox>
-          <TimeNum justifyContent='center' alignItems='center'>
-            <img src="/images/tokens/TIME.svg" alt="" />
-            <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
-              <Text fontSize='18px' bold>{formatDisplayApr(Time)}</Text>
-              <Text fontSize='14px' color='textTips'>可获得Time</Text>
+          <TimeNum justifyContent='space-between' alignItems='center'>
+            <Flex alignItems='center'>
+              <img src="/images/tokens/TIME.svg" alt="" />
+              <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
+                <Text fontSize='18px' bold>{formatDisplayApr(Time)}</Text>
+                <Text fontSize='14px' color='textTips'>可获得Time</Text>
+              </Flex>
             </Flex>
+            <Box style={{ textAlign: 'right' }}>
+              <Text fontSize='14px' color='textTips'>Time余额</Text>
+              <Text>{formatDisplayApr(timeBalance)}</Text>
+            </Box>
           </TimeNum>
           <Flex justifyContent='space-between' alignItems='center'>
             <Box>

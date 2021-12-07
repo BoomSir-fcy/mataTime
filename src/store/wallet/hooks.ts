@@ -9,7 +9,7 @@ import { Api } from 'apis';
 import multicall from 'utils/multicall';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { AppDispatch, AppState } from '../index'
-import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync, fetchTimeExchangeList } from './reducer'
+import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync, fetchTimeExchangeList, fetchRewardNumAsync } from './reducer'
 import { ExchangeList } from './type';
 import { BIG_TEN } from 'utils/bigNumber';
 
@@ -232,6 +232,25 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   }
 }
 
+// 获取可领取数量
+export const FetchRewardNum = async (account: string) => {
+  const TimeShop = getTimeShopAddress()
+  const calls = [
+    {
+      address: TimeShop,
+      name: 'getReward',
+      params: [account]
+    },
+  ]
+  try {
+    const RewardNum = await multicall(timeShopAbi, calls)
+    return getBalanceNumber(new BigNumber(RewardNum[0][0].toJSON().hex))
+  } catch (error) {
+    throw error
+  }
+}
+
+
 // 获取钱包余额详情
 export const useFetchWalletInfo = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -277,4 +296,11 @@ export const useFetchDSGApproveNum = () => {
     dispatch(fetchDSGApproveNumAsync(account))
   }, [account])
 }
-
+// 
+export const useFetchRewardNum = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  useEffect(() => {
+    dispatch(fetchRewardNumAsync(account))
+  }, [account])
+}
