@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { usePopper } from 'react-popper';
 import { useImmer } from 'use-immer';
-import { Flex, Box, Text, TextProps } from 'uikit';
+import { Flex, Button, Text, TextProps } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { Icon } from '../Icon';
 import RewardAuthModal from './RewardAuthModal';
@@ -21,34 +20,31 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
   });
   const { visible } = state;
   const reward: reward[] = data.reward_stats || [];
-  const ref = React.useRef(null);
 
-  // const handleVisible = useCallback(() => {
-  //   setState(p => {
-  //     p.visible = false;
-  //   });
-  // }, []);
+  const handleVisible = () => {
+    setState(p => {
+      p.visible = false;
+    });
+  };
 
   // React.useEffect(() => {
   //   document.addEventListener('click', handleVisible);
-  //   return () => {
-  //     document.removeEventListener('click', handleVisible);
-  //   };
+  //   return () => document.removeEventListener('click', handleVisible);
   // }, []);
 
-  console.log(reward?.length);
   return (
-    <RewardAuthTagStyled
-      ref={ref}
-      onClick={() =>
-        setState(p => {
-          p.visible = true;
-        })
-      }
-      alignItems="center"
-    >
-      <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
-      {(reward?.length > 0 && reward[0]?.count) || 0}
+    <RewardAuthTagStyled alignItems="center">
+      <Button
+        variant="text"
+        onClick={() =>
+          setState(p => {
+            p.visible = !visible;
+          })
+        }
+      >
+        <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
+        {(reward?.length > 0 && reward[0]?.count) || 0}
+      </Button>
       {visible && (
         <RewardAuthModal currentPost={data} avatar={data.user_avator_url} />
       )}
