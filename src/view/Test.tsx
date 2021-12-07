@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import { Button, Box, Text, Toggle, Card, Flex } from 'uikit'
+import { Button, Box, Text, Toggle, Card, Flex, Input } from 'uikit'
 import { IM } from 'utils';
 import { languagesOptions } from 'config/localization';
 import { useTranslation } from 'contexts/Localization'
 import { Select } from 'components';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
+import { toast } from 'react-toastify';
+import { Http } from 'apis/http';
 
 
 const StyledNotFound = styled.div`
@@ -30,6 +32,7 @@ const Test = () => {
   const [languange, setUseLanguage] = useLanguange();
   const [isDark, toggleThemeHandle] = useThemeManager();
   const [ws, setWs] = useState<IM>(null)
+  const [inputVal, setInputVal] = useState<string>('');
 
   const handleTest = useCallback(() => {
     console.log(ws, 'test')
@@ -63,10 +66,40 @@ const Test = () => {
     // initSocket();
   }, []);
 
+  const handleRecharge = async () => {
+    try {
+      const res = await new Http().get('/v1/wallet/testgettime', { time_num: inputVal });
+      if (res.code === 1) {
+        toast.success('充值成功！');
+        setInputVal('');
+      } else {
+        toast.error('充值失败！');
+      }
+    } catch (error) {
+      console.log(error);
 
+    }
+
+  }
+
+  const handleInputChange = (e: any) => {
+    const inputVal = e.target.value;
+    if (!inputVal || !/^[0-9]*[.]?[0-9]{0,18}$/.test(inputVal)) {
+      toast.error('输入格式不正确！');
+      return false;
+    }
+    setInputVal(inputVal);
+  }
 
   return (
     <StyledNotFound>
+
+      <Box mb="100px">
+        <Flex>
+          <Input value={inputVal} onChange={(e) => setInputVal(e.target.value)} onBlur={handleInputChange} placeholder="输入time数量" />
+          <Button width="100px" ml="20px" onClick={() => handleRecharge()}>充值</Button>
+        </Flex>
+      </Box>
       <Flex>
         <Card padding="50px">1</Card>
         <CardStyled1 margin="0 20px" padding="50px">2</CardStyled1>
