@@ -162,7 +162,6 @@ export const FetchReleaseAmount = async (list: any) => {
 // 获取Time详情
 export const FetchExchangeList = async (account: string, page: number, pageSize: number) => {
   const TimeShop = getTimeShopAddress()
-
   const getTotalPage = (totalNum) => {
     if (pageSize != 0 && totalNum % pageSize == 0) {
       return parseInt(String(totalNum / pageSize));
@@ -206,7 +205,7 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
       RemainingAmount: getBalanceNumber(new BigNumber(item[0].totalAmount.toJSON().hex).minus(new BigNumber(item[0].debtAmount.toJSON().hex))),
       totalPage: totalPage,
       page: page,
-      id: Number(end) - index - 1
+      id: start - index
     }))
     const AmountList = await FetchReleaseAmount(List)
     const completeList = AmountList.map((item, index) => ({
@@ -245,7 +244,7 @@ export const useFetchWalletInfo = () => {
   const { account } = useWeb3React()
   const refresh = useRefresh()
   useEffect(() => {
-    account && dispatch(fetchWalletAsync())
+    if (account) dispatch(fetchWalletAsync())
   }, [refresh, account])
 }
 
@@ -264,7 +263,7 @@ export const useFetTimeInfo = () => {
   const { account } = useWeb3React()
   const refresh = useRefresh(1)
   useEffect(() => {
-    account && dispatch(fetchTimeShopInfo())
+    dispatch(fetchTimeShopInfo())
   }, [refresh, account])
 }
 
@@ -273,7 +272,7 @@ export const useFetTimeExchangeList = (page: number, pageSize: number) => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   useEffect(() => {
-    account && dispatch(fetchTimeExchangeList({ account, page, pageSize }))
+    if (account) dispatch(fetchTimeExchangeList({ account, page, pageSize }))
   }, [account, page, pageSize])
 }
 // 获取DSG授权数量
@@ -281,7 +280,7 @@ export const useFetchDSGApproveNum = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   useEffect(() => {
-    dispatch(fetchDSGApproveNumAsync(account))
+    if (account) dispatch(fetchDSGApproveNumAsync(account))
   }, [account])
 }
 // 

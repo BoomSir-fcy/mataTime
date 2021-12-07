@@ -144,11 +144,14 @@ const VestingTime: React.FC<init> = ({ }) => {
   const handlePageClick = (event) => {
     setLoading(true)
     const changePage = event.selected + 1
-    dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize }))
+    setPage(changePage)
+    // dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize }))
   };
 
   const upDate = useCallback(() => {
-    dispatch(fetchTimeExchangeList({ account, page, pageSize }))
+    setLoading(true)
+    setPage(1)
+    // dispatch(fetchTimeExchangeList({ account, page: 1, pageSize }))
     dispatch(fetchRewardNumAsync(account))
   }, [dispatch, account, pageSize])
 
@@ -159,7 +162,6 @@ const VestingTime: React.FC<init> = ({ }) => {
       setLoading(false)
     }
   }, [HistoryList])
-
   return (
     <>
       <WithDrawAllBox alignItems='center' justifyContent='space-between'>
@@ -203,6 +205,8 @@ const VestingTime: React.FC<init> = ({ }) => {
           <ReactPaginate
             breakLabel="..."
             nextLabel=">"
+            forcePage={page - 1}
+            disableInitialCallback={true}
             onPageChange={handlePageClick}
             pageRangeDisplayed={4}
             marginPagesDisplayed={1}
