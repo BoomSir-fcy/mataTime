@@ -26,6 +26,7 @@ const AnswerRuleList = styled(Box)`
 `
 const BgImgBox = styled(Box)`
   background-image: url(${BgImg});
+  background-size: 100%;
 `
 const HeadText = styled(Text)`
   color:${({ theme }) => theme.colors.textTips};
@@ -37,13 +38,15 @@ const RowText = styled(Text)`
 `
 
 const ScrollBox = styled(Box)`
-height:calc(100vh - 70px);
+padding-top: 70px;
+max-width:970px;
+/* height:calc(100vh - 70px);
 overflow-y: auto;
 ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 -ms-overflow-style: none;
-scrollbar-width: none;
+scrollbar-width: none; */
 `
 
 const FAQCircle = () => {

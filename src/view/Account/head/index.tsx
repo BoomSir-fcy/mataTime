@@ -10,11 +10,15 @@ import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 
 const Card = styled(Flex)`
+  position: fixed;
+  top:0;
+  z-index: 2;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 970px;
   height: 70px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  background: ${({ theme }) => theme.colors.background};;
   ${mediaQueriesSize.paddingxs}
   .text {
     font-size: 18px;
