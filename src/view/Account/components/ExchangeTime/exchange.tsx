@@ -282,7 +282,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
       <FAQ as={Link} to="/account/faq">
         <AnimationRingIcon style={{ cursor: 'pointer' }} color='white_black' active1 active3 bgColor showImg isRotate width="8rem">
           <FaqBox>
-            <Text color='white' style={{ cursor: 'pointer' }} mb='6px' fontSize="30px" bold>FAQ</Text>
+            <Text color='white_black' style={{ cursor: 'pointer' }} mb='6px' fontSize="30px" bold>FAQ</Text>
           </FaqBox>
         </AnimationRingIcon>
       </FAQ>

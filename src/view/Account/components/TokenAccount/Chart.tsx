@@ -72,7 +72,7 @@ const Chart: React.FC = () => {
   }, [chartData])
   return (
     <ChartsBox>
-      <Text color='#E3E3E3'>近7日内容收益趋势</Text>
+      <Text color='textTips'>近7日内容收益趋势</Text>
       <Box height="360px">
         <LineChart
           data={formattedLiquidityData}

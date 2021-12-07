@@ -7,6 +7,7 @@ import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 import walletBg from 'assets/images/myWallet/wallet.png'
+import walletBg_w from 'assets/images/myWallet/wallet_w.png'
 import { useStore, storeAction } from 'store';
 import { useDispatch } from 'react-redux'
 
@@ -16,7 +17,7 @@ flex-direction: column;
 justify-content:space-between;
 flex: 1;
 min-width: 300px;
-background:url('${walletBg}') no-repeat;
+background:url('${({ theme }) => theme.isDark ? walletBg : walletBg_w}') no-repeat;
 background-position: right 30px bottom 14px;
 background-size: 80px;
 ${({ theme }) => theme.mediaQueriesSize.padding}

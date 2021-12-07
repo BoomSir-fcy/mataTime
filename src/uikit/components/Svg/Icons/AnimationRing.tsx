@@ -344,12 +344,12 @@ const BottonInner = styled(Box)`
 `
 const BgBox = styled(Flex) <{ bgColor?: boolean; }>`
 	position: absolute;
-	top: 50%;
+	top: 49%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background:${({ bgColor }) => bgColor ? ({ theme }) => theme.colors.CircleBg : 'none'};
-	width: 64%;
-	height: 64%;
+	width: 68%;
+	height: 68%;
 	border-radius: 50%;
 	justify-content: center;
     align-items: center;
