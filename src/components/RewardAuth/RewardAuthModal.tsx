@@ -3,14 +3,15 @@ import BigNumber from 'bignumber.js';
 import ReactLoading from 'react-loading';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import { DropDown } from 'components';
-import { Flex, Box, Text, Card, Button, InputPanel, Image } from 'uikit';
+import { DropDown, Avatar } from 'components';
+import { Flex, Box, Text, Button } from 'uikit';
 import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { AvatarCard } from '../Avatar/AvatarCard';
-import { Avatar } from '../Avatar';
+
 import { RewardIncome, CoinItem, Reward } from './components';
 
 import { getDecimalAmount } from 'utils/formatBalance';
@@ -84,12 +85,17 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     authorization: [],
     currentToken: [],
     current_price: '0',
-    tokenList: []
+    tokenList: [],
+    reward_post: {
+      total_user: 0,
+      my_rewards: [],
+      users: []
+    }
   });
   const { getTokens, approve, rewardUsers } = RewardAuthorContract();
   const { getPrice } = GetCoinPrice();
   const { getInfo } = GetPostRewardAuthor();
-  const { currentToken, current_price, tokenList } = state;
+  const { currentToken, current_price, tokenList, reward_post } = state;
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const reward: reward[] = currentPost.reward_stats || [];
 
@@ -120,7 +126,9 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const getPost = async () => {
     try {
       const res = await getInfo(0, currentPost.id);
-      console.log(res);
+      setState(p => {
+        p.reward_post = res;
+      });
     } catch (error) {}
   };
 
@@ -157,6 +165,18 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     }
   };
 
+  const getString = (rewards, tokenList) => {
+    const text = rewards.map(({ token, amount }) => {
+      let tokenName = tokenList.find(item => item[0].toLowerCase() === token);
+      let text;
+      if (tokenName) {
+        text = `${amount} ${tokenName[2]}`;
+      }
+      return text;
+    });
+    return text.join('、');
+  };
+
   React.useEffect(() => {
     if (userInfo.uid === currentPost.user_id) {
       getPost();
@@ -174,7 +194,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     >
       {/* 无人打赏你的帖子 */}
       {userInfo.uid === currentPost.user_id ? (
-        <RewardIncome data={reward} />
+        <RewardIncome data={reward} postInfo={reward_post} />
       ) : (
         <React.Fragment>
           {state.loading ? (
@@ -247,20 +267,32 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
               {reward?.length > 0 && (
                 <Flex mt="4px" alignItems="center">
                   <Flex ml="1em">
-                    {[1, 2, 3].map(item => (
-                      <Box width="24px" style={{ marginLeft: '-1em' }}>
+                    {reward_post?.users?.map(item => (
+                      <Box
+                        key={item.uid}
+                        as={Link}
+                        to={`/me/profile/${item.uid}`}
+                        width="24px"
+                        style={{ marginLeft: '-1em' }}
+                      >
                         <Avatar
+                          src={item.nft_image}
                           scale="md"
                           style={{ width: '24px', height: '24px' }}
                         />
                       </Box>
                     ))}
                   </Flex>
-                  <Text ml="11px" fontSize="14px" color="textTips">
-                    共{(reward?.length > 0 && reward[0]?.count) || 0}
-                    人已打赏这篇帖子
+                  <Text ml="11px" fontSize="14px" color="textTips" ellipsis>
+                    共{reward_post?.total_user || 0}人已打赏这篇帖子
                   </Text>
                 </Flex>
+              )}
+              {/* 查看当前用户打赏明细 */}
+              {reward_post.my_rewards.length > 0 && (
+                <Text color="textTips" fontSize="14px" mt="12px" ellipsis>
+                  您已打赏{getString(reward_post.my_rewards, tokenList)}
+                </Text>
               )}
             </React.Fragment>
           )}

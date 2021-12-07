@@ -8,7 +8,7 @@ import {
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
-import { PageSection, Container, Affix } from 'components'
+import { PageSection, Container, Affix } from 'components';
 
 const LeftCard = styled(Flex)`
   width: 200px;
@@ -29,11 +29,12 @@ const ContainerStyled = styled(Container)`
   padding-top: 0 !important;
   padding-bottom: 12px !important;
   height: 60px;
-`
+`;
 
 const Stake = React.lazy(() => import('./components/Single'));
 const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
 const Exchange = React.lazy(() => import('./components/ExchangeTime'));
+const RewardList = React.lazy(() => import('./components/Reward/list'));
 
 const Account = props => {
   const { t } = useTranslation();
@@ -46,9 +47,17 @@ const Account = props => {
             path={`${props.match.path}`}
             render={() => (
               <>
-                <Route path={`${props.match.path}`} exact component={TokenAccount} />
+                <Route
+                  path={`${props.match.path}`}
+                  exact
+                  component={TokenAccount}
+                />
                 <Route path={`${props.match.path}/time`} component={Exchange} />
                 <Route path={`${props.match.path}/stake`} component={Stake} />
+                <Route
+                  path={`${props.match.path}/reward`}
+                  component={RewardList}
+                />
               </>
             )}
           />
@@ -66,7 +75,7 @@ const Account = props => {
         </Box> */}
       </CenterCard>
     </Box>
-  )
-}
+  );
+};
 
 export default withRouter(Account);

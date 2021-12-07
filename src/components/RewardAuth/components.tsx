@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
+import history from 'routerHistory';
+import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
 import { TokenImage, Avatar } from 'components';
@@ -39,16 +41,24 @@ const Tips = styled(Box)`
 // 查看自己发布帖子打赏
 export const RewardIncome: React.FC<{
   data: reward[];
-}> = ({ data }) => {
+  postInfo: any;
+}> = ({ data, postInfo }) => {
   return (
     <Box>
       <Content>
         {data.length ? (
           <Flex alignItems="center">
             <Flex ml="1em">
-              {[1, 2, 3].map(item => (
-                <Box key={item} width="25px" style={{ marginLeft: '-1em' }}>
+              {postInfo?.users?.map(item => (
+                <Box
+                  key={item.uid}
+                  as={Link}
+                  to={`/me/profile/${item.uid}`}
+                  width="25px"
+                  style={{ marginLeft: '-1em' }}
+                >
                   <Avatar
+                    src={item.nft_image}
                     scale="md"
                     style={{ width: '25px', height: '25px' }}
                   />
@@ -56,7 +66,7 @@ export const RewardIncome: React.FC<{
               ))}
             </Flex>
             <Text ml="11px" fontSize="14px">
-              共{data[0]?.count || 0}人已打赏这篇帖子
+              共{postInfo.total_user || 0}人已打赏这篇帖子
             </Text>
           </Flex>
         ) : (
@@ -83,7 +93,9 @@ export const RewardIncome: React.FC<{
       </Content>
       {data.length > 0 && (
         <Flex justifyContent="center" mt="20px">
-          <Button>查看收益</Button>
+          <Button onClick={() => history.push('/account/reward')}>
+            查看收益
+          </Button>
         </Flex>
       )}
     </Box>

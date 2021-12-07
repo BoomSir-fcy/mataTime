@@ -110,9 +110,8 @@ const config = [
       {
         icon: 'icon-purse1S',
         activeIcon: 'icon-purse1S',
-        coming: true,
         title: '打赏明细',
-        path: '/account/safeset',
+        path: '/account/reward',
         lable: 'AccountMenu Reward'
       }
     ]
@@ -125,7 +124,7 @@ const config = [
         activeIcon: 'icon-gerenxinxi1',
         lable: 'meMenuHome',
         path: '/me',
-        markPath: ['/me/edit'],
+        markPath: ['/me/edit']
       },
       {
         icon: 'icon-e31guanzhu',
@@ -157,7 +156,7 @@ const config = [
         lable: 'meMenuFav',
         hide: true,
         path: '/me/edit'
-      },
+      }
       // {
       //   icon: 'icon-pingbi1',
       //   activeIcon: 'icon-pingbi',

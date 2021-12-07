@@ -46,7 +46,7 @@ const GlobalStyle = createGlobalStyle`
       z-index: 9;
     }
   }
-`
+`;
 
 const PageContainer: React.FC = ({ children }) => {
   const { pathname } = useLocation();
@@ -81,7 +81,9 @@ const PageContainer: React.FC = ({ children }) => {
               </Box>
             </InnerBox>
             <LineStyled mr="14px" />
-            {showSidebar && <Sidebar className="mini-swap-Modal__Body--open-sidebar" />}
+            {showSidebar && (
+              <Sidebar className="mini-swap-Modal__Body--open-sidebar" />
+            )}
           </Flex>
         </Flex>
       </ChildrenWrapper>
