@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js'
-import { Flex, Box, Text } from 'uikit';
+import { Flex, Box, Text, AnimationRingIcon } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import BgImg from 'assets/images/myWallet/TimeHeaderBg.png'
 import { formatDisplayApr } from 'utils/formatBalance';
@@ -20,10 +20,15 @@ const RoundBox = styled(Box)`
   text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  position: relative;
+  padding-bottom: 50px;
 `;
 
 const ScaleBox = styled(Box)`
+  position: absolute;
+  bottom: -20px;
+  left: -24px;
   width: max-content;
   img{
     width: 32px;
@@ -33,7 +38,9 @@ const Placeholder = styled(Box)`
   width: 70px;
   height: 32px;
 `;
-
+const FaqBox = styled(Box)`
+width: max-content;
+`
 
 interface init {
   nowRound: TimeInfo
@@ -49,10 +56,12 @@ export const TimeHeader: React.FC<init> = React.memo(({ nowRound, NextRound }) =
     <Card>
       <Flex width='100%' justifyContent='space-around' alignItems='center'>
         <RoundBox>
-          <Box>
-            <Text fontSize='30px' bold>Now Round</Text>
-            <Text fontSize='24px'>Price</Text>
-          </Box>
+          <AnimationRingIcon bgColor active3 active1 isRotate width="8rem">
+            <FaqBox>
+              <Text fontSize='30px' bold>Now Round</Text>
+              <Text fontSize='24px'>Price</Text>
+            </FaqBox>
+          </AnimationRingIcon>
           <ScaleBox>
             <Flex alignItems='center'>
               <Box style={{ textAlign: 'right' }}>
@@ -71,10 +80,12 @@ export const TimeHeader: React.FC<init> = React.memo(({ nowRound, NextRound }) =
           </ScaleBox>
         </RoundBox>
         <RoundBox>
-          <Box>
-            <Text fontSize='30px' bold>Next Round</Text>
-            <Text fontSize='24px'>Price</Text>
-          </Box>
+          <AnimationRingIcon active2 isRotate width="8rem">
+            <FaqBox>
+              <Text fontSize='30px' bold>Next Round</Text>
+              <Text fontSize='24px'>Price</Text>
+            </FaqBox>
+          </AnimationRingIcon>
           <ScaleBox>
             <Flex alignItems='center'>
               <Box style={{ textAlign: 'right' }}>
