@@ -20,6 +20,12 @@ const config = [
     lable: 'homeMenuStar'
   },
   {
+    icon: 'icon-rewu',
+    activeIcon: 'icon-rewu1',
+    path: '/task',
+    lable: 'homeMenuTask'
+  },
+  {
     icon: 'icon-tixing',
     activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
