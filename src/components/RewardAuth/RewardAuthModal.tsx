@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import ReactLoading from 'react-loading';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import styled from 'styled-components';
+import { useImmer } from 'use-immer';
 import { DropDown } from 'components';
 import { Flex, Box, Text, Card, Button, InputPanel, Image } from 'uikit';
 import { useToast } from 'hooks';
@@ -22,18 +23,16 @@ import {
 
 import QuestionHelper from 'components/QuestionHelper';
 
-import { useImmer } from 'use-immer';
-
-const RewardAuthModalStyled = styled(Box)<{ top: number; left: number }>`
+const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   position: absolute;
-  z-index: 99;
+  z-index: 1004;
   width: 418px;
-  height: 242px;
+  min-height: 200px;
   padding: 8px 20px 16px;
   padding-bottom: 16px;
   border-radius: 10px;
-  top: ${({ top }) => top}px;
-  left: ${({ left }) => left}px;
+  bottom: ${({ bottom }) => (bottom ? bottom : 30)}px;
+  right: ${({ right }) => (right ? right : 0)}px;
   background: ${({ theme }) => theme.colors.tertiary};
 `;
 const CoinSelectStyled = styled(Button)`
@@ -59,20 +58,22 @@ const RowsToken = styled(Flex)`
 interface RewardAuthModalProps {
   currentPost: Api.Home.post;
   depositSymbol?: string;
-  onConfirm?: (amount: string) => void;
-  onDismiss?: () => void;
   userName?: string;
   address?: string;
   avatar?: string;
   offsetTop?: number;
   offsetLeft?: number;
+  onConfirm?: (amount: string) => void;
+  onDismiss?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   currentPost,
   avatar,
   offsetLeft,
-  offsetTop
+  offsetTop,
+  onMouseLeave
 }) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
@@ -90,6 +91,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const { getPrice } = GetCoinPrice();
   const { getInfo } = GetPostRewardAuthor();
   const { currentToken, current_price, tokenList } = state;
+  const reward: reward[] = currentPost.reward_stats || [];
 
   const init = async () => {
     try {
@@ -163,7 +165,11 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   }, [account]);
 
   return (
-    <RewardAuthModalStyled left={offsetLeft} top={offsetTop}>
+    <RewardAuthModalStyled
+      right={offsetLeft}
+      bottom={offsetTop}
+      onMouseLeave={onMouseLeave}
+    >
       {state.loading ? (
         <ReactLoading type={'cylon'} />
       ) : (
@@ -231,44 +237,24 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
               />
             )}
           </Box>
-          {/* <Flex flexWrap="wrap" mt="12px" justifyContent="space-between">
-            {RewardAuthorList.map(item => (
-              <InputPanelStyled onClick={() => changeRewardUser(item)}>
-                <Flex>
-                  <Box width="20px">
-                    <TokenImage
-                      width={20}
-                      height={20}
-                      tokenAddress={currentToken[1]}
+          {reward?.length > 0 && (
+            <Flex mt="4px" alignItems="center">
+              <Flex ml="1em">
+                {[1, 2, 3].map(item => (
+                  <Box width="24px" style={{ marginLeft: '-1em' }}>
+                    <Avatar
+                      scale="md"
+                      style={{ width: '24px', height: '24px' }}
                     />
                   </Box>
-                  <Flex ml="3px" flexDirection="column">
-                    <Text bold ml="5px" style={{ lineHeight: 'normal' }}>
-                      {item}
-                    </Text>
-                    <Text fontSize="14px" style={{ lineHeight: 'normal' }}>
-                      ${new BigNumber(current_price).times(item).toString()}
-                    </Text>
-                  </Flex>
-                </Flex>
-              </InputPanelStyled>
-            ))}
-          </Flex> */}
-          <Flex mt="4px" alignItems="center">
-            <Flex ml="1em">
-              {[1, 2, 3].map(item => (
-                <Box width="24px" style={{ marginLeft: '-1em' }}>
-                  <Avatar
-                    scale="md"
-                    style={{ width: '24px', height: '24px' }}
-                  />
-                </Box>
-              ))}
+                ))}
+              </Flex>
+              <Text ml="11px" fontSize="14px" color="textTips">
+                共{(reward?.length > 0 && reward[0]?.count) || 0}
+                人已打赏这篇帖子
+              </Text>
             </Flex>
-            <Text ml="11px" fontSize="14px" color="textTips">
-              共81人已打赏这篇帖子
-            </Text>
-          </Flex>
+          )}
         </React.Fragment>
       )}
     </RewardAuthModalStyled>
