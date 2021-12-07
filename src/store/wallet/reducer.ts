@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 import { changeActiveToken } from './actions';
-import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchTimeShopInfo } from './hooks';
+import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchRewardNum, FetchTimeShopInfo } from './hooks';
 import { WalletState } from './type';
 
 const initialState: WalletState = {
@@ -29,6 +29,7 @@ const initialState: WalletState = {
   },
   TimeExchangeList: [],
   activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'Time',
+  rewardNum: 0
 };
 
 // Async thunks
@@ -57,6 +58,14 @@ export const fetchTimeExchangeList = createAsyncThunk<any, any>('wallet/fetchTim
   const res = await FetchExchangeList(account, page, pageSize, end);
   return res
 });
+
+// DSG全部可领取数量
+export const fetchRewardNumAsync = createAsyncThunk<any, string>('wallet/fetchRewardNumAsync', async (account) => {
+  const res = await FetchRewardNum(account);
+  return res
+});
+
+
 export const wallet = createSlice({
   name: 'wallet',
   initialState,
@@ -89,6 +98,9 @@ export const wallet = createSlice({
       .addCase(changeActiveToken, (state, action) => {
         state.activeToken = action.payload.activeToken;
         localStorage.setItem("activeToken", action.payload.activeToken);
+      })
+      .addCase(fetchRewardNumAsync.fulfilled, (state, action) => {
+        state.rewardNum = action.payload;
       })
   }
 });

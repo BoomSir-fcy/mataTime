@@ -61,7 +61,11 @@ declare namespace Api {
       video_url: '';
     }
     interface postData extends Api.Error {
-      data: post;
+      data: {
+        List: post[];
+        total_num: number;
+        total_page: number;
+      };
     }
   }
 }

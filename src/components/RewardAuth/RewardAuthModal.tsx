@@ -7,14 +7,15 @@ import { useImmer } from 'use-immer';
 import { DropDown } from 'components';
 import { Flex, Box, Text, Card, Button, InputPanel, Image } from 'uikit';
 import { useToast } from 'hooks';
+import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { AvatarCard } from '../Avatar/AvatarCard';
 import { Avatar } from '../Avatar';
-import { CoinItem, Reward } from './components';
+import { RewardIncome, CoinItem, Reward } from './components';
 
 import { getDecimalAmount } from 'utils/formatBalance';
-
 import { getBnbAddress } from 'utils/addressHelpers';
+
 import {
   RewardAuthorContract,
   GetCoinPrice,
@@ -27,11 +28,11 @@ const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   position: absolute;
   z-index: 1004;
   width: 418px;
-  min-height: 200px;
+  min-height: 80px;
   padding: 8px 20px 16px;
   padding-bottom: 16px;
   border-radius: 10px;
-  bottom: ${({ bottom }) => (bottom ? bottom : 30)}px;
+  bottom: ${({ bottom }) => (bottom ? bottom : 35)}px;
   right: ${({ right }) => (right ? right : 0)}px;
   background: ${({ theme }) => theme.colors.tertiary};
 `;
@@ -40,7 +41,6 @@ const CoinSelectStyled = styled(Button)`
   height: 35px;
   padding: 0;
 `;
-
 const JiantouStyled = styled.div<{ open: boolean }>`
   border: 6px solid transparent;
   border-top-color: #fff;
@@ -49,7 +49,6 @@ const JiantouStyled = styled.div<{ open: boolean }>`
     open ? 'rotateZ(180deg) translateY(3px)' : 'rotateZ(0) translateY(3px)'};
   transform-origin: center;
 `;
-
 const RowsToken = styled(Flex)`
   align-items: center;
   padding: 10px;
@@ -91,6 +90,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const { getPrice } = GetCoinPrice();
   const { getInfo } = GetPostRewardAuthor();
   const { currentToken, current_price, tokenList } = state;
+  const userInfo = useStore(p => p.loginReducer.userInfo);
   const reward: reward[] = currentPost.reward_stats || [];
 
   const init = async () => {
@@ -119,7 +119,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
 
   const getPost = async () => {
     try {
-      const res = await getInfo(1, currentPost.id);
+      const res = await getInfo(0, currentPost.id);
       console.log(res);
     } catch (error) {}
   };
@@ -142,7 +142,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       const res = await rewardUsers(
         currentPost.user_address,
         currentToken[0],
-        1,
+        0,
         currentPost.id,
         getDecimalAmount(new BigNumber(amount)).toString(),
         getBnbAddress() === currentToken[0]
@@ -158,7 +158,9 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   };
 
   React.useEffect(() => {
-    if (account) {
+    if (userInfo.uid === currentPost.user_id) {
+      getPost();
+    } else if (account) {
       init();
       getPost();
     }
@@ -170,90 +172,97 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       bottom={offsetTop}
       onMouseLeave={onMouseLeave}
     >
-      {state.loading ? (
-        <ReactLoading type={'cylon'} />
+      {/* 无人打赏你的帖子 */}
+      {userInfo.uid === currentPost.user_id ? (
+        <RewardIncome data={reward} />
       ) : (
         <React.Fragment>
-          <Flex alignItems="center" justifyContent="space-between">
-            <AvatarCard
-              userName={currentPost.user_name}
-              avatar={avatar}
-              address={currentPost.user_address}
-            />
-            <Flex alignItems="center">
-              <Box width="100px">
-                <CoinSelectStyled
-                  onClick={e => {
-                    e.stopPropagation();
-                    setOpen(!open);
-                  }}
-                >
-                  <CoinItem token={currentToken} />
-                  <JiantouStyled open={open} />
-                </CoinSelectStyled>
-                <DropDown
-                  fillWidth
-                  isOpen={open}
-                  scale="xs"
-                  setIsOpen={setOpen}
-                >
-                  {tokenList.map((item, index) => (
-                    <RowsToken
-                      key={index}
-                      onClick={() => changeCoinChecked(item, index)}
+          {state.loading ? (
+            <ReactLoading type={'cylon'} />
+          ) : (
+            <React.Fragment>
+              <Flex alignItems="center" justifyContent="space-between">
+                <AvatarCard
+                  userName={currentPost.user_name}
+                  avatar={avatar}
+                  address={currentPost.user_address}
+                />
+                <Flex alignItems="center">
+                  <Box width="100px">
+                    <CoinSelectStyled
+                      onClick={e => {
+                        e.stopPropagation();
+                        setOpen(!open);
+                      }}
                     >
-                      <CoinItem token={item} />
-                    </RowsToken>
-                  ))}
-                </DropDown>
-              </Box>
-              <QuestionHelper
-                ml="15px"
-                text={
-                  <>
-                    <Text fontSize="14px">
-                      链上打赏并支持作者的创作，您的支持将会鼓励作者更大的创作热情
-                    </Text>
-                    <Text fontSize="14px" color="textTips">
-                      *平台将收取0.3%的交易手续费
-                    </Text>
-                  </>
-                }
-              />
-            </Flex>
-          </Flex>
-          <Box minHeight="120px" mt="12px">
-            {currentToken[1] && (
-              <Reward
-                current={currentToken}
-                price={current_price}
-                isOnApprove={state.isOnApprove}
-                onApprove={() =>
-                  setState(p => {
-                    p.isOnApprove = false;
-                  })
-                }
-                onCallBack={event => changeRewardUser(event)}
-              />
-            )}
-          </Box>
-          {reward?.length > 0 && (
-            <Flex mt="4px" alignItems="center">
-              <Flex ml="1em">
-                {[1, 2, 3].map(item => (
-                  <Box width="24px" style={{ marginLeft: '-1em' }}>
-                    <Avatar
-                      scale="md"
-                      style={{ width: '24px', height: '24px' }}
-                    />
+                      <CoinItem token={currentToken} />
+                      <JiantouStyled open={open} />
+                    </CoinSelectStyled>
+                    <DropDown
+                      fillWidth
+                      isOpen={open}
+                      scale="xs"
+                      setIsOpen={setOpen}
+                    >
+                      {tokenList.map((item, index) => (
+                        <RowsToken
+                          key={index}
+                          onClick={() => changeCoinChecked(item, index)}
+                        >
+                          <CoinItem token={item} />
+                        </RowsToken>
+                      ))}
+                    </DropDown>
                   </Box>
-                ))}
+                  <QuestionHelper
+                    ml="15px"
+                    text={
+                      <>
+                        <Text fontSize="14px">
+                          链上打赏并支持作者的创作，您的支持将会鼓励作者更大的创作热情
+                        </Text>
+                        <Text fontSize="14px" color="textTips">
+                          *平台将收取0.3%的交易手续费
+                        </Text>
+                      </>
+                    }
+                  />
+                </Flex>
               </Flex>
-              <Text ml="11px" fontSize="14px" color="textTips">
-                共{(reward?.length > 0 && reward[0]?.count) || 0}
-                人已打赏这篇帖子
-              </Text>
-            </Flex>
+              <Box minHeight="120px" mt="12px">
+                {currentToken[1] && (
+                  <Reward
+                    current={currentToken}
+                    price={current_price}
+                    isOnApprove={state.isOnApprove}
+                    onApprove={() =>
+                      setState(p => {
+                        p.isOnApprove = false;
+                      })
+                    }
+                    onCallBack={event => changeRewardUser(event)}
+                  />
+                )}
+              </Box>
+              {reward?.length > 0 && (
+                <Flex mt="4px" alignItems="center">
+                  <Flex ml="1em">
+                    {[1, 2, 3].map(item => (
+                      <Box width="24px" style={{ marginLeft: '-1em' }}>
+                        <Avatar
+                          scale="md"
+                          style={{ width: '24px', height: '24px' }}
+                        />
+                      </Box>
+                    ))}
+                  </Flex>
+                  <Text ml="11px" fontSize="14px" color="textTips">
+                    共{(reward?.length > 0 && reward[0]?.count) || 0}
+                    人已打赏这篇帖子
+                  </Text>
+                </Flex>
+              )}
+            </React.Fragment>
           )}
         </React.Fragment>
       )}

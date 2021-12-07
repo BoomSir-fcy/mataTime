@@ -1,7 +1,8 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import history from 'routerHistory';
-import { Flex, Button, Text } from 'uikit';
+import { Flex, Text } from 'uikit';
+import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js'
 import { formatDisplayApr } from 'utils/formatBalance';
 import { mediaQueriesSize } from 'uikit/theme/base';
@@ -43,7 +44,7 @@ export const WalletHead: React.FC<init> = React.memo(({ title }) => {
         <Text mr='18px' fontSize='14px' color='textPrimary'>
           1 DSG = {formatDisplayApr(new BigNumber(CurrentRound.max_time_token).div(CurrentRound.max_dsg_token).toNumber())} TIME
         </Text>
-        <Text mr='10px' fontSize='14px' color='textPrimary'>兑换 {'>'}</Text>
+        <Text as={Link} to="/account/time" mr='10px' fontSize='14px' color='textPrimary'>兑换 {'>'}</Text>
       </Flex>
     </Card>
   );

@@ -102,11 +102,26 @@ export const useRewardErc20 = () => {
       return receipt.status
     } catch (e) {
       throw e
-
     }
   }, [TimeContract])
 
   return { onWithdraw: handleApprove }
+}
+
+// 全部领取
+export const useRewardErc20All = () => {
+  const TimeContract = useTimeShop()
+  const WithdrawAll = useCallback(async () => {
+    try {
+      const tx = await TimeContract.withdrawAll()
+      const receipt = await tx.wait()
+      return receipt.status
+    } catch (e) {
+      throw e
+    }
+  }, [TimeContract])
+
+  return { onWithdrawAll: WithdrawAll }
 }
 
 // 获取详情
@@ -149,24 +164,6 @@ export const FetchApproveNum = async (account: string) => {
   try {
     const approvedNum = await multicall(erc20Abi, calls)
     return getBalanceNumber(approvedNum)
-  } catch (error) {
-    throw error
-  }
-}
-
-// 获取可领取数量
-export const FetchRewardNum = async (account: string) => {
-  const TimeShop = getTimeShopAddress()
-  const calls = [
-    {
-      address: TimeShop,
-      name: 'getReward',
-      params: [account]
-    },
-  ]
-  try {
-    const RewardNum = await multicall(timeShopAbi, calls)
-    return getBalanceNumber(new BigNumber(RewardNum[0][0].toJSON().hex))
   } catch (error) {
     throw error
   }

@@ -22,7 +22,8 @@ export const additionalColors = {
   bronze: '#E7974D',
   orange: '#FF780B',
   upPrice: '#9AF170',
-  downPrice: '#ec612b'
+  downPrice: '#ec612b',
+  CircleBg: "#3f3f3f"
 };
 
 export const nftTokenColors = {
