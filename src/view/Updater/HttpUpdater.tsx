@@ -50,7 +50,7 @@ export default function HttpUpdater() {
       <InsufficientBalanceModal
         onConfirm={() => {
           setVisible(false)
-          history.push('/account');
+          history.push('/test');
         }}
         onSecondary={() => {
           setVisible(false)
