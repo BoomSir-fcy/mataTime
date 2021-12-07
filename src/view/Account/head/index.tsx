@@ -2,9 +2,11 @@ import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import history from 'routerHistory';
 import { Flex, Button, Text } from 'uikit';
-
+import BigNumber from 'bignumber.js'
+import { formatDisplayApr } from 'utils/formatBalance';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
+import { useStore } from 'store';
 
 const Card = styled(Flex)`
   align-items: center;
@@ -28,11 +30,7 @@ interface init {
 }
 export const WalletHead: React.FC<init> = React.memo(({ title }) => {
   const { t } = useTranslation();
-  const theme = useTheme();
-
-  const goBack = () => {
-    history.goBack();
-  };
+  const CurrentRound = useStore(p => p.wallet.CurrentRound);
 
   return (
     <Card>
@@ -43,7 +41,7 @@ export const WalletHead: React.FC<init> = React.memo(({ title }) => {
           TIME 社区公平释放活动进行中，当前兑换系数
         </Text>
         <Text mr='18px' fontSize='14px' color='textPrimary'>
-          100DSG = 2900,000 TIME
+          1 DSG = {formatDisplayApr(new BigNumber(CurrentRound.max_time_token).div(CurrentRound.max_dsg_token).toNumber())} TIME
         </Text>
         <Text mr='10px' fontSize='14px' color='textPrimary'>兑换 {'>'}</Text>
       </Flex>

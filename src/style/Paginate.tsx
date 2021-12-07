@@ -8,6 +8,7 @@ declare module 'styled-components' {
 }
 
 const PaginateStyle = styled(Flex)`
+padding-top: 20px;
 ul,li{ padding:0;margin:0;list-style:none}
 ul{
   display: flex;

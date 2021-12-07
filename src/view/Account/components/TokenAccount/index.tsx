@@ -80,44 +80,76 @@ const TokenAccount: React.FC = () => {
     total_balance: "0",
     uid: 0
   }
-  const [TimeInfo, setTimeInfo] = useState(info)
-  const [MatterInfo, setMatterInfo] = useState(info)
+  // const [TimeInfo, setTimeInfo] = useState(info)
+  // const [MatterInfo, setMatterInfo] = useState(info)
+  const [WalletInfo, setWalletInfo] = useState(info)
+  const [walletBalance, setwalletBalance] = useState(0)
+  const [tokenAddress, settokenAddress] = useState('')
   const [ActiveTab, setActiveTab] = useState(1)
+  const [ActiveToken, setActiveToken] = useState(1)
   const timeAddress = getTimeAddress()
   const MatterAddress = getMatterAddress()
   const { balance: timeBalance } = useTokenBalance(timeAddress)
+  const { balance: matterBalance } = useTokenBalance(MatterAddress)
   const BalanceList = useStore(p => p.wallet.wallet);
+  const activeToken = useStore(p => p.wallet.activeToken);
+
   const getMyBalance = async () => {
     for (let i = 0; i < BalanceList.length; i++) {
-      if (BalanceList[i].token_type === 1) {
-        setTimeInfo(BalanceList[i])
+      if (BalanceList[i].token_type === 1 && activeToken === 'Time') {
+        setWalletInfo(BalanceList[i])
       }
-      if (BalanceList[i].token_type === 2) {
-        setMatterInfo(BalanceList[i])
+      if (BalanceList[i].token_type === 2 && activeToken === 'Matter') {
+        setWalletInfo(BalanceList[i])
       }
     }
   }
   useEffect(() => {
+    if (account) {
+      if (activeToken === 'Time') {
+        setwalletBalance(timeBalance)
+        settokenAddress(timeAddress)
+      } else {
+        setwalletBalance(matterBalance)
+        settokenAddress(MatterAddress)
+      }
+    }
+    return () => {
+      setwalletBalance(0)
+    }
+  }, [account, matterBalance, timeBalance, timeAddress, MatterAddress, activeToken])
+  useEffect(() => {
     account && BalanceList.length > 1 && getMyBalance()
     return () => {
-      setTimeInfo(info)
-      setMatterInfo(info)
+      setWalletInfo(info)
     }
-  }, [BalanceList, account])
+  }, [BalanceList, account, activeToken])
   return (
     <NoPdBottom>
       <WalletHead title={t('我的钱包')} />
       <ScrollBox>
         <Flex flexWrap='wrap' justifyContent='space-between'>
-          <BorderWalletBox BalanceInfo={TimeInfo} Token='Time' Balance={timeBalance} TokenAddr={timeAddress} />
-          <Recharge balance={timeBalance} TokenAddr={timeAddress} />
+          <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
+          <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />
         </Flex>
-        {/* tab切换 */}
+        {/* token切换 */}
         <ContentTab>
           <Flex alignItems='baseline'>
-            <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
-            <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>打赏收益</TabText>
-            <TabText className={ActiveTab === 3 ? 'active' : ''} onClick={() => setActiveTab(3)}>Matter收益</TabText>
+            <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time收益</TabText>
+            <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter收益</TabText>
+          </Flex>
+        </ContentTab>
+        {/* 收益切换 */}
+        <ContentTab>
+          <Flex alignItems='baseline'>
+            {ActiveToken === 1 ?
+              <>
+                <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
+                <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>打赏收益</TabText>
+              </>
+              :
+              <TabText className='active'>Matter收益</TabText>
+            }
           </Flex>
           <RightBox justifyContent='space-between' alignItems='center'>
             <IncomeBox>
@@ -137,13 +169,13 @@ const TokenAccount: React.FC = () => {
           </RightBox>
         </ContentTab>
         {
-          ActiveTab !== 3 ?
+          ActiveToken !== 2 ?
             <>
               <Chart />
               <EarningsRecord type={ActiveTab} />
             </>
             :
-            <Matter BalanceInfo={MatterInfo} TokenAddr={MatterAddress} />
+            <Matter BalanceInfo={WalletInfo} TokenAddr={MatterAddress} />
         }
       </ScrollBox>
     </NoPdBottom>

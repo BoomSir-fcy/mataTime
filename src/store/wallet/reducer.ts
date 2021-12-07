@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
-import { FetchApproveNum, FetchDSGApproveNum, FetchTimeShopInfo } from './hooks';
+import { changeActiveToken } from './actions';
+import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchTimeShopInfo } from './hooks';
 import { WalletState } from './type';
 
 const initialState: WalletState = {
@@ -17,7 +18,17 @@ const initialState: WalletState = {
     total_balance: "0",
     uid: 0
   }],
-  TimeInfo: []
+  TimeInfo: [],
+  CurrentRound: {
+    long_time: 0,
+    max_dsg_token: 0,
+    max_time_token: 0,
+    right_now_release: 0,
+    times: 1,
+    total_dsg: 0
+  },
+  TimeExchangeList: [],
+  activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'Time',
 };
 
 // Async thunks
@@ -41,7 +52,11 @@ export const fetchTimeShopInfo = createAsyncThunk<any>('wallet/fetchTimeShopInfo
   const res = await FetchTimeShopInfo();
   return res
 });
-
+// Time兑换历史
+export const fetchTimeExchangeList = createAsyncThunk<any, any>('wallet/fetchTimeExchangeList', async ({ account, page, pageSize = 10, end = 0 }) => {
+  const res = await FetchExchangeList(account, page, pageSize, end);
+  return res
+});
 export const wallet = createSlice({
   name: 'wallet',
   initialState,
@@ -59,7 +74,21 @@ export const wallet = createSlice({
         state.ApproveNum.dsg = action.payload;
       })
       .addCase(fetchTimeShopInfo.fulfilled, (state, action) => {
+        const arr = action.payload;
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].total_dsg < arr[i].max_dsg_token) {
+            state.CurrentRound = arr[i]
+            break
+          }
+        }
         state.TimeInfo = action.payload;
+      })
+      .addCase(fetchTimeExchangeList.fulfilled, (state, action) => {
+        state.TimeExchangeList = action.payload;
+      })
+      .addCase(changeActiveToken, (state, action) => {
+        state.activeToken = action.payload.activeToken;
+        localStorage.setItem("activeToken", action.payload.activeToken);
       })
   }
 });

@@ -20,6 +20,9 @@ min-height:300px;
 .Reward{
 grid-template-columns: 60% 40%;
 }
+.matterStyle{
+grid-template-columns: 26% 27% 27% 20%;
+}
 `
 const Row = styled.div`
 width: 100%;
@@ -51,10 +54,11 @@ const ItemText = styled(Text)`
 
 // type 1 内容 2 打赏
 interface init {
-  type: number
+  type?: number
+  token?: string
 }
 
-const EarningsRecord: React.FC<init> = ({ type }) => {
+const EarningsRecord: React.FC<init> = ({ type, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const [pageCount, setPageCount] = useState(10);
@@ -66,43 +70,71 @@ const EarningsRecord: React.FC<init> = ({ type }) => {
     Icome: 300,
     total: 353231
   }]
+  const TaskHistoryList = [{
+    time: 1638783725,
+    type: 1,
+    info: 'gslp',
+    Icome: 353231
+  }]
   const handlePageClick = (event) => {
     console.log(event.selected);
     // const newOffset = (event.selected * itemsPerPage) % items.length;
     // setItemOffset(newOffset);
   };
+
   return (
     <CountBox>
-      <Table>
-        <Row className={type === 2 ? 'Reward' : ''}>
-          <HeadText>{t('创作')}</HeadText>
-          {
-            type === 1 &&
-            <>
-              <HeadText>{t('阅读人数')}</HeadText>
+      {
+        token === 'Matter' ?
+          <Table>
+            <Row className='matterStyle'>
+              <HeadText>{t('日期')}</HeadText>
+              <HeadText>{t('任务类型')}</HeadText>
+              <HeadText>{t('任务明细')}</HeadText>
               <HeadText>{t('当日收益')}</HeadText>
-            </>
-          }
-          <HeadText>{t('累计收益')}</HeadText>
-        </Row>
-        {
-          HistoryList.map((item, index) => (
-            <Row className={type === 2 ? 'Reward' : ''} key={`${item.content}${index}`}>
-              <>
-                <ItemText>{item.content}</ItemText>
-                {
-                  type === 1 &&
-                  <>
-                    <ItemText>{item.read}</ItemText>
-                    <ItemText>{item.Icome}</ItemText>
-                  </>
-                }
-                <ItemText>{item.total}</ItemText>
-              </>
             </Row>
-          ))
-        }
-      </Table>
+            {
+              TaskHistoryList.map((item, index) => (
+                <Row className='matterStyle' key={`${item.time}${index}`}>
+                  <ItemText>{item.time}</ItemText>
+                  <ItemText>{item.type}</ItemText>
+                  <ItemText>{item.info}</ItemText>
+                  <ItemText>{item.Icome}</ItemText>
+                </Row>
+              ))
+            }
+          </Table>
+          :
+          <Table>
+            <Row className={type === 2 ? 'Reward' : ''}>
+              <HeadText>{t('创作')}</HeadText>
+              {
+                type === 1 &&
+                <>
+                  <HeadText>{t('阅读人数')}</HeadText>
+                  <HeadText>{t('当日收益')}</HeadText>
+                </>
+              }
+              <HeadText>{t('累计收益')}</HeadText>
+            </Row>
+            {
+              HistoryList.map((item, index) => (
+                <Row className={type === 2 ? 'Reward' : ''} key={`${item.content}${index}`}>
+                  <ItemText>{item.content}</ItemText>
+                  {
+                    type === 1 &&
+                    <>
+                      <ItemText>{item.read}</ItemText>
+                      <ItemText>{item.Icome}</ItemText>
+                    </>
+                  }
+                  <ItemText>{item.total}</ItemText>
+                </Row>
+              ))
+            }
+          </Table>
+      }
+
       <PaginateStyle alignItems='center' justifyContent='end'>
         <Text mr='16px' fontSize='14px' color='textTips'>总共 12页</Text>
         <ReactPaginate

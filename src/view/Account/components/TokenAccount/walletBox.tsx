@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { ModalWrapper } from 'components'
 import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
-import HistoryModal from './Pops/HistoryModal';
-import { Api } from 'apis';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
+import walletBg from 'assets/images/myWallet/wallet.png'
+import { useStore, storeAction } from 'store';
+import { useDispatch } from 'react-redux'
 
 
 const Content = styled(Flex)`
@@ -15,17 +16,25 @@ flex-direction: column;
 justify-content:space-between;
 flex: 1;
 min-width: 300px;
-/* background:${({ theme }) => theme.card.background}; */
+background:url('${walletBg}') no-repeat;
+background-position: right 30px bottom 14px;
+background-size: 80px;
 ${({ theme }) => theme.mediaQueriesSize.padding}
 `
 const TopInfo = styled(Flex)`
 justify-content: space-between;
-align-content: center;
+align-items: center;
 flex-wrap:wrap;
 `
 const Icon = styled(Image)`
 ${({ theme }) => theme.mediaQueriesSize.marginr}
 min-width: 43px;
+`
+const LeftBox = styled(Flex)`
+min-height: 86px;
+flex-direction: column;
+justify-content:space-between;
+
 `
 const NumText = styled(Text)`
 color: ${({ theme }) => theme.colors.textPrimary};
@@ -39,6 +48,17 @@ font-size: 14px;
 const WithdrawBtn = styled(Button)`
 min-width: 80px;
 background: ${({ theme }) => theme.colors.backgroundPrimary};
+&:disabled{
+  background: ${({ theme }) => theme.colors.disableStep};
+}
+`
+const ChangeTokenBtn = styled(Flex)`
+cursor: pointer;
+`
+const ChangeToken = styled.img`
+width: 21px;
+display: inline-block;
+margin-right: 12px;
 `
 
 
@@ -52,9 +72,11 @@ interface Wallet {
 const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, ...props }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
   const [ModalTitle, setModalTitle] = useState('')
   const [ChosenType, setChosenType] = useState(1)
+
   const openModaal = (title) => {
     const titleText = title === 1 ? t('AccountRecharge') : t('Accountwithdraw')
     setModalTitle(`${titleText} ${Token}`)
@@ -62,26 +84,49 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
     setVisible(true)
   }
   const onClose = useCallback(() => setVisible(false), [setVisible])
+  const onChangeToken = useCallback(() => {
+    if (Token === 'Time') {
+      dispatch(storeAction.changeActiveToken({ activeToken: 'Matter' }))
+    } else {
+      dispatch(storeAction.changeActiveToken({ activeToken: 'Time' }))
+    }
+  }, [Token])
   return (
     <Content {...props}>
       <TopInfo mb='4px'>
-        <Flex>
+        <Flex alignItems='center'>
           <Icon src='/images/tokens/TIME.svg' width={43} height={43} alt='' />
-          <Text fontSize='26px'>Time</Text>
+          <Text fontSize='26px'>{Token}</Text>
         </Flex>
-        <WithdrawBtn onClick={() => openModaal(2)}>{t('Accountwithdraw')}</WithdrawBtn>
+        <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
+          <ChangeToken src={require('assets/images/myWallet/changeToken.png').default} alt="" />
+          <NumText fontSize='14px'>{t('%token%钱包', { token: Token === 'Time' ? 'Matter' : 'Time' })}</NumText>
+        </ChangeTokenBtn>
       </TopInfo>
-      <Flex alignItems='baseline'>
-        <Fount mr='26px'>{t('Account balance')}</Fount>
-        <NumText>{formatDisplayApr(Number(BalanceInfo.available_balance))}</NumText>
-      </Flex>
-      <Flex alignItems='baseline'>
-        <Fount mr='26px'>{t('Account Frozen amount')}</Fount>
-        <NumText>{formatDisplayApr(Number(BalanceInfo.freeze_balance))}</NumText>
-      </Flex>
-      <Flex alignItems='baseline'>
-        <Fount mr='26px'>{t('预计阅读')}</Fount>
-        <NumText>{t('超过 28 小时')}</NumText>
+      <Flex alignItems='flex-end' justifyContent='space-between'>
+        <LeftBox>
+          <Flex alignItems='baseline'>
+            <Fount mr='26px'>{t('Account balance')}</Fount>
+            <NumText>{formatDisplayApr(Number(BalanceInfo.available_balance))}</NumText>
+          </Flex>
+          {
+            Token === 'Time' ?
+              <>
+                <Flex alignItems='baseline'>
+                  <Fount mr='26px'>{t('Account Frozen amount')}</Fount>
+                  <NumText>{formatDisplayApr(Number(BalanceInfo.freeze_balance))}</NumText>
+                </Flex>
+                <Flex alignItems='baseline'>
+                  <Fount mr='26px'>{t('预计阅读')}</Fount>
+                  <NumText>{t('超过 28 小时')}</NumText>
+                </Flex>
+              </>
+              :
+              <Fount>{t('满 100 可提至链上钱包')}</Fount>
+          }
+
+        </LeftBox>
+        <WithdrawBtn disabled={Token === 'Matter' && Number(BalanceInfo.available_balance) < 100} onClick={() => openModaal(2)}>{t('Accountwithdraw')}</WithdrawBtn>
       </Flex>
 
       {/* 输入框弹窗 */}

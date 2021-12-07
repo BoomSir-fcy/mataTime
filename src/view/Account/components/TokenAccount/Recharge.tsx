@@ -81,9 +81,10 @@ interface init {
   balance: number
   TokenAddr: string
   decimals?: number
+  Token: string
 }
 
-const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
+const Recharge: React.FC<init> = ({ Token, balance, TokenAddr, decimals = 18 }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const { account } = useWeb3React()
@@ -92,9 +93,8 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
   const [visibleHistory, setVisibleHistory] = useState(false)
   const [pending, setpending] = useState(false)
   const [ActiveHistory, setActiveHistory] = useState(1)
-
   const { Recharge, onApprove } = useDpWd()
-  const approvedNum = useStore(p => p.wallet.ApproveNum.time);
+  const approvedNum = useStore(p => Token === 'Time' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter);
 
   const numberList = ['10000', '20000', '50000', '100000']
 
@@ -127,7 +127,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
   const handleApprove = useCallback(async () => {
     setpending(true)
     try {
-      await onApprove()
+      await onApprove(Token)
       toast.success(t('setNftAuthorizationSuccess'));
     } catch (e) {
       console.error(e)
@@ -166,7 +166,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
       <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
         <LeftBox>
           <Title mb='24px'>
-            <Text mr='28px' fontSize='16px'>充值Time</Text>
+            <Text mr='28px' fontSize='16px'>充值{Token}</Text>
             <Text style={{ cursor: 'pointer' }} fontSize='14px' color='textPrimary' onClick={() => setVisibleHistory(true)}>{t('Account history record')}</Text>
           </Title>
           <Flex alignItems='center' flexWrap='wrap'>
@@ -213,7 +213,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
         </RightBox>
       </Flex>
       {/* 提币、充值记录 */}
-      <ModalWrapper title={`Time${t('Account history record')}`} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
+      <ModalWrapper title={`${Token}${t('Account history record')}`} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
         {/* <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">
             <HistoryHead className={ActiveHistory === 1 ? 'active' : ''} onClick={() => setActiveHistory(1)} scale='ld'>充值记录</HistoryHead>
@@ -223,7 +223,7 @@ const Recharge: React.FC<init> = ({ balance, TokenAddr, decimals = 18 }) => {
             <CloseLineIcon width={16} color="primary"></CloseLineIcon>
           </Button>
         </PopHeard> */}
-        <HistoryModal token='Time' type={ActiveHistory} />
+        <HistoryModal token={Token} type={ActiveHistory} />
       </ModalWrapper>
     </Content>
   )

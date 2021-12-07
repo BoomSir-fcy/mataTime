@@ -118,7 +118,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   const handleApprove = useCallback(async () => {
     setpending(true)
     try {
-      await onApprove()
+      await onApprove(token)
       toast.success(t('setNftAuthorizationSuccess'));
     } catch (e) {
       console.error(e)
@@ -132,13 +132,6 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       const chkPrice = (val) => {
-        // val = val.replace(/[^\d.]/g, "");
-        // //必须保证第一位为数字而不是. 
-        // val = val.replace(/^\./g, "");
-        // //保证只有出现一个.而没有多个. 
-        // val = val.replace(/\.{2,}/g, ".");
-        // //保证.只出现一次，而不能出现两次以上 
-        // val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
         val = val.replace(/,/g, '.')
         if (Number(val) > (type === 1 ? balance : Number(withdrawalBalance))) {
           return type === 1 ? String(balance) : withdrawalBalance

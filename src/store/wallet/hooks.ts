@@ -9,7 +9,9 @@ import { Api } from 'apis';
 import multicall from 'utils/multicall';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { AppDispatch, AppState } from '../index'
-import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync } from './reducer'
+import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync, fetchTimeExchangeList } from './reducer'
+import { ExchangeList } from './type';
+import { BIG_TEN } from 'utils/bigNumber';
 
 
 const REFRESH_INTERVAL = 30 * 1000
@@ -115,7 +117,115 @@ export const FetchTimeShopInfo = async () => {
       right_now_release: Number(new BigNumber(item.right_now_release.toJSON().hex)),
       total_dsg: getBalanceNumber(new BigNumber(item.total_dsg.toJSON().hex))
     }))
+    console.log(info, "------------------------");
+
     return info
+  } catch (error) {
+    console.log(error);
+    return []
+  }
+}
+// 获取兑换列表条数
+export const FetchRecordLength = async (account: string) => {
+  const TimeShop = getTimeShopAddress()
+  const calls = [
+    {
+      address: TimeShop,
+      name: 'getUsersRecordLength',
+      params: [account]
+    },
+  ]
+  try {
+    const res = await multicall(timeShopAbi, calls)
+    return new BigNumber(res[0][0].toJSON().hex).toNumber()
+  } catch (error) {
+    console.log(error);
+    return []
+  }
+}
+// 获取当前可领取数量
+export const FetchReleaseAmount = async (list: any) => {
+  const TimeShop = getTimeShopAddress()
+  const calls = list.map((item, index) => ({
+    address: TimeShop,
+    name: 'getReleaseAmount',
+    params: [item.latestTime, item.endTime, new BigNumber(item.totalAmount).times(BIG_TEN.pow(18)).toString(), new BigNumber(item.debtAmount).times(BIG_TEN.pow(18)).toString()]
+  }))
+  try {
+    const numArr = await multicall(timeShopAbi, calls)
+    const AmountList = numArr.map((item) => (
+      getBalanceNumber(new BigNumber(item[0].toJSON().hex))
+    ))
+    return AmountList
+  } catch (error) {
+    throw error
+  }
+}
+// 获取Time详情
+export const FetchExchangeList = async (account: string, page: number, pageSize: number, LastEnd: number) => {
+  const TimeShop = getTimeShopAddress()
+
+  const getTotalPage = (totalNum) => {
+    if (pageSize != 0 && totalNum % pageSize == 0) {
+      return parseInt(String(totalNum / pageSize));
+    }
+    if (pageSize != 0 && totalNum % pageSize != 0) {
+      return parseInt(String(totalNum / pageSize)) + 1;
+    }
+  }
+
+  // 获取当前页的数据
+  const ListArr = (start, end) => {
+    let calls = []
+    for (let i = start; i >= end; i--) {
+      let item = {
+        address: TimeShop,
+        name: 'getUserRecordKey',
+        params: [account, i]
+      }
+      calls.push(item)
+    }
+    return calls
+  }
+  // 获取总条数
+  const totalNum = await FetchRecordLength(account)
+  // 获取总页数
+  const totalPage = getTotalPage(totalNum)
+  // 获取当前页下标区间后返回对应请求参数列表
+  const start = LastEnd > 0 ? LastEnd - 1 : (((totalPage * pageSize - (page - 1) * pageSize) - 1) > Number(totalNum) - 1 ? Number(totalNum) - 1 : ((totalPage * pageSize - (page - 1) * pageSize) - 1))
+  const end = start - pageSize + 1 < 0 ? 0 : start - pageSize + 1
+  console.log(totalNum, totalPage, start, end, LastEnd);
+
+  const calls = ListArr(start, end)
+  // const calls = [
+  //   {
+  //     address: TimeShop,
+  //     name: 'getUserBuyRecords',
+  //     params: [account]
+  //   },
+  // ]
+  console.log(calls, "calls");
+  try {
+    const arr = await multicall(timeShopAbi, calls)
+    const List = arr.map((item, index) => ({
+      round: Number(new BigNumber(item[0].round.toJSON().hex)) + 1,
+      endTime: Number(new BigNumber(item[0].endTime.toJSON().hex)),
+      latestTime: new BigNumber(item[0].latestTime.toJSON().hex).toNumber(),
+      totalAmount: getBalanceNumber(new BigNumber(item[0].totalAmount.toJSON().hex)),
+      debtAmount: getBalanceNumber(new BigNumber(item[0].debtAmount.toJSON().hex)),
+      RemainingAmount: getBalanceNumber(new BigNumber(item[0].totalAmount.toJSON().hex).minus(new BigNumber(item[0].debtAmount.toJSON().hex))),
+      totalPage: totalPage,
+      page: page,
+      id: Number(end) - index - 1,
+      end: end
+    }))
+    const AmountList = await FetchReleaseAmount(List)
+    const completeList = AmountList.map((item, index) => ({
+      ...List[index],
+      ReleaseAmount: item
+    }))
+    console.log(completeList, "completeList");
+    return completeList
   } catch (error) {
     console.log(error);
     return []
@@ -151,6 +261,14 @@ export const useFetTimeInfo = () => {
   }, [refresh, account])
 }
 
+// 获取Time兑换列表
+export const useFetTimeExchangeList = (page: number, pageSize: number) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  useEffect(() => {
+    account && dispatch(fetchTimeExchangeList({ account, page, pageSize }))
+  }, [account, page, pageSize])
+}
 // 获取DSG授权数量
 export const useFetchDSGApproveNum = () => {
   const dispatch = useDispatch<AppDispatch>()
