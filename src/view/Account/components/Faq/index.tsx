@@ -7,6 +7,8 @@ import { formatLocalisedCompactNumber } from "utils/formatBalance";
 import AnswerChart from "./AnswerChart";
 import { ruleDataList } from './data'
 import CommonCircle from "components/Cirde/CommonCircle";
+import { useTranslation } from "contexts/Localization";
+import { WalletHead } from "../../head";
 
 const ItemBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -33,7 +35,18 @@ const RowText = styled(Text)`
   color:${({ theme }) => theme.colors.white_black};
   font-size: 14px;
 `
-export const FAQCircle = () => {
+
+const ScrollBox = styled(Box)`
+height:calc(100vh - 70px);
+overflow-y: auto;
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+-ms-overflow-style: none;
+scrollbar-width: none;
+`
+
+const FAQCircle = () => {
   return (
     <BgImgBox>
       <ComponentsWrapper>
@@ -51,58 +64,60 @@ const FaqQuestion = ({ children }) => <Text>{children}</Text>;
 const FaqAnswerText = ({ children }) => <Text>{children}</Text>;
 
 const Faq: React.FC = () => {
-
+  const { t } = useTranslation();
 
   return (
     <PageContainer>
-      <Flex flexDirection="column" >
-        <FAQCircle />
-        <ItemBox>
-          <FaqQuestion>Q1：$TIME总量多少,是如何分配的？ </FaqQuestion>
-          <FaqAnswerText>A1：$TIME总量为1,000,000,000,000,000,000,代币完全公平分发,没有团队或私募份额，所有的$TIME都分发给社区用户，具体分配比例如下：</FaqAnswerText>
-        </ItemBox>
-        <AnswerChart />
-        <ItemBox>
-          <FaqQuestion>Q2：使用$DSG兑换$TIME的价格是如何确定的？ </FaqQuestion>
-          <FaqAnswerText>A2：$DSG兑换$TIME总共分为10轮，每轮的价格和锁仓规则都不相同，总体而言，越早期的兑换，价格越低，但是锁仓比例越高，并且解锁时间 越久。具体规则如下：</FaqAnswerText>
-        </ItemBox>
-        <AnswerRuleList>
-          <Flex>
-            <HeadText width="8%">周期</HeadText>
-            <HeadText width="22%">$TIME to be exchanged</HeadText>
-            <HeadText width="15%">兑换所需DSG</HeadText>
-            <HeadText width="25%">TIME价格（以DSG计价）</HeadText>
-            <HeadText width="12%">立即释放比例</HeadText>
-            <HeadText width="20%">立即释放TIME总数量</HeadText>
-            <HeadText width="15%">后续线性解锁时间</HeadText>
-          </Flex>
-          {
-            ruleDataList.map(item =>
-              <Flex mt="20px" key={item.period}>
-                <RowText width="8%">{item.period}</RowText>
-                <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage)}</RowText>
-                <RowText width="15%">{formatLocalisedCompactNumber(item.need)}</RowText>
-                <RowText width="25%">{item.price}</RowText>
-                <RowText width="12%">{item.rate}</RowText>
-                <RowText width="20%">{formatLocalisedCompactNumber(item.total)}</RowText>
-                <RowText width="15%">{item.month}个月</RowText>
-              </Flex>)
-          }
-        </AnswerRuleList>
-        <BottomItemBox>
-          <FaqQuestion>Q3：用于兑换$TIME的DSG将会如何处理 </FaqQuestion>
-          <FaqAnswerText>A3：用户兑换$TIME的DSG：50%将会直接销毁，15%将会分配给vDSG的持有人，35%将会分配给质押$TIME的用户：其中15%立即释放， 20%在未来的6个月内线性释放 </FaqAnswerText>
-          <br />
-          <FaqQuestion>Q4：$TIME有哪些用例，我拿到$TIME可以做什么？ </FaqQuestion>
-          <FaqAnswerText>A4：$TIME是使用社交产品Metatime必不可少的代币，用户浏览Metatime其他人发的内容时每秒都需要付出1$TIME，并且只有使用$TIME完成 任务才可以获得$MATTER。</FaqAnswerText>
-          <br />
-          <FaqAnswerText>
-            除此以外，您还可以将$TIME质押，您可以获得后续兑换$TIME用户DSG的35%的奖励。
-          </FaqAnswerText>
-        </BottomItemBox>
-      </Flex>
+      <WalletHead title={t('FAQ')} />
+      <ScrollBox>
+        <Flex flexDirection="column" >
+          <FAQCircle />
+          <ItemBox>
+            <FaqQuestion>Q1：$TIME总量多少,是如何分配的？ </FaqQuestion>
+            <FaqAnswerText>A1：$TIME总量为1,000,000,000,000,000,000,代币完全公平分发,没有团队或私募份额，所有的$TIME都分发给社区用户，具体分配比例如下：</FaqAnswerText>
+          </ItemBox>
+          <AnswerChart />
+          <ItemBox>
+            <FaqQuestion>Q2：使用$DSG兑换$TIME的价格是如何确定的？ </FaqQuestion>
+            <FaqAnswerText>A2：$DSG兑换$TIME总共分为10轮，每轮的价格和锁仓规则都不相同，总体而言，越早期的兑换，价格越低，但是锁仓比例越高，并且解锁时间 越久。具体规则如下：</FaqAnswerText>
+          </ItemBox>
+          <AnswerRuleList>
+            <Flex>
+              <HeadText width="8%">周期</HeadText>
+              <HeadText width="22%">$TIME to be exchanged</HeadText>
+              <HeadText width="15%">兑换所需DSG</HeadText>
+              <HeadText width="25%">TIME价格（以DSG计价）</HeadText>
+              <HeadText width="12%">立即释放比例</HeadText>
+              <HeadText width="20%">立即释放TIME总数量</HeadText>
+              <HeadText width="15%">后续线性解锁时间</HeadText>
+            </Flex>
+            {
+              ruleDataList.map(item =>
+                <Flex mt="20px" key={item.period}>
+                  <RowText width="8%">{item.period}</RowText>
+                  <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage)}</RowText>
+                  <RowText width="15%">{formatLocalisedCompactNumber(item.need)}</RowText>
+                  <RowText width="25%">{item.price}</RowText>
+                  <RowText width="12%">{item.rate}</RowText>
+                  <RowText width="20%">{formatLocalisedCompactNumber(item.total)}</RowText>
+                  <RowText width="15%">{item.month}个月</RowText>
+                </Flex>)
+            }
+          </AnswerRuleList>
+          <BottomItemBox>
+            <FaqQuestion>Q3：用于兑换$TIME的DSG将会如何处理 </FaqQuestion>
+            <FaqAnswerText>A3：用户兑换$TIME的DSG：50%将会直接销毁，15%将会分配给vDSG的持有人，35%将会分配给质押$TIME的用户：其中15%立即释放， 20%在未来的6个月内线性释放 </FaqAnswerText>
+            <br />
+            <FaqQuestion>Q4：$TIME有哪些用例，我拿到$TIME可以做什么？ </FaqQuestion>
+            <FaqAnswerText>A4：$TIME是使用社交产品Metatime必不可少的代币，用户浏览Metatime其他人发的内容时每秒都需要付出1$TIME，并且只有使用$TIME完成 任务才可以获得$MATTER。</FaqAnswerText>
+            <br />
+            <FaqAnswerText>
+              除此以外，您还可以将$TIME质押，您可以获得后续兑换$TIME用户DSG的35%的奖励。
+            </FaqAnswerText>
+          </BottomItemBox>
+        </Flex>
+      </ScrollBox>
     </PageContainer>
   )
 }
-
-export default Faq;
+export default Faq

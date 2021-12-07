@@ -10,7 +10,6 @@ import ExchangeTime from './exchange';
 import { useFetchDSGApproveNum, useFetTimeInfo } from 'store/wallet/hooks';
 import { useStore } from 'store';
 import VestingTime from './VestingTime';
-import Faq from '../Faq';
 import { ComponentsWrapper } from "components/Cirde/PageContainer";
 import CommonCircle from "components/Cirde/CommonCircle";
 
@@ -72,7 +71,7 @@ const Exchange: React.FC = () => {
       }
     }
   }
-  const showFaq = useCallback(() => setToFaq(true), [setToFaq])
+  // const showFaq = useCallback(() => setToFaq(true), [setToFaq])
   useEffect(() => {
     if (account && TimeInfo.length > 1) {
       getTimeShopInfo()
@@ -83,23 +82,16 @@ const Exchange: React.FC = () => {
     <>
       <WalletHead title={t('Time兑换')} />
       <ScrollBox>
-        {
-          ToFaq ?
-            <Faq />
-            :
-            <>
-              <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
-              <ExchangeTime showFaq={showFaq} nowRound={TimeShopInfo} />
-              <VestingBox>
-                <ComponentsWrapper>
-                  <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-13rem 0 0 -23rem" isAnimation>
-                    <Text fontSize='30px' bold>My Vesting Time</Text>
-                  </CommonCircle>
-                </ComponentsWrapper>
-              </VestingBox>
-              <VestingTime />
-            </>
-        }
+        <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
+        <ExchangeTime nowRound={TimeShopInfo} />
+        <VestingBox>
+          <ComponentsWrapper>
+            <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-13rem 0 0 -23rem" isAnimation>
+              <Text fontSize='30px' bold>My Vesting Time</Text>
+            </CommonCircle>
+          </ComponentsWrapper>
+        </VestingBox>
+        <VestingTime />
       </ScrollBox>
     </>
   )

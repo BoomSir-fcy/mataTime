@@ -18,8 +18,7 @@ import { useStore } from 'store';
 import { useDispatch } from 'react-redux'
 import { fetchDSGApproveNumAsync, fetchTimeExchangeList, fetchTimeShopInfo } from 'store/wallet/reducer';
 import { useToast } from 'hooks';
-// import { ComponentsWrapper, PageContainer } from "components/Cirde/PageContainer";
-// import CommonCircle from "components/Cirde/CommonCircle";
+import { Link } from 'react-router-dom';
 
 
 const Center = styled(Flex)`
@@ -83,9 +82,8 @@ const FaqBox = styled(Box)`
 interface init {
   nowRound: TimeInfo,
   decimals?: number,
-  showFaq: () => void
 }
-const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18, showFaq }) => {
+const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch()
   const { account } = useWeb3React()
@@ -272,10 +270,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18, showFaq }) => {
           }
         }}>{pending ? <Dots>{approvedNum > 0 ? "兑换中" : "授权中"}</Dots> : approvedNum > 0 ? "兑换" : "授权"}</ButtonStyle>
       </SwapBox>
-      <FAQ onClick={showFaq}>
-        {/* <CommonCircle hideBg={true} width="10rem" height="10rem" margin="-78px 0 0px -80px" isAnimation>
-          <Text fontSize="30px" lineHeight="54px" bold>FAQ</Text>
-        </CommonCircle> */}
+      <FAQ as={Link} to="/account/faq">
         <AnimationRingIcon style={{ cursor: 'pointer' }} active1 active3 bgColor showImg isRotate width="8rem">
           <FaqBox>
             <Text style={{ cursor: 'pointer' }} mb='6px' fontSize="30px" bold>FAQ</Text>

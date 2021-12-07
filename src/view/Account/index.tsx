@@ -34,6 +34,7 @@ const ContainerStyled = styled(Container)`
 const Stake = React.lazy(() => import('./components/Single'));
 const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
 const Exchange = React.lazy(() => import('./components/ExchangeTime'));
+const FAQ = React.lazy(() => import('./components/Faq'));
 
 const Account = props => {
   const { t } = useTranslation();
@@ -49,6 +50,7 @@ const Account = props => {
                 <Route path={`${props.match.path}`} exact component={TokenAccount} />
                 <Route path={`${props.match.path}/time`} component={Exchange} />
                 <Route path={`${props.match.path}/stake`} component={Stake} />
+                <Route path={`${props.match.path}/faq`} component={FAQ} />
               </>
             )}
           />
