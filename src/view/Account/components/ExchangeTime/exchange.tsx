@@ -19,7 +19,8 @@ import { useDispatch } from 'react-redux'
 import { fetchDSGApproveNumAsync, fetchTimeExchangeList, fetchTimeShopInfo } from 'store/wallet/reducer';
 import { useToast } from 'hooks';
 import { Link } from 'react-router-dom';
-
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration'
 
 const Center = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -98,7 +99,13 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const { onApprove } = useApproveErc20Change()
   const { onExchange } = useExchangeErc20()
   const { toastError, toastWarning, toastSuccess } = useToast();
+  dayjs.extend(duration)
 
+
+  const ReleaseTime = useMemo(() => {
+    const num = dayjs.duration(nowRound.long_time, "seconds").humanize();
+    return num
+  }, [nowRound])
 
   const Time = useMemo(() => {
     const num = new BigNumber(Number(inputNum)).times(nowRound.max_time_token).div(nowRound.max_dsg_token).toNumber()
@@ -255,10 +262,11 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </Flex>
         </TimeBox>
         <Rule fontSize='14px' color='textTips'>
-          {t('*锁仓规则：%now%%立即释放，%later%%在未来4年之内线性解锁',
+          {t('*锁仓规则：%now%%立即释放，%later%%在未来 %time%之内线性解锁',
             {
               now: ReleaseNow,
-              later: ReleaseLater
+              later: ReleaseLater,
+              time: ReleaseTime
             })}
         </Rule>
         <ButtonStyle disabled={pending} onClick={async () => {
