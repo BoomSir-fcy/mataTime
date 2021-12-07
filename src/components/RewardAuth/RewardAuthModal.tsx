@@ -27,13 +27,13 @@ import QuestionHelper from 'components/QuestionHelper';
 
 const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   position: absolute;
-  z-index: 1004;
+  z-index: 999;
   width: 418px;
   min-height: 80px;
   padding: 8px 20px 16px;
   padding-bottom: 16px;
   border-radius: 10px;
-  bottom: ${({ bottom }) => (bottom ? bottom : 35)}px;
+  bottom: ${({ bottom }) => (bottom ? bottom : 0)}px;
   right: ${({ right }) => (right ? right : 0)}px;
   background: ${({ theme }) => theme.colors.tertiary};
 `;
@@ -65,7 +65,7 @@ interface RewardAuthModalProps {
   offsetLeft?: number;
   onConfirm?: (amount: string) => void;
   onDismiss?: () => void;
-  onMouseLeave?: () => void;
+  onClose?: () => void;
 }
 
 const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
@@ -73,7 +73,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   avatar,
   offsetLeft,
   offsetTop,
-  onMouseLeave
+  onClose
 }) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
@@ -156,6 +156,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         getBnbAddress() === currentToken[0]
       );
       if (res === 1) {
+        onClose();
         toastSuccess('打赏成功');
       } else if (res === 4001) {
         toastSuccess('已经取消打赏');
@@ -187,11 +188,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   }, [account]);
 
   return (
-    <RewardAuthModalStyled
-      right={offsetLeft}
-      bottom={offsetTop}
-      onMouseLeave={onMouseLeave}
-    >
+    <RewardAuthModalStyled right={offsetLeft} bottom={offsetTop}>
       {/* 无人打赏你的帖子 */}
       {userInfo.uid === currentPost.user_id ? (
         <RewardIncome data={reward} postInfo={reward_post} />
@@ -289,7 +286,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                 </Flex>
               )}
               {/* 查看当前用户打赏明细 */}
-              {reward_post.my_rewards.length > 0 && (
+              {reward_post?.my_rewards?.length > 0 && (
                 <Text color="textTips" fontSize="14px" mt="12px" ellipsis>
                   您已打赏{getString(reward_post.my_rewards, tokenList)}
                 </Text>

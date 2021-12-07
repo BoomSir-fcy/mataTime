@@ -1,53 +1,66 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useImmer } from 'use-immer';
-import { Flex, Button, Text, TextProps } from 'uikit';
-import { useTranslation } from 'contexts/Localization';
+import Popup from 'reactjs-popup';
+import { Flex, Box } from 'uikit';
 import { Icon } from '../Icon';
+
 import RewardAuthModal from './RewardAuthModal';
 
+import 'reactjs-popup/dist/index.css';
 // import useRewardAuth from 'contexts/RewardAuthContext/hooks/useRewardAuth';
 
 const RewardAuthTagStyled = styled(Flex)`
-  cursor: pointer;
   position: relative;
+`;
+const PopupButton = styled(Box)`
+  cursor: pointer;
 `;
 
 export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
-  const { t } = useTranslation();
-  const [state, setState] = useImmer({
-    visible: false
-  });
-  const { visible } = state;
   const reward: reward[] = data.reward_stats || [];
+  const popupRef = React.useRef(null);
 
-  const handleVisible = () => {
-    setState(p => {
-      p.visible = false;
-    });
+  const close = () => {
+    if (popupRef.current) {
+      console.log(popupRef.current);
+      popupRef?.current?.close();
+    }
   };
-
-  // React.useEffect(() => {
-  //   document.addEventListener('click', handleVisible);
-  //   return () => document.removeEventListener('click', handleVisible);
-  // }, []);
 
   return (
     <RewardAuthTagStyled alignItems="center">
-      <Button
-        variant="text"
-        onClick={() =>
-          setState(p => {
-            p.visible = !visible;
-          })
+      <Popup
+        ref={popupRef}
+        trigger={
+          <PopupButton>
+            <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
+            {(reward?.length > 0 && reward[0]?.count) || 0}
+          </PopupButton>
         }
+        nested
+        keepTooltipInside={true}
+        position="top right"
+        closeOnDocumentClick
+        contentStyle={{
+          width: '418px',
+          height: 'auto',
+          minHeight: '80px',
+          borderRadius: '10px',
+          padding: 0,
+          border: '0',
+          backgroundColor: 'transparent'
+        }}
+        arrowStyle={{ opacity: 0 }}
       >
-        <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
-        {(reward?.length > 0 && reward[0]?.count) || 0}
-      </Button>
-      {visible && (
+        <RewardAuthModal
+          currentPost={data}
+          avatar={data.user_avator_url}
+          onClose={close}
+        />
+      </Popup>
+      {/* {visible && (
         <RewardAuthModal currentPost={data} avatar={data.user_avator_url} />
-      )}
+      )} */}
     </RewardAuthTagStyled>
   );
 };

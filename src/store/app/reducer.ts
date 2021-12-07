@@ -3,9 +3,8 @@ import {
   toggleTheme,
   setSystemCustom,
   setLocation,
-  toastContainer,
   connectWallet,
-  setChainId,
+  setChainId
   // setTopicCoins
 } from './actions';
 import { languange } from './type';
@@ -16,17 +15,13 @@ const initialState = {
   show: false,
   loading: false,
   localtion: [],
-  toast: {
-    type: '',
-    text: '',
-    toastContainer: null
-  },
   systemCustom: {
     isDark: true,
     notification: true,
     languange: {} as languange,
     autoTranslation: false
   },
+  supportTokenViews: []
   // coins: {
   //   symbol: '',
   //   projectLink: '',
@@ -49,15 +44,12 @@ export default createReducer(initialState, builder => {
     .addCase(setLocation, (state, action) => {
       state.localtion = action.payload;
     })
-    .addCase(toastContainer, (state, { payload }) => {
-      state.toast.toastContainer = payload;
-    })
     .addCase(connectWallet, (state, action) => {
       state.connectWallet = action.payload.connectWallet;
     })
     .addCase(setChainId, (state, action) => {
       state.chainId = action.payload.chainId;
-    })
+    });
   // .addCase(setTopicCoins, (state, action) => {
   //   // nowTime 做防抖处理
   //   const nowTime = Math.floor(new Date().getTime() / 1000 / 3)
