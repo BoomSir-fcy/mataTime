@@ -7,12 +7,13 @@ import { useDispatch } from 'react-redux'
 import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
-import { useFetTimeExchangeList } from 'store/wallet/hooks';
+import { useFetchRewardNum, useFetTimeExchangeList } from 'store/wallet/hooks';
 import { useStore } from 'store';
 import dayjs from 'dayjs'
-import { fetchTimeExchangeList } from 'store/wallet/reducer';
-import { useRewardErc20 } from './hook';
+import { fetchTimeExchangeList, fetchRewardNumAsync } from 'store/wallet/reducer';
+import { useRewardErc20, useRewardErc20All } from './hook';
 import Dots from 'components/Loader/Dots';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 
 const CountBox = styled(Box)`
@@ -29,7 +30,7 @@ position: relative;
 const Row = styled.div`
 width: 100%;
 display: grid;
-grid-template-columns: 15% 23% 30% 20% 12%;
+grid-template-columns: 15% 25% 25% 23% 12%;
 align-items: center;
 min-height: 30px;
 `
@@ -58,12 +59,25 @@ const LoadingAnimation = styled(Box)`
   width: 100%;
 `
 
-const ClaimButton = ({ ReleaseAmount, id, upDate }) => {
+const WithDrawAllBox = styled(Flex)`
+border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+${({ theme }) => theme.mediaQueriesSize.paddingsm}
+img{
+    width: 40px;
+}
+`
+
+interface btn {
+  ReleaseAmount?: number
+  id?: number
+  all?: boolean
+  upDate: () => void
+}
+const ClaimButton: React.FC<btn> = ({ upDate, all, ReleaseAmount, id }) => {
   const [pending, setpending] = useState(false)
   const { onWithdraw } = useRewardErc20()
-  const dispatch = useDispatch()
+  const { onWithdrawAll } = useRewardErc20All()
   const { t } = useTranslation()
-
   // 领取
   const handleReward = useCallback(async (id) => {
     console.log(id);
@@ -78,10 +92,32 @@ const ClaimButton = ({ ReleaseAmount, id, upDate }) => {
       setpending(false)
     }
   }, [onWithdraw])
+  // 全部领取
+  const handleRewardAll = useCallback(async () => {
+    try {
+      setpending(true)
+      await onWithdrawAll()
+      upDate()
+      // todo确认是否需要更新本轮兑换详情
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setpending(false)
+    }
+  }, [onWithdrawAll])
   return (
-    <Button disabled={ReleaseAmount === 0 || pending} onClick={() => handleReward(id)}>
-      {pending ? <Dots>{t('领取中')}</Dots> : t('领取')}
-    </Button>
+    <>
+      {
+        all ?
+          <Button disabled={ReleaseAmount === 0 || pending} onClick={handleRewardAll}>
+            {pending ? <Dots>{t('领取中')}</Dots> : t('全部领取')}
+          </Button>
+          :
+          <Button disabled={ReleaseAmount === 0 || pending} onClick={() => handleReward(id)}>
+            {pending ? <Dots>{t('领取中')}</Dots> : t('领取')}
+          </Button>
+      }
+    </>
   )
 }
 
@@ -92,6 +128,7 @@ interface init {
 }
 
 const VestingTime: React.FC<init> = ({ }) => {
+  useFetchRewardNum()
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
@@ -99,9 +136,10 @@ const VestingTime: React.FC<init> = ({ }) => {
   const [pageSize, setpageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [Loading, setLoading] = useState(true);
-  useFetTimeExchangeList(page, pageSize)
 
+  useFetTimeExchangeList(page, pageSize)
   const HistoryList = useStore(p => p.wallet.TimeExchangeList);
+  const RewardNum = useStore(p => p.wallet.rewardNum);
 
   const handlePageClick = (event) => {
     setLoading(true)
@@ -111,57 +149,70 @@ const VestingTime: React.FC<init> = ({ }) => {
 
   const upDate = useCallback(() => {
     dispatch(fetchTimeExchangeList({ account, page, pageSize }))
+    dispatch(fetchRewardNumAsync(account))
   }, [dispatch, account, pageSize])
 
   useEffect(() => {
     if (HistoryList.length > 0) {
       // 获取总页数
       setPageCount(HistoryList[0].totalPage)
+      setLoading(false)
     }
-    setLoading(false)
   }, [HistoryList])
 
   return (
-    <CountBox>
-      <Table>
-        <Row>
-          <HeadText>{t('Round')}</HeadText>
-          <HeadText>{t('Vesting end TIME')}</HeadText>
-          <HeadText>{t('Vesting $TIME')}</HeadText>
-          <HeadText>{t('Claimable $TIME')}</HeadText>
-          <HeadText></HeadText>
-        </Row>
-        {
-          HistoryList.map((item, index) => (
-            <Row key={`${item.round}${index}`}>
-              <ItemText>{item.round}</ItemText>
-              <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
-              <ItemText>{item.RemainingAmount}</ItemText>
-              <ItemText>{item.ReleaseAmount}</ItemText>
-              <ItemText>
-                <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
-              </ItemText>
-            </Row>
-          ))
-        }
-        {
-          Loading && <LoadingAnimation><Spinner /></LoadingAnimation>
-        }
-      </Table>
-      <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text mr='16px' fontSize='14px' color='textTips'>总共 {pageCount}页</Text>
-        <ReactPaginate
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={4}
-          marginPagesDisplayed={1}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-        />
-      </PaginateStyle>
-    </CountBox >
+    <>
+      <WithDrawAllBox alignItems='center' justifyContent='space-between'>
+        <Flex>
+          <img src="/images/tokens/TIME.svg" alt="" />
+          <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
+            <Text fontSize='14px' color='textTips'>待领取收益</Text>
+            <Text>{formatDisplayApr(RewardNum)}</Text>
+          </Flex>
+        </Flex>
+        <ClaimButton ReleaseAmount={RewardNum} all upDate={upDate} />
+      </WithDrawAllBox>
+      <CountBox>
+        <Table>
+          <Row>
+            <HeadText>{t('Round')}</HeadText>
+            <HeadText>{t('Vesting end TIME')}</HeadText>
+            <HeadText>{t('Vesting $TIME')}</HeadText>
+            <HeadText>{t('Claimable $TIME')}</HeadText>
+            <HeadText></HeadText>
+          </Row>
+          {
+            HistoryList.map((item, index) => (
+              <Row key={`${item.round}${index}`}>
+                <ItemText>{item.round}</ItemText>
+                <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
+                <ItemText>{formatDisplayApr(item.RemainingAmount)}</ItemText>
+                <ItemText>{formatDisplayApr(item.ReleaseAmount)}</ItemText>
+                <ItemText>
+                  <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
+                </ItemText>
+              </Row>
+            ))
+          }
+          {
+            Loading && <LoadingAnimation><Spinner /></LoadingAnimation>
+          }
+        </Table>
+        <PaginateStyle alignItems='center' justifyContent='end'>
+          <Text mr='16px' fontSize='14px' color='textTips'>总共 {pageCount}页</Text>
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={4}
+            marginPagesDisplayed={1}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+          />
+        </PaginateStyle>
+      </CountBox >
+    </>
   )
 }
 

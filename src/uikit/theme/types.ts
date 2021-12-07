@@ -130,7 +130,7 @@ export type Colors = {
   searchTopicTxt: string;
   // Gradients
   gradients: Gradients;
-
+  CircleBg: string;
   // box shadow
   shadow: {
     box: string;

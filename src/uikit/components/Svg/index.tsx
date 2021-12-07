@@ -136,5 +136,6 @@ export { default as MinusBtnIcon } from "./Icons/MinusBtn";
 export { default as CloseLineIcon } from "./Icons/CloseLine";
 export { default as AddBtnIcon } from "./Icons/AddBtn";
 export { default as SvgText } from "./Icons/SvgText";
+export { default as AnimationRingIcon } from "./Icons/AnimationRing";
 export { default as Svg } from "./Svg";
 export type { SvgProps } from "./types";
