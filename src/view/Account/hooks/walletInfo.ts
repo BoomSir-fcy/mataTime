@@ -12,7 +12,7 @@ import { useCashierDesk, useERC20 } from 'hooks/useContract';
 import { RechargeToken } from 'utils/calls';
 import { getBalanceNumber } from 'utils/formatBalance';
 import multicall from 'utils/multicall';
-import { getCashierDeskAddress, getTimeAddress } from 'utils/addressHelpers';
+import { getCashierDeskAddress, getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json'
 import { ethers } from 'ethers'
 
@@ -67,8 +67,10 @@ export function useDpWd() {
   const { account, chainId, library } = useActiveWeb3React();
   const CashierDeskContract = useCashierDesk();
 
-  const tokenAddress = getTimeAddress()
-  const TimeContract = useERC20(tokenAddress)
+  const TimeAddress = getTimeAddress()
+  const TimeContract = useERC20(TimeAddress)
+  const MatterAddress = getMatterAddress()
+  const MatterContract = useERC20(MatterAddress)
   const CashierDeskAddr = getCashierDeskAddress()
 
   // 充值
@@ -79,9 +81,14 @@ export function useDpWd() {
     [CashierDeskContract]
   );
   // 授权
-  const onApprove = useCallback(async () => {
+  const onApprove = useCallback(async (token: string) => {
     try {
-      const tx = await TimeContract.approve(CashierDeskAddr, ethers.constants.MaxUint256)
+      let tx
+      if (token === 'Time') {
+        tx = await TimeContract.approve(CashierDeskAddr, ethers.constants.MaxUint256)
+      } else {
+        tx = await MatterContract.approve(CashierDeskAddr, ethers.constants.MaxUint256)
+      }
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {

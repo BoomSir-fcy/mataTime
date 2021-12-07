@@ -176,6 +176,7 @@ var Supply$1 = "Supply";
 var Learn$1 = "Learn";
 var Wrap$1 = "Wrap";
 var Unwrap$1 = "Unwrap";
+var Fee$1 = "Fee";
 var Route$1 = "Route";
 var translationLast$1 = "translationLast";
 var translationEnd$1 = "translationEnd";
@@ -448,6 +449,7 @@ var translations = {
 	"Minimum received": "Minimum received",
 	"Price Impact": "Price Impact",
 	"Liquidity Provider Fee": "Liquidity Provider Fee",
+	Fee: Fee$1,
 	Route: Route$1,
 	"Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.",
 	"The difference between the market price and estimated price due to trade size.": "The difference between the market price and estimated price due to trade size.",
@@ -552,6 +554,7 @@ var Learn = "了解";
 var Wrap = "兑换";
 var Unwrap = "兑换";
 var Route = "路由";
+var Fee = "手续费";
 var translationLast = "translationLast";
 var translationEnd = "translationEnd";
 var translationsZhCN = {
@@ -835,6 +838,7 @@ var translationsZhCN = {
 	"0.025% to %symbol% holder": "0.025%分配给%symbol%质押用户",
 	"0.06% to operation fund": "0.06%分配给运营基金",
 	"Liquidity Provider Fee": "流动性提供者费用",
+	Fee: Fee,
 	"Routing through these tokens resulted in the best price for your trade.": "使交易获得最佳价格的路由。",
 	"Money-hungry Dino": "贪财龙",
 	"Enter an amount": "输入金额",
@@ -7558,7 +7562,6 @@ function Updater$3() {
         blockNumber: null,
     }), 2), state = _b[0], setState = _b[1];
     var blockNumberCallback = React.useCallback(function (blockNumber) {
-        console.log(blockNumber, new Date().getTime(), 'blockNumber event');
         setState(function (prev) {
             if (chainId === prev.chainId) {
                 if (typeof prev.blockNumber !== 'number')
@@ -11498,7 +11501,7 @@ function LiquidityProviderFee() {
     var nftInfo = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_STAKE_NFT_INFO);
     var swapToken = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_TOKEN);
     var swapvToken = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_V_TOKEN);
-    return (jsxRuntime.jsxs(Flex, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Liquidity Provider Fee') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ mb: "12px" }, { children: [t('for each trade a 0.3% fee is paid'), ":"] }), void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.1% to the LP token holders')] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.04% to the %symbol% stakers', {
+    return (jsxRuntime.jsxs(Flex, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Fee') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ mb: "12px" }, { children: [t('for each trade a 0.3% fee is paid'), ":"] }), void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.1% to the LP token holders')] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.04% to the %symbol% stakers', {
                                     symbol: t(nftInfo.name) + " NFT"
                                 })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.05% buyback %symbol% and burn', {
                                     symbol: swapToken.symbol
@@ -13612,7 +13615,9 @@ function Swap(_a) {
     return (jsxRuntime.jsx("div", { children: jsxRuntime.jsxs(AppBody, { children: [jsxRuntime.jsx(AppHeader, { title: t('Exchange'), helper: titlehelper, tips: subTitleTips }, void 0), jsxRuntime.jsxs(Wrapper$3, tslib.__assign({ id: "swap-page" }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsx(CurrencyInputPanel, { label: independentField === Field$2.OUTPUT && !showWrap && trade ? t('From (estimated)') : t('From'), value: formattedAmounts[Field$2.INPUT], showMaxButton: false, currency: currencies[Field$2.INPUT], onUserInput: handleTypeInput, onMax: handleMaxInput, onCurrencySelect: handleInputSelect, otherCurrency: currencies[Field$2.OUTPUT], id: "swap-currency-input", showCommonBases: true }, void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "space-between" }, { children: jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: isExpertMode ? 'space-between' : 'center', style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: true }, { children: jsxRuntime.jsx(Icon$1, { width: "20px", onClick: function () {
                                                         setApprovalSubmitted(false); // reset 2 step UI for approvals
                                                         onSwitchTokens();
-                                                    }, color: currencies[Field$2.INPUT] && currencies[Field$2.OUTPUT] ? 'primary' : 'text' }, void 0) }), void 0), recipient === null && !showWrap && isExpertMode ? (jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "add-recipient-button", onClick: function () { return onChangeRecipient(''); } }, { children: t('+ Add a send (optional)') }), void 0)) : null] }), void 0) }), void 0), jsxRuntime.jsx(CurrencyInputPanel, { value: formattedAmounts[Field$2.OUTPUT], onUserInput: handleTypeOutput, label: independentField === Field$2.INPUT && !showWrap && trade ? t('To (estimated)') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: false }, { children: jsxRuntime.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Price') }), void 0), jsxRuntime.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0)] }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.jsxs(Box, tslib.__assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0)] }, void 0) }, void 0));
+                                                    }, color: currencies[Field$2.INPUT] && currencies[Field$2.OUTPUT] ? 'primary' : 'text' }, void 0) }), void 0), recipient === null && !showWrap && isExpertMode ? (jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "add-recipient-button", onClick: function () { return onChangeRecipient(''); } }, { children: t('+ Add a send (optional)') }), void 0)) : null] }), void 0) }), void 0), jsxRuntime.jsx(CurrencyInputPanel, { value: formattedAmounts[Field$2.OUTPUT], onUserInput: handleTypeOutput, 
+                                    // label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
+                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: false }, { children: jsxRuntime.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.jsx(RowBetween, tslib.__assign({ align: "center" }, { children: jsxRuntime.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.jsxs(Box, tslib.__assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0)] }, void 0) }, void 0));
 }
 var templateObject_1;
 

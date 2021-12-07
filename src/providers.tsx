@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { RefreshContextProvider } from 'contexts/RefreshContext'
 import { ToastsProvider, LanguageProvider } from 'contexts';
 import { ConnectWalletProvider } from 'contexts/ConnectWalletContext';
+import { RewardAuthContextProvider } from 'contexts/RewardAuthContext';
 import { ImContextProvider } from 'contexts/ImContext';
 import { store } from 'store';
 import { getLibrary } from 'utils';
@@ -24,9 +25,13 @@ const Providers: React.FC = ({ children }) => {
           <ToastsProvider>
             <LanguageProvider>
               <ConnectWalletProvider>
-                <ImContextProvider>
-                  {children}
-                </ImContextProvider>
+                <RefreshContextProvider>
+                  <ImContextProvider>
+                    <RewardAuthContextProvider>
+                      {children}
+                    </RewardAuthContextProvider>
+                  </ImContextProvider>
+                </RefreshContextProvider>
               </ConnectWalletProvider>
             </LanguageProvider>
           </ToastsProvider>

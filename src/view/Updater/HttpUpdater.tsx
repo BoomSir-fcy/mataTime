@@ -45,12 +45,12 @@ export default function HttpUpdater() {
       eventBus.addEventListener('insufficient', handleInsufficient);
     }
   }, [handleInsufficient])
-  if (visible) return (
-    <ModalWrapper padding="0" customizeTitle creactOnUse visible={visible} >
+  return (
+    <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
         onConfirm={() => {
           setVisible(false)
-          history.push('/account');
+          history.push('/test');
         }}
         onSecondary={() => {
           setVisible(false)
@@ -58,6 +58,5 @@ export default function HttpUpdater() {
         }}
       />
     </ModalWrapper>
-  )
-  return null;
+  );
 }

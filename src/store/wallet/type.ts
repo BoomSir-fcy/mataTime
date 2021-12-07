@@ -13,6 +13,9 @@ export interface WalletState {
     uid: number,
   }]
   TimeInfo: TimeInfo[]
+  CurrentRound: TimeInfo
+  TimeExchangeList: ExchangeList[]
+  activeToken: string
 }
 
 export interface TimeInfo {
@@ -22,4 +25,17 @@ export interface TimeInfo {
   right_now_release: number,
   times: number,
   total_dsg: number
+}
+export interface ExchangeList {
+  round: number,
+  endTime: number,
+  latestTime: number,
+  totalAmount: number,
+  debtAmount: number,
+  RemainingAmount: number,
+  ReleaseAmount: number,
+  totalPage: number,
+  page: number
+  id: number
+  end: number
 }

@@ -8,7 +8,8 @@ interface SpendTimeViewWithArticleProps {
   articleId: number
 }
 
-const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ articleId }) => {
+// 浏览扣费组件
+const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.memo(({ articleId }) => {
 
   const imgRef = useRef<HTMLDivElement>(null);
   const { setArticlePositions, rendered, setRendered } = useIm()
@@ -17,7 +18,7 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ art
   // FIXME: 当这个文章有图片等信息的时候 获取的高度不是真实高度 需要
 
   useEffect(() => {
-    if (imgRef.current && !isLoaded) {
+    if (imgRef.current) {
       const offsetHeight = imgRef.current?.parentElement?.offsetHeight
       const offsetTop = imgRef.current?.parentElement?.offsetTop
       // const { offsetTop } = imgRef.current
@@ -37,6 +38,6 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = ({ art
   // return <div ref={imgRef}>
   //   <Text>articleId: {articleId}</Text>
   // </div>
-}
+})
 
 export default SpendTimeViewWithArticle

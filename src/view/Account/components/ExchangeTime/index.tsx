@@ -65,10 +65,16 @@ const Exchange: React.FC = () => {
   const TimeInfo = useStore(p => p.wallet.TimeInfo);
   const getTimeShopInfo = async () => {
     for (let i = 0; i < TimeInfo.length; i++) {
-      if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
+      if (i === TimeInfo.length - 1) {
         setTimeShopInfo(TimeInfo[i])
-        setTimeNext(TimeInfo[i + 1])
-        break
+      } else {
+        if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
+          setTimeShopInfo(TimeInfo[i])
+          if (i + 1 < TimeInfo.length) {
+            setTimeNext(TimeInfo[i + 1])
+          }
+          break
+        }
       }
     }
   }
@@ -88,41 +94,6 @@ const Exchange: React.FC = () => {
           <Text fontSize='30px' bold>My Vesting Time</Text>
         </VestingBox>
         <VestingTime />
-        {/* <Center flexDirection='column' justifyContent='center' alignItems='center'>
-          <div>
-            当前周期：{TimeShopInfo.times} <br />
-            最大Dsg兑换量：{TimeShopInfo.max_dsg_token}<br />
-            最大Time兑换量：{TimeShopInfo.max_time_token}<br />
-            立即获得百分比：{new BigNumber(TimeShopInfo.right_now_release).div(10000).times(100).toString()}%<br />
-            当前总Dsg：{TimeShopInfo.total_dsg}<br />
-            当前可领取Time：{rewardNum}<br />
-            当前Time余额：{Number(timeBalance)}<br />
-            <Button disabled={Receiving || rewardNum <= 0} onClick={handleReward}>{Receiving ? <Dots>领取中</Dots> : '领取'}</Button>
-          </div>
-          <Flex flexDirection='column'>
-            <Input type="number" value={inputNum.Dsg} onChange={event =>
-              setinputNum(p => {
-                p.Dsg = event.target.value;
-                p.Time = new BigNumber(Number(event.target.value)).times(new BigNumber(TimeShopInfo?.max_time_token).div(TimeShopInfo?.max_dsg_token)).toString()
-              })
-            } />DSG余额{Number(balance)}
-            <Input type="number" value={inputNum.Time} onChange={event =>
-              setinputNum(p => {
-                p.Dsg = new BigNumber(Number(event.target.value)).div(new BigNumber(TimeShopInfo?.max_time_token).div(TimeShopInfo?.max_dsg_token)).toString();
-                p.Time = event.target.value
-              })
-            } />Time
-            <Button disabled={pending} onClick={async () => {
-              if (approvedNum > 0) {
-                // 兑换
-                await handleExchange()
-              } else {
-                // 授权
-                await handleApprove()
-              }
-            }}>{pending ? <Dots>{approvedNum > 0 ? "兑换中" : "授权中"}</Dots> : approvedNum > 0 ? "兑换" : "授权"}</Button>
-          </Flex>
-        </Center> */}
       </ScrollBox>
     </>
   )

@@ -12,7 +12,7 @@ import poolsReduce from './pools';
 import type { CoinsState } from './coins/reducer';
 import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
-
+import * as walletAction from './wallet/actions'
 export interface Store {
   appReducer: App;
   loginReducer: Login;
@@ -43,7 +43,8 @@ export const store = configureStore({
 export const storeAction = {
   ...loginAction,
   ...appAction,
-  ...coinsAction
+  ...coinsAction,
+  ...walletAction
 };
 export const fetchThunk = {
   fetchUserInfoAsync

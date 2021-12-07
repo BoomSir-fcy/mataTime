@@ -71,8 +71,9 @@ const GlobalStyle = createGlobalStyle`
     height: 8px;
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.textSubtle}; 
-    border-radius: 0;
+    background: ${({ theme }) => theme.colors.textTips}; 
+    border-radius: 8px;
+
   }
   ::-webkit-scrollbar-track {
     background: ${({ theme }) => theme.colors.background}; 

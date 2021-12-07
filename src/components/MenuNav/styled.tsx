@@ -1,25 +1,25 @@
 import styled from 'styled-components'
 import { Box, Flex, Text } from 'uikit'
 
- export const NavItemStyled = styled(Flex)<{ active?: boolean }>`
+export const NavItemStyled = styled(Flex) <{ isactive?: number }>`
   width: 100%;
   height: 40px;
   cursor: pointer;
   vertical-align: middle;
   transition: background 0.3s ;
-  background: ${({ active, theme }) => active ? theme.colors.backgroundMenu : 'transparent' };
+  background: ${({ isactive, theme }) => isactive ? theme.colors.backgroundMenu : 'transparent'};
   &:hover{
     cursor: pointer;
-    background: ${({ active, theme }) => theme.colors.backgroundMenu };
+    background: ${({ theme }) => theme.colors.backgroundMenu};
   }
 `
 
- export const IconBox = styled(Box)`
+export const IconBox = styled(Box)`
   position: relative;
   width: 24px;
   /* height: 24px; */
 `
- export const Badge = styled(Text)`
+export const Badge = styled(Text)`
   position: absolute;
   background: ${({ theme }) => theme.colors.textOrigin};
   height: 14px;

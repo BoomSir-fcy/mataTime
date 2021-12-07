@@ -18,7 +18,6 @@ export default function Updater(): null {
 
   const blockNumberCallback = useCallback(
     (blockNumber: number) => {
-      console.log(blockNumber, new Date().getTime(), 'blockNumber event')
       setState((prev) => {
         if (chainId === prev.chainId) {
           if (typeof prev.blockNumber !== 'number') return { chainId, blockNumber }

@@ -69,7 +69,13 @@ const DropDownListContainer = styled.div<{ scale: Scale }>`
   }
 `;
 
-const DropDownContainer = styled.div<{ isOpen: boolean; width: number; scale: Scale; fillWidth: boolean; height: number }>`
+const DropDownContainer = styled.div<{
+  isOpen: boolean;
+  width: number;
+  scale: Scale;
+  fillWidth: boolean;
+  height: number;
+}>`
   cursor: pointer;
   width: ${({ width, fillWidth }) => (fillWidth ? '100%' : `${width}px`)};
   position: relative;
@@ -140,11 +146,17 @@ const ListItem = styled.li`
 export interface DropDownProps {
   fillWidth?: boolean;
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   scale?: Scale;
 }
 
-export const DropDown: React.FunctionComponent<DropDownProps> = ({ scale, isOpen, setIsOpen, fillWidth, children }) => {
+export const DropDown: React.FunctionComponent<DropDownProps> = ({
+  scale,
+  isOpen,
+  setIsOpen,
+  fillWidth,
+  children
+}) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   // const [isOpen, setIsOpen] = useState(false);
@@ -167,7 +179,13 @@ export const DropDown: React.FunctionComponent<DropDownProps> = ({ scale, isOpen
   }, [isOpen]);
 
   return (
-    <DropDownContainer scale={scale} isOpen={isOpen} fillWidth={fillWidth} ref={containerRef} {...containerSize}>
+    <DropDownContainer
+      scale={scale}
+      isOpen={isOpen}
+      fillWidth={fillWidth}
+      ref={containerRef}
+      {...containerSize}
+    >
       <DropDownListContainer scale={scale}>
         <DropDownList onClick={() => setIsOpen(false)} ref={dropdownRef}>
           {children}

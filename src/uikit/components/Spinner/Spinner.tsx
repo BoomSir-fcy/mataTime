@@ -28,6 +28,7 @@ const float = keyframes`
 
 const Container = styled(Box)`
   position: relative;
+  margin: 0 auto;
 `;
 
 const RotatingPancakeIcon = styled(Image)`
