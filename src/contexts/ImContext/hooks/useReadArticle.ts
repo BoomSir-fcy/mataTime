@@ -3,6 +3,7 @@ import debounce from 'lodash/debounce'
 import { IM } from 'utils';
 import useIm from './useIm'
 
+// TODO: 视图范围优化, 目前当文章只有1px在屏幕内都会收费
 const VIEW_PADDING = 120;
 const useReadArticle = () => {
   const { im, articleIds, articlePositions, rendered, setArticleIds } = useIm()
@@ -34,15 +35,16 @@ const useReadArticle = () => {
   }, [nowTime, articleIds, fetchReadTime, fetchHandle])
 
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = useCallback((event: any) => {
+    const offsetTopOverflow = Math.min(...Object.values(articlePositions).map(item => item[0]))
     const top = window.scrollY
+    // console.log(articlePositions, event, top)
     const bottom = top + window.innerHeight
     const topViews = []
-    const offsetTopOverflow = Math.min(...Object.values(articlePositions).map(item => item[0]))
     Object.keys(articlePositions).forEach(item => {
       let [articleTop, articleBottom] = articlePositions[item]
-      articleTop = Number(articleTop) - offsetTopOverflow
-      articleBottom = Number(articleBottom) - offsetTopOverflow
+      articleTop = Number(articleTop)
+      articleBottom = Number(articleBottom)
       // 碰撞检测
       /**
        * @dev 碰撞检测
@@ -55,12 +57,12 @@ const useReadArticle = () => {
        * 1. 当文章过长以后 判断上边距和文章碰撞检测
        */
       if (
-        articleTop >= (top + VIEW_PADDING) && (bottom - VIEW_PADDING) >= articleTop
+        articleTop >= (top) && (bottom) >= articleTop
         ||
-        articleBottom >= (top + VIEW_PADDING) && (bottom - VIEW_PADDING) >= articleBottom
+        articleBottom >= (top) && (bottom) >= articleBottom
       ) {
         topViews.push(Number(item))
-      } else if (top >= (articleTop + VIEW_PADDING) && (articleBottom - VIEW_PADDING) >= top) {
+      } else if (top >= (articleTop) && (articleBottom) >= top) {
         topViews.push(Number(item))
       }
     })
@@ -68,14 +70,14 @@ const useReadArticle = () => {
   }, [articlePositions, setArticleIds])
 
   const debouncedOnChange = useMemo(
-    () => debounce(() => handleScroll(), 300),
+    () => debounce((event) => handleScroll(event), 300),
     [handleScroll],
   )
 
   // 初始化显示阅读文章
   useEffect(() => {
     if (rendered && !initLoad) {
-      handleScroll()
+      handleScroll(11111111)
       setInitLoad(true)
     }
   }, [rendered, handleScroll, initLoad, setInitLoad])
@@ -84,7 +86,7 @@ const useReadArticle = () => {
     window.addEventListener('scroll', debouncedOnChange);
 
     return () => {
-      window.addEventListener('scroll', debouncedOnChange)
+      window.removeEventListener('scroll', debouncedOnChange)
     };
   }, [debouncedOnChange])
 

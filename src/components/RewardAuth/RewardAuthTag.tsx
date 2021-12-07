@@ -36,7 +36,6 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
   //   };
   // }, []);
 
-  console.log(reward?.length);
   return (
     <RewardAuthTagStyled
       ref={ref}
