@@ -3,18 +3,18 @@ import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
-import { TokenImage } from 'components';
+import { TokenImage, Avatar } from 'components';
 import { Flex, Box, Text, Button, InputPanel } from 'uikit';
 
 import { OnApprove, RewardAuthorList } from './hook';
 import { useTranslation } from 'contexts/Localization';
 
 import Dots from 'components/Loader/Dots';
+import QuestionHelper from 'components/QuestionHelper';
 
 const Rows = styled(Flex)`
   align-items: center;
 `;
-
 const InputPanelStyled = styled(InputPanel)`
   width: 33%;
   cursor: pointer;
@@ -24,6 +24,71 @@ const InputPanelStyled = styled(InputPanel)`
   margin-bottom: 12px;
   box-shadow: inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
 `;
+const Content = styled(Flex)`
+  position: relative;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  padding-top: 20px;
+`;
+const Tips = styled(Box)`
+  position: absolute;
+  right: 0;
+`;
+
+// 查看自己发布帖子打赏
+export const RewardIncome: React.FC<{
+  data: reward[];
+}> = ({ data }) => {
+  return (
+    <Box>
+      <Content>
+        {data.length ? (
+          <Flex alignItems="center">
+            <Flex ml="1em">
+              {[1, 2, 3].map(item => (
+                <Box key={item} width="25px" style={{ marginLeft: '-1em' }}>
+                  <Avatar
+                    scale="md"
+                    style={{ width: '25px', height: '25px' }}
+                  />
+                </Box>
+              ))}
+            </Flex>
+            <Text ml="11px" fontSize="14px">
+              共{data[0]?.count || 0}人已打赏这篇帖子
+            </Text>
+          </Flex>
+        ) : (
+          <Flex>
+            <Text textAlign="center">还没有人打赏您的帖子</Text>
+          </Flex>
+        )}
+        <Tips>
+          <QuestionHelper
+            mt="5px"
+            ml="5px"
+            text={
+              <>
+                <Text fontSize="14px">
+                  链上打赏并支持作者的创作，您的支持将会鼓励作者更大的创作热情
+                </Text>
+                <Text fontSize="14px" color="textTips">
+                  *平台将收取0.3%的交易手续费
+                </Text>
+              </>
+            }
+          />
+        </Tips>
+      </Content>
+      {data.length > 0 && (
+        <Flex justifyContent="center" mt="20px">
+          <Button>查看收益</Button>
+        </Flex>
+      )}
+    </Box>
+  );
+};
 
 export const CoinItem: React.FC<{
   token: string[];
@@ -91,7 +156,13 @@ export const Reward: React.FC<{
       ) : (
         <Flex flexWrap="wrap" justifyContent="space-between">
           {RewardAuthorList.map(item => (
-            <InputPanelStyled onClick={() => onCallBack(item)}>
+            <InputPanelStyled
+              key={item}
+              onClick={evnet => {
+                evnet.stopPropagation();
+                onCallBack(item);
+              }}
+            >
               <Flex>
                 <Box width="20px">
                   <TokenImage
