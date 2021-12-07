@@ -117,8 +117,6 @@ export const FetchTimeShopInfo = async () => {
       right_now_release: Number(new BigNumber(item.right_now_release.toJSON().hex)),
       total_dsg: getBalanceNumber(new BigNumber(item.total_dsg.toJSON().hex))
     }))
-    console.log(info, "------------------------");
-
     return info
   } catch (error) {
     console.log(error);
@@ -162,7 +160,7 @@ export const FetchReleaseAmount = async (list: any) => {
   }
 }
 // 获取Time详情
-export const FetchExchangeList = async (account: string, page: number, pageSize: number, LastEnd: number) => {
+export const FetchExchangeList = async (account: string, page: number, pageSize: number) => {
   const TimeShop = getTimeShopAddress()
 
   const getTotalPage = (totalNum) => {
@@ -190,21 +188,13 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   // 获取总条数
   const totalNum = await FetchRecordLength(account)
   // 获取总页数
-  const totalPage = getTotalPage(totalNum)
+  const totalPage = getTotalPage(Number(totalNum))
   // 获取当前页下标区间后返回对应请求参数列表
-  const start = LastEnd > 0 ? LastEnd - 1 : (((totalPage * pageSize - (page - 1) * pageSize) - 1) > Number(totalNum) - 1 ? Number(totalNum) - 1 : ((totalPage * pageSize - (page - 1) * pageSize) - 1))
+  const remainder = pageSize - Number(totalNum) % pageSize;
+  const start = (totalPage * pageSize - (page - 1) * pageSize) - 1 - remainder
   const end = start - pageSize + 1 < 0 ? 0 : start - pageSize + 1
-  console.log(totalNum, totalPage, start, end, LastEnd);
-
+  console.log(totalNum, totalPage, start, end, remainder);
   const calls = ListArr(start, end)
-  // const calls = [
-  //   {
-  //     address: TimeShop,
-  //     name: 'getUserBuyRecords',
-  //     params: [account]
-  //   },
-  // ]
-  console.log(calls, "calls");
   try {
     const arr = await multicall(timeShopAbi, calls)
     const List = arr.map((item, index) => ({
@@ -216,15 +206,13 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
       RemainingAmount: getBalanceNumber(new BigNumber(item[0].totalAmount.toJSON().hex).minus(new BigNumber(item[0].debtAmount.toJSON().hex))),
       totalPage: totalPage,
       page: page,
-      id: Number(end) - index - 1,
-      end: end
+      id: Number(end) - index - 1
     }))
     const AmountList = await FetchReleaseAmount(List)
     const completeList = AmountList.map((item, index) => ({
       ...List[index],
       ReleaseAmount: item
     }))
-    console.log(completeList, "completeList");
     return completeList
   } catch (error) {
     console.log(error);

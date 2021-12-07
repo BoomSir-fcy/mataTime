@@ -144,7 +144,7 @@ const VestingTime: React.FC<init> = ({ }) => {
   const handlePageClick = (event) => {
     setLoading(true)
     const changePage = event.selected + 1
-    dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize, end: HistoryList[0].end }))
+    dispatch(fetchTimeExchangeList({ account, page: changePage, pageSize }))
   };
 
   const upDate = useCallback(() => {
