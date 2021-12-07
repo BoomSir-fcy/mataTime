@@ -63,7 +63,7 @@ export const Crumbs: React.FC<{
           {centerTitle && (
             <CenterBox>
               <Text className="text" ml="16px">
-                {centerTitle}
+                {centerTitle.length > 20 ? centerTitle.slice(0, 20) + '...#' : centerTitle}
               </Text>
             </CenterBox>
           )}
