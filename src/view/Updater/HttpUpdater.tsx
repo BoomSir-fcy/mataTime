@@ -23,7 +23,6 @@ export default function HttpUpdater() {
     // TODO:
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
-    localStorage.removeItem(storage.Token);
   }, [dispatch, history]);
 
   const handleInsufficient = useCallback(() => {

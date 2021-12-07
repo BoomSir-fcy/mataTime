@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import GlobalStyle from 'style/global';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchThunk } from 'store';
+import { fetchThunk, storeAction } from 'store';
 import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, ToastComponents } from 'components';
 import PageContainer from 'components/Layout/PageContainer';
@@ -46,7 +46,10 @@ function App() {
   const token = window.localStorage.getItem(storage.Token);
 
   useEffect(() => {
-    Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
+    if (token) {
+      dispatch(fetchThunk.fetchUserInfoAsync());
+      // dispatch(storeAction.setUserToken(token));
+    }
   }, [token, dispatch]);
   // useEffect(() => {
   //   eventBus.addEventListener('http', (data) => {

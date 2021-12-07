@@ -91,6 +91,7 @@ export function useSignIn() {
 
 export function useLogin() {
   const { account, chainId, library } = useActiveWeb3React();
+  const dispatch = useDispatch();
 
   const loginCallback = useCallback(
     async (operationType: Api.SignIn.OperationType) => {
@@ -110,6 +111,7 @@ export function useLogin() {
         if (Api.isSuccess(response)) {
           const { token } = response.data;
           window.localStorage.setItem(storage.Token, token);
+          dispatch(storeAction.setUserToken(token));
         }
         return response;
       } catch (error: any) {
@@ -119,7 +121,7 @@ export function useLogin() {
         };
       }
     },
-    [chainId, library, account]
+    [chainId, library, account, dispatch]
   );
 
   return {

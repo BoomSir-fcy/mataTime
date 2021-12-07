@@ -48,6 +48,7 @@ export class IM extends EventTarget {
   url: string = `ws://192.168.101.122:8888/v1/ws`;
   // url: string = `${process.env.React_APP_WS_URL}/v1/ws`;
   token: string;
+  userToken: string;
 
   expires: number;
   pingIntervalSeconds = 10_000; // 心跳连接时间
@@ -71,10 +72,10 @@ export class IM extends EventTarget {
   static MessageProtocol = MessageProtocol
   messageProtocol = MessageProtocol // 方便在子组件调用
 
-  constructor() {
+  constructor(userToken: string) {
     super();
     // this.url = prop.url;
-    // this.token = prop.token;
+    this.userToken = userToken;
     this.init()
   }
 

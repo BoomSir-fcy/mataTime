@@ -8,10 +8,11 @@ import { useStore } from 'store';
 import { relativeTime } from 'utils';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
+import { ReadType } from 'contexts/ImContext/types';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
 import { Api } from 'apis';
-import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -101,7 +102,7 @@ export const ArticleList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle articleId={item.id} />
+                <SpendTimeViewWithArticle readType={ReadType.ARTICLE} articleId={item.id} />
               )
             }
             <MentionItem
