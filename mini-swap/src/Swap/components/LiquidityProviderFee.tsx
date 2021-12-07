@@ -17,7 +17,7 @@ export default function LiquidityProviderFee() {
   return (
     <Flex>
       <Text fontSize="14px" color="text">
-        {t('Liquidity Provider Fee')}
+        {t('Fee')}
       </Text>
       <QuestionHelper
         text={
