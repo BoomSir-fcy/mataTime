@@ -52,16 +52,16 @@ const FAQCircle = () => {
       <ComponentsWrapper>
         <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-13rem 0 0 -23rem" isAnimation>
           <Box width="14rem" height="14rem" margin="10rem 0 0 9rem">
-            <Text fontSize="40px" lineHeight="54px" bold>FAQ</Text>
+            <Text fontSize="40px" color='white' lineHeight="54px" bold>FAQ</Text>
           </Box>
         </CommonCircle>
       </ComponentsWrapper>
-    </BgImgBox>
+    </BgImgBox >
   );
 }
 
-const FaqQuestion = ({ children }) => <Text>{children}</Text>;
-const FaqAnswerText = ({ children }) => <Text>{children}</Text>;
+const FaqQuestion = ({ children }) => <Text color='white_black'>{children}</Text>;
+const FaqAnswerText = ({ children }) => <Text color='white_black'>{children}</Text>;
 
 const Faq: React.FC = () => {
   const { t } = useTranslation();

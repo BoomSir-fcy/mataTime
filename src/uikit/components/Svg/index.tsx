@@ -137,5 +137,8 @@ export { default as CloseLineIcon } from "./Icons/CloseLine";
 export { default as AddBtnIcon } from "./Icons/AddBtn";
 export { default as SvgText } from "./Icons/SvgText";
 export { default as AnimationRingIcon } from "./Icons/AnimationRing";
+export { default as bgCricle } from "./Icons/bgCricle";
+export { default as centerCricle } from "./Icons/centerCricle";
+
 export { default as Svg } from "./Svg";
 export type { SvgProps } from "./types";

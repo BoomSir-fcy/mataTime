@@ -51,6 +51,7 @@ const InputStyle = styled(Input)`
   padding: 0;
   width: auto;
   flex: 1;
+  background-color: transparent;
 `
 
 const TimeBox = styled(Box)`
@@ -271,9 +272,9 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
         }}>{pending ? <Dots>{approvedNum > 0 ? "兑换中" : "授权中"}</Dots> : approvedNum > 0 ? "兑换" : "授权"}</ButtonStyle>
       </SwapBox>
       <FAQ as={Link} to="/account/faq">
-        <AnimationRingIcon style={{ cursor: 'pointer' }} active1 active3 bgColor showImg isRotate width="8rem">
+        <AnimationRingIcon style={{ cursor: 'pointer' }} color='white_black' active1 active3 bgColor showImg isRotate width="8rem">
           <FaqBox>
-            <Text style={{ cursor: 'pointer' }} mb='6px' fontSize="30px" bold>FAQ</Text>
+            <Text color='white' style={{ cursor: 'pointer' }} mb='6px' fontSize="30px" bold>FAQ</Text>
           </FaqBox>
         </AnimationRingIcon>
       </FAQ>
