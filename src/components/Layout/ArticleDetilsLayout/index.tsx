@@ -31,13 +31,17 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
     });
   };
 
-  useEffect(() => {
+  const getArticleDetail = () => {
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
       if (Api.isSuccess(res)) {
         setItemData(res.data);
         setRefresh(refresh === 1 ? 2 : 1);
       }
     });
+  }
+
+  useEffect(() => {
+    getArticleDetail()
   }, []);
 
   return (
@@ -54,7 +58,9 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
               post_id: itemData.id
             }
           }}
-          callback={item => setItemData({ ...item })}
+          callback={() => {
+            getArticleDetail()
+          }}
           more={true}
         />
         <MentionOperator
