@@ -10,6 +10,7 @@ import { TableList } from './table';
 
 import { Api } from 'apis';
 
+import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 const Title = styled(Flex)`
@@ -32,6 +33,7 @@ const RewardList = () => {
     total: 0,
     pageCount: 0
   });
+  const { t } = useTranslation();
   const { loading, list, page } = state;
 
   const getAllIncome = async () => {
@@ -79,10 +81,10 @@ const RewardList = () => {
   return (
     <React.Fragment>
       <Loading visible={loading} />
-      <WalletHead title="我的钱包" />
+      <WalletHead title={t('rewardAutherWallet')} />
       <Tabs data={state.income} />
       <Box>
-        <Title>获得打赏记录</Title>
+        <Title>{t('rewardAutherList')}</Title>
         <TableList
           data={list}
           pageCount={state.pageCount}

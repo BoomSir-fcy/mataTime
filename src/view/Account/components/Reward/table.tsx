@@ -5,6 +5,8 @@ import { useStore } from 'store';
 import { shortenAddress } from 'utils/contract';
 import { Flex, Box, Text } from 'uikit';
 
+import { useTranslation } from 'contexts/Localization';
+
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 
@@ -52,6 +54,7 @@ export const TableList: React.FC<{
   onchangePage: (page: number) => void;
 }> = React.memo(({ data, pageCount, onchangePage }) => {
   const tokenList = useStore(p => p.appReducer.supportTokenViews);
+  const { t } = useTranslation();
 
   const stringArr = (newarr: any, stringArray: string[]) => {
     for (let i = 0; i < newarr.length; i++) {
@@ -73,11 +76,11 @@ export const TableList: React.FC<{
     <Wraper>
       <Table>
         <Row className="matterStyle">
-          <HeadText>创作</HeadText>
-          <HeadText>打赏用户</HeadText>
-          <HeadText>打赏币种</HeadText>
-          <HeadText>打赏金额</HeadText>
-          <HeadText>打赏时间</HeadText>
+          <HeadText>{t('rewardAutherTableText1')}</HeadText>
+          <HeadText>{t('rewardAutherTableText2')}</HeadText>
+          <HeadText>{t('rewardAutherTableText3')}</HeadText>
+          <HeadText>{t('rewardAutherTableText4')}</HeadText>
+          <HeadText>{t('rewardAutherTableText5')}</HeadText>
         </Row>
         {data.map((item, index) => {
           const stringArray: any[] = [];
