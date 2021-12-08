@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, Icon } from 'components';
 import { Flex, Button, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { useStore } from 'store';
 import { relativeTime } from 'utils';
 import { SortIcon } from './SortIcon';
 import { Link } from 'react-router-dom';
 import MentionOperator from 'view/News/components/MentionOperator';
 import { FollowPopup, CommentPop, List, ContentParsing } from 'components';
 import { Api } from 'apis';
+import { ReadType } from 'contexts/ImContext/types';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import {
   CommentListBox,
   CommentTitle,
@@ -31,6 +34,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [sortTime, setSortTime] = useState(1);
   const [sortLike, setSortLike] = useState(1);
   const [refresh, setRefresh] = useState(false);
+  const currentUid = useStore(p => p.loginReducer.userInfo);
+
   let listRef: any = useRef();
   useEffect(() => {
     listRef.current.loadList();
@@ -55,7 +60,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
     Api.CommentApi.getCommentList({
       pid: itemData.id,
-      prepage: 20,
+      prepage: 5,
       page: page,
       sort_add_time: sortTime,
       sort_like: sortLike
@@ -103,6 +108,12 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       >
         {listData.map((item, index) => (
           <CommentItem key={item.id}>
+            {
+              // 浏览自己的不扣费
+              currentUid?.uid !== item.user_id && (
+                <SpendTimeViewWithArticle readType={ReadType.COMMENT} articleId={item.id} />
+              )
+            }
             <Flex>
               <Avatar
                 src={item.user_avator_url}

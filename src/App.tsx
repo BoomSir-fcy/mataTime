@@ -63,7 +63,10 @@ function App() {
   };
 
   useEffect(() => {
-    Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
+    if (token) {
+      dispatch(fetchThunk.fetchUserInfoAsync());
+      // dispatch(storeAction.setUserToken(token));
+    }
   }, [token, dispatch]);
 
   useEffect(() => {
@@ -110,9 +113,9 @@ function App() {
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />
               <Route path="/account" component={Account} />
-              {process.env.NODE_ENV === 'development' && (
-                <Route path="/test" component={Test} />
-              )}
+              <Route path="/test" component={Test} />
+              {/* {process.env.NODE_ENV === 'development' && (
+              )} */}
             </Switch>
           </React.Suspense>
         </PageContainer>

@@ -31,40 +31,7 @@ const Test = () => {
   const { t } = useTranslation()
   const [languange, setUseLanguage] = useLanguange();
   const [isDark, toggleThemeHandle] = useThemeManager();
-  const [ws, setWs] = useState<IM>(null)
   const [inputVal, setInputVal] = useState<string>('');
-
-  const handleTest = useCallback(() => {
-    console.log(ws, 'test')
-    ws?.send(IM.MessageProtocol.WSProtocol_SYSTEM_NOTIFY, { test: '211221' })
-  }, [ws])
-
-  const handleClose = useCallback(() => {
-    ws?.close()
-    console.log('211221')
-  }, [ws])
-
-  const initSocket = () => {
-    let im = new IM();
-    im.on('open', (event) => {
-      console.log('=============open', event)
-    })
-    im.on('message', (event) => {
-      console.log('=======message======message', event)
-    })
-    im.on('close', (event) => {
-      console.log('=======close======close', event)
-    })
-    im.on('error', (event) => {
-      console.log('=======error======error', event)
-    })
-    // im.addEventListener('', ())
-    setWs(im)
-  };
-
-  React.useEffect(() => {
-    // initSocket();
-  }, []);
 
   const handleRecharge = async () => {
     try {
@@ -110,12 +77,6 @@ const Test = () => {
         <Text>{t('Example: There is a variable: %variableA% here', { variableA: 1 })}</Text>
         <Text>{t('Example: There is variableA: %variableA% and variableB: %variableB%', { variableB: 23 })}</Text>
       </Box>
-      <Button mt="16px" onClick={() => handleTest()} scale="sm">
-        {t('Test')}
-      </Button>
-      <Button mt="16px" onClick={() => handleClose()} scale="sm">
-        {t('Close')}
-      </Button>
       <Box mt="16px">
         <Toggle checked={isDark} onClick={toggleThemeHandle} />
       </Box>

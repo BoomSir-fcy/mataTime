@@ -20,7 +20,6 @@ export default function AccountUpdater() {
   const handleReSetAccount = useCallback(() => {
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
-    localStorage.removeItem(storage.Token);
     // logout();
   }, [dispatch, history]);
 

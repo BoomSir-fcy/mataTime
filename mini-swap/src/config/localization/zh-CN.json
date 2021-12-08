@@ -279,6 +279,7 @@
   "0.025% to %symbol% holder": "0.025%分配给%symbol%质押用户",
   "0.06% to operation fund": "0.06%分配给运营基金",
   "Liquidity Provider Fee": "流动性提供者费用",
+  "Fee": "手续费",
   "Routing through these tokens resulted in the best price for your trade.": "使交易获得最佳价格的路由。",
   "Money-hungry Dino": "贪财龙",
   "Enter an amount": "输入金额",

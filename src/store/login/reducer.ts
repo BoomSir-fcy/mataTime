@@ -12,7 +12,8 @@ import {
   setUserNftStake,
   setNftAddr,
   resetLoginState,
-  setSigninLoading
+  setSigninLoading,
+  setUserToken,
 } from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
@@ -35,6 +36,7 @@ const initialState = {
   nftStatus: false,
   nftList: [],
   nftAddr: [],
+  token: window.localStorage.getItem(storage.Token) || '',
   unReadMsg: {
     message_at_me: 0,
     message_comment: 0,
@@ -137,6 +139,13 @@ export const login = createSlice({
         state.nftStatus = true;
         state.nftList = action.payload;
       })
+      .addCase(setUserToken, (state, { payload }) => {
+        if (payload) {
+          state.token = payload;
+        } else {
+          state.token = '';
+        }
+      })
       .addCase(fetchUserUnreadMsgNum.fulfilled, (state, action) => {
         if (action.payload) {
           const mineTotalMsgNum = action.payload.message_at_me + action.payload.message_like + action.payload.message_comment
@@ -150,6 +159,8 @@ export const login = createSlice({
       .addCase(resetLoginState, state => {
         Object.keys(state).forEach(key => {
           state[key] = cloneDeep(initialState[key]);
+          state.token = ''; // 单独设置 initialState.token的初始值可能不为空
+          localStorage.removeItem(storage.Token); // 移除token
         });
       });
   }

@@ -1,11 +1,9 @@
 import styled from "styled-components";
 type Iprops = {
-  changeSort:()=>void;
-  flag:boolean
+  changeSort: () => void;
+  flag: boolean
 }
-export const SortIcon =(props:Iprops)=>{
-  const {flag = false} = props;
-  const SortBox = styled.div`
+const SortBox = styled.div<{ flag?: boolean }>`
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -21,18 +19,22 @@ i{
   border-left: 6px solid transparent;
 }
 i:first-child{
-  border-bottom: 6px solid ${flag?'#fff':'#4168ED'};
+  border-bottom: 6px solid ${({ flag, theme }) => flag ? theme.colors.textTips : theme.colors.ThemeText};
   margin-bottom:2px;
 }
 i:last-child{
-  border-top: 6px solid ${flag?'#4168ED':'#fff'};
+  border-top: 6px solid ${({ flag, theme }) => flag ? theme.colors.ThemeText : theme.colors.textTips};
 }
 `
-const changeSort =()=>{
+
+export const SortIcon = (props: Iprops) => {
+  const { flag = false } = props;
+
+  const changeSort = () => {
     props.changeSort()
-}
-  return(
-    <SortBox onClick={changeSort}>
+  }
+  return (
+    <SortBox flag={flag} onClick={changeSort}>
       <i></i>
       <i></i>
     </SortBox>

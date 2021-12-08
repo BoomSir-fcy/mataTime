@@ -8,10 +8,11 @@ import { useStore } from 'store';
 import { relativeTime } from 'utils';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
+import { ReadType } from 'contexts/ImContext/types';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
 import { Api } from 'apis';
-import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -31,20 +32,33 @@ export const ArticleList = props => {
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
 
+  const [isEnd, setIsEnd] = useState(false)
+  const pageSize = 5
+
+  const {
+    readFlag,
+    setReadFlag = () => { console.error('setReadFlag is null or undefined, and not refresh ') }
+  } = props || {}
+
   // 获取列表
   const getList = (current = 0) => {
-    if ((loading || page > totalPage) && !current) return false;
+    if ((loading || isEnd) && !current) return false;
     setLoading(true);
     Api.HomeApi.getArticleList({
       attention: 1,
       page: current || page,
-      per_page: 5,
+      per_page: pageSize,
       ...props.filterValObj
     }).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
         setLoading(false);
         setTotalPage(res.data.total_page);
+        if (res.data.List.length < pageSize) {
+          setIsEnd(true)
+        } else {
+          setIsEnd(false)
+        }
         if (current === 1 || page === 1) {
           setListData([...res.data.List]);
           setPage(2);
@@ -66,6 +80,7 @@ export const ArticleList = props => {
       type === MoreOperatorEnum.COMMONT
     ) {
       setPage(1);
+      setIsEnd(false)
       getList(1);
       return;
     }
@@ -85,6 +100,7 @@ export const ArticleList = props => {
         arr.push(obj);
       }
     });
+    setReadFlag(prep => prep + 1)
     setListData([...arr]);
   };
 
@@ -93,7 +109,7 @@ export const ArticleList = props => {
       <List
         ref={listRef}
         marginTop={320}
-        loading={page <= totalPage}
+        loading={isEnd}
         renderList={getList}
       >
         {listData.map((item, index) => (
@@ -101,7 +117,7 @@ export const ArticleList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle articleId={item.id} />
+                <SpendTimeViewWithArticle flag={readFlag} readType={ReadType.ARTICLE} articleId={item.id} />
               )
             }
             <MentionItem

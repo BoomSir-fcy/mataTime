@@ -92,13 +92,12 @@ const MentionOperator: React.FC<IProps> = ({
     <MentionOperatorWrapper>
       <Flex justifyContent="space-between" className="mention-operator">
         <Flex>
-          <Box className="operator-item">
+          <Box onClick={() => setReplyVisible(true)} className="operator-item">
             <Icon
               name="icon-pinglun"
               margin="0 10px 0 0"
               size={18}
               color="textTips"
-              onClick={() => setReplyVisible(true)}
             />
             {itemData.comment_num || 0}
           </Box>
