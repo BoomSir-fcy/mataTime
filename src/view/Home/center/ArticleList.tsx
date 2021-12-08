@@ -32,6 +32,9 @@ export const ArticleList = props => {
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
 
+  const [isEnd, setIsEnd] = useState(false)
+  const pageSize = 5
+
   const {
     readFlag,
     setReadFlag = () => { console.error('setReadFlag is null or undefined, and not refresh ') }
@@ -39,18 +42,23 @@ export const ArticleList = props => {
 
   // 获取列表
   const getList = (current = 0) => {
-    if ((loading || page > totalPage) && !current) return false;
+    if ((loading || isEnd) && !current) return false;
     setLoading(true);
     Api.HomeApi.getArticleList({
       attention: 1,
       page: current || page,
-      per_page: 5,
+      per_page: pageSize,
       ...props.filterValObj
     }).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
         setLoading(false);
         setTotalPage(res.data.total_page);
+        if (res.data.List.length < pageSize) {
+          setIsEnd(true)
+        } else {
+          setIsEnd(false)
+        }
         if (current === 1 || page === 1) {
           setListData([...res.data.List]);
           setPage(2);
@@ -72,6 +80,7 @@ export const ArticleList = props => {
       type === MoreOperatorEnum.COMMONT
     ) {
       setPage(1);
+      setIsEnd(false)
       getList(1);
       return;
     }
@@ -100,7 +109,7 @@ export const ArticleList = props => {
       <List
         ref={listRef}
         marginTop={320}
-        loading={page <= totalPage}
+        loading={isEnd}
         renderList={getList}
       >
         {listData.map((item, index) => (
