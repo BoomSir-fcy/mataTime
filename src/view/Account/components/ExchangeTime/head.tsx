@@ -44,6 +44,13 @@ width: max-content;
 const WhiteText = styled(Text)`
 color:${({ theme }) => theme.colors.white};
 `
+const Arrow = styled(Box)`
+  img{
+    min-width: 100px;
+    width: 15vw;
+    height: 17px;
+  }
+`;
 
 interface init {
   nowRound: TimeInfo
@@ -57,7 +64,7 @@ export const TimeHeader: React.FC<init> = React.memo(({ nowRound, NextRound }) =
   const { max_time_token: NextTime } = NextRound
   return (
     <Card>
-      <Flex width='100%' justifyContent='space-around' alignItems='center'>
+      <Flex style={{ padding: '0 140px' }} width='100%' justifyContent='space-around' alignItems='center'>
         <RoundBox>
           <AnimationRingIcon bgColor active3 active1 isRotate width="8rem">
             <FaqBox>
@@ -82,6 +89,9 @@ export const TimeHeader: React.FC<init> = React.memo(({ nowRound, NextRound }) =
             </Flex>
           </ScaleBox>
         </RoundBox>
+        <Arrow>
+          <img src="/images/Time/arrow.png" alt="" />
+        </Arrow>
         <RoundBox>
           <AnimationRingIcon active2 isRotate width="8rem">
             <FaqBox>

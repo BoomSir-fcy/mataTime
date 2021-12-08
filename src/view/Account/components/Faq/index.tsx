@@ -98,11 +98,11 @@ const Faq: React.FC = () => {
               ruleDataList.map(item =>
                 <Flex mt="20px" key={item.period}>
                   <RowText width="8%">{item.period}</RowText>
-                  <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage)}</RowText>
-                  <RowText width="15%">{formatLocalisedCompactNumber(item.need)}</RowText>
+                  <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage, 6)}</RowText>
+                  <RowText width="15%">{formatLocalisedCompactNumber(item.need, 6)}</RowText>
                   <RowText width="25%">{item.price}</RowText>
                   <RowText width="12%">{item.rate}</RowText>
-                  <RowText width="20%">{formatLocalisedCompactNumber(item.total)}</RowText>
+                  <RowText width="20%">{formatLocalisedCompactNumber(item.total, 6)}</RowText>
                   <RowText width="15%">{item.month}个月</RowText>
                 </Flex>)
             }

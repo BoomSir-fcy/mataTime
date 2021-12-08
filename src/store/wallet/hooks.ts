@@ -5,10 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCashierDeskAddress, getDsgAddress, getTimeAddress, getTimeShopAddress } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json'
 import timeShopAbi from 'config/abi/TimeShop.json';
-import { Api } from 'apis';
 import multicall from 'utils/multicall';
 import { getBalanceNumber } from 'utils/formatBalance';
-import { AppDispatch, AppState } from '../index'
+import { AppDispatch } from '../index'
 import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync, fetchTimeExchangeList, fetchRewardNumAsync } from './reducer'
 import { ExchangeList } from './type';
 import { BIG_TEN } from 'utils/bigNumber';
@@ -186,6 +185,21 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   }
   // 获取总条数
   const totalNum = await FetchRecordLength(account)
+  if (Number(totalNum) === 0) {
+    return [
+      {
+        round: 0,
+        endTime: 0,
+        latestTime: 0,
+        totalAmount: 0,
+        debtAmount: 0,
+        RemainingAmount: 0,
+        totalPage: 0,
+        page: page,
+        id: 0
+      }
+    ]
+  }
   // 获取总页数
   const totalPage = getTotalPage(Number(totalNum))
   // 获取当前页下标区间后返回对应请求参数列表
@@ -215,7 +229,17 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
     return completeList
   } catch (error) {
     console.log(error);
-    return []
+    return [{
+      round: 0,
+      endTime: 0,
+      latestTime: 0,
+      totalAmount: 0,
+      debtAmount: 0,
+      RemainingAmount: 0,
+      totalPage: 0,
+      page: page,
+      id: 0
+    }]
   }
 }
 

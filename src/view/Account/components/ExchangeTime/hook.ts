@@ -1,10 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
-import { ethers, Contract } from 'ethers'
+import { ethers } from 'ethers'
 import { useTimeShop, useERC20 } from 'hooks/useContract'
 import { getDsgAddress, getTimeShopAddress } from 'utils/addressHelpers';
-import { stakeNftFarm, CancelNftStake } from 'utils/calls';
-import { uniq } from 'lodash';
 import multicall from 'utils/multicall';
 import timeShopAbi from 'config/abi/TimeShop.json';
 import erc20Abi from 'config/abi/erc20.json';

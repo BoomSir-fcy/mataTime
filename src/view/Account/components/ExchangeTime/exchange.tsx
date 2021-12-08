@@ -104,10 +104,10 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const { onApprove } = useApproveErc20Change()
   const { onExchange } = useExchangeErc20()
   const { toastError, toastWarning, toastSuccess } = useToast();
-  dayjs.extend(duration)
 
 
   const ReleaseTime = useMemo(() => {
+    dayjs.extend(duration)
     const num = dayjs.duration(nowRound.long_time, "seconds").humanize();
     return num
   }, [nowRound])
@@ -217,77 +217,75 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
       </Head>
       {
         IsBegin ?
-          <>
-            <SwapBox>
-              <InputBox>
-                <Flex mb='4px' justifyContent='space-between'>
-                  <SmFont>{t('Time Exchange')}</SmFont>
-                  <Flex>
-                    <SmFont mr='16px' color='textTips'>{t('Balance')}：{formatDisplayApr(DsgBalance)}</SmFont>
-                    <SmFont style={{ cursor: 'pointer' }} onClick={() => {
-                      setinputNum(String(DsgBalance))
-                    }} >MAX</SmFont>
-                  </Flex>
+          <SwapBox>
+            <InputBox>
+              <Flex mb='4px' justifyContent='space-between'>
+                <SmFont>{t('Time Exchange')}</SmFont>
+                <Flex>
+                  <SmFont mr='16px' color='textTips'>{t('Balance')}：{formatDisplayApr(DsgBalance)}</SmFont>
+                  <SmFont style={{ cursor: 'pointer' }} onClick={() => {
+                    setinputNum(String(DsgBalance))
+                  }} >MAX</SmFont>
                 </Flex>
+              </Flex>
+              <Flex alignItems='center'>
+                <InputStyle
+                  noShadow
+                  pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
+                  inputMode="decimal"
+                  value={inputNum}
+                  onChange={handleChange}
+                  placeholder={t('Time Please enter the exchange amount')}
+                />
                 <Flex alignItems='center'>
-                  <InputStyle
-                    noShadow
-                    pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-                    inputMode="decimal"
-                    value={inputNum}
-                    onChange={handleChange}
-                    placeholder={t('Time Please enter the exchange amount')}
-                  />
-                  <Flex alignItems='center'>
-                    <img src="/images/tokens/DSG.svg" alt="" />
-                    <Text ml='8px' fontSize='14px' bold>DSG</Text>
+                  <img src="/images/tokens/DSG.svg" alt="" />
+                  <Text ml='8px' fontSize='14px' bold>DSG</Text>
+                </Flex>
+              </Flex>
+            </InputBox>
+            <TimeBox>
+              <TimeNum justifyContent='space-between' alignItems='center'>
+                <Flex alignItems='center'>
+                  <img src="/images/tokens/TIME.svg" alt="" />
+                  <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
+                    <Text fontSize='18px' bold>{formatDisplayApr(Time)}</Text>
+                    <Text fontSize='14px' color='textTips'>{t('Time Available')}Time</Text>
                   </Flex>
                 </Flex>
-              </InputBox>
-              <TimeBox>
-                <TimeNum justifyContent='space-between' alignItems='center'>
-                  <Flex alignItems='center'>
-                    <img src="/images/tokens/TIME.svg" alt="" />
-                    <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
-                      <Text fontSize='18px' bold>{formatDisplayApr(Time)}</Text>
-                      <Text fontSize='14px' color='textTips'>{t('Time Available')}Time</Text>
-                    </Flex>
-                  </Flex>
-                  <Box style={{ textAlign: 'right' }}>
-                    <Text fontSize='14px' color='textTips'>Time{t('Balance')}</Text>
-                    <Text>{formatDisplayApr(timeBalance)}</Text>
-                  </Box>
-                </TimeNum>
-                <Flex justifyContent='space-between' alignItems='center'>
-                  <Box>
-                    <Text fontSize='14px' color='textTips'>{t('Time Circulation')}</Text>
-                    <Text>{formatDisplayApr(Circulation)}</Text>
-                  </Box>
-                  <Box style={{ textAlign: 'right' }}>
-                    <Text fontSize='14px' color='textTips'>{t('Time Locked linear release')}</Text>
-                    <Text>{formatDisplayApr(Lock)}</Text>
-                  </Box>
-                </Flex>
-              </TimeBox>
-              <Rule fontSize='14px' color='textTips'>
-                {t('Time *Locking rules: %now%% will be released immediately, and %later%% will be unlocked linearly within the next %time%',
-                  {
-                    now: ReleaseNow,
-                    later: ReleaseLater,
-                    time: ReleaseTime
-                  })}
-              </Rule>
-              <ButtonStyle disabled={pending} onClick={async () => {
-                if (approvedNum > 0) {
-                  // 兑换
-                  await handleExchange()
-                } else {
-                  // 授权
-                  await handleApprove()
-                }
-              }}>{pending ? <Dots>{approvedNum > 0 ? t("Time Redeeming") : t("Account Approving")}</Dots> : approvedNum > 0 ? t("Time Exchange") : t("Account Approve")}</ButtonStyle>
-            </SwapBox>
-          </>
+                <Box style={{ textAlign: 'right' }}>
+                  <Text fontSize='14px' color='textTips'>Time{t('Balance')}</Text>
+                  <Text>{formatDisplayApr(timeBalance)}</Text>
+                </Box>
+              </TimeNum>
+              <Flex justifyContent='space-between' alignItems='center'>
+                <Box>
+                  <Text fontSize='14px' color='textTips'>{t('Time Circulation')}</Text>
+                  <Text>{formatDisplayApr(Circulation)}</Text>
+                </Box>
+                <Box style={{ textAlign: 'right' }}>
+                  <Text fontSize='14px' color='textTips'>{t('Time Locked linear release')}</Text>
+                  <Text>{formatDisplayApr(Lock)}</Text>
+                </Box>
+              </Flex>
+            </TimeBox>
+            <Rule fontSize='14px' color='textTips'>
+              {t('Time *Locking rules: %now%% will be released immediately, and %later%% will be unlocked linearly within the next %time%',
+                {
+                  now: ReleaseNow,
+                  later: ReleaseLater,
+                  time: ReleaseTime
+                })}
+            </Rule>
+            <ButtonStyle disabled={pending} onClick={async () => {
+              if (approvedNum > 0) {
+                // 兑换
+                await handleExchange()
+              } else {
+                // 授权
+                await handleApprove()
+              }
+            }}>{pending ? <Dots>{approvedNum > 0 ? t("Time Redeeming") : t("Account Approving")}</Dots> : approvedNum > 0 ? t("Time Exchange") : t("Account Approve")}</ButtonStyle>
+          </SwapBox>
           :
           <IsBeginBox>
             <Flex mb='20px' alignItems='center' justifyContent='center'>
