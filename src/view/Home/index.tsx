@@ -6,7 +6,6 @@ import useReadArticle from 'contexts/ImContext/hooks/useReadArticle';
 import { useToast } from 'hooks';
 import { useTranslation } from 'contexts/Localization';
 import { Flex, Box } from 'uikit';
-import { Menu } from './left';
 import { Header, Tabs, ArticleList } from './center';
 
 import { Api } from 'apis';
@@ -45,8 +44,8 @@ const Home: React.FC = (props: any) => {
   // const  editorRef = useRef();
 
   // 阅读文章扣费
-  const [readFlag, setReadFlag] = useState(0)
-  useReadArticle(readFlag);
+  const [nonce, setNonce] = useState(0)
+  useReadArticle(nonce);
 
   const sendArticle = async (content: string, image_urls, remind_user) => {
     if (!content) return false;
@@ -107,8 +106,8 @@ const Home: React.FC = (props: any) => {
           <Tabs tabsChange={tabsChange} />
           {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList
-            setReadFlag={setReadFlag}
-            readFlag={readFlag}
+            setNonce={setNonce}
+            nonce={nonce}
             key={refresh}
             topicName={match.params.name}
             filterValObj={filterVal}

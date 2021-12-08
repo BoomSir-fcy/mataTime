@@ -53,9 +53,9 @@ function App() {
       const res = await getTokens();
       const isApprove = await approve(
         account,
-        res.map(item => item[0])
+        res?.map(item => item[0])
       );
-      const newArr = res.map((item, index) => [...item, isApprove[index]]);
+      const newArr = res?.map((item, index) => [...item, isApprove[index]]);
       dispatch(storeAction.setSupportToken(newArr));
     } catch (error) {
       console.log(error);

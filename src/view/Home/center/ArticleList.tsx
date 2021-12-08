@@ -36,8 +36,8 @@ export const ArticleList = props => {
   const pageSize = 5
 
   const {
-    readFlag,
-    setReadFlag = () => { console.error('setReadFlag is null or undefined, and not refresh ') }
+    nonce,
+    setNonce = () => { console.error('setNonce is null or undefined, and not refresh ') }
   } = props || {}
 
   // 获取列表
@@ -85,23 +85,23 @@ export const ArticleList = props => {
       return;
     }
 
+    const handleChangeList = (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
     let arr = [];
     listData.forEach((item: any) => {
       let obj = item;
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
       }
-      if (
-        item.id === newItem.id &&
-        (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
-      ) {
+      if (item.id === newItem.id && handleChangeList) {
         // 屏蔽、删除
       } else {
         arr.push(obj);
       }
     });
-    setReadFlag(prep => prep + 1)
     setListData([...arr]);
+    if (handleChangeList) {
+      setNonce(prep => prep + 1)
+    }
   };
 
   return (
@@ -117,7 +117,7 @@ export const ArticleList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle flag={readFlag} readType={ReadType.ARTICLE} articleId={item.id} />
+                <SpendTimeViewWithArticle nonce={nonce} readType={ReadType.ARTICLE} articleId={item.id} />
               )
             }
             <MentionItem
