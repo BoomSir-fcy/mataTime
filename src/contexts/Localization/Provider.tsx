@@ -42,7 +42,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
       codeFromStorage !== EN.locale
         ? dayjs.locale('zh-cn')
-        : dayjs.locale('es-us');
+        : dayjs.locale('en-us');
 
       setState(prevState => ({
         ...prevState,

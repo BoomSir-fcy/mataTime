@@ -39,6 +39,7 @@ const HoverUpdater = ({ locale, payload, setHoverValue, setHoverDate }) => {
 }
 
 const CustomTooltip = ({ locale, payload, setHoverValue, setHoverDate }) => {
+  const { t } = useTranslation()
   useEffect(() => {
     if (payload && payload.length) {
       setHoverValue(payload[0].payload.value)
@@ -48,8 +49,8 @@ const CustomTooltip = ({ locale, payload, setHoverValue, setHoverDate }) => {
   if (payload && payload.length) {
     return (
       <TooltipBox>
-        <div>时间:{dayjs(payload[0].payload.time * 1000).format('MM-DD HH:mm')}</div>
-        <div>收益:{payload[0].payload.value}</div>
+        <div>{t('AccountTime')}:{dayjs(payload[0].payload.time * 1000).format('MM-DD HH:mm')}</div>
+        <div>{t('Rewards')}:{payload[0].payload.value}</div>
       </TooltipBox>
     );
   }

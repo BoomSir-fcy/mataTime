@@ -16,6 +16,7 @@ export interface WalletState {
   CurrentRound: TimeInfo
   TimeExchangeList: ExchangeList[]
   activeToken: string
+  rewardNum: number
 }
 
 export interface TimeInfo {
@@ -37,5 +38,4 @@ export interface ExchangeList {
   totalPage: number,
   page: number
   id: number
-  end: number
 }

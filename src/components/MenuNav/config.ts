@@ -89,8 +89,17 @@ const config = [
         icon: 'icon-w59',
         activeIcon: 'icon-w59',
         title: 'Time兑换',
+        lable: 'AccountMenu Time',
         path: '/account/time',
-        lable: 'AccountMenu Time'
+        markPath: ['/account/faq'],
+      },
+      {
+        icon: 'icon-w59',
+        activeIcon: 'icon-w59',
+        title: 'Time兑换',
+        lable: 'AccountMenu Time',
+        hide: true,
+        path: '/account/faq'
       },
       {
         icon: 'icon-shuichi',

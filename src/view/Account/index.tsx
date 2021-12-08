@@ -35,6 +35,7 @@ const Stake = React.lazy(() => import('./components/Single'));
 const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
 const Exchange = React.lazy(() => import('./components/ExchangeTime'));
 const RewardList = React.lazy(() => import('./components/Reward/list'));
+const FAQ = React.lazy(() => import('./components/Faq'));
 
 const Account = props => {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ const Account = props => {
                   path={`${props.match.path}/reward`}
                   component={RewardList}
                 />
+                <Route path={`${props.match.path}/faq`} component={FAQ} />
               </>
             )}
           />

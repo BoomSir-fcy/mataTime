@@ -3,5 +3,6 @@ export const hideSidebarPath = [
   '/account',
   '/account/time',
   '/account/stake',
-  '/account/reward'
+  '/account/reward',
+  '/account/faq',
 ];
