@@ -6,7 +6,10 @@ import { useStore } from 'store';
 import { Card, Flex, Box, Text, Button } from 'uikit';
 import { TokenImage } from 'components';
 
+import { useTranslation } from 'contexts/Localization';
+
 const TabsBox = styled(Card)`
+  margin-top: 70px;
   display: flex;
   align-items: center;
   height: 60px;
@@ -46,12 +49,12 @@ export const Tabs: React.FC<{
   data: any;
 }> = React.memo(({ data }) => {
   const tokenList = useStore(p => p.appReducer.supportTokenViews);
-
+  const { t } = useTranslation();
   const [state, setState] = useImmer({
     checked: 1,
     tabs: [
-      { label: '今日收益', val: 1 },
-      { label: '累计收益', val: 2 }
+      { label: 'rewardAutherTodayIncome', val: 1 },
+      { label: 'rewardAutherAllIncome', val: 2 }
     ]
   });
   const { checked, tabs } = state;
@@ -60,20 +63,23 @@ export const Tabs: React.FC<{
   return (
     <React.Fragment>
       <TabsBox isBoxShadow>
-        {tabs.map((row, index) => (
-          <Button
-            key={index}
-            onClick={() =>
-              setState(p => {
-                p.checked = row.val;
-              })
-            }
-            className={classnames(checked === row.val ? 'active' : '')}
-            variant="text"
-          >
-            {row.label}
-          </Button>
-        ))}
+        {tabs.map((row, index) => {
+          console.log(row);
+          return (
+            <Button
+              key={index}
+              onClick={() =>
+                setState(p => {
+                  p.checked = row.val;
+                })
+              }
+              className={classnames(checked === row.val ? 'active' : '')}
+              variant="text"
+            >
+              {t(row.label)}
+            </Button>
+          );
+        })}
       </TabsBox>
       <TabsContent>
         {income?.map(item => {
