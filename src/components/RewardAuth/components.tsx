@@ -43,6 +43,8 @@ export const RewardIncome: React.FC<{
   data: reward[];
   postInfo: any;
 }> = ({ data, postInfo }) => {
+  const { t } = useTranslation();
+
   return (
     <Box>
       <Content>
@@ -66,12 +68,14 @@ export const RewardIncome: React.FC<{
               ))}
             </Flex>
             <Text ml="11px" fontSize="14px">
-              共{postInfo.total_user || 0}人已打赏这篇帖子
+              {t('rewardAutherAlreadyText1', {
+                value: postInfo.total_user || 0
+              })}
             </Text>
           </Flex>
         ) : (
           <Flex>
-            <Text textAlign="center">还没有人打赏您的帖子</Text>
+            <Text textAlign="center">{t('rewardAutherAlreadyText3')}</Text>
           </Flex>
         )}
         <Tips>
@@ -80,11 +84,9 @@ export const RewardIncome: React.FC<{
             ml="5px"
             text={
               <>
-                <Text fontSize="14px">
-                  链上打赏并支持作者的创作，您的支持将会鼓励作者更大的创作热情
-                </Text>
+                <Text fontSize="14px">{t('rewardAutherTipsText1')}</Text>
                 <Text fontSize="14px" color="textTips">
-                  *平台将收取0.3%的交易手续费
+                  {t('rewardAutherTipsText2')}
                 </Text>
               </>
             }
@@ -94,7 +96,7 @@ export const RewardIncome: React.FC<{
       {data.length > 0 && (
         <Flex justifyContent="center" mt="20px">
           <Button onClick={() => history.push('/account/reward')}>
-            查看收益
+            {t('rewardAutherViewEarnings')}
           </Button>
         </Flex>
       )}
@@ -121,7 +123,7 @@ export const Reward: React.FC<{
   onApprove: () => void;
 }> = React.memo(({ current, price, isOnApprove, onCallBack, onApprove }) => {
   const { handleApprove } = OnApprove(current[0]);
-  const { toastSuccess, toastError } = useToast();
+  const { toastError } = useToast();
   const { t } = useTranslation();
 
   const [state, setState] = useImmer({
@@ -159,9 +161,11 @@ export const Reward: React.FC<{
         >
           <Button onClick={() => ChangeApprove()}>
             {state.loading ? (
-              <Dots>授权 {current[2]}</Dots>
+              <Dots>
+                {t('Account Approve')} {current[2]}
+              </Dots>
             ) : (
-              ` 授权 ${current[2]}`
+              `${t('Account Approve')} ${current[2]}`
             )}
           </Button>
         </Flex>

@@ -3,12 +3,13 @@ import BigNumber from 'bignumber.js';
 import ReactLoading from 'react-loading';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import { DropDown, Avatar } from 'components';
+import { DropDown, Avatar, Loading } from 'components';
 import { Flex, Box, Text, Button } from 'uikit';
 import { useToast } from 'hooks';
-import { useStore } from 'store';
+import { useStore, storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { AvatarCard } from '../Avatar/AvatarCard';
 
@@ -41,6 +42,12 @@ const CoinSelectStyled = styled(Button)`
   width: 100px;
   height: 35px;
   padding: 0;
+  div {
+    color: #fff;
+  }
+  svg {
+    fill: #fff;
+  }
 `;
 const JiantouStyled = styled.div<{ open: boolean }>`
   border: 6px solid transparent;
@@ -76,13 +83,14 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   onClose
 }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const [open, setOpen] = useState(false);
   const [state, setState] = useImmer({
     loading: true,
+    submitLoading: false,
     isOnApprove: true,
-    authorization: [],
     currentToken: [],
     current_price: '0',
     tokenList: [],
@@ -96,23 +104,30 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const { getPrice } = GetCoinPrice();
   const { getInfo } = GetPostRewardAuthor();
   const { currentToken, current_price, tokenList, reward_post } = state;
+  const tokenViewList = useStore(p => p.appReducer.supportTokenViews);
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const reward: reward[] = currentPost.reward_stats || [];
 
   const init = async () => {
     try {
-      const res = await getTokens();
-      const isApprove = await approve(
-        account,
-        res.map(item => item[0])
-      );
-      const price = await getPrice(res[0][0]);
+      let newArr;
+      if (!tokenViewList.length) {
+        const res = await getTokens();
+        const isApprove = await approve(
+          account,
+          res.map(item => item[0])
+        );
+        newArr = res.map((item, index) => [...item, isApprove[index]]);
+        dispatch(storeAction.setSupportToken(newArr));
+      } else {
+        newArr = tokenViewList;
+      }
+      const price = await getPrice(newArr[0][0]);
       setState(p => {
-        p.tokenList = res;
-        p.currentToken = res[0];
+        p.tokenList = newArr;
+        p.currentToken = newArr[0];
         p.current_price = price.current_price || '0.12345';
-        p.authorization = isApprove;
-        p.isOnApprove = isApprove[0] > 0 ? false : true;
+        p.isOnApprove = newArr[0][4] > 0 ? false : true;
       });
     } catch (error) {
       console.log(error);
@@ -139,7 +154,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       setState(p => {
         p.currentToken = rows;
         p.current_price = res.current_price || '0.12345';
-        p.isOnApprove = state.authorization[index] > 0 ? false : true;
+        p.isOnApprove = tokenList[index][4] > 0 ? false : true;
       });
     } catch (error) {}
   };
@@ -147,6 +162,9 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   // 打赏用户
   const changeRewardUser = async (amount: number) => {
     try {
+      setState(p => {
+        p.submitLoading = true;
+      });
       const res = await rewardUsers(
         currentPost.user_address,
         currentToken[0],
@@ -157,12 +175,18 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       );
       if (res === 1) {
         onClose();
-        toastSuccess('打赏成功');
+        toastSuccess(t('rewardAutherSuccess'));
       } else if (res === 4001) {
-        toastSuccess('已经取消打赏');
+        toastSuccess(t('rewardAutherCancel'));
+      } else {
+        toastError(t('rewardAutherError'));
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setState(p => {
+        p.submitLoading = false;
+      });
     }
   };
 
@@ -187,6 +211,16 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     }
   }, [account]);
 
+  React.useEffect(() => {
+    const handOpen = () => {
+      setOpen(false);
+    };
+    document.addEventListener('click', handOpen, true);
+    return () => {
+      document.removeEventListener('click', handOpen, true);
+    };
+  }, []);
+
   return (
     <RewardAuthModalStyled right={offsetLeft} bottom={offsetTop}>
       {/* 无人打赏你的帖子 */}
@@ -199,6 +233,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
           ) : (
             <React.Fragment>
               <Flex alignItems="center" justifyContent="space-between">
+                <Loading visible={state.submitLoading} />
                 <AvatarCard
                   userName={currentPost.user_name}
                   avatar={avatar}
@@ -233,13 +268,14 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                   </Box>
                   <QuestionHelper
                     ml="15px"
+                    color="white"
                     text={
                       <>
                         <Text fontSize="14px">
-                          链上打赏并支持作者的创作，您的支持将会鼓励作者更大的创作热情
+                          {t('rewardAutherTipsText1')}
                         </Text>
                         <Text fontSize="14px" color="textTips">
-                          *平台将收取0.3%的交易手续费
+                          {t('rewardAutherTipsText2')}
                         </Text>
                       </>
                     }
@@ -281,14 +317,18 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                     ))}
                   </Flex>
                   <Text ml="11px" fontSize="14px" color="textTips" ellipsis>
-                    共{reward_post?.total_user || 0}人已打赏这篇帖子
+                    {t('rewardAutherAlreadyText1', {
+                      value: reward_post?.total_user || 0
+                    })}
                   </Text>
                 </Flex>
               )}
               {/* 查看当前用户打赏明细 */}
               {reward_post?.my_rewards?.length > 0 && (
                 <Text color="textTips" fontSize="14px" mt="12px" ellipsis>
-                  您已打赏{getString(reward_post.my_rewards, tokenList)}
+                  {t('rewardAutherAlreadyText2', {
+                    value: getString(reward_post.my_rewards, tokenList)
+                  })}
                 </Text>
               )}
             </React.Fragment>
