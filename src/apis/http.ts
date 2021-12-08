@@ -8,7 +8,8 @@ import { ResponseCode } from './type';
 const baseURL =
   process.env.NODE_ENV === 'production'
     ? process.env.REACT_APP_API_HOST
-    : 'https://api.social.qgx.io/';
+    // : 'https://api.social.qgx.io/';
+    : 'http://192.168.101.131:8888/';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false

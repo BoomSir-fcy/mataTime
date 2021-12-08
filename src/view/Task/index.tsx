@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, Button } from 'uikit';
+import { Box, Flex, Text, Button, Spinner } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import CountdownTime from './Countdown';
+import { useTaskList } from './hooks/matter';
 import MissionCard from './MissionCard';
+import { Status } from './type';
 
 const TaskTitle = styled(Flex)`
   align-items: center;
@@ -62,119 +64,77 @@ interface MatterInfo {
 }
 
 const Task: React.FC<MatterInfo> = () => {
-  const endTime = 1638979200;
-  const TaskList = [{
-    taskID: 11,
-    nowTime: 1635758812,
-    endTime: 1638870125,
-    taskStatus: 1,
-    points: 100,
-    taskType: 1,
-    taskName: 'SignIn1',
-    continuous: { now: 2, max: 3 }
-  },
-  {
-    taskID: 2,
-    nowTime: 1635758812,
-    endTime: 1638956525,
-    taskStatus: 2,
-    points: 100,
-    taskType: 1,
-    taskName: 'SignIn2',
-    continuous: { now: 2, max: 3 }
-  },
-  {
-    taskID: 3,
-    nowTime: 1635758812,
-    endTime: 1638956525,
-    taskStatus: 3,
-    points: 100,
-    taskType: 1,
-    taskName: 'SignIn3',
-    continuous: { now: 2, max: 3 }
-  },
-  {
-    taskID: 4,
-    nowTime: 1635758812,
-    endTime: 1638956525,
-    taskStatus: 1,
-    points: 100,
-    taskType: 1,
-    taskName: 'SignIn4',
-    continuous: { now: 2, max: 3 }
-  }, {
-    taskID: 5,
-    nowTime: 1635758812,
-    endTime: 1638956525,
-    taskStatus: 1,
-    points: 100,
-    taskType: 2,
-    taskName: 'SignIn',
-    continuous: { now: 2, max: 3 }
-  }, {
-    taskID: 6,
-    nowTime: 1635758812,
-    endTime: 1638956525,
-    taskStatus: 1,
-    points: 100,
-    taskType: 3,
-    taskName: 'SignIn',
-    continuous: { now: 2, max: 10 }
-  }
-  ];
+  const { dailyList, weekList, specialList, loading } = useTaskList();
 
+  const dailyReceived = dailyList.filter(v => v.status === Status.Received).length;
+  const dailyTotal = dailyList.length;
+
+  const weekReceived = weekList.filter(v => v.status === Status.Received).length;
+  const weekTotal = weekList.length;
+
+  const specialReceived = specialList.filter(v => v.status === Status.Received).length;
+  const specialTotal = specialList.length;
   return (
-    <Box>
-      <TaskTitle><Text fontSize="18px" bold>轻松任务，赚取$Matter</Text></TaskTitle>
-      <Box>
-        <TaskCountBox>
-          <Flex justifyContent="space-between">
-            <TaskCount left="当日任务" right="2/10" />
-            <TaskCount left="当周任务" right="2/10" />
-            <TaskCount left="成就任务" right="2/10" />
-          </Flex>
-          <Button>收益记录</Button>
-        </TaskCountBox>
-        <TaskTitle>
-          <Flex alignItems="center">
-            <Text mr="43px" fontSize="18px" bold>每日任务 (0 / 10)</Text>
-            <Flex mr="12px">
-              <Text fontSize="14px" color="textTips">刷新时间倒计时：</Text>
-              {/* <CountdownTime endTime={endTime} /> */}
-            </Flex>
-            <Time src={require('assets/images/myWallet/time.png').default} alt="" />
-          </Flex>
-        </TaskTitle>
-        <LeftFlex>
-          {
-            TaskList.filter(v => v.taskType === 1).map(item => <MissionCard key={item.taskID} info={item} />)
-          }
-        </LeftFlex>
-        <TaskTitle>
-          <Flex alignItems="center">
-            <Text mr="43px" fontSize="18px" bold>每周任务 (0 / 10)</Text>
-            <Text mr="12px" fontSize="14px" color="textTips">刷新时间倒计时：8h 23m 15s</Text>
-            <Time src={require('assets/images/myWallet/time.png').default} alt="" />
-          </Flex>
-        </TaskTitle>
-        <LeftFlex>
-          {
-            TaskList.filter(v => v.taskType === 2).map(item => <MissionCard key={item.taskID} info={item} />)
-          }
-        </LeftFlex>
-        <TaskTitle>
-          <Flex alignItems="center">
-            <Text mr="43px" fontSize="18px" bold>成就任务 (0 / 10)</Text>
-            <Text mr="12px" fontSize="14px" color="textTips">一次性任务</Text>
-          </Flex>
-        </TaskTitle>
-        <LeftFlex>
-          {
-            TaskList.filter(v => v.taskType === 3).map(item => <MissionCard key={item.taskID} info={item} />)
-          }
-        </LeftFlex>
-      </Box>
-    </Box>
+    <>
+      {
+        loading ?
+          <Flex height="100vh" justifyContent="center" alignItems="center">
+            <Spinner />
+          </Flex > :
+          <Box>
+            <TaskTitle><Text fontSize="18px" bold>轻松任务，赚取$Matter</Text></TaskTitle>
+            <Box>
+              <TaskCountBox>
+                <Flex justifyContent="space-between">
+                  <TaskCount left="当日任务" right={`${dailyReceived}/${dailyTotal}`} />
+                  <TaskCount left="当周任务" right={`${weekReceived}/${weekTotal}`} />
+                  <TaskCount left="成就任务" right={`${specialReceived}/${specialTotal}`} />
+                </Flex>
+                <Button>收益记录</Button>
+              </TaskCountBox>
+              <TaskTitle>
+                <Flex alignItems="center">
+                  <Text mr="43px" fontSize="18px" bold>每日任务 ({dailyReceived} / {dailyTotal})</Text>
+                  <Flex mr="12px">
+                    <Text fontSize="14px" color="textTips">刷新时间倒计时：</Text>
+                    {
+                      dailyList[0]?.end_time && <CountdownTime endTime={dailyList[0].end_time} startTime={dailyList[0].now_time} />
+                    }
+                  </Flex>
+                  <Time src={require('assets/images/myWallet/time.png').default} alt="" />
+                </Flex>
+              </TaskTitle>
+              <LeftFlex>
+                {dailyList.map(item => <MissionCard key={item.task_id} info={item} />)}
+              </LeftFlex>
+              <TaskTitle>
+                <Flex alignItems="center">
+                  <Text mr="43px" fontSize="18px" bold>每周任务 ({weekReceived} / {weekTotal})</Text>
+                  <Flex mr="12px">
+                    <Text fontSize="14px" color="textTips">刷新时间倒计时：</Text>
+                    {
+                      weekList[0]?.end_time && <CountdownTime endTime={weekList[0].end_time} startTime={weekList[0].now_time} />
+                    }
+                  </Flex>
+                  <Time src={require('assets/images/myWallet/time.png').default} alt="" />
+                </Flex>
+              </TaskTitle>
+              <LeftFlex>
+                {weekList.map(item => <MissionCard key={item.task_id} info={item} />)}
+              </LeftFlex>
+              <TaskTitle>
+                <Flex alignItems="center">
+                  <Text mr="43px" fontSize="18px" bold>成就任务 ({specialReceived} / {specialTotal})</Text>
+                  <Text mr="12px" fontSize="14px" color="textTips">一次性任务</Text>
+                </Flex>
+              </TaskTitle>
+              <LeftFlex>
+                {specialList.map(item => <MissionCard key={item.task_id} info={item} />)}
+              </LeftFlex>
+            </Box>
+          </Box>
+      }
+    </>
   );
 };
 

@@ -7,8 +7,51 @@ import { useTranslation } from 'contexts/Localization';
 // import { fetchTaskListAsync, fetchSeasonInfo } from 'state/mission';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import random from 'lodash/random';
-/* eslint-disable */
+import { Api } from 'apis';
+import { toast } from 'react-toastify';
+import { TaskInfo, taskContents } from '../type';
 
+
+// 任务列表
+export const useTaskList = () => {
+  const [dailyList, setDailyList] = useState<TaskInfo[]>([]);
+  const [weekList, setWeekList] = useState<TaskInfo[]>([]);
+  const [specialList, setSpecialList] = useState<TaskInfo[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    getList();
+  }, [])
+
+  const getList = async () => {
+    setLoading(true);
+    try {
+      const res = await Api.TaskApi.getTaskStatus();
+      if (Api.isSuccess(res)) {
+        setDailyList(res.data.filter((v: TaskInfo) => v.task_type === 1));
+        setWeekList(res.data.filter((v: TaskInfo) => v.task_type === 2));
+        setSpecialList(res.data.filter((v: TaskInfo) => v.task_type === 3));
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false)
+    }
+
+  }
+
+  return { dailyList, weekList, specialList, loading };
+}
+
+// 领取任务
+export const useReceive = async (taskId: number) => {
+  try {
+    const res = await Api.TaskApi.receive(taskId);
+    return res;
+  } catch (error) {
+    throw new Error('Receive Error');
+  }
+}
 
 // 签到
 export const useSignIn = async (dispatch: any, account: string, library: any, OperationType: number, TaskID?: number, TaskType?: number) => {
@@ -65,19 +108,10 @@ export const useCountdownTime = (endTime: number) => {
       setSecondsRemaining(endTime - nowTime)
 
       if (endTime > nowTime) {
-        // Clear previous interval
         if (timer.current) {
           clearInterval(timer.current)
         }
-
         timer.current = setInterval(() => {
-          // setSecondsRemaining((prevSecondsRemaining) => {
-          //     if (prevSecondsRemaining === 1) {
-          //         clearInterval(timer.current)
-          //     }
-
-          //     return prevSecondsRemaining - 1
-          // })
           setSecondsRemaining(endTime - Math.floor(new Date().getTime() / 1000))
         }, 1000)
       }
@@ -161,23 +195,9 @@ export const useFetchInviteFriendsList = () => {
 
   return { list, page, end, setPageNum, loading }
 }
-// 获取任务名称
-export const GetTaskName = (taskName, t) => {
-  if (taskName === 'SignIn') return t('Sign in')
-  if (taskName === 'AnyTransaction') return t('Complete any transaction')
-  if (taskName === 'AnyMarketMaking') return t('Complete any market making')
-  if (taskName === 'MintLeast01vdsg') return t('Cast at least 0.1VDSG')
-  if (taskName === 'Least3TransactionsWithDinosaurEggs') return t('Use dinosaur eggs for at least 3 transactions on the day')
-  if (taskName === 'inviteNewUserTransfer') return t('Invite a user who has never used dinosaur eggs to trade')
-  if (taskName === 'SpecifyTradingPairBNBToBUSDTask') return t('BNB/BUSD reached 30,000 USDT transaction volume')
-  if (taskName === 'SpecifyTradingPairBNBToDSGTask') return t('BNB/DSG reached 30,000 USDT transaction volume')
-  if (taskName === 'MintMore1vdsg') return t('Cast a complete VDSG on the same day')
-  if (taskName === 'More1TransactionsWithNFTdsg') return t('Complete at least one NFT transaction in DSG’s NFT market that day')
-  if (taskName === 'ExtractMiningIncomeFromOneTransaction') return t('Withdraw a transaction mining income')
-  if (taskName === 'PledgeDSGreceivedBNBrewardToday') return t('Greedy Dragon with any level of pledge received BNB rewards today')
-  if (taskName === 'CompletedAllDailyTasksAndAdvancedTasks') return t('Complete all daily tasks and advanced tasks of the day')
-  if (taskName === 'ContinuousSignIn') return t('Complete all basic trading tasks of the month')
-  if (taskName === 'Invitation') return t('Invite at least 15 users who have never used dinosaur eggs to trade')
-  return t('Mystery quests')
+
+// 获取任务名称和任务描述
+export const GetTaskName = (taskNameId: number) => {
+  return taskContents.filter(v => v.id === taskNameId)[0] || { name: 'Mystery quests', describe: 'Mystery quests' };
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -7,10 +7,11 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { getAddress } from 'utils/addressHelpers'
 // import { fetchTaskListAsync } from 'state/mission'
 // import tokens from 'config/constants/tokens'
-import { GetTaskName, useCountdownTime, useSignIn } from './hooks/matter'
+import { GetTaskName, useCountdownTime, useReceive, useSignIn } from './hooks/matter'
 import { useToast } from 'hooks'
 import { useDispatch } from 'react-redux'
 import CountdownTime from './Countdown'
+import { TaskInfo, Status } from './type'
 
 /* eslint-disable */
 
@@ -63,125 +64,82 @@ const CardAction = styled(Box)`
   left: 50%;
   transform: translate(-50%, 0);
 `
-interface MissionList {
-  taskID: number
-  nowTime: number
-  endTime: number
-  taskStatus: number
-  points: number
-  taskType: number
-  taskName: string
-  continuous: any
-}
-export interface CardProps {
-  info: MissionList
-}
-const MissionCard: React.FC<CardProps> = ({
+const ReceiveButton = styled(Button) <{ disabled: boolean }>`
+  background-color: ${({ theme, disabled }) => disabled ? theme.colors.disableStep : theme.colors.backgroundPrimary};
+`
+
+const MissionCard: React.FC<{ info: TaskInfo }> = ({
   info
 }) => {
   const { t } = useTranslation()
-  const { account, chainId, library } = useActiveWeb3React();
   const { toastSuccess, toastError } = useToast();
-  const dispatch = useDispatch()
-  const history = useHistory();
   const [pengdingType, setpengdingType] = useState(false)
-  const [loadTime, setloadTime] = useState(0)
+  const [status, setStatus] = useState(info.status);
 
-  // const [onPresent] = useModal(
-  //   <MissionIntroModal />,
-  // )
-  const toFinisheTask = (taskName: string) => {
-    // if (taskName === 'AnyTransaction') history.push('/swap')
-    // if (taskName === 'AnyMarketMaking') history.push('/liquidity')
-    // if (taskName === 'MintLeast01vdsg') history.push('/vdsg')
-    // if (taskName === 'Least3TransactionsWithDinosaurEggs') history.push('/swap')
-    // // 邀请交易
-    // if (taskName === 'inviteNewUserTransfer' || taskName === 'Invitation') {
-    //   // onPresent()
-    // }
-    // if (taskName === 'SpecifyTradingPairBNBToBUSDTask') {
-    //   const BUSDT = tokens.busd
-    //   const BUSDTADD = getAddress(BUSDT.address)
-    //   history.push(`/swap?outputCurrency=${BUSDTADD}`)
-    // }
-    // if (taskName === 'SpecifyTradingPairBNBToDSGTask') {
-    //   const DSG = tokens.dsg
-    //   const DSGADD = getAddress(DSG.address)
-    //   history.push(`/swap?outputCurrency=${DSGADD}`)
-    // }
-    // if (taskName === 'MintMore1vdsg') history.push('/vdsg')
-    // if (taskName === 'More1TransactionsWithNFTdsg') history.push('/nft')
-    // if (taskName === 'ExtractMiningIncomeFromOneTransaction') history.push('/trading')
-    // if (taskName === 'PledgeDSGreceivedBNBrewardToday') history.push('/nftfarm')
+
+  // 领取
+  const handleReceive = useCallback(
+    async () => {
+      try {
+        setpengdingType(true)
+        console.log('领取中。。。');
+
+        // const res = await useReceive(info.task_id)
+        // if (res.code === 1) {
+        //   toastSuccess(t('Received successfully'))
+        //   setStatus(Status.Received);
+        // } else {
+        //   toastError(t('Received failed'))
+        // }
+      } catch (error) {
+        toastError(t('Received failed'))
+      } finally {
+        setpengdingType(false)
+      }
+    },
+    [],
+  )
+
+  const getTipColor = () => {
+    if (status === Status.Received) return 'taskTips';
+    if (info.task_type === 1) return 'taskDay';
+    if (info.task_type === 2) return 'taskWeek';
+    if (info.task_type === 3) return 'taskAchievement';
+    return 'taskDay';
   }
 
-  // 签到
-  const OnSgin = (taskName, taskID, taskType) => {
-    let type = 2
-    if (taskName === 'SignIn') type = 1
-    return useSignIn(dispatch, account, library, type, taskID, taskType)
-  }
-  const downTime = useCountdownTime(info.endTime)
-
-  const getName = (taskName) => {
-    if (taskName === 'Invitation') return t('times')
-    if (taskName === 'ContinuousSignIn') return t('d')
-    return t('times')
-  }
-  // 防止用户乱调时间，导致接口一直调用！现在时间不对10秒重新请求接口
-  useEffect(() => {
-    if (downTime <= 0 && downTime !== null && info.endTime && (Math.floor(new Date().getTime() / 1000) - loadTime > 60)) {
-      setloadTime(Math.floor(new Date().getTime() / 1000))
-      // dispatch(fetchTaskListAsync({ account, lastEndTime: info.endTime }))
-    }
-  }, [dispatch, downTime, info.endTime, info.nowTime, loadTime, account])
-  // 任务taskStatus 1.未完成 2.可领取 3.已完成
   return (
     <>
       <MisCard >
-        <MisText fontSize="14px">{info.taskType === 1 ? t('Daily') : info.taskType === 2 ? t('Week') : t('Special')}</MisText>
-        <Ribbon color={info.taskType === 1 ? 'taskDay' : info.taskType === 2 ? 'taskWeek' : 'taskAchievement'} viewBox="0 0 200 200">
+        <MisText fontSize="14px">{info.task_type === 1 ? t('Daily') : info.task_type === 2 ? t('Week') : t('Special')}</MisText>
+        <Ribbon color={getTipColor()} viewBox="0 0 200 200">
           <polygon points="0,106 0,200 199.5,0 103,0 " />
         </Ribbon>
         <Info>
           <Flex flexDirection="column" justifyContent='space-between' alignItems='center'>
-            <Heading mb='16px' scale='ld'>{GetTaskName(info.taskName, t)}</Heading>
-            <Text mb='20px' color='textTips'>每日评论累计3次</Text>
-            <ProgressBox>
-              <Text small mb="8px">{`${info.continuous?.now}/${info.continuous?.max}`}</Text>
-              <Box width="100%"><Progress scale='sm' variant='round' primaryStep={(info.continuous?.now / info.continuous?.max) * 100} /></Box>
-            </ProgressBox>
+            <Heading mb='16px' scale='ld'>{t(`${GetTaskName(info.task_name_id).name}`)}</Heading>
+            <Text mb='20px' color='textTips'>{t(`${GetTaskName(info.task_name_id).describe}`)}</Text>
+            {
+              info?.Expand &&
+              <ProgressBox>
+                <Text small mb="8px">{`${info.Expand?.now}/${info.Expand?.max}`}</Text>
+                <Box width="100%"><Progress scale='sm' variant='round' primaryStep={(info.Expand?.now / info.Expand?.max) * 100} /></Box>
+              </ProgressBox>
+            }
             <Flex alignItems="center">
               <img alt="" width={33} src="/images/tokens/matter.svg" />
-              <Text ml="30px" color='textPrimary' fontWeight='bold' fontSize='16px'>+{info.points}</Text>
+              <Text ml="30px" color='textPrimary' fontWeight='bold' fontSize='16px'>+{info.matter}</Text>
               <Text ml="8px" color='textPrimary'>Matter</Text>
             </Flex>
           </Flex>
         </Info>
         <CardAction>
-          <Button disabled={pengdingType || info.taskStatus === 3 || ((info.taskName === 'CompletedAllDailyTasksAndAdvancedTasks' || info.taskName === 'ContinuousSignIn') && info.taskStatus === 1)} onClick={async () => {
-            if (info.taskStatus === 1) {
-              toFinisheTask(info.taskName)
-            } else {
-              try {
-                setpengdingType(true)
-                const res = await OnSgin(info.taskName, info.taskID, info.taskType)
-                if (res.code === 20008) {
-                  toastError(t('The difference between the local time and the standard time is too large, please synchronize the time!'))
-                } else {
-                  toastSuccess(t('Received successfully'))
-                }
-              } catch (error) {
-                toastError(t('Claim failed'))
-              } finally {
-                setpengdingType(false)
-              }
-            }
-          }} >
-            {
-              info.taskStatus === 3 ? t('Claim') : info.taskStatus === 2 ? t('Claim2') : (info.taskName === 'CompletedAllDailyTasksAndAdvancedTasks' || info.taskName === 'ContinuousSignIn') ? t('To be completed') : t('To finish')
-            }
-          </Button>
+          <ReceiveButton
+            isLoading={pengdingType}
+            disabled={pengdingType || status === Status.UnCompleted || status === Status.Received}
+            onClick={handleReceive} >
+            {status === Status.UnCompleted || status === Status.Completed ? t('Receive') : t('Completed')}
+          </ReceiveButton>
         </CardAction>
       </MisCard >
     </>

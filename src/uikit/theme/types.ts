@@ -75,6 +75,7 @@ export type Colors = {
   taskDay: string;
   taskWeek: string;
   taskAchievement: string;
+  taskTips: string;
   disableStep: string;
   protrudeColor: string;
   ThemeText: string;
