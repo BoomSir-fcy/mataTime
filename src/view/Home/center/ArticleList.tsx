@@ -109,7 +109,7 @@ export const ArticleList = props => {
       <List
         ref={listRef}
         marginTop={320}
-        loading={isEnd}
+        loading={!isEnd}
         renderList={getList}
       >
         {listData.map((item, index) => (
