@@ -148,7 +148,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
     console.log(Time, RemainingNum);
 
     if (Time > (RemainingNum)) {
-      toastWarning(`${t('Time最大兑换量:')}${RemainingNum}`);
+      toastWarning(`${t('Time Time maximum exchange amount:')}${RemainingNum}`);
       return
     }
     if (inputNum === '') {
@@ -213,9 +213,9 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
       <SwapBox>
         <InputBox>
           <Flex mb='4px' justifyContent='space-between'>
-            <SmFont>兑换</SmFont>
+            <SmFont>{t('Time Exchange')}</SmFont>
             <Flex>
-              <SmFont mr='16px' color='textTips'>余额：{formatDisplayApr(DsgBalance)}</SmFont>
+              <SmFont mr='16px' color='textTips'>{t('Balance')}：{formatDisplayApr(DsgBalance)}</SmFont>
               <SmFont style={{ cursor: 'pointer' }} onClick={() => {
                 setinputNum(String(DsgBalance))
               }} >MAX</SmFont>
@@ -228,7 +228,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
               inputMode="decimal"
               value={inputNum}
               onChange={handleChange}
-              placeholder={t('请输入兑换数量')}
+              placeholder={t('Time Please enter the exchange amount')}
             />
             <Flex alignItems='center'>
               <img src="/images/tokens/DSG.svg" alt="" />
@@ -242,27 +242,27 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
               <img src="/images/tokens/TIME.svg" alt="" />
               <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
                 <Text fontSize='18px' bold>{formatDisplayApr(Time)}</Text>
-                <Text fontSize='14px' color='textTips'>可获得Time</Text>
+                <Text fontSize='14px' color='textTips'>{t('Time Available')}Time</Text>
               </Flex>
             </Flex>
             <Box style={{ textAlign: 'right' }}>
-              <Text fontSize='14px' color='textTips'>Time余额</Text>
+              <Text fontSize='14px' color='textTips'>Time{t('Balance')}</Text>
               <Text>{formatDisplayApr(timeBalance)}</Text>
             </Box>
           </TimeNum>
           <Flex justifyContent='space-between' alignItems='center'>
             <Box>
-              <Text fontSize='14px' color='textTips'>流通</Text>
+              <Text fontSize='14px' color='textTips'>{t('Time Circulation')}</Text>
               <Text>{formatDisplayApr(Circulation)}</Text>
             </Box>
             <Box style={{ textAlign: 'right' }}>
-              <Text fontSize='14px' color='textTips'>锁仓线性释放</Text>
+              <Text fontSize='14px' color='textTips'>{t('Time Locked linear release')}</Text>
               <Text>{formatDisplayApr(Lock)}</Text>
             </Box>
           </Flex>
         </TimeBox>
         <Rule fontSize='14px' color='textTips'>
-          {t('*锁仓规则：%now%%立即释放，%later%%在未来 %time%之内线性解锁',
+          {t('Time *Locking rules: %now%% will be released immediately, and %later%% will be unlocked linearly within the next %time%',
             {
               now: ReleaseNow,
               later: ReleaseLater,
@@ -277,7 +277,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
             // 授权
             await handleApprove()
           }
-        }}>{pending ? <Dots>{approvedNum > 0 ? "兑换中" : "授权中"}</Dots> : approvedNum > 0 ? "兑换" : "授权"}</ButtonStyle>
+        }}>{pending ? <Dots>{approvedNum > 0 ? t("Time Redeeming") : t("Account Approving")}</Dots> : approvedNum > 0 ? t("Time Exchange") : t("Account Approve")}</ButtonStyle>
       </SwapBox>
       <FAQ as={Link} to="/account/faq">
         <AnimationRingIcon style={{ cursor: 'pointer' }} color='white_black' active1 active3 bgColor showImg isRotate width="8rem">

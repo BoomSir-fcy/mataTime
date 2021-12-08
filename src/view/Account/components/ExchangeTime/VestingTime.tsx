@@ -110,11 +110,11 @@ const ClaimButton: React.FC<btn> = ({ upDate, all, ReleaseAmount, id }) => {
       {
         all ?
           <Button disabled={ReleaseAmount === 0 || pending} onClick={handleRewardAll}>
-            {pending ? <Dots>{t('领取中')}</Dots> : t('全部领取')}
+            {pending ? <Dots>{t('Time Claiming')}</Dots> : t('Time Claim all')}
           </Button>
           :
           <Button disabled={ReleaseAmount === 0 || pending} onClick={() => handleReward(id)}>
-            {pending ? <Dots>{t('领取中')}</Dots> : t('领取')}
+            {pending ? <Dots>{t('Time Claiming')}</Dots> : t('Claim')}
           </Button>
       }
     </>
@@ -168,7 +168,7 @@ const VestingTime: React.FC<init> = ({ }) => {
         <Flex>
           <img src="/images/tokens/TIME.svg" alt="" />
           <Flex ml='14px' flexDirection='column' justifyContent='space-between'>
-            <Text fontSize='14px' color='textTips'>待领取收益</Text>
+            <Text fontSize='14px' color='textTips'>{t('Time Unclaimed income')}</Text>
             <Text>{formatDisplayApr(RewardNum)}</Text>
           </Flex>
         </Flex>
@@ -201,7 +201,7 @@ const VestingTime: React.FC<init> = ({ }) => {
           }
         </Table>
         <PaginateStyle alignItems='center' justifyContent='end'>
-          <Text mr='16px' fontSize='14px' color='textTips'>总共 {pageCount}页</Text>
+          <Text mr='16px' fontSize='14px' color='textTips'>{t('Account Total %page% page', { page: pageCount })}</Text>
           <ReactPaginate
             breakLabel="..."
             nextLabel=">"

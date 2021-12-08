@@ -81,7 +81,7 @@ const Exchange: React.FC = () => {
 
   return (
     <>
-      <WalletHead title={t('Time兑换')} />
+      <WalletHead title='Time' />
       <ScrollBox>
         <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
         <ExchangeTime nowRound={TimeShopInfo} />

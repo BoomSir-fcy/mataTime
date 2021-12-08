@@ -88,10 +88,10 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
         token === 'Matter' ?
           <Table>
             <Row className='matterStyle'>
-              <HeadText>{t('日期')}</HeadText>
-              <HeadText>{t('任务类型')}</HeadText>
-              <HeadText>{t('任务明细')}</HeadText>
-              <HeadText>{t('当日收益')}</HeadText>
+              <HeadText>{t('Account Date')}</HeadText>
+              <HeadText>{t('Account Task type')}</HeadText>
+              <HeadText>{t('Account Task details')}</HeadText>
+              <HeadText>{t('Account Day income')}</HeadText>
             </Row>
             {
               TaskHistoryList.map((item, index) => (
@@ -107,15 +107,15 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
           :
           <Table>
             <Row className={type === 2 ? 'Reward' : ''}>
-              <HeadText>{t('创作')}</HeadText>
+              <HeadText>{t('Account Creation')}</HeadText>
               {
                 type === 1 &&
                 <>
-                  <HeadText>{t('阅读人数')}</HeadText>
-                  <HeadText>{t('当日收益')}</HeadText>
+                  <HeadText>{t('Account Number of readers')}</HeadText>
+                  <HeadText>{t('Account Day income')}</HeadText>
                 </>
               }
-              <HeadText>{t('累计收益')}</HeadText>
+              <HeadText>{t('Account Cumulative income')}</HeadText>
             </Row>
             {
               HistoryList.map((item, index) => (
@@ -136,7 +136,7 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
       }
 
       <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text mr='16px' fontSize='14px' color='textTips'>总共 12页</Text>
+        <Text mr='16px' fontSize='14px' color='textTips'>{t('Account Total %page% page', { page: pageCount })}</Text>
         <ReactPaginate
           breakLabel="..."
           nextLabel=">"

@@ -18,7 +18,7 @@ const Single: React.FC = () => {
 
   return (
     <>
-      <WalletHead title={t('质押 Staking')} />
+      <WalletHead title={t('Stake')} />
       <Box pt="86px">
         {
           loaded
