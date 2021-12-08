@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import debounce from 'lodash/debounce'
+import useDebounce from 'hooks/useDebounce'
 import { IM } from 'utils';
 import useIm from './useIm'
 
@@ -13,9 +14,15 @@ const VIEW_PADDING = {
  * @dev useReadArticle websocket向后端传当前阅读的评论或者id
  * 
  * FIXME:
- *  1.
+ *  1.展开折叠需要重新计算高度
+ *  2.删除、屏蔽帖子等操作, 需要重新计算高度
+ *  3.图片加载需要获得高度
+ *  4.如果后续评论显示在帖子里 需要重新计算高度
+ *  5.如果有一万条帖子 计算高度的时候是否需要全部重新计算
+ *  6.现在发帖会刷新列表 如果后续发帖不刷新整个列表 只在最前面新加帖子 需要计算高度
+ *  
  */
-const useReadArticle = () => {
+const useReadArticle = (flag?: number | boolean) => {
   const { im, articleIds, articlePositions, rendered, setArticleIds } = useIm()
   const timeStep = 1 // 推送时间间隔
   const [initLoad, setInitLoad] = useState(false)
@@ -90,10 +97,11 @@ const useReadArticle = () => {
     [handleScroll],
   )
 
-  // 初始化显示阅读文章
+  // 初始化显示阅读文章及监听其他可能更改高度的操作, 防抖 1s
+  const flagDebounce = useDebounce(flag, 1000)
   useEffect(() => {
     handleScroll()
-  }, [handleScroll])
+  }, [handleScroll, flagDebounce])
 
   useEffect(() => {
     window.addEventListener('scroll', debouncedOnChange);

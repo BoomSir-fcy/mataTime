@@ -12,7 +12,7 @@ interface SpendTimeViewWithArticleProps {
 }
 
 // 浏览扣费组件
-const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.memo(({ articleId, readType }) => {
+const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.memo(({ articleId, readType, flag }) => {
 
   const imgRef = useRef<HTMLDivElement>(null);
   const { setArticlePositions, rendered, setRendered } = useIm()
@@ -43,7 +43,7 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
         return newArticlePositions
       })
     }
-  }, [articleId, readType, rendered, setRendered, setArticlePositions]);
+  }, [articleId, readType, rendered, flag, setRendered, setArticlePositions]);
 
 
   // return <div ref={imgRef} />

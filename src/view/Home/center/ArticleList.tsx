@@ -32,6 +32,11 @@ export const ArticleList = props => {
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
 
+  const {
+    readFlag,
+    setReadFlag = () => { console.error('setReadFlag is null or undefined, and not refresh ') }
+  } = props || {}
+
   // 获取列表
   const getList = (current = 0) => {
     if ((loading || page > totalPage) && !current) return false;
@@ -86,6 +91,7 @@ export const ArticleList = props => {
         arr.push(obj);
       }
     });
+    setReadFlag(prep => prep + 1)
     setListData([...arr]);
   };
 
@@ -102,7 +108,7 @@ export const ArticleList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle readType={ReadType.ARTICLE} articleId={item.id} />
+                <SpendTimeViewWithArticle flag={readFlag} readType={ReadType.ARTICLE} articleId={item.id} />
               )
             }
             <MentionItem
