@@ -17,12 +17,10 @@ opacity: 0.96; */
 `
 
 interface Init {
-  Token: string
-  Balance: number
-  TokenAddr: string
-  BalanceInfo: Api.Account.Balance
+  type?: number
+  token?: number
 }
-const Chart: React.FC = () => {
+const Chart: React.FC<Init> = ({ type, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const [liquidityHover, setLiquidityHover] = useState<number | undefined>()
@@ -72,7 +70,7 @@ const Chart: React.FC = () => {
   }, [chartData])
   return (
     <ChartsBox>
-      <Text color='#E3E3E3'>近7日内容收益趋势</Text>
+      <Text color='textTips'>{type === 1 ? t('Account Content revenue trend in the past 7 days') : t('Account Reward the income trend in the past 7 days')}</Text>
       <Box height="360px">
         <LineChart
           data={formattedLiquidityData}

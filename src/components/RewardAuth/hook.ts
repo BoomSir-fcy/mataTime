@@ -28,6 +28,7 @@ export const RewardAuthorContract = () => {
       const tokenView = await multicall(rewardAuthorAbi, calls);
       return tokenView[0][0];
     } catch (error) {
+      console.log(error);
       return [];
     }
   }, []);

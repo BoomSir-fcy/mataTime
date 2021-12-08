@@ -1,15 +1,13 @@
 import React, { useCallback, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { Text, Flex, Box } from "uikit";
+import { Text, Flex, Box, TextProps } from "uikit";
 import { chartData } from './data'
 
 const BoxContener = styled(Box)`
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 ${({ theme }) => theme.mediaQueriesSize.padding}
 `
-
-
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = (props: any) => {
@@ -20,7 +18,8 @@ const renderCustomizedLabel = (props: any) => {
     outerRadius,
     value,
     percent,
-    name
+    name,
+    white_black
   } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
@@ -39,15 +38,15 @@ const renderCustomizedLabel = (props: any) => {
 
       <path
         d={`M${sx + dx},${sy + dy}L${mx},${my}L${ex},${ey}`}
-        stroke="#fff"
+        stroke={white_black}
         fill="none"
       />
-      <circle cx={sx} cy={sy} r={4} strokeWidth="2" stroke="#fff" fill="transparent" />
+      <circle cx={sx} cy={sy} r={4} strokeWidth="2" stroke={white_black} fill="transparent" />
       <text
         x={ex + (cos >= 0 ? 1 : -1) * -180}
         y={ey - 12}
         textAnchor={textAnchor}
-        fill="#fff"
+        fill={white_black}
       >{`${name} ${(percent * 100).toFixed(2)}%)`}</text>
       {/* <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
@@ -62,6 +61,8 @@ const renderCustomizedLabel = (props: any) => {
   );
 };
 export default function AnswerChart() {
+  const white_black = useTheme().colors.white_black;
+
   return (
     <BoxContener mt="32px">
       <Text bold fontSize="24px">Distribution of $TIME</Text>
@@ -72,7 +73,10 @@ export default function AnswerChart() {
             cx={200}
             cy={200}
             labelLine={false}
-            label={renderCustomizedLabel}
+            label={(props) => renderCustomizedLabel({
+              ...props,
+              white_black
+            })}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"

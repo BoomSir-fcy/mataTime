@@ -2,13 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import { Header, CommonLeftMenu, Affix } from 'components';
-import {
-  HotTopic,
-  RecommendPeople,
-  Search,
-  Swap,
-  FooterCopyright
-} from 'view/Home/right';
 import { Header as CenterHeader } from 'view/Home/center';
 import { Flex, Box } from 'uikit';
 import menu from './menuData';

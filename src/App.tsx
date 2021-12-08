@@ -6,19 +6,20 @@ import GlobalStyle from 'style/global';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk, storeAction } from 'store';
-import PageLoader from 'components/Loader/PageLoader';
 import { CommonLayout, ToastComponents } from 'components';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import PageLoader from 'components/Loader/PageLoader';
 import PageContainer from 'components/Layout/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
 
 import useEagerConnect from 'hooks/useEagerConnect';
+import { RewardAuthorContract } from 'components/RewardAuth/hook';
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import HttpUpdater from './view/Updater/HttpUpdater';
 
-// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/es-us';
 dayjs.extend(relativeTime);
@@ -44,6 +45,22 @@ function App() {
   useEagerConnect();
   const dispatch = useDispatch();
   const token = window.localStorage.getItem(storage.Token);
+  const { account } = useActiveWeb3React();
+  const { getTokens, approve } = RewardAuthorContract();
+
+  const getTokensToCache = async () => {
+    try {
+      const res = await getTokens();
+      const isApprove = await approve(
+        account,
+        res.map(item => item[0])
+      );
+      const newArr = res.map((item, index) => [...item, isApprove[index]]);
+      dispatch(storeAction.setSupportToken(newArr));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (token) {
@@ -51,6 +68,13 @@ function App() {
       // dispatch(storeAction.setUserToken(token));
     }
   }, [token, dispatch]);
+
+  useEffect(() => {
+    if (account) {
+      getTokensToCache();
+    }
+  }, [token, account]);
+
   // useEffect(() => {
   //   eventBus.addEventListener('http', (data) => {
   //     console.log('==========', data)

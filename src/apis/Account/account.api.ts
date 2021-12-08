@@ -15,4 +15,14 @@ export class AccountApi extends Http {
     const res = await this.get('/v1/wallet/chargeandwithdraw', params);
     return res;
   }
+
+  async getRewardList(params?: any) {
+    const res = await this.get('/v1/reward/reward-author/list', params);
+    return res;
+  }
+
+  async getIncome() {
+    const res = await this.get('/v1/reward/reward-author/user-stat');
+    return res;
+  }
 }
