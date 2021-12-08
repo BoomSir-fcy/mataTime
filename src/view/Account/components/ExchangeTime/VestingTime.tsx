@@ -114,7 +114,7 @@ const ClaimButton: React.FC<btn> = ({ upDate, all, ReleaseAmount, id }) => {
           </Button>
           :
           <Button disabled={ReleaseAmount === 0 || pending} onClick={() => handleReward(id)}>
-            {pending ? <Dots>{t('Time Claiming')}</Dots> : t('Claim')}
+            {pending ? <Dots>{t('Time Claiming')}</Dots> : t('Time Claim')}
           </Button>
       }
     </>
