@@ -113,9 +113,9 @@ function App() {
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />
               <Route path="/account" component={Account} />
-              {process.env.NODE_ENV === 'development' && (
-                <Route path="/test" component={Test} />
-              )}
+              <Route path="/test" component={Test} />
+              {/* {process.env.NODE_ENV === 'development' && (
+              )} */}
             </Switch>
           </React.Suspense>
         </PageContainer>
