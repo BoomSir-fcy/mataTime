@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-import { useImmer } from 'use-immer';
+import { useStore } from 'store';
 import { shortenAddress } from 'utils/contract';
 import { Flex, Box, Text } from 'uikit';
-import { Api } from 'apis';
 
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
@@ -47,14 +46,12 @@ const ItemText = styled(Text)`
   }
 `;
 
-export const TableList = React.memo(() => {
-  const [state, setState] = useImmer({
-    list: [],
-    page: 1,
-    total: 0,
-    pageCount: 0
-  });
-  const { page } = state;
+export const TableList: React.FC<{
+  data;
+  pageCount: number;
+  onchangePage: (page: number) => void;
+}> = React.memo(({ data, pageCount, onchangePage }) => {
+  const tokenList = useStore(p => p.appReducer.supportTokenViews);
 
   const stringArr = (newarr: any, stringArray: string[]) => {
     for (let i = 0; i < newarr.length; i++) {
@@ -69,28 +66,8 @@ export const TableList = React.memo(() => {
   };
 
   const handlePageClick = event => {
-    setState(p => {
-      p.page = event.selected + 1;
-    });
+    onchangePage(event.selected + 1);
   };
-
-  const init = async () => {
-    try {
-      const res = await Api.AccountApi.getRewardList({ page });
-      console.log(res);
-      if (Api.isSuccess(res)) {
-        setState(p => {
-          p.list = res.data.list || [];
-          p.total = res.data.total_num;
-          p.pageCount = res.data.total_page;
-        });
-      }
-    } catch (error) {}
-  };
-
-  React.useEffect(() => {
-    init();
-  }, [state.page]);
 
   return (
     <Wraper>
@@ -102,9 +79,12 @@ export const TableList = React.memo(() => {
           <HeadText>打赏金额</HeadText>
           <HeadText>打赏时间</HeadText>
         </Row>
-        {state.list.map((item, index) => {
+        {data.map((item, index) => {
           const stringArray: any[] = [];
           let context: any[] = [];
+          let token = tokenList.find(
+            row => row[0].toLowerCase() === item.token
+          );
           try {
             context = Array.isArray(JSON.parse(item.post))
               ? JSON.parse(item.post)
@@ -112,8 +92,9 @@ export const TableList = React.memo(() => {
           } catch (err) {
             console.log(err);
           }
+
           return (
-            <Row className="matterStyle" key={`${item.time}${index}`}>
+            <Row className="matterStyle" key={`${item.add_time}_${index}`}>
               <ItemText ellipsis>
                 {stringArr(context, stringArray).join(',')}
               </ItemText>
@@ -125,7 +106,7 @@ export const TableList = React.memo(() => {
                   </Text>
                 </Flex>
               </ItemText>
-              <ItemText>{item.amount}</ItemText>
+              <ItemText>{token[2]}</ItemText>
               <ItemText>{item.amount}</ItemText>
               <ItemText>
                 {dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')}
@@ -134,10 +115,10 @@ export const TableList = React.memo(() => {
           );
         })}
       </Table>
-      {state.list.length > 0 && (
+      {data.length > 0 && (
         <PaginateStyle alignItems="center" justifyContent="end">
           <Text mr="16px" fontSize="14px" color="textTips">
-            总共 {state.pageCount}页
+            总共 {pageCount}页
           </Text>
           <ReactPaginate
             breakLabel="..."
@@ -145,7 +126,7 @@ export const TableList = React.memo(() => {
             onPageChange={handlePageClick}
             pageRangeDisplayed={4}
             marginPagesDisplayed={1}
-            pageCount={state.pageCount}
+            pageCount={pageCount}
             previousLabel="<"
             renderOnZeroPageCount={null}
           />

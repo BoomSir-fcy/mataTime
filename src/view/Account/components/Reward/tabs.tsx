@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
+import { useImmer } from 'use-immer';
+import { useStore } from 'store';
 import { Card, Flex, Box, Text, Button } from 'uikit';
+import { TokenImage } from 'components';
 
 const TabsBox = styled(Card)`
   display: flex;
@@ -18,7 +22,7 @@ const TabsBox = styled(Card)`
   }
 `;
 const TabsContent = styled(Flex)`
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   padding: 29px 18px 7px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -31,37 +35,67 @@ const CoinCols = styled(Flex)`
   background: ${({ theme }) => theme.colors.backgroundMenu};
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: ${({ theme }) => theme.radii.card};
+  &:nth-child(2),
+  &:nth-child(5) {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
 `;
 
-export const Tabs = React.memo(() => {
+export const Tabs: React.FC<{
+  data: any;
+}> = React.memo(({ data }) => {
+  const tokenList = useStore(p => p.appReducer.supportTokenViews);
+
+  const [state, setState] = useImmer({
+    checked: 1,
+    tabs: [
+      { label: '今日收益', val: 1 },
+      { label: '累计收益', val: 2 }
+    ]
+  });
+  const { checked, tabs } = state;
+  const income = checked === 1 ? data.today : data.total;
+
   return (
     <React.Fragment>
       <TabsBox isBoxShadow>
-        <Button variant="text">今日收益</Button>
-        <Button variant="text" className="active">
-          累计收益
-        </Button>
+        {tabs.map((row, index) => (
+          <Button
+            key={index}
+            onClick={() =>
+              setState(p => {
+                p.checked = row.val;
+              })
+            }
+            className={classnames(checked === row.val ? 'active' : '')}
+            variant="text"
+          >
+            {row.label}
+          </Button>
+        ))}
       </TabsBox>
       <TabsContent>
-        {[...new Array(6)].map(item => (
-          <CoinCols key={item}>
-            <img
-              src="/images/tokens/TIME.svg"
-              style={{ width: '40px', height: '40px' }}
-              alt=""
-            />
-            <Flex
-              ml="20px"
-              flexDirection="column"
-              justifyContent="space-between"
-            >
-              <Text color="textTips">Time</Text>
-              <Text fontSize="18px" fontWeight="bold">
-                82,226,226
-              </Text>
-            </Flex>
-          </CoinCols>
-        ))}
+        {income?.map(item => {
+          let token = tokenList.find(
+            row => row[0].toLowerCase() === item.token
+          );
+          return (
+            <CoinCols key={item.token}>
+              <TokenImage tokenAddress={item.token} width={40} height={40} />
+              <Flex
+                ml="20px"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <Text color="textTips">{token.length && token[2]}</Text>
+                <Text fontSize="18px" fontWeight="bold">
+                  {item.amount}
+                </Text>
+              </Flex>
+            </CoinCols>
+          );
+        })}
       </TabsContent>
     </React.Fragment>
   );

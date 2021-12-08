@@ -12,8 +12,14 @@ import 'reactjs-popup/dist/index.css';
 const RewardAuthTagStyled = styled(Flex)`
   position: relative;
 `;
-const PopupButton = styled(Box)`
+const PopupButton = styled(Flex)`
+  align-items: center;
   cursor: pointer;
+  i {
+    background: -webkit-linear-gradient(180deg, #ffd700, #e29d24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent !important;
+  }
 `;
 
 export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
@@ -22,7 +28,6 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
 
   const close = () => {
     if (popupRef.current) {
-      console.log(popupRef.current);
       popupRef?.current?.close();
     }
   };
@@ -34,7 +39,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
         trigger={
           <PopupButton>
             <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
-            {(reward?.length > 0 && reward[0]?.count) || 0}
+            {reward?.length || 0}
           </PopupButton>
         }
         nested

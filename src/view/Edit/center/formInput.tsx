@@ -44,6 +44,7 @@ const InputRows = styled(Flex)`
   width: 381px;
   height: 50px;
   input {
+    flex: 1;
     color: ${({ theme }) => theme.colors.textTips};
     padding: 14px 13px 14px 0;
     background: transparent;

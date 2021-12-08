@@ -4,7 +4,8 @@ import {
   setSystemCustom,
   setLocation,
   connectWallet,
-  setChainId
+  setChainId,
+  setSupportToken
   // setTopicCoins
 } from './actions';
 import { languange } from './type';
@@ -49,6 +50,9 @@ export default createReducer(initialState, builder => {
     })
     .addCase(setChainId, (state, action) => {
       state.chainId = action.payload.chainId;
+    })
+    .addCase(setSupportToken, (state, action) => {
+      state.supportTokenViews = action.payload;
     });
   // .addCase(setTopicCoins, (state, action) => {
   //   // nowTime 做防抖处理

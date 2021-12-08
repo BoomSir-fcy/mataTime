@@ -15,5 +15,5 @@ export const setLocation = createAction<[]>('app/setLocation');
 export const connectWallet =
   createAction<{ connectWallet: boolean }>('app/connectWallet');
 export const setChainId = createAction<{ chainId: number }>('app/setChainId');
-export const setSupportToken = createAction('app/setSupportToken');
+export const setSupportToken = createAction<[]>('app/setSupportToken');
 // export const setTopicCoins = createAction<coinsProps>('app/topic/coins');
