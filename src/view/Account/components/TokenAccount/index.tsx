@@ -20,13 +20,14 @@ const NoPdBottom = styled(Container)`
 padding: 0;
 `
 const ScrollBox = styled(Box)`
-height:calc(100vh - 70px);
+padding-top: 70px;
+/* height:calc(100vh - 70px);
 overflow-y: auto;
 ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 -ms-overflow-style: none;
-scrollbar-width: none;
+scrollbar-width: none; */
 `
 const BorderWalletBox = styled(WalletBox)`
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -126,7 +127,7 @@ const TokenAccount: React.FC = () => {
   }, [BalanceList, account, activeToken])
   return (
     <NoPdBottom>
-      <WalletHead title={t('我的钱包')} />
+      <WalletHead title={t('Account My Wallet')} />
       <ScrollBox>
         <Flex flexWrap='wrap' justifyContent='space-between'>
           <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
@@ -135,8 +136,8 @@ const TokenAccount: React.FC = () => {
         {/* token切换 */}
         <ContentTab>
           <Flex alignItems='baseline'>
-            <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time收益</TabText>
-            <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter收益</TabText>
+            <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time {t('Rewards')}</TabText>
+            <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter {t('Rewards')}</TabText>
           </Flex>
         </ContentTab>
         {/* 收益切换 */}
@@ -144,25 +145,25 @@ const TokenAccount: React.FC = () => {
           <Flex alignItems='baseline'>
             {ActiveToken === 1 ?
               <>
-                <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
-                <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>打赏收益</TabText>
+                <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>{t('Account Content income')}</TabText>
+                <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>{t('Account Reward income')}</TabText>
               </>
               :
-              <TabText className='active'>Matter收益</TabText>
+              <TabText className='active'>Matter {t('Rewards')}</TabText>
             }
           </Flex>
           <RightBox justifyContent='space-between' alignItems='center'>
             <IncomeBox>
               <Img src={require('assets/images/myWallet/today.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-                <Text fontSize='14px' color='textTips'>当日收益</Text>
+                <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
                 <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
               </Flex>
             </IncomeBox>
             <IncomeBox>
               <Img src={require('assets/images/myWallet/total.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-                <Text fontSize='14px' color='textTips'>累计收益</Text>
+                <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
                 <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
               </Flex>
             </IncomeBox>
@@ -171,7 +172,7 @@ const TokenAccount: React.FC = () => {
         {
           ActiveToken !== 2 ?
             <>
-              <Chart />
+              <Chart type={ActiveTab} />
               <EarningsRecord type={ActiveTab} />
             </>
             :

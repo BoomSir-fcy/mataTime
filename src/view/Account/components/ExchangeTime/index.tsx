@@ -1,20 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components';
-import { Flex, Button, Box, Text, Input } from 'uikit';
-import { getDsgAddress, getTimeAddress } from 'utils/addressHelpers';
-import {
-  useTokenBalance,
-  FetchTimeShopInfo,
-  FetchApproveNum,
-  FetchRewardNum,
-  useApproveErc20Change,
-  useExchangeErc20,
-  useRewardErc20
-} from './hook';
+import { Flex, Box, Text } from 'uikit';
 import { useWeb3React } from '@web3-react/core';
-import Dots from 'components/Loader/Dots';
-import { useImmer } from 'use-immer';
 import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { TimeHeader } from './head';
@@ -22,22 +10,27 @@ import ExchangeTime from './exchange';
 import { useFetchDSGApproveNum, useFetTimeInfo } from 'store/wallet/hooks';
 import { useStore } from 'store';
 import VestingTime from './VestingTime';
+import { ComponentsWrapper } from "components/Cirde/PageContainer";
+import CommonCircle from "components/Cirde/CommonCircle";
+
 
 const ScrollBox = styled(Box)`
-height:calc(100vh - 70px);
+padding-top: 70px;
+/* height:calc(100vh - 70px);
 overflow-y: auto;
 ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 -ms-overflow-style: none;
-scrollbar-width: none;
+scrollbar-width: none; */
 `
 const VestingBox = styled(Flex)`
-height:160px;
+height:350px;
 align-items: center;
 justify-content: center;
-width: max-content;
+width: 36rem;
 margin: 0 auto;
+overflow: hidden;
 ${({ theme }) => theme.mediaQueriesSize.marginb}
 `
 
@@ -46,6 +39,7 @@ const Exchange: React.FC = () => {
   useFetTimeInfo()
   const { t } = useTranslation();
   const { account } = useWeb3React()
+  const [ToFaq, setToFaq] = useState(false)
   const [TimeShopInfo, setTimeShopInfo] = useState({
     long_time: 0,
     max_dsg_token: 0,
@@ -78,6 +72,7 @@ const Exchange: React.FC = () => {
       }
     }
   }
+  // const showFaq = useCallback(() => setToFaq(true), [setToFaq])
   useEffect(() => {
     if (account && TimeInfo.length > 1) {
       getTimeShopInfo()
@@ -86,12 +81,16 @@ const Exchange: React.FC = () => {
 
   return (
     <>
-      <WalletHead title={t('Time兑换')} />
+      <WalletHead title='Time' />
       <ScrollBox>
         <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
         <ExchangeTime nowRound={TimeShopInfo} />
         <VestingBox>
-          <Text fontSize='30px' bold>My Vesting Time</Text>
+          <ComponentsWrapper>
+            <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-13rem 0 0 -23rem" isAnimation>
+              <Text fontSize='30px' bold>My Vesting Time</Text>
+            </CommonCircle>
+          </ComponentsWrapper>
         </VestingBox>
         <VestingTime />
       </ScrollBox>

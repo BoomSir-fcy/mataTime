@@ -79,6 +79,7 @@ export const lightColors: Colors = {
   taskDay: '#AABFFF',
   taskWeek: '#4168ED',
   taskAchievement: '#F5C51D',
+  CircleBg: "#e8f0fd",
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
@@ -155,6 +156,7 @@ export const darkColors: Colors = {
   taskDay: '#AABFFF',
   taskWeek: '#4168ED',
   taskAchievement: '#F5C51D',
+  CircleBg: "#3f3f3f",
   gradients: {
     footer: '#191F2D',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
