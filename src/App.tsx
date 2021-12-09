@@ -55,7 +55,10 @@ function App() {
         account,
         res.map(item => item[0])
       );
-      const newArr = res.map((item, index) => [...item, isApprove[index]]);
+      const newArr = res.map((item, index) => [
+        ...item.toString().split(','),
+        isApprove[index].toString()
+      ]);
       dispatch(storeAction.setSupportToken(newArr));
     } catch (error) {
       console.log(error);
