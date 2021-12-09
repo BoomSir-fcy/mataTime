@@ -38,6 +38,7 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Account = React.lazy(() => import('./view/Account'));
+const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 
 const Container = styled(Box)`
@@ -123,6 +124,7 @@ function App() {
                 path="/articleDetils/:id"
                 render={props => <ArticleDetilsLayout {...props} />}
               />
+              <Route path="/task" component={Task} />
               <Route
                 path="/news"
                 render={props => <CommonLayout {...props} />}

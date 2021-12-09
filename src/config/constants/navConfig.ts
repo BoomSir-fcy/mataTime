@@ -31,6 +31,13 @@ export const menuNavConfig: MenuNavConfig[] = [
     lable: 'homeMenuStar'
   },
   {
+    icon: 'icon-rewu',
+    activeIcon: 'icon-xingqiu1',
+    path: '/task',
+    hideRight: true,
+    lable: 'homeMenuTask'
+  },
+  {
     icon: 'icon-tixing',
     activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
