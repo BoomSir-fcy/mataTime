@@ -63,31 +63,28 @@ export const Tabs: React.FC<{
   return (
     <React.Fragment>
       <TabsBox isBoxShadow>
-        {tabs.map((row, index) => {
-          console.log(row);
-          return (
-            <Button
-              key={index}
-              onClick={() =>
-                setState(p => {
-                  p.checked = row.val;
-                })
-              }
-              className={classnames(checked === row.val ? 'active' : '')}
-              variant="text"
-            >
-              {t(row.label)}
-            </Button>
-          );
-        })}
+        {tabs.map((row, index) => (
+          <Button
+            key={index}
+            onClick={() =>
+              setState(p => {
+                p.checked = row.val;
+              })
+            }
+            className={classnames(checked === row.val ? 'active' : '')}
+            variant="text"
+          >
+            {t(row.label)}
+          </Button>
+        ))}
       </TabsBox>
       <TabsContent>
-        {income?.map(item => {
+        {income?.map((item, index) => {
           let token = tokenList.find(
             row => row[0].toLowerCase() === item.token
           );
           return (
-            <CoinCols key={item.token}>
+            <CoinCols key={`${item.token}_${index}`}>
               <TokenImage tokenAddress={item.token} width={40} height={40} />
               <Flex
                 ml="20px"

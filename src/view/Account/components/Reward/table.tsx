@@ -85,9 +85,8 @@ export const TableList: React.FC<{
         {data.map((item, index) => {
           const stringArray: any[] = [];
           let context: any[] = [];
-          let token = tokenList.find(
-            row => row[0].toLowerCase() === item.token
-          );
+          let token =
+            tokenList.find(row => row[0].toLowerCase() === item.token) || [];
           try {
             context = Array.isArray(JSON.parse(item.post))
               ? JSON.parse(item.post)
@@ -109,7 +108,7 @@ export const TableList: React.FC<{
                   </Text>
                 </Flex>
               </ItemText>
-              <ItemText>{token[2]}</ItemText>
+              <ItemText>{token && token?.length && token[2]}</ItemText>
               <ItemText>{item.amount}</ItemText>
               <ItemText>
                 {dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')}

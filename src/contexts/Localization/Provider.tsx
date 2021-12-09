@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { EN, Language, languages } from 'config/localization';
+import { EN, ZHCN, Language, languages } from 'config/localization';
 import { ContextApi, ContextData, ProviderState } from './types';
 import { LS_KEY, fetchLocale, getLanguageCodeFromLS } from './helpers';
 import translations from 'config/localization/translations.json';
@@ -42,7 +42,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
       codeFromStorage !== EN.locale
         ? dayjs.locale('zh-cn')
-        : dayjs.locale('en-us');
+        : dayjs.locale('en');
 
       setState(prevState => ({
         ...prevState,
@@ -54,7 +54,6 @@ export const LanguageProvider: React.FC = ({ children }) => {
   }, [setState]);
 
   const setLanguage = async (language: Language) => {
-    console.log(language);
     if (!languageMap.has(language.locale)) {
       setState(prevState => ({
         ...prevState,
@@ -81,6 +80,10 @@ export const LanguageProvider: React.FC = ({ children }) => {
         currentLanguage: language
       }));
     }
+
+    language.locale === ZHCN.locale
+      ? dayjs.locale('zh-cn')
+      : dayjs.locale('en');
   };
 
   const translate = useCallback(

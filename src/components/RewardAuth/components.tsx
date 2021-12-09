@@ -19,12 +19,11 @@ const Rows = styled(Flex)`
 `;
 const InputPanelStyled = styled(InputPanel)`
   width: 33%;
-  cursor: pointer;
   padding: 6px 9px;
-  min-width: 100px;
   height: 50px;
   margin-bottom: 12px;
   box-shadow: inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
 `;
 const Content = styled(Flex)`
   position: relative;
@@ -187,12 +186,16 @@ export const Reward: React.FC<{
                     tokenAddress={current[1]}
                   />
                 </Box>
-                <Flex ml="3px" flexDirection="column" style={{ flex: 1 }}>
-                  <Text bold ml="5px" style={{ lineHeight: 'normal' }}>
-                    {item}
+                <Flex
+                  ml="3px"
+                  flexDirection="column"
+                  style={{ flex: 1, minWidth: 0 }}
+                >
+                  <Text bold ml="5px" style={{ lineHeight: 'normal' }} ellipsis>
+                    {new BigNumber(item).div(price).toFixed(18)}
                   </Text>
                   <Text fontSize="14px" style={{ lineHeight: 'normal' }}>
-                    ${new BigNumber(price).times(item).toString()}
+                    ${item}
                   </Text>
                 </Flex>
               </Flex>
