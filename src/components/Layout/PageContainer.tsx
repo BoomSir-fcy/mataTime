@@ -5,8 +5,9 @@ import { BoxProps, Box, Flex, FlexProps } from 'uikit';
 import MenuNav from 'components/MenuNav';
 import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
-import { hideSidebarPath } from '../Sidebar/config';
-import { hideLeftNavPath } from '../MenuNav/config';
+// import { hideSidebarPath } from '../Sidebar/config';
+// import { hideLeftNavPath } from '../MenuNav/config';
+import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig'
 // backgroundVariants
 
 interface PageSectionProps extends FlexProps {
@@ -47,7 +48,7 @@ const GlobalStyle = createGlobalStyle`
       z-index: 9;
     }
   }
-`
+`;
 
 const PageContainer: React.FC = ({ children }) => {
   const { pathname } = useLocation();
@@ -82,7 +83,9 @@ const PageContainer: React.FC = ({ children }) => {
               </Box>
             </InnerBox>
             <LineStyled mr="14px" />
-            {showSidebar && <Sidebar className="mini-swap-Modal__Body--open-sidebar" />}
+            {showSidebar && (
+              <Sidebar className="mini-swap-Modal__Body--open-sidebar" />
+            )}
           </Flex>
         </Flex>
       </ChildrenWrapper>

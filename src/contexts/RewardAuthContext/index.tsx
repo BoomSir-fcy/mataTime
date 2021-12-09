@@ -1,10 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import RewardAuthModal from '../../components/RewardAuth/RewardAuthModal';
 
-interface ArticlePositions {
-  // [number, number] =  [top, bottom], 当前文章边界
-  [articleId: number]: [number, number];
-}
 interface ProviderState {
   visible;
   setVisible;

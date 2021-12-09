@@ -22,8 +22,7 @@ export const additionalColors = {
   bronze: '#E7974D',
   orange: '#FF780B',
   upPrice: '#9AF170',
-  downPrice: '#ec612b',
-  CircleBg: "#3f3f3f"
+  downPrice: '#ec612b'
 };
 
 export const nftTokenColors = {
@@ -81,6 +80,7 @@ export const lightColors: Colors = {
   taskWeek: '#4168ED',
   taskAchievement: '#F5C51D',
   taskTips: '#4C525E',
+  CircleBg: '#e8f0fd',
   gradients: {
     footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
@@ -147,7 +147,7 @@ export const darkColors: Colors = {
   textTips: '#B5B5B5',
   textDisabled: '#666171',
   textOrigin: '#EC612B',
-  textgrey: '#B4C8A9',
+  textgrey: '#B5B5B5',
   disabled: '#524B63',
   borderThemeColor: '#3A4459',
   borderColor: '#4D535F',
@@ -158,6 +158,7 @@ export const darkColors: Colors = {
   taskWeek: '#4168ED',
   taskAchievement: '#F5C51D',
   taskTips: '#4C525E',
+  CircleBg: '#3f3f3f',
   gradients: {
     footer: '#191F2D',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',

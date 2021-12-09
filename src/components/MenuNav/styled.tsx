@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Box, Flex, Text } from 'uikit'
 
 export const NavItemStyled = styled(Flex) <{ isactive?: number }>`
+  align-items: center;
   width: 100%;
   height: 40px;
   cursor: pointer;

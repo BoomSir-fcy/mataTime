@@ -27,6 +27,16 @@ interface SendMessageData {
   data?: unknown
 }
 
+enum ImEventType {
+  MESSAGE = 'message',
+  CLOSE = 'close',
+  ERROR = 'error',
+  OPEN = 'open',
+  SYSTEM_MSG = 'systemMsg',
+  SPEND_TIME = 'spendTime',
+  UNREAD_NOTIFY = 'unreadNotify',
+}
+
 interface ResponseMessageData {
   code: number
   data: unknown
@@ -45,9 +55,13 @@ interface HandleEvent<T> {
 export class IM extends EventTarget {
   connection: WebSocket;
   interval: any;
-  url: string = `ws://192.168.101.122:8888/v1/ws`;
-  // url: string = `${process.env.React_APP_WS_URL}/v1/ws`;
+  // url: string = `ws://192.168.101.112:8888/v1/ws`;
+  url: string = process.env.NODE_ENV === 'production'
+    ? `${process.env.React_APP_WS_URL}/v1/ws`
+    : `${process.env.React_APP_WS_URL}/v1/ws`
+  // : 'ws://192.168.101.122:8888/v1/ws';
   token: string;
+  userToken: string;
 
   expires: number;
   pingIntervalSeconds = 10_000; // 心跳连接时间
@@ -71,10 +85,14 @@ export class IM extends EventTarget {
   static MessageProtocol = MessageProtocol
   messageProtocol = MessageProtocol // 方便在子组件调用
 
-  constructor() {
+  // 事件类型
+  static EventType = ImEventType
+  eventType = ImEventType // 方便在子组件调用
+
+  constructor(userToken: string) {
     super();
     // this.url = prop.url;
-    // this.token = prop.token;
+    this.userToken = userToken;
     this.init()
   }
 
@@ -171,7 +189,7 @@ export class IM extends EventTarget {
 
   private onopenHandle(event: Event) {
     this.loading = false
-    this.dispatchEvent(new Event('open', event))
+    this.dispatchEvent(new Event(ImEventType.OPEN, event))
     this.waitMessageList.forEach(item => {
       this.send(item.ptl, item.data, true)
     })
@@ -180,29 +198,38 @@ export class IM extends EventTarget {
   // TODO: 
   private parseMessage(event: MessageEvent) {
     const data = JSON.parse(event.data)
-    switch (data.code) {
+    switch (data.ptl) {
       case IM.MessageProtocol.WSProtocol_SYSTEM_NOTIFY:
-        this.dispatchEvent(new MessageEvent('systemMsg', {
+        this.dispatchEvent(new MessageEvent(ImEventType.SYSTEM_MSG, {
           data,
+          origin: event.origin,
+          lastEventId: event.lastEventId,
+          source: event.source,
         }))
         break;
       case IM.MessageProtocol.WSProtocol_Spend_Time:
-        this.dispatchEvent(new MessageEvent('spendTime', {
-          data
+        this.dispatchEvent(new MessageEvent(ImEventType.SPEND_TIME, {
+          data,
+          origin: event.origin,
+          lastEventId: event.lastEventId,
+          source: event.source,
         }))
         break;
       case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
-        this.dispatchEvent(new MessageEvent('unreadNotify', {
-          data
+        this.dispatchEvent(new MessageEvent(ImEventType.UNREAD_NOTIFY, {
+          data,
+          origin: event.origin,
+          lastEventId: event.lastEventId,
+          source: event.source,
         }))
         break;
       case IM.MessageProtocol.WSProtocol_HEART_Jump_Jump:
         // 心跳检测 不做处理
         break;
-      case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
-        // TODO: Error
-        // this.addSuspendTpl()
-        break;
+      // case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
+      //   TODO: Error
+      //   this.addSuspendTpl()
+      //   break;
       default:
         console.debug('unread ws code: ', data)
         break
@@ -210,7 +237,7 @@ export class IM extends EventTarget {
   }
 
   private onmessageHandle(event: MessageEvent) {
-    this.dispatchEvent(new MessageEvent('message', {
+    this.dispatchEvent(new MessageEvent(ImEventType.MESSAGE, {
       data: event.data,
       origin: event.origin,
       lastEventId: event.lastEventId,
@@ -222,26 +249,18 @@ export class IM extends EventTarget {
   }
 
   private onerrorHandle(event: Event) {
-    this.dispatchEvent(new Event('error', event))
+    this.dispatchEvent(new Event(ImEventType.ERROR, event))
   }
 
   private oncloseHandle(event: CloseEvent) {
     if ((event.target as IM)?.connection !== this.connection) return
-    this.dispatchEvent(new CloseEvent('close', event))
-
-    // this.connection.removeEventListener('open', this.onopenHandleBind);
-
-    // this.connection.removeEventListener('message', this.onmessageHandle);
-
-    // this.connection.removeEventListener('error', this.onerrorHandle);
-
-    // this.connection.removeEventListener('close', this.oncloseHandleBind);
+    this.dispatchEvent(new CloseEvent(ImEventType.CLOSE, event))
 
     if (this.endConnect || this.loading) return
-    this.init()
+    setTimeout(() => {
+      this.init()
+    }, 3000)
   }
-
-  private oncloseHandleBind = this.oncloseHandle.bind(this)
 
   // 初始化socket
   private async initWebSocket() {
@@ -258,7 +277,7 @@ export class IM extends EventTarget {
 
       this.connection.addEventListener('error', this.onerrorHandle.bind(this));
 
-      this.connection.addEventListener('close', this.oncloseHandleBind.bind(this));
+      this.connection.addEventListener('close', this.oncloseHandle.bind(this));
 
       // 发送心跳包，如果断开了，重连
       this.sendHeart()

@@ -21,4 +21,6 @@ export * from './ContentParsing';
 export * from './Affix';
 export * from './topicEmpty';
 export * from './Time/Timer';
+export * from './Loading';
+export * from './Popup/MorePopup/morePopup';
 export { DropDown } from './DropDown';

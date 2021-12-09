@@ -1,3 +1,4 @@
+import { bgCricle, centerCricle } from 'uikit';
 import styled, { keyframes } from 'styled-components';
 import { BannerProps, CircleIconProps } from './types';
 
@@ -248,14 +249,14 @@ export const AnimationE3center = styled(E3center)`
     animation: ${breathe} 5s linear 0s infinite alternate;
 `
 
-export const BgCircleIcon = styled.img<CircleIconProps>`
+export const BgCircleIcon = styled(bgCricle) <CircleIconProps>`
     width: 100%;
     height: 100%;
 `
 export const AnimationBgCircleIcon = styled(BgCircleIcon)`
     animation: ${rotate} 10s linear infinite;
 `
-export const CenterCircleIcon = styled.img<CircleIconProps>`
+export const CenterCircleIcon = styled(centerCricle) <CircleIconProps>`
     width: 100%;
     height: 100%;
 `

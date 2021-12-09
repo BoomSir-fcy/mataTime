@@ -9,7 +9,7 @@ import { useRewardAuthor } from 'hooks/useContract';
 import { getRewardAuthorAddress, getBnbAddress } from 'utils/addressHelpers';
 import { Api } from 'apis';
 
-export const RewardAuthorList = [0.01, 0.02, 30, 50, 100, 200];
+export const RewardAuthorList = [1, 5, 10, 20, 50, 100];
 
 // 用户打赏
 export const RewardAuthorContract = () => {
@@ -28,6 +28,7 @@ export const RewardAuthorContract = () => {
       const tokenView = await multicall(rewardAuthorAbi, calls);
       return tokenView[0][0];
     } catch (error) {
+      console.log(error);
       return [];
     }
   }, []);

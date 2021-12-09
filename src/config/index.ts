@@ -20,3 +20,5 @@ export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)
 
 export const BSC_BLOCK_TIME = 3
 export const BLOCKS_PER_YEAR = new BigNumber((60 / BSC_BLOCK_TIME) * 60 * 24 * 365) // 10512000
+
+export const REFRESH_TIME_BURN_PER_CIRCLE = 1000 * 60 // 60 秒 转完一圈

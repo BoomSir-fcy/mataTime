@@ -12,7 +12,9 @@ import {
   setUserNftStake,
   setNftAddr,
   resetLoginState,
-  setSigninLoading
+  setSigninLoading,
+  setUserToken,
+  setUserUnreadMsgNum,
 } from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
@@ -35,6 +37,7 @@ const initialState = {
   nftStatus: false,
   nftList: [],
   nftAddr: [],
+  token: window.localStorage.getItem(storage.Token) || '',
   unReadMsg: {
     message_at_me: 0,
     message_comment: 0,
@@ -71,17 +74,6 @@ export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
   }
 );
 
-// Async thunks
-export const fetchUserUnreadMsgNum = createAsyncThunk<Api.News.UnreadMsgNum>(
-  'login/fetchUserUnreadMsgNum',
-  async () => {
-    const res = await Api.NewsApi.getUnreadMsgNum();
-    if (Api.isSuccess(res)) {
-      return res.data
-    }
-    return null
-  }
-);
 
 export const login = createSlice({
   name: 'login',
@@ -137,12 +129,22 @@ export const login = createSlice({
         state.nftStatus = true;
         state.nftList = action.payload;
       })
-      .addCase(fetchUserUnreadMsgNum.fulfilled, (state, action) => {
+      .addCase(setUserToken, (state, { payload }) => {
+        if (payload) {
+          state.token = payload;
+        } else {
+          state.token = '';
+        }
+      })
+      .addCase(setUserUnreadMsgNum, (state, action: { payload: Partial<Api.News.UnreadMsgNum> }) => {
         if (action.payload) {
-          const mineTotalMsgNum = action.payload.message_at_me + action.payload.message_like + action.payload.message_comment
-          state.unReadMsg = {
+          const unreadMsg = {
             ...state.unReadMsg,
             ...action.payload,
+          }
+          const mineTotalMsgNum = unreadMsg.message_at_me + unreadMsg.message_like + unreadMsg.message_comment + unreadMsg.message_system
+          state.unReadMsg = {
+            ...unreadMsg,
             mineTotalMsgNum,
           }
         }
@@ -150,6 +152,8 @@ export const login = createSlice({
       .addCase(resetLoginState, state => {
         Object.keys(state).forEach(key => {
           state[key] = cloneDeep(initialState[key]);
+          state.token = ''; // 单独设置 initialState.token的初始值可能不为空
+          localStorage.removeItem(storage.Token); // 移除token
         });
       });
   }

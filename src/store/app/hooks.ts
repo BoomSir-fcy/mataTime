@@ -9,7 +9,10 @@ import { languange } from './type';
 export const useThemeManager = (): [boolean, () => void] => {
   const dispatch = useDispatch<AppDispatch>();
   const setting = useStore(p => p.appReducer.systemCustom);
-  const isDark = useSelector<AppState, AppState['appReducer']['systemCustom']['isDark']>(state => state.appReducer.systemCustom.isDark);
+  const isDark = useSelector<
+    AppState,
+    AppState['appReducer']['systemCustom']['isDark']
+  >(state => state.appReducer.systemCustom.isDark);
 
   const toggleThemeHandle = useCallback(() => {
     dispatch(toggleTheme());
@@ -40,12 +43,15 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
 
   const setUseLanguage = useCallback(
     val => {
+      console.log(val);
       const systemSetting = {
         ...setting,
         languange: val
       };
-      dispatch(setSystemCustom(systemSetting));
+      console.log(systemSetting);
+
       setLanguage(val.value);
+      dispatch(setSystemCustom(systemSetting));
     },
     [dispatch, setting]
   );

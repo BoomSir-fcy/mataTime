@@ -20,12 +20,12 @@ import HistoryModal from './Pops/HistoryModal';
 
 const Content = styled(Box)`
 flex: 1;
-min-width: 60%;
+min-width: 52%;
 ${({ theme }) => theme.mediaQueriesSize.padding}
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `
 const LeftBox = styled(Box)`
-min-width: 230px;
+min-width: 236px;
 flex:1;
 `
 const Title = styled(Flex)`
@@ -35,7 +35,7 @@ const NumberBox = styled(Flex)`
   width: 100px;
   height: 35px;
   background: ${({ theme }) => theme.colors.backgroundMenu};
-  box-shadow: inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: 10px;
   align-items: center;
   justify-content: center;
@@ -49,7 +49,7 @@ const NumberBox = styled(Flex)`
 `
 const RightBox = styled(Box)`
 flex:1;
-min-width: 230px;
+min-width: 200px;
 `
 const InputBox = styled(Flex)`
 position: relative;
@@ -166,7 +166,7 @@ const Recharge: React.FC<init> = ({ Token, balance, TokenAddr, decimals = 18 }) 
       <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
         <LeftBox>
           <Title mb='24px'>
-            <Text mr='28px' fontSize='16px'>充值{Token}</Text>
+            <Text mr='16px' fontSize='16px'>{t('AccountRecharge')}{Token}</Text>
             <Text style={{ cursor: 'pointer' }} fontSize='14px' color='textPrimary' onClick={() => setVisibleHistory(true)}>{t('Account history record')}</Text>
           </Title>
           <Flex alignItems='center' flexWrap='wrap'>

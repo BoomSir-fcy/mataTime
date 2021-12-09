@@ -20,15 +20,12 @@ export default function HttpUpdater() {
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    // TODO:
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
-    localStorage.removeItem(storage.Token);
   }, [dispatch, history]);
 
+  // 余额不足
   const handleInsufficient = useCallback(() => {
-    // TODO:
-    // alert('余额不足')
     setVisible(true)
   }, [setVisible])
 
@@ -50,7 +47,7 @@ export default function HttpUpdater() {
       <InsufficientBalanceModal
         onConfirm={() => {
           setVisible(false)
-          history.push('/test');
+          history.push('/faucet-smart');
         }}
         onSecondary={() => {
           setVisible(false)

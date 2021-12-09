@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { Container } from 'components'
 import WalletBox from './walletBox'
 import Recharge from './Recharge'
 import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
-import { useFetchWalletInfo, useFetchApproveNum } from 'store/wallet/hooks';
+import { useFetchWalletInfo, useFetchApproveNum, useFetTimeIncometoday } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
@@ -20,13 +20,14 @@ const NoPdBottom = styled(Container)`
 padding: 0;
 `
 const ScrollBox = styled(Box)`
-height:calc(100vh - 70px);
+padding-top: 70px;
+/* height:calc(100vh - 70px);
 overflow-y: auto;
 ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 -ms-overflow-style: none;
-scrollbar-width: none;
+scrollbar-width: none; */
 `
 const BorderWalletBox = styled(WalletBox)`
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -70,6 +71,7 @@ height: 36px;
 const TokenAccount: React.FC = () => {
   useFetchWalletInfo()
   useFetchApproveNum()
+  useFetTimeIncometoday(7)
   const { t } = useTranslation();
   const { account } = useWeb3React()
   const info = {
@@ -93,6 +95,22 @@ const TokenAccount: React.FC = () => {
   const { balance: matterBalance } = useTokenBalance(MatterAddress)
   const BalanceList = useStore(p => p.wallet.wallet);
   const activeToken = useStore(p => p.wallet.activeToken);
+  const TimeIncometoday = useStore(p => p.wallet.TimeIncometoday);
+
+  const TimeTodayIncome = useMemo(() => {
+    const num = Number(TimeIncometoday.today_income)
+    return num
+  }, [TimeIncometoday])
+
+  const TimeTotalIncome = useMemo(() => {
+    const num = Number(TimeIncometoday.total_income)
+    return num
+  }, [TimeIncometoday])
+
+  const TimeChartList = useMemo(() => {
+    const num = Number(TimeIncometoday.data)
+    return num
+  }, [TimeIncometoday])
 
   const getMyBalance = async () => {
     for (let i = 0; i < BalanceList.length; i++) {
@@ -126,7 +144,7 @@ const TokenAccount: React.FC = () => {
   }, [BalanceList, account, activeToken])
   return (
     <NoPdBottom>
-      <WalletHead title={t('我的钱包')} />
+      <WalletHead title={t('Account My Wallet')} />
       <ScrollBox>
         <Flex flexWrap='wrap' justifyContent='space-between'>
           <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
@@ -135,43 +153,43 @@ const TokenAccount: React.FC = () => {
         {/* token切换 */}
         <ContentTab>
           <Flex alignItems='baseline'>
-            <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time收益</TabText>
-            <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter收益</TabText>
-          </Flex>
-        </ContentTab>
-        {/* 收益切换 */}
-        <ContentTab>
-          <Flex alignItems='baseline'>
-            {ActiveToken === 1 ?
-              <>
-                <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>内容收益</TabText>
-                <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>打赏收益</TabText>
-              </>
-              :
-              <TabText className='active'>Matter收益</TabText>
-            }
+            <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time {t('Rewards')}</TabText>
+            <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter {t('Rewards')}</TabText>
           </Flex>
           <RightBox justifyContent='space-between' alignItems='center'>
             <IncomeBox>
               <Img src={require('assets/images/myWallet/today.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-                <Text fontSize='14px' color='textTips'>当日收益</Text>
-                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
+                <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
+                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(TimeTodayIncome)}</Text>
               </Flex>
             </IncomeBox>
             <IncomeBox>
               <Img src={require('assets/images/myWallet/total.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-                <Text fontSize='14px' color='textTips'>累计收益</Text>
-                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(21565)}</Text>
+                <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
+                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(TimeTotalIncome)}</Text>
               </Flex>
             </IncomeBox>
           </RightBox>
         </ContentTab>
+        {/* 收益切换 */}
+        {/* <ContentTab>
+          <Flex alignItems='baseline'>
+            {ActiveToken === 1 ?
+              <>
+                <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>{t('Account Content income')}</TabText>
+                <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>{t('Account Reward income')}</TabText>
+              </>
+              :
+              <TabText className='active'>Matter {t('Rewards')}</TabText>
+            }
+          </Flex>
+        </ContentTab> */}
         {
           ActiveToken !== 2 ?
             <>
-              <Chart />
+              <Chart type={ActiveTab} chartData={TimeChartList} />
               <EarningsRecord type={ActiveTab} />
             </>
             :

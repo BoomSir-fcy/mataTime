@@ -16,9 +16,14 @@ export interface WalletState {
   CurrentRound: TimeInfo
   TimeExchangeList: ExchangeList[]
   activeToken: string
-  rewardNum: number
+  spendTimeInfo: {
+    burnCoinTody: number,
+    averageBurnTime: number,
+  }
+  rewardNum: number,
+  TimeIncomeList: IncomeListInfo,
+  TimeIncometoday: IncometodayInfo
 }
-
 export interface TimeInfo {
   long_time: number,
   max_dsg_token: number,
@@ -38,5 +43,17 @@ export interface ExchangeList {
   totalPage: number,
   page: number
   id: number
-  end: number
+}
+
+export interface IncomeListInfo {
+  index: number
+  record: []
+  size: number
+  total: number
+}
+
+export interface IncometodayInfo {
+  data: []
+  today_income: string
+  total_income: string
 }

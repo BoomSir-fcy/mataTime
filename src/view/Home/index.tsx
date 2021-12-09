@@ -2,19 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Editor, Crumbs } from 'components';
 import { withRouter } from 'react-router-dom';
-import useReadArticle from 'contexts/ImContext/hooks/useReadArticle';
+import useReadArticle from 'hooks/imHooks/useReadArticle';
 import { useToast } from 'hooks';
 import { useTranslation } from 'contexts/Localization';
 import { Flex, Box } from 'uikit';
-import { Menu } from './left';
 import { Header, Tabs, ArticleList } from './center';
-import {
-  Search,
-  Swap,
-  RecommendPeople,
-  HotTopic,
-  FooterCopyright
-} from './right';
 
 import { Api } from 'apis';
 
@@ -46,11 +38,14 @@ const RightCard = styled(Flex)`
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
-  useReadArticle();
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({});
   const { toastError } = useToast();
   // const  editorRef = useRef();
+
+  // 阅读文章扣费
+  const [nonce, setNonce] = useState(0)
+  useReadArticle(nonce);
 
   const sendArticle = async (content: string, image_urls, remind_user) => {
     if (!content) return false;
@@ -92,42 +87,19 @@ const Home: React.FC = (props: any) => {
   return (
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
-        {/* <LeftCard>
-          <Affix offsetTop={0} positionObj={{}}>
-            <Menu />
-          </Affix>
-        </LeftCard> */}
         <CenterCard>
-          {/**
-           * @review
-           * 1.代码分离不清晰
-           * 2.同一页面使用差异性路由
-           * 3.Header 组件应该为公共组件
-           * 4.字符串拼接
-           */}
-          {/* <Header {...props} title={t('homeHeaderTitle')} /> */}
           <Crumbs title={t('homeHeaderTitle')} />
           <Editor type="post" sendArticle={sendArticle} />
           <Tabs tabsChange={tabsChange} />
-          {/* <NewsMe {...props}></NewsMe> */}
           <ArticleList
+            setNonce={setNonce}
+            nonce={nonce}
             key={refresh}
             topicName={match.params.name}
             filterValObj={filterVal}
             {...props}
           />
         </CenterCard>
-        {/* <RightCard>
-          <Affix offsetTop={0} positionObj={{}}>
-            <>
-              <Search />
-              <Swap />
-              <RecommendPeople />
-              <HotTopic {...props} />
-              <FooterCopyright />
-            </>
-          </Affix>
-        </RightCard> */}
       </Flex>
     </PageContainer>
   );

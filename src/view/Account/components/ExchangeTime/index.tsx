@@ -15,13 +15,14 @@ import CommonCircle from "components/Cirde/CommonCircle";
 
 
 const ScrollBox = styled(Box)`
-height:calc(100vh - 70px);
+padding-top: 70px;
+/* height:calc(100vh - 70px);
 overflow-y: auto;
 ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 -ms-overflow-style: none;
-scrollbar-width: none;
+scrollbar-width: none; */
 `
 const VestingBox = styled(Flex)`
 height:350px;
@@ -80,7 +81,7 @@ const Exchange: React.FC = () => {
 
   return (
     <>
-      <WalletHead title={t('Time兑换')} />
+      <WalletHead title='Time' />
       <ScrollBox>
         <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
         <ExchangeTime nowRound={TimeShopInfo} />

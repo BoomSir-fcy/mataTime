@@ -1,9 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { save, load } from 'redux-localstorage-simple';
-import { ToastContainerProps } from 'react-toastify';
 import { appReducer, appAction, App } from './app';
-import { toastContainer } from './app/actions';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from './login';
 import coinsReduce from './coins/reducer';
 import * as coinsAction from './coins/actions';
@@ -12,7 +10,7 @@ import poolsReduce from './pools';
 import type { CoinsState } from './coins/reducer';
 import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
-import * as walletAction from './wallet/actions'
+import * as walletAction from './wallet/actions';
 export interface Store {
   appReducer: App;
   loginReducer: Login;
@@ -30,7 +28,7 @@ export const store = configureStore({
     loginReducer,
     coins: coinsReduce,
     pools: poolsReduce,
-    wallet: walletReduce,
+    wallet: walletReduce
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -51,13 +49,7 @@ export const fetchThunk = {
 };
 
 export const Dispatch = {
-  toast: {
-    show: (params: appAction.toastInterface) =>
-      store.dispatch({ type: 'toast/show', payload: params }),
-    container: (params: ToastContainerProps) =>
-      store.dispatch(toastContainer(params)),
-    hide: () => store.dispatch({ type: 'toast/hide' })
-  }
+  toast: {}
 };
 
 export function useStore<TSelected>(

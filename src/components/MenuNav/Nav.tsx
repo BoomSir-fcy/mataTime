@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Api } from 'apis';
 import { Box, Flex } from 'uikit';
+import config from 'config/constants/navConfig';
 import { useTranslation } from 'contexts/Localization';
 import { Icon } from 'components';
 import NavItem from './NavItem';
 import NavGoback from './NavGoback';
-import config from './config';
-import { useFetchUnreadMsg, useReadMsg } from './hooks';
+import { useReadMsg } from './hooks';
 
 export interface NavProps {
   // seconds?: number
@@ -48,7 +48,6 @@ const Nav: React.FC<NavProps> = ({ }) => {
   const menu = config.filter(row => row.lable);
 
   useReadMsg(pathname);
-  useFetchUnreadMsg(notification);
 
   const activeChildren = useMemo(() => {
     const activeConfig = config.find(item =>
@@ -71,10 +70,12 @@ const Nav: React.FC<NavProps> = ({ }) => {
         {menu.map(item => {
           return (
             <NavItem
+              key={item.path}
               icon={item.icon}
               activeIcon={item.activeIcon}
               coming={item.coming}
               lable={item.lable}
+              hide={item.hide}
               path={item.path}
               // hide={item.hide}
               pathname={pathname}
@@ -94,6 +95,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
             {displayChildren.map(item => {
               return (
                 <NavItem
+                  key={item.path}
                   icon={item.icon}
                   activeIcon={item.activeIcon || item.icon}
                   coming={item.coming}

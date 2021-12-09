@@ -5,11 +5,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCashierDeskAddress, getDsgAddress, getTimeAddress, getTimeShopAddress } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json'
 import timeShopAbi from 'config/abi/TimeShop.json';
+import { REFRESH_TIME_BURN_PER_CIRCLE } from 'config'
 import { Api } from 'apis';
 import multicall from 'utils/multicall';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { AppDispatch, AppState } from '../index'
-import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync, fetchTimeExchangeList, fetchRewardNumAsync } from './reducer'
+import {
+  fetchWalletAsync,
+  fetchTimeShopInfo,
+  fetchApproveNumAsync,
+  fetchDSGApproveNumAsync,
+  fetchTimeExchangeList,
+  fetchRewardNumAsync,
+  fetchWalletAverageburntime,
+  fetchWalletBurncointoday,
+  fetchIncomeList,
+  fetchTimeIncometoday,
+} from './reducer'
 import { ExchangeList } from './type';
 import { BIG_TEN } from 'utils/bigNumber';
 
@@ -46,6 +58,22 @@ const useRefresh = (slow?) => {
         setFefresh((prev) => prev + 1)
       }
     }, slow ? SLOW_INTERVAL : REFRESH_INTERVAL)
+    return () => clearInterval(interval)
+  }, [isBrowserTabActiveRef])
+
+  return fefresh
+}
+
+const useRefreshTimeBurn = () => {
+  const [fefresh, setFefresh] = useState(0)
+  const isBrowserTabActiveRef = useIsBrowserTabActive()
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (isBrowserTabActiveRef.current) {
+        setFefresh((prev) => prev + 1)
+      }
+    }, REFRESH_TIME_BURN_PER_CIRCLE)
     return () => clearInterval(interval)
   }, [isBrowserTabActiveRef])
 
@@ -117,8 +145,6 @@ export const FetchTimeShopInfo = async () => {
       right_now_release: Number(new BigNumber(item.right_now_release.toJSON().hex)),
       total_dsg: getBalanceNumber(new BigNumber(item.total_dsg.toJSON().hex))
     }))
-    console.log(info, "------------------------");
-
     return info
   } catch (error) {
     console.log(error);
@@ -162,9 +188,8 @@ export const FetchReleaseAmount = async (list: any) => {
   }
 }
 // 获取Time详情
-export const FetchExchangeList = async (account: string, page: number, pageSize: number, LastEnd: number) => {
+export const FetchExchangeList = async (account: string, page: number, pageSize: number) => {
   const TimeShop = getTimeShopAddress()
-
   const getTotalPage = (totalNum) => {
     if (pageSize != 0 && totalNum % pageSize == 0) {
       return parseInt(String(totalNum / pageSize));
@@ -189,22 +214,29 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   }
   // 获取总条数
   const totalNum = await FetchRecordLength(account)
+  if (Number(totalNum) === 0) {
+    return [
+      {
+        round: 0,
+        endTime: 0,
+        latestTime: 0,
+        totalAmount: 0,
+        debtAmount: 0,
+        RemainingAmount: 0,
+        totalPage: 0,
+        page: page,
+        id: 0
+      }
+    ]
+  }
   // 获取总页数
-  const totalPage = getTotalPage(totalNum)
+  const totalPage = getTotalPage(Number(totalNum))
   // 获取当前页下标区间后返回对应请求参数列表
-  const start = LastEnd > 0 ? LastEnd - 1 : (((totalPage * pageSize - (page - 1) * pageSize) - 1) > Number(totalNum) - 1 ? Number(totalNum) - 1 : ((totalPage * pageSize - (page - 1) * pageSize) - 1))
+  const remainder = pageSize - Number(totalNum) % pageSize;
+  const start = (totalPage * pageSize - (page - 1) * pageSize) - 1 - remainder
   const end = start - pageSize + 1 < 0 ? 0 : start - pageSize + 1
-  console.log(totalNum, totalPage, start, end, LastEnd);
-
+  console.log(totalNum, totalPage, start, end, remainder);
   const calls = ListArr(start, end)
-  // const calls = [
-  //   {
-  //     address: TimeShop,
-  //     name: 'getUserBuyRecords',
-  //     params: [account]
-  //   },
-  // ]
-  console.log(calls, "calls");
   try {
     const arr = await multicall(timeShopAbi, calls)
     const List = arr.map((item, index) => ({
@@ -216,19 +248,27 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
       RemainingAmount: getBalanceNumber(new BigNumber(item[0].totalAmount.toJSON().hex).minus(new BigNumber(item[0].debtAmount.toJSON().hex))),
       totalPage: totalPage,
       page: page,
-      id: Number(end) - index - 1,
-      end: end
+      id: start - index
     }))
     const AmountList = await FetchReleaseAmount(List)
     const completeList = AmountList.map((item, index) => ({
       ...List[index],
       ReleaseAmount: item
     }))
-    console.log(completeList, "completeList");
     return completeList
   } catch (error) {
     console.log(error);
-    return []
+    return [{
+      round: 0,
+      endTime: 0,
+      latestTime: 0,
+      totalAmount: 0,
+      debtAmount: 0,
+      RemainingAmount: 0,
+      totalPage: 0,
+      page: page,
+      id: 0
+    }]
   }
 }
 
@@ -250,14 +290,60 @@ export const FetchRewardNum = async (account: string) => {
   }
 }
 
+// time收益记录
+export const FetchIncomeList = async (page, size) => {
+  const index = page * size
+  try {
+    const res = await Api.AccountApi.TimeIncomerecord({ index, size })
+    if (Api.isSuccess(res)) {
+      return res.data
+    } else {
+      throw new Error("errCode");
+    }
+  } catch (error) {
+    console.error(error);
+    throw error
+  }
+}
 
+// time今日收益和K线记录
+export const FetchTimeIncometoday = async (days) => {
+  try {
+    const res = await Api.AccountApi.TimeIncometoday({ days })
+    if (Api.isSuccess(res)) {
+      return res.data
+    } else {
+      throw new Error("errCode");
+    }
+  } catch (error) {
+    console.error(error);
+    throw error
+  }
+}
+// 获取time收益记录
+export const useFetTimeIncomeList = (page: number, pageSize: number) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  useEffect(() => {
+    if (account) dispatch(fetchIncomeList({ page, pageSize }))
+  }, [account, page, pageSize])
+}
+
+// 获取time今日收益和K线记录
+export const useFetTimeIncometoday = (day: number) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  useEffect(() => {
+    if (account) dispatch(fetchTimeIncometoday({ day }))
+  }, [account, day,])
+}
 // 获取钱包余额详情
 export const useFetchWalletInfo = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   const refresh = useRefresh()
   useEffect(() => {
-    account && dispatch(fetchWalletAsync())
+    if (account) dispatch(fetchWalletAsync())
   }, [refresh, account])
 }
 
@@ -276,7 +362,7 @@ export const useFetTimeInfo = () => {
   const { account } = useWeb3React()
   const refresh = useRefresh(1)
   useEffect(() => {
-    account && dispatch(fetchTimeShopInfo())
+    dispatch(fetchTimeShopInfo())
   }, [refresh, account])
 }
 
@@ -285,7 +371,7 @@ export const useFetTimeExchangeList = (page: number, pageSize: number) => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   useEffect(() => {
-    account && dispatch(fetchTimeExchangeList({ account, page, pageSize }))
+    if (account) dispatch(fetchTimeExchangeList({ account, page, pageSize }))
   }, [account, page, pageSize])
 }
 // 获取DSG授权数量
@@ -293,7 +379,7 @@ export const useFetchDSGApproveNum = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   useEffect(() => {
-    dispatch(fetchDSGApproveNumAsync(account))
+    if (account) dispatch(fetchDSGApproveNumAsync(account))
   }, [account])
 }
 // 
@@ -303,4 +389,16 @@ export const useFetchRewardNum = () => {
   useEffect(() => {
     dispatch(fetchRewardNumAsync(account))
   }, [account])
+}
+
+export const useFetchTimeBurnData = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  const refresh = useRefreshTimeBurn()
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchWalletAverageburntime())
+      dispatch(fetchWalletBurncointoday())
+    }
+  }, [refresh, account])
 }

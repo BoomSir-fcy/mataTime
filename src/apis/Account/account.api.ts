@@ -2,7 +2,7 @@ import { Http } from '../http';
 
 export class AccountApi extends Http {
   async withdraw(params: Api.Account.DrawbalanceSignMessage) {
-    const res = await this.post('/v1/wallet/drawbalance', params);
+    const res = await this.post('/v1/wallet/withdrawbalance', params);
     return res;
   }
 
@@ -14,5 +14,43 @@ export class AccountApi extends Http {
   async history(params?: Api.Account.History) {
     const res = await this.get('/v1/wallet/chargeandwithdraw', params);
     return res;
+  }
+
+  async TimeIncomerecord(params?: Api.Account.TimeIncomerecord) {
+    const res = await this.get('/v1/wallet/incomerecord', params);
+    return res;
+  }
+
+  async TimeIncometoday(params?: Api.Account.TimeIncometoday) {
+    const res = await this.get('/v1/wallet/incometoday', params);
+    return res;
+  }
+
+  async getRewardList(params?: any) {
+    const res = await this.get('/v1/reward/reward-author/list', params);
+    return res;
+  }
+
+  async getIncome() {
+    const res = await this.get('/v1/reward/reward-author/user-stat');
+    return res;
+  }
+
+  // 今日 消耗
+  async getWalletBurncointoday() {
+    const res = await this.get('v1/wallet/burncointoday');
+    if (Http.checkSuccess(res)) {
+      return res;
+    }
+    return null
+  }
+
+  // 平均消耗
+  async getWalletAverageburntime() {
+    const res = await this.get('v1/wallet/averageburntime');
+    if (Http.checkSuccess(res)) {
+      return res;
+    }
+    return null
   }
 }

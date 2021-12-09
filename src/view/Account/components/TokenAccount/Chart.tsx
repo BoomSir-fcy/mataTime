@@ -17,47 +17,46 @@ opacity: 0.96; */
 `
 
 interface Init {
-  Token: string
-  Balance: number
-  TokenAddr: string
-  BalanceInfo: Api.Account.Balance
+  type?: number
+  token?: number,
+  chartData: any
 }
-const Chart: React.FC = () => {
+const Chart: React.FC<Init> = ({ type, token, chartData }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const [liquidityHover, setLiquidityHover] = useState<number | undefined>()
   const [liquidityDateHover, setLiquidityDateHover] = useState<string | undefined>()
 
-  const chartData = [
-    {
-      date: 1635758812,
-      val: 32
-    },
-    {
-      date: 1635845212,
-      val: 42
-    },
-    {
-      date: 1635931612,
-      val: 51
-    },
-    {
-      date: 1636018012,
-      val: 32
-    },
-    {
-      date: 1636104412,
-      val: 77
-    },
-    {
-      date: 1636190812,
-      val: 80
-    },
-    {
-      date: 1636277212,
-      val: 10
-    }
-  ]
+  // const chartData = [
+  //   {
+  //     date: 1635758812,
+  //     val: 32
+  //   },
+  //   {
+  //     date: 1635845212,
+  //     val: 42
+  //   },
+  //   {
+  //     date: 1635931612,
+  //     val: 51
+  //   },
+  //   {
+  //     date: 1636018012,
+  //     val: 32
+  //   },
+  //   {
+  //     date: 1636104412,
+  //     val: 77
+  //   },
+  //   {
+  //     date: 1636190812,
+  //     val: 80
+  //   },
+  //   {
+  //     date: 1636277212,
+  //     val: 10
+  //   }
+  // ]
 
   const formattedLiquidityData = useMemo(() => {
     if (chartData) {
@@ -72,7 +71,7 @@ const Chart: React.FC = () => {
   }, [chartData])
   return (
     <ChartsBox>
-      <Text color='#E3E3E3'>近7日内容收益趋势</Text>
+      <Text color='textTips'>{t('Account Earnings trend in the past 7 days')}</Text>
       <Box height="360px">
         <LineChart
           data={formattedLiquidityData}

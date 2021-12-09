@@ -26,6 +26,7 @@ const AnswerRuleList = styled(Box)`
 `
 const BgImgBox = styled(Box)`
   background-image: url(${BgImg});
+  background-size: 100%;
 `
 const HeadText = styled(Text)`
   color:${({ theme }) => theme.colors.textTips};
@@ -37,13 +38,15 @@ const RowText = styled(Text)`
 `
 
 const ScrollBox = styled(Box)`
-height:calc(100vh - 70px);
+padding-top: 70px;
+max-width:970px;
+/* height:calc(100vh - 70px);
 overflow-y: auto;
 ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 -ms-overflow-style: none;
-scrollbar-width: none;
+scrollbar-width: none; */
 `
 
 const FAQCircle = () => {
@@ -52,16 +55,16 @@ const FAQCircle = () => {
       <ComponentsWrapper>
         <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-13rem 0 0 -23rem" isAnimation>
           <Box width="14rem" height="14rem" margin="10rem 0 0 9rem">
-            <Text fontSize="40px" lineHeight="54px" bold>FAQ</Text>
+            <Text fontSize="40px" color='white' lineHeight="54px" bold>FAQ</Text>
           </Box>
         </CommonCircle>
       </ComponentsWrapper>
-    </BgImgBox>
+    </BgImgBox >
   );
 }
 
-const FaqQuestion = ({ children }) => <Text>{children}</Text>;
-const FaqAnswerText = ({ children }) => <Text>{children}</Text>;
+const FaqQuestion = ({ children }) => <Text color='white_black'>{children}</Text>;
+const FaqAnswerText = ({ children }) => <Text color='white_black'>{children}</Text>;
 
 const Faq: React.FC = () => {
   const { t } = useTranslation();
@@ -95,11 +98,11 @@ const Faq: React.FC = () => {
               ruleDataList.map(item =>
                 <Flex mt="20px" key={item.period}>
                   <RowText width="8%">{item.period}</RowText>
-                  <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage)}</RowText>
-                  <RowText width="15%">{formatLocalisedCompactNumber(item.need)}</RowText>
+                  <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage, 6)}</RowText>
+                  <RowText width="15%">{formatLocalisedCompactNumber(item.need, 6)}</RowText>
                   <RowText width="25%">{item.price}</RowText>
                   <RowText width="12%">{item.rate}</RowText>
-                  <RowText width="20%">{formatLocalisedCompactNumber(item.total)}</RowText>
+                  <RowText width="20%">{formatLocalisedCompactNumber(item.total, 6)}</RowText>
                   <RowText width="15%">{item.month}个月</RowText>
                 </Flex>)
             }
