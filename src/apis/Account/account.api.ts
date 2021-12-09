@@ -25,4 +25,22 @@ export class AccountApi extends Http {
     const res = await this.get('/v1/reward/reward-author/user-stat');
     return res;
   }
+
+  // 今日 消耗
+  async getWalletBurncointoday() {
+    const res = await this.get('v1/wallet/burncointoday');
+    if (Http.checkSuccess(res)) {
+      return res;
+    }
+    return null
+  }
+
+  // 平均消耗
+  async getWalletAverageburntime() {
+    const res = await this.get('v1/wallet/averageburntime');
+    if (Http.checkSuccess(res)) {
+      return res;
+    }
+    return null
+  }
 }

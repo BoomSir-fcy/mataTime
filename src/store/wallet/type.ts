@@ -17,8 +17,11 @@ export interface WalletState {
   TimeExchangeList: ExchangeList[]
   activeToken: string
   rewardNum: number
+  spendTimeInfo: {
+    burnCoinTody: number,
+    averageBurnTime: number,
+  }
 }
-
 export interface TimeInfo {
   long_time: number,
   max_dsg_token: number,
