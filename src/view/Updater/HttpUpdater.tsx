@@ -49,7 +49,7 @@ export default function HttpUpdater() {
       <InsufficientBalanceModal
         onConfirm={() => {
           setVisible(false)
-          history.push('/test');
+          history.push('/faucet-smart');
         }}
         onSecondary={() => {
           setVisible(false)
