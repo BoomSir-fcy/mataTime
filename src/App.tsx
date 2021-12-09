@@ -22,7 +22,7 @@ import AccountUpdater from './view/Updater/AccountUpdater';
 import HttpUpdater from './view/Updater/HttpUpdater';
 
 import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/es-us';
+import 'dayjs/locale/en';
 dayjs.extend(relativeTime);
 
 // 路由加载

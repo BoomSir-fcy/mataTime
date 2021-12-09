@@ -1,40 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Flex, Box, Card, Text } from 'uikit';
-import { useTranslation } from 'contexts/Localization';
-import { Avatar, Icon } from 'components';
-import { Api } from 'apis';
+import styled, { useTheme } from 'styled-components';
+import { debounce } from 'lodash';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Flex, Box, Card, Text } from 'uikit';
+import { useToast } from 'hooks';
+import { useTranslation } from 'contexts/Localization';
+import { Icon } from 'components';
+import { Api } from 'apis';
 
 const HotTopicBox = styled(Card)`
   width: 300px;
   margin-top: 15px;
   padding: 20px 18px;
 `;
-const Hot = styled.span`
+const Hot = styled(Box)`
   flex: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   font-size: 16px;
-  color: ${({ theme }) => (theme.isDark ? '#7393FF' : '#4168ED')};
+  color: ${({ theme }) => theme.colors.ThemeText};
   cursor: pointer;
+  transition: all 0.1s ease;
   :hover {
     text-decoration: underline;
-    transition: all 0.3s;
   }
 `;
-const HotCount = styled.span`
-  font-size: 16px;
+const HotCount = styled(Text)`
   text-align: right;
-  color: ${({ theme }) => (theme.isDark ? '#B5B5B5' : '#7A83A0')};
+  color: ${({ theme }) => theme.colors.textgrey};
 `;
 
 const HotTopic: React.FC = () => {
   const { t } = useTranslation();
+  const { toastSuccess } = useToast();
   const [page, setPage] = useState(1);
   const [hotTopicList, setHotTopicList] = useState([]);
+  const theme = useTheme();
 
   useEffect(() => {
     getList(false);
@@ -45,7 +47,7 @@ const HotTopic: React.FC = () => {
       if (Api.isSuccess(res)) {
         setHotTopicList(res.data.List);
         if (isToast) {
-          toast.success(t('HotTopicRefreshSuccess'));
+          toastSuccess(t('HotTopicRefreshSuccess'));
         }
         if (page < res.data.total_page) {
           setPage(page + 1);
@@ -64,10 +66,10 @@ const HotTopic: React.FC = () => {
         </Text>
         <Icon
           current={1}
-          onClick={getList.bind(this, true)}
+          onClick={debounce(() => getList(true), 500)}
           name="icon-jiazai_shuaxin"
           margin="0"
-          color="#7393FF"
+          color={theme.colors.textPrimary}
         />
       </Flex>
       <Flex justifyContent="space-between" flexDirection="column">
@@ -77,10 +79,8 @@ const HotTopic: React.FC = () => {
             mt="20px"
             justifyContent="space-between"
           >
-            <Hot>
-              <Link to={`/topicList/${item.tid}/${item.topic_name}`}>
-                #{item.topic_name}#
-              </Link>
+            <Hot as={Link} to={`/topicList/${item.tid}/${item.topic_name}`}>
+              #{item.topic_name}#
             </Hot>
             <HotCount>
               {t('HotTopicUnit', {
