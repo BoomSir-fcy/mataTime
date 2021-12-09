@@ -159,9 +159,6 @@ const BoxStyled = styled(Box)`
 `
 
 const Shalou: React.FC<BoxProps> = (...props) => {
-  const { t } = useTranslation()
-
-  console.log(props, '=props')
 
   return (
     <BoxStyled {...props}>

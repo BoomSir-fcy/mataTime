@@ -122,7 +122,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           }
         </Button>
       </Flex>
-      <Text mt="12px" textAlign="center" fontSize="14px" color="textTips">*{t('The pledge can be taken out after the expiration of the time')}</Text>
+      <Text mt="12px" textAlign="center" fontSize="14px" color="textTips">*{t('The stake can be taken out after the expiration of the time')}</Text>
     </StakeModalBox>
   )
 }

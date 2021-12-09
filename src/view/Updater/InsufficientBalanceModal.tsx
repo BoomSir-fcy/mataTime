@@ -35,10 +35,18 @@ const ModalHeader = styled(Flex)`
 interface StakeModalProps {
   onConfirm?: () => void
   onSecondary?: () => void
+  title: string
+  tips: string
+  onConfirmLable: string
+  onSecondaryLable: string
 }
 const StakeModal: React.FC<StakeModalProps> = ({
   onConfirm,
   onSecondary,
+  title,
+  tips,
+  onConfirmLable,
+  onSecondaryLable,
 }) => {
   const { t } = useTranslation()
 
@@ -50,15 +58,14 @@ const StakeModal: React.FC<StakeModalProps> = ({
         </ModalHeader>
       </ModalHeaderBox>
       <Flex justifyContent="center" pt="64px">
-        <Heading>Time余额不足</Heading>
+        <Heading>{title}</Heading>
       </Flex>
       <Text padding="22px 36px 32px">
-        Metatime 基于阅读时间扣费，1Time=1秒钟需要提前充值
-        后方可浏览平台信息
+        {tips}
       </Text>
       <Flex padding="0 36px" justifyContent="space-around">
-        <Button onClick={onConfirm}>前去充值</Button>
-        <Button onClick={onSecondary} variant="tertiary">登出账号</Button>
+        <Button onClick={onConfirm}>{onConfirmLable}</Button>
+        <Button onClick={onSecondary} variant="tertiary">{onSecondaryLable}</Button>
       </Flex>
     </StakeModalBox>
   )

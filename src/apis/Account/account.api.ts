@@ -38,18 +38,18 @@ export class AccountApi extends Http {
 
   // 今日 消耗
   async getWalletBurncointoday() {
-    const res = await this.get('v1/wallet/burncointoday');
+    const res: Api.Response<string> = await this.get('v1/wallet/burncointoday');
     if (Http.checkSuccess(res)) {
-      return res;
+      return res.data;
     }
     return null
   }
 
   // 平均消耗
   async getWalletAverageburntime() {
-    const res = await this.get('v1/wallet/averageburntime');
+    const res: Api.Response<string> = await this.get('v1/wallet/averageburntime');
     if (Http.checkSuccess(res)) {
-      return res;
+      return res.data;
     }
     return null
   }
