@@ -19,6 +19,8 @@ import {
   fetchRewardNumAsync,
   fetchWalletAverageburntime,
   fetchWalletBurncointoday,
+  fetchIncomeList,
+  fetchTimeIncometoday,
 } from './reducer'
 import { ExchangeList } from './type';
 import { BIG_TEN } from 'utils/bigNumber';
@@ -212,6 +214,21 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   }
   // 获取总条数
   const totalNum = await FetchRecordLength(account)
+  if (Number(totalNum) === 0) {
+    return [
+      {
+        round: 0,
+        endTime: 0,
+        latestTime: 0,
+        totalAmount: 0,
+        debtAmount: 0,
+        RemainingAmount: 0,
+        totalPage: 0,
+        page: page,
+        id: 0
+      }
+    ]
+  }
   // 获取总页数
   const totalPage = getTotalPage(Number(totalNum))
   // 获取当前页下标区间后返回对应请求参数列表
@@ -241,7 +258,17 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
     return completeList
   } catch (error) {
     console.log(error);
-    return []
+    return [{
+      round: 0,
+      endTime: 0,
+      latestTime: 0,
+      totalAmount: 0,
+      debtAmount: 0,
+      RemainingAmount: 0,
+      totalPage: 0,
+      page: page,
+      id: 0
+    }]
   }
 }
 
@@ -263,7 +290,53 @@ export const FetchRewardNum = async (account: string) => {
   }
 }
 
+// time收益记录
+export const FetchIncomeList = async (page, size) => {
+  const index = page * size
+  try {
+    const res = await Api.AccountApi.TimeIncomerecord({ index, size })
+    if (Api.isSuccess(res)) {
+      return res.data
+    } else {
+      throw new Error("errCode");
+    }
+  } catch (error) {
+    console.error(error);
+    throw error
+  }
+}
 
+// time今日收益和K线记录
+export const FetchTimeIncometoday = async (days) => {
+  try {
+    const res = await Api.AccountApi.TimeIncometoday({ days })
+    if (Api.isSuccess(res)) {
+      return res.data
+    } else {
+      throw new Error("errCode");
+    }
+  } catch (error) {
+    console.error(error);
+    throw error
+  }
+}
+// 获取time收益记录
+export const useFetTimeIncomeList = (page: number, pageSize: number) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  useEffect(() => {
+    if (account) dispatch(fetchIncomeList({ page, pageSize }))
+  }, [account, page, pageSize])
+}
+
+// 获取time今日收益和K线记录
+export const useFetTimeIncometoday = (day: number) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  useEffect(() => {
+    if (account) dispatch(fetchTimeIncometoday({ day }))
+  }, [account, day,])
+}
 // 获取钱包余额详情
 export const useFetchWalletInfo = () => {
   const dispatch = useDispatch<AppDispatch>()

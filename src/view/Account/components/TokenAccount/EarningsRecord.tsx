@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux'
 import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
+import { useFetTimeIncomeList, useFetTimeIncometoday } from 'store/wallet/hooks';
+import { useStore } from 'store';
 
 
 const CountBox = styled(Box)`
@@ -61,9 +63,13 @@ interface init {
 const EarningsRecord: React.FC<init> = ({ type, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const [pageCount, setPageCount] = useState(10);
-
   const dispatch = useDispatch()
+  const [pageSize, setpageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  useFetTimeIncomeList(page, pageSize)
+  const List = useStore(p => p.wallet.TimeIncomeList);
+
   const HistoryList = [{
     content: '才就是当你闹事的操作下简称耨爱收到你',
     read: 100,

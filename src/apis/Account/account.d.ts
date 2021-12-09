@@ -23,5 +23,12 @@ declare namespace Api {
       pageSize?: number;
       coin_type?: number;
     }
+    interface TimeIncomerecord {
+      index?: number;//列表下标page*size
+      size?: number;//每页条数
+    }
+    interface TimeIncometoday {
+      days?: number;
+    }
   }
 }

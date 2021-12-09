@@ -2,7 +2,7 @@ import { Http } from '../http';
 
 export class AccountApi extends Http {
   async withdraw(params: Api.Account.DrawbalanceSignMessage) {
-    const res = await this.post('/v1/wallet/drawbalance', params);
+    const res = await this.post('/v1/wallet/withdrawbalance', params);
     return res;
   }
 
@@ -13,6 +13,16 @@ export class AccountApi extends Http {
 
   async history(params?: Api.Account.History) {
     const res = await this.get('/v1/wallet/chargeandwithdraw', params);
+    return res;
+  }
+
+  async TimeIncomerecord(params?: Api.Account.TimeIncomerecord) {
+    const res = await this.get('/v1/wallet/incomerecord', params);
+    return res;
+  }
+
+  async TimeIncometoday(params?: Api.Account.TimeIncometoday) {
+    const res = await this.get('/v1/wallet/incometoday', params);
     return res;
   }
 
