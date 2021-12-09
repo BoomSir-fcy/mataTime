@@ -35,6 +35,7 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Account = React.lazy(() => import('./view/Account'));
+const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 
 const Container = styled(Box)`
   background-color: ${({ theme }) => theme.colors.background};
@@ -113,9 +114,10 @@ function App() {
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />
               <Route path="/account" component={Account} />
-              <Route path="/test" component={Test} />
-              {/* {process.env.NODE_ENV === 'development' && (
-              )} */}
+              <Route path="/faucet-smart" component={FaucetSmart} />
+              {process.env.NODE_ENV === 'development' && (
+                <Route path="/test" component={Test} />
+              )}
             </Switch>
           </React.Suspense>
         </PageContainer>
