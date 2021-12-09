@@ -5,13 +5,25 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCashierDeskAddress, getDsgAddress, getTimeAddress, getTimeShopAddress } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json'
 import timeShopAbi from 'config/abi/TimeShop.json';
+import { REFRESH_TIME_BURN_PER_CIRCLE } from 'config'
+import { Api } from 'apis';
 import multicall from 'utils/multicall';
 import { getBalanceNumber } from 'utils/formatBalance';
-import { AppDispatch } from '../index'
-import { fetchWalletAsync, fetchTimeShopInfo, fetchApproveNumAsync, fetchDSGApproveNumAsync, fetchTimeExchangeList, fetchRewardNumAsync, fetchIncomeList, fetchTimeIncometoday } from './reducer'
+import { AppDispatch, AppState } from '../index'
+import {
+  fetchWalletAsync,
+  fetchTimeShopInfo,
+  fetchApproveNumAsync,
+  fetchDSGApproveNumAsync,
+  fetchTimeExchangeList,
+  fetchRewardNumAsync,
+  fetchWalletAverageburntime,
+  fetchWalletBurncointoday,
+  fetchIncomeList,
+  fetchTimeIncometoday,
+} from './reducer'
 import { ExchangeList } from './type';
 import { BIG_TEN } from 'utils/bigNumber';
-import { Api } from 'apis';
 
 
 const REFRESH_INTERVAL = 30 * 1000
@@ -46,6 +58,22 @@ const useRefresh = (slow?) => {
         setFefresh((prev) => prev + 1)
       }
     }, slow ? SLOW_INTERVAL : REFRESH_INTERVAL)
+    return () => clearInterval(interval)
+  }, [isBrowserTabActiveRef])
+
+  return fefresh
+}
+
+const useRefreshTimeBurn = () => {
+  const [fefresh, setFefresh] = useState(0)
+  const isBrowserTabActiveRef = useIsBrowserTabActive()
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (isBrowserTabActiveRef.current) {
+        setFefresh((prev) => prev + 1)
+      }
+    }, REFRESH_TIME_BURN_PER_CIRCLE)
     return () => clearInterval(interval)
   }, [isBrowserTabActiveRef])
 
@@ -361,4 +389,16 @@ export const useFetchRewardNum = () => {
   useEffect(() => {
     dispatch(fetchRewardNumAsync(account))
   }, [account])
+}
+
+export const useFetchTimeBurnData = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { account } = useWeb3React()
+  const refresh = useRefreshTimeBurn()
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchWalletAverageburntime())
+      dispatch(fetchWalletBurncointoday())
+    }
+  }, [refresh, account])
 }
