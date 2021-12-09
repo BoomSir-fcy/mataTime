@@ -9,11 +9,14 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 import { Api } from 'apis';
 import { useStore, storeAction } from 'store';
 import { useLogin, useSignIn } from '../hooks';
-import { useContract } from '../hook';
+import { FetchNftStakeType, useContract } from '../hook';
 import { WalletAddress } from './signUp';
 import { useTranslation } from 'contexts/Localization';
-import { shortenAddress } from 'utils/contract';
+import { isAddress, shortenAddress } from 'utils/contract';
 import Dots from 'components/Loader/Dots';
+import { AddressZero } from '@ethersproject/constants';
+
+
 
 const InputItems = styled(Flex)`
   position: relative;
@@ -43,6 +46,11 @@ const InputNickName = styled.input`
     color: ${({ theme }) => theme.colors.textTips};
   }
 `;
+const InputAddress = styled(InputNickName)`
+padding-right: 25px;
+`;
+
+
 const NickNameBox = styled.div`
 position: relative;
 `;
@@ -76,6 +84,11 @@ export const SignUpSetName: React.FC<{
     isSignin: false,
     nickName: ''
   });
+  const [inviteinfo, setinviteinfo] = useImmer({
+    inviteAddr: '',
+    isRightAdd: true,
+    isActive: true
+  })
   const [haveNickName, sethaveNickName] = useState(false);
   const { account } = useWeb3React();
   const { t } = useTranslation();
@@ -119,13 +132,21 @@ export const SignUpSetName: React.FC<{
       sethaveNickName(false);
       return;
     }
+
+    if (!inviteinfo.isRightAdd || !inviteinfo.isActive) {
+      return;
+    }
+    const inviteAddr = inviteinfo.inviteAddr === '' ? AddressZero : inviteinfo.inviteAddr
+    console.log(inviteAddr, inviteinfo.isRightAdd, inviteinfo.isActive);
+
     dispatch(storeAction.setSigninLoading(true));
     const res = await checkNickname(state.nickName);
     if (!res[0] && res[1]) {
       const userInfo = await createUser(
         state.nickName,
         nft.properties?.token,
-        nft.properties?.token_id
+        nft.properties?.token_id,
+        inviteAddr
       );
       if (Boolean(userInfo)) {
         verify();
@@ -140,9 +161,63 @@ export const SignUpSetName: React.FC<{
       dispatch(storeAction.setSigninLoading(false));
       toastError(t('loginSetNickNameRepeat'));
     }
-  }, [state, nft]);
+  }, [state, nft, inviteinfo]);
+
+  const getAddresQualifications = (account) => {
+    const getIsActive = async (addr) => {
+      // 查询地址是否有邀请资格
+      const [{ isActive }] = await FetchNftStakeType(addr)
+      setinviteinfo(p => {
+        p.isActive = isActive
+        p.isRightAdd = true;
+      })
+    }
+    if (isAddress(account)) {
+      setinviteinfo(p => {
+        p.inviteAddr = account;
+        p.isRightAdd = true;
+        p.isActive = true
+      })
+      getIsActive(account)
+    } else {
+      setinviteinfo(p => {
+        p.inviteAddr = account;
+        p.isRightAdd = account === '' ? true : false;
+        p.isActive = true
+      })
+    }
+  }
+
+  // 邀请地址验证
+  const handleChange = React.useCallback(
+    (e) => {
+      if (e.currentTarget.validity.valid) {
+        // 是否为正确地址
+        const addr = e.currentTarget.value
+        getAddresQualifications(addr)
+        // if (isAddress(e.currentTarget.value)) {
+        //   setinviteinfo(p => {
+        //     p.inviteAddr = addr;
+        //     p.isRightAdd = true;
+        //     p.isActive = true
+        //   })
+        // } else {
+        //   setinviteinfo(p => {
+        //     p.inviteAddr = addr;
+        //     p.isRightAdd = addr === '' ? true : false;
+        //     p.isActive = true
+        //   })
+        // }
+      }
+    },
+    [],
+  )
 
   React.useEffect(() => {
+    const InviteAddress = localStorage.getItem('InviteAddress')
+    if (InviteAddress) {
+      getAddresQualifications(InviteAddress)
+    }
     return () => {
       timer && clearInterval(timer);
     };
@@ -160,13 +235,22 @@ export const SignUpSetName: React.FC<{
       </Text> */}
       {/* <WalletAddress address={account} /> */}
       <Box paddingTop="100px">
-        {/* <InputItems marginBottom="32px" alignItems="center">
-          <InputText>{t('loginInputTitleAvatar')}</InputText>
-          <Flex alignItems="flex-end">
-            {nft.image && <InputNftImg src={nft.image} />}
-            <Text color="textTips">{t('loginInputValueAvatar')}</Text>
-          </Flex>
-        </InputItems> */}
+        <InputItems marginBottom="36px" alignItems="center">
+          <InputText>{t('邀请地址')}</InputText>
+          <NickNameBox>
+            <InputAddress
+              value={inviteinfo.inviteAddr}
+              onChange={handleChange}
+              placeholder={t('请输入邀请地址')}
+            />
+            {!inviteinfo.isRightAdd && <NameVerify style={{ left: '26px' }} small color="red">
+              {t('请输入正确的地址')}
+            </NameVerify>}
+            {!inviteinfo.isActive && <NameVerify style={{ left: '26px' }} small color="red">
+              {t('该地址无邀请资格')}
+            </NameVerify>}
+          </NickNameBox>
+        </InputItems>
         <InputItems marginBottom="27px" alignItems="center">
           <InputText>{t('loginInputTitleNickname')}</InputText>
           <NickNameBox>
@@ -195,7 +279,7 @@ export const SignUpSetName: React.FC<{
         <Submit
           scale="ld"
           onClick={state.isSignin ? signIn : submitProfile}
-          disabled={!status || !haveNickName}
+          disabled={!status || !haveNickName || loading}
         >
           {Boolean(loading) ? (
             <Dots>{t('loginSignUpNext')}</Dots>
