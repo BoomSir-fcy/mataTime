@@ -7,7 +7,6 @@ import Chart from '../Chart';
 import EarningsRecord from '../EarningsRecord';
 
 const Content = styled(Box)`
-  padding: 30px 18px;
 ${({ theme }) => theme.mediaQueries.md}{
   padding: 15px 14px;
 }
@@ -94,7 +93,7 @@ const Matter: React.FC<MatterInfo> = ({ Balance, TokenAddr, BalanceInfo }) => {
   return (
     <Content>
       {/* <Header Balance={Balance} BalanceInfo={BalanceInfo} TokenAddr={TokenAddr} /> */}
-      <Chart />
+      <Chart chartData={[]} />
       <EarningsRecord token='Matter' />
       {/* <TaskTitle>Matter每日任务 ( 0 / 10)</TaskTitle>
       <LeftFlex>

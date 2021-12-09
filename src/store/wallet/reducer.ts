@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 import { changeActiveToken } from './actions';
-import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchRewardNum, FetchTimeShopInfo } from './hooks';
+import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchIncomeList, FetchRewardNum, FetchTimeIncometoday, FetchTimeShopInfo } from './hooks';
 import { WalletState } from './type';
 
 const initialState: WalletState = {
@@ -29,7 +29,18 @@ const initialState: WalletState = {
   },
   TimeExchangeList: [],
   activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'Time',
-  rewardNum: 0
+  rewardNum: 0,
+  TimeIncomeList: {
+    index: 0,
+    record: [],
+    size: 10,
+    total: 0,
+  },
+  TimeIncometoday: {
+    data: [],
+    today_income: '0',
+    total_income: '0',
+  }
 };
 
 // Async thunks
@@ -65,6 +76,17 @@ export const fetchRewardNumAsync = createAsyncThunk<any, string>('wallet/fetchRe
   return res
 });
 
+// time收益记录
+export const fetchIncomeList = createAsyncThunk<any, any>('wallet/fetchIncomeList', async ({ page, pageSize = 10 }) => {
+  const res = await FetchIncomeList(page, pageSize);
+  return res
+});
+
+// time今日收益和K线记录
+export const fetchTimeIncometoday = createAsyncThunk<any, any>('wallet/fetchTimeIncometoday', async ({ day }) => {
+  const res = await FetchTimeIncometoday(day);
+  return res
+});
 
 export const wallet = createSlice({
   name: 'wallet',
@@ -101,6 +123,12 @@ export const wallet = createSlice({
       })
       .addCase(fetchRewardNumAsync.fulfilled, (state, action) => {
         state.rewardNum = action.payload;
+      })
+      .addCase(fetchIncomeList.fulfilled, (state, action) => {
+        state.TimeExchangeList = action.payload;
+      })
+      .addCase(fetchTimeIncometoday.fulfilled, (state, action) => {
+        state.TimeIncometoday = action.payload;
       })
   }
 });
