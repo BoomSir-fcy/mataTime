@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { variant } from 'styled-system';
 
+export * from './AvatarCard';
+
 const scales = {
   XL: 'xl',
   LD: 'ld',
@@ -31,7 +33,7 @@ const scaleVariants = {
   [scales.MM]: {
     width: '24px',
     height: '24px'
-  },
+  }
 };
 
 const Img = styled.img`
@@ -39,9 +41,9 @@ const Img = styled.img`
   border-radius: 50%;
   object-fit: cover;
   ${variant({
-  prop: 'scale',
-  variants: scaleVariants
-})}
+    prop: 'scale',
+    variants: scaleVariants
+  })}
 `;
 
 export const Avatar: React.FC<{

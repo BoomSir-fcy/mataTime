@@ -245,6 +245,7 @@
   "commonUploadBackgroundTips": "Specification: 1200x500, below 2MB",
   "commonCoinMarketEmpty": "The token is not yet included, and the price cannot be displayed",
   "commonContactAdmin": "Please contact the management",
+  "commonTransactionRejected": "Transaction rejected",
   "******end*****@kksam********": "@kksam翻译结束",
   "******start*****@bigCongee********": "@bigCongee翻译开始",
   "delCommentTitle": "Whether to delete this comment?",
@@ -321,7 +322,6 @@
   "Account Earnings trend in the past 7 days": "Earnings trend in the past 7 days",
   "******end*****@FCY********": "@FCY翻译结束",
   "******start**2021-12-09**@kksam********": "@kksam翻译结束",
-  "commonTransactionRejected": "Transaction rejected",
   "rewardAutherSuccess": "reward for success",
   "rewardAutherCancel": "reward has been cancelled",
   "rewardAutherError": "fail reward",
@@ -340,5 +340,6 @@
   "rewardAutherTableText3": "Reward currency",
   "rewardAutherTableText4": "Reward amount",
   "rewardAutherTableText5": "Reward time",
+  "systemInformation": "system information",
   "******end**2021-12-09**@kksam********": "@kksam翻译结束"
 }
