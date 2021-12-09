@@ -125,7 +125,7 @@ export const wallet = createSlice({
         state.rewardNum = action.payload;
       })
       .addCase(fetchIncomeList.fulfilled, (state, action) => {
-        state.TimeExchangeList = action.payload;
+        state.TimeIncomeList = action.payload;
       })
       .addCase(fetchTimeIncometoday.fulfilled, (state, action) => {
         state.TimeIncometoday = action.payload;
