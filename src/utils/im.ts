@@ -55,8 +55,10 @@ interface HandleEvent<T> {
 export class IM extends EventTarget {
   connection: WebSocket;
   interval: any;
-  url: string = `ws://192.168.101.112:8888/v1/ws`;
-  // url: string = `${process.env.React_APP_WS_URL}/v1/ws`;
+  // url: string = `ws://192.168.101.112:8888/v1/ws`;
+  url: string = process.env.NODE_ENV === 'production'
+    ? `${process.env.React_APP_WS_URL}/v1/ws`
+    : '';
   token: string;
   userToken: string;
 
