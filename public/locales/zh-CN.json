@@ -338,5 +338,9 @@
   "Redemption is not yet open": "兑换暂未开放",
   "Network error, please refresh and try again": "网络错误，请刷新重试",
   "Account Earnings trend in the past 7 days": "近7日收益趋势",
+  "loginInviteAddress": "邀请地址",
+  "login Please enter the invitation address": "请输入邀请地址",
+  "login Please enter the correct address": "请输入正确的地址",
+  "login This address is not eligible for invitation": "该地址无邀请资格",
   "******end*****@FCY********": "@FCY翻译结束"
 }
