@@ -13,7 +13,6 @@ import history from 'routerHistory';
 type IProps = {
   content: string;
   callback?: Function;
-  onExpand?: (expand: boolean) => void;
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -61,7 +60,7 @@ export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
-  const { onExpand } = props
+  const { callback } = props
 
   useEffect(() => {
     const { content } = props;
@@ -193,8 +192,8 @@ export const ContentParsing = (props: IProps) => {
             onClick={(e: any) => {
               e.stopPropagation();
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-              if (onExpand) {
-                onExpand(!expand)
+              if (callback) {
+                callback(MoreOperatorEnum.EXPAND)
               }
               setExpand(!expand);
             }}

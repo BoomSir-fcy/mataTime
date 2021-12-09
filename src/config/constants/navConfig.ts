@@ -61,7 +61,7 @@ export const menuNavConfig: MenuNavConfig[] = [
       {
         icon: 'icon-tixing',
         activeIcon: 'icon-tixing1',
-        badgeName: 'message_secret',
+        badgeName: 'message_system',
         path: pathConfig.messageNoticePath,
         lable: 'newsNoticeMenuTitle'
       }

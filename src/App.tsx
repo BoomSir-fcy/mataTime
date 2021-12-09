@@ -15,6 +15,7 @@ import { storage } from 'config';
 
 import useEagerConnect from 'hooks/useEagerConnect';
 import { RewardAuthorContract } from 'components/RewardAuth/hook';
+import useUnreadMsg from 'hooks/imHooks/useUnreadMsg'
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
@@ -44,6 +45,7 @@ const Container = styled(Box)`
 
 function App() {
   useEagerConnect();
+  useUnreadMsg(); // 未读消息
   const dispatch = useDispatch();
   const token = window.localStorage.getItem(storage.Token);
   const { account } = useActiveWeb3React();

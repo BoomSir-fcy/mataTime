@@ -20,14 +20,12 @@ export default function HttpUpdater() {
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    // TODO:
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
   }, [dispatch, history]);
 
+  // 余额不足
   const handleInsufficient = useCallback(() => {
-    // TODO:
-    // alert('余额不足')
     setVisible(true)
   }, [setVisible])
 

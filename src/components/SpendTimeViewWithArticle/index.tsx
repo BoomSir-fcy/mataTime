@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import useIm from "contexts/ImContext/hooks/useIm";
-import { ReadType } from 'contexts/ImContext/types'
+import useIm from "hooks/imHooks/useIm";
+import { ReadType } from 'hooks/imHooks/types';
 import { Text, Button } from "uikit";
 import observerOptions from "./options";
 import styled from "styled-components";

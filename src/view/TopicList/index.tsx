@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
+import useReadArticle from 'hooks/imHooks/useReadArticle';
+import { useStore } from 'store';
 import { Box } from 'uikit';
 import { Crumbs, List } from 'components';
 import { Api } from 'apis';
@@ -9,6 +11,8 @@ import { Api } from 'apis';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+import { ReadType } from 'hooks/imHooks/types';
 
 const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
@@ -21,6 +25,11 @@ const TopicList = props => {
     totalPage: 1,
     listData: []
   });
+
+  // 阅读文章扣费
+  const [nonce, setNonce] = useState(0)
+  useReadArticle(nonce)
+  const currentUid = useStore(p => p.loginReducer.userInfo);
 
   const { loading, page, totalPage, listData } = state;
 
@@ -61,7 +70,6 @@ const TopicList = props => {
         marginTop={0}
         loading={loading}
         renderList={() => {
-          console.log(state.tagName, name, page, totalPage);
           if (loading || page > totalPage) return;
           Boolean(state.tagName) && state.tagName === name
             ? getList()
@@ -70,6 +78,12 @@ const TopicList = props => {
       >
         {listData.map((item, index) => (
           <MeItemWrapper key={`${item.id}_${index}`}>
+            {
+              // 浏览自己的不扣费
+              currentUid?.uid !== item?.user_id && item?.id && (
+                <SpendTimeViewWithArticle readType={ReadType.ARTICLE} articleId={item?.id} />
+              )
+            }
             <MentionItem
               {...props}
               itemData={{

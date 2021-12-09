@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useStore } from 'store';
 import { IM } from 'utils';
-import { ReadType } from './types'
+import { ReadType } from 'hooks/imHooks/types'
 
 
 

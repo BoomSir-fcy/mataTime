@@ -8,7 +8,7 @@ import { useStore } from 'store';
 import { relativeTime } from 'utils';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { ReadType } from 'contexts/ImContext/types';
+import { ReadType } from 'hooks/imHooks/types';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
@@ -83,6 +83,11 @@ export const ArticleList = props => {
       setIsEnd(false)
       getList(1);
       return;
+    }
+    // 折叠
+    if (type === MoreOperatorEnum.EXPAND) {
+      setNonce(prep => prep + 1)
+      return
     }
 
     const handleChangeList = (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)

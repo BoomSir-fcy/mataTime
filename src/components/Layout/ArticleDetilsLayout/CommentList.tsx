@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import MentionOperator from 'view/News/components/MentionOperator';
 import { FollowPopup, CommentPop, List, ContentParsing } from 'components';
 import { Api } from 'apis';
-import { ReadType } from 'contexts/ImContext/types';
+import { ReadType } from 'hooks/imHooks/types';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import {
   CommentListBox,
@@ -22,11 +22,12 @@ import {
 } from './style';
 type Iprops = {
   itemData: any;
+  nonce: number
 };
 
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
-  const { itemData } = props;
+  const { itemData, nonce } = props;
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
@@ -111,7 +112,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle readType={ReadType.COMMENT} articleId={item.id} />
+                <SpendTimeViewWithArticle nonce={nonce} readType={ReadType.COMMENT} articleId={item.id} />
               )
             }
             <Flex>
