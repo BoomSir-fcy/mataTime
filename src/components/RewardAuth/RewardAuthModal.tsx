@@ -117,7 +117,10 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
           account,
           res.map(item => item[0])
         );
-        newArr = res.map((item, index) => [...item, isApprove[index]]);
+        newArr = res.map((item, index) => [
+          ...item.toString().split(','),
+          isApprove[index].toString()
+        ]);
         dispatch(storeAction.setSupportToken(newArr));
       } else {
         newArr = tokenViewList;
