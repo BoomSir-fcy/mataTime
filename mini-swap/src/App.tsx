@@ -45,7 +45,7 @@ const App: React.FC = () => {
   }, [chainId])
   return (
     <div>
-      <ResetCSS />
+      {/* <ResetCSS /> */}
       <button onClick={changeDark} type="button" >change</button>
       <button onClick={changeLang} type="button" >changeLang</button>
       {isDark ? 'isDark' : 'no-isDark'}

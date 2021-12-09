@@ -112,13 +112,13 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
   const [polySwapPending, setPolySwapPending] = useState(false)
   const parsedAmounts = showWrap
     ? {
-        [Field.INPUT]: parsedAmount,
-        [Field.OUTPUT]: parsedAmount,
-      }
+      [Field.INPUT]: parsedAmount,
+      [Field.OUTPUT]: parsedAmount,
+    }
     : {
-        [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-        [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : (polyData?.isPolyMethed ? polyData?.toCurrencyAmount : trade?.outputAmount),
-      }
+      [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
+      [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : (polyData?.isPolyMethed ? polyData?.toCurrencyAmount : trade?.outputAmount),
+    }
 
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
   const isValid = !swapInputError
@@ -158,9 +158,9 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
       ? parsedAmounts[independentField]?.toExact() ?? ''
       // : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
       : parsedAmounts[dependentField]?.toSignificant(6,
-          undefined,
-          independentField === Field.INPUT ? Rounding.ROUND_DOWN : Rounding.ROUND_UP
-        ) ?? '',
+        undefined,
+        independentField === Field.INPUT ? Rounding.ROUND_DOWN : Rounding.ROUND_UP
+      ) ?? '',
   }
 
   const route = trade?.route
@@ -174,9 +174,9 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
   const [approvalAsPoly, approveCallbackAsPloy] = useApproveCallbackPolyTrade(polyData?.fromCurrencyTokenAmount, polySpender)
 
   const [approval, approveCallback] = useMemo(() => {
-    return polyData?.isPolyMethed ? [approvalAsPoly, approveCallbackAsPloy]: [approvalAsLiquild, approveCallbackAsLiquild]
+    return polyData?.isPolyMethed ? [approvalAsPoly, approveCallbackAsPloy] : [approvalAsLiquild, approveCallbackAsLiquild]
   }, [polyData?.isPolyMethed, approvalAsLiquild, approveCallbackAsLiquild, approvalAsPoly, approveCallbackAsPloy])
-  
+
   // const [approval, approveCallback] = useApproveCallbackFromTradeOrPoly(polyData?.isPolyMethed, trade, polyData?.currencyAmount, allowedSlippage)
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
@@ -445,47 +445,47 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
             </Button>
             {
               polyData.isPolyMethed
-              ?
-              <Button width="48%" disabled={!isValid || polySwapPending} onClick={async () =>{
-                await handlePolySwap()
-                setTimeout(() => {
-                  onPresentConfirmModal()
-                }, 0)
-              }}>{
-                polySwapPending
                 ?
-                <Dots>{t('Swap')}</Dots>
+                <Button width="48%" disabled={!isValid || polySwapPending} onClick={async () => {
+                  await handlePolySwap()
+                  setTimeout(() => {
+                    onPresentConfirmModal()
+                  }, 0)
+                }}>{
+                    polySwapPending
+                      ?
+                      <Dots>{t('Swap')}</Dots>
+                      :
+                      swapInputError || t('Swap')
+                  }</Button>
                 :
-                swapInputError || t('Swap')
-              }</Button>
-              :
-              <Button
-                variant={isValid && priceImpactSeverity > 2 ? 'danger' : 'primary'}
-                onClick={() => {
-                  if (isExpertMode) {
-                    handleSwap()
-                  } else {
-                    setSwapState({
-                      tradeToConfirm: trade,
-                      attemptingTxn: false,
-                      swapErrorMessage: undefined,
-                      txHash: undefined,
-                    })
-                    setTimeout(() => {
-                      onPresentConfirmModal()
-                    }, 0)
-                  }
-                }}
-                width="48%"
-                id="swap-button"
-                disabled={!isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)}
-              >
-                {priceImpactSeverity > 3 && !isExpertMode
-                  ? t('Price Impact High')
-                  : priceImpactSeverity > 2
-                  ? t('Swap Anyway')
-                  : t('Swap')}
-              </Button>
+                <Button
+                  variant={isValid && priceImpactSeverity > 2 ? 'danger' : 'primary'}
+                  onClick={() => {
+                    if (isExpertMode) {
+                      handleSwap()
+                    } else {
+                      setSwapState({
+                        tradeToConfirm: trade,
+                        attemptingTxn: false,
+                        swapErrorMessage: undefined,
+                        txHash: undefined,
+                      })
+                      setTimeout(() => {
+                        onPresentConfirmModal()
+                      }, 0)
+                    }
+                  }}
+                  width="48%"
+                  id="swap-button"
+                  disabled={!isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)}
+                >
+                  {priceImpactSeverity > 3 && !isExpertMode
+                    ? t('Price Impact High')
+                    : priceImpactSeverity > 2
+                      ? t('Swap Anyway')
+                      : t('Swap')}
+                </Button>
             }
           </RowBetween>
           <Column style={{ marginTop: '1rem' }}>
@@ -497,50 +497,50 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
       <Flex justifyContent="center">
         {
           polyData.isPolyMethed
-          ?
-          <Button width="100%" scale="ld" disabled={!isValid || polySwapPending} onClick={async () =>{
-            await handlePolySwap()
-            setTimeout(() => {
-              onPresentConfirmModal()
-            }, 0)
-          }}>{
-            polySwapPending
             ?
-            <Dots>{t('Swap')}</Dots>
+            <Button width="100%" scale="ld" disabled={!isValid || polySwapPending} onClick={async () => {
+              await handlePolySwap()
+              setTimeout(() => {
+                onPresentConfirmModal()
+              }, 0)
+            }}>{
+                polySwapPending
+                  ?
+                  <Dots>{t('Swap')}</Dots>
+                  :
+                  swapInputError || t('Swap')
+              }</Button>
             :
-            swapInputError || t('Swap')
-          }</Button>
-          :
-          <Button
-            width="100%"
-            variant={polyData.isPolyMethed ? 'primary' : (isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'danger' : 'primary')}
-            onClick={() => {
-              if (isExpertMode) {
-                handleSwap()
-              } else {
-                setSwapState({
-                  tradeToConfirm: trade,
-                  attemptingTxn: false,
-                  swapErrorMessage: undefined,
-                  txHash: undefined,
-                })
-                setTimeout(() => {
-                  onPresentConfirmModal()
-                }, 0)
-              }
-            }}
-            id="swap-button"
-            scale="ld"
-            disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
-          >
-            {
-              (swapInputError ||
-                (priceImpactSeverity > 3 && !isExpertMode
-                  ? t('Swap Anyway')
-                  : priceImpactSeverity > 2
-                  ? t('Swap Anyway')
-                  : t('Swap')))}
-          </Button>
+            <Button
+              width="100%"
+              variant={polyData.isPolyMethed ? 'primary' : (isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'danger' : 'primary')}
+              onClick={() => {
+                if (isExpertMode) {
+                  handleSwap()
+                } else {
+                  setSwapState({
+                    tradeToConfirm: trade,
+                    attemptingTxn: false,
+                    swapErrorMessage: undefined,
+                    txHash: undefined,
+                  })
+                  setTimeout(() => {
+                    onPresentConfirmModal()
+                  }, 0)
+                }
+              }}
+              id="swap-button"
+              scale="ld"
+              disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
+            >
+              {
+                (swapInputError ||
+                  (priceImpactSeverity > 3 && !isExpertMode
+                    ? t('Swap Anyway')
+                    : priceImpactSeverity > 2
+                      ? t('Swap Anyway')
+                      : t('Swap')))}
+            </Button>
 
         }
       </Flex>
@@ -591,7 +591,8 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
             <CurrencyInputPanel
               value={formattedAmounts[Field.OUTPUT]}
               onUserInput={handleTypeOutput}
-              label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
+              // label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
+              label={independentField === Field.INPUT && !showWrap && trade ? t('To') : t('To')}
               showMaxButton={false}
               currency={currencies[Field.OUTPUT]}
               onCurrencySelect={handleOutputSelect}
@@ -619,7 +620,7 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
               <AutoColumn gap="8px" style={{ padding: '0' }}>
                 {(Boolean(trade) || polyData.isPolyMethed) && (
                   <RowBetween align="center">
-                    <Text fontSize="16px">{t('Price')}</Text>
+                    {/* <Text fontSize="16px">{t('Price')}</Text> */}
                     <TradePrice
                       price={polyData?.isPolyMethed ? polyData?.price : trade?.executionPrice}
                       showInverted={showInverted}

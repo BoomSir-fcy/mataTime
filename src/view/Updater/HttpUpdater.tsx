@@ -20,15 +20,12 @@ export default function HttpUpdater() {
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    // TODO:
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
-    localStorage.removeItem(storage.Token);
   }, [dispatch, history]);
 
+  // 余额不足
   const handleInsufficient = useCallback(() => {
-    // TODO:
-    // alert('余额不足')
     setVisible(true)
   }, [setVisible])
 
@@ -45,12 +42,12 @@ export default function HttpUpdater() {
       eventBus.addEventListener('insufficient', handleInsufficient);
     }
   }, [handleInsufficient])
-  if (visible) return (
-    <ModalWrapper padding="0" customizeTitle creactOnUse visible={visible} >
+  return (
+    <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
         onConfirm={() => {
           setVisible(false)
-          history.push('/account');
+          history.push('/faucet-smart');
         }}
         onSecondary={() => {
           setVisible(false)
@@ -58,6 +55,5 @@ export default function HttpUpdater() {
         }}
       />
     </ModalWrapper>
-  )
-  return null;
+  );
 }

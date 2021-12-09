@@ -5,20 +5,22 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import GlobalStyle from 'style/global';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchThunk } from 'store';
-import PageLoader from 'components/Loader/PageLoader';
+import { fetchThunk, storeAction } from 'store';
 import { CommonLayout, ToastComponents } from 'components';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import PageLoader from 'components/Loader/PageLoader';
 import PageContainer from 'components/Layout/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
 
 import useEagerConnect from 'hooks/useEagerConnect';
+import { RewardAuthorContract } from 'components/RewardAuth/hook';
+import useUnreadMsg from 'hooks/imHooks/useUnreadMsg'
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import HttpUpdater from './view/Updater/HttpUpdater';
 
-// XXX: 后期优化一下(account 分支合并后) 更换为占资源更少得dayjs
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/es-us';
 dayjs.extend(relativeTime);
@@ -34,6 +36,7 @@ const Login = React.lazy(() => import('./view/Login'));
 const Set = React.lazy(() => import('./view/Set'));
 const Test = React.lazy(() => import('./view/Test'));
 const Account = React.lazy(() => import('./view/Account'));
+const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 
 const Container = styled(Box)`
   background-color: ${({ theme }) => theme.colors.background};
@@ -42,12 +45,42 @@ const Container = styled(Box)`
 
 function App() {
   useEagerConnect();
+  useUnreadMsg(); // 未读消息
   const dispatch = useDispatch();
   const token = window.localStorage.getItem(storage.Token);
+  const { account } = useActiveWeb3React();
+  const { getTokens, approve } = RewardAuthorContract();
+
+  const getTokensToCache = async () => {
+    try {
+      const res = await getTokens();
+      const isApprove = await approve(
+        account,
+        res?.map(item => item[0])
+      );
+      const newArr = res.map((item, index) => [
+        ...item.toString().split(','),
+        isApprove[index].toString()
+      ]);
+      dispatch(storeAction.setSupportToken(newArr));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    Boolean(token) && dispatch(fetchThunk.fetchUserInfoAsync());
+    if (token) {
+      dispatch(fetchThunk.fetchUserInfoAsync());
+      // dispatch(storeAction.setUserToken(token));
+    }
   }, [token, dispatch]);
+
+  useEffect(() => {
+    if (account) {
+      getTokensToCache();
+    }
+  }, [token, account]);
+
   // useEffect(() => {
   //   eventBus.addEventListener('http', (data) => {
   //     console.log('==========', data)
@@ -86,6 +119,7 @@ function App() {
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />
               <Route path="/account" component={Account} />
+              <Route path="/faucet-smart" component={FaucetSmart} />
               {process.env.NODE_ENV === 'development' && (
                 <Route path="/test" component={Test} />
               )}

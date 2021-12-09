@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { Box, Flex } from 'uikit';
 import { Icon, ReplyModal, MoreOperatorEnum } from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
+import RewardAuthTag from 'components/RewardAuth/RewardAuthTag';
 
 // enum MentionObjEnum {
 //   Article,
@@ -88,33 +90,44 @@ const MentionOperator: React.FC<IProps> = ({
 
   return (
     <MentionOperatorWrapper>
-      <div className="mention-operator">
-        <div className="operator-item">
-          <Icon
-            name={'icon-pinglun'}
-            size={18}
-            color="textTips"
-            onClick={() => {
-              setReplyVisible(true);
-            }}
-          ></Icon>
-          {itemData.comment_num || 0}
-        </div>
-        {/* <div className="operator-item">
-          <Icon name={'icon-retweet'} color={'#B5B5B5'}></Icon>
-          {itemData.share_num || 0}
-        </div> */}
-        {hasLike ? (
-          <div className="operator-item" onClick={changeLike}>
-            {isLike === 1 ? (
-              <Icon size={18} name={'icon-aixin1'} color={'#EC612B'} />
-            ) : (
-              <Icon size={18} name={'icon-aixin'} color={'#B5B5B5'} />
-            )}
-            {itemData.like_num || 0}
-          </div>
-        ) : null}
-      </div>
+      <Flex justifyContent="space-between" className="mention-operator">
+        <Flex>
+          <Box onClick={() => setReplyVisible(true)} className="operator-item">
+            <Icon
+              name="icon-pinglun"
+              margin="0 10px 0 0"
+              size={18}
+              color="textTips"
+            />
+            {itemData.comment_num || 0}
+          </Box>
+          {/* <Box className="operator-item">
+            <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />
+            {itemData.share_num || 0}
+          </Box> */}
+          {hasLike && (
+            <Box className="operator-item" onClick={changeLike}>
+              {isLike === 1 ? (
+                <Icon
+                  size={18}
+                  name="icon-aixin1"
+                  margin="0 10px 0 0"
+                  color="#EC612B"
+                />
+              ) : (
+                <Icon
+                  size={18}
+                  name="icon-aixin"
+                  margin="0 10px 0 0"
+                  color="textTips"
+                />
+              )}
+              {itemData.like_num || 0}
+            </Box>
+          )}
+        </Flex>
+        <RewardAuthTag data={itemData} />
+      </Flex>
       {/* 回复 */}
       <ReplyModal
         replyType={replyType}
@@ -124,7 +137,7 @@ const MentionOperator: React.FC<IProps> = ({
         itemData={itemData}
         onClose={() => {
           setReplyVisible(false);
-          callback(itemData, MoreOperatorEnum.COMMONT)
+          callback(itemData, MoreOperatorEnum.COMMONT);
         }}
       />
     </MentionOperatorWrapper>

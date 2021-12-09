@@ -12,7 +12,7 @@ export interface NavItemProps extends MenuNavLink {
   pathname: string
 }
 
-const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hide, activeIcon, pathname, markPath }) => {
+const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hide, activeIcon, pathname, markPath, ...props }) => {
   const { t } = useTranslation()
   const { toastInfo } = useToast();
 
@@ -21,13 +21,13 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hid
   }, [badge])
 
   const isActive = useMemo(() => {
-    return (pathname === path || markPath?.includes(pathname)) && !coming
+    return Boolean((pathname === path || markPath?.includes(pathname)) && !coming)
   }, [pathname, markPath, path])
 
   if (hide) return null
   if (coming) {
     return (
-      <NavItemStyled onClick={() => toastInfo(t('Coming Soon!'))} mt="1px" alignItems="center" padding="28px 14px">
+      <NavItemStyled onClick={() => toastInfo(t('Coming Soon!'))} mt="1px" padding="28px 14px">
         <IconBox>
           {/* {icon} */}
           <Icon name={icon} color={isActive ? 'white_black' : 'textSubtle'} />
@@ -38,7 +38,7 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hid
     )
   }
   return (
-    <NavItemStyled active={isActive} as={Link} to={path} mt="1px" alignItems="center" padding="28px 14px">
+    <NavItemStyled isactive={isActive ? 1 : 0} as={Link} to={path} mt="1px" padding="28px 14px">
       <IconBox>
         {/* {isActive ? (activeIcon || icon) : icon} */}
         <Icon name={isActive ? (activeIcon || icon) : icon} color={isActive ? 'white_black' : 'textSubtle'} />

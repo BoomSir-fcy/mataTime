@@ -31,3 +31,7 @@ export const changeSignin =
 export const changeReset = createAction('login/changeReset');
 
 export const setSigninLoading = createAction<boolean>('signin/setLoading');
+
+export const setUserToken = createAction<string | null | undefined>('signin/setUserToken');
+
+export const setUserUnreadMsgNum = createAction<Partial<Api.News.UnreadMsgNum>>('login/setUserUnreadMsgNum');

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ImContext } from '..';
+import { ImContext } from '../../contexts/ImContext';
 
 const useIm = () => {
   const im = useContext(ImContext);

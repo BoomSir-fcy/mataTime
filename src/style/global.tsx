@@ -71,8 +71,9 @@ const GlobalStyle = createGlobalStyle`
     height: 8px;
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.textSubtle}; 
-    border-radius: 0;
+    background: ${({ theme }) => theme.colors.textTips}; 
+    border-radius: 8px;
+
   }
   ::-webkit-scrollbar-track {
     background: ${({ theme }) => theme.colors.background}; 
@@ -106,6 +107,8 @@ const GlobalStyle = createGlobalStyle`
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
     background-color: ${({ theme }) => theme.main};
+    overflow-y: scroll; // 解决滚动条抖动问题
+    /* overflow-x: auto; */
     img {
       height: auto;
       max-width: 100%;
