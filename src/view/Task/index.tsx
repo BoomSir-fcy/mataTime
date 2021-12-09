@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, Button, Spinner } from 'uikit';
+import { Box, Flex, Text, Button, Spinner, Empty } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import CountdownTime from './Countdown';
 import { useTranslation } from 'contexts/Localization'
@@ -9,7 +9,7 @@ import MissionCard from './MissionCard';
 import { Status } from './type';
 
 const ScrollBox = styled(Box)`
-  height: calc(100vh - 57px);
+  height: calc(100vh - 152px);
   overflow-y: auto;
   ::-webkit-scrollbar {
     display: none; /* Chrome Safari */
@@ -113,7 +113,7 @@ const Task: React.FC = () => {
                 </Flex>
               </TaskTitle>
               <LeftFlex>
-                {dailyList.map(item => <MissionCard key={item.task_id} info={item} />)}
+                {dailyList.length ? dailyList.map(item => <MissionCard key={item.task_id} info={item} />) : <Empty />}
               </LeftFlex>
               <TaskTitle>
                 <Flex alignItems="center">
@@ -128,7 +128,7 @@ const Task: React.FC = () => {
                 </Flex>
               </TaskTitle>
               <LeftFlex>
-                {weekList.map(item => <MissionCard key={item.task_id} info={item} />)}
+                {weekList.length ? weekList.map(item => <MissionCard key={item.task_id} info={item} />) : <Empty />}
               </LeftFlex>
               <TaskTitle>
                 <Flex alignItems="center">
@@ -137,7 +137,7 @@ const Task: React.FC = () => {
                 </Flex>
               </TaskTitle>
               <LeftFlex>
-                {specialList.map(item => <MissionCard key={item.task_id} info={item} />)}
+                {specialList.length ? specialList.map(item => <MissionCard key={item.task_id} info={item} />) : <Empty />}
               </LeftFlex>
             </ScrollBox>
           </Box>

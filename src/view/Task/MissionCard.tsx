@@ -105,8 +105,10 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
         </Ribbon>
         <Info>
           <Flex flexDirection="column" justifyContent='space-between' alignItems='center'>
-            <Heading mb='16px' scale='ld'>{configInfo?.count ? t(`${configInfo.name}`, { count: configInfo.count }) : t(`${configInfo.name}`)}</Heading>
-            <Text mb='20px' color='textTips'>{t(`${configInfo.describe}`)}</Text>
+            <Heading mb='16px' scale='ld'>{t(`${configInfo.name}`)}</Heading>
+            <Text mb='20px' color='textTips'>
+              {configInfo?.count ? t(`${configInfo.describe}`, { count: configInfo.count }) : t(`${configInfo.describe}`)}
+            </Text>
             {
               info?.Expand &&
               <ProgressBox>

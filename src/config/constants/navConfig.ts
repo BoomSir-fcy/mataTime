@@ -32,8 +32,9 @@ export const menuNavConfig: MenuNavConfig[] = [
   },
   {
     icon: 'icon-rewu',
-    activeIcon: 'icon-rewu1',
+    activeIcon: 'icon-xingqiu1',
     path: '/task',
+    hideRight: true,
     lable: 'homeMenuTask'
   },
   {

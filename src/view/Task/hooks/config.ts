@@ -79,31 +79,31 @@ export const taskContents = [
     id: 15,
     name: 'Browse posts',
     describe: '%count% $TIME per day',
-    count: 1
+    count: 300
   },
   {
     id: 16,
     name: 'Browse posts',
     describe: '%count% $TIME per day',
-    count: 2
+    count: 600
   },
   {
     id: 17,
     name: 'Browse posts',
     describe: '%count% $TIME per day',
-    count: 3
+    count: 900
   },
   {
     id: 18,
     name: 'Browse posts',
     describe: '%count% $TIME per day',
-    count: 4
+    count: 1200
   },
   {
     id: 19,
     name: 'Browse posts',
     describe: '%count% $TIME per day',
-    count: 5
+    count: 1500
   },
   {
     id: 20,
