@@ -6,9 +6,9 @@ export class TaskApi extends Http {
     const res = await this.post('/v1/task/receive', { task_id });
     return res;
   }
-  // 任务列表
-  async getTaskList() {
-    const res = await this.get('/v1/task/list');
+  // 签到
+  async SignIn() {
+    const res = await this.post('/v1/task/sign');
     return res;
   }
   // 用户任务列表

@@ -1,20 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useLocation, useHistory } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
-import { Button, Heading, Text, Flex, Svg, Progress, Box, Image } from 'uikit'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { getAddress } from 'utils/addressHelpers'
-// import { fetchTaskListAsync } from 'state/mission'
-// import tokens from 'config/constants/tokens'
-import { GetTaskName, useCountdownTime, useReceive, useSignIn } from './hooks/matter'
+import { Button, Heading, Text, Flex, Svg, Progress, Box } from 'uikit'
+import { GetTaskName, receive } from './hooks/matter'
+import debounce from 'lodash/debounce'
 import { useToast } from 'hooks'
-import { useDispatch } from 'react-redux'
-import CountdownTime from './Countdown'
 import { TaskInfo, Status } from './type'
-
-/* eslint-disable */
-
+import Dots from 'components/Loader/Dots';
 
 const MisCard = styled.div`
   background: ${(props) => props.theme.card.background};
@@ -76,29 +68,25 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
   const [pengdingType, setpengdingType] = useState(false)
   const [status, setStatus] = useState(info.status);
 
+  const configInfo = GetTaskName(info.task_name_id);
 
   // 领取
-  const handleReceive = useCallback(
-    async () => {
-      try {
-        setpengdingType(true)
-        console.log('领取中。。。');
-
-        // const res = await useReceive(info.task_id)
-        // if (res.code === 1) {
-        //   toastSuccess(t('Received successfully'))
-        //   setStatus(Status.Received);
-        // } else {
-        //   toastError(t('Received failed'))
-        // }
-      } catch (error) {
+  const handleReceive = debounce(async () => {
+    try {
+      setpengdingType(true)
+      const res = await receive(info.task_id)
+      if (res.code === 1) {
+        toastSuccess(t('Received successfully'))
+        setStatus(Status.Received);
+      } else {
         toastError(t('Received failed'))
-      } finally {
-        setpengdingType(false)
       }
-    },
-    [],
-  )
+    } catch (error) {
+      toastError(t('Received failed'))
+    } finally {
+      setpengdingType(false)
+    }
+  }, 150);
 
   const getTipColor = () => {
     if (status === Status.Received) return 'taskTips';
@@ -117,8 +105,8 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
         </Ribbon>
         <Info>
           <Flex flexDirection="column" justifyContent='space-between' alignItems='center'>
-            <Heading mb='16px' scale='ld'>{t(`${GetTaskName(info.task_name_id).name}`)}</Heading>
-            <Text mb='20px' color='textTips'>{t(`${GetTaskName(info.task_name_id).describe}`)}</Text>
+            <Heading mb='16px' scale='ld'>{configInfo?.count ? t(`${configInfo.name}`, { count: configInfo.count }) : t(`${configInfo.name}`)}</Heading>
+            <Text mb='20px' color='textTips'>{t(`${configInfo.describe}`)}</Text>
             {
               info?.Expand &&
               <ProgressBox>
@@ -135,10 +123,9 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
         </Info>
         <CardAction>
           <ReceiveButton
-            isLoading={pengdingType}
             disabled={pengdingType || status === Status.UnCompleted || status === Status.Received}
             onClick={handleReceive} >
-            {status === Status.UnCompleted || status === Status.Completed ? t('Receive') : t('Completed')}
+            {status === Status.UnCompleted || status === Status.Completed ? (pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive')) : t('Completed')}
           </ReceiveButton>
         </CardAction>
       </MisCard >
