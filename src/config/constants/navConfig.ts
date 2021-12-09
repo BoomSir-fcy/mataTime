@@ -1,3 +1,5 @@
+import { MenuNavConfig } from './types'
+
 export const pathConfig = {
   messageAtMePath: '/news/me',
   messageCommentPath: '/news/comment',
@@ -5,7 +7,16 @@ export const pathConfig = {
   messageNoticePath: '/news/notice'
 };
 
-const config = [
+export const menuNavConfig: MenuNavConfig[] = [
+  {
+    icon: 'icon-shouye',
+    activeIcon: 'icon-shouye1',
+    path: '/login',
+    hide: true,
+    hideLeft: true,
+    hideRight: true,
+    lable: 'homeMenuHome'
+  },
   {
     icon: 'icon-shouye',
     activeIcon: 'icon-shouye1',
@@ -15,7 +26,7 @@ const config = [
   {
     icon: 'icon-xingqiu',
     activeIcon: 'icon-xingqiu1',
-    path: '/',
+    path: '/star',
     coming: true,
     lable: 'homeMenuStar'
   },
@@ -59,17 +70,16 @@ const config = [
   {
     icon: 'icon-youxiang',
     activeIcon: 'icon-youxiang1',
-    path: '/',
+    path: '/letter',
     badgeName: 'letter',
     coming: true,
-    count: 0,
     lable: 'homeMenuLetter'
   },
   {
     icon: 'icon-qitawenti',
     activeIcon: 'icon-qitawenti1',
     coming: true,
-    path: '/',
+    path: '/other',
     lable: 'homeMenuOther'
   },
   {
@@ -81,37 +91,36 @@ const config = [
       {
         icon: 'icon-qianbao2',
         activeIcon: 'icon-a-qianbao1',
-        title: '钱包资产',
         path: '/account',
+        hideRight: true,
         lable: 'AccountMenu Wallet'
       },
       {
         icon: 'icon-w59',
         activeIcon: 'icon-w59',
-        title: 'Time兑换',
         lable: 'AccountMenu Time',
         path: '/account/time',
+        hideRight: true,
         markPath: ['/account/faq'],
       },
       {
         icon: 'icon-w59',
         activeIcon: 'icon-w59',
-        title: 'Time兑换',
         lable: 'AccountMenu Time',
+        hideRight: true,
         hide: true,
         path: '/account/faq'
       },
       {
         icon: 'icon-shuichi',
         activeIcon: 'icon-xiaofangshuixiang_shuichi',
-        title: '质押Staking',
         path: '/account/stake',
+        hideRight: true,
         lable: 'AccountMenu Staking'
       },
       {
         icon: 'icon-NFTkapai1',
         activeIcon: 'icon-NFTkapai',
-        title: 'NFT',
         coming: true,
         path: '/account/safeset',
         lable: 'AccountMenu NFT'
@@ -119,7 +128,7 @@ const config = [
       {
         icon: 'icon-purse1S',
         activeIcon: 'icon-purse1S',
-        title: '打赏明细',
+        hideRight: true,
         path: '/account/reward',
         lable: 'AccountMenu Reward'
       }
@@ -202,6 +211,24 @@ const config = [
   }
 ];
 
-export const hideLeftNavPath = ['/login'];
+const getHidePath = (activeRes: string[], config: MenuNavConfig[], key: string) => {
+  let res: string[] = [...activeRes]
+  config.forEach(item => {
+    if (item[key]) {
+      res = res.concat(item.path);
+    }
+    if (item.children) {
+      res = getHidePath(res, item.children, key)
+    }
+  })
+  return res
+}
+export const hideLeftNavPath = (() => {
+  return getHidePath([], menuNavConfig, 'hideLeft')
+})()
 
-export default config;
+export const hideSidebarPath = (() => {
+  return getHidePath([], menuNavConfig, 'hideRight')
+})()
+
+export default menuNavConfig;

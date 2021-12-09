@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Api } from 'apis';
 
 import { fetchUserUnreadMsgNum } from 'store/login/reducer';
-import { pathConfig } from './config'
+import { pathConfig } from 'config/constants/navConfig'
 
 export const useFetchUnreadMsg = (notification) => {
   const [refreshMsg, setRefreshMsg] = useState(0)

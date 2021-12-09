@@ -5,8 +5,9 @@ import { BoxProps, Box, Flex, FlexProps } from 'uikit';
 import MenuNav from 'components/MenuNav';
 import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
-import { hideSidebarPath } from '../Sidebar/config';
-import { hideLeftNavPath } from '../MenuNav/config';
+// import { hideSidebarPath } from '../Sidebar/config';
+// import { hideLeftNavPath } from '../MenuNav/config';
+import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig'
 // backgroundVariants
 
 interface PageSectionProps extends FlexProps {
