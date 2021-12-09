@@ -9,7 +9,7 @@ import { useTranslation } from 'contexts/Localization';
 import { Icon } from 'components';
 import NavItem from './NavItem';
 import NavGoback from './NavGoback';
-import { useFetchUnreadMsg, useReadMsg } from './hooks';
+import { useReadMsg } from './hooks';
 
 export interface NavProps {
   // seconds?: number
@@ -48,7 +48,6 @@ const Nav: React.FC<NavProps> = ({ }) => {
   const menu = config.filter(row => row.lable);
 
   useReadMsg(pathname);
-  useFetchUnreadMsg(notification);
 
   const activeChildren = useMemo(() => {
     const activeConfig = config.find(item =>

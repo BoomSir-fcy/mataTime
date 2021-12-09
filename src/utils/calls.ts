@@ -22,12 +22,14 @@ export const createUserContact = async (
   masterChefContract,
   nickname,
   nftAddress,
-  tokenID
+  tokenID,
+  InviteAddress
 ) => {
   const tx = await masterChefContract.createProfile(
     nickname,
     nftAddress,
-    tokenID
+    tokenID,
+    InviteAddress
   );
   const receipt = await tx.wait();
   return receipt.status;

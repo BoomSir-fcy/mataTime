@@ -89,12 +89,22 @@ export const ruleDataList: RuleDataProps[] = [{
   rate: 60,
   total: 180000000000000,
   month: 2
-}];
+},
+{
+  period: 10,
+  exchnage: 100000000000000,
+  need: 10000000,
+  price: '0.00000010000',
+  rate: 90,
+  total: 90000000000000,
+  month: 1
+}
+];
 
 const TOTAL = 1000000000000000000
-export const chartData  = [
-  { name: "Liquidity Mining", value: TOTAL * 0.15,  color: "rgba(36, 36, 36, 1)" },
-  { name: "Airdrop", value: TOTAL * 0.050, color: "rgba(65, 65, 65, 1)"},
+export const chartData = [
+  { name: "Liquidity Mining", value: TOTAL * 0.15, color: "rgba(36, 36, 36, 1)" },
+  { name: "Airdrop", value: TOTAL * 0.050, color: "rgba(65, 65, 65, 1)" },
   { name: "Staking", value: TOTAL * 0.100, color: "rgba(105, 105, 105, 1)" },
   { name: "DSG Echange", value: TOTAL * 0.700, color: "rgba(13, 13, 13, 1)" },
 ];

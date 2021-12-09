@@ -60,13 +60,14 @@ export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
+  const { callback } = props
 
   useEffect(() => {
     const { content } = props;
     try {
       let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
       setParsingResult(arr);
-    } catch (err: any) {}
+    } catch (err: any) { }
   }, [props.content]);
 
   useEffect(() => {
@@ -191,6 +192,9 @@ export const ContentParsing = (props: IProps) => {
             onClick={(e: any) => {
               e.stopPropagation();
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
+              if (callback) {
+                callback(MoreOperatorEnum.EXPAND)
+              }
               setExpand(!expand);
             }}
           >

@@ -208,7 +208,21 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     }
   };
 
+  const getInviteAddress = () => {
+    // 获取邀请地址
+    const search = route.location.search
+    const myQuery = (search) => {
+      return new URLSearchParams(search);
+    }
+    const InviteAddress = myQuery(search).get("InviteAddress");
+    if (InviteAddress) {
+      localStorage.setItem("InviteAddress", InviteAddress);
+    }
+    console.log(InviteAddress, "InviteAddress");
+  }
+
   useEffect(() => {
+    getInviteAddress()
     return () => {
       dispatch(storeAction.changeReset());
     };

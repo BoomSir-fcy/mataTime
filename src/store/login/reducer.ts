@@ -14,6 +14,7 @@ import {
   resetLoginState,
   setSigninLoading,
   setUserToken,
+  setUserUnreadMsgNum,
 } from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
@@ -73,17 +74,6 @@ export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
   }
 );
 
-// Async thunks
-export const fetchUserUnreadMsgNum = createAsyncThunk<Api.News.UnreadMsgNum>(
-  'login/fetchUserUnreadMsgNum',
-  async () => {
-    const res = await Api.NewsApi.getUnreadMsgNum();
-    if (Api.isSuccess(res)) {
-      return res.data
-    }
-    return null
-  }
-);
 
 export const login = createSlice({
   name: 'login',
@@ -146,12 +136,15 @@ export const login = createSlice({
           state.token = '';
         }
       })
-      .addCase(fetchUserUnreadMsgNum.fulfilled, (state, action) => {
+      .addCase(setUserUnreadMsgNum, (state, action: { payload: Partial<Api.News.UnreadMsgNum> }) => {
         if (action.payload) {
-          const mineTotalMsgNum = action.payload.message_at_me + action.payload.message_like + action.payload.message_comment
-          state.unReadMsg = {
+          const unreadMsg = {
             ...state.unReadMsg,
             ...action.payload,
+          }
+          const mineTotalMsgNum = unreadMsg.message_at_me + unreadMsg.message_like + unreadMsg.message_comment + unreadMsg.message_system
+          state.unReadMsg = {
+            ...unreadMsg,
             mineTotalMsgNum,
           }
         }

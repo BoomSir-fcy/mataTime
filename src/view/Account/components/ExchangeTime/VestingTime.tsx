@@ -186,13 +186,18 @@ const VestingTime: React.FC<init> = ({ }) => {
           {
             HistoryList.map((item, index) => (
               <Row key={`${item.round}${index}`}>
-                <ItemText>{item.round}</ItemText>
-                <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
-                <ItemText>{formatDisplayApr(item.RemainingAmount)}</ItemText>
-                <ItemText>{formatDisplayApr(item.ReleaseAmount)}</ItemText>
-                <ItemText>
-                  <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
-                </ItemText>
+                {
+                  item.totalPage > 0 &&
+                  <>
+                    <ItemText>{item.round}</ItemText>
+                    <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
+                    <ItemText>{formatDisplayApr(item.RemainingAmount)}</ItemText>
+                    <ItemText>{formatDisplayApr(item.ReleaseAmount)}</ItemText>
+                    <ItemText>
+                      <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
+                    </ItemText>
+                  </>
+                }
               </Row>
             ))
           }

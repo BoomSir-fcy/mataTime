@@ -169,7 +169,8 @@ export const FetchNftStakeType = async account => {
     return userInfo.map((item, index) => ({
       token_id: Number(new BigNumber(item.token_id.toJSON().hex)),
       NFT_address: item.NFT_address,
-      user_id: item.user_id
+      user_id: item.user_id,
+      isActive: item.isActive
     }));
   } catch (error) {
     console.log(error);
@@ -307,13 +308,14 @@ export const useContract = () => {
 
   // 创建用户
   const createUser = useCallback(
-    async (nickname: string, nftAddress: string, tokenID: number) => {
+    async (nickname: string, nftAddress: string, tokenID: number, InviteAddress: string) => {
       try {
         const userinfo = await createUserContact(
           masterChefContract,
           nickname,
           nftAddress,
-          tokenID
+          tokenID,
+          InviteAddress
         );
         return userinfo;
       } catch (error) {

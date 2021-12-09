@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import Popup from 'reactjs-popup';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import {
   FollowPopup,
   MorePopup,
@@ -45,6 +45,8 @@ const MentionItem: React.FC<IProps> = props => {
     callback = () => {}
   } = props;
   const mentionRef: any = useRef();
+  const { push } = useHistory();
+  const { pathname, ...location } = useLocation();
 
   const [position, setPosition] = useState([-999, -999]);
   const [uid, setUid] = useState<string | number>(0);
@@ -75,8 +77,9 @@ const MentionItem: React.FC<IProps> = props => {
   };
 
   const goDetils = () => {
-    if (props?.match?.path === '/articleDetils/:id') return;
-    props.history.push('/articleDetils/' + itemData.post_id || itemData.id);
+    // XXX: 总感觉这样写有问题
+    if (pathname.includes('articleDetils')) return;
+    push(`/articleDetils/${itemData.post_id || itemData.id}`);
   };
 
   return (
