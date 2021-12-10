@@ -399,6 +399,7 @@ export const useFetchTimeBurnData = () => {
   const refresh = useRefreshTimeBurn()
   useEffect(() => {
     if (token) {
+      dispatch(fetchWalletAsync())
       dispatch(fetchWalletAverageburntime())
       dispatch(fetchWalletBurncointoday())
     }
@@ -412,7 +413,10 @@ export const usePlatformTimeBalance = () => {
   return useMemo(() => {
     const timeWallet = wallet.find(item => item.token_type === 1)
     // const timeWallet = wallet.find(item => item.address?.toLowerCase() === getTimeAddress().toLowerCase())
-    return new BigNumber(timeWallet?.available_balance || 0)
+    return {
+      availableBalance: new BigNumber(timeWallet?.available_balance || 0),
+      uid: timeWallet?.uid,
+    }
   }, [wallet])
 }
 
@@ -420,10 +424,12 @@ export const usePlatformTimeBalance = () => {
 export const useEstimatedServiceTime = () => {
   const [leftTime, setLeftTime] = useState(0)
   const { averageBurnTime } = useSelector((p: State) => p.wallet.spendTimeInfo);
-  const availableBalance = usePlatformTimeBalance()
+  const { availableBalance, uid } = usePlatformTimeBalance()
   useEffect(() => {
-    if (!Number(averageBurnTime)) {
-      setLeftTime(availableBalance.toNumber()) // 没有平均消耗值, 剩余时间无限
+    if (!uid) {
+      setLeftTime(0xffff_ffff) // 未请求回数据, 剩余时间无限
+    } else if (!Number(averageBurnTime)) {
+      setLeftTime(availableBalance.toNumber()) // 没有平均消耗值, 剩余时间为币种数量
     } else {
       setLeftTime(availableBalance.div(averageBurnTime).toNumber())
 

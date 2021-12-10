@@ -53,7 +53,7 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
   const [percent, setPercent] = useState(0)
   const [temp, setTemp] = useState(0)
   const burnCoinTody = useStore(p => p.wallet.spendTimeInfo.burnCoinTody);
-  const timeBalance = usePlatformTimeBalance()
+  const { availableBalance } = usePlatformTimeBalance()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -89,7 +89,7 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
           </Box>
           <Box ml="16px">
             <Text color="textTips" fontSize="14px">{t('Time left')}</Text>
-            <Text color="white_black" fontSize="14px">{getFullDisplayBalance(timeBalance, 0, 3)}</Text>
+            <Text color="white_black" fontSize="14px">{getFullDisplayBalance(availableBalance, 0, 3)}</Text>
           </Box>
         </Flex>
       </TimeInfoBox>

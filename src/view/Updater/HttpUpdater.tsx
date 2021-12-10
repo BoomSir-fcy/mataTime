@@ -51,7 +51,7 @@ export default function HttpUpdater() {
         onSecondaryLable={t('登出账号')}
         onConfirm={() => {
           setVisible(false)
-          history.push('/faucet-smart');
+          history.push('/account');
         }}
         onSecondary={() => {
           setVisible(false)
