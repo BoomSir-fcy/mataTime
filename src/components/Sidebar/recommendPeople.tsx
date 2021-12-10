@@ -132,7 +132,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
 
   return (
     isInit &&
-    state.list.length && (
+    state.list.length > 0 && (
       <RecommendPeopleBox isBoxShadow isRadius>
         <Flex justifyContent="space-between" alignItems="center">
           <TitleText>{t('recommendPeopleTitle')}</TitleText>

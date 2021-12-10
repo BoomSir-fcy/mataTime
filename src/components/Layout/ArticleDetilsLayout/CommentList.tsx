@@ -1,15 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Avatar, Icon } from 'components';
+import styled, { useTheme } from 'styled-components';
+import {
+  Avatar,
+  Icon,
+  CommentPop,
+  List,
+  ContentParsing,
+  PopupWrap
+} from 'components';
 import { Flex, Button, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { relativeTime } from 'utils';
 import { SortIcon } from './SortIcon';
-import { Link } from 'react-router-dom';
-import MentionOperator from 'view/News/components/MentionOperator';
-import { FollowPopup, CommentPop, List, ContentParsing } from 'components';
+
 import { Api } from 'apis';
 import { ReadType } from 'hooks/imHooks/types';
+
+import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import {
   CommentListBox,
@@ -20,10 +28,16 @@ import {
   // CommentFooter,
   CommentListFooter
 } from './style';
+
 type Iprops = {
   itemData: any;
-  nonce: number
+  nonce: number;
 };
+
+const PopupButton = styled(Flex)`
+  align-items: center;
+  cursor: pointer;
+`;
 
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
@@ -36,6 +50,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [sortLike, setSortLike] = useState(1);
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const theme = useTheme();
 
   let listRef: any = useRef();
   useEffect(() => {
@@ -82,14 +97,14 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         <span>{t('newsCommentMenuTitle')}</span>
         <div className="sort-box">
           <div>
-            {t('detailHeat')}{' '}
+            {t('detailHeat')}
             <SortIcon
               changeSort={changeSortLike}
               flag={sortLike === 0}
             ></SortIcon>
           </div>
           <div>
-            {t('detailTime')}{' '}
+            {t('detailTime')}
             <SortIcon
               changeSort={changeSortTime}
               flag={sortTime === 0}
@@ -112,7 +127,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle nonce={nonce} readType={ReadType.COMMENT} articleId={item.id} />
+                <SpendTimeViewWithArticle
+                  nonce={nonce}
+                  readType={ReadType.COMMENT}
+                  articleId={item.id}
+                />
               )
             }
             <Flex>
@@ -122,7 +141,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                 scale="md"
               />
               <div style={{ flex: 1, marginLeft: '22px' }}>
-                <CommentHeader justifyContent="space-between">
+                <CommentHeader justifyContent="space-between" mb="15px">
                   <Flex>
                     <div>
                       <div>{item.user_name}</div>
@@ -132,24 +151,24 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     </div>
                     {item.comment_user_name && (
                       <div className="reply">
-                        回复
+                        {t('reply')}
                         <span>@{item.comment_user_name}</span>
                       </div>
                     )}
                   </Flex>
                   <Flex>
-                    <CommentPop
-                      postUserId={itemData.user_id}
-                      data={item}
-                      callback={initList}
+                    <PopupWrap
+                      arrowStyle={{
+                        color: theme.colors.tertiary,
+                        stroke: theme.colors.tertiary
+                      }}
                     >
-                      <Icon
-                        name="icon-gengduo"
-                        current={1}
-                        margin="8px 15px 0 0"
-                        color="#7E7E7E"
+                      <CommentPop
+                        postUserId={itemData.user_id}
+                        data={item}
+                        callback={initList}
                       />
-                    </CommentPop>
+                    </PopupWrap>
                     {/* <MorePopup data={new Object()}> */}
                     {/* </MorePopup> */}
                   </Flex>
@@ -169,7 +188,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               }}
               postId={item.pid}
               commentId={item.id}
-            ></MentionOperator>
+            />
           </CommentItem>
         ))}
       </List>
