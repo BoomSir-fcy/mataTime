@@ -3,6 +3,8 @@ import styled, { keyframes } from "styled-components";
 import { Box } from "../Box";
 import { Image } from "../Image";
 import { SpinnerProps } from "./types";
+import ReactLoading from 'react-loading';
+import { store } from 'store';
 
 
 const rotate = keyframes`
@@ -47,7 +49,15 @@ const FloatingPanIcon = styled(Image)`
 const Spinner: React.FC<SpinnerProps> = ({ size = 128 }) => {
   return (
     <Container width={size} height={size}>
-      <FloatingPanIcon width={size} height={size} src="/images/loding.gif" />
+      {/* <FloatingPanIcon width={size} height={size} src="/images/loding.gif" /> */}
+      <ReactLoading
+        type={'cylon'}
+        color={
+          store.getState().appReducer.systemCustom.isDark
+            ? '#fff'
+            : '#4168ED'
+        }
+      />
     </Container>
   );
 };

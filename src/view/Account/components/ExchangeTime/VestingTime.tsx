@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useCallback, useState, useEffect } from 'react';
-import { Flex, Box, Text, Button, Spinner } from 'uikit';
+import { Flex, Box, Text, Button, Spinner, Empty } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux'
@@ -55,7 +55,7 @@ const ItemText = styled(Text)`
   }
 `
 const LoadingAnimation = styled(Box)`
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
 `
 
@@ -159,8 +159,8 @@ const VestingTime: React.FC<init> = ({ }) => {
     if (HistoryList.length > 0) {
       // 获取总页数
       setPageCount(HistoryList[0].totalPage)
-      setLoading(false)
     }
+    setLoading(false)
   }, [HistoryList])
   return (
     <>
@@ -184,22 +184,23 @@ const VestingTime: React.FC<init> = ({ }) => {
             <HeadText></HeadText>
           </Row>
           {
-            HistoryList.map((item, index) => (
-              <Row key={`${item.round}${index}`}>
-                {
-                  item.totalPage > 0 &&
-                  <>
-                    <ItemText>{item.round}</ItemText>
-                    <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
-                    <ItemText>{formatDisplayApr(item.RemainingAmount)}</ItemText>
-                    <ItemText>{formatDisplayApr(item.ReleaseAmount)}</ItemText>
-                    <ItemText>
-                      <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
-                    </ItemText>
-                  </>
-                }
-              </Row>
-            ))
+            HistoryList.length ?
+              HistoryList.map((item, index) => (
+                <Row key={`${item.round}${index}`}>
+                  {
+                    item.totalPage > 0 &&
+                    <>
+                      <ItemText>{item.round}</ItemText>
+                      <ItemText>{dayjs(item.endTime * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
+                      <ItemText>{formatDisplayApr(item.RemainingAmount)}</ItemText>
+                      <ItemText>{formatDisplayApr(item.ReleaseAmount)}</ItemText>
+                      <ItemText>
+                        <ClaimButton ReleaseAmount={item.ReleaseAmount} id={item.id} upDate={upDate} />
+                      </ItemText>
+                    </>
+                  }
+                </Row>
+              )) : (!Loading && <Empty />)
           }
           {
             Loading && <LoadingAnimation><Spinner /></LoadingAnimation>

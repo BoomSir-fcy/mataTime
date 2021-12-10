@@ -6,31 +6,41 @@ import { Text } from "../Text";
 import { Flex } from "../Box";
 import { EmptyProps, scales, Scales } from "./types";
 import { useTranslation } from "contexts/Localization";
+import { AnimationRingIcon } from "../Svg";
 
 export const scaleIconVariants = {
   [scales.LG]: {
-    width: 496,
-    height: 700
+    width: '496px',
+    height: '700px'
   },
   [scales.MD]: {
-    width: 248,
-    height: 350.8
+    width: '248px',
+    height: '350.8px'
   },
   [scales.SM]: {
-    width: 128,
-    height: 175.4
+    width: '128px',
+    height: '175.4px'
   },
 };
 
-
+const FaqBox = styled.div`
+width: max-content;
+`
 
 const Empty: React.FC<EmptyProps> = ({ scale }) => {
   const { t } = useTranslation()
   const { width, height } = scaleIconVariants[scale]
-  return <Flex width="100%" flexDirection="column" alignItems="center" justifyContent="center">
-    <Image width={width} height={height} src="/images/no-data.png" />
-    <Text>{t('No Data')}</Text>
-  </Flex>
+  return (
+    <Flex width="100%" flexDirection="column" alignItems="center" justifyContent="center">
+      {/* <Image width={width} height={height} src="/images/no-data.png" />
+      <Text>{t('No Data')}</Text> */}
+      <AnimationRingIcon active2 isRotate width={width} height={height}>
+        <FaqBox>
+          <Text>{t('No Data')}</Text>
+        </FaqBox>
+      </AnimationRingIcon>
+    </Flex>
+  )
 };
 
 Empty.defaultProps = {
