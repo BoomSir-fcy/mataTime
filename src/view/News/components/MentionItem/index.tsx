@@ -195,7 +195,8 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 zIndex: 98
               }}
               arrowStyle={{
-                color: theme.colors.tertiary
+                color: theme.colors.tertiary,
+                stroke: theme.colors.tertiary
               }}
             >
               <MorePostPopup

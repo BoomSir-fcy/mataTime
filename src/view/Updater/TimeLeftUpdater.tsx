@@ -22,7 +22,6 @@ export default function TimeLeftUpdater() {
   const [prompted, setPrompted] = useState(false)
 
   useEffect(() => {
-    console.log(leftTime, '==leftTime')
     if (leftTime < SERVICE_TIME_LIMIT && !prompted) {
       setVisible(true)
       setPrompted(true)
@@ -41,7 +40,8 @@ export default function TimeLeftUpdater() {
         onSecondaryLable={t('I see!')}
         onConfirm={() => {
           setVisible(false)
-          history.push('/faucet-smart');
+          history.push('/account');
+          // history.push('/faucet-smart');
         }}
         onSecondary={() => {
           setVisible(false)

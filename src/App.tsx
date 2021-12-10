@@ -132,9 +132,11 @@ function App() {
               <Route path="/me" component={Me} />
               <Route path="/set" component={Set} />
               <Route path="/account" component={Account} />
-              <Route path="/faucet-smart" component={FaucetSmart} />
               {process.env.NODE_ENV === 'development' && (
-                <Route path="/test" component={Test} />
+                <>
+                  <Route path="/faucet-smart" component={FaucetSmart} />
+                  <Route path="/test" component={Test} />
+                </>
               )}
             </Switch>
           </React.Suspense>
