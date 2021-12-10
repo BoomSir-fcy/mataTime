@@ -19,7 +19,7 @@ const getCustomStyles = (
     transform: 'translate(-50%, -50%)',
     minWidth: '240px',
     // height: '238px',
-    background: theme.card.background,
+    background: theme.colors.greyBackground,
     borderRadius: theme.radii.card,
     // boxShadow: theme.card.boxShadow,
     border: 0,

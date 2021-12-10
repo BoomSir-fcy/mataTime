@@ -34,7 +34,7 @@ export const ModalTitleWrapper = styled(Box)`
 export const ReportModalWrapper = styled(Box)`
   width: 668px;
   max-height: 500px;
-  background: ${({ theme }) => theme.colors.backgroundCard};
+  background: ${({ theme }) => theme.colors.greyBackground};
   border-radius: ${({ theme }) => theme.radii.card};
   box-sizing: border-box;
 `;
@@ -52,7 +52,7 @@ export const ReplyTargetWrapper = styled(Box)`
     top: 70px;
     width: 5px;
     height: calc(100% - 75px);
-    background: #4d535f;
+    background: #000;
     border-radius: 3px;
     position: absolute;
     content: '';

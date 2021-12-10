@@ -34,8 +34,10 @@ export const scaleVariants = {
 
 export const styleVariants = {
   [variants.PRIMARY]: {
-    backgroundColor: 'backgroundPrimary',
-    color: 'primary'
+    background: 'linear-gradient(90deg, #353535, #080808)',
+    color: 'primary',
+    border: '1px solid',
+    borderColor: 'primary'
     // backgroundRepeat: "no-repeat",
     // backgroundImage: `url(${btn1}), url(${btn}), url(${btn2})`,
     // backgroundPosition: "0 0px, 10px 0px, 100% -1px",
@@ -45,14 +47,14 @@ export const styleVariants = {
     backgroundColor: 'transparent',
     boxShadow: 'none',
     border: '1px solid',
-    borderColor: 'backgroundPrimary',
-    color: 'blue',
+    borderColor: 'white',
+    color: 'white',
     ':disabled': {
       backgroundColor: 'primary'
     }
   },
   [variants.TERTIARY]: {
-    backgroundColor: 'tertiary',
+    backgroundColor: 'backgroundDisabled',
     boxShadow: 'none',
     color: 'primary'
   },

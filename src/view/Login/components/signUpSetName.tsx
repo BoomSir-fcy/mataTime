@@ -23,7 +23,7 @@ const InputItems = styled(Flex)`
 `;
 const InputText = styled(Text)`
   width: 120px;
-  min-width: 100px;
+  min-width: 110px;
   ${mediaQueriesSize.marginr}
 `;
 const InputNftImg = styled.img`
@@ -62,7 +62,7 @@ const Submit = styled(Button)`
 const NameVerify = styled(Text)`
   position: absolute;
   left: 2px;
-  bottom: -30px;
+  top: 50px;
 `;
 const WalletAddr = styled.div`
   position: absolute;

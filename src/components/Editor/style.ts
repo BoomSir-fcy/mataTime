@@ -39,10 +39,9 @@ export const CancelButton = styled(Button)`
 export const SlateBox = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
-  margin-bottom: 10px;
   border-radius: ${({ theme }) => theme.radii.card};
   padding: 15px;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
   z-index: 1004;
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
