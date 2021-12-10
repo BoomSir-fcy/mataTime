@@ -40,6 +40,7 @@ import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
+
 import escapeHtml from 'escape-html';
 
 type Iprops = {
@@ -111,13 +112,14 @@ const insertTopic = (editor, character = '') => {
   // Transforms.insertNodes(editor, topic);
 };
 
+// 20211210 去掉escapeHtml
 function deep(children) {
   return children.map(item => {
     if (item.text) {
-      return { ...item, text: escapeHtml(item.text) };
+      return { ...item, text: item.text };
     }
     if (item.type === 'mention') {
-      return { ...item, character: escapeHtml(item.character) };
+      return { ...item, character: item.character };
     }
     return item;
   });
@@ -254,6 +256,7 @@ export const Editor = (props: Iprops) => {
   useEffect(() => {
     setIsDisabledSend(imgList.length < 1);
   }, [imgList]);
+
   const callbackSelectImg = e => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -343,9 +346,10 @@ export const Editor = (props: Iprops) => {
     // let content = ''
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
+
     if (content.length > 140) {
       setTimeId(null);
-      return toast.warning(t('sendArticleMsgMaxWords'))
+      return toast.warning(t('sendArticleMsgMaxWords'));
     }
 
     props.sendArticle(
