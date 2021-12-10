@@ -67,6 +67,8 @@ export class IM extends EventTarget {
   pingIntervalSeconds = 10_000; // 心跳连接时间
   loading = false;
 
+  reTimer = null; // 重连timer
+
   waitMessageList: SendMessageData[] = [];
   handleEvents: HandleEvent<unknown>[] = [];
   endConnect: boolean = false; // 是否结束链接
@@ -189,6 +191,7 @@ export class IM extends EventTarget {
 
   private onopenHandle(event: Event) {
     this.loading = false
+    clearTimeout(this.reTimer)
     this.dispatchEvent(new Event(ImEventType.OPEN, event))
     this.waitMessageList.forEach(item => {
       this.send(item.ptl, item.data, true)
@@ -249,15 +252,16 @@ export class IM extends EventTarget {
   }
 
   private onerrorHandle(event: Event) {
+    this.loading = false
     this.dispatchEvent(new Event(ImEventType.ERROR, event))
   }
 
   private oncloseHandle(event: CloseEvent) {
-    if ((event.target as IM)?.connection !== this.connection) return
     this.dispatchEvent(new CloseEvent(ImEventType.CLOSE, event))
 
     if (this.endConnect || this.loading) return
-    setTimeout(() => {
+    clearTimeout(this.reTimer)
+    this.reTimer = setTimeout(() => {
       this.init()
     }, 3000)
   }
