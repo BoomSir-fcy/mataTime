@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import { Box, Flex } from 'uikit';
+import { useToast } from 'hooks';
 import { Icon, ReplyModal, MoreOperatorEnum } from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
 import RewardAuthTag from 'components/RewardAuth/RewardAuthTag';
+
+import { useTranslation } from 'contexts/Localization';
 
 // enum MentionObjEnum {
 //   Article,
@@ -34,6 +36,8 @@ const MentionOperator: React.FC<IProps> = ({
   commentId = '',
   postId = ''
 }) => {
+  const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
@@ -59,12 +63,19 @@ const MentionOperator: React.FC<IProps> = ({
             }
           });
           setIsLike(isLike === 1 ? 0 : 1);
-          toast.success(res.data);
+          toastSuccess(
+            isLike === 0
+              ? t('commonMsgUnlikeSuccess')
+              : t('commonMsgUnlikeError')
+          );
         } else {
-          toast.error(res?.data);
+          toastError(
+            isLike === 0 ? t('commonMsglikeError') : t('commonMsgUnUnlikeError')
+          );
         }
       });
     }
+
     if (type === 'Comment') {
       Api.CommentApi[isLike === 1 ? 'commentCancelLike' : 'commentLike']({
         comment_id: itemData.id
@@ -76,9 +87,9 @@ const MentionOperator: React.FC<IProps> = ({
             like_num:
               isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1
           });
-          toast.success(res.data);
+          toastSuccess(res.data);
         } else {
-          toast.error(res.data);
+          toastError(res.data);
         }
       });
     }

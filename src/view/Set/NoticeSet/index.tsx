@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
 import { Flex, Card, Text, Toggle } from 'uikit';
+import { useToast } from 'hooks';
 import { useStore, fetchThunk } from 'store';
 import { Api } from 'apis';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization';
 
 const NoticeSetBox = styled(Card)`
@@ -33,6 +33,7 @@ const NoticeSet = () => {
   const dispatch = useDispatch();
   const setting = useStore(p => p.loginReducer.userInfo);
   const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const [state, setState] = useImmer({
     msg_remind: setting.msg_remind === 1 ? true : false
   });
@@ -46,9 +47,9 @@ const NoticeSet = () => {
           p[keys] = params[keys] === 1 ? true : false;
         });
         dispatch(fetchThunk.fetchUserInfoAsync());
-        toast.success(res.msg);
+        toastSuccess(t('editSuccess'));
       } else {
-        toast.error(res.msg);
+        toastError(t('editFial'));
       }
     } catch (error) {
       console.log(error);

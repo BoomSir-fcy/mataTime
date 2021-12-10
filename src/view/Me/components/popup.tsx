@@ -112,9 +112,9 @@ export const Popup: React.FC<{
             <PopupContentWrapper
               onMouseLeave={(e: any) => {
                 e.stopPropagation();
-                setState(p => {
-                  p.visible = false;
-                });
+                // setState(p => {
+                //   p.visible = false;
+                // });
               }}
             >
               <Button variant="text" disabled>
