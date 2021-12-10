@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,9 @@ import {
   MoreOperatorEnum,
   Icon
 } from 'components';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+import { ReadType } from 'hooks/imHooks/types';
+import useReadArticle from 'hooks/imHooks/useReadArticle';
 import { Box, Button, Card, Flex, Text } from 'uikit';
 
 import { shortenAddress } from 'utils/contract';
@@ -131,6 +134,10 @@ const Profile: React.FC<any> = props => {
   const defaultImages = isDark ? defaultDarkImages : defaultLightImages;
   const { languange } = setting;
   const systemLang = languange?.value?.code;
+
+  // 阅读文章扣费
+  const [nonce, setNonce] = useState(0)
+  useReadArticle(nonce);
 
   const init = async (offset?: number) => {
     try {
@@ -263,6 +270,12 @@ const Profile: React.FC<any> = props => {
       >
         {list.map((item, index) => (
           <MeItemWrapper key={`${item.id}+${index}`}>
+            {
+              // 浏览自己的不扣费
+              currentUid?.uid !== item.user_id && (
+                <SpendTimeViewWithArticle nonce={nonce} readType={ReadType.ARTICLE} articleId={item.id} />
+              )
+            }
             <MentionItem
               {...props}
               itemData={{
@@ -273,7 +286,9 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={() => init(1)}
+              callback={(type) => {
+                init(1)
+              }}
             />
             <MentionOperator
               replyType="twitter"
@@ -287,7 +302,10 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={() => init(1)}
+              callback={(type) => {
+                console.log(type, '===')
+                init(1)
+              }}
             />
           </MeItemWrapper>
         ))}

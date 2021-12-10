@@ -217,19 +217,7 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   // 获取总条数
   const totalNum = await FetchRecordLength(account)
   if (Number(totalNum) === 0) {
-    return [
-      {
-        round: 0,
-        endTime: 0,
-        latestTime: 0,
-        totalAmount: 0,
-        debtAmount: 0,
-        RemainingAmount: 0,
-        totalPage: 0,
-        page: page,
-        id: 0
-      }
-    ]
+    return []
   }
   // 获取总页数
   const totalPage = getTotalPage(Number(totalNum))
@@ -260,17 +248,7 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
     return completeList
   } catch (error) {
     console.log(error);
-    return [{
-      round: 0,
-      endTime: 0,
-      latestTime: 0,
-      totalAmount: 0,
-      debtAmount: 0,
-      RemainingAmount: 0,
-      totalPage: 0,
-      page: page,
-      id: 0
-    }]
+    return []
   }
 }
 

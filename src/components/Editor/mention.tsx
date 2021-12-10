@@ -10,7 +10,6 @@ export const MentionUser: React.FC<{
 }> = React.memo(({ data, index }) => {
   const ref = React.useRef<HTMLDivElement | null>();
 
-  console.log(data, index);
   return (
     <Context
       ref={ref}

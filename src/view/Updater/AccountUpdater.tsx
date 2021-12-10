@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
-import { useTranslation } from 'contexts/Localization';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction } from 'store';
 import useAuth from 'hooks/useAuth';
-import { storage } from 'config';
 
 export default function AccountUpdater() {
   const dispatch = useDispatch();
@@ -32,6 +29,6 @@ export default function AccountUpdater() {
       setAccountFlag(account);
       handleReSetAccount();
     }
-  }, [account, accountFlag]);
+  }, [account, handleReSetAccount, accountFlag]);
   return null;
 }
