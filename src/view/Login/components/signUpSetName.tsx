@@ -236,18 +236,18 @@ export const SignUpSetName: React.FC<{
       {/* <WalletAddress address={account} /> */}
       <Box paddingTop="100px">
         <InputItems marginBottom="36px" alignItems="center">
-          <InputText>{t('邀请地址')}</InputText>
+          <InputText>{t('loginInviteAddress')}</InputText>
           <NickNameBox>
             <InputAddress
               value={inviteinfo.inviteAddr}
               onChange={handleChange}
-              placeholder={t('请输入邀请地址')}
+              placeholder={t('login Please enter the invitation address')}
             />
             {!inviteinfo.isRightAdd && <NameVerify style={{ left: '26px' }} small color="red">
-              {t('请输入正确的地址')}
+              {t('login Please enter the correct address')}
             </NameVerify>}
             {!inviteinfo.isActive && <NameVerify style={{ left: '26px' }} small color="red">
-              {t('该地址无邀请资格')}
+              {t('login This address is not eligible for invitation')}
             </NameVerify>}
           </NickNameBox>
         </InputItems>
