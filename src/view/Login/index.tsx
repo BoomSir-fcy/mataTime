@@ -24,10 +24,11 @@ import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
 import sloganImg from 'assets/images/login_slogan_img.png';
+import HomeBanner from 'components/Cirde/HomeBanner';
 
 /* eslint-disable */
 const LoginContainer = styled(Flex)`
-  width: 100vw;
+  max-width: 100vw;
   height: 100vh;
   background: ${({ theme }) => theme.colors.gradients.signinBackground};
   ${({ theme }) => theme.mediaQueries.md} {
@@ -37,11 +38,11 @@ const LoginContainer = styled(Flex)`
   }
 `;
 const LeftBox = styled(Box)`
-  width: 62.5vw;
-  background-image: url(${sloganImg});
+  width: 63vw;
+  /* background-image: url(${sloganImg});
   background-size: 100% auto;
   background-repeat: no-repeat;
-  background-position: center bottom;
+  background-position: center bottom; */
   ${({ theme }) => theme.mediaQueries.md} {
     width: 100%;
   }
@@ -50,7 +51,7 @@ const Content = styled(Card)`
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  width: 37.5vw;
+  width: 37vw;
   border-radius: 0;
   background-color: ${({ theme }) => theme.colors.backgroundCard};
   ${({ theme }) => theme.mediaQueries.md} {
@@ -266,6 +267,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   return (
     <LoginContainer>
       <LeftBox>
+        <HomeBanner />
         {/* {nftBoolean && (
           <Nft>
             <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>

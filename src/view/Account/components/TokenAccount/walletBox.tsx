@@ -12,6 +12,7 @@ import { useStore, storeAction } from 'store';
 import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration'
+import { useEstimatedServiceTime } from 'store/wallet/hooks';
 
 
 const Content = styled(Flex)`
@@ -80,13 +81,13 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
   const [visible, setVisible] = useState(false)
   const [ModalTitle, setModalTitle] = useState('')
   const [ChosenType, setChosenType] = useState(1)
-
+  const leftTime = useEstimatedServiceTime()
 
   const ReleaseTime = useMemo(() => {
     dayjs.extend(duration)
-    const num = dayjs.duration(432000, "seconds").humanize();
+    const num = dayjs.duration(leftTime, "seconds").humanize();
     return num
-  }, [])
+  }, [leftTime])
 
   const openModaal = (title) => {
     const titleText = title === 1 ? t('AccountRecharge') : t('Accountwithdraw')
@@ -129,7 +130,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
                 </Flex>
                 <Flex alignItems='baseline'>
                   <Fount mr='16px'>{t('Account Estimated use of')}</Fount>
-                  <NumText>{t('More than %time% hours', { time: ReleaseTime })}</NumText>
+                  <NumText>{leftTime > 0 ? t('More than %time% hours', { time: ReleaseTime }) : 0}</NumText>
                 </Flex>
               </>
               :
