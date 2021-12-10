@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { ModalWrapper } from 'components'
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
-import { storeAction } from 'store';
+import { useStore } from 'store';
 import eventBus from 'utils/eventBus';
 import useAuth from 'hooks/useAuth';
 import { SERVICE_TIME_LIMIT } from 'config';
@@ -20,16 +20,17 @@ export default function TimeLeftUpdater() {
 
   const [visible, setVisible] = useState(false)
   const [prompted, setPrompted] = useState(false)
+  const token = useStore(p => p.loginReducer.token);
 
   useEffect(() => {
-    if (leftTime < SERVICE_TIME_LIMIT && !prompted) {
+    if (leftTime < SERVICE_TIME_LIMIT && !prompted && token) {
       setVisible(true)
       setPrompted(true)
     } else if (leftTime > SERVICE_TIME_LIMIT) {
       setVisible(false)
       setPrompted(false)
     }
-  }, [leftTime])
+  }, [leftTime, token, prompted])
 
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
