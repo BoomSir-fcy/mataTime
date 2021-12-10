@@ -326,8 +326,8 @@
   "login Please enter the invitation address": "Please enter the invitation address",
   "login Please enter the correct address": "Please enter the correct address",
   "login This address is not eligible for invitation": "This address is not eligible for invitation",
+  "No Data": "No Data",
   "******end*****@FCY********": "@FCY翻译结束",
-  
   "******start**2021-12-09**@kksam********": "@kksam翻译结束",
   "rewardAutherSuccess": "reward for success",
   "rewardAutherCancel": "reward has been cancelled",
@@ -349,19 +349,18 @@
   "rewardAutherTableText5": "Reward time",
   "systemInformation": "system information",
   "******end**2021-12-09**@kksam********": "@kksam翻译结束",
-
   "******start*****@gww********": "@gww翻译开始",
   "homeMenuTask": "Task",
   "DailyTask": "DailyTask",
   "WeekTask": "WeekTask",
   "SpecialTask": "SpecialTask",
-  "Daily" : "Daily",
-  "Week" : "Week",
-  "Special" : "Special",
-  "RefreshTimeCountdown": "RefreshTimeCountdown", 
-  "OneTimeTask": "OneTimeTask", 
-  "EasyTaskEarn$Matter": "EasyTask, Earn$Matter", 
-  "RevenueRecord": "RevenueRecord", 
+  "Daily": "Daily",
+  "Week": "Week",
+  "Special": "Special",
+  "RefreshTimeCountdown": "RefreshTimeCountdown",
+  "OneTimeTask": "OneTimeTask",
+  "EasyTaskEarn$Matter": "EasyTask, Earn$Matter",
+  "RevenueRecord": "RevenueRecord",
   "Receive": "Receive",
   "Receiving": "Receiving",
   "Completed": "Completed",
@@ -392,5 +391,4 @@
   "Invite friends": "Invite friends",
   "Successfully invite %count% friend every day": "Successfully invite %count% friend every day",
   "******end*****@gww********": "@gww翻译结束"
-  
 }
