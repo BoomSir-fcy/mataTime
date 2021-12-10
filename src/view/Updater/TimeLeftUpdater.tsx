@@ -23,7 +23,8 @@ export default function TimeLeftUpdater() {
   const token = useStore(p => p.loginReducer.token);
 
   useEffect(() => {
-    if (leftTime < SERVICE_TIME_LIMIT && !prompted && token) {
+    // 剩余时间小于提示时间（5分钟） 并且 剩余时间不为0, 并且第一次提示, 并且已经登录
+    if (leftTime < SERVICE_TIME_LIMIT && leftTime !== 0 && !prompted && token) {
       setVisible(true)
       setPrompted(true)
     } else if (leftTime > SERVICE_TIME_LIMIT) {

@@ -78,7 +78,7 @@ function App() {
       ]);
       dispatch(storeAction.setSupportToken(newArr));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -94,12 +94,6 @@ function App() {
       getTokensToCache();
     }
   }, [token, account]);
-
-  // useEffect(() => {
-  //   eventBus.addEventListener('http', (data) => {
-  //     console.log('==========', data)
-  //   })
-  // }, [])
 
   return (
     <Router history={history}>
