@@ -18,7 +18,7 @@ export const mediaQueries: MediaQueries = {
   xxs: `@media screen and (max-width: ${breakpointMap.xs}px)`,
   xs: `@media screen and (min-width: ${breakpointMap.xs}px)`,
   sm: `@media screen and (min-width: ${breakpointMap.sm}px)`,
-  md: `@media screen and (max-width: ${breakpointMap.md}px)`,
+  md: `@media screen and (min-width: ${breakpointMap.md}px)`,
   lg: `@media screen and (min-width: ${breakpointMap.lg}px)`,
   xl: `@media screen and (min-width: ${breakpointMap.xl}px)`,
   xxl: `@media screen and (min-width: ${breakpointMap.xxl}px)`,

@@ -20,11 +20,11 @@ import { useToast } from 'hooks';
 
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   flex-direction: column;
   align-items: center;
   ${({ theme }) => theme.mediaQueries.md} {
-    padding-bottom: 50px;
+    padding-bottom: 100px;
   }
 `;
 const WalletBody = styled(Flex)`
@@ -37,11 +37,11 @@ const WalletBody = styled(Flex)`
   margin-bottom: 30px;
 `;
 const FailButton = styled(Button)`
-  width: 205px;
-  margin-bottom: 23px;
+  width: 45%;
+  margin-bottom: 15px;
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 45%;
-    margin-bottom: 15px;
+    width: 205px;
+    margin-bottom: 23px;
   }
 `;
 const SignUpText = styled(Text)`
@@ -58,9 +58,11 @@ const Nft = styled(Flex)`
   height: 100%;
   justify-content: center;
   flex-direction: column;
+  margin-top: 15px;
+  padding: 0 15px;
   ${({ theme }) => theme.mediaQueries.md} {
-    margin-top: 15px;
-    padding: 0 15px;
+    margin-top: 0;
+    padding: 0;
   }
 `;
 const NftTitle = styled(Text)`

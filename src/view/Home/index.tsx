@@ -88,7 +88,7 @@ const Home: React.FC = (props: any) => {
     <PageContainer>
       <Flex justifyContent="space-between" width="100%">
         <CenterCard>
-          <Crumbs title={t('homeHeaderTitle')} />
+          <Crumbs zIndex={1005} title={t('homeHeaderTitle')} />
           <Editor type="post" sendArticle={sendArticle} />
           <Tabs tabsChange={tabsChange} />
           <ArticleList
