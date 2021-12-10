@@ -13,7 +13,8 @@ import { useStore, storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { AvatarCard } from '../Avatar/AvatarCard';
 
-import { RewardIncome, CoinItem, Reward } from './components';
+import { RewardIncome, CoinItem } from './components';
+import { RewardInput } from './RewardInput';
 
 import { getDecimalAmount } from 'utils/formatBalance';
 import { getBnbAddress } from 'utils/addressHelpers';
@@ -285,8 +286,18 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                   />
                 </Flex>
               </Flex>
-              <Box minHeight="120px" mt="12px">
-                {currentToken[1] && (
+              <Box minHeight="100px" mt="25px">
+                <RewardInput
+                  current={currentToken}
+                  price={current_price}
+                  isOnApprove={state.isOnApprove}
+                  onApprove={() =>
+                    setState(p => {
+                      p.isOnApprove = false;
+                    })
+                  }
+                />
+                {/* {currentToken[1] && (
                   <Reward
                     current={currentToken}
                     price={current_price}
@@ -298,7 +309,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                     }
                     onCallBack={event => changeRewardUser(event)}
                   />
-                )}
+                )} */}
               </Box>
               {reward?.length > 0 && (
                 <Flex mt="4px" alignItems="center">
