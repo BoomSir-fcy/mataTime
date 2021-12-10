@@ -146,10 +146,9 @@ const RecommendPeople: React.FC<Iprops> = props => {
             mt="17px"
           >
             <Flex
-              alignItems="center"
               as={Link}
               to={`/me/profile/${item.uid}`}
-              style={{ flex: 1 }}
+              style={{ flex: 1, alignItems: 'center' }}
             >
               <Avatar src={item.nft_image} scale="sm" />
               <UserInfo>

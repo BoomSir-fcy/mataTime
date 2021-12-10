@@ -31,8 +31,8 @@ const initialState: WalletState = {
   activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'Time',
   rewardNum: 0,
   spendTimeInfo: {
-    burnCoinTody: 0,
-    averageBurnTime: 0,
+    burnCoinTody: '0',
+    averageBurnTime: '0',
   },
   TimeIncomeList: {
     index: 0,
@@ -81,13 +81,13 @@ export const fetchRewardNumAsync = createAsyncThunk<any, string>('wallet/fetchRe
 });
 
 // 今日 消耗
-export const fetchWalletBurncointoday = createAsyncThunk<any>('wallet/fetchWalletBurncointoday', async () => {
+export const fetchWalletBurncointoday = createAsyncThunk<string>('wallet/fetchWalletBurncointoday', async () => {
   const res = await Api.AccountApi.getWalletBurncointoday()
   return res
 });
 
 // 平均消耗
-export const fetchWalletAverageburntime = createAsyncThunk<any>('wallet/fetchWalletAverageburntime', async () => {
+export const fetchWalletAverageburntime = createAsyncThunk<string>('wallet/fetchWalletAverageburntime', async () => {
   const res = await Api.AccountApi.getWalletAverageburntime()
   return res
 });
@@ -141,12 +141,14 @@ export const wallet = createSlice({
         state.rewardNum = action.payload;
       })
       .addCase(fetchWalletBurncointoday.fulfilled, (state, action) => {
-        console.log(action.payload)
-        state.spendTimeInfo.burnCoinTody = action.payload;
+        if (action.payload) {
+          state.spendTimeInfo.burnCoinTody = action.payload;
+        }
       })
       .addCase(fetchWalletAverageburntime.fulfilled, (state, action) => {
-        console.log(action.payload)
-        state.spendTimeInfo.averageBurnTime = action.payload;
+        if (action.payload) {
+          state.spendTimeInfo.averageBurnTime = action.payload;
+        }
       })
       .addCase(fetchIncomeList.fulfilled, (state, action) => {
         state.TimeIncomeList = action.payload;

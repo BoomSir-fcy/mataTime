@@ -10,6 +10,7 @@ import { MeApi } from './Me';
 import { SetApi } from './Set';
 import { AttentionApi } from './Attention';
 import { AccountApi } from './Account';
+import { TaskApi } from './Task';
 
 const isSuccess = (res: Api.Error) => {
   return res && res.code === 1;
@@ -28,5 +29,6 @@ export const Api = {
   MeApi: new MeApi(),
   SetApi: new SetApi(),
   AttentionApi: new AttentionApi(),
-  AccountApi: new AccountApi()
+  AccountApi: new AccountApi(),
+  TaskApi: new TaskApi()
 };

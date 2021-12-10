@@ -8,54 +8,43 @@ import { useWeb3React } from '@web3-react/core';
 import { storeAction } from 'store';
 import eventBus from 'utils/eventBus';
 import useAuth from 'hooks/useAuth';
-import { storage } from 'config';
+import { SERVICE_TIME_LIMIT } from 'config';
 import InsufficientBalanceModal from './InsufficientBalanceModal'
+import { useEstimatedServiceTime } from 'store/wallet/hooks';
 
-export default function HttpUpdater() {
+export default function TimeLeftUpdater() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { t } = useTranslation()
+  const leftTime = useEstimatedServiceTime()
 
   const [visible, setVisible] = useState(false)
-
-  // 重置用户信息
-  const handleReSetAccount = useCallback(() => {
-    dispatch(storeAction.resetLoginState());
-    history.replace('/login');
-  }, [dispatch, history]);
-
-  // 余额不足
-  const handleInsufficient = useCallback(() => {
-    setVisible(true)
-  }, [setVisible])
+  const [prompted, setPrompted] = useState(false)
 
   useEffect(() => {
-    eventBus.addEventListener('unauthorized', handleReSetAccount);
-    return () => {
-      eventBus.addEventListener('unauthorized', handleReSetAccount);
+    console.log(leftTime, '==leftTime')
+    if (leftTime < SERVICE_TIME_LIMIT && !prompted) {
+      setVisible(true)
+      setPrompted(true)
+    } else if (leftTime > SERVICE_TIME_LIMIT) {
+      setVisible(false)
+      setPrompted(false)
     }
-  }, [handleReSetAccount])
+  }, [leftTime])
 
-  useEffect(() => {
-    eventBus.addEventListener('insufficient', handleInsufficient);
-    return () => {
-      eventBus.addEventListener('insufficient', handleInsufficient);
-    }
-  }, [handleInsufficient])
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
-        title={t('$TIME余额不足')}
+        title={t('$TIME余额不足5分钟')}
         tips={t('Metatime 基于阅读时间扣费，1Time=1秒钟需要提前充值后方可浏览平台信息')}
         onConfirmLable={t('前去充值')}
-        onSecondaryLable={t('登出账号')}
+        onSecondaryLable={t('I see!')}
         onConfirm={() => {
           setVisible(false)
           history.push('/faucet-smart');
         }}
         onSecondary={() => {
           setVisible(false)
-          handleReSetAccount()
         }}
       />
     </ModalWrapper>

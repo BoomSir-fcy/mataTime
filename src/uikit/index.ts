@@ -16,6 +16,7 @@ export * from "./components/Skeleton";
 export * from "./widgets/Menu";
 export * from "./theme";
 export * from "./components/Progress";
+export * from "./components/Empty";
 
 // Hooks
 export * from "./hooks";

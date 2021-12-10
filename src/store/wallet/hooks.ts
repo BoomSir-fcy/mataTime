@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCashierDeskAddress, getDsgAddress, getTimeAddress, getTimeShopAddress } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json'
@@ -23,7 +23,9 @@ import {
   fetchTimeIncometoday,
 } from './reducer'
 import { ExchangeList } from './type';
+import { State } from '../types'
 import { BIG_TEN } from 'utils/bigNumber';
+import { useTokenBalance } from 'hooks/useTokenBalance';
 
 
 const REFRESH_INTERVAL = 30 * 1000
@@ -393,12 +395,41 @@ export const useFetchRewardNum = () => {
 
 export const useFetchTimeBurnData = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { account } = useWeb3React()
+  const token = useSelector((p: State) => p.loginReducer.token);
   const refresh = useRefreshTimeBurn()
   useEffect(() => {
-    if (account) {
+    if (token) {
       dispatch(fetchWalletAverageburntime())
       dispatch(fetchWalletBurncointoday())
     }
-  }, [refresh, account])
+  }, [refresh, token])
 }
+
+
+// 平台time余额
+export const usePlatformTimeBalance = () => {
+  const wallet = useSelector((p: State) => p.wallet.wallet);
+  return useMemo(() => {
+    const timeWallet = wallet.find(item => item.token_type === 1)
+    // const timeWallet = wallet.find(item => item.address?.toLowerCase() === getTimeAddress().toLowerCase())
+    return new BigNumber(timeWallet?.available_balance || 0)
+  }, [wallet])
+}
+
+// 预计使用时间
+export const useEstimatedServiceTime = () => {
+  const [leftTime, setLeftTime] = useState(0)
+  const { averageBurnTime } = useSelector((p: State) => p.wallet.spendTimeInfo);
+  const availableBalance = usePlatformTimeBalance()
+  useEffect(() => {
+    if (!Number(averageBurnTime)) {
+      setLeftTime(availableBalance.toNumber()) // 没有平均消耗值, 剩余时间无限
+    } else {
+      setLeftTime(availableBalance.div(averageBurnTime).toNumber())
+
+    }
+  }, [availableBalance, averageBurnTime])
+
+  return leftTime
+}
+

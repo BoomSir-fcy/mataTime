@@ -17,8 +17,8 @@ export interface WalletState {
   TimeExchangeList: ExchangeList[]
   activeToken: string
   spendTimeInfo: {
-    burnCoinTody: number,
-    averageBurnTime: number,
+    burnCoinTody: string,
+    averageBurnTime: string,
   }
   rewardNum: number,
   TimeIncomeList: IncomeListInfo,
