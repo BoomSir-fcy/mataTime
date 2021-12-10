@@ -7,6 +7,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
+  <style>
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+      }
+
+      40% {
+        opacity: 0.6;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .particles {
+      background-color: black;
+      animation: fade-in;
+      animation-duration: 0.5s;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #root {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
   <link rel="stylesheet" href="//at.alicdn.com/t/font_2883938_n96a6kkeb9l.css" />
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <!--
@@ -30,6 +61,8 @@
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
   <div id="portal-root"></div>
+  <canvas id="particles" class="particles"></canvas>
+  <script src="particles.js"></script>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

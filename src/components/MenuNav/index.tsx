@@ -9,7 +9,7 @@ import NavFooter from './NavFooter';
 const MenuContener = styled(Flex)`
   height: 100vh;
   width: 214px;
-  /* background: pink; */
+  background:  ${({ theme }) => theme.colors.primaryDark};
   /* border: 1px red solid; */
   position: sticky;
   top: 0;
@@ -20,7 +20,7 @@ export interface MenuNavProps {
   // seconds?: number
 }
 
-const MenuNav: React.FC<MenuNavProps> = ({}) => {
+const MenuNav: React.FC<MenuNavProps> = ({ }) => {
   const { t } = useTranslation();
 
   return (

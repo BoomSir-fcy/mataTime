@@ -42,7 +42,7 @@ const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 
 const Container = styled(Box)`
-  background-color: ${({ theme }) => theme.colors.background};
+  /* background-color: ${({ theme }) => theme.colors.background}; */
   min-height: 100vh;
 `;
 

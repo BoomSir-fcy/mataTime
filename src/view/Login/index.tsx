@@ -30,7 +30,8 @@ import HomeBanner from 'components/Cirde/HomeBanner';
 const LoginContainer = styled(Flex)`
   max-width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gradients.signinBackground};
+  overflow: hidden;
+  /* background: ${({ theme }) => theme.colors.gradients.signinBackground}; */
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: column-reverse;
     height: auto;
@@ -53,7 +54,8 @@ const Content = styled(Card)`
   align-items: flex-end;
   width: 37vw;
   border-radius: 0;
-  background-color: ${({ theme }) => theme.colors.backgroundCard};
+  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  background-color: ${({ theme }) => theme.colors.primaryDark};
   ${({ theme }) => theme.mediaQueries.md} {
     width: 100%;
     align-items: baseline;

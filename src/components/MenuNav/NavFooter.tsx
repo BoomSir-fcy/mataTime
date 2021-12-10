@@ -29,7 +29,7 @@ const User = styled(Flex)`
 const TimeInfoBox = styled(Flex)`
   width: 100%;
   height: 110px;
-  background: ${({ theme }) => theme.colors.backgroundMenu};
+  background: ${({ theme }) => theme.colors.backgroundThemeCard};
   padding-left: 12px;
 `
 
@@ -39,7 +39,7 @@ const DownTimeBox = styled(Box)`
   position: absolute;
   width: ${100 - strokeWidth * 2}%;
   height: ${100 - strokeWidth * 2}%;
-  background: ${({ theme }) => theme.colors.background};
+  /* background: ${({ theme }) => theme.colors.background}; */
   border-radius: 50%;
   top: ${strokeWidth}%;
   left: ${strokeWidth}%;

@@ -35,14 +35,14 @@ const Column = styled(Flex)`
     margin-left:17px;
   }
   .active {
-    box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.backgroundPrimary};
+    box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.white};
   }
 `;
 const GetAuthorizeBox = styled(Box)`
   padding: 10px 17px 0 0px ;
   margin-top: 10px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
+  background: ${({ theme }) => theme.colors.backgroundDisabled};
 `;
 const GetAuthorize = styled(Flex)`
   /* justify-content: space-between; */
@@ -53,7 +53,7 @@ const GetAuthorize = styled(Flex)`
     height: 4px;
   }
   ::-webkit-scrollbar-thumb {
-  background-color: ${({ theme }) => theme.colors.backgroundPrimary};
+  background-color: ${({ theme }) => theme.colors.white};
   }
 `;
 const AvatarName = styled(Text)`
@@ -63,11 +63,8 @@ const AvatarName = styled(Text)`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.textTips};
 `;
-const ActiveImg = styled.img`
-  position: absolute;
-  top: 0;
-  right: 30px;
-  width: 30px;
+const ActiveImg = styled(Avatar)`
+  border-radius: 10px;
 `;
 const NodataDom = styled.div`
   color: ${({ theme }) => theme.colors.textTips};
@@ -80,7 +77,6 @@ const NowrapBtn = styled(Button)`
 const AvatarBox = styled.div`
   width: 102px;
   height: 104px;
-  border: 2px solid #e0f9d0;
   border-radius: 10px;
 `;
 
@@ -149,7 +145,7 @@ const NftAvatar: React.FC<{
                       item.properties.token_id && 'active'
                     }
                   >
-                    <Avatar
+                    <ActiveImg
                       src={item.image}
                       scale="ld"
                       onClick={() => {

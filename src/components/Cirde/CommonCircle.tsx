@@ -42,10 +42,12 @@ export const Circle: React.FC<CircleIconProps> = ({ width, height, margin, isAni
                 isAnimation ?
                     <>
                         <AnimationE2center width={width} height={height} margin={margin}>
-                            <AnimationBgCircleIcon color='white_black' />
+                            {/* <AnimationBgCircleIcon color='white_black' /> */}
+                            <AnimationBgCircleIcon src="/images/bg_cricle.svg" />
                         </AnimationE2center>
                         <AnimationE3center width={width} height={height} margin={margin}>
-                            <AnimationCenterCircleIcon color='white_black' />
+                            {/* <AnimationCenterCircleIcon color='white_black' /> */}
+                            <AnimationCenterCircleIcon src="/images/center_cricle.svg" />
                         </AnimationE3center>
                     </>
                     :

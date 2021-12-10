@@ -15,6 +15,7 @@ const PageContainer = styled(Box)`
   width: 100%;
   margin: 0 auto;
   display: flex;
+  background: ${({ theme }) => theme.colors.primaryDark};
 `;
 const LeftCard = styled(Flex)`
   width: 200px;
