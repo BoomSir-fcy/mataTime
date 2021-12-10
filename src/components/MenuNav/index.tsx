@@ -13,6 +13,8 @@ const MenuContener = styled(Flex) <{ isMobile: boolean }>`
   height: 100vh;
   width: ${({ isMobile }) => (isMobile ? '0' : `${SIDEBAR_WIDTH_FULL}px`)};
   /* background: pink; */
+  width: 214px;
+  background:  ${({ theme }) => theme.colors.primaryDark};
   /* border: 1px red solid; */
   position: ${({ isMobile }) => (isMobile ? 'fixed' : 'sticky')};
   top: 0;
@@ -35,7 +37,6 @@ const MobileOnlyOverlay = styled(Overlay)`
     display: none;
   }
 `;
-
 
 const MenuNav: React.FC<MenuNavProps> = ({ }) => {
   const { t } = useTranslation();

@@ -32,7 +32,7 @@ const WalletBody = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 70px;
-  background: ${({ theme }) => theme.colors.backgroundTextArea};
+  background: ${({ theme }) => theme.colors.backgroundDisabled};
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;

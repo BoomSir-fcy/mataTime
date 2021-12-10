@@ -12,7 +12,7 @@ const FooterWarpper = styled(Flex)`
   width: 100%;
   height: 125px;
   padding-left: 45px;
-  border-top: 1px solid ${({ theme }) => theme.colors.borderColor};
+  border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background: ${({ theme }) => theme.colors.gradients.footer};
   ${({ theme }) => theme.mediaQueries.md} {
     display: none;
@@ -25,7 +25,7 @@ const LogoWrapper = styled(Box)`
   ${mediaQueriesSize.marginbmd};
 `;
 
-const SubText = styled(Text)<{
+const SubText = styled(Text) <{
   to?: string;
 }>`
   color: ${({ theme }) => theme.colors.textTips};
@@ -42,7 +42,7 @@ export const Footer = React.memo(() => {
   return (
     <FooterWarpper flexDirection="column">
       <LogoWrapper>
-        <Logo url="/" src={require('./images/logo.svg').default} />
+        <Logo url="/" src={require('../../view/Login/images/LOGO2.svg').default} />
       </LogoWrapper>
       <Flex>
         <SubText as={Link} to="/">

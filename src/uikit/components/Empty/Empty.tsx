@@ -23,7 +23,7 @@ export const scaleIconVariants = {
   },
 };
 
-const FaqBox = styled.div`
+const DataBox = styled.div`
 width: max-content;
 `
 
@@ -35,9 +35,9 @@ const Empty: React.FC<EmptyProps> = ({ scale }) => {
       {/* <Image width={width} height={height} src="/images/no-data.png" />
       <Text>{t('No Data')}</Text> */}
       <AnimationRingIcon active2 isRotate width={width} height={height}>
-        <FaqBox>
+        <DataBox>
           <Text>{t('No Data')}</Text>
-        </FaqBox>
+        </DataBox>
       </AnimationRingIcon>
     </Flex>
   )

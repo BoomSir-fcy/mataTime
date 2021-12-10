@@ -34,6 +34,7 @@ const LoginContainer = styled(Flex)`
   flex-direction: column-reverse;
   height: auto;
   min-height: 100vh;
+  overflow: hidden;
   ${({ theme }) => theme.mediaQueries.md} {
     max-width: 100vw;
     height: 100vh;
@@ -56,7 +57,8 @@ const Content = styled(Card)`
   width: 100%;
   align-items: baseline;
   border-radius: 0;
-  background-color: ${({ theme }) => theme.colors.backgroundCard};
+  border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  background-color: ${({ theme }) => theme.colors.primaryDark};
   ${({ theme }) => theme.mediaQueries.md} {
     align-items: flex-end;
     width: 37vw;

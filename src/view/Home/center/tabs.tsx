@@ -6,7 +6,6 @@ import { Flex, Button, Box, Card } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 export const TabsBox = styled(Card)`
-  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -61,7 +60,7 @@ interface propsType {
   tabsChange?: (item) => void;
   tabRightArr?: any[];
   tabLeftArr?: any[];
-  isThrottle:boolean
+  isThrottle: boolean
 }
 export const Tabs = (props: propsType) => {
   const { t } = useTranslation();
@@ -94,12 +93,12 @@ export const Tabs = (props: propsType) => {
     defCurrentRight || 0
   );
   const leftTabClick = (item, index) => {
-    if (isThrottle&&index === currentLeftIndex) return
+    if (isThrottle && index === currentLeftIndex) return
     setCurrentLeftIndex(index);
     tabsChange(item);
   };
   const rightTabClick = (item, index) => {
-    if (isThrottle&&index === currentRightIndex) return
+    if (isThrottle && index === currentRightIndex) return
     setCurrentRightIndex(index);
     tabsChange(item);
   };
@@ -142,7 +141,7 @@ Tabs.defaultProps = {
   currentLeft: 0,
   currentRight: 0,
   // tabLeftChange: () => { },
-  isThrottle:true,
+  isThrottle: true,
   // tabRightChange: () => { },
-  tabsChange: () => {}
+  tabsChange: () => { }
 };

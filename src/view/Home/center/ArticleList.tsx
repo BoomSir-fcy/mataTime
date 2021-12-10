@@ -16,6 +16,7 @@ import { Api } from 'apis';
 
 const ArticleListBox = styled.div`
   color: #fff;
+  padding-top: 12px;
 `;
 
 /**

@@ -17,7 +17,11 @@ justify-content: space-between;
 align-items: center;
 padding:16px 5px 30px;
   .active{
-  background: ${({ theme }) => theme.colors.backgroundPrimary};
+  background: ${({ theme }) => theme.colors.gradients.buttonBg};
+  border-width: 1px;
+  }
+  .activeLine{
+  background: ${({ theme }) => theme.colors.white};
   }
 `
 
@@ -30,13 +34,14 @@ align-items: center;
 width: 50px;
 height: 50px;
 background: ${({ theme }) => theme.colors.disableStep};
+border: 2px solid ${({ theme }) => theme.colors.white};
 border-radius: 50%;
 `
 
 const Line = styled.div`
-width: 10vw;
+width: 8vw;
 height: 3px;
-background: ${({ theme }) => theme.colors.disableStep};
+background: ${({ theme }) => theme.colors.borderColor};
 `
 
 const PositionText = styled(Text)`
@@ -65,11 +70,11 @@ export const Step: React.FC = React.memo(() => {
           1
           <PositionText fontSize='18px' >{t('login Choose Avatar')}</PositionText>
         </StepItem>
-        <Line className='active' />
+        <Line className='activeLine' />
         <StepItem className={singUpStep > 1 ? 'active' : ''}>2
           <PositionText fontSize='18px' >{t('login Set nickname')}</PositionText>
         </StepItem>
-        <Line className={singUpStep > 1 ? 'active' : ''} />
+        <Line className={singUpStep > 1 ? 'activeLine' : ''} />
         <StepItem className={singUpStep > 2 ? 'active' : ''} >3
           <PositionText fontSize='18px' >{t('login Complete registration')}</PositionText>
         </StepItem>

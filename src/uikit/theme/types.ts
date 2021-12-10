@@ -69,9 +69,11 @@ export type Gradients = {
   violetAlt: string;
   gold: string;
   progress: string;
+  buttonBg: string;
 };
 
 export type Colors = {
+  greyBackground: string;
   taskDay: string;
   taskWeek: string;
   taskAchievement: string;

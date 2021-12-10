@@ -24,12 +24,12 @@ const getDisabledStyles = ({ $isLoading, theme }: TransientButtonProps) => {
     `;
   }
 
+  // background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
   return `
     &:disabled,
     &.pancake-button--disabled {
       background-repeat: no-repeat;
       background-position: 0 0px, 10px 0px, 100% -1px;
-      background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
       border-color: ${theme.colors.backgroundDisabled};
       box-shadow: none;
       color: white;
@@ -60,7 +60,7 @@ const StyledButton = styled.button<BaseButtonProps>`
   font-size: 14px;
   font-weight: 600;
   justify-content: center;
-  letter-spacing: 0.03em;
+  /* letter-spacing: 0.03em; */
   line-height: 1;
   opacity: ${getOpacity};
   outline: 0;
@@ -78,13 +78,13 @@ const StyledButton = styled.button<BaseButtonProps>`
 
   ${getDisabledStyles}
   ${variant({
-    prop: "scale",
-    variants: scaleVariants,
-  })}
+  prop: "scale",
+  variants: scaleVariants,
+})}
   background-size: 100% 100%;
   ${variant({
-    variants: styleVariants,
-  })}
+  variants: styleVariants,
+})}
   ${layout}
   ${space}
 `;
