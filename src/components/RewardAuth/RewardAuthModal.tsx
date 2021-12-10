@@ -164,7 +164,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   };
 
   // 打赏用户
-  const changeRewardUser = async (amount: number) => {
+  const changeRewardUser = async (amount: string) => {
     try {
       setState(p => {
         p.submitLoading = true;
@@ -296,6 +296,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                       p.isOnApprove = false;
                     })
                   }
+                  onCallBack={event => changeRewardUser(event)}
                 />
                 {/* {currentToken[1] && (
                   <Reward

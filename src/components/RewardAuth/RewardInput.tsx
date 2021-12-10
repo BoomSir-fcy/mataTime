@@ -34,14 +34,14 @@ export const RewardInput: React.FC<{
   price: string;
   isOnApprove: boolean;
   onApprove: () => void;
-}> = React.memo(({ current, price, isOnApprove, onApprove }) => {
+  onCallBack: (event: string) => void;
+}> = React.memo(({ current, price, isOnApprove, onApprove, onCallBack }) => {
   const { t } = useTranslation();
   const { handleApprove } = OnApprove(current[0]);
+  const [amount, setAmount] = React.useState('');
   const [state, setState] = useImmer({
-    number: '',
     loading: false
   });
-
   const { toastError } = useToast();
 
   const ChangeApprove = React.useCallback(async () => {
@@ -63,6 +63,15 @@ export const RewardInput: React.FC<{
       });
     }
   }, [handleApprove]);
+
+  const handleChange = React.useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      if (e.currentTarget.validity.valid) {
+        setAmount(e.currentTarget.value.replace(/,/g, '.'));
+      }
+    },
+    []
+  );
 
   return (
     <React.Fragment>
@@ -93,27 +102,31 @@ export const RewardInput: React.FC<{
                 style={{ minWidth: 0, maxWidth: 150 }}
                 ellipsis
               >
-                ≈ $
-                {state.number
-                  ? new BigNumber(state.number).times(price).toFixed(6)
-                  : 0}
+                ≈ ${amount ? new BigNumber(amount).times(price).toFixed(6) : 0}
               </Text>
             </Flex>
             <InputCell>
               <InputToken
-                value={state.number}
-                onChange={event =>
-                  setState(p => {
-                    p.number = event.target.value;
-                  })
-                }
+                inputMode="decimal"
+                value={amount}
+                pattern={`^[0-9]*[.,]?[0-9]{0,${
+                  (current && current[3]) || 6
+                }}$`}
+                onChange={handleChange}
               />
               <Text color="white" mr="23px">
                 {current && current[2]}
               </Text>
             </InputCell>
           </Box>
-          <Submit>确认</Submit>
+          <Submit
+            onClick={evnet => {
+              evnet.stopPropagation();
+              onCallBack(amount);
+            }}
+          >
+            确认
+          </Submit>
         </Flex>
       )}
     </React.Fragment>
