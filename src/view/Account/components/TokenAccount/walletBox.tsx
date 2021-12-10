@@ -130,7 +130,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
                 </Flex>
                 <Flex alignItems='baseline'>
                   <Fount mr='16px'>{t('Account Estimated use of')}</Fount>
-                  <NumText>{t('More than %time% hours', { time: ReleaseTime })}</NumText>
+                  <NumText>{leftTime > 0 ? t('More than %time% hours', { time: ReleaseTime }) : 0}</NumText>
                 </Flex>
               </>
               :

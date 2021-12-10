@@ -405,7 +405,7 @@ export const useEstimatedServiceTime = () => {
   const { availableBalance, uid } = usePlatformTimeBalance()
   useEffect(() => {
     if (!uid) {
-      setLeftTime(0xffff_ffff) // 未请求回数据, 剩余时间无限
+      setLeftTime(0) // 未请求回数据, 剩余时间无
     } else if (!Number(averageBurnTime)) {
       setLeftTime(availableBalance.toNumber()) // 没有平均消耗值, 剩余时间为币种数量
     } else {

@@ -8,7 +8,7 @@ import {
 const HomeBanner: React.FC = () => {
 
     const [isClick, setIsClick] = useState(false);
-    const [noce, setNoce] = useState(4);
+    const [noce, setNoce] = useState(0);
 
     const handleClick = useCallback(() => {
         setNoce(prep => prep + 1) // 1
