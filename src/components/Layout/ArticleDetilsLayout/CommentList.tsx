@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { Link } from 'react-router-dom';
 import {
   Avatar,
   Icon,
@@ -50,8 +51,10 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [sortLike, setSortLike] = useState(1);
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const popupRefs = React.useRef();
   const theme = useTheme();
 
+  console.log(popupRefs);
   let listRef: any = useRef();
   useEffect(() => {
     listRef.current.loadList();
@@ -135,12 +138,10 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               )
             }
             <Flex>
-              <Avatar
-                src={item.user_avator_url}
-                style={{ width: '50px', height: '50px' }}
-                scale="md"
-              />
-              <div style={{ flex: 1, marginLeft: '22px' }}>
+              <Box as={Link} to={`/me/profile/${item.user_id}`}>
+                <Avatar src={item.user_avator_url} scale="md" />
+              </Box>
+              <div style={{ flex: 1, marginLeft: '14px' }}>
                 <CommentHeader justifyContent="space-between" mb="15px">
                   <Flex>
                     <div>
@@ -158,6 +159,16 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   </Flex>
                   <Flex>
                     <PopupWrap
+                      ref={popupRefs}
+                      trigger={
+                        <PopupButton>
+                          <Icon
+                            name="icon-gengduo"
+                            current={1}
+                            color="#7E7E7E"
+                          />
+                        </PopupButton>
+                      }
                       arrowStyle={{
                         color: theme.colors.tertiary,
                         stroke: theme.colors.tertiary
