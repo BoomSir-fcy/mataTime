@@ -52,7 +52,7 @@ const LikeSet: React.FC = () => {
 
   return (
     <NoticeSetBox isBoxShadow>
-      <Column>
+      {/* <Column>
         <Rows>
           <Title>{t('Dark')}</Title>
           <Text color="textTips" mt="11px">
@@ -60,7 +60,7 @@ const LikeSet: React.FC = () => {
           </Text>
         </Rows>
         <Toggle checked={isDark} onClick={toggleThemeHandle} />
-      </Column>
+      </Column> */}
       <Column>
         <Rows>
           <Title>{t('settingMsgtitle')}</Title>

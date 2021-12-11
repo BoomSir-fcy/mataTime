@@ -140,7 +140,7 @@
   "loginSignUpFail": "There is no corresponding NFT in your account, so you cannot register",
   "loginFollow": "Recommend to follow popular users",
   "loginSubTips": "You can use your digital wallet account to create and log in to the Dinosaur Community for free. The platform will not save any sensitive data of your wallet. Please keep your wallet properly. You cannot log in to the platform if you lose your wallet.",
-  "loginCreatAccount": "Create Account",
+  "loginCreatAccount": "Create",
   "loginGetNft": "Get NFT",
   "loginSignupSuccess": "Registration Success!",
   "loginSignupSuccessText": "Thank you for joining the dinosaur social platform",

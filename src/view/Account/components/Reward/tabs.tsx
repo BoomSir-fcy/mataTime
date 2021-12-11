@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import classnames from 'classnames';
 import { useImmer } from 'use-immer';
 import { useStore } from 'store';
-import { Card, Flex, Box, Text, Button } from 'uikit';
+import { Card, Flex, Box, Text, Button, Empty } from 'uikit';
 import { TokenImage } from 'components';
 
 import { useTranslation } from 'contexts/Localization';
@@ -79,26 +79,36 @@ export const Tabs: React.FC<{
         ))}
       </TabsBox>
       <TabsContent>
-        {income?.map((item, index) => {
-          let token = tokenList.find(
-            row => row[0].toLowerCase() === item.token
-          );
-          return (
-            <CoinCols key={`${item.token}_${index}`}>
-              <TokenImage tokenAddress={item.token} width={40} height={40} />
-              <Flex
-                ml="20px"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <Text color="textTips">{token.length && token[2]}</Text>
-                <Text fontSize="18px" fontWeight="bold">
-                  {item.amount}
-                </Text>
-              </Flex>
-            </CoinCols>
-          );
-        })}
+        {income && income.length > 0 ? (
+          <>
+            {income?.map((item, index) => {
+              let token = tokenList.find(
+                row => row[0].toLowerCase() === item.token
+              );
+              return (
+                <CoinCols key={`${item.token}_${index}`}>
+                  <TokenImage
+                    tokenAddress={item.token}
+                    width={40}
+                    height={40}
+                  />
+                  <Flex
+                    ml="20px"
+                    flexDirection="column"
+                    justifyContent="space-between"
+                  >
+                    <Text color="textTips">{token.length && token[2]}</Text>
+                    <Text fontSize="18px" fontWeight="bold">
+                      {item.amount}
+                    </Text>
+                  </Flex>
+                </CoinCols>
+              );
+            })}
+          </>
+        ) : (
+          <Empty />
+        )}
       </TabsContent>
     </React.Fragment>
   );

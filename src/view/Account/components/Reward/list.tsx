@@ -79,11 +79,11 @@ const RewardList = () => {
   }, [state.page, userInfo]);
 
   return (
-    <React.Fragment>
+    <Box minHeight="100vh">
       <Loading visible={loading} />
       <WalletHead title={t('rewardAutherWallet')} />
       <Tabs data={state.income} />
-      <Box>
+      <Box height="100%">
         <Title>{t('rewardAutherList')}</Title>
         <TableList
           data={list}
@@ -96,7 +96,7 @@ const RewardList = () => {
           }
         />
       </Box>
-    </React.Fragment>
+    </Box>
   );
 };
 
