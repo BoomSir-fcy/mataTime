@@ -10,15 +10,16 @@ import { Api } from 'apis';
 type IProp = {
   show: boolean;
   pid: number;
+  type?: 'comment' | 'post';
   onClose: () => void;
   onQuery: () => void;
 };
 
 export const ReportModal = React.memo((props: IProp) => {
   const { t } = useTranslation();
-  const { show, onClose, pid, onQuery } = props;
+  const { show, onClose, pid, onQuery, type } = props;
   const { toastSuccess, toastError } = useToast();
-  const [complainContent, setComplainContent] = useState<string[]>([
+  const [complainContent] = useState<string[]>([
     t('ReportModalComplain1'),
     t('ReportModalComplain2'),
     t('ReportModalComplain3'),
@@ -33,7 +34,19 @@ export const ReportModal = React.memo((props: IProp) => {
       toastSuccess(t('ReportModalSuccess'));
       onQuery();
     } else {
-      toastError(res.msg || t('ReportModalError'));
+      toastError(t('ReportModalError'));
+      onClose();
+    }
+  };
+
+  // 举报评论
+  const onComplainComment = async (content: string) => {
+    const res = await Api.MeApi.reportComment(pid, content);
+    if (Api.isSuccess(res)) {
+      toastSuccess(t('ReportModalSuccess'));
+      onQuery();
+    } else {
+      toastSuccess(t('ReportModalError'));
       onClose();
     }
   };
@@ -45,14 +58,16 @@ export const ReportModal = React.memo((props: IProp) => {
       visible={show}
       setVisible={onClose}
     >
-      <Box>
+      <Box width="500px">
         <ReportContentWrapper>
           {complainContent.map((item: any, index: number) => {
             return (
               <p
                 key={index}
                 onClick={() => {
-                  onComplainPostRequest(item);
+                  type === 'comment'
+                    ? onComplainComment(item)
+                    : onComplainPostRequest(item);
                 }}
               >
                 {item}

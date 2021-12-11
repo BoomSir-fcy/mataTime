@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useImmer } from 'use-immer';
 import { Box, Text } from 'uikit';
 import {
   ReportModal,
@@ -38,12 +39,13 @@ type Iprops = {
 export const CommentPop = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
-  const { data = {}, callback = () => {}, postUserId = '' } = props;
-  const [visible, setVisible] = useState<boolean>(false);
+  const { data, callback, postUserId } = props;
   const [isCurrentUser, setIsCurrentUser] = useState(false);
-
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [inqueryType, setInqueryType] = useState<string>('deleteComment');
+  const [state, setState] = useImmer({
+    visible: false
+  });
 
   // const [isShowDel, setIsShowDel] = useState<boolean>(false);
   useEffect(() => {
@@ -68,24 +70,17 @@ export const CommentPop = React.memo((props: Iprops) => {
   };
 
   const reportComment = () => {
-    Api.MeApi.reportComment(data.id, 'ssss').then(res => {
-      if (Api.isSuccess(res)) {
-        console.log(res);
-        callback();
-        toast.success(t('ReportModalSuccess'));
-      } else {
-        toast.success(t('ReportModalError'));
-      }
-    });
+    console.log(data);
+    // Api.MeApi.reportComment(data.id, 'ssss').then(res => {
+    //   if (Api.isSuccess(res)) {
+    //     console.log(res);
+    //     callback();
+    //     toast.success(t('ReportModalSuccess'));
+    //   } else {
+    //     toast.success(t('ReportModalError'));
+    //   }
+    // });
   };
-
-  useEffect(() => {
-    const fn = e => {
-      setVisible(false);
-    };
-    document.addEventListener('click', fn);
-    return () => document.removeEventListener('click', fn);
-  });
 
   return (
     <>
@@ -103,14 +98,33 @@ export const CommentPop = React.memo((props: Iprops) => {
         ) : null}
         <Text
           textTransform="capitalize"
-          onClick={() => {
-            setInqueryType('reportComment');
-            setCommonInqueryShow(true);
-          }}
+          onClick={() =>
+            setState(p => {
+              p.visible = true;
+            })
+          }
         >
           {t('moreReport')}
         </Text>
       </PopupWrapper>
+
+      {/* 举报 */}
+      <ReportModal
+        show={state.visible}
+        pid={data.id}
+        type={'comment'}
+        onClose={() =>
+          setState(p => {
+            p.visible = false;
+          })
+        }
+        onQuery={() => {
+          setState(p => {
+            p.visible = false;
+          });
+          callback();
+        }}
+      />
 
       {/* 统一询问框 */}
       <CommonInquiryModal
@@ -118,19 +132,12 @@ export const CommentPop = React.memo((props: Iprops) => {
         type={inqueryType}
         onClose={() => {
           setCommonInqueryShow(false);
-          setVisible(false);
         }}
         onQuery={() => {
-          if (inqueryType === 'deleteComment') {
-            delComment();
-          }
-          if (inqueryType === 'reportComment') {
-            reportComment();
-          }
+          delComment();
           setCommonInqueryShow(false);
-          setVisible(false);
         }}
-      ></CommonInquiryModal>
+      />
     </>
   );
 });

@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Popup from 'reactjs-popup';
 import styled from 'styled-components';
-import { Flex } from 'uikit';
-import { Icon } from 'components';
 
 const StyledPopup = styled(Popup)`
   &-overlay {
-    z-index: 98;
+    z-index: 98 !important;
   }
   &-content {
     width: 150px !important;
@@ -15,30 +13,24 @@ const StyledPopup = styled(Popup)`
     padding: 0;
     border: 0;
     background-color: transparent;
-    z-index: 99;
+    z-index: 99 !important;
   }
 `;
 
-const PopupButton = styled(Flex)`
-  align-items: center;
-  cursor: pointer;
-`;
+const PopupWrapModal = (props, ref) => {
+  return (
+    <StyledPopup
+      ref={ref}
+      trigger={props.trigger}
+      nested
+      keepTooltipInside
+      closeOnDocumentClick
+      position="bottom center"
+      arrowStyle={props.arrowStyle}
+    >
+      {props.children}
+    </StyledPopup>
+  );
+};
 
-export const PopupWrap: React.FC<{
-  arrowStyle: any;
-}> = ({ arrowStyle, children }) => (
-  <StyledPopup
-    trigger={
-      <PopupButton>
-        <Icon name="icon-gengduo" current={1} color="#7E7E7E" />
-      </PopupButton>
-    }
-    nested
-    keepTooltipInside
-    closeOnDocumentClick
-    position="bottom center"
-    arrowStyle={arrowStyle}
-  >
-    {children}
-  </StyledPopup>
-);
+export const PopupWrap = React.forwardRef(PopupWrapModal);
