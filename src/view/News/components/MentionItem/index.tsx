@@ -19,7 +19,6 @@ import { relativeTime } from 'utils';
 
 import { MentionItemWrapper, MentionItemUserWrapper } from './style';
 
-import commentIcon from 'assets/images/social/comment.png';
 import moreIcon from 'assets/images/social/more.png';
 
 const PopupButton = styled(Flex)`
@@ -42,7 +41,7 @@ const MentionItem: React.FC<IProps> = props => {
     dontShowPic,
     size = 'nomal',
     itemData = {},
-    callback = () => { }
+    callback = () => {}
   } = props;
   const mentionRef: any = useRef();
   const { push } = useHistory();

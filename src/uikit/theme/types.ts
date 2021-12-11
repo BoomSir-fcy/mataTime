@@ -73,7 +73,7 @@ export type Gradients = {
 };
 
 export type Colors = {
-  hoverList: string
+  hoverList: string;
   greyBackground: string;
   taskDay: string;
   taskWeek: string;
@@ -84,6 +84,7 @@ export type Colors = {
   ThemeText: string;
   upPrice: string;
   white: string;
+  danger: string;
   downPrice: string;
   primary: string;
   primaryBright: string;
