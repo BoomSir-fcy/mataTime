@@ -5,6 +5,8 @@ import { Flex } from 'uikit';
 import { UserTitle, UserDesc } from 'view/Home/right/recommendPeople';
 import { Api } from 'apis';
 
+import { useTranslation } from 'contexts/Localization';
+
 type Iprops = {
   show: boolean;
   callback?: (data, type) => void;
@@ -12,6 +14,7 @@ type Iprops = {
 };
 
 export const SearchPop = (props: Iprops) => {
+  const { t } = useTranslation();
   const [nicKName, setNickName] = useState('');
   const [nicKNameTimeId, setNicKNameTimeId] = useState(null);
   const [userList, setUserList] = useState([]);
@@ -86,7 +89,7 @@ export const SearchPop = (props: Iprops) => {
               />
             ) : null}
             <input
-              placeholder="昵称搜索"
+              placeholder={t('nicknameSearch')}
               value={nicKName}
               onChange={e => setNickName(e.target.value)}
               type="text"
@@ -144,7 +147,7 @@ export const SearchPop = (props: Iprops) => {
             ) : null}
             <input
               type="text"
-              placeholder="话题搜索"
+              placeholder={t('topicSearch')}
               value={topicValue}
               onChange={e => setTopicValue(e.target.value)}
             />

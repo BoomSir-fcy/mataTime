@@ -2,13 +2,12 @@ import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import { BoxProps, Box, Flex, FlexProps } from 'uikit';
+import { useTranslation } from 'contexts/Localization';
 import MenuNav from 'components/MenuNav';
 import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
-// import { hideSidebarPath } from '../Sidebar/config';
-// import { hideLeftNavPath } from '../MenuNav/config';
 import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig'
-// backgroundVariants
+import Crumbs from './crumbs';
 
 interface PageSectionProps extends FlexProps {
   containerProps?: BoxProps;
@@ -23,7 +22,7 @@ const PageContainerStyled = styled(Box)`
 const ChildrenWrapper = styled(Box)`
   min-height: auto;
   max-width: 1200px;
-  width: 1200px;
+  /* width: 1200px; */
   margin: auto;
   padding-top: 0;
   padding-bottom: 0;
@@ -34,6 +33,10 @@ const LineStyled = styled(Box)`
   height: 100vh;
   position: sticky;
   top: 0;
+  display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: block;
+  }
 `;
 const InnerBox = styled(Flex)`
   position: sticky;
@@ -41,7 +44,15 @@ const InnerBox = styled(Flex)`
   z-index: 2;
 `;
 
-// 解决图层问题
+const CennerBox = styled(Box) <{ showSidebar?: boolean }>`
+  width: 100%;
+  max-width: 100%
+  ${({ theme }) => theme.mediaQueries.md} {
+    max-width: ${({ showSidebar }) => showSidebar ? '670px' : '984px'};
+  }
+`
+
+// 解决右侧slider图层在上问题
 const GlobalStyle = createGlobalStyle`
   .mini-swap-Modal__Body--open {
     .mini-swap-Modal__Body--open-sidebar{
@@ -51,6 +62,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const PageContainer: React.FC = ({ children }) => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
 
   const showSidebar = useMemo(() => {
@@ -78,9 +90,9 @@ const PageContainer: React.FC = ({ children }) => {
           <LineStyled />
           <Flex flex="1" alignItems="flex-start" justifyContent="space-between">
             <InnerBox flex="1" flexDirection="column">
-              <Box maxWidth={showSidebar ? '670px' : '984px'} width="100%">
+              <CennerBox showSidebar={showSidebar}>
                 {children}
-              </Box>
+              </CennerBox>
             </InnerBox>
             <LineStyled mr="14px" />
             {showSidebar && (

@@ -333,6 +333,12 @@ export const Editor = (props: Iprops) => {
     };
   };
 
+  // 转义长度
+  const getBLen = str => {
+    if (!Boolean(str)) return 0;
+    return str.replace(/[^\x00-\xff]/g, '01').length;
+  };
+
   const [timeId, setTimeId] = useState(null);
   const sendArticle = () => {
     if (timeId) return toast.warning(t('sendArticleMsgMaxTime'));
@@ -347,11 +353,11 @@ export const Editor = (props: Iprops) => {
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
 
-    if (content.length > 140) {
+    //限制用户输入数量
+    if (getBLen(content) > 280) {
       setTimeId(null);
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
-
     props.sendArticle(
       JSON.stringify(newValue),
       imgList.join(','),

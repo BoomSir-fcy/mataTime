@@ -3,13 +3,11 @@ import styled, { useTheme } from 'styled-components';
 import history from 'routerHistory';
 import { Flex, Box, Text } from 'uikit';
 import { Icon } from 'components';
-import useMenuNav from 'hooks/useMenuNav';
-import { HamburgerIcon, HamburgerCloseIcon } from "uikit/widgets/Menu/icons";
+
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
-import MenuButton from "./MenuButton";
 
-const Card = styled(Flex) <{ zIndex?: number }>`
+const Card = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 60px;
@@ -17,7 +15,7 @@ const Card = styled(Flex) <{ zIndex?: number }>`
   position: sticky;
   top: 0;
   background: ${({ theme }) => theme.colors.background};
-  z-index: ${({ zIndex }) => zIndex};
+  z-index: 1003;
   ${mediaQueriesSize.paddingxs}
   .text {
     font-size: 18px;
@@ -33,30 +31,21 @@ const CenterBox = styled(Box)`
   text-align: center;
 `;
 
-export const Crumbs: React.FC<{
+const Crumbs: React.FC<{
   title?: string;
   centerTitle?: string;
   back?: boolean;
-  zIndex?: number;
-}> = React.memo(({ back, title, centerTitle, zIndex }) => {
+}> = React.memo(({ back, title, centerTitle }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const colors = theme.colors.white_black;
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
 
   const goBack = () => {
     history.goBack();
   };
 
   return (
-    <Card zIndex={zIndex}>
-      <MenuButton aria-label="Toggle menu" onClick={() => setIsPushed(prep => !prep)} mr="24px">
-        {isPushed ? (
-          <HamburgerCloseIcon width="24px" color="textSubtle" />
-        ) : (
-          <HamburgerIcon width="24px" color="textSubtle" />
-        )}
-      </MenuButton>
+    <Card>
       {!back ? (
         <Text className="text">{title || '首页'}</Text>
       ) : (
@@ -83,3 +72,5 @@ export const Crumbs: React.FC<{
     </Card>
   );
 });
+
+export default Crumbs

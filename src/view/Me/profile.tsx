@@ -136,7 +136,7 @@ const Profile: React.FC<any> = props => {
   const systemLang = languange?.value?.code;
 
   // 阅读文章扣费
-  const [nonce, setNonce] = useState(0)
+  const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
   const init = async (offset?: number) => {
@@ -237,15 +237,15 @@ const Profile: React.FC<any> = props => {
             <Flex className="number">
               <Text className="text">
                 {t('meFans')}
-                <Text className="value"> {profile.fans_num}</Text>
+                <Text className="value">{profile.fans_num}</Text>
               </Text>
               <Text className="text">
                 {t('meFollow')}
-                <Text className="value"> {profile.attention_num}</Text>
+                <Text className="value">{profile.attention_num}</Text>
               </Text>
               <Text className="text">
                 {t('meDynamic')}
-                <Text className="value"> {profile.post_num}</Text>
+                <Text className="value">{profile.post_num}</Text>
               </Text>
             </Flex>
             {/* <Flex className="topic">
@@ -273,7 +273,11 @@ const Profile: React.FC<any> = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle nonce={nonce} readType={ReadType.ARTICLE} articleId={item.id} />
+                <SpendTimeViewWithArticle
+                  nonce={nonce}
+                  readType={ReadType.ARTICLE}
+                  articleId={item.id}
+                />
               )
             }
             <MentionItem
@@ -286,8 +290,8 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={(type) => {
-                init(1)
+              callback={type => {
+                init(1);
               }}
             />
             <MentionOperator
@@ -302,9 +306,9 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={(type) => {
-                console.log(type, '===')
-                init(1)
+              callback={type => {
+                console.log(type, '===');
+                init(1);
               }}
             />
           </MeItemWrapper>

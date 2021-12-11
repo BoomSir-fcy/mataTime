@@ -10,7 +10,7 @@ const LoadingWraper = styled(Flex)`
   width: 100%;
   height: 100%;
   margin: auto;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.01);
   justify-content: center;
   align-items: center;
   @keyframes sk-chase {

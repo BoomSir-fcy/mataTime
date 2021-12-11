@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useStore } from 'store';
 import { shortenAddress } from 'utils/contract';
-import { Flex, Box, Text } from 'uikit';
+import { Flex, Box, Text, Empty } from 'uikit';
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -82,40 +82,47 @@ export const TableList: React.FC<{
           <HeadText>{t('rewardAutherTableText4')}</HeadText>
           <HeadText>{t('rewardAutherTableText5')}</HeadText>
         </Row>
-        {data.map((item, index) => {
-          const stringArray: any[] = [];
-          let context: any[] = [];
-          let token =
-            tokenList.find(row => row[0].toLowerCase() === item.token) || [];
-          try {
-            context = Array.isArray(JSON.parse(item.post))
-              ? JSON.parse(item.post)
-              : [];
-          } catch (err) {
-            console.log(err);
-          }
+        {data.length > 0 ? (
+          <>
+            {data.map((item, index) => {
+              const stringArray: any[] = [];
+              let context: any[] = [];
+              let token =
+                tokenList.find(row => row[0].toLowerCase() === item.token) ||
+                [];
+              try {
+                context = Array.isArray(JSON.parse(item.post))
+                  ? JSON.parse(item.post)
+                  : [];
+              } catch (err) {
+                console.log(err);
+              }
 
-          return (
-            <Row className="matterStyle" key={`${item.add_time}_${index}`}>
-              <ItemText ellipsis>
-                {stringArr(context, stringArray).join(',')}
-              </ItemText>
-              <ItemText>
-                <Flex>
-                  {item.sender_nickname}
-                  <Text ml="10px" color="textTips" ellipsis>
-                    {shortenAddress(item.sender_address)}
-                  </Text>
-                </Flex>
-              </ItemText>
-              <ItemText>{token && token?.length && token[2]}</ItemText>
-              <ItemText>{item.amount}</ItemText>
-              <ItemText>
-                {dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')}
-              </ItemText>
-            </Row>
-          );
-        })}
+              return (
+                <Row className="matterStyle" key={`${item.add_time}_${index}`}>
+                  <ItemText ellipsis>
+                    {stringArr(context, stringArray).join(',')}
+                  </ItemText>
+                  <ItemText>
+                    <Flex>
+                      {item.sender_nickname}
+                      <Text ml="10px" color="textTips" ellipsis>
+                        {shortenAddress(item.sender_address)}
+                      </Text>
+                    </Flex>
+                  </ItemText>
+                  <ItemText>{token && token?.length && token[2]}</ItemText>
+                  <ItemText>{item.amount}</ItemText>
+                  <ItemText>
+                    {dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')}
+                  </ItemText>
+                </Row>
+              );
+            })}
+          </>
+        ) : (
+          <Empty />
+        )}
       </Table>
       {data.length > 0 && (
         <PaginateStyle alignItems="center" justifyContent="end">

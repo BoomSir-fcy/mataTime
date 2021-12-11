@@ -73,7 +73,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         });
         toastSuccess(t('moreCollectionSuccess'));
       } else {
-        toastError(res.msg || t('moreCollectionError'));
+        toastError(t('moreCollectionError'));
       }
     };
 
@@ -90,7 +90,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         });
         toastSuccess(t('moreCancelCollectionSuccess'));
       } else {
-        toastError(res.msg || t('moreCancelCollectionError'));
+        toastError(t('moreCancelCollectionError'));
       }
     };
 
@@ -145,7 +145,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         callback(data, MoreOperatorEnum.SHIELD);
         toastSuccess(t('shieldModalShieldSuccess'));
       } else {
-        toastError(res.data || t('shieldModalShieldError'));
+        toastError(t('shieldModalShieldError'));
       }
     };
 
@@ -156,7 +156,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         callback(data, MoreOperatorEnum.SETTOP);
         toastSuccess(t('moreTopSuccess'));
       } else {
-        toastError(res.data || t('moreTopError'));
+        toastError(t('moreTopError'));
       }
     };
 
@@ -167,7 +167,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         callback(data, MoreOperatorEnum.CANCEL_SETTOP);
         toastSuccess(t('moreCancelTopSuccess'));
       } else {
-        toastError(res.data || t('moreCancelTopError'));
+        toastError(t('moreCancelTopError'));
       }
     };
 
@@ -175,10 +175,10 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const onAttentionFocusRequest = async (focus_uid: number) => {
       const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
       if (Api.isSuccess(res)) {
-        toastSuccess(res.data);
+        toastSuccess(t('commonMsgFollowSuccess'));
         callback({ ...data, is_attention: 1 }, MoreOperatorEnum.FOLLOW);
       } else {
-        toastError(res.data);
+        toastError(t('commonMsgFollowError'));
       }
     };
 
@@ -186,10 +186,10 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const onAttentionCancelRequest = async (focus_uid: number) => {
       const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
       if (Api.isSuccess(res)) {
-        toastSuccess(res.data);
+        toastSuccess(t('commonMsgUnFollowSuccess'));
         callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
       } else {
-        toastError(res.data);
+        toastError(t('commonMsgUnFollowError'));
       }
     };
 
@@ -210,6 +210,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           {isOwn && (
             <>
               <Text
+                textTransform="capitalize"
                 onClick={() => {
                   setInqueryType('delete');
                   setCommonInqueryShow(true);
@@ -218,6 +219,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                 {t('moreDelete')}
               </Text>
               <Text
+                textTransform="capitalize"
                 onClick={() => {
                   if (data.post.is_top === 1) {
                     setInqueryType('cancelTopping');
@@ -234,15 +236,25 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           )}
 
           {!isOwn && data.is_attention === 0 ? (
-            <Text onClick={() => onAttentionFocusRequest(data.user_id)}>
-              {t('followText')} Ta
+            <Text
+              textTransform="capitalize"
+              onClick={() => onAttentionFocusRequest(data.user_id)}
+            >
+              {t('followText')}
             </Text>
-          ) : (
-            <Text onClick={() => onAttentionCancelRequest(data.user_id)}>
-              {t('followCancelText')} Ta
+          ) : !isOwn && data.is_attention === 1 ? (
+            <Text
+              textTransform="capitalize"
+              onClick={() => {
+                onAttentionCancelRequest(data.user_id);
+              }}
+            >
+              {t('followCancelText')}
             </Text>
-          )}
+          ) : null}
+
           {/* <Text
+              textTransform="capitalize"
               onClick={() => {
                 onShareTwitterClick();
               }}
@@ -250,11 +262,13 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
               {t('moreShareTwitter')}
             </Text> */}
           <Text
+            textTransform="capitalize"
             onClick={() => {
               copyContent(
                 `${window.location.origin}/articleDetils/${data.post.post_id || ''
                 }`
               );
+              toastSuccess(t('copySuccess'));
               callback({ ...data });
             }}
           >
@@ -264,6 +278,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           {!isOwn && (
             <>
               <Text
+                textTransform="capitalize"
                 onClick={() => {
                   data.post.is_fav === 1
                     ? onFavCancelRequest(data.post.post_id)
@@ -275,6 +290,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                   : t('moreCollection')}
               </Text>
               <Text
+                textTransform="capitalize"
                 onClick={() => {
                   setReportShow(true);
                 }}
@@ -282,6 +298,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                 {t('moreReport')}
               </Text>
               <Text
+                textTransform="capitalize"
                 onClick={() => {
                   setInqueryType('shield');
                   setCommonInqueryShow(true);

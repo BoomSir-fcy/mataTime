@@ -30,35 +30,38 @@ import HomeBanner from 'components/Cirde/HomeBanner';
 const LoginContainer = styled(Flex)`
   max-width: 100vw;
   height: 100vh;
+  background: ${({ theme }) => theme.colors.gradients.signinBackground};
+  flex-direction: column-reverse;
+  height: auto;
+  min-height: 100vh;
   overflow: hidden;
-  /* background: ${({ theme }) => theme.colors.gradients.signinBackground}; */
   ${({ theme }) => theme.mediaQueries.md} {
-    flex-direction: column-reverse;
-    height: auto;
-    min-height: 100vh;
+    max-width: 100vw;
+    height: 100vh;
+    flex-direction: row;
   }
 `;
 const LeftBox = styled(Box)`
-  width: 63vw;
+  width: 100%;
   /* background-image: url(${sloganImg});
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center bottom; */
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 100%;
+    width: 63vw;
   }
 `;
 const Content = styled(Card)`
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
-  width: 37vw;
+  width: 100%;
+  align-items: baseline;
   border-radius: 0;
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background-color: ${({ theme }) => theme.colors.primaryDark};
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 100%;
-    align-items: baseline;
+    align-items: flex-end;
+    width: 37vw;
   }
 `;
 const LogoWarpper = styled(Box)`
@@ -69,39 +72,39 @@ const LogoWarpper = styled(Box)`
 const Container = styled(Box)`
   width: 100%;
   height: calc(100vh - 125px);
-  padding: 55px 45px 0;
+  padding: 20px 15px 0;
   overflow-y: auto;
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 100%;
     height: 100%;
-    padding: 20px 15px 0;
+    padding: 55px 45px 0;
   }
 `;
 const Nft = styled(Flex)`
   height: 100%;
   justify-content: center;
   flex-direction: column;
-  padding: 0 100px;
+  margin-top: 15px;
+  padding: 0 15px;
   ${({ theme }) => theme.mediaQueries.md} {
-    margin-top: 15px;
-    padding: 0 15px;
+    padding: 0 100px;
+    margin-top: 0;
   }
 `;
 const FailButton = styled(Button)`
-  width: 205px;
-  margin-bottom: 23px;
+  width: 45%;
+  margin-bottom: 15px;
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 45%;
-    margin-bottom: 15px;
+    width: 205px;
+    margin-bottom: 23px;
   }
 `;
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
-  padding-bottom: 100px;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 50px;
   ${({ theme }) => theme.mediaQueries.md} {
-    padding-bottom: 50px;
+    padding-bottom: 100px;
   }
 `;
 const SignInBox = () => {

@@ -8,11 +8,14 @@ import RecommendPeople from './recommendPeople';
 import FooterCopyright from './footerCopyright';
 import styled from 'styled-components';
 
-// TODO: js 判断 滚动
 const SidebarStyled = styled(Box)`
   position: sticky;
   transition: all 0.2s ease-out;
   top: 0;
+  display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: block;
+  }
 `;
 
 const Sidebar = props => {
