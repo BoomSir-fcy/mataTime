@@ -18,6 +18,14 @@ const StyledPopup = styled(Popup)`
 `;
 
 const PopupWrapModal = (props, ref) => {
+  const handsScroller = React.useCallback(() => {
+    ref?.current?.close();
+  }, []);
+
+  React.useEffect(() => {}, [
+    document.addEventListener('scroll', handsScroller)
+  ]);
+
   return (
     <StyledPopup
       ref={ref}

@@ -54,7 +54,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const popupRefs = React.useRef();
   const theme = useTheme();
 
-  console.log(popupRefs);
   let listRef: any = useRef();
   useEffect(() => {
     listRef.current.loadList();
