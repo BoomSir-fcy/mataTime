@@ -128,7 +128,6 @@ export { default as IndexIcon } from "./Icons/IndexIcon";
 export { default as FireIcon } from "./Icons/FireHot";
 export { default as Erc20Icon } from "./Icons/Erc20";
 export { default as CardLableIcon } from "./Icons/CardLable";
-export { default as SortDownIcon } from "./Icons/SortDown";
 export { default as SortUpIcon } from "./Icons/SortUp";
 export { default as PoolsIcon } from "./Icons/Pools";
 export { default as BlockTimeIcon } from "./Icons/BlockTime";

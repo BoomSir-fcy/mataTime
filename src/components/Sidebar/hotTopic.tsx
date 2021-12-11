@@ -69,7 +69,7 @@ const HotTopic: React.FC = () => {
           onClick={debounce(() => getList(true), 500)}
           name="icon-jiazai_shuaxin"
           margin="0"
-          color={theme.colors.textPrimary}
+          color={theme.colors.white_black}
         />
       </Flex>
       <Flex justifyContent="space-between" flexDirection="column">

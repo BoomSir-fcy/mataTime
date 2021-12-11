@@ -50,22 +50,22 @@ export const Toolbar: React.FC<{
           <>
             <Icon
               size={size}
-              color="textPrimary"
+              color="white_black"
               current={1}
               name="icon-tupian"
               onClick={callbackSelectImg}
             />
-            {/* <Icon size={size} color="textPrimary" current={1} name="icon-GIF"/> */}
+            {/* <Icon size={size} color="white_black" current={1} name="icon-GIF"/> */}
             <Icon
               size={size}
-              color="textPrimary"
+              color="white_black"
               current={1}
               name="icon-aite"
               onClick={callbackInserAt}
             />
             <Icon
               size={size}
-              color="textPrimary"
+              color="white_black"
               current={1}
               name="icon-a-xiaoxi1"
               onClick={callbackInserTopic}

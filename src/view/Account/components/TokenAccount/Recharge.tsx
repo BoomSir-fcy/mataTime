@@ -63,7 +63,6 @@ cursor: pointer;
 font-size: 14px;
 `
 const SureBtn = styled(Button)`
-background: ${({ theme }) => theme.colors.backgroundPrimary};
 width: 100%;
 `
 const MyInput = styled(Input)`

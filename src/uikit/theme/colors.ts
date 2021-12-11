@@ -105,7 +105,8 @@ export const lightColors: Colors = {
   searchTopicTxt: '#000',
   searchTopicHoverBg: '#eaf2ff',
   commentBorder: '#ccc',
-  commentHoverBg: '#eaf2ff'
+  commentHoverBg: '#eaf2ff',
+  hoverList: '#070707'
 };
 
 export const darkColors: Colors = {
@@ -134,10 +135,10 @@ export const darkColors: Colors = {
   dropdown: '#1E1D20',
   dropdownDeep: '#212827',
   invertedContrast: '#191326',
-  input: '#292D34',
+  input: '#343434',
   inputPanel: '#21262A',
   inpuShadows: 'inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)',
-  inputSelect: '#292D34',
+  inputSelect: '#343434',
   inputSecondary: '#262130',
   primaryDark: '#000',
   tertiary: '#4D535F',
@@ -181,9 +182,10 @@ export const darkColors: Colors = {
   },
   editorText: '#FFFFFF',
   editorBoxBg: 'transparent',
-  searchTopicBg: '#2F3749',
+  searchTopicBg: '#4A4A4A',
   searchTopicHoverBg: '#191f2d',
   searchTopicTxt: '#fff',
   commentHoverBg: '#1F2534',
-  commentBorder: '#ccc'
+  commentBorder: '#ccc',
+  hoverList: '#1f1f1f'
 };

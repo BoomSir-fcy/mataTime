@@ -39,7 +39,7 @@ export const Emoji: React.FC<{
       </ButtonIcon> */}
       <Icon
         size={20}
-        color="textPrimary"
+        color="white_black"
         current={1}
         name="icon-xiaolian"
         onClick={e => {

@@ -59,6 +59,10 @@ const TaskCountBox = styled(Flex)`
     background: ${({ theme }) => theme.colors.backgroundTextArea};
   }
 `
+const BgBox = styled(Box)`
+  background: ${({ theme }) => theme.colors.primaryDark};
+`
+
 
 const TaskCount = ({ left, right }) => {
   return (
@@ -89,7 +93,7 @@ const Task: React.FC = () => {
           <Flex height="100vh" justifyContent="center" alignItems="center">
             <Spinner />
           </Flex > :
-          <Box>
+          <BgBox>
             <TaskTitle><Text fontSize="18px" bold>{t('EasyTaskEarn$Matter')}</Text></TaskTitle>
             <TaskCountBox>
               <Flex flexWrap="wrap" justifyContent="space-between">
@@ -140,7 +144,7 @@ const Task: React.FC = () => {
                 {specialList.length ? specialList.map(item => <MissionCard key={item.task_id} info={item} />) : <Empty />}
               </LeftFlex>
             </ScrollBox>
-          </Box>
+          </BgBox>
       }
     </>
   );

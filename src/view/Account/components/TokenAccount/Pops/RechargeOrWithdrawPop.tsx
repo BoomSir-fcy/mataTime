@@ -33,7 +33,6 @@ font-size: 14px;
 `
 const SureBtn = styled(Button)`
 padding: 6px 30px;
-background: ${({ theme }) => theme.colors.backgroundPrimary};
 width: 60%;
 `
 const MyInput = styled(Input)`

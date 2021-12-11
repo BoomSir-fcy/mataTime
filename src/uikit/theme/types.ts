@@ -73,6 +73,7 @@ export type Gradients = {
 };
 
 export type Colors = {
+  hoverList: string
   greyBackground: string;
   taskDay: string;
   taskWeek: string;

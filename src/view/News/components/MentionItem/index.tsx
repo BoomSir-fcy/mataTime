@@ -42,7 +42,7 @@ const MentionItem: React.FC<IProps> = props => {
     dontShowPic,
     size = 'nomal',
     itemData = {},
-    callback = () => {}
+    callback = () => { }
   } = props;
   const mentionRef: any = useRef();
   const { push } = useHistory();

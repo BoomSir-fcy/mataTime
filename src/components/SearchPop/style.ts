@@ -16,7 +16,7 @@ export const SearchPopBox = styled(Flex)`
         width: 300px;
         height: 50px;
         background: ${({ theme }) => theme.colors.searchTopicBg};
-        border: 2px solid #4168ed;
+        border: 2px solid ${({ theme }) => theme.colors.white_black};
         outline: none;
         border-radius: 20px;
         color: ${({ theme }) => theme.colors.searchTopicTxt};

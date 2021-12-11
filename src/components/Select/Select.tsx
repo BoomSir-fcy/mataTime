@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { ArrowDropDownIcon, Text, SortDownIcon, SortUpIcon, Flex } from 'uikit';
+import { ArrowDropDownIcon, Text, SortUpIcon, Flex } from 'uikit';
 
 export const scales = {
   LD: 'ld',

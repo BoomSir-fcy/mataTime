@@ -35,7 +35,7 @@ li{
       justify-content: center;
     }
   &:hover {
-  border: 1px solid  ${({ theme }) => theme.colors.backgroundPrimary};
+  border: 1px solid  ${({ theme }) => theme.colors.primaryDark};
   }
   &.disabled{
     cursor: no-drop;
@@ -45,8 +45,9 @@ li{
   }
 }
 .selected{
-  background-color: ${({ theme }) => theme.colors.backgroundPrimary};
-  border: 1px solid ${({ theme }) => theme.colors.backgroundPrimary};
+  background-color: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.primaryDark};
 }
 `
 

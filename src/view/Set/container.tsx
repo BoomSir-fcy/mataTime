@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 
 const PageContainer = styled(Box)`
   position: relative;
+  background: ${({ theme }) => theme.colors.primaryDark};
 `;
 
 export const Container = props => {

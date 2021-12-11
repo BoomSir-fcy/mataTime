@@ -73,7 +73,7 @@ export const SearchPop = (props: Iprops) => {
               name="icon-sousuo"
               margin="15px 0"
               size={20}
-              color="#7393FF"
+              color="white_black"
             />
             {!!nicKName ? (
               <Icon
@@ -81,7 +81,7 @@ export const SearchPop = (props: Iprops) => {
                 name="icon-guanbi2fill"
                 margin="15px 0"
                 size={20}
-                color="#4168ED"
+                color="white_black"
                 onClick={() => setNickName('')}
               />
             ) : null}
@@ -114,8 +114,8 @@ export const SearchPop = (props: Iprops) => {
                   <UserDesc title={item.address}>
                     {item.address &&
                       (item.address || '').slice(0, 3) +
-                        '...' +
-                        (item.address || '').slice(35)}
+                      '...' +
+                      (item.address || '').slice(35)}
                   </UserDesc>
                 </div>
               </Flex>
@@ -130,7 +130,7 @@ export const SearchPop = (props: Iprops) => {
               name="icon-sousuo"
               margin="15px 0"
               size={20}
-              color="#7393FF"
+              color="white_black"
             />
             {!!topicValue ? (
               <Icon
@@ -138,7 +138,7 @@ export const SearchPop = (props: Iprops) => {
                 name="icon-guanbi2fill"
                 margin="15px 0"
                 size={20}
-                color="#4168ED"
+                color="white_black"
                 onClick={() => setTopicValue('')}
               />
             ) : null}

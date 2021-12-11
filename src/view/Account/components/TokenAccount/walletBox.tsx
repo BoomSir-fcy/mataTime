@@ -41,7 +41,7 @@ justify-content:space-between;
 
 `
 const NumText = styled(Text)`
-color: ${({ theme }) => theme.colors.textPrimary};
+/* color: ${({ theme }) => theme.colors.textPrimary}; */
 font-weight: bold;
 `
 
@@ -52,7 +52,6 @@ min-width: 76px;
 `
 const WithdrawBtn = styled(Button)`
 min-width: 80px;
-background: ${({ theme }) => theme.colors.backgroundPrimary};
 &:disabled{
   background: ${({ theme }) => theme.colors.disableStep};
 }
@@ -112,7 +111,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
         </Flex>
         <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
           <ChangeToken src={require('assets/images/myWallet/changeToken.png').default} alt="" />
-          <NumText fontSize='14px'>{t('%token%Wallet', { token: Token === 'Time' ? 'Matter' : 'Time' })}</NumText>
+          <NumText fontSize='14px' color='textPrimary'>{t('%token%Wallet', { token: Token === 'Time' ? 'Matter' : 'Time' })}</NumText>
         </ChangeTokenBtn>
       </TopInfo>
       <Flex alignItems='flex-end' justifyContent='space-between'>

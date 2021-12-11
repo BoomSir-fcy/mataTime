@@ -161,14 +161,14 @@ const TokenAccount: React.FC = () => {
               <Img src={require('assets/images/myWallet/today.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
                 <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
-                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(TimeTodayIncome)}</Text>
+                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TimeTodayIncome)}</Text>
               </Flex>
             </IncomeBox>
             <IncomeBox>
               <Img src={require('assets/images/myWallet/total.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
                 <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
-                <Text color='textPrimary' fontWeight='bold'>{formatDisplayApr(TimeTotalIncome)}</Text>
+                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TimeTotalIncome)}</Text>
               </Flex>
             </IncomeBox>
           </RightBox>

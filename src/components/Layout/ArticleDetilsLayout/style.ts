@@ -31,7 +31,7 @@ export const RightCard = styled(Flex)`
   overflow: auto;
 `;
 export const CommentListBox = styled(Card)`
-/* background-color:#191F2D; */
+background-color:${({ theme }) => theme.colors.primaryDark};
 /* border-radius: 10px; */
 overflow: hidden;
 margin-bottom:50px;

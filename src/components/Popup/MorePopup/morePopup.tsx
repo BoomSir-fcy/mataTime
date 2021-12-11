@@ -26,7 +26,7 @@ enum MoreOperatorEnum {
 
 const PopupWrapper = styled(Box)`
   width: 150px;
-  background: ${({ theme }) => theme.colors.tertiary};
+  background: ${({ theme }) => theme.colors.greyBackground};
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   box-sizing: border-box;
@@ -252,8 +252,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           <Text
             onClick={() => {
               copyContent(
-                `${window.location.origin}/articleDetils/${
-                  data.post.post_id || ''
+                `${window.location.origin}/articleDetils/${data.post.post_id || ''
                 }`
               );
               callback({ ...data });
