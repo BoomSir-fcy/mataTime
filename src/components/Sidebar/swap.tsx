@@ -6,7 +6,7 @@ import MiniSwap from 'libs/mini-swap';
 import { useWeb3React } from '@web3-react/core';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { useTranslation } from 'contexts/Localization';
-import { light, dark, Text, Box } from 'uikit';
+import { light, dark, Text, Box, LinkExternal, Flex } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
@@ -84,8 +84,16 @@ const Swap: React.FC = () => {
         >
           <MiniSwap
             titlehelper={t(
-              '当您搜索一些代币话题时, 平台会自动提供代币快捷兑换功能,提供一站式加密服务,现已支持主流数字货币,后续将不断接入更多货币,敬请期待'
+              'When you search for some token topics, the platform will automatically provide token quick exchange function and one-stop encryption service. Now it supports mainstream digital currencies, and more currencies will be accessed in the future. Please look forward to it'
             )}
+            powered={<Flex padding="0 20px 20px">
+              <Text>
+                Powered by &nbsp;
+              </Text>
+              <LinkExternal color="primary" height="24px" fontSize="16px" href="https://dsgmetaverse.com/">
+                Dsgmetaverse
+              </LinkExternal>
+            </Flex>}
             // subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
             onInputCurrencyChange={handleInputChange}
             inputCurrencyId="0x0858241B08b1335d7711838D6cC9C60a72c92C4B"
@@ -95,8 +103,9 @@ const Swap: React.FC = () => {
                   dropdown: dark.colors.input,
                   text: dark.colors.white_black,
                   backgroundDisabled: dark.colors.tertiary,
-                  primary: dark.colors.textPrimary,
-                  textSubtle: dark.colors.white_black,
+                  primary: dark.colors.primary,
+                  success: dark.colors.success,
+                  textSubtle: dark.colors.textTips,
                   backgroundAlt: dark.colors.backgroundCard,
                   background: dark.colors.background,
                   dropdownDeep: dark.colors.backgroundCard,
@@ -104,7 +113,8 @@ const Swap: React.FC = () => {
                 },
                 shadows: {
                   inset: 'none',
-                  box: 'none'
+                  box: 'none',
+                  success: ''
                 },
                 modal: {
                   background: dark.colors.backgroundCard,

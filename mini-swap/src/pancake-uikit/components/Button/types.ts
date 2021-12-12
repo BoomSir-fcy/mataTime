@@ -14,7 +14,6 @@ export const variants = {
   SECONDARY: "secondary",
   TERTIARY: "tertiary",
   TEXT: "text",
-  TEXTLINE: "textline",
   DANGER: "danger",
   SUBTLE: "subtle",
   SUCCESS: "success",

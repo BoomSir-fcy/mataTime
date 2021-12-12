@@ -1,5 +1,6 @@
 export declare const scaleVariants: {
     ld: {
+        fontSize: string;
         height: string;
         minWidth: string;
         padding: string;
@@ -20,18 +21,19 @@ export declare const scaleVariants: {
 };
 export declare const styleVariants: {
     primary: {
-        backgroundColor: string;
+        background: string;
         color: string;
+        border: string;
+        borderColor: string;
     };
     secondary: {
         backgroundColor: string;
+        boxShadow: string;
         border: string;
         borderColor: string;
-        boxShadow: string;
         color: string;
-        ":disabled": {
+        ':disabled': {
             backgroundColor: string;
-            color: string;
         };
     };
     tertiary: {
@@ -44,19 +46,25 @@ export declare const styleVariants: {
         color: string;
     };
     danger: {
-        backgroundColor: string;
         color: string;
+        backgroundRepeat: string;
+        backgroundPosition: string;
+        backgroundSize: string;
     };
     left: {
         color: string;
-        backgroundColor: string;
+        backgroundRepeat: string;
+        backgroundPosition: string;
+        backgroundSize: string;
         borderTopRightRadius: number;
         borderBottomRightRadius: number;
         boxShadow: string;
     };
     right: {
         color: string;
-        backgroundColor: string;
+        backgroundRepeat: string;
+        backgroundPosition: string;
+        backgroundSize: string;
         borderTopLeftRadius: number;
         borderBottomLeftRadius: number;
         boxShadow: string;
@@ -74,16 +82,11 @@ export declare const styleVariants: {
         backgroundColor: string;
         color: string;
         boxShadow: string;
-    };
-    textline: {
-        backgroundColor: string;
-        color: string;
-        boxShadow: string;
-        padding: number;
-        margin: number;
+        ':disabled': {
+            color: string;
+        };
     };
     circular: {
-        backgroundColor: string;
         color: string;
         width: string;
         height: string;

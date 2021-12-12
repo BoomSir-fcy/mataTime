@@ -77,6 +77,7 @@ const MiniSwap: React.FC<MiniSwapInterface> = ({
   chainId,
   subTitleTips,
   titlehelper,
+  powered,
 }) => {
 
   useEffect(() => {
@@ -99,7 +100,7 @@ const MiniSwap: React.FC<MiniSwapInterface> = ({
       <Updaters />
       <ListenerCurrencyChange onInputCurrencyChange={onInputCurrencyChange} onOutputCurrencyChange={onOutputCurrencyChange} />
       <Blocklist>
-        <Swap subTitleTips={subTitleTips} titlehelper={titlehelper} outputCurrencyId={outputCurrencyId} inputCurrencyId={inputCurrencyId} />
+        <Swap subTitleTips={subTitleTips} titlehelper={titlehelper} powered={powered} outputCurrencyId={outputCurrencyId} inputCurrencyId={inputCurrencyId} />
       </Blocklist>
     </Providers>
   )

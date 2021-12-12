@@ -59,13 +59,13 @@ const UnstakeBtn: React.FC<{
           await onConfirm(stakingId)
           onDismiss()
           toast.success(<>
-            <Text>{t('Unstaked!')}</Text>
-            <Text>{t('Your earnings have also been harvested to your wallet')}</Text>
+            <Text color='black'>{t('Unstaked!')}</Text>
+            <Text color='black'>{t('Your earnings have also been harvested to your wallet')}</Text>
           </>)
         } catch (e) {
           toast.error(<>
-            <Text>{t('Error')}</Text>
-            <Text>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+            <Text color='black'>{t('Error')}</Text>
+            <Text color='black'>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
           </>)
           console.error(e)
         } finally {
@@ -77,7 +77,7 @@ const UnstakeBtn: React.FC<{
           ?
           <Dots>{t('Unstaking')}</Dots>
           :
-          t('Unstaked!')
+          t('Unstaked')
       }
     </Button>
   )

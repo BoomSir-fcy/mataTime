@@ -33,6 +33,7 @@ var styledSystem = require('styled-system');
 var get = require('lodash/get');
 require('lodash/uniqueId');
 var lodash = require('lodash');
+var ReactLoading = require('react-loading');
 var reactDom = require('react-dom');
 var reactPopper = require('react-popper');
 require('lodash/noop');
@@ -55,6 +56,7 @@ var Ajv__default = /*#__PURE__*/_interopDefaultLegacy(Ajv);
 var CID__default = /*#__PURE__*/_interopDefaultLegacy(CID);
 var styled__default = /*#__PURE__*/_interopDefaultLegacy(styled);
 var get__default = /*#__PURE__*/_interopDefaultLegacy(get);
+var ReactLoading__default = /*#__PURE__*/_interopDefaultLegacy(ReactLoading);
 var merge__default = /*#__PURE__*/_interopDefaultLegacy(merge);
 
 var EN = { locale: 'en-US', language: 'English', code: 'en' };
@@ -8664,7 +8666,6 @@ var variants$5 = {
     SECONDARY: "secondary",
     TERTIARY: "tertiary",
     TEXT: "text",
-    TEXTLINE: "textline",
     DANGER: "danger",
     SUBTLE: "subtle",
     SUCCESS: "success",
@@ -8675,105 +8676,119 @@ var variants$5 = {
 };
 
 var _a$7, _b$3;
+// import aFront from '../../image/button/a-front.png';
+// import eFront from '../../image/button/e-front.png';
+// import btn from '../../image/button/btn.png';
+// import btn1 from '../../image/button/btn-1.png';
+// import btn2 from '../../image/button/btn-2.png';
+// import e1 from '../../image/button/e1.png';
+// import e2 from '../../image/button/e2.png';
+// import e3 from '../../image/button/e3.png';
+// import btnLeft from '../../image/button/btn-left.png';
+// import btnRight from '../../image/button/btn-right.png';
 var scaleVariants$1 = (_a$7 = {},
     _a$7[scales$9.LD] = {
-        height: "40px",
-        minWidth: "108px",
-        padding: "0 24px",
+        fontSize: '18px',
+        height: '44px',
+        minWidth: '108px',
+        padding: '0 30px'
     },
     _a$7[scales$9.MD] = {
-        height: "36px",
-        padding: "0 24px",
+        height: '35px',
+        padding: '0 20px'
     },
     _a$7[scales$9.SM] = {
-        height: "32px",
-        padding: "0 16px",
+        height: '32px',
+        padding: '0 16px'
     },
     _a$7[scales$9.XS] = {
-        height: "20px",
-        fontSize: "12px",
-        padding: "0 8px",
+        height: '20px',
+        fontSize: '12px',
+        padding: '0 8px'
     },
     _a$7);
 var styleVariants$2 = (_b$3 = {},
     _b$3[variants$5.PRIMARY] = {
-        backgroundColor: "primary",
-        color: "white",
-        // boxShadow: "0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4)",
+        background: 'linear-gradient(90deg, #353535, #080808)',
+        color: 'primary',
+        border: '1px solid',
+        borderColor: 'primary'
+        // backgroundRepeat: "no-repeat",
+        // backgroundImage: `url(${btn1}), url(${btn}), url(${btn2})`,
+        // backgroundPosition: "0 0px, 10px 0px, 100% -1px",
+        // backgroundSize: "20px 36px, calc(100% - 20px) 36px, 20px 38px",
     },
     _b$3[variants$5.SECONDARY] = {
-        backgroundColor: "transparent",
-        border: "2px solid",
-        borderColor: "primary",
-        boxShadow: "none",
-        color: "primary",
-        ":disabled": {
-            backgroundColor: "transparent",
-            color: "primary",
-        },
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+        border: '1px solid',
+        borderColor: 'white',
+        color: 'white',
+        ':disabled': {
+            backgroundColor: 'primary'
+        }
     },
     _b$3[variants$5.TERTIARY] = {
-        backgroundColor: "tertiary",
-        boxShadow: "none",
-        color: "primary",
+        backgroundColor: 'backgroundDisabled',
+        boxShadow: 'none',
+        color: 'primary'
     },
     _b$3[variants$5.SUBTLE] = {
-        backgroundColor: "textSubtle",
-        color: "backgroundAlt",
+        backgroundColor: 'textSubtle',
+        color: 'backgroundAlt'
     },
     _b$3[variants$5.DANGER] = {
-        backgroundColor: "failure",
-        color: "white",
+        // backgroundColor: "failure",
+        // color: "white",
+        color: 'white',
+        backgroundRepeat: 'no-repeat',
+        // backgroundImage: `url(${e1}), url(${e2}), url(${e3})`,
+        backgroundPosition: '0 0px, 10px 0px, 100% -1px',
+        backgroundSize: '20px 36px, calc(100% - 20px) 36px, 20px 38px'
     },
     _b$3[variants$5.LEFT] = {
-        color: "white",
-        backgroundColor: "primary",
-        // backgroundRepeat: "no-repeat",
+        color: 'white',
+        backgroundRepeat: 'no-repeat',
         // backgroundImage: `url(${btnLeft})`,
-        // backgroundPosition: "0",
-        // backgroundSize: "57px 60px",
+        backgroundPosition: '0',
+        backgroundSize: '57px 60px',
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0,
-        boxShadow: "0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4)",
+        boxShadow: '0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4)'
     },
     _b$3[variants$5.RIGHT] = {
-        color: "white",
-        backgroundColor: "primary",
-        // backgroundRepeat: "no-repeat",
+        color: 'white',
+        backgroundRepeat: 'no-repeat',
         // backgroundImage: `url(${btnRight})`,
-        // backgroundPosition: "right",
-        // backgroundSize: "57px 60px",
+        backgroundPosition: 'right',
+        backgroundSize: '57px 60px',
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
-        boxShadow: "0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), -1px 0px 0px 0px rgba(14, 14, 44, 0.4)",
+        boxShadow: '0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), -1px 0px 0px 0px rgba(14, 14, 44, 0.4)'
     },
     _b$3[variants$5.SUCCESS] = {
-        backgroundColor: "success",
-        color: "white",
+        backgroundColor: 'success',
+        color: 'white'
     },
     _b$3[variants$5.ORANGE] = {
-        backgroundColor: "orange",
-        color: "white",
-        boxShadow: "none",
+        backgroundColor: 'orange',
+        color: 'white',
+        boxShadow: 'none'
     },
     _b$3[variants$5.TEXT] = {
-        backgroundColor: "transparent",
-        color: "primary",
-        boxShadow: "none",
-    },
-    _b$3[variants$5.TEXTLINE] = {
-        backgroundColor: "transparent",
-        color: "primary",
-        boxShadow: "none",
-        padding: 0,
-        margin: 0,
+        backgroundColor: 'transparent',
+        color: 'primary',
+        boxShadow: 'none',
+        ':disabled': {
+            color: 'white'
+        }
     },
     _b$3[variants$5.CIRCULAR] = {
-        backgroundColor: "primary",
-        color: "white",
-        width: "36px",
-        height: "36px",
-        padding: "0",
+        // backgroundImage: `url(${eFront})`,
+        color: 'white',
+        width: '36px',
+        height: '36px',
+        padding: '0'
     },
     _b$3);
 
@@ -8782,7 +8797,8 @@ var getDisabledStyles = function (_a) {
     if ($isLoading === true) {
         return "\n      &:disabled,\n      &.pancake-button--disabled {\n        cursor: progress;\n      }\n    ";
     }
-    return "\n    &:disabled,\n    &.pancake-button--disabled {\n      background-color: " + theme.colors.backgroundDisabled + ";\n      border-color: " + theme.colors.backgroundDisabled + ";\n      box-shadow: none;\n      color: white;\n      // color: " + theme.colors.textDisabled + ";\n      cursor: not-allowed;\n    }\n  ";
+    // background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
+    return "\n    &:disabled,\n    &.pancake-button--disabled {\n      background-repeat: no-repeat;\n      background-position: 0 0px, 10px 0px, 100% -1px;\n      border-color: " + theme.colors.backgroundDisabled + ";\n      box-shadow: none;\n      color: white;\n      // color: " + theme.colors.textDisabled + ";\n      cursor: not-allowed;\n    }\n  ";
 };
 /**
  * This is to get around an issue where if you use a Link component
@@ -8793,7 +8809,7 @@ var getOpacity = function (_a) {
     var _b = _a.$isLoading, $isLoading = _b === void 0 ? false : _b;
     return $isLoading ? ".8" : "1";
 };
-var StyledButton = styled__default["default"].button(templateObject_1$1m || (templateObject_1$1m = tslib.__makeTemplateObject(["\n  align-items: center;\n  border: 0;\n  border-radius: 10px;\n  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,; */\n  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4); */\n  cursor: pointer;\n  display: inline-flex;\n  font-family: inherit;\n  font-size: 14px;\n  font-weight: 600;\n  justify-content: center;\n  letter-spacing: 0.03em;\n  line-height: 1;\n  opacity: ", ";\n  outline: 0;\n  transition: background-color 0.2s, opacity 0.2s;\n\n  &:hover:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled):not(:active) {\n    opacity: 0.8;\n  }\n\n  &:active:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled) {\n    opacity: 0.85;\n    transform: translateY(1px);\n    box-shadow: none;\n  }\n\n  ", "\n  ", "\n  background-size: 100% 100%;\n  ", "\n  ", "\n  ", "\n"], ["\n  align-items: center;\n  border: 0;\n  border-radius: 10px;\n  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,; */\n  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4); */\n  cursor: pointer;\n  display: inline-flex;\n  font-family: inherit;\n  font-size: 14px;\n  font-weight: 600;\n  justify-content: center;\n  letter-spacing: 0.03em;\n  line-height: 1;\n  opacity: ", ";\n  outline: 0;\n  transition: background-color 0.2s, opacity 0.2s;\n\n  &:hover:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled):not(:active) {\n    opacity: 0.8;\n  }\n\n  &:active:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled) {\n    opacity: 0.85;\n    transform: translateY(1px);\n    box-shadow: none;\n  }\n\n  ", "\n  ", "\n  background-size: 100% 100%;\n  ", "\n  ", "\n  ", "\n"])), getOpacity, getDisabledStyles, styledSystem.variant({
+var StyledButton = styled__default["default"].button(templateObject_1$1m || (templateObject_1$1m = tslib.__makeTemplateObject(["\n  align-items: center;\n  border: 1px solid transparent;\n  border-radius: 10px;\n  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset; */\n  cursor: pointer;\n  display: inline-flex;\n  font-family: inherit;\n  font-size: 14px;\n  font-weight: 600;\n  justify-content: center;\n  /* letter-spacing: 0.03em; */\n  line-height: 1;\n  opacity: ", ";\n  outline: 0;\n  transition: background-color 0.2s, opacity 0.2s;\n\n  &:hover:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled):not(:active) {\n    opacity: 0.8;\n  }\n\n  &:active:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled) {\n    opacity: 0.85;\n    transform: translateY(1px);\n    box-shadow: none;\n  }\n\n  ", "\n  ", "\n  background-size: 100% 100%;\n  ", "\n  ", "\n  ", "\n"], ["\n  align-items: center;\n  border: 1px solid transparent;\n  border-radius: 10px;\n  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset; */\n  cursor: pointer;\n  display: inline-flex;\n  font-family: inherit;\n  font-size: 14px;\n  font-weight: 600;\n  justify-content: center;\n  /* letter-spacing: 0.03em; */\n  line-height: 1;\n  opacity: ", ";\n  outline: 0;\n  transition: background-color 0.2s, opacity 0.2s;\n\n  &:hover:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled):not(:active) {\n    opacity: 0.8;\n  }\n\n  &:active:not(:disabled):not(.pancake-button--disabled):not(.pancake-button--disabled) {\n    opacity: 0.85;\n    transform: translateY(1px);\n    box-shadow: none;\n  }\n\n  ", "\n  ", "\n  background-size: 100% 100%;\n  ", "\n  ", "\n  ", "\n"])), getOpacity, getDisabledStyles, styledSystem.variant({
     prop: "scale",
     variants: scaleVariants$1,
 }), styledSystem.variant({
@@ -8872,7 +8888,7 @@ var Icon$8 = function (props) {
 };
 
 var Icon$7 = function (props) {
-    return (jsxRuntime.jsxs(Svg, tslib.__assign({ viewBox: "0 0 1024 1024" }, props, { children: [jsxRuntime.jsx("path", { d: "M751.616 1014.784H271.36c-140.8 0-256-115.2-256-256v-419.84c0-140.8 115.2-256 256-256h480.256c140.8 0 256 115.2 256 256v419.84c0 140.8-115.2 256-256 256z", "p-id": "3789", "data-spm-anchor-id": "a313x.7781069.0.i2" }, void 0), jsxRuntime.jsx("path", { d: "M751.616 941.056H271.36c-140.8 0-256-115.2-256-256v-419.84c0-140.8 115.2-256 256-256h480.256c140.8 0 256 115.2 256 256v419.84c0 140.8-115.2 256-256 256z", fill: "#B7DDA5", "p-id": "3790", "data-spm-anchor-id": "a313x.7781069.0.i3" }, void 0), jsxRuntime.jsx("path", { d: "M751.616 941.056H271.36c-140.8 0-256-115.2-256-256V323.584c0-140.8 115.2-256 256-256h480.256c140.8 0 256 115.2 256 256v361.984c0 140.288-115.2 255.488-256 255.488z", "p-id": "3791", "data-spm-anchor-id": "a313x.7781069.0.i0" }, void 0), jsxRuntime.jsx("path", { d: "M286.72 722.944l-1.536-1.536c-16.896-16.896-16.896-44.032 0-60.416l405.504-405.504c16.896-16.896 44.032-16.896 60.416 0l1.536 1.536c16.896 16.896 16.896 44.032 0 60.416l-405.504 405.504c-16.896 16.384-44.032 16.384-60.416 0z", fill: "#FFFFFF", "p-id": "3792" }, void 0), jsxRuntime.jsx("path", { d: "M751.104 722.432l-1.536 1.536c-16.896 16.896-44.032 16.896-60.416 0L283.136 318.976c-16.896-16.896-16.896-44.032 0-60.416l1.536-1.536c16.896-16.896 44.032-16.896 60.416 0l405.504 405.504c17.408 15.872 17.408 43.52 0.512 59.904z", fill: "#FFFFFF", "p-id": "3793", "data-spm-anchor-id": "a313x.7781069.0.i5" }, void 0)] }), void 0));
+    return (jsxRuntime.jsx(Svg, tslib.__assign({ viewBox: "0 0 1024 1024" }, props, { children: jsxRuntime.jsx("path", { d: "M621.714286 512 1002.057143 131.657143c29.257143-29.257143 29.257143-80.457143 0-109.714286-29.257143-29.257143-80.457143-29.257143-109.714286 0L512 402.285714 131.657143 21.942857c-29.257143-29.257143-80.457143-29.257143-109.714286 0-29.257143 29.257143-29.257143 80.457143 0 109.714286L402.285714 512 21.942857 892.342857c-29.257143 29.257143-29.257143 80.457143 0 109.714286 29.257143 29.257143 80.457143 29.257143 109.714286 0L512 621.714286l380.342857 380.342857c29.257143 29.257143 80.457143 29.257143 109.714286 0 29.257143-29.257143 29.257143-80.457143 0-109.714286L621.714286 512z", "p-id": "3258" }, void 0) }), void 0));
 };
 
 var Icon$6 = function (props) {
@@ -8995,7 +9011,7 @@ var Input$3 = styled__default["default"].input(templateObject_1$1f || (templateO
     return noShadow ? '0' : '16px';
 }, function (_a) {
     var theme = _a.theme;
-    return theme.colors.text;
+    return theme.colors.textSubtle;
 }, function (_a) {
     var theme = _a.theme;
     return theme.colors.backgroundDisabled;
@@ -9874,14 +9890,21 @@ styled__default["default"](Root)(templateObject_4$a || (templateObject_4$a = tsl
 styled__default["default"](Root)(templateObject_5$7 || (templateObject_5$7 = tslib.__makeTemplateObject(["\n  position: relative;\n  overflow: hidden;\n  transform: translate3d(0, 0, 0);\n  &:before {\n    content: \"\";\n    position: absolute;\n    background-image: linear-gradient(90deg, transparent, rgba(243, 243, 243, 0.5), transparent);\n    top: 0;\n    left: -150px;\n    height: 100%;\n    width: 150px;\n    animation: ", " 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;\n  }\n"], ["\n  position: relative;\n  overflow: hidden;\n  transform: translate3d(0, 0, 0);\n  &:before {\n    content: \"\";\n    position: absolute;\n    background-image: linear-gradient(90deg, transparent, rgba(243, 243, 243, 0.5), transparent);\n    top: 0;\n    left: -150px;\n    height: 100%;\n    width: 150px;\n    animation: ", " 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;\n  }\n"])), waves);
 var templateObject_1$M, templateObject_2$r, templateObject_3$j, templateObject_4$a, templateObject_5$7;
 
+var useTheme = function () {
+    var _a = tslib.__read(useThemeManager(), 2), isDark = _a[0], toggleTheme = _a[1];
+    var theme = React.useContext(styled.ThemeContext);
+    return { isDark: isDark, theme: theme, toggleTheme: toggleTheme };
+};
+
 var rotate$1 = styled.keyframes(templateObject_1$L || (templateObject_1$L = tslib.__makeTemplateObject(["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"], ["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"])));
-var float = styled.keyframes(templateObject_2$q || (templateObject_2$q = tslib.__makeTemplateObject(["\n\t0% {\n\t\ttransform: translatey(0px);\n\t}\n\t50% {\n\t\ttransform: translatey(20px);\n\t}\n\t100% {\n\t\ttransform: translatey(0px);\n\t}\n"], ["\n\t0% {\n\t\ttransform: translatey(0px);\n\t}\n\t50% {\n\t\ttransform: translatey(20px);\n\t}\n\t100% {\n\t\ttransform: translatey(0px);\n\t}\n"])));
-var Container$1 = styled__default["default"](Box)(templateObject_3$i || (templateObject_3$i = tslib.__makeTemplateObject(["\n  position: relative;\n"], ["\n  position: relative;\n"])));
+var float = styled.keyframes(templateObject_2$q || (templateObject_2$q = tslib.__makeTemplateObject(["\n\t0% {\n\t\ttransform: translatey(0px);\n\t}cd \n\t50% {\n\t\ttransform: translatey(20px);\n\t}\n\t100% {\n\t\ttransform: translatey(0px);\n\t}\n"], ["\n\t0% {\n\t\ttransform: translatey(0px);\n\t}cd \n\t50% {\n\t\ttransform: translatey(20px);\n\t}\n\t100% {\n\t\ttransform: translatey(0px);\n\t}\n"])));
+var Container$1 = styled__default["default"](Box)(templateObject_3$i || (templateObject_3$i = tslib.__makeTemplateObject(["\n  position: relative;\n  margin: 0 auto;\n"], ["\n  position: relative;\n  margin: 0 auto;\n"])));
 styled__default["default"](Image)(templateObject_4$9 || (templateObject_4$9 = tslib.__makeTemplateObject(["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"])), rotate$1);
-var FloatingPanIcon = styled__default["default"](Image)(templateObject_5$6 || (templateObject_5$6 = tslib.__makeTemplateObject(["\n  animation: ", " 2s ease-in-out infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  animation: ", " 2s ease-in-out infinite;\n  transform: translate3d(0, 0, 0);\n"])), float);
+styled__default["default"](Image)(templateObject_5$6 || (templateObject_5$6 = tslib.__makeTemplateObject(["\n  animation: ", " 2s ease-in-out infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  animation: ", " 2s ease-in-out infinite;\n  transform: translate3d(0, 0, 0);\n"])), float);
 var Spinner = function (_a) {
     var _b = _a.size, size = _b === void 0 ? 128 : _b;
-    return (jsxRuntime.jsx(Container$1, tslib.__assign({ width: size, height: size }, { children: jsxRuntime.jsx(FloatingPanIcon, { width: size, height: size, src: "/images/loding.PNG" }, void 0) }), void 0));
+    var theme = useTheme().theme;
+    return (jsxRuntime.jsx(Container$1, tslib.__assign({ width: size, height: size }, { children: jsxRuntime.jsx(ReactLoading__default["default"], { type: 'cylon', color: theme.colors.primary }, void 0) }), void 0));
 };
 var templateObject_1$L, templateObject_2$q, templateObject_3$i, templateObject_4$9, templateObject_5$6;
 
@@ -10629,7 +10652,7 @@ var Context$1 = React.createContext({
     onDismiss: function () { return null; },
     setCloseOnOverlayClick: function () { return true; },
 });
-var OPEN_CLASS_NAME = 'mini-swap-Modal__Body--open';
+var OPEN_CLASS_NAME = ' mini-swap-Modal__Body--open';
 var ModalProvider$1 = function (_a) {
     var children = _a.children;
     var _b = tslib.__read(React.useState(false), 2), isOpen = _b[0], setIsOpen = _b[1];
@@ -10653,10 +10676,11 @@ var ModalProvider$1 = function (_a) {
     };
     React.useEffect(function () {
         if (isOpen) {
-            document.body.className = document.body.className + " " + OPEN_CLASS_NAME;
+            document.body.className = "" + document.body.className + OPEN_CLASS_NAME;
         }
         else {
-            document.body.className = ("" + document.body.className).replaceAll(OPEN_CLASS_NAME, '');
+            var reg = new RegExp(OPEN_CLASS_NAME, 'g');
+            document.body.className = ("" + document.body.className).replace(reg, '');
         }
     }, [isOpen]);
     return (jsxRuntime.jsxs(Context$1.Provider, tslib.__assign({ value: {
@@ -12161,12 +12185,6 @@ function Manage(_a) {
 }
 var templateObject_1$b;
 
-var useTheme = function () {
-    var _a = tslib.__read(useThemeManager(), 2), isDark = _a[0], toggleTheme = _a[1];
-    var theme = React.useContext(styled.ThemeContext);
-    return { isDark: isDark, theme: theme, toggleTheme: toggleTheme };
-};
-
 var Wrapper = styled__default["default"].div(templateObject_1$a || (templateObject_1$a = tslib.__makeTemplateObject(["\n  position: relative;\n  width: 100%;\n"], ["\n  position: relative;\n  width: 100%;\n"])));
 var TextDot = styled__default["default"].div(templateObject_2$6 || (templateObject_2$6 = tslib.__makeTemplateObject(["\n  height: 3px;\n  width: 3px;\n  background-color: ", ";\n  border-radius: 50%;\n"], ["\n  height: 3px;\n  width: 3px;\n  background-color: ", ";\n  border-radius: 50%;\n"])), function (_a) {
     var theme = _a.theme;
@@ -13278,7 +13296,7 @@ function Swap(_a) {
     var _b, _c, _d;
     var _this = this;
     var _e, _f, _g, _h, _j, _k;
-    var inputCurrencyId = _a.inputCurrencyId, outputCurrencyId = _a.outputCurrencyId, subTitleTips = _a.subTitleTips, titlehelper = _a.titlehelper;
+    var inputCurrencyId = _a.inputCurrencyId, outputCurrencyId = _a.outputCurrencyId, subTitleTips = _a.subTitleTips, titlehelper = _a.titlehelper, powered = _a.powered;
     var t = useTranslation().t;
     // token warning stuff
     var _l = tslib.__read([
@@ -13617,7 +13635,7 @@ function Swap(_a) {
                                                         onSwitchTokens();
                                                     }, color: currencies[Field$2.INPUT] && currencies[Field$2.OUTPUT] ? 'primary' : 'text' }, void 0) }), void 0), recipient === null && !showWrap && isExpertMode ? (jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "add-recipient-button", onClick: function () { return onChangeRecipient(''); } }, { children: t('+ Add a send (optional)') }), void 0)) : null] }), void 0) }), void 0), jsxRuntime.jsx(CurrencyInputPanel, { value: formattedAmounts[Field$2.OUTPUT], onUserInput: handleTypeOutput, 
                                     // label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
-                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: false }, { children: jsxRuntime.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.jsx(RowBetween, tslib.__assign({ align: "center" }, { children: jsxRuntime.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.jsxs(Box, tslib.__assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0)] }, void 0) }, void 0));
+                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: false }, { children: jsxRuntime.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.jsx(RowBetween, tslib.__assign({ align: "center" }, { children: jsxRuntime.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.jsxs(Box, tslib.__assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0), jsxRuntime.jsx(Box, { children: powered }, void 0)] }, void 0) }, void 0));
 }
 var templateObject_1;
 
@@ -14228,7 +14246,7 @@ function Blocklist(_a) {
     return jsxRuntime.jsx(jsxRuntime.Fragment, { children: children }, void 0);
 }
 var MiniSwap = function (_a) {
-    var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onLoaded = _a.onLoaded, onInputCurrencyChange = _a.onInputCurrencyChange, onOutputCurrencyChange = _a.onOutputCurrencyChange, onConnectWallet = _a.onConnectWallet, inputCurrencyId = _a.inputCurrencyId, outputCurrencyId = _a.outputCurrencyId, chainId = _a.chainId, subTitleTips = _a.subTitleTips, titlehelper = _a.titlehelper;
+    var isDark = _a.isDark, lang = _a.lang, resetTheme = _a.resetTheme, onLoaded = _a.onLoaded, onInputCurrencyChange = _a.onInputCurrencyChange, onOutputCurrencyChange = _a.onOutputCurrencyChange, onConnectWallet = _a.onConnectWallet, inputCurrencyId = _a.inputCurrencyId, outputCurrencyId = _a.outputCurrencyId, chainId = _a.chainId, subTitleTips = _a.subTitleTips, titlehelper = _a.titlehelper, powered = _a.powered;
     React.useEffect(function () {
         console.debug("chainId is change " + chainId);
         dsgswapSdk.setChainId(chainId);
@@ -14240,7 +14258,7 @@ var MiniSwap = function (_a) {
             onLoaded();
         }
     }, [onLoaded, loaded]);
-    return (jsxRuntime.jsxs(Providers, tslib.__assign({ resetTheme: resetTheme, lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsxRuntime.jsx(Updaters, {}, void 0), jsxRuntime.jsx(ListenerCurrencyChange, { onInputCurrencyChange: onInputCurrencyChange, onOutputCurrencyChange: onOutputCurrencyChange }, void 0), jsxRuntime.jsx(Blocklist, { children: jsxRuntime.jsx(Swap, { subTitleTips: subTitleTips, titlehelper: titlehelper, outputCurrencyId: outputCurrencyId, inputCurrencyId: inputCurrencyId }, void 0) }, void 0)] }), void 0));
+    return (jsxRuntime.jsxs(Providers, tslib.__assign({ resetTheme: resetTheme, lang: lang, onConnectWallet: onConnectWallet, isDark: isDark, chainId: chainId }, { children: [jsxRuntime.jsx(Updaters, {}, void 0), jsxRuntime.jsx(ListenerCurrencyChange, { onInputCurrencyChange: onInputCurrencyChange, onOutputCurrencyChange: onOutputCurrencyChange }, void 0), jsxRuntime.jsx(Blocklist, { children: jsxRuntime.jsx(Swap, { subTitleTips: subTitleTips, titlehelper: titlehelper, powered: powered, outputCurrencyId: outputCurrencyId, inputCurrencyId: inputCurrencyId }, void 0) }, void 0)] }), void 0));
 };
 
 module.exports = MiniSwap;

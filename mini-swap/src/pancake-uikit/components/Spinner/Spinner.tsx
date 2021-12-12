@@ -3,6 +3,8 @@ import styled, { keyframes } from "styled-components";
 import { Box } from "../Box";
 import { Image } from "../Image";
 import { SpinnerProps } from "./types";
+import ReactLoading from 'react-loading';
+import useTheme from "hooks/useTheme";
 
 
 const rotate = keyframes`
@@ -17,7 +19,7 @@ const rotate = keyframes`
 const float = keyframes`
 	0% {
 		transform: translatey(0px);
-	}
+	}cd 
 	50% {
 		transform: translatey(20px);
 	}
@@ -28,6 +30,7 @@ const float = keyframes`
 
 const Container = styled(Box)`
   position: relative;
+  margin: 0 auto;
 `;
 
 const RotatingPancakeIcon = styled(Image)`
@@ -44,11 +47,15 @@ const FloatingPanIcon = styled(Image)`
 `;
 
 const Spinner: React.FC<SpinnerProps> = ({ size = 128 }) => {
+  const { theme } = useTheme()
+
   return (
     <Container width={size} height={size}>
-      {/* <RotatingPancakeIcon width={`${size * 0.5}px`} />
-      <FloatingPanIcon width={`${size}px`} /> */}
-      <FloatingPanIcon width={size} height={size} src="/images/loding.PNG" />
+      {/* <FloatingPanIcon width={size} height={size} src="/images/loding.gif" /> */}
+      <ReactLoading
+        type={'cylon'}
+        color={theme.colors.primary}
+      />
     </Container>
   );
 };

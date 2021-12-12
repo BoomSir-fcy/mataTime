@@ -2,10 +2,10 @@ import styled, { DefaultTheme } from "styled-components";
 import { space, layout, variant } from "styled-system";
 import { scaleVariants, styleVariants } from "./theme";
 import { BaseButtonProps } from "./types";
-import cFront from '../../image/button/c-front.png';
-import btnD from '../../image/button/btn-d.png';
-import btnD1 from '../../image/button/btn-d1.png';
-import btnD2 from '../../image/button/btn-d2.png';
+// import cFront from '../../image/button/c-front.png';
+// import btnD from '../../image/button/btn-d.png';
+// import btnD1 from '../../image/button/btn-d1.png';
+// import btnD2 from '../../image/button/btn-d2.png';
 interface ThemedButtonProps extends BaseButtonProps {
   theme: DefaultTheme;
 }
@@ -24,10 +24,12 @@ const getDisabledStyles = ({ $isLoading, theme }: TransientButtonProps) => {
     `;
   }
 
+  // background-size: 20px 36px, calc(100% - 20px) 36px, 20px 38px;
   return `
     &:disabled,
     &.pancake-button--disabled {
-      background-color: ${theme.colors.backgroundDisabled};
+      background-repeat: no-repeat;
+      background-position: 0 0px, 10px 0px, 100% -1px;
       border-color: ${theme.colors.backgroundDisabled};
       box-shadow: none;
       color: white;
@@ -49,17 +51,16 @@ const getOpacity = ({ $isLoading = false }: TransientButtonProps) => {
 
 const StyledButton = styled.button<BaseButtonProps>`
   align-items: center;
-  border: 0;
+  border: 1px solid transparent;
   border-radius: 10px;
-  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,; */
-  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4); */
+  /* box-shadow: 0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset; */
   cursor: pointer;
   display: inline-flex;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   justify-content: center;
-  letter-spacing: 0.03em;
+  /* letter-spacing: 0.03em; */
   line-height: 1;
   opacity: ${getOpacity};
   outline: 0;
@@ -77,13 +78,13 @@ const StyledButton = styled.button<BaseButtonProps>`
 
   ${getDisabledStyles}
   ${variant({
-    prop: "scale",
-    variants: scaleVariants,
-  })}
+  prop: "scale",
+  variants: scaleVariants,
+})}
   background-size: 100% 100%;
   ${variant({
-    variants: styleVariants,
-  })}
+  variants: styleVariants,
+})}
   ${layout}
   ${space}
 `;

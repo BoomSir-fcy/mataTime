@@ -12,7 +12,6 @@ export declare const variants: {
     readonly SECONDARY: "secondary";
     readonly TERTIARY: "tertiary";
     readonly TEXT: "text";
-    readonly TEXTLINE: "textline";
     readonly DANGER: "danger";
     readonly SUBTLE: "subtle";
     readonly SUCCESS: "success";

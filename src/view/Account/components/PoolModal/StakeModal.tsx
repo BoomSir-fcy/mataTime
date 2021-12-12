@@ -100,13 +100,13 @@ const StakeModal: React.FC<StakeModalProps> = ({
               await onConfirm(val)
               onDismiss()
               toast.success(<>
-                <Text>{t('Staked!')}</Text>
-                <Text>{t('Your funds have been staked in the pool!')}</Text>
+                <Text color='black'>{t('Staked!')}</Text>
+                <Text color='black'>{t('Your funds have been staked in the pool!')}</Text>
               </>)
             } catch (e) {
               toast.error(<>
-                <Text>{t('Error')}</Text>
-                <Text>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+                <Text color='black'>{t('Error')}</Text>
+                <Text color='black'>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
               </>)
               console.error(e)
             } finally {

@@ -3,6 +3,7 @@ export interface SwapInterface {
     inputCurrencyId?: string;
     outputCurrencyId?: string;
     subTitleTips?: React.ReactNode;
+    powered?: React.ReactNode;
     titlehelper?: string;
 }
-export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, titlehelper }: SwapInterface): JSX.Element;
+export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, titlehelper, powered }: SwapInterface): JSX.Element;
