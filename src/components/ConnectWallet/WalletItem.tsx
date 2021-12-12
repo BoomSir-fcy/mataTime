@@ -20,7 +20,7 @@ const WalletButton = styled(Button).attrs({ width: '100%', variant: 'text' })`
   justify-content: flex-start;
   margin-left: auto;
   margin-right: auto;
-  background-color: ${({ theme }) => theme.colors.backgroundCard};
+  background-color: ${({ theme }) => theme.colors.inputSelect};
   width: 200px;
   padding-top: 8px;
   padding-bottom: 8px;
