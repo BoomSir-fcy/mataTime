@@ -403,5 +403,7 @@
   "Publish %count% pieces of content with a valid reading time of more than 600 seconds": "Publish %count% pieces of content with a valid reading time of more than 600 seconds",
   "Invite friends": "Invite friends",
   "Successfully invite %count% friend every day": "Successfully invite %count% friend every day",
+  "Received successfully": "Received successfully",
+  "Received failed": "Received failed",
   "******end*****@gww********": "@gww翻译结束"
 }
