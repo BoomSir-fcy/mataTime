@@ -1,3 +1,4 @@
+import { ARTICLE_IMAGE_CLASS_NAME } from 'config';
 import React, { useState } from 'react';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 import { ImgListBox } from './style';
@@ -71,15 +72,16 @@ export const ImgList = (props: Iprops) => {
       )}
       {list.length === 3 ? (
         <>
-          <img onClick={() => preViewImg(0)} src={list[0]} alt="" />
+          <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(0)} src={list[0]} alt="" />
           <div className="imgListRightBox">
-            <img onClick={() => preViewImg(1)} src={list[1]} alt="" />
-            <img onClick={() => preViewImg(0)} src={list[2]} alt="" />
+            <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(1)} src={list[1]} alt="" />
+            <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(0)} src={list[2]} alt="" />
           </div>
         </>
       ) : (
         list.map((item, index) => (
           <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
             style={{ width: list.length === 1 ? '100%' : null }}
             onClick={() => preViewImg(index)}
             src={item}

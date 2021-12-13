@@ -5,7 +5,7 @@ import { useToast } from 'hooks';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 import { useStore } from 'store';
 import { Box } from 'uikit';
-import { Crumbs, List } from 'components';
+import { Crumbs, List, MoreOperatorEnum } from 'components';
 import { Api } from 'apis';
 
 import { MeItemWrapper } from 'view/News/Me/style';
@@ -81,7 +81,7 @@ const TopicList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item?.user_id && item?.id && (
-                <SpendTimeViewWithArticle readType={ReadType.ARTICLE} articleId={item?.id} />
+                <SpendTimeViewWithArticle setNonce={setNonce} nonce={nonce} readType={ReadType.ARTICLE} articleId={item?.id} />
               )
             }
             <MentionItem
@@ -94,7 +94,13 @@ const TopicList = props => {
                   post_id: item.id
                 }
               }}
-              callback={() => getList(1)}
+              callback={(data, _type) => {
+                if (_type === MoreOperatorEnum.EXPAND) {
+                  setNonce(prep => prep + 1)
+                  return
+                }
+                getList(1);
+              }}
             />
             <MentionOperator
               {...props}
@@ -108,7 +114,13 @@ const TopicList = props => {
                   post_id: item.id
                 }
               }}
-              callback={() => getList(1)}
+              callback={(data, _type) => {
+                if (_type === MoreOperatorEnum.EXPAND) {
+                  setNonce(prep => prep + 1)
+                  return
+                }
+                getList(1);
+              }}
             />
           </MeItemWrapper>
         ))}

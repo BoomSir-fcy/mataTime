@@ -22,9 +22,10 @@ const PopupWrapModal = (props, ref) => {
     ref?.current?.close();
   }, []);
 
-  React.useEffect(() => {}, [
-    document.addEventListener('scroll', handsScroller)
-  ]);
+  React.useEffect(() => {
+    document.addEventListener('scroll', handsScroller);
+    return () => document.removeEventListener('scroll', handsScroller);
+  }, []);
 
   return (
     <StyledPopup

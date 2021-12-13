@@ -36,11 +36,11 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
           rewardToken0Symbol={poolInfo.rewardToken0Symbol}
           rewardToken1Symbol={poolInfo.rewardToken1Symbol}
           poolAddress={poolInfo.poolAddress} />
-        <ContainerStyled>
+        <ContainerStyled mt="16px">
           <Flex justifyContent="space-between">
             <Box>
               <Text color="textTips">{t('ARP')}</Text>
-              <Text bold color="textPrimary">{formatDisplayApr(poolApr?.totalApr)}%</Text>
+              <Text bold color="upPrice">{formatDisplayApr(poolApr?.totalApr)}%</Text>
             </Box>
             <Box>
               <Text color="textTips">{t('Lock time')}</Text>

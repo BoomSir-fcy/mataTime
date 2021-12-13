@@ -137,6 +137,9 @@ const Profile: React.FC<any> = props => {
   const { languange } = setting;
   const systemLang = languange?.value?.code;
 
+  const [isEnd, setIsEnd] = useState(false)
+  const perpage = 5
+
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
@@ -148,7 +151,7 @@ const Profile: React.FC<any> = props => {
       });
       const [profile, tweet] = await Promise.all([
         Api.MeApi.getProfile(uid),
-        Api.MeApi.getProfileMsg(offset || page, uid)
+        Api.MeApi.getProfileMsg({ page: offset || page, perpage, uid })
       ]);
       if (Api.isSuccess(profile) || Api.isSuccess(tweet)) {
         setState(p => {
@@ -159,6 +162,11 @@ const Profile: React.FC<any> = props => {
           p.page = (offset || page) + 1;
           p.totalPage = tweet.data.total_page;
         });
+        if (tweet?.data?.list?.length < perpage) {
+          setIsEnd(true)
+        } else {
+          setIsEnd(false)
+        }
       }
     } catch (error) {
     } finally {
@@ -268,7 +276,7 @@ const Profile: React.FC<any> = props => {
         marginTop={13}
         loading={loading}
         renderList={() => {
-          if (loading || page > totalPage) return false;
+          if (loading || isEnd) return false;
           init();
         }}
       >
@@ -279,6 +287,7 @@ const Profile: React.FC<any> = props => {
               currentUid?.uid !== item.user_id && (
                 <SpendTimeViewWithArticle
                   nonce={nonce}
+                  setNonce={setNonce}
                   readType={ReadType.ARTICLE}
                   articleId={item.id}
                 />
@@ -294,7 +303,11 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={type => {
+              callback={(data, _type) => {
+                if (_type === MoreOperatorEnum.EXPAND) {
+                  setNonce(prep => prep + 1)
+                  return
+                }
                 init(1);
               }}
             />
@@ -310,8 +323,11 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={type => {
-                console.log(type, '===');
+              callback={(data, _type) => {
+                if (_type === MoreOperatorEnum.EXPAND) {
+                  setNonce(prep => prep + 1)
+                  return
+                }
                 init(1);
               }}
             />

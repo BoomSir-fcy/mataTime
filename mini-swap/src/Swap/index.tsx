@@ -383,7 +383,7 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
           <Button
             maxWidth="100%"
             width="100%"
-            disabled scale="ld" mb="4px">
+            disabled mb="4px">
             {t('Unsupported Asset')}
           </Button>
         </Flex>
@@ -391,7 +391,7 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
     if (!account)
       return (
         <Flex justifyContent="center">
-          <ConnectWalletButton width="100%" scale="ld" />
+          <ConnectWalletButton width="100%" />
         </Flex>
       )
     if (showWrap)
@@ -499,7 +499,7 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
         {
           polyData.isPolyMethed
             ?
-            <Button width="100%" scale="ld" disabled={!isValid || polySwapPending} onClick={async () => {
+            <Button width="100%" disabled={!isValid || polySwapPending} onClick={async () => {
               await handlePolySwap()
               setTimeout(() => {
                 onPresentConfirmModal()
@@ -531,7 +531,7 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
                 }
               }}
               id="swap-button"
-              scale="ld"
+
               disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
             >
               {

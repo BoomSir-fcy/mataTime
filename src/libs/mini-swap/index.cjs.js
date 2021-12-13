@@ -13540,9 +13540,9 @@ function Swap(_a) {
     var getButtonSupported = function () {
         var _a, _b;
         if (swapIsUnsupported)
-            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ maxWidth: "100%", width: "100%", disabled: true, scale: "ld", mb: "4px" }, { children: t('Unsupported Asset') }), void 0) }), void 0));
+            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ maxWidth: "100%", width: "100%", disabled: true, mb: "4px" }, { children: t('Unsupported Asset') }), void 0) }), void 0));
         if (!account)
-            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(ConnectWalletButton, { width: "100%", scale: "ld" }, void 0) }), void 0));
+            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(ConnectWalletButton, { width: "100%" }, void 0) }), void 0));
         if (showWrap)
             return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", disabled: Boolean(wrapInputError), onClick: onWrap }, { children: wrapInputError !== null && wrapInputError !== void 0 ? wrapInputError : (wrapType === WrapType.WRAP ? t('Wrap') : wrapType === WrapType.UNWRAP ? t('Unwrap') : null) }), void 0) }), void 0));
         if (noRoute && pairState === PairState.LOADING && !polyData.isPolyMethed) {
@@ -13593,7 +13593,7 @@ function Swap(_a) {
                                                 : t('Swap') }), void 0)] }, void 0), jsxRuntime.jsx(Column, tslib.__assign({ style: { marginTop: '1rem' } }, { children: jsxRuntime.jsx(ProgressCircles, { steps: [approval === ApprovalState.APPROVED] }, void 0) }), void 0)] }, void 0));
         return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: polyData.isPolyMethed
                 ?
-                    jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", scale: "ld", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
+                    jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
                             return tslib.__generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0: return [4 /*yield*/, handlePolySwap()];
@@ -13626,7 +13626,7 @@ function Swap(_a) {
                                     onPresentConfirmModal();
                                 }, 0);
                             }
-                        }, id: "swap-button", scale: "ld", disabled: !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError }, { children: (swapInputError ||
+                        }, id: "swap-button", disabled: !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError }, { children: (swapInputError ||
                             (priceImpactSeverity > 3 && !isExpertMode
                                 ? t('Swap Anyway')
                                 : priceImpactSeverity > 2
