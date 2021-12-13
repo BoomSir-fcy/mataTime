@@ -1,7 +1,7 @@
 import { Colors } from './types';
 
 export const baseColors = {
-  failure: '#ED4B9E',
+  failure: '#FF0000',
   primary: '#FFFFFF',
   primaryBright: '#FFFFFF',
   primaryDark: '#000',

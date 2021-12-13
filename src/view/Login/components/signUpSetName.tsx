@@ -247,16 +247,23 @@ export const SignUpSetName: React.FC<{
                   } else {
                     sethaveNickName(true);
                   }
+                  // if (getBLen(event.target.value) > 30) {
+                  //   setState(p => {
+                  //     p.nickName = p.nickName;
+                  //   });
+                  // } else {
+                  // }
                   setState(p => {
                     p.nickName = event.target.value;
                   });
                 }}
+                value={state.nickName}
                 maxLength={30}
                 placeholder={t('loginSetNickNameEmpty')}
               />
               <WalletAddr>{shortenAddress(account)}</WalletAddr>
             </Box>
-            <Text color="textTips" textAlign="right" ellipsis>
+            <Text color={getBLen(state.nickName) > 30 ? 'failure' : 'textTips'} textAlign="right" ellipsis>
               {t('loginCountCharacters', { value: getBLen(state.nickName) })}
             </Text>
             <NameVerify small color="textTips" textAlign="right">
@@ -276,14 +283,14 @@ export const SignUpSetName: React.FC<{
               <NameVerify
                 style={{ top: '55px' }}
                 small
-                color="red"
+                color="failure"
                 textAlign="right"
               >
                 {t('login Please enter the correct address')}
               </NameVerify>
             )}
             {!inviteinfo.isActive && (
-              <NameVerify style={{ left: '26px' }} small color="red">
+              <NameVerify style={{ left: '26px' }} small color="failure">
                 {t('login This address is not eligible for invitation')}
               </NameVerify>
             )}
