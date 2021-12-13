@@ -552,6 +552,7 @@ var Latest = "最新";
 var Claimed = "已领取";
 var Settings = "设置";
 var Supply = "供应";
+var Accept = "同意";
 var Learn = "了解";
 var Wrap = "兑换";
 var Unwrap = "兑换";
@@ -810,6 +811,8 @@ var translationsZhCN = {
 	"Enter a recipient": "输入接收人",
 	"Invalid recipient": "接收人无效",
 	Supply: Supply,
+	Accept: Accept,
+	"Price Updated": "价格已更新",
 	"Your Liquidity": "您的流动性",
 	"Remove liquidity to receive tokens back": "移除流动性以收回代币",
 	"Trade anything. No registration, no hassle.": "交易任何代币。无需注册，不必麻烦。",
@@ -11505,7 +11508,7 @@ function SwapCallbackError(_a) {
 }
 var SwapShowAcceptChanges = styled__default["default"](AutoColumn)(templateObject_9 || (templateObject_9 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"], ["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"])), function (_a) {
     var theme = _a.theme;
-    return theme.colors.warning + "33";
+    return "" + theme.colors.input;
 });
 var templateObject_1$j, templateObject_2$c, templateObject_3$6, templateObject_4$2, templateObject_5$1, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
 
