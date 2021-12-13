@@ -105,7 +105,9 @@ export const TableList: React.FC<{
                   </ItemText>
                   <ItemText>
                     <Flex>
-                      {item.sender_nickname}
+                      <Text width='56%' color="textTips" ellipsis>
+                        {item.sender_nickname}
+                      </Text>
                       <Text ml="10px" color="textTips" ellipsis>
                         {shortenAddress(item.sender_address)}
                       </Text>

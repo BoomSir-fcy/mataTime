@@ -274,9 +274,8 @@ export const FetchRewardNum = async (account: string) => {
 
 // time收益记录
 export const FetchIncomeList = async (page, size) => {
-  const index = (page - 1) * size
   try {
-    const res = await Api.AccountApi.TimeIncomerecord({ index, size })
+    const res = await Api.AccountApi.TimeIncomerecord({ index: page, size })
     if (Api.isSuccess(res)) {
       return res.data
     } else {

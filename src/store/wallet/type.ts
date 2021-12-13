@@ -52,6 +52,7 @@ export interface IncomeListInfo {
   record: []
   size: number
   total: number
+  creator_percent: number
 }
 export interface MatterIncomeListInfo {
   now_page: number

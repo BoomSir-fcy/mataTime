@@ -7,11 +7,10 @@ import { useDispatch } from 'react-redux'
 import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
-import { useFetTimeIncomeList, useFetTimeIncometoday } from 'store/wallet/hooks';
-import { useStore } from 'store';
 import dayjs from 'dayjs'
 import { GetTaskName } from 'view/Task/hooks/matter';
-import { fetchMatterIncomeList } from 'store/wallet/reducer';
+import { fetchMatterIncomeList, fetchIncomeList } from 'store/wallet/reducer';
+import { Link } from 'react-router-dom'
 
 
 const CountBox = styled(Box)`
@@ -27,6 +26,9 @@ grid-template-columns: 60% 40%;
 }
 .matterStyle{
 grid-template-columns: 26% 27% 27% 20%;
+}
+.LinkRow{
+  cursor: pointer;
 }
 `
 const Row = styled.div`
@@ -48,12 +50,14 @@ const ItemText = styled(Text)`
   color: ${({ theme }) => theme.colors.white_black};
   font-size: 14px;
   margin-bottom: 10px;
+  &:first-child{
+    margin-right: 10px;
+  }
   &:last-child{
     text-align: right;
-      img{
-        width: 20px;
-        cursor: pointer;
-      }
+    }
+  img{
+    width: 50px;
   }
 `
 const LoadingAnimation = styled(Box)`
@@ -63,10 +67,10 @@ const LoadingAnimation = styled(Box)`
 // type 1 内容 2 打赏
 interface init {
   type?: number
-  token?: string
+  info: any
 }
 
-const EarningsRecord: React.FC<init> = ({ type, token }) => {
+const EarningsRecord: React.FC<init> = ({ type, info }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
@@ -75,16 +79,7 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
   const [pageCount, setPageCount] = useState(1);
   const [Loading, setLoading] = useState(true);
   const [TaskHistoryList, setTaskHistoryList] = useState([])
-  useFetTimeIncomeList(page, pageSize)
-  const List = useStore(p => p.wallet.TimeIncomeList);
-  const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
-
-  const HistoryList = [{
-    content: '才就是当你闹事的操作下简称耨爱收到你',
-    read: 100,
-    Icome: 300,
-    total: 353231
-  }]
+  const [ContentHistoryList, setContentHistoryList] = useState([])
 
   const getTotalPage = (totalNum) => {
     if (pageSize != 0 && totalNum % pageSize == 0) {
@@ -95,10 +90,20 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
     }
   }
 
+  const getIcome = (time) => {
+    const percent = info.creator_percent
+    const Icome = (time * percent) / 100
+    return Icome
+  }
+
   const handlePageClick = (event) => {
     setLoading(true)
     const changePage = event.selected + 1
-    dispatch(fetchMatterIncomeList({ page: changePage, pageSize }))
+    if (type === 1) {
+      dispatch(fetchIncomeList({ page: changePage, pageSize }))
+    } else {
+      dispatch(fetchMatterIncomeList({ page: changePage, pageSize }))
+    }
   };
 
   const getTaskType = (type) => {
@@ -111,14 +116,41 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
     }
   }
 
+  const stringArr = (newarr: any, stringArray: string[]) => {
+    for (let i = 0; i < newarr.length; i++) {
+      if (newarr[i].text) {
+        stringArray.push(newarr[i].text);
+      }
+      if (newarr[i].children?.length > 0) {
+        stringArr(newarr[i].children, stringArray);
+      }
+    }
+    return stringArray;
+  };
+
   useEffect(() => {
-    if (TaskHistoryinfo.matter_history?.length) {
-      setTaskHistoryList(TaskHistoryinfo.matter_history)
-      setPage(TaskHistoryinfo.now_page)
-      setPageCount(getTotalPage(TaskHistoryinfo.total_size))
+    if (type === 1) {
+      if (info.record?.length) {
+        setContentHistoryList(info.record)
+        setPage(info.index)
+        setPageCount(getTotalPage(info.total))
+      } else {
+        setPage(1)
+        setPageCount(1)
+      }
+    } else {
+      if (info.matter_history?.length) {
+        setTaskHistoryList(info.matter_history)
+        setPage(info.now_page)
+        setPageCount(getTotalPage(info.total_size))
+      } else {
+        setPage(1)
+        setPageCount(1)
+      }
     }
     setLoading(false)
-  }, [TaskHistoryinfo])
+  }, [info, type])
+
   return (
     <CountBox>
       {
@@ -137,7 +169,7 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
                     {
                       item.task_type && (
                         <>
-                          <ItemText>{dayjs(item.create_time * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
+                          <ItemText>{dayjs(item.create_time * 1000).format(t('YYYY-MM-DD HH:mm:ss'))}</ItemText>
                           <ItemText>{getTaskType(item.task_type)}</ItemText>
                           <ItemText>{t(GetTaskName(item.task_name_id).name)}</ItemText>
                           <ItemText>{item.change}</ItemText>
@@ -162,14 +194,38 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
               <HeadText>{t('Account Cumulative income')}</HeadText>
             </Row>
             {
-              HistoryList.map((item, index) => (
-                <Row key={`${item.content}${index}`}>
-                  <ItemText>{item.content}</ItemText>
-                  <ItemText>{item.read}</ItemText>
-                  <ItemText>{item.Icome}</ItemText>
-                  <ItemText>{item.total}</ItemText>
-                </Row>
-              ))
+              ContentHistoryList.map((item, index) => {
+                const stringArray: any[] = [];
+                let context: any[] = [];
+                try {
+                  context = Array.isArray(JSON.parse(item.info.content))
+                    ? JSON.parse(item.info.content)
+                    : [];
+                } catch (err) {
+                  console.log(err);
+                }
+                return (
+                  <Row className='LinkRow' key={`${item.read.post_id}${index}`} as={Link} to={`/articleDetils/${item.read.post_id}`}>
+                    <ItemText>
+                      <Flex alignItems='center'>
+                        <Text ellipsis>
+                          {stringArr(context, stringArray).join(',')}
+                        </Text>
+                        {
+                          item.info.image_list &&
+                          item.info.image_list.map((item) => (
+                            <img key={item} src={item} alt='' />
+                          ))
+                        }
+                      </Flex>
+                    </ItemText>
+                    <ItemText>{item.read.total_read_count}</ItemText>
+                    <ItemText>{getIcome(item.read.range_read_times)}</ItemText>
+                    <ItemText>{getIcome(item.read.total_read_times)}</ItemText>
+                  </Row>
+                )
+              }
+              )
             }
           </Table>
       }

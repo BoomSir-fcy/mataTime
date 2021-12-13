@@ -24,27 +24,24 @@ interface Init {
 }
 const Chart: React.FC<Init> = ({ type, token, chartData, load }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
-  const [liquidityHover, setLiquidityHover] = useState<number | undefined>()
-  const [liquidityDateHover, setLiquidityDateHover] = useState<string | undefined>()
 
-
-  const formattedLiquidityData = useMemo(() => {
+  const formattedData = useMemo(() => {
     if (chartData) {
       return chartData.map((day) => {
         return {
           time: day.date,
-          value: day.income,
+          value: Number(day.income),
         }
-      })
+      }).reverse()
     }
   }, [chartData])
+
   return (
     <ChartsBox>
       <Text color='textTips'>{t('Account Earnings trend in the past 7 days')}</Text>
       <Box height="360px">
         <LineChart
-          data={formattedLiquidityData}
+          data={formattedData}
           load={load}
         />
       </Box>

@@ -40,6 +40,7 @@ const initialState: WalletState = {
     record: [],
     size: 10,
     total: 0,
+    creator_percent: 0
   },
   TimeIncometoday: {
     data: [],
@@ -107,7 +108,7 @@ export const fetchWalletAverageburntime = createAsyncThunk<string>('wallet/fetch
 });
 
 // time收益记录
-export const fetchIncomeList = createAsyncThunk<any, any>('wallet/fetchIncomeList', async ({ page, pageSize = 10 }) => {
+export const fetchIncomeList = createAsyncThunk<any, any>('wallet/fetchIncomeList', async ({ page, pageSize = 5 }) => {
   const res = await FetchIncomeList(page, pageSize);
   return res
 });
