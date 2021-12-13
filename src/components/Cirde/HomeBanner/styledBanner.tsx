@@ -165,7 +165,7 @@ export const BeginBtnButton = styled.a<BannerProps>`
     margin: 0 auto;
     display: block;
     position: relative;
-    ${({ noce }) => ( noce > 0 ? 
+    ${({ noce }) => (noce > 0 ?
         `
             transition: all 0.2s ease-in-out;
             transition-delay: 0s !important;
@@ -201,7 +201,7 @@ export const GointoBtn = styled.div<BannerProps>`
         animation: ${btnExpansion} 6s ease-out 0s 1 alternate;
         box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 0), 0 0 30px white;
     }
-    display: ${({ noce }) => noce <= 2 ? 'block' : 'none' };
+    display: ${({ noce }) => noce <= 2 ? 'block' : 'none'};
     
 `
 
@@ -214,7 +214,7 @@ export const BannerBox = styled.div<BannerProps>`
     top: 0;
     transition: opacity 0.3s;
     opacity: ${({ noce }) => noce > 2 ? 1 : 0};
-    
+    min-height: 50vh;
 `
 
 export const E2center = styled.div<CircleIconProps>`
@@ -393,7 +393,7 @@ export const E4center = styled.div`
         display: block;
     }
 `
-export const TipBtn= styled.button<{tip: string}>`
+export const TipBtn = styled.button<{ tip: string }>`
     &.tip::after {
         content: '${({ tip }) => tip}';
         visibility: hidden;
