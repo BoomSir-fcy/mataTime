@@ -83,7 +83,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
             {
               token0UnclaimedRewards.isFinite()
                 ?
-                <Text bold color="textPrimary">{dispalyToken0Rewards}</Text>
+                <Text bold color="primary">{dispalyToken0Rewards}</Text>
                 :
                 <Skeleton />
             }
@@ -95,7 +95,7 @@ const PoolStakeInfo: React.FC<PoolStakeInfoProps> = ({
             {
               token1UnclaimedRewards.isFinite()
                 ?
-                <Text textAlign="right" bold color="textPrimary">{dispalyToken1Rewards}</Text>
+                <Text textAlign="right" bold color="primary">{dispalyToken1Rewards}</Text>
                 :
                 <Skeleton />
             }

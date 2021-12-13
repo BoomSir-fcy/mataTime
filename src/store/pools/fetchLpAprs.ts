@@ -35,7 +35,6 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
     const contract = getSinglePoolContract()
     const filterFrom = contract.filters.Donate()
     const eveSales = await contract.queryFilter(filterFrom, blockNumber - 100, blockNumber)
-    console.log(eveSales, "----eveSales-----");
 
     const res = {}
     eveSales.reverse().forEach((item, index) => {
@@ -58,7 +57,6 @@ const culAprHandle = (culFarm: CulFarm, eveSales: EveDonate) => {
 
   return Object.values(culFarm).map(item => {
     const donate = eveSales[item.pid] || new BigNumber(0)
-    console.log(donate.toFixed(0), item.pid)
     return {
       ...item,
       fourRealAmount: donate.times(6).times(365).times(100).toNumber()

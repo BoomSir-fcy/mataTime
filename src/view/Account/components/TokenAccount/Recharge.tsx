@@ -24,9 +24,11 @@ min-width: 52%;
 ${({ theme }) => theme.mediaQueriesSize.padding}
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `
-const LeftBox = styled(Box)`
+const LeftBox = styled(Flex)`
 min-width: 236px;
 flex:1;
+flex-direction: column;
+justify-content: space-between;
 `
 const Title = styled(Flex)`
   align-items: center;
@@ -40,12 +42,8 @@ const NumberBox = styled(Flex)`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  &:nth-child(odd){
-    margin-right: 16px;
-  }
-  &:nth-child(1),&:nth-child(2){
-    margin-bottom: 16px;
-  }
+  margin-top: 16px;
+  margin-right: 16px;
 `
 const RightBox = styled(Box)`
 flex:1;
@@ -162,9 +160,9 @@ const Recharge: React.FC<init> = ({ Token, balance, TokenAddr, decimals = 18 }) 
 
   return (
     <Content>
-      <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
+      <Flex flexWrap='wrap' justifyContent='space-between'>
         <LeftBox>
-          <Title mb='24px'>
+          <Title>
             <Text mr='16px' fontSize='16px'>{t('AccountRecharge')}{Token}</Text>
             <Text style={{ cursor: 'pointer' }} fontSize='14px' color='textPrimary' onClick={() => setVisibleHistory(true)}>{t('Account history record')}</Text>
           </Title>

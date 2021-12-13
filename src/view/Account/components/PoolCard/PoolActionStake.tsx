@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
-import { Flex, Box, Button } from 'uikit';
+import { Flex, Text, Box, Button } from 'uikit';
 import { useSinglePoolState } from 'store/pools/hooks';
 import { fetchSpVaultUserAsync } from 'store/pools/thunks';
 import { ModalWrapper } from 'components'
@@ -78,12 +78,27 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
         {
           isApproved && (userStakesMap[pid] ? (
             <Flex>
-              <Button onClick={() => setVisible(true)}>{t('Increase')}</Button>
-              <Button onClick={() => setVisibleView(true)} ml="12px">{t('View')}</Button>
+              <Button
+                padding={0}
+                width={23}
+                height={23}
+                style={{
+                  borderRadius: "0"
+                }}
+                onClick={() => setVisible(true)}
+              >
+                <Text style={{ transform: "translateY(-3%)" }} fontSize='22px' bold lineHeight={1} padding={0} >+</Text>
+              </Button>
+              {/* <Button onClick={() => setVisible(true)}>{t('Increase')}</Button> */}
+              {/* <Button onClick={() => setVisibleView(true)} ml="12px">{t('View')}</Button> */}
             </Flex>
           )
             :
-            <Button onClick={() => setVisible(true)}>{t('Stake')}</Button>)
+            <Button padding={0} width={23} height={23} style={{
+              borderRadius: "0"
+            }} onClick={() => setVisible(true)}>
+              <Text style={{ transform: "translateY(-3%)" }} fontSize='22px' bold lineHeight={1} padding={0} >+</Text>
+            </Button>)
         }
       </PoolStakeInfo>
       <ModalWrapper title={t('Stake')} creactOnUse visible={visible} setVisible={setVisible}>

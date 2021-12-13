@@ -270,6 +270,7 @@ export class IM extends EventTarget {
   private async initWebSocket() {
     const start = async () => {
       const token = await this.getToken()
+      if (!token) return
       if (this.connection) {
         delete this.connection
       }

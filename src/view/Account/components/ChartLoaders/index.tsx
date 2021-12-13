@@ -20,7 +20,9 @@ const LoadingIndicator = styled(Box)`
   height: 100%;
   position: relative;
 `
-
+interface Init {
+  load: number
+}
 export const BarChartLoader: React.FC = () => {
   const { t } = useTranslation()
   return (
@@ -35,14 +37,14 @@ export const BarChartLoader: React.FC = () => {
   )
 }
 
-export const LineChartLoader: React.FC = () => {
+export const LineChartLoader: React.FC<Init> = ({ load }) => {
   const { t } = useTranslation()
   return (
     <LoadingIndicator>
       <LineChartLoaderSVG />
       <LoadingText>
         <Text color="textSubtle" fontSize="20px">
-          {t('Loading chart data...')}
+          {!load ? t('Loading chart data...') : t('No data')}
         </Text>
       </LoadingText>
     </LoadingIndicator>

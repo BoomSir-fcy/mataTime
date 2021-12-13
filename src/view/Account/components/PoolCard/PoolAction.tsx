@@ -1,17 +1,24 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Flex, Box, Text, Card } from 'uikit';
 import { Container } from 'components'
 import styled from 'styled-components';
 import { formatDisplayBalance, formatDisplayBalanceWithSymbol, getBalanceAmount } from 'utils/formatBalance';
 import { SinglePoolData, UserData } from 'store/pools/types';
 import BigNumber from 'bignumber.js';
+import { ModalWrapper } from 'components/ModalWrapper'
+import { useTranslation } from 'contexts';
+import { useWithdrawPool } from 'view/Account/hooks/pools';
+import { useSinglePoolState } from 'store/pools/hooks';
+import { fetchSpVaultUserAsync } from 'store/pools/thunks';
+import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import PoolActionHarvest from './PoolActionHarvest';
 import PoolActionStake from './PoolActionStake';
 import { PoolDispalynUserData } from './PoolStakeInfo';
+import UnStakeModal from '../PoolModal/UnStakeModal'
 
 const ActionBoxStyled = styled(Box)`
-  background: ${({ theme }) => theme.colors.backgroundLight};
+  background: ${({ theme }) => theme.colors.input};
 `
 const ContainerItem = styled(Container)`
   padding-top: 12px;
@@ -24,6 +31,16 @@ interface PoolActionProps {
 }
 const PoolAction: React.FC<PoolActionProps> = ({ poolInfo, userData }) => {
   const { account } = useWeb3React()
+  const { t } = useTranslation()
+
+  const [visibleView, setVisibleView] = useState(false)
+  const { onWithdraw } = useWithdrawPool()
+  const dispatch = useDispatch()
+  const { userStakesMap } = useSinglePoolState()
+  const updateUserData = useCallback(() => {
+    dispatch(fetchSpVaultUserAsync(account))
+
+  }, [dispatch, account])
 
   const dispalynUserData = useMemo(() => {
     const {
@@ -78,8 +95,29 @@ const PoolAction: React.FC<PoolActionProps> = ({ poolInfo, userData }) => {
         depositToken={poolInfo.depositToken}
         poolAddress={poolInfo.poolAddress}
         pid={poolInfo.pid}
+        onView={() => setVisibleView(true)}
+        showView={!!userStakesMap[poolInfo.pid]}
         isApproved={dispalynUserData.isApproved}
       />
+      <ModalWrapper fillBody title={t('View')} creactOnUse visible={visibleView} setVisible={setVisibleView}>
+        <UnStakeModal
+          onConfirm={async (_pid) => {
+            await onWithdraw(_pid)
+            updateUserData()
+          }}
+          onDismiss={() => setVisibleView(false)}
+          depositToken={poolInfo.depositToken}
+          rewardToken0={poolInfo.rewardToken0}
+          rewardToken1={poolInfo.rewardToken1}
+          depositSymbol={poolInfo.depositSymbol}
+          rewardToken0Symbol={poolInfo.rewardToken0Symbol}
+          rewardToken1Symbol={poolInfo.rewardToken1Symbol}
+          rewardToken0Decimals={poolInfo.rewardToken0Decimals}
+          rewardToken1Decimals={poolInfo.rewardToken1Decimals}
+          depositDecimals={poolInfo.depositDecimals}
+          stakes={userStakesMap[poolInfo.pid]}
+        />
+      </ModalWrapper>
     </ActionBoxStyled>
   )
 }

@@ -10,6 +10,7 @@ import { useApproveErc20Pool, useHarvesPoolId } from '../../hooks/pools';
 import Dots from 'components/Loader/Dots';
 import { getBalanceAmount } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
+import useConnectWallet from 'hooks/useConnectWallet';
 import { BIG_ZERO } from 'utils/bigNumber';
 import styled from 'styled-components';
 
@@ -19,6 +20,57 @@ const ContainerItem = styled(Container)`
   padding-bottom: 12px;
 `
 
+const HandleButton = ({ isApproved, handleApprove, onHandleReward, showView, onView, t, account, onConnectWallet }) => {
+  const [pendingTx, setPendingTx] = useState(false)
+
+  if (!account) {
+    return (
+      <Button onClick={onConnectWallet}>
+        {t('Connect Wallet')}
+      </Button>
+    )
+  }
+  if (!isApproved) {
+    return (
+      <Button width={100} disabled={pendingTx} onClick={async () => {
+        await handleApprove()
+      }}>
+        {
+          pendingTx
+            ?
+            <Dots>{t('Enabling')}</Dots>
+            :
+            t('Enabe')
+        }
+      </Button>
+    )
+  }
+  return (
+    <Flex>
+      {
+        showView && (
+          <Button width={100} margin="0 12px" disabled={pendingTx} onClick={onView}>
+            {t('View')}
+          </Button>
+        )
+      }
+      <Button variant='success' width={100} margin="0 12px" disabled={pendingTx} onClick={async () => {
+        setPendingTx(true)
+        await onHandleReward()
+        setPendingTx(false)
+      }}>
+        {
+          pendingTx
+            ?
+            <Dots>{t('Harvesting')}</Dots>
+            :
+            t('Harvest')
+        }
+      </Button>
+    </Flex>
+  )
+}
+
 interface HarvestProps {
   earnings?: string
   isApproved?: boolean
@@ -26,6 +78,8 @@ interface HarvestProps {
   poolAddress: string
   pid: string
   rewardTokenPrice?: BigNumber
+  showView: boolean
+  onView: () => void
 }
 
 // TODO: Remove Partial
@@ -35,23 +89,22 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   depositToken,
   poolAddress,
   pid,
+  onView,
+  showView,
   rewardTokenPrice,
 }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const { onConnectWallet } = useConnectWallet();
 
-  const [pendingTx, setPendingTx] = useState(false)
 
   const { onApprove } = useApproveErc20Pool(depositToken, poolAddress)
   const handleApprove = useCallback(async () => {
     try {
-      setPendingTx(true)
       await onApprove()
       dispatch(fetchVaultUserAsync(account))
-      setPendingTx(false)
     } catch (e) {
-      setPendingTx(false)
       console.error(e)
     }
   }, [onApprove, dispatch, account])
@@ -59,52 +112,34 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   const { onHarvest } = useHarvesPoolId(pid)
   const onHandleReward = useCallback(async () => {
     try {
-      setPendingTx(true)
       await onHarvest()
-      setPendingTx(false)
       dispatch(fetchVaultUserAsync(account))
       toast.success(<>
-        <Text>{t('Harvested!')}</Text>
-        <Text>{t('Your earnings have been harvested to your wallet')}</Text>
+        <Text color="blank">{t('Harvested!')}</Text>
+        <Text color="blank">{t('Your earnings have been harvested to your wallet')}</Text>
       </>)
     } catch (error) {
-      toast.error(<>
-        <Text>{t('Error')}</Text>
-        <Text>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
-      </>)
-      setPendingTx(false)
+      if ((error as any)?.code !== 4001) {
+        toast.error(<>
+          <Text color="blank">{t('Error')}</Text>
+          <Text color="blank">{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+        </>)
+      }
     }
   }, [onHarvest, dispatch, account])
 
   return (
     <ContainerItem>
       <Flex justifyContent="center" alignItems="center">
-        <Box>
-          {
-            !isApproved
-              ?
-              (<Button disabled={pendingTx} onClick={handleApprove}>
-                {
-                  pendingTx
-                    ?
-                    <Dots>{t('Enabling')}</Dots>
-                    :
-                    t('Enable')
-                }
-              </Button>)
-              :
-              (<Button disabled={pendingTx} onClick={onHandleReward}>
-                {
-                  pendingTx
-                    ?
-                    <Dots>{t('Harvesting')}</Dots>
-                    :
-                    t('Harvest')
-                }
-              </Button>)
-          }
-
-        </Box>
+        <HandleButton
+          isApproved={isApproved}
+          handleApprove={handleApprove}
+          onHandleReward={onHandleReward}
+          onView={onView}
+          account={account}
+          onConnectWallet={onConnectWallet}
+          showView={showView}
+          t={t} />
       </Flex>
     </ContainerItem>
   )

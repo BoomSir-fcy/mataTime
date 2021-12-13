@@ -35,7 +35,9 @@ li{
       justify-content: center;
     }
   &:hover {
-  border: 1px solid  ${({ theme }) => theme.colors.primaryDark};
+  /* border: 1px solid  ${({ theme }) => theme.colors.primaryDark}; */
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.primaryDark};
   }
   &.disabled{
     cursor: no-drop;

@@ -23,15 +23,15 @@ export const ArrowWrapper = styled.div<{ clickable: boolean }>`
       : null}
 `
 
-export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
+export const ErrorText = styled(Text) <{ severity?: 0 | 1 | 2 | 3 | 4 }>`
   color: ${({ theme, severity }) =>
     severity === 3 || severity === 4
       ? theme.colors.failure
       : severity === 2
-      ? theme.colors.warning
-      : severity === 1
-      ? theme.colors.text
-      : theme.colors.success};
+        ? theme.colors.warning
+        : severity === 1
+          ? theme.colors.text
+          : theme.colors.success};
 `
 
 export const StyledBalanceMaxMini = styled.button`
@@ -105,7 +105,7 @@ export function SwapCallbackError({ error }: { error: string }) {
 }
 
 export const SwapShowAcceptChanges = styled(AutoColumn)`
-  background-color: ${({ theme }) => `${theme.colors.warning}33`};
+  background-color: ${({ theme }) => `${theme.colors.input}`};
   padding: 0.5rem;
   border-radius: 12px;
   margin-top: 8px;

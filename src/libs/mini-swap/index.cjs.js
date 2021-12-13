@@ -552,6 +552,7 @@ var Latest = "最新";
 var Claimed = "已领取";
 var Settings = "设置";
 var Supply = "供应";
+var Accept = "同意";
 var Learn = "了解";
 var Wrap = "兑换";
 var Unwrap = "兑换";
@@ -810,6 +811,8 @@ var translationsZhCN = {
 	"Enter a recipient": "输入接收人",
 	"Invalid recipient": "接收人无效",
 	Supply: Supply,
+	Accept: Accept,
+	"Price Updated": "价格已更新",
 	"Your Liquidity": "您的流动性",
 	"Remove liquidity to receive tokens back": "移除流动性以收回代币",
 	"Trade anything. No registration, no hassle.": "交易任何代币。无需注册，不必麻烦。",
@@ -11505,7 +11508,7 @@ function SwapCallbackError(_a) {
 }
 var SwapShowAcceptChanges = styled__default["default"](AutoColumn)(templateObject_9 || (templateObject_9 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"], ["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"])), function (_a) {
     var theme = _a.theme;
-    return theme.colors.warning + "33";
+    return "" + theme.colors.input;
 });
 var templateObject_1$j, templateObject_2$c, templateObject_3$6, templateObject_4$2, templateObject_5$1, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
 
@@ -13537,9 +13540,9 @@ function Swap(_a) {
     var getButtonSupported = function () {
         var _a, _b;
         if (swapIsUnsupported)
-            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ maxWidth: "100%", width: "100%", disabled: true, scale: "ld", mb: "4px" }, { children: t('Unsupported Asset') }), void 0) }), void 0));
+            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ maxWidth: "100%", width: "100%", disabled: true, mb: "4px" }, { children: t('Unsupported Asset') }), void 0) }), void 0));
         if (!account)
-            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(ConnectWalletButton, { width: "100%", scale: "ld" }, void 0) }), void 0));
+            return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(ConnectWalletButton, { width: "100%" }, void 0) }), void 0));
         if (showWrap)
             return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", disabled: Boolean(wrapInputError), onClick: onWrap }, { children: wrapInputError !== null && wrapInputError !== void 0 ? wrapInputError : (wrapType === WrapType.WRAP ? t('Wrap') : wrapType === WrapType.UNWRAP ? t('Unwrap') : null) }), void 0) }), void 0));
         if (noRoute && pairState === PairState.LOADING && !polyData.isPolyMethed) {
@@ -13590,7 +13593,7 @@ function Swap(_a) {
                                                 : t('Swap') }), void 0)] }, void 0), jsxRuntime.jsx(Column, tslib.__assign({ style: { marginTop: '1rem' } }, { children: jsxRuntime.jsx(ProgressCircles, { steps: [approval === ApprovalState.APPROVED] }, void 0) }), void 0)] }, void 0));
         return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: polyData.isPolyMethed
                 ?
-                    jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", scale: "ld", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
+                    jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
                             return tslib.__generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0: return [4 /*yield*/, handlePolySwap()];
@@ -13623,7 +13626,7 @@ function Swap(_a) {
                                     onPresentConfirmModal();
                                 }, 0);
                             }
-                        }, id: "swap-button", scale: "ld", disabled: !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError }, { children: (swapInputError ||
+                        }, id: "swap-button", disabled: !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError }, { children: (swapInputError ||
                             (priceImpactSeverity > 3 && !isExpertMode
                                 ? t('Swap Anyway')
                                 : priceImpactSeverity > 2

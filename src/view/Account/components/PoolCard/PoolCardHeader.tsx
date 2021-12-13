@@ -20,7 +20,7 @@ const CardTipsStyled = styled(Card)`
   right: 0;
   border-radius: ${({ theme }) => `0 ${theme.radii.card} 0 20px`};
   width: 30%;
-  background: ${({ theme }) => theme.colors.gradients.tags};
+  background: ${({ theme }) => theme.colors.background};
   min-width: 150px;
   &::after{
     content: '';
