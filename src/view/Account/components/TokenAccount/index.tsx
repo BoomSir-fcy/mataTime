@@ -5,7 +5,7 @@ import { Container } from 'components'
 import WalletBox from './walletBox'
 import Recharge from './Recharge'
 import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
-import { useFetchWalletInfo, useFetchApproveNum, useFetTimeIncometoday } from 'store/wallet/hooks';
+import { useFetchWalletInfo, useFetchApproveNum, useFetTimeIncometoday, useFetTimeIncomeList } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
@@ -23,13 +23,6 @@ padding: 0;
 `
 const ScrollBox = styled(Box)`
 padding-top: 70px;
-/* height:calc(100vh - 70px);
-overflow-y: auto;
-::-webkit-scrollbar {
-  display: none;
-}
--ms-overflow-style: none;
-scrollbar-width: none; */
 `
 const BorderWalletBox = styled(WalletBox)`
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -88,6 +81,7 @@ const TokenAccount: React.FC = () => {
   const [walletBalance, setwalletBalance] = useState(0)
   const [tokenAddress, settokenAddress] = useState('')
   const [ActiveToken, setActiveToken] = useState(1)
+  const [pageSize, setpageSize] = useState(5);
   const [day, setday] = useState(7)
   const timeAddress = getTimeAddress()
   const MatterAddress = getMatterAddress()
@@ -97,9 +91,11 @@ const TokenAccount: React.FC = () => {
   const activeToken = useStore(p => p.wallet.activeToken);
   const TimeIncometoday = useStore(p => p.wallet.TimeIncometoday);
   const MatterIncometoday = useStore(p => p.wallet.MatterIncometoday);
+  const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
+  const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
 
   useFetTimeIncometoday(day)
-
+  useFetTimeIncomeList(1, pageSize)
 
   const TodayIncome = useMemo(() => {
     let num
@@ -154,6 +150,7 @@ const TokenAccount: React.FC = () => {
       }
     }
   }
+
   useEffect(() => {
     if (account) {
       if (activeToken === 'Time') {
@@ -168,6 +165,7 @@ const TokenAccount: React.FC = () => {
       setwalletBalance(0)
     }
   }, [account, matterBalance, timeBalance, timeAddress, MatterAddress, activeToken])
+
   useEffect(() => {
     account && BalanceList.length > 1 && getMyBalance()
     return () => {
@@ -217,7 +215,7 @@ const TokenAccount: React.FC = () => {
           </RightBox>
         </ContentTab>
         <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
-        <EarningsRecord type={ActiveToken} />
+        <EarningsRecord type={ActiveToken} info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo} />
       </ScrollBox>
     </NoPdBottom>
   )

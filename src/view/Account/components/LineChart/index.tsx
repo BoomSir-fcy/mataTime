@@ -76,7 +76,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, load }) => {
         margin={{
           top: 10,
           right: 5,
-          left: -30,
+          left: 0,
           bottom: 0,
         }}
       >
@@ -94,19 +94,18 @@ const LineChart: React.FC<LineChartProps> = ({ data, load }) => {
           tickLine={false}
           tickFormatter={(time) => time}
           minTickGap={10}
-          padding={{ left: 40 }}
+          padding={{ left: 5 }}
         />
         <YAxis
           dataKey="value"
           tickCount={6}
-          scale="linear"
           axisLine={false}
           tickLine={false}
           fontSize="12px"
           tickFormatter={(val) => `${formatAmount(val)}`}
-          orientation="left"
-          tick={{ dx: 10, fill: theme.colors.textSubtle }}
+          tick={{ fill: theme.colors.textSubtle }}
           padding={{ top: 10, bottom: 10 }}
+          domain={[0, 'dataMax']}
         />
         <Tooltip
           cursor={false}
