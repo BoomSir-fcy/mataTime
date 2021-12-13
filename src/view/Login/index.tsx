@@ -30,7 +30,7 @@ import HomeBanner from 'components/Cirde/HomeBanner';
 const LoginContainer = styled(Flex)`
   max-width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.gradients.signinBackground};
+  /* background: ${({ theme }) => theme.colors.gradients.signinBackground}; */
   flex-direction: column-reverse;
   height: auto;
   min-height: 100vh;

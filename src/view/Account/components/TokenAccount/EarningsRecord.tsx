@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useCallback, useState, useEffect } from 'react';
-import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
+import { Flex, Box, Text, Button, InputPanel, Input, Empty, Spinner } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux'
@@ -9,6 +9,9 @@ import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import { useFetTimeIncomeList, useFetTimeIncometoday } from 'store/wallet/hooks';
 import { useStore } from 'store';
+import dayjs from 'dayjs'
+import { GetTaskName } from 'view/Task/hooks/matter';
+import { fetchMatterIncomeList } from 'store/wallet/reducer';
 
 
 const CountBox = styled(Box)`
@@ -53,7 +56,10 @@ const ItemText = styled(Text)`
       }
   }
 `
-
+const LoadingAnimation = styled(Box)`
+  /* position: absolute; */
+  width: 100%;
+`
 // type 1 内容 2 打赏
 interface init {
   type?: number
@@ -64,11 +70,14 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
-  const [pageSize, setpageSize] = useState(10);
+  const [pageSize, setpageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const [Loading, setLoading] = useState(true);
+  const [TaskHistoryList, setTaskHistoryList] = useState([])
   useFetTimeIncomeList(page, pageSize)
   const List = useStore(p => p.wallet.TimeIncomeList);
+  const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
 
   const HistoryList = [{
     content: '才就是当你闹事的操作下简称耨爱收到你',
@@ -76,22 +85,44 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
     Icome: 300,
     total: 353231
   }]
-  const TaskHistoryList = [{
-    time: 1638783725,
-    type: 1,
-    info: 'gslp',
-    Icome: 353231
-  }]
+
+  const getTotalPage = (totalNum) => {
+    if (pageSize != 0 && totalNum % pageSize == 0) {
+      return parseInt(String(totalNum / pageSize));
+    }
+    if (pageSize != 0 && totalNum % pageSize != 0) {
+      return parseInt(String(totalNum / pageSize)) + 1;
+    }
+  }
+
   const handlePageClick = (event) => {
-    console.log(event.selected);
-    // const newOffset = (event.selected * itemsPerPage) % items.length;
-    // setItemOffset(newOffset);
+    setLoading(true)
+    const changePage = event.selected + 1
+    dispatch(fetchMatterIncomeList({ page: changePage, pageSize }))
   };
 
+  const getTaskType = (type) => {
+    if (type === 1) {
+      return t('DailyTask')
+    } else if (type === 2) {
+      return t('WeekTask')
+    } else {
+      return t('SpecialTask')
+    }
+  }
+
+  useEffect(() => {
+    if (TaskHistoryinfo.matter_history?.length) {
+      setTaskHistoryList(TaskHistoryinfo.matter_history)
+      setPage(TaskHistoryinfo.now_page)
+      setPageCount(getTotalPage(TaskHistoryinfo.total_size))
+    }
+    setLoading(false)
+  }, [TaskHistoryinfo])
   return (
     <CountBox>
       {
-        token === 'Matter' ?
+        type === 2 ?
           <Table>
             <Row className='matterStyle'>
               <HeadText>{t('Account Date')}</HeadText>
@@ -100,40 +131,42 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
               <HeadText>{t('Account Day income')}</HeadText>
             </Row>
             {
-              TaskHistoryList.map((item, index) => (
-                <Row className='matterStyle' key={`${item.time}${index}`}>
-                  <ItemText>{item.time}</ItemText>
-                  <ItemText>{item.type}</ItemText>
-                  <ItemText>{item.info}</ItemText>
-                  <ItemText>{item.Icome}</ItemText>
-                </Row>
-              ))
+              TaskHistoryList.length ?
+                TaskHistoryList.map((item, index) => (
+                  <Row className='matterStyle' key={`${item.create_time}${index}`}>
+                    {
+                      item.task_type && (
+                        <>
+                          <ItemText>{dayjs(item.create_time * 1000).format(t('YYYY-MM-DD hh:mm:ss'))}</ItemText>
+                          <ItemText>{getTaskType(item.task_type)}</ItemText>
+                          <ItemText>{t(GetTaskName(item.task_name_id).name)}</ItemText>
+                          <ItemText>{item.change}</ItemText>
+                        </>
+                      )
+                    }
+                  </Row>
+                ))
+                :
+                (!Loading && <Empty />)
+            }
+            {
+              Loading && <LoadingAnimation><Spinner /></LoadingAnimation>
             }
           </Table>
           :
           <Table>
-            <Row className={type === 2 ? 'Reward' : ''}>
+            <Row>
               <HeadText>{t('Account Creation')}</HeadText>
-              {
-                type === 1 &&
-                <>
-                  <HeadText>{t('Account Number of readers')}</HeadText>
-                  <HeadText>{t('Account Day income')}</HeadText>
-                </>
-              }
+              <HeadText>{t('Account Number of readers')}</HeadText>
+              <HeadText>{t('Account Day income')}</HeadText>
               <HeadText>{t('Account Cumulative income')}</HeadText>
             </Row>
             {
               HistoryList.map((item, index) => (
-                <Row className={type === 2 ? 'Reward' : ''} key={`${item.content}${index}`}>
+                <Row key={`${item.content}${index}`}>
                   <ItemText>{item.content}</ItemText>
-                  {
-                    type === 1 &&
-                    <>
-                      <ItemText>{item.read}</ItemText>
-                      <ItemText>{item.Icome}</ItemText>
-                    </>
-                  }
+                  <ItemText>{item.read}</ItemText>
+                  <ItemText>{item.Icome}</ItemText>
                   <ItemText>{item.total}</ItemText>
                 </Row>
               ))
@@ -146,6 +179,8 @@ const EarningsRecord: React.FC<init> = ({ type, token }) => {
         <ReactPaginate
           breakLabel="..."
           nextLabel=">"
+          forcePage={page - 1}
+          disableInitialCallback={true}
           onPageChange={handlePageClick}
           pageRangeDisplayed={4}
           marginPagesDisplayed={1}

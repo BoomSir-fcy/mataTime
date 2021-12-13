@@ -22,7 +22,9 @@ export interface WalletState {
   }
   rewardNum: number,
   TimeIncomeList: IncomeListInfo,
-  TimeIncometoday: IncometodayInfo
+  TimeIncometoday: IncometodayInfo,
+  MatterIncomeList: MatterIncomeListInfo,
+  MatterIncometoday: IncometodayInfo
 }
 export interface TimeInfo {
   long_time: number,
@@ -51,9 +53,15 @@ export interface IncomeListInfo {
   size: number
   total: number
 }
-
+export interface MatterIncomeListInfo {
+  now_page: number
+  matter_history: []
+  page_size: number
+  total_size: number
+}
 export interface IncometodayInfo {
   data: []
   today_income: string
   total_income: string
+  loadStatus: number
 }
