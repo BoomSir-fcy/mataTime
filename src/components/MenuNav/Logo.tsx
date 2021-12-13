@@ -9,13 +9,17 @@ import lightLogo from 'assets/images/light_logo.svg'
 const LogoWarpper = styled(Box)`
   display: block;
 `;
-
+const ImageStyled = styled(Image)`
+  margin-left: -22px;
+  max-width: 100%;
+  max-height: 100%;
+`
 const Logo: React.FC<BoxProps> = (props) => {
   const [isDark] = useThemeManager();
 
   return (
     <LogoWarpper {...props} width="100%" as={Link} to={'/'}>
-      <Image src={isDark ? logo : lightLogo } width={175} height={32} alt="" />
+      <ImageStyled src={isDark ? logo : lightLogo} width={175} height={32} alt="" />
     </LogoWarpper>
   );
 };

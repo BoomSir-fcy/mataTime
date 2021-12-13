@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "Futura";
+  src: url("./Futura-Bk-BT-Book.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Futura-Bold";
+  src: url("./Futura-Md-BT-Bold.ttf");
+  font-weight: Bold;
+  font-style: normal;
+}

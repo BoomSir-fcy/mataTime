@@ -10,6 +10,7 @@ export const NavItemStyled = styled(Flex) <{ isactive?: number }>`
   vertical-align: middle;
   transition: background 0.3s ;
   background: ${({ isactive, theme }) => isactive ? theme.colors.backgroundThemeCard : 'transparent'};
+  border-radius: 18px;
   &:hover{
     cursor: pointer;
     background: ${({ theme }) => theme.colors.backgroundThemeCard};
