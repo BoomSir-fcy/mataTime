@@ -62,12 +62,13 @@ const UnstakeBtn: React.FC<{
             <Text color='black'>{t('Unstaked!')}</Text>
             <Text color='black'>{t('Your earnings have also been harvested to your wallet')}</Text>
           </>)
-        } catch (e) {
-          toast.error(<>
-            <Text color='black'>{t('Error')}</Text>
-            <Text color='black'>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
-          </>)
-          console.error(e)
+        } catch (error) {
+          if ((error as any)?.code !== 4001) {
+            toast.error(<>
+              <Text color='black'>{t('Error')}</Text>
+              <Text color='black'>{t('Please try again. Confirm the transaction and make sure you are paying enough gas!')}</Text>
+            </>)
+          }
         } finally {
           setPendingTx(false)
         }

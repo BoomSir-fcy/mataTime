@@ -95,7 +95,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       </MeItemWrapper>
       {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
       <Editor type="comment" sendArticle={sendArticle} />
-      <CommentList nonce={nonce} key={refresh} itemData={itemData} />
+      <CommentList nonce={nonce} setNonce={setNonce} key={refresh} itemData={itemData} />
     </PageContainer>
   );
 };

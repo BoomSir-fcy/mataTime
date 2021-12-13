@@ -44,14 +44,12 @@ export const fetchSpRewardsAprAsync = (datas: SinglePoolData[]): AppThunk => asy
     const donateApr = donateAprs.find(donate => donate.pid === item.pid)
     aprs[item.pid] = getPoolsApr(item, donateApr?.fourRealAmount)
   })
-  console.log(setSpAprsData(aprs), "--aprs--")
 
   dispatch(setSpAprsData(aprs))
 }
 
 export const fetchSpVaultUserAsync = (account: string, datas?: SinglePoolData[]): AppThunk => async (dispatch, getState) => {
   const userPoolData = await fetchSinglePoolUserData(account)
-  console.log(userPoolData, "--userPoolData--")
 
   dispatch(setSpUserStakesData(getUserStakesMap(userPoolData)))
 
@@ -66,7 +64,6 @@ export const fetchSinglePoolDataAsync =
   (account?: string): AppThunk =>
     async (dispatch, getState) => {
       const data = await fetchSinglePoolData()
-      console.log(data, "----区块产出-----");
 
       dispatch(setSpDataList(data))
       dispatch(fetchSpPublicDatasAsync(data))

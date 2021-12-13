@@ -33,6 +33,7 @@ import {
 type Iprops = {
   itemData: any;
   nonce: number;
+  setNonce: React.Dispatch<React.SetStateAction<number>>
 };
 
 const PopupButton = styled(Flex)`
@@ -42,7 +43,7 @@ const PopupButton = styled(Flex)`
 
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
-  const { itemData, nonce } = props;
+  const { itemData, nonce, setNonce } = props;
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
@@ -131,6 +132,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               currentUid?.uid !== item.user_id && (
                 <SpendTimeViewWithArticle
                   nonce={nonce}
+                  setNonce={setNonce}
                   readType={ReadType.COMMENT}
                   articleId={item.id}
                 />

@@ -37,7 +37,7 @@ export const styleVariants = {
     background: 'linear-gradient(90deg, #353535, #080808)',
     color: 'primary',
     border: '1px solid',
-    borderColor: 'primary'
+    borderColor: 'primary',
     // backgroundRepeat: "no-repeat",
     // backgroundImage: `url(${btn1}), url(${btn}), url(${btn2})`,
     // backgroundPosition: "0 0px, 10px 0px, 100% -1px",
@@ -95,7 +95,9 @@ export const styleVariants = {
   },
   [variants.SUCCESS]: {
     backgroundColor: 'success',
-    color: 'white'
+    color: 'white',
+    border: '1px solid',
+    borderColor: 'primary',
   },
   [variants.ORANGE]: {
     backgroundColor: 'orange',

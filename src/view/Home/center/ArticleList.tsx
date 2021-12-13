@@ -122,7 +122,7 @@ export const ArticleList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle nonce={nonce} readType={ReadType.ARTICLE} articleId={item.id} />
+                <SpendTimeViewWithArticle nonce={nonce} setNonce={setNonce} readType={ReadType.ARTICLE} articleId={item.id} />
               )
             }
             <MentionItem

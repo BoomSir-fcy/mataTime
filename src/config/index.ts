@@ -26,3 +26,5 @@ export const REFRESH_TIME_BURN_PER_CIRCLE = 1000 * 10 // 60 秒 转完一圈
 export const SERVICE_TIME_LIMIT = 60 * 5 // 剩余使用时间, 小于这个时间后提示用户 单位 （s）
 
 export const GET_DSG_NFT_URL = 'https://dsgmetaverse.com/#/nft/socialfi'
+
+export const ARTICLE_IMAGE_CLASS_NAME = 'article-image-display_with_load'

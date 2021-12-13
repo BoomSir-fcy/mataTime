@@ -58,10 +58,8 @@ const useReadArticle = (nonce?: number | boolean) => {
 
   const handleScroll = useCallback(() => {
     if (!Object.keys(articlePositions).length) return // 页面刷新的时候可能会触发onScroll 事件, 排除这种情况
-    console.log(articlePositions)
     // const offsetTopOverflow = Math.min(...Object.values(articlePositions).map(item => item[0]))
     const top = window.scrollY + VIEW_PADDING.top
-    // console.log(articlePositions, event, top)
     const bottom = top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom
     const topViews = {}
     Object.keys(articlePositions).forEach(item => {
@@ -88,7 +86,6 @@ const useReadArticle = (nonce?: number | boolean) => {
         (topViews[readType] || (topViews[readType] = [])).push(Number(articleId))
       }
     })
-    console.log(topViews)
     setArticleIds(topViews)
   }, [articlePositions, setArticleIds])
 
