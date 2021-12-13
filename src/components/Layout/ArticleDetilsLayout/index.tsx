@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import { Editor, Crumbs, MoreOperatorEnum } from 'components';
-import { useTranslation } from 'contexts/Localization';
-import { CommentList } from './CommentList';
-import { Api } from 'apis';
-import useReadArticle from 'hooks/imHooks/useReadArticle';
+import { useToast } from 'hooks';
 import { useStore } from 'store';
+import { Api } from 'apis';
+
+import { useTranslation } from 'contexts/Localization';
+import { ReadType } from 'hooks/imHooks/types';
+import useReadArticle from 'hooks/imHooks/useReadArticle';
+
+import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
 import { PageContainer } from './style';
+
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { ReadType } from 'hooks/imHooks/types';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 type Iprops = {
@@ -18,12 +21,14 @@ type Iprops = {
 };
 export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const { t } = useTranslation();
+  const { toastSuccess, toastError } = useToast();
   const [itemData, setItemData] = useState<any>({});
   const [refresh, setRefresh] = useState(1);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   // 阅读文章扣费
-  const [nonce, setNonce] = useState(0)
-  useReadArticle(nonce)
+  const [nonce, setNonce] = useState(0);
+  useReadArticle(nonce);
+
   const sendArticle = res => {
     if (!res) return;
     Api.CommentApi.createComment({
@@ -31,8 +36,10 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       comment: res
     }).then(res => {
       if (Api.isSuccess(res)) {
-        toast.success(res.data);
+        toastSuccess(res.data);
         setRefresh(refresh === 1 ? 2 : 1);
+      } else {
+        toastError(t('commonContactAdmin') || res.msg);
       }
     });
   };
@@ -40,8 +47,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const getArticleDetail = (_type?: MoreOperatorEnum) => {
     // 折叠
     if (_type === MoreOperatorEnum.EXPAND) {
-      setNonce(prep => prep + 1)
-      return
+      setNonce(prep => prep + 1);
+      return;
     }
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
       if (Api.isSuccess(res)) {
@@ -49,10 +56,10 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
         setRefresh(refresh === 1 ? 2 : 1);
       }
     });
-  }
+  };
 
   useEffect(() => {
-    getArticleDetail()
+    getArticleDetail();
   }, []);
 
   return (
@@ -60,7 +67,10 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       {
         // 浏览自己的不扣费
         currentUid?.uid !== itemData?.user_id && itemData?.id && (
-          <SpendTimeViewWithArticle readType={ReadType.ARTICLE} articleId={itemData?.id} />
+          <SpendTimeViewWithArticle
+            readType={ReadType.ARTICLE}
+            articleId={itemData?.id}
+          />
         )
       }
       <Crumbs back title={t('newsBack')} />
@@ -76,7 +86,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
             }
           }}
           callback={(_data, _type) => {
-            getArticleDetail(_type)
+            getArticleDetail(_type);
           }}
           more={true}
         />

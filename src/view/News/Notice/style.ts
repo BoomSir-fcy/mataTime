@@ -14,6 +14,7 @@ export const NoticeWrapper = styled(Box)`
 export const NoticeContentWrapper = styled(Card)`
   width: 100%;
   background-color: transparent;
+  overflow: visible;
 `;
 
 export const NoticeItemWrapper = styled(Box)`
