@@ -30,6 +30,16 @@ const HotCount = styled(Text)`
   text-align: right;
   color: ${({ theme }) => theme.colors.textgrey};
 `;
+const HeadAction = styled(Flex)`
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.1s ease-out;
+  i {
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+`;
 
 const HotTopic: React.FC = () => {
   const { t } = useTranslation();
@@ -60,7 +70,7 @@ const HotTopic: React.FC = () => {
 
   return (
     <HotTopicBox isBoxShadow isRadius>
-      <Flex justifyContent="space-between" alignItems="center">
+      <HeadAction>
         <Text fontWeight="bold" fontSize="18px">
           {t('HotTopicTitle')}
         </Text>
@@ -71,7 +81,7 @@ const HotTopic: React.FC = () => {
           margin="0"
           color={theme.colors.white_black}
         />
-      </Flex>
+      </HeadAction>
       <Flex justifyContent="space-between" flexDirection="column">
         {hotTopicList.map((item, index) => (
           <Flex

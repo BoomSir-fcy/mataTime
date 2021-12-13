@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
 import { Flex, Card, Text } from 'uikit';
-import { Avatar, FollowButton, CancelAttentionModal } from 'components';
+import { Avatar, FollowButton, CancelAttentionModal, Icon } from 'components';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
 
 const RecommendPeopleBox = styled(Card)`
   width: 300px;
   margin-top: 15px;
-  padding: 20px 18px;
+  padding: 20px 0;
 `;
 const TitleText = styled(Text)`
   font-weight: bold;
@@ -50,6 +50,25 @@ export const UserDesc = styled(Text)`
   // text-overflow: ellipsis;
 `;
 
+const HeadAction = styled(Flex)`
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.1s ease-out;
+  padding: 0 18px;
+  i {
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+`;
+
+const Content = styled(Flex)`
+  padding: 0 18px;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.hoverList};
+  }
+`;
+
 type Iprops = {};
 
 const RecommendPeople: React.FC<Iprops> = props => {
@@ -66,6 +85,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
     }
   });
   const { list } = state;
+  const theme = useTheme();
 
   useEffect(() => {
     getManList();
@@ -134,12 +154,19 @@ const RecommendPeople: React.FC<Iprops> = props => {
     isInit &&
     state.list.length > 0 && (
       <RecommendPeopleBox isBoxShadow isRadius>
-        <Flex justifyContent="space-between" alignItems="center">
+        <HeadAction>
           <TitleText>{t('recommendPeopleTitle')}</TitleText>
-          <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn>
-        </Flex>
+          <Icon
+            current={1}
+            onClick={debounce(() => getManList(), 500)}
+            name="icon-jiazai_shuaxin"
+            margin="0"
+            color={theme.colors.white_black}
+          />
+          {/* <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn> */}
+        </HeadAction>
         {state.list.map((item, index) => (
-          <Flex
+          <Content
             key={`${item.uid}_${index}`}
             alignItems="center"
             justifyContent="space-between"
@@ -167,7 +194,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
                 })
               }
             />
-          </Flex>
+          </Content>
         ))}
 
         <CancelAttentionModal
