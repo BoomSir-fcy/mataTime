@@ -19,7 +19,7 @@ const Text = styled.div<TextProps>`
   color: ${getColor};
   font-size: ${getFontSize};
   font-weight: ${({ bold }) => (bold ? 'bold' : 400)};
-  font-family: ${({ bold }) => (bold ? 'AlibabaPuHuiTi-Bold' : 'AlibabaPuHuiTi-Regular')};
+  font-family: ${({ bold }) => (bold ? 'Futura-Bold' : 'Futura')};
   line-height: 1.5;
   ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}
   ${({ ellipsis, maxLine }) =>

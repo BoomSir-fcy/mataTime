@@ -404,5 +404,7 @@
   "Publish %count% pieces of content with a valid reading time of more than 600 seconds": "发布%count%条获得600秒以上有效阅读时长的内容",
   "Invite friends": "邀请好友",
   "Successfully invite %count% friend every day": "每日成功邀请%count%位好友",
+  "Received successfully": "领取成功",
+  "Received failed": "领取失败",
   "******end*****@gww********": "@gww翻译结束"
 }

@@ -27,10 +27,12 @@ const User = styled(Flex)`
 `;
 
 const TimeInfoBox = styled(Flex)`
-  width: 100%;
+  /* width: 100%; */
   height: 110px;
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
   padding-left: 12px;
+  margin-bottom: 30px;
+  border-radius: 10px;
 `
 
 const strokeWidth = 8
@@ -69,7 +71,7 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
   }, [percent, temp])
 
   return (
-    <Box mb="32px">
+    <Box mb="32px" mr="8px">
       <TimeInfoBox flexDirection="column" justifyContent="center">
         <Flex alignItems="center">
           <Box position="relative" width="33px" height="33px">

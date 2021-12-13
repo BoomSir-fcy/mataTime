@@ -99,7 +99,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
-    font-family: Alibaba PuHuiTi, 'SourceHanSansCN', sans-serif;
+    font-family: Futura, 'SourceHanSansCN', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

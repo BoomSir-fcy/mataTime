@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Button, Heading, Text, Flex, Svg, Progress, Box } from 'uikit'
-import { GetTaskName, receive } from './hooks/matter'
+import { GetTaskName, receive, useTaskList } from './hooks/matter'
 import debounce from 'lodash/debounce'
 import { useToast } from 'hooks'
-import { TaskInfo, Status } from './type'
+import { Status, TaskInfo } from './type'
 import Dots from 'components/Loader/Dots';
+import { fetchTaskListAsync } from 'store/task/reducer'
+import { useDispatch } from 'react-redux'
 
 const MisCard = styled.div`
   background: ${(props) => props.theme.card.background};
@@ -37,7 +39,7 @@ const MisText = styled(Text)`
   color:${({ theme }) => theme.colors.white};
 `
 const Info = styled.div`
-  background: ${({ theme }) => theme.colors.backgroundMenu};
+  background: ${({ theme }) => theme.colors.backgroundDisabled};
   box-shadow: inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: 20px;
   padding: 20px 16px;
@@ -57,39 +59,40 @@ const CardAction = styled(Box)`
   transform: translate(-50%, 0);
 `
 const ReceiveButton = styled(Button) <{ disabled: boolean }>`
-  background-color: ${({ theme, disabled }) => disabled ? theme.colors.disableStep : theme.colors.backgroundPrimary};
+  min-width: 120px;
+  background: ${({ theme, disabled }) => disabled ? theme.colors.borderColor : theme.colors.success};
 `
 
 const MissionCard: React.FC<{ info: TaskInfo }> = ({
   info
 }) => {
   const { t } = useTranslation()
+  const dispatch = useDispatch()
   const { toastSuccess, toastError } = useToast();
   const [pengdingType, setpengdingType] = useState(false)
-  const [status, setStatus] = useState(info.status);
 
   const configInfo = GetTaskName(info.task_name_id);
 
   // 领取
   const handleReceive = debounce(async () => {
     try {
-      setpengdingType(true)
-      const res = await receive(info.task_id)
+      setpengdingType(true);
+      const res = await receive(info.task_id);
       if (res.code === 1) {
-        toastSuccess(t('Received successfully'))
-        setStatus(Status.Received);
+        toastSuccess(t('Received successfully'));
+        dispatch(fetchTaskListAsync())
       } else {
-        toastError(t('Received failed'))
+        toastError(t('Received failed'));
       }
     } catch (error) {
-      toastError(t('Received failed'))
+      toastError(t('Received failed'));
     } finally {
-      setpengdingType(false)
+      setpengdingType(false);
     }
   }, 150);
 
   const getTipColor = () => {
-    if (status === Status.Received) return 'taskTips';
+    if (info.status === Status.Received) return 'taskTips';
     if (info.task_type === 1) return 'taskDay';
     if (info.task_type === 2) return 'taskWeek';
     if (info.task_type === 3) return 'taskAchievement';
@@ -125,9 +128,9 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
         </Info>
         <CardAction>
           <ReceiveButton
-            disabled={pengdingType || status === Status.UnCompleted || status === Status.Received}
+            disabled={pengdingType || info.status === Status.UnCompleted || info.status === Status.Received}
             onClick={handleReceive} >
-            {status === Status.UnCompleted || status === Status.Completed ? (pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive')) : t('Completed')}
+            {info.status === Status.UnCompleted || info.status === Status.Completed ? (pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive')) : t('Completed')}
           </ReceiveButton>
         </CardAction>
       </MisCard >
