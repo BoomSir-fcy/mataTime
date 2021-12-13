@@ -16,6 +16,7 @@ import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'hooks';
+import { GET_DSG_NFT_URL } from 'config';
 
 
 const SignUpWarpper = styled(Flex)`
@@ -75,7 +76,8 @@ const SignUpFail = () => {
 
   const goRouter = () => {
     dispatch(storeAction.changeReset);
-    history.push('/');
+    // history.push('/');
+    window.open(GET_DSG_NFT_URL)
   };
 
   return (

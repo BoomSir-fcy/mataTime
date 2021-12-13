@@ -93,7 +93,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch()
   const { account } = useWeb3React()
-  const [IsBegin, setIsBegin] = useState(false)
+  const [IsBegin, setIsBegin] = useState(true)
   const [pending, setpending] = useState(false)
   const [inputNum, setinputNum] = useState('');
   const approvedNum = useStore(p => p.wallet.ApproveNum.dsg);

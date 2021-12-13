@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 import { changeActiveToken } from './actions';
+import { FetchMatterIncomeList, FetchMatterIncometoday } from './fetch';
 import { FetchApproveNum, FetchDSGApproveNum, FetchExchangeList, FetchIncomeList, FetchRewardNum, FetchTimeIncometoday, FetchTimeShopInfo } from './hooks';
 import { WalletState } from './type';
 
@@ -44,6 +45,19 @@ const initialState: WalletState = {
     data: [],
     today_income: '0',
     total_income: '0',
+    loadStatus: 0
+  },
+  MatterIncomeList: {
+    now_page: 0,
+    matter_history: [],
+    page_size: 0,
+    total_size: 0
+  },
+  MatterIncometoday: {
+    data: [],
+    today_income: '0',
+    total_income: '0',
+    loadStatus: 0
   }
 };
 
@@ -104,6 +118,17 @@ export const fetchTimeIncometoday = createAsyncThunk<any, any>('wallet/fetchTime
   return res
 });
 
+// Matter收益记录
+export const fetchMatterIncomeList = createAsyncThunk<any, any>('wallet/fetchMatterIncomeList', async ({ page, pageSize = 5 }) => {
+  const res = await FetchMatterIncomeList(page, pageSize);
+  return res
+});
+
+// Matter今日收益和K线记录
+export const fetchMatterIncometoday = createAsyncThunk<any, any>('wallet/fetchMatterIncometoday', async ({ day }) => {
+  const res = await FetchMatterIncometoday(day);
+  return res
+});
 export const wallet = createSlice({
   name: 'wallet',
   initialState,
@@ -154,7 +179,13 @@ export const wallet = createSlice({
         state.TimeIncomeList = action.payload;
       })
       .addCase(fetchTimeIncometoday.fulfilled, (state, action) => {
-        state.TimeIncometoday = action.payload;
+        state.TimeIncometoday = { ...action.payload, loadStatus: 1 };
+      })
+      .addCase(fetchMatterIncomeList.fulfilled, (state, action) => {
+        state.MatterIncomeList = action.payload;
+      })
+      .addCase(fetchMatterIncometoday.fulfilled, (state, action) => {
+        state.MatterIncometoday = { ...action.payload, loadStatus: 1 };
       })
   }
 });

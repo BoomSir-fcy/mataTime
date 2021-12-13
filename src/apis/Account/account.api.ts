@@ -26,6 +26,16 @@ export class AccountApi extends Http {
     return res;
   }
 
+  async MatterIncomerecord(params?: Api.Account.TimeIncomerecord) {
+    const res = await this.get('/v1/task/matter-history', params);
+    return res;
+  }
+
+  async MatterIncometoday(params?: Api.Account.TimeIncometoday) {
+    const res = await this.get('/v1/task/matter-income', params);
+    return res;
+  }
+
   async getRewardList(params?: any) {
     const res = await this.get('/v1/reward/reward-author/list', params);
     return res;
