@@ -47,6 +47,7 @@ export interface SwapInterface {
   inputCurrencyId?: string
   outputCurrencyId?: string
   subTitleTips?: React.ReactNode
+  powered?: React.ReactNode
   titlehelper?: string
 }
 
@@ -59,7 +60,7 @@ const GreyCardStyled = styled(GreyCard)`
   border-radius: 10px;
 `
 
-export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, titlehelper }: SwapInterface) {
+export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, titlehelper, powered }: SwapInterface) {
   // const loadedUrlParams = useDefaultsFromURLSearch()
 
   const { t } = useTranslation()
@@ -650,6 +651,9 @@ export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, 
             {getButtonSupported()}
           </Box>
         </Wrapper>
+        <Box>
+          {powered}
+        </Box>
       </AppBody>
     </div>
   )

@@ -23,5 +23,5 @@ export * from './topicEmpty';
 export * from './Time/Timer';
 export * from './Loading';
 export * from './Popup/MorePopup/morePopup';
-export * from './Popup/popupWrap';
+export * from './Popup/popupWraps';
 export { DropDown } from './DropDown';

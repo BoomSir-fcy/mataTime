@@ -55,7 +55,9 @@ const Info = styled(Flex)`
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
   .name {
+    min-width: 0;
     word-wrap: break-word;
+    word-break: break-all;
     font-size: 28px;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.text};
@@ -191,7 +193,9 @@ const Profile: React.FC<any> = props => {
             <Flex alignItems="flex-end" style={{ flex: 1 }}>
               <Avatar scale="xl" src={profile.nft_image} />
               <Desc>
-                <Text className="name">{profile.nick_name}</Text>
+                <Text className="name" ellipsis maxLine={2}>
+                  {profile.nick_name}
+                </Text>
                 <Flex mt="5px">
                   <Flex>
                     {/* <Certification /> */}

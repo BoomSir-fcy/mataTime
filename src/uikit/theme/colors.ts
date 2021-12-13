@@ -35,6 +35,7 @@ export const lightColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   white: 'white',
+  danger: 'red',
   background: '#FFF',
   backgroundPage: '#f5fdfc',
   backgroundLight: '#EAF2FF',
@@ -94,7 +95,7 @@ export const lightColors: Colors = {
     violetAlt: 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
     progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
-    buttonBg: 'linear-gradient(90deg, #353535, #080808)',
+    buttonBg: 'linear-gradient(90deg, #353535, #080808)'
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)'
@@ -114,6 +115,7 @@ export const darkColors: Colors = {
   ...additionalColors,
   ...nftTokenColors,
   white: 'white',
+  danger: 'red',
   secondary: '#9A6AFF',
   background: '#000',
   backgroundPage: '#0B1513',
@@ -175,7 +177,7 @@ export const darkColors: Colors = {
     tags: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
     progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
-    buttonBg: 'linear-gradient(90deg, #353535, #080808)',
+    buttonBg: 'linear-gradient(90deg, #353535, #080808)'
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)'

@@ -81,7 +81,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
             <Image width={40} height={40} src={coinInfo?.coin_image_url} />
           </Box>
           <Box ml="8px">
-            <Flex pr="8px" alignItems="center" justifyContent="space-between">
+            <Flex pr="8px" alignItems="center" justifyContent="flex-start">
               <Text bold color="white_black" fontSize="18px">{coinInfo?.coin_symbol}</Text>
               {showHelp && (
                 <QuestionHelper

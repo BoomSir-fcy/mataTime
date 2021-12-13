@@ -36,7 +36,7 @@ export const Context = createContext<ModalsContext>({
   setCloseOnOverlayClick: () => true,
 });
 
-const OPEN_CLASS_NAME = 'mini-swap-Modal__Body--open'
+const OPEN_CLASS_NAME = ' mini-swap-Modal__Body--open'
 
 const ModalProvider: React.FC = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,9 +64,10 @@ const ModalProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.className = `${document.body.className} ${OPEN_CLASS_NAME}`
+      document.body.className = `${document.body.className}${OPEN_CLASS_NAME}`
     } else {
-      document.body.className = `${document.body.className}`.replaceAll(OPEN_CLASS_NAME, '')
+      const reg = new RegExp(OPEN_CLASS_NAME, 'g')
+      document.body.className = `${document.body.className}`.replace(reg, '')
     }
   }, [isOpen])
 

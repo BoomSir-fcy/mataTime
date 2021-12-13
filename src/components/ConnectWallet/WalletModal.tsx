@@ -17,18 +17,23 @@ const WalletModalStyled = styled.div<{
   onClick?: (e: Event) => void;
 }>`
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: 10vh;
+  right: 0;
+  left: 0;
+  margin: auto;
   padding: 22px 26px;
   z-index: 10;
-  /* TODO: 走theme配置文件 */
-  background-color: ${({ theme }) => theme.colors.borderColor};
+  /* background-color: ${({ theme }) => theme.colors.borderColor}; */
   border-radius: ${({ theme }) => theme.radii.card};
-  transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(500px)')};
+  /* transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(500px)')}; */
+  transform: ${({ show }) => (show ? ' rotateX(0deg)' : ' rotateX(90deg)')};
+  background: rgba(28, 28, 28, 0.9);
   transition: 300ms transform;
+  width: 500px;
+  max-width: 100%;
 `;
 
-export const Cover = styled(Box)<{ show?: boolean }>`
+export const Cover = styled(Box) <{ show?: boolean }>`
   position: fixed;
   top: 0px;
   right: 0px;
@@ -47,17 +52,13 @@ const WalletModal: React.FC<{ show?: boolean; onClick?: (e: any) => void }> = ({
 
   return (
     <WalletModalStyled onClick={onClick} show={show}>
-      <Flex justifyContent="space-between">
-        <Text>{t('Connect Wallet')}</Text>
-        {/* <CloseIcon /> */}
-      </Flex>
-      <Box>
+      <Flex mt="28px" flexWrap="wrap">
         {connectors.map((item, index) => (
-          <Box mt="12px" key={index}>
+          <Box margin="12px" mt="0" key={item.title}>
             <WalletItem walletConfig={item} login={login} />
           </Box>
         ))}
-      </Box>
+      </Flex>
     </WalletModalStyled>
   );
 };

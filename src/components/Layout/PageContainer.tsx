@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 import MenuNav from 'components/MenuNav';
 import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
-import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig'
+import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig';
 import Crumbs from './crumbs';
 
 interface PageSectionProps extends FlexProps {
@@ -44,13 +44,13 @@ const InnerBox = styled(Flex)`
   z-index: 2;
 `;
 
-const CennerBox = styled(Box) <{ showSidebar?: boolean }>`
+const CennerBox = styled(Box)<{ showSidebar?: boolean }>`
   width: 100%;
-  max-width: 100%
+  max-width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
-    max-width: ${({ showSidebar }) => showSidebar ? '670px' : '984px'};
+    max-width: ${({ showSidebar }) => (showSidebar ? '670px' : '984px')};
   }
-`
+`;
 
 // 解决右侧slider图层在上问题
 const GlobalStyle = createGlobalStyle`
@@ -90,9 +90,7 @@ const PageContainer: React.FC = ({ children }) => {
           <LineStyled />
           <Flex flex="1" alignItems="flex-start" justifyContent="space-between">
             <InnerBox flex="1" flexDirection="column">
-              <CennerBox showSidebar={showSidebar}>
-                {children}
-              </CennerBox>
+              <CennerBox showSidebar={showSidebar}>{children}</CennerBox>
             </InnerBox>
             <LineStyled mr="14px" />
             {showSidebar && (

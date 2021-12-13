@@ -13,7 +13,7 @@ const getBoxShadow = ({ isSuccess = false, isWarning = false, noShadow = false, 
     return theme.shadows.warning;
   }
 
-  
+
   if (noShadow) {
     return 'none';
   }
@@ -54,7 +54,7 @@ const Input = styled.input<InputProps>`
   padding-left: ${({ noShadow }) => noShadow ? '0' : '16px'};;
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.textSubtle};
   }
 
   &:disabled {
