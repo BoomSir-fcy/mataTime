@@ -75,7 +75,7 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
       <TimeInfoBox flexDirection="column" justifyContent="center">
         <Flex alignItems="center">
           <Box position="relative" width="33px" height="33px">
-            <Circle percent={percent} strokeWidth={strokeWidth} trailWidth={strokeWidth} strokeColor="#6685f1" />
+            <Circle percent={percent} strokeWidth={strokeWidth} trailWidth={2} strokeColor="#ffffff" />
             <DownTimeBox>
               <Shalou />
             </DownTimeBox>
