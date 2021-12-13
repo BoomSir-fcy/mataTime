@@ -106,7 +106,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
-    background-color: ${({ theme }) => theme.main};
+    background-color: ${({ theme }) => theme.colors.background};
     overflow-y: scroll;
     /* overflow-x: auto; */
     img {
