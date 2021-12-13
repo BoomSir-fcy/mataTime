@@ -10,6 +10,7 @@ interface upload {
 }
 
 const Container = styled(Flex)`
+  position: relative;
   width: 100%;
   flex-direction: column;
   justify-content: center;

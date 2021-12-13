@@ -37,7 +37,7 @@ const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   border-radius: 10px;
   bottom: ${({ bottom }) => (bottom ? bottom : 0)}px;
   right: ${({ right }) => (right ? right : 0)}px;
-  background: ${({ theme }) => theme.colors.tertiary};
+  background: ${({ theme }) => theme.colors.greyBackground};
 `;
 const CoinSelectStyled = styled(Button)`
   width: 100px;
@@ -236,8 +236,12 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
             <ReactLoading type={'cylon'} />
           ) : (
             <React.Fragment>
-              <Flex alignItems="center" justifyContent="space-between">
-                <Loading visible={state.submitLoading} />
+              <Loading visible={state.submitLoading} />
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                width="100%"
+              >
                 <AvatarCard
                   userName={currentPost.user_name}
                   avatar={avatar}

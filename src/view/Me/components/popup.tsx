@@ -18,8 +18,8 @@ const PopupWrapper = styled(Button)`
   padding: 0;
 `;
 const PopupIcon = styled.img`
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 `;
 const PopupContentWrapper = styled(Card)`

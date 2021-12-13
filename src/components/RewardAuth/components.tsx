@@ -111,7 +111,9 @@ export const CoinItem: React.FC<{
 }> = React.memo(({ token }) => {
   return (
     <Rows>
-      <TokenImage tokenAddress={token[1]} width={20} height={20} />
+      <Box width="20px" height="20px">
+        <TokenImage tokenAddress={token[1]} width={20} height={20} />
+      </Box>
       <Text ml="5px">{token[2]}</Text>
     </Rows>
   );
@@ -182,7 +184,7 @@ export const Reward: React.FC<{
               }}
             >
               <Flex>
-                <Box width="20px">
+                <Box width="20px" height="20px">
                   <TokenImage
                     width={20}
                     height={20}

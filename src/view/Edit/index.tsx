@@ -14,11 +14,15 @@ import { Api } from 'apis';
 import { useProfileContract } from './hook';
 import { useFetchNftList } from '../Login/hook';
 
+import { ComponentsWrapper } from 'components/Cirde/PageContainer';
+import CommonCircle from 'components/Cirde/CommonCircle';
+
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
 import defaultImages from 'assets/images/default_background.png';
 
 const Background = styled(Flex)`
+  position: relative;
   width: 100%;
   height: 280px;
   background-size: 100%;
@@ -55,7 +59,7 @@ const Edit: React.FC = () => {
       nick_name: profile.nick_name,
       display_format: profile.display_format,
       introduction: profile.introduction,
-      background_image: profile.background_image || defaultImages,
+      background_image: profile.background_image,
       location: profile.location
     };
 
@@ -136,7 +140,7 @@ const Edit: React.FC = () => {
 
   React.useEffect(() => {
     setState(p => {
-      p.background = profile.background_image || defaultImages;
+      p.background = profile.background_image;
     });
   }, [profile]);
 
@@ -151,6 +155,32 @@ const Edit: React.FC = () => {
         </Button>
       </Header>
       <Background style={{ backgroundImage: `url(${state.background})` }}>
+        {!profile.background_image && !state.background && (
+          <Box
+            style={{
+              position: 'absolute'
+            }}
+          >
+            <ComponentsWrapper>
+              <CommonCircle
+                width="18rem"
+                height="18rem"
+                margin="-15rem 0 0 -9rem"
+                bgWidth="48rem"
+                bgHeight="19rem"
+                bgMargin="-19rem 0 0 -23rem"
+                isAnimation
+              >
+                <img
+                  width="250px"
+                  height="250px"
+                  style={{ position: 'relative', top: '-90px' }}
+                  src={require('view/Login/images/LOGO2.svg').default}
+                />
+              </CommonCircle>
+            </ComponentsWrapper>
+          </Box>
+        )}
         <Upload
           multiple
           uploadSuccess={(imgSrc: string) =>
