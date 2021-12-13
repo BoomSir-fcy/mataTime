@@ -11,10 +11,12 @@ import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
-import Matter from './Matter';
 import { useTokenBalance } from '../ExchangeTime/hook';
 import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
+import { useDispatch } from 'react-redux'
+import { fetchTimeIncometoday, fetchMatterIncometoday, fetchIncomeList, fetchMatterIncomeList } from 'store/wallet/reducer';
+
 
 const NoPdBottom = styled(Container)`
 padding: 0;
@@ -71,9 +73,9 @@ height: 36px;
 const TokenAccount: React.FC = () => {
   useFetchWalletInfo()
   useFetchApproveNum()
-  useFetTimeIncometoday(7)
   const { t } = useTranslation();
   const { account } = useWeb3React()
+  const dispatch = useDispatch()
   const info = {
     address: "",
     available_balance: "0",
@@ -82,13 +84,11 @@ const TokenAccount: React.FC = () => {
     total_balance: "0",
     uid: 0
   }
-  // const [TimeInfo, setTimeInfo] = useState(info)
-  // const [MatterInfo, setMatterInfo] = useState(info)
   const [WalletInfo, setWalletInfo] = useState(info)
   const [walletBalance, setwalletBalance] = useState(0)
   const [tokenAddress, settokenAddress] = useState('')
-  const [ActiveTab, setActiveTab] = useState(1)
   const [ActiveToken, setActiveToken] = useState(1)
+  const [day, setday] = useState(7)
   const timeAddress = getTimeAddress()
   const MatterAddress = getMatterAddress()
   const { balance: timeBalance } = useTokenBalance(timeAddress)
@@ -96,21 +96,53 @@ const TokenAccount: React.FC = () => {
   const BalanceList = useStore(p => p.wallet.wallet);
   const activeToken = useStore(p => p.wallet.activeToken);
   const TimeIncometoday = useStore(p => p.wallet.TimeIncometoday);
+  const MatterIncometoday = useStore(p => p.wallet.MatterIncometoday);
 
-  const TimeTodayIncome = useMemo(() => {
-    const num = Number(TimeIncometoday.today_income)
-    return num
-  }, [TimeIncometoday])
+  useFetTimeIncometoday(day)
 
-  const TimeTotalIncome = useMemo(() => {
-    const num = Number(TimeIncometoday.total_income)
-    return num
-  }, [TimeIncometoday])
 
-  const TimeChartList = useMemo(() => {
-    const num = Number(TimeIncometoday.data)
+  const TodayIncome = useMemo(() => {
+    let num
+    if (ActiveToken === 1) {
+      num = Number(TimeIncometoday.today_income)
+    } else {
+      num = Number(MatterIncometoday.today_income)
+    }
     return num
-  }, [TimeIncometoday])
+  }, [TimeIncometoday, MatterIncometoday, ActiveToken])
+
+  const TotalIncome = useMemo(() => {
+    let num
+    if (ActiveToken === 1) {
+      num = Number(TimeIncometoday.total_income)
+    } else {
+      num = Number(MatterIncometoday.total_income)
+    }
+    return num
+  }, [TimeIncometoday, MatterIncometoday, ActiveToken])
+
+  const ChartList = useMemo(() => {
+    let data
+    if (ActiveToken === 1) {
+      data = TimeIncometoday.data
+    } else {
+      data = MatterIncometoday.data
+    }
+    if (!data) {
+      data = []
+    }
+    return data
+  }, [TimeIncometoday, MatterIncometoday, ActiveToken])
+
+  const LoadStatus = useMemo(() => {
+    let Status
+    if (ActiveToken === 1) {
+      Status = TimeIncometoday.loadStatus
+    } else {
+      Status = MatterIncometoday.loadStatus
+    }
+    return Status
+  }, [TimeIncometoday, MatterIncometoday, ActiveToken])
 
   const getMyBalance = async () => {
     for (let i = 0; i < BalanceList.length; i++) {
@@ -142,6 +174,17 @@ const TokenAccount: React.FC = () => {
       setWalletInfo(info)
     }
   }, [BalanceList, account, activeToken])
+
+  useEffect(() => {
+    if (ActiveToken === 1) {
+      dispatch(fetchTimeIncometoday({ day }))
+      dispatch(fetchIncomeList({ page: 1 }))
+    } else {
+      dispatch(fetchMatterIncometoday({ day }))
+      dispatch(fetchMatterIncomeList({ page: 1 }))
+    }
+  }, [ActiveToken])
+
   return (
     <NoPdBottom>
       <WalletHead title={t('Account My Wallet')} />
@@ -161,40 +204,20 @@ const TokenAccount: React.FC = () => {
               <Img src={require('assets/images/myWallet/today.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
                 <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
-                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TimeTodayIncome)}</Text>
+                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TodayIncome)}</Text>
               </Flex>
             </IncomeBox>
             <IncomeBox>
               <Img src={require('assets/images/myWallet/total.png').default} />
               <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
                 <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
-                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TimeTotalIncome)}</Text>
+                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TotalIncome)}</Text>
               </Flex>
             </IncomeBox>
           </RightBox>
         </ContentTab>
-        {/* 收益切换 */}
-        {/* <ContentTab>
-          <Flex alignItems='baseline'>
-            {ActiveToken === 1 ?
-              <>
-                <TabText className={ActiveTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>{t('Account Content income')}</TabText>
-                <TabText className={ActiveTab === 2 ? 'active' : ''} onClick={() => setActiveTab(2)}>{t('Account Reward income')}</TabText>
-              </>
-              :
-              <TabText className='active'>Matter {t('Rewards')}</TabText>
-            }
-          </Flex>
-        </ContentTab> */}
-        {
-          ActiveToken !== 2 ?
-            <>
-              <Chart type={ActiveTab} chartData={TimeChartList} />
-              <EarningsRecord type={ActiveTab} />
-            </>
-            :
-            <Matter BalanceInfo={WalletInfo} TokenAddr={MatterAddress} />
-        }
+        <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
+        <EarningsRecord type={ActiveToken} />
       </ScrollBox>
     </NoPdBottom>
   )

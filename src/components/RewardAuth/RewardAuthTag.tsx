@@ -32,6 +32,11 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
     }
   };
 
+  React.useEffect(() => {
+    document.addEventListener('scroll', close);
+    return () => document.removeEventListener('scroll', close);
+  }, []);
+
   return (
     <RewardAuthTagStyled alignItems="center">
       <Popup

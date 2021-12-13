@@ -95,17 +95,18 @@ export const CommentPop = React.memo((props: Iprops) => {
           >
             {t('moreDelete')}
           </Text>
-        ) : null}
-        <Text
-          textTransform="capitalize"
-          onClick={() =>
-            setState(p => {
-              p.visible = true;
-            })
-          }
-        >
-          {t('moreReport')}
-        </Text>
+        ) : (
+          <Text
+            textTransform="capitalize"
+            onClick={() =>
+              setState(p => {
+                p.visible = true;
+              })
+            }
+          >
+            {t('moreReport')}
+          </Text>
+        )}
       </PopupWrapper>
 
       {/* 举报 */}

@@ -20,9 +20,14 @@ const SystemAvatar = styled(Box)`
 `;
 const Content = styled(Box)`
   flex: 1;
+  a {
+    color: ${({ theme }) => theme.colors.textPrimary};
+  }
 `;
 const PostContent = styled(Flex)`
-  padding: 30px 0 30px 100px;
+  width: 100%;
+  flex-direction: column;
+  padding: 30px 10px 30px 100px;
   background-color: ${({ theme }) => theme.colors.backgroundLight};
 `;
 
@@ -62,7 +67,9 @@ const NewsNotice: React.FC = () => {
 const NoticeItem: React.FC<{
   itemData;
 }> = ({ itemData }) => {
-  const { t } = useTranslation();
+  const { t, getHTML } = useTranslation();
+  const { type } = itemData;
+
   return (
     <NoticeItemWrapper>
       <Flex justifyContent="space-between" padding="0 20px 25px 30px">
@@ -80,17 +87,34 @@ const NoticeItem: React.FC<{
           <Text color="textTips" fontSize="14px" mt="10px" mb="15px">
             {dayjs(itemData.add_time).format(t('HH:mm:ss'))}
           </Text>
-          <Text color="textTips">{itemData.msg_content}</Text>
+          <Text color="textTips">
+            {type === 6 &&
+              getHTML('settingNotificationText1', {
+                value: `<a href="#">${t('latformReviewRules')}</a>`
+              })}
+            {type === 7 &&
+              getHTML('settingNotificationText2', {
+                value: `<a href="#">${t('latformReviewRules')}</a>`
+              })}
+            {type === 8 &&
+              getHTML('settingNotificationText3', {
+                value: `<a href="#">${t('latformReviewRules')}</a>`
+              })}
+          </Text>
         </Content>
       </Flex>
-      <PostContent>
-        <AvatarCard
-          userName={itemData?.post?.nick_name}
-          avatar={itemData?.post?.nft_image}
-          address={itemData?.post?.user_address}
-        />
-        <ContentParsing content={itemData?.post?.content} />
-      </PostContent>
+      {itemData?.post?.user_address && (
+        <PostContent>
+          <AvatarCard
+            userName={itemData?.post?.nick_name}
+            avatar={itemData?.post?.nft_image}
+            address={itemData?.post?.user_address}
+          />
+          <Box mt="14px">
+            <ContentParsing content={itemData?.post?.content} />
+          </Box>
+        </PostContent>
+      )}
     </NoticeItemWrapper>
   );
 };

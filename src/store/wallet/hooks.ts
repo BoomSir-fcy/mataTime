@@ -21,6 +21,8 @@ import {
   fetchWalletBurncointoday,
   fetchIncomeList,
   fetchTimeIncometoday,
+  fetchMatterIncomeList,
+  fetchMatterIncometoday,
 } from './reducer'
 import { ExchangeList } from './type';
 import { State } from '../types'
@@ -272,7 +274,7 @@ export const FetchRewardNum = async (account: string) => {
 
 // time收益记录
 export const FetchIncomeList = async (page, size) => {
-  const index = page * size
+  const index = (page - 1) * size
   try {
     const res = await Api.AccountApi.TimeIncomerecord({ index, size })
     if (Api.isSuccess(res)) {
@@ -300,21 +302,27 @@ export const FetchTimeIncometoday = async (days) => {
     throw error
   }
 }
-// 获取time收益记录
+// 获取timeMater收益记录
 export const useFetTimeIncomeList = (page: number, pageSize: number) => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   useEffect(() => {
-    if (account) dispatch(fetchIncomeList({ page, pageSize }))
-  }, [account, page, pageSize])
+    if (account) {
+      dispatch(fetchIncomeList({ page, pageSize }))
+      dispatch(fetchMatterIncomeList({ page, pageSize }))
+    }
+  }, [account])
 }
 
-// 获取time今日收益和K线记录
+// 获取timeMater今日收益和K线记录
 export const useFetTimeIncometoday = (day: number) => {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useWeb3React()
   useEffect(() => {
-    if (account) dispatch(fetchTimeIncometoday({ day }))
+    if (account) {
+      dispatch(fetchTimeIncometoday({ day }))
+      dispatch(fetchMatterIncometoday({ day }))
+    }
   }, [account, day,])
 }
 // 获取钱包余额详情

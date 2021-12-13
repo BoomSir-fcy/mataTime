@@ -21,35 +21,30 @@ border: 4px solid #2BEC93;
 border-radius: 50%;
 `
 
-export type LineChartProps = {
+interface LineChartProps {
   data: any[]
-  setHoverValue: Dispatch<SetStateAction<number | undefined>> // used for value on hover
-  setHoverDate: Dispatch<SetStateAction<string | undefined>> // used for label of value
-} & React.HTMLAttributes<HTMLDivElement>
+  load: number
+}
 
 // Calls setHoverValue and setHoverDate when part of chart is hovered
 // Note: this NEEDs to be wrapped inside component and useEffect, if you plug it as is it will create big render problems (try and see console)
-const HoverUpdater = ({ locale, payload, setHoverValue, setHoverDate }) => {
+const HoverUpdater = ({ locale, payload }) => {
 
   useEffect(() => {
-    setHoverValue(payload.value)
-    setHoverDate(payload.time)
-  }, [locale, payload.value, payload.time, setHoverValue, setHoverDate])
+  }, [locale, payload.value, payload.time])
   return null
 }
 
-const CustomTooltip = ({ locale, payload, setHoverValue, setHoverDate }) => {
+const CustomTooltip = ({ locale, payload }) => {
   const { t } = useTranslation()
   useEffect(() => {
     if (payload && payload.length) {
-      setHoverValue(payload[0].payload.value)
-      setHoverDate(payload[0].payload.time)
     }
-  }, [locale, payload[0], payload[0], setHoverValue, setHoverDate])
+  }, [locale, payload[0], payload[0]])
   if (payload && payload.length) {
     return (
       <TooltipBox>
-        <div>{t('AccountTime')}:{dayjs(payload[0].payload.time * 1000).format('MM-DD HH:mm')}</div>
+        <div>{t('AccountTime')}:{payload[0].payload.time}</div>
         <div>{t('Rewards')}:{payload[0].payload.value}</div>
       </TooltipBox>
     );
@@ -64,13 +59,13 @@ const CustomizedActiveDot: React.FC = () => {
 /**
  * Note: remember that it needs to be mounted inside the container with fixed height
  */
-const LineChart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
+const LineChart: React.FC<LineChartProps> = ({ data, load }) => {
   const {
     currentLanguage: { locale },
   } = useTranslation()
   const { theme } = useTheme()
   if (!data || data.length === 0) {
-    return <LineChartLoader />
+    return <LineChartLoader load={load} />
   }
   return (
     <ResponsiveContainer>
@@ -83,10 +78,6 @@ const LineChart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
           right: 5,
           left: -30,
           bottom: 0,
-        }}
-        onMouseLeave={() => {
-          if (setHoverDate) setHoverDate(undefined)
-          if (setHoverValue) setHoverValue(undefined)
         }}
       >
         <defs>
@@ -101,7 +92,7 @@ const LineChart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
           dataKey="time"
           axisLine={false}
           tickLine={false}
-          tickFormatter={(time) => dayjs(time * 1000).format('MM-DD HH:mm')}
+          tickFormatter={(time) => time}
           minTickGap={10}
           padding={{ left: 40 }}
         />
@@ -123,8 +114,6 @@ const LineChart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
             <CustomTooltip
               locale={locale}
               payload={props.payload}
-              setHoverValue={setHoverValue}
-              setHoverDate={setHoverDate}
             />
           )}
         />
