@@ -58,7 +58,7 @@ export const MentionItemUserWrapper = styled.div`
       display: flex;
       align-items: center;
       img {
-        width: 25px;
+        width: 20px;
         cursor: pointer;
       }
     }
@@ -109,7 +109,7 @@ export const MentionItemUserWrapper = styled.div`
         display: flex;
         align-items: center;
         img {
-          width: 25px;
+          width: 20px;
           cursor: pointer;
         }
       }

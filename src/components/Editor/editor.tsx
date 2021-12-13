@@ -40,6 +40,7 @@ import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
+import { getBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
 
@@ -331,12 +332,6 @@ export const Editor = (props: Iprops) => {
       content,
       userIdList
     };
-  };
-
-  // 转义长度
-  const getBLen = str => {
-    if (!Boolean(str)) return 0;
-    return str.replace(/[^\x00-\xff]/g, '01').length;
   };
 
   const [timeId, setTimeId] = useState(null);

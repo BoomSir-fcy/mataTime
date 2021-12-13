@@ -16,7 +16,7 @@ const SystemAvatar = styled(Box)`
   width: 60px;
   height: 60px;
   border-radius: ${({ theme }) => theme.radii.card};
-  background-color: #000000;
+  background-color: ${({ theme }) => theme.colors.backgroundThemeCard};
 `;
 const Content = styled(Box)`
   flex: 1;
@@ -28,7 +28,7 @@ const PostContent = styled(Flex)`
   width: 100%;
   flex-direction: column;
   padding: 30px 10px 30px 100px;
-  background-color: ${({ theme }) => theme.colors.backgroundLight};
+  background-color: ${({ theme }) => theme.colors.backgroundThemeCard};
 `;
 
 const NewsNotice: React.FC = () => {
