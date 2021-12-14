@@ -300,7 +300,7 @@ export const SignUpSetName: React.FC<{
           </NickNameBox>
         </InputItems>
       </Box>
-      <Flex justifyContent="center" pt="30px">
+      <Flex justifyContent="center" pt="30px" pb='30px'>
         <Submit
           scale="ld"
           onClick={state.isSignin ? signIn : submitProfile}
