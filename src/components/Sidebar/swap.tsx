@@ -35,11 +35,12 @@ const transitionStyles = {
 
 const Swap: React.FC = () => {
   const { chainId } = useWeb3React();
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
+
+  console.log(currentLanguage, 'currentLanguage')
 
   const [inProp, setInProp] = useState(false);
 
-  const [languange] = useLanguange();
   const [isDark] = useThemeManager();
   const { onConnectWallet } = useConnectWallet();
 
@@ -153,7 +154,7 @@ const Swap: React.FC = () => {
             onConnectWallet={onConnectWallet}
             chainId={chainId}
             isDark={isDark}
-            lang={languange?.value?.locale}
+            lang={currentLanguage.locale}
           />
         </Box>)}
       </Transition>
