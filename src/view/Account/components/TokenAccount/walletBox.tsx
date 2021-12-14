@@ -53,7 +53,7 @@ min-width: 76px;
 const WithdrawBtn = styled(Button)`
 min-width: 80px;
 &:disabled{
-  background: ${({ theme }) => theme.colors.disableStep};
+  background: ${({ theme }) => theme.colors.backgroundDisabled};
 }
 `
 const ChangeTokenBtn = styled(Flex)`
@@ -111,7 +111,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
         </Flex>
         <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
           <ChangeToken src={require('assets/images/myWallet/changeToken.png').default} alt="" />
-          <NumText fontSize='14px' color='textPrimary'>{t('%token%Wallet', { token: Token === 'Time' ? 'Matter' : 'Time' })}</NumText>
+          <NumText fontSize='14px' color='textPrimary'>{t('Account %token%Wallet', { token: Token === 'Time' ? 'Matter' : 'Time' })}</NumText>
         </ChangeTokenBtn>
       </TopInfo>
       <Flex alignItems='flex-end' justifyContent='space-between'>
@@ -133,7 +133,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
                 </Flex>
               </>
               :
-              <Fount>{t('AccountMenu Over %num% can be withdrawn to the wallet on the chain', { num: 100 })}</Fount>
+              <Fount>{t('Account Over %num% can be withdrawn to the wallet on the chain', { num: 100 })}</Fount>
           }
 
         </LeftBox>

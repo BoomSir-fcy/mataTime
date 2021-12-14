@@ -42,6 +42,8 @@ const InnerBox = styled(Flex)`
   position: sticky;
   top: 0;
   z-index: 2;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.colors.primaryDark};
 `;
 
 const CennerBox = styled(Box) <{ showSidebar?: boolean }>`

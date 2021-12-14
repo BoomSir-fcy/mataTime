@@ -31,7 +31,7 @@ const LoginContainer = styled(Flex)`
   max-width: 100vw;
   height: 100vh;
   /* background: ${({ theme }) => theme.colors.gradients.signinBackground}; */
-  flex-direction: column-reverse;
+  flex-direction: column;
   height: auto;
   min-height: 100vh;
   overflow: hidden;
