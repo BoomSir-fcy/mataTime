@@ -19,7 +19,7 @@ const Logo: React.FC<BoxProps> = (props) => {
 
   return (
     <LogoWarpper {...props} width="100%" as={Link} to={'/'}>
-      <ImageStyled src={isDark ? logo : lightLogo} width={175} height={32} alt="" />
+      <ImageStyled src={isDark ? logo : lightLogo} width={175} height={38} alt="" />
     </LogoWarpper>
   );
 };
