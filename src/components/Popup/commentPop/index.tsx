@@ -69,32 +69,33 @@ export const CommentPop = React.memo((props: Iprops) => {
     });
   };
 
-  const reportComment = () => {
-    console.log(data);
-    // Api.MeApi.reportComment(data.id, 'ssss').then(res => {
-    //   if (Api.isSuccess(res)) {
-    //     console.log(res);
-    //     callback();
-    //     toast.success(t('ReportModalSuccess'));
-    //   } else {
-    //     toast.success(t('ReportModalError'));
-    //   }
-    // });
-  };
-
   return (
     <>
       <PopupWrapper>
         {isCurrentUser ? (
-          <Text
-            textTransform="capitalize"
-            onClick={() => {
-              setInqueryType('deleteComment');
-              setCommonInqueryShow(true);
-            }}
-          >
-            {t('moreDelete')}
-          </Text>
+          <React.Fragment>
+            <Text
+              textTransform="capitalize"
+              onClick={() => {
+                setInqueryType('deleteComment');
+                setCommonInqueryShow(true);
+              }}
+            >
+              {t('moreDelete')}
+            </Text>
+            {data.user_id !== postUserId && (
+              <Text
+                textTransform="capitalize"
+                onClick={() =>
+                  setState(p => {
+                    p.visible = true;
+                  })
+                }
+              >
+                {t('moreReport')}
+              </Text>
+            )}
+          </React.Fragment>
         ) : (
           <Text
             textTransform="capitalize"

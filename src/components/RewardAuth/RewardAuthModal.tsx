@@ -65,6 +65,7 @@ const RowsToken = styled(Flex)`
 
 interface RewardAuthModalProps {
   currentPost: Api.Home.post;
+  postType: 0 | 1;
   depositSymbol?: string;
   userName?: string;
   address?: string;
@@ -78,6 +79,7 @@ interface RewardAuthModalProps {
 
 const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   currentPost,
+  postType,
   avatar,
   offsetLeft,
   offsetTop,
@@ -144,7 +146,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
 
   const getPost = async () => {
     try {
-      const res = await getInfo(0, currentPost.id);
+      const res = await getInfo(postType, currentPost.id);
       setState(p => {
         p.reward_post = res;
       });
@@ -172,7 +174,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       const res = await rewardUsers(
         currentPost.user_address,
         currentToken[0],
-        0,
+        postType,
         currentPost.id,
         getDecimalAmount(new BigNumber(amount)).toString(),
         getBnbAddress() === currentToken[0]

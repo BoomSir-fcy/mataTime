@@ -42,7 +42,7 @@ export const SignUpcomplete = React.memo(() => {
           p.list = res.data || [];
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const complete = () => {

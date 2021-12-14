@@ -4,13 +4,15 @@ import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from "./config";
 
 export const NavItemStyled = styled(Flex) <{ isactive?: number }>`
   align-items: center;
-  width: 100%;
-  height: 40px;
+  width: max-content;
+  /* height: 40px; */
   cursor: pointer;
   vertical-align: middle;
   transition: background 0.3s ;
   background: ${({ isactive, theme }) => isactive ? theme.colors.backgroundThemeCard : 'transparent'};
   border-radius: 18px;
+  margin-bottom: 20px;
+  padding: 7px 30px 7px 14px;
   &:hover{
     cursor: pointer;
     background: ${({ theme }) => theme.colors.backgroundThemeCard};
