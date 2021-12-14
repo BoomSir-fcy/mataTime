@@ -40,7 +40,7 @@ import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
-import { getBLen } from 'utils';
+import { getPostBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
 
@@ -349,7 +349,7 @@ export const Editor = (props: Iprops) => {
     const newValue = parseValue(value);
 
     //限制用户输入数量
-    if (getBLen(content) > 280) {
+    if (getPostBLen(content) > 280) {
       setTimeId(null);
       return toast.warning(t('sendArticleMsgMaxWords'));
     }

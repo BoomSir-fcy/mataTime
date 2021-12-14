@@ -4,12 +4,12 @@ import history from 'routerHistory';
 import { Flex, Box, Text } from 'uikit';
 import { Icon } from 'components';
 import useMenuNav from 'hooks/useMenuNav';
-import { HamburgerIcon, HamburgerCloseIcon } from "uikit/widgets/Menu/icons";
+import { HamburgerIcon, HamburgerCloseIcon } from 'uikit/widgets/Menu/icons';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
-import MenuButton from "./MenuButton";
+import MenuButton from './MenuButton';
 
-const Card = styled(Flex) <{ zIndex?: number }>`
+const Card = styled(Flex)<{ zIndex?: number }>`
   align-items: center;
   width: 100%;
   height: 60px;
@@ -42,7 +42,7 @@ export const Crumbs: React.FC<{
   const { t } = useTranslation();
   const theme = useTheme();
   const colors = theme.colors.white_black;
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
+  const { isPushed, setIsPushed, isMobile } = useMenuNav();
 
   const goBack = () => {
     history.goBack();
@@ -50,7 +50,11 @@ export const Crumbs: React.FC<{
 
   return (
     <Card zIndex={zIndex}>
-      <MenuButton aria-label="Toggle menu" onClick={() => setIsPushed(prep => !prep)} mr="24px">
+      <MenuButton
+        aria-label="Toggle menu"
+        onClick={() => setIsPushed(prep => !prep)}
+        mr="24px"
+      >
         {isPushed ? (
           <HamburgerCloseIcon width="24px" color="textSubtle" />
         ) : (
@@ -66,7 +70,12 @@ export const Crumbs: React.FC<{
           style={{ cursor: 'pointer', position: 'relative', width: '100%' }}
         >
           <Flex alignItems="center">
-            <Icon name={'icon-fanhui'} size={20} color={colors} bold />
+            <Icon
+              name={'icon-fanhui'}
+              size={20}
+              color={colors}
+              fontWeight="bold"
+            />
             <Text className="text" ml="16px">
               {t('newsBack')}
             </Text>
@@ -74,7 +83,9 @@ export const Crumbs: React.FC<{
           {centerTitle && (
             <CenterBox>
               <Text className="text" ml="16px">
-                {centerTitle.length > 20 ? centerTitle.slice(0, 20) + '...#' : centerTitle}
+                {centerTitle.length > 20
+                  ? centerTitle.slice(0, 20) + '...#'
+                  : centerTitle}
               </Text>
             </CenterBox>
           )}
