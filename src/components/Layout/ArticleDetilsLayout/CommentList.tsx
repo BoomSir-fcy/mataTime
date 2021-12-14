@@ -33,7 +33,7 @@ import {
 type Iprops = {
   itemData: any;
   nonce: number;
-  setNonce: React.Dispatch<React.SetStateAction<number>>
+  setNonce: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const PopupButton = styled(Flex)`
@@ -189,7 +189,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               </div>
             </Flex>
             <MentionOperator
-              type={'Comment'}
+              type="Comment"
               callback={initList}
               itemData={{
                 ...item,
