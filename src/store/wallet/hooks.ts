@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCashierDeskAddress, getDsgAddress, getTimeAddress, getTimeShopAddress } from 'utils/addressHelpers';
+import { getCashierDeskAddress, getDsgAddress, getTimeAddress, getMatterAddress, getTimeShopAddress } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json'
 import timeShopAbi from 'config/abi/TimeShop.json';
 import { REFRESH_TIME_BURN_PER_CIRCLE } from 'config'
@@ -88,6 +88,7 @@ const useRefreshTimeBurn = () => {
 export const FetchApproveNum = async (account: string) => {
   const CashierDesk = getCashierDeskAddress()
   const timeAddress = getTimeAddress()
+  const MatterAddress = getMatterAddress()
   const calls = [
     {
       address: timeAddress,
@@ -95,7 +96,7 @@ export const FetchApproveNum = async (account: string) => {
       params: [account, CashierDesk]
     },
     {
-      address: timeAddress,
+      address: MatterAddress,
       name: 'allowance',
       params: [account, CashierDesk]
     },
