@@ -9,6 +9,8 @@ import { Status, TaskInfo } from './type'
 import Dots from 'components/Loader/Dots';
 import { fetchTaskListAsync } from 'store/task/reducer'
 import { useDispatch } from 'react-redux'
+import { useWeb3React } from '@web3-react/core';
+import useConnectWallet from 'hooks/useConnectWallet';
 
 const MisCard = styled.div`
   background: ${(props) => props.theme.card.background};
@@ -68,6 +70,8 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const { account } = useWeb3React()
+  const { onConnectWallet } = useConnectWallet();
   const { toastSuccess, toastError } = useToast();
   const [pengdingType, setpengdingType] = useState(false)
 
@@ -80,7 +84,7 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
       const res = await receive(info.task_id);
       if (res.code === 1) {
         toastSuccess(t('Received successfully'));
-        dispatch(fetchTaskListAsync())
+        dispatch(fetchTaskListAsync({ isSignIn: false }))
       } else {
         toastError(t('Received failed'));
       }
@@ -127,11 +131,16 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
           </Flex>
         </Info>
         <CardAction>
-          <ReceiveButton
-            disabled={pengdingType || info.status === Status.UnCompleted || info.status === Status.Received}
-            onClick={handleReceive} >
-            {info.status === Status.UnCompleted || info.status === Status.Completed ? (pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive')) : t('Completed')}
-          </ReceiveButton>
+          {
+            account ?
+              <ReceiveButton
+                disabled={pengdingType || info.status === Status.UnCompleted || info.status === Status.Received}
+                onClick={handleReceive} >
+                {info.status === Status.UnCompleted || info.status === Status.Completed ? (pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive')) : t('Completed')}
+              </ReceiveButton>
+              :
+              <Button onClick={onConnectWallet}>{t('Connect Wallet')}</Button>
+          }
         </CardAction>
       </MisCard >
     </>

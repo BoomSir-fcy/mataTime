@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Text, Box } from 'uikit';
-import {
-    E2center, AnimationE2center, E3center, AnimationE3center, CircleText,
-    BgCircleIcon, AnimationBgCircleIcon, CenterCircleIcon, AnimationCenterCircleIcon
-} from './HomeBanner/styledBanner';
+import { CircleText, AnimationBgCircleIcon, AnimationCenterCircleIcon, AnimationE2center, AnimationE3center, E2center, BgCircleIcon, E3center, CenterCircleIcon } from './Circle';
+// import {
+//     E2center, AnimationE2center, E3center, AnimationE3center, CircleText,
+//     BgCircleIcon, AnimationBgCircleIcon, CenterCircleIcon, AnimationCenterCircleIcon
+// } from './HomeBanner/styledBanner';
 import { CircleIconProps } from './HomeBanner/types';
 
 const RoadMapCircleWrapper = styled.div`
@@ -41,21 +42,21 @@ export const Circle: React.FC<CircleIconProps> = ({ width, height, margin, isAni
             {
                 isAnimation ?
                     <>
-                        <AnimationE2center width={width} height={height} margin={margin}>
+                        <AnimationE2center width={width} height={height}>
                             {/* <AnimationBgCircleIcon color='white_black' /> */}
                             <AnimationBgCircleIcon src="/images/bg_cricle.svg" />
                         </AnimationE2center>
-                        <AnimationE3center width={width} height={height} margin={margin}>
+                        <AnimationE3center width={width} height={height}>
                             {/* <AnimationCenterCircleIcon color='white_black' /> */}
                             <AnimationCenterCircleIcon src="/images/center_cricle.svg" />
                         </AnimationE3center>
                     </>
                     :
                     <>
-                        <E2center width={width} height={height} margin={margin}>
+                        <E2center width={width} height={height}>
                             <BgCircleIcon color='white_black' />
                         </E2center>
-                        <E3center width={width} height={height} margin={margin}>
+                        <E3center width={width} height={height}>
                             <CenterCircleIcon color='white_black' />
                         </E3center>
                     </>

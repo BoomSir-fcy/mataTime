@@ -106,7 +106,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
         onClose()
       } catch (e) {
         console.error(e)
-        toast.error(t('Account Withdrawal failed'));
+        toast.error(t('Account Withdrawal failed!'));
       } finally {
         setpending(false)
       }

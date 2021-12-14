@@ -9,8 +9,8 @@ export const initialState = {
 }
 
 // 任务列表
-export const fetchTaskListAsync = createAsyncThunk<any>('task/fetchTaskListAsync', async () => {
-  const TaskListData = await getTaskListData()
+export const fetchTaskListAsync = createAsyncThunk<any, any>('task/fetchTaskListAsync', async ({ isSignIn }) => {
+  const TaskListData = await getTaskListData(isSignIn)
   return TaskListData
 },
 )

@@ -9,10 +9,13 @@ import { State } from '../types'
 
 export const useFetchTask = () => {
   const dispatch = useDispatch<AppDispatch>()
-  // const { slowRefresh } = useRefresh()
+  const { slowRefresh } = useRefresh()
+  const { account } = useWeb3React();
   useEffect(() => {
-    dispatch(fetchTaskListAsync())
-  }, [dispatch])
+    if (account) {
+      dispatch(fetchTaskListAsync({ isSignIn: true }))
+    }
+  }, [dispatch, account, slowRefresh])
 }
 
 
