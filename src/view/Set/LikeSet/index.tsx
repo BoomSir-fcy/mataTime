@@ -41,7 +41,7 @@ const LikeSet: React.FC = () => {
     isRemind: true,
     isTranslation: false
   });
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
 
   // 自动翻译
   const setTranslation = () => {
@@ -91,7 +91,7 @@ const LikeSet: React.FC = () => {
               value: languages['zh-CN']
             }
           ]}
-          defaultId={languange.id}
+          defaultId={1} // XXX: 屏蔽中文
           onChange={(val: any) => setUseLanguage(val)}
         />
       </Column>

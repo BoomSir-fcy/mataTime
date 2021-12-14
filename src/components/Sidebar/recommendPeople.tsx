@@ -10,6 +10,7 @@ import { Flex, Card, Box, Text } from 'uikit';
 import { Avatar, FollowButton, CancelAttentionModal, Icon } from 'components';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
+import RefreshIcon from 'components/Loader/RefreshIcon';
 
 const RecommendPeopleBox = styled(Card)`
   width: 300px;
@@ -120,7 +121,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
           p.cancelFollow = false;
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const getManList = async () => {
@@ -133,7 +134,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
           p.isRotate = false;
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 关注用户
@@ -168,15 +169,8 @@ const RecommendPeople: React.FC<Iprops> = props => {
       <RecommendPeopleBox isBoxShadow isRadius>
         <HeadAction>
           <TitleText>{t('recommendPeopleTitle')}</TitleText>
-          <Box className={classnames(state.isRotate && 'rotate')}>
-            <Icon
-              current={1}
-              onClick={debounce(() => {
-                setState(p => {
-                  p.isRotate = true;
-                });
-              }, 500)}
-              name="icon-jiazai_shuaxin"
+          <Box>
+            <RefreshIcon
               margin="0"
               color={theme.colors.white_black}
             />

@@ -48,8 +48,8 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
         languange: val
       };
 
-      // setLanguage(val.value);
-      // dispatch(setSystemCustom(systemSetting));
+      setLanguage(val.value);
+      dispatch(setSystemCustom(systemSetting));
     },
     [dispatch, setting]
   );
