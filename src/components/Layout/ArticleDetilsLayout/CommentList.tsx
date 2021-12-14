@@ -13,13 +13,13 @@ import { Flex, Button, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { relativeTime } from 'utils';
-import { SortIcon } from './SortIcon';
 
 import { Api } from 'apis';
 import { ReadType } from 'hooks/imHooks/types';
 
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import {
   CommentListBox,
   CommentTitle,
@@ -29,6 +29,7 @@ import {
   // CommentFooter,
   CommentListFooter
 } from './style';
+import { SortIcon } from './SortIcon';
 
 type Iprops = {
   itemData: any;
@@ -79,13 +80,12 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
     Api.CommentApi.getCommentList({
       pid: itemData.id,
-      prepage: 5,
+      prepage: MAX_SPEND_TIME_PAGE_TATOL,
       page: page,
       sort_add_time: sortTime,
       sort_like: sortLike
     }).then(res => {
       setLoading(false);
-      console.log(res);
       if (Api.isSuccess(res)) {
         setPage(page + 1);
         setListData([...listData, ...(res.data.list || [])]);

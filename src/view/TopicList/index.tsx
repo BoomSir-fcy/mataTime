@@ -13,6 +13,7 @@ import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
@@ -40,7 +41,7 @@ const TopicList = props => {
     try {
       const res = await Api.HomeApi.findByHotTopicIdList({
         page: current || page,
-        per_page: 20,
+        per_page: MAX_SPEND_TIME_PAGE_TATOL,
         topic_id: id === 'empty' ? null : id,
         topic_name: name
       });

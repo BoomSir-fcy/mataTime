@@ -13,6 +13,7 @@ import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
 import { Api } from 'apis';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -33,7 +34,7 @@ export const ArticleList = props => {
   const [totalPage, setTotalPage] = useState(2);
 
   const [isEnd, setIsEnd] = useState(false)
-  const pageSize = 5
+  const pageSize = MAX_SPEND_TIME_PAGE_TATOL
 
   const {
     nonce,
