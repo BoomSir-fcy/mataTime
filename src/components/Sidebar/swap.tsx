@@ -37,8 +37,6 @@ const Swap: React.FC = () => {
   const { chainId } = useWeb3React();
   const { t, currentLanguage } = useTranslation();
 
-  console.log(currentLanguage, 'currentLanguage')
-
   const [inProp, setInProp] = useState(false);
 
   const [isDark] = useThemeManager();
