@@ -62,7 +62,7 @@ const Home: React.FC = (props: any) => {
         toastError(t('commonContactAdmin') || res.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -74,7 +74,6 @@ const Home: React.FC = (props: any) => {
    * @bug 未节流处理
    */
   const tabsChange = item => {
-    console.log(item);
     const temp = {
       ...filterVal
     };

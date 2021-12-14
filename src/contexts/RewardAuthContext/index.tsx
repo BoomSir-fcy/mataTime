@@ -22,7 +22,6 @@ const RewardAuthContextProvider = ({ children }) => {
   //   return ref.getBoundingClientRect();
   // }, []);
 
-  console.log(positon);
   return (
     <RewardAuthContext.Provider
       value={{

@@ -138,7 +138,7 @@ const parseValue = value => {
 };
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -175,7 +175,6 @@ export const Editor = (props: Iprops) => {
   // 模糊查询用户
   const atSearchUser = useCallback(
     debounce(async (nickName: string) => {
-      console.log(nickName);
       try {
         const res = await Api.UserApi.searchUser(nickName);
         if (Api.isSuccess(res)) {
@@ -184,7 +183,7 @@ export const Editor = (props: Iprops) => {
           });
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }, 1000),
     []
@@ -236,7 +235,7 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) {}
+    } catch (err) { }
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -288,7 +287,6 @@ export const Editor = (props: Iprops) => {
                   ...res.data.map(item => item.full_path)
                 ]);
                 toast.success(t('uploadImgSuccessMsg'));
-                console.log(imgList);
               } else {
                 toast.error(t('uploadImgErrorMsg'));
               }

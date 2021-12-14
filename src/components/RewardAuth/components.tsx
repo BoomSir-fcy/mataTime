@@ -146,7 +146,7 @@ export const Reward: React.FC<{
         toastError(t('setNftAuthorizationFail'));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setState(p => {
         p.loading = false;

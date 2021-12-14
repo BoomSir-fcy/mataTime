@@ -143,7 +143,7 @@ export const FetchTimeShopInfo = async () => {
     }))
     return info
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return []
   }
 }

@@ -28,7 +28,7 @@ export const useProfileContract = () => {
         const isCheck = await multicall(nftSocialAbi, calls);
         return [isCheck[0][0], isCheck[1][0]];
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return [false, false];
       }
     },

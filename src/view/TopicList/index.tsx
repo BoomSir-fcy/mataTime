@@ -59,7 +59,7 @@ const TopicList = props => {
         toastError(res.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

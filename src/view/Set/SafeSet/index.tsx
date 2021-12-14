@@ -35,9 +35,8 @@ const SafeSet = () => {
   const updateEmail = async (email: string) => {
     try {
       const res = await Api.SetApi.updateEmail(email);
-      console.log('更新邮箱', res);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

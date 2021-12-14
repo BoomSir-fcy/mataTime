@@ -83,9 +83,8 @@ const Shield = React.memo(() => {
     const shieldUser = async (pid: number) => {
       try {
         const res = await Api.MeApi.shieldUser(pid)
-        console.log('屏蔽', res)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
 
@@ -93,10 +92,9 @@ const Shield = React.memo(() => {
     const unShieldUser = async (pid: number) => {
       try {
         const res = await Api.MeApi.shieldUser(pid)
-        console.log('取消屏蔽', res);
 
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 

@@ -117,7 +117,6 @@ const RecommendPeople: React.FC<Iprops> = props => {
           }
           return { ...row, attention_status: 0 };
         });
-        console.log(followTemp);
         setState(p => {
           p.list = followTemp;
           p.cancelFollow = false;
@@ -166,7 +165,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
         toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

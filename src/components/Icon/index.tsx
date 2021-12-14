@@ -26,10 +26,6 @@ const getColor = ({ color, theme }: ThemedProps) => {
 export const Icon = ({ size, name, color = '#fff', bold, margin, style = {}, current = 0, className, ...props }: iocnType) => {
   const { theme } = useTheme()
 
-  // const { size, name, color = '#fff', bold, margin, style = {}, current = 0, className } = props;
-  // if (name === 'icon-jiazai_shuaxin') {
-  //   console.log(props)
-  // }
   return (
     <i
       className={classnames('iconfont', name, className)}

@@ -43,7 +43,7 @@ const FaucetSmart = () => {
         toast.error('充值失败！');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
     }
 

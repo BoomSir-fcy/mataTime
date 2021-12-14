@@ -202,7 +202,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
                     ? JSON.parse(item.info.content)
                     : [];
                 } catch (err) {
-                  // console.log(err);
+                  console.error(err);
                 }
                 return (
                   <Row className='LinkRow' key={`${item.read.post_id}${index}`} as={Link} to={`/articleDetils/${item.read.post_id}`}>

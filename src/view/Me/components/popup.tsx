@@ -64,7 +64,7 @@ export const Popup: React.FC<{
         toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -83,7 +83,7 @@ export const Popup: React.FC<{
         toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

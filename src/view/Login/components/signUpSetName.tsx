@@ -140,7 +140,6 @@ export const SignUpSetName: React.FC<{
     }
     const inviteAddr =
       inviteinfo.inviteAddr === '' ? AddressZero : inviteinfo.inviteAddr;
-    console.log(inviteAddr, inviteinfo.isRightAdd, inviteinfo.isActive);
 
     dispatch(storeAction.setSigninLoading(true));
     const res = await checkNickname(state.nickName);

@@ -41,7 +41,7 @@ const MentionItem: React.FC<IProps> = props => {
     dontShowPic,
     size = 'nomal',
     itemData = {},
-    callback = () => {}
+    callback = () => { }
   } = props;
   const mentionRef: any = useRef();
   const { push } = useHistory();
@@ -65,8 +65,6 @@ const MentionItem: React.FC<IProps> = props => {
     Array.from(user).forEach((dom: any) => {
       dom.addEventListener('mouseenter', (e: any) => {
         const uid = dom.getAttribute('data-uid');
-        console.log('mouseenter:', dom);
-        console.log('e:', e);
         if (uid) {
           setUid(Math.random());
           setPosition([e.clientX, e.clientY]);
