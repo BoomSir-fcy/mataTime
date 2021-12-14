@@ -28,6 +28,9 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
 }) => {
   const reward: reward[] = data.reward_stats || [];
   const popupRef = React.useRef(null);
+  const total = reward.reduce((total, currentValue) => {
+    return total + currentValue.count;
+  }, 0);
 
   const close = () => {
     if (popupRef.current) {
@@ -47,7 +50,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
         trigger={
           <PopupButton>
             <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
-            {reward?.length || 0}
+            {total || 0}
           </PopupButton>
         }
         nested

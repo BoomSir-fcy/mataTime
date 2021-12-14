@@ -9,7 +9,6 @@ import { TokenImage } from 'components';
 import { useTranslation } from 'contexts/Localization';
 
 const TabsBox = styled(Card)`
-  margin-top: 70px;
   display: flex;
   align-items: center;
   height: 60px;

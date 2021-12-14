@@ -1,21 +1,22 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import history from 'routerHistory';
-import { Flex, Text } from 'uikit';
+import { Flex, Text, Button } from 'uikit';
 import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
+import useMenuNav from 'hooks/useMenuNav';
+import { HamburgerCloseIcon, HamburgerIcon } from 'uikit/widgets/Menu/icons';
 
 const Card = styled(Flex)`
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 2;
   align-items: center;
   justify-content: space-between;
-  width: 970px;
   height: 70px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background: ${({ theme }) => theme.colors.background};
@@ -29,18 +30,41 @@ const Card = styled(Flex)`
     display: inline-block;
     margin-right: 10px;
   }
+  .rightBox{
+    display: none;
+  }
 `;
+
+const MenuButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.text};
+  padding: 0 8px;
+  border-radius: 8px;
+  height: 64px;
+  margin-right: 0;
+  ${({ theme }) => theme.mediaQueries.nav} {
+    display: none;
+  }
+`;
+
 interface init {
   title: string;
 }
 export const WalletHead: React.FC<init> = React.memo(({ title }) => {
   const { t } = useTranslation();
   const CurrentRound = useStore(p => p.wallet.CurrentRound);
+  const { isPushed, setIsPushed, isMobile } = useMenuNav()
 
   return (
-    <Card>
+    <Card style={isMobile ? { justifyContent: 'start' } : {}}>
+      <MenuButton size='sm' variant='text' aria-label="Toggle menu" onClick={() => setIsPushed(prep => !prep)} mr="24px">
+        {isPushed ? (
+          <HamburgerCloseIcon width="24px" color="textSubtle" />
+        ) : (
+          <HamburgerIcon width="24px" color="textSubtle" />
+        )}
+      </MenuButton>
       <Text className="text">{title}</Text>
-      <Flex alignItems="center">
+      <Flex className={!isMobile ? '' : 'rightBox'} alignItems="center">
         <img
           src={require('assets/images/myWallet/broadcast.png').default}
           alt=""

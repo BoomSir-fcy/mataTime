@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ModalWrapper } from 'components'
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
@@ -15,13 +15,15 @@ export default function HttpUpdater() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { t } = useTranslation()
-
+  const { pathname } = useLocation();
   const [visible, setVisible] = useState(false)
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    dispatch(storeAction.resetLoginState());
-    history.replace('/login');
+    if (pathname != '/login') {
+      dispatch(storeAction.resetLoginState());
+      history.replace('/login');
+    }
   }, [dispatch, history]);
 
   // 余额不足

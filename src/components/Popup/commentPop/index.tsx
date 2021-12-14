@@ -83,7 +83,7 @@ export const CommentPop = React.memo((props: Iprops) => {
             >
               {t('moreDelete')}
             </Text>
-            {data.user_id !== postUserId && (
+            {data.user_id !== UID && (
               <Text
                 textTransform="capitalize"
                 onClick={() =>

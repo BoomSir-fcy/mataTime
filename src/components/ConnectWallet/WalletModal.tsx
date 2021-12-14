@@ -22,7 +22,7 @@ const WalletModalStyled = styled.div<{
   left: 0;
   margin: auto;
   padding: 22px 26px;
-  z-index: 10;
+  z-index: 14;
   /* background-color: ${({ theme }) => theme.colors.borderColor}; */
   border-radius: ${({ theme }) => theme.radii.card};
   /* transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(500px)')}; */

@@ -42,7 +42,7 @@ export const SignUpcomplete = React.memo(() => {
           p.list = res.data || [];
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const complete = () => {
@@ -70,8 +70,8 @@ export const SignUpcomplete = React.memo(() => {
           <Follow key={index} rows={row} getManList={getManList} />
         ))}
       </Box>
-      <FlexButton>
-        <Button scale="ld" onClick={debounce(() => getManList(), 1000)}>
+      <FlexButton paddingBottom='20px'>
+        <Button mr='20px' scale="ld" onClick={debounce(() => getManList(), 1000)}>
           {t('loginSignUpChangeBatch')}
         </Button>
         <CompleteButton variant="secondary" scale="ld" onClick={complete}>
