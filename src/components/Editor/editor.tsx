@@ -137,6 +137,22 @@ const parseValue = value => {
   return arr;
 };
 
+const removeEmptyText = value => {
+  const resVal = []
+  value.forEach(item => {
+    if (item.children) {
+      resVal.push({
+        ...item,
+        children: removeEmptyText(item.children)
+      })
+      return
+    }
+    resVal.push({ ...item })
+  })
+
+  return resVal
+}
+
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const { t } = useTranslation();
@@ -345,6 +361,10 @@ export const Editor = (props: Iprops) => {
     // let content = ''
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
+    // TODO: 解析
+    // const newValue1 = removeEmptyText(newValue);
+
+    // console.log(newValue1, newValue)
 
     //限制用户输入数量
     if (getPostBLen(content) > 280) {
