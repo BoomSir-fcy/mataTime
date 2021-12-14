@@ -110,7 +110,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
                 textAlign="right"
                 prefix="$ "
                 bold
-                color="textPrimary"
+                color="primary"
                 value={currentPrice}
                 decimals={decimals}
               />
@@ -137,7 +137,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
                   }}
                   style={{ cursor: 'pointer' }}
                   ml="4px"
-                  color="textPrimary"
+                  color="primary"
                   width="16px"
                 />
               )}
