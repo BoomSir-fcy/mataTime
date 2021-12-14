@@ -19,7 +19,7 @@ const Single: React.FC = () => {
   return (
     <>
       <WalletHead title={t('Stake')} />
-      <Box pt="86px">
+      <Box pt="16px">
         {
           loaded
             ?

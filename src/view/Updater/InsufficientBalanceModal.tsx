@@ -26,7 +26,6 @@ const ModalHeader = styled(Flex)`
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background: pink;
   position: absolute;
   transform: translate(-50%, -50%);
   left: 50%;

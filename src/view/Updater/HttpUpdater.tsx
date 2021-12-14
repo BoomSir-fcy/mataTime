@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ModalWrapper } from 'components'
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
@@ -15,13 +15,15 @@ export default function HttpUpdater() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { t } = useTranslation()
-
+  const { pathname } = useLocation();
   const [visible, setVisible] = useState(false)
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    dispatch(storeAction.resetLoginState());
-    history.replace('/login');
+    if (pathname != '/login') {
+      dispatch(storeAction.resetLoginState());
+      history.replace('/login');
+    }
   }, [dispatch, history]);
 
   // 余额不足
@@ -45,10 +47,10 @@ export default function HttpUpdater() {
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
-        title={t('$TIME余额不足')}
-        tips={t('Metatime 基于阅读时间扣费，1Time=1秒钟需要提前充值后方可浏览平台信息')}
-        onConfirmLable={t('前去充值')}
-        onSecondaryLable={t('登出账号')}
+        title={t('Insufficient $time balance')}
+        tips={t('Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information')}
+        onConfirmLable={t('Go recharge')}
+        onSecondaryLable={t('Logout account')}
         onConfirm={() => {
           setVisible(false)
           history.push('/account');

@@ -9,6 +9,8 @@ interface Props extends BoxProps {
 }
 
 const QuestionWrapper = styled.div`
+  vertical-align: middle;
+  display: inline-block;
   :hover,
   :focus {
     opacity: 0.7;

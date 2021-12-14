@@ -1,9 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Flex } from 'uikit';
-import {
-    HomeBannerBox, SceneButton, BeginBtn, BeginBtnInfo, BeginBtnButton, GointoBtn, BannerBox, MapBox,
-    AnimationE2center, AnimationE3center, E4center, TipBtn, AnimationBgCircleIcon, AnimationCenterCircleIcon
-} from './styledBanner'
+import Circle from '../Circle';
+import { HomeBannerBox, SceneButton, BeginBtn, BeginBtnInfo, BeginBtnButton, GointoBtn, E4center, TipBtn } from './styledBanner'
 
 const HomeBanner: React.FC = () => {
 
@@ -32,16 +30,8 @@ const HomeBanner: React.FC = () => {
                 </BeginBtn>
             </SceneButton>
             <GointoBtn noce={noce} className={noce >= 1 ? 'btn_into' : ''} />
-            <BannerBox noce={noce}>
-                <AnimationE2center className="e2-center">
-                    <AnimationBgCircleIcon src="/images/bg_cricle.svg" />
-
-                </AnimationE2center>
-                <AnimationE3center className="e3-center" cursor="pointer">
-                    <AnimationCenterCircleIcon src="/images/center_cricle.svg" />
-                </AnimationE3center>
-
-                <MapBox className="map">
+            <Flex height="100%" alignItems="center" justifyContent="center">
+                <Circle isShow={noce > 2} cursor="pointer">
                     <E4center className="e4-center map2-postion">
                         <TipBtn className="banner-e4 map2" tip="" />
                     </E4center>
@@ -63,8 +53,8 @@ const HomeBanner: React.FC = () => {
                     <E4center className="e4-center map6-postion">
                         <TipBtn className="banner-e4 map6" tip="" />
                     </E4center>
-                </MapBox>
-            </BannerBox>
+                </Circle>
+            </Flex>
         </HomeBannerBox>
     );
 }

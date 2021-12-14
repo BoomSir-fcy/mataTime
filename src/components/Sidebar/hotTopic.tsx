@@ -7,6 +7,7 @@ import { Flex, Box, Card, Text } from 'uikit';
 import { useToast } from 'hooks';
 import { useTranslation } from 'contexts/Localization';
 import { Icon } from 'components';
+import RefreshIcon from 'components/Loader/RefreshIcon';
 import { Api } from 'apis';
 
 const HotTopicBox = styled(Card)`
@@ -87,13 +88,8 @@ const HotTopic: React.FC = () => {
         <Text fontWeight="bold" fontSize="18px">
           {t('HotTopicTitle')}
         </Text>
-        <Box className={classnames(isRotate && 'rotate')}>
-          <Icon
-            current={1}
-            onClick={debounce(() => {
-              setIsRotate(true);
-            }, 500)}
-            name="icon-jiazai_shuaxin"
+        <Box>
+          <RefreshIcon
             margin="0"
             color={theme.colors.white_black}
           />

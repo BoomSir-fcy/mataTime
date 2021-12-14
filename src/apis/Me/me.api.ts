@@ -100,7 +100,9 @@ export class MeApi extends Http {
   }
 
   // 个人(他人)主页
-  async getProfileMsg({ page, perpage, uid }) {
+  async getProfileMsg({ page, perpage, uid }: {
+    page: number, perpage: number, uid?: number
+  }) {
     const res = await this.get('/v1/user/home_msg', { page, perpage, uid });
     return res;
   }

@@ -94,8 +94,8 @@ const TaskCount = ({ type, left, right }) => {
 };
 
 const Task: React.FC = () => {
-  useSignIn();
   const { t } = useTranslation();
+
   const { dailyList, weekList, specialList, loading } = useTaskList();
 
   const dailyReceived = dailyList.filter(

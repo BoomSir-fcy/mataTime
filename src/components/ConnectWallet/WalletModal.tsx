@@ -22,7 +22,7 @@ const WalletModalStyled = styled.div<{
   left: 0;
   margin: auto;
   padding: 22px 26px;
-  z-index: 10;
+  z-index: 14;
   /* background-color: ${({ theme }) => theme.colors.borderColor}; */
   border-radius: ${({ theme }) => theme.radii.card};
   /* transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(500px)')}; */
@@ -40,7 +40,7 @@ export const Cover = styled(Box) <{ show?: boolean }>`
   bottom: 0px;
   left: 0px;
   display: ${({ show }) => (show ? 'block' : 'none')};
-  z-index: 9;
+  z-index: 13;
 `;
 
 const WalletModal: React.FC<{ show?: boolean; onClick?: (e: any) => void }> = ({
