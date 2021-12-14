@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Button, Heading, Text, Flex, Svg, Progress, Box } from 'uikit'
-import { GetTaskName, receive, useTaskList } from './hooks/matter'
+import { GetTaskName, receive } from './hooks/matter'
 import debounce from 'lodash/debounce'
 import { useToast } from 'hooks'
 import { Status, TaskInfo } from './type'
@@ -69,8 +69,8 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
   info
 }) => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const { account } = useWeb3React()
+  const dispatch = useDispatch()
   const { onConnectWallet } = useConnectWallet();
   const { toastSuccess, toastError } = useToast();
   const [pengdingType, setpengdingType] = useState(false)
@@ -81,10 +81,9 @@ const MissionCard: React.FC<{ info: TaskInfo }> = ({
   const handleReceive = debounce(async () => {
     try {
       setpengdingType(true);
-      const res = await receive(info.task_id);
+      const res = await receive(dispatch, info.task_id);
       if (res.code === 1) {
         toastSuccess(t('Received successfully'));
-        dispatch(fetchTaskListAsync({ isSignIn: false }))
       } else {
         toastError(t('Received failed'));
       }

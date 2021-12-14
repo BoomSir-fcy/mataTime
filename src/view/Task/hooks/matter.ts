@@ -1,40 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Api } from 'apis';
-import { TaskInfo } from '../type';
 import { taskContents } from './config';
-import { useFetchTask, useTask } from 'store/task/hooks';
-
-
-// 任务列表
-export const useTaskList = () => {
-  const [dailyList, setDailyList] = useState<TaskInfo[]>([]);
-  const [weekList, setWeekList] = useState<TaskInfo[]>([]);
-  const [specialList, setSpecialList] = useState<TaskInfo[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useFetchTask();
-
-  const { taskList } = useTask();
-
-  useEffect(() => {
-    getList();
-  }, [taskList])
-
-  const getList = async () => {
-    setLoading(true);
-    try {
-      const { data } = taskList;
-      setDailyList(data.filter((v: TaskInfo) => v.task_type === 1));
-      setWeekList(data.filter((v: TaskInfo) => v.task_type === 2));
-      setSpecialList(data.filter((v: TaskInfo) => v.task_type === 3));
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { dailyList, weekList, specialList, loading };
-}
+import { useDispatch } from 'react-redux';
+import { fetchTaskListAsync } from 'store/task/reducer';
 
 // 签到
 export const useSignIn = () => {
@@ -53,9 +21,10 @@ export const useSignIn = () => {
 }
 
 // 领取任务
-export const receive = async (taskId: number) => {
+export const receive = async (dispatch: any, taskId: number) => {
   try {
     const res = await Api.TaskApi.receive(taskId);
+    await dispatch(fetchTaskListAsync({ isSignIn: false }))
     return res;
   } catch (error) {
     throw new Error('Receive Error');
@@ -96,3 +65,12 @@ export const GetTaskName = (taskNameId: number) => {
   return taskContents.filter(v => v.id === taskNameId)[0] || { name: 'Mystery quests', describe: 'Mystery quests', count: 0 };
 }
 
+
+// 获取任务类型
+export const GetTaskTag = (taskGroupId: number) => {
+  if (taskGroupId === 1) return 'ACTIVITY';
+  if (taskGroupId === 2) return 'CREATE';
+  if (taskGroupId === 3) return 'INVITE';
+  if (taskGroupId === 4) return 'REPORT';
+  return 'ACTIVITY';
+}
