@@ -45,6 +45,7 @@ const HeadTop = styled(Box)`
   width: 100%;
   min-height: 270px;
   background-size: 100% auto;
+  overflow: hidden;
 `;
 const ProfileInfo = styled(Box)`
   margin-top: -75px;
@@ -115,6 +116,11 @@ const Content = styled(Box)`
     }
   }
 `;
+const CenterImg = styled.img`
+    position: absolute;
+    top: 40%;
+    left: 8%;
+`
 
 const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
@@ -201,19 +207,10 @@ const Profile: React.FC<any> = props => {
         >
           {!profile.background_image && (
             <ComponentsWrapper>
-              <CommonCircle
-                width="18rem"
-                height="18rem"
-                margin="-2em 0 0 -9rem"
-                bgWidth="48rem"
-                bgHeight="19rem"
-                bgMargin="-6rem 0 0 -23rem"
-                isAnimation
-              >
-                <img
+              <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-6rem 0 0 -23rem" isAnimation>
+                <CenterImg
                   width="250px"
                   height="250px"
-                  style={{ position: 'relative', top: '115px' }}
                   src={require('view/Login/images/LOGO2.svg').default}
                 />
               </CommonCircle>
