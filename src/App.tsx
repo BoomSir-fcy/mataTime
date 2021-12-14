@@ -21,6 +21,7 @@ import useUnreadMsg from 'hooks/imHooks/useUnreadMsg'
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import HttpUpdater from './view/Updater/HttpUpdater';
+// import ScrollBarApdater from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 
 import 'dayjs/locale/zh-cn';
@@ -51,6 +52,7 @@ const Updater = () => {
     <>
       <AccountUpdater />
       <HttpUpdater />
+      {/* <ScrollBarApdater /> */}
       <TimeLeftUpdater />
     </>
   )

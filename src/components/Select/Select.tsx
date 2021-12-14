@@ -154,6 +154,7 @@ export interface SelectProps {
   options: OptionProps[];
   defaultId?: string | number;
   fillWidth?: boolean;
+  disabled?: boolean;
   activeIndex?: number;
   onChange?: (option: OptionProps) => void;
   onSortClick?: () => void;
@@ -168,7 +169,7 @@ export interface OptionProps {
   id?: string | number;
 }
 
-export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children, childrenHeight }) => {
+export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, disabled, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children, childrenHeight }) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -176,6 +177,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const toggling = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (disabled) return
     setIsOpen(!isOpen);
     event.stopPropagation();
   };

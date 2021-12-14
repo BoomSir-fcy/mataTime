@@ -36,9 +36,9 @@ export default function TimeLeftUpdater() {
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
-        title={t('$TIME余额不足5分钟')}
-        tips={t('Metatime 基于阅读时间扣费，1Time=1秒钟需要提前充值后方可浏览平台信息')}
-        onConfirmLable={t('前去充值')}
+        title={t('$time balance less than 5 minutes')}
+        tips={t('Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information')}
+        onConfirmLable={t('Go recharge')}
         onSecondaryLable={t('I see!')}
         onConfirm={() => {
           setVisible(false)

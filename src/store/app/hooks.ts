@@ -43,15 +43,13 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
 
   const setUseLanguage = useCallback(
     val => {
-      console.log(val);
       const systemSetting = {
         ...setting,
         languange: val
       };
-      console.log(systemSetting);
 
-      setLanguage(val.value);
-      dispatch(setSystemCustom(systemSetting));
+      // setLanguage(val.value);
+      // dispatch(setSystemCustom(systemSetting));
     },
     [dispatch, setting]
   );
@@ -59,4 +57,4 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
   return [setting.languange, setUseLanguage];
 };
 
-export const useHackEslint = () => {};
+export const useHackEslint = () => { };
