@@ -43,7 +43,6 @@ const LoginContainer = styled(Flex)`
 `;
 const LeftBox = styled(Box)`
   width: 100%;
-  min-height: 50vh;
   /* background-image: url(${sloganImg});
   background-size: 100% auto;
   background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import { BannerProps, CircleIconProps } from './types';
+import { BannerProps } from './types';
 
 const fadeIn = keyframes`
     0% {
@@ -75,6 +75,7 @@ export const rotate = keyframes`
 export const HomeBannerBox = styled.div`
     width: 100%;
     height: 100%;
+    position: relative;
 `
 export const SceneButton = styled.div<BannerProps>`
     position: relative;
@@ -191,11 +192,13 @@ export const GointoBtn = styled.div<BannerProps>`
     &.btn_into {
         border-radius: 50%;
         transform: scale(0.5);
-        left: 50%;
-        top: 50%;
-        margin: -12.5rem;
-        width: 25rem;
-        height: 25rem;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 250px;
+        height: 250px;
         position: absolute;
         cursor: pointer;
         animation: ${btnExpansion} 6s ease-out 0s 1 alternate;
@@ -205,81 +208,8 @@ export const GointoBtn = styled.div<BannerProps>`
     
 `
 
-// banner
-export const BannerBox = styled.div<BannerProps>`
-    position: relative;
-    display: ${({ noce }) => noce > 2 ? 'flex' : 'none'};
-    height: 100%;
-    left: 0;
-    top: 0;
-    transition: opacity 0.3s;
-    opacity: ${({ noce }) => noce > 2 ? 1 : 0};
-    min-height: 50vh;
-`
-
-export const E2center = styled.div<CircleIconProps>`
-    transform: scale(1);
-    left: 50%;
-    top: 50%;
-    margin: ${({ margin }) => margin || '-20rem'};
-    width: ${({ width }) => width || '40rem'};
-    height: ${({ height }) => height || '40rem'};
-    position: absolute;
-    cursor: ${({ cursor }) => cursor};
-`
-export const AnimationE2center = styled(E2center)`
-    opacity: 0;
-    animation: ${fadeIn} 0.5s ease-in-out 0s 1 normal;
-    animation-fill-mode: forwards;
-`
-
-export const E3center = styled.div<CircleIconProps>`
-    transform: scale(1.15);
-    left: 50%;
-    top: 50%;
-    margin: ${({ margin }) => margin || '-20rem'};
-    width: ${({ width }) => width || '40rem'};
-    height: ${({ height }) => height || '40rem'};
-    position: absolute;
-    cursor: ${({ cursor }) => cursor};
-`
-export const AnimationE3center = styled(E3center)`
-    opacity: 0;
-    animation: ${breathe} 5s linear 0s infinite alternate;
-`
-
-export const BgCircleIcon = styled.img<CircleIconProps>`
-    width: 100%;
-    height: 100%;
-`
-export const AnimationBgCircleIcon = styled(BgCircleIcon)`
-    animation: ${rotate} 10s linear infinite;
-`
-export const CenterCircleIcon = styled.img<CircleIconProps>`
-    width: 100%;
-    height: 100%;
-`
-export const AnimationCenterCircleIcon = styled(CenterCircleIcon)`
-    animation: ${rotate} 50s linear infinite;
-`
-export const CircleText = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-`
-export const MapBox = styled.div`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 40rem;
-    height: 40rem;
-    margin: -20rem;
-`
 export const E4center = styled.div`
     transform: scale(1);
-    margin: -8rem;
-    width: 16rem;
-    height: 16rem;
     position: absolute;
     cursor: pointer;
     opacity: 0;
@@ -293,8 +223,8 @@ export const E4center = styled.div`
         background: url("/images/map/Ahover.png");
     }
     &.map1-postion {
-        left: 22rem;
-        top: 18rem;
+        left: 36%;
+        top: 26%;
         z-index: 2;
     }
     .map2 {
@@ -304,8 +234,8 @@ export const E4center = styled.div`
         background: url("/images/map/Bhover.png");
     }
     &.map2-postion {
-        left: 32rem;
-        top: 18rem;
+        left: 68%;
+        top: 27%;
         z-index: 3;
     }
     .map3 {
@@ -316,13 +246,13 @@ export const E4center = styled.div`
         background: url("/images/map/Chover.png");
     }
     &.map3-postion {
-        left: 15rem;
-        top: 31rem;
+        left: 21%;
+        top: 59%;
         z-index: 2;
     }
     &.map4-postion {
-        left: 26rem;
-        top: 33rem;
+        left: 44%;
+        top: 62%;
         z-index: 3;
     }
     .map4 {
@@ -333,8 +263,8 @@ export const E4center = styled.div`
         background: url("/images/map/Dhover.png");
     }
     &.map5-postion {
-        left: 34rem;
-        top: 27rem;
+        left: 62%;
+        top: 46%;
         z-index: 3;
     }
 
@@ -347,8 +277,8 @@ export const E4center = styled.div`
     }
 
     &.map6-postion {
-        left: 12rem;
-        top: 20rem;
+        left: 11%;
+        top: 35%;
     }
     .map6 {
         background: url("/images/map/Fnormal.png");
@@ -357,8 +287,8 @@ export const E4center = styled.div`
         background: url("/images/map/Fhover.png");
     }
     &.map7-postion {
-        left: 32rem;
-        top: 13rem;
+        left: 68%;
+        top: 14%;
     }
     .map7 {
         background: url("/images/map/Gnormal.png");
@@ -369,14 +299,16 @@ export const E4center = styled.div`
     .banner-e4 {
         /* z-index: 5; */
         border: 0;
-        width: 10rem;
-        height: 10rem;
+        width: 16vw;
+        height: 16vw;
+        max-width: 10rem;
+        max-height: 10rem;
         background-repeat: no-repeat;
         background-position: center;
         background-size: 100%;
         margin: 0 auto;
         cursor: pointer;
-        transition: all 1s linear;
+        transition: all 0.5s linear;
     }
     .banner-e4:hover {
         background-repeat: no-repeat;

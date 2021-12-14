@@ -40,23 +40,21 @@ const RowText = styled(Text)`
 const ScrollBox = styled(Box)`
 padding-top: 70px;
 max-width:970px;
-/* height:calc(100vh - 70px);
-overflow-y: auto;
-::-webkit-scrollbar {
-  display: none;
-}
--ms-overflow-style: none;
-scrollbar-width: none; */
 `
+
+const CenterText = styled(Text)`
+    position: absolute;
+    top: 40%;
+    left: 36%;
+`
+
 
 const FAQCircle = () => {
   return (
     <BgImgBox>
       <ComponentsWrapper>
         <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-13rem 0 0 -23rem" isAnimation>
-          <Box width="14rem" height="14rem" margin="10rem 0 0 9rem">
-            <Text fontSize="40px" color='white' lineHeight="54px" bold>FAQ</Text>
-          </Box>
+          <CenterText fontSize="40px" color='white' lineHeight="54px" bold>FAQ</CenterText>
         </CommonCircle>
       </ComponentsWrapper>
     </BgImgBox >
