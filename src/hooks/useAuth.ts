@@ -13,6 +13,7 @@ import {
 import { ConnectorNames, connectorLocalStorageKey } from 'config/wallet';
 import { connectorsByName } from 'utils/web3React';
 import { setupNetwork } from 'utils/wallet';
+import { useToast } from 'hooks';
 // import useToast from 'hooks/useToast'
 // import { useAppDispatch } from 'state'
 import { useTranslation } from 'contexts/Localization';
@@ -23,7 +24,7 @@ const useAuth = () => {
   const { t } = useTranslation();
   // const dispatch = useAppDispatch()
   const { activate, deactivate } = useWeb3React();
-  // const { toastError } = useToast()
+  const { toastError } = useToast()
   const history = useHistory();
 
   const login = useCallback(
@@ -42,8 +43,7 @@ const useAuth = () => {
               error instanceof NoEthereumProviderError ||
               error instanceof NoBscProviderError
             ) {
-              // TODO: 用户提示
-              // toastError(t('Provider Error'), t('No provider was found'))
+              toastError(t('Provider Error'), t('No provider was found'))
             } else if (
               error instanceof UserRejectedRequestErrorInjected ||
               error instanceof UserRejectedRequestErrorWalletConnect
@@ -52,17 +52,14 @@ const useAuth = () => {
                 const walletConnector = connector as WalletConnectConnector;
                 walletConnector.walletConnectProvider = null;
               }
-              // TODO: 用户提示
-              // toastError(t('Authorization Error'), t('Please authorize to access your account'))
+              toastError(t('Authorization Error'), t('Please authorize to access your account'))
             } else {
-              // TODO: 用户提示
-              // toastError(error.name, error.message)
+              toastError(error.name, error.message)
             }
           }
         });
       } else {
-        // TODO: 用户提示
-        // toastError(t('Unable to find connector'), t('The connector config is wrong'))
+        toastError(t('Unable to find connector'), t('The connector config is wrong'))
       }
     },
     [t, activate]

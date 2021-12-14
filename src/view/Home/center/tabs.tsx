@@ -12,7 +12,6 @@ export const TabsBox = styled(Card)`
   height: 60px;
   background-color: transparent;
   /* border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
-  /* TODO: 后期放入一个Header的公共组件, 方便统一管理 */
   position: sticky;
   top: 0;
   z-index: 1003;

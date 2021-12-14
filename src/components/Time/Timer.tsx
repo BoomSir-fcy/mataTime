@@ -39,8 +39,6 @@ const StyledTimerText = styled(Text)`
       -webkit-text-fill-color: transparent;
     `
   )}
-  /* TODO: 这个更改会对其他地方的组件有影响 没去做具体验证 */
-  /* transform: translateY(-2px); */
 `
 
 export const Timer: React.FC<TimerProps> = ({

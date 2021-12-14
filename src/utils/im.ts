@@ -198,7 +198,6 @@ export class IM extends EventTarget {
     })
   }
 
-  // TODO: 
   private parseMessage(event: MessageEvent) {
     const data = JSON.parse(event.data)
     switch (data.ptl) {
@@ -229,10 +228,6 @@ export class IM extends EventTarget {
       case IM.MessageProtocol.WSProtocol_HEART_Jump_Jump:
         // 心跳检测 不做处理
         break;
-      // case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
-      //   TODO: Error
-      //   this.addSuspendTpl()
-      //   break;
       default:
         console.debug('unread ws code: ', data)
         break
