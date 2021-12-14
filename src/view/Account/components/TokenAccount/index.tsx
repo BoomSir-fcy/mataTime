@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { Container } from 'components'
+import { RouteComponentProps } from 'react-router-dom';
 import WalletBox from './walletBox'
 import Recharge from './Recharge'
 import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
@@ -63,7 +64,7 @@ height: 36px;
 `
 
 
-const TokenAccount: React.FC = () => {
+const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchWalletInfo()
   useFetchApproveNum()
   const { t } = useTranslation();
@@ -152,6 +153,20 @@ const TokenAccount: React.FC = () => {
   }
 
   useEffect(() => {
+    const getTokenType = () => {
+      // 获取路由的token参数
+      const search = route.location.search
+      const myQuery = (search) => {
+        return new URLSearchParams(search);
+      }
+      const TokenType = myQuery(search).get("token");
+      if (TokenType) {
+        setActiveToken(Number(TokenType))
+      }
+    }
+    getTokenType()
+  }, [])
+  useEffect(() => {
     if (account) {
       if (activeToken === 'Time') {
         setwalletBalance(timeBalance)
@@ -219,6 +234,6 @@ const TokenAccount: React.FC = () => {
       </ScrollBox>
     </NoPdBottom>
   )
-}
+})
 
 export default TokenAccount;
