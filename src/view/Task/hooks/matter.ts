@@ -13,6 +13,7 @@ export const useTaskList = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useFetchTask();
+
   const { taskList } = useTask();
 
   useEffect(() => {
