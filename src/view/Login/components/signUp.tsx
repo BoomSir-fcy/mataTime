@@ -180,7 +180,7 @@ export const SignUp: React.FC<{
       {/* 选择头像 */}
       {singUpStep === 1 && !signUpFail &&
         <Nft>
-          <Flex alignItems="baseline">
+          <Flex alignItems="baseline" flexWrap='wrap'>
             <NftTitle fontSize="18px">{t('login Already have an NFT avatar')}</NftTitle>
             <Text fontSize="14px">{t('login After you hold and pledge your NFT avatar, you can register successfully')}</Text>
           </Flex>
@@ -200,7 +200,7 @@ export const SignUp: React.FC<{
       {singUpStep === 2 && <SignUpSetName status={isStakeNft} />}
       {/* {singUpStep === 2 && <SignUpSetName />} */}
       {singUpStep === 3 && (
-        <Box width="100%">
+        <Box paddingTop='30px' width="100%">
           {/* <Text
             fontSize="34px"
             marginBottom="24px"

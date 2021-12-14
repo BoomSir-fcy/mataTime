@@ -19,10 +19,11 @@ import { getBLen } from 'utils';
 
 const InputItems = styled(Flex)`
   position: relative;
+  width: 100%;
 `;
 const InputText = styled(Text)`
   width: 120px;
-  min-width: 110px;
+  min-width: 104px;
   ${mediaQueriesSize.marginr}
 `;
 const InputNftImg = styled.img`
@@ -32,7 +33,8 @@ const InputNftImg = styled.img`
   ${mediaQueriesSize.marginr}
 `;
 const InputNickName = styled.input`
-  width: 381px;
+  max-width: 381px;
+  width: 100%;
   height: 50px;
   color: ${({ theme }) => theme.colors.white_black};
   background: ${({ theme }) => theme.colors.backgroundTextArea};
@@ -51,6 +53,7 @@ const InputAddress = styled(InputNickName)`
 
 const NickNameBox = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 const Submit = styled(Button)`
@@ -232,7 +235,7 @@ export const SignUpSetName: React.FC<{
       </Text> */}
       {/* <WalletAddress address={account} /> */}
       <Box paddingTop="100px">
-        <InputItems marginBottom="36px" alignItems="center">
+        <InputItems marginBottom="46px" alignItems="center">
           <InputText>{t('loginInputTitleNickname')}</InputText>
           <NickNameBox>
             <Box
