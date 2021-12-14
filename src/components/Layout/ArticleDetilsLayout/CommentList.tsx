@@ -58,7 +58,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   let listRef: any = useRef();
   useEffect(() => {
-    listRef.current.loadList();
+    if (listRef.current) {
+      listRef.current.loadList();
+    }
   }, [refresh]);
   const initList = () => {
     setListData([]);
@@ -76,7 +78,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   };
   const getList = () => {
     if (!itemData.id) return;
-    console.log(page, sortTime);
 
     Api.CommentApi.getCommentList({
       pid: itemData.id,

@@ -30,7 +30,9 @@ const useReadArticle = (nonce?: number | boolean) => {
   const [fetchReadTime, setFetchReadTime] = useState(0)
 
   useEffect(() => {
-    im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
+    if (im) {
+      im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
+    }
   }, [])
 
   useEffect(() => {
