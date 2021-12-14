@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
+import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
-import { Flex, Card, Text } from 'uikit';
+import { Flex, Card, Box, Text } from 'uikit';
 import { Avatar, FollowButton, CancelAttentionModal, Icon } from 'components';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
@@ -55,9 +56,12 @@ const HeadAction = styled(Flex)`
   align-items: center;
   transition: all 0.1s ease-out;
   padding: 0 18px;
+  .rotate {
+    transform: rotate(90deg);
+  }
   i {
     &:hover {
-      transform: rotate(90deg);
+      opacity: 0.5;
     }
   }
 `;
@@ -77,6 +81,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
   const [isInit, setIsInit] = useState(true);
   const [state, setState] = useImmer({
     list: [] as any,
+    isRotate: false,
     cancelFollow: false,
     cancelParams: {
       uid: 0,
@@ -90,6 +95,12 @@ const RecommendPeople: React.FC<Iprops> = props => {
   useEffect(() => {
     getManList();
   }, []);
+
+  useEffect(() => {
+    if (state.isRotate) {
+      getManList();
+    }
+  }, [state.isRotate]);
 
   const getCurrentState = async () => {
     const uids = list.map(({ uid }) => uid);
@@ -119,6 +130,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
         setIsInit(true);
         setState(p => {
           p.list = res.data || [];
+          p.isRotate = false;
         });
       }
     } catch (error) {}
@@ -156,13 +168,19 @@ const RecommendPeople: React.FC<Iprops> = props => {
       <RecommendPeopleBox isBoxShadow isRadius>
         <HeadAction>
           <TitleText>{t('recommendPeopleTitle')}</TitleText>
-          <Icon
-            current={1}
-            onClick={debounce(() => getManList(), 500)}
-            name="icon-jiazai_shuaxin"
-            margin="0"
-            color={theme.colors.white_black}
-          />
+          <Box className={classnames(state.isRotate && 'rotate')}>
+            <Icon
+              current={1}
+              onClick={debounce(() => {
+                setState(p => {
+                  p.isRotate = true;
+                });
+              }, 500)}
+              name="icon-jiazai_shuaxin"
+              margin="0"
+              color={theme.colors.white_black}
+            />
+          </Box>
           {/* <MoreBtn onClick={getManList}>{t('moreText')}</MoreBtn> */}
         </HeadAction>
         {state.list.map((item, index) => (

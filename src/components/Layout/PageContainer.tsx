@@ -58,7 +58,7 @@ const CennerBox = styled(Box) <{ showSidebar?: boolean }>`
 const GlobalStyle = createGlobalStyle`
   .mini-swap-Modal__Body--open {
     .mini-swap-Modal__Body--open-sidebar{
-      z-index: 9;
+      z-index: 20;
     }
   }
 `;

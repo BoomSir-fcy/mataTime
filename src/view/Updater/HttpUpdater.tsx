@@ -45,10 +45,10 @@ export default function HttpUpdater() {
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
-        title={t('$TIME余额不足')}
-        tips={t('Metatime 基于阅读时间扣费，1Time=1秒钟需要提前充值后方可浏览平台信息')}
-        onConfirmLable={t('前去充值')}
-        onSecondaryLable={t('登出账号')}
+        title={t('Insufficient $time balance')}
+        tips={t('Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information')}
+        onConfirmLable={t('Go recharge')}
+        onSecondaryLable={t('Logout account')}
         onConfirm={() => {
           setVisible(false)
           history.push('/account');

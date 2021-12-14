@@ -22,7 +22,10 @@ const PopupButton = styled(Flex)`
   }
 `;
 
-export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
+export const RewardAuthTag: React.FC<RewardAuthProps> = ({
+  data,
+  postType
+}) => {
   const reward: reward[] = data.reward_stats || [];
   const popupRef = React.useRef(null);
 
@@ -63,6 +66,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({ data }) => {
         arrowStyle={{ opacity: 0 }}
       >
         <RewardAuthModal
+          postType={postType}
           currentPost={data}
           avatar={data.user_avator_url}
           onClose={close}

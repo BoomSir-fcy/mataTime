@@ -109,6 +109,10 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${({ theme }) => theme.colors.background};
     overflow-y: scroll;
     /* overflow-x: auto; */
+    &.ReactModal__Body--open, &.mini-swap-Modal__Body--open{
+      overflow: hidden;
+      padding-right: 8px;
+    }
     img {
       height: auto;
       max-width: 100%;

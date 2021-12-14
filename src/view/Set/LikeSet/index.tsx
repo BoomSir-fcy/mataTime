@@ -78,6 +78,7 @@ const LikeSet: React.FC = () => {
           </Text>
         </Rows>
         <Select
+          disabled
           options={[
             {
               id: 1,

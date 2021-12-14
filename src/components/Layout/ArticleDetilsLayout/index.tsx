@@ -70,6 +70,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <SpendTimeViewWithArticle
             readType={ReadType.ARTICLE}
             articleId={itemData?.id}
+            setNonce={setNonce}
+            nonce={nonce}
           />
         )
       }

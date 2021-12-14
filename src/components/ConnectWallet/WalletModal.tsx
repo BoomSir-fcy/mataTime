@@ -40,7 +40,7 @@ export const Cover = styled(Box) <{ show?: boolean }>`
   bottom: 0px;
   left: 0px;
   display: ${({ show }) => (show ? 'block' : 'none')};
-  z-index: 9;
+  z-index: 13;
 `;
 
 const WalletModal: React.FC<{ show?: boolean; onClick?: (e: any) => void }> = ({
