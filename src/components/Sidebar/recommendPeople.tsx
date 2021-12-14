@@ -93,6 +93,8 @@ const RecommendPeople: React.FC<Iprops> = props => {
   const { list } = state;
   const theme = useTheme();
 
+  const [refresh, setRefresh] = useState(false)
+
   useEffect(() => {
     getManList();
   }, []);
@@ -126,6 +128,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
 
   const getManList = async () => {
     try {
+      setRefresh(true)
       const res = await Api.UserApi.referrerMans({ num: 3 });
       if (Api.isSuccess(res)) {
         setIsInit(true);
@@ -134,7 +137,11 @@ const RecommendPeople: React.FC<Iprops> = props => {
           p.isRotate = false;
         });
       }
-    } catch (error) { }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setRefresh(false)
+    }
   };
 
   // 关注用户
@@ -172,6 +179,8 @@ const RecommendPeople: React.FC<Iprops> = props => {
           <Box>
             <RefreshIcon
               margin="0"
+              // refresh={refresh}
+              onClick={() => getManList()}
               color={theme.colors.white_black}
             />
           </Box>
