@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Api } from 'apis';
 import { TaskInfo } from '../type';
 import { taskContents } from './config';
+import { useFetchTask, useTask } from 'store/task/hooks';
 
 
 // 任务列表
@@ -11,30 +12,43 @@ export const useTaskList = () => {
   const [specialList, setSpecialList] = useState<TaskInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  useFetchTask();
+  const { taskList } = useTask();
+
   useEffect(() => {
     getList();
-  }, [])
+  }, [taskList])
 
   const getList = async () => {
     setLoading(true);
     try {
-      await Api.TaskApi.SignIn();
-      const res = await Api.TaskApi.getTaskStatus();
-      if (Api.isSuccess(res)) {
-        const list = res.data || [];
-        setDailyList(list.filter((v: TaskInfo) => v.task_type === 1));
-        setWeekList(list.filter((v: TaskInfo) => v.task_type === 2));
-        setSpecialList(list.filter((v: TaskInfo) => v.task_type === 3));
-      }
+      const { data } = taskList;
+      setDailyList(data.filter((v: TaskInfo) => v.task_type === 1));
+      setWeekList(data.filter((v: TaskInfo) => v.task_type === 2));
+      setSpecialList(data.filter((v: TaskInfo) => v.task_type === 3));
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false)
     }
-
   }
 
   return { dailyList, weekList, specialList, loading };
+}
+
+// 签到
+export const useSignIn = () => {
+  useEffect(() => {
+    onSignIn();
+  }, [])
+
+  const onSignIn = async () => {
+    try {
+      const res = await Api.TaskApi.SignIn();
+      return res;
+    } catch (error) {
+      throw new Error('SignIn Error');
+    }
+  }
 }
 
 // 领取任务

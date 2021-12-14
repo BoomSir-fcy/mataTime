@@ -4,9 +4,10 @@ import { Box, Flex, Text, Button, Spinner, Empty } from 'uikit';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import CountdownTime from './Countdown';
 import { useTranslation } from 'contexts/Localization';
-import { useTaskList } from './hooks/matter';
+import { useSignIn, useTaskList } from './hooks/matter';
 import MissionCard from './MissionCard';
 import { Status } from './type';
+import { Link } from 'react-router-dom';
 
 const ScrollBox = styled(Box)`
   height: calc(100vh - 152px);
@@ -32,7 +33,7 @@ const LeftFlex = styled(Flex)`
   flex-wrap: wrap;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   padding: 23px 14px 55px 14px;
-  & > :not(:nth-child(3)) {
+  & > :nth-child(n) {
     margin-right: 12px;
   }
 `;
@@ -45,18 +46,26 @@ const TaskCountBox = styled(Flex)`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  flex: 1;
   width: 100%;
-  height: 95px;
-  padding: 0 50px;
+  height: auto;
+  /* padding: 20px 50px; */
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   transition: all 0.3s;
+  ${({ theme }) => theme.mediaQueriesSize.padding};
+  .count-item {
+    margin: 10px 0;
+    ${({ theme }) => theme.mediaQueriesSize.marginr};
+  }
   .left {
+    border: 0;
     border-radius: 10px 0 0 10px;
     background: ${({ theme }) => theme.colors.tertiary};
   }
   .right {
+    border: 0;
     border-radius: 0 10px 10px 0;
-    background: ${({ theme }) => theme.colors.backgroundTextArea};
+    background: #292D34;
   }
 `
 const BgBox = styled(Box)`
@@ -64,16 +73,28 @@ const BgBox = styled(Box)`
 `
 
 
-const TaskCount = ({ left, right }) => {
+const TaskCount = ({ type, left, right }) => {
+
+  const scrollTo = () => {
+    if (type) {
+      let anchorElement = document.getElementById(type);
+      // scrollIntoView让页面滚动到对应可视化区域内
+      if (anchorElement) {
+        anchorElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
-    <Box mr="50px">
-      <Button className="left">{left}</Button>
+    <Box className="count-item">
+      <Button onClick={scrollTo} className="left">{left}</Button>
       <Button className="right">{right}</Button>
     </Box>
   );
 };
 
 const Task: React.FC = () => {
+  useSignIn();
   const { t } = useTranslation();
   const { dailyList, weekList, specialList, loading } = useTaskList();
 
@@ -107,23 +128,26 @@ const Task: React.FC = () => {
           <TaskCountBox>
             <Flex flexWrap="wrap" justifyContent="space-between">
               <TaskCount
+                type="dailyTask"
                 left={t('DailyTask')}
                 right={`${dailyReceived}/${dailyTotal}`}
               />
               <TaskCount
+                type="weekTask"
                 left={t('WeekTask')}
                 right={`${weekReceived}/${weekTotal}`}
               />
               <TaskCount
+                type="specialTask"
                 left={t('SpecialTask')}
                 right={`${specialReceived}/${specialTotal}`}
               />
             </Flex>
-            <Button>{t('RevenueRecord')}</Button>
+            <Button as={Link} to="/account?token=2" className="count-item">{t('RevenueRecord')}</Button>
           </TaskCountBox>
           <ScrollBox>
-            <TaskTitle>
-              <Flex alignItems="center">
+            <TaskTitle id="dailyTask">
+              <Flex flexWrap="wrap" alignItems="center">
                 <Text mr="43px" fontSize="18px" bold>
                   {t('DailyTask')} ({dailyReceived} / {dailyTotal})
                 </Text>
@@ -153,8 +177,8 @@ const Task: React.FC = () => {
                 <Empty />
               )}
             </LeftFlex>
-            <TaskTitle>
-              <Flex alignItems="center">
+            <TaskTitle id="weekTask">
+              <Flex flexWrap="wrap" alignItems="center">
                 <Text mr="43px" fontSize="18px" bold>
                   {t('WeekTask')} ({weekReceived} / {weekTotal})
                 </Text>
@@ -184,8 +208,8 @@ const Task: React.FC = () => {
                 <Empty />
               )}
             </LeftFlex>
-            <TaskTitle>
-              <Flex alignItems="center">
+            <TaskTitle id="specialTask">
+              <Flex flexWrap="wrap" alignItems="center">
                 <Text mr="43px" fontSize="18px" bold>
                   {t('SpecialTask')} ({specialReceived} / {specialTotal})
                 </Text>

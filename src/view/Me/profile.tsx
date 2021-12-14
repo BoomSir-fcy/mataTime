@@ -28,6 +28,9 @@ import MentionOperator from 'view/News/components/MentionOperator';
 import defaultDarkImages from 'assets/images/default_background.png';
 import defaultLightImages from 'assets/images/default_light_background.png';
 
+import { ComponentsWrapper } from 'components/Cirde/PageContainer';
+import CommonCircle from 'components/Cirde/CommonCircle';
+
 import useAuth from 'hooks/useAuth';
 
 const Center = styled(Box)`
@@ -137,8 +140,8 @@ const Profile: React.FC<any> = props => {
   const { languange } = setting;
   const systemLang = languange?.value?.code;
 
-  const [isEnd, setIsEnd] = useState(false)
-  const perpage = 5
+  const [isEnd, setIsEnd] = useState(false);
+  const perpage = 5;
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
@@ -163,9 +166,9 @@ const Profile: React.FC<any> = props => {
           p.totalPage = tweet.data.total_page;
         });
         if (tweet?.data?.list?.length < perpage) {
-          setIsEnd(true)
+          setIsEnd(true);
         } else {
-          setIsEnd(false)
+          setIsEnd(false);
         }
       }
     } catch (error) {
@@ -193,9 +196,30 @@ const Profile: React.FC<any> = props => {
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
-            backgroundImage: `url(${profile.background_image || defaultImages})`
+            backgroundImage: `url(${profile.background_image})`
           }}
-        />
+        >
+          {!profile.background_image && (
+            <ComponentsWrapper>
+              <CommonCircle
+                width="18rem"
+                height="18rem"
+                margin="-2em 0 0 -9rem"
+                bgWidth="48rem"
+                bgHeight="19rem"
+                bgMargin="-6rem 0 0 -23rem"
+                isAnimation
+              >
+                <img
+                  width="250px"
+                  height="250px"
+                  style={{ position: 'relative', top: '115px' }}
+                  src={require('view/Login/images/LOGO2.svg').default}
+                />
+              </CommonCircle>
+            </ComponentsWrapper>
+          )}
+        </HeadTop>
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end" style={{ flex: 1 }}>
@@ -305,8 +329,8 @@ const Profile: React.FC<any> = props => {
               }}
               callback={(data, _type) => {
                 if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1)
-                  return
+                  setNonce(prep => prep + 1);
+                  return;
                 }
                 init(1);
               }}
@@ -325,8 +349,8 @@ const Profile: React.FC<any> = props => {
               }}
               callback={(data, _type) => {
                 if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1)
-                  return
+                  setNonce(prep => prep + 1);
+                  return;
                 }
                 init(1);
               }}

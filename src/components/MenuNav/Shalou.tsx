@@ -127,8 +127,8 @@ const HourglassSand = styled.div`
       bottom: 2px;
       width: 24px;
       height: 25px;
-      background: ${({ theme }) => `linear-gradient(${theme.colors.textTips} 0%, ${theme.colors.textTips} 50%, #fff 50%, #ddd 100%);`};
-      /* background: linear-gradient(#4168ed 0%, #4168ed 50%, #fff 50%, #ddd 100%); */
+      /* background: ${({ theme }) => `linear-gradient(${theme.colors.textTips} 0%, ${theme.colors.textTips} 50%, #fff 50%, transparent 100%);`}; */
+      background: linear-gradient(#fff 0%, #fff 50%, #0f0f0f 50%, #666 100%);
       background-size: 30px 50px;
       border-top-left-radius: 13px 23px;
       border-top-right-radius: 13px 23px;

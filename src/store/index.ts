@@ -7,16 +7,19 @@ import coinsReduce from './coins/reducer';
 import * as coinsAction from './coins/actions';
 import walletReduce from './wallet/reducer';
 import poolsReduce from './pools';
+import taskReduce from './task/reducer';
 import type { CoinsState } from './coins/reducer';
 import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
+import { TaskState } from './task/type';
 export interface Store {
   appReducer: App;
   loginReducer: Login;
   coins: CoinsState;
   pools: PoolsState;
   wallet: WalletState;
+  task: TaskState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -28,7 +31,8 @@ export const store = configureStore({
     loginReducer,
     coins: coinsReduce,
     pools: poolsReduce,
-    wallet: walletReduce
+    wallet: walletReduce,
+    task: taskReduce
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

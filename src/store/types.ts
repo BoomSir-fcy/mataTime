@@ -5,11 +5,13 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { PoolsState } from './pools/types';
 import { Login } from './login';
 import { WalletState } from './wallet/type'
+import { TaskState } from './task/type';
 
 export interface State {
   pools: PoolsState;
   loginReducer: Login;
   wallet: WalletState;
+  task: TaskState;
 }
 
 export interface AppStore {

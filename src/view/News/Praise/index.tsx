@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import dayjs from 'dayjs';
+import { Box } from 'uikit';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization';
@@ -90,31 +90,35 @@ const NewsPraise: React.FC = props => {
           if (item?.post?.content_status === 1) {
             return (
               <PraiseItemWrapper key={item.id}>
-                <MentionItemUser
-                  more={false}
-                  itemData={{
-                    ...item,
-                    ...item.post,
-                    ...item.comment,
-                    user_name: item.send_name,
-                    user_avator_url: item.send_image,
-                    uid: item.send_uid,
-                    user_address: item.send_address
-                  }}
-                  callback={data => {
-                    updateList(data);
-                  }}
-                />
-                <div className="reply-wrapper">
-                  <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon>{' '}
-                  <span className={'reply-tip'}>{t('newsPraiseContent')}</span>
-                  <ContentParsing
-                    content={item.comment.comment}
-                    callback={(type: MoreOperatorEnum) => {
-                      updateList(item, type);
+                <Box padding="25px 25px 0">
+                  <MentionItemUser
+                    more={false}
+                    itemData={{
+                      ...item,
+                      ...item.post,
+                      ...item.comment,
+                      user_name: item.send_name,
+                      user_avator_url: item.send_image,
+                      uid: item.send_uid,
+                      user_address: item.send_address
                     }}
-                  ></ContentParsing>
-                </div>
+                    callback={data => {
+                      updateList(data);
+                    }}
+                  />
+                  <div className="reply-wrapper">
+                    <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon>{' '}
+                    <span className={'reply-tip'}>
+                      {t('newsPraiseContent')}
+                    </span>
+                    <ContentParsing
+                      content={item.comment.comment}
+                      callback={(type: MoreOperatorEnum) => {
+                        updateList(item, type);
+                      }}
+                    ></ContentParsing>
+                  </div>
+                </Box>
                 <div className="comment-content">
                   <MentionItem
                     itemData={{
@@ -127,7 +131,7 @@ const NewsPraise: React.FC = props => {
                     {...props}
                     more={false}
                     size={'small'}
-                  ></MentionItem>
+                  />
                 </div>
                 {/* <MentionOperator
                   hasLike={false}
