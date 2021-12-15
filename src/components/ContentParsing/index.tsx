@@ -7,6 +7,7 @@ import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { tokens } from 'config';
+import { SQUARE_REGEXP, HTTP_REGEXP, SYMBOL_REGEXP } from 'config/constants/regexp';
 
 import history from 'routerHistory';
 
@@ -37,7 +38,7 @@ const ParagraphItem = styled.div`
   a {
     color: #7393ff;
     cursor: pointer;
-    margin: 0 5px;
+    /* margin: 0 5px; */
   }
   span {
     /* color: #4168ED; */
@@ -95,7 +96,7 @@ export const ContentParsing = (props: IProps) => {
     // Match url
     replacedText = reactStringReplace(
       text,
-      /(http[s]?:\/\/\S+)/g,
+      HTTP_REGEXP,
       (match, i) => (
         <a
           key={match + i}
@@ -112,8 +113,9 @@ export const ContentParsing = (props: IProps) => {
     // Match token
     replacedText = reactStringReplace(
       replacedText,
-      /\$(\w+)\$/g,
-      // /\$(\w+)[\s|\D]{0}/g,
+      // /\$(\w+)\$/g,
+      // /\$(\w{2, 20})\s/g,
+      SYMBOL_REGEXP,
       (match, i) => (
         <a
           onClick={event => {
@@ -123,14 +125,13 @@ export const ContentParsing = (props: IProps) => {
           }}
           title={match}
           key={match + i}
-        >${match}$</a>
+        >${match}&nbsp;</a>
       )
     );
     // Match hashtags
     replacedText = reactStringReplace(
       replacedText,
-      // /#(\S+)\x20/g,
-      /#(\w+|[\u4E00-\u9FA5|0-9]+)#/g,
+      SQUARE_REGEXP,
       // /#(\w+|[\u4E00-\u9FA5|0-9]+)[\s|\D]{0}/g,
       (match, i) => (
         <a
@@ -139,9 +140,7 @@ export const ContentParsing = (props: IProps) => {
             goRouter(`/topicList/empty/${match}`);
           }}
           key={match + i}
-        >
-          #{match}#
-        </a>
+        >#{match}&nbsp;</a>
       )
     );
     return replacedText;
