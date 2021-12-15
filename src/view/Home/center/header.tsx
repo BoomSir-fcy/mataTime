@@ -48,7 +48,7 @@ export const Header = (props: {
    * props 参数和当前命名重复
    */
   const clickTitle = e => {
-    // console.log(e);
+    // console.debug(e);
   };
   const clickBack = () => {
     props.history.goBack();

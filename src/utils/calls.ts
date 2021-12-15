@@ -50,7 +50,6 @@ export const RewardAuthorContactReward = async (
   amount,
   bool
 ) => {
-  console.log(target, token, postType, postId, amount);
   const tx = await masterChefContract.reward(
     target,
     token,

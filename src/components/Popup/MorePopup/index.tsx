@@ -86,7 +86,6 @@ export const MorePopup = React.memo((props: Iprops) => {
   const parseComments = value => {
     let topic = '';
     value.replace(/[#＃][^#＃]+[#＃]/g, word => {
-      console.log(word);
       topic = word.slice(1).slice(0, -1);
     });
     return topic;
@@ -114,7 +113,7 @@ export const MorePopup = React.memo((props: Iprops) => {
         ? JSON.parse(data.content)
         : [];
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
 
     const text = render(context).join('');

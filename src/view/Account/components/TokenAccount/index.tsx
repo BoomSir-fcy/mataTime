@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { Container } from 'components'
+import { RouteComponentProps } from 'react-router-dom';
 import WalletBox from './walletBox'
 import Recharge from './Recharge'
 import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
@@ -16,13 +17,13 @@ import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux'
 import { fetchTimeIncometoday, fetchMatterIncometoday, fetchIncomeList, fetchMatterIncomeList } from 'store/wallet/reducer';
+import useMenuNav from 'hooks/useMenuNav';
 
 
 const NoPdBottom = styled(Container)`
 padding: 0;
 `
 const ScrollBox = styled(Box)`
-padding-top: 70px;
 `
 const BorderWalletBox = styled(WalletBox)`
 border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -33,6 +34,7 @@ ${({ theme }) => theme.mediaQueries.sm} {
 const ContentTab = styled(Flex)`
 align-items: center;
 justify-content: space-between;
+flex-wrap: wrap;
 ${({ theme }) => theme.mediaQueriesSize.padding}
 padding-bottom: 0;
 padding-top: 0;
@@ -62,13 +64,36 @@ width: 36px;
 height: 36px;
 `
 
+const IncomeComp = ({ TodayIncome, TotalIncome }) => {
+  const { t } = useTranslation();
 
-const TokenAccount: React.FC = () => {
+  return (
+    <RightBox justifyContent='space-between' alignItems='center'>
+      <IncomeBox>
+        <Img src={require('assets/images/myWallet/today.png').default} />
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
+          <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TodayIncome)}</Text>
+        </Flex>
+      </IncomeBox>
+      <IncomeBox>
+        <Img src={require('assets/images/myWallet/total.png').default} />
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
+          <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TotalIncome)}</Text>
+        </Flex>
+      </IncomeBox>
+    </RightBox>
+  );
+};
+
+const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchWalletInfo()
   useFetchApproveNum()
   const { t } = useTranslation();
   const { account } = useWeb3React()
   const dispatch = useDispatch()
+  const { isPushed, setIsPushed, isMobile } = useMenuNav()
   const info = {
     address: "",
     available_balance: "0",
@@ -142,18 +167,32 @@ const TokenAccount: React.FC = () => {
 
   const getMyBalance = async () => {
     for (let i = 0; i < BalanceList.length; i++) {
-      if (BalanceList[i].token_type === 1 && activeToken === 'Time') {
+      if (BalanceList[i].token_type === 1 && activeToken === 'TIME') {
         setWalletInfo(BalanceList[i])
       }
-      if (BalanceList[i].token_type === 2 && activeToken === 'Matter') {
+      if (BalanceList[i].token_type === 2 && activeToken === 'MATTER') {
         setWalletInfo(BalanceList[i])
       }
     }
   }
 
   useEffect(() => {
+    const getTokenType = () => {
+      // 获取路由的token参数
+      const search = route.location.search
+      const myQuery = (search) => {
+        return new URLSearchParams(search);
+      }
+      const TokenType = myQuery(search).get("token");
+      if (TokenType) {
+        setActiveToken(Number(TokenType))
+      }
+    }
+    getTokenType()
+  }, [])
+  useEffect(() => {
     if (account) {
-      if (activeToken === 'Time') {
+      if (activeToken === 'TIME') {
         setwalletBalance(timeBalance)
         settokenAddress(timeAddress)
       } else {
@@ -186,39 +225,30 @@ const TokenAccount: React.FC = () => {
   return (
     <NoPdBottom>
       <WalletHead title={t('Account My Wallet')} />
-      <ScrollBox>
-        <Flex flexWrap='wrap' justifyContent='space-between'>
-          <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
-          <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />
+      <Flex flexWrap='wrap' justifyContent='space-between'>
+        <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
+        {!isMobile && <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />}
+      </Flex>
+      {/* token切换 */}
+      <ContentTab>
+        <Flex alignItems='baseline'>
+          <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>TIME {t('Time Rewards')}</TabText>
+          <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>MATTER {t('Time Rewards')}</TabText>
         </Flex>
-        {/* token切换 */}
+        {
+          !isMobile && <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+        }
+      </ContentTab>
+      {
+        isMobile &&
         <ContentTab>
-          <Flex alignItems='baseline'>
-            <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time {t('Rewards')}</TabText>
-            <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter {t('Rewards')}</TabText>
-          </Flex>
-          <RightBox justifyContent='space-between' alignItems='center'>
-            <IncomeBox>
-              <Img src={require('assets/images/myWallet/today.png').default} />
-              <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-                <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
-                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TodayIncome)}</Text>
-              </Flex>
-            </IncomeBox>
-            <IncomeBox>
-              <Img src={require('assets/images/myWallet/total.png').default} />
-              <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-                <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
-                <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TotalIncome)}</Text>
-              </Flex>
-            </IncomeBox>
-          </RightBox>
+          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
         </ContentTab>
-        <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
-        <EarningsRecord type={ActiveToken} info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo} />
-      </ScrollBox>
+      }
+      <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
+      <EarningsRecord type={ActiveToken} info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo} />
     </NoPdBottom>
   )
-}
+})
 
 export default TokenAccount;

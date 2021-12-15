@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
@@ -13,13 +13,13 @@ import { Flex, Button, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { relativeTime } from 'utils';
-import { SortIcon } from './SortIcon';
 
 import { Api } from 'apis';
 import { ReadType } from 'hooks/imHooks/types';
 
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import {
   CommentListBox,
   CommentTitle,
@@ -29,11 +29,12 @@ import {
   // CommentFooter,
   CommentListFooter
 } from './style';
+import { SortIcon } from './SortIcon';
 
 type Iprops = {
   itemData: any;
   nonce: number;
-  setNonce: React.Dispatch<React.SetStateAction<number>>
+  setNonce: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const PopupButton = styled(Flex)`
@@ -53,39 +54,44 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
+  const listRef = React.useRef<any>();
   const theme = useTheme();
 
-  let listRef: any = useRef();
   useEffect(() => {
-    listRef.current.loadList();
+    console.log(listRef);
+    if (listRef.current) {
+      listRef.current.loadList();
+    }
   }, [refresh]);
+
   const initList = () => {
     setListData([]);
     setPage(1);
     setTotalPage(2);
     setRefresh(!refresh);
   };
+
   const changeSortTime = () => {
+    document.body.scrollIntoView({ block: "start", inline: "nearest" })
     setSortTime(sortTime === 1 ? 0 : 1);
     initList();
   };
   const changeSortLike = () => {
+    document.body.scrollIntoView({ block: "start", inline: "nearest" })
     setSortLike(sortLike === 1 ? 0 : 1);
     initList();
   };
+
   const getList = () => {
     if (!itemData.id) return;
-    console.log(page, sortTime);
-
     Api.CommentApi.getCommentList({
       pid: itemData.id,
-      prepage: 5,
+      prepage: MAX_SPEND_TIME_PAGE_TATOL,
       page: page,
       sort_add_time: sortTime,
       sort_like: sortLike
     }).then(res => {
       setLoading(false);
-      console.log(res);
       if (Api.isSuccess(res)) {
         setPage(page + 1);
         setListData([...listData, ...(res.data.list || [])]);
@@ -94,6 +100,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       }
     });
   };
+
   return (
     <CommentListBox>
       <CommentTitle justifyContent="space-between" alignItems="center">
@@ -101,17 +108,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         <div className="sort-box">
           <div>
             {t('detailHeat')}
-            <SortIcon
-              changeSort={changeSortLike}
-              flag={sortLike === 0}
-            ></SortIcon>
+            <SortIcon changeSort={changeSortLike} flag={sortLike === 0} />
           </div>
           <div>
             {t('detailTime')}
-            <SortIcon
-              changeSort={changeSortTime}
-              flag={sortTime === 0}
-            ></SortIcon>
+            <SortIcon changeSort={changeSortTime} flag={sortTime === 0} />
           </div>
         </div>
       </CommentTitle>
@@ -189,7 +190,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               </div>
             </Flex>
             <MentionOperator
-              type={'Comment'}
+              type="Comment"
               callback={initList}
               itemData={{
                 ...item,

@@ -103,12 +103,19 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  html, body{
+    height: 100%;
+  }
   body {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
     background-color: ${({ theme }) => theme.colors.background};
     overflow-y: scroll;
     /* overflow-x: auto; */
+    &.ReactModal__Body--open, &.mini-swap-Modal__Body--open{
+      overflow: hidden;
+      padding-right: 8px;
+    }
     img {
       height: auto;
       max-width: 100%;

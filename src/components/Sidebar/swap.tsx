@@ -35,18 +35,17 @@ const transitionStyles = {
 
 const Swap: React.FC = () => {
   const { chainId } = useWeb3React();
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
 
   const [inProp, setInProp] = useState(false);
 
-  const [languange] = useLanguange();
   const [isDark] = useThemeManager();
   const { onConnectWallet } = useConnectWallet();
 
   const coins = useStore(p => p.coins.clickCoins);
 
   const handleInputChange = useCallback(currency => {
-    console.log(currency);
+    console.debug(currency);
   }, []);
 
   useEffect(() => {
@@ -84,14 +83,14 @@ const Swap: React.FC = () => {
         >
           <MiniSwap
             titlehelper={t(
-              'When you search for some token topics, the platform will automatically provide token quick exchange function and one-stop encryption service. Now it supports mainstream digital currencies, and more currencies will be accessed in the future. Please look forward to it'
+              'When you search for some topics about tokens, the platform will automatically provide token quick swap function, providing one-stop crypto services. Right now Metatime supports mainstream digital tokens, and will continue to access more tokens, please look forward to staking function.t'
             )}
             powered={<Flex padding="0 20px 20px">
               <Text>
                 Powered by &nbsp;
               </Text>
               <LinkExternal color="primary" height="24px" fontSize="16px" href="https://dsgmetaverse.com/">
-                Dsgmetaverse
+                DSGmetaverse
               </LinkExternal>
             </Flex>}
             // subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
@@ -153,7 +152,7 @@ const Swap: React.FC = () => {
             onConnectWallet={onConnectWallet}
             chainId={chainId}
             isDark={isDark}
-            lang={languange?.value?.locale}
+            lang={currentLanguage.locale}
           />
         </Box>)}
       </Transition>

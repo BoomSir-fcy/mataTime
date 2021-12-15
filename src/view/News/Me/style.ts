@@ -16,6 +16,7 @@ export const MeItemWrapper = styled(Card)`
   background-color: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background-color: ${({ theme }) => theme.colors.primaryDark};
+  transition: background 0.3s;
   &:hover{
     background: ${({ theme }) => theme.colors.hoverList};
   }

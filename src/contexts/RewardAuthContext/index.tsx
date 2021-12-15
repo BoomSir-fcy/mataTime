@@ -22,7 +22,6 @@ const RewardAuthContextProvider = ({ children }) => {
   //   return ref.getBoundingClientRect();
   // }, []);
 
-  console.log(positon);
   return (
     <RewardAuthContext.Provider
       value={{
@@ -34,6 +33,7 @@ const RewardAuthContextProvider = ({ children }) => {
     >
       {visible && (
         <RewardAuthModal
+          postType={0}
           currentPost={current}
           avatar={current.user_avator_url}
           offsetTop={positon.top}

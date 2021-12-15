@@ -7,30 +7,6 @@ import { setLpDataList, setSpDataList, setSpUserData, setSpUserStakesData, setSp
 import { getPoolsApr, getUserPoolsMap, getUserStakesMap } from './utils'
 import { fetchLpRewardsApr } from './fetchLpAprs'
 
-
-export const fetchLpPublicDatasAsync = (data: LiquidityPoolData[]): AppThunk => async (dispatch) => {
-  // TODO:
-  dispatch(setLpDataList(data))
-}
-export const fetchVaultUserAsync = (account: string): AppThunk => async (dispatch) => {
-  // TODO:
-  // dispatch(setLpDataList(data))
-}
-
-export const fetchLpDataListAsync =
-  (account?: string): AppThunk =>
-    async (dispatch, getState) => {
-      const state = getState()
-      const { liquidity } = state.pools
-      const data = await fetchLpDataList()
-      dispatch(setLpDataList(data))
-      dispatch(fetchLpPublicDatasAsync(data))
-      if (account) {
-        dispatch(fetchVaultUserAsync(account))
-      }
-    }
-
-
 export const fetchSpPublicDatasAsync = (datas: SinglePoolData[]): AppThunk => async (dispatch) => {
   const priceData = await fetchPoolTokensPrice(datas)
   dispatch(setSpDataList(priceData))

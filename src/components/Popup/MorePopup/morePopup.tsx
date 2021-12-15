@@ -97,7 +97,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const parseComments = value => {
       let topic = '';
       value.replace(/[#＃][^#＃]+[#＃]/g, word => {
-        console.log(word);
         topic = word.slice(1).slice(0, -1);
       });
       return topic;
@@ -125,7 +124,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           ? JSON.parse(data.content)
           : [];
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
 
       const text = render(context).join('');

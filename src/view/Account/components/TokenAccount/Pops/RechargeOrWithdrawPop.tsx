@@ -44,6 +44,19 @@ background: ${({ theme }) => theme.colors.backgroundTextArea};
     color: ${({ theme }) => theme.colors.textTips};
   }
 `
+const NumberBox = styled(Flex)`
+  width: 45%;
+  height: 35px;
+  background: ${({ theme }) => theme.colors.input};
+  box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 16px;
+  justify-content: center;
+`;
+
 // type 1 充值 2 提币
 interface init {
   type: number
@@ -64,6 +77,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   const [pending, setpending] = useState(false)
   const approvedNum = useStore(p => token === 'Time' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter);
 
+  const numberList = ['10000', '20000', '50000', '100000'];
 
   // 充值/提现
   const handSure = useCallback(async () => {
@@ -106,7 +120,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
         onClose()
       } catch (e) {
         console.error(e)
-        toast.error(t('Account Withdrawal failed'));
+        toast.error(t('Account Withdrawal failed!'));
       } finally {
         setpending(false)
       }
@@ -145,6 +159,24 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   )
   return (
     <CountBox>
+      {
+        type === 1 &&
+        <Flex mb='20px' alignItems="center" justifyContent='space-between' flexWrap="wrap">
+          {numberList.map((item, index) => (
+            <NumberBox
+              key={item}
+              onClick={() => {
+                const Num = Number(item) > balance ? String(balance) : item;
+                setVal(Num);
+              }}
+            >
+              <Text fontWeight="bold" fontSize="16px">
+                {item}
+              </Text>
+            </NumberBox>
+          ))}
+        </Flex>
+      }
       <Flex justifyContent="end" mb='12px'>
         <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {getFullDisplayBalance(type === 1 ? new BigNumber(balance) : new BigNumber(Number(withdrawalBalance)), 0)}</Text>
       </Flex>

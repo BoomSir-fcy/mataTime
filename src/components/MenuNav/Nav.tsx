@@ -58,7 +58,6 @@ const Nav: React.FC<NavProps> = ({ }) => {
   }, [pathname]);
 
   useEffect(() => {
-    console.log(activeChildren, '=activeChildren');
     if (activeChildren) {
       setDisplayChildren(activeChildren);
     }

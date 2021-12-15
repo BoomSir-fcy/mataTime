@@ -13,6 +13,7 @@ import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
@@ -27,8 +28,8 @@ const TopicList = props => {
   });
 
   // 阅读文章扣费
-  const [nonce, setNonce] = useState(0)
-  useReadArticle(nonce)
+  const [nonce, setNonce] = useState(0);
+  useReadArticle(nonce);
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
   const { loading, page, totalPage, listData } = state;
@@ -40,7 +41,7 @@ const TopicList = props => {
     try {
       const res = await Api.HomeApi.findByHotTopicIdList({
         page: current || page,
-        per_page: 20,
+        per_page: MAX_SPEND_TIME_PAGE_TATOL,
         topic_id: id === 'empty' ? null : id,
         topic_name: name
       });
@@ -58,13 +59,13 @@ const TopicList = props => {
         toastError(res.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
     <Box key={props.location.key}>
-      <Crumbs back centerTitle={`#${name}#`} />
+      <Crumbs back centerTitle={`#${name}`} zIndex={1005} />
       <List
         ref={listRef}
         marginTop={0}
@@ -81,7 +82,12 @@ const TopicList = props => {
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item?.user_id && item?.id && (
-                <SpendTimeViewWithArticle setNonce={setNonce} nonce={nonce} readType={ReadType.ARTICLE} articleId={item?.id} />
+                <SpendTimeViewWithArticle
+                  setNonce={setNonce}
+                  nonce={nonce}
+                  readType={ReadType.ARTICLE}
+                  articleId={item?.id}
+                />
               )
             }
             <MentionItem
@@ -96,8 +102,8 @@ const TopicList = props => {
               }}
               callback={(data, _type) => {
                 if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1)
-                  return
+                  setNonce(prep => prep + 1);
+                  return;
                 }
                 getList(1);
               }}
@@ -116,8 +122,8 @@ const TopicList = props => {
               }}
               callback={(data, _type) => {
                 if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1)
-                  return
+                  setNonce(prep => prep + 1);
+                  return;
                 }
                 getList(1);
               }}

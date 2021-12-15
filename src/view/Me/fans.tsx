@@ -72,7 +72,7 @@ const Fans = React.memo(() => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setState(p => {
         p.loading = false;
@@ -90,7 +90,7 @@ const Fans = React.memo(() => {
         toast.warning(res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -105,7 +105,7 @@ const Fans = React.memo(() => {
         toast.warning(res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

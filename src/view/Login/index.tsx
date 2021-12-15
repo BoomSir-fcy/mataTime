@@ -31,7 +31,7 @@ const LoginContainer = styled(Flex)`
   max-width: 100vw;
   height: 100vh;
   /* background: ${({ theme }) => theme.colors.gradients.signinBackground}; */
-  flex-direction: column-reverse;
+  flex-direction: column;
   height: auto;
   min-height: 100vh;
   overflow: hidden;
@@ -71,7 +71,7 @@ const LogoWarpper = styled(Box)`
 `;
 const Container = styled(Box)`
   width: 100%;
-  height: calc(100vh - 125px);
+  /* height: calc(100vh - 125px); */
   padding: 20px 15px 0;
   overflow-y: auto;
   ${({ theme }) => theme.mediaQueries.md} {
@@ -204,7 +204,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
     // 已经质押走登录
-    console.log('质押:', nftStake[0], account);
 
     if (nftStake.length > 0 && nftStake[0].token_id) {
       dispatch(storeAction.changeSignin({ isSignin: true }));
@@ -224,7 +223,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
     if (InviteAddress) {
       localStorage.setItem("InviteAddress", InviteAddress);
     }
-    console.log(InviteAddress, "InviteAddress");
   }
 
   useEffect(() => {

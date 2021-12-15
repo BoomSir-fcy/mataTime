@@ -42,9 +42,11 @@ const InnerBox = styled(Flex)`
   position: sticky;
   top: 0;
   z-index: 2;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.colors.primaryDark};
 `;
 
-const CennerBox = styled(Box)<{ showSidebar?: boolean }>`
+const CennerBox = styled(Box) <{ showSidebar?: boolean }>`
   width: 100%;
   max-width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
@@ -56,7 +58,7 @@ const CennerBox = styled(Box)<{ showSidebar?: boolean }>`
 const GlobalStyle = createGlobalStyle`
   .mini-swap-Modal__Body--open {
     .mini-swap-Modal__Body--open-sidebar{
-      z-index: 9;
+      z-index: 20;
     }
   }
 `;

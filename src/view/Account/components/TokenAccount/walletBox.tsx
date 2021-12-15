@@ -13,6 +13,8 @@ import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration'
 import { useEstimatedServiceTime } from 'store/wallet/hooks';
+import useMenuNav from 'hooks/useMenuNav';
+import HistoryModal from './Pops/HistoryModal';
 
 
 const Content = styled(Flex)`
@@ -53,7 +55,7 @@ min-width: 76px;
 const WithdrawBtn = styled(Button)`
 min-width: 80px;
 &:disabled{
-  background: ${({ theme }) => theme.colors.disableStep};
+  background: ${({ theme }) => theme.colors.backgroundDisabled};
 }
 `
 const ChangeTokenBtn = styled(Flex)`
@@ -77,6 +79,9 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
+  const { isPushed, setIsPushed, isMobile } = useMenuNav()
+
+  const [visibleHistory, setVisibleHistory] = useState(false);
   const [visible, setVisible] = useState(false)
   const [ModalTitle, setModalTitle] = useState('')
   const [ChosenType, setChosenType] = useState(1)
@@ -96,10 +101,10 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
   }
   const onClose = useCallback(() => setVisible(false), [setVisible])
   const onChangeToken = useCallback(() => {
-    if (Token === 'Time') {
-      dispatch(storeAction.changeActiveToken({ activeToken: 'Matter' }))
+    if (Token === 'TIME') {
+      dispatch(storeAction.changeActiveToken({ activeToken: 'MATTER' }))
     } else {
-      dispatch(storeAction.changeActiveToken({ activeToken: 'Time' }))
+      dispatch(storeAction.changeActiveToken({ activeToken: 'TIME' }))
     }
   }, [Token])
   return (
@@ -111,17 +116,17 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
         </Flex>
         <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
           <ChangeToken src={require('assets/images/myWallet/changeToken.png').default} alt="" />
-          <NumText fontSize='14px' color='textPrimary'>{t('%token%Wallet', { token: Token === 'Time' ? 'Matter' : 'Time' })}</NumText>
+          <NumText fontSize='14px' color='textPrimary'>{t('Account %token%Wallet', { token: Token === 'TIME' ? 'MATTER' : 'TIME' })}</NumText>
         </ChangeTokenBtn>
       </TopInfo>
-      <Flex alignItems='flex-end' justifyContent='space-between'>
+      <Flex mb={isMobile ? '20px' : ''} alignItems='flex-end' justifyContent='space-between'>
         <LeftBox>
           <Flex alignItems='baseline'>
             <Fount mr='16px'>{t('Account balance')}</Fount>
             <NumText>{formatDisplayApr(Number(BalanceInfo.available_balance))}</NumText>
           </Flex>
           {
-            Token === 'Time' ?
+            Token === 'TIME' ?
               <>
                 <Flex alignItems='baseline'>
                   <Fount mr='16px'>{t('Account Frozen amount')}</Fount>
@@ -133,16 +138,42 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
                 </Flex>
               </>
               :
-              <Fount>{t('AccountMenu Over %num% can be withdrawn to the wallet on the chain', { num: 100 })}</Fount>
+              <Fount>{t('Account Over %num% can be withdrawn to the wallet on the chain', { num: 100 })}</Fount>
           }
 
         </LeftBox>
-        <WithdrawBtn disabled={Token === 'Matter' && Number(BalanceInfo.available_balance) < 100} onClick={() => openModaal(2)}>{t('Accountwithdraw')}</WithdrawBtn>
+        {!isMobile && <WithdrawBtn disabled={Token === 'MATTER' && Number(BalanceInfo.available_balance) < 100} onClick={() => openModaal(2)}>{t('Accountwithdraw')}</WithdrawBtn>}
       </Flex>
+      {isMobile &&
+        <Flex alignItems='center' justifyContent='space-between'>
+          <Text
+            style={{ cursor: 'pointer' }}
+            color="textPrimary"
+            onClick={() => setVisibleHistory(true)}
+          >
+            {t('Account history record')}
+          </Text>
+          <Box>
+            <WithdrawBtn mr='20px' onClick={() => openModaal(1)}>{t('AccountRecharge')}</WithdrawBtn>
+            <WithdrawBtn disabled={Token === 'MATTER' && Number(BalanceInfo.available_balance) < 100} onClick={() => openModaal(2)}>{t('Accountwithdraw')}</WithdrawBtn>
+          </Box>
+        </Flex>
+      }
+
 
       {/* 输入框弹窗 */}
       <ModalWrapper title={ModalTitle} creactOnUse visible={visible} setVisible={setVisible}>
         <RechargeOrWithdrawPop onClose={onClose} TokenAddr={TokenAddr} type={ChosenType} token={Token} balance={Balance} withdrawalBalance={BalanceInfo.available_balance} />
+      </ModalWrapper>
+
+      {/* 提币、充值记录 */}
+      <ModalWrapper
+        title={`${Token}${t('Account history record')}`}
+        creactOnUse
+        visible={visibleHistory}
+        setVisible={setVisibleHistory}
+      >
+        <HistoryModal token={Token} type={1} />
       </ModalWrapper>
     </Content>
   )

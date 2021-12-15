@@ -56,7 +56,7 @@ export const RewardInput: React.FC<{
         toastError(t('setNftAuthorizationFail'));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setState(p => {
         p.loading = false;
@@ -109,9 +109,8 @@ export const RewardInput: React.FC<{
               <InputToken
                 inputMode="decimal"
                 value={amount}
-                pattern={`^[0-9]*[.,]?[0-9]{0,${
-                  (current && current[3]) || 6
-                }}$`}
+                pattern={`^[0-9]*[.,]?[0-9]{0,${(current && current[3]) || 6
+                  }}$`}
                 onChange={handleChange}
               />
               <Text color="white" mr="23px">

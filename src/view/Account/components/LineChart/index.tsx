@@ -45,7 +45,7 @@ const CustomTooltip = ({ locale, payload }) => {
     return (
       <TooltipBox>
         <div>{t('AccountTime')}:{payload[0].payload.time}</div>
-        <div>{t('Rewards')}:{payload[0].payload.value}</div>
+        <div>{t('Time Rewards')}:{payload[0].payload.value}</div>
       </TooltipBox>
     );
   }

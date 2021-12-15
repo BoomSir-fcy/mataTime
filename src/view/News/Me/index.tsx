@@ -55,7 +55,6 @@ const NewsMe: React.FC = (props) => {
       }
 
     })
-    console.log('arr:', arr)
     setListData([...arr])
   }
 

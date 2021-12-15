@@ -29,11 +29,12 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
-  const sendArticle = res => {
+  const sendArticle = (res, image_urls, remind_user) => {
     if (!res) return;
     Api.CommentApi.createComment({
       pid: itemData.id,
-      comment: res
+      comment: res,
+      remind_user,
     }).then(res => {
       if (Api.isSuccess(res)) {
         toastSuccess(res.data);
@@ -70,6 +71,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <SpendTimeViewWithArticle
             readType={ReadType.ARTICLE}
             articleId={itemData?.id}
+            setNonce={setNonce}
+            nonce={nonce}
           />
         )
       }

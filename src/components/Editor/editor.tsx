@@ -40,7 +40,7 @@ import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
-import { getBLen } from 'utils';
+import { getPostBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
 
@@ -137,8 +137,28 @@ const parseValue = value => {
   return arr;
 };
 
+const removeEmptyText = value => {
+  const resVal = []
+  value.forEach(item => {
+    if (item.children) {
+      const children = removeEmptyText(item.children)
+      resVal.push({
+        ...item,
+        children: children.length ? children : null
+      })
+      return
+    }
+    const kyes = Object.keys(item)
+    if (kyes.length > 1 || (kyes[0] === 'text' && item.text)) {
+      resVal.push({ ...item })
+    }
+  })
+
+  return resVal
+}
+
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -175,7 +195,6 @@ export const Editor = (props: Iprops) => {
   // 模糊查询用户
   const atSearchUser = useCallback(
     debounce(async (nickName: string) => {
-      console.log(nickName);
       try {
         const res = await Api.UserApi.searchUser(nickName);
         if (Api.isSuccess(res)) {
@@ -184,7 +203,7 @@ export const Editor = (props: Iprops) => {
           });
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }, 1000),
     []
@@ -236,7 +255,7 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) {}
+    } catch (err) { }
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -288,7 +307,6 @@ export const Editor = (props: Iprops) => {
                   ...res.data.map(item => item.full_path)
                 ]);
                 toast.success(t('uploadImgSuccessMsg'));
-                console.log(imgList);
               } else {
                 toast.error(t('uploadImgErrorMsg'));
               }
@@ -348,13 +366,15 @@ export const Editor = (props: Iprops) => {
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
 
+    const newValue1 = removeEmptyText(newValue);
+
     //限制用户输入数量
-    if (getBLen(content) > 280) {
+    if (getPostBLen(content) > 280) {
       setTimeId(null);
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
     props.sendArticle(
-      JSON.stringify(newValue),
+      JSON.stringify(newValue1),
       imgList.join(','),
       userIdList.join(',')
     );

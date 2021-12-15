@@ -4,7 +4,7 @@ import useTheme from 'hooks/useTheme'
 import { TextProps } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
 
-interface iocnType {
+export interface iocnType {
   size?: number;
   name: string;
   color?: string;
@@ -23,14 +23,12 @@ const getColor = ({ color, theme }: ThemedProps) => {
 };
 
 
-export const Icon = (props: iocnType) => {
+export const Icon = ({ size, name, color = '#fff', bold, margin, style = {}, current = 0, className, ...props }: iocnType) => {
   const { theme } = useTheme()
-
-  const { size, name, color = '#fff', bold, margin, style = {}, current = 0 } = props;
 
   return (
     <i
-      className={classnames('iconfont ' + name)}
+      className={classnames('iconfont', name, className)}
       style={{
         fontSize: size || 20,
         color: getColor({ color, theme }),

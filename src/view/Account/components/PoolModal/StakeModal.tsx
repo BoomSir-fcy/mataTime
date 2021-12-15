@@ -41,7 +41,6 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const [fullBalance, displayFullBalance] = useMemo(() => {
     const fullBalanceVal = getFullDisplayBalance(max, decimals)
     const displayFullBalanceVal = formatDisplayBalance(max, decimals)
-    console.log(fullBalanceVal, displayFullBalanceVal, max, decimals)
     return [fullBalanceVal, displayFullBalanceVal]
   }, [max, decimals])
 
@@ -83,7 +82,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             min="0"
             inputMode="decimal"
-            placeholder="Place enter stake amount"
+            placeholder="Please enter the amount"
             onChange={handleChange}
           />
           <Button onClick={handleSelectMax} padding="0" variant="text">

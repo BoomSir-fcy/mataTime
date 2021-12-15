@@ -68,7 +68,6 @@ export const FollowPopup = React.memo((props: Iprops) => {
       onClick={e => e.stopPropagation()}
       onMouseOver={(e: any) => {
         e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-        // uid && getUserInfo()
         setVisible(true);
       }}
       onMouseLeave={(e: any) => {
@@ -186,7 +185,6 @@ export const FollowPopupD = React.memo((props: IDprops) => {
   // 鼠标移开
   const handleMouseOut = () => {
     popupRef.current.addEventListener('mouseleave', (e: any) => {
-      console.log('mouseleave', e);
       callback();
     });
   };

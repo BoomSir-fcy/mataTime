@@ -1,12 +1,12 @@
 /* eslint-disable */
 import React, { useState, useCallback } from 'react';
-import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js';
 import { Flex, Box, Text, Input, Button } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { useDpWd } from '../../hooks/walletInfo';
 import { BIG_TEN } from 'utils/bigNumber';
 import { toast } from 'react-toastify';
@@ -16,23 +16,21 @@ import Dots from 'components/Loader/Dots';
 import { ModalWrapper } from 'components';
 import HistoryModal from './Pops/HistoryModal';
 
-
-
 const Content = styled(Box)`
-flex: 1;
-min-width: 52%;
-${({ theme }) => theme.mediaQueriesSize.padding}
-border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-`
+  flex: 1;
+  min-width: 52%;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+`;
 const LeftBox = styled(Flex)`
-min-width: 236px;
-flex:1;
-flex-direction: column;
-justify-content: space-between;
-`
+  min-width: 236px;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 const Title = styled(Flex)`
   align-items: center;
-`
+`;
 const NumberBox = styled(Flex)`
   width: 100px;
   height: 35px;
@@ -44,146 +42,169 @@ const NumberBox = styled(Flex)`
   cursor: pointer;
   margin-top: 16px;
   margin-right: 16px;
-`
+`;
 const RightBox = styled(Box)`
-flex:1;
-min-width: 200px;
-`
+  flex: 1;
+  min-width: 200px;
+`;
 const InputBox = styled(Flex)`
-position: relative;
-align-items: center;
-`
+  position: relative;
+  align-items: center;
+`;
 const Max = styled(Text)`
-position: absolute;
-right: 15px;
-color:${({ theme }) => theme.colors.textPrimary};
-cursor: pointer;
-font-size: 14px;
-`
-const SureBtn = styled(Button)`
-width: 100%;
-`
-const MyInput = styled(Input)`
-border-radius: 10px;
-padding:12px 50px 12px 16px;
-height: 50px;
-background: ${({ theme }) => theme.colors.backgroundTextArea};
-&::placeholder {
+  position: absolute;
+  right: 15px;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  cursor: pointer;
   font-size: 14px;
+`;
+const SureBtn = styled(Button)`
+  width: 100%;
+`;
+const MyInput = styled(Input)`
+  border-radius: 10px;
+  padding: 12px 50px 12px 16px;
+  height: 50px;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
+  &::placeholder {
+    font-size: 14px;
     color: ${({ theme }) => theme.colors.textTips};
   }
-`
+`;
 
 interface init {
-  balance: number
-  TokenAddr: string
-  decimals?: number
-  Token: string
+  balance: number;
+  TokenAddr: string;
+  decimals?: number;
+  Token: string;
 }
 
-const Recharge: React.FC<init> = ({ Token, balance, TokenAddr, decimals = 18 }) => {
-  const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const { account } = useWeb3React()
+const Recharge: React.FC<init> = ({
+  Token,
+  balance,
+  TokenAddr,
+  decimals = 18
+}) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
 
-  const [val, setVal] = useState('')
-  const [visibleHistory, setVisibleHistory] = useState(false)
-  const [pending, setpending] = useState(false)
-  const [ActiveHistory, setActiveHistory] = useState(1)
-  const { Recharge, onApprove } = useDpWd()
-  const approvedNum = useStore(p => Token === 'Time' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter);
+  const [val, setVal] = useState('');
+  const [visibleHistory, setVisibleHistory] = useState(false);
+  const [pending, setpending] = useState(false);
+  const [ActiveHistory, setActiveHistory] = useState(1);
+  const { Recharge, onApprove } = useDpWd();
+  const approvedNum = useStore(p =>
+    Token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter
+  );
 
-  const numberList = ['10000', '20000', '50000', '100000']
+  const numberList = ['10000', '20000', '50000', '100000'];
 
   // 充值
   const handSure = useCallback(async () => {
-    setpending(true)
+    setpending(true);
     // 充值
     if (balance === 0) {
-      setpending(false)
-      return
+      setpending(false);
+      return;
     }
     if (Number(val) <= 0) {
-      setpending(false)
-      return
+      setpending(false);
+      return;
     }
-    const addPrecisionNum = new BigNumber(Number(val)).times(BIG_TEN.pow(18)).toString()
+    const addPrecisionNum = new BigNumber(Number(val))
+      .times(BIG_TEN.pow(18))
+      .toString();
     try {
-      await Recharge(TokenAddr, addPrecisionNum)
+      await Recharge(TokenAddr, addPrecisionNum);
       toast.success(t('Account The transaction is successful!'));
-      setVal('')
+      setVal('');
     } catch (e) {
-      console.error(e)
+      console.error(e);
       toast.error(t('Account Recharge failed'));
     } finally {
-      setpending(false)
+      setpending(false);
     }
-    dispatch(fetchWalletAsync())
-  }, [Recharge, balance, TokenAddr, val])
+    dispatch(fetchWalletAsync());
+  }, [Recharge, balance, TokenAddr, val]);
   // 授权
   const handleApprove = useCallback(async () => {
-    setpending(true)
+    setpending(true);
     try {
-      await onApprove(Token)
+      await onApprove(Token);
       toast.success(t('setNftAuthorizationSuccess'));
     } catch (e) {
-      console.error(e)
+      console.error(e);
       toast.error(t('setNftAuthorizationFail'));
     } finally {
-      setpending(false)
-      dispatch(fetchApproveNumAsync(account))
+      setpending(false);
+      dispatch(fetchApproveNumAsync(account));
     }
-  }, [onApprove, account])
+  }, [onApprove, account]);
   // 输入框输入限制
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
-      const chkPrice = (val) => {
+      const chkPrice = val => {
         // val = val.replace(/[^\d.]/g, "");
-        // //必须保证第一位为数字而不是. 
+        // //必须保证第一位为数字而不是.
         // val = val.replace(/^\./g, "");
-        // //保证只有出现一个.而没有多个. 
+        // //保证只有出现一个.而没有多个.
         // val = val.replace(/\.{2,}/g, ".");
-        // //保证.只出现一次，而不能出现两次以上 
+        // //保证.只出现一次，而不能出现两次以上
         // val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        val = val.replace(/,/g, '.')
+        val = val.replace(/,/g, '.');
         if (Number(val) > balance) {
-          return String(balance)
+          return String(balance);
         }
         return val;
-      }
+      };
       if (e.currentTarget.validity.valid) {
-        setVal(chkPrice(e.currentTarget.value))
+        setVal(chkPrice(e.currentTarget.value));
       }
     },
-    [setVal, balance],
-  )
+    [setVal, balance]
+  );
 
   return (
     <Content>
-      <Flex flexWrap='wrap' justifyContent='space-between'>
+      <Flex flexWrap="wrap" justifyContent="space-between">
         <LeftBox>
           <Title>
-            <Text mr='16px' fontSize='16px'>{t('AccountRecharge')}{Token}</Text>
-            <Text style={{ cursor: 'pointer' }} fontSize='14px' color='textPrimary' onClick={() => setVisibleHistory(true)}>{t('Account history record')}</Text>
+            <Text mr="16px" fontSize="16px">
+              {Token} {t('AccountRecharge')}
+            </Text>
+            <Text
+              style={{ cursor: 'pointer' }}
+              fontSize="14px"
+              color="textPrimary"
+              onClick={() => setVisibleHistory(true)}
+            >
+              {t('Account history record')}
+            </Text>
           </Title>
-          <Flex alignItems='center' flexWrap='wrap'>
-            {
-              numberList.map((item, index) => (
-                <NumberBox key={item} onClick={() => {
-                  const Num = Number(item) > balance ? String(balance) : item
-                  setVal(Num)
-                }}>
-                  <Text fontWeight='bold' fontSize='16px'>{item}</Text>
-                </NumberBox>
-              ))
-            }
+          <Flex alignItems="center" flexWrap="wrap">
+            {numberList.map((item, index) => (
+              <NumberBox
+                key={item}
+                onClick={() => {
+                  const Num = Number(item) > balance ? String(balance) : item;
+                  setVal(Num);
+                }}
+              >
+                <Text fontWeight="bold" fontSize="16px">
+                  {item}
+                </Text>
+              </NumberBox>
+            ))}
           </Flex>
         </LeftBox>
         <RightBox>
-          <Flex justifyContent="end" mb='12px'>
-            <Text fontSize='14px' color='textTips'>{t('Account Available Balance')}: {formatDisplayApr(balance)}</Text>
+          <Flex justifyContent="end" mb="12px">
+            <Text fontSize="14px" color="textTips">
+              {t('Account Available Balance')}: {formatDisplayApr(balance)}
+            </Text>
           </Flex>
-          <InputBox mb='14px'>
+          <InputBox mb="14px">
             <MyInput
               noShadow
               pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
@@ -194,23 +215,45 @@ const Recharge: React.FC<init> = ({ Token, balance, TokenAddr, decimals = 18 }) 
             />
             <Max onClick={() => setVal(String(balance))}>MAX</Max>
           </InputBox>
-          <Flex flexDirection='column' justifyContent='center' alignItems='center'>
-            <SureBtn disable={pending} onClick={() => {
-              if (approvedNum > 0) {
-                // 充值
-                handSure()
-              } else {
-                // 授权
-                handleApprove()
-              }
-            }}>
-              {pending ? <Dots>{approvedNum > 0 ? t('Account Trading') : t('Account Approving')}</Dots> : approvedNum > 0 ? t('AccountRecharge') : t('Account Approve')}
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <SureBtn
+              disable={pending}
+              onClick={() => {
+                if (approvedNum > 0) {
+                  // 充值
+                  handSure();
+                } else {
+                  // 授权
+                  handleApprove();
+                }
+              }}
+            >
+              {pending ? (
+                <Dots>
+                  {approvedNum > 0
+                    ? t('Account Trading')
+                    : t('Account Approving')}
+                </Dots>
+              ) : approvedNum > 0 ? (
+                t('AccountRecharge')
+              ) : (
+                t('Account Approve')
+              )}
             </SureBtn>
           </Flex>
         </RightBox>
       </Flex>
       {/* 提币、充值记录 */}
-      <ModalWrapper title={`${Token}${t('Account history record')}`} creactOnUse visible={visibleHistory} setVisible={setVisibleHistory}>
+      <ModalWrapper
+        title={`${Token}${t('Account history record')}`}
+        creactOnUse
+        visible={visibleHistory}
+        setVisible={setVisibleHistory}
+      >
         {/* <PopHeard mb="8px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="baseline">
             <HistoryHead className={ActiveHistory === 1 ? 'active' : ''} onClick={() => setActiveHistory(1)} scale='ld'>充值记录</HistoryHead>
@@ -223,7 +266,7 @@ const Recharge: React.FC<init> = ({ Token, balance, TokenAddr, decimals = 18 }) 
         <HistoryModal token={Token} type={ActiveHistory} />
       </ModalWrapper>
     </Content>
-  )
-}
+  );
+};
 
 export default Recharge;

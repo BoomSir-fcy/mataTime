@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js';
 import { Flex, Box, Text, AnimationRingIcon } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import BgImg from 'assets/images/myWallet/TimeHeaderBg.png'
+import BgImg from 'assets/images/myWallet/TimeHeaderBg.png';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { TimeInfo } from 'store/wallet/type';
-
 
 const Card = styled(Box)`
   background-image: url(${BgImg});
@@ -30,7 +29,7 @@ const ScaleBox = styled(Box)`
   bottom: -20px;
   left: -24px;
   width: max-content;
-  img{
+  img {
     width: 32px;
   }
 `;
@@ -39,13 +38,13 @@ const Placeholder = styled(Box)`
   height: 32px;
 `;
 const FaqBox = styled(Box)`
-width: max-content;
-`
+  width: max-content;
+`;
 const WhiteText = styled(Text)`
-color:${({ theme }) => theme.colors.white};
-`
+  color: ${({ theme }) => theme.colors.white};
+`;
 const Arrow = styled(Box)`
-  img{
+  img {
     min-width: 100px;
     width: 15vw;
     height: 17px;
@@ -53,70 +52,103 @@ const Arrow = styled(Box)`
 `;
 
 interface init {
-  nowRound: TimeInfo
-  NextRound: TimeInfo
+  nowRound: TimeInfo;
+  NextRound: TimeInfo;
 }
-export const TimeHeader: React.FC<init> = React.memo(({ nowRound, NextRound }) => {
-  const { t } = useTranslation();
-  const { max_dsg_token: NowDsg } = nowRound
-  const { max_time_token: NowTime } = nowRound
-  const { max_dsg_token: NextDsg } = NextRound
-  const { max_time_token: NextTime } = NextRound
-  return (
-    <Card>
-      <Flex style={{ padding: '0 140px' }} width='100%' justifyContent='space-around' alignItems='center'>
-        <RoundBox>
-          <AnimationRingIcon bgColor active3 active1 isRotate width="8rem">
-            <FaqBox>
-              <WhiteText fontSize='30px' bold>Now Round</WhiteText>
-              <WhiteText fontSize='24px'>Price</WhiteText>
-            </FaqBox>
-          </AnimationRingIcon>
-          <ScaleBox>
-            <Flex alignItems='center'>
-              <Box style={{ textAlign: 'right' }}>
-                <img src="/images/tokens/DSG.svg" alt="" />
-                <WhiteText fontSize='18px' bold>1 DSG</WhiteText>
-              </Box>
-              <Box style={{ textAlign: 'right' }}>
-                <Placeholder />
-                <WhiteText textAlign='center' fontSize='18px' bold>=</WhiteText>
-              </Box>
-              <Box style={{ textAlign: 'left' }}>
-                <img src="/images/tokens/TIME.svg" alt="" />
-                <WhiteText fontSize='18px' bold>{formatDisplayApr(new BigNumber(Number(NowTime)).div(Number(NowDsg)).toNumber())} Time</WhiteText>
-              </Box>
-            </Flex>
-          </ScaleBox>
-        </RoundBox>
-        <Arrow>
-          <img src="/images/Time/arrow.png" alt="" />
-        </Arrow>
-        <RoundBox>
-          <AnimationRingIcon active2 isRotate width="8rem">
-            <FaqBox>
-              <WhiteText fontSize='30px' bold>Next Round</WhiteText>
-              <WhiteText fontSize='24px'>Price</WhiteText>
-            </FaqBox>
-          </AnimationRingIcon>
-          <ScaleBox>
-            <Flex alignItems='center'>
-              <Box style={{ textAlign: 'right' }}>
-                <img src="/images/tokens/DSG.svg" alt="" />
-                <WhiteText fontSize='18px' bold>1 DSG</WhiteText>
-              </Box>
-              <Box style={{ textAlign: 'right' }}>
-                <Placeholder />
-                <WhiteText textAlign='center' fontSize='18px' bold>=</WhiteText>
-              </Box>
-              <Box style={{ textAlign: 'left' }}>
-                <img src="/images/tokens/TIME.svg" alt="" />
-                <WhiteText fontSize='18px' bold>{formatDisplayApr(new BigNumber(Number(NextTime)).div(Number(NextDsg)).toNumber())} Time</WhiteText>
-              </Box>
-            </Flex>
-          </ScaleBox>
-        </RoundBox>
-      </Flex>
-    </Card>
-  );
-});
+export const TimeHeader: React.FC<init> = React.memo(
+  ({ nowRound, NextRound }) => {
+    const { t } = useTranslation();
+    const { max_dsg_token: NowDsg } = nowRound;
+    const { max_time_token: NowTime } = nowRound;
+    const { max_dsg_token: NextDsg } = NextRound;
+    const { max_time_token: NextTime } = NextRound;
+    return (
+      <Card>
+        <Flex
+          style={{ padding: '0 140px' }}
+          width="100%"
+          justifyContent="space-around"
+          alignItems="center"
+        >
+          <RoundBox>
+            <AnimationRingIcon bgColor active3 active1 isRotate width="8rem">
+              <FaqBox>
+                <WhiteText fontSize="30px" bold>
+                  Current Round
+                </WhiteText>
+                <WhiteText fontSize="24px">Rate</WhiteText>
+              </FaqBox>
+            </AnimationRingIcon>
+            <ScaleBox>
+              <Flex alignItems="center">
+                <Box style={{ textAlign: 'right' }}>
+                  <img src="/images/tokens/DSG.svg" alt="" />
+                  <WhiteText fontSize="18px" bold>
+                    1 DSG
+                  </WhiteText>
+                </Box>
+                <Box style={{ textAlign: 'right' }}>
+                  <Placeholder />
+                  <WhiteText textAlign="center" fontSize="18px" bold>
+                    =
+                  </WhiteText>
+                </Box>
+                <Box style={{ textAlign: 'left' }}>
+                  <img src="/images/tokens/TIME.svg" alt="" />
+                  <WhiteText fontSize="18px" bold>
+                    {formatDisplayApr(
+                      new BigNumber(Number(NowTime))
+                        .div(Number(NowDsg))
+                        .toNumber()
+                    )}{' '}
+                    TIME
+                  </WhiteText>
+                </Box>
+              </Flex>
+            </ScaleBox>
+          </RoundBox>
+          <Arrow>
+            <img src="/images/Time/arrow.png" alt="" />
+          </Arrow>
+          <RoundBox>
+            <AnimationRingIcon active2 isRotate width="8rem">
+              <FaqBox>
+                <WhiteText fontSize="30px" bold>
+                  Next Round
+                </WhiteText>
+                <WhiteText fontSize="24px">Rate</WhiteText>
+              </FaqBox>
+            </AnimationRingIcon>
+            <ScaleBox>
+              <Flex alignItems="center">
+                <Box style={{ textAlign: 'right' }}>
+                  <img src="/images/tokens/DSG.svg" alt="" />
+                  <WhiteText fontSize="18px" bold>
+                    1 DSG
+                  </WhiteText>
+                </Box>
+                <Box style={{ textAlign: 'right' }}>
+                  <Placeholder />
+                  <WhiteText textAlign="center" fontSize="18px" bold>
+                    =
+                  </WhiteText>
+                </Box>
+                <Box style={{ textAlign: 'left' }}>
+                  <img src="/images/tokens/TIME.svg" alt="" />
+                  <WhiteText fontSize="18px" bold>
+                    {formatDisplayApr(
+                      new BigNumber(Number(NextTime))
+                        .div(Number(NextDsg))
+                        .toNumber()
+                    )}{' '}
+                    TIME
+                  </WhiteText>
+                </Box>
+              </Flex>
+            </ScaleBox>
+          </RoundBox>
+        </Flex>
+      </Card>
+    );
+  }
+);

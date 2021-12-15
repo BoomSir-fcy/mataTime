@@ -30,6 +30,12 @@ const useReadArticle = (nonce?: number | boolean) => {
   const [fetchReadTime, setFetchReadTime] = useState(0)
 
   useEffect(() => {
+    if (im) {
+      im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
+    }
+  }, [])
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
     }, 1000);

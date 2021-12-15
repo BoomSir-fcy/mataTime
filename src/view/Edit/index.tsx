@@ -39,6 +39,12 @@ export const Header = styled(Flex)`
   ${mediaQueriesSize.paddingxs}
 `;
 
+const CenterImg = styled.img`
+    position: absolute;
+    top: 40%;
+    left: 8%;
+`
+
 const Edit: React.FC = () => {
   useFetchNftList();
 
@@ -96,7 +102,6 @@ const Edit: React.FC = () => {
 
     try {
       const response = await checkNickname(params.nick_name);
-      console.log(response);
       if (!response[0] && response[1]) {
         const res = await updateProfileNickname(params.nick_name);
         if (Boolean(res) && res === 1) {
@@ -116,7 +121,7 @@ const Edit: React.FC = () => {
         toastError(t('loginSetNickNameRepeat'));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -158,7 +163,10 @@ const Edit: React.FC = () => {
         {!profile.background_image && !state.background && (
           <Box
             style={{
-              position: 'absolute'
+              position: 'absolute',
+              top: '0',
+              overflow: 'hidden',
+              width: '100%'
             }}
           >
             <ComponentsWrapper>
@@ -168,13 +176,12 @@ const Edit: React.FC = () => {
                 margin="-15rem 0 0 -9rem"
                 bgWidth="48rem"
                 bgHeight="19rem"
-                bgMargin="-19rem 0 0 -23rem"
+                bgMargin="-6rem 0 0 -23rem"
                 isAnimation
               >
-                <img
+                <CenterImg
                   width="250px"
                   height="250px"
-                  style={{ position: 'relative', top: '-90px' }}
                   src={require('view/Login/images/LOGO2.svg').default}
                 />
               </CommonCircle>

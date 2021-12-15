@@ -45,7 +45,7 @@ const Home: React.FC = (props: any) => {
   // const  editorRef = useRef();
 
   // 阅读文章扣费
-  const [nonce, setNonce] = useState(0)
+  const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
   const sendArticle = async (content: string, image_urls, remind_user) => {
@@ -62,7 +62,7 @@ const Home: React.FC = (props: any) => {
         toastError(t('commonContactAdmin') || res.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -74,7 +74,6 @@ const Home: React.FC = (props: any) => {
    * @bug 未节流处理
    */
   const tabsChange = item => {
-    console.log(item);
     const temp = {
       ...filterVal
     };

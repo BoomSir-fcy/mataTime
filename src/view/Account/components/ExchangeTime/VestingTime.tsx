@@ -80,7 +80,6 @@ const ClaimButton: React.FC<btn> = ({ upDate, all, ReleaseAmount, id }) => {
   const { t } = useTranslation()
   // 领取
   const handleReward = useCallback(async (id) => {
-    console.log(id);
     try {
       setpending(true)
       await onWithdraw(id)
