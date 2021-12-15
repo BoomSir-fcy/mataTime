@@ -9,15 +9,14 @@ export const PopupContentWrapper = styled(Box)`
   min-height: 100px;
   position: absolute;
   left: 10px;
-  overflow: hidden;
   top: 22px;
   background: #4d535f;
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   box-sizing: border-box;
   padding: 15px;
-  z-index: 99;
-
+  z-index: 1099;
+  overflow: hidden;
   .content {
     display: flex;
     align-items: center;

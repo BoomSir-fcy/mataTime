@@ -111,7 +111,7 @@ const NewsComment: React.FC = props => {
                     {...props}
                     more={false}
                     size={'small'}
-                  ></MentionItem>
+                  />
                 </div>
                 <MentionOperator
                   hasLike={false}

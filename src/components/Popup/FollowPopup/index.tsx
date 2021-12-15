@@ -21,7 +21,7 @@ type Iprops = {
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const myself = useStore(p => p.loginReducer.userInfo);
-  const { children, uid, callback = () => { } } = props;
+  const { children, uid, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
@@ -68,7 +68,6 @@ export const FollowPopup = React.memo((props: Iprops) => {
       onClick={e => e.stopPropagation()}
       onMouseOver={(e: any) => {
         e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-        // uid && getUserInfo()
         setVisible(true);
       }}
       onMouseLeave={(e: any) => {
@@ -141,7 +140,7 @@ type IDprops = {
 
 export const FollowPopupD = React.memo((props: IDprops) => {
   const { t } = useTranslation();
-  const { left = 100, top = 100, callback = () => { }, uid } = props;
+  const { left = 100, top = 100, callback = () => {}, uid } = props;
   const popupRef: any = useRef();
   const [userInfo, setUserInfo] = useState<any>({});
 

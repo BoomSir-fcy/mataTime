@@ -13,13 +13,13 @@ export const CommentItemWrapper = styled(Card)`
   background: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   .reply-wrapper {
+    display: flex;
+    box-sizing: border-box;
     font-size: 16px;
     font-weight: 400;
     color: ${({ theme }) => theme.colors.white_black};
-    line-height: 50px;
-    display: flex;
-    box-sizing: border-box;
     padding-left: 73px;
+    padding-top: 15px;
     a {
       color: #4168ed;
       margin-left: 10px;
@@ -35,6 +35,7 @@ export const CommentItemWrapper = styled(Card)`
     background-color: ${({ theme }) => theme.colors.backgroundThemeCard};
     box-sizing: border-box;
     padding: 20px 98px;
+    margin-top: 15px;
     margin-left: -25px;
   }
 `;

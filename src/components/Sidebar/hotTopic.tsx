@@ -104,7 +104,7 @@ const HotTopic: React.FC = () => {
             justifyContent="space-between"
           >
             <Hot as={Link} to={`/topicList/${item.tid}/${item.topic_name}`}>
-              #{item.topic_name}#
+              #{item.topic_name}
             </Hot>
             <HotCount>
               {t('HotTopicUnit', {
