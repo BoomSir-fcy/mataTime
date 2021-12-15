@@ -193,15 +193,24 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
       </InputBox>
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn mb='10px' disable={pending} onClick={() => {
-          if (approvedNum > 0) {
-            // 充值、提现
-            handSure()
+          if (type === 1) {
+            if (approvedNum > 0) {
+              // 充值
+              handSure()
+            } else {
+              // 授权
+              handleApprove()
+            }
           } else {
-            // 授权
-            handleApprove()
+            //提现
+            handSure()
           }
         }}>
-          {pending ? <Dots>{approvedNum > 0 ? t('Account Trading') : t('Account Approving')}</Dots> : approvedNum > 0 ? t('Account Confirm') : t('Account Approve')}
+          {type === 1 ?
+            (pending ? <Dots>{approvedNum > 0 ? t('Account Trading') : t('Account Approving')}</Dots> : approvedNum > 0 ? t('Account Confirm') : t('Account Approve'))
+            :
+            (pending ? <Dots>{t('Account Trading')}</Dots> : t('Account Confirm'))
+          }
         </SureBtn>
         <Text fontSize='14px' color='textTips'>{t('Account Please confirm the transaction in Token')}</Text>
       </Flex>

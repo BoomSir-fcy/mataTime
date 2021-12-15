@@ -118,10 +118,10 @@ const Content = styled(Box)`
   }
 `;
 const CenterImg = styled.img`
-    position: absolute;
-    top: 40%;
-    left: 8%;
-`
+  position: absolute;
+  top: 40%;
+  left: 8%;
+`;
 
 const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
@@ -208,7 +208,15 @@ const Profile: React.FC<any> = props => {
         >
           {!profile.background_image && (
             <ComponentsWrapper>
-              <CommonCircle width="18rem" height="18rem" margin="-9rem 0 0 -9rem" bgWidth="48rem" bgHeight="19rem" bgMargin="-6rem 0 0 -23rem" isAnimation>
+              <CommonCircle
+                width="18rem"
+                height="18rem"
+                margin="-9rem 0 0 -9rem"
+                bgWidth="48rem"
+                bgHeight="19rem"
+                bgMargin="-6rem 0 0 -23rem"
+                isAnimation
+              >
                 <CenterImg
                   width="250px"
                   height="250px"
@@ -325,6 +333,7 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
+              postUid={uid}
               callback={(data, _type) => {
                 if (_type === MoreOperatorEnum.EXPAND) {
                   setNonce(prep => prep + 1);
