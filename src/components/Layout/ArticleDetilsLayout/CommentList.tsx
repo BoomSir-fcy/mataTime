@@ -54,10 +54,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
-  const listRef = React.useRef();
+  const listRef = React.useRef<any>();
   const theme = useTheme();
 
   useEffect(() => {
+    console.log(listRef);
     if (listRef.current) {
       listRef.current.loadList();
     }

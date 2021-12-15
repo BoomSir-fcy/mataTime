@@ -55,7 +55,6 @@ class ListComponents extends React.Component<Iprops> {
         this.loadList();
       }
     );
-    console.log(this.listBox);
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this));
   }
 
@@ -87,7 +86,7 @@ class ListComponents extends React.Component<Iprops> {
           </LoadingWrapper>
         ) : (
           <NoDataWrapper>
-            It's at the bottom～
+            {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"}
           </NoDataWrapper>
         )}
       </Box>
