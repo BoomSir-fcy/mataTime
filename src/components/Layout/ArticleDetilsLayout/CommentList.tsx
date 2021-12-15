@@ -69,10 +69,12 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     setRefresh(!refresh);
   };
   const changeSortTime = () => {
+    document.body.scrollIntoView({ block: "start", inline: "nearest" })
     setSortTime(sortTime === 1 ? 0 : 1);
     initList();
   };
   const changeSortLike = () => {
+    document.body.scrollIntoView({ block: "start", inline: "nearest" })
     setSortLike(sortLike === 1 ? 0 : 1);
     initList();
   };

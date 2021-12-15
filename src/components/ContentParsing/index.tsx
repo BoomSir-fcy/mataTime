@@ -129,7 +129,7 @@ export const ContentParsing = (props: IProps) => {
     // Match hashtags
     replacedText = reactStringReplace(
       replacedText,
-      /#(\w+|[\u4E00-\u9FA5|0-9]+)#/g,
+      /#(\w+|[\u4E00-\u9FA5|0-9]+)\s/g,
       (match, i) => (
         <a
           onClick={event => {
@@ -138,7 +138,7 @@ export const ContentParsing = (props: IProps) => {
           }}
           key={match + i}
         >
-          #{match}#
+          #{match}&nbsp;
         </a>
       )
     );
