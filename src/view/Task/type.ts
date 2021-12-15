@@ -1,9 +1,17 @@
+export const variants = {
+  ACTIVITY: "activity",
+  CREATE: "create",
+  INVITE: "invite",
+  REPORT: "report",
+} as const;
 
+export type Variant = typeof variants[keyof typeof variants];
 export interface TaskInfo {
   task_id: number;
   task_type?: number;
   task_name?: string;
   task_name_id?: number;
+  task_group?: number;
   now_time?: number;
   end_time?: number;
   matter?: number;
@@ -22,3 +30,13 @@ export enum Status {
   Received = 3 // 已领取奖励
 }
 
+export enum Group {
+  ACTIVITY = 1,
+  CREATE = 2,
+  INVITE = 3,
+  REPORT = 4
+}
+
+export interface TagProps {
+  variant?: Variant;
+}

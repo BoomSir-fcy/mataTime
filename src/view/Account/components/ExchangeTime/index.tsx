@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import styled from 'styled-components';
 import { Flex, Box, Text } from 'uikit';
 import { useWeb3React } from '@web3-react/core';
-import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { TimeHeader } from './head';
 import ExchangeTime from './exchange';
@@ -18,9 +17,10 @@ const VestingBox = styled(Flex)`
 height:350px;
 align-items: center;
 justify-content: center;
-width: 36rem;
+width: 40vw;
 margin: 0 auto;
 overflow: hidden;
+min-width:300px;
 ${({ theme }) => theme.mediaQueriesSize.marginb}
 `
 const CenterText = styled(Text)`
@@ -31,7 +31,6 @@ const CenterText = styled(Text)`
 
 const Exchange: React.FC = () => {
   useFetchDSGApproveNum()
-  useFetTimeInfo()
   const { t } = useTranslation();
   const { account } = useWeb3React()
   const [ToFaq, setToFaq] = useState(false)
@@ -76,7 +75,6 @@ const Exchange: React.FC = () => {
 
   return (
     <>
-      <WalletHead title='Time' />
       <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
       <ExchangeTime nowRound={TimeShopInfo} />
       <VestingBox>

@@ -33,6 +33,7 @@ import { useToast } from 'hooks';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import useMenuNav from 'hooks/useMenuNav';
 
 const Center = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -40,6 +41,7 @@ const Center = styled(Flex)`
   width: 45%;
   margin: 0 auto;
   position: relative;
+  min-width: 300px;
 `;
 
 const Head = styled(Box)`
@@ -69,7 +71,7 @@ const InputStyle = styled(Input)`
 const TimeBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
   background:${({ theme }) => theme.colors.backgroundTextArea};
-  ${({ theme }) => theme.mediaQueriesSize.marginbmd}
+  ${({ theme }) => theme.mediaQueriesSize.marginb}
   border-radius: 10px;
   img {
     width: 40px;
@@ -86,13 +88,48 @@ const ButtonStyle = styled(Button)`
 `;
 const FAQ = styled(Flex)`
   position: absolute;
-  right: -220px;
+  right: -198px;
   top: 70px;
+  &.Mobile{
+    position: static;
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+  }
 `;
 const FaqBox = styled(Box)``;
 const IsBeginBox = styled(TimeBox)`
   margin-bottom: 150px;
 `;
+
+const FaqOutBox = ({ isMobile }) => {
+  return (
+    <FAQ className={isMobile ? 'Mobile' : ''} as={Link} to="/account/faq">
+      <AnimationRingIcon
+        style={{ cursor: 'pointer' }}
+        color="white_black"
+        active1
+        active3
+        bgColor
+        showImg
+        isRotate
+        width="8rem"
+      >
+        <FaqBox>
+          <Text
+            color="white_black"
+            style={{ cursor: 'pointer' }}
+            mb="6px"
+            fontSize="30px"
+            bold
+          >
+            FAQ
+          </Text>
+        </FaqBox>
+      </AnimationRingIcon>
+    </FAQ>
+  )
+}
 
 interface init {
   nowRound: TimeInfo;
@@ -113,6 +150,8 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const { onApprove } = useApproveErc20Change();
   const { onExchange } = useExchangeErc20();
   const { toastError, toastWarning, toastSuccess } = useToast();
+  const { isPushed, setIsPushed, isMobile } = useMenuNav()
+
 
   const ReleaseTime = useMemo(() => {
     dayjs.extend(duration);
@@ -258,7 +297,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
               <SmFont>{t('Time Exchange')}</SmFont>
               <Flex>
                 <SmFont mr="16px" color="textTips">
-                  {t('Balance')}：{formatDisplayApr(DsgBalance)}
+                  {t('Balance')}: {formatDisplayApr(DsgBalance)}
                 </SmFont>
                 <SmFont
                   style={{ cursor: 'pointer' }}
@@ -372,30 +411,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </Text>
         </IsBeginBox>
       )}
-      <FAQ as={Link} to="/account/faq">
-        <AnimationRingIcon
-          style={{ cursor: 'pointer' }}
-          color="white_black"
-          active1
-          active3
-          bgColor
-          showImg
-          isRotate
-          width="8rem"
-        >
-          <FaqBox>
-            <Text
-              color="white_black"
-              style={{ cursor: 'pointer' }}
-              mb="6px"
-              fontSize="30px"
-              bold
-            >
-              FAQ
-            </Text>
-          </FaqBox>
-        </AnimationRingIcon>
-      </FAQ>
+      <FaqOutBox isMobile={isMobile} />
     </Center>
   );
 };

@@ -92,7 +92,7 @@ export function useDpWd() {
       const receipt = await tx.wait()
       return receipt.status
     } catch (e) {
-      return false
+      throw e
     }
   }, [TimeContract, CashierDeskAddr])
   // 提现

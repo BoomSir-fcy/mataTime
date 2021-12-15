@@ -52,6 +52,7 @@ const ItemText = styled(Text)`
   margin-bottom: 10px;
   &:first-child{
     margin-right: 10px;
+    overflow: hidden;
   }
   &:last-child{
     text-align: right;
@@ -220,9 +221,9 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
                         }
                       </Flex>
                     </ItemText>
-                    <ItemText>{item.read.total_read_count}</ItemText>
-                    <ItemText>{getIcome(item.read.range_read_times)}</ItemText>
-                    <ItemText>{getIcome(item.read.total_read_times)}</ItemText>
+                    <ItemText ellipsis>{item.read.total_read_count}</ItemText>
+                    <ItemText ellipsis>{getIcome(item.read.range_read_times)}</ItemText>
+                    <ItemText ellipsis>{getIcome(item.read.total_read_times)}</ItemText>
                   </Row>
                 )
               }

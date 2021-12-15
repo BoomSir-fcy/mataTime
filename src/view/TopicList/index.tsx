@@ -65,7 +65,7 @@ const TopicList = props => {
 
   return (
     <Box key={props.location.key}>
-      <Crumbs back centerTitle={`#${name}#`} zIndex={1005} />
+      <Crumbs back centerTitle={`#${name}`} zIndex={1005} />
       <List
         ref={listRef}
         marginTop={0}

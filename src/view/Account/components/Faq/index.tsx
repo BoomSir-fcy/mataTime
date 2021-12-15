@@ -8,7 +8,6 @@ import AnswerChart from "./AnswerChart";
 import { ruleDataList } from './data'
 import CommonCircle from "components/Cirde/CommonCircle";
 import { useTranslation } from "contexts/Localization";
-import { WalletHead } from "../../head";
 
 const ItemBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -20,8 +19,8 @@ ${({ theme }) => theme.mediaQueriesSize.marginb}
 `
 
 const AnswerRuleList = styled(Box)`
+  min-width:800px;
   ${({ theme }) => theme.mediaQueriesSize.padding}
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 
 `
 const BgImgBox = styled(Box)`
@@ -38,8 +37,8 @@ const RowText = styled(Text)`
 `
 
 const ScrollBox = styled(Box)`
-padding-top: 70px;
 max-width:970px;
+overflow: hidden;
 `
 
 const CenterText = styled(Text)`
@@ -47,7 +46,10 @@ const CenterText = styled(Text)`
     top: 40%;
     left: 36%;
 `
-
+const ScrollTable = styled(Box)`
+overflow-x: auto;
+border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+`
 
 const FAQCircle = () => {
   return (
@@ -69,7 +71,6 @@ const Faq: React.FC = () => {
 
   return (
     <PageContainer>
-      <WalletHead title={t('FAQ')} />
       <ScrollBox>
         <Flex flexDirection="column" >
           <FAQCircle />
@@ -82,29 +83,31 @@ const Faq: React.FC = () => {
             <FaqQuestion>{t('FAQ Q2')}</FaqQuestion>
             <FaqAnswerText>{t('FAQ A2')}</FaqAnswerText>
           </ItemBox>
-          <AnswerRuleList>
-            <Flex>
-              <HeadText width="8%">{t('FAQ Round')}</HeadText>
-              <HeadText width="22%">$TIME to be exchanged</HeadText>
-              <HeadText width="15%">{t('FAQ DSG required for exchange')}</HeadText>
-              <HeadText width="25%">{t('FAQ TIME Price')}{t('FAQ priced in DSG')}</HeadText>
-              <HeadText width="12%">{t('FAQ Immediately unlocked ratio')}</HeadText>
-              <HeadText width="20%">{t('FAQ Amount of TIME immediately unlocked')}</HeadText>
-              <HeadText width="15%">{t('FAQ Subsequent linear unlocking period')}</HeadText>
-            </Flex>
-            {
-              ruleDataList.map(item =>
-                <Flex mt="20px" key={item.period}>
-                  <RowText width="8%">{item.period}</RowText>
-                  <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage, 6)}</RowText>
-                  <RowText width="15%">{formatLocalisedCompactNumber(item.need, 6)}</RowText>
-                  <RowText width="25%">{item.price}</RowText>
-                  <RowText width="12%">{item.rate}</RowText>
-                  <RowText width="20%">{formatLocalisedCompactNumber(item.total, 6)}</RowText>
-                  <RowText width="15%">{item.month} {t('FAQ months')}</RowText>
-                </Flex>)
-            }
-          </AnswerRuleList>
+          <ScrollTable>
+            <AnswerRuleList>
+              <Flex>
+                <HeadText width="8%">{t('FAQ Round')}</HeadText>
+                <HeadText width="22%">$TIME to be exchanged</HeadText>
+                <HeadText width="15%">{t('FAQ DSG required for exchange')}</HeadText>
+                <HeadText width="25%">{t('FAQ TIME Price')}{t('FAQ priced in DSG')}</HeadText>
+                <HeadText width="12%">{t('FAQ Immediately unlocked ratio')}</HeadText>
+                <HeadText width="20%">{t('FAQ Amount of TIME immediately unlocked')}</HeadText>
+                <HeadText width="15%">{t('FAQ Subsequent linear unlocking period')}</HeadText>
+              </Flex>
+              {
+                ruleDataList.map(item =>
+                  <Flex mt="20px" key={item.period}>
+                    <RowText width="8%">{item.period}</RowText>
+                    <RowText width="22%">{formatLocalisedCompactNumber(item.exchnage, 6)}</RowText>
+                    <RowText width="15%">{formatLocalisedCompactNumber(item.need, 6)}</RowText>
+                    <RowText width="25%">{item.price}</RowText>
+                    <RowText width="12%">{item.rate}</RowText>
+                    <RowText width="20%">{formatLocalisedCompactNumber(item.total, 6)}</RowText>
+                    <RowText width="15%">{item.month} {t('FAQ months')}</RowText>
+                  </Flex>)
+              }
+            </AnswerRuleList>
+          </ScrollTable>
           <BottomItemBox>
             <FaqQuestion>{t('FAQ Q3')}</FaqQuestion>
             <FaqAnswerText>{t('FAQ A3')}</FaqAnswerText>
