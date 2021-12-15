@@ -1,34 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, Button, Spinner, Empty } from 'uikit';
-import { mediaQueriesSize } from 'uikit/theme/base';
-import CountdownTime from './Countdown';
+import { Box, Flex, Text, Spinner } from 'uikit';
+import { WalletHead as Header } from 'components/HeaderContent';
 import { useTranslation } from 'contexts/Localization';
-import MissionCard from './MissionCard';
-import { Group, Status } from './type';
-import { Link } from 'react-router-dom';
+import { Group } from './type';
 import { useFetchTask, useTask } from 'store/task/hooks';
 import TaskContent from './TaskContent';
-import { partition } from 'lodash';
 import useMenuNav from 'hooks/useMenuNav';
 
 const ScrollBox = styled(Box)`
-  padding-top: 57px;
 `;
 
-const TaskHeader = styled(Flex)`
-  position: fixed;
-  top:0;
-  z-index: 2;
-  flex-wrap: wrap;
-  align-items: center;
-  width: 100%;
-  max-width: 970px;
-  min-height: 57px;
-  padding: 10px 14px;
-  background: ${({ theme }) => theme.colors.background};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-`;
 const TipsFlex = styled(Box)`
   padding: 10px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -107,12 +89,15 @@ const Task: React.FC = () => {
         </Flex>
       ) : (
         <BgBox>
-          <TaskHeader>
+          <Header title={t('EasyTaskEarn$Matter')}>
+            {!isMobile && <HeaderTips t={t} />}
+          </Header>
+          {/* <TaskHeader>
             <Text mr="50px" fontSize="18px" bold>
               {t('EasyTaskEarn$Matter')}
             </Text>
             {!isMobile && <HeaderTips t={t} />}
-          </TaskHeader>
+          </TaskHeader> */}
           <ScrollBox>
             {isMobile && <TipsFlex><HeaderTips t={t} /></TipsFlex>}
             {/* {

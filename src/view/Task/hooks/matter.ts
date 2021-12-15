@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Api } from 'apis';
 import { taskContents } from './config';
-import { useDispatch } from 'react-redux';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { Group } from '../type';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, Image, Heading, Progress, Button } from 'uikit';
+import { Box, Flex, Text } from 'uikit';
 import { GetTaskTag } from '../hooks/matter';
 import { TaskInfo, Variant } from '../type';
 import StyledTag from './StyledTag';
