@@ -75,7 +75,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
   const [val, setVal] = useState('')
   const { drawCallback, Recharge, onApprove } = useDpWd()
   const [pending, setpending] = useState(false)
-  const approvedNum = useStore(p => token === 'Time' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter);
+  const approvedNum = useStore(p => token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter);
 
   const numberList = ['10000', '20000', '50000', '100000'];
 
@@ -115,7 +115,7 @@ const MoneyModal: React.FC<init> = ({ type, balance, token, TokenAddr, onClose, 
         return
       }
       try {
-        await drawCallback(val, TokenAddr, token === 'Time' ? 1 : 2)
+        await drawCallback(val, TokenAddr, token === 'TIME' ? 1 : 2)
         toast.success(t('Account The transaction is successful!'));
         onClose()
       } catch (e) {

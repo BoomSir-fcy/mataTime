@@ -10,7 +10,7 @@ import { HamburgerCloseIcon, HamburgerIcon } from 'uikit/widgets/Menu/icons';
 const Card = styled(Flex)`
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 1000;
   align-items: center;
   justify-content: space-between;
   height: 70px;

@@ -38,7 +38,7 @@ const Account = props => {
   useFetTimeInfo()
 
   const { t } = useTranslation();
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
+  const { isMobile } = useMenuNav()
   const CurrentRound = useStore(p => p.wallet.CurrentRound);
   const { pathname } = useLocation();
 
