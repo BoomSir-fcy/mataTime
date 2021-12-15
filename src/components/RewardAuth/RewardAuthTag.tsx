@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Popup from 'reactjs-popup';
-import { Flex, Box } from 'uikit';
+import { Flex, Box, Image } from 'uikit';
 import { Icon } from '../Icon';
 
 import RewardAuthModal from './RewardAuthModal';
@@ -49,7 +49,13 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
         ref={popupRef}
         trigger={
           <PopupButton>
-            <Icon color="red" margin="0 10px 0 0" name="icon-dashang" />
+            <Box width="18px" mr="10px">
+              <Image
+                src={require('assets/images/reward.svg').default}
+                width={18}
+                height={18}
+              />
+            </Box>
             {total || 0}
           </PopupButton>
         }

@@ -7,7 +7,7 @@ const StyledPopup = styled(Popup)`
     z-index: 98 !important;
   }
   &-content {
-    width: 150px !important;
+    width: 150px;
     height: auto;
     border-radius: 10px;
     padding: 0;
@@ -34,7 +34,7 @@ const PopupWrapModal = (props, ref) => {
       nested
       keepTooltipInside
       closeOnDocumentClick
-      position="bottom center"
+      position={props.position || 'bottom center'}
       arrowStyle={props.arrowStyle}
     >
       {props.children}
