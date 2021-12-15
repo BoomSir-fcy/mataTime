@@ -17,6 +17,7 @@ import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux'
 import { fetchTimeIncometoday, fetchMatterIncometoday, fetchIncomeList, fetchMatterIncomeList } from 'store/wallet/reducer';
+import useMenuNav from 'hooks/useMenuNav';
 
 
 const NoPdBottom = styled(Container)`
@@ -63,6 +64,28 @@ width: 36px;
 height: 36px;
 `
 
+const IncomeComp = ({ TodayIncome, TotalIncome }) => {
+  const { t } = useTranslation();
+
+  return (
+    <RightBox justifyContent='space-between' alignItems='center'>
+      <IncomeBox>
+        <Img src={require('assets/images/myWallet/today.png').default} />
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
+          <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TodayIncome)}</Text>
+        </Flex>
+      </IncomeBox>
+      <IncomeBox>
+        <Img src={require('assets/images/myWallet/total.png').default} />
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
+          <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TotalIncome)}</Text>
+        </Flex>
+      </IncomeBox>
+    </RightBox>
+  );
+};
 
 const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
   useFetchWalletInfo()
@@ -70,6 +93,7 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
   const { t } = useTranslation();
   const { account } = useWeb3React()
   const dispatch = useDispatch()
+  const { isPushed, setIsPushed, isMobile } = useMenuNav()
   const info = {
     address: "",
     available_balance: "0",
@@ -203,7 +227,7 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
       <WalletHead title={t('Account My Wallet')} />
       <Flex flexWrap='wrap' justifyContent='space-between'>
         <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
-        <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />
+        {!isMobile && <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />}
       </Flex>
       {/* token切换 */}
       <ContentTab>
@@ -211,23 +235,16 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
           <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time {t('Rewards')}</TabText>
           <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter {t('Rewards')}</TabText>
         </Flex>
-        <RightBox justifyContent='space-between' alignItems='center'>
-          <IncomeBox>
-            <Img src={require('assets/images/myWallet/today.png').default} />
-            <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-              <Text fontSize='14px' color='textTips'>{t('Account Day income')}</Text>
-              <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TodayIncome)}</Text>
-            </Flex>
-          </IncomeBox>
-          <IncomeBox>
-            <Img src={require('assets/images/myWallet/total.png').default} />
-            <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
-              <Text fontSize='14px' color='textTips'>{t('Account Cumulative income')}</Text>
-              <Text color='white_black' fontWeight='bold'>{formatDisplayApr(TotalIncome)}</Text>
-            </Flex>
-          </IncomeBox>
-        </RightBox>
+        {
+          !isMobile && <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+        }
       </ContentTab>
+      {
+        isMobile &&
+        <ContentTab>
+          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+        </ContentTab>
+      }
       <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
       <EarningsRecord type={ActiveToken} info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo} />
     </NoPdBottom>
