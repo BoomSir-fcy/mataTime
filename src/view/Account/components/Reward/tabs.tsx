@@ -26,17 +26,21 @@ const TabsBox = styled(Card)`
 const TabsContent = styled(Flex)`
   justify-content: flex-start;
   flex-wrap: wrap;
-  padding: 29px 18px 7px;
+  padding: 16px 18px 0;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 29px 18px 7px;
+  }
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 const CoinCols = styled(Flex)`
   align-items: center;
   width: 30%;
-  padding: 15px 27px;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
   margin-bottom: 16px;
   background: ${({ theme }) => theme.colors.backgroundMenu};
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: ${({ theme }) => theme.radii.card};
+  min-width: max-content;
   &:nth-child(2),
   &:nth-child(5) {
     margin-left: 5%;

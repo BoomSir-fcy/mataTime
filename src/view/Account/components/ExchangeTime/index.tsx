@@ -18,9 +18,10 @@ const VestingBox = styled(Flex)`
 height:350px;
 align-items: center;
 justify-content: center;
-width: 36rem;
+width: 40vw;
 margin: 0 auto;
 overflow: hidden;
+min-width:300px;
 ${({ theme }) => theme.mediaQueriesSize.marginb}
 `
 const CenterText = styled(Text)`

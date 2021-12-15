@@ -17,6 +17,11 @@ const LeftCard = styled(Flex)`
 `;
 const CenterCard = styled(Box)`
   background: ${({ theme }) => theme.colors.primaryDark};
+  width: calc(100vw - 8px);
+  overflow: hidden;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width:100%;
+  }
   /* flex: 1; */
   /* margin: 0 15px; */
   /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */

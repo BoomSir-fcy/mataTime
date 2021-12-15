@@ -11,9 +11,16 @@ const Card = styled(Box)`
   background-image: url(${BgImg});
   min-height: 294px;
   display: flex;
+  overflow-x: auto;
   ${({ theme }) => theme.mediaQueriesSize.padding}
   ${({ theme }) => theme.mediaQueriesSize.marginb}
 `;
+const FlexBoxStyle = styled(Flex)`
+  width: max-content;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width:100%;
+  }
+`
 const RoundBox = styled(Box)`
   width: max-content;
   text-align: center;
@@ -22,12 +29,13 @@ const RoundBox = styled(Box)`
   align-items: center;
   position: relative;
   padding-bottom: 50px;
+  min-width: 250px;
 `;
 
 const ScaleBox = styled(Box)`
   position: absolute;
   bottom: -20px;
-  left: -24px;
+  left: 20px;
   width: max-content;
   img {
     width: 32px;
@@ -46,8 +54,9 @@ const WhiteText = styled(Text)`
 const Arrow = styled(Box)`
   img {
     min-width: 100px;
-    width: 15vw;
+    width: 8vw;
     height: 17px;
+    margin-bottom: 30px;
   }
 `;
 
@@ -64,8 +73,8 @@ export const TimeHeader: React.FC<init> = React.memo(
     const { max_time_token: NextTime } = NextRound;
     return (
       <Card>
-        <Flex
-          style={{ padding: '0 140px' }}
+        <FlexBoxStyle
+          style={{ padding: '0 40px' }}
           width="100%"
           justifyContent="space-around"
           alignItems="center"
@@ -108,7 +117,7 @@ export const TimeHeader: React.FC<init> = React.memo(
             </ScaleBox>
           </RoundBox>
           <Arrow>
-            <img src="/images/Time/arrow.png" alt="" />
+            <img src={require('assets/images/myWallet/arrow.png').default} alt="" />
           </Arrow>
           <RoundBox>
             <AnimationRingIcon active2 isRotate width="8rem">
@@ -119,7 +128,7 @@ export const TimeHeader: React.FC<init> = React.memo(
                 <WhiteText fontSize="24px">Rate</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
-            <ScaleBox>
+            <ScaleBox style={{ left: '40px' }}>
               <Flex alignItems="center">
                 <Box style={{ textAlign: 'right' }}>
                   <img src="/images/tokens/DSG.svg" alt="" />
@@ -147,7 +156,7 @@ export const TimeHeader: React.FC<init> = React.memo(
               </Flex>
             </ScaleBox>
           </RoundBox>
-        </Flex>
+        </FlexBoxStyle>
       </Card>
     );
   }
