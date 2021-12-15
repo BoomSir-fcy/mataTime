@@ -68,7 +68,7 @@ export const ContentParsing = (props: IProps) => {
     try {
       let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
       setParsingResult(arr);
-    } catch (err: any) {}
+    } catch (err: any) { }
   }, [props.content]);
 
   useEffect(() => {
@@ -112,8 +112,8 @@ export const ContentParsing = (props: IProps) => {
     // Match token
     replacedText = reactStringReplace(
       replacedText,
-      // /\$(\w+)\$/g,
-      /\$(\w+)[\s|\D]{0}/g,
+      /\$(\w+)\$/g,
+      // /\$(\w+)[\s|\D]{0}/g,
       (match, i) => (
         <a
           onClick={event => {
@@ -123,13 +123,14 @@ export const ContentParsing = (props: IProps) => {
           }}
           title={match}
           key={match + i}
-        >${match}</a>
+        >${match}$</a>
       )
     );
     // Match hashtags
     replacedText = reactStringReplace(
       replacedText,
-      /#(\S+)\x20/g,
+      // /#(\S+)\x20/g,
+      /#(\w+|[\u4E00-\u9FA5|0-9]+)#/g,
       // /#(\w+|[\u4E00-\u9FA5|0-9]+)[\s|\D]{0}/g,
       (match, i) => (
         <a
@@ -139,7 +140,7 @@ export const ContentParsing = (props: IProps) => {
           }}
           key={match + i}
         >
-          #{match}
+          #{match}#
         </a>
       )
     );
