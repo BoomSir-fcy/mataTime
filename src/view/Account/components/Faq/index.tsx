@@ -69,7 +69,6 @@ const Faq: React.FC = () => {
 
   return (
     <PageContainer>
-      <WalletHead title={t('FAQ')} />
       <ScrollBox>
         <Flex flexDirection="column" >
           <FAQCircle />

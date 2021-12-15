@@ -3,7 +3,6 @@ import { Flex, Box, Text, Spinner } from 'uikit';
 import { Container, FlexAutoWarpper, FlexLayout } from 'components'
 import { useFetchSinglePool, useSinglePoolState } from 'store/pools/hooks';
 import PoolCard from '../PoolCard/PoolCard';
-import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 
 const Single: React.FC = () => {
@@ -18,7 +17,6 @@ const Single: React.FC = () => {
 
   return (
     <>
-      <WalletHead title={t('Stake')} />
       <Box pt="16px">
         {
           loaded

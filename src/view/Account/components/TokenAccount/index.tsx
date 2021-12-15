@@ -224,7 +224,6 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
 
   return (
     <NoPdBottom>
-      <WalletHead title={t('Account My Wallet')} />
       <Flex flexWrap='wrap' justifyContent='space-between'>
         <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
         {!isMobile && <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />}

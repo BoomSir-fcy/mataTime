@@ -44,7 +44,7 @@ const RewardList = () => {
           p.income = res.data;
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const init = async () => {
@@ -81,7 +81,6 @@ const RewardList = () => {
   return (
     <Box minHeight="100vh">
       <Loading visible={loading} />
-      <WalletHead title={t('rewardAutherWallet')} />
       <Tabs data={state.income} />
       <Box height="100%">
         <Title>{t('rewardAutherList')}</Title>

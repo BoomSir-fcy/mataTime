@@ -77,7 +77,6 @@ const Exchange: React.FC = () => {
 
   return (
     <>
-      <WalletHead title='Time' />
       <TimeHeader nowRound={TimeShopInfo} NextRound={TimeNext} />
       <ExchangeTime nowRound={TimeShopInfo} />
       <VestingBox>
