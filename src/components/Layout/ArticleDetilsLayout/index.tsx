@@ -34,7 +34,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
     Api.CommentApi.createComment({
       pid: itemData.id,
       comment: res,
-      comment_id: remind_user,
+      remind_user,
     }).then(res => {
       if (Api.isSuccess(res)) {
         toastSuccess(res.data);

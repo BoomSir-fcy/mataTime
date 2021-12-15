@@ -8482,7 +8482,7 @@ var translations = {
 	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
 	"No results found.": "No results found.",
 	Manage: Manage$1,
-	"Manage Tokens": "Manage Tokens",
+	"Manage Tokens": "Manage your token list",
 	"Import Tokens": "Import Tokens",
 	"Import List": "Import List",
 	"Import at your own risk": "Import at your own risk",

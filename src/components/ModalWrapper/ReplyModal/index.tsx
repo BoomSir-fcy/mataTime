@@ -36,14 +36,15 @@ export const ReplyModal = React.memo((props: IProp) => {
   } = props;
 
   // 评论
-  const sendArticle = (res) => {
+  const sendArticle = (res, imags_list, remind_user) => {
     if (!res) return;
     if (replyType === 'comment') {
       // 针对评论
       Api.CommentApi.createComment({
         pid: postId,
         comment_id: commentId,
-        comment: res
+        comment: res,
+        remind_user
       }).then(res => {
         if (Api.isSuccess(res)) {
           toastSuccess(res.data);
@@ -58,7 +59,8 @@ export const ReplyModal = React.memo((props: IProp) => {
       // 针对推文
       Api.CommentApi.createComment({
         pid: postId,
-        comment: res
+        comment: res,
+        remind_user
       }).then(res => {
         if (Api.isSuccess(res)) {
           toastSuccess(res.data);
