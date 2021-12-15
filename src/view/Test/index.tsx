@@ -8,6 +8,7 @@ import { Select } from 'components';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { toast } from 'react-toastify';
 import { Http } from 'apis/http';
+import RichTextExample from 'components/Editor/richtext'
 
 
 const StyledNotFound = styled.div`
@@ -64,9 +65,10 @@ const Test = () => {
       <Box mb="100px">
         <Flex>
           <Input value={inputVal} onChange={(e) => setInputVal(e.target.value)} onBlur={handleInputChange} placeholder="输入time数量" />
-          <Button width="100px" ml="20px" onClick={() => handleRecharge()}>充值</Button>
+          {/* <Button width="100px" ml="20px" onClick={() => handleRecharge()}>充值</Button> */}
         </Flex>
       </Box>
+      <RichTextExample />
       <Flex>
         <Card padding="50px">1</Card>
         <CardStyled1 margin="0 20px" padding="50px">2</CardStyled1>
