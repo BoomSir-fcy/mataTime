@@ -83,7 +83,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             min="0"
             inputMode="decimal"
-            placeholder="Place enter stake amount"
+            placeholder="Please enter the amount"
             onChange={handleChange}
           />
           <Button onClick={handleSelectMax} padding="0" variant="text">

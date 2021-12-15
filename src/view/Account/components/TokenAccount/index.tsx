@@ -167,10 +167,10 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
 
   const getMyBalance = async () => {
     for (let i = 0; i < BalanceList.length; i++) {
-      if (BalanceList[i].token_type === 1 && activeToken === 'Time') {
+      if (BalanceList[i].token_type === 1 && activeToken === 'TIME') {
         setWalletInfo(BalanceList[i])
       }
-      if (BalanceList[i].token_type === 2 && activeToken === 'Matter') {
+      if (BalanceList[i].token_type === 2 && activeToken === 'MATTER') {
         setWalletInfo(BalanceList[i])
       }
     }
@@ -192,7 +192,7 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
   }, [])
   useEffect(() => {
     if (account) {
-      if (activeToken === 'Time') {
+      if (activeToken === 'TIME') {
         setwalletBalance(timeBalance)
         settokenAddress(timeAddress)
       } else {
@@ -232,8 +232,8 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
       {/* token切换 */}
       <ContentTab>
         <Flex alignItems='baseline'>
-          <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>Time {t('Rewards')}</TabText>
-          <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>Matter {t('Rewards')}</TabText>
+          <TabText className={ActiveToken === 1 ? 'active' : ''} onClick={() => setActiveToken(1)}>TIME {t('Time Rewards')}</TabText>
+          <TabText className={ActiveToken === 2 ? 'active' : ''} onClick={() => setActiveToken(2)}>MATTER {t('Time Rewards')}</TabText>
         </Flex>
         {
           !isMobile && <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />

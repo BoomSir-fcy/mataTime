@@ -74,9 +74,9 @@ export const TimeHeader: React.FC<init> = React.memo(
             <AnimationRingIcon bgColor active3 active1 isRotate width="8rem">
               <FaqBox>
                 <WhiteText fontSize="30px" bold>
-                  current round
+                  Current Round
                 </WhiteText>
-                <WhiteText fontSize="24px">rate</WhiteText>
+                <WhiteText fontSize="24px">Rate</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
             <ScaleBox>
@@ -101,7 +101,7 @@ export const TimeHeader: React.FC<init> = React.memo(
                         .div(Number(NowDsg))
                         .toNumber()
                     )}{' '}
-                    Time
+                    TIME
                   </WhiteText>
                 </Box>
               </Flex>
@@ -116,7 +116,7 @@ export const TimeHeader: React.FC<init> = React.memo(
                 <WhiteText fontSize="30px" bold>
                   Next Round
                 </WhiteText>
-                <WhiteText fontSize="24px">Price</WhiteText>
+                <WhiteText fontSize="24px">Rate</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
             <ScaleBox>
@@ -141,7 +141,7 @@ export const TimeHeader: React.FC<init> = React.memo(
                         .div(Number(NextDsg))
                         .toNumber()
                     )}{' '}
-                    Time
+                    TIME
                   </WhiteText>
                 </Box>
               </Flex>

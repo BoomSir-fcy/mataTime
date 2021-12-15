@@ -29,7 +29,7 @@ const initialState: WalletState = {
     total_dsg: 0
   },
   TimeExchangeList: [],
-  activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'Time',
+  activeToken: localStorage.getItem("activeToken") ? localStorage.getItem("activeToken") : 'TIME',
   rewardNum: 0,
   spendTimeInfo: {
     burnCoinTody: '0',

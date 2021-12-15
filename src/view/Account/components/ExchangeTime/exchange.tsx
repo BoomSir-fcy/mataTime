@@ -301,13 +301,13 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
                     {formatDisplayApr(Time)}
                   </Text>
                   <Text fontSize="14px" color="textTips">
-                    {t('Time Available')}Time
+                    {t('Time Available')} TIME
                   </Text>
                 </Flex>
               </Flex>
               <Box style={{ textAlign: 'right' }}>
                 <Text fontSize="14px" color="textTips">
-                  Time{t('Balance')}
+                  TIME {t('Balance')}
                 </Text>
                 <Text>{formatDisplayApr(timeBalance)}</Text>
               </Box>
@@ -365,7 +365,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           <Flex mb="20px" alignItems="center" justifyContent="center">
             <img src="/images/tokens/TIME.svg" alt="" />
             <Text ml="14px" color="textTips">
-              Time
+              TIME
             </Text>
           </Flex>
           <Text textAlign="center" color="textTips">

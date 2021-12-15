@@ -121,9 +121,8 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
       dispatch(fetchVaultUserAsync(account));
       toast.success(
         <>
-          <Text color="blank">{t('Harvested!')}</Text>
           <Text color="blank">
-            {t('Your earnings have been harvested to your wallet')}
+            {t('Your earnings have been harvested to your wallet!')}
           </Text>
         </>
       );

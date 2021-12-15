@@ -95,7 +95,7 @@ const Recharge: React.FC<init> = ({
   const [ActiveHistory, setActiveHistory] = useState(1);
   const { Recharge, onApprove } = useDpWd();
   const approvedNum = useStore(p =>
-    Token === 'Time' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter
+    Token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter
   );
 
   const numberList = ['10000', '20000', '50000', '100000'];

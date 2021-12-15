@@ -58,6 +58,7 @@ const ItemText = styled(Text)`
     }
   img{
     width: 50px;
+    max-height: 50px;
   }
 `
 const LoadingAnimation = styled(Box)`
