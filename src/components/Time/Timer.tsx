@@ -57,25 +57,25 @@ export const Timer: React.FC<TimerProps> = ({
       )}
       {Boolean(days) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{days}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{days || '0'}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('d')}</StyledTimerText>
         </>
       )}
       {(Boolean(hours) || days > 0) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{hours}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{hours || '0'}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('h')}</StyledTimerText>
         </>
       )}
       {(Boolean(minutes) || hours > 0 || days > 0) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{minutes}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{minutes || '0'}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('m')}</StyledTimerText>
         </>
       )}
       {(Boolean(seconds) || minutes > 0 || hours > 0 || days > 0) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{seconds}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{seconds || '0'}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('s')}</StyledTimerText>
         </>
       )}

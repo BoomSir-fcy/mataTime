@@ -86,7 +86,7 @@ class ListComponents extends React.Component<Iprops> {
           </LoadingWrapper>
         ) : (
           <NoDataWrapper>
-            {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"}
+            It's at the bottom～
           </NoDataWrapper>
         )}
       </div>
