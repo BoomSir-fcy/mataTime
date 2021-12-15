@@ -13,7 +13,6 @@ import { formatDisplayApr } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
 import { useTokenBalance } from '../ExchangeTime/hook';
-import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux'
 import { fetchTimeIncometoday, fetchMatterIncometoday, fetchIncomeList, fetchMatterIncomeList } from 'store/wallet/reducer';

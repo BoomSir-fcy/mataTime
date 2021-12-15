@@ -4,7 +4,6 @@ import { useImmer } from 'use-immer';
 import { Loading } from 'components';
 import { Flex, Box } from 'uikit';
 import { useStore } from 'store';
-import { WalletHead } from '../../head';
 import { Tabs } from './tabs';
 import { TableList } from './table';
 

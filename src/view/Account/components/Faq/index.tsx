@@ -8,7 +8,6 @@ import AnswerChart from "./AnswerChart";
 import { ruleDataList } from './data'
 import CommonCircle from "components/Cirde/CommonCircle";
 import { useTranslation } from "contexts/Localization";
-import { WalletHead } from "../../head";
 
 const ItemBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}

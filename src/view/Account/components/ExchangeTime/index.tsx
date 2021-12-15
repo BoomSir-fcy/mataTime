@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 import styled from 'styled-components';
 import { Flex, Box, Text } from 'uikit';
 import { useWeb3React } from '@web3-react/core';
-import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { TimeHeader } from './head';
 import ExchangeTime from './exchange';

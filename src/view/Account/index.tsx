@@ -10,12 +10,11 @@ import {
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
-import { PageSection, Container, Affix } from 'components';
-import { WalletHead } from './head';
 import useMenuNav from 'hooks/useMenuNav';
 import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
+import { WalletHead } from 'components/HeaderContent';
 
 
 const CenterCard = styled(Box)`
