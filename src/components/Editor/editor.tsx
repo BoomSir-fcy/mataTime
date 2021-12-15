@@ -141,13 +141,17 @@ const removeEmptyText = value => {
   const resVal = []
   value.forEach(item => {
     if (item.children) {
+      const children = removeEmptyText(item.children)
       resVal.push({
         ...item,
-        children: removeEmptyText(item.children)
+        children: children.length ? children : null
       })
       return
     }
-    resVal.push({ ...item })
+    const kyes = Object.keys(item)
+    if (kyes.length > 1 || (kyes[0] === 'text' && item.text)) {
+      resVal.push({ ...item })
+    }
   })
 
   return resVal
@@ -361,10 +365,8 @@ export const Editor = (props: Iprops) => {
     // let content = ''
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
-    // TODO: 解析
-    // const newValue1 = removeEmptyText(newValue);
 
-    // console.log(newValue1, newValue)
+    const newValue1 = removeEmptyText(newValue);
 
     //限制用户输入数量
     if (getPostBLen(content) > 280) {
@@ -372,7 +374,7 @@ export const Editor = (props: Iprops) => {
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
     props.sendArticle(
-      JSON.stringify(newValue),
+      JSON.stringify(newValue1),
       imgList.join(','),
       userIdList.join(',')
     );
