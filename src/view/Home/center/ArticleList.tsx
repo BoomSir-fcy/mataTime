@@ -26,20 +26,21 @@ const ArticleListBox = styled.div`
  */
 export const ArticleList = props => {
   // const [size, setSize] = useState(20)
-  const listRef: any = useRef();
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
 
-  const [isEnd, setIsEnd] = useState(false)
-  const pageSize = MAX_SPEND_TIME_PAGE_TATOL
+  const [isEnd, setIsEnd] = useState(false);
+  const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
     nonce,
-    setNonce = () => { console.error('setNonce is null or undefined, and not refresh ') }
-  } = props || {}
+    setNonce = () => {
+      console.error('setNonce is null or undefined, and not refresh ');
+    }
+  } = props || {};
 
   // 获取列表
   const getList = (current = 0) => {
@@ -56,9 +57,9 @@ export const ArticleList = props => {
         setLoading(false);
         setTotalPage(res.data.total_page);
         if (res.data.List.length < pageSize) {
-          setIsEnd(true)
+          setIsEnd(true);
         } else {
-          setIsEnd(false)
+          setIsEnd(false);
         }
         if (current === 1 || page === 1) {
           setListData([...res.data.List]);
@@ -81,17 +82,18 @@ export const ArticleList = props => {
       type === MoreOperatorEnum.COMMONT
     ) {
       setPage(1);
-      setIsEnd(false)
+      setIsEnd(false);
       getList(1);
       return;
     }
     // 折叠
     if (type === MoreOperatorEnum.EXPAND) {
-      setNonce(prep => prep + 1)
-      return
+      setNonce(prep => prep + 1);
+      return;
     }
 
-    const handleChangeList = (type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST)
+    const handleChangeList =
+      type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST;
     let arr = [];
     listData.forEach((item: any) => {
       let obj = item;
@@ -106,24 +108,24 @@ export const ArticleList = props => {
     });
     setListData([...arr]);
     if (handleChangeList) {
-      setNonce(prep => prep + 1)
+      setNonce(prep => prep + 1);
     }
   };
 
   return (
     <ArticleListBox>
-      <List
-        ref={listRef}
-        marginTop={320}
-        loading={!isEnd}
-        renderList={getList}
-      >
+      <List loading={!isEnd} renderList={getList}>
         {listData.map((item, index) => (
-          <MeItemWrapper key={item.id}>
+          <MeItemWrapper key={`${item.id}_${index}`}>
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle nonce={nonce} setNonce={setNonce} readType={ReadType.ARTICLE} articleId={item.id} />
+                <SpendTimeViewWithArticle
+                  nonce={nonce}
+                  setNonce={setNonce}
+                  readType={ReadType.ARTICLE}
+                  articleId={item.id}
+                />
               )
             }
             <MentionItem
