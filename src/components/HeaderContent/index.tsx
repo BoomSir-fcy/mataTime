@@ -21,14 +21,6 @@ const Card = styled(Flex)`
     font-size: 18px;
     font-weight: bold;
   }
-  img {
-    height: 18px;
-    display: inline-block;
-    margin-right: 10px;
-  }
-  .rightBox{
-    display: none;
-  }
 `;
 
 const MenuButton = styled(Button)`

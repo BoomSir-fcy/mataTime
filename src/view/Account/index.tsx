@@ -26,6 +26,18 @@ const CenterCard = styled(Box)`
     width:100%;
   }
 `;
+const MobileTips = styled(Flex)`
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  padding: 10px 14px;
+`;
+
+const Tips = styled.img`
+  height: 18px;
+  display: inline-block;
+  margin-right: 10px;
+`;
 
 
 const Stake = React.lazy(() => import('./components/Single'));
@@ -55,36 +67,14 @@ const Account = props => {
     <Box width="100%">
       <CenterCard>
         <WalletHead title={getHeadTitle()}>
-          <Flex className={!isMobile ? '' : 'rightBox'} alignItems="center">
-            <img
-              src={require('assets/images/myWallet/broadcast.png').default}
-              alt=""
-            />
-            <Text mr="10px" fontSize="14px" color="textTips">
-              {t(
-                'Time Community fair release activities are in progress, the current exchange coefficient is'
-              )}
-            </Text>
-            <Text mr="18px" fontSize="14px" color="textPrimary">
-              1 DSG =
-              {formatDisplayApr(
-                new BigNumber(CurrentRound.max_time_token)
-                  .div(CurrentRound.max_dsg_token)
-                  .toNumber()
-              )}{' '}
-              TIME
-            </Text>
-            <Text
-              as={Link}
-              to="/account/time"
-              mr="10px"
-              fontSize="14px"
-              color="textPrimary"
-            >
-              {t('Time Exchange')} {'>'}
-            </Text>
-          </Flex>
+          {!isMobile && <HeaderTips isMobile={isMobile} t={t} CurrentRound={CurrentRound} />}
         </WalletHead>
+        {
+          isMobile &&
+          <MobileTips>
+            <HeaderTips isMobile={isMobile} t={t} CurrentRound={CurrentRound} />
+          </MobileTips>
+        }
         <Switch>
           <Route
             path={`${props.match.path}`}
@@ -110,5 +100,42 @@ const Account = props => {
     </Box>
   );
 };
+
+
+const HeaderTips = ({ t, CurrentRound, isMobile }) => {
+  return (
+    <Flex alignItems="center" flexWrap='wrap'>
+      <Flex>
+        <Tips
+          src={require('assets/images/myWallet/broadcast.png').default}
+          alt=""
+        />
+        <Text mr="10px" fontSize="14px" color="textTips">
+          {t(
+            'Time Community fair release activities are in progress, the current exchange coefficient is'
+          )}
+        </Text>
+      </Flex>
+      <Text ml={isMobile ? '28px' : ''} mr="18px" fontSize="14px" color="textPrimary">
+        1 DSG =
+        {formatDisplayApr(
+          new BigNumber(CurrentRound.max_time_token)
+            .div(CurrentRound.max_dsg_token)
+            .toNumber()
+        )}{' '}
+        TIME
+      </Text>
+      <Text
+        as={Link}
+        to="/account/time"
+        mr="10px"
+        fontSize="14px"
+        color="textPrimary"
+      >
+        {t('Time Exchange')} {'>'}
+      </Text>
+    </Flex>
+  );
+}
 
 export default withRouter(Account);
