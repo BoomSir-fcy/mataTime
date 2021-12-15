@@ -44,47 +44,50 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   }, []);
 
   return (
-    <RewardAuthTagStyled alignItems="center">
-      <Popup
-        ref={popupRef}
-        trigger={
-          <PopupButton>
-            <Box width="18px" mr="10px">
-              <Image
-                src={require('assets/images/reward.svg').default}
-                width={18}
-                height={18}
-              />
-            </Box>
-            {total || 0}
-          </PopupButton>
-        }
-        nested
-        keepTooltipInside={true}
-        position="top right"
-        closeOnDocumentClick
-        contentStyle={{
-          width: '418px',
-          height: 'auto',
-          minHeight: '80px',
-          borderRadius: '10px',
-          padding: 0,
-          border: '0',
-          backgroundColor: 'transparent'
-        }}
-        arrowStyle={{ opacity: 0 }}
-      >
-        <RewardAuthModal
-          postType={postType}
-          currentPost={data}
-          avatar={data.user_avator_url}
-          onClose={close}
-        />
-      </Popup>
-      {/* {visible && (
-        <RewardAuthModal currentPost={data} avatar={data.user_avator_url} />
-      )} */}
-    </RewardAuthTagStyled>
+    <React.Fragment>
+      {postType === 1 ? (
+        <></>
+      ) : (
+        <RewardAuthTagStyled alignItems="center">
+          <Popup
+            ref={popupRef}
+            trigger={
+              <PopupButton>
+                <Box width="18px" mr="10px">
+                  <Image
+                    src={require('assets/images/reward.svg').default}
+                    width={18}
+                    height={18}
+                  />
+                </Box>
+                {total || 0}
+              </PopupButton>
+            }
+            nested
+            keepTooltipInside={true}
+            position="top right"
+            closeOnDocumentClick
+            contentStyle={{
+              width: '418px',
+              height: 'auto',
+              minHeight: '80px',
+              borderRadius: '10px',
+              padding: 0,
+              border: '0',
+              backgroundColor: 'transparent'
+            }}
+            arrowStyle={{ opacity: 0 }}
+          >
+            <RewardAuthModal
+              postType={postType}
+              currentPost={data}
+              avatar={data.user_avator_url}
+              onClose={close}
+            />
+          </Popup>
+        </RewardAuthTagStyled>
+      )}
+    </React.Fragment>
   );
 };
 

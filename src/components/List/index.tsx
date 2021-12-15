@@ -55,6 +55,7 @@ class ListComponents extends React.Component<Iprops> {
         this.loadList();
       }
     );
+    console.log(this.listBox);
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this));
   }
 
@@ -75,7 +76,7 @@ class ListComponents extends React.Component<Iprops> {
   render() {
     const { systemCustom } = this.props.appReducer;
     return (
-      <div ref={this.listBox} className="list-container">
+      <Box ref={this.listBox} className="list-container">
         {this.props.children}
         {this.props.loading ? (
           <LoadingWrapper>
@@ -89,7 +90,7 @@ class ListComponents extends React.Component<Iprops> {
             {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"}
           </NoDataWrapper>
         )}
-      </div>
+      </Box>
     );
   }
 }

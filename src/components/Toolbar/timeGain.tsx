@@ -32,7 +32,7 @@ export const TimeGain: React.FC = React.memo(() => {
           <Box width="18px" mr="10px">
             <TimeIcon width={18} height={18} src="/images/tokens/TIME.svg" />
           </Box>
-          <Text color="textTips">123123</Text>
+          <Text color="textTips">21</Text>
         </PopupButton>
       }
       position="top center"
@@ -46,7 +46,7 @@ export const TimeGain: React.FC = React.memo(() => {
           Time收益
         </Text>
         <Text fontWeight="bold" ellipsis>
-          269966213213213123123
+          2699662113123123
         </Text>
       </PopupContent>
     </PopupWrap>

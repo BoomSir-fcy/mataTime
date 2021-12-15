@@ -7,11 +7,11 @@ export const MentionOperatorWrapper = styled.div`
     margin-top: 10px;
     padding-left: 73px;
     .operator-item {
+      min-width: 120px;
       color: #b5b5b5;
       display: flex;
       align-items: center;
       cursor: pointer;
-      margin-right: 78px;
       &:last-child {
         margin-right: 0;
       }

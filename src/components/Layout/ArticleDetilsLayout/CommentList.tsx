@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
@@ -54,20 +54,22 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
+  const listRef = React.useRef();
   const theme = useTheme();
 
-  let listRef: any = useRef();
   useEffect(() => {
     if (listRef.current) {
       listRef.current.loadList();
     }
   }, [refresh]);
+
   const initList = () => {
     setListData([]);
     setPage(1);
     setTotalPage(2);
     setRefresh(!refresh);
   };
+
   const changeSortTime = () => {
     setSortTime(sortTime === 1 ? 0 : 1);
     initList();
@@ -76,9 +78,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     setSortLike(sortLike === 1 ? 0 : 1);
     initList();
   };
+
   const getList = () => {
     if (!itemData.id) return;
-
     Api.CommentApi.getCommentList({
       pid: itemData.id,
       prepage: MAX_SPEND_TIME_PAGE_TATOL,
@@ -95,6 +97,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       }
     });
   };
+
   return (
     <CommentListBox>
       <CommentTitle justifyContent="space-between" alignItems="center">
@@ -102,17 +105,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         <div className="sort-box">
           <div>
             {t('detailHeat')}
-            <SortIcon
-              changeSort={changeSortLike}
-              flag={sortLike === 0}
-            ></SortIcon>
+            <SortIcon changeSort={changeSortLike} flag={sortLike === 0} />
           </div>
           <div>
             {t('detailTime')}
-            <SortIcon
-              changeSort={changeSortTime}
-              flag={sortTime === 0}
-            ></SortIcon>
+            <SortIcon changeSort={changeSortTime} flag={sortTime === 0} />
           </div>
         </div>
       </CommentTitle>

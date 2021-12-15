@@ -16,10 +16,10 @@ export const PraiseItemWrapper = styled(Card)`
     font-size: 16px;
     font-weight: 400;
     color: #b5b5b5;
-    line-height: 50px;
     display: flex;
     box-sizing: border-box;
     padding-left: 73px;
+    padding-top: 15px;
     align-items: center;
     i {
       margin-right: 10px !important;
@@ -32,5 +32,6 @@ export const PraiseItemWrapper = styled(Card)`
     background-color: ${({ theme }) => theme.colors.backgroundThemeCard};
     box-sizing: border-box;
     padding: 30px 10px 30px 100px;
+    margin-top: 15px;
   }
 `;
