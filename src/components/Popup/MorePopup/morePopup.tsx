@@ -11,6 +11,7 @@ import { copyContent } from 'utils/copy';
 
 type Iprops = {
   data: any;
+  postUid?: string;
   callback?: (event: any, type?: string) => void;
 };
 
@@ -41,7 +42,7 @@ const PopupWrapper = styled(Box)`
 `;
 
 export const MorePostPopup: React.FC<Iprops> = React.memo(
-  ({ data, callback }) => {
+  ({ data, postUid, callback }) => {
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const [reportShow, setReportShow] = useState<boolean>(false);
@@ -234,23 +235,28 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             </>
           )}
 
-          {!isOwn && data.is_attention === 0 ? (
-            <Text
-              textTransform="capitalize"
-              onClick={() => onAttentionFocusRequest(data.user_id)}
-            >
-              {t('followText')}
-            </Text>
-          ) : !isOwn && data.is_attention === 1 ? (
-            <Text
-              textTransform="capitalize"
-              onClick={() => {
-                onAttentionCancelRequest(data.user_id);
-              }}
-            >
-              {t('followCancelText')}
-            </Text>
-          ) : null}
+          {/* todo 后端字段没改，所以传入用户id 屏蔽 */}
+          {Number(postUid) !== data.post.user_id && (
+            <>
+              {!isOwn && data.is_attention === 0 ? (
+                <Text
+                  textTransform="capitalize"
+                  onClick={() => onAttentionFocusRequest(data.user_id)}
+                >
+                  {t('followText')}
+                </Text>
+              ) : !isOwn && data.is_attention === 1 ? (
+                <Text
+                  textTransform="capitalize"
+                  onClick={() => {
+                    onAttentionCancelRequest(data.user_id);
+                  }}
+                >
+                  {t('followCancelText')}
+                </Text>
+              ) : null}
+            </>
+          )}
 
           {/* <Text
               textTransform="capitalize"
@@ -264,7 +270,8 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             textTransform="capitalize"
             onClick={() => {
               copyContent(
-                `${window.location.origin}/articleDetils/${data.post.post_id || ''
+                `${window.location.origin}/articleDetils/${
+                  data.post.post_id || ''
                 }`
               );
               toastSuccess(t('copySuccess'));

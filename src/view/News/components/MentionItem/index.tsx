@@ -30,6 +30,7 @@ type IProps = {
   more?: boolean;
   size?: string;
   dontShowPic?: boolean;
+  postUid?: string;
   itemData: any;
   [propName: string]: any;
   callback?: Function;
@@ -39,9 +40,10 @@ const MentionItem: React.FC<IProps> = props => {
   const {
     children,
     dontShowPic,
+    postUid,
     size = 'nomal',
     itemData = {},
-    callback = () => { }
+    callback = () => {}
   } = props;
   const mentionRef: any = useRef();
   const { push } = useHistory();
@@ -85,6 +87,7 @@ const MentionItem: React.FC<IProps> = props => {
         more={props.more}
         size={size}
         itemData={itemData}
+        postUid={postUid}
         callback={(data: any, type: MoreOperatorEnum) => {
           callback(data, type);
         }}
@@ -123,6 +126,7 @@ const MentionItem: React.FC<IProps> = props => {
 type UserProps = {
   more?: boolean;
   size?: string;
+  postUid?: string;
   itemData?: any;
   callback?: (event: any, type?: any) => void;
 };
@@ -130,6 +134,7 @@ type UserProps = {
 export const MentionItemUser: React.FC<UserProps> = ({
   more = true,
   size = 'nomal',
+  postUid,
   itemData = {},
   callback
 }) => {
@@ -197,6 +202,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
               }}
             >
               <MorePostPopup
+                postUid={postUid}
                 data={itemData}
                 callback={(data: any, type) => {
                   popupRef?.current?.close();
