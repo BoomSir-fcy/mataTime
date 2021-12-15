@@ -1,237 +1,127 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Box, Flex, Text, Button, Spinner, Empty } from 'uikit';
-import { mediaQueriesSize } from 'uikit/theme/base';
-import CountdownTime from './Countdown';
+import { Box, Flex, Text, Spinner } from 'uikit';
+import { WalletHead as Header } from 'components/HeaderContent';
 import { useTranslation } from 'contexts/Localization';
-import { useSignIn, useTaskList } from './hooks/matter';
-import MissionCard from './MissionCard';
-import { Status } from './type';
-import { Link } from 'react-router-dom';
+import { Group } from './type';
+import { useFetchTask, useTask } from 'store/task/hooks';
+import TaskContent from './TaskContent';
+import useMenuNav from 'hooks/useMenuNav';
 
 const ScrollBox = styled(Box)`
-  height: calc(100vh - 152px);
-  overflow-y: auto;
-  ::-webkit-scrollbar {
-    display: none; /* Chrome Safari */
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 `;
 
-const TaskTitle = styled(Flex)`
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 57px;
+const TipsFlex = styled(Box)`
+  padding: 10px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  ${mediaQueriesSize.paddingxs}
-`;
-
-const LeftFlex = styled(Flex)`
-  justify-content: start;
-  flex-wrap: wrap;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  padding: 23px 14px 55px 14px;
-  & > :nth-child(n) {
-    margin-right: 12px;
-  }
-`;
-const Time = styled.img`
-  width: 18px;
-  display: inline-block;
-`;
-
-const TaskCountBox = styled(Flex)`
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  flex: 1;
-  width: 100%;
-  height: auto;
-  /* padding: 20px 50px; */
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  transition: all 0.3s;
-  ${({ theme }) => theme.mediaQueriesSize.padding};
-  .count-item {
-    margin: 10px 0;
-    ${({ theme }) => theme.mediaQueriesSize.marginr};
-  }
-  .left {
-    border: 0;
-    border-radius: 10px 0 0 10px;
-    background: ${({ theme }) => theme.colors.tertiary};
-  }
-  .right {
-    border: 0;
-    border-radius: 0 10px 10px 0;
-    background: #292D34;
-  }
 `
+
+const Time = styled.img`
+  max-width: 19px;
+  max-height: 21px;
+  display: inline-block;
+  margin-right: 8px;
+`;
+
 const BgBox = styled(Box)`
+  height: auto;
   background: ${({ theme }) => theme.colors.primaryDark};
 `
 
-
-const TaskCount = ({ type, left, right }) => {
-
-  const scrollTo = () => {
-    if (type) {
-      let anchorElement = document.getElementById(type);
-      // scrollIntoView让页面滚动到对应可视化区域内
-      if (anchorElement) {
-        anchorElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
-      }
-    }
-  };
-
-  return (
-    <Box className="count-item">
-      <Button onClick={scrollTo} className="left">{left}</Button>
-      <Button className="right">{right}</Button>
-    </Box>
-  );
-};
-
 const Task: React.FC = () => {
   const { t } = useTranslation();
+  const { isMobile } = useMenuNav();
+  const [taskGroup, setTaskGroup] = useState({});
 
-  const { dailyList, weekList, specialList, loading } = useTaskList();
+  useFetchTask();
+  const { taskList } = useTask();
+  const { data, dataLoaded } = taskList;
 
-  const dailyReceived = dailyList.filter(
-    v => v.status === Status.Received
-  ).length;
-  const dailyTotal = dailyList.length;
+  // 任务分组结果为对象
+  const groupByTask = (list = [], field) => {
+    let result = { 'default': [] };
+    list.forEach(item => {
+      const group = item[field];
+      if (group) {
+        if (!result[group]) result[group] = [];
+        result[group].push(item);
+      } else {
+        result['default'].push(item);
+      }
+    });
+    return result;
+  }
 
-  const weekReceived = weekList.filter(
-    v => v.status === Status.Received
-  ).length;
-  const weekTotal = weekList.length;
+  // 任务分组结果为数组
+  const ItemGroupBy = (list = [], field) => {
+    let result = [], types = {};
+    for (let i = 0; i < list.length; i++) {
+      const cur = list[i];
+      if (cur[field] === 0) {
+        if (!(1 in types)) {
+          types[1] = { type: 1, data: [] };
+          result.push(types[1]);
+        }
+        types[1].data.push(cur);
+      } else {
+        if (!(cur[field] in types)) {
+          types[cur[field]] = { type: cur[field], data: [] };
+          result.push(types[cur[field]]);
+        }
+        types[cur[field]].data.push(cur);
+      }
+    }
+    return result;
+  }
 
-  const specialReceived = specialList.filter(
-    v => v.status === Status.Received
-  ).length;
-  const specialTotal = specialList.length;
+  useEffect(() => {
+    const result = groupByTask(data, 'task_group');
+    result[Group.ACTIVITY]?.unshift(result['default'][0]);
+    // const result = ItemGroupBy(data, 'task_group');
+    setTaskGroup(result);
+  }, [data])
+
   return (
     <>
-      {loading ? (
+      {!dataLoaded ? (
         <Flex height="100vh" justifyContent="center" alignItems="center">
           <Spinner />
         </Flex>
       ) : (
         <BgBox>
-          <TaskTitle>
-            <Text fontSize="18px" bold>
+          <Header title={t('EasyTaskEarn$Matter')}>
+            {!isMobile && <HeaderTips t={t} />}
+          </Header>
+          {/* <TaskHeader>
+            <Text mr="50px" fontSize="18px" bold>
               {t('EasyTaskEarn$Matter')}
             </Text>
-          </TaskTitle>
-          <TaskCountBox>
-            <Flex flexWrap="wrap" justifyContent="space-between">
-              <TaskCount
-                type="dailyTask"
-                left={t('DailyTask')}
-                right={`${dailyReceived}/${dailyTotal}`}
-              />
-              <TaskCount
-                type="weekTask"
-                left={t('WeekTask')}
-                right={`${weekReceived}/${weekTotal}`}
-              />
-              <TaskCount
-                type="specialTask"
-                left={t('SpecialTask')}
-                right={`${specialReceived}/${specialTotal}`}
-              />
-            </Flex>
-            <Button as={Link} to="/account?token=2" className="count-item">{t('RevenueRecord')}</Button>
-          </TaskCountBox>
+            {!isMobile && <HeaderTips t={t} />}
+          </TaskHeader> */}
           <ScrollBox>
-            <TaskTitle id="dailyTask">
-              <Flex flexWrap="wrap" alignItems="center">
-                <Text mr="43px" fontSize="18px" bold>
-                  {t('DailyTask')} ({dailyReceived} / {dailyTotal})
-                </Text>
-                <Flex mr="12px">
-                  <Text fontSize="14px" color="textTips">
-                    {t('RefreshTimeCountdown')}：
-                  </Text>
-                  {dailyList[0]?.end_time && (
-                    <CountdownTime
-                      endTime={dailyList[0].end_time}
-                      startTime={dailyList[0].now_time}
-                    />
-                  )}
-                </Flex>
-                <Time
-                  src={require('assets/images/myWallet/time.png').default}
-                  alt=""
-                />
-              </Flex>
-            </TaskTitle>
-            <LeftFlex>
-              {dailyList.length ? (
-                dailyList.map(item => (
-                  <MissionCard key={item.task_id} info={item} />
-                ))
-              ) : (
-                <Empty />
-              )}
-            </LeftFlex>
-            <TaskTitle id="weekTask">
-              <Flex flexWrap="wrap" alignItems="center">
-                <Text mr="43px" fontSize="18px" bold>
-                  {t('WeekTask')} ({weekReceived} / {weekTotal})
-                </Text>
-                <Flex mr="12px">
-                  <Text fontSize="14px" color="textTips">
-                    {t('RefreshTimeCountdown')}：
-                  </Text>
-                  {weekList[0]?.end_time && (
-                    <CountdownTime
-                      endTime={weekList[0].end_time}
-                      startTime={weekList[0].now_time}
-                    />
-                  )}
-                </Flex>
-                <Time
-                  src={require('assets/images/myWallet/time.png').default}
-                  alt=""
-                />
-              </Flex>
-            </TaskTitle>
-            <LeftFlex>
-              {weekList.length ? (
-                weekList.map(item => (
-                  <MissionCard key={item.task_id} info={item} />
-                ))
-              ) : (
-                <Empty />
-              )}
-            </LeftFlex>
-            <TaskTitle id="specialTask">
-              <Flex flexWrap="wrap" alignItems="center">
-                <Text mr="43px" fontSize="18px" bold>
-                  {t('SpecialTask')} ({specialReceived} / {specialTotal})
-                </Text>
-                <Text mr="12px" fontSize="14px" color="textTips">
-                  {t('OneTimeTask')}
-                </Text>
-              </Flex>
-            </TaskTitle>
-            <LeftFlex>
-              {specialList.length ? (
-                specialList.map(item => (
-                  <MissionCard key={item.task_id} info={item} />
-                ))
-              ) : (
-                <Empty />
-              )}
-            </LeftFlex>
+            {isMobile && <TipsFlex><HeaderTips t={t} /></TipsFlex>}
+            {/* {
+              taskGroup.map(item => <TaskContent key={item.type} taskGroupId={item.type} taskList={item.data} />)
+            } */}
+            <TaskContent taskGroupId={Group.ACTIVITY} taskList={taskGroup[Group.ACTIVITY]} />
+            <TaskContent taskGroupId={Group.CREATE} taskList={taskGroup[Group.CREATE]} />
+            <TaskContent taskGroupId={Group.INVITE} taskList={taskGroup[Group.INVITE]} />
+            <TaskContent taskGroupId={Group.REPORT} taskList={taskGroup[Group.REPORT]} />
           </ScrollBox>
         </BgBox>
       )}
     </>
   );
 };
+
+
+const HeaderTips = ({ t }) => {
+  return (
+    <Flex alignItems="center">
+      <Time src={require('assets/images/myWallet/time.png').default} alt="" />
+      <Text small color="textTips">{t('Note that all tasks are refreshed at 0:00 UTC time. Please get your $matter before 0:00 UTC!')}</Text>
+    </Flex>
+  );
+}
 
 export default Task;

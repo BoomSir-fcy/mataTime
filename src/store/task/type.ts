@@ -10,6 +10,7 @@ export interface TaskList {
   task_type: number;
   task_name: string;
   task_name_id: number;
+  task_group: number;
   now_time: number;
   end_time: number;
   matter: number;

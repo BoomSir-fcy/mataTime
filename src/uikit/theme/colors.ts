@@ -6,12 +6,12 @@ export const baseColors = {
   primaryBright: '#FFFFFF',
   primaryDark: '#000',
   secondary: '#7645D9',
-  success: '#85C559',
+  success: '#287452',
   warning: '#FFB237',
   transparent: 'transparent',
   blue: '#5A79F8',
   switch: '#2B303F',
-  switchChecked: '#4168ED'
+  switchChecked: '#4168ED',
 };
 
 export const additionalColors = {

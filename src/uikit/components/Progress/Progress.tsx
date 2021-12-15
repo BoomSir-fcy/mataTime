@@ -22,6 +22,7 @@ const Progress: React.FC<ProgressProps> = ({
   primaryStep = 0,
   secondaryStep = null,
   showProgressBunny = false,
+  color
 }) => {
   return (
     <StyledProgress variant={variant} scale={scale}>
@@ -30,7 +31,7 @@ const Progress: React.FC<ProgressProps> = ({
           <ProgressBunny />
         </ProgressBunnyWrapper>
       )}
-      <Bar primary style={{ width: `${stepGuard(primaryStep)}%` }} />
+      <Bar primary color={color} style={{ width: `${stepGuard(primaryStep)}%` }} />
       {secondaryStep ? <Bar style={{ width: `${stepGuard(secondaryStep)}%` }} /> : null}
     </StyledProgress>
   );

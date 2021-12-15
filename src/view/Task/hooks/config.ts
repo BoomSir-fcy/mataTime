@@ -77,63 +77,63 @@ export const taskContents = [
   },
   {
     id: 15,
-    name: 'Browse posts',
-    describe: '%count% $TIME per day',
+    name: 'Spend %count% $TIME',
+    describe: 'Spend %count% time in metatme',
     count: 300
   },
   {
     id: 16,
-    name: 'Browse posts',
-    describe: '%count% $TIME per day',
+    name: 'Spend %count% $TIME',
+    describe: 'Spend %count% time in metatme',
     count: 600
   },
   {
     id: 17,
-    name: 'Browse posts',
-    describe: '%count% $TIME per day',
+    name: 'Spend %count% $TIME',
+    describe: 'Spend %count% time in metatme',
     count: 900
   },
   {
     id: 18,
-    name: 'Browse posts',
-    describe: '%count% $TIME per day',
+    name: 'Spend %count% $TIME',
+    describe: 'Spend %count% time in metatme',
     count: 1200
   },
   {
     id: 19,
-    name: 'Browse posts',
-    describe: '%count% $TIME per day',
+    name: 'Spend %count% $TIME',
+    describe: 'Spend %count% time in metatme',
     count: 1500
   },
   {
     id: 20,
-    name: 'Publish content',
-    describe: 'Publish %count% pieces of content with a valid reading time of more than 600 seconds',
-    count: 1
+    name: 'Gain %count% seconds of reading time',
+    describe: 'Read articles in metatme for %count% seconds',
+    count: 600
   },
   {
     id: 21,
-    name: 'Publish content',
-    describe: 'Publish %count% pieces of content with a valid reading time of more than 600 seconds',
-    count: 2
+    name: 'Gain %count% seconds of reading time',
+    describe: 'Read articles in metatme for %count% seconds',
+    count: 1200
   },
   {
     id: 22,
-    name: 'Publish content',
-    describe: 'Publish %count% pieces of content with a valid reading time of more than 600 seconds',
-    count: 3
+    name: 'Gain %count% seconds of reading time',
+    describe: 'Read articles in metatme for %count% seconds',
+    count: 1800
   },
   {
     id: 23,
-    name: 'Publish content',
-    describe: 'Publish %count% pieces of content with a valid reading time of more than 600 seconds',
-    count: 4
+    name: 'Gain %count% seconds of reading time',
+    describe: 'Read articles in metatme for %count% seconds',
+    count: 2400
   },
   {
     id: 24,
-    name: 'Publish content',
-    describe: 'Publish %count% pieces of content with a valid reading time of more than 600 seconds',
-    count: 5
+    name: 'Gain %count% seconds of reading time',
+    describe: 'Read articles in metatme for %count% seconds',
+    count: 3000
   },
   {
     id: 25,
