@@ -4,7 +4,6 @@ import { useImmer } from 'use-immer';
 import { Loading } from 'components';
 import { Flex, Box } from 'uikit';
 import { useStore } from 'store';
-import { WalletHead } from '../../head';
 import { Tabs } from './tabs';
 import { TableList } from './table';
 
@@ -44,7 +43,7 @@ const RewardList = () => {
           p.income = res.data;
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const init = async () => {
@@ -81,7 +80,6 @@ const RewardList = () => {
   return (
     <Box minHeight="100vh">
       <Loading visible={loading} />
-      <WalletHead title={t('rewardAutherWallet')} />
       <Tabs data={state.income} />
       <Box height="100%">
         <Title>{t('rewardAutherList')}</Title>

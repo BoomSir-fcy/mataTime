@@ -116,7 +116,7 @@ const WalletBox: React.FC<Wallet> = ({ Token, Balance, TokenAddr, BalanceInfo, .
         </Flex>
         <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
           <ChangeToken src={require('assets/images/myWallet/changeToken.png').default} alt="" />
-          <NumText fontSize='14px' color='textPrimary'>{t('Account %token%Wallet', { token: Token === 'TIME' ? 'MATTER' : 'TIME' })}</NumText>
+          <NumText fontSize='14px' color='textPrimary'>{t('Account %token% Wallet', { token: Token === 'TIME' ? 'MATTER' : 'TIME' })}</NumText>
         </ChangeTokenBtn>
       </TopInfo>
       <Flex mb={isMobile ? '20px' : ''} alignItems='flex-end' justifyContent='space-between'>

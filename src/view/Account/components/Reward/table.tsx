@@ -11,8 +11,11 @@ import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 
 const Wraper = styled(Box)`
-  padding: 0 25px;
-  margin-top: 32px;
+  padding: 0 10px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 0 25px;
+  }
+  ${({ theme }) => theme.mediaQueriesSize.margint}
 `;
 const Table = styled(Flex)`
   flex-direction: column;

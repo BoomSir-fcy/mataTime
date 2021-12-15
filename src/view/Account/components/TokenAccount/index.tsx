@@ -13,7 +13,6 @@ import { formatDisplayApr } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
 import { useTokenBalance } from '../ExchangeTime/hook';
-import { WalletHead } from '../../head';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux'
 import { fetchTimeIncometoday, fetchMatterIncometoday, fetchIncomeList, fetchMatterIncomeList } from 'store/wallet/reducer';
@@ -224,7 +223,6 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
 
   return (
     <NoPdBottom>
-      <WalletHead title={t('Account My Wallet')} />
       <Flex flexWrap='wrap' justifyContent='space-between'>
         <BorderWalletBox BalanceInfo={WalletInfo} Token={activeToken} Balance={walletBalance} TokenAddr={tokenAddress} />
         {!isMobile && <Recharge Token={activeToken} balance={walletBalance} TokenAddr={tokenAddress} />}

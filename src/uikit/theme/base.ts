@@ -64,6 +64,17 @@ const mediaQueriesMargin = `
 `;
 
 const mediaMarginBottom = `
+  ${mediaQueries.xxs} {
+    margin-bottom: 8px;
+  }
+  ${mediaQueries.xs} {
+    margin-bottom: 8px;
+  }
+
+  ${mediaQueries.sm} {
+    margin-bottom: 12px;
+  }
+
   ${mediaQueries.lg} {
     margin-bottom: 18px;
   }
@@ -188,6 +199,9 @@ const mediaPaddingSM = `
 `;
 
 const mediaPaddingXs = `
+  ${mediaQueries.xs} {
+    padding: 0 10px;
+  }
   ${mediaQueries.sm} {
     padding: 0 14px;
   }
