@@ -20,11 +20,11 @@ export default function HttpUpdater() {
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    if (pathname != '/login') {
+    if (pathname !== '/login') {
       dispatch(storeAction.resetLoginState());
       history.replace('/login');
     }
-  }, [dispatch, history]);
+  }, [dispatch, pathname, history]);
 
   // 余额不足
   const handleInsufficient = useCallback(() => {

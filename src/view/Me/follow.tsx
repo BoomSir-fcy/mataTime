@@ -74,7 +74,7 @@ const Follow = React.memo(() => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setState(p => {
         p.loading = false;
@@ -92,7 +92,7 @@ const Follow = React.memo(() => {
         toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -107,7 +107,7 @@ const Follow = React.memo(() => {
         toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -133,7 +133,6 @@ const Follow = React.memo(() => {
           marginTop={13}
           loading={loading}
           renderList={() => {
-            console.log(page, totalPage);
             if (loading || page > totalPage) return false;
             getFollowList();
           }}

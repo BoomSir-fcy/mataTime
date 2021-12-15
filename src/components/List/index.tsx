@@ -1,9 +1,8 @@
-import React, { useEffect, createRef } from 'react';
-import { Box } from 'uikit';
-import ReactLoading from 'react-loading';
+import React, { createRef } from 'react';
 import styled from 'styled-components';
-
-import { store } from 'store';
+import ReactLoading from 'react-loading';
+import { connect } from 'react-redux';
+import { Box } from 'uikit';
 
 export const LoadingWrapper = styled(Box)`
   width: 100%;
@@ -18,21 +17,25 @@ export const NoDataWrapper = styled(Box)`
   align-items: center;
   font-size: 14px;
   font-weight: 400;
-  color: #b5b5b5;
+  color: ${({ theme }) => theme.colors.textTips};
 `;
 
 interface Iprops {
   renderList: () => void;
   marginTop?: number;
   loading?: boolean;
+  appReducer: any;
 }
-export class List extends React.Component<Iprops> {
+
+class ListComponents extends React.Component<Iprops> {
   listBox: any;
   isDark: boolean;
+
   constructor(props: Iprops) {
     super(props);
     this.listBox = createRef();
   }
+
   defaultProps: {
     marginTop: 0;
     loading: true;
@@ -43,10 +46,15 @@ export class List extends React.Component<Iprops> {
   }
 
   componentDidMount() {
-    this.setState({
-      isDark: store.getState().appReducer.systemCustom.isDark
-    });
-    this.loadList();
+    const { systemCustom } = this.props.appReducer;
+    this.setState(
+      {
+        isDark: systemCustom.isDark
+      },
+      () => {
+        this.loadList();
+      }
+    );
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this));
   }
 
@@ -65,6 +73,7 @@ export class List extends React.Component<Iprops> {
   }
 
   render() {
+    const { systemCustom } = this.props.appReducer;
     return (
       <div ref={this.listBox} className="list-container">
         {this.props.children}
@@ -72,21 +81,30 @@ export class List extends React.Component<Iprops> {
           <LoadingWrapper>
             <ReactLoading
               type={'cylon'}
-              color={
-                store.getState().appReducer.systemCustom.isDark
-                  ? '#fff'
-                  : '#4168ED'
-              }
+              color={systemCustom.isDark ? '#fff' : '#4168ED'}
             />
           </LoadingWrapper>
         ) : (
           <NoDataWrapper>
-            {store.getState().appReducer.systemCustom.languange.id === 2
-              ? '已经到底了～'
-              : "It's over～"}
+            {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"}
           </NoDataWrapper>
         )}
       </div>
     );
   }
 }
+
+const ListStateToProps = state => {
+  return {
+    appReducer: state.appReducer
+  };
+};
+
+const ListDispatchToProps = (dispatch, props) => {
+  return {};
+};
+
+export const List = connect(
+  ListStateToProps,
+  ListDispatchToProps
+)(ListComponents);

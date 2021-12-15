@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Text, Card, Button, Heading, BalanceText } from 'uikit';
 import { toast } from 'react-toastify';
-import { fetchVaultUserAsync } from 'store/pools/thunks';
+import { fetchSpVaultUserAsync } from 'store/pools/thunks';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'contexts/Localization';
 import { Container } from 'components';
@@ -88,7 +88,6 @@ interface HarvestProps {
   onView: () => void;
 }
 
-// TODO: Remove Partial
 const PoolActionHarvest: React.FC<HarvestProps> = ({
   earnings = '0',
   isApproved,
@@ -108,7 +107,7 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   const handleApprove = useCallback(async () => {
     try {
       await onApprove();
-      dispatch(fetchVaultUserAsync(account));
+      dispatch(fetchSpVaultUserAsync(account));
     } catch (e) {
       console.error(e);
     }
@@ -118,7 +117,7 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   const onHandleReward = useCallback(async () => {
     try {
       await onHarvest();
-      dispatch(fetchVaultUserAsync(account));
+      dispatch(fetchSpVaultUserAsync(account));
       toast.success(
         <>
           <Text color="blank">

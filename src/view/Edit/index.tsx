@@ -102,7 +102,6 @@ const Edit: React.FC = () => {
 
     try {
       const response = await checkNickname(params.nick_name);
-      console.log(response);
       if (!response[0] && response[1]) {
         const res = await updateProfileNickname(params.nick_name);
         if (Boolean(res) && res === 1) {
@@ -122,7 +121,7 @@ const Edit: React.FC = () => {
         toastError(t('loginSetNickNameRepeat'));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

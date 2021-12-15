@@ -67,7 +67,6 @@ const Collect = props => {
         }}
       >
         {listData.map((item, index) => {
-          console.log(item.post_status);
           return (
             <MeItemWrapper key={index}>
               {item.post_status === 2 ? (

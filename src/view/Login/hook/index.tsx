@@ -103,7 +103,7 @@ export const FetchNftsList = async account => {
     }
     return AllList;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return [];
   }
 };
@@ -131,7 +131,7 @@ export const FetchSupportNFT = async () => {
     const supAddress = result.map(item => item.sup);
     return supAddress[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return [];
   }
 };
@@ -173,7 +173,7 @@ export const FetchNftStakeType = async account => {
       isActive: item.isActive
     }));
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return [];
   }
 };
@@ -299,7 +299,7 @@ export const useContract = () => {
         const isCheck = await multicall(nftSocialAbi, calls);
         return [isCheck[0][0], isCheck[1][0]];
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return [false, false];
       }
     },
@@ -319,7 +319,7 @@ export const useContract = () => {
         );
         return userinfo;
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return false;
       }
     },

@@ -91,6 +91,7 @@ const HotTopic: React.FC = () => {
         <Box>
           <RefreshIcon
             margin="0"
+            onClick={() => getList(true)}
             color={theme.colors.white_black}
           />
         </Box>

@@ -67,7 +67,7 @@ export function useSignIn() {
       const res = await Api.UserApi.getUserInfo();
       return res;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -77,7 +77,7 @@ export function useSignIn() {
       const res = await Api.UserApi.addNickName(nickname);
       return res;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -115,7 +115,7 @@ export function useLogin() {
         }
         return response;
       } catch (error: any) {
-        console.log(error);
+        console.error(error);
         return {
           code: error?.code || 0
         };

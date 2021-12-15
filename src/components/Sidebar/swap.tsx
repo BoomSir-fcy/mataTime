@@ -45,7 +45,7 @@ const Swap: React.FC = () => {
   const coins = useStore(p => p.coins.clickCoins);
 
   const handleInputChange = useCallback(currency => {
-    console.log(currency);
+    console.debug(currency);
   }, []);
 
   useEffect(() => {

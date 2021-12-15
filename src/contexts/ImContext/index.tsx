@@ -47,7 +47,6 @@ const ImContextProvider = ({ children }) => {
   };
 
   React.useEffect(() => {
-    // console.log(token, 'token')
     if (im && im.userToken !== token && token) {
       im.init()
     } else if (!im && token) {

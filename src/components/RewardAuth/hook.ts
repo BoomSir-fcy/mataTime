@@ -28,7 +28,7 @@ export const RewardAuthorContract = () => {
       const tokenView = await multicall(rewardAuthorAbi, calls);
       return tokenView[0][0];
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return [];
     }
   }, []);
@@ -47,7 +47,7 @@ export const RewardAuthorContract = () => {
         '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
       return MatterApprove;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return [];
     }
   }, []);
@@ -67,7 +67,7 @@ export const RewardAuthorContract = () => {
         );
         return res;
       } catch (error: any) {
-        console.log(error);
+        console.error(error);
         return error?.code || false;
       }
     },
@@ -106,7 +106,7 @@ export const GetCoinPrice = () => {
         return res.data;
       }
       return {};
-    } catch (error) {}
+    } catch (error) { }
   }, []);
 
   return { getPrice };
@@ -120,7 +120,7 @@ export const GetPostRewardAuthor = () => {
         return res.data;
       }
       return {};
-    } catch (error) {}
+    } catch (error) { }
   }, []);
 
   return { getInfo };

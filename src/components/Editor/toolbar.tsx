@@ -15,17 +15,6 @@ const EditorToolbar = styled(Flex)`
 
 const EmojiButton = ({ callbackEmoji }) => {
   const editor = useSlate();
-  // const {insertText} = editor
-  // console.log(editor);
-  // editor.insertText=(res)=>{
-  //   console.log(res);
-  //   // insertText(res)
-  //   Transforms.unwrapNodes(editor, {
-  //     match: n =>{
-  //       console.log(n);
-  //     },
-  //   })
-  // }
   return <Emoji onChange={emoji => callbackEmoji(emoji, editor)} />;
 };
 export const Toolbar: React.FC<{

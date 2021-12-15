@@ -53,7 +53,7 @@ export const Follow: React.FC<{
         toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (
@@ -143,7 +143,6 @@ export const CancelFollow = (props: IProps) => {
     const { userId } = props;
     if (flag) {
       Api.MeApi.unFollowUser(userId).then(res => {
-        console.log(res);
         if (Api.isSuccess(res)) {
           toastSuccess(res.data);
         } else {

@@ -152,7 +152,7 @@ export const FetchTimeShopInfo = async () => {
     }))
     return info
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return []
   }
 }
@@ -170,7 +170,7 @@ export const FetchRecordLength = async (account: string) => {
     const res = await multicall(timeShopAbi, calls)
     return new BigNumber(res[0][0].toJSON().hex).toNumber()
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return []
   }
 }
@@ -228,7 +228,6 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
   const remainder = pageSize - Number(totalNum) % pageSize;
   const start = (totalPage * pageSize - (page - 1) * pageSize) - 1 - remainder
   const end = start - pageSize + 1 < 0 ? 0 : start - pageSize + 1
-  console.log(totalNum, totalPage, start, end, remainder);
   const calls = ListArr(start, end)
   try {
     const arr = await multicall(timeShopAbi, calls)
@@ -250,7 +249,7 @@ export const FetchExchangeList = async (account: string, page: number, pageSize:
     }))
     return completeList
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return []
   }
 }

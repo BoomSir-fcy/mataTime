@@ -27,7 +27,7 @@ import {
 
 import QuestionHelper from 'components/QuestionHelper';
 
-const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
+const RewardAuthModalStyled = styled(Box) <{ bottom: number; right: number }>`
   position: absolute;
   z-index: 999;
   width: 418px;
@@ -136,7 +136,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         p.isOnApprove = newArr[0][4] > 0 ? false : true;
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setState(p => {
         p.loading = false;
@@ -150,7 +150,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       setState(p => {
         p.reward_post = res;
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 切换币种
@@ -162,7 +162,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         p.current_price = res.current_price || '0.12345';
         p.isOnApprove = tokenList[index][4] > 0 ? false : true;
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 打赏用户
@@ -188,7 +188,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         toastError(t('rewardAutherError'));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setState(p => {
         p.submitLoading = false;

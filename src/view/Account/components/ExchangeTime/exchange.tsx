@@ -168,7 +168,6 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
 
   // 兑换
   const handleExchange = useCallback(async () => {
-    console.log(Time, RemainingNum);
 
     if (Time > RemainingNum) {
       toastWarning(`${t('Time Time maximum exchange amount')}:${RemainingNum}`);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex } from 'uikit';
+import { Box, Flex, Image } from 'uikit';
 import { useToast } from 'hooks';
-import { Icon, ReplyModal, MoreOperatorEnum } from 'components';
+import { Icon, ReplyModal, MoreOperatorEnum, TimeGain } from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
 import RewardAuthTag from 'components/RewardAuth/RewardAuthTag';
@@ -136,6 +136,7 @@ const MentionOperator: React.FC<IProps> = ({
               {itemData.like_num || 0}
             </Box>
           )}
+          <TimeGain />
         </Flex>
         <RewardAuthTag data={itemData} postType={type === 'Comment' ? 1 : 0} />
       </Flex>

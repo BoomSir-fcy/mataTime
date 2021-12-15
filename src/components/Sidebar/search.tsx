@@ -53,21 +53,21 @@ const Search: React.FC = () => {
   }
   const startSearch = (e) => {
     if (e.code === 'Enter' && value) {
-      console.log(value)
+      console.debug(value)
     }
 
   }
   return (
-    true?null:
-    <SearchBox>
-      {/* <img src={searchImg} alt="" /> */}
-      <Icon name={'icon-sousuo'} style={{
-        position: 'absolute',
-        top: '8px',
-        left: '25px',
-      }} size={28} color={isDark ? '#FFFFFF' : '#7A83A0'}></Icon>
-      <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder={t('SearchPlaceholder')} />
-    </SearchBox>
+    true ? null :
+      <SearchBox>
+        {/* <img src={searchImg} alt="" /> */}
+        <Icon name={'icon-sousuo'} style={{
+          position: 'absolute',
+          top: '8px',
+          left: '25px',
+        }} size={28} color={isDark ? '#FFFFFF' : '#7A83A0'}></Icon>
+        <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder={t('SearchPlaceholder')} />
+      </SearchBox>
   )
 }
 

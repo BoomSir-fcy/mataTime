@@ -128,37 +128,6 @@ export const contractAddress = {
   },
 }
 
-// export const MBT: { [chainId: number]: Token } = {
-//   [ChainId.MAINNET]: new Token(
-//     ChainId.MAINNET,
-//     '0x165c1eb65ea235dd75b26bca48bc8b1be8e82ec2',
-//     18,
-//     'MBT',
-//     'Magician',
-//   ),
-//   [ChainId.MATIC_MAINNET]: new Token(
-//     ChainId.MATIC_MAINNET,
-//     '0x165c1eb65ea235dd75b26bca48bc8b1be8e82ec2', // TODO:
-//     18,
-//     'MBT',
-//     'MBT',
-//   ),
-//   [ChainId.MATIC_TESTNET]: new Token(
-//     ChainId.MATIC_TESTNET,
-//     '0x165c1eb65ea235dd75b26bca48bc8b1be8e82ec2', // TODO:
-//     18,
-//     'MBT',
-//     'MBT',
-//   ),
-//   [ChainId.TESTNET]: new Token(
-//     ChainId.TESTNET,
-//     '0x48F1935187D71990ded5c5c3fC65F2b9896380b5',
-//     18,
-//     'MBT',
-//     'Magician',
-//   ),
-// }
-
 export const EmptyAddress = {
   [ChainId.MATIC_TESTNET]: '',
   [ChainId.MATIC_MAINNET]: '',

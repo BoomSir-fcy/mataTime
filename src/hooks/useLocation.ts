@@ -26,7 +26,7 @@ export function useLocation() {
         dispatch(storeAction.setLocation(location));
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 

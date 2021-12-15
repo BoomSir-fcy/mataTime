@@ -64,14 +64,12 @@ const Links = styled(Flex)`
 `
 
 export const About = (() => {
-  // const editPeople = () => {
-  //   console.log('编辑')
-  // } 
+
   return (
     <AboutWarpper>
       <Flex>
         <Link to="/edit">
-          <Avatar src="" scale="ld"/>
+          <Avatar src="" scale="ld" />
         </Link>
         <Desc>
           <Name>Baby fuck me</Name>

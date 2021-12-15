@@ -41,7 +41,6 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const [fullBalance, displayFullBalance] = useMemo(() => {
     const fullBalanceVal = getFullDisplayBalance(max, decimals)
     const displayFullBalanceVal = formatDisplayBalance(max, decimals)
-    console.log(fullBalanceVal, displayFullBalanceVal, max, decimals)
     return [fullBalanceVal, displayFullBalanceVal]
   }, [max, decimals])
 

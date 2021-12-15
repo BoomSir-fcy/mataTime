@@ -32,6 +32,7 @@ import { ComponentsWrapper } from 'components/Cirde/PageContainer';
 import CommonCircle from 'components/Cirde/CommonCircle';
 
 import useAuth from 'hooks/useAuth';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 const Center = styled(Box)`
   width: 100%;
@@ -147,7 +148,7 @@ const Profile: React.FC<any> = props => {
   const systemLang = languange?.value?.code;
 
   const [isEnd, setIsEnd] = useState(false);
-  const perpage = 5;
+  const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);

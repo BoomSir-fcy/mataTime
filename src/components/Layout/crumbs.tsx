@@ -55,7 +55,12 @@ const Crumbs: React.FC<{
           style={{ cursor: 'pointer', position: 'relative', width: '100%' }}
         >
           <Flex alignItems="center">
-            <Icon name={'icon-fanhui'} size={20} color={colors} bold />
+            <Icon
+              name={'icon-fanhui'}
+              size={20}
+              color={colors}
+              fontWeight="bold"
+            />
             <Text className="text" ml="16px">
               {t('newsBack')}
             </Text>
@@ -63,7 +68,9 @@ const Crumbs: React.FC<{
           {centerTitle && (
             <CenterBox>
               <Text className="text" ml="16px">
-                {centerTitle.length > 20 ? centerTitle.slice(0, 20) + '...#' : centerTitle}
+                {centerTitle.length > 20
+                  ? centerTitle.slice(0, 20) + '...#'
+                  : centerTitle}
               </Text>
             </CenterBox>
           )}
@@ -73,4 +80,4 @@ const Crumbs: React.FC<{
   );
 });
 
-export default Crumbs
+export default Crumbs;
