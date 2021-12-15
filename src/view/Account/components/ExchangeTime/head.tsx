@@ -12,13 +12,21 @@ const Card = styled(Box)`
   min-height: 294px;
   display: flex;
   overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  &::-moz--scrollbar {
+    display: none;
+  }
   ${({ theme }) => theme.mediaQueriesSize.padding}
   ${({ theme }) => theme.mediaQueriesSize.marginb}
 `;
 const FlexBoxStyle = styled(Flex)`
   width: max-content;
+  padding: 0;
   ${({ theme }) => theme.mediaQueries.sm} {
     width:100%;
+    padding: 0 40px;
   }
 `
 const RoundBox = styled(Box)`
@@ -74,7 +82,6 @@ export const TimeHeader: React.FC<init> = React.memo(
     return (
       <Card>
         <FlexBoxStyle
-          style={{ padding: '0 40px' }}
           width="100%"
           justifyContent="space-around"
           alignItems="center"
