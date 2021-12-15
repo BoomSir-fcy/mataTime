@@ -3,6 +3,7 @@ import { Api } from 'apis';
 import { taskContents } from './config';
 import { useDispatch } from 'react-redux';
 import { fetchTaskListAsync } from 'store/task/reducer';
+import { Group } from '../type';
 
 // 签到
 export const useSignIn = () => {
@@ -68,9 +69,9 @@ export const GetTaskName = (taskNameId: number) => {
 
 // 获取任务类型
 export const GetTaskTag = (taskGroupId: number) => {
-  if (taskGroupId === 1) return 'ACTIVITY';
-  if (taskGroupId === 2) return 'CREATE';
-  if (taskGroupId === 3) return 'INVITE';
-  if (taskGroupId === 4) return 'REPORT';
-  return 'ACTIVITY';
+  if (taskGroupId === Group.ACTIVITY) return 'activity';
+  if (taskGroupId === Group.CREATE) return 'create';
+  if (taskGroupId === Group.INVITE) return 'invite';
+  if (taskGroupId === Group.REPORT) return 'report';
+  return 'activity';
 }

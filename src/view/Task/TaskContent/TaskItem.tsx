@@ -13,7 +13,7 @@ import useConnectWallet from 'hooks/useConnectWallet';
 
 const Item = styled(Flex)`
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
   padding: 0px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -23,16 +23,57 @@ const Item = styled(Flex)`
     background: ${({ theme }) => theme.colors.backgroundThemeCard};
   }
 `
+const ItemFlex = styled(Flex)`
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s;
+  ${({ theme }) => theme.mediaQueries.lg}{
+    flex-direction: row;
+  }
+`
+const ContentFlex = styled(Flex)`
+  width: 244px;
+  align-items: center;
+  margin: 10px 0;
+  transition: all 0.3s;
+  @media (max-width: 415px){
+    max-width: 180px;
+  }
+  ${({ theme }) => theme.mediaQueries.lg}{
+    width: 300px;
+  }
+  ${({ theme }) => theme.mediaQueriesSize.marginr}
+  
+  
+`
 const ProgressBox = styled(Flex)`
   width: 244px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 10px 0;
+  transition: all 0.3s;
+  @media (max-width: 415px){
+    max-width: 180px;
+  }
 `
-const ReceiveButton = styled(Button) <{ disabled: boolean }>`
-  min-width: 130px;
-  background: ${({ theme, disabled }) => disabled ? theme.colors.primaryDark : theme.colors.success};
+const MatterFlex = styled(Flex)`
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 10px 0;
+  ${({ theme }) => theme.mediaQueries.lg}{
+    margin-right: 40px;
+  }
 `
+const ReceiveButton = styled(Button) <{ disabled: boolean, status: number }>`
+  min-width: 120px;
+  ${({ theme, disabled, status }) => status <= 2 && `
+    background: ${disabled ? theme.colors.primaryDark : theme.colors.success};
+  `}
+  border-color: ${({ theme }) => theme.colors.primary} !important;
+`
+
+
 const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -68,49 +109,54 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
   }
 
   const getBtnText = () => {
-    if (info.status === Status.Received) return pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive');
-    if (info.status === Status.Completed) return t('Completed');
+    if (info.status === Status.Completed) return pengdingType ? <Dots>{t('Receiving')}</Dots> : t('Receive');
+    if (info.status === Status.Received) return t('Completed');
     if (info.status === Status.UnCompleted) return t('UnCompleted');
     return t('UnCompleted');
   }
 
   return (
     <Item>
-      <Flex maxWidth="300px" width="100%" alignItems="center" margin="10px 0">
-        <Image mr="20px" src={require(`assets/images/task/${getIcon()}.png`).default} width={22} height={22} />
-        <Flex flexDirection="column">
-          <Text mb='10px' fontWeight={500}>{t(`${configInfo.name}`)}</Text>
-          <Text small color='textTips'>{configInfo?.count ? t(`${configInfo.describe}`, { count: configInfo.count }) : t(`${configInfo.describe}`)}</Text>
-        </Flex>
-      </Flex>
-      <ProgressBox>
-        {
-          info?.Expand &&
-          <>
-            <Flex width="100%" mb="13px" justifyContent="space-between">
-              <Text small color='textTips'>进度</Text>
-              <Text small color='textTips'>{`${info.Expand?.now}/${info.Expand?.max}`}</Text>
-            </Flex>
-            <Box width="100%"><Progress color="primary" scale='sm' variant='round' primaryStep={(info.Expand?.now / info.Expand?.max) * 100} /></Box>
-          </>
-        }
-      </ProgressBox>
-      <Flex alignItems="center" margin="10px 0">
-        <Flex flexDirection="column" alignItems="flex-end" mr="40px">
+      <ItemFlex>
+        <ContentFlex>
+          <Image mr="20px" src={require(`assets/images/task/${getIcon()}.png`).default} width={22} height={22} />
+          <Flex flexDirection="column">
+            <Text mb='8px' fontWeight={500}>{configInfo?.count ? t(`${configInfo.name}`, { count: configInfo.count }) : t(`${configInfo.name}`)}</Text>
+            <Text small color='textTips'>{configInfo?.count ? t(`${configInfo.describe}`, { count: configInfo.count }) : t(`${configInfo.describe}`)}</Text>
+          </Flex>
+        </ContentFlex>
+        <ProgressBox>
+          {
+            info?.Expand &&
+            <>
+              <Flex width="100%" mb="13px" justifyContent="space-between">
+                <Text small color='textTips'>{t('progress')}</Text>
+                <Text small color='textTips'>{`${info.Expand?.now}/${info.Expand?.max}`}</Text>
+              </Flex>
+              <Box width="100%"><Progress color="primary" scale='sm' variant='round' primaryStep={(info.Expand?.now / info.Expand?.max) * 100} /></Box>
+            </>
+          }
+        </ProgressBox>
+      </ItemFlex>
+      <ItemFlex>
+        <MatterFlex>
           <Text small>Matter</Text>
           <Text bold>+{info.matter}</Text>
-        </Flex>
+        </MatterFlex>
         {
           account ?
             <ReceiveButton
+              margin="10px 0"
+              status={info.status}
               disabled={pengdingType || info.status === Status.UnCompleted || info.status === Status.Received}
+              onClick={handleReceive}
             >
               {getBtnText()}
             </ReceiveButton>
             :
             <Button onClick={onConnectWallet}>{t('Connect Wallet')}</Button>
         }
-      </Flex>
+      </ItemFlex>
     </Item>
   );
 }
