@@ -48,32 +48,32 @@ export const taskContents = [
   {
     id: 10,
     name: 'Report bad content',
-    describe: 'Successfully reported %count% today',
-    count: '1 time'
+    describe: 'Successfully reported %count% time today',
+    count: 1
   },
   {
     id: 11,
     name: 'Report bad content',
-    describe: 'Successfully reported %count% today',
-    count: '2 times'
+    describe: 'Successfully reported %count% times today',
+    count: 2
   },
   {
     id: 12,
     name: 'Report bad content',
-    describe: 'Successfully reported %count% today',
-    count: '3 times'
+    describe: 'Successfully reported %count% times today',
+    count: 3
   },
   {
     id: 13,
     name: 'Report bad content',
-    describe: 'Successfully reported %count% today',
-    count: '4 times'
+    describe: 'Successfully reported %count% times today',
+    count: 4
   },
   {
     id: 14,
     name: 'Report bad content',
-    describe: 'Successfully reported %count% today',
-    count: '5 times'
+    describe: 'Successfully reported %count% times today',
+    count: 5
   },
   {
     id: 15,
@@ -138,31 +138,31 @@ export const taskContents = [
   {
     id: 25,
     name: 'Invite friends',
-    describe: 'Successfully invited %count% today',
-    count: '1 friend'
+    describe: 'Successfully invited %count% friend today',
+    count: 1
   },
   {
     id: 26,
     name: 'Invite friends',
-    describe: 'Successfully invited %count% today',
-    count: '2 friends'
+    describe: 'Successfully invited %count% friends today',
+    count: 2
   },
   {
     id: 27,
     name: 'Invite friends',
-    describe: 'Successfully invited %count% today',
-    count: '3 friends'
+    describe: 'Successfully invited %count% friends today',
+    count: 3
   },
   {
     id: 28,
     name: 'Invite friends',
-    describe: 'Successfully invited %count% today',
-    count: '4 friends'
+    describe: 'Successfully invited %count% friends today',
+    count: 4
   },
   {
     id: 29,
     name: 'Invite friends',
-    describe: 'Successfully invited %count% today',
-    count: '5 friends'
+    describe: 'Successfully invited %count% friends today',
+    count: 5
   }
 ]

@@ -10,14 +10,16 @@ import Dots from 'components/Loader/Dots';
 import { useDispatch } from 'react-redux'
 import { useWeb3React } from '@web3-react/core';
 import useConnectWallet from 'hooks/useConnectWallet';
+import useMenuNav from 'hooks/useMenuNav';
 
 const Item = styled(Flex)`
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
-  padding: 0px 14px;
+  padding: 0px 5px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   transition: all 0.3s;
+  ${({ theme }) => theme.mediaQueriesSize.paddingxs}
   &:hover{
     cursor: pointer;
     background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -78,6 +80,7 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
+  const { isMobile } = useMenuNav();
   const { onConnectWallet } = useConnectWallet();
   const { toastSuccess, toastError } = useToast();
   const [pengdingType, setpengdingType] = useState(false)
@@ -125,22 +128,20 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
             <Text small color='textTips'>{configInfo?.count ? t(`${configInfo.describe}`, { count: configInfo.count }) : t(`${configInfo.describe}`)}</Text>
           </Flex>
         </ContentFlex>
-        <ProgressBox>
-          {
-            info?.Expand &&
-            <>
-              <Flex width="100%" mb="13px" justifyContent="space-between">
-                <Text small color='textTips'>{t('progress')}</Text>
-                <Text small color='textTips'>{`${info.Expand?.now}/${info.Expand?.max}`}</Text>
-              </Flex>
-              <Box width="100%"><Progress color="primary" scale='sm' variant='round' primaryStep={(info.Expand?.now / info.Expand?.max) * 100} /></Box>
-            </>
-          }
-        </ProgressBox>
+        {
+          info?.Expand &&
+          <ProgressBox>
+            <Flex width="100%" mb="13px" justifyContent="space-between">
+              <Text small color='textTips'>{t('progress')}</Text>
+              <Text small color='textTips'>{`${info.Expand.now}/${info.Expand?.max}`}</Text>
+            </Flex>
+            <Box width="100%"><Progress color="primary" scale='sm' variant='round' primaryStep={(info.Expand?.now / info.Expand?.max) * 100} /></Box>
+          </ProgressBox>
+        }
       </ItemFlex>
       <ItemFlex>
         <MatterFlex>
-          <Text small>Matter</Text>
+          <Text small>MATTER</Text>
           <Text bold>+{info.matter}</Text>
         </MatterFlex>
         {
@@ -150,11 +151,12 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
               status={info.status}
               disabled={pengdingType || info.status === Status.UnCompleted || info.status === Status.Received}
               onClick={handleReceive}
+              scale={isMobile ? 'sm' : 'md'}
             >
               {getBtnText()}
             </ReceiveButton>
             :
-            <Button onClick={onConnectWallet}>{t('Connect Wallet')}</Button>
+            <Button scale={isMobile ? 'sm' : 'md'} onClick={onConnectWallet}>{t('Connect Wallet')}</Button>
         }
       </ItemFlex>
     </Item>
