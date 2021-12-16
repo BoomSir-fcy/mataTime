@@ -32,6 +32,8 @@ const PopupWrapper = styled(Box)`
   border-radius: 10px;
   box-sizing: border-box;
   padding: 15px 30px;
+  margin-top: -1px;
+  margin-left: 6px;
   div {
     font-size: 14px;
     font-weight: 400;

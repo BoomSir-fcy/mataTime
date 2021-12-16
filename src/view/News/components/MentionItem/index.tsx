@@ -182,7 +182,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 </PopupButton>
               }
               nested
-              position="bottom center"
+              position="bottom right"
               closeOnDocumentClick
               contentStyle={{
                 width: '150px',
