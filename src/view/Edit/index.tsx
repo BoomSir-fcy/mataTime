@@ -9,17 +9,15 @@ import { useStore, storeAction } from 'store';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
-
 import { Api } from 'apis';
 import { useProfileContract } from './hook';
 import { useFetchNftList } from '../Login/hook';
-
 import { ComponentsWrapper } from 'components/Cirde/PageContainer';
 import CommonCircle from 'components/Cirde/CommonCircle';
-
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
 import defaultImages from 'assets/images/default_background.png';
+import { WalletHead } from 'components/HeaderContent';
 
 const Background = styled(Flex)`
   position: relative;
@@ -40,10 +38,10 @@ export const Header = styled(Flex)`
 `;
 
 const CenterImg = styled.img`
-    position: absolute;
-    top: 40%;
-    left: 8%;
-`
+  position: absolute;
+  top: 40%;
+  left: 8%;
+`;
 
 const Edit: React.FC = () => {
   useFetchNftList();
@@ -151,14 +149,19 @@ const Edit: React.FC = () => {
 
   return (
     <Box>
-      <Header>
+      <WalletHead title={t('commonAccountEdit')}>
+        <Button onClick={debounce(() => updateUserInfo(), 1000)}>
+          {t('commonAccountSave')}
+        </Button>
+      </WalletHead>
+      {/* <Header>
         <Text color="white_black" fontWeight="bold" fontSize="18px">
           {t('commonAccountEdit')}
         </Text>
         <Button onClick={debounce(() => updateUserInfo(), 1000)}>
           {t('commonAccountSave')}
         </Button>
-      </Header>
+      </Header> */}
       <Background style={{ backgroundImage: `url(${state.background})` }}>
         {!profile.background_image && !state.background && (
           <Box

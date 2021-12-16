@@ -3,7 +3,7 @@ import { ModalWrapper } from 'components';
 import { useToast } from 'hooks';
 import { Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import { ReportContentWrapper } from './style';
+import { ReportContentWrapper, ReportModalWrapper } from './style';
 
 import { Api } from 'apis';
 
@@ -58,7 +58,7 @@ export const ReportModal = React.memo((props: IProp) => {
       visible={show}
       setVisible={onClose}
     >
-      <Box width="500px">
+      <ReportModalWrapper width="500px">
         <ReportContentWrapper>
           {complainContent.map((item: any, index: number) => {
             return (
@@ -75,7 +75,7 @@ export const ReportModal = React.memo((props: IProp) => {
             );
           })}
         </ReportContentWrapper>
-      </Box>
+      </ReportModalWrapper>
     </ModalWrapper>
   );
 });

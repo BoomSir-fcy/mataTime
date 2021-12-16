@@ -40,18 +40,26 @@ interface init {
 export const WalletHead: React.FC<init> = React.memo(({ title, children }) => {
   const { t } = useTranslation();
   const CurrentRound = useStore(p => p.wallet.CurrentRound);
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
+  const { isPushed, setIsPushed, isMobile } = useMenuNav();
 
   return (
-    <Card style={isMobile ? { justifyContent: 'start' } : {}}>
-      <MenuButton size='sm' variant='text' aria-label="Toggle menu" onClick={() => setIsPushed(prep => !prep)} mr="24px">
-        {isPushed ? (
-          <HamburgerCloseIcon width="24px" color="textSubtle" />
-        ) : (
-          <HamburgerIcon width="24px" color="textSubtle" />
-        )}
-      </MenuButton>
-      <Text className="text">{title}</Text>
+    <Card>
+      <Flex alignItems="center">
+        <MenuButton
+          size="sm"
+          variant="text"
+          aria-label="Toggle menu"
+          onClick={() => setIsPushed(prep => !prep)}
+          mr="24px"
+        >
+          {isPushed ? (
+            <HamburgerCloseIcon width="24px" color="textSubtle" />
+          ) : (
+            <HamburgerIcon width="24px" color="textSubtle" />
+          )}
+        </MenuButton>
+        <Text className="text">{title}</Text>
+      </Flex>
       {children}
     </Card>
   );

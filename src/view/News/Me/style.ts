@@ -9,7 +9,7 @@ export const MeItemWrapper = styled(Card)`
   width: 100%;
   width: 100%;
   box-sizing: border-box;
-  padding: 25px;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
   padding-top: 40px;
   overflow: visible;
   box-shadow: none;
@@ -17,7 +17,7 @@ export const MeItemWrapper = styled(Card)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background-color: ${({ theme }) => theme.colors.primaryDark};
   transition: background 0.3s;
-  &:hover{
+  &:hover {
     background: ${({ theme }) => theme.colors.hoverList};
   }
 `;
