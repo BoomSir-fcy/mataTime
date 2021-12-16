@@ -14,6 +14,7 @@ import {
 import ReactLoading from 'react-loading';
 import { languagesOptions } from 'config/localization';
 import { formatLocalisedCompactNumber } from 'utils/formatBalance';
+import { useStore } from 'store';
 import { Select } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
@@ -50,6 +51,18 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   const coinsList = useCoinsList();
   const [currentCoin, setCurrentCoin] = useState(coinsList[0]);
   useFetchCoinInfo(currentCoin?.coin_id);
+
+  const coins = useStore(p => p.coins.clickCoins);
+
+  useEffect(() => {
+
+    if (coins?.symbol) {
+      const activeCoin = coinsList.find(item => item.coin_symbol === coins.symbol)
+      if (activeCoin) {
+        setCurrentCoin(activeCoin)
+      }
+    }
+  }, [coins, coinsList])
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {
