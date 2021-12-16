@@ -121,7 +121,7 @@ const Recharge: React.FC<init> = ({
       setVal('');
     } catch (e) {
       console.error(e);
-      toast.error(t('Account Recharge failed'));
+      toast.error(t('Account Recharge failed!'));
     } finally {
       setpending(false);
     }
@@ -140,7 +140,7 @@ const Recharge: React.FC<init> = ({
       setpending(false);
       dispatch(fetchApproveNumAsync(account));
     }
-  }, [onApprove, account]);
+  }, [onApprove, account, Token]);
   // 输入框输入限制
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
