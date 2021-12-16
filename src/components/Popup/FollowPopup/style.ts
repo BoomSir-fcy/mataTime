@@ -22,7 +22,7 @@ export const PopupContentWrapper = styled(Box)`
     align-items: center;
     .left-box {
       width: 60px;
-      margin-right: 15px;
+      margin-right: 10px;
       .img-box {
         width: 60px;
         height: 60px;
@@ -39,18 +39,11 @@ export const PopupContentWrapper = styled(Box)`
       display: flex;
       flex-direction: column;
       justify-content: center;
+      min-width: 0;
       .name {
         font-size: 18px;
-        font-family: Alibaba PuHuiTi;
         font-weight: bold;
         color: #ffffff;
-        text-overflow: -o-ellipsis-lastline;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        line-clamp: 1;
-        -webkit-box-orient: vertical;
       }
       .des {
         font-size: 14px;
@@ -65,14 +58,17 @@ export const PopupContentWrapper = styled(Box)`
       .number {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        max-width: 100%;
+        .cloums {
+          min-width: 0;
+          display: flex;
+          color: ${({ theme }) => theme.colors.textTips};
+        }
         p {
           font-size: 14px;
-          font-family: Alibaba PuHuiTi;
           font-weight: 400;
           color: #b5b5b5;
-          &:first-child {
-            margin-right: 35px;
-          }
           strong {
             font-size: 16px;
             font-weight: bold;

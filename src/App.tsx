@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
 import GlobalStyle from 'style/global';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -16,7 +17,7 @@ import { storage } from 'config';
 
 import useEagerConnect from 'hooks/useEagerConnect';
 import { RewardAuthorContract } from 'components/RewardAuth/hook';
-import useUnreadMsg from 'hooks/imHooks/useUnreadMsg'
+import useUnreadMsg from 'hooks/imHooks/useUnreadMsg';
 
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
@@ -27,6 +28,14 @@ import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en';
 dayjs.extend(relativeTime);
+dayjs.extend(updateLocale)
+
+// dayjs.updateLocale('en', {
+//   relativeTime: {
+//     ss: "%d s",
+
+//   }
+// })
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
@@ -55,8 +64,8 @@ const Updater = () => {
       <ScrollBarApdater />
       <TimeLeftUpdater />
     </>
-  )
-}
+  );
+};
 
 function App() {
   useEagerConnect();
@@ -122,7 +131,7 @@ function App() {
               />
               <Route path="/task" component={Task} />
               <Route
-                path="/news"
+                path="/notification"
                 render={props => <CommonLayout {...props} />}
               />
               <Route path="/me" component={Me} />

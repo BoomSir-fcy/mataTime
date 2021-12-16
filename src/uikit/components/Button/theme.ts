@@ -71,28 +71,6 @@ export const styleVariants = {
     backgroundPosition: '0 0px, 10px 0px, 100% -1px',
     backgroundSize: '20px 36px, calc(100% - 20px) 36px, 20px 38px'
   },
-  [variants.LEFT]: {
-    color: 'white',
-    backgroundRepeat: 'no-repeat',
-    // backgroundImage: `url(${btnLeft})`,
-    backgroundPosition: '0',
-    backgroundSize: '57px 60px',
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    boxShadow:
-      '0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), 1px 0px 0px 0px rgba(14, 14, 44, 0.4)'
-  },
-  [variants.RIGHT]: {
-    color: 'white',
-    backgroundRepeat: 'no-repeat',
-    // backgroundImage: `url(${btnRight})`,
-    backgroundPosition: 'right',
-    backgroundSize: '57px 60px',
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    boxShadow:
-      '0px -3px 0px 0px rgba(14, 14, 44, 0.4) inset,  0px -2px 0px 0px rgba(250, 250, 253, 0.4), -1px 0px 0px 0px rgba(14, 14, 44, 0.4)'
-  },
   [variants.SUCCESS]: {
     backgroundColor: 'success',
     color: 'white',
@@ -103,6 +81,12 @@ export const styleVariants = {
     backgroundColor: 'orange',
     color: 'white',
     boxShadow: 'none'
+  },
+  [variants.PRIMARY_GREEN]: {
+    backgroundColor: 'primaryGreen',
+    color: 'white',
+    border: '1px solid',
+    borderColor: 'primary',
   },
   [variants.TEXT]: {
     backgroundColor: 'transparent',

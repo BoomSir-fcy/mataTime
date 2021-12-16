@@ -16,6 +16,8 @@ import { useTranslation } from 'contexts/Localization';
 type IProps = {
   itemData: any;
   hasLike?: boolean;
+  hasTime?: boolean;
+  hasReward?: boolean;
   type?: 'Article' | 'Comment';
   callback?: Function;
   history?: any;
@@ -31,6 +33,8 @@ const MentionOperator: React.FC<IProps> = ({
   itemData,
   type = 'Article',
   hasLike = true,
+  hasTime = true,
+  hasReward = true,
   callback,
   replyType = 'comment',
   commentId = '',
@@ -136,9 +140,14 @@ const MentionOperator: React.FC<IProps> = ({
               {itemData.like_num || 0}
             </Box>
           )}
-          <TimeGain />
+          {hasTime && <TimeGain />}
         </Flex>
-        <RewardAuthTag data={itemData} postType={type === 'Comment' ? 1 : 0} />
+        {hasReward && (
+          <RewardAuthTag
+            data={itemData}
+            postType={type === 'Comment' ? 1 : 0}
+          />
+        )}
       </Flex>
       {/* 回复 */}
       <ReplyModal

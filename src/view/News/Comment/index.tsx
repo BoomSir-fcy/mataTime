@@ -98,7 +98,6 @@ const NewsComment: React.FC = props => {
                     ></ContentParsing>
                   </div>
                 )}
-
                 <div className="comment-content">
                   <MentionItem
                     itemData={{
@@ -113,8 +112,10 @@ const NewsComment: React.FC = props => {
                     size={'small'}
                   />
                 </div>
-                <MentionOperator
+                {/* <MentionOperator
                   hasLike={false}
+                  hasTime={false}
+                  hasReward={false}
                   replyType={'comment'}
                   postId={item.post.post_id}
                   commentId={item.id}
@@ -129,7 +130,7 @@ const NewsComment: React.FC = props => {
                   callback={(item: any, type?: MoreOperatorEnum) => {
                     updateList(item, type);
                   }}
-                />
+                /> */}
               </CommentItemWrapper>
             );
           }

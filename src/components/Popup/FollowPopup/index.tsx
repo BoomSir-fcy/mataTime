@@ -3,6 +3,7 @@ import { Icon, Avatar, MoreOperatorEnum } from 'components';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useStore } from 'store';
+import { Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
 
@@ -21,7 +22,7 @@ type Iprops = {
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const myself = useStore(p => p.loginReducer.userInfo);
-  const { children, uid, callback = () => {} } = props;
+  const { children, uid, callback = () => { } } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
@@ -63,16 +64,24 @@ export const FollowPopup = React.memo((props: Iprops) => {
     }
   };
 
+  // const [timer, setTimer] = useState(null)
+  let timer = null
+
   return (
     <PopupWrapper
       onClick={e => e.stopPropagation()}
       onMouseOver={(e: any) => {
+        if (timer) {
+          clearTimeout(timer)
+        }
         e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
         setVisible(true);
       }}
       onMouseLeave={(e: any) => {
         e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-        setVisible(false);
+        timer = setTimeout(() => {
+          setVisible(false);
+        }, 300)
       }}
     >
       {children}
@@ -89,22 +98,35 @@ export const FollowPopup = React.memo((props: Iprops) => {
               </div>
             </div>
             <div className="right-box">
-              <div
-                className="name"
-                title={userInfo.NickName || userInfo.nick_name || '  '}
-              >
+              <Text className="name" ellipsis>
                 {userInfo.NickName || userInfo.nick_name || '  '}
-              </div>
+              </Text>
               <div className="des">{shortenAddress(userInfo.address)}</div>
               <div className="number">
-                <p>
+                <Flex className="cloums">
                   {t('followFans')}
-                  <strong>{userInfo.fans_num || 0}</strong>
-                </p>
-                <p>
+                  <Text
+                    fontWeight="bold"
+                    color="white"
+                    ml="10px"
+                    maxWidth="30px"
+                    ellipsis
+                  >
+                    {userInfo.FansNum || 0}
+                  </Text>
+                </Flex>
+                <Flex className="cloums">
                   {t('followText')}
-                  <strong>{userInfo.attention_num || 0}</strong>
-                </p>
+                  <Text
+                    fontWeight="bold"
+                    color="white"
+                    ml="10px"
+                    maxWidth="30px"
+                    ellipsis
+                  >
+                    {userInfo.AttentionNum || 0}
+                  </Text>
+                </Flex>
               </div>
             </div>
           </Link>
@@ -140,7 +162,7 @@ type IDprops = {
 
 export const FollowPopupD = React.memo((props: IDprops) => {
   const { t } = useTranslation();
-  const { left = 100, top = 100, callback = () => {}, uid } = props;
+  const { left = 100, top = 100, callback = () => { }, uid } = props;
   const popupRef: any = useRef();
   const [userInfo, setUserInfo] = useState<any>({});
 

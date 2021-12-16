@@ -35,6 +35,8 @@ const WrapText = styled(Text)`
 `;
 const MinWidthButton = styled(Button)`
   width: max-content;
+  min-width: 110px;
+  max-width: 110px;
 `;
 
 const Follow = React.memo(() => {
