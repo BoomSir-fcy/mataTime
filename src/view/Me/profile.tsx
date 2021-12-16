@@ -128,7 +128,6 @@ const CenterImg = styled.img`
 const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
     profile: {
-      post_num: 0,
       label_list: []
     } as Api.User.userInfoParams,
     loading: false,
