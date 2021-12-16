@@ -34,7 +34,7 @@ const Title = styled(Flex)`
 const NumberBox = styled(Flex)`
   width: 100px;
   height: 35px;
-  background: ${({ theme }) => theme.colors.backgroundMenu};
+  background: ${({ theme }) => theme.colors.input};
   box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: 10px;
   align-items: center;
