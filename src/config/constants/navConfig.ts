@@ -1,10 +1,10 @@
-import { MenuNavConfig } from './types'
+import { MenuNavConfig } from './types';
 
 export const pathConfig = {
-  messageAtMePath: '/news/me',
-  messageCommentPath: '/news/comment',
-  messageLikePath: '/news/praise',
-  messageNoticePath: '/news/notice'
+  messageAtMePath: '/notification/me',
+  messageCommentPath: '/notification/comment',
+  messageLikePath: '/notification/praise',
+  messageNoticePath: '/notification/notice'
 };
 
 export const menuNavConfig: MenuNavConfig[] = [
@@ -108,7 +108,7 @@ export const menuNavConfig: MenuNavConfig[] = [
         lable: 'AccountMenu Time',
         path: '/account/time',
         hideRight: true,
-        markPath: ['/account/faq'],
+        markPath: ['/account/faq']
       },
       {
         icon: 'icon-w59',
@@ -218,24 +218,28 @@ export const menuNavConfig: MenuNavConfig[] = [
   }
 ];
 
-const getHidePath = (activeRes: string[], config: MenuNavConfig[], key: string) => {
-  let res: string[] = [...activeRes]
+const getHidePath = (
+  activeRes: string[],
+  config: MenuNavConfig[],
+  key: string
+) => {
+  let res: string[] = [...activeRes];
   config.forEach(item => {
     if (item[key]) {
       res = res.concat(item.path);
     }
     if (item.children) {
-      res = getHidePath(res, item.children, key)
+      res = getHidePath(res, item.children, key);
     }
-  })
-  return res
-}
+  });
+  return res;
+};
 export const hideLeftNavPath = (() => {
-  return getHidePath([], menuNavConfig, 'hideLeft')
-})()
+  return getHidePath([], menuNavConfig, 'hideLeft');
+})();
 
 export const hideSidebarPath = (() => {
-  return getHidePath([], menuNavConfig, 'hideRight')
-})()
+  return getHidePath([], menuNavConfig, 'hideRight');
+})();
 
 export default menuNavConfig;

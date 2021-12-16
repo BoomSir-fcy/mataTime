@@ -8,7 +8,7 @@ export const NewsCommentWrapper = styled.div`
 export const CommentItemWrapper = styled(Card)`
   width: 100%;
   box-sizing: border-box;
-  padding: 25px;
+  padding: 25px 25px 0;
   overflow: inherit;
   background: transparent;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
