@@ -3,7 +3,7 @@ export const taskContents = [
   {
     id: 1,
     name: 'Sign In',
-    describe: 'Log in to the platform every day'
+    describe: 'Log in reward, one $Matter for each day'
   },
   {
     id: 2,
@@ -48,121 +48,121 @@ export const taskContents = [
   {
     id: 10,
     name: 'Report bad content',
-    describe: 'You can get it by successfully reporting %count% times a day',
-    count: 1
+    describe: 'Successfully reported %count% today',
+    count: '1 time'
   },
   {
     id: 11,
     name: 'Report bad content',
-    describe: 'You can get it by successfully reporting %count% times a day',
-    count: 2
+    describe: 'Successfully reported %count% today',
+    count: '2 times'
   },
   {
     id: 12,
     name: 'Report bad content',
-    describe: 'You can get it by successfully reporting %count% times a day',
-    count: 3
+    describe: 'Successfully reported %count% today',
+    count: '3 times'
   },
   {
     id: 13,
     name: 'Report bad content',
-    describe: 'You can get it by successfully reporting %count% times a day',
-    count: 4
+    describe: 'Successfully reported %count% today',
+    count: '4 times'
   },
   {
     id: 14,
     name: 'Report bad content',
-    describe: 'You can get it by successfully reporting %count% times a day',
-    count: 5
+    describe: 'Successfully reported %count% today',
+    count: '5 times'
   },
   {
     id: 15,
     name: 'Spend %count% $TIME',
-    describe: 'Spend %count% time in metatme',
+    describe: 'Spend %count% $Time in Metatime',
     count: 300
   },
   {
     id: 16,
     name: 'Spend %count% $TIME',
-    describe: 'Spend %count% time in metatme',
+    describe: 'Spend %count% $Time in Metatime',
     count: 600
   },
   {
     id: 17,
     name: 'Spend %count% $TIME',
-    describe: 'Spend %count% time in metatme',
+    describe: 'Spend %count% $Time in Metatime',
     count: 900
   },
   {
     id: 18,
     name: 'Spend %count% $TIME',
-    describe: 'Spend %count% time in metatme',
+    describe: 'Spend %count% $Time in Metatime',
     count: 1200
   },
   {
     id: 19,
     name: 'Spend %count% $TIME',
-    describe: 'Spend %count% time in metatme',
+    describe: 'Spend %count% $Time in Metatime',
     count: 1500
   },
   {
     id: 20,
     name: 'Gain %count% seconds of reading time',
-    describe: 'Read articles in metatme for %count% seconds',
+    describe: 'Read articles in Metatime for %count% seconds',
     count: 600
   },
   {
     id: 21,
     name: 'Gain %count% seconds of reading time',
-    describe: 'Read articles in metatme for %count% seconds',
+    describe: 'Read articles in Metatime for %count% seconds',
     count: 1200
   },
   {
     id: 22,
     name: 'Gain %count% seconds of reading time',
-    describe: 'Read articles in metatme for %count% seconds',
+    describe: 'Read articles in Metatime for %count% seconds',
     count: 1800
   },
   {
     id: 23,
     name: 'Gain %count% seconds of reading time',
-    describe: 'Read articles in metatme for %count% seconds',
+    describe: 'Read articles in Metatime for %count% seconds',
     count: 2400
   },
   {
     id: 24,
     name: 'Gain %count% seconds of reading time',
-    describe: 'Read articles in metatme for %count% seconds',
+    describe: 'Read articles in Metatime for %count% seconds',
     count: 3000
   },
   {
     id: 25,
     name: 'Invite friends',
-    describe: 'Successfully invite %count% friend every day',
-    count: 1
+    describe: 'Successfully invited %count% today',
+    count: '1 friend'
   },
   {
     id: 26,
     name: 'Invite friends',
-    describe: 'Successfully invite %count% friend every day',
-    count: 2
+    describe: 'Successfully invited %count% today',
+    count: '2 friends'
   },
   {
     id: 27,
     name: 'Invite friends',
-    describe: 'Successfully invite %count% friend every day',
-    count: 3
+    describe: 'Successfully invited %count% today',
+    count: '3 friends'
   },
   {
     id: 28,
     name: 'Invite friends',
-    describe: 'Successfully invite %count% friend every day',
-    count: 4
+    describe: 'Successfully invited %count% today',
+    count: '4 friends'
   },
   {
     id: 29,
     name: 'Invite friends',
-    describe: 'Successfully invite %count% friend every day',
-    count: 5
+    describe: 'Successfully invited %count% today',
+    count: '5 friends'
   }
 ]

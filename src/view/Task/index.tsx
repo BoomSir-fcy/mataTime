@@ -119,7 +119,7 @@ const HeaderTips = ({ t }) => {
   return (
     <Flex alignItems="center">
       <Time src={require('assets/images/myWallet/time.png').default} alt="" />
-      <Text small color="textTips">{t('Note that all tasks are refreshed at 0:00 UTC time. Please get your $matter before 0:00 UTC!')}</Text>
+      <Text small color="textTips">{t('Note that all tasks are refreshed at 0:00 UTC. Please get your $Matter before 0:00 UTC!')}</Text>
     </Flex>
   );
 }
