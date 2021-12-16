@@ -6,7 +6,8 @@ export const baseColors = {
   primaryBright: '#FFFFFF',
   primaryDark: '#000',
   secondary: '#7645D9',
-  success: '#287452',
+  success: '#4168ED',
+  primaryGreen: "#287452",
   warning: '#FFB237',
   transparent: 'transparent',
   blue: '#5A79F8',
@@ -21,7 +22,7 @@ export const additionalColors = {
   silver: '#B2B2B2',
   bronze: '#E7974D',
   orange: '#FF780B',
-  upPrice: '#9AF170',
+  upPrice: '#287452',
   downPrice: '#ec612b'
 };
 

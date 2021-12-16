@@ -68,7 +68,7 @@ const MatterFlex = styled(Flex)`
 const ReceiveButton = styled(Button) <{ disabled: boolean, status: number }>`
   min-width: 120px;
   ${({ theme, disabled, status }) => status <= 2 && `
-    background: ${disabled ? theme.colors.primaryDark : theme.colors.success};
+    background: ${disabled ? theme.colors.primaryDark : theme.colors.primaryGreen};
   `}
   border-color: ${({ theme }) => theme.colors.primary} !important;
 `
