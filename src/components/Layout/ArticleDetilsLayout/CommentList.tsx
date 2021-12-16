@@ -49,7 +49,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
-  const [sortTime, setSortTime] = useState(1);
+  // 1是降序 2是升序
+  const [sortTime, setSortTime] = useState(0);
   const [sortLike, setSortLike] = useState(1);
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
@@ -57,7 +58,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const theme = useTheme();
 
   useEffect(() => {
-    // listView?.renderList();
     getList(1);
   }, [refresh]);
 
@@ -69,13 +69,15 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   };
 
   const changeSortTime = () => {
-    document.body.scrollIntoView({ block: "start", inline: "nearest" })
-    setSortTime(sortTime === 1 ? 0 : 1);
+    document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
+    setSortTime(sortTime === 1 ? 2 : 1);
+    setSortLike(0);
     initList();
   };
   const changeSortLike = () => {
-    document.body.scrollIntoView({ block: "start", inline: "nearest" })
-    setSortLike(sortLike === 1 ? 0 : 1);
+    document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
+    setSortLike(sortLike === 1 ? 2 : 1);
+    setSortTime(0);
     initList();
   };
 
@@ -105,11 +107,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         <div className="sort-box">
           <div>
             {t('detailHeat')}
-            <SortIcon changeSort={changeSortLike} flag={sortLike === 0} />
+            <SortIcon changeSort={changeSortLike} flag={sortLike} />
           </div>
           <div>
             {t('detailTime')}
-            <SortIcon changeSort={changeSortTime} flag={sortTime === 0} />
+            <SortIcon changeSort={changeSortTime} flag={sortTime} />
           </div>
         </div>
       </CommentTitle>

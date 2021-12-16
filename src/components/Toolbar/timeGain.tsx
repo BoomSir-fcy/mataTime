@@ -1,7 +1,9 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
+import BigNumber from 'bignumber.js';
 import { Flex, Box, Text, Image } from 'uikit';
 import { PopupWrap, Icon } from 'components';
+import { formatDisplayApr } from 'utils/formatBalance';
 
 const TimeIcon = styled(Image)``;
 const PopupButton = styled(Flex)`
@@ -20,7 +22,9 @@ const PopupContent = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 
-export const TimeGain: React.FC = React.memo(() => {
+export const TimeGain: React.FC<{
+  total: string;
+}> = React.memo(({ total }) => {
   const theme = useTheme();
   const Popref = React.useRef(null);
 
@@ -32,7 +36,9 @@ export const TimeGain: React.FC = React.memo(() => {
           <Box width="18px" mr="10px">
             <TimeIcon width={18} height={18} src="/images/tokens/TIME.svg" />
           </Box>
-          <Text color="textTips">21</Text>
+          <Text color="textTips">
+            {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
+          </Text>
         </PopupButton>
       }
       position="top center"
@@ -46,7 +52,7 @@ export const TimeGain: React.FC = React.memo(() => {
           Time收益
         </Text>
         <Text fontWeight="bold" ellipsis>
-          2699662113123123
+          {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
         </Text>
       </PopupContent>
     </PopupWrap>

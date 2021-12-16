@@ -15,13 +15,13 @@ const useUnreadMsg = (flag?: number | boolean) => {
 
   const getMessageBody = useCallback((newMsg) => {
     if (newMsg.message_at_me !== unReadMsg.message_at_me) {
-      return t("Someone's mention you")
+      return t("Someone mentioned you")
     }
     if (newMsg.message_comment !== unReadMsg.message_comment) {
-      return t("Someone's comment your post or comment")
+      return t("Someone left you a comment")
     }
     if (newMsg.message_like !== unReadMsg.message_like) {
-      return t("Someone's like your post or comment")
+      return t("Someone liked your post or comment")
     }
     if (newMsg.message_system !== unReadMsg.message_system) {
       return t("You have a system notification")

@@ -140,7 +140,7 @@ const MentionOperator: React.FC<IProps> = ({
               {itemData.like_num || 0}
             </Box>
           )}
-          {hasTime && <TimeGain />}
+          {hasTime && <TimeGain total={itemData.total_receive_time} />}
         </Flex>
         {hasReward && (
           <RewardAuthTag
