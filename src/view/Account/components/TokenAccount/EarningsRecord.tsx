@@ -17,7 +17,7 @@ import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import dayjs from 'dayjs';
-import { GetTaskName } from 'view/Task/hooks/matter';
+import { GetTaskName, GetTaskTag } from 'view/Task/hooks/matter';
 import { fetchMatterIncomeList, fetchIncomeList } from 'store/wallet/reducer';
 import { Link } from 'react-router-dom';
 
@@ -116,16 +116,6 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
     }
   };
 
-  const getTaskType = type => {
-    if (type === 1) {
-      return t('DailyTask');
-    } else if (type === 2) {
-      return t('WeekTask');
-    } else {
-      return t('SpecialTask');
-    }
-  };
-
   const getItemTaskName = id => {
     const configInfo = GetTaskName(id);
     return configInfo?.count
@@ -191,7 +181,9 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
                           t('YYYY-MM-DD HH:mm:ss')
                         )}
                       </ItemText>
-                      <ItemText>{getTaskType(item.task_type)}</ItemText>
+                      <ItemText>
+                        {GetTaskTag(item.task_type).toUpperCase()}
+                      </ItemText>
                       <ItemText>
                         {t(getItemTaskName(item.task_name_id))}
                       </ItemText>
