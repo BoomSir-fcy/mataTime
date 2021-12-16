@@ -14,7 +14,7 @@ import {
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce } from 'lodash';
-import { Flex } from 'uikit';
+import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
 import { UploadList } from './UploadList';
@@ -43,6 +43,7 @@ import { useTranslation } from 'contexts/Localization';
 import { getPostBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
+import { ARTICLE_POST_MAX_LEN } from 'config';
 
 type Iprops = {
   type: any;
@@ -109,7 +110,7 @@ const insertTopic = (editor, character = '') => {
   //   type: 'topic',
   //   children: [{ text: character }]
   // };
-  Transforms.insertText(editor, `#${character}#`);
+  Transforms.insertText(editor, `#${character} `);
   // Transforms.insertNodes(editor, topic);
 };
 
@@ -167,6 +168,8 @@ export const Editor = (props: Iprops) => {
   const [searcTopic, setSearcTopic] = useState(false);
   const [refresh, setRefresh] = useState(1);
   const [target, setTarget] = useState<Range | undefined>();
+  const [articleLength, setArticleLength] = useState(0)
+
   const [stateEdit, setStateEdit] = useImmer({
     userList: [],
     search: '',
@@ -369,7 +372,7 @@ export const Editor = (props: Iprops) => {
     const newValue1 = removeEmptyText(newValue);
 
     //限制用户输入数量
-    if (getPostBLen(content) > 280) {
+    if (getPostBLen(content) > ARTICLE_POST_MAX_LEN) {
       setTimeId(null);
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
@@ -414,7 +417,8 @@ export const Editor = (props: Iprops) => {
 
           const { content } = deepContent(value);
           const { selection } = editor;
-
+          const lenght = getPostBLen(content)
+          setArticleLength(lenght)
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
             const wordBefore = slateEditor.before(editor, start, {
@@ -465,6 +469,11 @@ export const Editor = (props: Iprops) => {
                 : t('editorPlaceholder')
             }
           />
+          {/* <Box className='num-tips' position="absolute" bottom="84px" right="28px" >
+            <Text color={articleLength > ARTICLE_POST_MAX_LEN ? 'failure' : 'primary'}>
+              {ARTICLE_POST_MAX_LEN - articleLength}
+            </Text>
+          </Box> */}
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
         <Flex justifyContent="space-between" alignItems="center">

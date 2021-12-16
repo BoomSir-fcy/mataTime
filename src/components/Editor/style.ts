@@ -43,11 +43,13 @@ export const SlateBox = styled.div`
   padding: 15px;
   padding-bottom: 30px;
   z-index: 1004;
+  /* background: pink; */
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
     background: ${({ theme }) => theme.colors.backgroundTextArea};
+    /* background: red; */
     padding: 15px;
-    padding-bottom: 0px;
+    padding-bottom: 16px;
     border-radius: 5px;
     min-height: 112px !important;
     max-height: 120px;
@@ -63,7 +65,10 @@ export const SlateBox = styled.div`
       background: rgba(83, 83, 83, 0.5);
     }
     & > div {
-      min-height: 95px !important;
+      min-height: 88px !important;
+      &.num-tips{
+        min-height: 16px !important;
+      }
     }
   }
 `;

@@ -8,8 +8,9 @@ import { useWeb3React } from '@web3-react/core';
 import { storeAction } from 'store';
 import eventBus from 'utils/eventBus';
 import useAuth from 'hooks/useAuth';
-import { storage } from 'config';
+import { MAX_PER_SPEND_TIME, storage } from 'config';
 import InsufficientBalanceModal from './InsufficientBalanceModal'
+import { usePlatformTimeBalance } from 'store/wallet/hooks';
 
 export default function HttpUpdater() {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ export default function HttpUpdater() {
   const { t } = useTranslation()
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false)
+  const { availableBalance } = usePlatformTimeBalance()
+
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
@@ -44,6 +47,13 @@ export default function HttpUpdater() {
       eventBus.addEventListener('insufficient', handleInsufficient);
     }
   }, [handleInsufficient])
+
+  useEffect(() => {
+    if (availableBalance.isGreaterThanOrEqualTo(MAX_PER_SPEND_TIME)) {
+      setVisible(false)
+    }
+  }, [availableBalance])
+
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal

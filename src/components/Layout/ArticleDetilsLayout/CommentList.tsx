@@ -54,14 +54,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
-  const listRef = React.useRef<any>();
   const theme = useTheme();
 
   useEffect(() => {
-    console.log(listRef);
-    if (listRef.current) {
-      listRef.current.loadList();
-    }
+    // listView?.renderList();
+    getList(1);
   }, [refresh]);
 
   const initList = () => {
@@ -82,18 +79,18 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     initList();
   };
 
-  const getList = () => {
+  const getList = (current?: number) => {
     if (!itemData.id) return;
     Api.CommentApi.getCommentList({
       pid: itemData.id,
       prepage: MAX_SPEND_TIME_PAGE_TATOL,
-      page: page,
+      page: current || page,
       sort_add_time: sortTime,
       sort_like: sortLike
     }).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
-        setPage(page + 1);
+        setPage((current || page) + 1);
         setListData([...listData, ...(res.data.list || [])]);
         // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
         setTotalPage(res.data.total_page);
@@ -117,8 +114,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         </div>
       </CommentTitle>
       <List
-        ref={listRef}
-        marginTop={410}
         renderList={() => {
           if (!itemData.id) return;
           if (loading || page > totalPage) return false;

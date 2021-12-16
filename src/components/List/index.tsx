@@ -25,6 +25,7 @@ interface Iprops {
   marginTop?: number;
   loading?: boolean;
   appReducer: any;
+  onRef?: any;
 }
 
 class ListComponents extends React.Component<Iprops> {
@@ -55,6 +56,7 @@ class ListComponents extends React.Component<Iprops> {
         this.loadList();
       }
     );
+    // this.props?.onRef(this.props);
     document.addEventListener('scroll', this.scrollRenderHandler.bind(this));
   }
 
@@ -86,7 +88,8 @@ class ListComponents extends React.Component<Iprops> {
           </LoadingWrapper>
         ) : (
           <NoDataWrapper>
-            {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"}
+            {/* {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"} */}
+            It's at the bottom～
           </NoDataWrapper>
         )}
       </Box>
