@@ -34,6 +34,8 @@ const WrapText = styled(Text)`
 `;
 const MinWidthButton = styled(Button)`
   width: max-content;
+  min-width: 150px;
+  max-width: 150px;
 `;
 const Fans = React.memo(() => {
   const { t } = useTranslation();

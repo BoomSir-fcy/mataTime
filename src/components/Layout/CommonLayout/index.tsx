@@ -1,56 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
-import { Header, CommonLeftMenu, Affix } from 'components';
 import { Header as CenterHeader } from 'view/Home/center';
-import { Flex, Box } from 'uikit';
-import menu from './menuData';
-import {
-  CommonLayoutWrapper,
-  LayoutContentWrapper,
-  LayoutLeftWrapper,
-  LayoutMiddleWrapper,
-  LayoutRightWrapper
-} from './style';
+import { LayoutMiddleWrapper } from './style';
 
 import NewsMe from 'view/News/Me';
 import NewsComment from 'view/News/Comment';
 import NewsPraise from 'view/News/Praise';
 import NewsNotice from 'view/News/Notice';
-type IProps = {};
 
-export const CommonLayout: React.FC<IProps> = (props: any) => {
+export const CommonLayout: React.FC = (props: any) => {
   const { t } = useTranslation();
-  const { match, location } = props;
-  const [screenWid, setScreenWid] = useState<number>(0);
+  const { location } = props;
 
-  useEffect(() => {
-    const wid = document.body.clientWidth;
-    setScreenWid(wid);
-  }, []);
+  const title =
+    location.pathname !== '/notification/notice'
+      ? t('newsNotice')
+      : t('newsSystem');
 
   return (
     <LayoutMiddleWrapper>
-      <CenterHeader title={t('newsNotice')} />
+      <CenterHeader title={title} />
       <Route
-        path={'/news'}
+        path={'/notification'}
         exact
-        render={() => <Redirect to={'/news/me'} push />}
+        render={() => <Redirect to={'/notification/me'} push />}
       />
       <Route
-        path={'/news/me'}
+        path={'/notification/me'}
         render={props => {
           return <NewsMe {...props} />;
         }}
       />
       <Route
-        path={'/news/comment'}
+        path={'/notification/comment'}
         render={props => {
           return <NewsComment {...props} />;
         }}
       />
-      <Route path={'/news/praise'} render={props => <NewsPraise />} />
-      <Route path={'/news/notice'} component={NewsNotice} />
+      <Route path={'/notification/praise'} component={NewsPraise} />
+      <Route path={'/notification/notice'} component={NewsNotice} />
     </LayoutMiddleWrapper>
   );
 };
