@@ -27,7 +27,7 @@ export default function TimeLeftUpdater() {
 
   useEffect(() => {
     // 剩余时间小于提示时间（5分钟） 并且 余额大于单次最大花费数量, 并且第一次提示, 并且已经登录
-    if (leftTime < SERVICE_TIME_LIMIT && availableBalance.isGreaterThan(MAX_PER_SPEND_TIME) && !prompted && token) {
+    if (leftTime && leftTime < SERVICE_TIME_LIMIT && availableBalance.isGreaterThan(MAX_PER_SPEND_TIME) && !prompted && token) {
       setVisible(true)
       setPrompted(true)
     } else if (leftTime > SERVICE_TIME_LIMIT) {

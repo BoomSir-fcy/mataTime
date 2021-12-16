@@ -369,7 +369,7 @@ export const Editor = (props: Iprops) => {
     let { userIdList, content } = deepContent(value);
     const newValue = parseValue(value);
 
-    const newValue1 = removeEmptyText(newValue);
+    // const newValue1 = removeEmptyText(newValue);
 
     //限制用户输入数量
     if (getPostBLen(content) > ARTICLE_POST_MAX_LEN) {
@@ -377,7 +377,7 @@ export const Editor = (props: Iprops) => {
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
     props.sendArticle(
-      JSON.stringify(newValue1),
+      JSON.stringify(newValue),
       imgList.join(','),
       userIdList.join(',')
     );
