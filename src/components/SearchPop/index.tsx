@@ -160,7 +160,7 @@ export const SearchPop = (props: Iprops) => {
                 onClick={e => callback(item, type)}
               >
                 <UserTitle style={{ flex: 1 }} title={item.topic_name}>
-                  #{item.topic_name}#
+                  #{item.topic_name}
                 </UserTitle>
               </Flex>
             ))}

@@ -3,7 +3,7 @@ try {
 
     } else {
         (function() {
-            var canvas = document.querySelector('canvas'),
+            var canvas = document.querySelector('#particles'),
                 ctx = canvas.getContext('2d')
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
