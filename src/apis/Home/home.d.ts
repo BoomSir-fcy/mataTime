@@ -33,7 +33,7 @@ declare namespace Api {
 
     interface post {
       add_time: '2021-12-06T03:32:03Z';
-      add_time_desc: '2小时';
+      add_time_desc: '';
       aid: 0;
       cid: 0;
       comment_num: 0;

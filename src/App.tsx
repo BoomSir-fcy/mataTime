@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
 import GlobalStyle from 'style/global';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -27,6 +28,14 @@ import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en';
 dayjs.extend(relativeTime);
+dayjs.extend(updateLocale)
+
+// dayjs.updateLocale('en', {
+//   relativeTime: {
+//     ss: "%d s",
+
+//   }
+// })
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
