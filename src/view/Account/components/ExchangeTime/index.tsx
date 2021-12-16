@@ -31,7 +31,6 @@ const CenterText = styled(Text)`
 
 const Exchange: React.FC = () => {
   useFetchDSGApproveNum()
-  useFetTimeInfo()
   const { t } = useTranslation();
   const { account } = useWeb3React()
   const [ToFaq, setToFaq] = useState(false)

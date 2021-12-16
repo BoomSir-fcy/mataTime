@@ -21,6 +21,7 @@ export const variants = {
   ORANGE: "orange",
   LEFT: "left",
   RIGHT: "right",
+  PRIMARY_GREEN: "primaryGreen",
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];

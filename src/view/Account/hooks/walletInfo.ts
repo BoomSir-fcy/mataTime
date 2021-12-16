@@ -84,7 +84,7 @@ export function useDpWd() {
   const onApprove = useCallback(async (token: string) => {
     try {
       let tx
-      if (token === 'Time') {
+      if (token === 'TIME') {
         tx = await TimeContract.approve(CashierDeskAddr, ethers.constants.MaxUint256)
       } else {
         tx = await MatterContract.approve(CashierDeskAddr, ethers.constants.MaxUint256)

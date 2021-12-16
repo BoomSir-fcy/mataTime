@@ -282,6 +282,7 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
         <Container>
           {singUpStep === 0 && <LogoWarpper>
             <Logo
+              style={{ marginLeft: '-10px' }}
               url="/"
               src={`${require(isDark
                 ? './images/LOGO2.svg'

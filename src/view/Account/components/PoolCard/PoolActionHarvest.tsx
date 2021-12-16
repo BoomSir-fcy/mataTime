@@ -61,7 +61,7 @@ const HandleButton = ({
         </Button>
       )}
       <Button
-        variant="success"
+        variant="primaryGreen"
         width={100}
         margin="0 12px"
         disabled={pendingTx}

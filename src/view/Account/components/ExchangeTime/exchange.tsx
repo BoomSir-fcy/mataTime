@@ -90,11 +90,46 @@ const FAQ = styled(Flex)`
   position: absolute;
   right: -198px;
   top: 70px;
+  &.Mobile{
+    position: static;
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+  }
 `;
 const FaqBox = styled(Box)``;
 const IsBeginBox = styled(TimeBox)`
   margin-bottom: 150px;
 `;
+
+const FaqOutBox = ({ isMobile }) => {
+  return (
+    <FAQ className={isMobile ? 'Mobile' : ''} as={Link} to="/account/faq">
+      <AnimationRingIcon
+        style={{ cursor: 'pointer' }}
+        color="white_black"
+        active1
+        active3
+        bgColor
+        showImg
+        isRotate
+        width="8rem"
+      >
+        <FaqBox>
+          <Text
+            color="white_black"
+            style={{ cursor: 'pointer' }}
+            mb="6px"
+            fontSize="30px"
+            bold
+          >
+            FAQ
+          </Text>
+        </FaqBox>
+      </AnimationRingIcon>
+    </FAQ>
+  )
+}
 
 interface init {
   nowRound: TimeInfo;
@@ -376,30 +411,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </Text>
         </IsBeginBox>
       )}
-      {!isMobile && <FAQ as={Link} to="/account/faq">
-        <AnimationRingIcon
-          style={{ cursor: 'pointer' }}
-          color="white_black"
-          active1
-          active3
-          bgColor
-          showImg
-          isRotate
-          width="8rem"
-        >
-          <FaqBox>
-            <Text
-              color="white_black"
-              style={{ cursor: 'pointer' }}
-              mb="6px"
-              fontSize="30px"
-              bold
-            >
-              FAQ
-            </Text>
-          </FaqBox>
-        </AnimationRingIcon>
-      </FAQ>}
+      <FaqOutBox isMobile={isMobile} />
     </Center>
   );
 };

@@ -1,5 +1,7 @@
 import { cloneDeep, throttle } from "lodash";
 import { Api } from "apis";
+import { ResponseCode } from 'apis/type'
+import eventBus from './eventBus'
 
 enum MessageProtocol {
   // 报错
@@ -59,7 +61,7 @@ export class IM extends EventTarget {
   url: string = process.env.NODE_ENV === 'production'
     ? `${process.env.React_APP_WS_URL}/v1/ws`
     : `${process.env.React_APP_WS_URL}/v1/ws`
-  // : 'ws://192.168.101.122:8888/v1/ws';
+  // : 'ws://192.168.101.112:8888/v1/ws';
   token: string;
   userToken: string;
 
@@ -200,6 +202,8 @@ export class IM extends EventTarget {
 
   private parseMessage(event: MessageEvent) {
     const data = JSON.parse(event.data)
+    const isSuccess = this.parseMessageCode(data)
+    if (!isSuccess) return
     switch (data.ptl) {
       case IM.MessageProtocol.WSProtocol_SYSTEM_NOTIFY:
         this.dispatchEvent(new MessageEvent(ImEventType.SYSTEM_MSG, {
@@ -232,6 +236,29 @@ export class IM extends EventTarget {
         console.debug('unread ws code: ', data)
         break
     }
+  }
+
+  private parseMessageCode(data: ResponseMessageData): boolean {
+    switch (data.code) {
+      case ResponseCode.INSUFFICIENT_BALANCE:
+        eventBus.dispatchEvent(
+          new MessageEvent('insufficient', {
+            data
+          })
+        )
+        this.addSuspendTpl(this.messageProtocol.WSProtocol_Spend_Time)
+        return false
+      case 0:
+        // eventBus.dispatchEvent(
+        //   new MessageEvent('insufficient', {
+        //     data
+        //   })
+        // )
+        return false
+      default:
+        return true
+    }
+    // return true
   }
 
   private onmessageHandle(event: MessageEvent) {

@@ -15,6 +15,7 @@ import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { WalletHead } from 'components/HeaderContent';
+import { useFetTimeInfo } from 'store/wallet/hooks';
 
 
 const CenterCard = styled(Box)`
@@ -34,8 +35,10 @@ const RewardList = React.lazy(() => import('./components/Reward/list'));
 const FAQ = React.lazy(() => import('./components/Faq'));
 
 const Account = props => {
+  useFetTimeInfo()
+
   const { t } = useTranslation();
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
+  const { isMobile } = useMenuNav()
   const CurrentRound = useStore(p => p.wallet.CurrentRound);
   const { pathname } = useLocation();
 
@@ -43,6 +46,7 @@ const Account = props => {
   const getHeadTitle = () => {
     if (pathname === '/account') return t('Account My Wallet')
     if (pathname === '/account/time') return t('TIME')
+    if (pathname === '/account/faq') return t('FAQ')
     if (pathname === '/account/stake') return t('Stake')
     if (pathname === '/account/reward') return t('rewardAutherWallet')
   }
