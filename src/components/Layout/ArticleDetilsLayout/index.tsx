@@ -34,7 +34,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
     Api.CommentApi.createComment({
       pid: itemData.id,
       comment: res,
-      remind_user,
+      remind_user
     }).then(res => {
       if (Api.isSuccess(res)) {
         toastSuccess(res.data);
@@ -108,7 +108,12 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       </MeItemWrapper>
       {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
       <Editor type="comment" sendArticle={sendArticle} />
-      <CommentList nonce={nonce} setNonce={setNonce} key={refresh} itemData={itemData} />
+      <CommentList
+        nonce={nonce}
+        setNonce={setNonce}
+        key={refresh}
+        itemData={itemData}
+      />
     </PageContainer>
   );
 };
