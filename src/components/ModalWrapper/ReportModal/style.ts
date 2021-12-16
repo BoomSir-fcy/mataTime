@@ -29,7 +29,9 @@ export const ModalTitleWrapper = styled(Box)`
   }
 `;
 export const ReportModalWrapper = styled(Box)`
-  width: 500px;
+  max-width: 500px;
+  width: 40vw;
+  min-width: 300px;
 `;
 
 export const ReportContentWrapper = styled(Box)`

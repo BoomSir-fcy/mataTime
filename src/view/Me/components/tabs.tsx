@@ -7,18 +7,18 @@ const TabsBox = styled(Card)`
   display: flex;
   align-items: center;
   height: 60px;
-  padding: 0 26px;
+  ${({ theme }) => theme.mediaQueriesSize.paddingxs}
   background-color: transparent;
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 const TabItems = styled(Flex)`
   position: relative;
-  width: 60px;
+  padding: 0 20px;
   height: 100%;
   justify-content: center;
   align-items: center;
-  margin: 0 17px;
+  margin-right: 17px;
   color: ${({ theme }) => theme.colors.textgrey};
   &.active {
     text-align: center;

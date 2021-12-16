@@ -40,15 +40,20 @@ export const SlateBox = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
   border-radius: ${({ theme }) => theme.radii.card};
-  padding: 15px;
+  padding: 8px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 15px;
+  }
   padding-bottom: 30px;
   z-index: 1004;
   /* background: pink; */
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
     background: ${({ theme }) => theme.colors.backgroundTextArea};
-    /* background: red; */
-    padding: 15px;
+    padding: 8px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      padding: 15px;
+    }
     padding-bottom: 16px;
     border-radius: 5px;
     min-height: 112px !important;
@@ -66,7 +71,7 @@ export const SlateBox = styled.div`
     }
     & > div {
       min-height: 88px !important;
-      &.num-tips{
+      &.num-tips {
         min-height: 16px !important;
       }
     }

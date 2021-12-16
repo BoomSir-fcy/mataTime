@@ -34,7 +34,7 @@ const Title = styled(Flex)`
 const NumberBox = styled(Flex)`
   width: 100px;
   height: 35px;
-  background: ${({ theme }) => theme.colors.backgroundMenu};
+  background: ${({ theme }) => theme.colors.input};
   box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.35);
   border-radius: 10px;
   align-items: center;
@@ -121,7 +121,7 @@ const Recharge: React.FC<init> = ({
       setVal('');
     } catch (e) {
       console.error(e);
-      toast.error(t('Account Recharge failed'));
+      toast.error(t('Account Recharge failed!'));
     } finally {
       setpending(false);
     }
@@ -140,7 +140,7 @@ const Recharge: React.FC<init> = ({
       setpending(false);
       dispatch(fetchApproveNumAsync(account));
     }
-  }, [onApprove, account]);
+  }, [onApprove, account, Token]);
   // 输入框输入限制
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {

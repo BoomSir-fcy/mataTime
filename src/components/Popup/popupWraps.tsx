@@ -34,7 +34,7 @@ const PopupWrapModal = (props, ref) => {
       nested
       keepTooltipInside
       closeOnDocumentClick
-      position={props.position || 'bottom center'}
+      position={props.position || 'bottom right'}
       arrowStyle={props.arrowStyle}
     >
       {props.children}

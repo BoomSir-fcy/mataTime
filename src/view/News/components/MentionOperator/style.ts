@@ -5,9 +5,14 @@ export const MentionOperatorWrapper = styled.div`
   .mention-operator {
     width: 100%;
     margin-top: 10px;
-    padding-left: 73px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      padding-left: 73px;
+    }
     .operator-item {
-      min-width: 120px;
+      min-width: 90px;
+      ${({ theme }) => theme.mediaQueries.sm} {
+        min-width: 120px;
+      }
       color: #b5b5b5;
       display: flex;
       align-items: center;

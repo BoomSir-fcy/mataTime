@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
@@ -33,7 +33,7 @@ const NoticeSet = () => {
   const dispatch = useDispatch();
   const setting = useStore(p => p.loginReducer.userInfo);
   const { t } = useTranslation();
-  const { toastSuccess, toastError } = useToast();
+  const { toastSuccess, toastError, toastInfo } = useToast();
   const [state, setState] = useImmer({
     msg_remind: setting.msg_remind === 1 ? true : false
   });
@@ -41,20 +41,50 @@ const NoticeSet = () => {
   const setNotice = async (params: Api.Set.likeSetParams) => {
     const keys: any = Object.keys(params);
     try {
-      const res = await Api.SetApi.likeSet(params);
-      if (Api.isSuccess(res)) {
-        setState(p => {
-          p[keys] = params[keys] === 1 ? true : false;
-        });
-        dispatch(fetchThunk.fetchUserInfoAsync());
-        toastSuccess(t('editSuccess'));
-      } else {
-        toastError(t('editFial'));
-      }
+      Notification.requestPermission(async (status: NotificationPermission) => {
+        console.log(status); // 仅当值为 "granted" 时显示通知
+        // var n = new Notification("title", { body: "notification body" }); // 显示通知
+        if (status === 'granted') {
+          const res = await Api.SetApi.likeSet(params);
+          if (Api.isSuccess(res)) {
+            setState(p => {
+              p[keys] = params[keys] === 1 ? true : false;
+            });
+            dispatch(fetchThunk.fetchUserInfoAsync());
+            toastSuccess(t('editSuccess'));
+          } else {
+            toastError(t('editFial'));
+          }
+          return
+        }
+        if (status === 'default') {
+          toastInfo(t('Please open browser notification'));
+          return
+        }
+        if (status === 'denied') {
+          toastError(t('Please open browser notification'));
+        }
+      });
     } catch (error) {
+      toastError(t('editFial'));
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    try {
+      if (state.msg_remind) {
+        Notification.requestPermission((status) => {
+          setState(p => {
+            p.msg_remind = status === 'granted' ? true : false;
+          });
+        });
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+  }, [state.msg_remind])
 
   return (
     <NoticeSetBox isBoxShadow>

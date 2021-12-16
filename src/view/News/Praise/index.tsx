@@ -122,9 +122,9 @@ const NewsPraise: React.FC = props => {
                 <div className="comment-content">
                   <MentionItem
                     itemData={{
-                      ...item,
                       ...item.comment,
                       ...item.post,
+                      add_time: item.post.add_time_desc,
                       user_name: item.post.nick_name,
                       user_avator_url: item.post.nft_image
                     }}

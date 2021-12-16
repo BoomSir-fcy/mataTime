@@ -63,7 +63,7 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
-  const coin_type = token === 'Time' ? 1 : 2
+  const coin_type = token === 'TIME' ? 1 : 2
   const { list: HistoryList, page, setPageNum, loading, end } = useFetchHistoryList(coin_type)
   const loadMore = useCallback((e: any) => {
     const { offsetHeight, scrollTop, scrollHeight } = e.nativeEvent.target;

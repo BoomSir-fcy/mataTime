@@ -72,7 +72,9 @@ const Desc = styled(Box)`
     color: ${({ theme }) => theme.colors.textTips};
   }
   .marginLeft {
-    margin-left: 30px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      margin-left: 30px;
+    }
   }
 `;
 
@@ -199,7 +201,7 @@ const Profile: React.FC<any> = props => {
 
   return (
     <Center>
-      <Crumbs title={t('meHome')} back={Boolean(uid)} />
+      <Crumbs zIndex={10} title={t('meHome')} back={Boolean(uid)} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -234,7 +236,7 @@ const Profile: React.FC<any> = props => {
                 <Text className="name" ellipsis maxLine={2}>
                   {profile.nick_name}
                 </Text>
-                <Flex mt="5px">
+                <Flex mt="5px" flexWrap="wrap">
                   <Flex>
                     {/* <Certification /> */}
                     <Text className="text">

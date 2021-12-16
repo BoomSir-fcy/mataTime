@@ -7,7 +7,11 @@ import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { tokens } from 'config';
-import { SQUARE_REGEXP, HTTP_REGEXP, SYMBOL_REGEXP } from 'config/constants/regexp';
+import {
+  SQUARE_REGEXP,
+  HTTP_REGEXP,
+  SYMBOL_REGEXP
+} from 'config/constants/regexp';
 
 import history from 'routerHistory';
 
@@ -28,7 +32,7 @@ const ExpandWrapper = styled.div`
 `;
 const ParagraphItem = styled.div`
   word-wrap: break-word;
-  word-break: keep-all;
+  word-break: break-word;
   white-space: pre-wrap;
   p {
     font-size: 18px;
@@ -69,7 +73,7 @@ export const ContentParsing = (props: IProps) => {
     try {
       let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
       setParsingResult(arr);
-    } catch (err: any) { }
+    } catch (err: any) {}
   }, [props.content]);
 
   useEffect(() => {
@@ -94,22 +98,18 @@ export const ContentParsing = (props: IProps) => {
     // const re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
     let replacedText: any;
     // Match url
-    replacedText = reactStringReplace(
-      text,
-      HTTP_REGEXP,
-      (match, i) => (
-        <a
-          key={match + i}
-          target="_blank"
-          onClick={event => event.stopPropagation()}
-          href={match}
-          title={match}
-          rel="noreferrer"
-        >
-          {match}
-        </a>
-      )
-    );
+    replacedText = reactStringReplace(text, HTTP_REGEXP, (match, i) => (
+      <a
+        key={match + i}
+        target="_blank"
+        onClick={event => event.stopPropagation()}
+        href={match}
+        title={match}
+        rel="noreferrer"
+      >
+        {match}
+      </a>
+    ));
     // Match token
     replacedText = reactStringReplace(
       replacedText,
@@ -125,7 +125,9 @@ export const ContentParsing = (props: IProps) => {
           }}
           title={match}
           key={match + i}
-        >${match}&nbsp;</a>
+        >
+          ${match}&nbsp;
+        </a>
       )
     );
     // Match hashtags
@@ -140,7 +142,9 @@ export const ContentParsing = (props: IProps) => {
             goRouter(`/topicList/empty/${match}`);
           }}
           key={match + i}
-        >#{match}&nbsp;</a>
+        >
+          #{match}&nbsp;
+        </a>
       )
     );
     return replacedText;
