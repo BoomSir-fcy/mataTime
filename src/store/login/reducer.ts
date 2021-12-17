@@ -25,13 +25,13 @@ interface UnreadMsg extends Api.News.UnreadMsgNum {
 }
 
 const initialState = {
-  isSignup: true,
-  isSignin: true,
+  isSignup: false,
+  isSignin: false,
   isGetStake: false,
   isStakeNft: false,
   signUpFail: false,
   signinLoading: false,
-  singUpStep: 4,
+  singUpStep: 0,
   userInfo: {} as Api.User.userInfoParams,
   nft: {} as any,
   nftStatus: false,
