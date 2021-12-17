@@ -61,19 +61,16 @@ export const SlateBox = styled.div`
     overflow-y: auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/
-      width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+      width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
       height: 1px;
     }
     &::-webkit-scrollbar-thumb {
       /*滚动条里面小方块*/
-      border-radius: 10px;
+      border-radius: 8px;
       background: rgba(83, 83, 83, 0.5);
     }
     & > div {
       min-height: 88px !important;
-      &.num-tips {
-        min-height: 16px !important;
-      }
     }
   }
 `;

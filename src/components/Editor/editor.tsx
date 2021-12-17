@@ -469,11 +469,6 @@ export const Editor = (props: Iprops) => {
                 : t('editorPlaceholder')
             }
           />
-          {/* <Box className='num-tips' position="absolute" bottom="84px" right="28px" >
-            <Text color={articleLength > ARTICLE_POST_MAX_LEN ? 'failure' : 'primary'}>
-              {ARTICLE_POST_MAX_LEN - articleLength}
-            </Text>
-          </Box> */}
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
         <Flex justifyContent="space-between" alignItems="center">
@@ -484,18 +479,27 @@ export const Editor = (props: Iprops) => {
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
           />
-          {initValue ? (
-            <div>
-              <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
+          <Flex alignItems="center">
+            {
+              articleLength > ARTICLE_POST_MAX_LEN && (
+                <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'failure' : 'primary'}>
+                  {ARTICLE_POST_MAX_LEN - articleLength}
+                </Text>
+              )
+            }
+            {initValue ? (
+              <div>
+                <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
+                <SendButton disabled={isDisabledSend} onClick={sendArticle}>
+                  保存并发布
+                </SendButton>
+              </div>
+            ) : (
               <SendButton disabled={isDisabledSend} onClick={sendArticle}>
-                保存并发布
+                {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
               </SendButton>
-            </div>
-          ) : (
-            <SendButton disabled={isDisabledSend} onClick={sendArticle}>
-              {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
-            </SendButton>
-          )}
+            )}
+          </Flex>
         </Flex>
         {(searcTopic || searchUser) && (
           <SearchPop

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useToast } from 'hooks';
 import { Icon, Editor, Avatar, ModalWrapper } from 'components';
+import { Input } from 'uikit'
 
 import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
