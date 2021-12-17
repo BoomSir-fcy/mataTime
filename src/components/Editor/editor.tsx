@@ -345,6 +345,8 @@ export const Editor = (props: Iprops) => {
         }
         if (item.children) {
           deepArr(item.children);
+        } else {
+          content += '-' // 换行算一个字符
         }
       });
     };
@@ -376,6 +378,7 @@ export const Editor = (props: Iprops) => {
       setTimeId(null);
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
+
     props.sendArticle(
       JSON.stringify(newValue),
       imgList.join(','),

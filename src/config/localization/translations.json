@@ -368,7 +368,7 @@
   "rewardAutherCancel": "Tip cancelled",
   "rewardAutherError": "Tip failed",
   "rewardAutherTipsText1": "Reward and support the author's creation on the chain. Your support will encourage the author to have greater creative enthusiasm",
-  "rewardAutherTipsText2": "*The platform will charge a 0.3% transaction fee",
+  "rewardAutherTipsText2": "*The platform will charge a 10% transaction fee",
   "rewardAutherAlreadyText1": "A total of %value% have rewarded this post",
   "rewardAutherAlreadyText2": "You have rewarded %value%",
   "rewardAutherAlreadyText3": "No one has tipped the post yet",
