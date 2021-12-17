@@ -7,7 +7,8 @@ import {
   CommentPop,
   List,
   ContentParsing,
-  PopupWrap
+  PopupWrap,
+  MoreOperatorEnum
 } from 'components';
 import { Flex, Button, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
@@ -100,6 +101,46 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     });
   };
 
+  // 更新列表
+  const updateList = (newItem: any, type: MoreOperatorEnum) => {
+    const {
+      FOLLOW,
+      CANCEL_FOLLOW,
+      SETTOP,
+      CANCEL_SETTOP,
+      COMMONT,
+      EXPAND,
+      SHIELD,
+      DELPOST
+    } = MoreOperatorEnum;
+    const handleChangeList = type === SHIELD || type === DELPOST;
+    let arr = [];
+
+    if (
+      type === FOLLOW ||
+      type === CANCEL_FOLLOW ||
+      type === SETTOP ||
+      type === CANCEL_SETTOP ||
+      type === COMMONT
+    ) {
+      initList();
+      return;
+    }
+
+    listData.forEach((item: any) => {
+      let obj = item;
+      if (item.id === newItem.id) {
+        obj = { ...newItem };
+      }
+      if (item.id === newItem.id && handleChangeList) {
+        // 屏蔽、删除
+      } else {
+        arr.push(obj);
+      }
+    });
+    setListData([...arr]);
+  };
+
   return (
     <CommentListBox>
       <CommentTitle justifyContent="space-between" alignItems="center">
@@ -124,7 +165,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         }}
       >
         {listData.map((item, index) => (
-          <CommentItem key={item.id}>
+          <CommentItem key={`${item.id}_${index}`}>
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
@@ -188,7 +229,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             </Flex>
             <MentionOperator
               type="Comment"
-              callback={initList}
+              callback={(data, type) => updateList(data, type)}
               itemData={{
                 ...item,
                 comment: {
