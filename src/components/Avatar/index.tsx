@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { variant } from 'styled-system';
-
+import default_avatar from 'assets/images/default_avatar.jpg';
 export * from './AvatarCard';
 
 const scales = {
@@ -53,8 +53,7 @@ export const Avatar: React.FC<{
 }> = props => {
   let deepProps = Object.assign({}, props);
   if (!deepProps.src) {
-    deepProps.src =
-      'https://pic1.zhimg.com/50/v2-c81d57456b7886c12affc22a699983ff_720w.jpg?source=1940ef5c';
+    deepProps.src = default_avatar;
   }
   return <Img {...deepProps} />;
 };
