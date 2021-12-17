@@ -43,39 +43,59 @@ const StyledTimerText = styled(Text)`
 
 export const Timer: React.FC<TimerProps> = ({
   minutes, seconds, hours, days, fontSize, color, bold,
+  years, months,
   itemMr = '12px', textMr = '4px',
 }) => {
   const { t } = useTranslation()
 
+  const showDaysLeft = !Boolean(years) && !Boolean(months)
   return (
     <StyledTimerFlex alignItems="flex-end">
-      {seconds === minutes && minutes === hours && hours === days && days === 0 && (
+      {seconds === minutes && minutes === hours && hours === days && days === months && months === years && years === 0 && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>0</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('s')}</StyledTimerText>
         </>
       )}
-      {Boolean(days) && (
+      {Boolean(years) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{days || '0'}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{years}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('yr')}</StyledTimerText>
+        </>
+      )}
+      {Boolean(months) && (
+        <>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{months}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('mth')}</StyledTimerText>
+        </>
+      )}
+      {!Boolean(years) && Boolean(months) && Boolean(days) && (
+        <>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{days}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('d')}</StyledTimerText>
         </>
       )}
-      {(Boolean(hours) || days > 0) && (
+      {showDaysLeft && Boolean(days) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{hours || '0'}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{days}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('d')}</StyledTimerText>
+        </>
+      )}
+      {showDaysLeft && (Boolean(hours) || days > 0) && (
+        <>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{hours}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('h')}</StyledTimerText>
         </>
       )}
-      {(Boolean(minutes) || hours > 0 || days > 0) && (
+      {showDaysLeft && (Boolean(minutes) || hours > 0 || days > 0) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{minutes || '0'}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{minutes}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('m')}</StyledTimerText>
         </>
       )}
-      {(Boolean(seconds) || minutes > 0 || hours > 0 || days > 0) && (
+      {showDaysLeft && (Boolean(seconds) || minutes > 0 || hours > 0 || days > 0) && (
         <>
-          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{seconds || '0'}</StyledTimerText>
+          <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{seconds || 0}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('s')}</StyledTimerText>
         </>
       )}
