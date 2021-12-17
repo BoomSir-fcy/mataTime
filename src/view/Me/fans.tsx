@@ -8,12 +8,14 @@ import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
+import { Crumbs } from 'components';
 
 import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
-  min-height: 705px;
-  padding: 29px 19px;
+  min-height: 500px;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  max-width: calc(100vw - 8px);
   background-color: transparent;
 `;
 const Column = styled(Flex)`
@@ -21,7 +23,7 @@ const Column = styled(Flex)`
   justify-content: space-around;
   min-height: 60px;
   margin-left: 22px;
-  width: calc(100% - 108px);
+  width: calc(100% - 70px);
 `;
 const ContentBox = styled(Flex)`
   min-height: 60px;
@@ -37,6 +39,12 @@ const MinWidthButton = styled(Button)`
   min-width: 150px;
   max-width: 150px;
 `;
+
+const NameText = styled(Text)`
+  max-width: 100%;
+  width: max-content;
+`;
+
 const Fans = React.memo(() => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
@@ -113,7 +121,7 @@ const Fans = React.memo(() => {
 
   return (
     <Box>
-      <CrumbsHead>
+      {/* <CrumbsHead>
         <Flex>
           <Text
             fontWeight="bold"
@@ -127,7 +135,22 @@ const Fans = React.memo(() => {
             {t('meHeaderPeople%value%', { value: total })}
           </Text>
         </Flex>
-      </CrumbsHead>
+      </CrumbsHead> */}
+      <Crumbs title={t('meHome')}>
+        <Flex>
+          <Text
+            fontWeight="bold"
+            mr="10px"
+            fontSize="14px"
+            style={{ textTransform: 'capitalize' }}
+          >
+            {t('meHeaderFans')}
+          </Text>
+          <Text fontSize="14px">
+            {t('meHeaderPeople%value%', { value: state.total })}
+          </Text>
+        </Flex>
+      </Crumbs>
       <Content isBoxShadow>
         <List
           marginTop={13}
@@ -147,10 +170,10 @@ const Fans = React.memo(() => {
                 >
                   <Avatar src={item.nft_image} scale="md" />
                   <Column>
-                    <Flex>
-                      <Text color="white_black" mr="13px">
+                    <Flex flexWrap="wrap">
+                      <NameText ellipsis color="white_black" mr="13px">
                         {item.nick_name}
-                      </Text>
+                      </NameText>
                       <Text color="textTips">
                         @{shortenAddress(item.address)}
                       </Text>

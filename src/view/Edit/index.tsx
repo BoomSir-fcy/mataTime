@@ -17,7 +17,7 @@ import CommonCircle from 'components/Cirde/CommonCircle';
 import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
 import defaultImages from 'assets/images/default_background.png';
-import { WalletHead } from 'components/HeaderContent';
+import { Crumbs } from 'components';
 
 const Background = styled(Flex)`
   position: relative;
@@ -41,6 +41,10 @@ const CenterImg = styled.img`
   position: absolute;
   top: 40%;
   left: 8%;
+`;
+
+const PageBox = styled(Box)`
+  max-width: calc(100vw - 8px);
 `;
 
 const Edit: React.FC = () => {
@@ -148,12 +152,12 @@ const Edit: React.FC = () => {
   }, [profile]);
 
   return (
-    <Box>
-      <WalletHead title={t('commonAccountEdit')}>
+    <PageBox>
+      <Crumbs title={t('commonAccountEdit')}>
         <Button onClick={debounce(() => updateUserInfo(), 1000)}>
           {t('commonAccountSave')}
         </Button>
-      </WalletHead>
+      </Crumbs>
       {/* <Header>
         <Text color="white_black" fontWeight="bold" fontSize="18px">
           {t('commonAccountEdit')}
@@ -202,7 +206,7 @@ const Edit: React.FC = () => {
       </Background>
       <NftAvatar />
       <FormInput ref={form} />
-    </Box>
+    </PageBox>
   );
 };
 

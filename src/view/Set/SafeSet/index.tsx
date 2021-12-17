@@ -7,7 +7,7 @@ import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
 
 const SafeSetBox = styled(Card)`
-  height: 700px;
+  /* height: 700px; */
   padding: 27px 0;
   background-color: transparent;
 `;

@@ -8,7 +8,10 @@ import { useTranslation } from 'contexts/Localization';
 
 const Nft = styled(Box)`
   background: transparent;
-  padding: 27px 26px 38px 34px;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 27px 26px 38px 34px;
+  }
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 const Title = styled(Text)`
