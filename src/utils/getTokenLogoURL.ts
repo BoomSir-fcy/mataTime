@@ -1,4 +1,4 @@
-import { getDsgAddress, getTimeAddress } from "./addressHelpers"
+import { getDsgAddress, getTimeAddress, getMatterAddress } from "./addressHelpers"
 
 const getTokenLogoURLs = (address: string): string[] => {
   if (getTimeAddress().toLowerCase() === address?.toLowerCase()) return [
@@ -6,6 +6,9 @@ const getTokenLogoURLs = (address: string): string[] => {
   ]
   if (getDsgAddress().toLowerCase() === address?.toLowerCase()) return [
     '/images/tokens/DSG.svg',
+  ]
+  if (getMatterAddress().toLowerCase() === address?.toLowerCase()) return [
+    '/images/tokens/MATTER.svg',
   ]
   return [
     `https://sv.dsgmetaverse.com/images/tokens/${address}.svg`,
