@@ -56,7 +56,7 @@ const Account = props => {
     if (pathname === '/account') return t('Account My Wallet');
     if (pathname === '/account/time') return t('TIME');
     if (pathname === '/account/faq') return t('FAQ');
-    if (pathname === '/account/stake') return t('Stake');
+    if (pathname === '/account/stake') return t('TIME Stake');
     if (pathname === '/account/reward') return t('rewardAutherWallet');
   };
 

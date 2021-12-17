@@ -8,7 +8,6 @@ import { Select } from 'components';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { toast } from 'react-toastify';
 import { Http } from 'apis/http';
-import RichTextExample from 'components/Editor/richtext'
 
 
 const StyledNotFound = styled.div`
@@ -68,7 +67,6 @@ const Test = () => {
           {/* <Button width="100px" ml="20px" onClick={() => handleRecharge()}>充值</Button> */}
         </Flex>
       </Box>
-      <RichTextExample />
       <Flex>
         <Card padding="50px">1</Card>
         <CardStyled1 margin="0 20px" padding="50px">2</CardStyled1>

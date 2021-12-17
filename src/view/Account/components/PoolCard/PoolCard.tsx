@@ -8,6 +8,7 @@ import getTimePeriods from 'utils/getTimePeriods';
 import { SinglePoolData, UserData, PoolUserData, PoolAprs } from 'store/pools/types';
 import PoolCardHeader from './PoolCardHeader'
 import PoolAction from './PoolAction';
+import { boostData } from '../../datas/boost'
 
 const ContainerStyled = styled(Container)`
  padding-top: 0;
@@ -24,6 +25,8 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
 
 
   const { years, months, days, hours, minutes } = getTimePeriods(Number(poolInfo.duration), true)
+
+  const boostVal = boostData.find(item => item.days === days)
 
   return (
     <Card isRadius={true}>
@@ -44,7 +47,11 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
             </Box>
             <Box>
               <Text color="textTips">{t('Lock time')}</Text>
-              <Timer bold color="white_black" itemMr="6px" years={years} months={months} minutes={minutes} hours={hours} days={days} />
+              <Timer bold color="white_black" itemMr="6px" days={days} />
+            </Box>
+            <Box>
+              <Text color="textTips">{t('Boost')}</Text>
+              <Text bold color="orange">{boostVal?.value ? `+${boostVal?.value}` : '--'}</Text>
             </Box>
             <Box>
               <Text color="textTips" textAlign="right">{t('Total staked')}</Text>
