@@ -19,6 +19,7 @@ type IProp = {
   replyType: string;
   commentId?: string;
   postId?: string;
+  onSuccess?: () => void;
   onClose: () => void;
 };
 
@@ -28,6 +29,7 @@ export const ReplyModal = React.memo((props: IProp) => {
   const { toastSuccess, toastError } = useToast();
   const {
     show,
+    onSuccess,
     onClose,
     itemData,
     replyType,
@@ -64,7 +66,7 @@ export const ReplyModal = React.memo((props: IProp) => {
       }).then(res => {
         if (Api.isSuccess(res)) {
           toastSuccess(res.data);
-          onClose();
+          onSuccess();
         } else {
           toastError(t('commonContactAdmin') || res.msg);
         }

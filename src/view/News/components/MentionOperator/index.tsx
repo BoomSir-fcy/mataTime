@@ -156,9 +156,12 @@ const MentionOperator: React.FC<IProps> = ({
         commentId={commentId}
         postId={postId}
         itemData={itemData}
-        onClose={() => {
+        onSuccess={() => {
           setReplyVisible(false);
           callback(itemData, MoreOperatorEnum.COMMONT);
+        }}
+        onClose={() => {
+          setReplyVisible(false);
         }}
       />
     </MentionOperatorWrapper>
