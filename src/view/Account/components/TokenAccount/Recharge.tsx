@@ -260,7 +260,7 @@ const Recharge: React.FC<init> = ({
       </Flex>
       {/* 提币、充值记录 */}
       <ModalWrapper
-        title={`${Token}${t('Account history record')}`}
+        title={`${Token} ${t('Account history record')}`}
         creactOnUse
         visible={visibleHistory}
         setVisible={setVisibleHistory}
