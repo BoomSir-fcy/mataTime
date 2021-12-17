@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
+import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
 import { Flex, Box, Button, Text, Input } from 'uikit';
 import { useToast } from 'hooks';
-import { OnApprove } from './hook';
+import { useStore, storeAction } from 'store';
+import { OnApprove, RewardAuthorContract } from './hook';
 
 import { useTranslation } from 'contexts/Localization';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import Dots from 'components/Loader/Dots';
 
@@ -36,13 +39,32 @@ export const RewardInput: React.FC<{
   onApprove: () => void;
   onCallBack: (event: string) => void;
 }> = React.memo(({ current, price, isOnApprove, onApprove, onCallBack }) => {
+  const dispatch = useDispatch();
+
   const { t } = useTranslation();
+  const { account } = useActiveWeb3React();
   const { handleApprove } = OnApprove(current[0]);
+  const { approve } = RewardAuthorContract();
   const [amount, setAmount] = React.useState('');
   const [state, setState] = useImmer({
     loading: false
   });
   const { toastError } = useToast();
+  const tokenViewList = useStore(p => p.appReducer.supportTokenViews);
+
+  const getMaxUint = async () => {
+    const isApprove = await approve(account, [current[0]]);
+    const newTokenList: any = tokenViewList.map(item => {
+      if (item[0] === current[0]) {
+        const res = [...item.toString().split(',')];
+        res.splice(4, 1, isApprove.toString());
+        return res;
+      }
+      return item;
+    });
+    onApprove();
+    dispatch(storeAction.setSupportToken(newTokenList));
+  };
 
   const ChangeApprove = React.useCallback(async () => {
     try {
@@ -51,7 +73,7 @@ export const RewardInput: React.FC<{
       });
       const res = await handleApprove();
       if (Boolean(res)) {
-        onApprove();
+        getMaxUint();
       } else {
         toastError(t('setNftAuthorizationFail'));
       }
@@ -109,8 +131,9 @@ export const RewardInput: React.FC<{
               <InputToken
                 inputMode="decimal"
                 value={amount}
-                pattern={`^[0-9]*[.,]?[0-9]{0,${(current && current[3]) || 6
-                  }}$`}
+                pattern={`^[0-9]*[.,]?[0-9]{0,${
+                  (current && current[3]) || 6
+                }}$`}
                 onChange={handleChange}
               />
               <Text color="white" mr="23px">
