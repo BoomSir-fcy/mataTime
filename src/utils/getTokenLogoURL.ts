@@ -11,6 +11,8 @@ const getTokenLogoURLs = (address: string): string[] => {
     '/images/tokens/MATTER.svg',
   ]
   return [
+    `/images/tokens/${address}.svg`,
+    `/images/tokens/${address}.png`,
     `https://sv.dsgmetaverse.com/images/tokens/${address}.svg`,
     `https://sv.dsgmetaverse.com/images/tokens/${address}.png`,
     `https://tokens.pancakeswap.finance/images/${address}.png`,

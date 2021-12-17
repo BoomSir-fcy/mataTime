@@ -112,7 +112,7 @@ export const CoinItem: React.FC<{
   return (
     <Rows>
       <Box width="20px" height="20px">
-        <TokenImage tokenAddress={token[1]} width={20} height={20} />
+        <TokenImage tokenAddress={token[0]} width={20} height={20} />
       </Box>
       <Text ml="5px">{token[2]}</Text>
     </Rows>
