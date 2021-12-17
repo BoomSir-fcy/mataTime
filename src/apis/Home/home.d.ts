@@ -59,6 +59,7 @@ declare namespace Api {
       user_id: 560640573;
       user_name: '0x1da407adfcf7266585';
       video_url: '';
+      send_name?: string;
     }
     interface postData extends Api.Error {
       data: {

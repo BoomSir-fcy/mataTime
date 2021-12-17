@@ -35,7 +35,7 @@ const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   padding: 8px 20px 16px;
   padding-bottom: 16px;
   border-radius: 10px;
-  bottom: ${({ bottom }) => (bottom ? bottom : 0)}px;
+  bottom: ${({ bottom }) => (bottom ? bottom : -5)}px;
   right: ${({ right }) => (right ? right : 0)}px;
   background: ${({ theme }) => theme.colors.greyBackground};
 `;
@@ -252,7 +252,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                     width="100%"
                   >
                     <AvatarCard
-                      userName={currentPost.user_name}
+                      userName={currentPost.user_name || currentPost.send_name}
                       avatar={avatar}
                       address={currentPost.user_address}
                     />
