@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
 import { formatDisplayApr, getFullDisplayBalance } from 'utils/formatBalance';
 import Dots from 'components/Loader/Dots';
-import { ModalWrapper } from 'components';
+import { ConnectWalletButton, ModalWrapper } from 'components';
 import HistoryModal from './Pops/HistoryModal';
 
 const Content = styled(Box)`
@@ -231,30 +231,34 @@ const Recharge: React.FC<init> = ({
             justifyContent="center"
             alignItems="center"
           >
-            <SureBtn
-              disable={pending}
-              onClick={() => {
-                if (approvedNum > 0) {
-                  // 充值
-                  handSure();
-                } else {
-                  // 授权
-                  handleApprove();
-                }
-              }}
-            >
-              {pending ? (
-                <Dots>
-                  {approvedNum > 0
-                    ? t('Account Trading')
-                    : t('Account Approving')}
-                </Dots>
-              ) : approvedNum > 0 ? (
-                t('AccountRecharge')
-              ) : (
-                t('Account Approve')
-              )}
-            </SureBtn>
+            {account ? (
+              <SureBtn
+                disable={pending}
+                onClick={() => {
+                  if (approvedNum > 0) {
+                    // 充值
+                    handSure();
+                  } else {
+                    // 授权
+                    handleApprove();
+                  }
+                }}
+              >
+                {pending ? (
+                  <Dots>
+                    {approvedNum > 0
+                      ? t('Account Trading')
+                      : t('Account Approving')}
+                  </Dots>
+                ) : approvedNum > 0 ? (
+                  t('AccountRecharge')
+                ) : (
+                  t('Account Approve')
+                )}
+              </SureBtn>
+            ) : (
+              <ConnectWalletButton />
+            )}
           </Flex>
         </RightBox>
       </Flex>
