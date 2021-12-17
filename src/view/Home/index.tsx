@@ -40,7 +40,9 @@ const RightCard = styled(Flex)`
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
-  const [filterVal, setFilterVal] = useState({});
+  const [filterVal, setFilterVal] = useState({
+    attention: 2,
+  });
   const { toastError } = useToast();
   // const  editorRef = useRef();
 
@@ -90,7 +92,7 @@ const Home: React.FC = (props: any) => {
         <CenterCard>
           <Crumbs zIndex={1005} title={t('homeHeaderTitle')} />
           <Editor type="post" sendArticle={sendArticle} />
-          <Tabs tabsChange={tabsChange} />
+          <Tabs tabsChange={tabsChange} defCurrentLeft={1} />
           <ArticleList
             setNonce={setNonce}
             nonce={nonce}
