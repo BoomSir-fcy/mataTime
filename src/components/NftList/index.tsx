@@ -8,29 +8,6 @@ import { useFetchSupportNFT } from 'view/Login/hook';
 
 import NftAvatar from './list';
 
-const Nft = styled(Box)`
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  margin-top: 19px;
-  padding: 27px 26px 38px 34px;
-  border-radius: 10px;
-  width: 40vw;
-  min-width: 600px;
-`;
-const NftCard = styled.div`
-  margin: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
-const NftImg = styled.img`
-  width: 200px;
-  height: 200px;
-  display: block;
-  margin-bottom: 10px;
-  cursor: pointer;
-`;
-
 export const StakeNFT: React.FC<{
   status?: number;
 }> = ({ status }) => {

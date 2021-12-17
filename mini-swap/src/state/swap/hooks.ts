@@ -368,20 +368,18 @@ export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
 }
 
 // updates the swap state to use the defaults for a given network
-export function useDefaultsFromURLSearch():
+export function useDefaultsFromURLSearch(outputCurrency?: string, inputCurrencyId?: string):
   | { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined }
   | undefined {
   const { chainId } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
-  const parsedQs = useParsedQueryString()
   const [result, setResult] = useState<
     { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
   >()
 
   useEffect(() => {
     if (!chainId) return
-    const parsed = queryParametersToSwapState(parsedQs)
-
+    const parsed = queryParametersToSwapState({ outputCurrency, inputCurrencyId })
     dispatch(
       replaceSwapState({
         typedValue: parsed.typedValue,
@@ -394,10 +392,11 @@ export function useDefaultsFromURLSearch():
 
     setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, chainId])
+  }, [dispatch, chainId, outputCurrency, inputCurrencyId])
 
   return result
 }
+
 
 export function useSwapCurrencies() {
   const {

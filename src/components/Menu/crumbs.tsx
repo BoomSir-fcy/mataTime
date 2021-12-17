@@ -11,13 +11,14 @@ import MenuButton from './MenuButton';
 
 const Card = styled(Flex)<{ zIndex?: number }>`
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   position: sticky;
   top: 0;
   background: ${({ theme }) => theme.colors.background};
-  z-index: ${({ zIndex }) => zIndex};
+  z-index: ${({ zIndex }) => zIndex || 1005};
   ${mediaQueriesSize.paddingxs}
   .text {
     font-size: 18px;
@@ -38,7 +39,8 @@ export const Crumbs: React.FC<{
   centerTitle?: string;
   back?: boolean;
   zIndex?: number;
-}> = React.memo(({ back, title, centerTitle, zIndex }) => {
+  children?: any;
+}> = React.memo(({ back, title, centerTitle, zIndex, children }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const colors = theme.colors.white_black;
@@ -50,47 +52,50 @@ export const Crumbs: React.FC<{
 
   return (
     <Card zIndex={zIndex}>
-      <MenuButton
-        aria-label="Toggle menu"
-        onClick={() => setIsPushed(prep => !prep)}
-        mr="24px"
-      >
-        {isPushed ? (
-          <HamburgerCloseIcon width="24px" color="textSubtle" />
-        ) : (
-          <HamburgerIcon width="24px" color="textSubtle" />
-        )}
-      </MenuButton>
-      {!back ? (
-        <Text className="text">{title || '首页'}</Text>
-      ) : (
-        <Flex
-          onClick={goBack}
-          alignItems="center"
-          style={{ cursor: 'pointer', position: 'relative', width: '100%' }}
+      <Flex alignItems="center">
+        <MenuButton
+          aria-label="Toggle menu"
+          onClick={() => setIsPushed(prep => !prep)}
+          mr="24px"
         >
-          <Flex alignItems="center">
-            <Icon
-              name={'icon-fanhui'}
-              size={20}
-              color={colors}
-              fontWeight="bold"
-            />
-            <Text className="text" ml="16px">
-              {t('newsBack')}
-            </Text>
-          </Flex>
-          {centerTitle && (
-            <CenterBox>
-              <Text className="text" ml="16px">
-                {centerTitle.length > 20
-                  ? centerTitle.slice(0, 20) + '...#'
-                  : centerTitle}
-              </Text>
-            </CenterBox>
+          {isPushed ? (
+            <HamburgerCloseIcon width="24px" color="textSubtle" />
+          ) : (
+            <HamburgerIcon width="24px" color="textSubtle" />
           )}
-        </Flex>
-      )}
+        </MenuButton>
+        {!back ? (
+          <Text className="text">{title || '首页'}</Text>
+        ) : (
+          <Flex
+            onClick={goBack}
+            alignItems="center"
+            style={{ cursor: 'pointer', position: 'relative', width: '100%' }}
+          >
+            <Flex alignItems="center">
+              <Icon
+                name={'icon-fanhui'}
+                size={20}
+                color={colors}
+                fontWeight="bold"
+              />
+              <Text className="text" ml="16px">
+                {t('newsBack')}
+              </Text>
+            </Flex>
+            {centerTitle && (
+              <CenterBox>
+                <Text className="text" ml="16px">
+                  {centerTitle.length > 20
+                    ? centerTitle.slice(0, 20) + '...#'
+                    : centerTitle}
+                </Text>
+              </CenterBox>
+            )}
+          </Flex>
+        )}
+      </Flex>
+      {children}
     </Card>
   );
 });

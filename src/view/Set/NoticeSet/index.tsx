@@ -9,7 +9,7 @@ import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 
 const NoticeSetBox = styled(Card)`
-  height: 700px;
+  /* height: 700px; */
   padding: 27px 0;
   background-color: transparent;
 `;
@@ -55,11 +55,11 @@ const NoticeSet = () => {
           } else {
             toastError(t('editFial'));
           }
-          return
+          return;
         }
         if (status === 'default') {
           toastInfo(t('Please open browser notification'));
-          return
+          return;
         }
         if (status === 'denied') {
           toastError(t('Please open browser notification'));
@@ -74,17 +74,16 @@ const NoticeSet = () => {
   useEffect(() => {
     try {
       if (state.msg_remind) {
-        Notification.requestPermission((status) => {
+        Notification.requestPermission(status => {
           setState(p => {
             p.msg_remind = status === 'granted' ? true : false;
           });
         });
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-
-  }, [state.msg_remind])
+  }, [state.msg_remind]);
 
   return (
     <NoticeSetBox isBoxShadow>

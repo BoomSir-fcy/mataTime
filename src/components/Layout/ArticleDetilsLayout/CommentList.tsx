@@ -51,7 +51,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [totalPage, setTotalPage] = useState(2);
   // 1是降序 2是升序
   const [sortTime, setSortTime] = useState(0);
-  const [sortLike, setSortLike] = useState(1);
+  const [sortLike, setSortLike] = useState(2);
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
@@ -70,13 +70,13 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
-    setSortTime(sortTime === 1 ? 2 : 1);
+    setSortTime(sortTime === 2 ? 1 : 2);
     setSortLike(0);
     initList();
   };
   const changeSortLike = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
-    setSortLike(sortLike === 1 ? 2 : 1);
+    setSortLike(sortLike === 2 ? 1 : 2);
     setSortTime(0);
     initList();
   };

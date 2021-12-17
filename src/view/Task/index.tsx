@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Spinner } from 'uikit';
-import { WalletHead as Header } from 'components/HeaderContent';
+import { Crumbs as Header } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { Group } from './type';
 import { useFetchTask, useTask } from 'store/task/hooks';
 import TaskContent from './TaskContent';
 import useMenuNav from 'hooks/useMenuNav';
 
-const ScrollBox = styled(Box)`
-`;
+const ScrollBox = styled(Box)``;
 
 const TipsFlex = styled(Box)`
   padding: 10px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-`
+`;
 
 const Time = styled.img`
   max-width: 19px;
@@ -26,7 +25,7 @@ const Time = styled.img`
 const BgBox = styled(Box)`
   height: auto;
   background: ${({ theme }) => theme.colors.primaryDark};
-`
+`;
 
 const Task: React.FC = () => {
   const { t } = useTranslation();
@@ -39,7 +38,7 @@ const Task: React.FC = () => {
 
   // 任务分组结果为对象
   const groupByTask = (list = [], field) => {
-    let result = { 'default': [] };
+    let result = { default: [] };
     list.forEach(item => {
       const group = item[field];
       if (group) {
@@ -50,11 +49,12 @@ const Task: React.FC = () => {
       }
     });
     return result;
-  }
+  };
 
   // 任务分组结果为数组
   const ItemGroupBy = (list = [], field) => {
-    let result = [], types = {};
+    let result = [],
+      types = {};
     for (let i = 0; i < list.length; i++) {
       const cur = list[i];
       if (cur[field] === 0) {
@@ -72,14 +72,14 @@ const Task: React.FC = () => {
       }
     }
     return result;
-  }
+  };
 
   useEffect(() => {
     const result = groupByTask(data, 'task_group');
     result[Group.ACTIVITY]?.unshift(result['default'][0]);
     // const result = ItemGroupBy(data, 'task_group');
     setTaskGroup(result);
-  }, [data])
+  }, [data]);
 
   return (
     <>
@@ -93,14 +93,30 @@ const Task: React.FC = () => {
             {!isMobile && <HeaderTips t={t} />}
           </Header>
           <ScrollBox>
-            {isMobile && <TipsFlex><HeaderTips t={t} /></TipsFlex>}
+            {isMobile && (
+              <TipsFlex>
+                <HeaderTips t={t} />
+              </TipsFlex>
+            )}
             {/* {
               taskGroup.map(item => <TaskContent key={item.type} taskGroupId={item.type} taskList={item.data} />)
             } */}
-            <TaskContent taskGroupId={Group.ACTIVITY} taskList={taskGroup[Group.ACTIVITY]} />
-            <TaskContent taskGroupId={Group.CREATE} taskList={taskGroup[Group.CREATE]} />
-            <TaskContent taskGroupId={Group.INVITE} taskList={taskGroup[Group.INVITE]} />
-            <TaskContent taskGroupId={Group.REPORT} taskList={taskGroup[Group.REPORT]} />
+            <TaskContent
+              taskGroupId={Group.ACTIVITY}
+              taskList={taskGroup[Group.ACTIVITY]}
+            />
+            <TaskContent
+              taskGroupId={Group.CREATE}
+              taskList={taskGroup[Group.CREATE]}
+            />
+            <TaskContent
+              taskGroupId={Group.INVITE}
+              taskList={taskGroup[Group.INVITE]}
+            />
+            <TaskContent
+              taskGroupId={Group.REPORT}
+              taskList={taskGroup[Group.REPORT]}
+            />
           </ScrollBox>
         </BgBox>
       )}
@@ -108,14 +124,17 @@ const Task: React.FC = () => {
   );
 };
 
-
 const HeaderTips = ({ t }) => {
   return (
     <Flex alignItems="center">
       <Time src={require('assets/images/myWallet/time.png').default} alt="" />
-      <Text small color="textTips">{t('Note that all tasks are refreshed at 0:00 UTC. Please get your $Matter before 0:00 UTC!')}</Text>
+      <Text small color="textTips">
+        {t(
+          'Note that all tasks are refreshed at 0:00 UTC. Please get your $Matter before 0:00 UTC!'
+        )}
+      </Text>
     </Flex>
   );
-}
+};
 
 export default Task;

@@ -20,8 +20,6 @@ var toolkit = require('@reduxjs/toolkit');
 var abi$1 = require('@ethersproject/abi');
 var strings = require('@ethersproject/strings');
 var flatMap = require('lodash/flatMap');
-require('qs');
-var reactRouterDom = require('react-router-dom');
 var axios = require('axios');
 var tokenLists = require('@uniswap/token-lists');
 var Ajv = require('ajv');
@@ -40,6 +38,7 @@ require('lodash/noop');
 require('lodash/debounce');
 require('react-transition-group');
 var reactWindow = require('react-window');
+var reactRouterDom = require('react-router-dom');
 var reactHelmetAsync = require('react-helmet-async');
 var merge = require('lodash/merge');
 var reduxLocalstorageSimple = require('redux-localstorage-simple');
@@ -2385,10 +2384,10 @@ function useBlockNumber() {
     return reactRedux.useSelector(function (state) { return state.application.blockNumber[chainId !== null && chainId !== void 0 ? chainId : -1]; });
 }
 
-var ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+var ADDRESS_REGEX$1 = /^0x[a-fA-F0-9]{40}$/;
 var LOWER_HEX_REGEX = /^0x[a-f0-9]*$/;
 function toCallKey(call) {
-    if (!ADDRESS_REGEX.test(call.address)) {
+    if (!ADDRESS_REGEX$1.test(call.address)) {
         throw new Error("Invalid address: " + call.address);
     }
     if (!LOWER_HEX_REGEX.test(call.callData)) {
@@ -7520,6 +7519,87 @@ function useDerivedSwapInfo() {
         inputError: inputError,
         // polyPairs: polyPairs ?? undefined,
     };
+}
+function parseCurrencyFromURLParameter(urlParam) {
+    var _a, _b, _c, _d, _e;
+    var ETHER = dsgswapSdk.getActiveETHERWidthChainId();
+    if (typeof urlParam === 'string') {
+        var valid = isAddress(urlParam);
+        if (valid)
+            return valid;
+        if (urlParam.toUpperCase() === ((_a = ETHER.symbol) === null || _a === void 0 ? void 0 : _a.toLowerCase()))
+            return (_b = ETHER.symbol) === null || _b === void 0 ? void 0 : _b.toLowerCase();
+        if (valid === false)
+            return (_c = ETHER.symbol) === null || _c === void 0 ? void 0 : _c.toLowerCase();
+    }
+    return (_e = (_d = ETHER.symbol) === null || _d === void 0 ? void 0 : _d.toLowerCase()) !== null && _e !== void 0 ? _e : '';
+}
+function parseTokenAmountURLParameter(urlParam) {
+    // eslint-disable-next-line no-restricted-globals
+    return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : '';
+}
+function parseIndependentFieldURLParameter(urlParam) {
+    return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field$2.OUTPUT : Field$2.INPUT;
+}
+var ENS_NAME_REGEX$1 = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/;
+var ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+function validatedRecipient(recipient) {
+    if (typeof recipient !== 'string')
+        return null;
+    var address = isAddress(recipient);
+    if (address)
+        return address;
+    if (ENS_NAME_REGEX$1.test(recipient))
+        return recipient;
+    if (ADDRESS_REGEX.test(recipient))
+        return recipient;
+    return null;
+}
+function queryParametersToSwapState(parsedQs) {
+    var _a;
+    var inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency);
+    var outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency);
+    if (inputCurrency === outputCurrency) {
+        if (typeof parsedQs.outputCurrency === 'string') {
+            inputCurrency = '';
+        }
+        else {
+            outputCurrency = '';
+        }
+    }
+    var recipient = validatedRecipient(parsedQs.recipient);
+    return _a = {},
+        _a[Field$2.INPUT] = {
+            currencyId: inputCurrency,
+        },
+        _a[Field$2.OUTPUT] = {
+            currencyId: outputCurrency,
+        },
+        _a.typedValue = parseTokenAmountURLParameter(parsedQs.exactAmount),
+        _a.independentField = parseIndependentFieldURLParameter(parsedQs.exactField),
+        _a.recipient = recipient,
+        _a;
+}
+// updates the swap state to use the defaults for a given network
+function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
+    var chainId = useActiveWeb3React().chainId;
+    var dispatch = reactRedux.useDispatch();
+    var _a = tslib.__read(React.useState(), 2), result = _a[0], setResult = _a[1];
+    React.useEffect(function () {
+        if (!chainId)
+            return;
+        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrencyId: inputCurrencyId });
+        dispatch(replaceSwapState({
+            typedValue: parsed.typedValue,
+            field: parsed.independentField,
+            inputCurrencyId: parsed[Field$2.INPUT].currencyId,
+            outputCurrencyId: parsed[Field$2.OUTPUT].currencyId,
+            recipient: null,
+        }));
+        setResult({ inputCurrencyId: parsed[Field$2.INPUT].currencyId, outputCurrencyId: parsed[Field$2.OUTPUT].currencyId });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, chainId, outputCurrency, inputCurrencyId]);
+    return result;
 }
 function useSwapCurrencies() {
     var _a = useSwapState() || {}, _b = Field$2.INPUT, inputStateCurrency = _a[_b], _c = Field$2.OUTPUT, outputStateCurrency = _a[_c];
@@ -13295,16 +13375,16 @@ function usePloyCallData() {
 
 var GreyCardStyled = styled__default["default"](GreyCard)(templateObject_1 || (templateObject_1 = tslib.__makeTemplateObject(["\n  height: 40px;\n  padding: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 10px;\n"], ["\n  height: 40px;\n  padding: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 10px;\n"])));
 function Swap(_a) {
-    // const loadedUrlParams = useDefaultsFromURLSearch()
     var _b, _c, _d;
     var _this = this;
     var _e, _f, _g, _h, _j, _k;
     var inputCurrencyId = _a.inputCurrencyId, outputCurrencyId = _a.outputCurrencyId, subTitleTips = _a.subTitleTips, titlehelper = _a.titlehelper, powered = _a.powered;
+    var loadedUrlParams = useDefaultsFromURLSearch(outputCurrencyId, inputCurrencyId);
     var t = useTranslation().t;
     // token warning stuff
     var _l = tslib.__read([
-        useCurrency(inputCurrencyId),
-        useCurrency(outputCurrencyId),
+        useCurrency(loadedUrlParams === null || loadedUrlParams === void 0 ? void 0 : loadedUrlParams.inputCurrencyId),
+        useCurrency(loadedUrlParams === null || loadedUrlParams === void 0 ? void 0 : loadedUrlParams.outputCurrencyId),
     ], 2), loadedInputCurrency = _l[0], loadedOutputCurrency = _l[1];
     var urlLoadedTokens = React.useMemo(function () { var _a, _b; return (_b = (_a = [loadedInputCurrency, loadedOutputCurrency]) === null || _a === void 0 ? void 0 : _a.filter(function (c) { return c instanceof dsgswapSdk.Token; })) !== null && _b !== void 0 ? _b : []; }, [loadedInputCurrency, loadedOutputCurrency]);
     // dismiss warning if all imported tokens are in active lists

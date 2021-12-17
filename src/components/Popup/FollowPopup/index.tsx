@@ -22,7 +22,7 @@ type Iprops = {
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const myself = useStore(p => p.loginReducer.userInfo);
-  const { children, uid, callback = () => { } } = props;
+  const { children, uid, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
@@ -65,14 +65,14 @@ export const FollowPopup = React.memo((props: Iprops) => {
   };
 
   // const [timer, setTimer] = useState(null)
-  let timer = null
+  let timer = null;
 
   return (
     <PopupWrapper
       onClick={e => e.stopPropagation()}
       onMouseOver={(e: any) => {
         if (timer) {
-          clearTimeout(timer)
+          clearTimeout(timer);
         }
         e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
         setVisible(true);
@@ -81,7 +81,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
         e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
         timer = setTimeout(() => {
           setVisible(false);
-        }, 300)
+        }, 300);
       }}
     >
       {children}
@@ -112,7 +112,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
                     maxWidth="30px"
                     ellipsis
                   >
-                    {userInfo.FansNum || 0}
+                    {userInfo.fans_num || 0}
                   </Text>
                 </Flex>
                 <Flex className="cloums">
@@ -124,7 +124,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
                     maxWidth="30px"
                     ellipsis
                   >
-                    {userInfo.AttentionNum || 0}
+                    {userInfo.attention_num || 0}
                   </Text>
                 </Flex>
               </div>
@@ -162,7 +162,7 @@ type IDprops = {
 
 export const FollowPopupD = React.memo((props: IDprops) => {
   const { t } = useTranslation();
-  const { left = 100, top = 100, callback = () => { }, uid } = props;
+  const { left = 100, top = 100, callback = () => {}, uid } = props;
   const popupRef: any = useRef();
   const [userInfo, setUserInfo] = useState<any>({});
 

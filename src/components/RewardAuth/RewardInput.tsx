@@ -96,7 +96,7 @@ export const RewardInput: React.FC<{
         <Flex justifyContent="space-between" alignItems="flex-end">
           <Box mr="15px">
             <Flex mb="15px" justifyContent="space-between">
-              <Text color="white">打赏数量</Text>
+              <Text color="white">{t('Amount')}</Text>
               <Text
                 color="textTips"
                 style={{ minWidth: 0, maxWidth: 150 }}
@@ -124,7 +124,7 @@ export const RewardInput: React.FC<{
               onCallBack(amount);
             }}
           >
-            确认
+            {t('Confirm')}
           </Submit>
         </Flex>
       )}

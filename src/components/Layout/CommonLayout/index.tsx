@@ -8,6 +8,7 @@ import NewsMe from 'view/News/Me';
 import NewsComment from 'view/News/Comment';
 import NewsPraise from 'view/News/Praise';
 import NewsNotice from 'view/News/Notice';
+import { Crumbs } from 'components';
 
 export const CommonLayout: React.FC = (props: any) => {
   const { t } = useTranslation();
@@ -20,7 +21,8 @@ export const CommonLayout: React.FC = (props: any) => {
 
   return (
     <LayoutMiddleWrapper>
-      <CenterHeader title={title} />
+      {/* <CenterHeader title={title} /> */}
+      <Crumbs zIndex={1005} title={title} />
       <Route
         path={'/notification'}
         exact
