@@ -13,6 +13,7 @@ import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
 import { getAddress } from 'utils/addressHelpers'
 import { Address } from 'config/constants/types';
+import { useCoinsList } from 'store/coins/hooks';
 
 const SwapBox = styled.div`
   /* margin-top:15px; */
@@ -40,12 +41,14 @@ const Swap: React.FC = () => {
   const { chainId } = useWeb3React();
   const { t, currentLanguage } = useTranslation();
 
-  const [inProp, setInProp] = useState(false);
+  const [inPropSwap, setInPropSwap] = useState(false);
+  const [inPropCoin, setInPropCoin] = useState(false);
 
   const [isDark] = useThemeManager();
   const { onConnectWallet } = useConnectWallet();
 
   const coins = useStore(p => p.coins.clickCoins);
+  const coinsList = useCoinsList();
 
   const handleInputChange = useCallback(currency => {
     console.debug(currency);
@@ -53,9 +56,14 @@ const Swap: React.FC = () => {
 
   useEffect(() => {
     if (coins?.symbol) {
-      setInProp(true)
+      const activeCoin = coinsList.find(item => item.coin_symbol === coins.symbol)
+      setInPropSwap(true)
+      if (activeCoin) {
+        setInPropCoin(true)
+      }
       const timer = setTimeout(() => {
-        setInProp(false)
+        setInPropSwap(false)
+        setInPropCoin(false)
       }, 500)
       return () => {
         clearTimeout(timer)
@@ -73,18 +81,18 @@ const Swap: React.FC = () => {
 
   return (
     <SwapBox>
-      <Transition in={inProp} timeout={500}>
+      <Transition in={inPropCoin} timeout={500}>
         {
           state => (
             <CoinMarketCap mb="14px"
-            // style={{
-            //   ...defaultStyle,
-            //   ...transitionStyles[state]
-            // }}
+              style={{
+                ...defaultStyle,
+                ...transitionStyles[state]
+              }}
             />)
         }
       </Transition>
-      <Transition in={inProp} timeout={500}>
+      <Transition in={inPropSwap} timeout={500}>
         {state =>
         (<Box
           style={{
