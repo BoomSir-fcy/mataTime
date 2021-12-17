@@ -145,8 +145,6 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const approvedNum = useStore(p => p.wallet.ApproveNum.dsg);
   const address = getDsgAddress();
   const { balance: DsgBalance } = useTokenBalance(address);
-  console.log(DsgBalance);
-
   const timeAddress = getTimeAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
   const { onApprove } = useApproveErc20Change();
