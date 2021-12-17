@@ -7,7 +7,11 @@ export default function ScrollBarApdater() {
 
     // XXX: 不加滚动条会不滚动 卧液布值道定理
     setTimeout(() => {
-      document.body.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
+      // document.body.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
+      window.scrollTo({
+        behavior: 'smooth',
+        top: 0,
+      });
     }, 0)
   }, [pathname])
   return null;
