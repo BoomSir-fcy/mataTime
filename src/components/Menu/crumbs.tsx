@@ -52,7 +52,7 @@ export const Crumbs: React.FC<{
 
   return (
     <Card zIndex={zIndex}>
-      <Flex alignItems="center">
+      <Flex alignItems="center" width="100%">
         <MenuButton
           aria-label="Toggle menu"
           onClick={() => setIsPushed(prep => !prep)}

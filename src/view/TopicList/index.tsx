@@ -95,6 +95,7 @@ const TopicList = props => {
               itemData={{
                 ...item,
                 post_id: item.id,
+                add_time: item.add_time_desc,
                 post: {
                   ...item,
                   post_id: item.id
