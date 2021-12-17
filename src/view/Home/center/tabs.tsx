@@ -75,11 +75,11 @@ export const Tabs = (props: propsType) => {
         value: '1',
         paramsName: 'attention'
       },
-      {
-        label: t('homeTabLatest'),
-        value: '1',
-        paramsName: 'attention'
-      },
+      // {
+      //   label: t('homeTabLatest'),
+      //   value: '1',
+      //   paramsName: 'attention'
+      // },
       {
         label: t('homeTabFocus'),
         value: '2',
