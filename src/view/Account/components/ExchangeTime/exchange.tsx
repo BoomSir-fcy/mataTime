@@ -52,7 +52,7 @@ const InputBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
   background:${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   img {
     width: 23px;
   }
@@ -90,7 +90,7 @@ const FAQ = styled(Flex)`
   position: absolute;
   right: -198px;
   top: 70px;
-  &.Mobile{
+  &.Mobile {
     position: static;
     display: flex;
     justify-content: center;
@@ -128,8 +128,8 @@ const FaqOutBox = ({ isMobile }) => {
         </FaqBox>
       </AnimationRingIcon>
     </FAQ>
-  )
-}
+  );
+};
 
 interface init {
   nowRound: TimeInfo;
@@ -150,8 +150,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const { onApprove } = useApproveErc20Change();
   const { onExchange } = useExchangeErc20();
   const { toastError, toastWarning, toastSuccess } = useToast();
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
-
+  const { isPushed, setIsPushed, isMobile } = useMenuNav();
 
   const ReleaseTime = useMemo(() => {
     dayjs.extend(duration);
@@ -207,7 +206,6 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
 
   // 兑换
   const handleExchange = useCallback(async () => {
-
     if (Time > RemainingNum) {
       toastWarning(`${t('Time Time maximum exchange amount')}:${RemainingNum}`);
       return;
@@ -296,9 +294,6 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
             <Flex mb="4px" justifyContent="space-between">
               <SmFont>{t('Time Exchange')}</SmFont>
               <Flex>
-                <SmFont mr="16px" color="textTips">
-                  {t('Balance')}: {formatDisplayApr(DsgBalance)}
-                </SmFont>
                 <SmFont
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
@@ -326,8 +321,16 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
               </Flex>
             </Flex>
           </InputBox>
+          <Flex mb="20px">
+            <SmFont style={{ minWidth: '40%' }} mr="16px" color="textTips">
+              DSG {t('Balance')}: {formatDisplayApr(0)}
+            </SmFont>
+            <SmFont color="textTips">
+              TIME {t('Balance')}: {formatDisplayApr(timeBalance)}
+            </SmFont>
+          </Flex>
           <TimeBox>
-            <TimeNum justifyContent="space-between" alignItems="center">
+            <TimeNum justifyContent="center" alignItems="center">
               <Flex alignItems="center">
                 <img src="/images/tokens/TIME.svg" alt="" />
                 <Flex
@@ -343,12 +346,12 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
                   </Text>
                 </Flex>
               </Flex>
-              <Box style={{ textAlign: 'right' }}>
+              {/* <Box style={{ textAlign: 'right' }}>
                 <Text fontSize="14px" color="textTips">
                   TIME {t('Balance')}
                 </Text>
                 <Text>{formatDisplayApr(timeBalance)}</Text>
-              </Box>
+              </Box> */}
             </TimeNum>
             <Flex justifyContent="space-between" alignItems="center">
               <Box>
