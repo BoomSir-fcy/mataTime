@@ -34,6 +34,8 @@ const ParagraphItem = styled.div`
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
+  min-height: 1.1875em;
+  line-height: 1.1875;
   p {
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
@@ -180,6 +182,7 @@ export const ContentParsing = (props: IProps) => {
         return parseText2(node.text);
     }
   };
+
 
   return (
     <ContentParsingWrapper>

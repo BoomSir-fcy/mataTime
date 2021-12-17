@@ -30,9 +30,9 @@ const TimeInfoBox = styled(Flex)`
   /* width: 100%; */
   height: 110px;
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
+  border-radius: 10px;
   padding-left: 12px;
   margin-bottom: 30px;
-  border-radius: 10px;
 `
 
 const strokeWidth = 8
@@ -95,9 +95,9 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
           </Box>
         </Flex>
       </TimeInfoBox>
-      <User as={Link} to="/me">
+      {/* <User as={Link} to="/me">
         <ProfileMenu />
-      </User>
+      </User> */}
     </Box>
   )
 }

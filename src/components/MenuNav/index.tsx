@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Overlay, useMatchBreakpoints } from 'uikit';
 import useMenuNav from 'hooks/useMenuNav';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 import Logo from './Logo';
 import Nav from './Nav';
 import NavFooter from './NavFooter';
 import { Panel } from './styled'
 import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from "./config";
+import { ProfileMenu } from './ProfileMenu';
 
 const MenuContener = styled(Flex) <{ isMobile: boolean }>`
   height: 100vh;
@@ -21,6 +23,15 @@ const MenuContener = styled(Flex) <{ isMobile: boolean }>`
   flex-direction: column;
   z-index: 10;
 `;
+
+const UserBox = styled(Flex)`
+  background: ${({ theme }) => theme.colors.backgroundThemeCard};
+  border-radius: 10px;
+  height: 70px;
+  align-items: center;
+  margin-top: 12px;
+  margin-right: 8px;
+`
 
 export interface MenuNavProps {
   // seconds?: number
@@ -44,6 +55,9 @@ const MenuNav: React.FC<MenuNavProps> = ({ }) => {
       <Panel isMobile={isMobile} isPushed={isPushed} showMenu>
         <Flex flex="1" flexDirection="column">
           <Logo />
+          <UserBox  as={Link} to="/me">
+            <ProfileMenu />
+          </UserBox>
           <Nav />
         </Flex>
         <NavFooter />
