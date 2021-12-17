@@ -18,6 +18,7 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { useTranslation } from 'contexts/Localization';
+import { EN } from 'config/localization';
 import { useStore } from 'store';
 import { Api } from 'apis';
 
@@ -139,7 +140,7 @@ const Profile: React.FC<any> = props => {
     page: 1,
     totalPage: 0
   });
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const country = useStore(p => p.appReducer.localtion);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const setting = useStore(p => p.appReducer.systemCustom);
@@ -150,7 +151,6 @@ const Profile: React.FC<any> = props => {
   const { isDark } = useTheme();
   const defaultImages = isDark ? defaultDarkImages : defaultLightImages;
   const { languange } = setting;
-  const systemLang = languange?.value?.code;
 
   const [isEnd, setIsEnd] = useState(false);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
@@ -247,9 +247,9 @@ const Profile: React.FC<any> = props => {
 
   const locationDisplay = React.useMemo(() => {
     const defaultCountry = country?.find(item => item.ID === profile.location);
-    return systemLang === 'CN'
-      ? defaultCountry?.LocaltionZh
-      : defaultCountry?.LocationEn;
+    return currentLanguage.locale === EN.locale
+      ? defaultCountry?.LocationEn
+      : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
 
   return (
