@@ -18,12 +18,7 @@ export const ConnectWalletButton: React.FC<{
   const { onConnectWallet } = useConnectWallet();
 
   return (
-    <Box
-      style={{
-        position: 'absolute',
-        bottom: '-10px'
-      }}
-    >
+    <Box>
       <WalletButton
         disabled={Boolean(loading)}
         onClick={onConnectWallet}

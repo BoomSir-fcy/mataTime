@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import { DropDown, Avatar, Loading } from 'components';
+import { DropDown, Avatar, Loading, ConnectWalletButton } from 'components';
 import { Flex, Box, Text, Button } from 'uikit';
 import { useToast } from 'hooks';
 import { useStore, storeAction } from 'store';
@@ -27,7 +27,7 @@ import {
 
 import QuestionHelper from 'components/QuestionHelper';
 
-const RewardAuthModalStyled = styled(Box) <{ bottom: number; right: number }>`
+const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   position: absolute;
   z-index: 999;
   width: 418px;
@@ -150,7 +150,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       setState(p => {
         p.reward_post = res;
       });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 切换币种
@@ -162,7 +162,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         p.current_price = res.current_price || '0.12345';
         p.isOnApprove = tokenList[index][4] > 0 ? false : true;
       });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 打赏用户
@@ -214,6 +214,10 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     } else if (account) {
       init();
       getPost();
+    } else if (!account) {
+      setState(p => {
+        p.loading = false;
+      });
     }
   }, [account]);
 
@@ -238,73 +242,75 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
             <ReactLoading type={'cylon'} />
           ) : (
             <React.Fragment>
-              <Loading visible={state.submitLoading} />
-              <Flex
-                alignItems="center"
-                justifyContent="space-between"
-                width="100%"
-              >
-                <AvatarCard
-                  userName={currentPost.user_name}
-                  avatar={avatar}
-                  address={currentPost.user_address}
-                />
-                <Flex alignItems="center">
-                  <Box width="100px">
-                    <CoinSelectStyled
-                      onClick={e => {
-                        e.stopPropagation();
-                        setOpen(!open);
-                      }}
-                    >
-                      <CoinItem token={currentToken} />
-                      <JiantouStyled open={open} />
-                    </CoinSelectStyled>
-                    <DropDown
-                      fillWidth
-                      isOpen={open}
-                      scale="xs"
-                      setIsOpen={setOpen}
-                    >
-                      {tokenList.map((item, index) => (
-                        <RowsToken
-                          key={index}
-                          onClick={() => changeCoinChecked(item, index)}
+              {account ? (
+                <React.Fragment>
+                  <Loading visible={state.submitLoading} />
+                  <Flex
+                    alignItems="center"
+                    justifyContent="space-between"
+                    width="100%"
+                  >
+                    <AvatarCard
+                      userName={currentPost.user_name}
+                      avatar={avatar}
+                      address={currentPost.user_address}
+                    />
+                    <Flex alignItems="center">
+                      <Box width="100px">
+                        <CoinSelectStyled
+                          onClick={e => {
+                            e.stopPropagation();
+                            setOpen(!open);
+                          }}
                         >
-                          <CoinItem token={item} />
-                        </RowsToken>
-                      ))}
-                    </DropDown>
-                  </Box>
-                  <QuestionHelper
-                    ml="15px"
-                    color="white"
-                    text={
-                      <>
-                        <Text fontSize="14px">
-                          {t('rewardAutherTipsText1')}
-                        </Text>
-                        <Text fontSize="14px" color="textTips">
-                          {t('rewardAutherTipsText2')}
-                        </Text>
-                      </>
-                    }
-                  />
-                </Flex>
-              </Flex>
-              <Box minHeight="100px" mt="25px">
-                <RewardInput
-                  current={currentToken}
-                  price={current_price}
-                  isOnApprove={state.isOnApprove}
-                  onApprove={() =>
-                    setState(p => {
-                      p.isOnApprove = false;
-                    })
-                  }
-                  onCallBack={event => changeRewardUser(event)}
-                />
-                {/* {currentToken[1] && (
+                          <CoinItem token={currentToken} />
+                          <JiantouStyled open={open} />
+                        </CoinSelectStyled>
+                        <DropDown
+                          fillWidth
+                          isOpen={open}
+                          scale="xs"
+                          setIsOpen={setOpen}
+                        >
+                          {tokenList.map((item, index) => (
+                            <RowsToken
+                              key={index}
+                              onClick={() => changeCoinChecked(item, index)}
+                            >
+                              <CoinItem token={item} />
+                            </RowsToken>
+                          ))}
+                        </DropDown>
+                      </Box>
+                      <QuestionHelper
+                        ml="15px"
+                        color="white"
+                        text={
+                          <>
+                            <Text fontSize="14px">
+                              {t('rewardAutherTipsText1')}
+                            </Text>
+                            <Text fontSize="14px" color="textTips">
+                              {t('rewardAutherTipsText2')}
+                            </Text>
+                          </>
+                        }
+                      />
+                    </Flex>
+                  </Flex>
+                  <Box minHeight="100px" mt="25px">
+                    <RewardInput
+                      current={currentToken}
+                      price={current_price}
+                      isOnApprove={state.isOnApprove}
+                      onApprove={() =>
+                        setState(p => {
+                          p.isOnApprove = false;
+                        })
+                      }
+                      onCallBack={event => changeRewardUser(event)}
+                    />
+                    {/* {currentToken[1] && (
                   <Reward
                     current={currentToken}
                     price={current_price}
@@ -317,40 +323,46 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                     onCallBack={event => changeRewardUser(event)}
                   />
                 )} */}
-              </Box>
-              {reward?.length > 0 && (
-                <Flex mt="4px" alignItems="center">
-                  <Flex ml="1em">
-                    {reward_post?.users?.map(item => (
-                      <Box
-                        key={item.uid}
-                        as={Link}
-                        to={`/me/profile/${item.uid}`}
-                        width="24px"
-                        style={{ marginLeft: '-1em' }}
-                      >
-                        <Avatar
-                          src={item.nft_image}
-                          scale="md"
-                          style={{ width: '24px', height: '24px' }}
-                        />
-                      </Box>
-                    ))}
-                  </Flex>
-                  <Text ml="11px" fontSize="14px" color="textTips" ellipsis>
-                    {t('rewardAutherAlreadyText1', {
-                      value: reward_post?.total_user || 0
-                    })}
-                  </Text>
+                  </Box>
+                  {reward?.length > 0 && (
+                    <Flex mt="4px" alignItems="center">
+                      <Flex ml="1em">
+                        {reward_post?.users?.map(item => (
+                          <Box
+                            key={item.uid}
+                            as={Link}
+                            to={`/me/profile/${item.uid}`}
+                            width="24px"
+                            style={{ marginLeft: '-1em' }}
+                          >
+                            <Avatar
+                              src={item.nft_image}
+                              scale="md"
+                              style={{ width: '24px', height: '24px' }}
+                            />
+                          </Box>
+                        ))}
+                      </Flex>
+                      <Text ml="11px" fontSize="14px" color="textTips" ellipsis>
+                        {t('rewardAutherAlreadyText1', {
+                          value: reward_post?.total_user || 0
+                        })}
+                      </Text>
+                    </Flex>
+                  )}
+                  {/* 查看当前用户打赏明细 */}
+                  {reward_post?.my_rewards?.length > 0 && (
+                    <Text color="textTips" fontSize="14px" mt="12px" ellipsis>
+                      {t('rewardAutherAlreadyText2', {
+                        value: getString(reward_post.my_rewards, tokenList)
+                      })}
+                    </Text>
+                  )}
+                </React.Fragment>
+              ) : (
+                <Flex height="56px" justifyContent="center" alignItems="center">
+                  <ConnectWalletButton />
                 </Flex>
-              )}
-              {/* 查看当前用户打赏明细 */}
-              {reward_post?.my_rewards?.length > 0 && (
-                <Text color="textTips" fontSize="14px" mt="12px" ellipsis>
-                  {t('rewardAutherAlreadyText2', {
-                    value: getString(reward_post.my_rewards, tokenList)
-                  })}
-                </Text>
               )}
             </React.Fragment>
           )}

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Flex, Box, Text, Image, Button, Heading, CloseLineIcon } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
-import { ModalWrapper } from 'components';
+import { ConnectWalletButton, ModalWrapper } from 'components';
 import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
@@ -173,14 +173,21 @@ const WalletBox: React.FC<Wallet> = ({
           )}
         </LeftBox>
         {!isMobile && (
-          <WithdrawBtn
-            disabled={
-              Token === 'MATTER' && Number(BalanceInfo.available_balance) < 100
-            }
-            onClick={() => openModaal(2)}
-          >
-            {t('Accountwithdraw')}
-          </WithdrawBtn>
+          <Box>
+            {account ? (
+              <WithdrawBtn
+                disabled={
+                  Token === 'MATTER' &&
+                  Number(BalanceInfo.available_balance) < 100
+                }
+                onClick={() => openModaal(2)}
+              >
+                {t('Accountwithdraw')}
+              </WithdrawBtn>
+            ) : (
+              <ConnectWalletButton />
+            )}
+          </Box>
         )}
       </Flex>
       {isMobile && (
@@ -192,20 +199,24 @@ const WalletBox: React.FC<Wallet> = ({
           >
             {t('Account history record')}
           </Text>
-          <Box>
-            <WithdrawBtn mr="20px" onClick={() => openModaal(1)}>
-              {t('AccountRecharge')}
-            </WithdrawBtn>
-            <WithdrawBtn
-              disabled={
-                Token === 'MATTER' &&
-                Number(BalanceInfo.available_balance) < 100
-              }
-              onClick={() => openModaal(2)}
-            >
-              {t('Accountwithdraw')}
-            </WithdrawBtn>
-          </Box>
+          {account ? (
+            <Box>
+              <WithdrawBtn mr="20px" onClick={() => openModaal(1)}>
+                {t('AccountRecharge')}
+              </WithdrawBtn>
+              <WithdrawBtn
+                disabled={
+                  Token === 'MATTER' &&
+                  Number(BalanceInfo.available_balance) < 100
+                }
+                onClick={() => openModaal(2)}
+              >
+                {t('Accountwithdraw')}
+              </WithdrawBtn>
+            </Box>
+          ) : (
+            <ConnectWalletButton />
+          )}
         </Flex>
       )}
 
