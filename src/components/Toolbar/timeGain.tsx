@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { Flex, Box, Text, Image } from 'uikit';
 import { PopupWrap, Icon } from 'components';
 import { formatDisplayApr } from 'utils/formatBalance';
+import { useTranslation } from 'contexts/Localization';
 
 const TimeIcon = styled(Image)``;
 const PopupButton = styled(Flex)`
@@ -27,6 +28,7 @@ export const TimeGain: React.FC<{
 }> = React.memo(({ total }) => {
   const theme = useTheme();
   const Popref = React.useRef(null);
+  const { t } = useTranslation();
 
   return (
     <PopupWrap
@@ -49,7 +51,7 @@ export const TimeGain: React.FC<{
     >
       <PopupContent>
         <Text color="textTips" style={{ flex: 1, minWidth: 80 }}>
-          Time收益
+          Time {t('Time Rewards')}
         </Text>
         <Text fontWeight="bold" ellipsis>
           {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
