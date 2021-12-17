@@ -45,7 +45,7 @@ export default function TimeLeftUpdater() {
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
-        title={t('$time balance less than 5 minutes')}
+        title={t('$TIME balance less than 5 minutes')}
         tips={t('Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information')}
         onConfirmLable={t('Go recharge')}
         onSecondaryLable={t('I see!')}

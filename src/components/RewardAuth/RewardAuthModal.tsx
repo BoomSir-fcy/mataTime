@@ -132,7 +132,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       setState(p => {
         p.tokenList = newArr;
         p.currentToken = newArr[0];
-        p.current_price = price.current_price || '0.12345';
+        p.current_price = price.current_price || '0';
         p.isOnApprove = newArr[0][4] > 0 ? false : true;
       });
     } catch (error) {
@@ -157,9 +157,10 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const changeCoinChecked = async (rows: string[], index) => {
     try {
       const res = await getPrice(rows[0]);
+      console.log(tokenList[index]);
       setState(p => {
         p.currentToken = rows;
-        p.current_price = res.current_price || '0.12345';
+        p.current_price = res.current_price || '0';
         p.isOnApprove = tokenList[index][4] > 0 ? false : true;
       });
     } catch (error) {}

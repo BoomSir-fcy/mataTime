@@ -56,7 +56,7 @@ export default function HttpUpdater() {
   return (
     <ModalWrapper padding="0" customizeTitle visible={visible}>
       <InsufficientBalanceModal
-        title={t('Insufficient $time balance')}
+        title={t('Insufficient $TIME balance')}
         tips={t(
           'Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information'
         )}
