@@ -129,7 +129,6 @@ const CenterImg = styled.img`
 const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
     profile: {
-      post_num: 0,
       label_list: []
     } as Api.User.userInfoParams,
     loading: false,
@@ -188,6 +187,54 @@ const Profile: React.FC<any> = props => {
       setState(p => {
         p.loading = false;
       });
+    }
+  };
+
+  // 更新列表
+  const updateList = (newItem: any, type: MoreOperatorEnum) => {
+    const {
+      FOLLOW,
+      CANCEL_FOLLOW,
+      SETTOP,
+      CANCEL_SETTOP,
+      COMMONT,
+      EXPAND,
+      SHIELD,
+      DELPOST
+    } = MoreOperatorEnum;
+    const handleChangeList = type === SHIELD || type === DELPOST;
+    let arr = [];
+
+    if (
+      type === FOLLOW ||
+      type === CANCEL_FOLLOW ||
+      type === SETTOP ||
+      type === CANCEL_SETTOP ||
+      type === COMMONT
+    ) {
+      setIsEnd(false);
+      init(1);
+      return;
+    }
+
+    // 折叠
+    if (type === EXPAND) return setNonce(prep => prep + 1);
+    state.list.forEach((item: any) => {
+      let obj = item;
+      if (item.id === newItem.id) {
+        obj = { ...newItem.post };
+      }
+      if (item.id === newItem.id && handleChangeList) {
+        // 屏蔽、删除
+      } else {
+        arr.push(obj);
+      }
+    });
+    setState(p => {
+      p.list = [...arr];
+    });
+    if (handleChangeList) {
+      setNonce(prep => prep + 1);
     }
   };
 
@@ -339,12 +386,13 @@ const Profile: React.FC<any> = props => {
                 }
               }}
               postUid={uid}
-              callback={(data, _type) => {
-                if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1);
-                  return;
-                }
-                init(1);
+              callback={(data, type) => {
+                // if (_type === MoreOperatorEnum.EXPAND) {
+                //   setNonce(prep => prep + 1);
+                //   return;
+                // }
+                // init(1);
+                updateList(data, type);
               }}
             />
             <MentionOperator
@@ -359,12 +407,13 @@ const Profile: React.FC<any> = props => {
                   post_id: item.id
                 }
               }}
-              callback={(data, _type) => {
-                if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1);
-                  return;
-                }
-                init(1);
+              callback={(data, type) => {
+                // if (_type === MoreOperatorEnum.EXPAND) {
+                //   setNonce(prep => prep + 1);
+                //   return;
+                // }
+                // init(1);
+                updateList(data, type);
               }}
             />
           </MeItemWrapper>

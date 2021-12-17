@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { getActiveETHERWidthChainId, getValueWithChainId } from 'dsgswap-sdk';
 import styled from 'styled-components';
 import { Transition } from "react-transition-group";
 import { useStore } from 'store';
@@ -10,6 +11,9 @@ import { light, dark, Text, Box, LinkExternal, Flex } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
+import { getAddress } from 'utils/addressHelpers'
+import { Address } from 'config/constants/types';
+import { useCoinsList } from 'store/coins/hooks';
 
 const SwapBox = styled.div`
   /* margin-top:15px; */
@@ -23,7 +27,7 @@ const defaultStyle = {
   // opacity: 0,
   // color: ''
 }
-const innerShadow = '0px 0px 25px 0px rgba(115, 147, 255, 0.5)'
+const innerShadow = '0px 0px 25px 0px rgba(180, 200, 169, 0.3)'
 const outShadow = '0px 0px 25px 0px rgba(180, 200, 169, 0)'
 
 const transitionStyles = {
@@ -37,12 +41,14 @@ const Swap: React.FC = () => {
   const { chainId } = useWeb3React();
   const { t, currentLanguage } = useTranslation();
 
-  const [inProp, setInProp] = useState(false);
+  const [inPropSwap, setInPropSwap] = useState(false);
+  const [inPropCoin, setInPropCoin] = useState(false);
 
   const [isDark] = useThemeManager();
   const { onConnectWallet } = useConnectWallet();
 
   const coins = useStore(p => p.coins.clickCoins);
+  const coinsList = useCoinsList();
 
   const handleInputChange = useCallback(currency => {
     console.debug(currency);
@@ -50,9 +56,14 @@ const Swap: React.FC = () => {
 
   useEffect(() => {
     if (coins?.symbol) {
-      setInProp(true)
+      const activeCoin = coinsList.find(item => item.coin_symbol === coins.symbol)
+      setInPropSwap(true)
+      if (activeCoin) {
+        setInPropCoin(true)
+      }
       const timer = setTimeout(() => {
-        setInProp(false)
+        setInPropSwap(false)
+        setInPropCoin(false)
       }, 500)
       return () => {
         clearTimeout(timer)
@@ -60,20 +71,28 @@ const Swap: React.FC = () => {
     }
   }, [coins])
 
+  const outputCurrencyId = useMemo(() => {
+    
+    const ETHER = getActiveETHERWidthChainId()
+    if (!coins?.symbol) return undefined
+    if (coins?.symbol === ETHER.symbol) return coins?.symbol
+    return getAddress(coins.address as Address)
+  }, [coins])
+
   return (
     <SwapBox>
-      <Transition in={inProp} timeout={500}>
+      <Transition in={inPropCoin} timeout={500}>
         {
           state => (
             <CoinMarketCap mb="14px"
-            // style={{
-            //   ...defaultStyle,
-            //   ...transitionStyles[state]
-            // }}
+              style={{
+                ...defaultStyle,
+                ...transitionStyles[state]
+              }}
             />)
         }
       </Transition>
-      <Transition in={inProp} timeout={500}>
+      <Transition in={inPropSwap} timeout={500}>
         {state =>
         (<Box
           style={{
@@ -95,7 +114,7 @@ const Swap: React.FC = () => {
             </Flex>}
             // subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
             onInputCurrencyChange={handleInputChange}
-            inputCurrencyId="0x0858241B08b1335d7711838D6cC9C60a72c92C4B"
+            outputCurrencyId={outputCurrencyId}
             resetTheme={{
               dark: {
                 colors: {

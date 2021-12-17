@@ -32,6 +32,7 @@ import { usePolySwap } from 'hooks/usePolySwap'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { Field } from 'state/swap/actions'
 import {
+  useDefaultsFromURLSearch,
   useDerivedSwapInfo,
   useSwapActionHandlers,
   useSwapState,
@@ -61,14 +62,15 @@ const GreyCardStyled = styled(GreyCard)`
 `
 
 export default function Swap({ inputCurrencyId, outputCurrencyId, subTitleTips, titlehelper, powered }: SwapInterface) {
-  // const loadedUrlParams = useDefaultsFromURLSearch()
+
+  const loadedUrlParams = useDefaultsFromURLSearch(outputCurrencyId, inputCurrencyId)
 
   const { t } = useTranslation()
 
   // token warning stuff
   const [loadedInputCurrency, loadedOutputCurrency] = [
-    useCurrency(inputCurrencyId),
-    useCurrency(outputCurrencyId),
+    useCurrency(loadedUrlParams?.inputCurrencyId),
+    useCurrency(loadedUrlParams?.outputCurrencyId),
   ]
   const urlLoadedTokens: Token[] = useMemo(
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],

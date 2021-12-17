@@ -411,10 +411,8 @@ export const useEstimatedServiceTime = () => {
   const { averageBurnTime } = useSelector((p: State) => p.wallet.spendTimeInfo);
   const { availableBalance, uid } = usePlatformTimeBalance()
   useEffect(() => {
-    if (!uid) {
-      setLeftTime(0) // 未请求回数据, 剩余时间无
-    } else if (!Number(averageBurnTime)) {
-      setLeftTime(availableBalance.toNumber()) // 没有平均消耗值, 剩余时间为币种数量
+    if (!uid || !Number(averageBurnTime)) {
+      setLeftTime(0) // 未请求回数据,没有平均消耗值, 剩余时间无
     } else {
       setLeftTime(availableBalance.div(averageBurnTime).toNumber())
 

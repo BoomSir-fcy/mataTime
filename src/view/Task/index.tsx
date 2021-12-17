@@ -92,12 +92,6 @@ const Task: React.FC = () => {
           <Header title={t('EasyTaskEarn$Matter')}>
             {!isMobile && <HeaderTips t={t} />}
           </Header>
-          {/* <TaskHeader>
-            <Text mr="50px" fontSize="18px" bold>
-              {t('EasyTaskEarn$Matter')}
-            </Text>
-            {!isMobile && <HeaderTips t={t} />}
-          </TaskHeader> */}
           <ScrollBox>
             {isMobile && <TipsFlex><HeaderTips t={t} /></TipsFlex>}
             {/* {
