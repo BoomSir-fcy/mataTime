@@ -51,7 +51,7 @@ const PoolCard: React.FC<PoolCardProps> = ({ poolInfo, userData, poolApr, userSt
             </Box>
             <Box>
               <Text color="textTips">{t('Boost')}</Text>
-              <Text bold color="orange">{boostVal?.value ? `+${boostVal?.value}` : '--'}</Text>
+              <Text bold color="orange">{boostVal?.value ? `X ${boostVal?.value}` : '--'}</Text>
             </Box>
             <Box>
               <Text color="textTips" textAlign="right">{t('Total staked')}</Text>
