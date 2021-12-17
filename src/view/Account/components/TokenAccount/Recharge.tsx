@@ -185,8 +185,10 @@ const Recharge: React.FC<init> = ({
           <Flex alignItems="center" flexWrap="wrap">
             {numberList.map((item, index) => (
               <NumberBox
+                style={approvedNum === 0 ? { cursor: 'no-drop' } : {}}
                 key={item}
                 onClick={() => {
+                  if (approvedNum === 0) return;
                   const Num = Number(item) > balance ? String(balance) : item;
                   setVal(Num);
                 }}
@@ -206,6 +208,7 @@ const Recharge: React.FC<init> = ({
           </Flex>
           <InputBox mb="14px">
             <MyInput
+              disabled={approvedNum === 0}
               noShadow
               pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
               inputMode="decimal"
@@ -213,7 +216,15 @@ const Recharge: React.FC<init> = ({
               onChange={handleChange}
               placeholder={t('Account Please enter the recharge amount')}
             />
-            <Max onClick={() => setVal(String(balance))}>MAX</Max>
+            <Max
+              style={approvedNum === 0 ? { cursor: 'no-drop' } : {}}
+              onClick={() => {
+                if (approvedNum === 0) return;
+                setVal(String(balance));
+              }}
+            >
+              MAX
+            </Max>
           </InputBox>
           <Flex
             flexDirection="column"

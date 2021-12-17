@@ -182,8 +182,12 @@ const MoneyModal: React.FC<init> = ({
         >
           {numberList.map((item, index) => (
             <NumberBox
+              style={
+                type === 1 && approvedNum === 0 ? { cursor: 'no-drop' } : {}
+              }
               key={item}
               onClick={() => {
+                if (approvedNum === 0) return;
                 const Num = Number(item) > balance ? String(balance) : item;
                 setVal(Num);
               }}
@@ -208,6 +212,7 @@ const MoneyModal: React.FC<init> = ({
       </Flex>
       <InputBox mb="26px">
         <MyInput
+          disabled={approvedNum === 0}
           noShadow
           pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
           inputMode="decimal"
@@ -220,9 +225,11 @@ const MoneyModal: React.FC<init> = ({
           }
         />
         <Max
-          onClick={() =>
-            setVal(String(type === 1 ? balance : withdrawalBalance))
-          }
+          style={type === 1 && approvedNum === 0 ? { cursor: 'no-drop' } : {}}
+          onClick={() => {
+            if (type === 1 && approvedNum === 0) return;
+            setVal(String(type === 1 ? balance : withdrawalBalance));
+          }}
         >
           MAX
         </Max>

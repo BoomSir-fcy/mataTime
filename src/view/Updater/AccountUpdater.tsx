@@ -16,10 +16,10 @@ export default function AccountUpdater() {
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
-    dispatch(storeAction.resetLoginState());
-    history.replace('/login');
     // if (pathname !== '/login') {
     // }
+    dispatch(storeAction.resetLoginState());
+    history.replace('/login');
   }, [dispatch, history]);
 
   useEffect(() => {
