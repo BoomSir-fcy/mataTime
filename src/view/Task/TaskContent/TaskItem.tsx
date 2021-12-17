@@ -42,7 +42,7 @@ const ContentFlex = styled(Flex)`
     max-width: 180px;
   }
   ${({ theme }) => theme.mediaQueries.lg}{
-    width: 300px;
+    width: 310px;
   }
   ${({ theme }) => theme.mediaQueriesSize.marginr}
   
