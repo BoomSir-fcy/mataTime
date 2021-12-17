@@ -18,7 +18,7 @@ const Card = styled(Flex)<{ zIndex?: number }>`
   position: sticky;
   top: 0;
   background: ${({ theme }) => theme.colors.background};
-  z-index: ${({ zIndex }) => (zIndex ? zIndex : 1000)};
+  z-index: ${({ zIndex }) => zIndex || 1005};
   ${mediaQueriesSize.paddingxs}
   .text {
     font-size: 18px;
