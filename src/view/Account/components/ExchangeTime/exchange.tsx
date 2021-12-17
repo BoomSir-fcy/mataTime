@@ -323,7 +323,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </InputBox>
           <Flex mb="20px">
             <SmFont style={{ minWidth: '40%' }} mr="16px" color="textTips">
-              DSG {t('Balance')}: {formatDisplayApr(0)}
+              DSG {t('Balance')}: {formatDisplayApr(DsgBalance)}
             </SmFont>
             <SmFont color="textTips">
               TIME {t('Balance')}: {formatDisplayApr(timeBalance)}
