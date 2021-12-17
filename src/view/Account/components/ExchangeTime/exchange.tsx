@@ -145,6 +145,8 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const approvedNum = useStore(p => p.wallet.ApproveNum.dsg);
   const address = getDsgAddress();
   const { balance: DsgBalance } = useTokenBalance(address);
+  console.log(DsgBalance);
+
   const timeAddress = getTimeAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
   const { onApprove } = useApproveErc20Change();
@@ -323,7 +325,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </InputBox>
           <Flex mb="20px">
             <SmFont style={{ minWidth: '40%' }} mr="16px" color="textTips">
-              DSG {t('Balance')}: {formatDisplayApr(0)}
+              DSG {t('Balance')}: {formatDisplayApr(DsgBalance)}
             </SmFont>
             <SmFont color="textTips">
               TIME {t('Balance')}: {formatDisplayApr(timeBalance)}
