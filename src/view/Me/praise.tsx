@@ -10,7 +10,7 @@ import { CrumbsHead } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { WalletHead } from 'components/HeaderContent';
+import { Crumbs } from 'components';
 import { useTranslation } from 'contexts/Localization';
 
 const Praise = React.memo(props => {
@@ -55,7 +55,7 @@ const Praise = React.memo(props => {
           <Button>今日新增</Button>
         </Box>
       </CrumbsHead> */}
-      <WalletHead title={t('meHome')} />
+      <Crumbs title={t('meHome')} />
       <List
         marginTop={13}
         loading={loading}

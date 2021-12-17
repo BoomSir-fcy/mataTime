@@ -8,7 +8,7 @@ import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
-import { WalletHead } from 'components/HeaderContent';
+import { Crumbs } from 'components';
 
 import { CrumbsHead } from './components';
 
@@ -136,7 +136,7 @@ const Fans = React.memo(() => {
           </Text>
         </Flex>
       </CrumbsHead> */}
-      <WalletHead title={t('meHome')}>
+      <Crumbs title={t('meHome')}>
         <Flex>
           <Text
             fontWeight="bold"
@@ -150,7 +150,7 @@ const Fans = React.memo(() => {
             {t('meHeaderPeople%value%', { value: state.total })}
           </Text>
         </Flex>
-      </WalletHead>
+      </Crumbs>
       <Content isBoxShadow>
         <List
           marginTop={13}

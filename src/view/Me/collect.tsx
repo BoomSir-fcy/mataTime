@@ -8,7 +8,7 @@ import { CrumbsHead } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { WalletHead } from 'components/HeaderContent';
+import { Crumbs } from 'components';
 
 import { Api } from 'apis';
 
@@ -49,7 +49,7 @@ const Collect = props => {
 
   return (
     <Box>
-      <WalletHead title={t('meHome')}>
+      <Crumbs title={t('meHome')}>
         <Flex>
           <Text fontWeight="bold" mr="10px" fontSize="14px">
             {t('meHeaderMyCollection')}
@@ -58,7 +58,7 @@ const Collect = props => {
             {t('meHeaderNum%value%', { value: total })}
           </Text>
         </Flex>
-      </WalletHead>
+      </Crumbs>
       <List
         marginTop={14}
         loading={loading}

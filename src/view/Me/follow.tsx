@@ -9,7 +9,7 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
-import { WalletHead } from 'components/HeaderContent';
+import { Crumbs } from 'components';
 
 import { CrumbsHead } from './components';
 
@@ -135,7 +135,7 @@ const Follow = React.memo(() => {
           </Text>
         </Flex>
       </CrumbsHead> */}
-      <WalletHead title={t('meHome')}>
+      <Crumbs title={t('meHome')}>
         <Flex>
           <Text
             fontWeight="bold"
@@ -149,7 +149,7 @@ const Follow = React.memo(() => {
             {t('meHeaderPeople%value%', { value: state.total })}
           </Text>
         </Flex>
-      </WalletHead>
+      </Crumbs>
       <Content isBoxShadow>
         <List
           marginTop={13}
