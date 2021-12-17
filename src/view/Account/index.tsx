@@ -14,16 +14,15 @@ import useMenuNav from 'hooks/useMenuNav';
 import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
-import { WalletHead } from 'components/HeaderContent';
+import { Crumbs } from 'components';
 import { useFetTimeInfo } from 'store/wallet/hooks';
-
 
 const CenterCard = styled(Box)`
   background: ${({ theme }) => theme.colors.primaryDark};
   width: calc(100vw - 8px);
   /* overflow: hidden; */
   ${({ theme }) => theme.mediaQueries.sm} {
-    width:100%;
+    width: 100%;
   }
 `;
 const MobileTips = styled(Flex)`
@@ -39,7 +38,6 @@ const Tips = styled.img`
   margin-right: 10px;
 `;
 
-
 const Stake = React.lazy(() => import('./components/Single'));
 const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
 const Exchange = React.lazy(() => import('./components/ExchangeTime'));
@@ -47,34 +45,34 @@ const RewardList = React.lazy(() => import('./components/Reward/list'));
 const FAQ = React.lazy(() => import('./components/Faq'));
 
 const Account = props => {
-  useFetTimeInfo()
+  useFetTimeInfo();
 
   const { t } = useTranslation();
-  const { isMobile } = useMenuNav()
+  const { isMobile } = useMenuNav();
   const CurrentRound = useStore(p => p.wallet.CurrentRound);
   const { pathname } = useLocation();
 
-
   const getHeadTitle = () => {
-    if (pathname === '/account') return t('Account My Wallet')
-    if (pathname === '/account/time') return t('TIME')
-    if (pathname === '/account/faq') return t('FAQ')
-    if (pathname === '/account/stake') return t('Stake')
-    if (pathname === '/account/reward') return t('rewardAutherWallet')
-  }
+    if (pathname === '/account') return t('Account My Wallet');
+    if (pathname === '/account/time') return t('TIME');
+    if (pathname === '/account/faq') return t('FAQ');
+    if (pathname === '/account/stake') return t('Stake');
+    if (pathname === '/account/reward') return t('rewardAutherWallet');
+  };
 
   return (
     <Box width="100%">
       <CenterCard>
-        <WalletHead title={getHeadTitle()}>
-          {!isMobile && <HeaderTips isMobile={isMobile} t={t} CurrentRound={CurrentRound} />}
-        </WalletHead>
-        {
-          isMobile &&
+        <Crumbs title={getHeadTitle()}>
+          {!isMobile && (
+            <HeaderTips isMobile={isMobile} t={t} CurrentRound={CurrentRound} />
+          )}
+        </Crumbs>
+        {isMobile && (
           <MobileTips>
             <HeaderTips isMobile={isMobile} t={t} CurrentRound={CurrentRound} />
           </MobileTips>
-        }
+        )}
         <Switch>
           <Route
             path={`${props.match.path}`}
@@ -101,10 +99,9 @@ const Account = props => {
   );
 };
 
-
 const HeaderTips = ({ t, CurrentRound, isMobile }) => {
   return (
-    <Flex alignItems="center" flexWrap='wrap'>
+    <Flex alignItems="center" flexWrap="wrap">
       <Flex>
         <Tips
           src={require('assets/images/myWallet/broadcast.png').default}
@@ -116,7 +113,12 @@ const HeaderTips = ({ t, CurrentRound, isMobile }) => {
           )}
         </Text>
       </Flex>
-      <Text ml={isMobile ? '28px' : ''} mr="18px" fontSize="14px" color="textPrimary">
+      <Text
+        ml={isMobile ? '28px' : ''}
+        mr="18px"
+        fontSize="14px"
+        color="textPrimary"
+      >
         1 DSG =
         {formatDisplayApr(
           new BigNumber(CurrentRound.max_time_token)
@@ -136,6 +138,6 @@ const HeaderTips = ({ t, CurrentRound, isMobile }) => {
       </Text>
     </Flex>
   );
-}
+};
 
 export default withRouter(Account);

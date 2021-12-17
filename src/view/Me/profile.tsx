@@ -33,6 +33,7 @@ import CommonCircle from 'components/Cirde/CommonCircle';
 
 import useAuth from 'hooks/useAuth';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import useMenuNav from 'hooks/useMenuNav';
 
 const Center = styled(Box)`
   width: 100%;
@@ -156,6 +157,8 @@ const Profile: React.FC<any> = props => {
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
+  const { isMobile } = useMenuNav();
+
   const init = async (offset?: number) => {
     try {
       setState(p => {
@@ -231,7 +234,7 @@ const Profile: React.FC<any> = props => {
         <ProfileInfo>
           <Info>
             <Flex alignItems="flex-end" style={{ flex: 1 }}>
-              <Avatar scale="xl" src={profile.nft_image} />
+              <Avatar scale={isMobile ? 'ld' : 'xl'} src={profile.nft_image} />
               <Desc>
                 <Text className="name" ellipsis maxLine={2}>
                   {profile.nick_name}

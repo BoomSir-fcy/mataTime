@@ -75,6 +75,6 @@ export const ReplyConentWrapper = styled(Box)`
   }
   .right {
     flex: 1;
-    max-width: 554px;
+    max-width: calc(100% - 82px);
   }
 `;

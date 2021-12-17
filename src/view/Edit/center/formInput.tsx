@@ -8,7 +8,10 @@ import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 
 const FormBox = styled.div`
-  padding: 35px 40px;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 35px 40px;
+  }
   margin-top: 13px;
   background: transparent;
   border-radius: 10px;
@@ -19,14 +22,24 @@ const Title = styled.div`
   color: ${({ theme }) => theme.colors.text};
   line-height: 50px;
   min-width: 105px;
-  margin-right: 20px;
+  margin-right: 8px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-right: 20px;
+  }
 `;
+
+const WidthBox = styled(Flex)`
+  max-width: 380px;
+  width: 60vw;
+  min-width: 200px;
+`;
+
 const Rows = styled(Flex)`
   justify-content: flex-start;
   margin-bottom: 26px;
   textarea {
     background: ${({ theme }) => theme.colors.backgroundTextArea};
-    width: 381px;
+    width: 100%;
     height: 210px;
     color: ${({ theme }) => theme.colors.textTips};
     padding: 15px;
@@ -35,18 +48,19 @@ const Rows = styled(Flex)`
     outline: none;
     resize: none;
   }
+  &:last-child {
+    margin-bottom: 126px;
+  }
 `;
-const InputRows = styled(Flex)`
+const InputRows = styled(WidthBox)`
   justify-content: space-between;
   border-radius: 10px;
   padding: 13px 9px;
   background: ${({ theme }) => theme.colors.backgroundTextArea};
-  width: 381px;
   height: 50px;
   input {
-    flex: 1;
+    width: 100%;
     color: ${({ theme }) => theme.colors.textTips};
-    padding: 14px 13px 14px 0;
     background: transparent;
     border: none;
     outline: none;
@@ -67,8 +81,7 @@ const Msg = styled.div`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 14px;
 `;
-const RadioBox = styled.div`
-  width: 381px;
+const RadioBox = styled(WidthBox)`
   height: 50px;
   line-height: 50px;
   color: ${({ theme }) => theme.colors.text};
@@ -159,7 +172,7 @@ const FormInput = React.forwardRef((props, ref) => {
       </Rows>
       <Rows>
         <Title>{t('loginInputTitleIntroduction')}</Title>
-        <Box>
+        <WidthBox flexDirection="column">
           <textarea
             placeholder={t('loginInputIntroduction')}
             onChange={event =>
@@ -170,7 +183,7 @@ const FormInput = React.forwardRef((props, ref) => {
             value={state.introduction}
           />
           <Msg>{t('loginInputIntroductionVerif')}</Msg>
-        </Box>
+        </WidthBox>
       </Rows>
       <Rows>
         <Title>{t('loginInputTitleCountry')}</Title>

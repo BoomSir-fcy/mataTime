@@ -43,6 +43,10 @@ const CenterImg = styled.img`
   left: 8%;
 `;
 
+const PageBox = styled(Box)`
+  max-width: calc(100vw - 8px);
+`;
+
 const Edit: React.FC = () => {
   useFetchNftList();
 
@@ -148,7 +152,7 @@ const Edit: React.FC = () => {
   }, [profile]);
 
   return (
-    <Box>
+    <PageBox>
       <WalletHead title={t('commonAccountEdit')}>
         <Button onClick={debounce(() => updateUserInfo(), 1000)}>
           {t('commonAccountSave')}
@@ -202,7 +206,7 @@ const Edit: React.FC = () => {
       </Background>
       <NftAvatar />
       <FormInput ref={form} />
-    </Box>
+    </PageBox>
   );
 };
 

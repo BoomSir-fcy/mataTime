@@ -10,8 +10,12 @@ import { CrumbsHead } from './components';
 import { MeItemWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
+import { WalletHead } from 'components/HeaderContent';
+import { useTranslation } from 'contexts/Localization';
 
 const Praise = React.memo(props => {
+  const { t } = useTranslation();
+
   const [state, setState] = useImmer({
     loading: false,
     list: [],
@@ -45,12 +49,13 @@ const Praise = React.memo(props => {
 
   return (
     <Box>
-      <CrumbsHead>
-        {/* <Box>
+      {/* <CrumbsHead>
+        <Box>
           <Button style={{ marginRight: '11px' }}>全部点赞</Button>
           <Button>今日新增</Button>
-        </Box> */}
-      </CrumbsHead>
+        </Box>
+      </CrumbsHead> */}
+      <WalletHead title={t('meHome')} />
       <List
         marginTop={13}
         loading={loading}

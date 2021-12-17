@@ -9,20 +9,22 @@ import { Box, Button, Card, Flex, Text } from 'uikit';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
+import { WalletHead } from 'components/HeaderContent';
 
 import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
-  min-height: 700px;
-  padding: 29px 19px;
+  min-height: 500px;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
   background-color: transparent;
+  max-width: calc(100vw - 8px);
 `;
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
   min-height: 60px;
   margin-left: 22px;
-  width: calc(100% - 108px);
+  width: calc(100% - 70px);
 `;
 const ContentBox = styled(Flex)`
   min-height: 60px;
@@ -38,7 +40,10 @@ const MinWidthButton = styled(Button)`
   min-width: 110px;
   max-width: 110px;
 `;
-
+const NameText = styled(Text)`
+  max-width: 100%;
+  width: max-content;
+`;
 const Follow = React.memo(() => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
@@ -115,7 +120,7 @@ const Follow = React.memo(() => {
 
   return (
     <Box>
-      <CrumbsHead>
+      {/* <CrumbsHead>
         <Flex>
           <Text
             fontWeight="bold"
@@ -129,7 +134,22 @@ const Follow = React.memo(() => {
             {t('meHeaderPeople%value%', { value: state.total })}
           </Text>
         </Flex>
-      </CrumbsHead>
+      </CrumbsHead> */}
+      <WalletHead title={t('meHome')}>
+        <Flex>
+          <Text
+            fontWeight="bold"
+            mr="10px"
+            fontSize="14px"
+            style={{ textTransform: 'capitalize' }}
+          >
+            {t('meHeaderFollow')}
+          </Text>
+          <Text fontSize="14px">
+            {t('meHeaderPeople%value%', { value: state.total })}
+          </Text>
+        </Flex>
+      </WalletHead>
       <Content isBoxShadow>
         <List
           marginTop={13}
@@ -145,14 +165,14 @@ const Follow = React.memo(() => {
                 <Flex
                   as={Link}
                   to={`/me/profile/${item.uid}`}
-                  style={{ width: 'calc(100% - 140px)' }}
+                  style={{ width: 'calc(100% - 120px)' }}
                 >
                   <Avatar src={item.nft_image} scale="md" />
                   <Column>
-                    <Flex>
-                      <Text color="white_black" mr="13px">
+                    <Flex flexWrap="wrap">
+                      <NameText ellipsis color="white_black" mr="13px">
                         {item.nick_name}
-                      </Text>
+                      </NameText>
                       <Text color="textTips">
                         @{shortenAddress(item.address)}
                       </Text>
