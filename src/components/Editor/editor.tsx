@@ -482,7 +482,7 @@ export const Editor = (props: Iprops) => {
           <Flex alignItems="center">
             {
               articleLength > ARTICLE_POST_MAX_LEN && (
-                <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'failure' : 'primary'}>
+                <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'}>
                   {ARTICLE_POST_MAX_LEN - articleLength}
                 </Text>
               )
