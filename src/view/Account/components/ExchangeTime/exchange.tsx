@@ -34,6 +34,7 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import useMenuNav from 'hooks/useMenuNav';
+import { ConnectWalletButton } from 'components';
 
 const Center = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -86,6 +87,10 @@ const Rule = styled(Text)`
 const ButtonStyle = styled(Button)`
   width: 100%;
 `;
+const ConnectWalletButtonStyle = styled(ConnectWalletButton)`
+  width: 100%;
+`;
+
 const FAQ = styled(Flex)`
   position: absolute;
   right: -198px;
@@ -378,28 +383,34 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
               }
             )}
           </Rule>
-          <ButtonStyle
-            disabled={pending}
-            onClick={async () => {
-              if (approvedNum > 0) {
-                // 兑换
-                await handleExchange();
-              } else {
-                // 授权
-                await handleApprove();
-              }
-            }}
-          >
-            {pending ? (
-              <Dots>
-                {approvedNum > 0 ? t('Time Redeeming') : t('Account Approving')}
-              </Dots>
-            ) : approvedNum > 0 ? (
-              t('Time Exchange')
-            ) : (
-              t('Account Approve')
-            )}
-          </ButtonStyle>
+          {account ? (
+            <ButtonStyle
+              disabled={pending}
+              onClick={async () => {
+                if (approvedNum > 0) {
+                  // 兑换
+                  await handleExchange();
+                } else {
+                  // 授权
+                  await handleApprove();
+                }
+              }}
+            >
+              {pending ? (
+                <Dots>
+                  {approvedNum > 0
+                    ? t('Time Redeeming')
+                    : t('Account Approving')}
+                </Dots>
+              ) : approvedNum > 0 ? (
+                t('Time Exchange')
+              ) : (
+                t('Account Approve')
+              )}
+            </ButtonStyle>
+          ) : (
+            <ConnectWalletButtonStyle />
+          )}
         </SwapBox>
       ) : (
         <IsBeginBox>
