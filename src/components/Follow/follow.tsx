@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { useImmer } from 'use-immer';
 import { Flex, Box, Text, Button } from 'uikit';
+import { FollowButton, CancelAttentionModal } from 'components';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
@@ -26,28 +28,68 @@ const FollowContent = styled(Flex)`
   flex: 1;
   align-items: center;
 `;
-const FollowButton = styled(Box)`
-  width: 100px;
-`;
 
-export const Follow: React.FC<{
-  rows: {
-    nft_image: string;
-    nick_name: string;
-    address: string;
-    attention_status: number;
-    uid: number;
-  };
-  getManList: () => void;
-}> = ({ rows, getManList }) => {
+export const Follow = React.forwardRef((props, ref) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
+  const [state, setState] = useImmer({
+    list: [] as any,
+    isRotate: false,
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: ''
+    }
+  });
+  const { list } = state;
+
+  React.useImperativeHandle(ref, () => ({
+    reload() {
+      return getManList();
+    }
+  }));
+
+  const getManList = async () => {
+    try {
+      const res = await Api.UserApi.referrerMans({ num: 3 });
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = res.data || [];
+        });
+      }
+    } catch (error) {}
+  };
+
+  const getCurrentState = async () => {
+    const uids = list.map(({ uid }) => uid);
+    try {
+      const res = await Api.AttentionApi.getFollowState(uids);
+      if (Api.isSuccess(res)) {
+        const considerFocus = res.data;
+        const followTemp = list.map(row => {
+          if (considerFocus[row.uid]) {
+            return { ...row, attention_status: 1 };
+          }
+          return { ...row, attention_status: 0 };
+        });
+        setState(p => {
+          p.list = followTemp;
+          p.cancelFollow = false;
+        });
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getManList();
+  }, []);
 
   const followUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
-        getManList();
+        getCurrentState();
         toastSuccess(t('commonMsgFollowSuccess') || res.data);
       } else {
         toastError(t('commonMsgUnFollowError') || res.data);
@@ -56,130 +98,63 @@ export const Follow: React.FC<{
       console.error(error);
     }
   };
-  return (
-    <FolloWarpper>
-      <FollowContent>
-        <Avatar scale="md" src={rows.nft_image} />
-        <Flex flexDirection="column" paddingLeft="12px" style={{ minWidth: 0 }}>
-          <Flex alignItems="center">
-            <Name>{rows.nick_name}</Name>
-          </Flex>
-          <Text color="textTips">@{shortenAddress(rows.address)}</Text>
-        </Flex>
-      </FollowContent>
-      <FollowButton>
-        <Button onClick={debounce(() => followUser(rows.uid), 1000)}>
-          {t('meFocusOn')}
-        </Button>
-      </FollowButton>
-    </FolloWarpper>
-  );
-};
 
-const FollowContainer = styled.div`
-  position: fixed;
-  top: -400px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  z-index: 99;
-  padding: 36px;
-  width: 498px;
-  height: 238px;
-  background: #191f2d;
-  box-shadow: 0px 0px 21px 0px rgba(25, 95, 81, 0.2);
-  border-radius: 20px;
-  .btns {
-    display: flex;
-    justify-content: center;
-    button {
-      width: 100px;
-    }
-    button + button {
-      margin-left: 80px;
-    }
-  }
-`;
-
-const FollowTitle = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  color: #ffffff;
-`;
-
-const FollowBody = styled(Flex)`
-  font-size: 16px;
-  font-weight: 400;
-  color: #ffffff;
-  margin: 25px 0 38px;
-  line-height: 1.5;
-  a {
-    color: rgba(65, 104, 237, 1);
-  }
-  & > div {
-    margin-left: 30px;
-  }
-`;
-type IProps = {
-  userId: string | number;
-  callBack: (data) => void;
-};
-export const CancelFollow = (props: IProps) => {
-  const [userInfo, setUserInfo] = useState<any>({});
-  const { toastSuccess, toastError } = useToast();
-  const { callBack } = props;
-  useEffect(() => {
-    if (props.userId) {
-      const { userId } = props;
-      Api.UserApi.getUserInfoByUID(userId).then(res => {
-        if (Api.isSuccess(res)) {
-          setUserInfo(res.data);
-        }
-      });
-    }
-  }, [props.userId]);
-  const clickBtn = flag => {
-    const { userId } = props;
-    if (flag) {
-      Api.MeApi.unFollowUser(userId).then(res => {
-        if (Api.isSuccess(res)) {
-          toastSuccess(res.data);
-        } else {
-          toastError(res.data);
-        }
-        callBack(true);
-      });
-    } else {
-      callBack(false);
+  // 取消关注
+  const unFollowRequest = async item => {
+    try {
+      const res = await Api.MeApi.unFollowUser(item.uid);
+      if (Api.isSuccess(res)) {
+        getCurrentState();
+        toastSuccess(t('commonMsgFollowError') || res.data);
+      } else {
+        toastError(t('commonMsgUnFollowError') || res.data);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
+
   return (
-    <FollowContainer>
-      <FollowTitle>是否取消关注Ta?</FollowTitle>
-      <FollowBody>
-        <Avatar src={userInfo.nft_image} scale="md" />
-        <div>
-          取消关注<a>@{userInfo.nick_name}</a>，将无法获取查看Ta的最新动态
-        </div>
-      </FollowBody>
-      <div className="btns">
-        <Button
-          style={{ backgroundColor: '#4D535F' }}
-          onClick={() => {
-            clickBtn(true);
-          }}
-        >
-          确定
-        </Button>
-        <Button
-          onClick={() => {
-            clickBtn(false);
-          }}
-        >
-          取消
-        </Button>
-      </div>
-    </FollowContainer>
+    <React.Fragment>
+      {state.list.map((row, index: number) => (
+        <FolloWarpper key={index}>
+          <FollowContent>
+            <Avatar scale="md" src={row.nft_image} />
+            <Flex
+              flexDirection="column"
+              paddingLeft="12px"
+              style={{ minWidth: 0 }}
+            >
+              <Flex alignItems="center">
+                <Name>{row.nick_name}</Name>
+              </Flex>
+              <Text color="textTips">@{shortenAddress(row.address)}</Text>
+            </Flex>
+          </FollowContent>
+          <FollowButton
+            key={index}
+            data={row}
+            followFunc={debounce(() => followUser(row.uid), 1000)}
+            unFollowFunc={() =>
+              setState(p => {
+                p.cancelParams = { ...row, index };
+                p.cancelFollow = true;
+              })
+            }
+          />
+        </FolloWarpper>
+      ))}
+      <CancelAttentionModal
+        title={t('meUnsubscribeTips')}
+        show={state.cancelFollow}
+        params={state.cancelParams}
+        confirm={debounce(() => unFollowRequest(state.cancelParams), 1000)}
+        onClose={() =>
+          setState(p => {
+            p.cancelFollow = false;
+          })
+        }
+      />
+    </React.Fragment>
   );
-};
+});

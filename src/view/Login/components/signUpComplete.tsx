@@ -29,31 +29,14 @@ export const SignUpcomplete = React.memo(() => {
   const history = useHistory();
   const location = useLocation();
   const redict = location?.state?.from?.pathname;
-  const [state, setState] = useImmer({
-    list: []
-  });
   const { t } = useTranslation();
-
-  const getManList = async () => {
-    try {
-      const res = await Api.UserApi.referrerMans({ num: 3 });
-      if (Api.isSuccess(res)) {
-        setState(p => {
-          p.list = res.data || [];
-        });
-      }
-    } catch (error) { }
-  };
+  const followRefs = React.useRef(null);
 
   const complete = () => {
     dispatch(fetchThunk.fetchUserInfoAsync());
     dispatch(storeAction.changeReset());
     history.replace(`${redict || '/'}`);
   };
-
-  React.useEffect(() => {
-    getManList();
-  }, []);
 
   return (
     <Box>
@@ -66,12 +49,14 @@ export const SignUpcomplete = React.memo(() => {
         {t('loginFollow')}
       </Text>
       <Box>
-        {state.list.map((row, index: number) => (
-          <Follow key={index} rows={row} getManList={getManList} />
-        ))}
+        <Follow ref={followRefs} />
       </Box>
-      <FlexButton paddingBottom='20px'>
-        <Button mr='20px' scale="ld" onClick={debounce(() => getManList(), 1000)}>
+      <FlexButton paddingBottom="20px">
+        <Button
+          mr="20px"
+          scale="ld"
+          onClick={debounce(() => followRefs?.current?.reload(), 1000)}
+        >
           {t('loginSignUpChangeBatch')}
         </Button>
         <CompleteButton variant="secondary" scale="ld" onClick={complete}>

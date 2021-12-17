@@ -14,7 +14,7 @@ import {
   resetLoginState,
   setSigninLoading,
   setUserToken,
-  setUserUnreadMsgNum,
+  setUserUnreadMsgNum
 } from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
@@ -25,13 +25,13 @@ interface UnreadMsg extends Api.News.UnreadMsgNum {
 }
 
 const initialState = {
-  isSignup: false,
-  isSignin: false,
+  isSignup: true,
+  isSignin: true,
   isGetStake: false,
   isStakeNft: false,
   signUpFail: false,
   signinLoading: false,
-  singUpStep: 0,
+  singUpStep: 4,
   userInfo: {} as Api.User.userInfoParams,
   nft: {} as any,
   nftStatus: false,
@@ -44,8 +44,8 @@ const initialState = {
     message_like: 0,
     message_secret: 0,
     message_system: 0,
-    mineTotalMsgNum: 0,
-  },
+    mineTotalMsgNum: 0
+  }
 };
 
 export type Login = typeof initialState;
@@ -73,7 +73,6 @@ export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
     return info;
   }
 );
-
 
 export const login = createSlice({
   name: 'login',
@@ -136,19 +135,26 @@ export const login = createSlice({
           state.token = '';
         }
       })
-      .addCase(setUserUnreadMsgNum, (state, action: { payload: Partial<Api.News.UnreadMsgNum> }) => {
-        if (action.payload) {
-          const unreadMsg = {
-            ...state.unReadMsg,
-            ...action.payload,
-          }
-          const mineTotalMsgNum = unreadMsg.message_at_me + unreadMsg.message_like + unreadMsg.message_comment + unreadMsg.message_system
-          state.unReadMsg = {
-            ...unreadMsg,
-            mineTotalMsgNum,
+      .addCase(
+        setUserUnreadMsgNum,
+        (state, action: { payload: Partial<Api.News.UnreadMsgNum> }) => {
+          if (action.payload) {
+            const unreadMsg = {
+              ...state.unReadMsg,
+              ...action.payload
+            };
+            const mineTotalMsgNum =
+              unreadMsg.message_at_me +
+              unreadMsg.message_like +
+              unreadMsg.message_comment +
+              unreadMsg.message_system;
+            state.unReadMsg = {
+              ...unreadMsg,
+              mineTotalMsgNum
+            };
           }
         }
-      })
+      )
       .addCase(resetLoginState, state => {
         Object.keys(state).forEach(key => {
           state[key] = cloneDeep(initialState[key]);
