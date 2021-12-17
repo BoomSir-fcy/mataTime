@@ -64,7 +64,10 @@ const Desc = styled(Box)`
     min-width: 0;
     word-wrap: break-word;
     word-break: break-all;
-    font-size: 28px;
+    font-size: 18px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      font-size: 28px;
+    }
     font-weight: bold;
     color: ${({ theme }) => theme.colors.text};
   }
