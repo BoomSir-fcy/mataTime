@@ -2,24 +2,23 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts/Localization';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ModalWrapper } from 'components'
+import { ModalWrapper } from 'components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction } from 'store';
 import eventBus from 'utils/eventBus';
 import useAuth from 'hooks/useAuth';
 import { MAX_PER_SPEND_TIME, storage } from 'config';
-import InsufficientBalanceModal from './InsufficientBalanceModal'
+import InsufficientBalanceModal from './InsufficientBalanceModal';
 import { usePlatformTimeBalance } from 'store/wallet/hooks';
 
 export default function HttpUpdater() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { pathname } = useLocation();
-  const [visible, setVisible] = useState(false)
-  const { availableBalance } = usePlatformTimeBalance()
-
+  const [visible, setVisible] = useState(false);
+  const { availableBalance } = usePlatformTimeBalance();
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
@@ -31,43 +30,45 @@ export default function HttpUpdater() {
 
   // 余额不足
   const handleInsufficient = useCallback(() => {
-    setVisible(true)
-  }, [setVisible])
+    setVisible(true);
+  }, [setVisible]);
 
   useEffect(() => {
     eventBus.addEventListener('unauthorized', handleReSetAccount);
     return () => {
       eventBus.addEventListener('unauthorized', handleReSetAccount);
-    }
-  }, [handleReSetAccount])
+    };
+  }, [handleReSetAccount]);
 
   useEffect(() => {
     eventBus.addEventListener('insufficient', handleInsufficient);
     return () => {
       eventBus.addEventListener('insufficient', handleInsufficient);
-    }
-  }, [handleInsufficient])
+    };
+  }, [handleInsufficient]);
 
   useEffect(() => {
     if (availableBalance.isGreaterThanOrEqualTo(MAX_PER_SPEND_TIME)) {
-      setVisible(false)
+      setVisible(false);
     }
-  }, [availableBalance])
+  }, [availableBalance]);
 
   return (
-    <ModalWrapper padding="0" customizeTitle visible={visible} >
+    <ModalWrapper padding="0" customizeTitle visible={visible}>
       <InsufficientBalanceModal
         title={t('Insufficient $time balance')}
-        tips={t('Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information')}
+        tips={t(
+          'Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information'
+        )}
         onConfirmLable={t('Go recharge')}
         onSecondaryLable={t('Logout account')}
         onConfirm={() => {
-          setVisible(false)
+          setVisible(false);
           history.push('/account');
         }}
         onSecondary={() => {
-          setVisible(false)
-          handleReSetAccount()
+          setVisible(false);
+          handleReSetAccount();
         }}
       />
     </ModalWrapper>
