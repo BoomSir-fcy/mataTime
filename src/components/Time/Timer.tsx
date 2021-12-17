@@ -81,19 +81,19 @@ export const Timer: React.FC<TimerProps> = ({
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('d')}</StyledTimerText>
         </>
       )}
-      {showDaysLeft && (Boolean(hours) || days > 0) && (
+      {showDaysLeft && typeof hours !== 'undefined' && (Boolean(hours) || days > 0) && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{hours}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('h')}</StyledTimerText>
         </>
       )}
-      {showDaysLeft && (Boolean(minutes) || hours > 0 || days > 0) && (
+      {showDaysLeft && typeof minutes !== 'undefined' && (Boolean(minutes) || hours > 0 || days > 0) && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{minutes}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('m')}</StyledTimerText>
         </>
       )}
-      {showDaysLeft && (Boolean(seconds) || minutes > 0 || hours > 0 || days > 0) && (
+      {showDaysLeft && typeof seconds !== 'undefined' && (Boolean(seconds) || minutes > 0 || hours > 0 || days > 0) && (
         <>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={textMr}>{seconds || 0}</StyledTimerText>
           <StyledTimerText color={color} bold={bold} fontSize={fontSize} mr={itemMr}>{t('s')}</StyledTimerText>
