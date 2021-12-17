@@ -272,8 +272,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             textTransform="capitalize"
             onClick={() => {
               copyContent(
-                `${window.location.origin}/articleDetils/${
-                  data.post.post_id || ''
+                `${window.location.origin}/articleDetils/${data.post.post_id || ''
                 }`
               );
               toastSuccess(t('copySuccess'));
@@ -286,6 +285,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           {!isOwn && (
             <>
               <Text
+                style={{ whiteSpace: 'nowrap' }}
                 textTransform="capitalize"
                 onClick={() => {
                   data.post.is_fav === 1
