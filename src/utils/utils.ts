@@ -5,7 +5,8 @@ export const getBLen = str => {
 };
 
 // 发布推文长度
-export const getPostBLen = str => {
+export const getPostBLen = (str): number => {
   if (!Boolean(str)) return 0;
-  return str.replace(/[^\x00-\xff]/g, '01').length;
+  return `${str}`.length;
+  // return str.replace(/[^\x00-\xff]/g, '01').length;
 };
