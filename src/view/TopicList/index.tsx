@@ -17,7 +17,9 @@ import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
-  const { id, name } = props.match.params;
+  const { id } = props.match.params;
+  let { name } = props.match.params;
+  name = decodeURIComponent(name)
   const { toastError } = useToast();
   const [state, setState] = useImmer({
     tagName: '',

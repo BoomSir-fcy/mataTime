@@ -10,7 +10,7 @@ import { tokens } from 'config';
 import {
   SQUARE_REGEXP,
   HTTP_REGEXP,
-  SYMBOL_REGEXP
+  SYMBOL_REGEXP,
 } from 'config/constants/regexp';
 
 import history from 'routerHistory';
@@ -141,11 +141,11 @@ export const ContentParsing = (props: IProps) => {
         <a
           onClick={event => {
             event.stopPropagation();
-            goRouter(`/topicList/empty/${match}`);
+            goRouter(`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`);
           }}
           key={match + i}
         >
-          #{match}&nbsp;
+          {match}&nbsp;
         </a>
       )
     );
@@ -169,7 +169,7 @@ export const ContentParsing = (props: IProps) => {
               serialize2(n, 'topic', index)
             )}`}
           >
-            #{children?.map((n, index) => serialize2(n, null, index))}#
+            {children?.map((n, index) => serialize2(n, null, index))}
           </Link>
         );
       case 'mention':
