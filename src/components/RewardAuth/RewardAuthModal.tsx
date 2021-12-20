@@ -157,7 +157,6 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const changeCoinChecked = async (rows: string[], index) => {
     try {
       const res = await getPrice(rows[0]);
-      console.log(tokenList[index]);
       setState(p => {
         p.currentToken = rows;
         p.current_price = res.current_price || '0';

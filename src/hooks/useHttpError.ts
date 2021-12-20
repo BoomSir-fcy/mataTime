@@ -20,7 +20,6 @@ export default function useHttpError() {
   const { t } = useTranslation();
 
   const httpErrorToast = useCallback((data: Api.Error) => {
-    console.log(httpErrorCodes, data, '==httpErrorCodes')
     if (httpErrorCodes.includes(data.code)) {
       toastError(t(`http-error-${data.code}`));
     } else {

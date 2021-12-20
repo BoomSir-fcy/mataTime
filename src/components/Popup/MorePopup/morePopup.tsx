@@ -46,7 +46,6 @@ const PopupWrapper = styled(Box)`
 export const MorePostPopup: React.FC<Iprops> = React.memo(
   ({ data, postUid, callback }) => {
 
-    console.log(122222222222222)
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const [reportShow, setReportShow] = useState<boolean>(false);

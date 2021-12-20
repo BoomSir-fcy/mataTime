@@ -362,7 +362,6 @@ export const Editor = (props: Iprops) => {
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
 
-    console.log(articleLength)
     props.sendArticle(
       JSON.stringify(newValue2),
       imgList.join(','),

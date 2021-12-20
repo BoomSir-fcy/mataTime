@@ -62,7 +62,6 @@ const Home: React.FC = (props: any) => {
         image_urls: image_urls,
         remind_user
       });
-      console.log(res)
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
       }

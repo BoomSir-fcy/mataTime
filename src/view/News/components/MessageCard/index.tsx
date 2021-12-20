@@ -41,7 +41,6 @@ const MessageCard: React.FC<MessageCardProps> = ({
   children
 }) => {
 
-  console.log(content)
   return (
     <BoxStyled alignItems="center" justifyContent="space-between">
       <Flex flex="1" padding="16px">
