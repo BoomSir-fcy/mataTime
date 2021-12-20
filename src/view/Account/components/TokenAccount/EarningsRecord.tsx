@@ -74,13 +74,14 @@ const LoadingAnimation = styled(Box)`
   /* position: absolute; */
   width: 100%;
 `;
-// type 1 内容 2 打赏
+// type 1 Time 2 Matter
 interface init {
+  readType?: number;
   type?: number;
   info: any;
 }
 
-const EarningsRecord: React.FC<init> = ({ type, info }) => {
+const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
     setLoading(true);
     const changePage = event.selected + 1;
     if (type === 1) {
-      dispatch(fetchIncomeList({ page: changePage, pageSize }));
+      dispatch(fetchIncomeList({ page: changePage, pageSize, readType }));
     } else {
       dispatch(fetchMatterIncomeList({ page: changePage, pageSize }));
     }
@@ -134,7 +135,9 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
     }
     return stringArray;
   };
-
+  useEffect(() => {
+    setContentHistoryList([]);
+  }, [readType]);
   useEffect(() => {
     if (type === 1) {
       if (info.record?.length) {
@@ -211,9 +214,15 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
             const stringArray: any[] = [];
             let context: any[] = [];
             try {
-              context = Array.isArray(JSON.parse(item.info.content))
-                ? JSON.parse(item.info.content)
-                : [];
+              if (readType === 1) {
+                context = Array.isArray(JSON.parse(item.info.content))
+                  ? JSON.parse(item.info.content)
+                  : [];
+              } else {
+                context = Array.isArray(JSON.parse(item.cinfo.comment))
+                  ? JSON.parse(item.cinfo.comment)
+                  : [];
+              }
             } catch (err) {
               console.error(err);
             }
@@ -229,7 +238,8 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
                     <Text ellipsis>
                       {stringArr(context, stringArray).join(',')}
                     </Text>
-                    {item.info.image_list &&
+                    {readType === 1 &&
+                      item.info?.image_list &&
                       item.info.image_list.map(item => (
                         <img key={item} src={item} alt="" />
                       ))}

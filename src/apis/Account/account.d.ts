@@ -1,6 +1,5 @@
 declare namespace Api {
   namespace Account {
-
     interface DrawbalanceSignMessage {
       network_type: number;
       sign_time: number; // 签名时间
@@ -16,7 +15,7 @@ declare namespace Api {
       available_balance: string;
       total_balance: string;
       freeze_balance: string;
-      token_type: number,
+      token_type: number;
     }
     interface History {
       page?: number;
@@ -24,8 +23,9 @@ declare namespace Api {
       coin_type?: number;
     }
     interface TimeIncomerecord {
-      index?: number;//列表下标page*size
-      size?: number;//每页条数
+      index?: number; //列表下标page*size
+      size?: number; //每页条数
+      read_type?: number; //1帖子 2评论
     }
     interface TimeIncometoday {
       days?: number;
