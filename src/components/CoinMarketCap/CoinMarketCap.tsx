@@ -62,7 +62,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
         setCurrentCoin(activeCoin)
       }
     }
-  }, [coins, coinsList])
+  }, [coins, coinsList.length])
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {

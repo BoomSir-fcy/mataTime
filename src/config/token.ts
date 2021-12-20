@@ -1,4 +1,13 @@
 export const tokens = {
+  btc: {
+    symbol: 'BTC',
+    address: {
+      56: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+      97: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c'
+    },
+    decimals: 18,
+    projectLink: 'https://bitcoin.org/'
+  },
   bnb: {
     symbol: 'BNB',
     projectLink: 'https://www.binance.com/',
