@@ -239,7 +239,7 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath([], menuNavConfig, 'hideRight');
+  return getHidePath(['/task/invite'], menuNavConfig, 'hideRight');
 })();
 
 export default menuNavConfig;

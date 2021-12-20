@@ -24,6 +24,11 @@ type ExpandInfo = {
   now: number;
 }
 
+export interface TaskContentProps {
+  taskGroupId: number,
+  taskList: TaskInfo[]
+}
+
 export enum Status {
   UnCompleted = 1, // 未完成
   Completed = 2, // 已完成
