@@ -52,40 +52,40 @@ export const Crumbs: React.FC<{
 
   return (
     <Card zIndex={zIndex}>
-      <Flex alignItems="center" style={centerTitle && { width: '100%' }}>
+      <Flex alignItems='center' style={centerTitle && { width: '100%' }}>
         <MenuButton
-          aria-label="Toggle menu"
+          aria-label='Toggle menu'
           onClick={() => setIsPushed(prep => !prep)}
-          mr="24px"
+          mr='24px'
         >
           {isPushed ? (
-            <HamburgerCloseIcon width="24px" color="textSubtle" />
+            <HamburgerCloseIcon width='24px' color='textSubtle' />
           ) : (
-            <HamburgerIcon width="24px" color="textSubtle" />
+            <HamburgerIcon width='24px' color='textSubtle' />
           )}
         </MenuButton>
         {!back ? (
-          <Text className="text">{title || '首页'}</Text>
+          <Text className='text'>{title || '首页'}</Text>
         ) : (
           <Flex
             onClick={goBack}
-            alignItems="center"
+            alignItems='center'
             style={{ cursor: 'pointer', position: 'relative', width: '100%' }}
           >
-            <Flex alignItems="center">
+            <Flex alignItems='center'>
               <Icon
                 name={'icon-fanhui'}
                 size={20}
                 color={colors}
-                fontWeight="bold"
+                fontWeight='bold'
               />
-              <Text className="text" ml="16px">
+              <Text className='text' ml='16px'>
                 {t('newsBack')}
               </Text>
             </Flex>
             {centerTitle && (
               <CenterBox>
-                <Text className="text" ml="16px">
+                <Text className='text' ml='16px'>
                   {centerTitle.length > 20
                     ? centerTitle.slice(0, 20) + '...#'
                     : centerTitle}

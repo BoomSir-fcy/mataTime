@@ -46,7 +46,7 @@ export const SlateBox = styled.div`
   }
   padding-bottom: 30px;
   z-index: 1004;
-  /* background: pink; */
+  background: pink;
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
     background: ${({ theme }) => theme.colors.backgroundTextArea};
