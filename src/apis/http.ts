@@ -4,11 +4,12 @@ import eventBus from '../utils/eventBus';
 import { storage } from 'config';
 import history from '../routerHistory';
 import { ResponseCode } from './type';
+import dispatchHttpErrorEvent from './httpErrorEvent';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
     ? process.env.REACT_APP_API_HOST
-    : 'https://api.social.qgx.io/';
+    : 'http://192.168.101.112:8888';
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
@@ -41,16 +42,7 @@ export class Http {
         headers: { ...configs.headers, token: token }
       });
 
-      // 余额不足
-      if (
-        (response.data as Api.Error)?.code === ResponseCode.INSUFFICIENT_BALANCE
-      ) {
-        eventBus.dispatchEvent(
-          new MessageEvent('insufficient', {
-            data: response.data
-          })
-        );
-      }
+      dispatchHttpErrorEvent(response.data)
       return response.data;
     } catch (e: any) {
       if (e?.status === 401) {

@@ -65,8 +65,6 @@ const Home: React.FC = (props: any) => {
       console.log(res)
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
-      } else {
-        toastError(t('commonContactAdmin') || res.msg);
       }
     } catch (error) {
       console.error(error);

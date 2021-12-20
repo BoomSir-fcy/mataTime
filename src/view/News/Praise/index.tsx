@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Text, Flex } from 'uikit';import dayjs from 'dayjs';
+import { Box, Text, Flex } from 'uikit';
+import dayjs from 'dayjs';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
@@ -87,7 +88,7 @@ const NewsPraise: React.FC = props => {
       >
         {
           listData.map(item => {
-            return (
+            return item?.post?.content_status === 1 && (
               <MessageCard
                 key={item.id}
                 avatar={item.send_image}

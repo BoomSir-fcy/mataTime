@@ -284,8 +284,6 @@ export const Editor = (props: Iprops) => {
                   ...res.data.map(item => item.full_path)
                 ]);
                 toast.success(t('uploadImgSuccessMsg'));
-              } else {
-                toast.error(t('uploadImgErrorMsg'));
               }
             });
           }
@@ -357,7 +355,7 @@ export const Editor = (props: Iprops) => {
     const newValue2 = removeEmptyLine(newValue1); // 删除空行
 
     let { content } = deepContent(newValue2);
-    if (!content.length) return
+    if (!content.length && !imgList.length) return
     //限制用户输入数量
     if (articleLength > ARTICLE_POST_MAX_LEN) {
       setTimeId(null);

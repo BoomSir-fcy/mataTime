@@ -55,8 +55,6 @@ const TopicList = props => {
             ? [...(res.data?.List || [])]
             : [...listData, ...(res.data?.List || [])];
         });
-      } else {
-        toastError(res.msg);
       }
     } catch (error) {
       console.error(error);

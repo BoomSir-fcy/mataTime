@@ -52,8 +52,6 @@ const NoticeSet = () => {
             });
             dispatch(fetchThunk.fetchUserInfoAsync());
             toastSuccess(t('editSuccess'));
-          } else {
-            toastError(t('editFial'));
           }
           return;
         }

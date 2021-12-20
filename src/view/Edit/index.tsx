@@ -91,8 +91,6 @@ const Edit: React.FC = () => {
         })
       );
       toastSuccess(t('loginUpdateProfileSuccess'));
-    } else {
-      toastError(t('loginUpdateProfileFail'));
     }
   };
 

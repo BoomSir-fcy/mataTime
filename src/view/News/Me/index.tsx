@@ -68,7 +68,7 @@ const NewsMe: React.FC = props => {
       >
         {
           listData.map(item => {
-            return (
+            return item?.post?.content_status === 1 && (
               <MessageCard
                 key={item.id}
                 avatar={item.send_image}

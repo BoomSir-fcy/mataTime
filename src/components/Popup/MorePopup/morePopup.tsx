@@ -45,6 +45,8 @@ const PopupWrapper = styled(Box)`
 
 export const MorePostPopup: React.FC<Iprops> = React.memo(
   ({ data, postUid, callback }) => {
+
+    console.log(122222222222222)
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const [reportShow, setReportShow] = useState<boolean>(false);
@@ -75,8 +77,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           }
         });
         toastSuccess(t('moreCollectionSuccess'));
-      } else {
-        toastError(t('moreCollectionError'));
       }
     };
 
@@ -92,8 +92,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           }
         });
         toastSuccess(t('moreCancelCollectionSuccess'));
-      } else {
-        toastError(t('moreCancelCollectionError'));
       }
     };
 
@@ -146,8 +144,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         callback(data, MoreOperatorEnum.SHIELD);
         toastSuccess(t('shieldModalShieldSuccess'));
-      } else {
-        toastError(t('shieldModalShieldError'));
       }
     };
 
@@ -157,8 +153,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         callback(data, MoreOperatorEnum.SETTOP);
         toastSuccess(t('moreTopSuccess'));
-      } else {
-        toastError(t('moreTopError'));
       }
     };
 
@@ -168,8 +162,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         callback(data, MoreOperatorEnum.CANCEL_SETTOP);
         toastSuccess(t('moreCancelTopSuccess'));
-      } else {
-        toastError(t('moreCancelTopError'));
       }
     };
 
@@ -179,8 +171,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         toastSuccess(t('commonMsgFollowSuccess'));
         callback({ ...data, is_attention: 1 }, MoreOperatorEnum.FOLLOW);
-      } else {
-        toastError(t('commonMsgFollowError'));
       }
     };
 
@@ -190,8 +180,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         toastSuccess(t('commonMsgUnFollowSuccess'));
         callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
-      } else {
-        toastError(t('commonMsgUnFollowError'));
       }
     };
 
@@ -201,8 +189,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         callback(data, MoreOperatorEnum.DELPOST);
         toastSuccess(t('moreDeleteSuccess'));
-      } else {
-        toastError(res.data || t('moreDeleteError'));
       }
     };
 

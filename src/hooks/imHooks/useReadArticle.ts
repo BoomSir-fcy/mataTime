@@ -29,19 +29,6 @@ const useReadArticle = (nonce?: number | boolean) => {
   const [nowTime, setNowTime] = useState(0)
   const [fetchReadTime, setFetchReadTime] = useState(0)
 
-  useEffect(() => {
-    if (im) {
-      im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
-    }
-  }, [])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
-    }, 1000);
-    return () => clearInterval(timer)
-  }, [])
-
   const fetchHandle = useCallback(() => {
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
@@ -105,6 +92,19 @@ const useReadArticle = (nonce?: number | boolean) => {
   useEffect(() => {
     handleScroll()
   }, [handleScroll, flagDebounce])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
+    }, 1000);
+    if (im) {
+      im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
+    }
+    return () => {
+      clearInterval(timer)
+      setArticleIds({})
+    }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('scroll', debouncedOnChange);

@@ -95,8 +95,6 @@ const Follow = React.memo(() => {
       if (Api.isSuccess(res)) {
         getFollowList(1);
         toast.success(t('commonMsgFollowSuccess') || res.data);
-      } else {
-        toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -110,8 +108,6 @@ const Follow = React.memo(() => {
       if (Api.isSuccess(res)) {
         getFollowList(1);
         toast.success(t('commonMsgFollowError') || res.data);
-      } else {
-        toast.error(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
