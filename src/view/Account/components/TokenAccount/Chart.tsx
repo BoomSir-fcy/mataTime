@@ -26,14 +26,17 @@ const Chart: React.FC<Init> = ({ type, token, chartData, load }) => {
 
   const formattedData = useMemo(() => {
     if (chartData) {
-      return chartData
-        .map(day => {
-          return {
-            time: day.date,
-            value: Number(day.income)
-          };
-        })
-        .reverse();
+      const data = chartData.map(day => {
+        return {
+          time: day.date,
+          value: Number(day.income)
+        };
+      });
+      if (type === 1) {
+        return data.reverse();
+      } else {
+        return data;
+      }
     }
   }, [chartData]);
 
