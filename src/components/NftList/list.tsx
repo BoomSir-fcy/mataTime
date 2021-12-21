@@ -18,7 +18,7 @@ import Dots from '../Loader/Dots';
 const Point = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 16px;
-  margin-left:17px;
+  margin-left: 17px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -28,18 +28,18 @@ const Column = styled(Flex)`
   margin-bottom: 20px;
   position: relative;
   cursor: pointer;
-  &:not(:last-child){
-    margin-right:26px;
+  &:not(:last-child) {
+    margin-right: 26px;
   }
-  &:first-child{
-    margin-left:17px;
+  &:first-child {
+    margin-left: 17px;
   }
   .active {
     box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.white};
   }
 `;
 const GetAuthorizeBox = styled(Box)`
-  padding: 10px 17px 0 0px ;
+  padding: 10px 0 17px 0;
   margin-top: 10px;
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.backgroundDisabled};
@@ -53,7 +53,7 @@ const GetAuthorize = styled(Flex)`
     height: 4px;
   }
   ::-webkit-scrollbar-thumb {
-  background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.white};
   }
 `;
 const AvatarName = styled(Text)`
@@ -119,12 +119,12 @@ const NftAvatar: React.FC<{
     <GetAuthorizeBox>
       {Nodata ? (
         <NodataDom>
-          <Text mb="10px">{t('setNftAvatarGetMore')}</Text>
+          <Text mb='15px'>{t('setNftAvatarGetMore')}</Text>
           <Button>{t('loginGetNft')}</Button>
         </NodataDom>
       ) : (
         <>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex justifyContent='space-between' alignItems='center'>
             <Point>{!Boolean(status) && t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
@@ -141,13 +141,14 @@ const NftAvatar: React.FC<{
                   {/* {ActiveAvInfo.properties?.token_id === item.properties.token_id && <ActiveImg src={require('./img/active.png').default} />} */}
                   <AvatarBox
                     className={
-                      nft.properties?.token_id ===
-                      item.properties.token_id && 'active'
+                      nft.properties?.token_id === item.properties.token_id &&
+                      'active'
                     }
                   >
                     <ActiveImg
+                      disableFollow
                       src={item.image}
-                      scale="ld"
+                      scale='ld'
                       onClick={() => {
                         if (!NftInfo.needApprove) {
                           dispatch(

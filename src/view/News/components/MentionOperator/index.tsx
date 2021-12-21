@@ -67,21 +67,16 @@ const MentionOperator: React.FC<IProps> = ({
             }
           });
           setIsLike(isLike === 1 ? 0 : 1);
-          toastSuccess(
-            isLike === 0
-              ? t('commonMsgUnlikeSuccess')
-              : t('commonMsgUnlikeError')
-          );
-        } else {
-          toastError(
-            isLike === 0 ? t('commonMsglikeError') : t('commonMsgUnUnlikeError')
-          );
+          // toastSuccess(
+          //   isLike === 0
+          //     ? t('commonMsgUnlikeSuccess')
+          //     : t('commonMsgUnlikeError')
+          // );
         }
       });
     }
 
     if (type === 'Comment') {
-      console.log(itemData);
       Api.CommentApi[isLike === 1 ? 'commentCancelLike' : 'commentLike']({
         comment_id: itemData.id
       }).then(res => {
@@ -93,9 +88,7 @@ const MentionOperator: React.FC<IProps> = ({
             like_num:
               isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1
           });
-          toastSuccess(res.data);
-        } else {
-          toastError(res.data);
+          // toastSuccess(res.data);
         }
       });
     }

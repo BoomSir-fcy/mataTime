@@ -9,7 +9,7 @@ import { Avatar } from '.';
 interface AvatarCardProps {
   avatar?: string;
   scale?: 'xl' | 'ld' | 'md' | 'sm';
-  uid?: string;
+  uid?: number;
   userName?: string;
   address?: string;
   time?: string;
@@ -25,12 +25,12 @@ export const AvatarCard: React.FC<AvatarCardProps> = ({
 }) => {
   return (
     <Flex style={{ flex: 1, minWidth: 0 }}>
-      <Avatar src={avatar} scale={scale} />
-      <Box ml="8px" style={{ minWidth: 0 }}>
+      <Avatar uid={uid} src={avatar} scale={scale} />
+      <Box ml='8px' style={{ minWidth: 0 }}>
         <Text color={'#FFF'} ellipsis>
           {userName}
         </Text>
-        <Text color="textTips" className="time">
+        <Text color='textTips' className='time'>
           <span>@{shortenAddress(address)}</span>
           {time}
         </Text>

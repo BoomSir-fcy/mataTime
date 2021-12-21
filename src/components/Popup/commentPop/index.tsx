@@ -62,8 +62,6 @@ export const CommentPop = React.memo((props: Iprops) => {
       if (Api.isSuccess(res)) {
         callback();
         toast.success(t('moreDeleteSuccess'));
-      } else {
-        toast.success(t('moreDeleteError'));
       }
     });
   };

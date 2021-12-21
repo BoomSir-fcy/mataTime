@@ -30,8 +30,6 @@ export const TopicEmpty: React.FC<{
     if (Api.isSuccess(res)) {
       callback();
       toast.success(t('moreCancelCollectionSuccess'));
-    } else {
-      toast.error(t('moreCancelCollectionError') || res.data);
     }
   };
 
@@ -43,8 +41,6 @@ export const TopicEmpty: React.FC<{
       if (Api.isSuccess(res)) {
         callback();
         toast.success(t('commonMsgUnUnlikeSuccess') || res.data);
-      } else {
-        toast.error(t('commonMsgUnUnlikeError') || res?.data);
       }
     });
   };

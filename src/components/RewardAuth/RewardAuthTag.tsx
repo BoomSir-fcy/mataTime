@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Popup from 'reactjs-popup';
 import { Flex, Box, Image } from 'uikit';
-import { Icon } from '../Icon';
 
 import RewardAuthModal from './RewardAuthModal';
 
@@ -38,11 +37,6 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
     }
   };
 
-  React.useEffect(() => {
-    document.addEventListener('scroll', close);
-    return () => document.removeEventListener('scroll', close);
-  }, []);
-
   return (
     <React.Fragment>
       {postType === 1 ? (
@@ -74,7 +68,11 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
               borderRadius: '10px',
               padding: 0,
               border: '0',
-              backgroundColor: 'transparent'
+              backgroundColor: 'transparent',
+              zIndex: 99
+            }}
+            overlayStyle={{
+              zIndex: 98
             }}
             arrowStyle={{ opacity: 0 }}
           >

@@ -27,6 +27,8 @@ const PopupContentWrapper = styled(Card)`
   padding: 15px 30px;
   display: flex;
   flex-direction: column;
+  margin-top: -1px;
+  margin-left: 4px;
   button {
     justify-content: flex-start;
     font-size: 14px;
@@ -59,9 +61,7 @@ export const Popup: React.FC<{
       if (Api.isSuccess(res)) {
         onCallback();
         popupRefs?.current?.close();
-        toastSuccess(t('commonMsgFollowSuccess') || res.data);
-      } else {
-        toastError(t('commonMsgUnFollowError') || res.data);
+        // toastSuccess(t('commonMsgFollowSuccess') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -79,8 +79,6 @@ export const Popup: React.FC<{
           p.cancelFollow = false;
         });
         toastSuccess(t('commonMsgFollowError') || res.data);
-      } else {
-        toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);

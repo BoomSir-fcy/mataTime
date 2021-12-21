@@ -7,13 +7,6 @@ const StyledPopup = styled(Popup)`
     z-index: 98 !important;
   }
   &-content {
-    width: 150px;
-    height: auto;
-    border-radius: 10px;
-    padding: 0;
-    border: 0;
-    background-color: transparent;
-    z-index: 99 !important;
   }
 `;
 
@@ -32,8 +25,17 @@ const PopupWrapModal = (props, ref) => {
       ref={ref}
       trigger={props.trigger}
       nested
-      keepTooltipInside
       closeOnDocumentClick
+      contentStyle={{
+        width: '150px',
+        height: 'auto',
+        borderRadius: '10px',
+        padding: 0,
+        border: '0',
+        backgroundColor: 'transparent',
+        zIndex: 99
+      }}
+      keepTooltipInside='.popupBoundary'
       position={props.position || 'bottom right'}
       arrowStyle={props.arrowStyle}
     >

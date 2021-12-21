@@ -29,7 +29,7 @@ import QuestionHelper from 'components/QuestionHelper';
 
 const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   position: absolute;
-  z-index: 999;
+  z-index: 99;
   width: 418px;
   min-height: 80px;
   padding: 8px 20px 16px;
@@ -157,7 +157,6 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const changeCoinChecked = async (rows: string[], index) => {
     try {
       const res = await getPrice(rows[0]);
-      console.log(tokenList[index]);
       setState(p => {
         p.currentToken = rows;
         p.current_price = res.current_price || '0';

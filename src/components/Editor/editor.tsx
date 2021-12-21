@@ -14,6 +14,7 @@ import {
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce } from 'lodash';
+import { Loading } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
@@ -139,18 +140,35 @@ const parseValue = value => {
 };
 
 const removeEmptyText = value => {
-  const resVal = []
+  const resVal = [];
   value.forEach(item => {
     if (item.children) {
-      const children = removeEmptyText(item.children)
+      const children = removeEmptyText(item.children);
       resVal.push({
         ...item,
         children: children.length ? children : null
-      })
-      return
+      });
+      return;
     }
-    const kyes = Object.keys(item)
+    const kyes = Object.keys(item);
     if (kyes.length > 1 || (kyes[0] === 'text' && item.text)) {
+      resVal.push({ ...item });
+    }
+  });
+
+  return resVal;
+};
+
+const isEmptyLine = (paragraph) => {
+  if (!paragraph) return true
+  const keys = Object.keys(paragraph)
+  return paragraph?.type === 'paragraph' && !paragraph?.children && keys.includes('type') && keys.includes('children') && keys.length === 2
+}
+
+const removeEmptyLine = value => {
+  const resVal = []
+  value.forEach((item, index) => {
+    if (!(isEmptyLine(item) && isEmptyLine(value[index - 1]))) {
       resVal.push({ ...item })
     }
   })
@@ -159,7 +177,7 @@ const removeEmptyText = value => {
 }
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => { }, type } = props;
+  const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -168,8 +186,8 @@ export const Editor = (props: Iprops) => {
   const [searcTopic, setSearcTopic] = useState(false);
   const [refresh, setRefresh] = useState(1);
   const [target, setTarget] = useState<Range | undefined>();
-  const [articleLength, setArticleLength] = useState(0)
 
+  const [isLoading, setIsLoading] = useState(false);
   const [stateEdit, setStateEdit] = useImmer({
     userList: [],
     search: '',
@@ -212,53 +230,11 @@ export const Editor = (props: Iprops) => {
     []
   );
 
-  const onKeyDown = useCallback(
-    (event: any) => {
-      if (target) {
-        switch (event.key) {
-          case 'ArrowDown':
-            event.preventDefault();
-            const prevIndex = index >= userList.length - 1 ? 0 : index + 1;
-            setStateEdit(p => {
-              p.index = prevIndex;
-            });
-            break;
-          case 'ArrowUp':
-            event.preventDefault();
-            const nextIndex = index <= 0 ? userList.length - 1 : index - 1;
-            setStateEdit(p => {
-              p.index = nextIndex;
-            });
-            break;
-          case 'Tab':
-          case 'Enter':
-            event.preventDefault();
-            Transforms.select(editor, target);
-            if (!userList.length) return;
-            insertMention(editor, {
-              uid: userList[index].uid,
-              character: `@${userList[index].nick_name}`
-            });
-            setTarget(null);
-            setStateEdit(p => {
-              p.userList = [];
-            });
-            break;
-          case 'Escape':
-            event.preventDefault();
-            setTarget(null);
-            break;
-        }
-      }
-    },
-    [index, search, target, userList]
-  );
-
   useEffect(() => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) { }
+    } catch (err) {}
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -310,8 +286,6 @@ export const Editor = (props: Iprops) => {
                   ...res.data.map(item => item.full_path)
                 ]);
                 toast.success(t('uploadImgSuccessMsg'));
-              } else {
-                toast.error(t('uploadImgErrorMsg'));
               }
             });
           }
@@ -345,17 +319,25 @@ export const Editor = (props: Iprops) => {
         }
         if (item.children) {
           deepArr(item.children);
-        } else {
+        }
+        if (!item.children) {
           content += '-' // 换行算一个字符
         }
       });
     };
     deepArr(arr);
+    content = content.slice(0, -1) // 计算结束后删除最后一个 -
     return {
       content,
       userIdList
     };
   };
+
+  const articleLength = useMemo(() => {
+    const { content } = deepContent(value);
+    const len = getPostBLen(content)
+    return len
+  }, [value])
 
   const [timeId, setTimeId] = useState(null);
   const sendArticle = () => {
@@ -368,19 +350,22 @@ export const Editor = (props: Iprops) => {
     // 递归收集字符和@的id
     // let userIdList = []
     // let content = ''
-    let { userIdList, content } = deepContent(value);
+    let { userIdList } = deepContent(value);
     const newValue = parseValue(value);
 
-    // const newValue1 = removeEmptyText(newValue);
+    const newValue1 = removeEmptyText(newValue);
+    const newValue2 = removeEmptyLine(newValue1); // 删除空行
 
+    let { content } = deepContent(newValue2);
+    if (!content.length && !imgList.length) return
     //限制用户输入数量
-    if (getPostBLen(content) > ARTICLE_POST_MAX_LEN) {
+    if (articleLength > ARTICLE_POST_MAX_LEN) {
       setTimeId(null);
       return toast.warning(t('sendArticleMsgMaxWords'));
     }
 
     props.sendArticle(
-      JSON.stringify(newValue),
+      JSON.stringify(newValue2),
       imgList.join(','),
       userIdList.join(',')
     );
@@ -410,8 +395,55 @@ export const Editor = (props: Iprops) => {
     }
   }, [userList, editor, index, search, target]);
 
+  const onKeyDown = useCallback(
+    (event: any) => {
+      if (event.ctrlKey && event.keyCode == 13) {
+        sendArticle()
+        return;
+      }
+      if (target) {
+        switch (event.key) {
+          case 'ArrowDown':
+            event.preventDefault();
+            const prevIndex = index >= userList.length - 1 ? 0 : index + 1;
+            setStateEdit(p => {
+              p.index = prevIndex;
+            });
+            break;
+          case 'ArrowUp':
+            event.preventDefault();
+            const nextIndex = index <= 0 ? userList.length - 1 : index - 1;
+            setStateEdit(p => {
+              p.index = nextIndex;
+            });
+            break;
+          case 'Tab':
+          case 'Enter':
+            event.preventDefault();
+            Transforms.select(editor, target);
+            if (!userList.length) return;
+            insertMention(editor, {
+              uid: userList[index].uid,
+              character: `@${userList[index].nick_name}`
+            });
+            setTarget(null);
+            setStateEdit(p => {
+              p.userList = [];
+            });
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setTarget(null);
+            break;
+        }
+      }
+    },
+    [index, search, target, userList, sendArticle]
+  );
+
   return (
     <SlateBox key={refresh}>
+      <Loading visible={isLoading} />
       <Slate
         editor={editor}
         value={value}
@@ -420,8 +452,6 @@ export const Editor = (props: Iprops) => {
 
           const { content } = deepContent(value);
           const { selection } = editor;
-          const lenght = getPostBLen(content)
-          setArticleLength(lenght)
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
             const wordBefore = slateEditor.before(editor, start, {
@@ -455,7 +485,7 @@ export const Editor = (props: Iprops) => {
         }}
       >
         <div
-          className="text-box"
+          className='text-box'
           ref={ref}
           style={{
             borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
@@ -474,17 +504,20 @@ export const Editor = (props: Iprops) => {
           />
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
-        <Flex justifyContent="space-between" alignItems="center">
+        <Flex justifyContent='space-between' alignItems='center'>
           <Toolbar
             type={type}
             callbackEmoji={data => editor.insertText(data)}
-            callbackSelectImg={callbackSelectImg}
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
+            selectImgLength={imgList.length}
+            callbackSelectImg={() => setIsLoading(true)}
+            onSuccess={event => setImgList([...imgList, ...event])}
+            onError={() => setIsLoading(false)}
           />
           <Flex alignItems="center">
             {
-              articleLength > ARTICLE_POST_MAX_LEN && (
+              (
                 <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'}>
                   {ARTICLE_POST_MAX_LEN - articleLength}
                 </Text>
@@ -514,7 +547,7 @@ export const Editor = (props: Iprops) => {
 
         {target && userList.length > 0 && (
           <Portal>
-            <MentionContent ref={mentionRef} data-cy="mentions-portal">
+            <MentionContent ref={mentionRef} data-cy='mentions-portal'>
               {userList.map((char, i) => (
                 <MentionItems
                   key={char.uid}

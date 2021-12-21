@@ -90,9 +90,7 @@ export const Follow = React.forwardRef((props, ref) => {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
         getCurrentState();
-        toastSuccess(t('commonMsgFollowSuccess') || res.data);
-      } else {
-        toastError(t('commonMsgUnFollowError') || res.data);
+        // toastSuccess(t('commonMsgFollowSuccess') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -106,8 +104,6 @@ export const Follow = React.forwardRef((props, ref) => {
       if (Api.isSuccess(res)) {
         getCurrentState();
         toastSuccess(t('commonMsgFollowError') || res.data);
-      } else {
-        toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);

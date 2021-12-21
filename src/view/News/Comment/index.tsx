@@ -1,11 +1,27 @@
 import React, { useState } from 'react';
-import { Box } from 'uikit';
+import { Box, Text, Flex } from 'uikit';
+import dayjs from 'dayjs';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization';
-import { List, ContentParsing, MoreOperatorEnum } from 'components';
+import {
+  List,
+  ContentParsing,
+  MoreOperatorEnum,
+  FollowPopup,
+  Icon
+} from 'components';
 import { Api } from 'apis';
 import { NewsCommentWrapper, CommentItemWrapper } from './style';
+import MessageCard from '../components/MessageCard';
+import styled from 'styled-components';
+
+const NoneEventsText = styled(Text)`
+  pointer-events: none;
+  & > * {
+    display: inline;
+  }
+`;
 
 const NewsComment: React.FC = props => {
   const { t } = useTranslation();
@@ -62,6 +78,41 @@ const NewsComment: React.FC = props => {
         }}
       >
         {listData.map(item => {
+          return (
+            <MessageCard
+              key={item.id}
+              uid={item.send_uid}
+              avatar={item.send_image}
+              title={item.send_name}
+              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              image_list={item.post?.image_list}
+              content_status={item.post?.content_status}
+              content={item.post?.content}
+              href={`/articleDetils/${item.post?.post_id}`}
+            >
+              <Box>
+                <FollowPopup uid={item.send_uid}>
+                  <Text
+                    as='span'
+                    maxWidth='20vw'
+                    ellipsis
+                    color='textPrimary'
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {item.send_name}&nbsp;
+                  </Text>
+                </FollowPopup>
+                <Text as='span' ellipsis mr='0.5em'>
+                  {t('commented: ')}
+                </Text>
+                <NoneEventsText as='span' ellipsis maxLine={2}>
+                  <ContentParsing content={item.comment.comment} />
+                </NoneEventsText>
+              </Box>
+            </MessageCard>
+          );
+        })}
+        {/* {listData.map(item => {
           if (item?.post?.content_status === 1) {
             return (
               <CommentItemWrapper key={item.id}>
@@ -112,29 +163,10 @@ const NewsComment: React.FC = props => {
                     size={'small'}
                   />
                 </div>
-                {/* <MentionOperator
-                  hasLike={false}
-                  hasTime={false}
-                  hasReward={false}
-                  replyType={'comment'}
-                  postId={item.post.post_id}
-                  commentId={item.id}
-                  itemData={{
-                    ...item,
-                    ...item.post,
-                    comment: {
-                      ...item.comment,
-                      content: item.comment.comment
-                    }
-                  }}
-                  callback={(item: any, type?: MoreOperatorEnum) => {
-                    updateList(item, type);
-                  }}
-                /> */}
               </CommentItemWrapper>
             );
           }
-        })}
+        })} */}
       </List>
     </NewsCommentWrapper>
   );
