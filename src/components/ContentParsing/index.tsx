@@ -143,8 +143,10 @@ export const ContentParsing = (props: IProps) => {
           <a
             onClick={event => {
               event.stopPropagation();
+              event.preventDefault()
               goRouter(`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`);
             }}
+            href={`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`}
             key={match + i}
           >
             {match}&nbsp;
