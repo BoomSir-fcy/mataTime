@@ -34,7 +34,6 @@ export const ReportModal = React.memo((props: IProp) => {
       toastSuccess(t('ReportModalSuccess'));
       onQuery();
     } else {
-      toastError(t('ReportModalError'));
       onClose();
     }
   };
@@ -46,7 +45,6 @@ export const ReportModal = React.memo((props: IProp) => {
       toastSuccess(t('ReportModalSuccess'));
       onQuery();
     } else {
-      toastSuccess(t('ReportModalError'));
       onClose();
     }
   };

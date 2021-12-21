@@ -75,7 +75,7 @@ export const ImgList = (props: Iprops) => {
           <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(0)} src={list[0]} alt="" />
           <div className="imgListRightBox">
             <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(1)} src={list[1]} alt="" />
-            <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(0)} src={list[2]} alt="" />
+            <img className={ARTICLE_IMAGE_CLASS_NAME} onClick={() => preViewImg(2)} src={list[2]} alt="" />
           </div>
         </>
       ) : (

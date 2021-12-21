@@ -27,8 +27,6 @@ export const ReportUserModal: React.FC<{
       if (Api.isSuccess(res)) {
         onClose();
         toast.success(t('ReportModalSuccess'));
-      } else {
-        toast.error(res.data || t('ReportModalError'));
       }
     } catch (error) {}
   };

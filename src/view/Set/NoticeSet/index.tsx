@@ -42,7 +42,6 @@ const NoticeSet = () => {
     const keys: any = Object.keys(params);
     try {
       Notification.requestPermission(async (status: NotificationPermission) => {
-        console.log(status); // 仅当值为 "granted" 时显示通知
         // var n = new Notification("title", { body: "notification body" }); // 显示通知
         if (status === 'granted') {
           const res = await Api.SetApi.likeSet(params);
@@ -52,8 +51,6 @@ const NoticeSet = () => {
             });
             dispatch(fetchThunk.fetchUserInfoAsync());
             toastSuccess(t('editSuccess'));
-          } else {
-            toastError(t('editFial'));
           }
           return;
         }

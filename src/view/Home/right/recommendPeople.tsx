@@ -73,8 +73,6 @@ export const RecommendPeople: React.FC<Iprops> = props => {
     if (Api.isSuccess(res)) {
       toast.success(res.data);
       getManList();
-    } else {
-      toast.error(res.data);
     }
   };
 

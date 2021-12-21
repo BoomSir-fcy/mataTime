@@ -59,8 +59,6 @@ export const MorePopup = React.memo((props: Iprops) => {
         }
       });
       toast.success(t('moreCollectionSuccess'));
-    } else {
-      toast.error(res.msg || t('moreCollectionError'));
     }
     setVisible(false);
   };
@@ -77,8 +75,6 @@ export const MorePopup = React.memo((props: Iprops) => {
         }
       });
       toast.success(t('moreCancelCollectionSuccess'));
-    } else {
-      toast.error(res.msg || t('moreCancelCollectionError'));
     }
     setVisible(false);
   };
@@ -144,8 +140,6 @@ export const MorePopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       callback(data, MoreOperatorEnum.SETTOP);
       toast.success(t('moreTopSuccess'));
-    } else {
-      toast.error(res.data || t('moreTopError'));
     }
     setVisible(false);
   };
@@ -156,8 +150,6 @@ export const MorePopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       callback(data, MoreOperatorEnum.CANCEL_SETTOP);
       toast.success(t('moreCancelTopSuccess'));
-    } else {
-      toast.error(res.data || t('moreCancelTopError'));
     }
     setVisible(false);
   };
@@ -168,8 +160,6 @@ export const MorePopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       toast.success(res.data);
       callback({ ...data, is_attention: 1 }, MoreOperatorEnum.FOLLOW);
-    } else {
-      toast.error(res.data);
     }
   };
 
@@ -179,8 +169,6 @@ export const MorePopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       toast.success(res.data);
       callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
-    } else {
-      toast.error(res.data);
     }
   };
 
@@ -190,8 +178,6 @@ export const MorePopup = React.memo((props: Iprops) => {
     if (Api.isSuccess(res)) {
       callback(data, MoreOperatorEnum.DELPOST);
       toast.success(t('moreDeleteSuccess'));
-    } else {
-      toast.error(res.data || t('moreDeleteError'));
     }
     setVisible(false);
   };

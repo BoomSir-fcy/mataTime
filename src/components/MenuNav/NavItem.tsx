@@ -10,9 +10,10 @@ import { NavItemStyled, IconBox, Badge } from './styled'
 
 export interface NavItemProps extends MenuNavLink {
   pathname: string
+  childrenLen?: number
 }
 
-const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hide, activeIcon, pathname, markPath, ...props }) => {
+const NavItem: React.FC<NavItemProps> = ({ path, icon, lable, badge, coming, hide, activeIcon, pathname, markPath, childrenLen, ...props }) => {
   const { t } = useTranslation()
   const { toastInfo } = useToast();
 

@@ -45,7 +45,7 @@ export const useFetchHistoryList = (coin_type: number) => {
     setLoading(true)  // 设为请求状态
     try {
       const res = await Api.AccountApi.history({ coin_type, page, pageSize })
-      if (res.code === 1) {
+      if (Api.isSuccess(res)) {
         const temp = res.data.event_list
         const nowList = page === 1 ? temp : [...list, ...temp]
         if (page * pageSize >= res.data.totalCount) {

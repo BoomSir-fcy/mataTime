@@ -96,8 +96,6 @@ const Fans = React.memo(() => {
       if (Api.isSuccess(res)) {
         getFansList(1);
         toast.success(res.data);
-      } else {
-        toast.warning(res.data);
       }
     } catch (error) {
       console.error(error);
@@ -111,8 +109,6 @@ const Fans = React.memo(() => {
       if (Api.isSuccess(res)) {
         getFansList(1);
         toast.success(res.data);
-      } else {
-        toast.warning(res.data);
       }
     } catch (error) {
       console.error(error);

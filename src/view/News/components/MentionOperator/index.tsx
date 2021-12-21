@@ -81,7 +81,6 @@ const MentionOperator: React.FC<IProps> = ({
     }
 
     if (type === 'Comment') {
-      console.log(itemData);
       Api.CommentApi[isLike === 1 ? 'commentCancelLike' : 'commentLike']({
         comment_id: itemData.id
       }).then(res => {
