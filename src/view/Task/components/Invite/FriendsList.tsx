@@ -1,35 +1,116 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { Flex, Text } from 'uikit';
+import { Empty, Flex, Spinner, Text } from 'uikit';
+import { useFetchInviteFriendsList } from 'view/Task/hooks/matter';
+import { useTranslation } from 'contexts/Localization';
+import ReactPaginate from 'react-paginate';
+import PaginateStyle from 'style/Paginate';
+import { shortenAddress } from 'utils/contract';
+import dayjs from 'dayjs';
 
-const Row = styled(Flex)`
-  justify-content: space-between;
+const Table = styled(Flex)`
+  flex-direction: column;
   align-items: center;
-  ${({ theme }) => theme.mediaQueriesSize.marginbmd}
-`
-const FriendsList: React.FC = () => {
+  width: 100%;
+  min-height: 300px;
+  .LinkRow {
+    cursor: pointer;
+  }
+`;
+const Row = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  align-items: center;
+  min-height: 30px;
+`;
+const HeadText = styled(Text)`
+  color: ${({ theme }) => theme.colors.textTips};
+  font-size: 14px;
+  margin-bottom: 10px;
+  &:last-child {
+    text-align: right;
+  }
+`;
+const ItemText = styled(Text)`
+  color: ${({ theme }) => theme.colors.white_black};
+  font-size: 14px;
+  margin-bottom: 10px;
+  &:first-child {
+    margin-right: 10px;
+    overflow: hidden;
+  }
+  &:last-child {
+    text-align: right;
+  }
+  img {
+    width: 50px;
+    max-height: 50px;
+  }
+`;
+const FriendsList: React.FC<{
+  list?: any;
+  loading?: boolean;
+  total?: number;
+  pageNum?: number;
+  handlePageClick: (event: any) => void;
+}> = ({ list, loading, total, pageNum, handlePageClick }) => {
+  const { t } = useTranslation();
   return (
-    <Flex width="100%" flexDirection="column">
-      <Row>
-        <Text color="textTips" small>Nickname</Text>
-        <Text color="textTips" small>Address</Text>
-        <Text color="textTips" small>Invitation Time</Text>
-        <Text small>My Rebate（TIME）</Text>
-      </Row>
-      <Row>
-        <Text small>Nickname</Text>
-        <Text small>0x2...2652</Text>
-        <Text small>2022-12-12 18:00:46</Text>
-        <Text small>123452.12</Text>
-      </Row>
-      <Row>
-        <Text small>Nickname</Text>
-        <Text small>0x2...2652</Text>
-        <Text small>2022-12-12 18:00:46</Text>
-        <Text small>123452.12</Text>
-      </Row>
+    <Flex width="100%" flexDirection="column" justifyContent="end">
+      <Table>
+        <Row>
+          <HeadText>{t('Nickname')}</HeadText>
+          <HeadText>{t('Address')}</HeadText>
+          <HeadText>{t('Invitation Time')}</HeadText>
+          <HeadText>{t('My Rebate(TIME)')}</HeadText>
+        </Row>
+        {list.length ? (
+          list.map(item => (
+            <Row key={item.uid} className="LinkRow">
+              <ItemText small ellipsis>
+                {item.nick_name}
+              </ItemText>
+              <ItemText small ellipsis>
+                {shortenAddress(item.address)}
+              </ItemText>
+              <ItemText small ellipsis>
+                {dayjs(item.add_time).format(t('YYYY-MM-DD HH:mm:ss'))}
+              </ItemText>
+              <ItemText small ellipsis>
+                {item.timer}
+              </ItemText>
+            </Row>
+          ))
+        ) : (
+          <Empty />
+        )}
+        {loading && (
+          <Flex alignItems="center" justifyContent="center">
+            <Spinner />
+          </Flex>
+        )}
+      </Table>
+
+      <PaginateStyle alignItems="center" justifyContent="end">
+        <Text mr="16px" fontSize="14px" color="textTips">
+          {t('Account Total %page% page', { page: total })}
+        </Text>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel=">"
+          forcePage={pageNum - 1}
+          disableInitialCallback={true}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={4}
+          marginPagesDisplayed={1}
+          pageCount={total}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+        />
+      </PaginateStyle>
     </Flex>
   );
-}
+};
 
 export default FriendsList;

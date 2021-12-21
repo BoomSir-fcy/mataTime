@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Button, Image, Box, Text, Progress } from 'uikit';
 import { useTranslation } from 'contexts/Localization'
@@ -120,10 +120,17 @@ const TaskItem: React.FC<{ info: TaskInfo, isDetail?: boolean, taskGroupId?: num
     return t('UnCompleted');
   }
 
+  // 跳转
+  const toPage = useCallback(
+    () => {
+      if (taskGroupId === Group.ACTIVITY) history.push('/account');
+      if (taskGroupId === Group.CREATE) history.push('/');
+      if (taskGroupId === Group.INVITE) history.push('/task/invite');
+    },
+    [taskGroupId, history],
+  )
   return (
-    <Item onClick={() => {
-      if (taskGroupId === Group.INVITE) history.push('/task/invite')
-    }}>
+    <Item onClick={toPage}>
       <ItemFlex>
         <ContentFlex>
           <Image mr="20px" src={require(`assets/images/task/${getIcon()}.png`).default} width={22} height={22} />

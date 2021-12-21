@@ -6,31 +6,38 @@ import styled from 'styled-components';
 const Content = styled(Box)`
   padding: 15px 20px;
   margin-bottom: 20px;
+  background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 10px;
 `
 const InviteModal: React.FC<{
-  title: string,
-  showTip?: boolean,
+  type?: number,
   visible?: boolean,
-  setVisible?: () => void
-}> = ({ title, showTip, visible, setVisible }) => {
+  setVisible?: () => void,
+  t?: (key: string) => string,
+  onCopyLink?: () => void
+}> = ({ type, visible, setVisible, t, onCopyLink }) => {
   return (
     <ModalWrapper
-      title={title}
+      title={type === 1 ? t('Invite friends') : t('Special Invitation')}
       creactOnUse
       visible={visible}
       setVisible={setVisible}
     >
-      <Flex>
+      <Flex maxWidth="410px" flexDirection="column">
         <Content>
-          谁获得了你的特别邀请，就意味着获得了一个免
-          费的绘画板NFT，可以创造一个无聊猴头像，自
-          由地登录Metatime。
+          {
+            type === 1 ?
+              <>
+                <Text mb="20px"> {t('InviteTips1')}</Text>
+                <Text> {t('InviteTips2')}</Text>
+              </>
+              : <Text mb="20px">{t('SpecialInviteTips1')}</Text>
+          }
         </Content>
         {
-          showTip && <Text mb="20px" color="textOrigin" small> *NFT被领取后无法撤回 </Text>
+          type === 2 && <Text mb="20px" color="textOrigin" small>{t('SpecialInviteTips2')}</Text>
         }
-        <Button>Copy Link</Button>
+        <Button margin="0 auto" width="50%" onClick={onCopyLink}>{t('Copy Link')}</Button>
       </Flex>
     </ModalWrapper >
   );

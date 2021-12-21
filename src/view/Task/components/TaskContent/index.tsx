@@ -88,7 +88,7 @@ const Task: React.FC = () => {
           <Spinner />
         </Flex>
       ) : (
-        <BgBox>
+        <Box>
           <Header title={t('EasyTaskEarn$Matter')}>
             {!isMobile && <HeaderTips t={t} />}
           </Header>
@@ -118,7 +118,7 @@ const Task: React.FC = () => {
               taskList={taskGroup[Group.REPORT]}
             />
           </ScrollBox>
-        </BgBox>
+        </Box>
       )}
     </>
   );
