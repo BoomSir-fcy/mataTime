@@ -11,13 +11,13 @@ import { Header, Tabs, ArticleList } from './center';
 import { Api } from 'apis';
 
 const PageContainer = styled(Box)`
+  position: relative;
   width: 100%;
   height: 100vh;
   margin: 0 auto;
 `;
 
 const CenterCard = styled(Box)`
-  position: relative;
   width: 100%;
   height: 100vh;
 `;
