@@ -67,15 +67,11 @@ const MentionOperator: React.FC<IProps> = ({
             }
           });
           setIsLike(isLike === 1 ? 0 : 1);
-          toastSuccess(
-            isLike === 0
-              ? t('commonMsgUnlikeSuccess')
-              : t('commonMsgUnlikeError')
-          );
-        } else {
-          toastError(
-            isLike === 0 ? t('commonMsglikeError') : t('commonMsgUnUnlikeError')
-          );
+          // toastSuccess(
+          //   isLike === 0
+          //     ? t('commonMsgUnlikeSuccess')
+          //     : t('commonMsgUnlikeError')
+          // );
         }
       });
     }
@@ -92,9 +88,7 @@ const MentionOperator: React.FC<IProps> = ({
             like_num:
               isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1
           });
-          toastSuccess(res.data);
-        } else {
-          toastError(res.data);
+          // toastSuccess(res.data);
         }
       });
     }

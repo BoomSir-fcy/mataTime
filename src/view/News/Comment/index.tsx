@@ -79,38 +79,37 @@ const NewsComment: React.FC = props => {
       >
         {listData.map(item => {
           return (
-            item?.post?.content_status === 1 && (
-              <MessageCard
-                key={item.id}
-                uid={item.send_uid}
-                avatar={item.send_image}
-                title={item.send_name}
-                date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
-                image_list={item.post?.image_list}
-                content={item.post?.content}
-                href={`/articleDetils/${item.post?.post_id}`}
-              >
-                <Box>
-                  <FollowPopup uid={item.send_uid}>
-                    <Text
-                      as='span'
-                      maxWidth='20vw'
-                      ellipsis
-                      color='textPrimary'
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {item.send_name}&nbsp;
-                    </Text>
-                  </FollowPopup>
-                  <Text as='span' ellipsis mr='0.5em'>
-                    {t('commented: ')}
+            <MessageCard
+              key={item.id}
+              uid={item.send_uid}
+              avatar={item.send_image}
+              title={item.send_name}
+              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              image_list={item.post?.image_list}
+              content_status={item.post?.content_status}
+              content={item.post?.content}
+              href={`/articleDetils/${item.post?.post_id}`}
+            >
+              <Box>
+                <FollowPopup uid={item.send_uid}>
+                  <Text
+                    as='span'
+                    maxWidth='20vw'
+                    ellipsis
+                    color='textPrimary'
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {item.send_name}&nbsp;
                   </Text>
-                  <NoneEventsText as='span' ellipsis maxLine={2}>
-                    <ContentParsing content={item.comment.comment} />
-                  </NoneEventsText>
-                </Box>
-              </MessageCard>
-            )
+                </FollowPopup>
+                <Text as='span' ellipsis mr='0.5em'>
+                  {t('commented: ')}
+                </Text>
+                <NoneEventsText as='span' ellipsis maxLine={2}>
+                  <ContentParsing content={item.comment.comment} />
+                </NoneEventsText>
+              </Box>
+            </MessageCard>
           );
         })}
         {/* {listData.map(item => {

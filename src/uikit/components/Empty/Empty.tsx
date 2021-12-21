@@ -36,11 +36,7 @@ const Empty: React.FC<EmptyProps> = ({ scale, title }) => {
       <Text>{t('No Data')}</Text> */}
       <AnimationRingIcon active2 isRotate width={width} height={height}>
         <DataBox>
-          {
-            title || (
-              <Text>{t('No Data')}</Text>
-            )
-          }
+          <Text>{ title || t('No Data')}</Text>
         </DataBox>
       </AnimationRingIcon>
     </Flex>

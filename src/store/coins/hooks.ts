@@ -11,11 +11,11 @@ const REFRESH_INTERVAL = 5 * 60 * 1000
 export const useFetchCoinsList = () => {
   const dispatch = useDispatch<AppDispatch>()
 
-  const refresh = useRefresh()
+  const { slowRefresh } = useRefresh()
 
   useEffect(() => {
     dispatch(fetchCoinsListAsync())
-  }, [refresh])
+  }, [slowRefresh])
 }
 
 export const useFetchCoinInfo = (coinId) => {

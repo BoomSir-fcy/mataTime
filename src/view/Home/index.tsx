@@ -37,7 +37,7 @@ const Home: React.FC = (props: any) => {
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
-  const { setArticleIds } = useIm();
+  // const { setArticleIds } = useIm()
 
   const sendArticle = async (content: string, image_urls, remind_user) => {
     if (!content) return false;
@@ -66,8 +66,8 @@ const Home: React.FC = (props: any) => {
     const temp = {
       ...filterVal
     };
-    setArticleIds({});
-    replace(`${path || ''}?attention=${item.value}`);
+    // setArticleIds({})
+    replace(`${path || ''}?attention=${item.value}`)
     temp[item.paramsName] = item.value;
     setFilterVal(temp);
     setRefresh(!refresh);

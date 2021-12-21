@@ -68,32 +68,31 @@ const NewsMe: React.FC = props => {
       >
         {listData.map(item => {
           return (
-            item?.post?.content_status === 1 && (
-              <MessageCard
-                key={item.id}
-                uid={item.send_uid}
-                avatar={item.send_image}
-                title={item.send_name}
-                date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
-                image_list={item.post?.image_list}
-                content={item.post?.content}
-                href={`/articleDetils/${item.post?.post_id}`}
-              >
-                <Flex flexWrap='nowrap'>
-                  <FollowPopup uid={item.send_uid}>
-                    <Text
-                      maxWidth='20vw'
-                      ellipsis
-                      color='textPrimary'
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {item.send_name}&nbsp;
-                    </Text>
-                  </FollowPopup>
-                  <Text ellipsis>{t('mentioned you')}</Text>
-                </Flex>
-              </MessageCard>
-            )
+            <MessageCard
+              key={item.id}
+              uid={item.send_uid}
+              avatar={item.send_image}
+              title={item.send_name}
+              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              image_list={item.post?.image_list}
+              content_status={item.post?.content_status}
+              content={item.post?.content}
+              href={`/articleDetils/${item.post?.post_id}`}
+            >
+              <Flex flexWrap='nowrap'>
+                <FollowPopup uid={item.send_uid}>
+                  <Text
+                    maxWidth='20vw'
+                    ellipsis
+                    color='textPrimary'
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {item.send_name}&nbsp;
+                  </Text>
+                </FollowPopup>
+                <Text ellipsis>{t('mentioned you')}</Text>
+              </Flex>
+            </MessageCard>
           );
         })}
         {/* {listData.map(item => {
