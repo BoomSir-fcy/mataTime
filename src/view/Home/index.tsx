@@ -11,37 +11,22 @@ import { Header, Tabs, ArticleList } from './center';
 import { Api } from 'apis';
 
 const PageContainer = styled(Box)`
-  position: relative;
   width: 100%;
+  height: 100vh;
   margin: 0 auto;
-  display: flex;
-  background: ${({ theme }) => theme.colors.primaryDark};
 `;
-const LeftCard = styled(Flex)`
-  width: 200px;
-  height: 100vh;
-  overflow: auto;
-`;
+
 const CenterCard = styled(Box)`
-  /* width: 670px; */
-  width: 100%;
-  flex: 1;
-  /* margin: 0 15px; */
-  /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
-`;
-const RightCard = styled(Flex)`
-  width: 300px;
-  height: 100vh;
   position: relative;
-  overflow: auto;
+  width: 100%;
+  height: 100vh;
 `;
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: 2,
+    attention: 2
   });
   const { toastError } = useToast();
   // const  editorRef = useRef();
@@ -88,21 +73,19 @@ const Home: React.FC = (props: any) => {
 
   return (
     <PageContainer>
-      <Flex justifyContent="space-between" width="100%">
-        <CenterCard>
-          <Crumbs zIndex={1005} title={t('homeHeaderTitle')} />
-          <Editor type="post" sendArticle={sendArticle} />
-          <Tabs tabsChange={tabsChange} defCurrentLeft={1} />
-          <ArticleList
-            setNonce={setNonce}
-            nonce={nonce}
-            key={refresh}
-            topicName={match.params.name}
-            filterValObj={filterVal}
-            {...props}
-          />
-        </CenterCard>
-      </Flex>
+      <CenterCard>
+        <Crumbs title={t('homeHeaderTitle')} />
+        <Editor type='post' sendArticle={sendArticle} />
+        <Tabs tabsChange={tabsChange} defCurrentLeft={1} />
+        <ArticleList
+          setNonce={setNonce}
+          nonce={nonce}
+          key={refresh}
+          topicName={match.params.name}
+          filterValObj={filterVal}
+          {...props}
+        />
+      </CenterCard>
     </PageContainer>
   );
 };

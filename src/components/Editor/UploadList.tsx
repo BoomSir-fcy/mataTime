@@ -48,16 +48,16 @@ export const UploadList = (props: imgListType) => {
     <React.Fragment>
       {imgList.length > 0 && (
         <ImgListBox>
-          {imgList.map((item, index) => (
+          {(imgList ?? []).map((item, index) => (
             <Box key={index}>
               <Icon
                 current={1}
                 size={17}
-                name="icon-jian"
-                color="#ec612b"
+                name='icon-jian'
+                color='#ec612b'
                 onClick={delImgItem.bind(this, index)}
               />
-              <img src={item} alt="" />
+              <img src={item} alt='' />
             </Box>
           ))}
         </ImgListBox>

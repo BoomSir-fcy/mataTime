@@ -14,6 +14,7 @@ import {
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce } from 'lodash';
+import { Loading } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
@@ -139,27 +140,27 @@ const parseValue = value => {
 };
 
 const removeEmptyText = value => {
-  const resVal = []
+  const resVal = [];
   value.forEach(item => {
     if (item.children) {
-      const children = removeEmptyText(item.children)
+      const children = removeEmptyText(item.children);
       resVal.push({
         ...item,
         children: children.length ? children : null
-      })
-      return
+      });
+      return;
     }
-    const kyes = Object.keys(item)
+    const kyes = Object.keys(item);
     if (kyes.length > 1 || (kyes[0] === 'text' && item.text)) {
-      resVal.push({ ...item })
+      resVal.push({ ...item });
     }
-  })
+  });
 
-  return resVal
-}
+  return resVal;
+};
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => { }, type } = props;
+  const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -168,8 +169,8 @@ export const Editor = (props: Iprops) => {
   const [searcTopic, setSearcTopic] = useState(false);
   const [refresh, setRefresh] = useState(1);
   const [target, setTarget] = useState<Range | undefined>();
-  const [articleLength, setArticleLength] = useState(0)
-
+  const [articleLength, setArticleLength] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [stateEdit, setStateEdit] = useImmer({
     userList: [],
     search: '',
@@ -258,7 +259,7 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) { }
+    } catch (err) {}
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -279,47 +280,6 @@ export const Editor = (props: Iprops) => {
   useEffect(() => {
     setIsDisabledSend(imgList.length < 1);
   }, [imgList]);
-
-  const callbackSelectImg = e => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.name = 'file';
-    input.multiple = true;
-    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp';
-    input.onchange = async (e: any) => {
-      const selectFiles = e.target.files;
-      if (!selectFiles[0]) return false;
-      if (imgList.length + selectFiles.length > 4)
-        return toast.error(t('uploadImgMaxMsg'));
-      const fileList: string[] = [];
-      for (let file of selectFiles) {
-        let fr: any = new FileReader();
-        // 读取文件
-        fr.readAsDataURL(file);
-        // 将文件转为base64
-        fr.onload = () => {
-          fileList.push(fr.result);
-          if (fileList.length === selectFiles.length) {
-            Api.CommonApi.uploadImgList({
-              dir_name: props.type,
-              base64: fileList
-            }).then(res => {
-              if (Api.isSuccess(res)) {
-                setImgList([
-                  ...imgList,
-                  ...res.data.map(item => item.full_path)
-                ]);
-                toast.success(t('uploadImgSuccessMsg'));
-              } else {
-                toast.error(t('uploadImgErrorMsg'));
-              }
-            });
-          }
-        };
-      }
-    };
-    input.click();
-  };
 
   const restInput = () => {
     // https://joshtronic.com/2020/04/13/error-cannot-resolve-a-dom-point-from-slate-point/
@@ -346,7 +306,7 @@ export const Editor = (props: Iprops) => {
         if (item.children) {
           deepArr(item.children);
         } else {
-          content += '-' // 换行算一个字符
+          content += '-'; // 换行算一个字符
         }
       });
     };
@@ -412,6 +372,7 @@ export const Editor = (props: Iprops) => {
 
   return (
     <SlateBox key={refresh}>
+      <Loading visible={isLoading} />
       <Slate
         editor={editor}
         value={value}
@@ -420,8 +381,8 @@ export const Editor = (props: Iprops) => {
 
           const { content } = deepContent(value);
           const { selection } = editor;
-          const lenght = getPostBLen(content)
-          setArticleLength(lenght)
+          const lenght = getPostBLen(content);
+          setArticleLength(lenght);
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
             const wordBefore = slateEditor.before(editor, start, {
@@ -455,7 +416,7 @@ export const Editor = (props: Iprops) => {
         }}
       >
         <div
-          className="text-box"
+          className='text-box'
           ref={ref}
           style={{
             borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
@@ -474,22 +435,29 @@ export const Editor = (props: Iprops) => {
           />
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
-        <Flex justifyContent="space-between" alignItems="center">
+        <Flex justifyContent='space-between' alignItems='center'>
           <Toolbar
             type={type}
             callbackEmoji={data => editor.insertText(data)}
-            callbackSelectImg={callbackSelectImg}
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
+            selectImgLength={imgList.length}
+            callbackSelectImg={() => setIsLoading(true)}
+            onSuccess={event => setImgList([...imgList, ...event])}
+            onError={() => setIsLoading(false)}
           />
-          <Flex alignItems="center">
-            {
-              articleLength > ARTICLE_POST_MAX_LEN && (
-                <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'}>
-                  {ARTICLE_POST_MAX_LEN - articleLength}
-                </Text>
-              )
-            }
+          <Flex alignItems='center'>
+            {articleLength > ARTICLE_POST_MAX_LEN && (
+              <Text
+                mt='12px'
+                mr='12px'
+                color={
+                  articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'
+                }
+              >
+                {ARTICLE_POST_MAX_LEN - articleLength}
+              </Text>
+            )}
             {initValue ? (
               <div>
                 <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
@@ -514,7 +482,7 @@ export const Editor = (props: Iprops) => {
 
         {target && userList.length > 0 && (
           <Portal>
-            <MentionContent ref={mentionRef} data-cy="mentions-portal">
+            <MentionContent ref={mentionRef} data-cy='mentions-portal'>
               {userList.map((char, i) => (
                 <MentionItems
                   key={char.uid}

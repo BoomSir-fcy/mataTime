@@ -27,6 +27,8 @@ const PopupContentWrapper = styled(Card)`
   padding: 15px 30px;
   display: flex;
   flex-direction: column;
+  margin-top: -1px;
+  margin-left: 4px;
   button {
     justify-content: flex-start;
     font-size: 14px;
