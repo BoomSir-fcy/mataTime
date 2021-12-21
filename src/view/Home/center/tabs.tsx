@@ -12,9 +12,9 @@ export const TabsBox = styled(Card)`
   height: 60px;
   background-color: transparent;
   /* border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
-  position: sticky;
+  /* position: sticky;
   top: 0;
-  z-index: 1003;
+  z-index: 1003; */
   background: ${({ theme }) => theme.colors.background};
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -59,7 +59,7 @@ interface propsType {
   tabsChange?: (item) => void;
   tabRightArr?: any[];
   tabLeftArr?: any[];
-  isThrottle: boolean
+  isThrottle: boolean;
 }
 export const Tabs = (props: propsType) => {
   const { t } = useTranslation();
@@ -92,12 +92,12 @@ export const Tabs = (props: propsType) => {
     defCurrentRight || 0
   );
   const leftTabClick = (item, index) => {
-    if (isThrottle && index === currentLeftIndex) return
+    if (isThrottle && index === currentLeftIndex) return;
     setCurrentLeftIndex(index);
     tabsChange(item);
   };
   const rightTabClick = (item, index) => {
-    if (isThrottle && index === currentRightIndex) return
+    if (isThrottle && index === currentRightIndex) return;
     setCurrentRightIndex(index);
     tabsChange(item);
   };
@@ -142,5 +142,5 @@ Tabs.defaultProps = {
   // tabLeftChange: () => { },
   isThrottle: true,
   // tabRightChange: () => { },
-  tabsChange: () => { }
+  tabsChange: () => {}
 };
