@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
-import { PancakeTheme } from 'uikit'
+import { PancakeTheme } from 'uikit';
 
 declare module 'styled-components' {
   export interface DefaultTheme extends PancakeTheme {
-    main: string
+    main: string;
   }
 }
 
@@ -102,6 +102,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: Futura, 'SourceHanSansCN', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
   }
   /* html, body{
     height: 100%;
@@ -128,6 +129,6 @@ const GlobalStyle = createGlobalStyle`
       z-index:99999;
     }
   }
-`
+`;
 
 export default GlobalStyle;

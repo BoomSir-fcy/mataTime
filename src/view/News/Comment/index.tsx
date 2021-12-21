@@ -4,18 +4,24 @@ import dayjs from 'dayjs';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
 import { useTranslation } from 'contexts/Localization';
-import { List, ContentParsing, MoreOperatorEnum, FollowPopup, Icon } from 'components';
+import {
+  List,
+  ContentParsing,
+  MoreOperatorEnum,
+  FollowPopup,
+  Icon
+} from 'components';
 import { Api } from 'apis';
 import { NewsCommentWrapper, CommentItemWrapper } from './style';
-import MessageCard from '../components/MessageCard'
+import MessageCard from '../components/MessageCard';
 import styled from 'styled-components';
 
 const NoneEventsText = styled(Text)`
   pointer-events: none;
-  & > *{
+  & > * {
     display: inline;
   }
-`
+`;
 
 const NewsComment: React.FC = props => {
   const { t } = useTranslation();
@@ -71,11 +77,12 @@ const NewsComment: React.FC = props => {
           getList();
         }}
       >
-        {
-          listData.map(item => {
-            return item?.post?.content_status === 1 && (
+        {listData.map(item => {
+          return (
+            item?.post?.content_status === 1 && (
               <MessageCard
                 key={item.id}
+                uid={item.send_uid}
                 avatar={item.send_image}
                 title={item.send_name}
                 date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
@@ -85,17 +92,27 @@ const NewsComment: React.FC = props => {
               >
                 <Box>
                   <FollowPopup uid={item.send_uid}>
-                    <Text as="span" maxWidth="20vw" ellipsis color='textPrimary' style={{ cursor: 'pointer' }} >{item.send_name}&nbsp;</Text>
+                    <Text
+                      as='span'
+                      maxWidth='20vw'
+                      ellipsis
+                      color='textPrimary'
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {item.send_name}&nbsp;
+                    </Text>
                   </FollowPopup>
-                  <Text  as="span" ellipsis mr="0.5em">{t('commented: ')}</Text>
-                  <NoneEventsText  as="span" ellipsis maxLine={2}>
+                  <Text as='span' ellipsis mr='0.5em'>
+                    {t('commented: ')}
+                  </Text>
+                  <NoneEventsText as='span' ellipsis maxLine={2}>
                     <ContentParsing content={item.comment.comment} />
                   </NoneEventsText>
                 </Box>
               </MessageCard>
             )
-          })
-        }
+          );
+        })}
         {/* {listData.map(item => {
           if (item?.post?.content_status === 1) {
             return (

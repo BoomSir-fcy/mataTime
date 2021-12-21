@@ -4,10 +4,10 @@ import MentionOperator from '../components/MentionOperator';
 import { List, MoreOperatorEnum, FollowPopup } from 'components';
 import { Api } from 'apis';
 import { NewsMeWrapper, MeItemWrapper } from './style';
-import MessageCard from '../components/MessageCard'
+import MessageCard from '../components/MessageCard';
 import dayjs from 'dayjs';
 import { useTranslation } from 'contexts';
-import { Text, Flex } from 'uikit'
+import { Text, Flex } from 'uikit';
 
 const NewsMe: React.FC = props => {
   const [page, setPage] = useState(1);
@@ -66,11 +66,12 @@ const NewsMe: React.FC = props => {
         loading={page <= totalPage}
         renderList={() => getList()}
       >
-        {
-          listData.map(item => {
-            return item?.post?.content_status === 1 && (
+        {listData.map(item => {
+          return (
+            item?.post?.content_status === 1 && (
               <MessageCard
                 key={item.id}
+                uid={item.send_uid}
                 avatar={item.send_image}
                 title={item.send_name}
                 date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
@@ -78,16 +79,23 @@ const NewsMe: React.FC = props => {
                 content={item.post?.content}
                 href={`/articleDetils/${item.post?.post_id}`}
               >
-                <Flex flexWrap="nowrap">
+                <Flex flexWrap='nowrap'>
                   <FollowPopup uid={item.send_uid}>
-                    <Text maxWidth="20vw" ellipsis color='textPrimary' style={{ cursor: 'pointer' }} >{item.send_name}&nbsp;</Text>
+                    <Text
+                      maxWidth='20vw'
+                      ellipsis
+                      color='textPrimary'
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {item.send_name}&nbsp;
+                    </Text>
                   </FollowPopup>
                   <Text ellipsis>{t('mentioned you')}</Text>
                 </Flex>
               </MessageCard>
             )
-          })
-        }
+          );
+        })}
         {/* {listData.map(item => {
           if (item?.post?.content_status === 1) {
             return (
