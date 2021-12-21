@@ -66,12 +66,6 @@ export class MeApi extends Http {
     return res;
   }
 
-  // 帖子详情
-  async getContentDetail(id: number) {
-    const res = await this.get('/v1/post/info', id);
-    return res;
-  }
-
   // 添加评论
   async addContentDetail(params: Api.Me.addContentDetail) {
     const res = await this.post('v1/comment/create', params);
