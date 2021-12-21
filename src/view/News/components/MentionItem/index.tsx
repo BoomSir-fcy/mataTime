@@ -9,7 +9,7 @@ import {
   Avatar,
   MoreOperatorEnum,
   ImgList,
-  FollowPopupD,
+  // FollowPopupD,
   ContentParsing,
   MorePostPopup
 } from 'components';
@@ -111,14 +111,14 @@ const MentionItem: React.FC<IProps> = props => {
       </Box>
       {children}
       {/* 关注提示 */}
-      <FollowPopupD
+      {/* <FollowPopupD
         uid={uid}
         left={position[0]}
         top={position[1]}
         callback={() => {
           setPosition([-999, -999]);
         }}
-      />
+      /> */}
     </MentionItemWrapper>
   );
 };

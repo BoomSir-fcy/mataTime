@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Box } from 'uikit';
-import MentionItem, { MentionItemUser } from '../components/MentionItem';
-import MentionOperator from '../components/MentionOperator';
-import { useTranslation } from 'contexts/Localization';
-import { Icon, MoreOperatorEnum, List, ContentParsing } from 'components';
-import { Header as CenterHeader, Tabs } from 'view/Home/center';
+import { Box, Text, Flex } from 'uikit';
+import dayjs from 'dayjs';
 import { Api } from 'apis';
+import { useTranslation } from 'contexts';
+import MentionItem, { MentionItemUser } from '../components/MentionItem';
+import { Icon, MoreOperatorEnum, List, ContentParsing, FollowPopup } from 'components';
 import { NewsPraiseWrapper, PraiseItemWrapper } from './style';
+import MessageCard from '../components/MessageCard'
 
 const NewsPraise: React.FC = props => {
   const { t } = useTranslation();
@@ -86,7 +86,36 @@ const NewsPraise: React.FC = props => {
           getList();
         }}
       >
-        {listData.map(item => {
+        {
+          listData.map(item => {
+            return item?.post?.content_status === 1 && (
+              <MessageCard
+                key={item.id}
+                avatar={item.send_image}
+                title={item.send_name}
+                date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+                image_list={item.post?.image_list}
+                content={item.post?.content}
+                href={`/articleDetils/${item.post?.post_id}`}
+              >
+                <Flex flexWrap="nowrap">
+                  <FollowPopup uid={item.send_uid}>
+                    <Text maxWidth="20vw" ellipsis color='textPrimary' style={{ cursor: 'pointer' }} >{item.send_name}&nbsp;</Text>
+                  </FollowPopup>
+                  <Icon
+                    size={12}
+                    name="icon-aixin1"
+                    margin="7px 10px 0 0"
+                    color="#EC612B"
+                  />
+                  <Text ellipsis>{t('your post')}</Text>
+                  {/* <Text ellipsis>{t('liked your comment')}</Text> */}
+                </Flex>
+              </MessageCard>
+            )
+          })
+        }
+        {/* {listData.map(item => {
           if (item?.post?.content_status === 1) {
             return (
               <PraiseItemWrapper key={item.id}>
@@ -133,29 +162,10 @@ const NewsPraise: React.FC = props => {
                     size={'small'}
                   />
                 </div>
-                {/* <MentionOperator
-                  hasLike={false}
-                  replyType={'comment'}
-                  postId={item.post.post_id}
-                  commentId={item.id}
-                  itemData={{
-                    ...item,
-                    ...item.post,
-                    comment: {
-                      ...item.comment,
-                      content: item.comment.comment,
-                      user_name: item.send_winner,
-                      user_avator_url: item.send_image
-                    }
-                  }}
-                  callback={(item: any, type?: MoreOperatorEnum) => {
-                    updateList(item, type);
-                  }}
-                /> */}
               </PraiseItemWrapper>
             );
           }
-        })}
+        })} */}
       </List>
     </NewsPraiseWrapper>
   );

@@ -39,8 +39,6 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       if (Api.isSuccess(res)) {
         toastSuccess(res.data);
         setRefresh(refresh === 1 ? 2 : 1);
-      } else {
-        toastError(t('commonContactAdmin') || res.msg);
       }
     });
   };

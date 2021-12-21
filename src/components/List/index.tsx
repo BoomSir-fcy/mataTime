@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
 import { connect } from 'react-redux';
-import { Box } from 'uikit';
+import { Box, Image, Empty } from 'uikit';
 
 export const LoadingWrapper = styled(Box)`
   width: 100%;
@@ -11,7 +11,7 @@ export const LoadingWrapper = styled(Box)`
 `;
 export const NoDataWrapper = styled(Box)`
   width: 100%;
-  height: 50px;
+  /* height: 50px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +89,13 @@ class ListComponents extends React.Component<Iprops> {
         ) : (
           <NoDataWrapper>
             {/* {systemCustom.languange.id === 2 ? '已经到底了～' : "It's over～"} */}
-            It's at the bottom～
+            {/* It's at the bottom～ */}
+            {/* <Image mt="50%" src="/images/no-order.svg" height={201.6} width={153.95} /> */}
+            {
+              Array.isArray(this.props.children) && this.props.children?.length === 0 && (
+                <Empty />
+              )
+            }
           </NoDataWrapper>
         )}
       </Box>

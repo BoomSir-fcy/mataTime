@@ -62,8 +62,6 @@ export const Popup: React.FC<{
         onCallback();
         popupRefs?.current?.close();
         toastSuccess(t('commonMsgFollowSuccess') || res.data);
-      } else {
-        toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -81,8 +79,6 @@ export const Popup: React.FC<{
           p.cancelFollow = false;
         });
         toastSuccess(t('commonMsgFollowError') || res.data);
-      } else {
-        toastError(t('commonMsgUnFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
