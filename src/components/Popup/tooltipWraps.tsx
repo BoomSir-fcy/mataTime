@@ -22,7 +22,6 @@ const FollowPopup: React.FC<{
 }> = React.memo(({ uid, callback }) => {
   const { t } = useTranslation();
   const { toastError, toastSuccess } = useToast();
-  const [visible, setVisible] = React.useState<boolean>(false);
   const [userInfo, setUserInfo] = React.useState<any>({});
   const myself = useStore(p => p.loginReducer.userInfo);
 

@@ -284,7 +284,11 @@ const Profile: React.FC<any> = props => {
         <ProfileInfo>
           <Info>
             <Flex alignItems='flex-end' style={{ flex: 1 }}>
-              <Avatar scale={isMobile ? 'ld' : 'xl'} src={profile.nft_image} />
+              <Avatar
+                disableFollow
+                scale={isMobile ? 'ld' : 'xl'}
+                src={profile.nft_image}
+              />
               <Desc>
                 <Text className='name' ellipsis maxLine={2}>
                   {profile.nick_name}
