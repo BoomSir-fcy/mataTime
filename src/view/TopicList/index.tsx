@@ -22,7 +22,6 @@ const TopicList = props => {
   try {
     name = decodeURIComponent(name)    
   } catch (error) {
-    console.log(error)
   }
   const { toastError } = useToast();
   const [state, setState] = useImmer({
