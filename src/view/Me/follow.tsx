@@ -94,7 +94,7 @@ const Follow = React.memo(() => {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
         getFollowList(1);
-        toast.success(t('commonMsgFollowSuccess') || res.data);
+        // toast.success(t('commonMsgFollowSuccess') || res.data);
       }
     } catch (error) {
       console.error(error);
