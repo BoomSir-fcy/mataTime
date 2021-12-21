@@ -18,6 +18,7 @@ import history from 'routerHistory';
 type IProps = {
   content: string;
   callback?: Function;
+  disableParseSquare?: boolean
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -68,7 +69,7 @@ export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
-  const { callback } = props;
+  const { callback, disableParseSquare } = props;
 
   useEffect(() => {
     const { content } = props;
@@ -133,22 +134,24 @@ export const ContentParsing = (props: IProps) => {
       )
     );
     // Match hashtags
-    replacedText = reactStringReplace(
-      replacedText,
-      SQUARE_REGEXP,
-      // /#(\w+|[\u4E00-\u9FA5|0-9]+)[\s|\D]{0}/g,
-      (match, i) => (
-        <a
-          onClick={event => {
-            event.stopPropagation();
-            goRouter(`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`);
-          }}
-          key={match + i}
-        >
-          {match}&nbsp;
-        </a>
-      )
-    );
+    if (!disableParseSquare) {
+      replacedText = reactStringReplace(
+        replacedText,
+        SQUARE_REGEXP,
+        // /#(\w+|[\u4E00-\u9FA5|0-9]+)[\s|\D]{0}/g,
+        (match, i) => (
+          <a
+            onClick={event => {
+              event.stopPropagation();
+              goRouter(`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`);
+            }}
+            key={match + i}
+          >
+            {match}&nbsp;
+          </a>
+        )
+      );
+    }
     return replacedText;
   };
 

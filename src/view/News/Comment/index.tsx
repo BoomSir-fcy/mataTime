@@ -90,7 +90,7 @@ const NewsComment: React.FC = props => {
                   </FollowPopup>
                   <Text  as="span" ellipsis mr="0.5em">{t('commented: ')}</Text>
                   <NoneEventsText  as="span" ellipsis maxLine={2}>
-                    <ContentParsing content={item.comment.comment} />
+                    <ContentParsing disableParseSquare content={item.comment.comment} />
                   </NoneEventsText>
                 </Box>
               </MessageCard>
