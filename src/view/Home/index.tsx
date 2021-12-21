@@ -13,13 +13,12 @@ import { Api } from 'apis';
 const PageContainer = styled(Box)`
   position: relative;
   width: 100%;
-  height: 100vh;
   margin: 0 auto;
+  display: flex;
 `;
-
 const CenterCard = styled(Box)`
   width: 100%;
-  height: 100vh;
+  flex: 1;
 `;
 
 const Home: React.FC = (props: any) => {
@@ -73,19 +72,21 @@ const Home: React.FC = (props: any) => {
 
   return (
     <PageContainer>
-      <CenterCard>
-        <Crumbs title={t('homeHeaderTitle')} />
-        <Editor type='post' sendArticle={sendArticle} />
-        <Tabs tabsChange={tabsChange} defCurrentLeft={1} />
-        <ArticleList
-          setNonce={setNonce}
-          nonce={nonce}
-          key={refresh}
-          topicName={match.params.name}
-          filterValObj={filterVal}
-          {...props}
-        />
-      </CenterCard>
+      <Flex justifyContent='space-between' width='100%'>
+        <CenterCard>
+          <Crumbs zIndex={1005} title={t('homeHeaderTitle')} />
+          <Editor type='post' sendArticle={sendArticle} />
+          <Tabs tabsChange={tabsChange} defCurrentLeft={1} />
+          <ArticleList
+            setNonce={setNonce}
+            nonce={nonce}
+            key={refresh}
+            topicName={match.params.name}
+            filterValObj={filterVal}
+            {...props}
+          />
+        </CenterCard>
+      </Flex>
     </PageContainer>
   );
 };
