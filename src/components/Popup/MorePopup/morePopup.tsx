@@ -168,7 +168,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const onAttentionFocusRequest = async (focus_uid: number) => {
       const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
       if (Api.isSuccess(res)) {
-        toastSuccess(t('commonMsgFollowSuccess'));
+        // toastSuccess(t('commonMsgFollowSuccess'));
         callback({ ...data, is_attention: 1 }, MoreOperatorEnum.FOLLOW);
       }
     };
@@ -177,7 +177,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const onAttentionCancelRequest = async (focus_uid: number) => {
       const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
       if (Api.isSuccess(res)) {
-        toastSuccess(t('commonMsgUnFollowSuccess'));
+        // toastSuccess(t('commonMsgUnFollowSuccess'));
         callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
       }
     };

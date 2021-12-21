@@ -148,7 +148,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       getCurrentState();
-      toastSuccess(t('commonMsgFollowSuccess') || res.data);
+      // toastSuccess(t('commonMsgFollowSuccess') || res.data);
     }
   };
 

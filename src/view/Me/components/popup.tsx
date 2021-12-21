@@ -61,7 +61,7 @@ export const Popup: React.FC<{
       if (Api.isSuccess(res)) {
         onCallback();
         popupRefs?.current?.close();
-        toastSuccess(t('commonMsgFollowSuccess') || res.data);
+        // toastSuccess(t('commonMsgFollowSuccess') || res.data);
       }
     } catch (error) {
       console.error(error);
