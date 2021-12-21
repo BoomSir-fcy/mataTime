@@ -88,13 +88,14 @@ const NewsPraise: React.FC = props => {
       >
         {
           listData.map(item => {
-            return item?.post?.content_status === 1 && (
+            return (
               <MessageCard
                 key={item.id}
                 avatar={item.send_image}
                 title={item.send_name}
                 date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
                 image_list={item.post?.image_list}
+                content_status={item.post?.content_status}
                 content={item.post?.content}
                 href={`/articleDetils/${item.post?.post_id}`}
               >
