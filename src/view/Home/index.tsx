@@ -11,27 +11,25 @@ import { useTranslation } from 'contexts/Localization';
 import { Flex, Box } from 'uikit';
 import { Header, Tabs, ArticleList } from './center';
 
-
 const PageContainer = styled(Box)`
-  width: 100%;
-  height: 100vh;
-  margin: 0 auto;
-`;
-
-const CenterCard = styled(Box)`
   position: relative;
   width: 100%;
-  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+`;
+const CenterCard = styled(Box)`
+  width: 100%;
+  flex: 1;
 `;
 
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
-  const { replace } = useHistory()
-  const { path } = useLocation()
-  const parsedQs = useParsedQueryString()
+  const { replace } = useHistory();
+  const { path } = useLocation();
+  const parsedQs = useParsedQueryString();
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: parsedQs.attention || 2,
+    attention: parsedQs.attention || 2
   });
   const { toastError } = useToast();
   // const  editorRef = useRef();
@@ -79,11 +77,14 @@ const Home: React.FC = (props: any) => {
 
   return (
     <PageContainer>
-      <Flex justifyContent="space-between" width="100%">
+      <Flex justifyContent='space-between' width='100%'>
         <CenterCard>
           <Crumbs zIndex={1005} title={t('homeHeaderTitle')} />
-          <Editor type="post" sendArticle={sendArticle} />
-          <Tabs tabsChange={tabsChange} defCurrentLeft={Number(parsedQs.attention || 2) - 1} />
+          <Editor type='post' sendArticle={sendArticle} />
+          <Tabs
+            tabsChange={tabsChange}
+            defCurrentLeft={Number(parsedQs.attention || 2) - 1}
+          />
           <ArticleList
             setNonce={setNonce}
             nonce={nonce}

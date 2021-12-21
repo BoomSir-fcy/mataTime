@@ -40,7 +40,7 @@ const LineStyled = styled(Box)`
   }
 `;
 const InnerBox = styled(Flex)`
-  position: relative;
+  position: sticky;
   top: 0;
   z-index: 2;
   min-height: 100vh;

@@ -11,8 +11,8 @@ export const TabsBox = styled(Card)`
   align-items: center;
   height: 60px;
   background-color: transparent;
-  /* border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
-  /* position: sticky;
+  /* border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; 
+  position: sticky;
   top: 0;
   z-index: 1003; */
   background: ${({ theme }) => theme.colors.background};
