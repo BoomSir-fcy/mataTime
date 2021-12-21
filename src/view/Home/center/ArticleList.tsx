@@ -69,7 +69,7 @@ export const ArticleList = props => {
           setPage(page + 1);
         }
       }
-      setNonce(prep => prep + 1);
+      // setNonce(prep => prep + 1);
     });
   };
 
