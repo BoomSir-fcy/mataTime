@@ -40,14 +40,14 @@ const LineStyled = styled(Box)`
   }
 `;
 const InnerBox = styled(Flex)`
-  position: sticky;
+  position: relative;
   top: 0;
   z-index: 2;
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.primaryDark};
 `;
 
-const CennerBox = styled(Box) <{ showSidebar?: boolean }>`
+const CennerBox = styled(Box)<{ showSidebar?: boolean }>`
   width: 100%;
   max-width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
@@ -88,16 +88,16 @@ const PageContainer: React.FC = ({ children }) => {
     <PageContainerStyled>
       <GlobalStyle />
       <ChildrenWrapper>
-        <Flex width="100%" alignItems="flex-start" justifyContent="center">
+        <Flex width='100%' alignItems='flex-start' justifyContent='center'>
           {showMenuNav && <MenuNav />}
           <LineStyled />
-          <Flex flex="1" alignItems="flex-start" justifyContent="space-between">
-            <InnerBox flex="1" flexDirection="column">
+          <Flex flex='1' alignItems='flex-start' justifyContent='space-between'>
+            <InnerBox flex='1' flexDirection='column'>
               <CennerBox showSidebar={showSidebar}>{children}</CennerBox>
             </InnerBox>
-            <LineStyled mr="14px" />
+            <LineStyled mr='14px' />
             {showSidebar && (
-              <Sidebar className="mini-swap-Modal__Body--open-sidebar" />
+              <Sidebar className='mini-swap-Modal__Body--open-sidebar' />
             )}
           </Flex>
         </Flex>

@@ -1,8 +1,8 @@
 import styled, { DefaultTheme } from 'styled-components';
 import classnames from 'classnames';
-import useTheme from 'hooks/useTheme'
-import { TextProps } from 'uikit'
-import getThemeValue from 'uikit/util/getThemeValue'
+import useTheme from 'hooks/useTheme';
+import { TextProps } from 'uikit';
+import getThemeValue from 'uikit/util/getThemeValue';
 
 export interface iocnType {
   size?: number;
@@ -10,7 +10,7 @@ export interface iocnType {
   color?: string;
   margin?: string;
   bold?: boolean;
-  current?: number;
+  current?: number | boolean;
   [propName: string]: any;
 }
 
@@ -22,9 +22,18 @@ const getColor = ({ color, theme }: ThemedProps) => {
   return getThemeValue(`colors.${color}`, color)(theme);
 };
 
-
-export const Icon = ({ size, name, color = '#fff', bold, margin, style = {}, current = 0, className, ...props }: iocnType) => {
-  const { theme } = useTheme()
+export const Icon = ({
+  size,
+  name,
+  color = '#fff',
+  bold,
+  margin,
+  style = {},
+  current = 0,
+  className,
+  ...props
+}: iocnType) => {
+  const { theme } = useTheme();
 
   return (
     <i

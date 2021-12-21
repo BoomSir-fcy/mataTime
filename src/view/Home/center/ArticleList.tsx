@@ -144,7 +144,7 @@ export const ArticleList = props => {
             />
             <MentionOperator
               {...props}
-              replyType="twitter"
+              replyType='twitter'
               postId={item.id}
               itemData={{
                 ...item,

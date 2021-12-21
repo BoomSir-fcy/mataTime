@@ -14,6 +14,7 @@ import {
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce } from 'lodash';
+import { Loading } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
@@ -139,24 +140,24 @@ const parseValue = value => {
 };
 
 const removeEmptyText = value => {
-  const resVal = []
+  const resVal = [];
   value.forEach(item => {
     if (item.children) {
-      const children = removeEmptyText(item.children)
+      const children = removeEmptyText(item.children);
       resVal.push({
         ...item,
         children: children.length ? children : null
-      })
-      return
+      });
+      return;
     }
-    const kyes = Object.keys(item)
+    const kyes = Object.keys(item);
     if (kyes.length > 1 || (kyes[0] === 'text' && item.text)) {
-      resVal.push({ ...item })
+      resVal.push({ ...item });
     }
-  })
+  });
 
-  return resVal
-}
+  return resVal;
+};
 
 const isEmptyLine = (paragraph) => {
   if (!paragraph) return true
@@ -176,7 +177,7 @@ const removeEmptyLine = value => {
 }
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => { }, type } = props;
+  const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -186,6 +187,7 @@ export const Editor = (props: Iprops) => {
   const [refresh, setRefresh] = useState(1);
   const [target, setTarget] = useState<Range | undefined>();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [stateEdit, setStateEdit] = useImmer({
     userList: [],
     search: '',
@@ -232,7 +234,7 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) { }
+    } catch (err) {}
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -441,6 +443,7 @@ export const Editor = (props: Iprops) => {
 
   return (
     <SlateBox key={refresh}>
+      <Loading visible={isLoading} />
       <Slate
         editor={editor}
         value={value}
@@ -449,7 +452,6 @@ export const Editor = (props: Iprops) => {
 
           const { content } = deepContent(value);
           const { selection } = editor;
-          const lenght = getPostBLen(content)
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
             const wordBefore = slateEditor.before(editor, start, {
@@ -483,7 +485,7 @@ export const Editor = (props: Iprops) => {
         }}
       >
         <div
-          className="text-box"
+          className='text-box'
           ref={ref}
           style={{
             borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
@@ -502,13 +504,16 @@ export const Editor = (props: Iprops) => {
           />
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
-        <Flex justifyContent="space-between" alignItems="center">
+        <Flex justifyContent='space-between' alignItems='center'>
           <Toolbar
             type={type}
             callbackEmoji={data => editor.insertText(data)}
-            callbackSelectImg={callbackSelectImg}
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
+            selectImgLength={imgList.length}
+            callbackSelectImg={() => setIsLoading(true)}
+            onSuccess={event => setImgList([...imgList, ...event])}
+            onError={() => setIsLoading(false)}
           />
           <Flex alignItems="center">
             {
@@ -542,7 +547,7 @@ export const Editor = (props: Iprops) => {
 
         {target && userList.length > 0 && (
           <Portal>
-            <MentionContent ref={mentionRef} data-cy="mentions-portal">
+            <MentionContent ref={mentionRef} data-cy='mentions-portal'>
               {userList.map((char, i) => (
                 <MentionItems
                   key={char.uid}

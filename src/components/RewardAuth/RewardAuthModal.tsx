@@ -29,7 +29,7 @@ import QuestionHelper from 'components/QuestionHelper';
 
 const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
   position: absolute;
-  z-index: 999;
+  z-index: 99;
   width: 418px;
   min-height: 80px;
   padding: 8px 20px 16px;

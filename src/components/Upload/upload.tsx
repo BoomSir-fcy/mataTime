@@ -76,17 +76,17 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
 
   return (
     <Container>
-      <label htmlFor="upload-images">{t('commonUploadBackground')}</label>
+      <label htmlFor='upload-images'>{t('commonUploadBackground')}</label>
       <input
-        id="upload-images"
+        id='upload-images'
         ref={imageInput}
         onChange={() => uploadFile()}
         multiple={multiple}
-        type="file"
-        accept="image/*"
+        type='file'
+        accept='image/*'
       />
       <Mask>
-        <Text color="textTips">{t('commonUploadBackgroundTips')}</Text>
+        <Text color='textTips'>{t('commonUploadBackgroundTips')}</Text>
       </Mask>
     </Container>
   );

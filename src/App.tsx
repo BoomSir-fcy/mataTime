@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import GlobalStyle from 'style/global';
+import VConsole from 'vconsole';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk, storeAction } from 'store';
@@ -28,7 +29,7 @@ import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en';
 dayjs.extend(relativeTime);
-dayjs.extend(updateLocale)
+dayjs.extend(updateLocale);
 
 // dayjs.updateLocale('en', {
 //   relativeTime: {
@@ -109,15 +110,15 @@ function App() {
   return (
     <Router history={history}>
       <GlobalStyle />
-      <Container id="bg">
+      <Container id='bg'>
         <PageContainer>
           <React.Suspense fallback={<PageLoader />}>
             <Updater />
             <Switch>
-              <Route path="/" exact render={props => <Home {...props} />} />
-              <Route path="/login" exact component={Login} />
+              <Route path='/' exact render={props => <Home {...props} />} />
+              <Route path='/login' exact component={Login} />
               <Route
-                path="/topicList/:id/:name"
+                path='/topicList/:id/:name'
                 render={props => (
                   <TopicList
                     key={props.location.pathname + props.location.search}
@@ -126,21 +127,21 @@ function App() {
                 )}
               />
               <Route
-                path="/articleDetils/:id"
+                path='/articleDetils/:id'
                 render={props => <ArticleDetilsLayout {...props} />}
               />
-              <Route path="/task" component={Task} />
+              <Route path='/task' component={Task} />
               <Route
-                path="/notification"
+                path='/notification'
                 render={props => <CommonLayout {...props} />}
               />
-              <Route path="/me" component={Me} />
-              <Route path="/set" component={Set} />
-              <Route path="/account" component={Account} />
+              <Route path='/me' component={Me} />
+              <Route path='/set' component={Set} />
+              <Route path='/account' component={Account} />
               {process.env.NODE_ENV === 'development' && (
                 <>
-                  <Route path="/faucet-smart" component={FaucetSmart} />
-                  <Route path="/test" component={Test} />
+                  <Route path='/faucet-smart' component={FaucetSmart} />
+                  <Route path='/test' component={Test} />
                 </>
               )}
             </Switch>

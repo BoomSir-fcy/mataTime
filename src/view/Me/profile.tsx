@@ -254,7 +254,7 @@ const Profile: React.FC<any> = props => {
 
   return (
     <Center>
-      <Crumbs zIndex={10} title={t('meHome')} back={Boolean(uid)} />
+      <Crumbs title={t('meHome')} back={Boolean(uid)} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -264,17 +264,17 @@ const Profile: React.FC<any> = props => {
           {!profile.background_image && (
             <ComponentsWrapper>
               <CommonCircle
-                width="18rem"
-                height="18rem"
-                margin="-9rem 0 0 -9rem"
-                bgWidth="48rem"
-                bgHeight="19rem"
-                bgMargin="-6rem 0 0 -23rem"
+                width='18rem'
+                height='18rem'
+                margin='-9rem 0 0 -9rem'
+                bgWidth='48rem'
+                bgHeight='19rem'
+                bgMargin='-6rem 0 0 -23rem'
                 isAnimation
               >
                 <CenterImg
-                  width="250px"
-                  height="250px"
+                  width='250px'
+                  height='250px'
                   src={require('view/Login/images/LOGO2.svg').default}
                 />
               </CommonCircle>
@@ -283,23 +283,23 @@ const Profile: React.FC<any> = props => {
         </HeadTop>
         <ProfileInfo>
           <Info>
-            <Flex alignItems="flex-end" style={{ flex: 1 }}>
+            <Flex alignItems='flex-end' style={{ flex: 1 }}>
               <Avatar scale={isMobile ? 'ld' : 'xl'} src={profile.nft_image} />
               <Desc>
-                <Text className="name" ellipsis maxLine={2}>
+                <Text className='name' ellipsis maxLine={2}>
                   {profile.nick_name}
                 </Text>
-                <Flex mt="5px" flexWrap="wrap">
+                <Flex mt='5px' flexWrap='wrap'>
                   <Flex>
                     {/* <Certification /> */}
-                    <Text className="text">
+                    <Text className='text'>
                       @{shortenAddress(profile.address)}
                     </Text>
                   </Flex>
                   {locationDisplay && (
-                    <Flex className="marginLeft" alignItems="center">
-                      <Icon name="icon-dizhi" color={gray} />
-                      <Text className="text">{locationDisplay}</Text>
+                    <Flex className='marginLeft' alignItems='center'>
+                      <Icon name='icon-dizhi' color={gray} />
+                      <Text className='text'>{locationDisplay}</Text>
                     </Flex>
                   )}
                 </Flex>
@@ -307,7 +307,7 @@ const Profile: React.FC<any> = props => {
             </Flex>
             {!uid || Number(uid) === currentUid.uid ? (
               <>
-                <Button as={Link} to="/me/edit">
+                <Button as={Link} to='/me/edit'>
                   {t('meEditProfile')}
                 </Button>
                 {/* <Button onClick={() => { signOut() }}>
@@ -319,8 +319,8 @@ const Profile: React.FC<any> = props => {
             )}
           </Info>
           <Content>
-            <Box className="desc">
-              <Text className="text" style={{ wordBreak: 'break-word' }}>
+            <Box className='desc'>
+              <Text className='text' style={{ wordBreak: 'break-word' }}>
                 {profile.introduction}
               </Text>
               {/* <Text className="text">
@@ -331,18 +331,18 @@ const Profile: React.FC<any> = props => {
               </Text>
               <Text className="text">Email：{profile.email}</Text> */}
             </Box>
-            <Flex className="number">
-              <Text className="text">
+            <Flex className='number'>
+              <Text className='text'>
                 {t('meFans')}
-                <Text className="value">{profile.fans_num}</Text>
+                <Text className='value'>{profile.fans_num}</Text>
               </Text>
-              <Text className="text">
+              <Text className='text'>
                 {t('meFollow')}
-                <Text className="value">{profile.attention_num}</Text>
+                <Text className='value'>{profile.attention_num}</Text>
               </Text>
-              <Text className="text">
+              <Text className='text'>
                 {t('meDynamic')}
-                <Text className="value">{profile.post_num}</Text>
+                <Text className='value'>{profile.post_num}</Text>
               </Text>
             </Flex>
             {/* <Flex className="topic">
@@ -399,8 +399,8 @@ const Profile: React.FC<any> = props => {
               }}
             />
             <MentionOperator
-              replyType="twitter"
-              type="Article"
+              replyType='twitter'
+              type='Article'
               postId={item.id}
               itemData={{
                 ...item,

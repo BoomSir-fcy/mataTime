@@ -12,30 +12,15 @@ import { Header, Tabs, ArticleList } from './center';
 import { Api } from 'apis';
 
 const PageContainer = styled(Box)`
-  position: relative;
   width: 100%;
+  height: 100vh;
   margin: 0 auto;
-  display: flex;
-  background: ${({ theme }) => theme.colors.primaryDark};
 `;
-const LeftCard = styled(Flex)`
-  width: 200px;
-  height: 100vh;
-  overflow: auto;
-`;
+
 const CenterCard = styled(Box)`
-  /* width: 670px; */
-  width: 100%;
-  flex: 1;
-  /* margin: 0 15px; */
-  /* border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
-`;
-const RightCard = styled(Flex)`
-  width: 300px;
-  height: 100vh;
   position: relative;
-  overflow: auto;
+  width: 100%;
+  height: 100vh;
 `;
 
 const Home: React.FC = (props: any) => {

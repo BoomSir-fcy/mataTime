@@ -87,41 +87,41 @@ export const FollowPopup = React.memo((props: Iprops) => {
       {children}
       {visible ? (
         <PopupContentWrapper>
-          <Link className="content" to={`/me/profile/${userInfo.uid}`}>
-            <div className="left-box">
-              <div className="img-box">
+          <Link className='content' to={`/me/profile/${userInfo.uid}`}>
+            <div className='left-box'>
+              <div className='img-box'>
                 <Avatar
-                  className="avatar"
+                  className='avatar'
                   src={userInfo.nft_image || userInfo.NftImage || '  '}
-                  scale="md"
+                  scale='md'
                 />
               </div>
             </div>
-            <div className="right-box">
-              <Text className="name" ellipsis>
+            <div className='right-box'>
+              <Text className='name' ellipsis>
                 {userInfo.NickName || userInfo.nick_name || '  '}
               </Text>
-              <div className="des">{shortenAddress(userInfo.address)}</div>
-              <div className="number">
-                <Flex className="cloums">
+              <div className='des'>{shortenAddress(userInfo.address)}</div>
+              <div className='number'>
+                <Flex className='cloums'>
                   {t('followFans')}
                   <Text
-                    fontWeight="bold"
-                    color="white"
-                    ml="10px"
-                    maxWidth="30px"
+                    fontWeight='bold'
+                    color='white'
+                    ml='10px'
+                    maxWidth='30px'
                     ellipsis
                   >
                     {userInfo.fans_num || 0}
                   </Text>
                 </Flex>
-                <Flex className="cloums">
+                <Flex className='cloums'>
                   {t('followText')}
                   <Text
-                    fontWeight="bold"
-                    color="white"
-                    ml="10px"
-                    maxWidth="30px"
+                    fontWeight='bold'
+                    color='white'
+                    ml='10px'
+                    maxWidth='30px'
                     ellipsis
                   >
                     {userInfo.attention_num || 0}
@@ -131,7 +131,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
             </div>
           </Link>
           {myself.uid !== uid && (
-            <div className="btn">
+            <div className='btn'>
               <FollowBtn
                 onClick={(e: any) => {
                   e.stopPropagation();
