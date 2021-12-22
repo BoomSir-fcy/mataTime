@@ -34,28 +34,10 @@ import { ExchangeList } from './type';
 import { State } from '../types';
 import { BIG_TEN } from 'utils/bigNumber';
 import { useTokenBalance } from 'hooks/useTokenBalance';
+import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
 
 const REFRESH_INTERVAL = 30 * 1000;
 const SLOW_INTERVAL = 60 * 1000;
-
-// Check if the tab is active in the user browser
-const useIsBrowserTabActive = () => {
-  const isBrowserTabActiveRef = useRef(true);
-
-  useEffect(() => {
-    const onVisibilityChange = () => {
-      isBrowserTabActiveRef.current = !document.hidden;
-    };
-
-    window.addEventListener('visibilitychange', onVisibilityChange);
-
-    return () => {
-      window.removeEventListener('visibilitychange', onVisibilityChange);
-    };
-  }, []);
-
-  return isBrowserTabActiveRef;
-};
 
 const useRefresh = (slow?) => {
   const [fefresh, setFefresh] = useState(0);

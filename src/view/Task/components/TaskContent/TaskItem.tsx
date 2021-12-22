@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Button, Image, Box, Text, Progress } from 'uikit';
 import { useTranslation } from 'contexts/Localization'
-import { GetTaskName, receive } from '../hooks/matter'
+import { GetTaskName, receive } from '../../hooks/matter'
 import debounce from 'lodash/debounce'
 import { useToast } from 'hooks'
-import { Status, TaskInfo } from '../type'
+import { Group, Status, TaskInfo } from '../../type'
 import Dots from 'components/Loader/Dots';
 import { useDispatch } from 'react-redux'
 import { useWeb3React } from '@web3-react/core';
 import useConnectWallet from 'hooks/useConnectWallet';
 import useMenuNav from 'hooks/useMenuNav';
+import { useHistory } from 'react-router-dom';
 
 const Item = styled(Flex)`
   justify-content: space-between;
@@ -76,8 +77,9 @@ const ReceiveButton = styled(Button) <{ disabled: boolean, status: number }>`
 `
 
 
-const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
+const TaskItem: React.FC<{ info: TaskInfo, isDetail?: boolean, taskGroupId?: number }> = ({ info, isDetail, taskGroupId }) => {
   const { t } = useTranslation()
+  const history = useHistory();
   const { account } = useWeb3React()
   const dispatch = useDispatch()
   const { isMobile } = useMenuNav();
@@ -118,13 +120,25 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
     return t('UnCompleted');
   }
 
+  // 跳转
+  const toPage = useCallback(
+    () => {
+      if (taskGroupId === Group.ACTIVITY) history.push('/account');
+      if (taskGroupId === Group.CREATE) history.push('/');
+      if (taskGroupId === Group.INVITE) history.push('/task/invite');
+    },
+    [taskGroupId, history],
+  )
   return (
-    <Item>
+    <Item onClick={toPage}>
       <ItemFlex>
         <ContentFlex>
           <Image mr="20px" src={require(`assets/images/task/${getIcon()}.png`).default} width={22} height={22} />
           <Flex flexDirection="column">
-            <Text mb='8px' fontWeight={500}>{configInfo?.count ? t(`${configInfo.name}`, { count: configInfo.count }) : t(`${configInfo.name}`)}</Text>
+            {
+              !isDetail &&
+              <Text mb='8px' fontWeight={500}>{configInfo?.count ? t(`${configInfo.name}`, { count: configInfo.count }) : t(`${configInfo.name}`)}</Text>
+            }
             <Text small color='textTips'>{configInfo?.count ? t(`${configInfo.describe}`, { count: configInfo.count }) : t(`${configInfo.describe}`)}</Text>
           </Flex>
         </ContentFlex>
@@ -141,7 +155,7 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
       </ItemFlex>
       <ItemFlex>
         <MatterFlex>
-          <Text small>MATTER</Text>
+          {!isDetail && <Text small>MATTER</Text>}
           <Text bold>+{info.matter}</Text>
         </MatterFlex>
         {
@@ -150,7 +164,10 @@ const TaskItem: React.FC<{ info: TaskInfo }> = ({ info }) => {
               margin="10px 0"
               status={info.status}
               disabled={pengdingType || info.status === Status.UnCompleted || info.status === Status.Received}
-              onClick={handleReceive}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleReceive();
+              }}
               scale={isMobile ? 'sm' : 'md'}
             >
               {getBtnText()}

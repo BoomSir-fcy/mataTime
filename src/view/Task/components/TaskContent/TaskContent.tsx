@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
-import { GetTaskTag } from '../hooks/matter';
-import { TaskInfo, Variant } from '../type';
+import { GetTaskTag } from '../../hooks/matter';
+import { TaskInfo, Variant, TaskContentProps } from '../../type';
 import StyledTag from './StyledTag';
 import TaskItem from './TaskItem';
 
@@ -31,11 +31,6 @@ const RewardsText = styled(Text)`
   }
 `
 
-interface TaskContentProps {
-  taskGroupId: number,
-  taskList: TaskInfo[]
-}
-
 const TaskContent: React.FC<TaskContentProps> = ({ taskGroupId, taskList }) => {
   const [collapse, setCollapse] = useState(true);
 
@@ -50,7 +45,7 @@ const TaskContent: React.FC<TaskContentProps> = ({ taskGroupId, taskList }) => {
         </Flex>
       </TaskTitle>
       <TaskContentBox collapse={collapse}>
-        {taskList?.map(item => <TaskItem key={item.task_id} info={item} />)}
+        {taskList?.map(item => <TaskItem key={item.task_id} info={item} taskGroupId={taskGroupId} />)}
       </TaskContentBox>
     </Box>
   );

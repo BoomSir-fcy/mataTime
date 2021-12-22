@@ -103,7 +103,7 @@ const HotTopic: React.FC = () => {
             mt="20px"
             justifyContent="space-between"
           >
-            <Hot as={Link} to={`/topicList/${item.tid}/${item.topic_name}`}>
+            <Hot as={Link} to={`/topicList/${item.tid}/${encodeURIComponent(item.topic_name)}`}>
               #{item.topic_name}
             </Hot>
             <HotCount>

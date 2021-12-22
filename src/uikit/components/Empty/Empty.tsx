@@ -27,7 +27,7 @@ const DataBox = styled.div`
 width: max-content;
 `
 
-const Empty: React.FC<EmptyProps> = ({ scale }) => {
+const Empty: React.FC<EmptyProps> = ({ scale, title }) => {
   const { t } = useTranslation()
   const { width, height } = scaleIconVariants[scale]
   return (
@@ -36,7 +36,7 @@ const Empty: React.FC<EmptyProps> = ({ scale }) => {
       <Text>{t('No Data')}</Text> */}
       <AnimationRingIcon active2 isRotate width={width} height={height}>
         <DataBox>
-          <Text>{t('No Data')}</Text>
+          <Text>{ title || t('No Data')}</Text>
         </DataBox>
       </AnimationRingIcon>
     </Flex>

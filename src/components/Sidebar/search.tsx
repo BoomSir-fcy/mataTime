@@ -2,24 +2,17 @@ import React, { useState, useRef } from 'react';
 import styled from "styled-components";
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'contexts/Localization'
-import { Flex, Box, Button, Card } from 'uikit';
+import { Flex, Box, Button, Card, Input } from 'uikit';
 import { Icon } from 'components';
 
 const SearchBox = styled(Card)`
   position: relative;
-  img{
-    // width:16px;
-    // height:16px;
-    transform: scale(0.8);
-    position: absolute;
-    top: 3px;
-    left:15px;
-  }
+  padding: 0 16px;
 `
 const SearchInput = styled.input`
 width: 300px;
 height: 50px;
-background: ${({ theme }) => theme.isDark ? '#191F2D' : '#fff'};
+/* background: ${({ theme }) => theme.isDark ? '#191F2D' : '#fff'}; */
 border:none;
 outline: none;
 font-size: 16px;
@@ -44,6 +37,12 @@ border-radius: 20px;
   }
 `
 
+const InputStyled = styled(Input)`
+  background: transparent;
+  border: none;
+  box-shadow: none;
+`
+
 const Search: React.FC = () => {
   const { t } = useTranslation()
   const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
@@ -57,18 +56,15 @@ const Search: React.FC = () => {
     }
 
   }
-  return (
-    true ? null :
-      <SearchBox>
-        {/* <img src={searchImg} alt="" /> */}
-        <Icon name={'icon-sousuo'} style={{
-          position: 'absolute',
-          top: '8px',
-          left: '25px',
-        }} size={28} color={isDark ? '#FFFFFF' : '#7A83A0'}></Icon>
-        <SearchInput value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder={t('SearchPlaceholder')} />
-      </SearchBox>
-  )
+  return null
+  // return (
+  //     <SearchBox isBoxShadow isRadius>
+  //       <Flex alignItems="center" >
+  //         <Icon name={'icon-sousuo'} size={16}></Icon>
+  //         <InputStyled value={value} onChange={(e) => { searchChange(e) }} onKeyDown={startSearch.bind(this)} type="text" placeholder={t('SearchPlaceholder')} />
+  //       </Flex>
+  //     </SearchBox>
+  // )
 }
 
 export default Search

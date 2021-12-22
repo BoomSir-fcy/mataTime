@@ -78,6 +78,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
               path={item.path}
               // hide={item.hide}
               pathname={pathname}
+              childrenLen={item.children?.length ?? 0}
               badge={
                 item.badgeName && notification && unReadMsg[item.badgeName]
                   ? unReadMsg[item.badgeName]
@@ -100,6 +101,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
                   coming={item.coming}
                   lable={item.lable}
                   hide={item.hide}
+                  childrenLen={item.children?.length ?? 0}
                   markPath={item.markPath}
                   badge={
                     item.badgeName && notification && unReadMsg[item.badgeName]

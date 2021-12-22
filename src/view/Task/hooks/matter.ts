@@ -3,6 +3,40 @@ import { Api } from 'apis';
 import { taskContents } from './config';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { Group } from '../type';
+import { useWeb3React } from '@web3-react/core';
+
+// 获取邀请好友列表
+export const useFetchInviteFriendsList = () => {
+  const { account } = useWeb3React()
+  const [list, setList] = useState([])
+  const [pageNum, setPageNum] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
+  const [total, setTotal] = useState(1)
+  const [loading, setLoading] = useState<boolean>(false)
+  useEffect(() => {
+    if (account) {
+      getList()
+    }
+  }, [pageNum, account])
+  const getList = () => {
+    setLoading(true);
+    Api.TaskApi.getInviteList(pageNum, pageSize).then((res: any) => {
+      if (Api.isSuccess(res)) {
+        const temp = res.data;
+        setList(temp?.Users);
+        setTotal(temp?.total_size);
+        setPageNum(temp?.now_page);
+        setPageSize(temp?.page_size);
+      }
+    }).catch(() => {
+      setList([]);
+    }).finally(() => {
+      setLoading(false);
+    })
+  }
+
+  return { list, pageNum, total, setPageNum, loading }
+}
 
 // 签到
 export const useSignIn = () => {

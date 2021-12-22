@@ -52,8 +52,6 @@ export const ReplyModal = React.memo((props: IProp) => {
         if (Api.isSuccess(res)) {
           toastSuccess(res.data);
           onSuccess();
-        } else {
-          toastError(t('commonContactAdmin') || res.msg);
         }
       });
     }
@@ -68,8 +66,6 @@ export const ReplyModal = React.memo((props: IProp) => {
         if (Api.isSuccess(res)) {
           toastSuccess(res.data);
           onSuccess();
-        } else {
-          toastError(t('commonContactAdmin') || res.msg);
         }
       });
     }

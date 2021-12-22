@@ -11,6 +11,7 @@ import useAuth from 'hooks/useAuth';
 import { MAX_PER_SPEND_TIME, storage } from 'config';
 import InsufficientBalanceModal from './InsufficientBalanceModal';
 import { usePlatformTimeBalance } from 'store/wallet/hooks';
+import useHttpError from 'hooks/useHttpError';
 
 export default function HttpUpdater() {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export default function HttpUpdater() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
   const { availableBalance } = usePlatformTimeBalance();
+  const httpErrorToast = useHttpError();
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
@@ -32,6 +34,11 @@ export default function HttpUpdater() {
   const handleInsufficient = useCallback(() => {
     setVisible(true);
   }, [setVisible]);
+  
+  // http 错误码提示
+  const handleHttpError = useCallback((error) => {
+    httpErrorToast(error.data)
+  }, [setVisible]);
 
   useEffect(() => {
     eventBus.addEventListener('unauthorized', handleReSetAccount);
@@ -44,6 +51,13 @@ export default function HttpUpdater() {
     eventBus.addEventListener('insufficient', handleInsufficient);
     return () => {
       eventBus.addEventListener('insufficient', handleInsufficient);
+    };
+  }, [handleInsufficient]);
+  
+  useEffect(() => {
+    eventBus.addEventListener('httpError', handleHttpError);
+    return () => {
+      eventBus.addEventListener('httpError', handleHttpError);
     };
   }, [handleInsufficient]);
 

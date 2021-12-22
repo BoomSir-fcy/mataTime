@@ -1,28 +1,10 @@
+import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive'
 import React, { useState, useEffect, useRef } from 'react'
 
 const FAST_INTERVAL = 10000
 const SLOW_INTERVAL = 60000
 
 const RefreshContext = React.createContext({ slow: 0, fast: 0 })
-
-// Check if the tab is active in the user browser
-const useIsBrowserTabActive = () => {
-  const isBrowserTabActiveRef = useRef(true)
-
-  useEffect(() => {
-    const onVisibilityChange = () => {
-      isBrowserTabActiveRef.current = !document.hidden
-    }
-
-    window.addEventListener('visibilitychange', onVisibilityChange)
-
-    return () => {
-      window.removeEventListener('visibilitychange', onVisibilityChange)
-    }
-  }, [])
-
-  return isBrowserTabActiveRef
-}
 
 // This context maintain 2 counters that can be used as a dependencies on other hooks to force a periodic refresh
 const RefreshContextProvider = ({ children }) => {

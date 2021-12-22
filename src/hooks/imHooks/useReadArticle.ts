@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import debounce from 'lodash/debounce'
 import useDebounce from 'hooks/useDebounce'
-import { IM } from 'utils';
+import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
 import useIm from './useIm'
 
 // 视图范围优化
@@ -12,14 +12,6 @@ const VIEW_PADDING = {
 
 /**
  * @dev useReadArticle websocket向后端传当前阅读的评论或者id
- * 
- * FIXME:
- *  1.展开折叠需要重新计算高度
- *  2.删除、屏蔽帖子等操作, 需要重新计算高度
- *  3.图片加载需要获得高度
- *  4.如果后续评论显示在帖子里 需要重新计算高度
- *  5.如果有一万条帖子 计算高度的时候是否需要全部重新计算
- *  6.现在发帖会刷新列表 如果后续发帖不刷新整个列表 只在最前面新加帖子 需要计算高度
  *  
  */
 const useReadArticle = (nonce?: number | boolean) => {
@@ -28,21 +20,10 @@ const useReadArticle = (nonce?: number | boolean) => {
   const [initLoad, setInitLoad] = useState(false)
   const [nowTime, setNowTime] = useState(0)
   const [fetchReadTime, setFetchReadTime] = useState(0)
-
-  useEffect(() => {
-    if (im) {
-      im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
-    }
-  }, [])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
-    }, 1000);
-    return () => clearInterval(timer)
-  }, [])
+  const isBrowserTabActiveRef = useIsBrowserTabActive()
 
   const fetchHandle = useCallback(() => {
+    if (!isBrowserTabActiveRef.current) return
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
         im?.send(im.messageProtocol.WSProtocol_Spend_Time, {
@@ -53,7 +34,7 @@ const useReadArticle = (nonce?: number | boolean) => {
         })
       }
     })
-  }, [articleIds, fetchReadTime])
+  }, [articleIds, fetchReadTime, isBrowserTabActiveRef])
 
   useEffect(() => {
     if (nowTime === fetchReadTime) return
@@ -63,7 +44,10 @@ const useReadArticle = (nonce?: number | boolean) => {
 
 
   const handleScroll = useCallback(() => {
-    if (!Object.keys(articlePositions).length) return // 页面刷新的时候可能会触发onScroll 事件, 排除这种情况
+    if (!Object.keys(articlePositions).length) {
+      setArticleIds({})
+      return
+    } // 页面刷新的时候可能会触发onScroll 事件, 排除这种情况
     // const offsetTopOverflow = Math.min(...Object.values(articlePositions).map(item => item[0]))
     const top = window.scrollY + VIEW_PADDING.top
     const bottom = top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom
@@ -105,6 +89,19 @@ const useReadArticle = (nonce?: number | boolean) => {
   useEffect(() => {
     handleScroll()
   }, [handleScroll, flagDebounce])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
+    }, 1000);
+    if (im) {
+      im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
+    }
+    return () => {
+      clearInterval(timer)
+      setArticleIds({})
+    }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('scroll', debouncedOnChange);

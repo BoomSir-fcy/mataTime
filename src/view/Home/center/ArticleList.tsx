@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Flex, Button, Box } from 'uikit';
 import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
 // import MentionItem from 'view/News/components/MentionItem';
 import { Link } from 'react-router-dom';
-import { useStore } from 'store';
+import { fetchThunk, storeAction, useStore } from 'store';
+
 import { relativeTime } from 'utils';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -27,6 +29,7 @@ const ArticleListBox = styled.div`
 export const ArticleList = props => {
   // const [size, setSize] = useState(20)
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
@@ -46,6 +49,16 @@ export const ArticleList = props => {
   const getList = (current = 0) => {
     if ((loading || isEnd) && !current) return false;
     setLoading(true);
+
+    dispatch(
+      fetchThunk.fetchPostAsync({
+        attention: 1,
+        page: current || page,
+        per_page: pageSize,
+        ...props.filterValObj
+      })
+    );
+
     Api.HomeApi.getArticleList({
       attention: 1,
       page: current || page,
@@ -69,6 +82,7 @@ export const ArticleList = props => {
           setPage(page + 1);
         }
       }
+      // setNonce(prep => prep + 1);
     });
   };
 

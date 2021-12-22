@@ -17,6 +17,7 @@ interface PageSectionProps extends FlexProps {
 const PageContainerStyled = styled(Box)`
   /* FIXME: 解决失败, 用另外的方法 */
   /* padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题 */
+  /* transform: translate(0, 0, 0); */
 `;
 
 const ChildrenWrapper = styled(Box)`
@@ -39,7 +40,7 @@ const LineStyled = styled(Box)`
   }
 `;
 const InnerBox = styled(Flex)`
-  position: relative;
+  position: sticky;
   top: 0;
   z-index: 2;
   min-height: 100vh;

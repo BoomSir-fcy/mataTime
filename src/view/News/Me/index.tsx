@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import MentionItem from '../components/MentionItem';
 import MentionOperator from '../components/MentionOperator';
-import { List, MoreOperatorEnum } from 'components';
+import { List, MoreOperatorEnum, FollowPopup } from 'components';
 import { Api } from 'apis';
 import { NewsMeWrapper, MeItemWrapper } from './style';
+import MessageCard from '../components/MessageCard';
+import dayjs from 'dayjs';
+import { useTranslation } from 'contexts';
+import { Text, Flex } from 'uikit';
 
 const NewsMe: React.FC = props => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
+  const { t } = useTranslation();
 
   // 获取列表
   const getList = (current = 0) => {
@@ -62,6 +67,35 @@ const NewsMe: React.FC = props => {
         renderList={() => getList()}
       >
         {listData.map(item => {
+          return (
+            <MessageCard
+              key={item.id}
+              uid={item.send_uid}
+              avatar={item.send_image}
+              title={item.send_name}
+              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              image_list={item.post?.image_list}
+              content_status={item.post?.content_status}
+              content={item.post?.content}
+              href={`/articleDetils/${item.post?.post_id}`}
+            >
+              <Flex flexWrap='nowrap'>
+                <FollowPopup uid={item.send_uid}>
+                  <Text
+                    maxWidth='20vw'
+                    ellipsis
+                    color='textPrimary'
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {item.send_name}&nbsp;
+                  </Text>
+                </FollowPopup>
+                <Text ellipsis>{t('mentioned you')}</Text>
+              </Flex>
+            </MessageCard>
+          );
+        })}
+        {/* {listData.map(item => {
           if (item?.post?.content_status === 1) {
             return (
               <MeItemWrapper key={item.id}>
@@ -96,7 +130,7 @@ const NewsMe: React.FC = props => {
               </MeItemWrapper>
             );
           }
-        })}
+        })} */}
       </List>
     </NewsMeWrapper>
   );

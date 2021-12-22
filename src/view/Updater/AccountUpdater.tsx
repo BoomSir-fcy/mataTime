@@ -34,7 +34,6 @@ export default function AccountUpdater() {
       account &&
       account?.toLowerCase() !== userInfo.address
     ) {
-      console.log(account.toLowerCase(), 23232, userInfo.address);
       handleReSetAccount();
     }
   }, [account, userInfo]);

@@ -119,12 +119,12 @@ const NftAvatar: React.FC<{
     <GetAuthorizeBox>
       {Nodata ? (
         <NodataDom>
-          <Text mb="15px">{t('setNftAvatarGetMore')}</Text>
+          <Text mb='15px'>{t('setNftAvatarGetMore')}</Text>
           <Button>{t('loginGetNft')}</Button>
         </NodataDom>
       ) : (
         <>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex justifyContent='space-between' alignItems='center'>
             <Point>{!Boolean(status) && t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
@@ -146,8 +146,9 @@ const NftAvatar: React.FC<{
                     }
                   >
                     <ActiveImg
+                      disableFollow
                       src={item.image}
-                      scale="ld"
+                      scale='ld'
                       onClick={() => {
                         if (!NftInfo.needApprove) {
                           dispatch(

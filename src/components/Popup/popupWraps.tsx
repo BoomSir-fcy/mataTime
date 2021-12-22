@@ -25,7 +25,6 @@ const PopupWrapModal = (props, ref) => {
       ref={ref}
       trigger={props.trigger}
       nested
-      keepTooltipInside
       closeOnDocumentClick
       contentStyle={{
         width: '150px',
@@ -36,6 +35,7 @@ const PopupWrapModal = (props, ref) => {
         backgroundColor: 'transparent',
         zIndex: 99
       }}
+      keepTooltipInside='.popupBoundary'
       position={props.position || 'bottom right'}
       arrowStyle={props.arrowStyle}
     >

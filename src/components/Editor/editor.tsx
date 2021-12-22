@@ -159,6 +159,23 @@ const removeEmptyText = value => {
   return resVal;
 };
 
+const isEmptyLine = (paragraph) => {
+  if (!paragraph) return true
+  const keys = Object.keys(paragraph)
+  return paragraph?.type === 'paragraph' && !paragraph?.children && keys.includes('type') && keys.includes('children') && keys.length === 2
+}
+
+const removeEmptyLine = value => {
+  const resVal = []
+  value.forEach((item, index) => {
+    if (!(isEmptyLine(item) && isEmptyLine(value[index - 1]))) {
+      resVal.push({ ...item })
+    }
+  })
+
+  return resVal
+}
+
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
@@ -169,7 +186,7 @@ export const Editor = (props: Iprops) => {
   const [searcTopic, setSearcTopic] = useState(false);
   const [refresh, setRefresh] = useState(1);
   const [target, setTarget] = useState<Range | undefined>();
-  const [articleLength, setArticleLength] = useState(0);
+
   const [isLoading, setIsLoading] = useState(false);
   const [stateEdit, setStateEdit] = useImmer({
     userList: [],
@@ -213,8 +230,177 @@ export const Editor = (props: Iprops) => {
     []
   );
 
+  useEffect(() => {
+    try {
+      setValue(JSON.parse(props.initValue) || initialValue);
+      setRefresh(refresh === 1 ? 2 : 1);
+    } catch (err) {}
+  }, [props.initValue]);
+
+  // 扩大focus距离
+  // useEffect(() => {
+  //   const el: any = ref.current;
+  //   const eventFn = (e: any) => {
+  //     if (e.target.className !== 'text-box') return false;
+  //     const range = window.getSelection(); //创建range
+  //     el.firstElementChild.focus();
+  //     range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
+  //     range.collapseToEnd(); //光标移至最后
+  //   };
+  //   el.addEventListener('click', eventFn);
+  //   return () => {
+  //     el.removeEventListener('click', eventFn);
+  //   };
+  // },[])
+  useEffect(() => {
+    setIsDisabledSend(imgList.length < 1);
+  }, [imgList]);
+
+  const callbackSelectImg = e => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.name = 'file';
+    input.multiple = true;
+    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp';
+    input.onchange = async (e: any) => {
+      const selectFiles = e.target.files;
+      if (!selectFiles[0]) return false;
+      if (imgList.length + selectFiles.length > 4)
+        return toast.error(t('uploadImgMaxMsg'));
+      const fileList: string[] = [];
+      for (let file of selectFiles) {
+        let fr: any = new FileReader();
+        // 读取文件
+        fr.readAsDataURL(file);
+        // 将文件转为base64
+        fr.onload = () => {
+          fileList.push(fr.result);
+          if (fileList.length === selectFiles.length) {
+            Api.CommonApi.uploadImgList({
+              dir_name: props.type,
+              base64: fileList
+            }).then(res => {
+              if (Api.isSuccess(res)) {
+                setImgList([
+                  ...imgList,
+                  ...res.data.map(item => item.full_path)
+                ]);
+                toast.success(t('uploadImgSuccessMsg'));
+              }
+            });
+          }
+        };
+      }
+    };
+    input.click();
+  };
+
+  const restInput = () => {
+    // https://joshtronic.com/2020/04/13/error-cannot-resolve-a-dom-point-from-slate-point/
+    const point = { path: [0, 0], offset: 0 };
+    editor.selection = { anchor: point, focus: point };
+    editor.history = { redos: [], undos: [] };
+    setValue(initialValue);
+    setImgList([]);
+    setIsDisabledSend(false);
+    setRefresh(refresh === 1 ? 2 : 1);
+  };
+
+  const deepContent = arr => {
+    let content = '',
+      userIdList = [];
+    const deepArr = data => {
+      data.forEach(item => {
+        if (item.type === 'mention') {
+          userIdList.push(item.character.slice(1) + '_' + item.attrs.userid);
+        }
+        if (item.text || item.character) {
+          content += item.text || item.character;
+        }
+        if (item.children) {
+          deepArr(item.children);
+        }
+        if (!item.children) {
+          content += '-' // 换行算一个字符
+        }
+      });
+    };
+    deepArr(arr);
+    content = content.slice(0, -1) // 计算结束后删除最后一个 -
+    return {
+      content,
+      userIdList
+    };
+  };
+
+  const articleLength = useMemo(() => {
+    const { content } = deepContent(value);
+    const len = getPostBLen(content)
+    return len
+  }, [value])
+
+  const [timeId, setTimeId] = useState(null);
+  const sendArticle = () => {
+    if (timeId) return toast.warning(t('sendArticleMsgMaxTime'));
+    setTimeId(
+      setTimeout(() => {
+        setTimeId(null);
+      }, 3000)
+    );
+    // 递归收集字符和@的id
+    // let userIdList = []
+    // let content = ''
+    let { userIdList } = deepContent(value);
+    const newValue = parseValue(value);
+
+    const newValue1 = removeEmptyText(newValue);
+    const newValue2 = removeEmptyLine(newValue1); // 删除空行
+
+    let { content } = deepContent(newValue2);
+    if (!content.length && !imgList.length) return
+    //限制用户输入数量
+    if (articleLength > ARTICLE_POST_MAX_LEN) {
+      setTimeId(null);
+      return toast.warning(t('sendArticleMsgMaxWords'));
+    }
+
+    props.sendArticle(
+      JSON.stringify(newValue2),
+      imgList.join(','),
+      userIdList.join(',')
+    );
+    restInput();
+  };
+
+  const searchSelect = (data, type) => {
+    setSearcTopic(false);
+    setSearchUser(false);
+    if (!data) return;
+    if (type === 'user') {
+      insertMention(editor, { uid: data.uid, character: '@' + data.nick_name });
+    }
+    if (type === 'topic') {
+      insertTopic(editor, data.topic_name);
+    }
+  };
+
+  // 计算模糊搜索框位置
+  useEffect(() => {
+    if (target && userList?.length > 0) {
+      const el = mentionRef.current;
+      const domRange = ReactEditor.toDOMRange(editor, target);
+      const rect = domRange.getBoundingClientRect();
+      el.style.top = `${rect.top + window.pageYOffset + 24}px`;
+      el.style.left = `${rect.left + window.pageXOffset}px`;
+    }
+  }, [userList, editor, index, search, target]);
+
   const onKeyDown = useCallback(
     (event: any) => {
+      if (event.ctrlKey && event.keyCode == 13) {
+        sendArticle()
+        return;
+      }
       if (target) {
         switch (event.key) {
           case 'ArrowDown':
@@ -252,123 +438,8 @@ export const Editor = (props: Iprops) => {
         }
       }
     },
-    [index, search, target, userList]
+    [index, search, target, userList, sendArticle]
   );
-
-  useEffect(() => {
-    try {
-      setValue(JSON.parse(props.initValue) || initialValue);
-      setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) {}
-  }, [props.initValue]);
-
-  // 扩大focus距离
-  // useEffect(() => {
-  //   const el: any = ref.current;
-  //   const eventFn = (e: any) => {
-  //     if (e.target.className !== 'text-box') return false;
-  //     const range = window.getSelection(); //创建range
-  //     el.firstElementChild.focus();
-  //     range.selectAllChildren(el.firstElementChild); //range 选择obj下所有子内容
-  //     range.collapseToEnd(); //光标移至最后
-  //   };
-  //   el.addEventListener('click', eventFn);
-  //   return () => {
-  //     el.removeEventListener('click', eventFn);
-  //   };
-  // },[])
-  useEffect(() => {
-    setIsDisabledSend(imgList.length < 1);
-  }, [imgList]);
-
-  const restInput = () => {
-    // https://joshtronic.com/2020/04/13/error-cannot-resolve-a-dom-point-from-slate-point/
-    const point = { path: [0, 0], offset: 0 };
-    editor.selection = { anchor: point, focus: point };
-    editor.history = { redos: [], undos: [] };
-    setValue(initialValue);
-    setImgList([]);
-    setIsDisabledSend(false);
-    setRefresh(refresh === 1 ? 2 : 1);
-  };
-
-  const deepContent = arr => {
-    let content = '',
-      userIdList = [];
-    const deepArr = data => {
-      data.forEach(item => {
-        if (item.type === 'mention') {
-          userIdList.push(item.character.slice(1) + '_' + item.attrs.userid);
-        }
-        if (item.text || item.character) {
-          content += item.text || item.character;
-        }
-        if (item.children) {
-          deepArr(item.children);
-        } else {
-          content += '-'; // 换行算一个字符
-        }
-      });
-    };
-    deepArr(arr);
-    return {
-      content,
-      userIdList
-    };
-  };
-
-  const [timeId, setTimeId] = useState(null);
-  const sendArticle = () => {
-    if (timeId) return toast.warning(t('sendArticleMsgMaxTime'));
-    setTimeId(
-      setTimeout(() => {
-        setTimeId(null);
-      }, 3000)
-    );
-    // 递归收集字符和@的id
-    // let userIdList = []
-    // let content = ''
-    let { userIdList, content } = deepContent(value);
-    const newValue = parseValue(value);
-
-    // const newValue1 = removeEmptyText(newValue);
-
-    //限制用户输入数量
-    if (getPostBLen(content) > ARTICLE_POST_MAX_LEN) {
-      setTimeId(null);
-      return toast.warning(t('sendArticleMsgMaxWords'));
-    }
-
-    props.sendArticle(
-      JSON.stringify(newValue),
-      imgList.join(','),
-      userIdList.join(',')
-    );
-    restInput();
-  };
-
-  const searchSelect = (data, type) => {
-    setSearcTopic(false);
-    setSearchUser(false);
-    if (!data) return;
-    if (type === 'user') {
-      insertMention(editor, { uid: data.uid, character: '@' + data.nick_name });
-    }
-    if (type === 'topic') {
-      insertTopic(editor, data.topic_name);
-    }
-  };
-
-  // 计算模糊搜索框位置
-  useEffect(() => {
-    if (target && userList?.length > 0) {
-      const el = mentionRef.current;
-      const domRange = ReactEditor.toDOMRange(editor, target);
-      const rect = domRange.getBoundingClientRect();
-      el.style.top = `${rect.top + window.pageYOffset + 24}px`;
-      el.style.left = `${rect.left + window.pageXOffset}px`;
-    }
-  }, [userList, editor, index, search, target]);
 
   return (
     <SlateBox key={refresh}>
@@ -381,8 +452,6 @@ export const Editor = (props: Iprops) => {
 
           const { content } = deepContent(value);
           const { selection } = editor;
-          const lenght = getPostBLen(content);
-          setArticleLength(lenght);
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
             const wordBefore = slateEditor.before(editor, start, {
@@ -446,18 +515,14 @@ export const Editor = (props: Iprops) => {
             onSuccess={event => setImgList([...imgList, ...event])}
             onError={() => setIsLoading(false)}
           />
-          <Flex alignItems='center'>
-            {articleLength > ARTICLE_POST_MAX_LEN && (
-              <Text
-                mt='12px'
-                mr='12px'
-                color={
-                  articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'
-                }
-              >
-                {ARTICLE_POST_MAX_LEN - articleLength}
-              </Text>
-            )}
+          <Flex alignItems="center">
+            {
+              (
+                <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'}>
+                  {ARTICLE_POST_MAX_LEN - articleLength}
+                </Text>
+              )
+            }
             {initValue ? (
               <div>
                 <CancelButton onClick={cancelSendArticle}>取消</CancelButton>

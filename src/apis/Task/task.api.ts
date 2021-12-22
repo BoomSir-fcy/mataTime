@@ -16,4 +16,9 @@ export class TaskApi extends Http {
     const res = await this.get('/v1/task/status');
     return res;
   }
+  // 邀请好友列表
+  async getInviteList(index: number, size: number) {
+    const res = await this.get('/v1/user/invite-list', { index, size });
+    return res;
+  }
 }

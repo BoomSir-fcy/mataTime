@@ -48,8 +48,9 @@ const NftAvatar: React.FC = () => {
       </Flex>
       <Rows>
         <Avatar
+          disableFollow
           src={userInfo.nft_image}
-          scale="ld"
+          scale='ld'
           style={{ marginRight: '18px' }}
         />
         <Column>

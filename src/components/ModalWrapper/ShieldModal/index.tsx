@@ -35,7 +35,6 @@ export const ShieldModal = React.memo((props: IProp) => {
       toast.success(t('shieldModalShieldSuccess'))
       onQuery()
     } else {
-      toast.error(res.data || t('shieldModalShieldError'))
       onClose()
     }
   }
