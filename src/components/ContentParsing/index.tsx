@@ -72,9 +72,8 @@ export const ContentParsing = (props: IProps) => {
   const { callback, disableParseSquare } = props;
 
   useEffect(() => {
-    const { content } = props;
     try {
-      let arr = Array.isArray(JSON.parse(content)) ? JSON.parse(content) : [];
+      let arr = Array.isArray(JSON.parse(props.content)) ? JSON.parse(props.content) : [];
       setParsingResult(arr);
     } catch (err: any) {}
   }, [props.content]);
@@ -122,11 +121,13 @@ export const ContentParsing = (props: IProps) => {
       (match, i) => (
         <a
           onClick={event => {
+            event.preventDefault()
             event.stopPropagation();
             const coinsKey = match.toLowerCase();
             dispatch(storeAction.setTopicCoins(tokens[coinsKey]));
           }}
           title={match}
+          href="/"
           key={match + i}
         >
           ${match}&nbsp;

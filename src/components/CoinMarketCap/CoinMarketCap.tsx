@@ -53,16 +53,23 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   useFetchCoinInfo(currentCoin?.coin_id);
 
   const coins = useStore(p => p.coins.clickCoins);
+  const [coinSymbol, setCoinSymbol] = useState('')
+  
+  useEffect(() => {
+    if (coins?.symbol) {
+      setCoinSymbol(coins?.symbol)
+    }
+  }, [coins])
 
   useEffect(() => {
-
-    if (coins?.symbol) {
+    if (coinSymbol) {
       const activeCoin = coinsList.find(item => item.coin_symbol === coins.symbol)
       if (activeCoin) {
         setCurrentCoin(activeCoin)
+        setCoinSymbol('')
       }
     }
-  }, [coins, coinsList.length])
+  }, [coinSymbol, coinsList])
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {
