@@ -54,10 +54,10 @@ const FriendsList: React.FC<{
   total?: number;
   pageNum?: number;
   handlePageClick: (event: any) => void;
-}> = ({ list, loading, total, pageNum, handlePageClick }) => {
+}> = React.memo(({ list, loading, total, pageNum, handlePageClick }) => {
   const { t } = useTranslation();
   return (
-    <Flex width="100%" flexDirection="column" justifyContent="end">
+    <Flex width='100%' flexDirection='column' justifyContent='end'>
       <Table>
         <Row>
           <HeadText>{t('Nickname')}</HeadText>
@@ -65,9 +65,9 @@ const FriendsList: React.FC<{
           <HeadText>{t('Invitation Time')}</HeadText>
           <HeadText>{t('My Rebate(TIME)')}</HeadText>
         </Row>
-        {list.length ? (
+        {list?.length ? (
           list.map(item => (
-            <Row key={item.uid} className="LinkRow">
+            <Row key={item.uid} className='LinkRow'>
               <ItemText small ellipsis>
                 {item.nick_name}
               </ItemText>
@@ -83,34 +83,34 @@ const FriendsList: React.FC<{
             </Row>
           ))
         ) : (
-          <Empty />
+          <>{!loading && <Empty />}</>
         )}
         {loading && (
-          <Flex alignItems="center" justifyContent="center">
+          <Flex alignItems='center' justifyContent='center'>
             <Spinner />
           </Flex>
         )}
       </Table>
 
-      <PaginateStyle alignItems="center" justifyContent="end">
-        <Text mr="16px" fontSize="14px" color="textTips">
+      <PaginateStyle alignItems='center' justifyContent='end'>
+        <Text mr='16px' fontSize='14px' color='textTips'>
           {t('Account Total %page% page', { page: total })}
         </Text>
         <ReactPaginate
-          breakLabel="..."
-          nextLabel=">"
+          breakLabel='...'
+          nextLabel='>'
           forcePage={pageNum - 1}
           disableInitialCallback={true}
           onPageChange={handlePageClick}
           pageRangeDisplayed={4}
           marginPagesDisplayed={1}
           pageCount={total}
-          previousLabel="<"
+          previousLabel='<'
           renderOnZeroPageCount={null}
         />
       </PaginateStyle>
     </Flex>
   );
-};
+});
 
 export default FriendsList;

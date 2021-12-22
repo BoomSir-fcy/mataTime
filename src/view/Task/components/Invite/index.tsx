@@ -1,10 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Crumbs, Icon } from 'components';
 import styled from 'styled-components';
 import { Box, Text, Flex, Button, Empty } from 'uikit';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { useDispatch } from 'react-redux';
-import { GetTaskTag, useFetchInviteFriendsList } from 'view/Task/hooks/matter';
+import {
+  GetTaskTag,
+  useFetchInviteFriendsList,
+  useInviteCount
+} from 'view/Task/hooks/matter';
 import { Variant, Group } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
 import TaskItem from '../TaskContent/TaskItem';
@@ -18,6 +22,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useToast } from 'hooks';
 import { copyContent } from 'utils';
 import { shortenAddress } from 'utils/contract';
+import Header from '../Header';
 
 const ContentBox = styled(Flex)`
   padding: 10px 14px;
@@ -104,10 +109,9 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
-  // 邀请列表
+  const { inviteInfo } = useInviteCount();
   const { list, pageNum, setPageNum, loading, total } =
     useFetchInviteFriendsList();
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -125,7 +129,7 @@ const Invite: React.FC = () => {
     } else {
       dispatch(fetchTaskListAsync({ isSignIn: false }));
     }
-  }, [data, dispatch]);
+  }, [data.length, dispatch]);
 
   const handlePageClick = useCallback(
     event => {
@@ -134,33 +138,26 @@ const Invite: React.FC = () => {
     [setPageNum]
   );
 
-  const onCopyLink = () => {
+  const onCopyLink = useCallback(() => {
     // 普通邀请
     if (inviteType === 1) {
       copyContent(copyUrl);
       toastSuccess(t('CopyLinkSuccess'));
       setVisible(false);
     }
-  };
+  }, [inviteType]);
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
   const copyUrl = `${Url}?InviteAddress=${account}`;
-  const tag: Variant = GetTaskTag(Group.INVITE);
+  const tag: Variant = useMemo(() => GetTaskTag(Group.INVITE), [Group.INVITE]);
+
   return (
     <>
-      <Crumbs back>
-        <Flex width="100%">
-          <StyledTag ml="20px" variant={tag}>
-            <Text fontSize="18px" bold>
-              {tag.toUpperCase()}
-            </Text>
-          </StyledTag>
-        </Flex>
-      </Crumbs>
+      <InviteHeader tag={tag} />
       <Box>
         <Box>
-          <ContentBox justifyContent="space-between">
+          <ContentBox justifyContent='space-between'>
             <ItemFlex>
               <ContentFlex>
                 <Text>{t('Invite friends')}</Text>
@@ -183,78 +180,80 @@ const Invite: React.FC = () => {
               <TaskItem isDetail key={item.task_id} info={item} />
             ))
           ) : (
-            <Empty />
+            <ContentBox>
+              <Empty />
+            </ContentBox>
           )}
         </Box>
-        <ContentBox flexDirection="column">
-          <Text mb="10px">{t('Invitation reward rules')}</Text>
+        <ContentBox flexDirection='column'>
+          <Text mb='10px'>{t('Invitation reward rules')}</Text>
           <Text>{t('InviteRuleContent1')}</Text>
           <Text>{t('InviteRuleContent2')}</Text>
         </ContentBox>
         {/* 普通邀请 */}
-        <ContentBox flexDirection="column">
-          <Text mb="25px" fontSize="18px" bold>
+        <ContentBox flexDirection='column'>
+          <Text mb='25px' fontSize='18px' bold>
             Invitation Overview
           </Text>
-          <Flex flexWrap="wrap" justifyContent="space-between">
-            <CardBox className="left-card">
-              <Flex mb="10px" alignContent="center">
-                <Text className="text-title" color="textTips" small>
+          <Flex flexWrap='wrap' justifyContent='space-between'>
+            <CardBox className='left-card'>
+              <Flex mb='10px' alignItems='center'>
+                <Text className='text-title' color='textTips' small>
                   {t('Number of invitees')}
                 </Text>
-                <Text fontSize="20px" bold>
-                  {total}
+                <Text fontSize='20px' bold>
+                  {inviteInfo.invite_num}
                 </Text>
               </Flex>
-              <Flex mb="10px" alignContent="center">
-                <Text className="text-title" color="textTips" small>
+              <Flex mb='10px' alignItems='center'>
+                <Text className='text-title' color='textTips' small>
                   {t('My Rewards(MATTER)')}
                 </Text>
-                <Text fontSize="20px" bold>
-                  5
+                <Text fontSize='20px' bold>
+                  {inviteInfo.total_meta}
                 </Text>
               </Flex>
-              <Flex mb="10px" alignContent="center">
-                <Text className="text-title" color="textTips" small>
+              <Flex mb='10px' alignItems='center'>
+                <Text className='text-title' color='textTips' small>
                   {t('My Rebate(TIME)')}
                 </Text>
-                <Text color="textPrimary" fontSize="20px" bold>
-                  26559556.36
+                <Text color='textPrimary' fontSize='20px' bold>
+                  {inviteInfo.total_rebate}
                 </Text>
               </Flex>
             </CardBox>
-            <CardBox className="right-card">
-              <Box className="top-card">
-                <Flex justifyContent="space-between" alignItems="center">
-                  <Text mr="20px" small>
+            <CardBox className='right-card'>
+              <Box className='top-card'>
+                <Flex justifyContent='space-between' alignItems='center'>
+                  <Text mr='20px' small>
                     {t('My Address')}
                   </Text>
-                  <Text mr="20px" color="textTips" small>
+                  <Text mr='20px' color='textTips' small>
                     {account && shortenAddress(account, 10)}
                   </Text>
                   <Icon
                     name={'icon-fuzhi'}
-                    color="textPrimary"
+                    color='textPrimary'
                     size={16}
-                    fontWeight="bold"
+                    fontWeight='bold'
                     onClick={() => {
                       copyContent(account);
                       toastSuccess(t('CopyAddressSuccess'));
                     }}
                   />
                 </Flex>
-                <Flex justifyContent="space-between" alignItems="center">
-                  <Text mr="20px" small>
+                <Flex justifyContent='space-between' alignItems='center'>
+                  <Text mr='20px' small>
                     {t('Invitation Link')}
                   </Text>
-                  <Text mr="20px" color="textTips" small ellipsis>
+                  <Text mr='20px' color='textTips' small ellipsis>
                     {Url}
                   </Text>
                   <Icon
                     name={'icon-fuzhi'}
-                    color="textPrimary"
+                    color='textPrimary'
                     size={16}
-                    fontWeight="bold"
+                    fontWeight='bold'
                     onClick={() => {
                       copyContent(copyUrl);
                       toastSuccess(t('CopyLinkSuccess'));
@@ -262,11 +261,11 @@ const Invite: React.FC = () => {
                   />
                 </Flex>
               </Box>
-              <Box className="bottom-card">
-                <Flex justifyContent="space-between" alignItems="end">
-                  <Flex flexDirection="column">
-                    <Text color="textPrimary" fontSize="20px" bold>
-                      5%
+              <Box className='bottom-card'>
+                <Flex justifyContent='space-between' alignItems='end'>
+                  <Flex flexDirection='column'>
+                    <Text color='textPrimary' fontSize='20px' bold>
+                      {`${inviteInfo.proportion}%`}
                     </Text>
                     <Text small>{t('My commission(TIME)')}</Text>
                   </Flex>
@@ -291,7 +290,7 @@ const Invite: React.FC = () => {
           <SpecialInvite />
         </ContentBox> */}
         <ContentBox>
-          <Text fontSize="18px" bold>
+          <Text fontSize='18px' bold>
             {t('Invited Friends List')}
           </Text>
         </ContentBox>
@@ -318,4 +317,33 @@ const Invite: React.FC = () => {
   );
 };
 
+const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
+  const source = window.location.search?.split('=')[1];
+  return (
+    <>
+      {source === 'TASK' ? (
+        <Crumbs back>
+          <Flex width='100%'>
+            <StyledTag ml='20px' variant={tag}>
+              <Text fontSize='18px' bold>
+                {tag.toUpperCase()}
+              </Text>
+            </StyledTag>
+          </Flex>
+        </Crumbs>
+      ) : (
+        <>
+          <Header />
+          <ContentBox>
+            <StyledTag ml='20px' variant={tag}>
+              <Text fontSize='18px' bold>
+                {tag.toUpperCase()}
+              </Text>
+            </StyledTag>
+          </ContentBox>
+        </>
+      )}
+    </>
+  );
+});
 export default Invite;

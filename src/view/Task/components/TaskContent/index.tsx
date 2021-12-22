@@ -1,35 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Spinner } from 'uikit';
-import { Crumbs as Header } from 'components';
-import { useTranslation } from 'contexts/Localization';
 import { Group } from '../../type';
 import { useFetchTask, useTask } from 'store/task/hooks';
 import TaskContent from './TaskContent';
-import useMenuNav from 'hooks/useMenuNav';
+import Header from '../Header';
 
 const ScrollBox = styled(Box)``;
 
-const TipsFlex = styled(Box)`
-  padding: 10px 14px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-`;
-
-const Time = styled.img`
-  max-width: 19px;
-  max-height: 21px;
-  display: inline-block;
-  margin-right: 8px;
-`;
-
-const BgBox = styled(Box)`
-  height: auto;
-  background: ${({ theme }) => theme.colors.primaryDark};
-`;
-
 const Task: React.FC = () => {
-  const { t } = useTranslation();
-  const { isMobile } = useMenuNav();
   const [taskGroup, setTaskGroup] = useState({});
 
   useFetchTask();
@@ -84,20 +63,13 @@ const Task: React.FC = () => {
   return (
     <>
       {!dataLoaded ? (
-        <Flex height="100vh" justifyContent="center" alignItems="center">
+        <Flex height='100vh' justifyContent='center' alignItems='center'>
           <Spinner />
         </Flex>
       ) : (
         <Box>
-          <Header title={t('EasyTaskEarn$Matter')}>
-            {!isMobile && <HeaderTips t={t} />}
-          </Header>
+          <Header />
           <ScrollBox>
-            {isMobile && (
-              <TipsFlex>
-                <HeaderTips t={t} />
-              </TipsFlex>
-            )}
             {/* {
               taskGroup.map(item => <TaskContent key={item.type} taskGroupId={item.type} taskList={item.data} />)
             } */}
@@ -121,19 +93,6 @@ const Task: React.FC = () => {
         </Box>
       )}
     </>
-  );
-};
-
-const HeaderTips = ({ t }) => {
-  return (
-    <Flex alignItems="center">
-      <Time src={require('assets/images/myWallet/time.png').default} alt="" />
-      <Text small color="textTips">
-        {t(
-          'Note that all tasks are refreshed at 0:00 UTC. Please get your $Matter before 0:00 UTC!'
-        )}
-      </Text>
-    </Flex>
   );
 };
 
