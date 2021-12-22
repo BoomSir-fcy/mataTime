@@ -29,13 +29,14 @@ const ArticleListBox = styled.div`
 export const ArticleList = props => {
   // const [size, setSize] = useState(20)
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const article = useStore(p => p.post);
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [listData, setListData] = useState([]);
-  const [totalPage, setTotalPage] = useState(2);
-
+  // const [listData, setListData] = useState([]);
+  // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
+  const { list, lastList, page } = article;
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
@@ -45,48 +46,67 @@ export const ArticleList = props => {
     }
   } = props || {};
 
-  // 获取列表
-  const getList = (current = 0) => {
-    if ((loading || isEnd) && !current) return false;
-    setLoading(true);
-
-    dispatch(
-      fetchThunk.fetchPostAsync({
-        attention: 1,
-        page: current || page,
-        per_page: pageSize,
-        ...props.filterValObj
-      })
-    );
-
-    Api.HomeApi.getArticleList({
-      attention: 1,
-      page: current || page,
-      per_page: pageSize,
-      ...props.filterValObj
-    }).then(res => {
+  const Getlist = React.useCallback(
+    (current = 0) => {
+      console.log(loading, isEnd, Boolean(current));
+      if ((loading || isEnd) && !current) return false;
+      setLoading(true);
+      dispatch(
+        fetchThunk.fetchPostAsync({
+          attention: 1,
+          page: current || page,
+          per_page: pageSize,
+          ...props.filterValObj
+        })
+      );
       setLoading(false);
-      if (Api.isSuccess(res)) {
-        setLoading(false);
-        setTotalPage(res.data.total_page);
-        if (res.data.List.length < pageSize) {
-          setIsEnd(true);
-        } else {
-          setIsEnd(false);
-        }
-        if (current === 1 || page === 1) {
-          setListData([...res.data.List]);
-          setPage(2);
-        } else {
-          setListData([...listData, ...res.data.List]);
-          setPage(page + 1);
-        }
-      }
-      // setNonce(prep => prep + 1);
-    });
-  };
+      setNonce(prep => prep + 1);
+    },
+    [article, isEnd]
+  );
+
+  React.useEffect(() => {
+    console.log(lastList.length);
+    if (list.length > 0 && lastList.length < pageSize) {
+      setIsEnd(true);
+    } else {
+      setIsEnd(false);
+    }
+  }, [list]);
+
+  // 获取列表
+  // const getList = (current = 0) => {
+  //   if ((loading || isEnd) && !current) return false;
+  //   setLoading(true);
+  //   Api.HomeApi.getArticleList({
+  //     attention: 1,
+  //     page: current || page,
+  //     per_page: pageSize,
+  //     ...props.filterValObj
+  //   }).then(res => {
+  //     setLoading(false);
+  //     if (Api.isSuccess(res)) {
+  //       setLoading(false);
+  //       setTotalPage(res.data.total_page);
+  //       if (res.data.List.length < pageSize) {
+  //         setIsEnd(true);
+  //       } else {
+  //         setIsEnd(false);
+  //       }
+  //       if (current === 1 || page === 1) {
+  //         setListData([...res.data.List]);
+  //         setPage(2);
+  //       } else {
+  //         setListData([...listData, ...res.data.List]);
+  //         setPage(page + 1);
+  //       }
+  //     }
+  //     // setNonce(prep => prep + 1);
+  //   });
+  // };
 
   // 更新列表
+
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     if (
       type === MoreOperatorEnum.FOLLOW ||
@@ -95,9 +115,8 @@ export const ArticleList = props => {
       type === MoreOperatorEnum.CANCEL_SETTOP ||
       type === MoreOperatorEnum.COMMONT
     ) {
-      setPage(1);
       setIsEnd(false);
-      getList(1);
+      Getlist(1);
       return;
     }
     // 折叠
@@ -109,7 +128,7 @@ export const ArticleList = props => {
     const handleChangeList =
       type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST;
     let arr = [];
-    listData.forEach((item: any) => {
+    list.forEach((item: any) => {
       let obj = item;
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
@@ -120,7 +139,7 @@ export const ArticleList = props => {
         arr.push(obj);
       }
     });
-    setListData([...arr]);
+    dispatch(storeAction.postUpdateArticle([...arr]));
     if (handleChangeList) {
       setNonce(prep => prep + 1);
     }
@@ -128,8 +147,8 @@ export const ArticleList = props => {
 
   return (
     <ArticleListBox>
-      <List loading={!isEnd} renderList={getList}>
-        {listData.map((item, index) => (
+      <List loading={!isEnd} renderList={Getlist}>
+        {(list ?? []).map((item, index) => (
           <MeItemWrapper key={`${item.id}_${index}`}>
             {
               // 浏览自己的不扣费
@@ -177,7 +196,4 @@ export const ArticleList = props => {
       </List>
     </ArticleListBox>
   );
-};
-ArticleList.defaultProps = {
-  filterValObj: {}
 };

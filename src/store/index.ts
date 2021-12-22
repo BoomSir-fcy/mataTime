@@ -12,7 +12,7 @@ import type { CoinsState } from './coins/reducer';
 import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
-import { postReducer, postAction, fetchPostAsync } from './post';
+import { Post, postReducer, postAction, fetchPostAsync } from './post';
 
 import { TaskState } from './task/type';
 export interface Store {
@@ -22,6 +22,7 @@ export interface Store {
   pools: PoolsState;
   wallet: WalletState;
   task: TaskState;
+  post: Post;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
