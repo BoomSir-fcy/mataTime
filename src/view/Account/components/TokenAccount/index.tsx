@@ -79,25 +79,25 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
   const { t } = useTranslation();
 
   return (
-    <RightBox justifyContent="space-between" alignItems="center">
+    <RightBox justifyContent='space-between' alignItems='center'>
       <IncomeBox>
         <Img src={require('assets/images/myWallet/today.png').default} />
-        <Flex ml="22px" flexDirection="column" justifyContent="space-between">
-          <Text fontSize="14px" color="textTips">
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>
             {t('Account Day income')}
           </Text>
-          <Text color="white_black" fontWeight="bold">
+          <Text color='white_black' fontWeight='bold'>
             {formatDisplayApr(TodayIncome)}
           </Text>
         </Flex>
       </IncomeBox>
       <IncomeBox>
         <Img src={require('assets/images/myWallet/total.png').default} />
-        <Flex ml="22px" flexDirection="column" justifyContent="space-between">
-          <Text fontSize="14px" color="textTips">
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>
             {t('Account Cumulative income')}
           </Text>
-          <Text color="white_black" fontWeight="bold">
+          <Text color='white_black' fontWeight='bold'>
             {formatDisplayApr(TotalIncome)}
           </Text>
         </Flex>
@@ -251,7 +251,7 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
 
   return (
     <NoPdBottom>
-      <Flex flexWrap="wrap" justifyContent="space-between">
+      <Flex flexWrap='wrap' justifyContent='space-between'>
         <BorderWalletBox
           BalanceInfo={WalletInfo}
           Token={activeToken}
@@ -268,7 +268,7 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
       </Flex>
       {/* token切换 */}
       <ContentTab>
-        <Flex alignItems="baseline">
+        <Flex alignItems='baseline'>
           <TabText
             className={ActiveToken === 1 ? 'active' : ''}
             onClick={() => setActiveToken(1)}
@@ -292,28 +292,30 @@ const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
         </ContentTab>
       )}
       <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
-      <PostTab>
-        <Flex alignItems="baseline">
-          <TabText
-            className={readType === 1 ? 'active' : ''}
-            onClick={() => {
-              setreadType(1);
-              dispatch(fetchIncomeList({ page: 1, pageSize, readType: 1 }));
-            }}
-          >
-            Post
-          </TabText>
-          <TabText
-            className={readType === 2 ? 'active' : ''}
-            onClick={() => {
-              setreadType(2);
-              dispatch(fetchIncomeList({ page: 1, pageSize, readType: 2 }));
-            }}
-          >
-            Comment
-          </TabText>
-        </Flex>
-      </PostTab>
+      {ActiveToken === 1 && (
+        <PostTab>
+          <Flex alignItems='baseline'>
+            <TabText
+              className={readType === 1 ? 'active' : ''}
+              onClick={() => {
+                setreadType(1);
+                dispatch(fetchIncomeList({ page: 1, pageSize, readType: 1 }));
+              }}
+            >
+              Post
+            </TabText>
+            <TabText
+              className={readType === 2 ? 'active' : ''}
+              onClick={() => {
+                setreadType(2);
+                dispatch(fetchIncomeList({ page: 1, pageSize, readType: 2 }));
+              }}
+            >
+              Comment
+            </TabText>
+          </Flex>
+        </PostTab>
+      )}
       <EarningsRecord
         readType={readType}
         type={ActiveToken}
