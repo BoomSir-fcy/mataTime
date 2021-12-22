@@ -15,7 +15,7 @@ import { PageContainer } from './style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-import { Spinner, Empty } from 'uikit'
+import { Spinner, Empty } from 'uikit';
 
 type Iprops = {
   [name: string]: any;
@@ -23,7 +23,9 @@ type Iprops = {
 export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
-  const [itemData, setItemData] = useState<any>({});
+  const [itemData, setItemData] = useState<any>({
+    id: 0
+  });
   const [refresh, setRefresh] = useState(1);
   const [loaded, setLoaded] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
@@ -51,9 +53,9 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       setNonce(prep => prep + 1);
       return;
     }
-    setLoaded(false)
+    setLoaded(false);
     Api.HomeApi.articleFindById({ id: props.match.params.id }).then(res => {
-      setLoaded(true)
+      setLoaded(true);
       if (Api.isSuccess(res)) {
         setItemData(res.data);
         setRefresh(refresh === 1 ? 2 : 1);
@@ -70,9 +72,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   return (
     <PageContainer>
       <Crumbs back title={t('newsBack')} />
-      {
-        itemData.id
-        ?
+      {Boolean(itemData.id) ? (
         <>
           {
             // 浏览自己的不扣费
@@ -102,7 +102,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
               more={true}
             />
             <MentionOperator
-              replyType="twitter"
+              replyType='twitter'
               postId={itemData.id}
               itemData={{
                 ...itemData,
@@ -115,24 +115,19 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
             />
           </MeItemWrapper>
           {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
-          <Editor type="comment" sendArticle={sendArticle} />
+          <Editor type='comment' sendArticle={sendArticle} />
           <CommentList
             nonce={nonce}
             setNonce={setNonce}
-            key={refresh}
+            // key={refresh} Todo 不知道这个key有什么作用
             itemData={itemData}
           />
         </>
-        :
-        (
-          loaded
-          ?
-          <Empty title={t('http-error-30001001')} />
-          :
-          <Spinner />
-        )
-      }
-      
+      ) : loaded ? (
+        <Empty title={t('http-error-30001001')} />
+      ) : (
+        <Spinner />
+      )}
     </PageContainer>
   );
 };

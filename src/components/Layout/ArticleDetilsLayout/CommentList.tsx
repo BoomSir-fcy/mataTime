@@ -59,7 +59,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const theme = useTheme();
 
   useEffect(() => {
-    getList(1);
+    refresh && getList(1);
   }, [refresh]);
 
   const initList = () => {
@@ -103,6 +103,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum) => {
+    console.log(232323232323);
     const {
       FOLLOW,
       CANCEL_FOLLOW,
@@ -143,9 +144,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   return (
     <CommentListBox>
-      <CommentTitle justifyContent="space-between" alignItems="center">
+      <CommentTitle justifyContent='space-between' alignItems='center'>
         <span>{t('newsCommentMenuTitle')}</span>
-        <div className="sort-box">
+        <div className='sort-box'>
           <div>
             {t('detailHeat')}
             <SortIcon changeSort={changeSortLike} flag={sortLike} />
@@ -161,6 +162,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
           if (!itemData.id) return;
           if (loading || page > totalPage) return false;
           setLoading(true);
+          console.log(11111);
           getList();
         }}
       >
@@ -179,19 +181,19 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             }
             <Flex>
               <Box as={Link} to={`/me/profile/${item.user_id}`}>
-                <Avatar src={item.user_avator_url} scale="md" />
+                <Avatar src={item.user_avator_url} scale='md' />
               </Box>
               <div style={{ flex: 1, marginLeft: '14px' }}>
-                <CommentHeader justifyContent="space-between" mb="15px">
+                <CommentHeader justifyContent='space-between' mb='15px'>
                   <Flex>
                     <div>
                       <div>{item.user_name}</div>
-                      <div className="relative-time">
+                      <div className='relative-time'>
                         {relativeTime(item.add_time)}
                       </div>
                     </div>
                     {item.comment_user_name && (
-                      <div className="reply">
+                      <div className='reply'>
                         {t('reply')}
                         <span>@{item.comment_user_name}</span>
                       </div>
@@ -203,9 +205,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       trigger={
                         <PopupButton>
                           <Icon
-                            name="icon-gengduo"
+                            name='icon-gengduo'
                             current={1}
-                            color="#7E7E7E"
+                            color='#7E7E7E'
                           />
                         </PopupButton>
                       }
@@ -228,7 +230,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               </div>
             </Flex>
             <MentionOperator
-              type="Comment"
+              type='Comment'
               callback={(data, type) => updateList(data, type)}
               itemData={{
                 ...item,
