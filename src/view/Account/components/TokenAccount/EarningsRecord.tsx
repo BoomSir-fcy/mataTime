@@ -187,7 +187,7 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
                         )}
                       </ItemText>
                       <ItemText>
-                        {GetTaskTag(item.task_type).toUpperCase()}
+                        {GetTaskTag(item.task_group).toUpperCase()}
                       </ItemText>
                       <ItemText>
                         {t(getItemTaskName(item.task_name_id))}
