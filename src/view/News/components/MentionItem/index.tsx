@@ -93,7 +93,7 @@ const MentionItem: React.FC<IProps> = props => {
         }}
       />
       <Box
-        className="mention-content"
+        className='mention-content'
         onClick={() => {
           goDetils();
         }}
@@ -144,20 +144,31 @@ export const MentionItemUser: React.FC<UserProps> = ({
   return (
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
-        <div className="user-left-wrapper">
+        <div className='user-left-wrapper'>
           <Link to={'/me/profile/' + (itemData.uid || itemData.user_id)}>
             <Avatar
-              className="avatar"
+              uid={itemData.uid || itemData.user_id}
+              className='avatar'
               src={itemData.user_avator_url}
-              scale="md"
+              callback={type => {
+                console.log(type);
+                callback(
+                  {
+                    ...itemData,
+                    is_attention: type === 'CANCEL_FOLLOW' ? 0 : 1
+                  },
+                  type
+                );
+              }}
+              scale='md'
             />
           </Link>
-          <div className="user-info">
+          <div className='user-info'>
             <div>
-              <Text className="user-name">
+              <Text className='user-name'>
                 {itemData.user_name || itemData.nick_name}
               </Text>
-              <Text color="textTips" className="time">
+              <Text color='textTips' className='time'>
                 <span>@{shortenAddress(itemData.user_address)}</span>
                 {relativeTime(itemData.add_time || itemData.post_time)}
               </Text>
@@ -165,7 +176,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
           </div>
         </div>
         {more && (
-          <div className="user-right-wrapper">
+          <div className='user-right-wrapper'>
             {/* <MorePopup
               data={itemData}
               callback={(data: any, type: MoreOperatorEnum) => {
@@ -178,11 +189,11 @@ export const MentionItemUser: React.FC<UserProps> = ({
               ref={popupRef}
               trigger={
                 <PopupButton>
-                  <img src={moreIcon} alt="more" />
+                  <img src={moreIcon} alt='more' />
                 </PopupButton>
               }
               nested
-              position="bottom right"
+              position='bottom right'
               closeOnDocumentClick
               contentStyle={{
                 width: '150px',

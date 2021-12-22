@@ -12,6 +12,8 @@ import type { CoinsState } from './coins/reducer';
 import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
+import { Post, postReducer, postAction, fetchPostAsync } from './post';
+
 import { TaskState } from './task/type';
 export interface Store {
   appReducer: App;
@@ -20,6 +22,7 @@ export interface Store {
   pools: PoolsState;
   wallet: WalletState;
   task: TaskState;
+  post: Post;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -32,7 +35,8 @@ export const store = configureStore({
     coins: coinsReduce,
     pools: poolsReduce,
     wallet: walletReduce,
-    task: taskReduce
+    task: taskReduce,
+    post: postReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -46,10 +50,12 @@ export const storeAction = {
   ...loginAction,
   ...appAction,
   ...coinsAction,
-  ...walletAction
+  ...walletAction,
+  ...postAction
 };
 export const fetchThunk = {
-  fetchUserInfoAsync
+  fetchUserInfoAsync,
+  fetchPostAsync
 };
 
 export const Dispatch = {

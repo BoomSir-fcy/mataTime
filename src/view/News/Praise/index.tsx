@@ -4,9 +4,15 @@ import dayjs from 'dayjs';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts';
 import MentionItem, { MentionItemUser } from '../components/MentionItem';
-import { Icon, MoreOperatorEnum, List, ContentParsing, FollowPopup } from 'components';
+import {
+  Icon,
+  MoreOperatorEnum,
+  List,
+  ContentParsing,
+  FollowPopup
+} from 'components';
 import { NewsPraiseWrapper, PraiseItemWrapper } from './style';
-import MessageCard from '../components/MessageCard'
+import MessageCard from '../components/MessageCard';
 
 const NewsPraise: React.FC = props => {
   const { t } = useTranslation();
@@ -86,36 +92,42 @@ const NewsPraise: React.FC = props => {
           getList();
         }}
       >
-        {
-          listData.map(item => {
-            return (
-              <MessageCard
-                key={item.id}
-                avatar={item.send_image}
-                title={item.send_name}
-                date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
-                image_list={item.post?.image_list}
-                content_status={item.post?.content_status}
-                content={item.post?.content}
-                href={`/articleDetils/${item.post?.post_id}`}
-              >
-                <Flex flexWrap="nowrap">
-                  <FollowPopup uid={item.send_uid}>
-                    <Text maxWidth="20vw" ellipsis color='textPrimary' style={{ cursor: 'pointer' }} >{item.send_name}&nbsp;</Text>
-                  </FollowPopup>
-                  <Icon
-                    size={12}
-                    name="icon-aixin1"
-                    margin="7px 10px 0 0"
-                    color="#EC612B"
-                  />
-                  <Text ellipsis>{t('your post')}</Text>
-                  {/* <Text ellipsis>{t('liked your comment')}</Text> */}
-                </Flex>
-              </MessageCard>
-            )
-          })
-        }
+        {listData.map(item => {
+          return (
+            <MessageCard
+              key={item.id}
+              uid={item.send_uid}
+              avatar={item.send_image}
+              title={item.send_name}
+              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              image_list={item.post?.image_list}
+              content_status={item.post?.content_status}
+              content={item.post?.content}
+              href={`/articleDetils/${item.post?.post_id}`}
+            >
+              <Flex flexWrap='nowrap'>
+                <FollowPopup uid={item.send_uid}>
+                  <Text
+                    maxWidth='20vw'
+                    ellipsis
+                    color='textPrimary'
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {item.send_name}&nbsp;
+                  </Text>
+                </FollowPopup>
+                <Icon
+                  size={12}
+                  name='icon-aixin1'
+                  margin='7px 10px 0 0'
+                  color='#EC612B'
+                />
+                <Text ellipsis>{t('your post')}</Text>
+                {/* <Text ellipsis>{t('liked your comment')}</Text> */}
+              </Flex>
+            </MessageCard>
+          );
+        })}
         {/* {listData.map(item => {
           if (item?.post?.content_status === 1) {
             return (

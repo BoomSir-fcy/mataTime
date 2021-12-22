@@ -20,6 +20,8 @@ const dispatchHttpErrorEvent = (data: Api.Error) => {
     );
     return
   }
+  // 任务签到
+  if (data?.code === ResponseCode.TASK_SIGN_IN) return;
   if (data?.code !== 1) {
     eventBus.dispatchEvent(
       new MessageEvent('httpError', {

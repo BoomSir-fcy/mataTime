@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Editor, Crumbs } from 'components';
 import { withRouter, useHistory, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Editor, Crumbs } from 'components';
+import { Flex, Box } from 'uikit';
+import { useToast } from 'hooks';
+import { storeAction, useStore } from 'store';
+import { Api } from 'apis';
+
+import useIm from 'hooks/imHooks/useIm';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useToast } from 'hooks';
-import { Api } from 'apis';
-import useIm from 'hooks/imHooks/useIm';
 import { useTranslation } from 'contexts/Localization';
-import { Flex, Box } from 'uikit';
+
 import { Header, Tabs, ArticleList } from './center';
 
 const PageContainer = styled(Box)`
@@ -27,9 +31,11 @@ const Home: React.FC = (props: any) => {
   const { replace } = useHistory();
   const { path } = useLocation();
   const parsedQs = useParsedQueryString();
+  const dispatch = useDispatch();
+  const attention = useStore(p => p.post.attention);
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: parsedQs.attention || 2
+    attention: parsedQs.attention || attention || 2
   });
   const { toastError } = useToast();
   // const  editorRef = useRef();
@@ -67,8 +73,11 @@ const Home: React.FC = (props: any) => {
       ...filterVal
     };
     // setArticleIds({})
-    replace(`${path || ''}?attention=${item.value}`)
+    replace(`${path || ''}?attention=${item.value}`);
     temp[item.paramsName] = item.value;
+    dispatch(
+      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 })
+    );
     setFilterVal(temp);
     setRefresh(!refresh);
   };
@@ -83,7 +92,7 @@ const Home: React.FC = (props: any) => {
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
             tabsChange={tabsChange}
-            defCurrentLeft={Number(parsedQs.attention || 2) - 1}
+            defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
           <ArticleList
             setNonce={setNonce}

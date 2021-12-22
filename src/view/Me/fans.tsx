@@ -135,14 +135,14 @@ const Fans = React.memo(() => {
       <Crumbs title={t('meHome')}>
         <Flex>
           <Text
-            fontWeight="bold"
-            mr="10px"
-            fontSize="14px"
+            fontWeight='bold'
+            mr='10px'
+            fontSize='14px'
             style={{ textTransform: 'capitalize' }}
           >
             {t('meHeaderFans')}
           </Text>
-          <Text fontSize="14px">
+          <Text fontSize='14px'>
             {t('meHeaderPeople%value%', { value: state.total })}
           </Text>
         </Flex>
@@ -164,17 +164,17 @@ const Fans = React.memo(() => {
                   to={`/me/profile/${item.uid}`}
                   style={{ width: 'calc(100% - 140px)' }}
                 >
-                  <Avatar src={item.nft_image} scale="md" />
+                  <Avatar uid={item.uid} src={item.nft_image} scale='md' />
                   <Column>
-                    <Flex flexWrap="wrap">
-                      <NameText ellipsis color="white_black" mr="13px">
+                    <Flex flexWrap='wrap'>
+                      <NameText ellipsis color='white_black' mr='13px'>
                         {item.nick_name}
                       </NameText>
-                      <Text color="textTips">
+                      <Text color='textTips'>
                         @{shortenAddress(item.address)}
                       </Text>
                     </Flex>
-                    <WrapText color="textTips">{item.introduction}</WrapText>
+                    <WrapText color='textTips'>{item.introduction}</WrapText>
                   </Column>
                 </Flex>
                 {item.attention_status === 0 ? (
@@ -200,7 +200,7 @@ const Fans = React.memo(() => {
                             p.hoverStatus = true;
                           })
                         }
-                        variant="secondary"
+                        variant='secondary'
                       >
                         {t('meNotFollowed')}
                       </MinWidthButton>
@@ -216,7 +216,7 @@ const Fans = React.memo(() => {
                             p.cancelParams = item;
                           })
                         }
-                        variant="tertiary"
+                        variant='tertiary'
                         onMouseLeave={() =>
                           setState(p => {
                             p.hoverIndex = 0;

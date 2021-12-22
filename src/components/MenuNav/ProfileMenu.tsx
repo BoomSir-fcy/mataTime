@@ -41,14 +41,14 @@ export const ProfileMenu = React.memo(() => {
   return (
     <React.Fragment>
       {userInfo.uid ? (
-        <Flex alignItems="center" width="100%" style={{ minWidth: 0 }}>
-          <Avatar src={userInfo?.nft_image} scale="sm" />
+        <Flex alignItems='center' width='100%' style={{ minWidth: 0 }}>
+          <Avatar disableFollow src={userInfo?.nft_image} scale='sm' />
           <Content>
             <UserTitle>
-              <Text className="name">{userInfo.nick_name}</Text>
-              <Box className="icon"></Box>
+              <Text className='name'>{userInfo.nick_name}</Text>
+              <Box className='icon'></Box>
             </UserTitle>
-            <Text color="textTips">@{shortenAddress(userInfo.address, 1)}</Text>
+            <Text color='textTips'>@{shortenAddress(userInfo.address, 1)}</Text>
           </Content>
         </Flex>
       ) : (

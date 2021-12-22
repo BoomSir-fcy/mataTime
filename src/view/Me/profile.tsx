@@ -170,9 +170,13 @@ const Profile: React.FC<any> = props => {
         Api.MeApi.getProfile(uid),
         Api.MeApi.getProfileMsg({ page: offset || page, perpage, uid })
       ]);
-      if (Api.isSuccess(profile) || Api.isSuccess(tweet)) {
+      if (Api.isSuccess(profile)) {
         setState(p => {
           p.profile = profile?.data;
+        });
+      }
+      if (Api.isSuccess(tweet)) {
+        setState(p => {
           p.list = offset
             ? [...(tweet?.data?.list || [])]
             : [...state.list, ...(tweet?.data?.list || [])];
@@ -284,7 +288,11 @@ const Profile: React.FC<any> = props => {
         <ProfileInfo>
           <Info>
             <Flex alignItems='flex-end' style={{ flex: 1 }}>
-              <Avatar scale={isMobile ? 'ld' : 'xl'} src={profile.nft_image} />
+              <Avatar
+                disableFollow
+                scale={isMobile ? 'ld' : 'xl'}
+                src={profile.nft_image}
+              />
               <Desc>
                 <Text className='name' ellipsis maxLine={2}>
                   {profile.nick_name}

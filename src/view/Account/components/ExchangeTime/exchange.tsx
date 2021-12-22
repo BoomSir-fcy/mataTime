@@ -109,23 +109,23 @@ const IsBeginBox = styled(TimeBox)`
 
 const FaqOutBox = ({ isMobile }) => {
   return (
-    <FAQ className={isMobile ? 'Mobile' : ''} as={Link} to="/account/faq">
+    <FAQ className={isMobile ? 'Mobile' : ''} as={Link} to='/account/faq'>
       <AnimationRingIcon
         style={{ cursor: 'pointer' }}
-        color="white_black"
+        color='white_black'
         active1
         active3
         bgColor
         showImg
         isRotate
-        width="8rem"
+        width='8rem'
       >
         <FaqBox>
           <Text
-            color="white_black"
+            color='white_black'
             style={{ cursor: 'pointer' }}
-            mb="6px"
-            fontSize="30px"
+            mb='6px'
+            fontSize='30px'
             bold
           >
             FAQ
@@ -273,22 +273,22 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   );
 
   return (
-    <Center flexDirection="column" justifyContent="center">
+    <Center flexDirection='column' justifyContent='center'>
       <Head>
-        <Text mb="14px" fontSize="18px">
+        <Text mb='14px' fontSize='18px'>
           $TIME left from this round
         </Text>
         <Progress
-          scale="sm"
-          variant="round"
+          scale='sm'
+          variant='round'
           primaryStep={new BigNumber(RedeemedTime)
             .div(nowRound.max_time_token)
             .times(100)
             .toNumber()}
         />
-        <Flex pt="14px" justifyContent="space-between">
-          <Text color="textTips">{formatDisplayApr(RedeemedTime)}</Text>
-          <Text color="textTips">
+        <Flex pt='14px' justifyContent='space-between'>
+          <Text color='textTips'>{formatDisplayApr(RedeemedTime)}</Text>
+          <Text color='textTips'>
             {formatDisplayApr(nowRound.max_time_token)}
           </Text>
         </Flex>
@@ -296,10 +296,11 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
       {IsBegin ? (
         <SwapBox>
           <InputBox>
-            <Flex mb="4px" justifyContent="space-between">
+            <Flex mb='4px' justifyContent='space-between'>
               <SmFont>{t('Time Exchange')}</SmFont>
               <Flex>
                 <SmFont
+                  color='textPrimary'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
                     setinputNum(String(DsgBalance));
@@ -309,44 +310,44 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
                 </SmFont>
               </Flex>
             </Flex>
-            <Flex alignItems="center">
+            <Flex alignItems='center'>
               <InputStyle
                 noShadow
                 pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-                inputMode="decimal"
+                inputMode='decimal'
                 value={inputNum}
                 onChange={handleChange}
                 placeholder={t('Time Please enter the exchange amount')}
               />
-              <Flex alignItems="center">
-                <img src="/images/tokens/DSG.svg" alt="" />
-                <Text ml="8px" fontSize="14px" bold>
+              <Flex alignItems='center'>
+                <img src='/images/tokens/DSG.svg' alt='' />
+                <Text ml='8px' fontSize='14px' bold>
                   DSG
                 </Text>
               </Flex>
             </Flex>
           </InputBox>
-          <Flex mb="20px">
-            <SmFont style={{ minWidth: '40%' }} mr="16px" color="textTips">
+          <Flex mb='20px'>
+            <SmFont style={{ minWidth: '40%' }} mr='16px' color='textTips'>
               DSG {t('Balance')}: {formatDisplayApr(DsgBalance)}
             </SmFont>
-            <SmFont color="textTips">
+            <SmFont color='textTips'>
               TIME {t('Balance')}: {formatDisplayApr(timeBalance)}
             </SmFont>
           </Flex>
           <TimeBox>
-            <TimeNum justifyContent="center" alignItems="center">
-              <Flex alignItems="center">
-                <img src="/images/tokens/TIME.svg" alt="" />
+            <TimeNum justifyContent='center' alignItems='center'>
+              <Flex alignItems='center'>
+                <img src='/images/tokens/TIME.svg' alt='' />
                 <Flex
-                  ml="14px"
-                  flexDirection="column"
-                  justifyContent="space-between"
+                  ml='14px'
+                  flexDirection='column'
+                  justifyContent='space-between'
                 >
-                  <Text fontSize="18px" bold>
+                  <Text fontSize='18px' bold>
                     {formatDisplayApr(Time)}
                   </Text>
-                  <Text fontSize="14px" color="textTips">
+                  <Text fontSize='14px' color='textTips'>
                     {t('Time Available')} TIME
                   </Text>
                 </Flex>
@@ -358,22 +359,22 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
                 <Text>{formatDisplayApr(timeBalance)}</Text>
               </Box> */}
             </TimeNum>
-            <Flex justifyContent="space-between" alignItems="center">
+            <Flex justifyContent='space-between' alignItems='center'>
               <Box>
-                <Text fontSize="14px" color="textTips">
+                <Text fontSize='14px' color='textTips'>
                   {t('Time Circulation')}
                 </Text>
                 <Text>{formatDisplayApr(Circulation)}</Text>
               </Box>
               <Box style={{ textAlign: 'right' }}>
-                <Text fontSize="14px" color="textTips">
+                <Text fontSize='14px' color='textTips'>
                   {t('Time Locked linear release')}
                 </Text>
                 <Text>{formatDisplayApr(Lock)}</Text>
               </Box>
             </Flex>
           </TimeBox>
-          <Rule fontSize="14px" color="textTips">
+          <Rule fontSize='14px' color='textTips'>
             {t(
               'Time *Locking rules: %now%% will be released immediately, and %later%% will be unlocked linearly within the next %time%',
               {
@@ -414,13 +415,13 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
         </SwapBox>
       ) : (
         <IsBeginBox>
-          <Flex mb="20px" alignItems="center" justifyContent="center">
-            <img src="/images/tokens/TIME.svg" alt="" />
-            <Text ml="14px" color="textTips">
+          <Flex mb='20px' alignItems='center' justifyContent='center'>
+            <img src='/images/tokens/TIME.svg' alt='' />
+            <Text ml='14px' color='textTips'>
               TIME
             </Text>
           </Flex>
-          <Text textAlign="center" color="textTips">
+          <Text textAlign='center' color='textTips'>
             {t('Redemption is not yet open')}
           </Text>
         </IsBeginBox>

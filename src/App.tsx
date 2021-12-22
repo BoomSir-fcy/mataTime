@@ -114,37 +114,39 @@ function App() {
         <PageContainer>
           <React.Suspense fallback={<PageLoader />}>
             <Updater />
-            <Switch>
-              <Route path='/' exact render={props => <Home {...props} />} />
-              <Route path='/login' exact component={Login} />
-              <Route
-                path='/topicList/:id/:name'
-                render={props => (
-                  <TopicList
-                    key={props.location.pathname + props.location.search}
-                    {...props}
-                  />
+            <Box className='popupBoundary'>
+              <Switch>
+                <Route path='/' exact render={props => <Home {...props} />} />
+                <Route path='/login' exact component={Login} />
+                <Route
+                  path='/topicList/:id/:name'
+                  render={props => (
+                    <TopicList
+                      key={props.location.pathname + props.location.search}
+                      {...props}
+                    />
+                  )}
+                />
+                <Route
+                  path='/articleDetils/:id'
+                  render={props => <ArticleDetilsLayout {...props} />}
+                />
+                <Route path='/task' component={Task} />
+                <Route
+                  path='/notification'
+                  render={props => <CommonLayout {...props} />}
+                />
+                <Route path='/me' component={Me} />
+                <Route path='/set' component={Set} />
+                <Route path='/account' component={Account} />
+                {process.env.NODE_ENV === 'development' && (
+                  <>
+                    <Route path='/faucet-smart' component={FaucetSmart} />
+                    <Route path='/test' component={Test} />
+                  </>
                 )}
-              />
-              <Route
-                path='/articleDetils/:id'
-                render={props => <ArticleDetilsLayout {...props} />}
-              />
-              <Route path='/task' component={Task} />
-              <Route
-                path='/notification'
-                render={props => <CommonLayout {...props} />}
-              />
-              <Route path='/me' component={Me} />
-              <Route path='/set' component={Set} />
-              <Route path='/account' component={Account} />
-              {process.env.NODE_ENV === 'development' && (
-                <>
-                  <Route path='/faucet-smart' component={FaucetSmart} />
-                  <Route path='/test' component={Test} />
-                </>
-              )}
-            </Switch>
+              </Switch>
+            </Box>
           </React.Suspense>
         </PageContainer>
       </Container>

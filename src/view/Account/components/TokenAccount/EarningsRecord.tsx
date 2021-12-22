@@ -74,13 +74,14 @@ const LoadingAnimation = styled(Box)`
   /* position: absolute; */
   width: 100%;
 `;
-// type 1 内容 2 打赏
+// type 1 Time 2 Matter
 interface init {
+  readType?: number;
   type?: number;
   info: any;
 }
 
-const EarningsRecord: React.FC<init> = ({ type, info }) => {
+const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
     setLoading(true);
     const changePage = event.selected + 1;
     if (type === 1) {
-      dispatch(fetchIncomeList({ page: changePage, pageSize }));
+      dispatch(fetchIncomeList({ page: changePage, pageSize, readType }));
     } else {
       dispatch(fetchMatterIncomeList({ page: changePage, pageSize }));
     }
@@ -134,7 +135,9 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
     }
     return stringArray;
   };
-
+  useEffect(() => {
+    setContentHistoryList([]);
+  }, [readType]);
   useEffect(() => {
     if (type === 1) {
       if (info.record?.length) {
@@ -144,6 +147,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
       } else {
         setPage(1);
         setPageCount(1);
+        setContentHistoryList([]);
       }
     } else {
       if (info.matter_history?.length) {
@@ -153,6 +157,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
       } else {
         setPage(1);
         setPageCount(1);
+        setContentHistoryList([]);
       }
     }
     setLoading(false);
@@ -162,7 +167,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
     <CountBox>
       {type === 2 ? (
         <Table>
-          <Row className="matterStyle">
+          <Row className='matterStyle'>
             <HeadText>{t('Account Date')}</HeadText>
             <HeadText>{t('Account Task type')}</HeadText>
             <HeadText>{t('Account Task details')}</HeadText>
@@ -171,7 +176,7 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
           {TaskHistoryList.length
             ? TaskHistoryList.map((item, index) => (
                 <Row
-                  className="matterStyle"
+                  className='matterStyle'
                   key={`${item.create_time}${index}`}
                 >
                   {item.task_type && (
@@ -211,27 +216,36 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
             const stringArray: any[] = [];
             let context: any[] = [];
             try {
-              context = Array.isArray(JSON.parse(item.info.content))
-                ? JSON.parse(item.info.content)
-                : [];
+              if (readType === 1) {
+                context = Array.isArray(JSON.parse(item.info.content))
+                  ? JSON.parse(item.info.content)
+                  : [];
+              } else {
+                context = Array.isArray(JSON.parse(item.cinfo.comment))
+                  ? JSON.parse(item.cinfo.comment)
+                  : [];
+              }
             } catch (err) {
               console.error(err);
             }
             return (
               <Row
-                className="LinkRow"
+                className='LinkRow'
                 key={`${item.read.post_id}${index}`}
                 as={Link}
-                to={`/articleDetils/${item.read.post_id}`}
+                to={`/articleDetils/${
+                  readType === 1 ? item.read.post_id : item.cinfo?.pid
+                }`}
               >
                 <ItemText>
-                  <Flex alignItems="center">
+                  <Flex alignItems='center'>
                     <Text ellipsis>
                       {stringArr(context, stringArray).join(',')}
                     </Text>
-                    {item.info.image_list &&
+                    {readType === 1 &&
+                      item.info?.image_list &&
                       item.info.image_list.map(item => (
-                        <img key={item} src={item} alt="" />
+                        <img key={item} src={item} alt='' />
                       ))}
                   </Flex>
                 </ItemText>
@@ -248,20 +262,20 @@ const EarningsRecord: React.FC<init> = ({ type, info }) => {
         </Table>
       )}
 
-      <PaginateStyle alignItems="center" justifyContent="end">
-        <Text mr="16px" fontSize="14px" color="textTips">
+      <PaginateStyle alignItems='center' justifyContent='end'>
+        <Text mr='16px' fontSize='14px' color='textTips'>
           {t('Account Total %page% page', { page: pageCount })}
         </Text>
         <ReactPaginate
-          breakLabel="..."
-          nextLabel=">"
+          breakLabel='...'
+          nextLabel='>'
           forcePage={page - 1}
           disableInitialCallback={true}
           onPageChange={handlePageClick}
           pageRangeDisplayed={4}
           marginPagesDisplayed={1}
           pageCount={pageCount}
-          previousLabel="<"
+          previousLabel='<'
           renderOnZeroPageCount={null}
         />
       </PaginateStyle>

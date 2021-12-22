@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { variant } from 'styled-system';
+import { TooltipWraps } from 'components';
 import default_avatar from 'assets/images/default_avatar.jpg';
 export * from './AvatarCard';
 
@@ -47,15 +48,35 @@ const Img = styled.img`
 `;
 
 export const Avatar: React.FC<{
+  uid?: number;
   src?: string;
   scale?: typeof scales[keyof typeof scales];
+  disableFollow?: boolean;
+  callback?: (type?: string) => void;
   [propName: string]: any;
 }> = props => {
   let deepProps = Object.assign({}, props);
   if (!deepProps.src) {
     deepProps.src = default_avatar;
   }
-  return <Img {...deepProps} />;
+
+  return (
+    <React.Fragment>
+      {!props.disableFollow ? (
+        <TooltipWraps
+          trigger={<Img {...deepProps} />}
+          uid={props.uid}
+          callback={type => {
+            props.callback && props.callback(type);
+          }}
+        >
+          <Img {...deepProps} />
+        </TooltipWraps>
+      ) : (
+        <Img {...deepProps} />
+      )}
+    </React.Fragment>
+  );
 };
 
 Avatar.defaultProps = {

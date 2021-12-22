@@ -93,7 +93,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
   const { list } = state;
   const theme = useTheme();
 
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     getManList();
@@ -122,12 +122,12 @@ const RecommendPeople: React.FC<Iprops> = props => {
           p.cancelFollow = false;
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const getManList = async () => {
     try {
-      setRefresh(true)
+      setRefresh(true);
       const res = await Api.UserApi.referrerMans({ num: 3 });
       if (Api.isSuccess(res)) {
         setIsInit(true);
@@ -137,9 +137,9 @@ const RecommendPeople: React.FC<Iprops> = props => {
         });
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     } finally {
-      setRefresh(false)
+      setRefresh(false);
     }
   };
 
@@ -173,7 +173,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
           <TitleText>{t('recommendPeopleTitle')}</TitleText>
           <Box>
             <RefreshIcon
-              margin="0"
+              margin='0'
               // refresh={refresh}
               onClick={() => getManList()}
               color={theme.colors.white_black}
@@ -184,16 +184,21 @@ const RecommendPeople: React.FC<Iprops> = props => {
         {state.list.map((item, index) => (
           <Content
             key={`${item.uid}_${index}`}
-            alignItems="center"
-            justifyContent="space-between"
-            mt="17px"
+            alignItems='center'
+            justifyContent='space-between'
+            mt='17px'
           >
             <Flex
               as={Link}
               to={`/me/profile/${item.uid}`}
               style={{ flex: 1, alignItems: 'center' }}
             >
-              <Avatar src={item.nft_image} scale="sm" />
+              <Avatar
+                uid={item.uid}
+                src={item.nft_image}
+                scale='sm'
+                callback={type => getCurrentState()}
+              />
               <UserInfo>
                 <UserTitle>{item.nick_name}</UserTitle>
                 <UserDesc>{shortenAddress(item.address)}</UserDesc>

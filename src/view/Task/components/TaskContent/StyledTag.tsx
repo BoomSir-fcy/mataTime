@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Flex } from "uikit";
-import { TagProps } from "../type";
+import { TagProps } from "../../type";
 import { space, variant as StyledSystemVariant } from "styled-system";
-import { styleVariants } from "../theme";
-import { variants } from '../type';
+import { styleVariants } from "../../theme";
+import { variants } from '../../type';
 
 const StyledTag = styled(Flex) <TagProps>`
   justify-content: center;

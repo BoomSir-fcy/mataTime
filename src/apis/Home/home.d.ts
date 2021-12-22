@@ -4,7 +4,7 @@ declare namespace Api {
       per_page: number;
       page: number;
       // topic_id: number,
-      attention: number | string;
+      attention: number;
     }
     interface createArticle {
       content: string;
