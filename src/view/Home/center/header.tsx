@@ -42,7 +42,7 @@ export const Header = (props: {
 
   const { title, back = false, align } = props;
   /**
-   * 
+   *
    * @review
    * @bug
    * props 参数和当前命名重复
@@ -66,9 +66,9 @@ export const Header = (props: {
       {/* TODO: color use theme */}
       {back && (
         <Icon
-          name="icon-fanhui"
+          name='icon-fanhui'
           onClick={clickBack}
-          margin="0px 10px 0 0"
+          margin='0px 10px 0 0'
           size={23}
           color={isDark ? '#fff' : '#000'}
         />
