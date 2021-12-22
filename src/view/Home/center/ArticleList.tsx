@@ -48,7 +48,6 @@ export const ArticleList = props => {
 
   const Getlist = React.useCallback(
     (current = 0) => {
-      console.log(loading, isEnd, Boolean(current));
       if ((loading || isEnd) && !current) return false;
       setLoading(true);
       dispatch(
@@ -59,6 +58,7 @@ export const ArticleList = props => {
           ...props.filterValObj
         })
       );
+      setIsEnd(true);
       setLoading(false);
       setNonce(prep => prep + 1);
     },
@@ -66,10 +66,10 @@ export const ArticleList = props => {
   );
 
   React.useEffect(() => {
-    console.log(lastList.length);
     if (list.length > 0 && lastList.length < pageSize) {
       setIsEnd(true);
-    } else {
+    }
+    if (list.length > 0 && list.length / pageSize !== page) {
       setIsEnd(false);
     }
   }, [list]);

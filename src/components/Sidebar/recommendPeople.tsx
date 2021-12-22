@@ -193,7 +193,12 @@ const RecommendPeople: React.FC<Iprops> = props => {
               to={`/me/profile/${item.uid}`}
               style={{ flex: 1, alignItems: 'center' }}
             >
-              <Avatar uid={item.uid} src={item.nft_image} scale='sm' />
+              <Avatar
+                uid={item.uid}
+                src={item.nft_image}
+                scale='sm'
+                callback={type => getCurrentState()}
+              />
               <UserInfo>
                 <UserTitle>{item.nick_name}</UserTitle>
                 <UserDesc>{shortenAddress(item.address)}</UserDesc>

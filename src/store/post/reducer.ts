@@ -36,9 +36,10 @@ export const Post = createSlice({
     builder
       .addCase(fetchPostAsync.fulfilled, (state, action) => {
         const { list, page, attention } = action.payload;
-        state.list = page === 1 ? list ?? [] : [...state.list, ...(list ?? [])];
+        let articleList = list ?? [];
+        state.list = page === 1 ? articleList : [...state.list, ...articleList];
         state.lastList = list ?? [];
-        state.page = page + 1;
+        state.page = articleList.length > 0 ? page + 1 : page;
         state.attention = Number(attention);
       })
       .addCase(postUpdateArticleParams, (state, action) => {

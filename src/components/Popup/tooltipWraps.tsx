@@ -130,7 +130,13 @@ const FollowPopup: React.FC<{
   );
 });
 
-export const TooltipWraps = (props, ref) => {
+const TooltipWrapRef = (props, ref) => {
+  React.useImperativeHandle(ref, () => ({}));
+
+  const changeStatus = (type: string) => {
+    props.callback(type);
+  };
+
   return (
     <Popup
       trigger={props.trigger}
@@ -149,7 +155,9 @@ export const TooltipWraps = (props, ref) => {
         opacity: '0'
       }}
     >
-      <FollowPopup uid={props.uid} />
+      <FollowPopup uid={props.uid} callback={type => changeStatus(type)} />
     </Popup>
   );
 };
+
+export const TooltipWraps = React.forwardRef(TooltipWrapRef);
