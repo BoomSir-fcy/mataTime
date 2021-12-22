@@ -34,11 +34,11 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
     const blockNumber = await simpleRpcProvider.getBlockNumber()
     const contract = getSinglePoolContract()
     const filterFrom = contract.filters.Donate()
-    const eveSales = await contract.queryFilter(filterFrom, blockNumber - 100, blockNumber)
+    const eveSales = await contract.queryFilter(filterFrom, blockNumber - 5000, blockNumber)
 
     const res = {}
     eveSales.reverse().forEach((item, index) => {
-      if (index > 11) return
+      // if (index > 11) return
       if (res[item.args.pid.toNumber()]) {
         res[item.args.pid.toNumber()] = res[item.args.pid.toNumber()].plus(item.args.realAmount.toJSON().hex)
       } else {
@@ -59,7 +59,7 @@ const culAprHandle = (culFarm: CulFarm, eveSales: EveDonate) => {
     const donate = eveSales[item.pid] || new BigNumber(0)
     return {
       ...item,
-      fourRealAmount: donate.times(6).times(365).times(100).toNumber()
+      totalDonateAmount: donate.times(6).times(365).toString()
     }
   })
 }

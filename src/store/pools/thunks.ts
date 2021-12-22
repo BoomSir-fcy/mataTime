@@ -18,7 +18,7 @@ export const fetchSpRewardsAprAsync = (datas: SinglePoolData[]): AppThunk => asy
   const aprs = {}
   datas.forEach(item => {
     const donateApr = donateAprs.find(donate => donate.pid === item.pid)
-    aprs[item.pid] = getPoolsApr(item, donateApr?.fourRealAmount)
+    aprs[item.pid] = getPoolsApr(item, donateApr?.totalDonateAmount)
   })
 
   dispatch(setSpAprsData(aprs))
