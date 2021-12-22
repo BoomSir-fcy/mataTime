@@ -138,6 +138,9 @@ const Invite: React.FC = () => {
     [setPageNum]
   );
 
+  // 复制链接
+  const Url = `${window.location.origin}/login`;
+  const copyUrl = `${Url}?InviteAddress=${account}`;
   const onCopyLink = useCallback(() => {
     // 普通邀请
     if (inviteType === 1) {
@@ -145,12 +148,9 @@ const Invite: React.FC = () => {
       toastSuccess(t('CopyLinkSuccess'));
       setVisible(false);
     }
-  }, [inviteType]);
+  }, [inviteType, copyUrl]);
 
-  // 复制链接
-  const Url = `${window.location.origin}/login`;
-  const copyUrl = `${Url}?InviteAddress=${account}`;
-  const tag: Variant = useMemo(() => GetTaskTag(Group.INVITE), [Group.INVITE]);
+  const tag: Variant = useMemo(() => GetTaskTag(Group.INVITE), []);
 
   return (
     <>

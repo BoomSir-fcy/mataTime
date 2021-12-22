@@ -183,8 +183,8 @@ export const menuNavConfig: MenuNavConfig[] = [
         path: '/me/edit'
       },
       {
-        icon: 'icon-zhifeiji',
-        activeIcon: 'icon-zhifeiji1',
+        icon: 'icon-zhifeiji1',
+        activeIcon: 'icon-zhifeiji',
         lable: 'meMenuInvite',
         path: '/task/invite'
       }
