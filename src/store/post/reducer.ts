@@ -1,18 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { postUpdateArticleParams, postUpdateArticle } from './actions';
 import { Api } from 'apis';
 
 const initialState = {
-  list: []
+  list: [],
+  lastList: [],
+  page: 1,
+  attention: 2
 };
+
+export type Post = typeof initialState;
 
 export const fetchPostAsync = createAsyncThunk(
   'fetch/getArticle',
   async (params: Api.Home.queryListParams) => {
-    const response = await Api.HomeApi.getArticleList(params);
+    const response: Api.Home.postData = await Api.HomeApi.getArticleList(
+      params
+    );
     if (Api.isSuccess(response)) {
-      return response.data.List;
+      return {
+        list: response.data.List,
+        page: params.page,
+        attention: params.attention
+      };
     }
-    return [];
+    return {};
   }
 );
 
@@ -21,9 +33,23 @@ export const Post = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(fetchPostAsync.fulfilled, (state, action) => {
-      state.list = action.payload;
-    });
+    builder
+      .addCase(fetchPostAsync.fulfilled, (state, action) => {
+        const { list, page, attention } = action.payload;
+        state.list = page === 1 ? list ?? [] : [...state.list, ...(list ?? [])];
+        state.lastList = list ?? [];
+        state.page = page + 1;
+        state.attention = Number(attention);
+      })
+      .addCase(postUpdateArticleParams, (state, action) => {
+        const { page, attention } = action.payload;
+        state.list = [];
+        state.page = page;
+        state.attention = Number(attention);
+      })
+      .addCase(postUpdateArticle, (state, action) => {
+        state.list = action.payload;
+      });
   }
 });
 
