@@ -108,7 +108,7 @@ const NewsPraise: React.FC = props => {
               <Flex flexWrap='nowrap'>
                 <FollowPopup uid={item.send_uid}>
                   <Text
-                    maxWidth='20vw'
+                    maxWidth='100px'
                     ellipsis
                     color='textPrimary'
                     style={{ cursor: 'pointer' }}

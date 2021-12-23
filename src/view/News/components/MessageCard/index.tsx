@@ -53,7 +53,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
         <Avatar uid={uid} src={avatar} scale='md' />
         <Flex flexDirection='column' ml='16px' flex='1'>
           <Flex alignItems='center'>
-            <Text maxWidth='20vw' ellipsis bold fontSize='18px' color='primary'>
+            <Text maxWidth='100px' ellipsis bold fontSize='18px' color='primary'>
               {title}
             </Text>
             <Text ellipsis ml='16px' fontSize='14px' color='textTips'>

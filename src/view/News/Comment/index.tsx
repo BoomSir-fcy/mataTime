@@ -91,10 +91,10 @@ const NewsComment: React.FC<any> = props => {
               href={`/articleDetils/${item.post?.post_id}`}
             >
               <Box>
-                <FollowPopup uid={item.send_uid}>
+                {/* <FollowPopup uid={item.send_uid}>
                   <Text
                     as='span'
-                    maxWidth='20vw'
+                    maxWidth='100px'
                     ellipsis
                     color='textPrimary'
                     style={{ cursor: 'pointer' }}
@@ -104,7 +104,7 @@ const NewsComment: React.FC<any> = props => {
                 </FollowPopup>
                 <Text as='span' ellipsis mr='0.5em'>
                   {t('commented: ')}
-                </Text>
+                </Text> */}
                 <NoneEventsText as='span' ellipsis maxLine={2}>
                   <ContentParsing content={item.comment.comment} />
                 </NoneEventsText>
