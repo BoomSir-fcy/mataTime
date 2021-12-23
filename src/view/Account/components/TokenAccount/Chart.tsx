@@ -8,11 +8,8 @@ import LineChart from '../LineChart';
 import dayjs from 'dayjs';
 
 const ChartsBox = styled(Box)`
-  ${({ theme }) => theme.mediaQueriesSize.padding}/* ${({ theme }) =>
-    theme.mediaQueriesSize.marginb} */
-
-/* background: linear-gradient(180deg, #2F2F4F, #191F2D);
-opacity: 0.96; */
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  width:'100%'
 `;
 
 interface Init {
@@ -29,7 +26,7 @@ const Chart: React.FC<Init> = ({ type, token, chartData, load }) => {
       const data = chartData.map(day => {
         return {
           time: day.date,
-          value: Number(day.income)
+          value: Number(day.income),
         };
       });
       if (type === 1) {
@@ -42,10 +39,10 @@ const Chart: React.FC<Init> = ({ type, token, chartData, load }) => {
 
   return (
     <ChartsBox>
-      <Text color="textTips">
+      <Text color='textTips'>
         {t('Account Earnings trend in the past 7 days')}
       </Text>
-      <Box height="360px">
+      <Box width='100%' height='360px'>
         <LineChart data={formattedData} load={load} />
       </Box>
     </ChartsBox>
