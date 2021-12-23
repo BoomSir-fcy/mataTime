@@ -61,8 +61,8 @@ export class IM extends EventTarget {
   url: string =
     process.env.NODE_ENV === 'production'
       ? `${process.env.React_APP_WS_URL}/v1/ws`
-      // : `${process.env.React_APP_WS_URL}/v1/ws`;
-  :'ws://192.168.101.129:8888/v1/ws';
+      : `${process.env.React_APP_WS_URL}/v1/ws`;
+  // :'ws://192.168.101.129:8888/v1/ws';
   token: string;
   userToken: string;
 

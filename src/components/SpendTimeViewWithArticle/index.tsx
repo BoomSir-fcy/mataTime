@@ -38,7 +38,6 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
 
   useEffect(() => {
     if (imgRef.current) {
-      console.log('========', articleId)
       handleListenImageLoad(imgRef.current?.parentElement)
       const offsetHeight = imgRef.current?.parentElement?.offsetHeight
       const offsetTop = imgRef.current?.parentElement?.offsetTop
@@ -63,10 +62,10 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
   }, [articleId, readType, rendered, flagDebounce, setRendered, setArticlePositions]);
 
 
-  // return <div ref={imgRef} />
-  return <div ref={imgRef}>
-    <Text>articleId: {articleId}</Text>
-  </div>
+  return <div ref={imgRef} />
+  // return <div ref={imgRef}>
+  //   <Text>articleId: {articleId}</Text>
+  // </div>
 })
 
 export default SpendTimeViewWithArticle

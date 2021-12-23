@@ -24,6 +24,7 @@ type IProps = {
 const ContentParsingWrapper = styled.div``;
 const ExpandWrapper = styled.div`
   width: 100%;
+  font-family: Arial;
   text-align: center;
   span {
     cursor: pointer;
@@ -36,20 +37,23 @@ const ParagraphItem = styled.div`
   word-break: break-word;
   white-space: pre-wrap;
   min-height: 1.1875em;
+  font-family: Arial;
   line-height: 1.1875;
   p {
     font-size: 18px;
-    font-family: Alibaba PuHuiTi;
+    font-family: Arial;
     font-weight: 400;
   }
   a {
     color: #7393ff;
     cursor: pointer;
+    font-family: Arial;
     /* margin: 0 5px; */
   }
   span {
     /* color: #4168ED; */
     cursor: pointer;
+    font-family: Arial;
   }
 `;
 
