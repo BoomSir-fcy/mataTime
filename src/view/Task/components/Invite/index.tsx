@@ -23,6 +23,9 @@ import { useToast } from 'hooks';
 import { copyContent } from 'utils';
 import { shortenAddress } from 'utils/contract';
 import Header from '../Header';
+import { useFetchNftList } from 'view/Login/hook';
+import { Step } from './step';
+import { StakeNFT } from '../NftList';
 
 const ContentBox = styled(Flex)`
   padding: 10px 14px;
@@ -109,9 +112,11 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
+  useFetchNftList();
   const { inviteInfo } = useInviteCount();
   const { list, pageNum, setPageNum, loading, total } =
     useFetchInviteFriendsList();
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -283,12 +288,29 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {/* <ContentBox>
-          <Text fontSize="18px" bold>Special Invitation</Text>
+        <ContentBox>
+          <Text fontSize='18px' bold>
+            Special Invitation
+          </Text>
         </ContentBox>
         <ContentBox>
-          <SpecialInvite />
-        </ContentBox> */}
+          <Flex flexDirection='column'>
+            <Text>{t('SpecialInvitationDescribe')}</Text>
+            <Flex
+              flexWrap='wrap'
+              justifyContent='space-between'
+              alignItems='center'
+            >
+              <Step />
+              <StakeNFT
+                handleClickNft={() => {
+                  setInviteType(2);
+                  setVisible(true);
+                }}
+              />
+            </Flex>
+          </Flex>
+        </ContentBox>
         <ContentBox>
           <Text fontSize='18px' bold>
             {t('Invited Friends List')}

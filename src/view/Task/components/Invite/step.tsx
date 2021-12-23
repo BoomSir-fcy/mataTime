@@ -49,7 +49,8 @@ const PositionText = styled(Text)`
   position: absolute;
   width: max-content;
   top: 60px;
-  max-width: 150px;
+  left: -50%;
+  max-width: 145px;
 `;
 export const Step: React.FC<{ step?: number }> = React.memo(({ step }) => {
   const { t } = useTranslation();
