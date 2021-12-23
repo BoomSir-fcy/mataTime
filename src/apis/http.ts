@@ -1,15 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
-import eventBus from '../utils/eventBus';
 import { storage } from 'config';
-import history from '../routerHistory';
-import { ResponseCode } from './type';
+import eventBus from '../utils/eventBus';
 import dispatchHttpErrorEvent from './httpErrorEvent';
 
-const baseURL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.REACT_APP_API_HOST
-    : process.env.REACT_APP_API_HOST
+const baseURL = process.env.REACT_APP_API_HOST;
 
 axios.defaults.timeout = 30 * 1000;
 // axios.defaults.withCredentials = false
@@ -28,7 +23,7 @@ axios.interceptors.response.use(
   },
   error => {
     return Promise.reject(error.response);
-  }
+  },
 );
 
 export class Http {
@@ -39,10 +34,10 @@ export class Http {
     try {
       response = await axios({
         ...configs,
-        headers: { ...configs.headers, token: token }
+        headers: { ...configs.headers, token: token },
       });
 
-      dispatchHttpErrorEvent(response.data)
+      dispatchHttpErrorEvent(response.data);
       return response.data;
     } catch (e: any) {
       if (e?.status === 401) {
@@ -56,7 +51,7 @@ export class Http {
       method: 'GET',
       url,
       baseURL,
-      params
+      params,
     };
     return this.request(config);
   }
@@ -66,7 +61,7 @@ export class Http {
       method: 'POST',
       url,
       data,
-      baseURL
+      baseURL,
     };
     return this.request(config);
   }
