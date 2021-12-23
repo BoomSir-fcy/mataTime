@@ -23,7 +23,9 @@ import useUnreadMsg from 'hooks/imHooks/useUnreadMsg';
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import EventBusUpdater from './view/Updater/EventBusUpdater';
-import ScrollBarApdater from './view/Updater/ScrollBarApdater';
+import ScrollBarApdater, {
+  useReStoreScrollTop,
+} from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 
 import 'dayjs/locale/zh-cn';
@@ -41,7 +43,7 @@ dayjs.extend(updateLocale);
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
 const ArticleDetilsLayout = React.lazy(
-  () => import('./components/Layout/ArticleDetilsLayout')
+  () => import('./components/Layout/ArticleDetilsLayout'),
 );
 const TopicList = React.lazy(() => import('./view/TopicList'));
 const Me = React.lazy(() => import('./view/Me'));
@@ -58,6 +60,7 @@ const Container = styled(Box)`
 `;
 
 const Updater = () => {
+  useReStoreScrollTop();
   return (
     <>
       <AccountUpdater />
@@ -82,11 +85,11 @@ function App() {
       const res = await getTokens();
       const isApprove = await approve(
         account,
-        res?.map(item => item[0])
+        res?.map(item => item[0]),
       );
       const newArr = res.map((item, index) => [
         ...item.toString().split(','),
-        isApprove[index].toString()
+        isApprove[index].toString(),
       ]);
       dispatch(storeAction.setSupportToken(newArr));
     } catch (error) {
