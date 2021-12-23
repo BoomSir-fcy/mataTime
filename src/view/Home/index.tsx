@@ -38,7 +38,7 @@ const Home: React.FC = (props: any) => {
     attention: parsedQs.attention || attention || 2,
   });
   const { toastError } = useToast();
-  // const  editorRef = useRef();
+  const articleRefs = React.useRef(null);
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
@@ -54,7 +54,9 @@ const Home: React.FC = (props: any) => {
         remind_user,
       });
       if (Api.isSuccess(res)) {
-        setRefresh(!refresh);
+        // setRefresh(!refresh);
+        console.log(articleRefs);
+        articleRefs?.current?.reload();
       }
     } catch (error) {
       console.error(error);
@@ -95,9 +97,9 @@ const Home: React.FC = (props: any) => {
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
           <ArticleList
+            ref={articleRefs}
             setNonce={setNonce}
             nonce={nonce}
-            key={refresh}
             topicName={match.params.name}
             filterValObj={filterVal}
             {...props}
