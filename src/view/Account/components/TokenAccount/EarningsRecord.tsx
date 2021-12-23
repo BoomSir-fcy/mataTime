@@ -8,7 +8,7 @@ import {
   InputPanel,
   Input,
   Empty,
-  Spinner
+  Spinner,
 } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
@@ -129,6 +129,9 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
       if (newarr[i].text) {
         stringArray.push(newarr[i].text);
       }
+      if (newarr[i].type === 'mention') {
+        stringArray.push(newarr[i].character);
+      }
       if (newarr[i].children?.length > 0) {
         stringArr(newarr[i].children, stringArray);
       }
@@ -183,11 +186,11 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
                     <>
                       <ItemText>
                         {dayjs(item.create_time * 1000).format(
-                          t('YYYY-MM-DD HH:mm:ss')
+                          t('YYYY-MM-DD HH:mm:ss'),
                         )}
                       </ItemText>
                       <ItemText>
-                        {GetTaskTag(item.task_type).toUpperCase()}
+                        {GetTaskTag(item.task_group).toUpperCase()}
                       </ItemText>
                       <ItemText>
                         {t(getItemTaskName(item.task_name_id))}
@@ -217,13 +220,17 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
             let context: any[] = [];
             try {
               if (readType === 1) {
-                context = Array.isArray(JSON.parse(item.info.content))
-                  ? JSON.parse(item.info.content)
-                  : [];
+                if (item?.info?.content) {
+                  context = Array.isArray(JSON.parse(item?.info?.content))
+                    ? JSON.parse(item?.info?.content)
+                    : [];
+                }
               } else {
-                context = Array.isArray(JSON.parse(item.cinfo.comment))
-                  ? JSON.parse(item.cinfo.comment)
-                  : [];
+                if (item?.cinfo?.comment) {
+                  context = Array.isArray(JSON.parse(item?.cinfo?.comment))
+                    ? JSON.parse(item?.cinfo?.comment)
+                    : [];
+                }
               }
             } catch (err) {
               console.error(err);

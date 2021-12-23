@@ -28,7 +28,7 @@ export const SignUpcomplete = React.memo(() => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const redict = location?.state?.from?.pathname;
+  const redict = (location?.state as any)?.from?.pathname;
   const { t } = useTranslation();
   const followRefs = React.useRef(null);
 

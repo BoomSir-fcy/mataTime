@@ -64,6 +64,9 @@ export const TableList: React.FC<{
       if (newarr[i].text) {
         stringArray.push(newarr[i].text);
       }
+      if (newarr[i].type === 'mention') {
+        stringArray.push(newarr[i].character);
+      }
       if (newarr[i].children?.length > 0) {
         stringArr(newarr[i].children, stringArray);
       }
@@ -78,7 +81,7 @@ export const TableList: React.FC<{
   return (
     <Wraper>
       <Table>
-        <Row className="matterStyle">
+        <Row className='matterStyle'>
           <HeadText>{t('rewardAutherTableText1')}</HeadText>
           <HeadText>{t('rewardAutherTableText2')}</HeadText>
           <HeadText>{t('rewardAutherTableText3')}</HeadText>
@@ -94,24 +97,26 @@ export const TableList: React.FC<{
                 tokenList.find(row => row[0].toLowerCase() === item.token) ||
                 [];
               try {
-                context = Array.isArray(JSON.parse(item.post))
-                  ? JSON.parse(item.post)
-                  : [];
+                if (item.post) {
+                  context = Array.isArray(JSON.parse(item.post))
+                    ? JSON.parse(item.post)
+                    : [];
+                }
               } catch (err) {
                 console.error(err);
               }
 
               return (
-                <Row className="matterStyle" key={`${item.add_time}_${index}`}>
+                <Row className='matterStyle' key={`${item.add_time}_${index}`}>
                   <ItemText ellipsis>
                     {stringArr(context, stringArray).join(',')}
                   </ItemText>
                   <ItemText>
                     <Flex>
-                      <Text width="56%" color="textTips" ellipsis>
+                      <Text width='56%' color='textTips' ellipsis>
                         {item.sender_nickname}
                       </Text>
-                      <Text ml="10px" color="textTips" ellipsis>
+                      <Text ml='10px' color='textTips' ellipsis>
                         {shortenAddress(item.sender_address)}
                       </Text>
                     </Flex>
@@ -130,18 +135,18 @@ export const TableList: React.FC<{
         )}
       </Table>
       {data.length > 0 && (
-        <PaginateStyle alignItems="center" justifyContent="end">
-          <Text mr="16px" fontSize="14px" color="textTips">
+        <PaginateStyle alignItems='center' justifyContent='end'>
+          <Text mr='16px' fontSize='14px' color='textTips'>
             总共 {pageCount}页
           </Text>
           <ReactPaginate
-            breakLabel="..."
-            nextLabel=">"
+            breakLabel='...'
+            nextLabel='>'
             onPageChange={handlePageClick}
             pageRangeDisplayed={4}
             marginPagesDisplayed={1}
             pageCount={pageCount}
-            previousLabel="<"
+            previousLabel='<'
             renderOnZeroPageCount={null}
           />
         </PaginateStyle>

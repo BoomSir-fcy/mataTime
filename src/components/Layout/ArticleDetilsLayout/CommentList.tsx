@@ -224,7 +224,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     {/* </MorePopup> */}
                   </Flex>
                 </CommentHeader>
-                <ContentParsing content={item.comment} />
+                <ContentParsing disableParseSquare content={item.comment} />
               </div>
             </Flex>
             <MentionOperator

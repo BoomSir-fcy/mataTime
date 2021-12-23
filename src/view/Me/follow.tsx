@@ -107,7 +107,7 @@ const Follow = React.memo(() => {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
         getFollowList(1);
-        toast.success(t('commonMsgFollowError') || res.data);
+        // toast.success(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);

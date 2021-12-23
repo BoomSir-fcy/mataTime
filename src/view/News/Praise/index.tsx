@@ -108,7 +108,7 @@ const NewsPraise: React.FC = props => {
               <Flex flexWrap='nowrap'>
                 <FollowPopup uid={item.send_uid}>
                   <Text
-                    maxWidth='20vw'
+                    maxWidth='100px'
                     ellipsis
                     color='textPrimary'
                     style={{ cursor: 'pointer' }}
@@ -122,8 +122,13 @@ const NewsPraise: React.FC = props => {
                   margin='7px 10px 0 0'
                   color='#EC612B'
                 />
-                <Text ellipsis>{t('your post')}</Text>
-                {/* <Text ellipsis>{t('liked your comment')}</Text> */}
+                {
+                  item.comment.comment_id
+                  ?
+                  <Text ellipsis>{t('your comment')}</Text>
+                  :
+                  <Text ellipsis>{t('your post')}</Text>
+                }
               </Flex>
             </MessageCard>
           );

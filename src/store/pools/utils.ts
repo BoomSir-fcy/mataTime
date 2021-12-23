@@ -54,9 +54,16 @@ const getBaseApr = (
 // (TimeToken)没有捐赠
 const getDenateApr = (
   token: string,
-  donateApr,
+  totalDonateAmount,
+  decimals,
+  price,
+  totalLiquidity
 ) => {
-  return token.toLowerCase() === getTimeAddress()?.toLowerCase() ? 0 : (donateApr || 0)
+  return token.toLowerCase() === getTimeAddress()?.toLowerCase()
+    ?
+    0
+    :
+    new BigNumber(totalDonateAmount).div(BIG_TEN.pow(decimals)).times(price).div(totalLiquidity).times(100).toNumber()
 }
 
 // (TimeToken)没有捐赠
@@ -68,7 +75,7 @@ const getTotalApr = (
   return baseApr + addtionalApr + donateApr
 }
 
-export const getPoolsApr = (pool: SinglePoolData, donateApr: number): PoolAprs => {
+export const getPoolsApr = (pool: SinglePoolData, totalDonateAmount: string): PoolAprs => {
   /**
    * 
    * @dev 获取池子年化收益率
@@ -83,14 +90,13 @@ export const getPoolsApr = (pool: SinglePoolData, donateApr: number): PoolAprs =
    */
   const token0baseApr = getBaseApr(pool.token0RewardsPerBlock, pool.rewardToken0Decimals, pool.rewardToken0Price, pool.totalLiquidity)
   const token1baseApr = getBaseApr(pool.token1RewardsPerBlock, pool.rewardToken1Decimals, pool.rewardToken1Price, pool.totalLiquidity)
-
   const token0additionalApr = getBaseApr(pool.token0AdditionalRewardPerBlock, pool.rewardToken0Decimals, pool.rewardToken0Price, pool.totalLiquidity)
   const token1additionalApr = getBaseApr(pool.token1AdditionalRewardPerBlock, pool.rewardToken1Decimals, pool.rewardToken1Price, pool.totalLiquidity)
 
-  const token0donateApr = getDenateApr(pool.rewardToken0, donateApr)
+  const token0donateApr = getDenateApr(pool.rewardToken0, totalDonateAmount, pool.rewardToken0Decimals, pool.rewardToken0Price, pool.totalLiquidity)
   const token0totalApr = getTotalApr(token0baseApr, token0additionalApr, token0donateApr)
 
-  const token1donateApr = getDenateApr(pool.rewardToken1, donateApr)
+  const token1donateApr = getDenateApr(pool.rewardToken1, totalDonateAmount, pool.rewardToken1Decimals, pool.rewardToken1Price, pool.totalLiquidity)
   const token1totalApr = getTotalApr(token1baseApr, token1additionalApr, token1donateApr)
 
   return {

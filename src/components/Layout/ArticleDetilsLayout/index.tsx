@@ -20,7 +20,7 @@ import { Spinner, Empty } from 'uikit';
 type Iprops = {
   [name: string]: any;
 };
-export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
+export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { toastSuccess } = useToast();
   const [itemData, setItemData] = useState<any>({

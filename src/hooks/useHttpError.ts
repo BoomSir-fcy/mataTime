@@ -23,7 +23,7 @@ export default function useHttpError() {
     if (httpErrorCodes.includes(data.code)) {
       toastError(t(`http-error-${data.code}`));
     } else {
-      toastError(t('服务器错误'));
+      toastError(t('http-error-30001001'));
     }
   }, [t, toastError])
   

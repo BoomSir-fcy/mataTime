@@ -85,7 +85,7 @@ const NoticeItem: React.FC<{
             {t('systemInformation')}
           </Text>
           <Text color="textTips" fontSize="14px" mt="10px" mb="15px">
-            {dayjs(itemData.add_time).format(t('HH:mm:ss'))}
+            {dayjs(itemData.add_time).format(t('MM-DD HH:mm'))}
           </Text>
           <Text color="textTips">
             {type === 6 &&

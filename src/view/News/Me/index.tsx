@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'contexts';
 import { Text, Flex } from 'uikit';
 
-const NewsMe: React.FC = props => {
+const NewsMe: React.FC<any> = props => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
@@ -82,7 +82,7 @@ const NewsMe: React.FC = props => {
               <Flex flexWrap='nowrap'>
                 <FollowPopup uid={item.send_uid}>
                   <Text
-                    maxWidth='20vw'
+                    maxWidth='100px'
                     ellipsis
                     color='textPrimary'
                     style={{ cursor: 'pointer' }}
