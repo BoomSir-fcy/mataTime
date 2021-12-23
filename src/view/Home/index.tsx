@@ -29,7 +29,7 @@ const CenterCard = styled(Box)`
 const Home: React.FC = (props: any) => {
   const { t } = useTranslation();
   const { replace } = useHistory();
-  const { path } = useLocation();
+  const { pathname } = useLocation();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
@@ -37,13 +37,11 @@ const Home: React.FC = (props: any) => {
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
   });
-  const { toastError } = useToast();
   const articleRefs = React.useRef(null);
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
-  // const { setArticleIds } = useIm()
 
   const sendArticle = async (content: string, image_urls, remind_user) => {
     if (!content) return false;
@@ -75,7 +73,7 @@ const Home: React.FC = (props: any) => {
       ...filterVal,
     };
     // setArticleIds({})
-    replace(`${path || ''}?attention=${item.value}`);
+    replace(`${pathname || ''}?attention=${item.value}`);
     temp[item.paramsName] = item.value;
     dispatch(
       storeAction.postUpdateArticleParams({ attention: item.value, page: 1 }),

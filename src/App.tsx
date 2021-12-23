@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -80,7 +80,7 @@ function App() {
   const { account } = useActiveWeb3React();
   const { getTokens, approve } = RewardAuthorContract();
 
-  const getTokensToCache = async () => {
+  const getTokensToCache = useCallback(async () => {
     try {
       const res = await getTokens();
       const isApprove = await approve(
@@ -95,7 +95,7 @@ function App() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [account, dispatch, getTokens, approve]);
 
   useEffect(() => {
     if (token) {

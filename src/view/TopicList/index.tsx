@@ -19,7 +19,10 @@ const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
   const { id } = props.match.params;
   let { name } = props.match.params;
-  name = decodeURIComponent(name)
+  try {
+    name = decodeURIComponent(name)    
+  } catch (error) {
+  }
   const { toastError } = useToast();
   const [state, setState] = useImmer({
     tagName: '',

@@ -103,7 +103,7 @@ export const Follow = React.forwardRef((props, ref) => {
       const res = await Api.MeApi.unFollowUser(item.uid);
       if (Api.isSuccess(res)) {
         getCurrentState();
-        toastSuccess(t('commonMsgFollowError') || res.data);
+        // toastSuccess(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);

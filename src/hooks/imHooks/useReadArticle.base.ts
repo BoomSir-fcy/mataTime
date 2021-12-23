@@ -3,7 +3,6 @@ import debounce from 'lodash/debounce'
 import useDebounce from 'hooks/useDebounce'
 import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
 import useIm from './useIm'
-import useInterval from '../useInterval'
 
 // 视图范围优化
 const VIEW_PADDING = {
@@ -16,8 +15,11 @@ const VIEW_PADDING = {
  *  
  */
 const useReadArticle = (nonce?: number | boolean) => {
-  const { im, articleIds, articlePositions, setArticleIds } = useIm()
+  const { im, articleIds, articlePositions, rendered, setArticleIds } = useIm()
   const timeStep = 1 // 推送时间间隔
+  const [initLoad, setInitLoad] = useState(false)
+  const [nowTime, setNowTime] = useState(0)
+  const [fetchReadTime, setFetchReadTime] = useState(0)
   const isBrowserTabActiveRef = useIsBrowserTabActive()
 
   const fetchHandle = useCallback(() => {
@@ -25,19 +27,24 @@ const useReadArticle = (nonce?: number | boolean) => {
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
         im?.send(im.messageProtocol.WSProtocol_Spend_Time, {
-          commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
+          commit_time: fetchReadTime, // 提交时间
           read_type: Number(type), // 文章阅读
           read_uid: articleIds[type], // id数组 推文或者评论的
           time_step: timeStep, // 推送时间间隔
-        }, true)
+        })
       }
     })
-  }, [articleIds, isBrowserTabActiveRef, im])
+  }, [articleIds, fetchReadTime, isBrowserTabActiveRef])
 
-  useInterval(fetchHandle, isBrowserTabActiveRef.current ? timeStep * 1000 : null)
+  useEffect(() => {
+    if (nowTime === fetchReadTime) return
+    setFetchReadTime(nowTime)
+    fetchHandle()
+  }, [nowTime, articleIds, fetchReadTime, fetchHandle])
 
 
   const handleScroll = useCallback(() => {
+    console.log(articlePositions)
     if (!Object.keys(articlePositions).length) {
       setArticleIds({})
       return
@@ -85,10 +92,14 @@ const useReadArticle = (nonce?: number | boolean) => {
   }, [handleScroll, flagDebounce])
 
   useEffect(() => {
+    const timer = setInterval(() => {
+      setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
+    }, 1000);
     if (im) {
       im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
     }
     return () => {
+      clearInterval(timer)
       setArticleIds({})
     }
   }, [])

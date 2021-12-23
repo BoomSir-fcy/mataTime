@@ -1,4 +1,4 @@
-friday, [2021/12/20 9:43]
+friday, [2021/12/21 15:49]
 var (
  LogicErrInvalidParams = newLogicError(30_000_001, "invalid parameter")
 
@@ -24,8 +24,7 @@ var (
  LogicErrHotTopicNotFound  = newLogicError(30_003_004, "failed to get the list of popular topics") //获取热门话题列表失败
 
  // 帖子(推特)
-
- LogicErrPOST                   = newLogicError(30_004_001, "post error.") // 未知错误导致发帖失败
+ LogicErrPOST                   = newLogicError(30_004_001, "post error.")
  LogicErrPOST_ContentToLong     = newLogicError(30_004_002, fmt.Sprintf("content can not more than %d characters", model.POST_TEXT_CONTENT_MAX_LENGTH)) // 超过最大长度
  LogicErrPOST_ContainPolitics   = newLogicError(30_004_003, "content related to politics")                                                              // 政治
  LogicErrPOST_ContainTerrorism  = newLogicError(30_004_004, "content related to terrorism")                                                             // 暴恐
@@ -34,22 +33,27 @@ var (
  LogicErrPOST_ContainContraband = newLogicError(30_004_007, "content related to contraband")                                                            // 违禁
  LogicErrPOST_TopicNumLimit     = newLogicError(30_004_008, fmt.Sprintf("topic num can not more than %d", model.POST_TOPIC_MAX_NUM))                    // 操作最大话题数
  LogicErrPOST_ImageNumLimit     = newLogicError(30_004_009, fmt.Sprintf("picture num can not more than %d", model.POST_PICTURE_MAX_NUM))                // 超过最大图片数
- LogicErrPOST_GetTimeReceive    = newLogicError(30_004_010, "get total time error.")      // 请求推文次数过多
+ LogicErrPOST_GetTimeReceive    = newLogicError(30_004_010, "get total time error.")
  LogicErrPostNotFound           = newLogicError(30_004_011, "get post error")             // 获取推文失败
  LogicErrCreatePost             = newLogicError(30_004_012, "failed to post new tweet")   // 发布新推文失败
  LogicErrPostDetailNotFound     = newLogicError(30_004_013, "failed to get post details") // 获取推文详情失败
  LogicErrPostSetTop             = newLogicError(30_004_014, "failed to set sticky posts") // 设置置顶帖子失败
  LogicErrCancelPostTop          = newLogicError(30_004_015, "failed to unpin posts")      // 取消置顶帖子失败
  LogicErrDeletePost             = newLogicError(30_004_016, "failed to delete post")      //  删除帖子失败
+ LogicErrInvalidFormat          = newLogicError(30_004_017, "failed to delete post")      //  帖子格式不正确
+ LogicErrCheckUsersFail         = newLogicError(30_004_018, "cant find users")            //  校验@用户失败
 
- // 评论
+friday, [2021/12/21 15:49]
+// 评论
  LogicErrComment         = newLogicError(30_005_001, "comment error.") // 未知错误导致评论失败
  LogicErrCreateComment   = newLogicError(30_005_002, "failed to post new comment") // 发布新评论失败
  LogicErrDeleteComment   = newLogicError(30_005_003, "failed to delelte comment") // 删除评论失败
  LogicErrCommentNotFound = newLogicError(30_005_004, "failed to get the comment list") // 获取评论列表失败
  LogicErrLikeCommentMsg  = newLogicError(30_005_005, "failed to send like comment message") //发送点赞评论消息失败
+LogicErrCantFindUsers    = newLogicError(30_005_006, "cant find users.")                    // @的用户不存在
+ LogicErrCantCreateTopics = newLogicError(30_005_007, "cant create topics")                  // 评论不能创建话题
+ LogicErrCantFindPost     = newLogicError(30_005_008, "cant create post")                    // 无法找到文章id
 
-friday, [2021/12/20 9:43]
 // 点赞相关
  LogicErrLike              = newLogicError(30_006_001, "like error.") // 未知错误导致点赞失败
  LogicErrLikePost          = newLogicError(30_006_002, "failed to like post")        //点赞推文失败
@@ -79,6 +83,8 @@ friday, [2021/12/20 9:43]
  // 钱包接口
  LogicErrWallet        = newLogicError(30_011_001, "wallet error.") // 服务器错误
  LogicErrTimeNotEnough = newLogicError(30_011_002, "insufficient time balance") // time 不足
+ // LogicErrNoRecord      = newLogicError(30_011_003, "insufficient time balance") //
+
  // 打赏
  LogicErrReward = newLogicError(30_012_001, "reward error.")
  // 任务

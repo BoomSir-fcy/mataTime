@@ -78,7 +78,7 @@ export const Popup: React.FC<{
         setState(p => {
           p.cancelFollow = false;
         });
-        toastSuccess(t('commonMsgFollowError') || res.data);
+        // toastSuccess(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
