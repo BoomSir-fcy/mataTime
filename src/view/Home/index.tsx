@@ -35,7 +35,7 @@ const Home: React.FC = (props: any) => {
   const attention = useStore(p => p.post.attention);
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: parsedQs.attention || attention || 2
+    attention: parsedQs.attention || attention || 2,
   });
   const { toastError } = useToast();
   // const  editorRef = useRef();
@@ -51,7 +51,7 @@ const Home: React.FC = (props: any) => {
       const res = await Api.HomeApi.createArticle({
         content: content,
         image_urls: image_urls,
-        remind_user
+        remind_user,
       });
       if (Api.isSuccess(res)) {
         setRefresh(!refresh);
@@ -70,13 +70,13 @@ const Home: React.FC = (props: any) => {
    */
   const tabsChange = item => {
     const temp = {
-      ...filterVal
+      ...filterVal,
     };
     // setArticleIds({})
     replace(`${path || ''}?attention=${item.value}`);
     temp[item.paramsName] = item.value;
     dispatch(
-      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 })
+      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 }),
     );
     setFilterVal(temp);
     setRefresh(!refresh);

@@ -100,7 +100,6 @@ export const ArticleList = props => {
   // };
 
   // 更新列表
-
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     if (
       type === MoreOperatorEnum.FOLLOW ||
