@@ -35,10 +35,10 @@ const Home: React.FC = (props: any) => {
   const attention = useStore(p => p.post.attention);
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: parsedQs.attention || attention || 2
+    attention: parsedQs.attention || attention || 2,
   });
   const { toastError } = useToast();
-  // const  editorRef = useRef();
+  const articleRefs = React.useRef(null);
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
@@ -51,10 +51,12 @@ const Home: React.FC = (props: any) => {
       const res = await Api.HomeApi.createArticle({
         content: content,
         image_urls: image_urls,
-        remind_user
+        remind_user,
       });
       if (Api.isSuccess(res)) {
-        setRefresh(!refresh);
+        // setRefresh(!refresh);
+        console.log(articleRefs);
+        articleRefs?.current?.reload(1);
       }
     } catch (error) {
       console.error(error);
@@ -70,13 +72,13 @@ const Home: React.FC = (props: any) => {
    */
   const tabsChange = item => {
     const temp = {
-      ...filterVal
+      ...filterVal,
     };
     // setArticleIds({})
     replace(`${path || ''}?attention=${item.value}`);
     temp[item.paramsName] = item.value;
     dispatch(
-      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 })
+      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 }),
     );
     setFilterVal(temp);
     setRefresh(!refresh);
@@ -95,9 +97,10 @@ const Home: React.FC = (props: any) => {
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
           <ArticleList
+            key={refresh}
+            ref={articleRefs}
             setNonce={setNonce}
             nonce={nonce}
-            key={refresh}
             topicName={match.params.name}
             filterValObj={filterVal}
             {...props}
