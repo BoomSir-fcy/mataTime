@@ -35,6 +35,10 @@ import { State } from '../types';
 import { BIG_TEN } from 'utils/bigNumber';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const REFRESH_INTERVAL = 30 * 1000;
 const SLOW_INTERVAL = 60 * 1000;
@@ -312,6 +316,13 @@ export const FetchTimeIncometoday = async days => {
   try {
     const res = await Api.AccountApi.TimeIncometoday({ days });
     if (Api.isSuccess(res)) {
+      if (res.data.today_income > 0) {
+        let today = {
+          income: res.data.today_income,
+          date: dayjs().utc().format('YYYY-MM-DD')
+        };
+        res.data.data.unshift(today);
+      }
       return res.data;
     } else {
       throw new Error('errCode');
