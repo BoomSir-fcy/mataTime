@@ -70,21 +70,21 @@ export const SearchPop = (props: Iprops) => {
   return show ? (
     <SearchPopBox onClick={e => e.nativeEvent.stopImmediatePropagation()}>
       {type === 'user' ? (
-        <div className="search-box">
-          <div className="title">
+        <div className='search-box'>
+          <div className='title'>
             <Icon
-              name="icon-sousuo"
-              margin="15px 0"
+              name='icon-sousuo'
+              margin='15px 0'
               size={20}
-              color="white_black"
+              color='white_black'
             />
             {!!nicKName ? (
               <Icon
                 current={1}
-                name="icon-guanbi2fill"
-                margin="15px 0"
+                name='icon-guanbi2fill'
+                margin='15px 0'
                 size={20}
-                color="white_black"
+                color='white_black'
                 onClick={() => setNickName('')}
               />
             ) : null}
@@ -92,20 +92,20 @@ export const SearchPop = (props: Iprops) => {
               placeholder={t('nicknameSearch')}
               value={nicKName}
               onChange={e => setNickName(e.target.value)}
-              type="text"
+              type='text'
             />
           </div>
-          <div className="search-res-list">
+          <div className='search-res-list'>
             {userList.map((item, index) => (
               <Flex
                 key={item.uid}
-                className="search-res-list-item"
+                className='search-res-list-item'
                 onClick={e => callback(item, type)}
               >
                 <Avatar
                   src={item.nft_image}
                   style={{ width: '50px', height: '50px' }}
-                  scale="md"
+                  scale='md'
                 />
                 <div style={{ flex: 1 }}>
                   <Flex>
@@ -117,8 +117,8 @@ export const SearchPop = (props: Iprops) => {
                   <UserDesc title={item.address}>
                     {item.address &&
                       (item.address || '').slice(0, 3) +
-                      '...' +
-                      (item.address || '').slice(35)}
+                        '...' +
+                        (item.address || '').slice(35)}
                   </UserDesc>
                 </div>
               </Flex>
@@ -127,36 +127,36 @@ export const SearchPop = (props: Iprops) => {
         </div>
       ) : null}
       {type === 'topic' ? (
-        <div className="search-box">
-          <div className="title">
+        <div className='search-box'>
+          <div className='title'>
             <Icon
-              name="icon-sousuo"
-              margin="15px 0"
+              name='icon-sousuo'
+              margin='15px 0'
               size={20}
-              color="white_black"
+              color='white_black'
             />
             {!!topicValue ? (
               <Icon
                 cur={true}
-                name="icon-guanbi2fill"
-                margin="15px 0"
+                name='icon-guanbi2fill'
+                margin='15px 0'
                 size={20}
-                color="white_black"
+                color='white_black'
                 onClick={() => setTopicValue('')}
               />
             ) : null}
             <input
-              type="text"
+              type='text'
               placeholder={t('topicSearch')}
               value={topicValue}
               onChange={e => setTopicValue(e.target.value)}
             />
           </div>
-          <div className="search-res-list">
+          <div className='search-res-list'>
             {topicList.map((item, index) => (
               <Flex
                 key={item.topic_id}
-                className="search-res-list-item"
+                className='search-res-list-item'
                 onClick={e => callback(item, type)}
               >
                 <UserTitle style={{ flex: 1 }} title={item.topic_name}>

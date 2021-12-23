@@ -101,16 +101,20 @@ export const Tabs = (props: propsType) => {
     setCurrentRightIndex(index);
     tabsChange(item);
   };
+
   return (
     <TabsBox isBoxShadow>
       {tabLeftArr.length > 0 && (
         <TableLeftBox>
           {tabLeftArr.map((item, index) => {
+            let curretnIndex = index + 1;
             return (
               <Box
-                key={index}
-                onClick={debounce(() => leftTabClick(item, index), 500)}
-                className={currentLeftIndex === index ? 'leftActive' : ''}
+                key={curretnIndex}
+                onClick={debounce(() => leftTabClick(item, curretnIndex), 500)}
+                className={
+                  currentLeftIndex === curretnIndex ? 'leftActive' : ''
+                }
               >
                 {item.label}
               </Box>

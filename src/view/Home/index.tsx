@@ -35,7 +35,7 @@ const Home: React.FC = (props: any) => {
   const attention = useStore(p => p.post.attention);
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: attention || parsedQs.attention || 2
+    attention: parsedQs.attention || attention || 2
   });
   const { toastError } = useToast();
   // const  editorRef = useRef();
@@ -92,7 +92,7 @@ const Home: React.FC = (props: any) => {
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
             tabsChange={tabsChange}
-            defCurrentLeft={Number(attention || parsedQs.attention || 2) - 1}
+            defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
           <ArticleList
             setNonce={setNonce}

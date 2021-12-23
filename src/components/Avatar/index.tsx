@@ -52,6 +52,7 @@ export const Avatar: React.FC<{
   src?: string;
   scale?: typeof scales[keyof typeof scales];
   disableFollow?: boolean;
+  callback?: (type?: string) => void;
   [propName: string]: any;
 }> = props => {
   let deepProps = Object.assign({}, props);
@@ -62,7 +63,13 @@ export const Avatar: React.FC<{
   return (
     <React.Fragment>
       {!props.disableFollow ? (
-        <TooltipWraps trigger={<Img {...deepProps} />} uid={props.uid}>
+        <TooltipWraps
+          trigger={<Img {...deepProps} />}
+          uid={props.uid}
+          callback={type => {
+            props.callback && props.callback(type);
+          }}
+        >
           <Img {...deepProps} />
         </TooltipWraps>
       ) : (

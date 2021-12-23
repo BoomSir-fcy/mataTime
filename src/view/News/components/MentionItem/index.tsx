@@ -150,6 +150,16 @@ export const MentionItemUser: React.FC<UserProps> = ({
               uid={itemData.uid || itemData.user_id}
               className='avatar'
               src={itemData.user_avator_url}
+              callback={type => {
+                console.log(type);
+                callback(
+                  {
+                    ...itemData,
+                    is_attention: type === 'CANCEL_FOLLOW' ? 0 : 1
+                  },
+                  type
+                );
+              }}
               scale='md'
             />
           </Link>

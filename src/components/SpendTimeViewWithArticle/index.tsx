@@ -53,7 +53,6 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
       if (!rendered) setRendered(true)
     }
     return () => {
-      console.log(`${articleId}_${readType}`)
       setArticlePositions(prep => {
         const newArticlePositions = {
           ...prep

@@ -23,7 +23,7 @@ export const MentionUser: React.FC<{
         borderRadius: '4px',
         boxShadow: '0 1px 5px rgba(0,0,0,.2)'
       }}
-      data-cy="mentions-portal"
+      data-cy='mentions-portal'
     >
       {data.map((char, i) => (
         <div

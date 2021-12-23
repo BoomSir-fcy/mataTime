@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { Flex, Button, Box } from 'uikit';
-import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
-// import MentionItem from 'view/News/components/MentionItem';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { List, MoreOperatorEnum } from 'components';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+import { ReadType } from 'hooks/imHooks/types';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { fetchThunk, storeAction, useStore } from 'store';
-
-import { relativeTime } from 'utils';
+import { MeItemWrapper, NewsMeWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { ReadType } from 'hooks/imHooks/types';
-import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-
-import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
-import { Api } from 'apis';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -43,12 +36,11 @@ export const ArticleList = props => {
     nonce,
     setNonce = () => {
       console.error('setNonce is null or undefined, and not refresh ');
-    }
+    },
   } = props || {};
 
   const Getlist = React.useCallback(
     (current = 0) => {
-      console.log(loading, isEnd, Boolean(current));
       if ((loading || isEnd) && !current) return false;
       setLoading(true);
       dispatch(
@@ -56,20 +48,21 @@ export const ArticleList = props => {
           attention: 1,
           page: current || page,
           per_page: pageSize,
-          ...props.filterValObj
-        })
+          ...props.filterValObj,
+        }),
       );
+      setIsEnd(true);
       setLoading(false);
       setNonce(prep => prep + 1);
     },
-    [article, isEnd]
+    [article, isEnd],
   );
 
   React.useEffect(() => {
-    console.log(lastList.length);
     if (list.length > 0 && lastList.length < pageSize) {
       setIsEnd(true);
-    } else {
+    }
+    if (list.length > 0 && list.length / pageSize !== page) {
       setIsEnd(false);
     }
   }, [list]);
@@ -168,8 +161,8 @@ export const ArticleList = props => {
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(item: any, type: MoreOperatorEnum) => {
                 updateList(item, type);
@@ -184,8 +177,8 @@ export const ArticleList = props => {
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(item: any, type?: MoreOperatorEnum) => {
                 updateList(item, type);
