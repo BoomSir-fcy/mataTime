@@ -97,6 +97,7 @@ const Home: React.FC = (props: any) => {
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
           <ArticleList
+            key={refresh}
             ref={articleRefs}
             setNonce={setNonce}
             nonce={nonce}
