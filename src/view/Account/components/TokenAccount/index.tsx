@@ -106,7 +106,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
   );
 };
 
-const TokenAccount: React.FC = React.memo((route: RouteComponentProps) => {
+const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
   useFetchWalletInfo();
   useFetchApproveNum();
   const { t } = useTranslation();

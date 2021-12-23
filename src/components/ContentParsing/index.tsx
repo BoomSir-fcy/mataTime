@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import reactStringReplace from 'react-string-replace';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -52,16 +52,7 @@ const ParagraphItem = styled.div`
     cursor: pointer;
   }
 `;
-// const parseText = (val = '') => {
-//   const reg = new RegExp(/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g)
-//   val.replace(reg, function (e) {
-//     return `<a href="${e}" target="_blank" onclick="event.stopPropagation()"> ${e} </a>`
-//   })
-//   val.replace(/[#＃][^#＃]+[#＃]/g, function (word) {
-//     return `<a  href="/topicList/empty${word}" onclick="event.stopPropagation()">${word}</a>`;
-//   });
-//   return val
-// }
+
 
 export const ContentParsing = (props: IProps) => {
   const ref: any = useRef();
@@ -91,8 +82,11 @@ export const ContentParsing = (props: IProps) => {
     }, 0);
   }, []);
 
+  const { push } = useHistory()
   const goRouter = router => {
-    history.push(router);
+    push(router, {
+      
+    });
   };
 
   // 解析内容
@@ -141,17 +135,15 @@ export const ContentParsing = (props: IProps) => {
         SQUARE_REGEXP,
         // /#(\w+|[\u4E00-\u9FA5|0-9]+)[\s|\D]{0}/g,
         (match, i) => (
-          <a
+          <Link
             onClick={event => {
               event.stopPropagation();
-              event.preventDefault()
-              goRouter(`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`);
             }}
-            href={`/topicList/empty/${encodeURIComponent(match.slice(1, match.length))}`}
+            to={() => `/topicList/empty/${encodeURI(encodeURIComponent(match.slice(1, match.length)))}`}
             key={match + i}
           >
             {match}&nbsp;
-          </a>
+          </Link>
         )
       );
     }

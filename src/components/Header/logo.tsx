@@ -5,7 +5,7 @@ import { Box } from 'uikit';
 
 interface LogoInterface {
   src: string;
-  url?: String;
+  url?: string;
   style?: React.CSSProperties;
 }
 
@@ -15,8 +15,10 @@ const LogoWarpper = styled(Box)`
 
 export const Logo: React.FC<LogoInterface> = ({ src, url, style }) => {
   return (
-    <LogoWarpper as={Link} to={url} style={style}>
-      <img src={src} alt="" />
+    <LogoWarpper style={style}>
+      <Link to={url}>
+        <img src={src} alt="" />
+      </Link>
     </LogoWarpper>
   );
 };

@@ -21,7 +21,6 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
 
   const imgRef = useRef<HTMLDivElement>(null);
   const { setArticlePositions, rendered, setRendered } = useIm()
-  const [isLoaded, setIsLoaded] = useState(false);
 
   // 解决图片加载后文章高度改变
   const handleListenImageLoad = useCallback((dom: HTMLElement) => {
@@ -39,6 +38,7 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
 
   useEffect(() => {
     if (imgRef.current) {
+      console.log('========', articleId)
       handleListenImageLoad(imgRef.current?.parentElement)
       const offsetHeight = imgRef.current?.parentElement?.offsetHeight
       const offsetTop = imgRef.current?.parentElement?.offsetTop
@@ -49,7 +49,6 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
           [`${articleId}_${readType}`]: { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight },
         }
       })
-      setIsLoaded(true)
       if (!rendered) setRendered(true)
     }
     return () => {
@@ -64,10 +63,10 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
   }, [articleId, readType, rendered, flagDebounce, setRendered, setArticlePositions]);
 
 
-  return <div ref={imgRef} />
-  // return <div ref={imgRef}>
-  //   <Text>articleId: {articleId}</Text>
-  // </div>
+  // return <div ref={imgRef} />
+  return <div ref={imgRef}>
+    <Text>articleId: {articleId}</Text>
+  </div>
 })
 
 export default SpendTimeViewWithArticle

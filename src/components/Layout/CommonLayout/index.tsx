@@ -10,7 +10,7 @@ import NewsPraise from 'view/News/Praise';
 import NewsNotice from 'view/News/Notice';
 import { Crumbs } from 'components';
 
-export const CommonLayout: React.FC = (props: any) => {
+export const CommonLayout: React.FC<any> = (props: any) => {
   const { t } = useTranslation();
   const { location } = props;
 

@@ -23,7 +23,7 @@ const NoneEventsText = styled(Text)`
   }
 `;
 
-const NewsComment: React.FC = props => {
+const NewsComment: React.FC<any> = props => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);

@@ -61,8 +61,8 @@ export class IM extends EventTarget {
   url: string =
     process.env.NODE_ENV === 'production'
       ? `${process.env.React_APP_WS_URL}/v1/ws`
-      : `${process.env.React_APP_WS_URL}/v1/ws`;
-  // :'ws://192.168.101.112:8888/v1/ws';
+      // : `${process.env.React_APP_WS_URL}/v1/ws`;
+  :'ws://192.168.101.129:8888/v1/ws';
   token: string;
   userToken: string;
 
@@ -290,7 +290,10 @@ export class IM extends EventTarget {
 
   private oncloseHandle(event: CloseEvent) {
     this.dispatchEvent(new CloseEvent(ImEventType.CLOSE, event));
+    this.reConnectionWs()
+  }
 
+  private reConnectionWs() {
     if (this.endConnect || this.loading) return;
     clearTimeout(this.reTimer);
     this.reTimer = setTimeout(() => {
@@ -302,7 +305,11 @@ export class IM extends EventTarget {
   private async initWebSocket() {
     const start = async () => {
       const token = await this.getToken();
-      if (!token) return;
+      if (!token) {
+        this.loading = false;
+        this.reConnectionWs();
+        return;
+      };
       if (this.connection) {
         delete this.connection;
       }
