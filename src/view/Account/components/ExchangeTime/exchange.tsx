@@ -26,6 +26,7 @@ import { useStore } from 'store';
 import { useDispatch } from 'react-redux';
 import {
   fetchDSGApproveNumAsync,
+  fetchRewardNumAsync,
   fetchTimeExchangeList,
   fetchTimeShopInfo
 } from 'store/wallet/reducer';
@@ -222,6 +223,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
       setpending(true);
       await onExchange(Number(inputNum));
       dispatch(fetchTimeShopInfo());
+      dispatch(fetchRewardNumAsync(account));
       dispatch(fetchTimeExchangeList({ account, page: 1 }));
       toastSuccess(t('Account The transaction is successful!'));
     } catch (e) {

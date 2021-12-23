@@ -19,7 +19,7 @@ const ArticleListBox = styled.div`
  * @review
  * props 未声明类型
  */
-export const ArticleList = props => {
+const ArticleComponents = (props, ref) => {
   // const [size, setSize] = useState(20)
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const article = useStore(p => p.post);
@@ -59,47 +59,16 @@ export const ArticleList = props => {
   );
 
   React.useEffect(() => {
-    if (list.length > 0 && lastList.length < pageSize) {
-      setIsEnd(true);
+    if (page > 1) {
+      if (lastList.length < pageSize) {
+        setIsEnd(true);
+      } else if (lastList.length >= pageSize) {
+        setIsEnd(false);
+      }
     }
-    if (list.length > 0 && list.length / pageSize !== page) {
-      setIsEnd(false);
-    }
-  }, [list]);
-
-  // 获取列表
-  // const getList = (current = 0) => {
-  //   if ((loading || isEnd) && !current) return false;
-  //   setLoading(true);
-  //   Api.HomeApi.getArticleList({
-  //     attention: 1,
-  //     page: current || page,
-  //     per_page: pageSize,
-  //     ...props.filterValObj
-  //   }).then(res => {
-  //     setLoading(false);
-  //     if (Api.isSuccess(res)) {
-  //       setLoading(false);
-  //       setTotalPage(res.data.total_page);
-  //       if (res.data.List.length < pageSize) {
-  //         setIsEnd(true);
-  //       } else {
-  //         setIsEnd(false);
-  //       }
-  //       if (current === 1 || page === 1) {
-  //         setListData([...res.data.List]);
-  //         setPage(2);
-  //       } else {
-  //         setListData([...listData, ...res.data.List]);
-  //         setPage(page + 1);
-  //       }
-  //     }
-  //     // setNonce(prep => prep + 1);
-  //   });
-  // };
+  }, [loading, list]);
 
   // 更新列表
-
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     if (
       type === MoreOperatorEnum.FOLLOW ||
@@ -137,6 +106,12 @@ export const ArticleList = props => {
       setNonce(prep => prep + 1);
     }
   };
+
+  React.useImperativeHandle(ref, () => ({
+    reload(page: number) {
+      return Getlist(page);
+    },
+  }));
 
   return (
     <ArticleListBox>
@@ -190,3 +165,5 @@ export const ArticleList = props => {
     </ArticleListBox>
   );
 };
+
+export const ArticleList = React.forwardRef(ArticleComponents);

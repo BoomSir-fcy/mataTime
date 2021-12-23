@@ -91,6 +91,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
             <div className='left-box'>
               <div className='img-box'>
                 <Avatar
+                  disableFollow
                   className='avatar'
                   src={userInfo.nft_image || userInfo.NftImage || '  '}
                   scale='md'
