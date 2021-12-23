@@ -8,7 +8,7 @@ import {
   List,
   ContentParsing,
   PopupWrap,
-  MoreOperatorEnum
+  MoreOperatorEnum,
 } from 'components';
 import { Flex, Button, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
@@ -28,7 +28,7 @@ import {
   CommentHeader,
   CommentContent,
   // CommentFooter,
-  CommentListFooter
+  CommentListFooter,
 } from './style';
 import { SortIcon } from './SortIcon';
 
@@ -89,7 +89,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       prepage: MAX_SPEND_TIME_PAGE_TATOL,
       page: current || page,
       sort_add_time: sortTime,
-      sort_like: sortLike
+      sort_like: sortLike,
     }).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
@@ -103,7 +103,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum) => {
-    console.log(232323232323);
     const {
       FOLLOW,
       CANCEL_FOLLOW,
@@ -112,7 +111,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       COMMONT,
       EXPAND,
       SHIELD,
-      DELPOST
+      DELPOST,
     } = MoreOperatorEnum;
     const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
@@ -162,7 +161,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
           if (!itemData.id) return;
           if (loading || page > totalPage) return false;
           setLoading(true);
-          console.log(11111);
           getList();
         }}
       >
@@ -213,7 +211,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       }
                       arrowStyle={{
                         color: theme.colors.tertiary,
-                        stroke: theme.colors.tertiary
+                        stroke: theme.colors.tertiary,
                       }}
                     >
                       <CommentPop
@@ -236,8 +234,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                 ...item,
                 comment: {
                   ...item,
-                  content: item.comment
-                }
+                  content: item.comment,
+                },
               }}
               postId={item.pid}
               commentId={item.id}

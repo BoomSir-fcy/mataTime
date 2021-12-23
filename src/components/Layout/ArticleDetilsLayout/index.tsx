@@ -22,9 +22,9 @@ type Iprops = {
 };
 export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
   const { t } = useTranslation();
-  const { toastSuccess, toastError } = useToast();
+  const { toastSuccess } = useToast();
   const [itemData, setItemData] = useState<any>({
-    id: 0
+    id: 0,
   });
   const [refresh, setRefresh] = useState(1);
   const [loaded, setLoaded] = useState(false);
@@ -38,7 +38,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
     Api.CommentApi.createComment({
       pid: itemData.id,
       comment: res,
-      remind_user
+      remind_user,
     }).then(res => {
       if (Api.isSuccess(res)) {
         toastSuccess(res.data);
@@ -58,7 +58,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
       setLoaded(true);
       if (Api.isSuccess(res)) {
         setItemData(res.data);
-        setRefresh(refresh === 1 ? 2 : 1);
+        // setRefresh(refresh === 1 ? 2 : 1);
       } else {
         setItemData({});
       }
@@ -93,8 +93,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
                 post_id: itemData.id,
                 post: {
                   ...itemData,
-                  post_id: itemData.id
-                }
+                  post_id: itemData.id,
+                },
               }}
               callback={(_data, _type) => {
                 getArticleDetail(_type);
@@ -108,8 +108,8 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
                 ...itemData,
                 post_id: itemData.id,
                 post: {
-                  ...itemData
-                }
+                  ...itemData,
+                },
               }}
               callback={data => setItemData(data)}
             />
@@ -119,7 +119,7 @@ export const ArticleDetilsLayout: React.FC = (props: Iprops) => {
           <CommentList
             nonce={nonce}
             setNonce={setNonce}
-            // key={refresh} Todo 不知道这个key有什么作用
+            key={refresh}
             itemData={itemData}
           />
         </>

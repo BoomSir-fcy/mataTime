@@ -6,7 +6,7 @@ import {
   ReportModal,
   EditTwitterModal,
   CommonInquiryModal,
-  CommentModal
+  CommentModal,
 } from 'components';
 
 import { toast } from 'react-toastify';
@@ -21,6 +21,8 @@ const PopupWrapper = styled(Box)`
   border-radius: 10px;
   box-sizing: border-box;
   padding: 15px 30px;
+  margin-top: -1px;
+  margin-left: 4px;
   div {
     font-size: 14px;
     font-weight: 400;
@@ -44,7 +46,7 @@ export const CommentPop = React.memo((props: Iprops) => {
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [inqueryType, setInqueryType] = useState<string>('deleteComment');
   const [state, setState] = useImmer({
-    visible: false
+    visible: false,
   });
 
   // const [isShowDel, setIsShowDel] = useState<boolean>(false);
@@ -72,7 +74,7 @@ export const CommentPop = React.memo((props: Iprops) => {
         {isCurrentUser ? (
           <React.Fragment>
             <Text
-              textTransform="capitalize"
+              textTransform='capitalize'
               onClick={() => {
                 setInqueryType('deleteComment');
                 setCommonInqueryShow(true);
@@ -82,7 +84,7 @@ export const CommentPop = React.memo((props: Iprops) => {
             </Text>
             {data.user_id !== UID && (
               <Text
-                textTransform="capitalize"
+                textTransform='capitalize'
                 onClick={() =>
                   setState(p => {
                     p.visible = true;
@@ -95,7 +97,7 @@ export const CommentPop = React.memo((props: Iprops) => {
           </React.Fragment>
         ) : (
           <Text
-            textTransform="capitalize"
+            textTransform='capitalize'
             onClick={() =>
               setState(p => {
                 p.visible = true;
