@@ -63,7 +63,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
 
   useEffect(() => {
     if (coinSymbol) {
-      const activeCoin = coinsList.find(item => item.coin_symbol === coins.symbol)
+      const activeCoin = coinsList.find(item => item.coin_symbol === coinSymbol)
       if (activeCoin) {
         setCurrentCoin(activeCoin)
         setCoinSymbol('')
