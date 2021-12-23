@@ -6,21 +6,21 @@ interface profile extends Api.User.userInfoParams {
 export const changeSignUp =
   createAction<{ isSignup: boolean }>('login/changeSignUp');
 export const changeGetStake = createAction<{ isGetStake: boolean }>(
-  'login/changeGetStake'
+  'login/changeGetStake',
 );
 export const changeSignUpFail = createAction<{ signUpFail: boolean }>(
-  'login/changeSignUpFail'
+  'login/changeSignUpFail',
 );
 export const changeSignUpStep = createAction<{ singUpStep: number }>(
-  'login/changeSignUpStep'
+  'login/changeSignUpStep',
 );
 export const changeUpdateProfile = createAction<profile>(
-  'login/changeUpdateProfile'
+  'login/changeUpdateProfile',
 );
 export const setUserNft =
   createAction<Api.SignIn.nftParams>('login/setUserNft');
 export const setUserNftStake = createAction<{ isStakeNft: boolean }>(
-  'login/setUserNftList'
+  'login/setUserNftList',
 );
 export const setNftAddr = createAction<any[]>('login/setNftAddr');
 export const resetLoginState = createAction('login/resetLoginState');
@@ -32,6 +32,10 @@ export const changeReset = createAction('login/changeReset');
 
 export const setSigninLoading = createAction<boolean>('signin/setLoading');
 
-export const setUserToken = createAction<string | null | undefined>('signin/setUserToken');
+export const setUserToken = createAction<string | null | undefined>(
+  'signin/setUserToken',
+);
 
-export const setUserUnreadMsgNum = createAction<Partial<Api.News.UnreadMsgNum>>('login/setUserUnreadMsgNum');
+export const setUserUnreadMsgNum = createAction<Partial<Api.News.UnreadMsgNum>>(
+  'login/setUserUnreadMsgNum',
+);

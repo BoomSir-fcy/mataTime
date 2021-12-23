@@ -215,7 +215,7 @@
   "meUnsubscribe": "Unfollow",
   "meUnsubscribeTips": "Unfollow her/him?",
   "meUnsubscribeContent": "Unfollow user %value%, you will not be able to get the latest Feeds of her/him",
-  "meFocusOn": "Follow",
+  "meFocusOn": "Following",
   "meNotFollowed": "Not Followed",
   "meFollowed": "Following",
   "meMutualAttention": "Mutual Following",

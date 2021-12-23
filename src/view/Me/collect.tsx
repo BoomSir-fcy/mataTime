@@ -15,7 +15,7 @@ import { Api } from 'apis';
 enum MoreOperatorEnum {
   SHIELD = 'SHIELD', // 屏蔽
   SETTOP = 'SETTOP',
-  DELPOST = 'DELPOST'
+  DELPOST = 'DELPOST',
 }
 
 const Collect = props => {
@@ -33,12 +33,12 @@ const Collect = props => {
       setLoading(false);
       if (Api.isSuccess(res)) {
         setPage((current || page) + 1);
-        setTotalPage(res.data.total_num);
+        setTotalPage(res.data.total_page);
         setTotal(res.data.total_num);
         setListData(
           current
             ? [...(res.data?.list || [])]
-            : [...listData, ...(res.data?.list || [])]
+            : [...listData, ...(res.data?.list || [])],
         );
       }
     } catch (error) {
@@ -51,10 +51,10 @@ const Collect = props => {
     <Box>
       <Crumbs title={t('meHome')}>
         <Flex>
-          <Text fontWeight="bold" mr="10px" fontSize="14px">
+          <Text fontWeight='bold' mr='10px' fontSize='14px'>
             {t('meHeaderMyCollection')}
           </Text>
-          <Text fontSize="14px">
+          <Text fontSize='14px'>
             {t('meHeaderNum%value%', { value: total })}
           </Text>
         </Flex>
@@ -84,14 +84,14 @@ const Collect = props => {
                       post: {
                         ...item,
                         is_fav: 1,
-                        user_id: item.uid
-                      }
+                        user_id: item.uid,
+                      },
                     }}
                     callback={() => init(1)}
                   />
                   <MentionOperator
-                    replyType="twitter"
-                    type="Article"
+                    replyType='twitter'
+                    type='Article'
                     postId={item.post_id}
                     itemData={{
                       ...item,
@@ -101,8 +101,8 @@ const Collect = props => {
                       post: {
                         ...item,
                         user_id: item.uid,
-                        is_fav: 1
-                      }
+                        is_fav: 1,
+                      },
                     }}
                     callback={() => init(1)}
                   />
