@@ -59,13 +59,14 @@ export const ArticleList = props => {
   );
 
   React.useEffect(() => {
-    if (list.length > 0 && lastList.length < pageSize) {
-      setIsEnd(true);
+    if (page > 1) {
+      if (lastList.length < pageSize) {
+        setIsEnd(true);
+      } else if (lastList.length >= pageSize) {
+        setIsEnd(false);
+      }
     }
-    if (list.length > 0 && list.length / pageSize !== page) {
-      setIsEnd(false);
-    }
-  }, [list]);
+  }, [loading, list]);
 
   // 获取列表
   // const getList = (current = 0) => {

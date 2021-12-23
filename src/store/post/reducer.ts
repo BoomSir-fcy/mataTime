@@ -6,7 +6,7 @@ const initialState = {
   list: [],
   lastList: [],
   page: 1,
-  attention: 2
+  attention: 2,
 };
 
 export type Post = typeof initialState;
@@ -15,17 +15,18 @@ export const fetchPostAsync = createAsyncThunk(
   'fetch/getArticle',
   async (params: Api.Home.queryListParams) => {
     const response: Api.Home.postData = await Api.HomeApi.getArticleList(
-      params
+      params,
     );
     if (Api.isSuccess(response)) {
       return {
         list: response.data.List,
         page: params.page,
-        attention: params.attention
+        per_page: params.per_page,
+        attention: params.attention,
       };
     }
     return {};
-  }
+  },
 );
 
 export const Post = createSlice({
@@ -35,11 +36,13 @@ export const Post = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchPostAsync.fulfilled, (state, action) => {
-        const { list, page, attention } = action.payload;
+        const { list, page, per_page, attention } = action.payload;
+        console.log(per_page);
         let articleList = list ?? [];
         state.list = page === 1 ? articleList : [...state.list, ...articleList];
-        state.lastList = list ?? [];
-        state.page = articleList.length > 0 ? page + 1 : page;
+        state.lastList =
+          articleList.length >= per_page || page > 1 ? articleList : [];
+        state.page = articleList.length >= per_page ? page + 1 : page;
         state.attention = Number(attention);
       })
       .addCase(postUpdateArticleParams, (state, action) => {
@@ -51,7 +54,7 @@ export const Post = createSlice({
       .addCase(postUpdateArticle, (state, action) => {
         state.list = action.payload;
       });
-  }
+  },
 });
 
 export default Post.reducer;
