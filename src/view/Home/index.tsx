@@ -56,7 +56,7 @@ const Home: React.FC = (props: any) => {
       if (Api.isSuccess(res)) {
         // setRefresh(!refresh);
         console.log(articleRefs);
-        articleRefs?.current?.reload();
+        articleRefs?.current?.reload(1);
       }
     } catch (error) {
       console.error(error);
