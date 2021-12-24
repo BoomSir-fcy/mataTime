@@ -81,6 +81,7 @@ const InsertImageButton: React.FC<{
           multiple={multiple}
           type='file'
           accept='image/*'
+          capture
           hidden
         />
       </label>
