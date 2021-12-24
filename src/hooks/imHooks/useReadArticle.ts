@@ -7,8 +7,8 @@ import useInterval from '../useInterval'
 
 // 视图范围优化
 const VIEW_PADDING = {
-  top: 200, // 忽略顶部200px的内容
-  bottom: 200 // 忽略底部200px的内容
+  top: 100, // 忽略顶部100px的内容
+  bottom: 100 // 忽略底部100px的内容
 };
 
 /**
@@ -21,6 +21,7 @@ const useReadArticle = (nonce?: number | boolean) => {
   const isBrowserTabActiveRef = useIsBrowserTabActive()
 
   const fetchHandle = useCallback(() => {
+    console.log(111)
     if (!isBrowserTabActiveRef.current) return
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
@@ -38,6 +39,7 @@ const useReadArticle = (nonce?: number | boolean) => {
 
 
   const handleScroll = useCallback(() => {
+    console.log(articlePositions)
     if (!Object.keys(articlePositions).length) {
       setArticleIds({})
       return
@@ -45,6 +47,7 @@ const useReadArticle = (nonce?: number | boolean) => {
     // const offsetTopOverflow = Math.min(...Object.values(articlePositions).map(item => item[0]))
     const top = window.scrollY + VIEW_PADDING.top
     const bottom = top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom
+    console.log(bottom, top)
     const topViews = {}
     Object.keys(articlePositions).forEach(item => {
       const { offsetTop, offsetBottom, readType, articleId } = articlePositions[item]
