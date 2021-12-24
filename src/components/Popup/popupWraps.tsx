@@ -33,7 +33,7 @@ const PopupWrapModal = (props, ref) => {
         padding: 0,
         border: '0',
         backgroundColor: 'transparent',
-        zIndex: 99
+        zIndex: 99,
       }}
       keepTooltipInside='.popupBoundary'
       position={props.position || 'bottom right'}
