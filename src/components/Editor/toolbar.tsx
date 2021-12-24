@@ -55,7 +55,7 @@ const InsertImageButton: React.FC<{
       }
       const res = await Api.CommonApi.uploadImgList({
         base64: fileList,
-        dir_name: 'common'
+        dir_name: 'common',
       });
       if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
       const imgList = (res.data ?? []).map(item => item.full_path);
@@ -106,7 +106,7 @@ export const Toolbar: React.FC<{
     onError,
     onSuccess,
     selectImgLength,
-    type
+    type,
   }) => {
     const size = 20;
     return (
@@ -139,5 +139,5 @@ export const Toolbar: React.FC<{
         ) : null}
       </EditorToolbar>
     );
-  }
+  },
 );

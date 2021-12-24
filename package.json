@@ -42,6 +42,7 @@
     "css-loader": "4.3.0",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
+    "dotenv-cli": "^4.1.1",
     "dotenv-expand": "5.1.0",
     "dsgswap-sdk": "1.0.21",
     "emoji-mart": "^3.0.1",
