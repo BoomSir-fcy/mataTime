@@ -22,7 +22,9 @@ enum MoreOperatorEnum {
   DELPOST = 'DELPOST',
   FOLLOW = 'FOLLOW',
   CANCEL_FOLLOW = 'CANCEL_FOLLOW',
-  COMMONT = 'COMMONT'
+  COMMONT = 'COMMONT',
+  LIKE = 'LIKE', // 点赞
+  BOOKMARK = 'BOOKMARK', // 收藏
 }
 
 const PopupWrapper = styled(Box)`
@@ -45,7 +47,6 @@ const PopupWrapper = styled(Box)`
 
 export const MorePostPopup: React.FC<Iprops> = React.memo(
   ({ data, postUid, callback }) => {
-
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const [reportShow, setReportShow] = useState<boolean>(false);
@@ -68,13 +69,16 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const onFavAgreeRequest = async (post_id: number) => {
       const res = await Api.ContentApi.onFavAgree(post_id);
       if (Api.isSuccess(res)) {
-        callback({
-          ...data,
-          post: {
-            ...data.post,
-            is_fav: 1
-          }
-        });
+        callback(
+          {
+            ...data,
+            post: {
+              ...data.post,
+              is_fav: 1,
+            },
+          },
+          MoreOperatorEnum.BOOKMARK,
+        );
         toastSuccess(t('moreCollectionSuccess'));
       }
     };
@@ -83,13 +87,16 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const onFavCancelRequest = async (post_id: number) => {
       const res = await Api.ContentApi.onFavCancel(post_id);
       if (Api.isSuccess(res)) {
-        callback({
-          ...data,
-          post: {
-            ...data.post,
-            is_fav: 0
-          }
-        });
+        callback(
+          {
+            ...data,
+            post: {
+              ...data.post,
+              is_fav: 0,
+            },
+          },
+          MoreOperatorEnum.BOOKMARK,
+        );
         toastSuccess(t('moreCancelCollectionSuccess'));
       }
     };
@@ -132,8 +139,8 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       window.open(
         `https://twitter.com/intent/tweet?text=${text.replace(
           /#/g,
-          ''
-        )}&hashtags=${parseComments(text)}&url=${url}`
+          '',
+        )}&hashtags=${parseComments(text)}&url=${url}`,
       );
     };
 
@@ -197,7 +204,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           {isOwn && (
             <>
               <Text
-                textTransform="capitalize"
+                textTransform='capitalize'
                 onClick={() => {
                   setInqueryType('delete');
                   setCommonInqueryShow(true);
@@ -206,7 +213,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                 {t('moreDelete')}
               </Text>
               <Text
-                textTransform="capitalize"
+                textTransform='capitalize'
                 onClick={() => {
                   if (data.post.is_top === 1) {
                     setInqueryType('cancelTopping');
@@ -227,14 +234,14 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             <>
               {!isOwn && data.is_attention === 0 ? (
                 <Text
-                  textTransform="capitalize"
+                  textTransform='capitalize'
                   onClick={() => onAttentionFocusRequest(data.user_id)}
                 >
                   {t('followText')}
                 </Text>
               ) : !isOwn && data.is_attention === 1 ? (
                 <Text
-                  textTransform="capitalize"
+                  textTransform='capitalize'
                   onClick={() => {
                     onAttentionCancelRequest(data.user_id);
                   }}
@@ -254,11 +261,12 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
               {t('moreShareTwitter')}
             </Text> */}
           <Text
-            textTransform="capitalize"
+            textTransform='capitalize'
             onClick={() => {
               copyContent(
-                `${window.location.origin}/articleDetils/${data.post.post_id || ''
-                }`
+                `${window.location.origin}/articleDetils/${
+                  data.post.post_id || ''
+                }`,
               );
               toastSuccess(t('copySuccess'));
               callback({ ...data });
@@ -271,11 +279,12 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             <>
               <Text
                 style={{ whiteSpace: 'nowrap' }}
-                textTransform="capitalize"
+                textTransform='capitalize'
                 onClick={() => {
                   data.post.is_fav === 1
                     ? onFavCancelRequest(data.post.post_id)
                     : onFavAgreeRequest(data.post.post_id);
+                  callback(data);
                 }}
               >
                 {data.post.is_fav === 1
@@ -283,7 +292,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                   : t('moreCollection')}
               </Text>
               <Text
-                textTransform="capitalize"
+                textTransform='capitalize'
                 onClick={() => {
                   setReportShow(true);
                 }}
@@ -291,7 +300,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                 {t('moreReport')}
               </Text>
               <Text
-                textTransform="capitalize"
+                textTransform='capitalize'
                 onClick={() => {
                   setInqueryType('shield');
                   setCommonInqueryShow(true);
@@ -350,5 +359,5 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         />
       </React.Fragment>
     );
-  }
+  },
 );
