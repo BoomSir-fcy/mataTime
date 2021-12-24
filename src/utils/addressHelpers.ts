@@ -58,3 +58,19 @@ export const getRewardAuthorAddress = () => {
 export const getBnbAddress = () => {
   return getAddress(addresses.Wbnb);
 };
+
+export const getDsgAvatarNftAddress = () => {
+  return getAddress(addresses.ExPhotoNft);
+};
+
+export const getTicketNftAddress = () => {
+  return getAddress(addresses.ticketsPhotoNft);
+};
+
+export const getExPhotoAddress = () => {
+  return getAddress(addresses.ExPhoto);
+};
+
+export const getDsgafAddress = () => {
+  return getAddress(addresses.dsgaf);
+};

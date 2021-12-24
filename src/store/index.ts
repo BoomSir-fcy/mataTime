@@ -13,8 +13,10 @@ import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
 import { Post, postReducer, postAction, fetchPostAsync } from './post';
+import picknftReducer from './picknft';
 
 import { TaskState } from './task/type';
+import { PickNftState } from './types';
 export interface Store {
   appReducer: App;
   loginReducer: Login;
@@ -23,6 +25,7 @@ export interface Store {
   wallet: WalletState;
   task: TaskState;
   post: Post;
+  pickNft: PickNftState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -36,14 +39,15 @@ export const store = configureStore({
     pools: poolsReduce,
     wallet: walletReduce,
     task: taskReduce,
-    post: postReducer
+    post: postReducer,
+    pickNft: picknftReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      thunk: true
+      thunk: true,
     }).concat(save({ states: PERSISTED_KEYS })),
   preloadedState: load({ states: PERSISTED_KEYS }),
-  devTools: process.env.NODE_ENV !== 'production'
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const storeAction = {
@@ -51,20 +55,20 @@ export const storeAction = {
   ...appAction,
   ...coinsAction,
   ...walletAction,
-  ...postAction
+  ...postAction,
 };
 export const fetchThunk = {
   fetchUserInfoAsync,
-  fetchPostAsync
+  fetchPostAsync,
 };
 
 export const Dispatch = {
-  toast: {}
+  toast: {},
 };
 
 export function useStore<TSelected>(
   selector: (state: Store) => TSelected,
-  equalityFn?: (left: TSelected, right: TSelected) => boolean
+  equalityFn?: (left: TSelected, right: TSelected) => boolean,
 ) {
   return useSelector<Store, TSelected>(selector, equalityFn);
 }

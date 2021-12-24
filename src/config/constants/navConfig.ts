@@ -4,7 +4,7 @@ export const pathConfig = {
   messageAtMePath: '/notification/me',
   messageCommentPath: '/notification/comment',
   messageLikePath: '/notification/praise',
-  messageNoticePath: '/notification/notice'
+  messageNoticePath: '/notification/notice',
 };
 
 export const menuNavConfig: MenuNavConfig[] = [
@@ -15,27 +15,27 @@ export const menuNavConfig: MenuNavConfig[] = [
     hide: true,
     hideLeft: true,
     hideRight: true,
-    lable: 'homeMenuHome'
+    lable: 'homeMenuHome',
   },
   {
     icon: 'icon-shouye',
     activeIcon: 'icon-shouye1',
     path: '/',
-    lable: 'homeMenuHome'
+    lable: 'homeMenuHome',
   },
   {
     icon: 'icon-xingqiu',
     activeIcon: 'icon-xingqiu1',
     path: '/star',
     coming: true,
-    lable: 'homeMenuStar'
+    lable: 'homeMenuStar',
   },
   {
     icon: 'icon-qizi',
     activeIcon: 'icon-flag',
     path: '/task',
     hideRight: true,
-    lable: 'homeMenuTask'
+    lable: 'homeMenuTask',
   },
   {
     icon: 'icon-tixing',
@@ -49,30 +49,30 @@ export const menuNavConfig: MenuNavConfig[] = [
         path: pathConfig.messageAtMePath,
         lable: 'newsMeMenuTitle',
         badgeName: 'message_at_me',
-        coming: false
+        coming: false,
       },
       {
         icon: 'icon-pinglun',
         activeIcon: 'icon-pinglun1',
         path: pathConfig.messageCommentPath,
         badgeName: 'message_comment',
-        lable: 'newsCommentMenuTitle'
+        lable: 'newsCommentMenuTitle',
       },
       {
         icon: 'icon-aixin',
         activeIcon: 'icon-aixin1',
         path: pathConfig.messageLikePath,
         badgeName: 'message_like',
-        lable: 'newsPraiseMenuTitle'
+        lable: 'newsPraiseMenuTitle',
       },
       {
         icon: 'icon-tixing',
         activeIcon: 'icon-tixing1',
         badgeName: 'message_system',
         path: pathConfig.messageNoticePath,
-        lable: 'newsNoticeMenuTitle'
-      }
-    ]
+        lable: 'newsNoticeMenuTitle',
+      },
+    ],
   },
   {
     icon: 'icon-youxiang',
@@ -80,14 +80,14 @@ export const menuNavConfig: MenuNavConfig[] = [
     path: '/letter',
     badgeName: 'letter',
     coming: true,
-    lable: 'homeMenuLetter'
+    lable: 'homeMenuLetter',
   },
   {
     icon: 'icon-qitawenti',
     activeIcon: 'icon-qitawenti1',
     coming: true,
     path: '/other',
-    lable: 'homeMenuOther'
+    lable: 'homeMenuOther',
   },
   {
     icon: 'icon-qianbao2',
@@ -100,7 +100,7 @@ export const menuNavConfig: MenuNavConfig[] = [
         activeIcon: 'icon-a-qianbao1',
         path: '/account',
         hideRight: true,
-        lable: 'AccountMenu Wallet'
+        lable: 'AccountMenu Wallet',
       },
       {
         icon: 'icon-w59',
@@ -108,7 +108,7 @@ export const menuNavConfig: MenuNavConfig[] = [
         lable: 'AccountMenu Time',
         path: '/account/time',
         hideRight: true,
-        markPath: ['/account/faq']
+        markPath: ['/account/faq'],
       },
       {
         icon: 'icon-w59',
@@ -116,30 +116,30 @@ export const menuNavConfig: MenuNavConfig[] = [
         lable: 'AccountMenu Time',
         hideRight: true,
         hide: true,
-        path: '/account/faq'
+        path: '/account/faq',
       },
       {
         icon: 'icon-shuichi',
         activeIcon: 'icon-xiaofangshuixiang_shuichi',
         path: '/account/stake',
         hideRight: true,
-        lable: 'AccountMenu Staking'
+        lable: 'AccountMenu Staking',
       },
       {
         icon: 'icon-NFTkapai1',
         activeIcon: 'icon-NFTkapai',
         coming: true,
         path: '/account/safeset',
-        lable: 'AccountMenu NFT'
+        lable: 'AccountMenu NFT',
       },
       {
         icon: 'icon-purse1S',
         activeIcon: 'icon-purse1S',
         hideRight: true,
         path: '/account/reward',
-        lable: 'AccountMenu Reward'
-      }
-    ]
+        lable: 'AccountMenu Reward',
+      },
+    ],
   },
   {
     path: '/me',
@@ -149,52 +149,52 @@ export const menuNavConfig: MenuNavConfig[] = [
         activeIcon: 'icon-gerenxinxi1',
         lable: 'meMenuHome',
         path: '/me',
-        markPath: ['/me/edit']
+        markPath: ['/me/edit'],
       },
       {
         icon: 'icon-e31guanzhu',
         activeIcon: 'icon-e31guanzhuxuanzhong',
         lable: 'meMenuFollow',
-        path: '/me/follow'
+        path: '/me/follow',
       },
       {
         icon: 'icon-aixin',
         activeIcon: 'icon-aixin1',
         lable: 'meMenuFans',
-        path: '/me/fans'
+        path: '/me/fans',
       },
       {
         icon: 'icon-dianzan',
         activeIcon: 'icon-dianzan1',
         lable: 'meMenuLink',
-        path: '/me/praise'
+        path: '/me/praise',
       },
       {
         icon: 'icon-shoucang',
         activeIcon: 'icon-shoucang1',
         lable: 'meMenuFav',
-        path: '/me/collect'
+        path: '/me/collect',
       },
       {
         icon: 'icon-shoucang',
         activeIcon: 'icon-shoucang1',
         lable: 'meMenuFav',
         hide: true,
-        path: '/me/edit'
+        path: '/me/edit',
       },
       {
         icon: 'icon-zhifeiji1',
         activeIcon: 'icon-zhifeiji',
         lable: 'meMenuInvite',
-        path: '/task/invite'
-      }
+        path: '/task/invite',
+      },
       // {
       //   icon: 'icon-pingbi1',
       //   activeIcon: 'icon-pingbi',
       //   title: 'meMenuShield',
       //   path: '/me/shield',
       // },
-    ]
+    ],
   },
   {
     icon: 'icon-shezhi',
@@ -206,28 +206,37 @@ export const menuNavConfig: MenuNavConfig[] = [
         icon: 'icon-gerenxinxi',
         activeIcon: 'icon-gerenxinxi1',
         lable: 'setMenuAccountSecurity',
-        path: '/set/safeset'
+        path: '/set/safeset',
       },
       {
         icon: 'icon-tixing',
         activeIcon: 'icon-tixing1',
         lable: 'setMenuNotification',
-        path: '/set/noticeset'
+        path: '/set/noticeset',
       },
       {
         icon: 'icon-aixin',
         activeIcon: 'icon-aixin1',
         lable: 'setMenuPreference',
-        path: '/set/likeset'
-      }
-    ]
-  }
+        path: '/set/likeset',
+      },
+    ],
+  },
+  {
+    icon: 'icon-shouye',
+    activeIcon: 'icon-shouye1',
+    path: '/picknft',
+    hide: true,
+    hideLeft: true,
+    hideRight: true,
+    lable: 'homeMenuHome',
+  },
 ];
 
 const getHidePath = (
   activeRes: string[],
   config: MenuNavConfig[],
-  key: string
+  key: string,
 ) => {
   let res: string[] = [...activeRes];
   config.forEach(item => {
