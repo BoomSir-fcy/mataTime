@@ -24,8 +24,8 @@ export class MeApi extends Http {
   }
 
   // 点赞列表
-  async praiseList(page: number) {
-    const res = await this.get('/v1/like/list', { page });
+  async praiseList(page: number, perpage?: number) {
+    const res = await this.get('/v1/like/list', { page, perpage });
     return res;
   }
   // 点赞
@@ -40,8 +40,8 @@ export class MeApi extends Http {
   }
 
   // 收藏列表
-  async collectList(page: number) {
-    const res = await this.get('/v1/fav/list', { page });
+  async collectList(page: number, perpage?: number) {
+    const res = await this.get('/v1/fav/list', { page, perpage });
     return res;
   }
   // 取消收藏

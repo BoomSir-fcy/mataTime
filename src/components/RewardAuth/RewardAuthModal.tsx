@@ -33,6 +33,7 @@ const RewardAuthModalStyled = styled(Box)`
   width: 100%;
   right: 0;
   bottom: 0;
+  margin: auto;
   min-height: 80px;
   padding: 8px 20px 16px;
   padding-bottom: 16px;

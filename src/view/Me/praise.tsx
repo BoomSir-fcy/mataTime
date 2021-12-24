@@ -16,6 +16,7 @@ import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 const Praise = React.memo(props => {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ const Praise = React.memo(props => {
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
+  const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
   const [state, setState] = useImmer({
     loading: false,
@@ -38,7 +40,7 @@ const Praise = React.memo(props => {
       p.loading = true;
     });
     try {
-      const res = await Api.MeApi.praiseList(offset || page);
+      const res = await Api.MeApi.praiseList(offset || page, perpage);
       if (Api.isSuccess(res)) {
         setState(p => {
           p.loading = false;

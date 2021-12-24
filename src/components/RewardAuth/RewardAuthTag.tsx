@@ -1,12 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import Popup from 'reactjs-popup';
+import useMenuNav from 'hooks/useMenuNav';
 import { Flex, Box, Image } from 'uikit';
 
 import RewardAuthModal from './RewardAuthModal';
 
 import 'reactjs-popup/dist/index.css';
 // import useRewardAuth from 'contexts/RewardAuthContext/hooks/useRewardAuth';
+
+const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
+  position: relative;
+  &-overlay {
+    z-index: 98 !important;
+  }
+  &-content {
+    width: ${({ isMobile }) => (isMobile ? '100% !important' : 'atuo')};
+    left: ${({ isMobile }) => (isMobile ? '0 !important' : 'atuo')};
+  }
+`;
 
 const RewardAuthTagStyled = styled(Flex)`
   position: relative;
@@ -26,6 +38,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   postType,
 }) => {
   const reward: reward[] = data.reward_stats || [];
+  const { isMobile } = useMenuNav();
   const popupRef = React.useRef(null);
   const total = reward.reduce((total, currentValue) => {
     return total + currentValue.count;
@@ -43,7 +56,8 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
         <></>
       ) : (
         <RewardAuthTagStyled alignItems='center'>
-          <Popup
+          <StyledPopup
+            isMobile={isMobile}
             ref={popupRef}
             trigger={
               <PopupButton>
@@ -82,7 +96,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
               avatar={data.user_avator_url}
               onClose={close}
             />
-          </Popup>
+          </StyledPopup>
         </RewardAuthTagStyled>
       )}
     </React.Fragment>
