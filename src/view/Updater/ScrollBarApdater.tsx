@@ -1,47 +1,38 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
+
+const homepath = '/'
+const listenPaths = ['/topicList']
 
 export default function ScrollBarApdater() {
   const { pathname } = useLocation();
+  const { listen } = useHistory();
+  const [scrollState, setScrollState] = useState({})
+  const [oldPath, setOldPath] = useState('/')
+
   useEffect(() => {
-    // XXX: 不加滚动条会不滚动 卧液布值道定理
-    setTimeout(() => {
-      // document.body.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
+    const unListen = listen((location) => {
+      if (pathname === homepath || listenPaths.some(item => item.includes(pathname))) {
+        setScrollState(state => ({
+          ...state,
+          [pathname]: {
+            y: window.scrollY,
+          },
+        }))
+      }
+    })
+    return unListen
+  }, [pathname])
+
+  useEffect(() => {
+    if (oldPath !== pathname) {
+      setOldPath(pathname)
       window.scrollTo({
-        behavior: 'smooth',
-        top: 0,
+        // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
+        behavior: 'auto',
+        top: scrollState[pathname]?.y * 10 || 0,
       });
-    }, 0);
-  }, [pathname]);
+    }
+  }, [pathname, scrollState, oldPath]);
   return null;
 }
-
-export const useScrollTop = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    if (pathname === '/') {
-      try {
-        let scrollY = sessionStorage.getItem(pathname);
-        let scroll =
-          Number(scrollY) === 0
-            ? 0
-            : document.body.scrollHeight - Number(scrollY);
-        setTimeout(() => {
-          // document.body.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
-          window.scrollTo({
-            behavior: 'smooth',
-            top: Number(scroll),
-          });
-        }, 0);
-      } catch (error) {
-        console.log(error);
-      }
-
-      return () => {
-        let scrollTop =
-          document.documentElement.scrollTop || document.body.scrollTop || 0;
-        sessionStorage.setItem(pathname, String(scrollTop));
-      };
-    }
-  }, [pathname]);
-};

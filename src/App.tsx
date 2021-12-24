@@ -23,9 +23,7 @@ import useUnreadMsg from 'hooks/imHooks/useUnreadMsg';
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import EventBusUpdater from './view/Updater/EventBusUpdater';
-import ScrollBarApdater, {
-  useScrollTop,
-} from './view/Updater/ScrollBarApdater';
+import ScrollBarApdater from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 
 import 'dayjs/locale/zh-cn';
@@ -60,7 +58,6 @@ const Container = styled(Box)`
 `;
 
 const Updater = () => {
-  useScrollTop();
   return (
     <>
       <AccountUpdater />
@@ -116,7 +113,6 @@ function App() {
       <Container id='bg'>
         <PageContainer>
           <React.Suspense fallback={<PageLoader />}>
-            <Updater />
             <Box className='popupBoundary'>
               <Switch>
                 <Route path='/' exact render={props => <Home {...props} />} />
@@ -150,6 +146,7 @@ function App() {
                 )}
               </Switch>
             </Box>
+            <Updater />
           </React.Suspense>
         </PageContainer>
       </Container>
