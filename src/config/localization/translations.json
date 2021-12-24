@@ -522,6 +522,8 @@
   "http-error-30006003": "Like failed",
   "http-error-30006004": "Like failed",
   "http-error-30006005": "Cancel like failed",
+  "http-error-30006006": "Liked",
+  "http-error-30006007": "Cancel like failed",
   "http-error-30007001": "Bookmark failed",
   "http-error-30007002": "Failed to find post ",
   "http-error-30007003": "Bookmarked ",

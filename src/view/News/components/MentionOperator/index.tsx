@@ -45,6 +45,7 @@ const MentionOperator: React.FC<IProps> = ({
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
+
   const changeLike = () => {
     if (type === 'Article') {
       Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({
@@ -75,6 +76,34 @@ const MentionOperator: React.FC<IProps> = ({
           //     ? t('commonMsgUnlikeSuccess')
           //     : t('commonMsgUnlikeError')
           // );
+        } else if (res.code === 30_006_006) {
+          callback(
+            {
+              ...itemData,
+              like_num: itemData.post.like_num + 1,
+              post: {
+                ...itemData.post,
+                like_num: itemData.post.like_num + 1,
+                is_like: 1,
+              },
+            },
+            MoreOperatorEnum.LIKE,
+          );
+          setIsLike(1);
+        } else if (res.code === 30_006_007) {
+          callback(
+            {
+              ...itemData,
+              like_num: itemData.post.like_num - 1,
+              post: {
+                ...itemData.post,
+                like_num: itemData.post.like_num - 1,
+                is_like: 0,
+              },
+            },
+            MoreOperatorEnum.LIKE,
+          );
+          setIsLike(0);
         }
       });
     }
