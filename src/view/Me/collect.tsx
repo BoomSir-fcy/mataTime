@@ -15,6 +15,7 @@ import { useStore } from 'store';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 
 import { Api } from 'apis';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 // enum MoreOperatorEnum {
 //   SHIELD = 'SHIELD', // 屏蔽
@@ -34,11 +35,12 @@ const Collect = props => {
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
+  const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
   const init = async (current?: number) => {
     setLoading(true);
     try {
-      const res = await Api.MeApi.collectList(current || page);
+      const res = await Api.MeApi.collectList(current || page, perpage);
       setLoading(false);
       if (Api.isSuccess(res)) {
         setPage((current || page) + 1);
