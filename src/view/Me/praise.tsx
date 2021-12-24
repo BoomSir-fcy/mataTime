@@ -138,7 +138,7 @@ const Praise = React.memo(props => {
                       nonce={nonce}
                       setNonce={setNonce}
                       readType={ReadType.ARTICLE}
-                      articleId={item.id}
+                      articleId={item.post_id}
                     />
                   )
                 }
