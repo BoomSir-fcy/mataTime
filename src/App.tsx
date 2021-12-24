@@ -24,7 +24,7 @@ import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import EventBusUpdater from './view/Updater/EventBusUpdater';
 import ScrollBarApdater, {
-  useReStoreScrollTop,
+  useScrollTop,
 } from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 
@@ -60,7 +60,7 @@ const Container = styled(Box)`
 `;
 
 const Updater = () => {
-  useReStoreScrollTop();
+  useScrollTop();
   return (
     <>
       <AccountUpdater />

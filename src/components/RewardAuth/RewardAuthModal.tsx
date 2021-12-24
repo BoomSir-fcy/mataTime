@@ -22,22 +22,27 @@ import { getBnbAddress } from 'utils/addressHelpers';
 import {
   RewardAuthorContract,
   GetCoinPrice,
-  GetPostRewardAuthor
+  GetPostRewardAuthor,
 } from './hook';
 
 import QuestionHelper from 'components/QuestionHelper';
 
-const RewardAuthModalStyled = styled(Box)<{ bottom: number; right: number }>`
+const RewardAuthModalStyled = styled(Box)`
   position: absolute;
   z-index: 99;
-  width: 418px;
+  width: 100%;
+  right: 0;
+  bottom: 0;
   min-height: 80px;
   padding: 8px 20px 16px;
   padding-bottom: 16px;
   border-radius: 10px;
-  bottom: ${({ bottom }) => (bottom ? bottom : -5)}px;
-  right: ${({ right }) => (right ? right : 0)}px;
   background: ${({ theme }) => theme.colors.greyBackground};
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 418px;
+    bottom: 0px;
+    right: 0;
+  }
 `;
 const CoinSelectStyled = styled(Button)`
   width: 100px;
@@ -83,7 +88,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   avatar,
   offsetLeft,
   offsetTop,
-  onClose
+  onClose,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -100,8 +105,8 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     reward_post: {
       total_user: 0,
       my_rewards: [],
-      users: []
-    }
+      users: [],
+    },
   });
   const { getTokens, approve, rewardUsers } = RewardAuthorContract();
   const { getPrice } = GetCoinPrice();
@@ -118,11 +123,11 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         const res = await getTokens();
         const isApprove = await approve(
           account,
-          res.map(item => item[0])
+          res.map(item => item[0]),
         );
         newArr = res.map((item, index) => [
           ...item.toString().split(','),
-          isApprove[index].toString()
+          isApprove[index].toString(),
         ]);
         dispatch(storeAction.setSupportToken(newArr));
       } else {
@@ -177,7 +182,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         postType,
         currentPost.id,
         getDecimalAmount(new BigNumber(amount)).toString(),
-        getBnbAddress() === currentToken[0]
+        getBnbAddress() === currentToken[0],
       );
       if (res === 1) {
         onClose();
@@ -246,17 +251,17 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                 <React.Fragment>
                   <Loading visible={state.submitLoading} />
                   <Flex
-                    alignItems="center"
-                    justifyContent="space-between"
-                    width="100%"
+                    alignItems='center'
+                    justifyContent='space-between'
+                    width='100%'
                   >
                     <AvatarCard
                       userName={currentPost.user_name || currentPost.send_name}
                       avatar={avatar}
                       address={currentPost.user_address}
                     />
-                    <Flex alignItems="center">
-                      <Box width="100px">
+                    <Flex alignItems='center'>
+                      <Box width='100px'>
                         <CoinSelectStyled
                           onClick={e => {
                             e.stopPropagation();
@@ -269,7 +274,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                         <DropDown
                           fillWidth
                           isOpen={open}
-                          scale="xs"
+                          scale='xs'
                           setIsOpen={setOpen}
                         >
                           {tokenList.map((item, index) => (
@@ -283,14 +288,14 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                         </DropDown>
                       </Box>
                       <QuestionHelper
-                        ml="15px"
-                        color="white"
+                        ml='15px'
+                        color='white'
                         text={
                           <>
-                            <Text fontSize="14px">
+                            <Text fontSize='14px'>
                               {t('rewardAutherTipsText1')}
                             </Text>
-                            <Text fontSize="14px" color="textTips">
+                            <Text fontSize='14px' color='textTips'>
                               {t('rewardAutherTipsText2')}
                             </Text>
                           </>
@@ -298,7 +303,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                       />
                     </Flex>
                   </Flex>
-                  <Box minHeight="100px" mt="25px">
+                  <Box minHeight='100px' mt='25px'>
                     <RewardInput
                       current={currentToken}
                       price={current_price}
@@ -325,42 +330,42 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                 )} */}
                   </Box>
                   {reward?.length > 0 && (
-                    <Flex mt="4px" alignItems="center">
-                      <Flex ml="1em">
+                    <Flex mt='4px' alignItems='center'>
+                      <Flex ml='1em'>
                         {reward_post?.users?.map(item => (
                           <Box
                             key={item.uid}
                             as={Link}
                             to={`/me/profile/${item.uid}`}
-                            width="24px"
+                            width='24px'
                             style={{ marginLeft: '-1em' }}
                           >
                             <Avatar
                               src={item.nft_image}
-                              scale="md"
+                              scale='md'
                               style={{ width: '24px', height: '24px' }}
                             />
                           </Box>
                         ))}
                       </Flex>
-                      <Text ml="11px" fontSize="14px" color="textTips" ellipsis>
+                      <Text ml='11px' fontSize='14px' color='textTips' ellipsis>
                         {t('rewardAutherAlreadyText1', {
-                          value: reward_post?.total_user || 0
+                          value: reward_post?.total_user || 0,
                         })}
                       </Text>
                     </Flex>
                   )}
                   {/* 查看当前用户打赏明细 */}
                   {reward_post?.my_rewards?.length > 0 && (
-                    <Text color="textTips" fontSize="14px" mt="12px" ellipsis>
+                    <Text color='textTips' fontSize='14px' mt='12px' ellipsis>
                       {t('rewardAutherAlreadyText2', {
-                        value: getString(reward_post.my_rewards, tokenList)
+                        value: getString(reward_post.my_rewards, tokenList),
                       })}
                     </Text>
                   )}
                 </React.Fragment>
               ) : (
-                <Flex height="56px" justifyContent="center" alignItems="center">
+                <Flex height='56px' justifyContent='center' alignItems='center'>
                   <ConnectWalletButton />
                 </Flex>
               )}

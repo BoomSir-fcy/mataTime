@@ -23,7 +23,7 @@ const PopupButton = styled(Flex)`
 
 export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   data,
-  postType
+  postType,
 }) => {
   const reward: reward[] = data.reward_stats || [];
   const popupRef = React.useRef(null);
@@ -42,12 +42,12 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
       {postType === 1 ? (
         <></>
       ) : (
-        <RewardAuthTagStyled alignItems="center">
+        <RewardAuthTagStyled alignItems='center'>
           <Popup
             ref={popupRef}
             trigger={
               <PopupButton>
-                <Box width="18px" mr="10px">
+                <Box width='18px' mr='10px'>
                   <Image
                     src={require('assets/images/reward.svg').default}
                     width={18}
@@ -59,20 +59,20 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
             }
             nested
             keepTooltipInside={true}
-            position="top right"
+            position='top right'
             closeOnDocumentClick
             contentStyle={{
-              width: '418px',
+              width: '400px',
               height: 'auto',
               minHeight: '80px',
               borderRadius: '10px',
               padding: 0,
               border: '0',
               backgroundColor: 'transparent',
-              zIndex: 99
+              zIndex: 99,
             }}
             overlayStyle={{
-              zIndex: 98
+              zIndex: 98,
             }}
             arrowStyle={{ opacity: 0 }}
           >
