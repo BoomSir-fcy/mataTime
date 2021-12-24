@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Text, Button } from 'uikit';
+import { Text, Button, useMatchBreakpoints } from 'uikit';
 import connectors, {
   walletLocalStorageKey,
   connectorLocalStorageKey
@@ -22,12 +22,19 @@ const WalletButton = styled(Button).attrs({ width: '100%', variant: 'text' })`
   margin-right: auto;
   background-color: ${({ theme }) => theme.colors.inputSelect};
   width: 200px;
+  max-width: 100%;
+  min-width: 100px;
   padding-top: 8px;
   padding-bottom: 8px;
+  padding-left: 8px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-left: 20px;
+  }
 `;
 
 const WalletItem: React.FC<Props> = ({ login, walletConfig }) => {
   const { title, icon: Icon } = walletConfig;
+  const { isMd, isLg, isXl, isXxl } = useMatchBreakpoints();
 
   return (
     <WalletButton
@@ -52,8 +59,14 @@ const WalletItem: React.FC<Props> = ({ login, walletConfig }) => {
       }}
       id={`wallet-connect-${title.toLocaleLowerCase()}`}
     >
-      <Icon width="40px" mr="16px" />
-      <Text fontSize="14px">{title}</Text>
+      {
+        isMd || isLg || isXl || isXxl
+        ?
+        <Icon width="40px" mr="16px" />
+        :
+        <Icon width="30px" mr="8px" />
+      }
+      <Text ellipsis fontSize="14px">{title}</Text>
     </WalletButton>
   );
 };

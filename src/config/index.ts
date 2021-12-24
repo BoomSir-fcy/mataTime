@@ -31,5 +31,6 @@ export const MAX_PER_SPEND_TIME = PER_ARTICLE_FETCH_SPEND * MAX_SPEND_TIME_PAGE_
 export const GET_DSG_NFT_URL = 'https://dsgmetaverse.com/#/nft/socialfi'
 
 export const ARTICLE_IMAGE_CLASS_NAME = 'article-image-display_with_load'
+export const CONNECT_WALLET_BODY_CLASS_NAME = 'connect-wallet-modal__Body--open'
 
 export const ARTICLE_POST_MAX_LEN = 280 // 发帖最大数量

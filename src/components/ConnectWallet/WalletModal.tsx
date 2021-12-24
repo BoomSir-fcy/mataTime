@@ -26,7 +26,7 @@ const WalletModalStyled = styled.div<{
   /* background-color: ${({ theme }) => theme.colors.borderColor}; */
   border-radius: ${({ theme }) => theme.radii.card};
   /* transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(500px)')}; */
-  transform: ${({ show }) => (show ? ' rotateX(0deg)' : ' rotateX(90deg)')};
+  transform: ${({ show }) => (show ? 'rotate3d(1, 0, 0, 0deg)' : 'rotate3d(1, 0, 0, 90deg)')};
   background: rgba(28, 28, 28, 0.9);
   transition: 300ms transform;
   width: 500px;
@@ -54,7 +54,7 @@ const WalletModal: React.FC<{ show?: boolean; onClick?: (e: any) => void }> = ({
     <WalletModalStyled onClick={onClick} show={show}>
       <Flex mt="28px" flexWrap="wrap">
         {connectors.map((item, index) => (
-          <Box margin="12px" mt="0" key={item.title}>
+          <Box maxWidth="42%" margin="12px" mt="0" key={item.title}>
             <WalletItem walletConfig={item} login={login} />
           </Box>
         ))}
