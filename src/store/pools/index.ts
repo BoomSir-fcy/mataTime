@@ -65,7 +65,6 @@ export const pools = createSlice({
     },
     setSpAprsData: (state, { payload: poolAprs }: { payload: { [pid: string]: PoolAprs } }) => {
       state.single.poolAprMap = poolAprs
-      console.log(state.single.poolAprMap)
     }
   },
 });

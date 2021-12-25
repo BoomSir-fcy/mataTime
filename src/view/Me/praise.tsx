@@ -55,12 +55,11 @@ const Praise = React.memo(props => {
           });
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum) => {
-    console.log(type);
     const {
       FOLLOW,
       CANCEL_FOLLOW,

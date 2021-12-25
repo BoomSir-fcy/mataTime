@@ -44,7 +44,6 @@ const useReadArticle = (nonce?: number | boolean) => {
 
 
   const handleScroll = useCallback(() => {
-    console.log(articlePositions)
     if (!Object.keys(articlePositions).length) {
       setArticleIds({})
       return

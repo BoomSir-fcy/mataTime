@@ -43,7 +43,7 @@ const MentionItem: React.FC<IProps> = props => {
     postUid,
     size = 'nomal',
     itemData = {},
-    callback = () => {},
+    callback = () => { },
   } = props;
   const mentionRef: any = useRef();
   const { push } = useHistory();
@@ -151,7 +151,6 @@ export const MentionItemUser: React.FC<UserProps> = ({
               className='avatar'
               src={itemData.user_avator_url}
               callback={type => {
-                console.log(type);
                 callback(
                   {
                     ...itemData,

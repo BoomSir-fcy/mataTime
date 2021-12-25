@@ -61,7 +61,7 @@ const InsertImageButton: React.FC<{
       const imgList = (res.data ?? []).map(item => item.full_path);
       onSuccess(imgList);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       onError();
     }
@@ -73,6 +73,7 @@ const InsertImageButton: React.FC<{
         <Icon size={size} color='white_black' current name='icon-tupian' />
         <input
           id='upload-images'
+          name="upload-images"
           ref={imageInput}
           onChange={() => {
             callbackSelectImg();
