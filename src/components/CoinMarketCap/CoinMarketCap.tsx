@@ -9,7 +9,7 @@ import {
   Text,
   BalanceText,
   light,
-  dark
+  dark,
 } from 'uikit';
 import ReactLoading from 'react-loading';
 import { languagesOptions } from 'config/localization';
@@ -22,7 +22,7 @@ import {
   useCoinsList,
   useCoinsState,
   useFetchCoinInfo,
-  useFetchCoinsList
+  useFetchCoinsList,
 } from 'store/coins/hooks';
 import CoinItem from './CoinItem';
 import { DropDown } from '../DropDown';
@@ -53,23 +53,25 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   useFetchCoinInfo(currentCoin?.coin_id);
 
   const coins = useStore(p => p.coins.clickCoins);
-  const [coinSymbol, setCoinSymbol] = useState('')
-  
+  const [coinSymbol, setCoinSymbol] = useState('');
+
   useEffect(() => {
     if (coins?.symbol) {
-      setCoinSymbol(coins?.symbol)
+      setCoinSymbol(coins?.symbol);
     }
-  }, [coins])
+  }, [coins]);
 
   useEffect(() => {
     if (coinSymbol) {
-      const activeCoin = coinsList.find(item => item.coin_symbol === coinSymbol)
+      const activeCoin = coinsList.find(
+        item => item.coin_symbol === coinSymbol,
+      );
       if (activeCoin) {
-        setCurrentCoin(activeCoin)
-        setCoinSymbol('')
+        setCurrentCoin(activeCoin);
+        setCoinSymbol('');
       }
     }
-  }, [coinSymbol, coinsList])
+  }, [coinSymbol, coinsList]);
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {
@@ -79,7 +81,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
 
   const marketCap = useMemo(() => {
     const value = new BigNumber(currentCoin?.circulating_supply).times(
-      currentCoin?.current_price
+      currentCoin?.current_price,
     );
     if (value.isFinite()) {
       return value.toNumber();
@@ -95,14 +97,14 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   const dispalyTotalVolume = useMemo(() => {
     if (!Number(currentCoin?.total_volume)) return '--';
     return `$ ${formatLocalisedCompactNumber(
-      Number(currentCoin?.total_volume)
+      Number(currentCoin?.total_volume),
     )}`;
   }, [currentCoin?.total_volume]);
 
   return (
     <StyledPage {...props}>
       {!loaded ? (
-        <Flex height="100%" justifyContent="center" alignItems="center">
+        <Flex height='100%' justifyContent='center' alignItems='center'>
           <ReactLoading
             type={'cylon'}
             color={
@@ -114,7 +116,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
         </Flex>
       ) : (
         <>
-          <StyledPageItem pt="8px">
+          <StyledPageItem pt='8px'>
             <CoinItem
               showHelp
               onTouch={() => setIsOpen(!isOpen)}
@@ -141,24 +143,24 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
           </Box>
           <StyledPageItem>
             {!!Number(currentCoin?.current_price) ? (
-              <Flex mt="8px" justifyContent="space-between">
+              <Flex mt='8px' justifyContent='space-between'>
                 <Box>
-                  <Text fontSize="14px" color="textTips">
+                  <Text fontSize='14px' color='textTips'>
                     {t('MARKET CAP')}
                   </Text>
-                  <Text fontWeight="bold" color="primary" fontSize="14px">
+                  <Text fontWeight='bold' color='primary' fontSize='14px'>
                     {totalSupplyValue}
                   </Text>
                 </Box>
                 <Box>
-                  <Text fontSize="14px" color="textTips" textAlign="right">
+                  <Text fontSize='14px' color='textTips' textAlign='right'>
                     {t('VOLUME')}
                   </Text>
                   <Text
-                    fontWeight="bold"
-                    color="primary"
-                    fontSize="14px"
-                    textAlign="right"
+                    fontWeight='bold'
+                    color='primary'
+                    fontSize='14px'
+                    textAlign='right'
                   >
                     {dispalyTotalVolume}
                   </Text>
@@ -166,10 +168,10 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
               </Flex>
             ) : (
               <Text
-                fontSize="14px"
-                textAlign="center"
-                mt="16px"
-                color="textgrey"
+                fontSize='14px'
+                textAlign='center'
+                mt='16px'
+                color='textgrey'
               >
                 {t('commonCoinMarketEmpty')}
               </Text>
