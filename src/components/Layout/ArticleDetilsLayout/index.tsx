@@ -10,7 +10,7 @@ import useReadArticle from 'hooks/imHooks/useReadArticle';
 
 import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
-import { PageContainer } from './style';
+import { PageStyle } from './style';
 
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -70,7 +70,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
   }, []);
 
   return (
-    <PageContainer>
+    <PageStyle>
       <Crumbs back title={t('newsBack')} />
       {Boolean(itemData.id) ? (
         <>
@@ -128,7 +128,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
       ) : (
         <Spinner />
       )}
-    </PageContainer>
+    </PageStyle>
   );
 };
 export default ArticleDetilsLayout;

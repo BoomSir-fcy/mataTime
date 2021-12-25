@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import {
   GetTaskTag,
   useFetchInviteFriendsList,
-  useInviteCount
+  useInviteCount,
 } from 'view/Task/hooks/matter';
 import { Variant, Group } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
@@ -135,7 +135,7 @@ const Invite: React.FC = () => {
     event => {
       setPageNum(event.selected + 1);
     },
-    [setPageNum]
+    [setPageNum],
   );
 
   // 复制链接

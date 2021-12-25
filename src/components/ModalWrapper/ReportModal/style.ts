@@ -30,8 +30,10 @@ export const ModalTitleWrapper = styled(Box)`
 `;
 export const ReportModalWrapper = styled(Box)`
   max-width: 500px;
-  width: 40vw;
-  min-width: 300px;
+  width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 40vw;
+  }
 `;
 
 export const ReportContentWrapper = styled(Box)`
