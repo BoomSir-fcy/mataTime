@@ -72,7 +72,7 @@ const WalletAddr = styled.div`
   font-size: 14px;
   right: 10px;
   bottom: 12px;
-  background: #4d535f;
+  background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 10px;
 `;
 export const SignUpSetName: React.FC<{

@@ -46,6 +46,7 @@ export declare const styleVariants: {
         color: string;
     };
     danger: {
+        backgroundColor: string;
         color: string;
         backgroundRepeat: string;
         backgroundPosition: string;

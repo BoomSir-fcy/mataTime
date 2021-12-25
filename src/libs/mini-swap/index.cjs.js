@@ -8821,7 +8821,7 @@ var styleVariants$2 = (_b$3 = {},
         color: 'backgroundAlt'
     },
     _b$3[variants$5.DANGER] = {
-        // backgroundColor: "failure",
+        backgroundColor: "failure",
         // color: "white",
         color: 'white',
         backgroundRepeat: 'no-repeat',

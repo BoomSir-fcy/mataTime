@@ -11,7 +11,7 @@ export const ModalOperatorWrapper = styled(Box)`
 export const ModalOperatorQueryWrapper = styled(Button)`
   width: 100px;
   height: 35px;
-  background: #4D535F;
+  background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 10px;
 `
 export const ModalOperatorCancerWrapper = styled(Button)`

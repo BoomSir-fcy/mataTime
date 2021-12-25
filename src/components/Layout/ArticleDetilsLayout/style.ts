@@ -58,7 +58,7 @@ export const CommentItem = styled.div`
   padding: 18px 18px 0 28px;
   .mention-operator {
     padding-bottom: 20px;
-    border-bottom: solid 1px #4d535f;
+    border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};;
   }
 `;
 export const CommentHeader = styled(Flex)`

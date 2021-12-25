@@ -11,6 +11,8 @@ export interface TooltipOptions {
   trigger?: TriggerType;
   arrowPadding?: Padding;
   tooltipPadding?: Padding;
+  stylePadding?: string;
+  background?: string;
   tooltipOffset?: [number, number];
 }
 
