@@ -9,6 +9,7 @@ import { useTranslation } from 'contexts/Localization';
 
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
+import { Link } from 'react-router-dom';
 
 const Wraper = styled(Box)`
   padding: 0 10px;
@@ -42,12 +43,16 @@ const ItemText = styled(Text)`
   color: ${({ theme }) => theme.colors.white_black};
   font-size: 14px;
   margin-bottom: 10px;
+  &:first-child {
+    margin-right: 10px;
+    overflow: hidden;
+  }
   &:last-child {
     text-align: right;
-    img {
-      width: 20px;
-      cursor: pointer;
-    }
+  }
+  img {
+    width: 50px;
+    max-height: 50px;
   }
 `;
 
@@ -107,9 +112,22 @@ export const TableList: React.FC<{
               }
 
               return (
-                <Row className='matterStyle' key={`${item.add_time}_${index}`}>
+                <Row
+                  className='matterStyle'
+                  key={`${item.add_time}_${index}`}
+                  as={Link}
+                  to={`/articleDetils/${item.post_id}`}
+                >
                   <ItemText ellipsis>
-                    {stringArr(context, stringArray).join(',')}
+                    <Flex alignItems='center'>
+                      <Text fontSize='14px' ellipsis>
+                        {stringArr(context, stringArray).join(',')}
+                      </Text>
+                      {item.image_list &&
+                        item.image_list.map(item => (
+                          <img key={item} src={item} alt='' />
+                        ))}
+                    </Flex>
                   </ItemText>
                   <ItemText>
                     <Flex>
