@@ -10,7 +10,7 @@ import {
   useFetchWalletInfo,
   useFetchApproveNum,
   useFetTimeIncometoday,
-  useFetTimeIncomeList
+  useFetTimeIncomeList,
 } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
@@ -24,7 +24,7 @@ import {
   fetchTimeIncometoday,
   fetchMatterIncometoday,
   fetchIncomeList,
-  fetchMatterIncomeList
+  fetchMatterIncomeList,
 } from 'store/wallet/reducer';
 import useMenuNav from 'hooks/useMenuNav';
 
@@ -106,7 +106,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
   );
 };
 
-const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
+const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useFetchWalletInfo();
   useFetchApproveNum();
   const { t } = useTranslation();
@@ -119,7 +119,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
     freeze_balance: '0',
     token_type: 1,
     total_balance: '0',
-    uid: 0
+    uid: 0,
   };
   const [WalletInfo, setWalletInfo] = useState(info);
   const [walletBalance, setwalletBalance] = useState(0);
@@ -139,7 +139,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
   const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
   const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
 
-  useFetTimeIncometoday(day);
+  // useFetTimeIncometoday(day);
   // useFetTimeIncomeList(1, pageSize, 1);
 
   const TodayIncome = useMemo(() => {
@@ -229,7 +229,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
     timeBalance,
     timeAddress,
     MatterAddress,
-    activeToken
+    activeToken,
   ]);
 
   useEffect(() => {
