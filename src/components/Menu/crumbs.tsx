@@ -11,7 +11,7 @@ import MenuButton from './MenuButton';
 
 const CrumbsWraper = styled(Box)`
   padding-bottom: 70px;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.md} {
     position: sticky;
     top: 0;
     z-index: 1005;
@@ -30,7 +30,7 @@ const Card = styled(Flex)<{ zIndex?: number }>`
   background: ${({ theme }) => theme.colors.background};
   z-index: ${({ zIndex }) => zIndex || 1005};
   transform: translateZ(1px);
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.md} {
     position: sticky;
   }
   ${mediaQueriesSize.paddingxs}

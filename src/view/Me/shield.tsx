@@ -62,7 +62,7 @@ width:100%;
 height:60px;
 margin-bottom:28px;
 button {
-  background:#4D535F;
+  background:${({ theme }) => theme.colors.tertiary};
   float:right;
   margin-top:15px;
 }

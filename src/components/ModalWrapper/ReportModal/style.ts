@@ -46,7 +46,7 @@ export const ReportContentWrapper = styled(Box)`
     line-height: 54px;
     box-sizing: border-box;
     padding: 0 12px;
-    border-bottom: 1px solid #4d535f;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
     cursor: pointer;
     &:last-child {
       border: 0;

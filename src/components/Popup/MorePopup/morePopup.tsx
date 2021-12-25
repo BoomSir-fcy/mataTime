@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'uikit';
-import { ReportModal, EditTwitterModal, CommonInquiryModal } from 'components';
+import {
+  ReportModal,
+  EditTwitterModal,
+  CommonInquiryModal,
+  CancelAttentionModal,
+} from 'components';
 import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
 
 import { Api } from 'apis';
 import { copyContent } from 'utils/copy';
+import { debounce } from 'lodash';
+import { useImmer } from 'use-immer';
 
 type Iprops = {
   data: any;
@@ -55,6 +62,10 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
     const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
     const [inqueryType, setInqueryType] = useState<string>('shield');
     const UID = useStore(p => p.loginReducer.userInfo.uid);
+
+    const [state, setState] = useImmer({
+      cancelFollow: false,
+    });
 
     useEffect(() => {
       init();
@@ -185,6 +196,9 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
       if (Api.isSuccess(res)) {
         // toastSuccess(t('commonMsgUnFollowSuccess'));
+        setState(p => {
+          p.cancelFollow = false;
+        });
         callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
       }
     };
@@ -243,7 +257,9 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                 <Text
                   textTransform='capitalize'
                   onClick={() => {
-                    onAttentionCancelRequest(data.user_id);
+                    setState(p => {
+                      p.cancelFollow = true;
+                    });
                   }}
                 >
                   {t('followCancelText')}
@@ -311,6 +327,22 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             </>
           )}
         </PopupWrapper>
+
+        <CancelAttentionModal
+          title={t('meUnsubscribeTips')}
+          show={state.cancelFollow}
+          params={{
+            uid: data.user_id,
+            address: data.user_address,
+            nft_image: data.user_avator_url,
+          }}
+          confirm={debounce(() => onAttentionCancelRequest(data.user_id), 1000)}
+          onClose={() => {
+            setState(p => {
+              p.cancelFollow = false;
+            });
+          }}
+        />
 
         {/* 举报 */}
         <ReportModal

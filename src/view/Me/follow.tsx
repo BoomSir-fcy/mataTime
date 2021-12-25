@@ -51,7 +51,7 @@ const Follow = React.memo(() => {
     cancelParams: {
       uid: 0,
       address: '',
-      nft_image: ''
+      nft_image: '',
     },
     hoverIndex: 0,
     hoverStatus: false,
@@ -59,7 +59,7 @@ const Follow = React.memo(() => {
     page: 1,
     total: 0,
     totalPage: 1,
-    list: []
+    list: [],
   });
   const { loading, page, totalPage, list } = state;
 
@@ -173,7 +173,9 @@ const Follow = React.memo(() => {
                         @{shortenAddress(item.address)}
                       </Text>
                     </Flex>
-                    <WrapText color='textTips'>{item.introduction}</WrapText>
+                    <WrapText small color='textTips' ellipsis>
+                      {item.introduction}
+                    </WrapText>
                   </Column>
                 </Flex>
                 {item.attention_status === 0 ? (

@@ -44,7 +44,7 @@
     "dotenv": "^10.0.0",
     "dotenv-cli": "^4.1.1",
     "dotenv-expand": "5.1.0",
-    "dsgswap-sdk": "1.0.21",
+    "dsgswap-sdk": "1.0.23",
     "emoji-mart": "^3.0.1",
     "emotion": "^11.0.0",
     "escape-html": "^1.0.3",

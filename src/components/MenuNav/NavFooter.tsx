@@ -7,7 +7,7 @@ import { Circle } from 'rc-progress';
 import { Box, Flex, Text, Image } from 'uikit'
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import { getTimeAddress } from 'utils/addressHelpers';
-import { getFullDisplayBalance } from 'utils/formatBalance';
+import { formatDisplayBalanceWithSymbol } from 'utils/formatBalance';
 import { usePlatformTimeBalance } from 'store/wallet/hooks';
 import { useTranslation } from 'contexts/Localization'
 import { ProfileMenu } from './ProfileMenu';
@@ -91,7 +91,7 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
           </Box>
           <Box ml="16px">
             <Text color="textTips" fontSize="14px">{t('Time left')}</Text>
-            <Text color="white_black" fontSize="14px">{getFullDisplayBalance(availableBalance, 0, 3)}</Text>
+            <Text color="white_black" fontSize="14px">{formatDisplayBalanceWithSymbol(availableBalance, 0)}</Text>
           </Box>
         </Flex>
       </TimeInfoBox>

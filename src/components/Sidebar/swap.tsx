@@ -72,7 +72,7 @@ const Swap: React.FC = () => {
   }, [coins])
 
   const outputCurrencyId = useMemo(() => {
-    
+
     const ETHER = getActiveETHERWidthChainId()
     if (!coins?.symbol) return undefined
     if (coins?.symbol === ETHER.symbol) return coins?.symbol
@@ -119,6 +119,7 @@ const Swap: React.FC = () => {
               dark: {
                 colors: {
                   dropdown: dark.colors.input,
+                  failure: light.colors.failure,
                   text: dark.colors.white_black,
                   backgroundDisabled: dark.colors.tertiary,
                   primary: dark.colors.primary,
@@ -148,6 +149,7 @@ const Swap: React.FC = () => {
               light: {
                 colors: {
                   dropdown: light.colors.input,
+                  failure: light.colors.failure,
                   text: light.colors.white_black,
                   backgroundDisabled: light.colors.tertiary,
                   primary: light.colors.textPrimary,

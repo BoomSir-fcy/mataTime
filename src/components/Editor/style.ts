@@ -30,7 +30,7 @@ export const CancelButton = styled(Button)`
   width: 100px;
   height: 35px;
   border-radius: 10px;
-  background: #4d535f;
+  background: ${({ theme }) => theme.colors.tertiary};
   margin-top: 12px;
   padding: 0;
   margin-right: 20px;
@@ -57,6 +57,7 @@ export const SlateBox = styled.div`
     border-radius: 5px;
     min-height: 160px !important;
     max-height: 200px;
+    max-width: calc(100vw - 38px);
     overflow-y: auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/

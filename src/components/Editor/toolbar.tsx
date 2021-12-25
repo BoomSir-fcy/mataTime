@@ -6,6 +6,7 @@ import { Box, Flex, Button, Svg } from 'uikit';
 import { Emoji } from './emoji';
 import { Icon } from 'components';
 import { Api } from 'apis';
+import client from 'utils/client'
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -82,7 +83,8 @@ const InsertImageButton: React.FC<{
           multiple={multiple}
           type='file'
           accept='image/*'
-          capture
+          capture={!client.ios}
+          // capture={true}
           hidden
         />
       </label>

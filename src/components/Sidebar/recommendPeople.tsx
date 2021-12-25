@@ -106,25 +106,32 @@ const RecommendPeople: React.FC<Iprops> = props => {
     }
   }, [state.isRotate]);
 
-  const getCurrentState = useCallback(async () => {
-    const uids = list.map(({ uid }) => uid);
-    try {
-      const res = await Api.AttentionApi.getFollowState(uids);
-      if (Api.isSuccess(res)) {
-        const considerFocus = res.data;
-        const followTemp = list.map(row => {
-          if (considerFocus[row.uid]) {
-            return { ...row, attention_status: 1 };
-          }
-          return { ...row, attention_status: 0 };
-        });
-        setState(p => {
-          p.list = followTemp;
-          p.cancelFollow = false;
-        });
+  const getCurrentState = useCallback(
+    async (data?: any) => {
+      if (data?.data && !list.some(({ uid }) => uid === data?.data)) {
+        return false;
       }
-    } catch (error) {}
-  }, [list]);
+
+      const uids = list.map(({ uid }) => uid);
+      try {
+        const res = await Api.AttentionApi.getFollowState(uids);
+        if (Api.isSuccess(res)) {
+          const considerFocus = res.data;
+          const followTemp = list.map(row => {
+            if (considerFocus[row.uid]) {
+              return { ...row, attention_status: 1 };
+            }
+            return { ...row, attention_status: 0 };
+          });
+          setState(p => {
+            p.list = followTemp;
+            p.cancelFollow = false;
+          });
+        }
+      } catch (error) {}
+    },
+    [list],
+  );
 
   // 添加事件监听，用于更新状态
   useEffect(() => {
