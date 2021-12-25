@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 
-export const Arrow = styled.div`
+export const Arrow = styled.div<{ background?: string }>`
   &,
   &::before {
     position: absolute;
     width: 10px;
     height: 10px;
     border-radius: 2px;
-    z-index: -1;
+    z-index: 1;
   }
 
   &::before {
     content: '';
     transform: rotate(45deg);
-    background: ${({ theme }) => theme.tooltip.background};
+    background: ${({ theme, background }) => background || theme.tooltip.background};
   }
 `;
 

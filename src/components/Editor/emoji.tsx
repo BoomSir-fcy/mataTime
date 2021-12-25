@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { EmojiView, Icon } from 'components';
-import { Box, Flex, Button, Svg } from 'uikit';
+import { Box, Flex, Button, Svg, useTooltip } from 'uikit';
+import useTheme from 'hooks/useTheme';
 
 const EmojiWarpper = styled(Box)`
   position: relative;
@@ -25,6 +26,13 @@ export const Emoji: React.FC<{
     return () => document.body.removeEventListener('click', changeHandler);
   }, []);
 
+  const { theme } = useTheme()
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    <EmojiView selectedEmoji={data => onChange(data)} />,
+    { placement: 'top-start', trigger: 'click', stylePadding: '0', hideArrow: true, tooltipPadding: 0 },
+  )
+
   return (
     <EmojiWarpper onClick={e => e.stopPropagation()}>
       {/* <ButtonIcon variant="text" onClick={(e) => {
@@ -37,19 +45,22 @@ export const Emoji: React.FC<{
           <image xlinkHref={require('./images/icon_emoji.png').default}/>
         </Svg>
       </ButtonIcon> */}
-      <Icon
-        size={20}
-        color="white_black"
-        current={1}
-        name="icon-xiaolian"
-        onClick={e => {
-          e.nativeEvent.stopImmediatePropagation();
-          setState(p => {
-            p.visible = !state.visible;
-          });
-        }}
-      />
-      {state.visible && <EmojiView selectedEmoji={data => onChange(data)} />}
+      <span ref={targetRef}>
+        <Icon
+          size={20}
+          color="white_black"
+          current={1}
+          name="icon-xiaolian"
+          onClick={e => {
+            e.nativeEvent.stopImmediatePropagation();
+            setState(p => {
+              p.visible = !state.visible;
+            });
+          }}
+        />
+      </span>
+      {tooltipVisible && tooltip}
+      {/* {state.visible && <EmojiView selectedEmoji={data => onChange(data)} />} */}
     </EmojiWarpper>
   );
 };

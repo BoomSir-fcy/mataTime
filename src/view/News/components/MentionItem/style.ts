@@ -10,10 +10,13 @@ export const MentionItemWrapper = styled.div`
   .mention-content {
     cursor: pointer;
     box-sizing: border-box;
-    padding: 15px 0 15px 73px;
     color: ${({ theme }) => theme.colors.white_black};
     word-wrap: break-word;
     word-break: break-all;
+    padding: 8px 0 8px 73px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      padding: 15px 0 15px 73px;
+    }
   }
 `;
 export const MentionItemUserWrapper = styled.div`

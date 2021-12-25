@@ -49,7 +49,7 @@ const NumText = styled(Text)`
 const Fount = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 14px;
-  min-width: 76px;
+  min-width: 96px;
 `;
 const WithdrawBtn = styled(Button)`
   min-width: 80px;
@@ -112,50 +112,50 @@ const WalletBox: React.FC<Wallet> = ({
   }, [Token]);
   return (
     <Content {...props}>
-      <TopInfo mb="4px">
-        <Flex alignItems="center">
+      <TopInfo mb='4px'>
+        <Flex alignItems='center'>
           <Icon
             src={`/images/tokens/${Token}.svg`}
             width={43}
             height={43}
-            alt=""
+            alt=''
           />
-          <Text fontSize="26px">{Token}</Text>
+          <Text fontSize='26px'>{Token}</Text>
         </Flex>
-        <ChangeTokenBtn alignItems="center" onClick={onChangeToken}>
+        <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
           <ChangeToken
             src={require('assets/images/myWallet/changeToken.png').default}
-            alt=""
+            alt=''
           />
-          <NumText fontSize="14px" color="textPrimary">
+          <NumText fontSize='14px' color='textPrimary'>
             {t('Account %token% Wallet', {
-              token: Token === 'TIME' ? 'MATTER' : 'TIME'
+              token: Token === 'TIME' ? 'MATTER' : 'TIME',
             })}
           </NumText>
         </ChangeTokenBtn>
       </TopInfo>
       <Flex
         mb={isMobile ? '20px' : ''}
-        alignItems="flex-end"
-        justifyContent="space-between"
+        alignItems='flex-end'
+        justifyContent='space-between'
       >
         <LeftBox>
-          <Flex alignItems="baseline">
-            <Fount mr="16px">{t('Account balance')}</Fount>
+          <Flex alignItems='baseline'>
+            <Fount mr='16px'>{t('Account balance')}</Fount>
             <NumText>
               {formatDisplayApr(Number(BalanceInfo.available_balance))}
             </NumText>
           </Flex>
+          <Flex alignItems='baseline'>
+            <Fount mr='16px'>{t('Account Frozen amount')}</Fount>
+            <NumText>
+              {formatDisplayApr(Number(BalanceInfo.freeze_balance))}
+            </NumText>
+          </Flex>
           {Token === 'TIME' ? (
             <>
-              <Flex alignItems="baseline">
-                <Fount mr="16px">{t('Account Frozen amount')}</Fount>
-                <NumText>
-                  {formatDisplayApr(Number(BalanceInfo.freeze_balance))}
-                </NumText>
-              </Flex>
-              <Flex alignItems="baseline">
-                <Fount mr="16px">{t('Account Estimated use of')}</Fount>
+              <Flex alignItems='baseline'>
+                <Fount mr='16px'>{t('Account Estimated use of')}</Fount>
                 <NumText>
                   {leftTime > 0
                     ? t('More than %time% hours', { time: ReleaseTime })
@@ -167,7 +167,7 @@ const WalletBox: React.FC<Wallet> = ({
             <Fount>
               {t(
                 'Account Over %num% can be withdrawn to the wallet on the chain',
-                { num: 100 }
+                { num: 100 },
               )}
             </Fount>
           )}
@@ -191,17 +191,17 @@ const WalletBox: React.FC<Wallet> = ({
         )}
       </Flex>
       {isMobile && (
-        <Flex alignItems="center" justifyContent="space-between">
+        <Flex alignItems='center' justifyContent='space-between'>
           <Text
             style={{ cursor: 'pointer' }}
-            color="textPrimary"
+            color='textPrimary'
             onClick={() => setVisibleHistory(true)}
           >
             {t('Account history record')}
           </Text>
           {account ? (
             <Box>
-              <WithdrawBtn mr="20px" onClick={() => openModaal(1)}>
+              <WithdrawBtn mr='20px' onClick={() => openModaal(1)}>
                 {t('AccountRecharge')}
               </WithdrawBtn>
               <WithdrawBtn

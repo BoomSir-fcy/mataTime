@@ -30,7 +30,7 @@ export const CancelButton = styled(Button)`
   width: 100px;
   height: 35px;
   border-radius: 10px;
-  background: #4d535f;
+  background: ${({ theme }) => theme.colors.tertiary};
   margin-top: 12px;
   padding: 0;
   margin-right: 20px;
@@ -55,6 +55,7 @@ export const SlateBox = styled.div`
     }
     padding-bottom: 16px;
     border-radius: 5px;
+    max-width: calc(100vw - 38px);
     min-height: 112px !important;
     max-height: 120px;
     overflow-y: auto;

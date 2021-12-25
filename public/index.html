@@ -84,6 +84,16 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+  <!-- <img style="display: none;" src="https://unpkg.com/emoji-datasource-apple@5.0.1/img/apple/sheets-256/64.png" alt=""> -->
+  <script>
+    // Emoji loading slow, the method can display fast with cache.
+    window.addEventListener('load', function () {
+      var img = new Image();
+      img.src = 'https://unpkg.com/emoji-datasource-apple@5.0.1/img/apple/sheets-256/64.png'
+      img.style.display = 'none !important'
+      document.body.append(img)
+    })
+  </script>
 </body>
 
 </html>
