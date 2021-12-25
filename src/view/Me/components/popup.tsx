@@ -62,7 +62,9 @@ export const Popup: React.FC<{
       if (Api.isSuccess(res)) {
         onCallback();
         popupRefs?.current?.close();
-        eventBus.dispatchEvent(new MessageEvent('updateFollowState'));
+        eventBus.dispatchEvent(
+          new MessageEvent('updateFollowState', { data: focus_uid }),
+        );
         // toastSuccess(t('commonMsgFollowSuccess') || res.data);
       }
     } catch (error) {
@@ -80,7 +82,9 @@ export const Popup: React.FC<{
         setState(p => {
           p.cancelFollow = false;
         });
-        eventBus.dispatchEvent(new MessageEvent('updateFollowState'));
+        eventBus.dispatchEvent(
+          new MessageEvent('updateFollowState', { data: focus_uid }),
+        );
         // toastSuccess(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
