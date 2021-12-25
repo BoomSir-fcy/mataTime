@@ -177,7 +177,7 @@ const removeEmptyLine = value => {
 }
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const { initValue = null, cancelSendArticle = () => { }, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -234,7 +234,7 @@ export const Editor = (props: Iprops) => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) {}
+    } catch (err) { }
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -255,45 +255,6 @@ export const Editor = (props: Iprops) => {
   useEffect(() => {
     setIsDisabledSend(imgList.length < 1);
   }, [imgList]);
-
-  const callbackSelectImg = e => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.name = 'file';
-    input.multiple = true;
-    input.accept = '.png,.jpg,.jpeg,avif,bmp,gif,raw,tif,webp';
-    input.onchange = async (e: any) => {
-      const selectFiles = e.target.files;
-      if (!selectFiles[0]) return false;
-      if (imgList.length + selectFiles.length > 4)
-        return toast.error(t('uploadImgMaxMsg'));
-      const fileList: string[] = [];
-      for (let file of selectFiles) {
-        let fr: any = new FileReader();
-        // 读取文件
-        fr.readAsDataURL(file);
-        // 将文件转为base64
-        fr.onload = () => {
-          fileList.push(fr.result);
-          if (fileList.length === selectFiles.length) {
-            Api.CommonApi.uploadImgList({
-              dir_name: props.type,
-              base64: fileList
-            }).then(res => {
-              if (Api.isSuccess(res)) {
-                setImgList([
-                  ...imgList,
-                  ...res.data.map(item => item.full_path)
-                ]);
-                toast.success(t('uploadImgSuccessMsg'));
-              }
-            });
-          }
-        };
-      }
-    };
-    input.click();
-  };
 
   const restInput = () => {
     // https://joshtronic.com/2020/04/13/error-cannot-resolve-a-dom-point-from-slate-point/
