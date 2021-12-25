@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { fetchSpVaultUserAsync } from 'store/pools/thunks';
 import { useWeb3React } from '@web3-react/core';
 import { useTranslation } from 'contexts/Localization';
-import { Container } from 'components';
+import { Container, ConnectWalletButton } from 'components';
 import { useApproveErc20Pool, useHarvesPoolId } from '../../hooks/pools';
 import Dots from 'components/Loader/Dots';
 import { getBalanceAmount } from 'utils/formatBalance';
@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { BIG_ZERO } from 'utils/bigNumber';
 import styled from 'styled-components';
+import { useToast } from 'hooks';
 
 const ContainerItem = styled(Container)`
   padding-top: 12px;
@@ -28,12 +29,12 @@ const HandleButton = ({
   onView,
   t,
   account,
-  onConnectWallet
+  canHarvest,
 }) => {
   const [pendingTx, setPendingTx] = useState(false);
 
   if (!account) {
-    return <Button onClick={onConnectWallet}>{t('Connect Wallet')}</Button>;
+    return <ConnectWalletButton />
   }
   if (!isApproved) {
     return (
@@ -61,10 +62,9 @@ const HandleButton = ({
         </Button>
       )}
       <Button
-        variant="primaryGreen"
         width={100}
         margin="0 12px"
-        disabled={pendingTx}
+        disabled={pendingTx || !canHarvest}
         onClick={async () => {
           setPendingTx(true);
           await onHandleReward();
@@ -101,7 +101,7 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { onConnectWallet } = useConnectWallet();
+  const { toastSuccess, toastError } = useToast()
 
   const { onApprove } = useApproveErc20Pool(depositToken, poolAddress);
   const handleApprove = useCallback(async () => {
@@ -118,39 +118,26 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
     try {
       await onHarvest();
       dispatch(fetchSpVaultUserAsync(account));
-      toast.success(
-        <>
-          <Text color="blank">
-            {t('Your earnings have been harvested to your wallet!')}
-          </Text>
-        </>
-      );
+      toastSuccess(t('Your earnings have been harvested to your wallet!'));
     } catch (error) {
       if ((error as any)?.code !== 4001) {
-        toast.error(
-          <>
-            <Text color="blank">{t('Error')}</Text>
-            <Text color="blank">
-              {t(
-                'Please try again. Confirm the transaction and make sure you are paying enough gas!'
-              )}
-            </Text>
-          </>
-        );
+        toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'));
       }
     }
-  }, [onHarvest, dispatch, account]);
+  }, [onHarvest, dispatch, t, toastSuccess, toastError, account]);
+
+  const canHarvest = new BigNumber(earnings).isGreaterThan(0)
 
   return (
     <ContainerItem>
       <Flex justifyContent="center" alignItems="center">
         <HandleButton
+          canHarvest={canHarvest}
           isApproved={isApproved}
           handleApprove={handleApprove}
           onHandleReward={onHandleReward}
           onView={onView}
           account={account}
-          onConnectWallet={onConnectWallet}
           showView={showView}
           t={t}
         />

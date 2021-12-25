@@ -21,8 +21,12 @@ import { formatDisplayApr } from 'utils/formatBalance';
 const CountBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  overflow: auto;
+  /* overflow: auto; */
 `;
+const TableBox = styled(Box)`
+  width: 100%;
+  overflow: auto;
+`
 const Table = styled(Flex)`
   flex-direction: column;
   align-items: center;
@@ -137,7 +141,7 @@ interface init {
   type?: number;
 }
 
-const VestingTime: React.FC<init> = ({}) => {
+const VestingTime: React.FC<init> = ({ }) => {
   useFetchRewardNum();
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -188,16 +192,17 @@ const VestingTime: React.FC<init> = ({}) => {
         <ClaimButton ReleaseAmount={RewardNum} all upDate={upDate} />
       </WithDrawAllBox>
       <CountBox>
-        <Table>
-          <Row>
-            <HeadText>{t('Round')}</HeadText>
-            <HeadText>{t('Vesting end TIME')}</HeadText>
-            <HeadText>{t('Vesting $TIME')}</HeadText>
-            <HeadText>{t('Claimable $TIME')}</HeadText>
-            <HeadText></HeadText>
-          </Row>
-          {HistoryList.length
-            ? HistoryList.map((item, index) => (
+        <TableBox>
+          <Table>
+            <Row>
+              <HeadText>{t('Round')}</HeadText>
+              <HeadText>{t('Vesting end TIME')}</HeadText>
+              <HeadText>{t('Vesting $TIME')}</HeadText>
+              <HeadText>{t('Claimable $TIME')}</HeadText>
+              <HeadText></HeadText>
+            </Row>
+            {HistoryList.length
+              ? HistoryList.map((item, index) => (
                 <Row key={`${item.round}${index}`}>
                   {item.totalPage > 0 && (
                     <>
@@ -224,13 +229,14 @@ const VestingTime: React.FC<init> = ({}) => {
                   )}
                 </Row>
               ))
-            : !Loading && <Empty />}
-          {Loading && (
-            <LoadingAnimation>
-              <Spinner />
-            </LoadingAnimation>
-          )}
-        </Table>
+              : !Loading && <Empty />}
+            {Loading && (
+              <LoadingAnimation>
+                <Spinner />
+              </LoadingAnimation>
+            )}
+          </Table>
+        </TableBox>
         <PaginateStyle alignItems='center' justifyContent='end'>
           <Text mr='16px' fontSize='14px' color='textTips'>
             {t('Account Total %page% page', { page: pageCount })}

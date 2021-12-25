@@ -24,11 +24,16 @@ import { Link } from 'react-router-dom';
 const CountBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
+const TableBox = styled(Box)`
+  width: 100%;
+  overflow: auto;
+`
 const Table = styled(Flex)`
   flex-direction: column;
   align-items: center;
   width: 100%;
   min-height: 300px;
+  min-width: 600px;
   .Reward {
     grid-template-columns: 60% 40%;
   }
@@ -168,16 +173,17 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
 
   return (
     <CountBox>
-      {type === 2 ? (
-        <Table>
-          <Row className='matterStyle'>
-            <HeadText>{t('Account Date')}</HeadText>
-            <HeadText>{t('Account Task type')}</HeadText>
-            <HeadText>{t('Account Task details')}</HeadText>
-            <HeadText>{t('Account Day income')}</HeadText>
-          </Row>
-          {TaskHistoryList.length
-            ? TaskHistoryList.map((item, index) => (
+      <TableBox>
+        {type === 2 ? (
+          <Table>
+            <Row className='matterStyle'>
+              <HeadText>{t('Account Date')}</HeadText>
+              <HeadText>{t('Account Task type')}</HeadText>
+              <HeadText>{t('Account Task details')}</HeadText>
+              <HeadText>{t('Account Day income')}</HeadText>
+            </Row>
+            {TaskHistoryList.length
+              ? TaskHistoryList.map((item, index) => (
                 <Row
                   className='matterStyle'
                   key={`${item.create_time}${index}`}
@@ -200,74 +206,74 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
                   )}
                 </Row>
               ))
-            : !Loading && <Empty />}
-          {Loading && (
-            <LoadingAnimation>
-              <Spinner />
-            </LoadingAnimation>
-          )}
-        </Table>
-      ) : (
-        <Table>
-          <Row>
-            <HeadText>{t('Account Creation')}</HeadText>
-            <HeadText>{t('Account Number of readers')}</HeadText>
-            <HeadText>{t('Account Day income')}</HeadText>
-            <HeadText>{t('Account Cumulative income')}</HeadText>
-          </Row>
-          {ContentHistoryList.map((item, index) => {
-            const stringArray: any[] = [];
-            let context: any[] = [];
-            try {
-              if (readType === 1) {
-                if (item?.info?.content) {
-                  context = Array.isArray(JSON.parse(item?.info?.content))
-                    ? JSON.parse(item?.info?.content)
-                    : [];
+              : !Loading && <Empty />}
+            {Loading && (
+              <LoadingAnimation>
+                <Spinner />
+              </LoadingAnimation>
+            )}
+          </Table>
+        ) : (
+          <Table>
+            <Row>
+              <HeadText>{t('Account Creation')}</HeadText>
+              <HeadText>{t('Account Number of readers')}</HeadText>
+              <HeadText>{t('Account Day income')}</HeadText>
+              <HeadText>{t('Account Cumulative income')}</HeadText>
+            </Row>
+            {ContentHistoryList.map((item, index) => {
+              const stringArray: any[] = [];
+              let context: any[] = [];
+              try {
+                if (readType === 1) {
+                  if (item?.info?.content) {
+                    context = Array.isArray(JSON.parse(item?.info?.content))
+                      ? JSON.parse(item?.info?.content)
+                      : [];
+                  }
+                } else {
+                  if (item?.cinfo?.comment) {
+                    context = Array.isArray(JSON.parse(item?.cinfo?.comment))
+                      ? JSON.parse(item?.cinfo?.comment)
+                      : [];
+                  }
                 }
-              } else {
-                if (item?.cinfo?.comment) {
-                  context = Array.isArray(JSON.parse(item?.cinfo?.comment))
-                    ? JSON.parse(item?.cinfo?.comment)
-                    : [];
-                }
+              } catch (err) {
+                console.error(err);
               }
-            } catch (err) {
-              console.error(err);
-            }
-            return (
-              <Row
-                className='LinkRow'
-                key={`${item.read.post_id}${index}`}
-                as={Link}
-                to={`/articleDetils/${
-                  readType === 1 ? item.read.post_id : item.cinfo?.pid
-                }`}
-              >
-                <ItemText>
-                  <Flex alignItems='center'>
-                    <Text ellipsis>
-                      {stringArr(context, stringArray).join(',')}
-                    </Text>
-                    {readType === 1 &&
-                      item.info?.image_list &&
-                      item.info.image_list.map(item => (
-                        <img key={item} src={item} alt='' />
-                      ))}
-                  </Flex>
-                </ItemText>
-                <ItemText ellipsis>{item.read.total_read_count}</ItemText>
-                <ItemText ellipsis>
-                  {getIcome(item.read.range_read_times)}
-                </ItemText>
-                <ItemText ellipsis>
-                  {getIcome(item.read.total_read_times)}
-                </ItemText>
-              </Row>
-            );
-          })}
-        </Table>
-      )}
+              return (
+                <Row
+                  className='LinkRow'
+                  key={`${item.read.post_id}${index}`}
+                  as={Link}
+                  to={`/articleDetils/${readType === 1 ? item.read.post_id : item.cinfo?.pid
+                    }`}
+                >
+                  <ItemText>
+                    <Flex alignItems='center'>
+                      <Text ellipsis>
+                        {stringArr(context, stringArray).join(',')}
+                      </Text>
+                      {readType === 1 &&
+                        item.info?.image_list &&
+                        item.info.image_list.map(item => (
+                          <img key={item} src={item} alt='' />
+                        ))}
+                    </Flex>
+                  </ItemText>
+                  <ItemText ellipsis>{item.read.total_read_count}</ItemText>
+                  <ItemText ellipsis>
+                    {getIcome(item.read.range_read_times)}
+                  </ItemText>
+                  <ItemText ellipsis>
+                    {getIcome(item.read.total_read_times)}
+                  </ItemText>
+                </Row>
+              );
+            })}
+          </Table>
+        )}
+      </TableBox>
 
       <PaginateStyle alignItems='center' justifyContent='end'>
         <Text mr='16px' fontSize='14px' color='textTips'>
