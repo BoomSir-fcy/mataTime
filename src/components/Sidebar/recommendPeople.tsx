@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled, { useTheme } from 'styled-components';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { Avatar, FollowButton, CancelAttentionModal, Icon } from 'components';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
 import RefreshIcon from 'components/Loader/RefreshIcon';
+import eventBus from 'utils/eventBus';
 
 const RecommendPeopleBox = styled(Card)`
   width: 300px;
@@ -87,8 +88,8 @@ const RecommendPeople: React.FC<Iprops> = props => {
     cancelParams: {
       uid: 0,
       address: '',
-      nft_image: ''
-    }
+      nft_image: '',
+    },
   });
   const { list } = state;
   const theme = useTheme();
@@ -105,7 +106,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
     }
   }, [state.isRotate]);
 
-  const getCurrentState = async () => {
+  const getCurrentState = useCallback(async () => {
     const uids = list.map(({ uid }) => uid);
     try {
       const res = await Api.AttentionApi.getFollowState(uids);
@@ -123,7 +124,15 @@ const RecommendPeople: React.FC<Iprops> = props => {
         });
       }
     } catch (error) {}
-  };
+  }, [list]);
+
+  // 添加事件监听，用于更新状态
+  useEffect(() => {
+    eventBus.addEventListener('updateFollowState', getCurrentState);
+    return () => {
+      eventBus.removeEventListener('updateFollowState', getCurrentState);
+    };
+  }, [getCurrentState]);
 
   const getManList = async () => {
     try {
@@ -148,6 +157,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
     const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
     if (Api.isSuccess(res)) {
       getCurrentState();
+      eventBus.dispatchEvent(new MessageEvent('updateProfile'));
       // toastSuccess(t('commonMsgFollowSuccess') || res.data);
     }
   };
@@ -158,6 +168,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
       const res = await Api.MeApi.unFollowUser(item.uid);
       if (Api.isSuccess(res)) {
         getCurrentState();
+        eventBus.dispatchEvent(new MessageEvent('updateProfile'));
         // toastSuccess(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {

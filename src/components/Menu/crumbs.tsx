@@ -12,6 +12,9 @@ import MenuButton from './MenuButton';
 const CrumbsWraper = styled(Box)`
   padding-bottom: 70px;
   ${({ theme }) => theme.mediaQueries.lg} {
+    position: sticky;
+    top: 0;
+    z-index: 1005;
     padding-bottom: 0;
   }
 `;
