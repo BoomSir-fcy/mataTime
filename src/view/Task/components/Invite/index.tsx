@@ -219,7 +219,7 @@ const Invite: React.FC = () => {
                 <Text className='text-title' color='textTips' small>
                   {t('My Rebate(TIME)')}
                 </Text>
-                <Text color='textPrimary' fontSize='20px' bold>
+                <Text fontSize='20px' bold>
                   {inviteInfo.total_rebate}
                 </Text>
               </Flex>
