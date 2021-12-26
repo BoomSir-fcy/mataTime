@@ -59,6 +59,7 @@ export const RewardIncome: React.FC<{
                   style={{ marginLeft: '-1em' }}
                 >
                   <Avatar
+                    disableFollow
                     src={item.nft_image}
                     scale='md'
                     style={{ width: '25px', height: '25px' }}

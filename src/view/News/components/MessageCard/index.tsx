@@ -6,21 +6,41 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'contexts/Localization';
 
 const BoxStyled = styled(Flex)`
-  height: 100px;
+  flex-direction: column;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 `;
 
 const ContentBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundCard};
-  /* height: calc(100% - 2px); */
   overflow: hidden;
-  width: 120px;
+  color: ${({ theme }) => theme.colors.white};
+  width: 100%;
   ${({ theme }) => theme.mediaQueries.sm} {
     width: 170px;
   }
 `;
 const ContentInnerBox = styled(Box)`
   pointer-events: none;
+  padding: 14px 8px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 14px 8px 0;
+  }
+`;
+
+const ContentBoxEllipsis = styled(Box)`
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  white-space: nowrap;
 `;
 
 interface MessageCardProps {
@@ -43,17 +63,23 @@ const MessageCard: React.FC<MessageCardProps> = ({
   content,
   href,
   content_status,
-  children
+  children,
 }) => {
   const { t } = useTranslation();
 
   return (
-    <BoxStyled alignItems='center' justifyContent='space-between'>
+    <BoxStyled>
       <Flex flex='1' padding='16px'>
         <Avatar uid={uid} src={avatar} scale='md' />
         <Flex flexDirection='column' ml='16px' flex='1'>
           <Flex alignItems='center'>
-            <Text maxWidth='100px' ellipsis bold fontSize='18px' color='primary'>
+            <Text
+              maxWidth='100px'
+              ellipsis
+              bold
+              fontSize='18px'
+              color='primary'
+            >
               {title}
             </Text>
             <Text ellipsis ml='16px' fontSize='14px' color='textTips'>
@@ -69,11 +95,9 @@ const MessageCard: React.FC<MessageCardProps> = ({
             {image_list?.length ? (
               <ImgList list={image_list} />
             ) : (
-              <Box padding='8px'>
-                <Text>
-                  <ContentParsing content={content} />
-                </Text>
-              </Box>
+              <ContentBoxEllipsis>
+                <ContentParsing content={content} />
+              </ContentBoxEllipsis>
             )}
           </ContentInnerBox>
         </ContentBox>
