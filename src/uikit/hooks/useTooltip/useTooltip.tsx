@@ -7,7 +7,8 @@ import isTouchDevice from '../../util/isTouchDevice';
 import { StyledTooltip, Arrow } from './StyledTooltip';
 import { TooltipOptions, TooltipRefs } from './types';
 
-const invertTheme = (currentTheme: DefaultTheme) => {
+const invertTheme = (currentTheme: DefaultTheme, invert: boolean) => {
+  if (!invert) return currentTheme
   if (currentTheme.isDark) {
     return light;
   }
@@ -26,6 +27,7 @@ const useTooltip = (
     arrowPadding = 16,
     tooltipPadding = { left: 16, right: 16 },
     tooltipOffset = [0, 10],
+    invert = true,
     stylePadding,
     background,
     hideArrow,
@@ -201,7 +203,7 @@ const useTooltip = (
       }}
       {...attributes.popper}
     >
-      <ThemeProvider theme={invertTheme}>{content}</ThemeProvider>
+      <ThemeProvider theme={(defaultTheme) => invertTheme(defaultTheme, invert)}>{content}</ThemeProvider>
       {!hideArrow && (
         <Arrow
           ref={setArrowElement}

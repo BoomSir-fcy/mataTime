@@ -26,7 +26,6 @@ import {
 } from './hook';
 
 import QuestionHelper from 'components/QuestionHelper';
-import useTheme from 'hooks/useTheme';
 
 const invertTheme = (currentTheme: DefaultTheme) => {
   if (currentTheme.isDark) {
@@ -119,7 +118,6 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const tokenViewList = useStore(p => p.appReducer.supportTokenViews);
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const reward: reward[] = currentPost.reward_stats || [];
-  const { theme } = useTheme()
 
   const init = async () => {
     try {
@@ -241,8 +239,6 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     };
   }, []);
 
-  console.log(theme.isDark, 'theme.isDark')
-
   return (
     <RewardAuthModalStyled right={offsetLeft} bottom={offsetTop}>
       {/* 无人打赏你的帖子 */}
@@ -294,23 +290,21 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                           ))}
                         </DropDown>
                       </Box>
-                      <ThemeProvider theme={invertTheme}>
-                        <QuestionHelper
-                          ml='15px'
-                          color='white'
-                          text={
-                            <>
-                              <Text fontSize='14px'>
-                                {t('rewardAutherTipsText1')}
-                              </Text>
-                              <Text fontSize='14px' color='textTips'>
-                                {t('rewardAutherTipsText2')}
-                              </Text>
-                            </>
-                          }
-                          placement='auto'
-                        />
-                      </ThemeProvider>
+                      <QuestionHelper
+                        ml='15px'
+                        color='white'
+                        text={
+                          <>
+                            <Text fontSize='14px'>
+                              {t('rewardAutherTipsText1')}
+                            </Text>
+                            <Text fontSize='14px' color='textTips'>
+                              {t('rewardAutherTipsText2')}
+                            </Text>
+                          </>
+                        }
+                        placement='auto'
+                      />
                     </Flex>
                   </Flex>
                   <Box minHeight='100px' mt='25px'>
