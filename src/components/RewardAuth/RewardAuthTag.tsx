@@ -9,14 +9,14 @@ import RewardAuthModal from './RewardAuthModal';
 import 'reactjs-popup/dist/index.css';
 // import useRewardAuth from 'contexts/RewardAuthContext/hooks/useRewardAuth';
 
-const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
+const StyledPopup = styled(Popup) <{ isMobile: boolean }>`
   position: relative;
   &-overlay {
     z-index: 98 !important;
   }
   &-content {
     width: ${({ isMobile }) =>
-      isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
+    isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
     left: ${({ isMobile }) => (isMobile ? '4px !important' : 'atuo')};
   }
 `;

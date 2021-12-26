@@ -125,20 +125,25 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
           </StyledPageItem>
           <Box>
             <DropDown fillWidth isOpen={isOpen} setIsOpen={setIsOpen}>
-              <StyledPageItem>
-                {coinsList.map(item => (
-                  <CoinItem
-                    key={item.coin_id}
-                    fillClickArea
-                    isActive={item.coin_id === currentCoin?.coin_id}
-                    onClick={coin => {
-                      setIsOpen(!isOpen);
-                      setCurrentCoin(coin);
-                    }}
-                    coinInfo={item}
-                  />
-                ))}
-              </StyledPageItem>
+              <Box style={{
+                overflowY: 'auto',
+                overflowX: 'hidden',
+              }} maxHeight="300px">
+                <StyledPageItem>
+                  {coinsList.map(item => (
+                    <CoinItem
+                      key={item.coin_id}
+                      fillClickArea
+                      isActive={item.coin_id === currentCoin?.coin_id}
+                      onClick={coin => {
+                        setIsOpen(!isOpen);
+                        setCurrentCoin(coin);
+                      }}
+                      coinInfo={item}
+                    />
+                  ))}
+                </StyledPageItem>
+              </Box>
             </DropDown>
           </Box>
           <StyledPageItem>

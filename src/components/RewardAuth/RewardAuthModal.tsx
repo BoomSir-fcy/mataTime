@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import ReactLoading from 'react-loading';
+import styled, { ThemeProvider, DefaultTheme } from 'styled-components'
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { DropDown, Avatar, Loading, ConnectWalletButton } from 'components';
-import { Flex, Box, Text, Button } from 'uikit';
+import { Flex, Box, Text, Button, light, dark } from 'uikit';
 import { useToast } from 'hooks';
 import { useStore, storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -26,6 +26,15 @@ import {
 } from './hook';
 
 import QuestionHelper from 'components/QuestionHelper';
+import useTheme from 'hooks/useTheme';
+
+const invertTheme = (currentTheme: DefaultTheme) => {
+  if (currentTheme.isDark) {
+    return light;
+  }
+  return dark;
+};
+
 
 const RewardAuthModalStyled = styled(Box)`
   width: 100%;
@@ -110,6 +119,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   const tokenViewList = useStore(p => p.appReducer.supportTokenViews);
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const reward: reward[] = currentPost.reward_stats || [];
+  const { theme } = useTheme()
 
   const init = async () => {
     try {
@@ -150,7 +160,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       setState(p => {
         p.reward_post = res;
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 切换币种
@@ -162,7 +172,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         p.current_price = res.current_price || '0';
         p.isOnApprove = tokenList[index][4] > 0 ? false : true;
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 打赏用户
@@ -231,6 +241,8 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
     };
   }, []);
 
+  console.log(theme.isDark, 'theme.isDark')
+
   return (
     <RewardAuthModalStyled right={offsetLeft} bottom={offsetTop}>
       {/* 无人打赏你的帖子 */}
@@ -282,21 +294,23 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                           ))}
                         </DropDown>
                       </Box>
-                      <QuestionHelper
-                        ml='15px'
-                        color='white'
-                        text={
-                          <>
-                            <Text fontSize='14px'>
-                              {t('rewardAutherTipsText1')}
-                            </Text>
-                            <Text fontSize='14px' color='textTips'>
-                              {t('rewardAutherTipsText2')}
-                            </Text>
-                          </>
-                        }
-                        placement='auto'
-                      />
+                      <ThemeProvider theme={invertTheme}>
+                        <QuestionHelper
+                          ml='15px'
+                          color='white'
+                          text={
+                            <>
+                              <Text fontSize='14px'>
+                                {t('rewardAutherTipsText1')}
+                              </Text>
+                              <Text fontSize='14px' color='textTips'>
+                                {t('rewardAutherTipsText2')}
+                              </Text>
+                            </>
+                          }
+                          placement='auto'
+                        />
+                      </ThemeProvider>
                     </Flex>
                   </Flex>
                   <Box minHeight='100px' mt='25px'>

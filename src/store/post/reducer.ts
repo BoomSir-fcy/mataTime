@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { postUpdateArticleParams, postUpdateArticle } from './actions';
 import { Api } from 'apis';
+import uniqBy from 'lodash/uniqBy';
 
 const initialState = {
   list: [],
@@ -38,7 +39,12 @@ export const Post = createSlice({
       .addCase(fetchPostAsync.fulfilled, (state, action) => {
         const { list, page, per_page, attention } = action.payload;
         let articleList = list ?? [];
-        state.list = page === 1 ? articleList : [...state.list, ...articleList];
+        if (page === 1) {
+          state.list = articleList;
+        } else {
+          const list = state.list.concat(articleList)
+          state.list = uniqBy(list, 'id')
+        }
         state.lastList =
           articleList.length >= per_page || page > 1 ? articleList : [];
         state.page = articleList.length >= per_page ? page + 1 : page;
