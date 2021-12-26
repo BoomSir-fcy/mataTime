@@ -54,10 +54,12 @@ const Task: React.FC = () => {
   };
 
   useEffect(() => {
-    const result = groupByTask(data, 'task_group');
-    if (!result[Group.ACTIVITY]) result[Group.ACTIVITY] = [];
-    result[Group.ACTIVITY]?.unshift(result['default'][0]);
-    setTaskGroup(result);
+    if (data.length) {
+      const result = groupByTask(data, 'task_group');
+      if (!result[Group.ACTIVITY]) result[Group.ACTIVITY] = [];
+      result[Group.ACTIVITY]?.unshift(result['default'][0]);
+      setTaskGroup(result);
+    }
   }, [data]);
 
   return (
