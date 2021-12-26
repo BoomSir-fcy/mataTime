@@ -28,11 +28,7 @@ import {
 import QuestionHelper from 'components/QuestionHelper';
 
 const RewardAuthModalStyled = styled(Box)`
-  position: absolute;
-  z-index: 99;
   width: 100%;
-  right: 0;
-  bottom: 0;
   margin: auto;
   min-height: 80px;
   padding: 8px 20px 16px;
@@ -41,8 +37,6 @@ const RewardAuthModalStyled = styled(Box)`
   background: ${({ theme }) => theme.colors.greyBackground};
   ${({ theme }) => theme.mediaQueries.lg} {
     width: 418px;
-    bottom: 0px;
-    right: 0;
   }
 `;
 const CoinSelectStyled = styled(Button)`
@@ -80,7 +74,7 @@ interface RewardAuthModalProps {
   offsetLeft?: number;
   onConfirm?: (amount: string) => void;
   onDismiss?: () => void;
-  onClose?: () => void;
+  onClose?: (event: Event) => void;
 }
 
 const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
@@ -172,7 +166,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   };
 
   // 打赏用户
-  const changeRewardUser = async (amount: string) => {
+  const changeRewardUser = async (amount: string, evnet) => {
     try {
       setState(p => {
         p.submitLoading = true;
@@ -186,7 +180,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         getBnbAddress() === currentToken[0],
       );
       if (res === 1) {
-        onClose();
+        onClose(evnet);
         toastSuccess(t('rewardAutherSuccess'));
       } else if (res === 4001) {
         toastSuccess(t('rewardAutherCancel'));
@@ -315,7 +309,9 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                           p.isOnApprove = false;
                         })
                       }
-                      onCallBack={event => changeRewardUser(event)}
+                      onCallBack={(amount, event) =>
+                        changeRewardUser(amount, event)
+                      }
                     />
                     {/* {currentToken[1] && (
                   <Reward

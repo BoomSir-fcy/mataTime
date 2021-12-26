@@ -37,7 +37,7 @@ export const RewardInput: React.FC<{
   price: string;
   isOnApprove: boolean;
   onApprove: () => void;
-  onCallBack: (event: string) => void;
+  onCallBack: (amount: string, event: Event) => void;
 }> = React.memo(({ current, price, isOnApprove, onApprove, onCallBack }) => {
   const dispatch = useDispatch();
 
@@ -47,7 +47,7 @@ export const RewardInput: React.FC<{
   const { approve } = RewardAuthorContract();
   const [amount, setAmount] = React.useState('');
   const [state, setState] = useImmer({
-    loading: false
+    loading: false,
   });
   const { toastError } = useToast();
   const tokenViewList = useStore(p => p.appReducer.supportTokenViews);
@@ -92,17 +92,17 @@ export const RewardInput: React.FC<{
         setAmount(e.currentTarget.value.replace(/,/g, '.'));
       }
     },
-    []
+    [],
   );
 
   return (
     <React.Fragment>
       {isOnApprove ? (
         <Flex
-          width="100%"
-          minHeight="120px"
-          justifyContent="center"
-          alignItems="center"
+          width='100%'
+          minHeight='120px'
+          justifyContent='center'
+          alignItems='center'
         >
           <Button onClick={() => ChangeApprove()}>
             {state.loading ? (
@@ -115,12 +115,12 @@ export const RewardInput: React.FC<{
           </Button>
         </Flex>
       ) : (
-        <Flex justifyContent="space-between" alignItems="flex-end">
-          <Box mr="15px">
-            <Flex mb="15px" justifyContent="space-between">
-              <Text color="white">{t('Amount')}</Text>
+        <Flex justifyContent='space-between' alignItems='flex-end'>
+          <Box mr='15px'>
+            <Flex mb='15px' justifyContent='space-between'>
+              <Text color='white'>{t('Amount')}</Text>
               <Text
-                color="textTips"
+                color='textTips'
                 style={{ minWidth: 0, maxWidth: 150 }}
                 ellipsis
               >
@@ -129,14 +129,14 @@ export const RewardInput: React.FC<{
             </Flex>
             <InputCell>
               <InputToken
-                inputMode="decimal"
+                inputMode='decimal'
                 value={amount}
                 pattern={`^[0-9]*[.,]?[0-9]{0,${
                   (current && current[3]) || 6
                 }}$`}
                 onChange={handleChange}
               />
-              <Text color="white" mr="23px">
+              <Text color='white' mr='23px'>
                 {current && current[2]}
               </Text>
             </InputCell>
@@ -144,7 +144,7 @@ export const RewardInput: React.FC<{
           <Submit
             onClick={evnet => {
               evnet.stopPropagation();
-              onCallBack(amount);
+              onCallBack(amount, evnet);
             }}
           >
             {t('Confirm')}
