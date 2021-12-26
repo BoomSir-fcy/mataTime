@@ -58,6 +58,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
       trigger: 'click',
       stylePadding: '0',
       hideArrow: true,
+      invert: false,
       tooltipPadding: 0,
       tooltipOffset: [0, 5],
       background: 'transparent',
