@@ -146,7 +146,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
 
   const getPost = async () => {
     try {
-      const res = await getInfo(postType, currentPost.id);
+      const res = await getInfo(postType, currentPost.reward_id);
       setState(p => {
         p.reward_post = res;
       });
@@ -175,7 +175,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         currentPost.user_address,
         currentToken[0],
         postType,
-        currentPost.id,
+        currentPost.reward_id,
         getDecimalAmount(new BigNumber(amount)).toString(),
         getBnbAddress() === currentToken[0],
       );

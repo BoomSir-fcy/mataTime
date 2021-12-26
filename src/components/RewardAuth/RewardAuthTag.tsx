@@ -49,7 +49,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   const { targetRef, tooltip, tooltipVisible, close } = useTooltip(
     <RewardAuthModal
       postType={postType}
-      currentPost={data}
+      currentPost={{ ...data, reward_id: data?.post_id ?? data.id }}
       avatar={data.user_avator_url}
       onClose={event => close(event)}
     />,

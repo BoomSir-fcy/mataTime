@@ -9,7 +9,7 @@ import {
   Range,
   createEditor,
   Descendant,
-  Element as SlateElement
+  Element as SlateElement,
 } from 'slate';
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
@@ -28,14 +28,15 @@ import {
   withReact,
   useSelected,
   useFocused,
-  useSlate
+  useSlate,
 } from 'slate-react';
+
 import {
   SlateBox,
   SendButton,
   CancelButton,
   MentionContent,
-  MentionItems
+  MentionItems,
 } from './style';
 import { MentionElement } from './custom-types';
 import { SearchPop, FollowPopup } from 'components';
@@ -45,6 +46,7 @@ import { getPostBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
 import { ARTICLE_POST_MAX_LEN } from 'config';
+import { isApp } from 'utils/client';
 
 type Iprops = {
   type: any;
@@ -68,10 +70,10 @@ const initialValue: Descendant[] = [
     type: 'paragraph',
     children: [
       {
-        text: ''
-      }
-    ]
-  }
+        text: '',
+      },
+    ],
+  },
 ];
 
 const withMentions = editor => {
@@ -100,7 +102,7 @@ const insertMention = (editor, { character, uid }) => {
     type: 'mention',
     character,
     attrs: { userid: uid },
-    children: [{ text: '' }]
+    children: [{ text: '' }],
   };
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
@@ -146,7 +148,7 @@ const removeEmptyText = value => {
       const children = removeEmptyText(item.children);
       resVal.push({
         ...item,
-        children: children.length ? children : null
+        children: children.length ? children : null,
       });
       return;
     }
@@ -159,25 +161,31 @@ const removeEmptyText = value => {
   return resVal;
 };
 
-const isEmptyLine = (paragraph) => {
-  if (!paragraph) return true
-  const keys = Object.keys(paragraph)
-  return paragraph?.type === 'paragraph' && !paragraph?.children && keys.includes('type') && keys.includes('children') && keys.length === 2
-}
+const isEmptyLine = paragraph => {
+  if (!paragraph) return true;
+  const keys = Object.keys(paragraph);
+  return (
+    paragraph?.type === 'paragraph' &&
+    !paragraph?.children &&
+    keys.includes('type') &&
+    keys.includes('children') &&
+    keys.length === 2
+  );
+};
 
 const removeEmptyLine = value => {
-  const resVal = []
+  const resVal = [];
   value.forEach((item, index) => {
     if (!(isEmptyLine(item) && isEmptyLine(value[index - 1]))) {
-      resVal.push({ ...item })
+      resVal.push({ ...item });
     }
-  })
+  });
 
-  return resVal
-}
+  return resVal;
+};
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => { }, type } = props;
+  const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -191,7 +199,7 @@ export const Editor = (props: Iprops) => {
   const [stateEdit, setStateEdit] = useImmer({
     userList: [],
     search: '',
-    index: 0
+    index: 0,
   });
   const ref = useRef<HTMLDivElement | null>();
   const mentionRef = useRef<HTMLDivElement | null>();
@@ -210,7 +218,7 @@ export const Editor = (props: Iprops) => {
 
   const editor = useMemo(
     () => withTopics(withMentions(withReact(withHistory(createEditor())))),
-    []
+    [],
   );
 
   // 模糊查询用户
@@ -227,14 +235,14 @@ export const Editor = (props: Iprops) => {
         console.error(error);
       }
     }, 1000),
-    []
+    [],
   );
 
   useEffect(() => {
     try {
       setValue(JSON.parse(props.initValue) || initialValue);
       setRefresh(refresh === 1 ? 2 : 1);
-    } catch (err) { }
+    } catch (err) {}
   }, [props.initValue]);
 
   // 扩大focus距离
@@ -282,23 +290,23 @@ export const Editor = (props: Iprops) => {
           deepArr(item.children);
         }
         if (!item.children) {
-          content += '-' // 换行算一个字符
+          content += '-'; // 换行算一个字符
         }
       });
     };
     deepArr(arr);
-    content = content.slice(0, -1) // 计算结束后删除最后一个 -
+    content = content.slice(0, -1); // 计算结束后删除最后一个 -
     return {
       content,
-      userIdList
+      userIdList,
     };
   };
 
   const articleLength = useMemo(() => {
     const { content } = deepContent(value);
-    const len = getPostBLen(content)
-    return len
-  }, [value])
+    const len = getPostBLen(content);
+    return len;
+  }, [value]);
 
   const [timeId, setTimeId] = useState(null);
   const sendArticle = () => {
@@ -306,7 +314,7 @@ export const Editor = (props: Iprops) => {
     setTimeId(
       setTimeout(() => {
         setTimeId(null);
-      }, 3000)
+      }, 3000),
     );
     // 递归收集字符和@的id
     // let userIdList = []
@@ -318,7 +326,7 @@ export const Editor = (props: Iprops) => {
     const newValue2 = removeEmptyLine(newValue1); // 删除空行
 
     let { content } = deepContent(newValue2);
-    if (!content.length && !imgList.length) return
+    if (!content.length && !imgList.length) return;
     //限制用户输入数量
     if (articleLength > ARTICLE_POST_MAX_LEN) {
       setTimeId(null);
@@ -328,7 +336,7 @@ export const Editor = (props: Iprops) => {
     props.sendArticle(
       JSON.stringify(newValue2),
       imgList.join(','),
-      userIdList.join(',')
+      userIdList.join(','),
     );
     restInput();
   };
@@ -359,7 +367,7 @@ export const Editor = (props: Iprops) => {
   const onKeyDown = useCallback(
     (event: any) => {
       if (event.ctrlKey && event.keyCode == 13) {
-        sendArticle()
+        sendArticle();
         return;
       }
       if (target) {
@@ -385,7 +393,7 @@ export const Editor = (props: Iprops) => {
             if (!userList.length) return;
             insertMention(editor, {
               uid: userList[index].uid,
-              character: `@${userList[index].nick_name}`
+              character: `@${userList[index].nick_name}`,
             });
             setTarget(null);
             setStateEdit(p => {
@@ -399,7 +407,7 @@ export const Editor = (props: Iprops) => {
         }
       }
     },
-    [index, search, target, userList, sendArticle]
+    [index, search, target, userList, sendArticle],
   );
 
   return (
@@ -416,7 +424,7 @@ export const Editor = (props: Iprops) => {
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
             const wordBefore = slateEditor.before(editor, start, {
-              unit: 'word'
+              unit: 'word',
             });
             const before = wordBefore && slateEditor.before(editor, wordBefore);
             const beforeRange =
@@ -450,11 +458,11 @@ export const Editor = (props: Iprops) => {
           ref={ref}
           style={{
             borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
-            borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px'
+            borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px',
           }}
         >
           <Editable
-            autoFocus
+            autoFocus={!isApp()}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             placeholder={
@@ -468,7 +476,10 @@ export const Editor = (props: Iprops) => {
         <Flex justifyContent='space-between' alignItems='center'>
           <Toolbar
             type={type}
-            callbackEmoji={data => editor.insertText(data)}
+            callbackEmoji={data => {
+              ReactEditor.focus(editor);
+              editor.insertText(data);
+            }}
             callbackInserAt={() => setSearchUser(!searchUser)}
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
             selectImgLength={imgList.length}
@@ -476,13 +487,17 @@ export const Editor = (props: Iprops) => {
             onSuccess={event => setImgList([...imgList, ...event])}
             onError={() => setIsLoading(false)}
           />
-          <Flex alignItems="center">
+          <Flex alignItems='center'>
             {
-              (
-                <Text mt="12px" mr="12px" color={articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'}>
-                  {ARTICLE_POST_MAX_LEN - articleLength}
-                </Text>
-              )
+              <Text
+                mt='12px'
+                mr='12px'
+                color={
+                  articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'
+                }
+              >
+                {ARTICLE_POST_MAX_LEN - articleLength}
+              </Text>
             }
             {initValue ? (
               <div>
@@ -517,7 +532,7 @@ export const Editor = (props: Iprops) => {
                     Transforms.select(editor, target);
                     insertMention(editor, {
                       uid: userList[i].uid,
-                      character: `@${userList[i].nick_name}`
+                      character: `@${userList[i].nick_name}`,
                     });
                     setTarget(null);
                     setStateEdit(p => {
@@ -526,7 +541,7 @@ export const Editor = (props: Iprops) => {
                   }}
                   style={{
                     background:
-                      i === index ? 'rgb(247, 249, 249)' : 'transparent'
+                      i === index ? 'rgb(247, 249, 249)' : 'transparent',
                   }}
                 >
                   {char.nick_name}
