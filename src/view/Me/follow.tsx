@@ -44,6 +44,12 @@ const NameText = styled(Text)`
   max-width: 100%;
   width: max-content;
 `;
+const NameFlex = styled(Flex)`
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+  }
+`;
 const Follow = React.memo(() => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
@@ -165,14 +171,14 @@ const Follow = React.memo(() => {
                 >
                   <Avatar uid={item.uid} src={item.nft_image} scale='md' />
                   <Column>
-                    <Flex flexWrap='wrap'>
+                    <NameFlex>
                       <NameText ellipsis color='white_black' mr='13px'>
                         {item.nick_name}
                       </NameText>
                       <Text color='textTips'>
                         @{shortenAddress(item.address)}
                       </Text>
-                    </Flex>
+                    </NameFlex>
                     <WrapText small color='textTips' ellipsis>
                       {item.introduction}
                     </WrapText>
