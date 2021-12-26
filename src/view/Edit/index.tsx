@@ -58,7 +58,7 @@ const Edit: React.FC = () => {
   const { toastSuccess, toastError } = useToast();
   const [state, setState] = useImmer({
     value: 1,
-    background: defaultImages
+    background: defaultImages,
   });
 
   const updateProfile = async () => {
@@ -68,7 +68,7 @@ const Edit: React.FC = () => {
       display_format: profile.display_format,
       introduction: profile.introduction,
       background_image: profile.background_image,
-      location: profile.location
+      location: profile.location,
     };
 
     if (
@@ -81,14 +81,14 @@ const Edit: React.FC = () => {
 
     const res = await Api.UserApi.updateUserInfo({
       ...params,
-      background_image: state.background
+      background_image: state.background,
     });
     if (Api.isSuccess(res)) {
       dispatch(
         storeAction.changeUpdateProfile({
           ...res.data,
-          nick_name: params.nick_name
-        })
+          nick_name: params.nick_name,
+        }),
       );
       toastSuccess(t('loginUpdateProfileSuccess'));
     }
@@ -99,17 +99,20 @@ const Edit: React.FC = () => {
     if (profile.nick_name === params.nick_name) {
       return updateProfile();
     }
-
+    let nick_name = params.nick_name
+      .replace(/(^\s*)|(\s*$)/g, '')
+      .replace(/\s+/g, ' ');
+    console.log(nick_name);
     try {
-      const response = await checkNickname(params.nick_name);
+      const response = await checkNickname(nick_name);
       if (!response[0] && response[1]) {
-        const res = await updateProfileNickname(params.nick_name);
+        const res = await updateProfileNickname(nick_name);
         if (Boolean(res) && res === 1) {
           dispatch(
             storeAction.changeUpdateProfile({
               ...profile,
-              nick_name: params.nick_name
-            })
+              nick_name: nick_name,
+            }),
           );
           updateProfile();
         } else {
@@ -171,22 +174,22 @@ const Edit: React.FC = () => {
               position: 'absolute',
               top: '0',
               overflow: 'hidden',
-              width: '100%'
+              width: '100%',
             }}
           >
             <ComponentsWrapper>
               <CommonCircle
-                width="18rem"
-                height="18rem"
-                margin="-15rem 0 0 -9rem"
-                bgWidth="48rem"
-                bgHeight="19rem"
-                bgMargin="-6rem 0 0 -23rem"
+                width='18rem'
+                height='18rem'
+                margin='-15rem 0 0 -9rem'
+                bgWidth='48rem'
+                bgHeight='19rem'
+                bgMargin='-6rem 0 0 -23rem'
                 isAnimation
               >
                 <CenterImg
-                  width="250px"
-                  height="250px"
+                  width='250px'
+                  height='250px'
                   src={require('view/Login/images/LOGO2.svg').default}
                 />
               </CommonCircle>

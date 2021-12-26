@@ -84,12 +84,12 @@ export const SignUpSetName: React.FC<{
   const { toastWarning, toastError } = useToast();
   const [state, setState] = useImmer({
     isSignin: false,
-    nickName: ''
+    nickName: '',
   });
   const [inviteinfo, setinviteinfo] = useImmer({
     inviteAddr: '',
     isRightAdd: true,
-    isActive: true
+    isActive: true,
   });
   const [haveNickName, sethaveNickName] = useState(false);
   const { account } = useWeb3React();
@@ -148,7 +148,7 @@ export const SignUpSetName: React.FC<{
         state.nickName,
         nft.properties?.token,
         nft.properties?.token_id,
-        inviteAddr
+        inviteAddr,
       );
       if (Boolean(userInfo)) {
         verify();
@@ -233,22 +233,26 @@ export const SignUpSetName: React.FC<{
         {t('loginWelcome')}
       </Text> */}
       {/* <WalletAddress address={account} /> */}
-      <Box paddingTop="100px">
-        <InputItems marginBottom="46px" alignItems="center">
+      <Box paddingTop='100px'>
+        <InputItems marginBottom='46px' alignItems='center'>
           <InputText>{t('loginInputTitleNickname')}</InputText>
           <NickNameBox>
             <Box
               style={{
-                position: 'relative'
+                position: 'relative',
               }}
             >
               <InputNickName
                 onChange={event => {
+                  const { value } = event.target;
                   if (event.target.value.length < 1) {
                     sethaveNickName(false);
                   } else {
                     sethaveNickName(true);
                   }
+                  let nick_name = value
+                    .replace(/(^\s*)|(\s*$)/g, '')
+                    .replace(/\s+/g, ' ');
                   // if (getBLen(event.target.value) > 30) {
                   //   setState(p => {
                   //     p.nickName = p.nickName;
@@ -256,7 +260,7 @@ export const SignUpSetName: React.FC<{
                   // } else {
                   // }
                   setState(p => {
-                    p.nickName = event.target.value;
+                    p.nickName = nick_name;
                   });
                 }}
                 value={state.nickName}
@@ -265,15 +269,19 @@ export const SignUpSetName: React.FC<{
               />
               <WalletAddr>{shortenAddress(account)}</WalletAddr>
             </Box>
-            <Text color={getBLen(state.nickName) > 30 ? 'failure' : 'textTips'} textAlign="right" ellipsis>
+            <Text
+              color={getBLen(state.nickName) > 30 ? 'failure' : 'textTips'}
+              textAlign='right'
+              ellipsis
+            >
               {t('loginCountCharacters', { value: getBLen(state.nickName) })}
             </Text>
-            <NameVerify small color="textTips" textAlign="right">
+            <NameVerify small color='textTips' textAlign='right'>
               {t('loginInputValueNickname')}
             </NameVerify>
           </NickNameBox>
         </InputItems>
-        <InputItems marginBottom="36px" alignItems="center">
+        <InputItems marginBottom='36px' alignItems='center'>
           <InputText>{t('loginInviteAddress')}</InputText>
           <NickNameBox>
             <InputAddress
@@ -285,23 +293,23 @@ export const SignUpSetName: React.FC<{
               <NameVerify
                 style={{ top: '55px' }}
                 small
-                color="failure"
-                textAlign="right"
+                color='failure'
+                textAlign='right'
               >
                 {t('login Please enter the correct address')}
               </NameVerify>
             )}
             {!inviteinfo.isActive && (
-              <NameVerify style={{ left: '26px' }} small color="failure">
+              <NameVerify style={{ left: '26px' }} small color='failure'>
                 {t('login This address is not eligible for invitation')}
               </NameVerify>
             )}
           </NickNameBox>
         </InputItems>
       </Box>
-      <Flex justifyContent="center" pt="30px" pb='30px'>
+      <Flex justifyContent='center' pt='30px' pb='30px'>
         <Submit
-          scale="ld"
+          scale='ld'
           onClick={state.isSignin ? signIn : submitProfile}
           disabled={!status || !haveNickName || loading}
         >
