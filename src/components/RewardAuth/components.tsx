@@ -73,8 +73,8 @@ export const RewardIncome: React.FC<{
             </Text>
           </Flex>
         ) : (
-          <Flex>
-            <Text textAlign='center' color='white'>
+          <Flex width='100%'>
+            <Text width='80%' textAlign='center' color='white'>
               {t('rewardAutherAlreadyText3')}
             </Text>
           </Flex>
