@@ -56,17 +56,18 @@ const TaskContent: React.FC<TaskContentProps> = React.memo(
           </Flex>
         </TaskTitle>
         <TaskContentBox collapse={collapse}>
-          {taskList?.map(item => (
-            <TaskItem
-              key={item.task_id}
-              info={item}
-              taskGroupId={taskGroupId}
-            />
-          ))}
+          {taskList?.length &&
+            taskList.map(item => (
+              <TaskItem
+                key={item.task_id}
+                info={item}
+                taskGroupId={taskGroupId}
+              />
+            ))}
         </TaskContentBox>
       </Box>
     );
-  }
+  },
 );
 
 export default TaskContent;
