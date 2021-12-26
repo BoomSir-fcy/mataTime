@@ -8,6 +8,13 @@ export const PageContainer = styled.div`
   /* display:flex;
 justify-content:center; */
 `;
+export const PageStyle = styled(PageContainer)`
+  overflow-x: hidden;
+  width: calc(100vw - 8px);
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 100%;
+  }
+`;
 export const LeftCard = styled(Flex)`
   width: 200px;
   /* height: 100vh; */
@@ -36,16 +43,22 @@ export const CommentListBox = styled(Card)`
   margin-bottom: 50px;
 `;
 export const CommentTitle = styled(Flex)`
-  padding-left: 29px;
-  padding-right: 17px;
+  padding: 0 10px;
   height: 54px;
   font-size: 18px;
   font-weight: bold;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding-left: 29px;
+    padding-right: 17px;
+  }
   .sort-box {
     display: flex;
     & > div {
       display: flex;
-      margin-left: 25px;
+      margin-left: 10px;
+      ${({ theme }) => theme.mediaQueries.sm} {
+        margin-left: 25px;
+      }
     }
   }
 `;

@@ -15,8 +15,9 @@ const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
     z-index: 98 !important;
   }
   &-content {
-    width: ${({ isMobile }) => (isMobile ? '100% !important' : 'atuo')};
-    left: ${({ isMobile }) => (isMobile ? '0 !important' : 'atuo')};
+    width: ${({ isMobile }) =>
+      isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
+    left: ${({ isMobile }) => (isMobile ? '4px !important' : 'atuo')};
   }
 `;
 

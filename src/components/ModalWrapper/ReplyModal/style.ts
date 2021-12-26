@@ -34,7 +34,10 @@ export const ModalTitleWrapper = styled(Box)`
 export const ReportModalWrapper = styled(Box)`
   width: 40vw;
   max-width: 670px;
-  min-width: 300px;
+  min-width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    min-width: 300px;
+  }
   max-height: 500px;
   background: ${({ theme }) => theme.colors.greyBackground};
   border-radius: ${({ theme }) => theme.radii.card};
@@ -43,7 +46,7 @@ export const ReportModalWrapper = styled(Box)`
 
 export const ReportContentWrapper = styled(Box)`
   margin-top: 5px;
-  padding: 0 10px;
+  padding: 0px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 0 20px;
   }
@@ -77,6 +80,6 @@ export const ReplyConentWrapper = styled(Box)`
   }
   .right {
     flex: 1;
-    max-width: calc(100% - 92px);
+    max-width: calc(100% - 64px);
   }
 `;

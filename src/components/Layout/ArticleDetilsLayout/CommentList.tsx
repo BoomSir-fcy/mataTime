@@ -43,6 +43,16 @@ const PopupButton = styled(Flex)`
   cursor: pointer;
 `;
 
+const CommentStyle = styled(CommentListBox)`
+  overflow-x: auto;
+  overflow-y: hidden;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    overflow: visible;
+  }
+`;
+const WidthBox = styled(Box)`
+  /* min-width: 370px; */
+`;
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { itemData, nonce, setNonce } = props;
@@ -142,108 +152,110 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   };
 
   return (
-    <CommentListBox>
-      <CommentTitle justifyContent='space-between' alignItems='center'>
-        <span>{t('newsCommentMenuTitle')}</span>
-        <div className='sort-box'>
-          <div>
-            {t('detailHeat')}
-            <SortIcon changeSort={changeSortLike} flag={sortLike} />
+    <CommentStyle>
+      <WidthBox>
+        <CommentTitle justifyContent='space-between' alignItems='center'>
+          <span>{t('newsCommentMenuTitle')}</span>
+          <div className='sort-box'>
+            <div>
+              {t('detailHeat')}
+              <SortIcon changeSort={changeSortLike} flag={sortLike} />
+            </div>
+            <div>
+              {t('detailTime')}
+              <SortIcon changeSort={changeSortTime} flag={sortTime} />
+            </div>
           </div>
-          <div>
-            {t('detailTime')}
-            <SortIcon changeSort={changeSortTime} flag={sortTime} />
-          </div>
-        </div>
-      </CommentTitle>
-      <List
-        renderList={() => {
-          if (!itemData.id) return;
-          if (loading || page > totalPage) return false;
-          setLoading(true);
-          getList();
-        }}
-      >
-        {listData.map((item, index) => (
-          <CommentItem key={`${item.id}_${index}`}>
-            {
-              // 浏览自己的不扣费
-              currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle
-                  nonce={nonce}
-                  setNonce={setNonce}
-                  readType={ReadType.COMMENT}
-                  articleId={item.id}
-                />
-              )
-            }
-            <Flex>
-              <Box as={Link} to={`/me/profile/${item.user_id}`}>
-                <Avatar src={item.user_avator_url} scale='md' />
-              </Box>
-              <div style={{ flex: 1, marginLeft: '14px' }}>
-                <CommentHeader justifyContent='space-between' mb='15px'>
-                  <Flex>
-                    <div>
-                      <div>{item.user_name}</div>
-                      <div className='relative-time'>
-                        {relativeTime(item.add_time)}
+        </CommentTitle>
+        <List
+          renderList={() => {
+            if (!itemData.id) return;
+            if (loading || page > totalPage) return false;
+            setLoading(true);
+            getList();
+          }}
+        >
+          {listData.map((item, index) => (
+            <CommentItem key={`${item.id}_${index}`}>
+              {
+                // 浏览自己的不扣费
+                currentUid?.uid !== item.user_id && (
+                  <SpendTimeViewWithArticle
+                    nonce={nonce}
+                    setNonce={setNonce}
+                    readType={ReadType.COMMENT}
+                    articleId={item.id}
+                  />
+                )
+              }
+              <Flex>
+                <Box as={Link} to={`/me/profile/${item.user_id}`}>
+                  <Avatar src={item.user_avator_url} scale='md' />
+                </Box>
+                <div style={{ flex: 1, marginLeft: '14px' }}>
+                  <CommentHeader justifyContent='space-between' mb='15px'>
+                    <Flex>
+                      <div>
+                        <div>{item.user_name}</div>
+                        <div className='relative-time'>
+                          {relativeTime(item.add_time)}
+                        </div>
                       </div>
-                    </div>
-                    {item.comment_user_name && (
-                      <div className='reply'>
-                        {t('reply')}
-                        <span>@{item.comment_user_name}</span>
-                      </div>
-                    )}
-                  </Flex>
-                  <Flex>
-                    <PopupWrap
-                      ref={popupRefs}
-                      trigger={
-                        <PopupButton>
-                          <Icon
-                            name='icon-gengduo'
-                            current={1}
-                            color='#7E7E7E'
-                          />
-                        </PopupButton>
-                      }
-                      arrowStyle={{
-                        color: theme.colors.tertiary,
-                        stroke: theme.colors.tertiary,
-                      }}
-                    >
-                      <CommentPop
-                        postUserId={itemData.user_id}
-                        data={item}
-                        callback={initList}
-                      />
-                    </PopupWrap>
-                    {/* <MorePopup data={new Object()}> */}
-                    {/* </MorePopup> */}
-                  </Flex>
-                </CommentHeader>
-                <ContentParsing disableParseSquare content={item.comment} />
-              </div>
-            </Flex>
-            <MentionOperator
-              type='Comment'
-              callback={(data, type) => updateList(data, type)}
-              itemData={{
-                ...item,
-                comment: {
+                      {item.comment_user_name && (
+                        <div className='reply'>
+                          {t('reply')}
+                          <span>@{item.comment_user_name}</span>
+                        </div>
+                      )}
+                    </Flex>
+                    <Flex>
+                      <PopupWrap
+                        ref={popupRefs}
+                        trigger={
+                          <PopupButton>
+                            <Icon
+                              name='icon-gengduo'
+                              current={1}
+                              color='#7E7E7E'
+                            />
+                          </PopupButton>
+                        }
+                        arrowStyle={{
+                          color: theme.colors.tertiary,
+                          stroke: theme.colors.tertiary,
+                        }}
+                      >
+                        <CommentPop
+                          postUserId={itemData.user_id}
+                          data={item}
+                          callback={initList}
+                        />
+                      </PopupWrap>
+                      {/* <MorePopup data={new Object()}> */}
+                      {/* </MorePopup> */}
+                    </Flex>
+                  </CommentHeader>
+                  <ContentParsing disableParseSquare content={item.comment} />
+                </div>
+              </Flex>
+              <MentionOperator
+                type='Comment'
+                callback={(data, type) => updateList(data, type)}
+                itemData={{
                   ...item,
-                  content: item.comment,
-                },
-              }}
-              postId={item.pid}
-              commentId={item.id}
-            />
-          </CommentItem>
-        ))}
-      </List>
-      {/* <CommentListFooter>没有更多内容了</CommentListFooter> */}
-    </CommentListBox>
+                  comment: {
+                    ...item,
+                    content: item.comment,
+                  },
+                }}
+                postId={item.pid}
+                commentId={item.id}
+              />
+            </CommentItem>
+          ))}
+        </List>
+        {/* <CommentListFooter>没有更多内容了</CommentListFooter> */}
+      </WidthBox>
+    </CommentStyle>
   );
 };

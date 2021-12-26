@@ -48,55 +48,56 @@ export const RewardIncome: React.FC<{
     <Box>
       <Content>
         {data.length ? (
-          <Flex alignItems="center">
-            <Flex ml="1em">
+          <Flex alignItems='center'>
+            <Flex ml='1em'>
               {postInfo?.users?.map(item => (
                 <Box
                   key={item.uid}
                   as={Link}
                   to={`/me/profile/${item.uid}`}
-                  width="25px"
+                  width='25px'
                   style={{ marginLeft: '-1em' }}
                 >
                   <Avatar
                     src={item.nft_image}
-                    scale="md"
+                    scale='md'
                     style={{ width: '25px', height: '25px' }}
                   />
                 </Box>
               ))}
             </Flex>
-            <Text ml="11px" fontSize="14px">
+            <Text ml='11px' fontSize='14px'>
               {t('rewardAutherAlreadyText1', {
-                value: postInfo.total_user || 0
+                value: postInfo.total_user || 0,
               })}
             </Text>
           </Flex>
         ) : (
           <Flex>
-            <Text textAlign="center" color="white">
+            <Text textAlign='center' color='white'>
               {t('rewardAutherAlreadyText3')}
             </Text>
           </Flex>
         )}
         <Tips>
           <QuestionHelper
-            mt="5px"
-            ml="5px"
-            color="white"
+            mt='5px'
+            ml='5px'
+            color='white'
             text={
               <>
-                <Text fontSize="14px">{t('rewardAutherTipsText1')}</Text>
-                <Text fontSize="14px" color="textTips">
+                <Text fontSize='14px'>{t('rewardAutherTipsText1')}</Text>
+                <Text fontSize='14px' color='textTips'>
                   {t('rewardAutherTipsText2')}
                 </Text>
               </>
             }
+            placement='auto'
           />
         </Tips>
       </Content>
       {data.length > 0 && (
-        <Flex justifyContent="center" mt="20px">
+        <Flex justifyContent='center' mt='20px'>
           <Button onClick={() => history.push('/account/reward')}>
             {t('rewardAutherViewEarnings')}
           </Button>
@@ -111,10 +112,10 @@ export const CoinItem: React.FC<{
 }> = React.memo(({ token }) => {
   return (
     <Rows>
-      <Box width="20px" height="20px">
+      <Box width='20px' height='20px'>
         <TokenImage tokenAddress={token[0]} width={20} height={20} />
       </Box>
-      <Text ml="5px">{token[2]}</Text>
+      <Text ml='5px'>{token[2]}</Text>
     </Rows>
   );
 });
@@ -131,7 +132,7 @@ export const Reward: React.FC<{
   const { t } = useTranslation();
 
   const [state, setState] = useImmer({
-    loading: false
+    loading: false,
   });
 
   const ChangeApprove = React.useCallback(async () => {
@@ -158,10 +159,10 @@ export const Reward: React.FC<{
     <React.Fragment>
       {isOnApprove ? (
         <Flex
-          width="100%"
-          minHeight="120px"
-          justifyContent="center"
-          alignItems="center"
+          width='100%'
+          minHeight='120px'
+          justifyContent='center'
+          alignItems='center'
         >
           <Button onClick={() => ChangeApprove()}>
             {state.loading ? (
@@ -174,7 +175,7 @@ export const Reward: React.FC<{
           </Button>
         </Flex>
       ) : (
-        <Flex flexWrap="wrap" justifyContent="space-between">
+        <Flex flexWrap='wrap' justifyContent='space-between'>
           {RewardAuthorList.map(item => (
             <InputPanelStyled
               key={item}
@@ -184,7 +185,7 @@ export const Reward: React.FC<{
               }}
             >
               <Flex>
-                <Box width="20px" height="20px">
+                <Box width='20px' height='20px'>
                   <TokenImage
                     width={20}
                     height={20}
@@ -192,14 +193,14 @@ export const Reward: React.FC<{
                   />
                 </Box>
                 <Flex
-                  ml="3px"
-                  flexDirection="column"
+                  ml='3px'
+                  flexDirection='column'
                   style={{ flex: 1, minWidth: 0 }}
                 >
-                  <Text bold ml="5px" style={{ lineHeight: 'normal' }} ellipsis>
+                  <Text bold ml='5px' style={{ lineHeight: 'normal' }} ellipsis>
                     {new BigNumber(item).div(price).toFixed(18)}
                   </Text>
-                  <Text fontSize="14px" style={{ lineHeight: 'normal' }}>
+                  <Text fontSize='14px' style={{ lineHeight: 'normal' }}>
                     ${item}
                   </Text>
                 </Flex>

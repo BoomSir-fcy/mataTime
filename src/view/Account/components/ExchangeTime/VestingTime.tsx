@@ -12,7 +12,7 @@ import { useStore } from 'store';
 import dayjs from 'dayjs';
 import {
   fetchTimeExchangeList,
-  fetchRewardNumAsync
+  fetchRewardNumAsync,
 } from 'store/wallet/reducer';
 import { useRewardErc20, useRewardErc20All } from './hook';
 import Dots from 'components/Loader/Dots';
@@ -26,7 +26,7 @@ const CountBox = styled(Box)`
 const TableBox = styled(Box)`
   width: 100%;
   overflow: auto;
-`
+`;
 const Table = styled(Flex)`
   flex-direction: column;
   align-items: center;
@@ -100,7 +100,7 @@ const ClaimButton: React.FC<btn> = ({ upDate, all, ReleaseAmount, id }) => {
         setpending(false);
       }
     },
-    [onWithdraw]
+    [onWithdraw],
   );
   // 全部领取
   const handleRewardAll = useCallback(async () => {
@@ -141,7 +141,7 @@ interface init {
   type?: number;
 }
 
-const VestingTime: React.FC<init> = ({ }) => {
+const VestingTime: React.FC<init> = ({}) => {
   useFetchRewardNum();
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -166,7 +166,7 @@ const VestingTime: React.FC<init> = ({ }) => {
   const upDate = useCallback(() => {
     setLoading(true);
     setPage(1);
-    // dispatch(fetchTimeExchangeList({ account, page: 1, pageSize }))
+    dispatch(fetchTimeExchangeList({ account, page: 1, pageSize }));
     dispatch(fetchRewardNumAsync(account));
   }, [dispatch, account, pageSize]);
 
@@ -175,6 +175,7 @@ const VestingTime: React.FC<init> = ({ }) => {
       // 获取总页数
       setPageCount(HistoryList[0].totalPage);
     }
+    console.log(HistoryList);
     setLoading(false);
   }, [HistoryList]);
   return (
@@ -203,32 +204,32 @@ const VestingTime: React.FC<init> = ({ }) => {
             </Row>
             {HistoryList.length
               ? HistoryList.map((item, index) => (
-                <Row key={`${item.round}${index}`}>
-                  {item.totalPage > 0 && (
-                    <>
-                      <ItemText>{item.round}</ItemText>
-                      <ItemText>
-                        {dayjs(item.endTime * 1000).format(
-                          t('YYYY-MM-DD hh:mm:ss')
-                        )}
-                      </ItemText>
-                      <ItemText>
-                        {formatDisplayApr(item.RemainingAmount)}
-                      </ItemText>
-                      <ItemText>
-                        {formatDisplayApr(item.ReleaseAmount)}
-                      </ItemText>
-                      <ItemText>
-                        <ClaimButton
-                          ReleaseAmount={item.ReleaseAmount}
-                          id={item.id}
-                          upDate={upDate}
-                        />
-                      </ItemText>
-                    </>
-                  )}
-                </Row>
-              ))
+                  <Row key={`${item.round}${index}`}>
+                    {item.totalPage > 0 && (
+                      <>
+                        <ItemText>{item.round}</ItemText>
+                        <ItemText>
+                          {dayjs(item.endTime * 1000).format(
+                            t('YYYY-MM-DD hh:mm:ss'),
+                          )}
+                        </ItemText>
+                        <ItemText>
+                          {formatDisplayApr(item.RemainingAmount)}
+                        </ItemText>
+                        <ItemText>
+                          {formatDisplayApr(item.ReleaseAmount)}
+                        </ItemText>
+                        <ItemText>
+                          <ClaimButton
+                            ReleaseAmount={item.ReleaseAmount}
+                            id={item.id}
+                            upDate={upDate}
+                          />
+                        </ItemText>
+                      </>
+                    )}
+                  </Row>
+                ))
               : !Loading && <Empty />}
             {Loading && (
               <LoadingAnimation>

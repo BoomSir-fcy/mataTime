@@ -301,6 +301,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                             </Text>
                           </>
                         }
+                        placement='auto'
                       />
                     </Flex>
                   </Flex>

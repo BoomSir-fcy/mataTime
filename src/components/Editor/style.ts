@@ -40,7 +40,7 @@ export const SlateBox = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
   border-radius: ${({ theme }) => theme.radii.card};
-  padding: 8px;
+  padding: 0px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 15px;
   }
@@ -55,9 +55,9 @@ export const SlateBox = styled.div`
     }
     padding-bottom: 16px;
     border-radius: 5px;
+    min-height: 160px !important;
+    max-height: 200px;
     max-width: calc(100vw - 38px);
-    min-height: 112px !important;
-    max-height: 120px;
     overflow-y: auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/
