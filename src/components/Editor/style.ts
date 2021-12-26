@@ -45,6 +45,8 @@ export const SlateBox = styled.div`
     padding: 15px;
   }
   padding-bottom: 30px;
+  max-width: calc(100vw - 15px);
+  margin: 0 auto;
   z-index: 1004;
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
@@ -57,7 +59,6 @@ export const SlateBox = styled.div`
     border-radius: 5px;
     min-height: 160px !important;
     max-height: 200px;
-    max-width: calc(100vw - 38px);
     overflow-y: auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/

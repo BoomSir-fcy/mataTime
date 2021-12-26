@@ -55,8 +55,8 @@ const Task: React.FC = () => {
 
   useEffect(() => {
     const result = groupByTask(data, 'task_group');
+    if (!result[Group.ACTIVITY]) result[Group.ACTIVITY] = [];
     result[Group.ACTIVITY]?.unshift(result['default'][0]);
-    // const result = ItemGroupBy(data, 'task_group');
     setTaskGroup(result);
   }, [data]);
 
@@ -70,9 +70,6 @@ const Task: React.FC = () => {
         <Box>
           <Header />
           <ScrollBox>
-            {/* {
-              taskGroup.map(item => <TaskContent key={item.type} taskGroupId={item.type} taskList={item.data} />)
-            } */}
             <TaskContent
               taskGroupId={Group.ACTIVITY}
               taskList={taskGroup[Group.ACTIVITY]}

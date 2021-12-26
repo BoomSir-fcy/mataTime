@@ -45,6 +45,12 @@ const NameText = styled(Text)`
   width: max-content;
 `;
 
+const NameFlex = styled(Flex)`
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+  }
+`;
 const Fans = React.memo(() => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
@@ -52,7 +58,7 @@ const Fans = React.memo(() => {
     cancelParams: {
       uid: 0,
       address: '',
-      nft_image: ''
+      nft_image: '',
     },
     hoverIndex: 0,
     hoverStatus: false,
@@ -60,7 +66,7 @@ const Fans = React.memo(() => {
     page: 1,
     total: 0,
     totalPage: 1,
-    list: []
+    list: [],
   });
   const { loading, page, total, totalPage, list } = state;
 
@@ -94,8 +100,12 @@ const Fans = React.memo(() => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
-        getFansList(1);
         toast.success(res.data);
+        await getFansList(1);
+        setState(p => {
+          p.hoverIndex = 0;
+          p.hoverStatus = false;
+        });
       }
     } catch (error) {
       console.error(error);
@@ -108,6 +118,9 @@ const Fans = React.memo(() => {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
         getFansList(1);
+        setState(p => {
+          p.cancelFollow = false;
+        });
         toast.success(res.data);
       }
     } catch (error) {
@@ -166,14 +179,14 @@ const Fans = React.memo(() => {
                 >
                   <Avatar uid={item.uid} src={item.nft_image} scale='md' />
                   <Column>
-                    <Flex flexWrap='wrap'>
+                    <NameFlex>
                       <NameText ellipsis color='white_black' mr='13px'>
                         {item.nick_name}
                       </NameText>
                       <Text color='textTips'>
                         @{shortenAddress(item.address)}
                       </Text>
-                    </Flex>
+                    </NameFlex>
                     <WrapText color='textTips'>{item.introduction}</WrapText>
                   </Column>
                 </Flex>
@@ -228,7 +241,12 @@ const Fans = React.memo(() => {
                       </MinWidthButton>
                     ) : (
                       <MinWidthButton
-                        onClick={() => unFollowUser(item.uid)}
+                        onClick={() =>
+                          setState(p => {
+                            p.cancelFollow = true;
+                            p.cancelParams = item;
+                          })
+                        }
                         onMouseEnter={() =>
                           setState(p => {
                             p.hoverIndex = index;
