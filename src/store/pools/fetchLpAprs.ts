@@ -34,7 +34,7 @@ export const fetchLpRewardsApr = async (farms: SinglePoolData[]) => {
     const blockNumber = await simpleRpcProvider.getBlockNumber()
     const contract = getSinglePoolContract()
     const filterFrom = contract.filters.Donate()
-    const eveSales = await contract.queryFilter(filterFrom, blockNumber - 5000, blockNumber)
+    const eveSales = await contract.queryFilter(filterFrom, blockNumber - 2400, blockNumber)
 
     const res = {}
     eveSales.reverse().forEach((item, index) => {
@@ -59,7 +59,7 @@ const culAprHandle = (culFarm: CulFarm, eveSales: EveDonate) => {
     const donate = eveSales[item.pid] || new BigNumber(0)
     return {
       ...item,
-      totalDonateAmount: donate.times(6).times(365).toString()
+      totalDonateAmount: donate.times(0.5).times(24).times(365).toString()
     }
   })
 }
