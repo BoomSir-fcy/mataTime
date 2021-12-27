@@ -175,7 +175,6 @@ const VestingTime: React.FC<init> = ({}) => {
       // 获取总页数
       setPageCount(HistoryList[0].totalPage);
     }
-    console.log(HistoryList);
     setLoading(false);
   }, [HistoryList]);
   return (
