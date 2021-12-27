@@ -190,7 +190,9 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         onClose(evnet);
         toastSuccess(t('rewardAutherSuccess'));
       } else if (res === 4001) {
-        toastSuccess(t('rewardAutherCancel'));
+        toastError(t('rewardAutherCancel'));
+      } else if (res === 400001) {
+        toastError(t('rewardAutherTransferAmountExceedsBlanceError'));
       } else {
         toastError(t('rewardAutherError'));
       }

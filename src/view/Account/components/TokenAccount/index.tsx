@@ -62,6 +62,7 @@ const TabText = styled(Text)`
 `;
 const RightBox = styled(Flex)`
   min-width: 23vw;
+  flex-wrap: wrap;
 `;
 const IncomeBox = styled(Flex)`
   align-items: center;
@@ -69,8 +70,14 @@ const IncomeBox = styled(Flex)`
   width: max-content;
 `;
 const Img = styled.img`
-  width: 36px;
-  height: 36px;
+  display: inline-block;
+  ${({ theme }) => theme.mediaQueriesSize.marginr}
+  width: 26px;
+  height: 26px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 const PostTab = styled(ContentTab)`
@@ -84,7 +91,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
     <RightBox justifyContent='space-between' alignItems='center'>
       <IncomeBox>
         <Img src={require('assets/images/myWallet/airplane.png').default} />
-        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+        <Flex mr='6px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('My Rebate(TIME)')}
           </Text>
@@ -95,7 +102,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
       </IncomeBox>
       <IncomeBox>
         <Img src={require('assets/images/myWallet/today.png').default} />
-        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+        <Flex flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Day income')}
           </Text>
@@ -106,7 +113,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
       </IncomeBox>
       <IncomeBox>
         <Img src={require('assets/images/myWallet/total.png').default} />
-        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+        <Flex flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Cumulative income')}
           </Text>
@@ -136,7 +143,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
     uid: 0,
   };
   const [WalletInfo, setWalletInfo] = useState(info);
-  const [walletBalance, setwalletBalance] = useState(0);
+  const [walletBalance, setwalletBalance] = useState('0');
   const [tokenAddress, settokenAddress] = useState('');
   const [ActiveToken, setActiveToken] = useState(1);
   const [pageSize, setpageSize] = useState(5);
@@ -236,15 +243,15 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useEffect(() => {
     if (account) {
       if (activeToken === 'TIME') {
-        setwalletBalance(getBalanceAmount(timeBalance).toNumber());
+        setwalletBalance(getBalanceAmount(timeBalance).toString());
         settokenAddress(timeAddress);
       } else {
-        setwalletBalance(getBalanceAmount(matterBalance).toNumber());
+        setwalletBalance(getBalanceAmount(matterBalance).toString());
         settokenAddress(MatterAddress);
       }
     }
     return () => {
-      setwalletBalance(0);
+      setwalletBalance('0');
     };
   }, [
     account,

@@ -73,7 +73,7 @@ const MyInput = styled(Input)`
 `;
 
 interface init {
-  balance: number;
+  balance: string;
   TokenAddr: string;
   decimals?: number;
   Token: string;
@@ -83,7 +83,7 @@ const Recharge: React.FC<init> = ({
   Token,
   balance,
   TokenAddr,
-  decimals = 18
+  decimals = 18,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -95,7 +95,7 @@ const Recharge: React.FC<init> = ({
   const [ActiveHistory, setActiveHistory] = useState(1);
   const { Recharge, onApprove } = useDpWd();
   const approvedNum = useStore(p =>
-    Token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter
+    Token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter,
   );
 
   const numberList = ['10000', '20000', '50000', '100000'];
@@ -104,7 +104,7 @@ const Recharge: React.FC<init> = ({
   const handSure = useCallback(async () => {
     setpending(true);
     // 充值
-    if (balance === 0) {
+    if (balance === '0') {
       setpending(false);
       return;
     }
@@ -112,7 +112,7 @@ const Recharge: React.FC<init> = ({
       setpending(false);
       return;
     }
-    const addPrecisionNum = new BigNumber(Number(val))
+    const addPrecisionNum = new BigNumber(val)
       .times(BIG_TEN.pow(18))
       .toString();
     try {
@@ -153,7 +153,10 @@ const Recharge: React.FC<init> = ({
         // //保证.只出现一次，而不能出现两次以上
         // val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
         val = val.replace(/,/g, '.');
-        if (Number(val) > balance) {
+        // if (Number(val) > balance) {
+        //   return String(balance);
+        // }
+        if (new BigNumber(balance).isLessThan(val)) {
           return String(balance);
         }
         return val;
@@ -162,38 +165,40 @@ const Recharge: React.FC<init> = ({
         setVal(chkPrice(e.currentTarget.value));
       }
     },
-    [setVal, balance]
+    [setVal, balance],
   );
 
   return (
     <Content>
-      <Flex flexWrap="wrap" justifyContent="space-between">
+      <Flex flexWrap='wrap' justifyContent='space-between'>
         <LeftBox>
           <Title>
-            <Text mr="16px" fontSize="16px">
+            <Text mr='16px' fontSize='16px'>
               {Token} {t('AccountRecharge')}
             </Text>
             <Text
               style={{ cursor: 'pointer' }}
-              fontSize="14px"
-              color="textPrimary"
+              fontSize='14px'
+              color='textPrimary'
               onClick={() => setVisibleHistory(true)}
             >
               {t('Account history record')}
             </Text>
           </Title>
-          <Flex alignItems="center" flexWrap="wrap">
+          <Flex alignItems='center' flexWrap='wrap'>
             {numberList.map((item, index) => (
               <NumberBox
                 style={approvedNum === 0 ? { cursor: 'no-drop' } : {}}
                 key={item}
                 onClick={() => {
                   if (approvedNum === 0) return;
-                  const Num = Number(item) > balance ? String(balance) : item;
-                  setVal(Num);
+                  const Num = new BigNumber(item).isGreaterThan(
+                    balance ? balance : item,
+                  );
+                  setVal(Num.toString());
                 }}
               >
-                <Text fontWeight="bold" fontSize="16px">
+                <Text fontWeight='bold' fontSize='16px'>
                   {item}
                 </Text>
               </NumberBox>
@@ -201,17 +206,18 @@ const Recharge: React.FC<init> = ({
           </Flex>
         </LeftBox>
         <RightBox>
-          <Flex justifyContent="end" mb="12px">
-            <Text fontSize="14px" color="textTips">
-              {t('Account Available Balance')}: {formatDisplayApr(balance)}
+          <Flex justifyContent='end' mb='12px'>
+            <Text fontSize='14px' color='textTips'>
+              {t('Account Available Balance')}:{' '}
+              {formatDisplayApr(Number(balance))}
             </Text>
           </Flex>
-          <InputBox mb="14px">
+          <InputBox mb='14px'>
             <MyInput
               disabled={approvedNum === 0}
               noShadow
               pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-              inputMode="decimal"
+              inputMode='decimal'
               value={val}
               onChange={handleChange}
               placeholder={t('Account Please enter the recharge amount')}
@@ -227,9 +233,9 @@ const Recharge: React.FC<init> = ({
             </Max>
           </InputBox>
           <Flex
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
+            flexDirection='column'
+            justifyContent='center'
+            alignItems='center'
           >
             {account ? (
               <SureBtn
