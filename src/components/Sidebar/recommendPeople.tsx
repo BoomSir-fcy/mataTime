@@ -128,7 +128,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
             p.cancelFollow = false;
           });
         }
-      } catch (error) {}
+      } catch (error) { }
     },
     [list],
   );
