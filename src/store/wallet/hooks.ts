@@ -29,6 +29,7 @@ import {
   fetchTimeIncometoday,
   fetchMatterIncomeList,
   fetchMatterIncometoday,
+  fetchMinimum,
 } from './reducer';
 import { ExchangeList } from './type';
 import { State } from '../types';
@@ -367,6 +368,14 @@ export const useFetchWalletInfo = () => {
   useEffect(() => {
     if (account) dispatch(fetchWalletAsync());
   }, [refresh, account]);
+};
+
+// 获取钱包余额详情
+export const useFetchMinimum = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchMinimum());
+  }, []);
 };
 
 // 获取授权数量

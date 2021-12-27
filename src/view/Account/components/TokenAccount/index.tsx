@@ -11,6 +11,7 @@ import {
   useFetchApproveNum,
   useFetTimeIncometoday,
   useFetTimeIncomeList,
+  useFetchMinimum,
 } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
@@ -27,6 +28,7 @@ import {
 } from 'store/wallet/reducer';
 import useMenuNav from 'hooks/useMenuNav';
 import { useTokenBalance } from 'hooks/useTokenBalance';
+import { useInviteCount } from 'view/Task/hooks/matter';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -77,9 +79,20 @@ const PostTab = styled(ContentTab)`
 
 const IncomeComp = ({ TodayIncome, TotalIncome }) => {
   const { t } = useTranslation();
-
+  const { inviteInfo } = useInviteCount();
   return (
     <RightBox justifyContent='space-between' alignItems='center'>
+      <IncomeBox>
+        <Img src={require('assets/images/myWallet/airplane.png').default} />
+        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>
+            {t('My Rebate(TIME)')}
+          </Text>
+          <Text color='white_black' fontWeight='bold'>
+            {inviteInfo.total_rebate}
+          </Text>
+        </Flex>
+      </IncomeBox>
       <IncomeBox>
         <Img src={require('assets/images/myWallet/today.png').default} />
         <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
@@ -109,6 +122,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
 const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useFetchWalletInfo();
   useFetchApproveNum();
+  useFetchMinimum();
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -128,6 +142,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const [pageSize, setpageSize] = useState(5);
   const [day, setday] = useState(7);
   const [readType, setreadType] = useState(1);
+  const [TokenWithDrawMinNum, setTokenWithDrawMinNum] = useState('0');
   const timeAddress = getTimeAddress();
   const MatterAddress = getMatterAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
@@ -138,6 +153,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const MatterIncometoday = useStore(p => p.wallet.MatterIncometoday);
   const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
   const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
+  const WithDrawMinNum = useStore(p => p.wallet.WithDrawMinNum);
 
   // useFetTimeIncometoday(day);
   // useFetTimeIncomeList(1, pageSize, 1);
@@ -196,6 +212,13 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
     }
   };
 
+  useEffect(() => {
+    if (activeToken === 'TIME') {
+      setTokenWithDrawMinNum(WithDrawMinNum.time_minimum);
+    } else {
+      setTokenWithDrawMinNum(WithDrawMinNum.meta_minimum);
+    }
+  }, [WithDrawMinNum, activeToken]);
   useEffect(() => {
     const getTokenType = () => {
       // 获取路由的token参数
@@ -257,6 +280,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           Token={activeToken}
           Balance={walletBalance}
           TokenAddr={tokenAddress}
+          TokenWithDrawMinNum={TokenWithDrawMinNum}
         />
         {!isMobile && (
           <Recharge
