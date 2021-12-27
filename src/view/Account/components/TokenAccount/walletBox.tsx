@@ -68,7 +68,7 @@ const ChangeToken = styled.img`
 
 interface Wallet {
   Token: string;
-  Balance: number;
+  Balance: string;
   TokenAddr: string;
   BalanceInfo: Api.Account.Balance;
   TokenWithDrawMinNum: string;
