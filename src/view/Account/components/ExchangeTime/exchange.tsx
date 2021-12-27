@@ -9,18 +9,18 @@ import {
   Text,
   Input,
   Progress,
-  AnimationRingIcon
+  AnimationRingIcon,
 } from 'uikit';
 import { getDsgAddress, getTimeAddress } from 'utils/addressHelpers';
-import {
-  useTokenBalance,
-  useApproveErc20Change,
-  useExchangeErc20
-} from './hook';
+import { useApproveErc20Change, useExchangeErc20 } from './hook';
 import { useWeb3React } from '@web3-react/core';
 import Dots from 'components/Loader/Dots';
 import { useTranslation } from 'contexts/Localization';
-import { formatDisplayApr } from 'utils/formatBalance';
+import {
+  formatDisplayApr,
+  getBalanceAmount,
+  getFullDisplayBalance,
+} from 'utils/formatBalance';
 import { TimeInfo } from 'store/wallet/type';
 import { useStore } from 'store';
 import { useDispatch } from 'react-redux';
@@ -28,7 +28,7 @@ import {
   fetchDSGApproveNumAsync,
   fetchRewardNumAsync,
   fetchTimeExchangeList,
-  fetchTimeShopInfo
+  fetchTimeShopInfo,
 } from 'store/wallet/reducer';
 import { useToast } from 'hooks';
 import { Link } from 'react-router-dom';
@@ -36,6 +36,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import useMenuNav from 'hooks/useMenuNav';
 import { ConnectWalletButton } from 'components';
+import { useTokenBalance } from 'hooks/useTokenBalance';
 
 const Center = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -150,13 +151,18 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   const [inputNum, setinputNum] = useState('');
   const approvedNum = useStore(p => p.wallet.ApproveNum.dsg);
   const address = getDsgAddress();
-  const { balance: DsgBalance } = useTokenBalance(address);
+  const { balance: NoDecimalsDsgBalance } = useTokenBalance(address);
   const timeAddress = getTimeAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
   const { onApprove } = useApproveErc20Change();
   const { onExchange } = useExchangeErc20();
   const { toastError, toastWarning, toastSuccess } = useToast();
   const { isPushed, setIsPushed, isMobile } = useMenuNav();
+
+  const DsgBalance = useMemo(() => {
+    const num = getBalanceAmount(NoDecimalsDsgBalance);
+    return num;
+  }, [NoDecimalsDsgBalance, inputNum]);
 
   const ReleaseTime = useMemo(() => {
     dayjs.extend(duration);
@@ -165,7 +171,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
   }, [nowRound]);
 
   const Time = useMemo(() => {
-    const num = new BigNumber(Number(inputNum))
+    const num = new BigNumber(inputNum)
       .times(nowRound.max_time_token)
       .div(nowRound.max_dsg_token)
       .toNumber();
@@ -205,7 +211,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
 
   const RemainingNum = useMemo(() => {
     const num = new BigNumber(nowRound.max_time_token)
-      .minus(Number(RedeemedTime))
+      .minus(RedeemedTime)
       .toNumber();
     return num;
   }, [nowRound, RedeemedTime]);
@@ -221,7 +227,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
     }
     try {
       setpending(true);
-      await onExchange(Number(inputNum));
+      await onExchange(inputNum);
       dispatch(fetchTimeShopInfo());
       dispatch(fetchRewardNumAsync(account));
       dispatch(fetchTimeExchangeList({ account, page: 1 }));
@@ -240,7 +246,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
     account,
     inputNum,
     Time,
-    RemainingNum
+    RemainingNum,
   ]);
   // 授权
   const handleApprove = useCallback(async () => {
@@ -248,7 +254,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
       setpending(true);
       await onApprove();
       dispatch(fetchDSGApproveNumAsync(account));
-      toastSuccess(t('setNftAuthorizationSuccess'));
+      // toastSuccess(t('setNftAuthorizationSuccess'));
     } catch (e) {
       console.error(e);
       toastError(t('setNftAuthorizationFail'));
@@ -262,8 +268,8 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
     (e: React.FormEvent<HTMLInputElement>) => {
       const chkPrice = val => {
         val = val.replace(/,/g, '.');
-        if (Number(val) > DsgBalance) {
-          return String(DsgBalance);
+        if (DsgBalance.isLessThan(val)) {
+          return DsgBalance.toString();
         }
         return val;
       };
@@ -271,7 +277,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
         setinputNum(chkPrice(e.currentTarget.value));
       }
     },
-    [setinputNum, DsgBalance]
+    [setinputNum, DsgBalance],
   );
 
   return (
@@ -305,7 +311,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
                   color='textPrimary'
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    setinputNum(String(DsgBalance));
+                    setinputNum(DsgBalance.toString());
                   }}
                 >
                   MAX
@@ -331,10 +337,11 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </InputBox>
           <Flex mb='20px'>
             <SmFont style={{ minWidth: '40%' }} mr='16px' color='textTips'>
-              DSG {t('Balance')}: {formatDisplayApr(DsgBalance)}
+              DSG {t('Balance')}: {getFullDisplayBalance(DsgBalance, 0, 3)}
             </SmFont>
             <SmFont color='textTips'>
-              TIME {t('Balance')}: {formatDisplayApr(timeBalance)}
+              TIME {t('Balance')}:{' '}
+              {formatDisplayApr(getBalanceAmount(timeBalance).toNumber())}
             </SmFont>
           </Flex>
           <TimeBox>
@@ -382,8 +389,8 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
               {
                 now: ReleaseNow,
                 later: ReleaseLater,
-                time: ReleaseTime
-              }
+                time: ReleaseTime,
+              },
             )}
           </Rule>
           {account ? (

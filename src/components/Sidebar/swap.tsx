@@ -11,7 +11,7 @@ import { light, dark, Text, Box, LinkExternal, Flex } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
-import { getAddress } from 'utils/addressHelpers'
+import { getAddress, getDsgAddress, getTimeAddress } from 'utils/addressHelpers'
 import { Address } from 'config/constants/types';
 import { useCoinsList } from 'store/coins/hooks';
 
@@ -74,10 +74,16 @@ const Swap: React.FC = () => {
   const outputCurrencyId = useMemo(() => {
 
     const ETHER = getActiveETHERWidthChainId()
-    if (!coins?.symbol) return undefined
+    if (!coins?.symbol) return getTimeAddress()
     if (coins?.symbol === ETHER.symbol) return coins?.symbol
     return getAddress(coins.address as Address)
   }, [coins])
+
+  const inputCurrencyId = useMemo(() => {
+    return getDsgAddress()
+  }, [coins])
+
+  console.log(inputCurrencyId, 'inputCurrencyId')
 
   return (
     <SwapBox>
@@ -115,6 +121,7 @@ const Swap: React.FC = () => {
             // subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
             onInputCurrencyChange={handleInputChange}
             outputCurrencyId={outputCurrencyId}
+            inputCurrencyId={inputCurrencyId}
             resetTheme={{
               dark: {
                 colors: {
