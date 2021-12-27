@@ -9,7 +9,7 @@ import {
   MoreOperatorEnum,
   List,
   ContentParsing,
-  FollowPopup
+  FollowPopup,
 } from 'components';
 import { NewsPraiseWrapper, PraiseItemWrapper } from './style';
 import MessageCard from '../components/MessageCard';
@@ -122,13 +122,11 @@ const NewsPraise: React.FC = props => {
                   margin='7px 10px 0 0'
                   color='#EC612B'
                 />
-                {
-                  item.comment.comment_id
-                  ?
+                {item.comment.comment_id ? (
                   <Text ellipsis>{t('your comment')}</Text>
-                  :
+                ) : (
                   <Text ellipsis>{t('your post')}</Text>
-                }
+                )}
               </Flex>
             </MessageCard>
           );

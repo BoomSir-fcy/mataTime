@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import ReactLoading from 'react-loading';
+import styled, { ThemeProvider, DefaultTheme } from 'styled-components';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { DropDown, Avatar, Loading, ConnectWalletButton } from 'components';
-import { Flex, Box, Text, Button } from 'uikit';
+import { Flex, Box, Text, Button, light, dark } from 'uikit';
 import { useToast } from 'hooks';
 import { useStore, storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -26,6 +26,13 @@ import {
 } from './hook';
 
 import QuestionHelper from 'components/QuestionHelper';
+
+const invertTheme = (currentTheme: DefaultTheme) => {
+  if (currentTheme.isDark) {
+    return light;
+  }
+  return dark;
+};
 
 const RewardAuthModalStyled = styled(Box)`
   width: 100%;
@@ -146,7 +153,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
 
   const getPost = async () => {
     try {
-      const res = await getInfo(postType, currentPost.id);
+      const res = await getInfo(postType, currentPost.reward_id);
       setState(p => {
         p.reward_post = res;
       });
@@ -175,7 +182,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         currentPost.user_address,
         currentToken[0],
         postType,
-        currentPost.id,
+        currentPost.reward_id,
         getDecimalAmount(new BigNumber(amount)).toString(),
         getBnbAddress() === currentToken[0],
       );
@@ -339,6 +346,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                             style={{ marginLeft: '-1em' }}
                           >
                             <Avatar
+                              disableFollow
                               src={item.nft_image}
                               scale='md'
                               style={{ width: '24px', height: '24px' }}

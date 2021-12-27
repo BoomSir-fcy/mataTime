@@ -76,7 +76,7 @@ export const ReplyConentWrapper = styled(Box)`
     width: 60px;
     box-sizing: border-box;
     padding-top: 5px;
-    ${({ theme }) => theme.mediaQueriesSize.marginr}
+    /* ${({ theme }) => theme.mediaQueriesSize.marginr} */
   }
   .right {
     flex: 1;

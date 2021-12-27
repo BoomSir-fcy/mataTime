@@ -116,8 +116,8 @@ const ArticleComponents = (props, ref) => {
   return (
     <ArticleListBox>
       <List loading={!isEnd} renderList={Getlist}>
-        {(list ?? []).map((item, index) => (
-          <MeItemWrapper key={`${item.id}_${index}`}>
+        {(list ?? []).map((item) => (
+          <MeItemWrapper key={`${item.id}`}>
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (

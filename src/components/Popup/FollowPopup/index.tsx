@@ -128,7 +128,14 @@ export const FollowPopup = React.memo((props: Iprops) => {
         </div>
       )}
     </PopupContentWrapper>,
-    { placement: 'top-start', trigger: client.isApp ? 'click' : 'hover', stylePadding: '0', background: theme.colors.tertiary, tooltipPadding: 0 },
+    {
+      placement: 'top-start',
+      trigger: client.isApp ? 'click' : 'hover',
+      invert: false,
+      stylePadding: '0',
+      background: theme.colors.tertiary,
+      tooltipPadding: 0
+    },
   )
 
   useEffect(() => {

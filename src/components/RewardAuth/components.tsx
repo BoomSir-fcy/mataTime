@@ -59,6 +59,7 @@ export const RewardIncome: React.FC<{
                   style={{ marginLeft: '-1em' }}
                 >
                   <Avatar
+                    disableFollow
                     src={item.nft_image}
                     scale='md'
                     style={{ width: '25px', height: '25px' }}
@@ -73,8 +74,8 @@ export const RewardIncome: React.FC<{
             </Text>
           </Flex>
         ) : (
-          <Flex>
-            <Text textAlign='center' color='white'>
+          <Flex width='100%'>
+            <Text width='80%' textAlign='center' color='white'>
               {t('rewardAutherAlreadyText3')}
             </Text>
           </Flex>

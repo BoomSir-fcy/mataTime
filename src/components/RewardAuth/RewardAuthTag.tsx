@@ -9,14 +9,14 @@ import RewardAuthModal from './RewardAuthModal';
 import 'reactjs-popup/dist/index.css';
 // import useRewardAuth from 'contexts/RewardAuthContext/hooks/useRewardAuth';
 
-const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
+const StyledPopup = styled(Popup) <{ isMobile: boolean }>`
   position: relative;
   &-overlay {
     z-index: 98 !important;
   }
   &-content {
     width: ${({ isMobile }) =>
-      isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
+    isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
     left: ${({ isMobile }) => (isMobile ? '4px !important' : 'atuo')};
   }
 `;
@@ -49,7 +49,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   const { targetRef, tooltip, tooltipVisible, close } = useTooltip(
     <RewardAuthModal
       postType={postType}
-      currentPost={data}
+      currentPost={{ ...data, reward_id: data?.post_id ?? data.id }}
       avatar={data.user_avator_url}
       onClose={event => close(event)}
     />,
@@ -58,6 +58,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
       trigger: 'click',
       stylePadding: '0',
       hideArrow: true,
+      invert: false,
       tooltipPadding: 0,
       tooltipOffset: [0, 5],
       background: 'transparent',
