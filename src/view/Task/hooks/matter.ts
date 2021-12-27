@@ -91,7 +91,7 @@ export const useSignIn = () => {
 export const receive = async (dispatch: any, taskId: number) => {
   try {
     const res = await Api.TaskApi.receive(taskId);
-    await dispatch(fetchTaskListAsync({ isSignIn: false }))
+    if (res.code === 1) await dispatch(fetchTaskListAsync({ isSignIn: false }))
     return res;
   } catch (error) {
     throw new Error('Receive Error');
