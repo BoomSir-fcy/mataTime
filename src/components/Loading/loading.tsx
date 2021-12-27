@@ -104,8 +104,8 @@ export const Loading: React.FC<{
       {visible && (
         <LoadingWraper>
           <LoadingContent>
-            {[...new Array(6)].map(item => (
-              <Dot key={item} />
+            {[...new Array(6)].map((item, index) => (
+              <Dot key={`${item}_${index}`} />
             ))}
           </LoadingContent>
         </LoadingWraper>
