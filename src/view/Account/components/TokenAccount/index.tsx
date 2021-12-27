@@ -14,10 +14,9 @@ import {
 } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
-import { formatDisplayApr } from 'utils/formatBalance';
+import { formatDisplayApr, getBalanceAmount } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
-import { useTokenBalance } from '../ExchangeTime/hook';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import {
@@ -27,6 +26,7 @@ import {
   fetchMatterIncomeList,
 } from 'store/wallet/reducer';
 import useMenuNav from 'hooks/useMenuNav';
+import { useTokenBalance } from 'hooks/useTokenBalance';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -213,10 +213,10 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useEffect(() => {
     if (account) {
       if (activeToken === 'TIME') {
-        setwalletBalance(timeBalance);
+        setwalletBalance(getBalanceAmount(timeBalance).toNumber());
         settokenAddress(timeAddress);
       } else {
-        setwalletBalance(matterBalance);
+        setwalletBalance(getBalanceAmount(matterBalance).toNumber());
         settokenAddress(MatterAddress);
       }
     }
