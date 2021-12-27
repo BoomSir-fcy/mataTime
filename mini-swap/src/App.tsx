@@ -60,7 +60,7 @@ const App: React.FC = () => {
       <button onClick={changeLang} type="button" >changeLang</button>
       <button onClick={changeCurrency} type="button" >changeCurrency</button>
       {isDark ? 'isDark' : 'no-isDark'}
-      <MiniSwapLocal outputCurrencyId={outputCurrencyId} lang={lang} onConnectWallet={onConnectWallet} isDark={isDark} />
+      <MiniSwapLocal inputCurrencyId={outputCurrencyId} lang={lang} onConnectWallet={onConnectWallet} isDark={isDark} />
     </div>
   )
 }

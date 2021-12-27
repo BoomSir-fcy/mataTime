@@ -34,7 +34,7 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
             'Anyone can create a %token% token on %chain% with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.',
             {
               token: 'ERC20',
-              chain: 'Polygon'
+              chain: 'BscScan'
             }
           )}
           <br />
@@ -72,7 +72,7 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
               <Flex justifyContent="space-between" width="100%">
                 <Text mr="4px">{address}</Text>
                 <Link href={getBscScanLink(token.address, 'address', chainId)} external>
-                  ({t('View on PolygonScan')})
+                  ({t('View on BscScan')})
                 </Link>
               </Flex>
             )}

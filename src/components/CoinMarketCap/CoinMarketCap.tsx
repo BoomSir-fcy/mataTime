@@ -13,7 +13,10 @@ import {
 } from 'uikit';
 import ReactLoading from 'react-loading';
 import { languagesOptions } from 'config/localization';
-import { formatLocalisedCompactNumber } from 'utils/formatBalance';
+import {
+  formatLocalisedCompactNumber,
+  getBalanceNumber,
+} from 'utils/formatBalance';
 import { useStore } from 'store';
 import { Select } from 'components';
 import { useTranslation } from 'contexts/Localization';
@@ -26,6 +29,9 @@ import {
 } from 'store/coins/hooks';
 import CoinItem from './CoinItem';
 import { DropDown } from '../DropDown';
+import { getTimeAddress, getMatterAddress } from 'utils/addressHelpers';
+import { useTotalSupply } from 'hooks/useTokenBalance';
+import { useTimeShopBalance } from 'hooks/useTimeShopBalance';
 
 const StyledPage = styled(Card)`
   width: 300px;
@@ -54,6 +60,13 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
 
   const coins = useStore(p => p.coins.clickCoins);
   const [coinSymbol, setCoinSymbol] = useState('');
+  const timeAddress = getTimeAddress();
+  const MatterAddress = getMatterAddress();
+
+  // 获取time Matter 的 totalSupply
+  const TimeSupply = useTotalSupply(timeAddress);
+  const MatterSupply = useTotalSupply(MatterAddress);
+  const TimeShopBalance = useTimeShopBalance();
 
   useEffect(() => {
     if (coins?.symbol) {
@@ -80,9 +93,18 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   }, [currentCoin, coinsList]);
 
   const marketCap = useMemo(() => {
-    const value = new BigNumber(currentCoin?.circulating_supply).times(
-      currentCoin?.current_price,
-    );
+    let value;
+    const Symbol = currentCoin?.coin_symbol;
+    if (Symbol === 'MATTER' || Symbol === 'TIME') {
+      const supply = getBalanceNumber(
+        Symbol === 'MATTER' ? MatterSupply : TimeSupply?.minus(TimeShopBalance),
+      );
+      value = new BigNumber(supply).times(currentCoin?.current_price);
+    } else {
+      value = new BigNumber(currentCoin?.circulating_supply).times(
+        currentCoin?.current_price,
+      );
+    }
     if (value.isFinite()) {
       return value.toNumber();
     }
@@ -125,10 +147,13 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
           </StyledPageItem>
           <Box>
             <DropDown fillWidth isOpen={isOpen} setIsOpen={setIsOpen}>
-              <Box style={{
-                overflowY: 'auto',
-                overflowX: 'hidden',
-              }} maxHeight="300px">
+              <Box
+                style={{
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                }}
+                maxHeight='300px'
+              >
                 <StyledPageItem>
                   {coinsList.map(item => (
                     <CoinItem

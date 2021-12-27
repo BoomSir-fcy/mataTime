@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Token, Currency } from 'dsgswap-sdk';
 interface ImportProps {
     tokens: Token[];

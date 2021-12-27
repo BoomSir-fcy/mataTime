@@ -18,7 +18,7 @@ export default {
     97: '0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576',
   },
   oracle: {
-    56: '0xCd73FdC242F12E7d104ac7a505D772CC23e5Ca79',
+    56: '0xAa8F3F169c3841CDfB70D5687cA5bc6feB7C4560',
     97: '0x6639fdbf6fac3a2814b20632e4496a3941238729',
   },
   nftSocial: {

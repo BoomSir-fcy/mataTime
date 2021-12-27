@@ -1,12 +1,13 @@
 /* eslint-disable */
 import React, { useCallback, useState, useEffect } from 'react';
-import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
+import { Flex, Box, Text, Link, InputPanel, Input } from 'uikit';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
 import { useFetchHistoryList } from 'view/Account/hooks/walletInfo';
 import { useTranslation } from 'contexts/Localization';
+import { getBscScanLink } from 'utils/contract';
 
 const CountBox = styled(Box)`
   width: 88vw;
@@ -39,7 +40,8 @@ const ItemText = styled(Text)`
   font-size: 14px;
   margin-bottom: 10px;
   &:last-child{
-    text-align: right;
+    display: flex;
+    justify-content: end;
       img{
         width: 20px;
         cursor: pointer;
@@ -73,14 +75,11 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
     }
   }, [loading, page, end])
 
-
-  const openLink = (hash) => {
-    window.open(`https://testnet.bscscan.com/tx/${hash}`)
-  }
   const getTime = (time) => {
     const filshTime = dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss')
     return filshTime
   }
+
   return (
     <CountBox>
       <Table>
@@ -97,8 +96,11 @@ const HistoryModal: React.FC<init> = ({ token, type }) => {
                   <>
                     <ItemText>{getTime(item.event_time)}</ItemText>
                     <ItemText>{item.event_type === 1 ? '+' : '-'}{item.event_amount}</ItemText>
-                    <ItemText onClick={() => openLink(item.event_hash)}>
-                      <img src={require('assets/images/myWallet/BSC_logo.png').default} alt="" />
+                    <ItemText>
+                      {/* <img src={require('assets/images/myWallet/BSC_logo.png').default} alt="" /> */}
+                      <Link external href={getBscScanLink(item.event_hash, 'transaction')}>
+                        <img src={require('assets/images/myWallet/BSC_logo.png').default} alt="" />
+                      </Link>
                     </ItemText>
                   </>
                 }
