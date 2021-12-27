@@ -100,7 +100,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
-    font-family: Futura, 'SourceHanSansCN', sans-serif;
+    font-family: Arial, 'SourceHanSansCN', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* -webkit-overflow-scrolling: touch; */
