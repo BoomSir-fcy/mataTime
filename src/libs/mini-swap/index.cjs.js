@@ -7581,14 +7581,14 @@ function queryParametersToSwapState(parsedQs) {
         _a;
 }
 // updates the swap state to use the defaults for a given network
-function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
+function useDefaultsFromURLSearch(outputCurrency, inputCurrency) {
     var chainId = useActiveWeb3React().chainId;
     var dispatch = reactRedux.useDispatch();
     var _a = tslib.__read(React.useState(), 2), result = _a[0], setResult = _a[1];
     React.useEffect(function () {
         if (!chainId)
             return;
-        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrencyId: inputCurrencyId });
+        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrency: inputCurrency });
         dispatch(replaceSwapState({
             typedValue: parsed.typedValue,
             field: parsed.independentField,
@@ -7598,7 +7598,7 @@ function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
         }));
         setResult({ inputCurrencyId: parsed[Field$2.INPUT].currencyId, outputCurrencyId: parsed[Field$2.OUTPUT].currencyId });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, chainId, outputCurrency, inputCurrencyId]);
+    }, [dispatch, chainId, outputCurrency, inputCurrency]);
     return result;
 }
 function useSwapCurrencies() {
