@@ -337,7 +337,8 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
           </InputBox>
           <Flex mb='20px'>
             <SmFont style={{ minWidth: '40%' }} mr='16px' color='textTips'>
-              DSG {t('Balance')}: {getFullDisplayBalance(DsgBalance, 0, 3)}
+              {/* DSG {t('Balance')}: {getFullDisplayBalance(DsgBalance, 0, 3)} */}
+              DSG {t('Balance')}: {formatDisplayApr(DsgBalance.toNumber())}
             </SmFont>
             <SmFont color='textTips'>
               TIME {t('Balance')}:{' '}

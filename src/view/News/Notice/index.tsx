@@ -70,7 +70,7 @@ const NoticeItem: React.FC<{
   const { t, getHTML } = useTranslation();
   const { type } = itemData;
 
-  const ruleUrl = `${window.location.origin}/content-rules`;
+  const ruleUrl = `${window.location.origin}/content-rules/index.html`;
   return (
     <NoticeItemWrapper>
       <Flex justifyContent='space-between' padding='0 20px 25px 30px'>

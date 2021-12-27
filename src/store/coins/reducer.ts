@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from 'apis';
+import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
 import { setTopicCoins } from './actions';
+import { getTime24HoursData } from './getSwapData';
 
 export interface CoinsState {
   total: number;
@@ -55,6 +57,19 @@ export const fetchCoinInfoAsync = createAsyncThunk<Api.Coins.CoinInfo, string>(
     const response = await Api.CoinsApi.fetchCoinInfoById({
       coin_id
     });
+    const timeToken = getTimeAddress().toLowerCase()
+    const volume1 = await getTime24HoursData(timeToken)
+
+    if (response?.coin_symbol === 'TIME') {
+      const timeToken = getTimeAddress().toLowerCase()
+      const volume = await getTime24HoursData(timeToken)
+      response.total_volume = volume.totalVolumeUSD
+    } else if (response?.coin_symbol === 'MATTER') {
+      const matterToken = getMatterAddress().toLowerCase()
+      const volume = await getTime24HoursData(matterToken)
+      response.total_volume = volume.totalVolumeUSD
+    }
+    console.log(response, 'response')
     return response;
   }
 );
