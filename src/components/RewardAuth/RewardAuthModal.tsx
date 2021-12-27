@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import ReactLoading from 'react-loading';
-import styled, { ThemeProvider, DefaultTheme } from 'styled-components'
+import styled, { ThemeProvider, DefaultTheme } from 'styled-components';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -33,7 +33,6 @@ const invertTheme = (currentTheme: DefaultTheme) => {
   }
   return dark;
 };
-
 
 const RewardAuthModalStyled = styled(Box)`
   width: 100%;
@@ -158,7 +157,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
       setState(p => {
         p.reward_post = res;
       });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 切换币种
@@ -170,7 +169,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
         p.current_price = res.current_price || '0';
         p.isOnApprove = tokenList[index][4] > 0 ? false : true;
       });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 打赏用户
@@ -347,6 +346,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                             style={{ marginLeft: '-1em' }}
                           >
                             <Avatar
+                              disableFollow
                               src={item.nft_image}
                               scale='md'
                               style={{ width: '24px', height: '24px' }}
