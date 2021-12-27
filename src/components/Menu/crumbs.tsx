@@ -61,7 +61,7 @@ export const Crumbs: React.FC<{
   const { isPushed, setIsPushed, isMobile } = useMenuNav();
 
   const goBack = () => {
-    history.goBack();
+    document.referrer === '' ? history.replace('/') : history.goBack();
   };
 
   return (
