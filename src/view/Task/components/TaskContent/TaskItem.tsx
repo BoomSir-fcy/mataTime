@@ -105,7 +105,7 @@ const TaskItem: React.FC<{
         toastError(t('Received failed'));
       }
     } catch (error) {
-      toastError(t('Received failed'));
+      // toastError(t('Received failed'));
     } finally {
       setpengdingType(false);
     }

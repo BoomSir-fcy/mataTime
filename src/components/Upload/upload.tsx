@@ -68,7 +68,7 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
             dir_name: 'common',
           });
           if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
-          uploadSuccess(res.data.full_path);
+          uploadSuccess(res?.data?.full_path);
         };
       }
     }

@@ -67,8 +67,13 @@ export const RewardAuthorContract = () => {
         );
         return res;
       } catch (error: any) {
-        console.error(error);
-        return error?.code || false;
+        const messgae = error?.data?.message;
+        const code =
+          messgae &&
+          messgae?.indexOf('transfer amount exceeds balance') !== '-1'
+            ? 400001
+            : error?.code;
+        return code || false;
       }
     },
     [masterChefContract],
