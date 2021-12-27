@@ -83,8 +83,6 @@ const Swap: React.FC = () => {
     return getDsgAddress()
   }, [coins])
 
-  console.log(inputCurrencyId, 'inputCurrencyId')
-
   return (
     <SwapBox>
       <Transition in={inPropCoin} timeout={500}>
