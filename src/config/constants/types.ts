@@ -33,6 +33,7 @@ export interface MenuNavBase {
 export interface MenuNavConfig extends MenuNavBase {
   badgeName?: string // 微标明
   children?: MenuNavConfig[]
+  customName?: string
 }
 
 export interface MenuNavLink extends MenuNavBase {

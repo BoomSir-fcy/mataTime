@@ -66,6 +66,7 @@ interface init {
   onClose: () => void;
   withdrawalBalance: string;
   decimals?: number;
+  TokenWithDrawMinNum: string;
 }
 
 const MoneyModal: React.FC<init> = ({
@@ -76,6 +77,7 @@ const MoneyModal: React.FC<init> = ({
   onClose,
   withdrawalBalance,
   decimals = 18,
+  TokenWithDrawMinNum,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -127,9 +129,11 @@ const MoneyModal: React.FC<init> = ({
       } else {
         num = val;
       }
-      if (Number(num) < 100) {
+      if (Number(num) < Number(TokenWithDrawMinNum)) {
         toast.error(
-          t('Account Minimum withdrawal amount %amount%', { amount: 100 }),
+          t('Account Minimum withdrawal amount %amount%', {
+            amount: TokenWithDrawMinNum,
+          }),
         );
         setpending(false);
         return;

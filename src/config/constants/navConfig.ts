@@ -143,12 +143,14 @@ export const menuNavConfig: MenuNavConfig[] = [
   },
   {
     path: '/me',
+    customName: 'me',
     children: [
       {
         icon: 'icon-gerenxinxi',
         activeIcon: 'icon-gerenxinxi1',
         lable: 'meMenuHome',
         path: '/me',
+        customName: 'me',
         markPath: ['/me/edit'],
       },
       {

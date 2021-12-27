@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Api } from 'apis';
+import { useStore } from 'store';
 import { Box, Flex } from 'uikit';
 import config from 'config/constants/navConfig';
 import { useTranslation } from 'contexts/Localization';
@@ -45,12 +46,41 @@ const Nav: React.FC<NavProps> = ({ }) => {
   const notification = useSelector(
     (state: any) => state.appReducer.systemCustom.notification
   );
-  const menu = config.filter(row => row.lable);
+
+  const currentUid = useStore(p => p.loginReducer.userInfo);
+
+  const renderConfig = useMemo(() => {
+    return config.map(item => {
+      if (item.children) {
+        return {
+          ...item,
+          children: item.children.map(subItem => {
+            if (subItem.customName === 'me') {
+              return {
+                ...subItem,
+                path: `${subItem.path}/profile/${currentUid.uid}`
+              }
+            }
+            return { ...subItem }
+          })
+        }
+      }
+      if (item.customName === 'me') {
+        return {
+          ...item,
+          path: `${item.path}/profile/${currentUid.uid}`
+        }
+      }
+      return { ...item }
+    })
+  }, [currentUid.uid])
+
+  const menu = renderConfig.filter(row => row.lable);
 
   useReadMsg(pathname);
 
   const activeChildren = useMemo(() => {
-    const activeConfig = config.find(item =>
+    const activeConfig = renderConfig.find(item =>
       item?.children?.some(subItem => subItem.path === pathname)
     );
     if (activeConfig) return activeConfig.children;
