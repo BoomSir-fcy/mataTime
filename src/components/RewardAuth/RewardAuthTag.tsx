@@ -1,22 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import Popup from 'reactjs-popup';
-import useMenuNav from 'hooks/useMenuNav';
+import { useDispatch } from 'react-redux';
 import { Flex, Box, Image, useTooltip } from 'uikit';
+import { useStore, storeAction } from 'store';
+
+import { Api } from 'apis';
 
 import RewardAuthModal from './RewardAuthModal';
+import useMenuNav from 'hooks/useMenuNav';
+import { GetPostRewardAuthor } from './hook';
 
 import 'reactjs-popup/dist/index.css';
-// import useRewardAuth from 'contexts/RewardAuthContext/hooks/useRewardAuth';
 
-const StyledPopup = styled(Popup) <{ isMobile: boolean }>`
+const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
   position: relative;
   &-overlay {
     z-index: 98 !important;
   }
   &-content {
     width: ${({ isMobile }) =>
-    isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
+      isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
     left: ${({ isMobile }) => (isMobile ? '4px !important' : 'atuo')};
   }
 `;
@@ -38,20 +42,58 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   data,
   postType,
 }) => {
+  const dispatch = useDispatch();
   const reward: reward[] = data.reward_stats || [];
+  const postList = useStore(p => p.post.list);
   const { isMobile } = useMenuNav();
-  const popupRef = React.useRef(null);
+  const { isReward } = GetPostRewardAuthor();
   const [visible, setVisible] = React.useState(false);
+  const popupRef = React.useRef(null);
+
   const total = reward.reduce((total, currentValue) => {
     return total + currentValue.count;
   }, 0);
+
+  let timer: any = 0;
+
+  React.useEffect(() => {
+    return () => {
+      timer && clearInterval(timer);
+    };
+  }, []);
 
   const { targetRef, tooltip, tooltipVisible, close } = useTooltip(
     <RewardAuthModal
       postType={postType}
       currentPost={{ ...data, reward_id: data?.post_id ?? data.id }}
       avatar={data.user_avator_url}
-      onClose={event => close(event)}
+      onClose={async event => {
+        close(event);
+        timer = setInterval(async () => {
+          try {
+            const ids = String(data?.post_id ?? data.id);
+            const res = await isReward(ids);
+            if (Api.isSuccess(res)) {
+              const rewardArr = res.data.reward_stats || [];
+              const RewardTotal = rewardArr.reduce((total, currentValue) => {
+                return total + currentValue.count;
+              }, 0);
+              if (total < RewardTotal) {
+                timer && clearInterval(timer);
+                const updatePost = postList.map((row: any) => {
+                  if (row.id === Number(ids)) {
+                    return { ...row, reward_stats: res.data.reward_stats };
+                  }
+                  return row;
+                });
+                dispatch(storeAction.postUpdateArticle([...updatePost]));
+              }
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }, 2000);
+      }}
     />,
     {
       placement: 'top-end',
