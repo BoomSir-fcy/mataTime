@@ -71,12 +71,14 @@ interface Wallet {
   Balance: number;
   TokenAddr: string;
   BalanceInfo: Api.Account.Balance;
+  TokenWithDrawMinNum: string;
 }
 const WalletBox: React.FC<Wallet> = ({
   Token,
   Balance,
   TokenAddr,
   BalanceInfo,
+  TokenWithDrawMinNum,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -167,7 +169,7 @@ const WalletBox: React.FC<Wallet> = ({
             <Fount>
               {t(
                 'Account Over %num% can be withdrawn to the wallet on the chain',
-                { num: 100 },
+                { num: TokenWithDrawMinNum },
               )}
             </Fount>
           )}
@@ -178,7 +180,8 @@ const WalletBox: React.FC<Wallet> = ({
               <WithdrawBtn
                 disabled={
                   Token === 'MATTER' &&
-                  Number(BalanceInfo.available_balance) < 100
+                  Number(BalanceInfo.available_balance) <
+                    Number(TokenWithDrawMinNum)
                 }
                 onClick={() => openModaal(2)}
               >
@@ -207,7 +210,8 @@ const WalletBox: React.FC<Wallet> = ({
               <WithdrawBtn
                 disabled={
                   Token === 'MATTER' &&
-                  Number(BalanceInfo.available_balance) < 100
+                  Number(BalanceInfo.available_balance) <
+                    Number(TokenWithDrawMinNum)
                 }
                 onClick={() => openModaal(2)}
               >
@@ -234,6 +238,7 @@ const WalletBox: React.FC<Wallet> = ({
           token={Token}
           balance={Balance}
           withdrawalBalance={BalanceInfo.available_balance}
+          TokenWithDrawMinNum={TokenWithDrawMinNum}
         />
       </ModalWrapper>
 

@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 import { changeActiveToken } from './actions';
-import { FetchMatterIncomeList, FetchMatterIncometoday } from './fetch';
+import {
+  FetchMatterIncomeList,
+  FetchMatterIncometoday,
+  FetchMinimum,
+} from './fetch';
 import {
   FetchApproveNum,
   FetchDSGApproveNum,
@@ -71,6 +75,10 @@ const initialState: WalletState = {
     today_income: '0',
     total_income: '0',
     loadStatus: 0,
+  },
+  WithDrawMinNum: {
+    meta_minimum: '0',
+    time_minimum: '0',
   },
 };
 
@@ -178,6 +186,16 @@ export const fetchMatterIncometoday = createAsyncThunk<any, any>(
     return res;
   },
 );
+
+//  Time Matter最小提币数量
+export const fetchMinimum = createAsyncThunk<any>(
+  'wallet/fetchMinimum',
+  async () => {
+    const res = await FetchMinimum();
+    return res;
+  },
+);
+
 export const wallet = createSlice({
   name: 'wallet',
   initialState,
@@ -235,6 +253,9 @@ export const wallet = createSlice({
       })
       .addCase(fetchMatterIncometoday.fulfilled, (state, action) => {
         state.MatterIncometoday = { ...action.payload, loadStatus: 1 };
+      })
+      .addCase(fetchMinimum.fulfilled, (state, action) => {
+        state.WithDrawMinNum = action.payload;
       });
   },
 });
