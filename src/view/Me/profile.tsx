@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,10 @@ import {
   List,
   MoreOperatorEnum,
   Icon,
+  FollowButton,
+  CancelAttentionModal,
 } from 'components';
+import { debounce } from 'lodash';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
@@ -131,6 +134,10 @@ const CenterImg = styled.img`
   left: 8%;
 `;
 
+const FollowButtonBox = styled(Box)`
+  ${mediaQueriesSize.marginr}
+`;
+
 const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
     profile: {
@@ -152,7 +159,14 @@ const Profile: React.FC<any> = props => {
   const { isDark } = useTheme();
   const defaultImages = isDark ? defaultDarkImages : defaultLightImages;
   const { languange } = setting;
-
+  const [FollowState, setFollowState] = useImmer({
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: '',
+    },
+  });
   const [isEnd, setIsEnd] = useState(false);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
@@ -161,6 +175,20 @@ const Profile: React.FC<any> = props => {
   useReadArticle(nonce);
 
   const { isMobile } = useMenuNav();
+
+  const FollowData = useMemo(() => {
+    const data = {
+      address: profile.address,
+      display_format: profile.display_format,
+      introduction: profile.introduction,
+      location: profile.location,
+      nft_image: profile.nft_image,
+      nick_name: profile.nick_name,
+      uid: profile.uid,
+      attention_status: profile.is_attention,
+    };
+    return data;
+  }, [profile]);
 
   const init = async (offset?: number) => {
     try {
@@ -245,7 +273,31 @@ const Profile: React.FC<any> = props => {
       setNonce(prep => prep + 1);
     }
   };
+  const followUser = async (focus_uid: number) => {
+    try {
+      const res = await Api.MeApi.followUser(focus_uid);
+      if (Api.isSuccess(res)) {
+        init(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  // 取消关注
+  const unFollowRequest = async item => {
+    try {
+      const res = await Api.MeApi.unFollowUser(item.uid);
+      if (Api.isSuccess(res)) {
+        setFollowState(p => {
+          p.cancelFollow = false;
+        });
+        init(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   React.useEffect(() => {
     init(1);
   }, [uid]);
@@ -265,7 +317,6 @@ const Profile: React.FC<any> = props => {
       ? defaultCountry?.LocationEn
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
-
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
@@ -333,7 +384,25 @@ const Profile: React.FC<any> = props => {
                 </Button> */}
               </>
             ) : (
-              <Popup user={profile} onCallback={() => init(1)} />
+              <Flex alignItems='center'>
+                <FollowButtonBox>
+                  <FollowButton
+                    data={FollowData}
+                    followFunc={debounce(() => followUser(uid), 1000)}
+                    unFollowFunc={() =>
+                      setFollowState(p => {
+                        p.cancelParams = {
+                          uid,
+                          address: profile.address,
+                          nft_image: profile.nft_image,
+                        };
+                        p.cancelFollow = true;
+                      })
+                    }
+                  />
+                </FollowButtonBox>
+                <Popup user={profile} onCallback={() => init(1)} />
+              </Flex>
             )}
           </Info>
           <Content>
@@ -440,6 +509,20 @@ const Profile: React.FC<any> = props => {
           </MeItemWrapper>
         ))}
       </List>
+      <CancelAttentionModal
+        title={t('meUnsubscribeTips')}
+        show={FollowState.cancelFollow}
+        params={FollowState.cancelParams}
+        confirm={debounce(
+          () => unFollowRequest(FollowState.cancelParams),
+          1000,
+        )}
+        onClose={() =>
+          setFollowState(p => {
+            p.cancelFollow = false;
+          })
+        }
+      />
     </Center>
   );
 };
