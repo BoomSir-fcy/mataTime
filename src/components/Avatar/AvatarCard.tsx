@@ -21,11 +21,11 @@ export const AvatarCard: React.FC<AvatarCardProps> = ({
   uid,
   userName,
   address,
-  time
+  time,
 }) => {
   return (
     <Flex style={{ flex: 1, minWidth: 0 }}>
-      <Avatar uid={uid} src={avatar} scale={scale} />
+      <Avatar disableFollow uid={uid} src={avatar} scale={scale} />
       <Box ml='8px' style={{ minWidth: 0 }}>
         <Text color={'#FFF'} ellipsis>
           {userName}

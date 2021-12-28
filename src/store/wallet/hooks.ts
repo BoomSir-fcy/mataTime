@@ -7,7 +7,7 @@ import {
   getDsgAddress,
   getTimeAddress,
   getMatterAddress,
-  getTimeShopAddress
+  getTimeShopAddress,
 } from 'utils/addressHelpers';
 import erc20Abi from 'config/abi/erc20.json';
 import timeShopAbi from 'config/abi/TimeShop.json';
@@ -28,13 +28,18 @@ import {
   fetchIncomeList,
   fetchTimeIncometoday,
   fetchMatterIncomeList,
-  fetchMatterIncometoday
+  fetchMatterIncometoday,
+  fetchMinimum,
 } from './reducer';
 import { ExchangeList } from './type';
 import { State } from '../types';
 import { BIG_TEN } from 'utils/bigNumber';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const REFRESH_INTERVAL = 30 * 1000;
 const SLOW_INTERVAL = 60 * 1000;
@@ -50,7 +55,7 @@ const useRefresh = (slow?) => {
           setFefresh(prev => prev + 1);
         }
       },
-      slow ? SLOW_INTERVAL : REFRESH_INTERVAL
+      slow ? SLOW_INTERVAL : REFRESH_INTERVAL,
     );
     return () => clearInterval(interval);
   }, [isBrowserTabActiveRef]);
@@ -83,22 +88,22 @@ export const FetchApproveNum = async (account: string) => {
     {
       address: timeAddress,
       name: 'allowance',
-      params: [account, CashierDesk]
+      params: [account, CashierDesk],
     },
     {
       address: MatterAddress,
       name: 'allowance',
-      params: [account, CashierDesk]
-    }
+      params: [account, CashierDesk],
+    },
   ];
   try {
     const [TimeApprovedNum, MatterApproveNum] = await multicall(
       erc20Abi,
-      calls
+      calls,
     );
     const data = {
       time: getBalanceNumber(TimeApprovedNum),
-      matter: getBalanceNumber(MatterApproveNum)
+      matter: getBalanceNumber(MatterApproveNum),
     };
     return data;
   } catch (error) {
@@ -114,8 +119,8 @@ export const FetchDSGApproveNum = async (account: string) => {
     {
       address: dsgAdd,
       name: 'allowance',
-      params: [account, TimeShop]
-    }
+      params: [account, TimeShop],
+    },
   ];
   try {
     const approvedNum = await multicall(erc20Abi, calls);
@@ -130,8 +135,8 @@ export const FetchTimeShopInfo = async () => {
   const calls = [
     {
       address: TimeShop,
-      name: 'getViews'
-    }
+      name: 'getViews',
+    },
   ];
   try {
     const Views = await multicall(timeShopAbi, calls);
@@ -139,15 +144,15 @@ export const FetchTimeShopInfo = async () => {
       times: index + 1,
       long_time: Number(new BigNumber(item.long_time.toJSON().hex)),
       max_dsg_token: getBalanceNumber(
-        new BigNumber(item.max_dsg_token.toJSON().hex)
+        new BigNumber(item.max_dsg_token.toJSON().hex),
       ),
       max_time_token: getBalanceNumber(
-        new BigNumber(item.max_time_token.toJSON().hex)
+        new BigNumber(item.max_time_token.toJSON().hex),
       ),
       right_now_release: Number(
-        new BigNumber(item.right_now_release.toJSON().hex)
+        new BigNumber(item.right_now_release.toJSON().hex),
       ),
-      total_dsg: getBalanceNumber(new BigNumber(item.total_dsg.toJSON().hex))
+      total_dsg: getBalanceNumber(new BigNumber(item.total_dsg.toJSON().hex)),
     }));
     return info;
   } catch (error) {
@@ -162,8 +167,8 @@ export const FetchRecordLength = async (account: string) => {
     {
       address: TimeShop,
       name: 'getUsersRecordLength',
-      params: [account]
-    }
+      params: [account],
+    },
   ];
   try {
     const res = await multicall(timeShopAbi, calls);
@@ -183,13 +188,13 @@ export const FetchReleaseAmount = async (list: any) => {
       item.latestTime,
       item.endTime,
       new BigNumber(item.totalAmount).times(BIG_TEN.pow(18)).toString(),
-      new BigNumber(item.debtAmount).times(BIG_TEN.pow(18)).toString()
-    ]
+      new BigNumber(item.debtAmount).times(BIG_TEN.pow(18)).toString(),
+    ],
   }));
   try {
     const numArr = await multicall(timeShopAbi, calls);
     const AmountList = numArr.map(item =>
-      getBalanceNumber(new BigNumber(item[0].toJSON().hex))
+      getBalanceNumber(new BigNumber(item[0].toJSON().hex)),
     );
     return AmountList;
   } catch (error) {
@@ -200,7 +205,7 @@ export const FetchReleaseAmount = async (list: any) => {
 export const FetchExchangeList = async (
   account: string,
   page: number,
-  pageSize: number
+  pageSize: number,
 ) => {
   const TimeShop = getTimeShopAddress();
   const getTotalPage = totalNum => {
@@ -219,7 +224,7 @@ export const FetchExchangeList = async (
       let item = {
         address: TimeShop,
         name: 'getUserRecordKey',
-        params: [account, i]
+        params: [account, i],
       };
       calls.push(item);
     }
@@ -244,24 +249,24 @@ export const FetchExchangeList = async (
       endTime: Number(new BigNumber(item[0].endTime.toJSON().hex)),
       latestTime: new BigNumber(item[0].latestTime.toJSON().hex).toNumber(),
       totalAmount: getBalanceNumber(
-        new BigNumber(item[0].totalAmount.toJSON().hex)
+        new BigNumber(item[0].totalAmount.toJSON().hex),
       ),
       debtAmount: getBalanceNumber(
-        new BigNumber(item[0].debtAmount.toJSON().hex)
+        new BigNumber(item[0].debtAmount.toJSON().hex),
       ),
       RemainingAmount: getBalanceNumber(
         new BigNumber(item[0].totalAmount.toJSON().hex).minus(
-          new BigNumber(item[0].debtAmount.toJSON().hex)
-        )
+          new BigNumber(item[0].debtAmount.toJSON().hex),
+        ),
       ),
       totalPage: totalPage,
       page: page,
-      id: start - index
+      id: start - index,
     }));
     const AmountList = await FetchReleaseAmount(List);
     const completeList = AmountList.map((item, index) => ({
       ...List[index],
-      ReleaseAmount: item
+      ReleaseAmount: item,
     }));
     return completeList;
   } catch (error) {
@@ -277,8 +282,8 @@ export const FetchRewardNum = async (account: string) => {
     {
       address: TimeShop,
       name: 'getReward',
-      params: [account]
-    }
+      params: [account],
+    },
   ];
   try {
     const RewardNum = await multicall(timeShopAbi, calls);
@@ -294,7 +299,7 @@ export const FetchIncomeList = async (page, size, read_type) => {
     const res = await Api.AccountApi.TimeIncomerecord({
       index: page,
       size,
-      read_type
+      read_type,
     });
     if (Api.isSuccess(res)) {
       return res.data;
@@ -312,6 +317,13 @@ export const FetchTimeIncometoday = async days => {
   try {
     const res = await Api.AccountApi.TimeIncometoday({ days });
     if (Api.isSuccess(res)) {
+      if (res.data.data.length > 0 || Number(res.data.today_income) > 0) {
+        let today = {
+          income: res.data.today_income,
+          date: dayjs().utc().format('YYYY-MM-DD'),
+        };
+        res.data.data.unshift(today);
+      }
       return res.data;
     } else {
       throw new Error('errCode');
@@ -325,7 +337,7 @@ export const FetchTimeIncometoday = async days => {
 export const useFetTimeIncomeList = (
   page: number,
   pageSize: number,
-  read_type: number
+  read_type: number,
 ) => {
   const dispatch = useDispatch<AppDispatch>();
   const { account } = useWeb3React();
@@ -356,6 +368,14 @@ export const useFetchWalletInfo = () => {
   useEffect(() => {
     if (account) dispatch(fetchWalletAsync());
   }, [refresh, account]);
+};
+
+// 获取钱包余额详情
+export const useFetchMinimum = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchMinimum());
+  }, []);
 };
 
 // 获取授权数量
@@ -423,7 +443,7 @@ export const usePlatformTimeBalance = () => {
     // const timeWallet = wallet.find(item => item.address?.toLowerCase() === getTimeAddress().toLowerCase())
     return {
       availableBalance: new BigNumber(timeWallet?.available_balance || 0),
-      uid: timeWallet?.uid
+      uid: timeWallet?.uid,
     };
   }, [wallet]);
 };

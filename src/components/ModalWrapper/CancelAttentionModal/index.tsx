@@ -34,12 +34,12 @@ export const CancelAttentionModal = React.memo((props: IProp) => {
     >
       <ReportModalWrapper>
         <CancelAttentionContentWrapper>
-          <Avatar scale="md" src={params.nft_image} />
-          <div className="des-box">
+          <Avatar disableFollow scale='md' src={params.nft_image} />
+          <div className='des-box'>
             {getHTML('meUnsubscribeContent', {
               value: `<span style="color:${
                 theme.colors.backgroundPrimary
-              }">@${shortenAddress(params.address)}</span>`
+              }">@${shortenAddress(params.address)}</span>`,
             })}
           </div>
         </CancelAttentionContentWrapper>

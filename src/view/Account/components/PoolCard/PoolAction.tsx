@@ -60,6 +60,8 @@ const PoolAction: React.FC<PoolActionProps> = ({ poolInfo, userData }) => {
     const dispalyToken0Rewards = formatDisplayBalanceWithSymbol(token0UnclaimedRewards, poolInfo.rewardToken1Decimals)
     const dispalyToken1Rewards = formatDisplayBalanceWithSymbol(token1UnclaimedRewards, poolInfo.rewardToken0Decimals)
     const dispalyStakeAmount = formatDisplayBalanceWithSymbol(stakeAmount, poolInfo.depositDecimals)
+    const earnings = token0UnclaimedRewards.plus(token1UnclaimedRewards).toString()
+
     return {
       allowance,
       isApproved,
@@ -70,6 +72,7 @@ const PoolAction: React.FC<PoolActionProps> = ({ poolInfo, userData }) => {
       dispalyToken0Rewards,
       dispalyToken1Rewards,
       dispalyStakeAmount,
+      earnings,
     }
   }, [userData, poolInfo.depositDecimals, poolInfo.rewardToken0Decimals, poolInfo.rewardToken1Decimals])
 
@@ -95,6 +98,7 @@ const PoolAction: React.FC<PoolActionProps> = ({ poolInfo, userData }) => {
         depositToken={poolInfo.depositToken}
         poolAddress={poolInfo.poolAddress}
         pid={poolInfo.pid}
+        earnings={dispalynUserData.earnings}
         onView={() => setVisibleView(true)}
         showView={!!userStakesMap[poolInfo.pid]}
         isApproved={dispalynUserData.isApproved}

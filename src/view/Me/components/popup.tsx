@@ -9,6 +9,7 @@ import { Api } from 'apis';
 
 import { copyContent } from 'utils';
 import { useTranslation } from 'contexts/Localization';
+import eventBus from 'utils/eventBus';
 
 const PopupButton = styled(Flex)`
   align-items: center;
@@ -50,7 +51,7 @@ export const Popup: React.FC<{
   const { toastSuccess, toastError } = useToast();
   const [state, setState] = useImmer({
     reportVisible: false,
-    cancelFollow: false
+    cancelFollow: false,
   });
   const popupRefs = React.useRef(null);
   const theme = useTheme();
@@ -61,6 +62,9 @@ export const Popup: React.FC<{
       if (Api.isSuccess(res)) {
         onCallback();
         popupRefs?.current?.close();
+        eventBus.dispatchEvent(
+          new MessageEvent('updateFollowState', { data: focus_uid }),
+        );
         // toastSuccess(t('commonMsgFollowSuccess') || res.data);
       }
     } catch (error) {
@@ -78,7 +82,10 @@ export const Popup: React.FC<{
         setState(p => {
           p.cancelFollow = false;
         });
-        toastSuccess(t('commonMsgFollowError') || res.data);
+        eventBus.dispatchEvent(
+          new MessageEvent('updateFollowState', { data: focus_uid }),
+        );
+        // toastSuccess(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -96,18 +103,18 @@ export const Popup: React.FC<{
         }
         arrowStyle={{
           color: theme.colors.tertiary,
-          stroke: theme.colors.tertiary
+          stroke: theme.colors.tertiary,
         }}
       >
         <PopupContentWrapper>
-          <Button variant="text" disabled>
+          <Button variant='text' disabled>
             {t('mePopupMenuPrivateLetters')}
           </Button>
           {/* 关注取消 */}
           <React.Fragment>
             {user.is_attention === 1 ? (
               <Button
-                variant="text"
+                variant='text'
                 onClick={() =>
                   setState(p => {
                     p.cancelFollow = true;
@@ -118,7 +125,7 @@ export const Popup: React.FC<{
               </Button>
             ) : (
               <Button
-                variant="text"
+                variant='text'
                 onClick={debounce(() => followUser(user.uid), 1000)}
               >
                 {t('meFocusOn')}
@@ -126,7 +133,7 @@ export const Popup: React.FC<{
             )}
           </React.Fragment>
           <Button
-            variant="text"
+            variant='text'
             onClick={() => {
               copyContent(window.location.href || '');
               popupRefs?.current?.close();
@@ -136,7 +143,7 @@ export const Popup: React.FC<{
             {t('mePopupMenuCopyAddress')}
           </Button>
           <Button
-            variant="text"
+            variant='text'
             onClick={() =>
               setState(p => {
                 p.reportVisible = !state.reportVisible;

@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { Flex, Button, Box } from 'uikit';
-import { Avatar, Icon, List, MoreOperatorEnum } from 'components';
-// import MentionItem from 'view/News/components/MentionItem';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { List, MoreOperatorEnum } from 'components';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+import { ReadType } from 'hooks/imHooks/types';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { fetchThunk, storeAction, useStore } from 'store';
-
-import { relativeTime } from 'utils';
+import { MeItemWrapper, NewsMeWrapper } from 'view/News/Me/style';
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
-import { ReadType } from 'hooks/imHooks/types';
-import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-
-import { NewsMeWrapper, MeItemWrapper } from 'view/News/Me/style';
-import { Api } from 'apis';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -26,7 +19,7 @@ const ArticleListBox = styled.div`
  * @review
  * props 未声明类型
  */
-export const ArticleList = props => {
+const ArticleComponents = (props, ref) => {
   // const [size, setSize] = useState(20)
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const article = useStore(p => p.post);
@@ -36,14 +29,14 @@ export const ArticleList = props => {
   // const [listData, setListData] = useState([]);
   // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
-  const { list, lastList, page } = article;
+  const { list, lastList, page, addListNum } = article;
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
     nonce,
     setNonce = () => {
       console.error('setNonce is null or undefined, and not refresh ');
-    }
+    },
   } = props || {};
 
   const Getlist = React.useCallback(
@@ -55,58 +48,33 @@ export const ArticleList = props => {
           attention: 1,
           page: current || page,
           per_page: pageSize,
-          ...props.filterValObj
-        })
+          ...props.filterValObj,
+        }),
       );
       setIsEnd(true);
       setLoading(false);
       setNonce(prep => prep + 1);
     },
-    [article, isEnd]
+    [article, isEnd],
   );
 
   React.useEffect(() => {
-    if (list.length > 0 && lastList.length < pageSize) {
-      setIsEnd(true);
+    if (page > 1) {
+      if (lastList.length < pageSize) {
+        setIsEnd(true);
+      } else if (lastList.length >= pageSize) {
+        setIsEnd(false);
+      }
     }
-    if (list.length > 0 && list.length / pageSize !== page) {
-      setIsEnd(false);
-    }
-  }, [list]);
+  }, [loading, list]);
 
-  // 获取列表
-  // const getList = (current = 0) => {
-  //   if ((loading || isEnd) && !current) return false;
-  //   setLoading(true);
-  //   Api.HomeApi.getArticleList({
-  //     attention: 1,
-  //     page: current || page,
-  //     per_page: pageSize,
-  //     ...props.filterValObj
-  //   }).then(res => {
-  //     setLoading(false);
-  //     if (Api.isSuccess(res)) {
-  //       setLoading(false);
-  //       setTotalPage(res.data.total_page);
-  //       if (res.data.List.length < pageSize) {
-  //         setIsEnd(true);
-  //       } else {
-  //         setIsEnd(false);
-  //       }
-  //       if (current === 1 || page === 1) {
-  //         setListData([...res.data.List]);
-  //         setPage(2);
-  //       } else {
-  //         setListData([...listData, ...res.data.List]);
-  //         setPage(page + 1);
-  //       }
-  //     }
-  //     // setNonce(prep => prep + 1);
-  //   });
-  // };
+  useEffect(() => {
+    if (addListNum === 0) {
+      Getlist()
+    }
+  }, [addListNum, Getlist])
 
   // 更新列表
-
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     if (
       type === MoreOperatorEnum.FOLLOW ||
@@ -145,11 +113,17 @@ export const ArticleList = props => {
     }
   };
 
+  React.useImperativeHandle(ref, () => ({
+    reload(page: number) {
+      return Getlist(page);
+    },
+  }));
+
   return (
     <ArticleListBox>
       <List loading={!isEnd} renderList={Getlist}>
-        {(list ?? []).map((item, index) => (
-          <MeItemWrapper key={`${item.id}_${index}`}>
+        {(list ?? []).map((item) => (
+          <MeItemWrapper key={`${item.id}`}>
             {
               // 浏览自己的不扣费
               currentUid?.uid !== item.user_id && (
@@ -168,8 +142,8 @@ export const ArticleList = props => {
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(item: any, type: MoreOperatorEnum) => {
                 updateList(item, type);
@@ -184,8 +158,8 @@ export const ArticleList = props => {
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(item: any, type?: MoreOperatorEnum) => {
                 updateList(item, type);
@@ -197,3 +171,5 @@ export const ArticleList = props => {
     </ArticleListBox>
   );
 };
+
+export const ArticleList = React.forwardRef(ArticleComponents);

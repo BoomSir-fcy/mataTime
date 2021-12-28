@@ -18,8 +18,10 @@ const Logo: React.FC<BoxProps> = (props) => {
   const [isDark] = useThemeManager();
 
   return (
-    <LogoWarpper {...props} width="100%" as={Link} to={'/'}>
-      <ImageStyled src={isDark ? logo : lightLogo} width={175} height={38} alt="" />
+    <LogoWarpper {...props} width="100%">
+      <Link to={'/'}>
+        <ImageStyled src={isDark ? logo : lightLogo} width={175} height={38} alt="" />
+      </Link>
     </LogoWarpper>
   );
 };

@@ -1,3 +1,4 @@
+import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config';
 import { createGlobalStyle } from 'styled-components';
 import { PancakeTheme } from 'uikit';
 
@@ -99,10 +100,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
-    font-family: Futura, 'SourceHanSansCN', sans-serif;
+    font-family: Arial, 'SourceHanSansCN', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    -webkit-overflow-scrolling: touch;
+    /* -webkit-overflow-scrolling: touch; */
   }
   /* html, body{
     height: 100%;
@@ -113,7 +114,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${({ theme }) => theme.colors.background};
     overflow-y: scroll;
     /* overflow-x: auto; */
-    &.ReactModal__Body--open, &.mini-swap-Modal__Body--open{
+    &.ReactModal__Body--open, &.mini-swap-Modal__Body--open, &.${CONNECT_WALLET_BODY_CLASS_NAME}{
       overflow: hidden;
       padding-right: 8px;
     }

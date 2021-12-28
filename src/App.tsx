@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import GlobalStyle from 'style/global';
-import VConsole from 'vconsole';
+// import VConsole from 'vconsole';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk, storeAction } from 'store';
@@ -41,7 +41,7 @@ dayjs.extend(updateLocale);
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
 const ArticleDetilsLayout = React.lazy(
-  () => import('./components/Layout/ArticleDetilsLayout')
+  () => import('./components/Layout/ArticleDetilsLayout'),
 );
 const TopicList = React.lazy(() => import('./view/TopicList'));
 const Me = React.lazy(() => import('./view/Me'));
@@ -51,6 +51,7 @@ const Test = React.lazy(() => import('./view/Test'));
 const Account = React.lazy(() => import('./view/Account'));
 const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
+const Swap = React.lazy(() => import('./view/Swap'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -77,22 +78,22 @@ function App() {
   const { account } = useActiveWeb3React();
   const { getTokens, approve } = RewardAuthorContract();
 
-  const getTokensToCache = async () => {
+  const getTokensToCache = useCallback(async () => {
     try {
       const res = await getTokens();
       const isApprove = await approve(
         account,
-        res?.map(item => item[0])
+        res?.map(item => item[0]),
       );
       const newArr = res.map((item, index) => [
         ...item.toString().split(','),
-        isApprove[index].toString()
+        isApprove[index].toString(),
       ]);
       dispatch(storeAction.setSupportToken(newArr));
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [account, dispatch, getTokens, approve]);
 
   useEffect(() => {
     if (token) {
@@ -113,7 +114,6 @@ function App() {
       <Container id='bg'>
         <PageContainer>
           <React.Suspense fallback={<PageLoader />}>
-            <Updater />
             <Box className='popupBoundary'>
               <Switch>
                 <Route path='/' exact render={props => <Home {...props} />} />
@@ -139,6 +139,7 @@ function App() {
                 <Route path='/me' component={Me} />
                 <Route path='/set' component={Set} />
                 <Route path='/account' component={Account} />
+                {/* <Route path='/swap' component={Swap} /> */}
                 {process.env.NODE_ENV === 'development' && (
                   <>
                     <Route path='/faucet-smart' component={FaucetSmart} />
@@ -147,6 +148,7 @@ function App() {
                 )}
               </Switch>
             </Box>
+            <Updater />
           </React.Suspense>
         </PageContainer>
       </Container>

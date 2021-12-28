@@ -34,32 +34,35 @@ export default function HttpUpdater() {
   const handleInsufficient = useCallback(() => {
     setVisible(true);
   }, [setVisible]);
-  
+
   // http 错误码提示
-  const handleHttpError = useCallback((error) => {
-    httpErrorToast(error.data)
-  }, [setVisible]);
+  const handleHttpError = useCallback(
+    error => {
+      httpErrorToast(error.data);
+    },
+    [setVisible],
+  );
 
   useEffect(() => {
     eventBus.addEventListener('unauthorized', handleReSetAccount);
     return () => {
-      eventBus.addEventListener('unauthorized', handleReSetAccount);
+      eventBus.removeEventListener('unauthorized', handleReSetAccount);
     };
   }, [handleReSetAccount]);
 
   useEffect(() => {
     eventBus.addEventListener('insufficient', handleInsufficient);
     return () => {
-      eventBus.addEventListener('insufficient', handleInsufficient);
+      eventBus.removeEventListener('insufficient', handleInsufficient);
     };
   }, [handleInsufficient]);
-  
+
   useEffect(() => {
     eventBus.addEventListener('httpError', handleHttpError);
     return () => {
-      eventBus.addEventListener('httpError', handleHttpError);
+      eventBus.removeEventListener('httpError', handleHttpError);
     };
-  }, [handleInsufficient]);
+  }, [handleHttpError]);
 
   useEffect(() => {
     if (availableBalance.isGreaterThanOrEqualTo(MAX_PER_SPEND_TIME)) {
@@ -68,11 +71,11 @@ export default function HttpUpdater() {
   }, [availableBalance]);
 
   return (
-    <ModalWrapper padding="0" customizeTitle visible={visible}>
+    <ModalWrapper padding='0' customizeTitle visible={visible}>
       <InsufficientBalanceModal
         title={t('Insufficient $TIME balance')}
         tips={t(
-          'Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information'
+          'Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information',
         )}
         onConfirmLable={t('Go recharge')}
         onSecondaryLable={t('Logout account')}

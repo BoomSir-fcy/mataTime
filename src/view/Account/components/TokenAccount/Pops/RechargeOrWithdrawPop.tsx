@@ -60,12 +60,13 @@ const NumberBox = styled(Flex)`
 // type 1 充值 2 提币
 interface init {
   type: number;
-  balance: number;
+  balance: string;
   token: string;
   TokenAddr: string;
   onClose: () => void;
   withdrawalBalance: string;
   decimals?: number;
+  TokenWithDrawMinNum: string;
 }
 
 const MoneyModal: React.FC<init> = ({
@@ -75,7 +76,8 @@ const MoneyModal: React.FC<init> = ({
   TokenAddr,
   onClose,
   withdrawalBalance,
-  decimals = 18
+  decimals = 18,
+  TokenWithDrawMinNum,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -84,7 +86,7 @@ const MoneyModal: React.FC<init> = ({
   const { drawCallback, Recharge, onApprove } = useDpWd();
   const [pending, setpending] = useState(false);
   const approvedNum = useStore(p =>
-    token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter
+    token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter,
   );
 
   const numberList = ['10000', '20000', '50000', '100000'];
@@ -94,7 +96,7 @@ const MoneyModal: React.FC<init> = ({
     setpending(true);
     if (type === 1) {
       // 充值
-      if (balance === 0) {
+      if (balance === '0') {
         setpending(false);
         return;
       }
@@ -121,9 +123,17 @@ const MoneyModal: React.FC<init> = ({
         setpending(false);
         return;
       }
-      if (Number(val) < 100) {
+      let num;
+      if (val.indexOf('.') !== -1) {
+        num = val.split('.')[0];
+      } else {
+        num = val;
+      }
+      if (Number(num) < Number(TokenWithDrawMinNum)) {
         toast.error(
-          t('Account Minimum withdrawal amount %amount%', { amount: 100 })
+          t('Account Minimum withdrawal amount %amount%', {
+            amount: TokenWithDrawMinNum,
+          }),
         );
         setpending(false);
         return;
@@ -160,8 +170,12 @@ const MoneyModal: React.FC<init> = ({
     (e: React.FormEvent<HTMLInputElement>) => {
       const chkPrice = val => {
         val = val.replace(/,/g, '.');
-        if (Number(val) > (type === 1 ? balance : Number(withdrawalBalance))) {
-          return type === 1 ? String(balance) : withdrawalBalance;
+        if (
+          new BigNumber(val).isGreaterThan(
+            type === 1 ? balance : withdrawalBalance,
+          )
+        ) {
+          return type === 1 ? balance : withdrawalBalance;
         }
         return val;
       };
@@ -169,16 +183,16 @@ const MoneyModal: React.FC<init> = ({
         setVal(chkPrice(e.currentTarget.value));
       }
     },
-    [setVal, balance, withdrawalBalance]
+    [setVal, balance, withdrawalBalance],
   );
   return (
     <CountBox>
       {type === 1 && (
         <Flex
-          mb="20px"
-          alignItems="center"
-          justifyContent="space-between"
-          flexWrap="wrap"
+          mb='20px'
+          alignItems='center'
+          justifyContent='space-between'
+          flexWrap='wrap'
         >
           {numberList.map((item, index) => (
             <NumberBox
@@ -188,34 +202,36 @@ const MoneyModal: React.FC<init> = ({
               key={item}
               onClick={() => {
                 if (approvedNum === 0) return;
-                const Num = Number(item) > balance ? String(balance) : item;
-                setVal(Num);
+                const Num = new BigNumber(item).isGreaterThan(balance)
+                  ? balance
+                  : item;
+                setVal(Num.toString());
               }}
             >
-              <Text fontWeight="bold" fontSize="16px">
+              <Text fontWeight='bold' fontSize='16px'>
                 {item}
               </Text>
             </NumberBox>
           ))}
         </Flex>
       )}
-      <Flex justifyContent="end" mb="12px">
-        <Text fontSize="14px" color="textTips">
+      <Flex justifyContent='end' mb='12px'>
+        <Text fontSize='14px' color='textTips'>
           {t('Account Available Balance')}:{' '}
           {getFullDisplayBalance(
             type === 1
               ? new BigNumber(balance)
-              : new BigNumber(Number(withdrawalBalance)),
-            0
+              : new BigNumber(withdrawalBalance),
+            0,
           )}
         </Text>
       </Flex>
-      <InputBox mb="26px">
+      <InputBox mb='10px'>
         <MyInput
           disabled={approvedNum === 0}
           noShadow
           pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-          inputMode="decimal"
+          inputMode='decimal'
           value={val}
           onChange={handleChange}
           placeholder={
@@ -234,9 +250,16 @@ const MoneyModal: React.FC<init> = ({
           MAX
         </Max>
       </InputBox>
-      <Flex flexDirection="column" justifyContent="center" alignItems="center">
+      {type === 2 && (
+        <Text mb='10px' color='textTips'>
+          {t('Account Minimum withdrawal amount %amount%', {
+            amount: TokenWithDrawMinNum,
+          })}
+        </Text>
+      )}
+      <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
-          mb="10px"
+          mb='10px'
           disable={pending}
           onClick={() => {
             if (type === 1) {
@@ -271,7 +294,7 @@ const MoneyModal: React.FC<init> = ({
             t('Account Confirm')
           )}
         </SureBtn>
-        <Text fontSize="14px" color="textTips">
+        <Text fontSize='14px' color='textTips'>
           {t('Account Please confirm the transaction in Token')}
         </Text>
       </Flex>

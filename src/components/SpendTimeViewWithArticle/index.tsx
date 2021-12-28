@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import useIm from "hooks/imHooks/useIm";
+import debounce from 'lodash/debounce'
 import { ReadType } from 'hooks/imHooks/types';
 import { Text, Button } from "uikit";
 import observerOptions from "./options";
@@ -21,21 +22,32 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
 
   const imgRef = useRef<HTMLDivElement>(null);
   const { setArticlePositions, rendered, setRendered } = useIm()
-  const [isLoaded, setIsLoaded] = useState(false);
+
+  const [flag, setFlag] = useState(0)
+
+  const debouncedOnChange = useMemo(
+    () => debounce(() => setFlag(prep => prep + 1), 300),
+    [setFlag],
+  )
 
   // 解决图片加载后文章高度改变
   const handleListenImageLoad = useCallback((dom: HTMLElement) => {
     const images = dom?.getElementsByClassName(ARTICLE_IMAGE_CLASS_NAME)
     if (images.length > 0) {
       (Array.from(images) as HTMLImageElement[]).forEach((item) => {
-        item.addEventListener('load', () => {
-          setNonce(prep => prep + 1)
-        })
+        item.addEventListener('load', debouncedOnChange)
       })
     }
-  }, [setNonce])
+  }, [debouncedOnChange])
 
-  const flagDebounce = useDebounce(nonce, 500)
+
+  useEffect(() => {
+    if (flag) {
+      setNonce(prep => prep + 1)
+    }
+  }, [flag])
+
+  // const flagDebounce = useDebounce(nonce, 500)
 
   useEffect(() => {
     if (imgRef.current) {
@@ -44,24 +56,27 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.
       const offsetTop = imgRef.current?.parentElement?.offsetTop
       // const { offsetTop } = imgRef.current
       setArticlePositions(prep => {
-        return {
-          ...prep,
-          [`${articleId}_${readType}`]: { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight },
-        }
+        // eslint-disable-next-line no-param-reassign
+        prep[`${articleId}_${readType}`] = { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight }
+        return prep
+        // return {
+        //   ...prep,
+        //   [`${articleId}_${readType}`]: { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight },
+        // }
       })
-      setIsLoaded(true)
       if (!rendered) setRendered(true)
     }
     return () => {
       setArticlePositions(prep => {
-        const newArticlePositions = {
-          ...prep
-        }
-        delete newArticlePositions[`${articleId}_${readType}`]
-        return newArticlePositions
+        // const newArticlePositions = {
+        //   ...prep
+        // }
+        // eslint-disable-next-line no-param-reassign
+        delete prep[`${articleId}_${readType}`]
+        return prep
       })
     }
-  }, [articleId, readType, rendered, flagDebounce, setRendered, setArticlePositions]);
+  }, [articleId, readType, rendered, nonce, setRendered, setArticlePositions]);
 
 
   return <div ref={imgRef} />

@@ -22,6 +22,17 @@ const StyledTriangle = styled.span`
   top: 3px;
 `;
 
+const PriceBox = styled(Box)`
+  max-width: 37%;
+  position: relative;
+`;
+
+const Helper = styled(QuestionHelper)`
+  position: absolute;
+  top: 0;
+  width: 100%;
+`;
+
 interface CoinItemProps {
   fillClickArea?: boolean;
   showHelp?: boolean;
@@ -39,12 +50,12 @@ const CoinItem: React.FC<CoinItemProps> = ({
   isActive,
   onClick,
   onTouch,
-  onRefresh
+  onRefresh,
 }) => {
   const { t } = useTranslation();
 
   const toggling = (
-    event: React.MouseEvent<HTMLDivElement | HTMLOrSVGElement>
+    event: React.MouseEvent<HTMLDivElement | HTMLOrSVGElement>,
   ) => {
     event.stopPropagation();
   };
@@ -54,7 +65,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
     if (!Number(coinInfo?.current_price)) return [0, 0];
     return [
       Number(coinInfo?.current_price),
-      Number(coinInfo?.current_price?.split('.')[1]?.length) || 0
+      Number(coinInfo?.current_price?.split('.')[1]?.length) || 0,
     ];
   }, [coinInfo?.current_price]);
 
@@ -68,7 +79,7 @@ const CoinItem: React.FC<CoinItemProps> = ({
         onClick && onClick(coinInfo);
       }}
     >
-      <Flex width="100%" alignItems="center" justifyContent="space-between">
+      <Flex width='100%' alignItems='center' justifyContent='space-between'>
         <Flex
           onClick={subEvent => {
             if (onTouch) {
@@ -77,71 +88,93 @@ const CoinItem: React.FC<CoinItemProps> = ({
             }
           }}
           style={{ cursor: isActive ? 'default' : 'pointer' }}
-          alignItems="center"
+          alignItems='center'
         >
-          <Box width="40px">
+          <Box width='40px'>
             <Image width={40} height={40} src={coinInfo?.coin_image_url} />
           </Box>
-          <Box ml="8px">
-            <Flex pr="8px" alignItems="center" justifyContent="flex-start">
-              <Text fontWeight="bold" color="white_black" fontSize="18px">
+          <Box ml='8px'>
+            <Flex pr='8px' alignItems='center' justifyContent='flex-start'>
+              <Text fontWeight='bold' color='white_black' fontSize='18px'>
                 {coinInfo?.coin_symbol}
               </Text>
               {showHelp && (
                 <QuestionHelper
                   text={
                     <>
-                      <Text fontSize="14px">
+                      <Text fontSize='14px'>
                         {t('Update time:')}{' '}
                         {dayjs(Number(coinInfo?.add_time) * 1000).format(
-                          'YYYY-MM-DD HH:mm'
+                          'YYYY-MM-DD HH:mm',
                         )}
                       </Text>
-                      <Text fontSize="14px">{t('Powered by CoinGecko')}</Text>
+                      <Text fontSize='14px'>{t('Powered by CoinGecko')}</Text>
                     </>
                   }
-                  ml="4px"
-                  mr="8px"
+                  ml='4px'
+                  mr='8px'
                   onClick={toggling}
-                  placement="top-start"
+                  placement='top-start'
                   style={{ cursor: 'auto' }}
                 />
               )}
               {onTouch && <StyledTriangle />}
             </Flex>
-            <Text ellipsis width="120px" color="textTips" fontSize="14px">
+            <Text ellipsis width='120px' color='textTips' fontSize='14px'>
               {coinInfo?.coin_name}
             </Text>
           </Box>
         </Flex>
         {!!Number(coinInfo?.current_price) && (
-          <Box>
+          <PriceBox maxWidth='37%'>
             {!!currentPrice ? (
-              <BalanceText
-                textAlign="right"
-                prefix="$ "
-                fontWeight="bold"
-                color="primary"
-                value={currentPrice}
-                decimals={decimals}
-              />
+              <>
+                <BalanceText
+                  ellipsis
+                  textAlign='right'
+                  prefix='$ '
+                  fontWeight='bold'
+                  color='primary'
+                  value={currentPrice}
+                  decimals={decimals}
+                />
+                <Helper
+                  text={
+                    <BalanceText
+                      ellipsis
+                      textAlign='right'
+                      prefix='$ '
+                      fontWeight='bold'
+                      color='white_black'
+                      value={currentPrice}
+                      decimals={decimals}
+                    />
+                  }
+                  iconWidth='90px'
+                  iconHeight='20px'
+                  onClick={toggling}
+                  placement='top-end'
+                  style={{ cursor: 'auto' }}
+                  color='transparent'
+                />
+              </>
             ) : (
               <Text
-                fontWeight="bold"
-                color="primary"
-                fontSize="18px"
-                textAlign="right"
+                fontWeight='bold'
+                color='primary'
+                fontSize='18px'
+                textAlign='right'
               >
                 --
               </Text>
             )}
             <Flex>
               {Number(coinInfo?.price_change_percentage_24h) >= 0 ? (
-                <Text color="upPrice" fontSize="14px" textAlign="right">
+                <Text color='upPrice' fontSize='14px' textAlign='right'>
                   +{coinInfo?.price_change_percentage_24h}%
                 </Text>
               ) : (
-                <Text color="downPrice" fontSize="14px" textAlign="right">
+                <Text color='downPrice' fontSize='14px' textAlign='right'>
                   {coinInfo?.price_change_percentage_24h}%
                 </Text>
               )}
@@ -152,13 +185,13 @@ const CoinItem: React.FC<CoinItemProps> = ({
                     onRefresh(coinInfo);
                   }}
                   style={{ cursor: 'pointer' }}
-                  ml="4px"
-                  color="primary"
-                  width="16px"
+                  ml='4px'
+                  color='primary'
+                  width='16px'
                 />
               )}
             </Flex>
-          </Box>
+          </PriceBox>
         )}
       </Flex>
     </CoinItemStyled>

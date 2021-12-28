@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Flex, Button, Box } from 'uikit';
 export const ModalOperatorWrapper = styled(Box)`
-  width: 300px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

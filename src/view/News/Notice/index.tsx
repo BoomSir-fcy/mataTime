@@ -9,7 +9,7 @@ import { Api } from 'apis';
 import {
   NoticeWrapper,
   NoticeItemWrapper,
-  NoticeContentWrapper
+  NoticeContentWrapper,
 } from './style';
 
 const SystemAvatar = styled(Box)`
@@ -70,10 +70,11 @@ const NoticeItem: React.FC<{
   const { t, getHTML } = useTranslation();
   const { type } = itemData;
 
+  const ruleUrl = `${window.location.origin}/content-rules/index.html`;
   return (
     <NoticeItemWrapper>
-      <Flex justifyContent="space-between" padding="0 20px 25px 30px">
-        <SystemAvatar mr="12px">
+      <Flex justifyContent='space-between' padding='0 20px 25px 30px'>
+        <SystemAvatar mr='12px'>
           <Image
             src={require('assets/images/system_logo.svg').default}
             width={60}
@@ -81,24 +82,30 @@ const NoticeItem: React.FC<{
           />
         </SystemAvatar>
         <Content>
-          <Text color="white_black" fontWeight="bold" fontSize="18px">
+          <Text color='white_black' fontWeight='bold' fontSize='18px'>
             {t('systemInformation')}
           </Text>
-          <Text color="textTips" fontSize="14px" mt="10px" mb="15px">
-            {dayjs(itemData.add_time).format(t('HH:mm:ss'))}
+          <Text color='textTips' fontSize='14px' mt='10px' mb='15px'>
+            {dayjs(itemData.add_time).format(t('MM-DD HH:mm'))}
           </Text>
-          <Text color="textTips">
+          <Text color='textTips'>
             {type === 6 &&
               getHTML('settingNotificationText1', {
-                value: `<a href="#">${t('latformReviewRules')}</a>`
+                value: `<a href="${ruleUrl}" target="_blank">${t(
+                  'latformReviewRules',
+                )}</a>`,
               })}
             {type === 7 &&
               getHTML('settingNotificationText2', {
-                value: `<a href="#">${t('latformReviewRules')}</a>`
+                value: `<a href="${ruleUrl}" target="_blank">${t(
+                  'latformReviewRules',
+                )}</a>`,
               })}
             {type === 8 &&
               getHTML('settingNotificationText3', {
-                value: `<a href="#">${t('latformReviewRules')}</a>`
+                value: `<a href="${ruleUrl}" target="_blank">${t(
+                  'latformReviewRules',
+                )}</a>`,
               })}
           </Text>
         </Content>
@@ -110,7 +117,7 @@ const NoticeItem: React.FC<{
             avatar={itemData?.post?.nft_image}
             address={itemData?.post?.user_address}
           />
-          <Box mt="14px">
+          <Box mt='14px'>
             <ContentParsing content={itemData?.post?.content} />
           </Box>
         </PostContent>

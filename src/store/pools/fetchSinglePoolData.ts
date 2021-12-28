@@ -1,5 +1,5 @@
-import multicall from 'utils/multicall'
-import { getOracleAddress, getSinglePool } from 'utils/addressHelpers'
+import multicall, { multicallv2 } from 'utils/multicall'
+import { getOracleAddress, getSinglePool, getDsgAddress, getTimeAddress } from 'utils/addressHelpers'
 import { BIG_TEN } from 'utils/bigNumber'
 import uniq from 'lodash/uniq'
 import MutiRewardPoolABI from 'config/abi/MutiRewardPool.json'
@@ -76,11 +76,43 @@ export const fetchPoolTokensPrice = async (poolsData: SinglePoolData[]) => {
       return { address: oracleAddress, name: 'getCurrentPrice', params: [address] }
     })
 
-    const currentPrice0 = await multicall(oracleABI, calls0)
+    const currentPrice0 = await multicallv2(oracleABI, calls0, { requireSuccess: false })
+
+    const dsgToken = tokensUniq.find(item => item.toLowerCase() === getDsgAddress().toLowerCase())
+    const dsgTokenPrice = currentPrice0[tokensUniq.indexOf(dsgToken)]?.price?.toString() || '0'
+
+    const timeToken = tokensUniq.find(item => item.toLowerCase() === getTimeAddress().toLowerCase())
+    const timeTokenPrice = currentPrice0[tokensUniq.indexOf(timeToken)]?.price?.toString() || new BigNumber(dsgTokenPrice).times(0.000000005)
+
     return poolsData.map(pool => {
-      const depositTokenPrice = new BigNumber(currentPrice0[tokensUniq.indexOf(pool.depositToken)]?.price).div(BIG_TEN.pow(ORACLE_DECIMALS)).toString()
-      const rewardToken0Price = new BigNumber(currentPrice0[tokensUniq.indexOf(pool.rewardToken0)]?.price).div(BIG_TEN.pow(ORACLE_DECIMALS)).toString()
-      const rewardToken1Price = new BigNumber(currentPrice0[tokensUniq.indexOf(pool.rewardToken1)]?.price).div(BIG_TEN.pow(ORACLE_DECIMALS)).toString()
+      let depositTokenPrice = '0'
+      if (currentPrice0[tokensUniq.indexOf(pool.depositToken)]?.price) {
+        depositTokenPrice = currentPrice0[tokensUniq.indexOf(pool.depositToken)]?.price?.toString() || '0'
+      } else if (pool.depositToken === dsgToken) {
+        depositTokenPrice = dsgTokenPrice
+      } else if (pool.depositToken === timeToken) {
+        depositTokenPrice = timeTokenPrice
+      }
+      let rewardToken0Price = '0'
+      if (currentPrice0[tokensUniq.indexOf(pool.rewardToken0)]?.price) {
+        rewardToken0Price = currentPrice0[tokensUniq.indexOf(pool.rewardToken0)]?.price?.toString() || '0'
+      } else if (pool.rewardToken0 === dsgToken) {
+        rewardToken0Price = dsgTokenPrice
+      } else if (pool.rewardToken0 === timeToken) {
+        rewardToken0Price = timeTokenPrice
+      }
+      let rewardToken1Price = '0'
+      if (currentPrice0[tokensUniq.indexOf(pool.rewardToken1)]?.price) {
+        rewardToken1Price = currentPrice0[tokensUniq.indexOf(pool.rewardToken1)]?.price?.toString() || '0'
+      } else if (pool.rewardToken1 === dsgToken) {
+        rewardToken1Price = dsgTokenPrice
+      } else if (pool.rewardToken1 === timeToken) {
+        rewardToken1Price = timeTokenPrice
+      }
+      depositTokenPrice = new BigNumber(depositTokenPrice).div(BIG_TEN.pow(ORACLE_DECIMALS)).toString()
+      rewardToken0Price = new BigNumber(rewardToken0Price).div(BIG_TEN.pow(ORACLE_DECIMALS)).toString()
+      rewardToken1Price = new BigNumber(rewardToken1Price).div(BIG_TEN.pow(ORACLE_DECIMALS)).toString()
+      
       const totalLiquidity = new BigNumber(depositTokenPrice).times(pool.totalAmount).div(BIG_TEN.pow(pool.depositDecimals)).toString()
       return {
         ...pool,
@@ -91,18 +123,16 @@ export const fetchPoolTokensPrice = async (poolsData: SinglePoolData[]) => {
       }
     })
   } catch (error) {
-    console.error(error)
-    // TODO: 更改代币价值
-    // return poolsData
-    return poolsData.map(pool => {
-      return {
-        ...pool,
-        depositTokenPrice: '1',
-        rewardToken0Price: '1',
-        rewardToken1Price: '1',
-        totalLiquidity: new BigNumber(1).times(pool.totalAmount).div(BIG_TEN.pow(pool.depositDecimals)).toString()
-      }
-    })
+    return poolsData
+    // return poolsData.map(pool => {
+    //   return {
+    //     ...pool,
+    //     depositTokenPrice: '0',
+    //     rewardToken0Price: '0',
+    //     rewardToken1Price: '0',
+    //     totalLiquidity: new BigNumber(1).times(pool.totalAmount).div(BIG_TEN.pow(pool.depositDecimals)).toString()
+    //   }
+    // })
   }
 }
 

@@ -44,6 +44,12 @@ const NameText = styled(Text)`
   max-width: 100%;
   width: max-content;
 `;
+const NameFlex = styled(Flex)`
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+  }
+`;
 const Follow = React.memo(() => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
@@ -51,7 +57,7 @@ const Follow = React.memo(() => {
     cancelParams: {
       uid: 0,
       address: '',
-      nft_image: ''
+      nft_image: '',
     },
     hoverIndex: 0,
     hoverStatus: false,
@@ -59,7 +65,7 @@ const Follow = React.memo(() => {
     page: 1,
     total: 0,
     totalPage: 1,
-    list: []
+    list: [],
   });
   const { loading, page, totalPage, list } = state;
 
@@ -107,7 +113,7 @@ const Follow = React.memo(() => {
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res)) {
         getFollowList(1);
-        toast.success(t('commonMsgFollowError') || res.data);
+        // toast.success(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -165,15 +171,17 @@ const Follow = React.memo(() => {
                 >
                   <Avatar uid={item.uid} src={item.nft_image} scale='md' />
                   <Column>
-                    <Flex flexWrap='wrap'>
+                    <NameFlex>
                       <NameText ellipsis color='white_black' mr='13px'>
                         {item.nick_name}
                       </NameText>
                       <Text color='textTips'>
                         @{shortenAddress(item.address)}
                       </Text>
-                    </Flex>
-                    <WrapText color='textTips'>{item.introduction}</WrapText>
+                    </NameFlex>
+                    <WrapText small color='textTips' ellipsis>
+                      {item.introduction}
+                    </WrapText>
                   </Column>
                 </Flex>
                 {item.attention_status === 0 ? (

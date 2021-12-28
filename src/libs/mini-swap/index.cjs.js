@@ -191,7 +191,7 @@ var translations = {
 	"Total %asset% Supply": "Total %asset% Supply",
 	Locked: Locked$1,
 	"Total Liquidity": "Total Liquidity",
-	"View on PolygonScan": "View on PolygonScan",
+	"View on BscScan": "View on BscScan",
 	Finished: Finished$1,
 	"Project site": "Project site",
 	"Project Site": "Project Site",
@@ -569,7 +569,7 @@ var translationsZhCN = {
 	"Total %asset% Supply": "%asset% 总供应量",
 	Locked: Locked,
 	"Total Liquidity": "总流动性",
-	"View on PolygonScan": "在 PolygonScan 上查看",
+	"View on BscScan": "在 BscScan 上查看",
 	Finished: Finished,
 	"Project site": "项目网站",
 	"Project Site": "Project Site",
@@ -7581,14 +7581,14 @@ function queryParametersToSwapState(parsedQs) {
         _a;
 }
 // updates the swap state to use the defaults for a given network
-function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
+function useDefaultsFromURLSearch(outputCurrency, inputCurrency) {
     var chainId = useActiveWeb3React().chainId;
     var dispatch = reactRedux.useDispatch();
     var _a = tslib.__read(React.useState(), 2), result = _a[0], setResult = _a[1];
     React.useEffect(function () {
         if (!chainId)
             return;
-        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrencyId: inputCurrencyId });
+        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrency: inputCurrency });
         dispatch(replaceSwapState({
             typedValue: parsed.typedValue,
             field: parsed.independentField,
@@ -7598,7 +7598,7 @@ function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
         }));
         setResult({ inputCurrencyId: parsed[Field$2.INPUT].currencyId, outputCurrencyId: parsed[Field$2.OUTPUT].currencyId });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, chainId, outputCurrency, inputCurrencyId]);
+    }, [dispatch, chainId, outputCurrency, inputCurrency]);
     return result;
 }
 function useSwapCurrencies() {
@@ -8821,7 +8821,7 @@ var styleVariants$2 = (_b$3 = {},
         color: 'backgroundAlt'
     },
     _b$3[variants$5.DANGER] = {
-        // backgroundColor: "failure",
+        backgroundColor: "failure",
         // color: "white",
         color: 'white',
         backgroundRepeat: 'no-repeat',
@@ -11132,7 +11132,7 @@ function Updater() {
                         },
                     }));
                     var toast = receipt.status === 1 ? toastSuccess : toastError;
-                    toast(t("Transaction receipt"), jsxRuntime.jsxs(Flex, tslib.__assign({ flexDirection: "column" }, { children: [jsxRuntime.jsx(Text, { children: (_b = (_a = transactions[hash]) === null || _a === void 0 ? void 0 : _a.summary) !== null && _b !== void 0 ? _b : "Hash: " + hash.slice(0, 8) + "..." + hash.slice(58, 65) }, void 0), chainId && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t("View on PolygonScan") }), void 0))] }), void 0));
+                    toast(t("Transaction receipt"), jsxRuntime.jsxs(Flex, tslib.__assign({ flexDirection: "column" }, { children: [jsxRuntime.jsx(Text, { children: (_b = (_a = transactions[hash]) === null || _a === void 0 ? void 0 : _a.summary) !== null && _b !== void 0 ? _b : "Hash: " + hash.slice(0, 8) + "..." + hash.slice(58, 65) }, void 0), chainId && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t("View on BscScan") }), void 0))] }), void 0));
                 }
                 else {
                     dispatch(checkedTransaction({ chainId: chainId, hash: hash, blockNumber: lastBlockNumber }));
@@ -11422,7 +11422,7 @@ function AddressInputPanel(_a) {
         onChange(withoutSpaces);
     }, [onChange]);
     var error = Boolean(value.length > 0 && !loading && !address);
-    return (jsxRuntime.jsx(InputPanel$1, tslib.__assign({ id: id }, { children: jsxRuntime.jsx(ContainerRow, tslib.__assign({ error: error }, { children: jsxRuntime.jsx(InputContainer, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, { children: t('Recipient') }, void 0), address && chainId && (jsxRuntime.jsxs(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(name !== null && name !== void 0 ? name : address, 'address', chainId) }, { children: ["(", t('View on PolygonScan'), ")"] }), void 0))] }, void 0), jsxRuntime.jsx(Input$1, { className: "recipient-address-input", type: "text", autoComplete: "off", autoCorrect: "off", autoCapitalize: "off", spellCheck: "false", placeholder: t('Wallet Address or ENS name'), error: error, pattern: "^(0x[a-fA-F0-9]{40})$", onChange: handleInput, value: value }, void 0)] }), void 0) }, void 0) }), void 0) }), void 0));
+    return (jsxRuntime.jsx(InputPanel$1, tslib.__assign({ id: id }, { children: jsxRuntime.jsx(ContainerRow, tslib.__assign({ error: error }, { children: jsxRuntime.jsx(InputContainer, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, { children: t('Recipient') }, void 0), address && chainId && (jsxRuntime.jsxs(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(name !== null && name !== void 0 ? name : address, 'address', chainId) }, { children: ["(", t('View on BscScan'), ")"] }), void 0))] }, void 0), jsxRuntime.jsx(Input$1, { className: "recipient-address-input", type: "text", autoComplete: "off", autoCorrect: "off", autoCapitalize: "off", spellCheck: "false", placeholder: t('Wallet Address or ENS name'), error: error, pattern: "^(0x[a-fA-F0-9]{40})$", onChange: handleInput, value: value }, void 0)] }), void 0) }, void 0) }), void 0) }), void 0));
 }
 var templateObject_1$n, templateObject_2$f, templateObject_3$9, templateObject_4$4;
 
@@ -11507,7 +11507,7 @@ function TransactionSubmittedContent(_a) {
     var library = useActiveWeb3React().library;
     var t = useTranslation().t;
     var token = wrappedCurrency(currencyToAdd, chainId);
-    return (jsxRuntime.jsx(Wrapper$4, { children: jsxRuntime.jsxs(Section, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Icon$c, { strokeWidth: 0.5, width: "90px", color: "primary" }, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Transaction Submitted') }), void 0), chainId && hash && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t('View on PolygonScan') }), void 0)), currencyToAdd && ((_b = library === null || library === void 0 ? void 0 : library.provider) === null || _b === void 0 ? void 0 : _b.isMetaMask) && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", mt: "12px", width: "fit-content", onClick: function () { return registerToken(token.address, token.symbol, token.decimals); } }, { children: jsxRuntime.jsxs(RowFixed, { children: [t('Add %asset% to Metamask', { asset: currencyToAdd.symbol }), jsxRuntime.jsx(Icon$3, { width: "16px", ml: "6px" }, void 0)] }, void 0) }), void 0)), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss, mt: "20px" }, { children: t('Close') }), void 0)] }), void 0)] }, void 0) }, void 0));
+    return (jsxRuntime.jsx(Wrapper$4, { children: jsxRuntime.jsxs(Section, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Icon$c, { strokeWidth: 0.5, width: "90px", color: "primary" }, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Transaction Submitted') }), void 0), chainId && hash && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t('View on BscScan') }), void 0)), currencyToAdd && ((_b = library === null || library === void 0 ? void 0 : library.provider) === null || _b === void 0 ? void 0 : _b.isMetaMask) && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", mt: "12px", width: "fit-content", onClick: function () { return registerToken(token.address, token.symbol, token.decimals); } }, { children: jsxRuntime.jsxs(RowFixed, { children: [t('Add %asset% to Metamask', { asset: currencyToAdd.symbol }), jsxRuntime.jsx(Icon$3, { width: "16px", ml: "6px" }, void 0)] }, void 0) }), void 0)), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss, mt: "20px" }, { children: t('Close') }), void 0)] }), void 0)] }, void 0) }, void 0));
 }
 function ConfirmationModalContent(_a) {
     var bottomContent = _a.bottomContent, topContent = _a.topContent;
@@ -12055,14 +12055,14 @@ function ImportToken(_a) {
     var inactiveTokenList = useCombinedInactiveList();
     return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "lg" }, { children: [jsxRuntime.jsx(Message, tslib.__assign({ variant: "warning" }, { children: jsxRuntime.jsxs(Text, { children: [t('Anyone can create a %token% token on %chain% with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.', {
                             token: 'ERC20',
-                            chain: 'Polygon'
+                            chain: 'BscScan'
                         }), jsxRuntime.jsx("br", {}, void 0), jsxRuntime.jsx("br", {}, void 0), t('If you purchase an arbitrary token, you may be unable to sell it back.')] }, void 0) }), void 0), tokens.map(function (token) {
                 var _a, _b;
                 var list = chainId && ((_b = (_a = inactiveTokenList === null || inactiveTokenList === void 0 ? void 0 : inactiveTokenList[chainId]) === null || _a === void 0 ? void 0 : _a[token.address]) === null || _b === void 0 ? void 0 : _b.list);
                 var address = token.address
                     ? token.address.substring(0, 6) + "..." + token.address.substring(token.address.length - 4)
                     : null;
-                return (jsxRuntime.jsxs(Grid, tslib.__assign({ gridTemplateRows: "1fr 1fr 1fr", gridGap: "4px" }, { children: [list !== undefined ? (jsxRuntime.jsxs(Tag, tslib.__assign({ variant: "success", outline: true, scale: "sm", startIcon: list.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: list.logoURI, size: "12px" }, void 0) }, { children: [t('via'), " ", list.name] }), void 0)) : (jsxRuntime.jsx(Tag, tslib.__assign({ variant: "failure", outline: true, scale: "sm", startIcon: jsxRuntime.jsx(Icon$f, { color: "failure" }, void 0) }, { children: t('Unknown Source') }), void 0)), jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "8px" }, { children: token.name }), void 0), jsxRuntime.jsxs(Text, { children: ["(", token.symbol, ")"] }, void 0)] }), void 0), chainId && (jsxRuntime.jsxs(Flex, tslib.__assign({ justifyContent: "space-between", width: "100%" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "4px" }, { children: address }), void 0), jsxRuntime.jsxs(Link, tslib.__assign({ href: getBscScanLink(token.address, 'address', chainId), external: true }, { children: ["(", t('View on PolygonScan'), ")"] }), void 0)] }), void 0))] }), token.address));
+                return (jsxRuntime.jsxs(Grid, tslib.__assign({ gridTemplateRows: "1fr 1fr 1fr", gridGap: "4px" }, { children: [list !== undefined ? (jsxRuntime.jsxs(Tag, tslib.__assign({ variant: "success", outline: true, scale: "sm", startIcon: list.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: list.logoURI, size: "12px" }, void 0) }, { children: [t('via'), " ", list.name] }), void 0)) : (jsxRuntime.jsx(Tag, tslib.__assign({ variant: "failure", outline: true, scale: "sm", startIcon: jsxRuntime.jsx(Icon$f, { color: "failure" }, void 0) }, { children: t('Unknown Source') }), void 0)), jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "8px" }, { children: token.name }), void 0), jsxRuntime.jsxs(Text, { children: ["(", token.symbol, ")"] }, void 0)] }), void 0), chainId && (jsxRuntime.jsxs(Flex, tslib.__assign({ justifyContent: "space-between", width: "100%" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "4px" }, { children: address }), void 0), jsxRuntime.jsxs(Link, tslib.__assign({ href: getBscScanLink(token.address, 'address', chainId), external: true }, { children: ["(", t('View on BscScan'), ")"] }), void 0)] }), void 0))] }), token.address));
             }), jsxRuntime.jsxs(Flex, tslib.__assign({ justifyContent: "space-between", alignItems: "center" }, { children: [jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center", onClick: function () { return setConfirmed(!confirmed); } }, { children: [jsxRuntime.jsx(Checkbox, { scale: "sm", name: "confirmed", type: "checkbox", checked: confirmed, onChange: function () { return setConfirmed(!confirmed); } }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ ml: "8px", style: { userSelect: 'none' } }, { children: t('I understand') }), void 0)] }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "danger", disabled: !confirmed, onClick: function () {
                             tokens.map(function (token) { return addToken(token); });
                             if (handleCurrencySelect) {

@@ -3,11 +3,12 @@ import debounce from 'lodash/debounce'
 import useDebounce from 'hooks/useDebounce'
 import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
 import useIm from './useIm'
+import useInterval from '../useInterval'
 
 // 视图范围优化
 const VIEW_PADDING = {
-  top: 200, // 忽略顶部200px的内容
-  bottom: 200 // 忽略底部200px的内容
+  top: 100, // 忽略顶部100px的内容
+  bottom: 100 // 忽略底部100px的内容
 };
 
 /**
@@ -15,11 +16,8 @@ const VIEW_PADDING = {
  *  
  */
 const useReadArticle = (nonce?: number | boolean) => {
-  const { im, articleIds, articlePositions, rendered, setArticleIds } = useIm()
+  const { im, articleIds, articlePositions, setArticleIds } = useIm()
   const timeStep = 1 // 推送时间间隔
-  const [initLoad, setInitLoad] = useState(false)
-  const [nowTime, setNowTime] = useState(0)
-  const [fetchReadTime, setFetchReadTime] = useState(0)
   const isBrowserTabActiveRef = useIsBrowserTabActive()
 
   const fetchHandle = useCallback(() => {
@@ -27,24 +25,21 @@ const useReadArticle = (nonce?: number | boolean) => {
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
         im?.send(im.messageProtocol.WSProtocol_Spend_Time, {
-          commit_time: fetchReadTime, // 提交时间
+          commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
           read_type: Number(type), // 文章阅读
           read_uid: articleIds[type], // id数组 推文或者评论的
           time_step: timeStep, // 推送时间间隔
-        })
+        }, true)
       }
     })
-  }, [articleIds, fetchReadTime, isBrowserTabActiveRef])
+  }, [articleIds, isBrowserTabActiveRef, im])
 
-  useEffect(() => {
-    if (nowTime === fetchReadTime) return
-    setFetchReadTime(nowTime)
-    fetchHandle()
-  }, [nowTime, articleIds, fetchReadTime, fetchHandle])
+  useInterval(fetchHandle, isBrowserTabActiveRef.current ? timeStep * 1000 : null)
 
+  const articlePositionsVal = useDebounce(articlePositions, 1000)
 
   const handleScroll = useCallback(() => {
-    if (!Object.keys(articlePositions).length) {
+    if (!Object.keys(articlePositionsVal).length) {
       setArticleIds({})
       return
     } // 页面刷新的时候可能会触发onScroll 事件, 排除这种情况
@@ -52,8 +47,8 @@ const useReadArticle = (nonce?: number | boolean) => {
     const top = window.scrollY + VIEW_PADDING.top
     const bottom = top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom
     const topViews = {}
-    Object.keys(articlePositions).forEach(item => {
-      const { offsetTop, offsetBottom, readType, articleId } = articlePositions[item]
+    Object.keys(articlePositionsVal).forEach(item => {
+      const { offsetTop, offsetBottom, readType, articleId } = articlePositionsVal[item]
       // 碰撞检测
       /**
        * @dev 碰撞检测
@@ -77,7 +72,7 @@ const useReadArticle = (nonce?: number | boolean) => {
       }
     })
     setArticleIds(topViews)
-  }, [articlePositions, setArticleIds])
+  }, [articlePositionsVal, setArticleIds])
 
   const debouncedOnChange = useMemo(
     () => debounce(() => handleScroll(), 300),
@@ -91,14 +86,10 @@ const useReadArticle = (nonce?: number | boolean) => {
   }, [handleScroll, flagDebounce])
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setNowTime(Math.floor(new Date().getTime() / 1000 / timeStep))
-    }, 1000);
     if (im) {
       im.removeSuspendTpl(im.messageProtocol.WSProtocol_Spend_Time)
     }
     return () => {
-      clearInterval(timer)
       setArticleIds({})
     }
   }, [])

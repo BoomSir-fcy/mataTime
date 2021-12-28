@@ -39,7 +39,7 @@ declare namespace Api {
       comment_num: 0;
       content: '';
       fid: 0;
-      id: 245102;
+      id: 0;
       image_list: [];
       image_urls: '[]';
       is_attention: 0;
@@ -60,6 +60,8 @@ declare namespace Api {
       user_name: '0x1da407adfcf7266585';
       video_url: '';
       send_name?: string;
+      post_id?: 0;
+      reward_id?: 0;
     }
     interface postData extends Api.Error {
       data: {

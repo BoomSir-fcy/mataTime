@@ -10,6 +10,7 @@ import NavFooter from './NavFooter';
 import { Panel } from './styled'
 import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from "./config";
 import { ProfileMenu } from './ProfileMenu';
+import { useStore } from 'store';
 
 const MenuContener = styled(Flex) <{ isMobile: boolean }>`
   height: 100vh;
@@ -50,12 +51,14 @@ const MenuNav: React.FC<MenuNavProps> = ({ }) => {
   const { t } = useTranslation();
   const { isPushed, setIsPushed, isMobile } = useMenuNav()
 
+  const currentUid = useStore(p => p.loginReducer.userInfo);
+
   return (
     <MenuContener isMobile={isMobile}>
       <Panel isMobile={isMobile} isPushed={isPushed} showMenu>
         <Flex flex="1" flexDirection="column">
           <Logo />
-          <UserBox  as={Link} to="/me">
+          <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
             <ProfileMenu />
           </UserBox>
           <Nav />

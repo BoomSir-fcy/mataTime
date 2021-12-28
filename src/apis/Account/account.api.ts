@@ -16,6 +16,12 @@ export class AccountApi extends Http {
     return res;
   }
 
+  // 最小提币数量
+  async getMinimum() {
+    const res = await this.get('/v1/wallet/get_withdraw_minimum');
+    return res;
+  }
+
   async TimeIncomerecord(params?: Api.Account.TimeIncomerecord) {
     const res = await this.get('/v1/wallet/incomerecord', params);
     return res;
@@ -52,15 +58,17 @@ export class AccountApi extends Http {
     if (Http.checkSuccess(res)) {
       return res.data;
     }
-    return null
+    return null;
   }
 
   // 平均消耗
   async getWalletAverageburntime() {
-    const res: Api.Response<string> = await this.get('v1/wallet/averageburntime');
+    const res: Api.Response<string> = await this.get(
+      'v1/wallet/averageburntime',
+    );
     if (Http.checkSuccess(res)) {
       return res.data;
     }
-    return null
+    return null;
   }
 }

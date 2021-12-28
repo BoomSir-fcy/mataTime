@@ -65,10 +65,10 @@ export const Upload: React.FC<upload> = ({ multiple, uploadSuccess }) => {
           imageInput.current.value = '';
           const res = await Api.CommonApi.uploadImg({
             base64: file.result,
-            dir_name: 'common'
+            dir_name: 'common',
           });
           if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
-          uploadSuccess(res.data.full_path);
+          uploadSuccess(res?.data?.full_path);
         };
       }
     }

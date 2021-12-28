@@ -21,8 +21,8 @@ export const RewardAuthorContract = () => {
       {
         address: RewardAuthorAddress,
         name: 'getSupportTokenViews',
-        params: []
-      }
+        params: [],
+      },
     ];
     try {
       const tokenView = await multicall(rewardAuthorAbi, calls);
@@ -38,7 +38,7 @@ export const RewardAuthorContract = () => {
     const calls = tokens.map(address => ({
       address: address,
       name: 'allowance',
-      params: [account, RewardAuthorAddress]
+      params: [account, RewardAuthorAddress],
     }));
     try {
       const index = tokens.findIndex(address => getBnbAddress() === address);
@@ -63,15 +63,20 @@ export const RewardAuthorContract = () => {
           postType,
           postId,
           amount,
-          bool
+          bool,
         );
         return res;
       } catch (error: any) {
-        console.error(error);
-        return error?.code || false;
+        const messgae = error?.data?.message;
+        const code =
+          messgae &&
+          messgae?.indexOf('transfer amount exceeds balance') !== '-1'
+            ? 400001
+            : error?.code;
+        return code || false;
       }
     },
-    [masterChefContract]
+    [masterChefContract],
   );
 
   return { getTokens, approve, rewardUsers };
@@ -86,7 +91,7 @@ export const OnApprove = address => {
     try {
       const tx = await coinContract.approve(
         RewardAuthorAddress,
-        ethers.constants.MaxUint256
+        ethers.constants.MaxUint256,
       );
       const receipt = await tx.wait();
       return receipt.status;
@@ -106,7 +111,7 @@ export const GetCoinPrice = () => {
         return res.data;
       }
       return {};
-    } catch (error) { }
+    } catch (error) {}
   }, []);
 
   return { getPrice };
@@ -120,8 +125,17 @@ export const GetPostRewardAuthor = () => {
         return res.data;
       }
       return {};
-    } catch (error) { }
+    } catch (error) {}
   }, []);
 
-  return { getInfo };
+  const isReward = useCallback(async (id: string) => {
+    try {
+      const res = await Api.HomeApi.articleFindById({ id });
+      return res;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }, []);
+
+  return { getInfo, isReward };
 };

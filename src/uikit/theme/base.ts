@@ -168,24 +168,31 @@ const mediaMarginRightMd = `
   }
 `;
 
+// xxs: 369,
+// xs: 370,
+// sm: 576,
+// md: 768,
+// lg: 968,
+// xl: 1280,
+// xxl: 1600
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
-    padding: 8px 4px;
+    padding: 4px 4px;
   }
-  ${mediaQueries.xl} {
-    padding: 16px 8px;
-  }
-
   ${mediaQueries.xs} {
-    padding: 16px 8px;
+    padding: 8px 8px;
   }
 
   ${mediaQueries.sm} {
-    padding: 16px 16px;
+    padding: 8px 16px;
   }
 
   ${mediaQueries.lg} {
     padding: 20px 25px;
+  }
+
+  ${mediaQueries.xl} {
+    padding: 16px 8px;
   }
 `;
 

@@ -9,6 +9,13 @@ const Content = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 10px;
 `;
+
+const CountBox = styled(Box)`
+  width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 410px;
+  }
+`;
 const InviteModal: React.FC<{
   type?: number;
   visible?: boolean;
@@ -23,26 +30,28 @@ const InviteModal: React.FC<{
       visible={visible}
       setVisible={setVisible}
     >
-      <Flex maxWidth='410px' flexDirection='column'>
-        <Content>
-          {type === 1 ? (
-            <>
-              <Text mb='20px'> {t('InviteTips1')}</Text>
-              <Text> {t('InviteTips2')}</Text>
-            </>
-          ) : (
-            <Text mb='20px'>{t('SpecialInviteTips1')}</Text>
+      <CountBox>
+        <Flex flexDirection='column'>
+          <Content>
+            {type === 1 ? (
+              <>
+                <Text mb='20px'> {t('InviteTips1')}</Text>
+                <Text> {t('InviteTips2')}</Text>
+              </>
+            ) : (
+              <Text mb='20px'>{t('SpecialInviteTips1')}</Text>
+            )}
+          </Content>
+          {type === 2 && (
+            <Text mb='20px' color='textOrigin' small>
+              {t('SpecialInviteTips2')}
+            </Text>
           )}
-        </Content>
-        {type === 2 && (
-          <Text mb='20px' color='textOrigin' small>
-            {t('SpecialInviteTips2')}
-          </Text>
-        )}
-        <Button margin='0 auto' width='50%' onClick={onCopyLink}>
-          {t('Copy Link')}
-        </Button>
-      </Flex>
+          <Button margin='0 auto' width='50%' onClick={onCopyLink}>
+            {t('Copy Link')}
+          </Button>
+        </Flex>
+      </CountBox>
     </ModalWrapper>
   );
 });

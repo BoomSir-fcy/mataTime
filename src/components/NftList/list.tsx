@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Box, Text, Flex, Button } from 'uikit';
+import { Box, Text, Flex, Button, Link } from 'uikit';
 import { Avatar } from 'components';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -10,6 +10,7 @@ import { fetchUserNftInfoAsync } from 'store/login/reducer';
 import { toast } from 'react-toastify';
 import { useWeb3React } from '@web3-react/core';
 import { storeAction } from 'store';
+import { GET_DSG_NFT_URL } from 'config';
 
 import { NftButton } from './approve';
 
@@ -96,8 +97,8 @@ const NftItem = {
     power: 0,
     res: '',
     token: '',
-    token_id: ''
-  }
+    token_id: '',
+  },
 };
 
 interface Nft {
@@ -120,7 +121,11 @@ const NftAvatar: React.FC<{
       {Nodata ? (
         <NodataDom>
           <Text mb='15px'>{t('setNftAvatarGetMore')}</Text>
-          <Button>{t('loginGetNft')}</Button>
+          <Button>
+            <Link external href={GET_DSG_NFT_URL}>
+              {t('loginGetNft')}
+            </Link>
+          </Button>
         </NodataDom>
       ) : (
         <>
@@ -152,7 +157,7 @@ const NftAvatar: React.FC<{
                       onClick={() => {
                         if (!NftInfo.needApprove) {
                           dispatch(
-                            storeAction.setUserNftStake({ isStakeNft: true })
+                            storeAction.setUserNftStake({ isStakeNft: true }),
                           );
                           dispatch(storeAction.setUserNft(item));
                         }
@@ -165,7 +170,7 @@ const NftAvatar: React.FC<{
                 </Column>
               ) : (
                 <></>
-              )
+              ),
             )}
           </GetAuthorize>
         </>

@@ -117,7 +117,7 @@ const SignInBox = () => {
   const history = useHistory();
   const { logout, login } = useAuth();
   const { toastError } = useToast();
-  const redict = location?.state?.from?.pathname;
+  const redict = (location?.state as any)?.from?.pathname;
   const [Pending, setPending] = useState(false)
 
   const signIn = async () => {
@@ -162,7 +162,7 @@ const SignInBox = () => {
     </React.Fragment>
   );
 };
-const Login: React.FC = React.memo((route: RouteComponentProps) => {
+const Login: React.FC<RouteComponentProps> = React.memo((route) => {
   useFetchSupportNFT();
   useFetchNftList();
 
@@ -188,7 +188,6 @@ const Login: React.FC = React.memo((route: RouteComponentProps) => {
   const { getUserName } = useSignIn();
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
-  const redict = location?.state?.from?.pathname;
   // const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 选择链

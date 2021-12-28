@@ -39,15 +39,15 @@ export const Follow = React.forwardRef((props, ref) => {
     cancelParams: {
       uid: 0,
       address: '',
-      nft_image: ''
-    }
+      nft_image: '',
+    },
   });
   const { list } = state;
 
   React.useImperativeHandle(ref, () => ({
     reload() {
       return getManList();
-    }
+    },
   }));
 
   const getManList = async () => {
@@ -103,7 +103,7 @@ export const Follow = React.forwardRef((props, ref) => {
       const res = await Api.MeApi.unFollowUser(item.uid);
       if (Api.isSuccess(res)) {
         getCurrentState();
-        toastSuccess(t('commonMsgFollowError') || res.data);
+        // toastSuccess(t('commonMsgFollowError') || res.data);
       }
     } catch (error) {
       console.error(error);
@@ -115,16 +115,16 @@ export const Follow = React.forwardRef((props, ref) => {
       {state.list.map((row, index: number) => (
         <FolloWarpper key={index}>
           <FollowContent>
-            <Avatar scale="md" src={row.nft_image} />
+            <Avatar disableFollow scale='md' src={row.nft_image} />
             <Flex
-              flexDirection="column"
-              paddingLeft="12px"
+              flexDirection='column'
+              paddingLeft='12px'
               style={{ minWidth: 0 }}
             >
-              <Flex alignItems="center">
+              <Flex alignItems='center'>
                 <Name>{row.nick_name}</Name>
               </Flex>
-              <Text color="textTips">@{shortenAddress(row.address)}</Text>
+              <Text color='textTips'>@{shortenAddress(row.address)}</Text>
             </Flex>
           </FollowContent>
           <FollowButton
