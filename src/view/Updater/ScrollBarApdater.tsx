@@ -30,7 +30,7 @@ export default function ScrollBarApdater() {
       window.scrollTo({
         // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
         behavior: 'auto',
-        top: scrollState[pathname]?.y * 10 || 0,
+        top: scrollState[pathname]?.y || 0,
       });
     }
   }, [pathname, scrollState, oldPath]);
