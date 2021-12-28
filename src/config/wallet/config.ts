@@ -98,7 +98,8 @@ export const walletIcon = {
   TokenPocket: TokenPocket,
   BinanceChain: BinanceChain,
   SafePal: SafePal,
-  Coin98: Coin98
+  Coin98: Coin98,
+  BitKeep: BitKeepIcon,
 }
 
 export default connectors;
