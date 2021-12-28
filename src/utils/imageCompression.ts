@@ -113,7 +113,7 @@ const defaultImg = [
 
 const defaultOption = {
   encoder: 0.9,
-  IMAGE_MAX: 0.2 * 1024 * 1024,
+  IMAGE_MAX: 20 * 1024 * 1024,
   imageTypes: defaultImg
 }
 
