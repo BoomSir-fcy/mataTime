@@ -187,7 +187,9 @@ const Fans = React.memo(() => {
                         @{shortenAddress(item.address)}
                       </Text>
                     </NameFlex>
-                    <WrapText color='textTips'>{item.introduction}</WrapText>
+                    <WrapText small color='textTips' ellipsis>
+                      {item.introduction}
+                    </WrapText>
                   </Column>
                 </Flex>
                 {item.attention_status === 0 ? (
