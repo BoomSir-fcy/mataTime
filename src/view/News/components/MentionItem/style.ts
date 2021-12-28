@@ -36,6 +36,13 @@ export const MentionItemUserWrapper = styled.div`
         .user-name {
           font-size: 18px;
           font-weight: bold;
+          max-width: 210px;
+          ${({ theme }) => theme.mediaQueries.xs} {
+            max-width: 350px;
+          }
+          ${({ theme }) => theme.mediaQueries.sm} {
+            max-width: max-content;
+          }
         }
         .time {
           margin-top: 5px;

@@ -61,19 +61,14 @@ const Test = () => {
   const [value, setValue] = useState({ 1: 23 })
   const hanldeChange = useCallback(() => {
     setValue((vvv) => {
-      console.log(vvv, '===')
       // eslint-disable-next-line no-param-reassign
       vvv[1] = vvv[1] + 1
       return vvv
     })
   }, [value, setValue])
 
-  useEffect(() => {
-    console.log(value, '改变')
-  }, [value])
-
   const hanldeRead = useCallback(() => {
-    console.log(value)
+    console.debug(value)
   }, [value])
 
   return (

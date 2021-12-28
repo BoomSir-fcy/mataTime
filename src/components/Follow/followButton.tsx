@@ -25,10 +25,10 @@ export const FollowButton: React.FC<{
     cancelParams: {
       uid: 0,
       address: '',
-      nft_image: ''
+      nft_image: '',
     },
     hoverIndex: 0,
-    hoverStatus: false
+    hoverStatus: false,
   });
 
   return (
@@ -40,7 +40,7 @@ export const FollowButton: React.FC<{
           {state.hoverStatus ? (
             <Button
               onClick={unFollowFunc}
-              variant="tertiary"
+              variant='tertiary'
               onMouseLeave={() =>
                 setState(p => {
                   p.hoverIndex = 0;
@@ -52,6 +52,7 @@ export const FollowButton: React.FC<{
             </Button>
           ) : (
             <Button
+              onClick={unFollowFunc}
               onMouseEnter={() =>
                 setState(p => {
                   p.hoverStatus = true;
