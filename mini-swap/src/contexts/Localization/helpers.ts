@@ -20,9 +20,10 @@ export const fetchLocale = async (locale) => {
 
 export const getLanguageCodeFromLS = () => {
   try {
-    const codeFromStorage = localStorage.getItem(LS_KEY)
+    // const codeFromStorage = localStorage.getItem(LS_KEY)
 
-    return codeFromStorage || EN.locale
+    // return codeFromStorage || EN.locale
+    return EN.locale
   } catch {
     return EN.locale
   }
