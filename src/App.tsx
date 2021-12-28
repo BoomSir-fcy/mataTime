@@ -139,7 +139,7 @@ function App() {
                 <Route path='/me' component={Me} />
                 <Route path='/set' component={Set} />
                 <Route path='/account' component={Account} />
-                <Route path='/swap' component={Swap} />
+                {/* <Route path='/swap' component={Swap} /> */}
                 {process.env.NODE_ENV === 'development' && (
                   <>
                     <Route path='/faucet-smart' component={FaucetSmart} />
