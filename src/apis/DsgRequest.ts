@@ -1,6 +1,7 @@
 import { request } from './DSGhttp'
 
-const baseURL = 'https://api.dsgmetaverse.com'
+// const baseURL = 'https://api.dsgmetaverse.com'
+const baseURL = process.env.REACT_APP_DSG_API_HOST;
 
 interface QueryParams {
   [elem: string]: any

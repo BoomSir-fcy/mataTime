@@ -25,10 +25,10 @@ const FlexBoxStyle = styled(Flex)`
   width: max-content;
   padding: 0;
   ${({ theme }) => theme.mediaQueries.sm} {
-    width:100%;
+    width: 100%;
     padding: 0 40px;
   }
-`
+`;
 const RoundBox = styled(Box)`
   width: max-content;
   text-align: center;
@@ -38,12 +38,15 @@ const RoundBox = styled(Box)`
   position: relative;
   padding-bottom: 50px;
   min-width: 250px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    min-width: 270px;
+  }
 `;
 
 const ScaleBox = styled(Box)`
   position: absolute;
   bottom: -20px;
-  left: 20px;
+  left: 40px;
   width: max-content;
   img {
     width: 32px;
@@ -82,40 +85,40 @@ export const TimeHeader: React.FC<init> = React.memo(
     return (
       <Card>
         <FlexBoxStyle
-          width="100%"
-          justifyContent="space-around"
-          alignItems="center"
+          width='100%'
+          justifyContent='space-around'
+          alignItems='center'
         >
           <RoundBox>
-            <AnimationRingIcon bgColor active3 active1 isRotate width="8rem">
+            <AnimationRingIcon bgColor active3 active1 isRotate width='8rem'>
               <FaqBox>
-                <WhiteText fontSize="30px" bold>
+                <WhiteText fontSize='30px' bold>
                   Current Round
                 </WhiteText>
-                <WhiteText fontSize="24px">Rate</WhiteText>
+                <WhiteText fontSize='24px'>Rate</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
             <ScaleBox>
-              <Flex alignItems="center">
+              <Flex alignItems='center'>
                 <Box style={{ textAlign: 'right' }}>
-                  <img src="/images/tokens/DSG.svg" alt="" />
-                  <WhiteText fontSize="18px" bold>
+                  <img src='/images/tokens/DSG.svg' alt='' />
+                  <WhiteText fontSize='18px' bold>
                     1 DSG
                   </WhiteText>
                 </Box>
                 <Box style={{ textAlign: 'right' }}>
                   <Placeholder />
-                  <WhiteText textAlign="center" fontSize="18px" bold>
+                  <WhiteText textAlign='center' fontSize='18px' bold>
                     =
                   </WhiteText>
                 </Box>
                 <Box style={{ textAlign: 'left' }}>
-                  <img src="/images/tokens/TIME.svg" alt="" />
-                  <WhiteText fontSize="18px" bold>
+                  <img src='/images/tokens/TIME.svg' alt='' />
+                  <WhiteText fontSize='18px' bold>
                     {formatDisplayApr(
                       new BigNumber(Number(NowTime))
                         .div(Number(NowDsg))
-                        .toNumber()
+                        .toNumber(),
                     )}{' '}
                     TIME
                   </WhiteText>
@@ -124,38 +127,41 @@ export const TimeHeader: React.FC<init> = React.memo(
             </ScaleBox>
           </RoundBox>
           <Arrow>
-            <img src={require('assets/images/myWallet/arrow.png').default} alt="" />
+            <img
+              src={require('assets/images/myWallet/arrow.png').default}
+              alt=''
+            />
           </Arrow>
           <RoundBox>
-            <AnimationRingIcon active2 isRotate width="8rem">
+            <AnimationRingIcon active2 isRotate width='8rem'>
               <FaqBox>
-                <WhiteText fontSize="30px" bold>
+                <WhiteText fontSize='30px' bold>
                   Next Round
                 </WhiteText>
-                <WhiteText fontSize="24px">Rate</WhiteText>
+                <WhiteText fontSize='24px'>Rate</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
-            <ScaleBox style={{ left: '40px' }}>
-              <Flex alignItems="center">
+            <ScaleBox>
+              <Flex alignItems='center'>
                 <Box style={{ textAlign: 'right' }}>
-                  <img src="/images/tokens/DSG.svg" alt="" />
-                  <WhiteText fontSize="18px" bold>
+                  <img src='/images/tokens/DSG.svg' alt='' />
+                  <WhiteText fontSize='18px' bold>
                     1 DSG
                   </WhiteText>
                 </Box>
                 <Box style={{ textAlign: 'right' }}>
                   <Placeholder />
-                  <WhiteText textAlign="center" fontSize="18px" bold>
+                  <WhiteText textAlign='center' fontSize='18px' bold>
                     =
                   </WhiteText>
                 </Box>
                 <Box style={{ textAlign: 'left' }}>
-                  <img src="/images/tokens/TIME.svg" alt="" />
-                  <WhiteText fontSize="18px" bold>
+                  <img src='/images/tokens/TIME.svg' alt='' />
+                  <WhiteText fontSize='18px' bold>
                     {formatDisplayApr(
                       new BigNumber(Number(NextTime))
                         .div(Number(NextDsg))
-                        .toNumber()
+                        .toNumber(),
                     )}{' '}
                     TIME
                   </WhiteText>
@@ -166,5 +172,5 @@ export const TimeHeader: React.FC<init> = React.memo(
         </FlexBoxStyle>
       </Card>
     );
-  }
+  },
 );

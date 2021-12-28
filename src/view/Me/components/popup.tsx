@@ -111,7 +111,7 @@ export const Popup: React.FC<{
             {t('mePopupMenuPrivateLetters')}
           </Button>
           {/* 关注取消 */}
-          <React.Fragment>
+          {/* <React.Fragment>
             {user.is_attention === 1 ? (
               <Button
                 variant='text'
@@ -131,7 +131,7 @@ export const Popup: React.FC<{
                 {t('meFocusOn')}
               </Button>
             )}
-          </React.Fragment>
+          </React.Fragment> */}
           <Button
             variant='text'
             onClick={() => {

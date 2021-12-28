@@ -41,7 +41,7 @@ const transitionStyles = {
   exited: { boxShadow: outShadow },
 };
 
-const Swap: React.FC = () => {
+const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
   const { chainId } = useWeb3React();
   const { t, currentLanguage } = useTranslation();
 
@@ -90,102 +90,110 @@ const Swap: React.FC = () => {
 
   return (
     <SwapBox>
-      <Transition in={inPropCoin} timeout={500}>
+      {!onlySwap && (
+        <Transition in={inPropCoin} timeout={500}>
+          {state => (
+            <CoinMarketCap
+              mb='14px'
+              style={{
+                ...defaultStyle,
+                ...transitionStyles[state],
+              }}
+            />
+          )}
+        </Transition>
+      )}
+      {/* <Transition in={inPropSwap} timeout={500}>
         {state => (
-          <CoinMarketCap
-            mb='14px'
+          <Box
             style={{
               ...defaultStyle,
               ...transitionStyles[state],
             }}
-          />
-        )}
-      </Transition>
-      {/* <Transition in={inPropSwap} timeout={500}>
-        {state =>
-        (<Box
-          style={{
-            ...defaultStyle,
-            ...transitionStyles[state]
-          }}
-        >
-          <MiniSwap
-            titlehelper={t(
-              'When you search for some topics about tokens, the platform will automatically provide token quick swap function, providing one-stop crypto services. Right now Metatime supports mainstream digital tokens, and will continue to access more tokens, please look forward to staking function.t'
-            )}
-            powered={<Flex padding="0 20px 20px">
-              <Text>
-                Powered by &nbsp;
-              </Text>
-              <LinkExternal color="primary" height="24px" fontSize="16px" href="https://dsgmetaverse.com/">
-                DSGmetaverse
-              </LinkExternal>
-            </Flex>}
-            // subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
-            onInputCurrencyChange={handleInputChange}
-            outputCurrencyId={outputCurrencyId}
-            inputCurrencyId={inputCurrencyId}
-            resetTheme={{
-              dark: {
-                colors: {
-                  dropdown: dark.colors.input,
-                  failure: light.colors.failure,
-                  text: dark.colors.white_black,
-                  backgroundDisabled: dark.colors.tertiary,
-                  primary: dark.colors.primary,
-                  success: dark.colors.success,
-                  textSubtle: dark.colors.textTips,
-                  backgroundAlt: dark.colors.backgroundCard,
-                  background: dark.colors.background,
-                  dropdownDeep: dark.colors.backgroundCard,
-                  invertedContrast: dark.colors.backgroundCard
-                },
-                shadows: {
-                  inset: 'none',
-                  box: 'none',
-                  success: ''
-                },
-                modal: {
-                  background: dark.colors.backgroundCard,
-                },
-                card: {
-                  boxShadow: '',
-                  background: dark.colors.backgroundCard
-                },
-                zIndices: {
-                  modal: 9999
-                }
-              },
-              light: {
-                colors: {
-                  dropdown: light.colors.input,
-                  failure: light.colors.failure,
-                  text: light.colors.white_black,
-                  backgroundDisabled: light.colors.tertiary,
-                  primary: light.colors.textPrimary,
-                  textSubtle: light.colors.white_black,
-                  backgroundAlt: light.colors.backgroundAlt,
-                  invertedContrast: light.colors.invertedContrast
-                },
-                shadows: {
-                  inset: 'none',
-                  box: 'none'
-                },
-                card: {
-                  boxShadow: '',
-                  background: light.colors.backgroundCard
-                },
-                zIndices: {
-                  modal: 9999
-                }
+          >
+            <MiniSwap
+              titlehelper={t(
+                'When you search for some topics about tokens, the platform will automatically provide token quick swap function, providing one-stop crypto services. Right now Metatime supports mainstream digital tokens, and will continue to access more tokens, please look forward to staking function.t',
+              )}
+              powered={
+                <Flex padding='0 20px 20px'>
+                  <Text>Powered by &nbsp;</Text>
+                  <LinkExternal
+                    color='primary'
+                    height='24px'
+                    fontSize='16px'
+                    href='https://dsgmetaverse.com/'
+                  >
+                    DSGmetaverse
+                  </LinkExternal>
+                </Flex>
               }
-            }}
-            onConnectWallet={onConnectWallet}
-            chainId={chainId}
-            isDark={isDark}
-            lang={currentLanguage.locale}
-          />
-        </Box>)}
+              // subTitleTips={<Text>推荐自@0x526w.....已自动为您匹配$To ken$</Text>}
+              onInputCurrencyChange={handleInputChange}
+              outputCurrencyId={outputCurrencyId}
+              inputCurrencyId={inputCurrencyId}
+              resetTheme={{
+                dark: {
+                  colors: {
+                    dropdown: dark.colors.input,
+                    failure: light.colors.failure,
+                    text: dark.colors.white_black,
+                    backgroundDisabled: dark.colors.tertiary,
+                    primary: dark.colors.primary,
+                    success: dark.colors.success,
+                    textSubtle: dark.colors.textTips,
+                    backgroundAlt: dark.colors.backgroundCard,
+                    background: dark.colors.background,
+                    dropdownDeep: dark.colors.backgroundCard,
+                    invertedContrast: dark.colors.backgroundCard,
+                  },
+                  shadows: {
+                    inset: 'none',
+                    box: 'none',
+                    success: '',
+                  },
+                  modal: {
+                    background: dark.colors.backgroundCard,
+                  },
+                  card: {
+                    boxShadow: '',
+                    background: dark.colors.backgroundCard,
+                  },
+                  zIndices: {
+                    modal: 9999,
+                  },
+                },
+                light: {
+                  colors: {
+                    dropdown: light.colors.input,
+                    failure: light.colors.failure,
+                    text: light.colors.white_black,
+                    backgroundDisabled: light.colors.tertiary,
+                    primary: light.colors.textPrimary,
+                    textSubtle: light.colors.white_black,
+                    backgroundAlt: light.colors.backgroundAlt,
+                    invertedContrast: light.colors.invertedContrast,
+                  },
+                  shadows: {
+                    inset: 'none',
+                    box: 'none',
+                  },
+                  card: {
+                    boxShadow: '',
+                    background: light.colors.backgroundCard,
+                  },
+                  zIndices: {
+                    modal: 9999,
+                  },
+                },
+              }}
+              onConnectWallet={onConnectWallet}
+              chainId={chainId}
+              isDark={isDark}
+              lang={currentLanguage.locale}
+            />
+          </Box>
+        )}
       </Transition> */}
     </SwapBox>
   );

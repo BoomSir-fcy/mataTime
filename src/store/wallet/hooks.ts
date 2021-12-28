@@ -317,7 +317,7 @@ export const FetchTimeIncometoday = async days => {
   try {
     const res = await Api.AccountApi.TimeIncometoday({ days });
     if (Api.isSuccess(res)) {
-      if (res.data.data.length > 0) {
+      if (res.data.data.length > 0 || Number(res.data.today_income) > 0) {
         let today = {
           income: res.data.today_income,
           date: dayjs().utc().format('YYYY-MM-DD'),

@@ -235,7 +235,12 @@ const Follow = React.memo(() => {
                       </MinWidthButton>
                     ) : (
                       <MinWidthButton
-                        onClick={() => unFollowUser(item.uid)}
+                        onClick={() =>
+                          setState(p => {
+                            p.cancelFollow = true;
+                            p.cancelParams = item;
+                          })
+                        }
                         onMouseEnter={() =>
                           setState(p => {
                             p.hoverIndex = index;

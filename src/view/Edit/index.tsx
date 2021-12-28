@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
@@ -18,6 +19,7 @@ import NftAvatar from './center/nftavatar';
 import FormInput from './center/formInput';
 import defaultImages from 'assets/images/default_background.png';
 import { Crumbs } from 'components';
+import { ConnectWalletButton } from 'components';
 
 const Background = styled(Flex)`
   position: relative;
@@ -46,10 +48,13 @@ const CenterImg = styled.img`
 const PageBox = styled(Box)`
   max-width: calc(100vw - 8px);
 `;
+const ConnectWalletButtonStyle = styled(ConnectWalletButton)`
+  width: max-content;
+`;
 
 const Edit: React.FC = () => {
   useFetchNftList();
-
+  const { account } = useWeb3React();
   const dispatch = useDispatch();
   const form = React.useRef<any>();
   const profile: any = useStore(p => p.loginReducer.userInfo);
@@ -102,7 +107,6 @@ const Edit: React.FC = () => {
     let nick_name = params.nick_name
       .replace(/(^\s*)|(\s*$)/g, '')
       .replace(/\s+/g, ' ');
-    console.log(nick_name);
     try {
       const response = await checkNickname(nick_name);
       if (!response[0] && response[1]) {
@@ -155,9 +159,13 @@ const Edit: React.FC = () => {
   return (
     <PageBox>
       <Crumbs title={t('commonAccountEdit')}>
-        <Button onClick={debounce(() => updateUserInfo(), 1000)}>
-          {t('commonAccountSave')}
-        </Button>
+        {account ? (
+          <Button onClick={debounce(() => updateUserInfo(), 1000)}>
+            {t('commonAccountSave')}
+          </Button>
+        ) : (
+          <ConnectWalletButtonStyle />
+        )}
       </Crumbs>
       {/* <Header>
         <Text color="white_black" fontWeight="bold" fontSize="18px">
