@@ -7,6 +7,7 @@ import { Emoji } from './emoji';
 import { Icon } from 'components';
 import { Api } from 'apis';
 import client from 'utils/client'
+// import imageCompression from 'utils/imageCompression'
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -50,9 +51,11 @@ const InsertImageButton: React.FC<{
         return toastError(t('uploadImgMaxMsg'));
 
       for (let image of imageFile) {
-        if (image.size > imgMaxSize)
+        const compressImage = image
+        // const compressImage = await imageCompression(image)
+        if (compressImage.size > imgMaxSize)
           return toastError(t('commonUploadMaxSize'));
-        fileList.push(await readFileAsync(image));
+        fileList.push(await readFileAsync(compressImage));
       }
       const res = await Api.CommonApi.uploadImgList({
         base64: fileList,
