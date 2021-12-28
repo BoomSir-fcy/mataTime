@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { variant } from 'styled-system';
 import { TooltipWraps } from 'components';
-import default_avatar from 'assets/images/default_avatar.jpg';
+import default_avatar from 'assets/images/default_avatar.png';
 export * from './AvatarCard';
 
 const scales = {
@@ -42,9 +42,9 @@ const Img = styled.img`
   border-radius: 50%;
   object-fit: cover;
   ${variant({
-    prop: 'scale',
-    variants: scaleVariants
-  })}
+  prop: 'scale',
+  variants: scaleVariants
+})}
 `;
 
 export const Avatar: React.FC<{
