@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { List, MoreOperatorEnum } from 'components';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
@@ -29,7 +29,7 @@ const ArticleComponents = (props, ref) => {
   // const [listData, setListData] = useState([]);
   // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
-  const { list, lastList, page } = article;
+  const { list, lastList, page, addListNum } = article;
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
@@ -67,6 +67,12 @@ const ArticleComponents = (props, ref) => {
       }
     }
   }, [loading, list]);
+
+  useEffect(() => {
+    if (addListNum === 0) {
+      Getlist()
+    }
+  }, [addListNum, Getlist])
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
