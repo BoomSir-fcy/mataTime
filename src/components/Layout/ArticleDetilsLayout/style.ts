@@ -68,10 +68,13 @@ export const CommentItem = styled.div`
     background-color: ${({ theme }) => theme.colors.backgroundCard};
     transition: all 0.3s;
   }
-  padding: 18px 18px 0 28px;
+  padding: 8px 8px 0 12px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 18px 18px 0 28px;
+  }
   .mention-operator {
     padding-bottom: 20px;
-    border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};;
+    border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};
   }
 `;
 export const CommentHeader = styled(Flex)`

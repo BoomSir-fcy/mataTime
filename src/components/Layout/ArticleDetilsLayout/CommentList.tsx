@@ -10,7 +10,7 @@ import {
   PopupWrap,
   MoreOperatorEnum,
 } from 'components';
-import { Flex, Button, Box } from 'uikit';
+import { Flex, Text, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { relativeTime } from 'utils';
@@ -53,6 +53,16 @@ const CommentStyle = styled(CommentListBox)`
 const WidthBox = styled(Box)`
   /* min-width: 370px; */
 `;
+const UserNmae = styled(Text)`
+  max-width: 210px;
+  ${({ theme }) => theme.mediaQueries.xs} {
+    max-width: 350px;
+  }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    max-width: max-content;
+  }
+`;
+
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { itemData, nonce, setNonce } = props;
@@ -189,14 +199,20 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                 )
               }
               <Flex>
-                <Box as={Link} to={`/me/profile/${item.user_id}`}>
+                <Box
+                  minWidth='50px'
+                  as={Link}
+                  to={`/me/profile/${item.user_id}`}
+                >
                   <Avatar src={item.user_avator_url} scale='md' />
                 </Box>
                 <div style={{ flex: 1, marginLeft: '14px' }}>
                   <CommentHeader justifyContent='space-between' mb='15px'>
                     <Flex>
                       <div>
-                        <div>{item.user_name}</div>
+                        <UserNmae fontSize='18px' bold ellipsis>
+                          {item.user_name}
+                        </UserNmae>
                         <div className='relative-time'>
                           {relativeTime(item.add_time)}
                         </div>
