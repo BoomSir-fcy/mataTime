@@ -1,17 +1,13 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { EN, ZHCN, Language, languages } from 'config/localization';
+import { EN, ZHTW, Language, languages } from 'config/localization';
 import { ContextApi, ContextData, ProviderState } from './types';
 import { LS_KEY, fetchLocale, getLanguageCodeFromLS } from './helpers';
 import translations from 'config/localization/translations.json';
 
 const initialState: ProviderState = {
   isFetching: true,
-  currentLanguage: {
-    locale: 'zh-CN',
-    language: '简体中文',
-    code: 'CN'
-  }
+  currentLanguage: EN,
 };
 
 // Export the translations directly
@@ -26,9 +22,13 @@ export const LanguageProvider: React.FC = ({ children }) => {
   const codeFromStorage = getLanguageCodeFromLS();
   const [state, setState] = useState<ProviderState>({
     ...initialState,
-    currentLanguage: languages[codeFromStorage]
+    currentLanguage: languages[codeFromStorage],
   });
   const { currentLanguage } = state;
+
+  useEffect(() => {
+    dayjs.locale(currentLanguage.dayjsCode || 'en');
+  }, [currentLanguage.code])
 
   useEffect(() => {
     const fetchInitialLocales = async () => {
@@ -40,13 +40,13 @@ export const LanguageProvider: React.FC = ({ children }) => {
         languageMap.set(codeFromStorage, { ...enLocale, ...currentLocale });
       }
 
-      codeFromStorage !== EN.locale
-        ? dayjs.locale('zh-cn')
-        : dayjs.locale('en');
+      // codeFromStorage !== EN.locale
+      //   ? dayjs.locale('zh-tw')
+      //   : dayjs.locale('en');
 
       setState(prevState => ({
         ...prevState,
-        isFetching: false
+        isFetching: false,
       }));
     };
 
@@ -57,7 +57,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
     if (!languageMap.has(language.locale)) {
       setState(prevState => ({
         ...prevState,
-        isFetching: true
+        isFetching: true,
       }));
 
       const locale = await fetchLocale(language.locale);
@@ -70,20 +70,20 @@ export const LanguageProvider: React.FC = ({ children }) => {
       setState(prevState => ({
         ...prevState,
         isFetching: false,
-        currentLanguage: language
+        currentLanguage: language,
       }));
     } else {
       localStorage.setItem(LS_KEY, language.locale);
       setState(prevState => ({
         ...prevState,
         isFetching: false,
-        currentLanguage: language
+        currentLanguage: language,
       }));
     }
 
-    language.locale === ZHCN.locale
-      ? dayjs.locale('zh-cn')
-      : dayjs.locale('en');
+    // language.locale === ZHTW.locale
+    //   ? dayjs.locale('zh-tw')
+    //   : dayjs.locale('en');
   };
 
   const translate = useCallback(
@@ -104,7 +104,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
           const templateKey = new RegExp(`%${dataKey}%`, 'g');
           interpolatedText = interpolatedText.replace(
             templateKey,
-            data[dataKey].toString()
+            data[dataKey].toString(),
           );
         });
 
@@ -113,7 +113,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
       return translatedText;
     },
-    [currentLanguage]
+    [currentLanguage],
   );
 
   const getHTML = useCallback(
@@ -132,14 +132,14 @@ export const LanguageProvider: React.FC = ({ children }) => {
           const templateKey = new RegExp(`%${dataKey}%`, 'g');
           interpolatedText = interpolatedText.replace(
             templateKey,
-            data[dataKey].toString()
+            data[dataKey].toString(),
           );
         });
 
         const el = React.createElement('span', {
           dangerouslySetInnerHTML: {
-            __html: interpolatedText
-          }
+            __html: interpolatedText,
+          },
         });
         // when key exists, it should still return element if there's defaultMessage() after getHTML()
         return el;
@@ -147,7 +147,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
       return translatedText;
     },
-    [currentLanguage]
+    [currentLanguage],
   );
 
   return (

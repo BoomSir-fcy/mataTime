@@ -32,7 +32,7 @@ const StepItem = styled(Flex)`
   align-items: center;
   width: 3rem;
   height: 3rem;
-  background: ${({ theme }) => theme.colors.disableStep};
+  background: ${({ theme }) => theme.colors.white};
   border: 2px solid ${({ theme }) => theme.colors.white};
   border-radius: 50%;
   color: ${({ theme }) => theme.colors.white};

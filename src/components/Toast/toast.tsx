@@ -17,7 +17,7 @@ export const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      style={{ zIndex: '99999' }}
+      style={{ zIndex: '99999', transform: 'translateZ(1px)' }}
     />
   );
 });
