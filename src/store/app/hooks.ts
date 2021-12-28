@@ -28,7 +28,7 @@ export const useNotification = (): [boolean, () => void] => {
   const setNotification = useCallback(() => {
     const systemSetting = {
       ...setting,
-      notification: !setting.notification
+      notification: !setting.notification,
     };
     dispatch(setSystemCustom(systemSetting));
   }, [dispatch, setting]);
@@ -45,16 +45,16 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
     val => {
       const systemSetting = {
         ...setting,
-        languange: val
+        languange: val,
       };
 
       setLanguage(val.value);
       dispatch(setSystemCustom(systemSetting));
     },
-    [dispatch, setting]
+    [dispatch, setting],
   );
 
   return [setting.languange, setUseLanguage];
 };
 
-export const useHackEslint = () => { };
+export const useHackEslint = () => {};

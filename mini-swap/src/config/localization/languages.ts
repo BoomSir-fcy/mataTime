@@ -60,7 +60,7 @@ export const languages = {
   // 'uk-UA': UK,
   // 'vi-VN': VI,
   'zh-CN': ZHCN,
-  // 'zh-TW': ZHTW,
+  'zh-TW': ZHTW,
 }
 
 export const languageList = Object.values(languages)

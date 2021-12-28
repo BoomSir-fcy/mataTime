@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getActiveETHERWidthChainId, getValueWithChainId } from 'dsgswap-sdk';
 import styled from 'styled-components';
-import { Transition } from "react-transition-group";
+import { Transition } from 'react-transition-group';
 import { useStore } from 'store';
 import MiniSwap from 'libs/mini-swap';
 import { useWeb3React } from '@web3-react/core';
@@ -11,7 +11,11 @@ import { light, dark, Text, Box, LinkExternal, Flex } from 'uikit';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CoinMarketCap } from 'components/CoinMarketCap';
 import { backgroundColor } from 'styled-system';
-import { getAddress, getDsgAddress, getTimeAddress } from 'utils/addressHelpers'
+import {
+  getAddress,
+  getDsgAddress,
+  getTimeAddress,
+} from 'utils/addressHelpers';
 import { Address } from 'config/constants/types';
 import { useCoinsList } from 'store/coins/hooks';
 
@@ -26,9 +30,9 @@ const defaultStyle = {
   borderRadius: '10px',
   // opacity: 0,
   // color: ''
-}
-const innerShadow = '0px 0px 25px 0px rgba(180, 200, 169, 0.3)'
-const outShadow = '0px 0px 25px 0px rgba(180, 200, 169, 0)'
+};
+const innerShadow = '0px 0px 25px 0px rgba(180, 200, 169, 0.3)';
+const outShadow = '0px 0px 25px 0px rgba(180, 200, 169, 0)';
 
 const transitionStyles = {
   entering: { boxShadow: innerShadow },
@@ -56,47 +60,48 @@ const Swap: React.FC = () => {
 
   useEffect(() => {
     if (coins?.symbol) {
-      const activeCoin = coinsList.find(item => item.coin_symbol === coins.symbol)
-      setInPropSwap(true)
+      const activeCoin = coinsList.find(
+        item => item.coin_symbol === coins.symbol,
+      );
+      setInPropSwap(true);
       if (activeCoin) {
-        setInPropCoin(true)
+        setInPropCoin(true);
       }
       const timer = setTimeout(() => {
-        setInPropSwap(false)
-        setInPropCoin(false)
-      }, 500)
+        setInPropSwap(false);
+        setInPropCoin(false);
+      }, 500);
       return () => {
-        clearTimeout(timer)
-      }
+        clearTimeout(timer);
+      };
     }
-  }, [coins])
+  }, [coins]);
 
   const outputCurrencyId = useMemo(() => {
-
-    const ETHER = getActiveETHERWidthChainId()
-    if (!coins?.symbol) return getTimeAddress()
-    if (coins?.symbol === ETHER.symbol) return coins?.symbol
-    return getAddress(coins.address as Address)
-  }, [coins])
+    const ETHER = getActiveETHERWidthChainId();
+    if (!coins?.symbol) return getTimeAddress();
+    if (coins?.symbol === ETHER.symbol) return coins?.symbol;
+    return getAddress(coins.address as Address);
+  }, [coins]);
 
   const inputCurrencyId = useMemo(() => {
-    return getDsgAddress()
-  }, [coins])
+    return getDsgAddress();
+  }, [coins]);
 
   return (
     <SwapBox>
       <Transition in={inPropCoin} timeout={500}>
-        {
-          state => (
-            <CoinMarketCap mb="14px"
-              style={{
-                ...defaultStyle,
-                ...transitionStyles[state]
-              }}
-            />)
-        }
+        {state => (
+          <CoinMarketCap
+            mb='14px'
+            style={{
+              ...defaultStyle,
+              ...transitionStyles[state],
+            }}
+          />
+        )}
       </Transition>
-      <Transition in={inPropSwap} timeout={500}>
+      {/* <Transition in={inPropSwap} timeout={500}>
         {state =>
         (<Box
           style={{
@@ -181,9 +186,9 @@ const Swap: React.FC = () => {
             lang={currentLanguage.locale}
           />
         </Box>)}
-      </Transition>
+      </Transition> */}
     </SwapBox>
   );
 };
 
-export default Swap
+export default Swap;
