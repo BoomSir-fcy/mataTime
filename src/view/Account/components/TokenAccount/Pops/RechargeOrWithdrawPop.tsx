@@ -226,7 +226,7 @@ const MoneyModal: React.FC<init> = ({
           )}
         </Text>
       </Flex>
-      <InputBox mb='26px'>
+      <InputBox mb='10px'>
         <MyInput
           disabled={approvedNum === 0}
           noShadow
@@ -250,6 +250,13 @@ const MoneyModal: React.FC<init> = ({
           MAX
         </Max>
       </InputBox>
+      {type === 2 && (
+        <Text mb='10px' color='textTips'>
+          {t('Account Minimum withdrawal amount %amount%', {
+            amount: TokenWithDrawMinNum,
+          })}
+        </Text>
+      )}
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
           mb='10px'
