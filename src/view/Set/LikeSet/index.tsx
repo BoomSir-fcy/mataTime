@@ -5,7 +5,7 @@ import { useTranslation } from 'contexts/Localization';
 import {
   useThemeManager,
   useLanguange,
-  useNotification
+  useNotification,
 } from 'store/app/hooks';
 import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
@@ -39,7 +39,7 @@ const LikeSet: React.FC = () => {
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
-    isTranslation: false
+    isTranslation: false,
   });
   const { t, currentLanguage } = useTranslation();
 
@@ -50,6 +50,7 @@ const LikeSet: React.FC = () => {
     });
   };
 
+  console.log(languange);
   return (
     <NoticeSetBox isBoxShadow>
       {/* <Column>
@@ -64,34 +65,33 @@ const LikeSet: React.FC = () => {
       <Column>
         <Rows>
           <Title>{t('settingMsgtitle')}</Title>
-          <Text color="textTips" mt="11px">
+          <Text color='textTips' mt='11px'>
             {t('settingMsgText')}
           </Text>
         </Rows>
         <Toggle checked={notification} onClick={setNotification} />
       </Column>
-      <Column alignItems="center">
+      <Column alignItems='center'>
         <Rows>
           <Title>{t('settingLanguagetitle')}</Title>
-          <Text color="textTips" mt="11px">
+          <Text color='textTips' mt='11px'>
             {t('settingLanguageText')}
           </Text>
         </Rows>
         <Select
-          disabled
           options={[
             {
               id: 1,
               label: 'English（EN）',
-              value: languages['en-US']
+              value: languages['en-US'],
             },
             {
               id: 2,
-              label: '简体中文（CN）',
-              value: languages['zh-CN']
-            }
+              label: '繁體中文（CN）',
+              value: languages['zh-TW'],
+            },
           ]}
-          defaultId={1} // XXX: 屏蔽中文
+          defaultId={languange.id} // XXX: 屏蔽中文
           onChange={(val: any) => setUseLanguage(val)}
         />
       </Column>

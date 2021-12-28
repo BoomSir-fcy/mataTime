@@ -7,6 +7,12 @@ import { chartData } from './data';
 const BoxContener = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   ${({ theme }) => theme.mediaQueriesSize.padding}
+  .pie-chart {
+    overflow-y: hidden;
+    ${({ theme }) => theme.mediaQueries.lg} {
+      overflow: hidden;
+    }
+  }
 `;
 
 const RADIAN = Math.PI / 180;
@@ -67,7 +73,12 @@ export default function AnswerChart() {
         Distribution of $TIME
       </Text>
       <Flex justifyContent='center'>
-        <PieChart margin={{ left: 300 }} width={1000} height={360}>
+        <PieChart
+          margin={{ left: 300 }}
+          width={1000}
+          height={360}
+          className='pie-chart'
+        >
           <Pie
             data={chartData}
             cx={200}
@@ -79,6 +90,7 @@ export default function AnswerChart() {
             dataKey='value'
             startAngle={20}
             endAngle={380}
+            className='pie'
           >
             {chartData.map((entry, index) => (
               // eslint-disable-next-line
