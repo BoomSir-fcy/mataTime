@@ -202,9 +202,9 @@ const MoneyModal: React.FC<init> = ({
               key={item}
               onClick={() => {
                 if (approvedNum === 0) return;
-                const Num = new BigNumber(item).isGreaterThan(
-                  balance ? balance : item,
-                );
+                const Num = new BigNumber(item).isGreaterThan(balance)
+                  ? balance
+                  : item;
                 setVal(Num.toString());
               }}
             >
