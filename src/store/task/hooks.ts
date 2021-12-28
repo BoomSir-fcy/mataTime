@@ -12,10 +12,8 @@ export const useFetchTask = () => {
   const { slowRefresh } = useRefresh()
   const { account } = useWeb3React();
   useEffect(() => {
-    if (account) {
       dispatch(fetchTaskListAsync({ isSignIn: true }))
-    }
-  }, [dispatch, account, slowRefresh])
+  }, [dispatch, slowRefresh])
 }
 
 
