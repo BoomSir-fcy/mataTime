@@ -6,7 +6,7 @@ import TokenPocket from "uikit/components/Svg/Icons/TokenPocket";
 import BinanceChain from "uikit/components/Svg/Icons/BinanceChain";
 import SafePal from "uikit/components/Svg/Icons/SafePal";
 import Coin98 from "uikit/components/Svg/Icons/Coin98";
-// import BitKeepIcon from "uikit/components/Svg/Icons/BitKeep";
+import BitKeepIcon from "uikit/components/Svg/Icons/BitKeep";
 
 import { Config, ConnectorNames } from "./types";
 
@@ -42,12 +42,12 @@ const connectors: Config[] = [
     priority: 999,
   },
 
-  // {
-  //   title: "BitKeep",
-  //   icon: BitKeepIcon,
-  //   connectorId: ConnectorNames.Injected,
-  //   priority: 999,
-  // },
+  {
+    title: "BitKeep",
+    icon: BitKeepIcon,
+    connectorId: ConnectorNames.Injected,
+    priority: 999,
+  },
   {
     title: "Binance Chain",
     icon: BinanceChain,
