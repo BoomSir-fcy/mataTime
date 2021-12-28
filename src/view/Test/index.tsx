@@ -58,6 +58,24 @@ const Test = () => {
     setInputVal(inputVal);
   }
 
+  const [value, setValue] = useState({ 1: 23 })
+  const hanldeChange = useCallback(() => {
+    setValue((vvv) => {
+      console.log(vvv, '===')
+      // eslint-disable-next-line no-param-reassign
+      vvv[1] = vvv[1] + 1
+      return vvv
+    })
+  }, [value, setValue])
+
+  useEffect(() => {
+    console.log(value, '改变')
+  }, [value])
+
+  const hanldeRead = useCallback(() => {
+    console.log(value)
+  }, [value])
+
   return (
     <StyledNotFound>
       <Flex>
@@ -65,6 +83,10 @@ const Test = () => {
         <CardStyled1 margin="0 20px" padding="50px">2</CardStyled1>
         <CardStyled2 padding="50px">3</CardStyled2>
       </Flex>
+      <Box>
+        <Button onClick={hanldeChange}>change{value[1]}</Button>
+        <Button onClick={hanldeRead}>read {value[1]}</Button>
+      </Box>
       <Box>
         <Text>{t('Example: This is a passage')}</Text>
         <Text>{t('Example: There is a variable: %variableA% here', { variableA: 1 })}</Text>
