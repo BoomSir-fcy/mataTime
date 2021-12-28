@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { languagesOptions } from 'config/localization';
 import { useTranslation } from 'contexts/Localization';
 import {
   useThemeManager,
-  useLanguange,
+  // useLanguange,
   useNotification,
 } from 'store/app/hooks';
 import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
-import { languages } from 'config/localization';
 
 const NoticeSetBox = styled(Card)`
   /* height: 700px; */
@@ -35,13 +35,15 @@ const Column = styled(Flex)`
 const LikeSet: React.FC = () => {
   const [isDark, toggleThemeHandle] = useThemeManager();
   const [notification, setNotification] = useNotification();
-  const [languange, setUseLanguage] = useLanguange();
+  // const [languange, setUseLanguage] = useLanguange();
+  // const { setLanguage, currentLanguage } = useTranslation();
+
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
     isTranslation: false,
   });
-  const { t, currentLanguage } = useTranslation();
+  const { t, currentLanguage, setLanguage } = useTranslation();
 
   // 自动翻译
   const setTranslation = () => {
@@ -50,7 +52,7 @@ const LikeSet: React.FC = () => {
     });
   };
 
-  console.log(languange);
+  // console.log(languange);
   return (
     <NoticeSetBox isBoxShadow>
       {/* <Column>
@@ -78,7 +80,7 @@ const LikeSet: React.FC = () => {
             {t('settingLanguageText')}
           </Text>
         </Rows>
-        <Select
+        {/* <Select
           options={[
             {
               id: 1,
@@ -92,7 +94,13 @@ const LikeSet: React.FC = () => {
             },
           ]}
           defaultId={languange.id} // XXX: 屏蔽中文
-          onChange={(val: any) => setUseLanguage(val)}
+          onChange={(val: any) => setLanguage(val)}
+        /> */}
+        <Select
+          disabled
+          options={languagesOptions}
+          defaultId={currentLanguage.code}
+          onChange={(val: any) => setLanguage(val.value)}
         />
       </Column>
       {/* <Column>

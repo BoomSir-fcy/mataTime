@@ -9,11 +9,11 @@ export const fetchLocale = async (locale: string) => {
   return data;
 };
 export const getLanguageCodeFromLS = () => {
-  // return EN.locale
-  try {
-    const codeFromStorage = localStorage.getItem(LS_KEY);
-    return codeFromStorage || EN.locale;
-  } catch {
-    return EN.locale;
-  }
+  return EN.locale
+  // try {
+  //   const codeFromStorage = localStorage.getItem(LS_KEY);
+  //   return codeFromStorage || EN.locale;
+  // } catch {
+  //   return EN.locale;
+  // }
 };

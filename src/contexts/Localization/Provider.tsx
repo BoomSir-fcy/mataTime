@@ -7,11 +7,7 @@ import translations from 'config/localization/translations.json';
 
 const initialState: ProviderState = {
   isFetching: true,
-  currentLanguage: {
-    locale: 'zh-TW',
-    language: '繁體中文',
-    code: 'zh-tw',
-  },
+  currentLanguage: EN,
 };
 
 // Export the translations directly
@@ -31,6 +27,10 @@ export const LanguageProvider: React.FC = ({ children }) => {
   const { currentLanguage } = state;
 
   useEffect(() => {
+    dayjs.locale(currentLanguage.dayjsCode || 'en');
+  }, [currentLanguage.code])
+
+  useEffect(() => {
     const fetchInitialLocales = async () => {
       const codeFromStorage = getLanguageCodeFromLS();
 
@@ -40,9 +40,9 @@ export const LanguageProvider: React.FC = ({ children }) => {
         languageMap.set(codeFromStorage, { ...enLocale, ...currentLocale });
       }
 
-      codeFromStorage !== EN.locale
-        ? dayjs.locale('zh-tw')
-        : dayjs.locale('en');
+      // codeFromStorage !== EN.locale
+      //   ? dayjs.locale('zh-tw')
+      //   : dayjs.locale('en');
 
       setState(prevState => ({
         ...prevState,
@@ -81,9 +81,9 @@ export const LanguageProvider: React.FC = ({ children }) => {
       }));
     }
 
-    language.locale === ZHTW.locale
-      ? dayjs.locale('zh-tw')
-      : dayjs.locale('en');
+    // language.locale === ZHTW.locale
+    //   ? dayjs.locale('zh-tw')
+    //   : dayjs.locale('en');
   };
 
   const translate = useCallback(
