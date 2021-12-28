@@ -68,12 +68,13 @@ const IncomeBox = styled(Flex)`
   align-items: center;
   ${({ theme }) => theme.mediaQueriesSize.marginr}
   width: max-content;
+  /* min-width: 160px; */
 `;
 const Img = styled.img`
   display: inline-block;
-  ${({ theme }) => theme.mediaQueriesSize.marginr}
   width: 26px;
   height: 26px;
+  margin-right: 12px;
   ${({ theme }) => theme.mediaQueries.lg} {
     width: 36px;
     height: 36px;
