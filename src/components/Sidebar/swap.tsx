@@ -103,7 +103,7 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
           )}
         </Transition>
       )}
-      {/* <Transition in={inPropSwap} timeout={500}>
+      <Transition in={inPropSwap} timeout={500}>
         {state => (
           <Box
             style={{
@@ -111,7 +111,7 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
               ...transitionStyles[state],
             }}
           >
-            <MiniSwap
+            {/* <MiniSwap
               titlehelper={t(
                 'When you search for some topics about tokens, the platform will automatically provide token quick swap function, providing one-stop crypto services. Right now Metatime supports mainstream digital tokens, and will continue to access more tokens, please look forward to staking function.t',
               )}
@@ -191,10 +191,10 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
               chainId={chainId}
               isDark={isDark}
               lang={currentLanguage.locale}
-            />
+            /> */}
           </Box>
         )}
-      </Transition> */}
+      </Transition>
     </SwapBox>
   );
 };
