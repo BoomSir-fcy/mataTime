@@ -8,14 +8,15 @@ import { StyledTooltip, Arrow } from './StyledTooltip';
 import { TooltipOptions, TooltipRefs } from './types';
 
 const invertTheme = (currentTheme: DefaultTheme, invert: boolean) => {
-  if (!invert) return currentTheme
+  if (!invert) return currentTheme;
   if (currentTheme.isDark) {
     return light;
   }
   return dark;
 };
-
-const portalRoot = document.getElementById('portal-root');
+// const portalRoot = document.getElementById('portal-root');
+// 解决打赏和连接钱包层级问题
+const portalRoot = document.getElementById('root');
 
 const useTooltip = (
   content: React.ReactNode,
@@ -203,7 +204,9 @@ const useTooltip = (
       }}
       {...attributes.popper}
     >
-      <ThemeProvider theme={(defaultTheme) => invertTheme(defaultTheme, invert)}>{content}</ThemeProvider>
+      <ThemeProvider theme={defaultTheme => invertTheme(defaultTheme, invert)}>
+        {content}
+      </ThemeProvider>
       {!hideArrow && (
         <Arrow
           ref={setArrowElement}
