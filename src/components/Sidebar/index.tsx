@@ -59,7 +59,7 @@ const Sidebar = props => {
 
   return (
     <SidebarStyled {...props} style={{ top: state.top }} ref={ref}>
-      <Search />
+      <Search mb="15px" />
       {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
       <Swap />
       <RecommendPeople />
