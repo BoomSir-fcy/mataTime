@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { withRouter, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -87,7 +87,12 @@ const Home: React.FC = (props: any) => {
     <PageContainer>
       <Flex justifyContent='space-between' width='100%'>
         <CenterCard>
-          <Crumbs zIndex={1005} title={t('homeHeaderTitle')} />
+          <Crumbs
+            top
+            zIndex={1005}
+            callBack={() => tabsChange(filterVal)}
+            title={t('homeHeaderTitle')}
+          />
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
             tabsChange={tabsChange}
