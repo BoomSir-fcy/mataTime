@@ -98,7 +98,9 @@ const PageContainer: React.FC = ({ children }) => {
             justifyContent='space-between'
           >
             <InnerBox flex='1' flexDirection='column'>
-              <CennerBox showSidebar={showSidebar}>{children}</CennerBox>
+              <CennerBox id='OutCenterBox' showSidebar={showSidebar}>
+                {children}
+              </CennerBox>
             </InnerBox>
             <LineStyled mr='14px' />
             {showSidebar && (
