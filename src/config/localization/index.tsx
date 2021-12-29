@@ -2,7 +2,7 @@ export interface Language {
   code: string;
   language: string;
   locale: string;
-  dayjsCode?: string
+  dayjsCode?: string;
 }
 
 interface languagesType {
@@ -107,17 +107,19 @@ export const ZHCN: Language = {
   locale: 'zh-CN',
   language: '简体中文',
   code: 'CN',
+  dayjsCode: 'zh-cn',
 };
 export const ZHTW: Language = {
   locale: 'zh-TW',
   language: '繁體中文',
   code: 'zh-tw',
+  dayjsCode: 'zh-tw',
 };
 
 export const languages: languagesType = {
   'en-US': EN,
   // 'zh-CN': ZHCN,
-  // 'zh-TW': ZHTW,
+  'zh-TW': ZHTW,
 };
 
 export const languagesOptions = Object.values(languages).map((item, index) => ({
