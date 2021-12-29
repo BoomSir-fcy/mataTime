@@ -8,6 +8,8 @@ import { useToast } from 'hooks';
 import { storeAction, useStore } from 'store';
 import { Api } from 'apis';
 
+import { useTag } from './hook';
+
 import useIm from 'hooks/imHooks/useIm';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -27,9 +29,11 @@ const CenterCard = styled(Box)`
 `;
 
 const Home: React.FC = (props: any) => {
+  const { match } = props;
   const { t } = useTranslation();
   const { replace } = useHistory();
   const { pathname } = useLocation();
+  const { getUserTag } = useTag();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
@@ -37,6 +41,7 @@ const Home: React.FC = (props: any) => {
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
   });
+  const [userTags, setUserTags] = useState([]);
   const articleRefs = React.useRef(null);
 
   // 阅读文章扣费
@@ -81,7 +86,18 @@ const Home: React.FC = (props: any) => {
     setRefresh(!refresh);
   };
 
-  const { match } = props;
+  const getTags = async () => {
+    try {
+      const res = await getUserTag();
+      setUserTags(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getTags();
+  }, []);
 
   return (
     <PageContainer>
@@ -95,6 +111,7 @@ const Home: React.FC = (props: any) => {
           />
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
+            tags={userTags}
             tabsChange={tabsChange}
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />

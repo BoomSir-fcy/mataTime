@@ -52,6 +52,7 @@ const TableRightBox = styled(Flex)`
   }
 `;
 interface propsType {
+  tags?: any[];
   defCurrentLeft?: number;
   defCurrentRight?: number;
   // tabLeftChange?: (item) => void
@@ -73,23 +74,23 @@ export const Tabs = (props: propsType) => {
       {
         label: t('homeTabAll'),
         value: '1',
-        paramsName: 'attention'
+        paramsName: 'attention',
       },
-      // {
-      //   label: t('homeTabLatest'),
-      //   value: '1',
-      //   paramsName: 'attention'
-      // },
+      {
+        label: t('homeTabExplore'),
+        value: '1',
+        paramsName: 'attention',
+      },
       {
         label: t('homeTabFocus'),
         value: '2',
-        paramsName: 'attention'
-      }
-    ]
+        paramsName: 'attention',
+      },
+    ],
   } = props;
   const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0);
   const [currentRightIndex, setCurrentRightIndex] = useState(
-    defCurrentRight || 0
+    defCurrentRight || 0,
   );
   const leftTabClick = (item, index) => {
     if (isThrottle && index === currentLeftIndex) return;
@@ -146,5 +147,5 @@ Tabs.defaultProps = {
   // tabLeftChange: () => { },
   isThrottle: true,
   // tabRightChange: () => { },
-  tabsChange: () => {}
+  tabsChange: () => {},
 };

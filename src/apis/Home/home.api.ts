@@ -7,11 +7,17 @@ export class HomeApi extends Http {
     return res;
   }
 
+  // 获取用户的tag分类列表
+  async getUserTag() {
+    const res = await this.get('/v1/user/tag/cat-list');
+    return res;
+  }
+
   // 获取指定用户对指定帖子的打赏统计
   async getPostRewardAuthor(post_type: string, post_id: number) {
     const res = await this.get('/v1/reward/reward-author/user-post-stat', {
       post_type,
-      post_id
+      post_id,
     });
     return res;
   }
