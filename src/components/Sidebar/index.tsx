@@ -1,7 +1,7 @@
 import React from 'react';
 import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
-import Search from './search';
+import Search from './Search';
 import Swap from './swap';
 import HotTopic from './hotTopic';
 import RecommendPeople from './recommendPeople';
