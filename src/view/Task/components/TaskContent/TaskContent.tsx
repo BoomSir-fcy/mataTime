@@ -41,7 +41,7 @@ const TaskContent: React.FC<TaskContentProps> = React.memo(
       <Box>
         <TaskTitle onClick={() => setCollapse(collapse => !collapse)}>
           <StyledTag variant={tag}>
-            <Text fontSize='18px' bold>
+            <Text color='primaryBright' fontSize='18px' bold>
               {tag.toUpperCase()}
             </Text>
           </StyledTag>

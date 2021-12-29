@@ -20,6 +20,7 @@ import FormInput from './center/formInput';
 import defaultImages from 'assets/images/default_background.png';
 import { Crumbs } from 'components';
 import { ConnectWalletButton } from 'components';
+import { useThemeManager } from 'store/app/hooks';
 
 const Background = styled(Flex)`
   position: relative;
@@ -54,6 +55,7 @@ const ConnectWalletButtonStyle = styled(ConnectWalletButton)`
 
 const Edit: React.FC = () => {
   useFetchNftList();
+  const [isDark] = useThemeManager();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
   const form = React.useRef<any>();
@@ -198,7 +200,11 @@ const Edit: React.FC = () => {
                 <CenterImg
                   width='250px'
                   height='250px'
-                  src={require('view/Login/images/LOGO2.svg').default}
+                  src={
+                    require(isDark
+                      ? 'assets/images/logo.svg'
+                      : 'assets/images/light_logo.svg').default
+                  }
                 />
               </CommonCircle>
             </ComponentsWrapper>

@@ -21,7 +21,7 @@ export const ModalTitleWrapper = styled(Box)`
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
     font-weight: bold;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
   }
   .close {
     width: 20px;

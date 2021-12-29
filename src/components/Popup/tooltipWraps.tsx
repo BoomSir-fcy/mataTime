@@ -83,7 +83,7 @@ const FollowPopup: React.FC<{
                 {t('followFans')}
                 <Text
                   fontWeight='bold'
-                  color='white'
+                  color='text'
                   ml='10px'
                   maxWidth='30px'
                   ellipsis
@@ -95,7 +95,7 @@ const FollowPopup: React.FC<{
                 {t('followText')}
                 <Text
                   fontWeight='bold'
-                  color='white'
+                  color='text'
                   ml='10px'
                   maxWidth='30px'
                   ellipsis

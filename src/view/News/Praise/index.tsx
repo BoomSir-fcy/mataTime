@@ -120,7 +120,7 @@ const NewsPraise: React.FC = props => {
                   size={12}
                   name='icon-aixin1'
                   margin='7px 10px 0 0'
-                  color='#EC612B'
+                  color='textOrigin'
                 />
                 {item.comment.comment_id ? (
                   <Text ellipsis>{t('your comment')}</Text>

@@ -43,13 +43,13 @@ export const PopupContentWrapper = styled(Box)`
       .name {
         font-size: 18px;
         font-weight: bold;
-        color: #ffffff;
+        color: ${({ theme }) => theme.colors.text};
       }
       .des {
         font-size: 14px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-        color: #b5b5b5;
+        color: ${({ theme }) => theme.colors.textgrey};
         i {
           font-size: 13px !important;
           margin-right: 8px !important;
@@ -68,12 +68,12 @@ export const PopupContentWrapper = styled(Box)`
         p {
           font-size: 14px;
           font-weight: 400;
-          color: #b5b5b5;
+          color: ${({ theme }) => theme.colors.textgrey};
           strong {
             font-size: 16px;
             font-weight: bold;
             margin-left: 12px;
-            color: #ffffff;
+            color: ${({ theme }) => theme.colors.text};
           }
         }
       }
@@ -122,13 +122,13 @@ export const FollowContentWrapper = styled(Box)`
       .name {
         font-size: 18px;
         font-weight: bold;
-        color: #ffffff;
+        color: ${({ theme }) => theme.colors.text};
       }
       .des {
         font-size: 14px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-        color: #b5b5b5;
+        color: ${({ theme }) => theme.colors.textgrey};
         i {
           font-size: 13px !important;
           margin-right: 8px !important;
@@ -147,12 +147,12 @@ export const FollowContentWrapper = styled(Box)`
         p {
           font-size: 14px;
           font-weight: 400;
-          color: #b5b5b5;
+          color: ${({ theme }) => theme.colors.textgrey};
           strong {
             font-size: 16px;
             font-weight: bold;
             margin-left: 12px;
-            color: #ffffff;
+            color: ${({ theme }) => theme.colors.text};
           }
         }
       }

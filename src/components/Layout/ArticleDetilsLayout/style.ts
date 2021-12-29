@@ -81,7 +81,7 @@ export const CommentHeader = styled(Flex)`
   .relative-time {
     margin-top: 8px;
     font-size: 14px;
-    color: #b5b5b5;
+    color: ${({ theme }) => theme.colors.textgrey };
   }
   .topic {
     display: flex;
@@ -90,22 +90,22 @@ export const CommentHeader = styled(Flex)`
     padding: 0 10px;
     height: 35px;
     font-size: 14px;
-    color: #ffffff;
-    border: 2px solid #4168ed;
+    color: ${({ theme }) => theme.colors.text};
+    border: 2px solid ${({ theme }) => theme.colors.backgroundPrimary};
     border-radius: 10px;
   }
   .reply {
     margin-left: 18px;
     font-size: 16px;
     font-weight: 400;
-    color: #b5b5b5;
+    color: ${({ theme }) => theme.colors.textgrey };
     line-height: 35px;
     div {
       line-height: initial;
     }
     span {
       cursor: pointer;
-      color: #4168ed;
+      color: ${({ theme }) => theme.colors.ThemeText};
     }
   }
 `;
@@ -117,7 +117,7 @@ export const CommentFooter = styled(Flex)`
   padding-left: 100px;
   align-items: center;
   height: 60px;
-  color: #b5b5b5;
+  color: ${({ theme }) => theme.colors.textgrey };
   border-bottom: solid 1px ${({ theme }) => theme.colors.commentBorder};
   & div {
     padding: 10px;
@@ -129,5 +129,5 @@ export const CommentListFooter = styled.div`
   line-height: 60px;
   font-size: 14px;
   font-weight: 400;
-  color: #b5b5b5;
+  color: ${({ theme }) => theme.colors.textgrey };
 `;

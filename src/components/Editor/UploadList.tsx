@@ -54,7 +54,7 @@ export const UploadList = (props: imgListType) => {
                 current={1}
                 size={17}
                 name='icon-jian'
-                color='#ec612b'
+                color='textOrigin'
                 onClick={delImgItem.bind(this, index)}
               />
               <img src={item} alt='' />

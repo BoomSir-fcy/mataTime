@@ -13,7 +13,7 @@ export const MentionOperatorWrapper = styled.div`
       ${({ theme }) => theme.mediaQueries.sm} {
         min-width: 120px;
       }
-      color: #b5b5b5;
+      color: ${({ theme }) => theme.colors.textgrey};
       display: flex;
       align-items: center;
       cursor: pointer;

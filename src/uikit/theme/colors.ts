@@ -40,10 +40,10 @@ export const lightColors: Colors = {
   backgroundLight: '#EAF2FF',
   backgroundDisabled: '#E9EAEB',
   backgroundPrimary: '#4168ED',
-  backgroundThemeCard: '#131314',
-  backgroundCard: '#FAFCFF',
+  backgroundThemeCard: '#F7F9F9',
+  backgroundCard: '#F7F9F9',
   backgroundAlt: '#FFFFFF',
-  backgroundTextArea: '#EAF2FF',
+  backgroundTextArea: '#EFF3F4',
   backgroundMenu: '#EAF2FF',
   greyBackground: '#4A4A4A',
   cardBorder: '#E7E3EB',
@@ -52,8 +52,9 @@ export const lightColors: Colors = {
   inpuShadows: 'inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)',
   inputSecondary: '#7393FF',
   inputSelect: '#DBDBDB',
-  tertiary: '#4D535F',
-  text: '#283433',
+  tertiary: '#FFFFFF',
+  primaryDark: '#FFFFFF',
+  text: '#000',
   white_black: '#000',
   textPrimary: '#7393FF',
   textSubtle: '#000000',
@@ -86,7 +87,7 @@ export const lightColors: Colors = {
   searchTopicTxt: '#000',
   searchTopicHoverBg: '#eaf2ff',
   commentBorder: '#ccc',
-  hoverList: '#070707'
+  hoverList: '#F5F5F5'
 };
 
 export const darkColors: Colors = {

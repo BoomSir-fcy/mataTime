@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 import { Logo } from './logo';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
+import { useThemeManager } from 'store/app/hooks';
 
 const FooterWarpper = styled(Flex)`
   justify-content: center;
@@ -25,7 +26,7 @@ const LogoWrapper = styled(Box)`
   ${mediaQueriesSize.marginbmd};
 `;
 
-const SubText = styled(Text) <{
+const SubText = styled(Text)<{
   to?: string;
 }>`
   color: ${({ theme }) => theme.colors.textTips};
@@ -38,17 +39,25 @@ const SubText = styled(Text) <{
 
 export const Footer = React.memo(() => {
   const { t } = useTranslation();
+  const [isDark] = useThemeManager();
 
   return (
-    <FooterWarpper flexDirection="column">
+    <FooterWarpper flexDirection='column'>
       <LogoWrapper>
-        <Logo url="/" src={require('../../view/Login/images/LOGO2.svg').default} />
+        <Logo
+          url='/'
+          src={
+            require(isDark
+              ? 'assets/images/logo.svg'
+              : 'assets/images/light_logo.svg').default
+          }
+        />
       </LogoWrapper>
       <Flex>
-        <SubText as={Link} to="/">
+        <SubText as={Link} to='/'>
           {t('loginTeamText')}
         </SubText>
-        <SubText as={Link} to="/">
+        <SubText as={Link} to='/'>
           {t('loginPrivacyPolicyText')}
         </SubText>
         <SubText>© Copyright 2021 Metatime. All Rights Reserved.</SubText>

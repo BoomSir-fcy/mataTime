@@ -24,7 +24,7 @@ const TitleText = styled(Text)`
 `;
 const MoreBtn = styled.span`
   font-size: 14px;
-  color: #7393ff;
+  color: ${({ theme }) => theme.colors.textPrimary};
   cursor: pointer;
 `;
 const UserInfo = styled(Flex)`
@@ -128,7 +128,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
             p.cancelFollow = false;
           });
         }
-      } catch (error) { }
+      } catch (error) {}
     },
     [list],
   );
