@@ -97,7 +97,6 @@ const LikeSet: React.FC = () => {
           onChange={(val: any) => setLanguage(val)}
         /> */}
         <Select
-          disabled
           options={languagesOptions}
           defaultId={currentLanguage.code}
           onChange={(val: any) => setLanguage(val.value)}
