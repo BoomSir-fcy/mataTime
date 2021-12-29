@@ -15,7 +15,8 @@ import {
   getSinglePool,
   getTimeShopAddress,
   getCashierDeskAddress,
-  getRewardAuthorAddress
+  getRewardAuthorAddress,
+  getInvitationAddress,
 } from 'utils/addressHelpers';
 
 // ABI
@@ -23,6 +24,7 @@ import bep20Abi from 'config/abi/erc20.json';
 import erc721Abi from 'config/abi/erc721.json';
 import MultiCallAbi from 'config/abi/Multicall.json';
 import CashierDeskAbi from 'config/abi/CashierDesk.json';
+import InvitationAbi from 'config/abi/Invitation.json';
 
 const getContract = (
   abi: any,
@@ -93,4 +95,10 @@ export const getCashierDeskContract = (
   signer?: ethers.Signer | ethers.providers.Provider
 ) => {
   return getContract(CashierDeskAbi, getCashierDeskAddress(), signer);
+};
+
+export const getInvitationContract = (
+  signer?: ethers.Signer | ethers.providers.Provider
+) => {
+  return getContract(InvitationAbi, getInvitationAddress(), signer);
 };

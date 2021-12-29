@@ -10,7 +10,8 @@ import {
   getLiquidityPoolContract,
   getSinglePoolContract,
   getCashierDeskContract,
-  getRewardAuthorContract
+  getRewardAuthorContract,
+  getInvitationContract
 } from 'utils/contractHelpers';
 import { getContract } from 'utils/contract';
 
@@ -121,4 +122,9 @@ export const useSinglePool = () => {
 export const useCashierDesk = () => {
   const { library } = useActiveWeb3React();
   return useMemo(() => getCashierDeskContract(library.getSigner()), [library]);
+};
+
+export const useInvitation = () => {
+  const { library } = useActiveWeb3React();
+  return useMemo(() => getInvitationContract(library.getSigner()), [library]);
 };

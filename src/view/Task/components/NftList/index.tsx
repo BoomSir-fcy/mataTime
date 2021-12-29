@@ -9,7 +9,7 @@ import { useFetchSupportNFT } from 'view/Login/hook';
 import NftAvatar from './list';
 
 export const StakeNFT: React.FC<{ handleClickNft?: () => void }> = ({
-  handleClickNft
+  handleClickNft,
 }) => {
   useFetchSupportNFT();
 
@@ -36,12 +36,12 @@ export const StakeNFT: React.FC<{ handleClickNft?: () => void }> = ({
           if (!list[i].isApprovedMarket) {
             myList[j] = {
               address: list[i].properties.token.toLowerCase(),
-              needApprove: true
+              needApprove: true,
             };
           } else if (list[i].isApprovedMarket) {
             myList[j] = {
               address: list[i].properties.token.toLowerCase(),
-              needApprove: false
+              needApprove: false,
             };
           }
         }
@@ -51,30 +51,22 @@ export const StakeNFT: React.FC<{ handleClickNft?: () => void }> = ({
   };
 
   useEffect(() => {
-    // if (!NftList.length && !isStakeNft) {
-    //   dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    // } else {
-    //   NftAddrList.length && getIsAllApprove(NftList)
-    //   dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    // }
     if (NftList.length && NftAddrList.length) {
-      getIsAllApprove(NftList);
+      // getIsAllApprove(NftList);
     }
   }, [NftList]);
 
   return (
-    <React.Fragment>
-      {isAllApprove.map((item, index) => {
+    <>
+      {NftList.map((item, index) => {
         return (
           <NftAvatar
             key={index}
             NftInfo={item}
-            Nodata={false}
             handleClickNft={handleClickNft}
           />
         );
       })}
-      {!isAllApprove.length && <NftAvatar Nodata={true} />}
-    </React.Fragment>
+    </>
   );
 };

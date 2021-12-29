@@ -58,3 +58,7 @@ export const getRewardAuthorAddress = () => {
 export const getBnbAddress = () => {
   return getAddress(addresses.Wbnb);
 };
+
+export const getInvitationAddress = () => {
+  return getAddress(addresses.Invitation);
+};

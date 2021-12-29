@@ -53,4 +53,8 @@ export default {
     56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     97: '0x094616F0BdFB0b526bD735Bf66Eca0Ad254ca81F',
   },
+  Invitation: {
+    56: '',
+    97: '',
+  },
 };

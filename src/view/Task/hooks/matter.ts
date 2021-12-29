@@ -43,7 +43,7 @@ export const useFetchInviteFriendsList = () => {
   const { account } = useWeb3React()
   const [list, setList] = useState([])
   const [pageNum, setPageNum] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
+  const [pageSize, setPageSize] = useState<number>(20)
   const [total, setTotal] = useState(1)
   const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
@@ -55,9 +55,9 @@ export const useFetchInviteFriendsList = () => {
       if (Api.isSuccess(res)) {
         const temp = res.data;
         setList(temp?.Users);
-        setTotal(temp?.total_size);
-        setPageNum(temp?.now_page);
-        setPageSize(temp?.page_size);
+        setTotal(temp?.total_size || 1);
+        setPageNum(temp?.now_page || 1);
+        setPageSize(temp?.page_size || 20);
       }
     }).catch(() => {
       setList([]);
