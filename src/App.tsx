@@ -26,8 +26,6 @@ import EventBusUpdater from './view/Updater/EventBusUpdater';
 import ScrollBarApdater from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 
-import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/en';
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
