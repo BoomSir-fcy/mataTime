@@ -284,7 +284,7 @@ const ExchangeTime: React.FC<init> = ({ nowRound, decimals = 18 }) => {
     <Center flexDirection='column' justifyContent='center'>
       <Head>
         <Text mb='14px' fontSize='18px'>
-          $TIME left from this round
+          {t('wallete$TIME left from this round', { value: '$TIME' })}
         </Text>
         <Progress
           scale='sm'

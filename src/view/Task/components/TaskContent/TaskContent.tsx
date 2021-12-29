@@ -5,6 +5,7 @@ import { GetTaskTag } from '../../hooks/matter';
 import { TaskInfo, Variant, TaskContentProps } from '../../type';
 import StyledTag from './StyledTag';
 import TaskItem from './TaskItem';
+import { useTranslation } from 'contexts/Localization';
 
 const TaskTitle = styled(Flex)`
   justify-content: space-between;
@@ -34,6 +35,7 @@ const RewardsText = styled(Text)`
 
 const TaskContent: React.FC<TaskContentProps> = React.memo(
   ({ taskGroupId, taskList }) => {
+    const { t } = useTranslation();
     const [collapse, setCollapse] = useState(true);
 
     const tag: Variant = useMemo(() => GetTaskTag(taskGroupId), [taskGroupId]);
@@ -42,12 +44,12 @@ const TaskContent: React.FC<TaskContentProps> = React.memo(
         <TaskTitle onClick={() => setCollapse(collapse => !collapse)}>
           <StyledTag variant={tag}>
             <Text fontSize='18px' bold>
-              {tag.toUpperCase()}
+              {t(`Task ${tag}`).toUpperCase()}
             </Text>
           </StyledTag>
           <Flex alignItems='center'>
             <RewardsText fontSize='18px' bold>
-              Rewards
+              {t('Task Rewards')}
             </RewardsText>
             <CollapseIcon
               collapse={collapse}

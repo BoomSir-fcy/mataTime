@@ -14,12 +14,13 @@ export function useLocation() {
       const res = await Api.UserApi.getLocation();
       if (Api.isSuccess(res)) {
         const location: [] = res.data.reduce((prve, current) => {
-          const country = systemLang === 'CN' ? current.LocaltionZh : current.LocationEn;
+          const country =
+            systemLang === 'zh-tw' ? current.LocaltionZh : current.LocationEn;
           prve.push({
             ...current,
             id: current.ID,
             label: country,
-            value: country
+            value: country,
           });
           return prve;
         }, []);
