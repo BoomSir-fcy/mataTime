@@ -230,7 +230,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useEffect(() => {
     const getTokenType = () => {
       // 获取路由的token参数
-      const search = route.location.search;
+      const { search } = route.location;
       const myQuery = search => {
         return new URLSearchParams(search);
       };
@@ -334,7 +334,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
                 dispatch(fetchIncomeList({ page: 1, pageSize, readType: 1 }));
               }}
             >
-              Post
+              {t('walletePost')}
             </TabText>
             <TabText
               className={readType === 2 ? 'active' : ''}
@@ -343,7 +343,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
                 dispatch(fetchIncomeList({ page: 1, pageSize, readType: 2 }));
               }}
             >
-              Comment
+              {t('walleteComment')}
             </TabText>
           </Flex>
         </PostTab>
