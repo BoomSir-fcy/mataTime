@@ -57,8 +57,8 @@ export const Tabs: React.FC<{
     checked: 1,
     tabs: [
       { label: 'rewardAutherTodayIncome', val: 1 },
-      { label: 'rewardAutherAllIncome', val: 2 }
-    ]
+      { label: 'rewardAutherAllIncome', val: 2 },
+    ],
   });
   const { checked, tabs } = state;
   const income = checked === 1 ? data.today : data.total;
@@ -75,7 +75,7 @@ export const Tabs: React.FC<{
               })
             }
             className={classnames(checked === row.val ? 'active' : '')}
-            variant="text"
+            variant='text'
           >
             {t(row.label)}
           </Button>
@@ -86,7 +86,7 @@ export const Tabs: React.FC<{
           <>
             {income?.map((item, index) => {
               let token = tokenList.find(
-                row => row[0].toLowerCase() === item.token
+                row => row[0].toLowerCase() === item.token,
               );
               return (
                 <CoinCols key={`${item.token}_${index}`}>
@@ -96,12 +96,14 @@ export const Tabs: React.FC<{
                     height={40}
                   />
                   <Flex
-                    ml="20px"
-                    flexDirection="column"
-                    justifyContent="space-between"
+                    ml='20px'
+                    flexDirection='column'
+                    justifyContent='space-between'
                   >
-                    <Text color="textTips">{token.length && token[2]}</Text>
-                    <Text fontSize="18px" fontWeight="bold">
+                    <Text color='textTips'>
+                      {token && token.length && token[2]}
+                    </Text>
+                    <Text fontSize='18px' fontWeight='bold'>
                       {item.amount}
                     </Text>
                   </Flex>
