@@ -117,7 +117,7 @@ export const ZHTW: Language = {
 export const languages: languagesType = {
   'en-US': EN,
   // 'zh-CN': ZHCN,
-  // 'zh-TW': ZHTW,
+  'zh-TW': ZHTW,
 };
 
 export const languagesOptions = Object.values(languages).map((item, index) => ({
