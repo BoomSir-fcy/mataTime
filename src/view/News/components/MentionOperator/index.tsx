@@ -76,7 +76,7 @@ const MentionOperator: React.FC<IProps> = ({
           //     ? t('commonMsgUnlikeSuccess')
           //     : t('commonMsgUnlikeError')
           // );
-        } else if (res.code === 30_006_006) {
+        } else if (res?.code === 30_006_006) {
           callback(
             {
               ...itemData,
@@ -90,7 +90,7 @@ const MentionOperator: React.FC<IProps> = ({
             MoreOperatorEnum.LIKE,
           );
           setIsLike(1);
-        } else if (res.code === 30_006_007) {
+        } else if (res?.code === 30_006_007) {
           callback(
             {
               ...itemData,

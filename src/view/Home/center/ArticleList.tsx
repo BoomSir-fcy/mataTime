@@ -25,11 +25,11 @@ const ArticleComponents = (props, ref) => {
   const article = useStore(p => p.post);
   const dispatch = useDispatch();
   // const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   // const [listData, setListData] = useState([]);
   // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
-  const { list, lastList, page, addListNum } = article;
+  const { list, lastList, page, addListNum, loading } = article;
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
@@ -42,7 +42,7 @@ const ArticleComponents = (props, ref) => {
   const Getlist = React.useCallback(
     (current = 0) => {
       if ((loading || isEnd) && !current) return false;
-      setLoading(true);
+      // setLoading(true);
       dispatch(
         fetchThunk.fetchPostAsync({
           attention: 1,
@@ -52,7 +52,7 @@ const ArticleComponents = (props, ref) => {
         }),
       );
       setIsEnd(true);
-      setLoading(false);
+      // setLoading(false);
       setNonce(prep => prep + 1);
     },
     [article, isEnd],
@@ -66,7 +66,7 @@ const ArticleComponents = (props, ref) => {
         setIsEnd(false);
       }
     }
-  }, [loading, list]);
+  }, [loading, lastList]);
 
   useEffect(() => {
     if (addListNum === 0) {
@@ -121,7 +121,12 @@ const ArticleComponents = (props, ref) => {
 
   return (
     <ArticleListBox>
-      <List loading={!isEnd} renderList={Getlist}>
+      <List loading={loading || !isEnd} renderList={(type) => {
+        if (type === 1 && list?.length !== 0) {
+          return
+        }
+        Getlist()
+      }}>
         {(list ?? []).map((item) => (
           <MeItemWrapper key={`${item.id}`}>
             {

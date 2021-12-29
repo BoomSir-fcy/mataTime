@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { mediaQueries } from "./theme/base";
+import { createGlobalStyle } from 'styled-components';
+import { mediaQueries } from './theme/base';
 
 const ResetCSS = createGlobalStyle`
   /* prettier-ignore */
@@ -31,7 +31,6 @@ const ResetCSS = createGlobalStyle`
   body {
     line-height: 1;
     font-size: 16px;
-    /* background-color: ${({ theme }) => theme.colors.backgroundPage}; */
   }
   body{
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

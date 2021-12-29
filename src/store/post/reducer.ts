@@ -10,16 +10,20 @@ const initialState = {
   page: 1,
   attention: 2,
   addListNum: -1,
+  loading: false,
 };
 
 export type Post = typeof initialState;
 
 export const fetchPostAsync = createAsyncThunk(
   'fetch/getArticle',
-  async (params: Api.Home.queryListParams) => {
+  async (params: Api.Home.queryListParams, { dispatch }) => {
+    // dispatch()
+    dispatch(setLoading(true))
     const response: Api.Home.postData = await Api.HomeApi.getArticleList(
       params,
     );
+    dispatch(setLoading(false))
     if (Api.isSuccess(response)) {
       return {
         list: response.data.List,
@@ -35,7 +39,11 @@ export const fetchPostAsync = createAsyncThunk(
 export const Post = createSlice({
   name: 'post',
   initialState,
-  reducers: {},
+  reducers: {
+    setLoading: (state, { payload }) => {
+      state.loading = payload
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchPostAsync.fulfilled, (state, action) => {
@@ -65,5 +73,10 @@ export const Post = createSlice({
       });
   },
 });
+
+export const {
+  setLoading,
+} = Post.actions
+
 
 export default Post.reducer;

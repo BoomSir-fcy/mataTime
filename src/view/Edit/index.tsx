@@ -107,7 +107,6 @@ const Edit: React.FC = () => {
     let nick_name = params.nick_name
       .replace(/(^\s*)|(\s*$)/g, '')
       .replace(/\s+/g, ' ');
-    console.log(nick_name);
     try {
       const response = await checkNickname(nick_name);
       if (!response[0] && response[1]) {
