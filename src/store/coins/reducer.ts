@@ -69,7 +69,6 @@ export const fetchCoinInfoAsync = createAsyncThunk<Api.Coins.CoinInfo, string>(
       const volume = await getTime24HoursData(matterToken)
       response.total_volume = volume.totalVolumeUSD
     }
-    console.log(response, 'response')
     return response;
   }
 );
