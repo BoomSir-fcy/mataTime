@@ -230,7 +230,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useEffect(() => {
     const getTokenType = () => {
       // 获取路由的token参数
-      const { search } = route.location;
+      const { search } = route?.location || {};
       const myQuery = search => {
         return new URLSearchParams(search);
       };
