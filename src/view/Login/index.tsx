@@ -123,7 +123,7 @@ const SignInBox = () => {
   const signIn = async () => {
     setPending(true)
     //2.1 用户已经注册登录钱包签名
-    await window.ethereum.enable();
+    // await window.ethereum.enable();
     const res = await loginCallback(2);
     if (Api.isSuccess(res)) {
       //2.2 获取用户信息
