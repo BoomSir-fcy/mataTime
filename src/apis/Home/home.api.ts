@@ -1,9 +1,17 @@
+import qs from 'qs';
 import { Http } from '../http';
 
 export class HomeApi extends Http {
   // 文章列表
   async getArticleList(params: Api.Home.queryListParams) {
-    const res: Api.Home.postData = await this.get('/v1/post/list', params);
+    const paramsStr = qs.stringify(
+      {
+        user_tags1: params.user_tags1,
+        user_tags2: params.user_tags2,
+      },
+      { arrayFormat: 'repeat' },
+    );
+    const res: Api.Home.postData = await this.get(`/v1/post/list`, params);
     return res;
   }
 

@@ -4,6 +4,8 @@ declare namespace Api {
       per_page: number;
       page: number;
       // topic_id: number,
+      user_tags1: number[];
+      user_tags2: number[];
       attention: number;
     }
     interface createArticle {

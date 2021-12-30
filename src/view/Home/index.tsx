@@ -37,7 +37,10 @@ const Home: React.FC = (props: any) => {
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
+  const userTag = useStore(p => p.post);
+  const { user_tags1, user_tags2 } = userTag;
   const [refresh, setRefresh] = useState(false);
+  const [getTab, setGetTab] = useState(true);
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
   });
@@ -77,20 +80,17 @@ const Home: React.FC = (props: any) => {
     const temp = {
       ...filterVal,
     };
-    const { useTag1, useTag2 } = tabsRefs?.current?.getTags();
-    // console.log(useTag1, useTag2);
     const params = item?.tabs ? `&type=${item.tabs}` : '';
     replace(`${pathname || ''}?attention=${item.value}${params}`);
-
-    temp[item.paramsName] = item.value;
     dispatch(
       storeAction.postUpdateArticleParams({
         attention: item.value,
-        user_tags1: [...useTag1],
-        user_tags2: [...useTag2],
+        user_tags1: [...user_tags1],
+        user_tags2: [...user_tags2],
         page: 1,
       }),
     );
+    temp[item.paramsName] = item.value;
     setFilterVal(temp);
     setRefresh(!refresh);
   };
@@ -101,6 +101,8 @@ const Home: React.FC = (props: any) => {
       setUserTags(res);
     } catch (error) {
       console.log(error);
+    } finally {
+      setGetTab(false);
     }
   };
 
@@ -130,15 +132,17 @@ const Home: React.FC = (props: any) => {
             params={parsedQs.type}
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
-          <ArticleList
-            key={refresh}
-            ref={articleRefs}
-            setNonce={setNonce}
-            nonce={nonce}
-            topicName={match.params.name}
-            filterValObj={filterVal}
-            {...props}
-          />
+          {!getTab && (
+            <ArticleList
+              key={refresh}
+              ref={articleRefs}
+              setNonce={setNonce}
+              nonce={nonce}
+              topicName={match.params.name}
+              filterValObj={filterVal}
+              {...props}
+            />
+          )}
         </CenterCard>
       </Flex>
     </PageContainer>

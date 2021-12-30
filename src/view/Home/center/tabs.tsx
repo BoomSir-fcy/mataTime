@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
 import { Flex, Button, Box, Card, Text } from 'uikit';
+import { useStore, storeAction, fetchThunk } from 'store';
 import { mediaQueriesSize } from 'uikit/theme/base';
+
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 
 export const TabsBox = styled(Card)`
   display: flex;
@@ -92,6 +96,7 @@ interface propsType {
 
 const TabsComponent = (props, ref) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const {
     tags,
     params,
@@ -108,7 +113,7 @@ const TabsComponent = (props, ref) => {
       },
       {
         label: t('homeTabExplore'),
-        value: '1',
+        value: '3',
         tabs: 'explore',
         paramsName: 'attention',
       },
@@ -120,20 +125,20 @@ const TabsComponent = (props, ref) => {
     ],
   }: propsType = props;
 
+  const userTag = useStore(p => p.post);
+  const { user_tags1, user_tags2 } = userTag;
   const [currentLeftIndex, setCurrentLeftIndex] = useState(defCurrentLeft || 0);
   const [currentRightIndex, setCurrentRightIndex] = useState(
     defCurrentRight || 0,
   );
-  const [state, setState] = useState({
-    useTag1: [],
-    useTag2: [],
-  });
+  const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const leftTabClick = (item, index) => {
     if (isThrottle && index === currentLeftIndex) return;
     setCurrentLeftIndex(index);
     tabsChange(item);
   };
+
   const rightTabClick = (item, index) => {
     if (isThrottle && index === currentRightIndex) return;
     setCurrentRightIndex(index);
@@ -141,20 +146,15 @@ const TabsComponent = (props, ref) => {
   };
 
   React.useEffect(() => {
-    if (tags.length > 0) {
-      setState({
-        ...state,
-        useTag1: [tags?.[0][0]?.ID],
-        useTag2: [tags?.[1][0]?.ID],
-      });
+    if (tags.length > 0 && Number(currentLeftIndex) === 3) {
+      dispatch(
+        storeAction.postSetParamsTag({
+          user_tags1: [tags?.[0][0]?.ID],
+          user_tags2: [tags?.[1][0]?.ID],
+        }),
+      );
     }
-  }, [tags]);
-
-  React.useImperativeHandle(ref, () => ({
-    getTags() {
-      return state;
-    },
-  }));
+  }, [tags, currentLeftIndex]);
 
   return (
     <React.Fragment>
@@ -162,14 +162,14 @@ const TabsComponent = (props, ref) => {
         <TableLeftBox>
           {(tabLeftArr ?? []).map((item, index) => {
             let curretnIndex = index + 1;
-            console.log(params, item.tabs, currentLeftIndex);
             return (
               <Box
                 key={curretnIndex}
-                onClick={debounce(() => leftTabClick(item, curretnIndex), 500)}
+                onClick={debounce(() => leftTabClick(item, item.value), 500)}
                 className={
-                  (currentLeftIndex === curretnIndex && !params) ||
-                  params === item?.tabs
+                  (!params &&
+                    Number(currentLeftIndex) === Number(item.value)) ||
+                  (params && params === item.tabs)
                     ? 'leftActive'
                     : ''
                 }
@@ -202,13 +202,15 @@ const TabsComponent = (props, ref) => {
             <ExploreButton
               key={`${item.Name}_${key}`}
               onClick={() => {
-                const tag = state.useTag1;
-                const index = tag.indexOf(item.ID);
-                index > -1 ? tag.splice(index, 1) : tag.push(item.ID);
-                setState({ ...state, useTag1: tag });
+                let tag = [...user_tags1];
+                const index = tag.findIndex(it => it === item.ID);
+                index !== -1 ? tag.splice(index, 1) : (tag = [...tag, item.ID]);
+                dispatch(
+                  storeAction.postSetParamsTag({ user_tags1: tag, user_tags2 }),
+                );
               }}
               variant={
-                state.useTag1.indexOf(item.ID) > -1 ? 'primary' : 'tertiary'
+                user_tags1.indexOf(item.ID) > -1 ? 'primary' : 'tertiary'
               }
             >
               {item.Name}
@@ -221,13 +223,20 @@ const TabsComponent = (props, ref) => {
                 <ExploreRadioButton
                   key={`${item.Name}_${keys}`}
                   onClick={() => {
-                    const tag = state.useTag2;
-                    const index = tag.indexOf(item.ID);
-                    index > -1 ? tag.splice(index, 1) : tag.push(item.ID);
-                    setState({ ...state, useTag1: tag });
+                    let tag = [...user_tags2];
+                    const index = tag.findIndex(it => it === item.ID);
+                    index !== -1
+                      ? tag.splice(index, 1)
+                      : (tag = [...tag, item.ID]);
+                    dispatch(
+                      storeAction.postSetParamsTag({
+                        user_tags1,
+                        user_tags2: tag,
+                      }),
+                    );
                   }}
                   variant={
-                    state.useTag2.indexOf(item.ID) > -1 ? 'primary' : 'text'
+                    user_tags2.indexOf(item.ID) > -1 ? 'primary' : 'text'
                   }
                 >
                   {item.Name}
