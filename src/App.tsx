@@ -25,6 +25,7 @@ import AccountUpdater from './view/Updater/AccountUpdater';
 import EventBusUpdater from './view/Updater/EventBusUpdater';
 import ScrollBarApdater from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
+import Gotop from 'components/GoTop';
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -149,6 +150,7 @@ function App() {
             <Updater />
           </React.Suspense>
         </PageContainer>
+        <Gotop />
       </Container>
       <ToastComponents />
     </Router>

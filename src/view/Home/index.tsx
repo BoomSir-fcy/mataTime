@@ -108,6 +108,10 @@ const Home: React.FC = (props: any) => {
     getTags();
   }, []);
 
+  const toTop = () => {
+    articleRefs?.current?.reload(1);
+  };
+
   return (
     <PageContainer>
       <Flex justifyContent='space-between' width='100%'>
@@ -115,7 +119,7 @@ const Home: React.FC = (props: any) => {
           <Crumbs
             top
             zIndex={1005}
-            callBack={() => tabsChange(filterVal)}
+            callBack={() => toTop()}
             title={t('homeHeaderTitle')}
           />
           <Editor type='post' sendArticle={sendArticle} />
