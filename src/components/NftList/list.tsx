@@ -43,7 +43,10 @@ const GetAuthorizeBox = styled(Box)`
   padding: 10px 0 17px 0;
   margin-top: 10px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.backgroundDisabled};
+  background: ${({ theme }) =>
+    theme.isDark
+      ? theme.colors.backgroundDisabled
+      : theme.colors.backgroundThemeCard};
 `;
 const GetAuthorize = styled(Flex)`
   /* justify-content: space-between; */
@@ -54,7 +57,7 @@ const GetAuthorize = styled(Flex)`
     height: 4px;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.white_black};
   }
 `;
 const AvatarName = styled(Text)`

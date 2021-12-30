@@ -1,56 +1,61 @@
 import styled from 'styled-components';
-import { PancakeTheme, Flex } from 'uikit'
+import { PancakeTheme, Flex } from 'uikit';
 
 declare module 'styled-components' {
   export interface DefaultTheme extends PancakeTheme {
-    main: string
+    main: string;
   }
 }
 
 const PaginateStyle = styled(Flex)`
-padding-top: 20px;
-ul,li{ padding:0;margin:0;list-style:none}
-ul{
-  display: flex;
-  align-items: center;
-}
-li{
-  width: 28px;
-  height: 28px;
-  color: ${({ theme }) => theme.colors.white_black};
-  border: 1px solid ${({ theme }) => theme.colors.textTips};
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 5px;
-  margin: 0 5px;
-  transition: all 0.1s linear;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-    a{
+  padding-top: 20px;
+  ul,
+  li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  ul {
+    display: flex;
+    align-items: center;
+  }
+  li {
+    width: 28px;
+    height: 28px;
+    color: ${({ theme }) => theme.colors.white_black};
+    border: 1px solid ${({ theme }) => theme.colors.textTips};
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: all 0.1s linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    a {
       width: 28px;
       height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-  &:hover {
-  /* border: 1px solid  ${({ theme }) => theme.colors.primaryDark}; */
-  background-color: ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.primaryDark};
-  }
-  &.disabled{
-    cursor: no-drop;
-    a{
-    cursor: no-drop;
+    &:hover {
+      /* border: 1px solid  ${({ theme }) => theme.colors.primaryDark}; */
+      background-color: ${({ theme }) => theme.colors.white_black};
+      color: ${({ theme }) => theme.colors.white};
+    }
+    &.disabled {
+      cursor: no-drop;
+      a {
+        cursor: no-drop;
+      }
     }
   }
-}
-.selected{
-  background-color: ${({ theme }) => theme.colors.white};
-  border: 1px solid ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.primaryDark};
-}
-`
+  .selected {
+    background-color: ${({ theme }) => theme.colors.white_black};
+    border: 1px solid ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.background};
+  }
+`;
 
 export default PaginateStyle;

@@ -20,7 +20,7 @@ import FormInput from './center/formInput';
 import defaultImages from 'assets/images/default_background.png';
 import { Crumbs } from 'components';
 import { ConnectWalletButton } from 'components';
-import { useThemeManager } from 'store/app/hooks';
+import useTheme from 'hooks/useTheme';
 
 const Background = styled(Flex)`
   position: relative;
@@ -55,7 +55,7 @@ const ConnectWalletButtonStyle = styled(ConnectWalletButton)`
 
 const Edit: React.FC = () => {
   useFetchNftList();
-  const [isDark] = useThemeManager();
+  const { isDark } = useTheme();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
   const form = React.useRef<any>();

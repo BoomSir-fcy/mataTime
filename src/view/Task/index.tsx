@@ -2,15 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import { useLocation } from 'react-router-dom';
-import { TaskPage, TaskInvite } from './components'
+import { TaskPage, TaskInvite } from './components';
 
 const BgBox = styled(Box)`
   height: auto;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const Task: React.FC = () => {
-
   const { pathname } = useLocation();
 
   return (
@@ -20,6 +19,5 @@ const Task: React.FC = () => {
     </BgBox>
   );
 };
-
 
 export default Task;

@@ -178,7 +178,11 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                   <Text fontSize='14px' color='textTips'>
                     {t('MARKET CAP')}
                   </Text>
-                  <Text fontWeight='bold' color='primary' fontSize='14px'>
+                  <Text
+                    fontWeight='bold'
+                    color={isDark ? 'primary' : 'ThemeText'}
+                    fontSize='14px'
+                  >
                     {totalSupplyValue}
                   </Text>
                 </Box>
@@ -188,7 +192,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                   </Text>
                   <Text
                     fontWeight='bold'
-                    color='primary'
+                    color={isDark ? 'primary' : 'ThemeText'}
                     fontSize='14px'
                     textAlign='right'
                   >

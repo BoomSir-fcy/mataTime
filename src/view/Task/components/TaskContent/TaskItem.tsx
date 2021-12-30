@@ -170,7 +170,7 @@ const TaskItem: React.FC<{
             </Flex>
             <Box width='100%'>
               <Progress
-                color='primary'
+                color='progressBar'
                 scale='sm'
                 variant='round'
                 primaryStep={(info.Expand?.now / info.Expand?.max) * 100}

@@ -156,6 +156,7 @@ interface CircleProps {
   cursor?: string;
   isAnimation?: boolean;
   showDots?: boolean;
+  color?: string;
 }
 
 const Circle: React.FC<CircleProps> = ({
@@ -167,6 +168,7 @@ const Circle: React.FC<CircleProps> = ({
   children,
   isAnimation,
   showDots,
+  color,
 }) => {
   const E2Circle = isAnimation ? AnimationE2center : E2center;
   const E2CircleIcon = isAnimation ? AnimationBgCircleIcon : BgCircleIcon;
@@ -182,7 +184,7 @@ const Circle: React.FC<CircleProps> = ({
       width={width}
     >
       <E2Circle width={width} height={height} maxWidth={maxWidth}>
-        <E2CircleIcon color='white_black' />
+        <E2CircleIcon color={color} />
       </E2Circle>
       <E3Circle
         width={width}
@@ -190,7 +192,7 @@ const Circle: React.FC<CircleProps> = ({
         cursor={cursor}
         maxWidth={maxWidth}
       >
-        <E3CircleIcon color='white_black' />
+        <E3CircleIcon color={color} />
       </E3Circle>
       <ContentBox width={width} height={height} maxWidth={maxWidth}>
         <Box className='content-box'>{children}</Box>

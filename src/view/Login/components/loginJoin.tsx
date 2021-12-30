@@ -15,8 +15,8 @@ const ConnectWallet = styled(Flex)`
   position: relative;
 `;
 const DataBox = styled.div`
-width: max-content;
-`
+  width: max-content;
+`;
 export const LoginJoin: React.FC = React.memo(() => {
   const { t } = useTranslation();
   const loading = useStore(p => p.loginReducer.signinLoading);
@@ -24,21 +24,28 @@ export const LoginJoin: React.FC = React.memo(() => {
   return (
     <Box>
       <Text
-        fontSize="34px"
-        marginBottom="29px"
+        fontSize='34px'
+        marginBottom='29px'
         bold
         style={{ textTransform: 'capitalize' }}
       >
         {t('loginWelcome')}
       </Text>
-      <Text color="textOrigin">{t('loginSubTitle')}</Text>
+      <Text color='textOrigin'>{t('loginSubTitle')}</Text>
       <ConnectWallet>
         {/* <img
           width="35%"
           src={require('../images/login_right_images.png').default}
         /> */}
         {/* <ConnectWalletButton loading={loading ? 1 : 0} /> */}
-        <AnimationRingIcon style={{ cursor: 'pointer' }} onClick={onConnectWallet} active2 isRotate width='10.5rem'>
+        <AnimationRingIcon
+          color='white_black'
+          style={{ cursor: 'pointer' }}
+          onClick={onConnectWallet}
+          active2
+          isRotate
+          width='10.5rem'
+        >
           <DataBox style={{ cursor: 'pointer' }} onClick={onConnectWallet}>
             <Text fontSize='28px' bold>
               {Boolean(loading) ? (
@@ -50,7 +57,7 @@ export const LoginJoin: React.FC = React.memo(() => {
           </DataBox>
         </AnimationRingIcon>
       </ConnectWallet>
-      <Text color="textTips">{t('loginSubTips')}</Text>
+      <Text color='textTips'>{t('loginSubTips')}</Text>
     </Box>
   );
 });

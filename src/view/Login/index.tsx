@@ -58,7 +58,7 @@ const Content = styled(Card)`
   align-items: baseline;
   border-radius: 0;
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  background-color: ${({ theme }) => theme.colors.primaryDark};
+  background-color: ${({ theme }) => theme.colors.background};
   ${({ theme }) => theme.mediaQueries.md} {
     align-items: flex-end;
     width: 37vw;

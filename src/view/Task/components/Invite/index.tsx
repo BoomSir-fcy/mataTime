@@ -327,7 +327,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
         <Crumbs back>
           <Flex width='100%'>
             <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {tag.toUpperCase()}
               </Text>
             </StyledTag>
@@ -338,7 +338,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
           <Header />
           <ContentBox>
             <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {tag.toUpperCase()}
               </Text>
             </StyledTag>

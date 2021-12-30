@@ -18,7 +18,6 @@ import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'hooks';
 import { GET_DSG_NFT_URL } from 'config';
 
-
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
   padding-bottom: 50px;
@@ -33,7 +32,10 @@ const WalletBody = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 70px;
-  background: ${({ theme }) => theme.colors.backgroundDisabled};
+  background: ${({ theme }) =>
+    theme.isDark
+      ? theme.colors.backgroundDisabled
+      : theme.colors.backgroundThemeCard};
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;
@@ -67,7 +69,7 @@ const Nft = styled(Flex)`
   }
 `;
 const NftTitle = styled(Text)`
-font-weight: bold;
+  font-weight: bold;
   ${mediaQueriesSize.marginr}
 `;
 const SignUpFail = () => {
@@ -77,20 +79,20 @@ const SignUpFail = () => {
   const goRouter = () => {
     dispatch(storeAction.changeReset);
     // history.push('/');
-    window.open(GET_DSG_NFT_URL)
+    window.open(GET_DSG_NFT_URL);
   };
 
   return (
-    <Flex width="100%" flexDirection="column">
-      <Flex justifyContent="space-between">
-        <FailButton scale="ld" variant="tertiary" disabled>
+    <Flex width='100%' flexDirection='column'>
+      <Flex justifyContent='space-between'>
+        <FailButton scale='ld' variant='tertiary' disabled>
           {t('loginCreatAccount')}
         </FailButton>
-        <FailButton scale="ld" onClick={goRouter}>
+        <FailButton scale='ld' onClick={goRouter}>
           {t('loginGetNft')}
         </FailButton>
       </Flex>
-      <Text color="textOrigin">{t('loginSignUpFail')}</Text>
+      <Text color='textOrigin'>{t('loginSignUpFail')}</Text>
     </Flex>
   );
 };
@@ -103,8 +105,8 @@ export const WalletAddress: React.FC<{
 
   return (
     <WalletBody>
-      <Icon width="40px" mr="30px" />
-      <Text fontSize="18px" fontWeight="bold">
+      <Icon width='40px' mr='30px' />
+      <Text fontSize='18px' fontWeight='bold'>
         {address && shortenAddress(address, 4)}
       </Text>
     </WalletBody>
@@ -127,45 +129,49 @@ export const SignUp: React.FC<{
   }, [dispatch]);
 
   return (
-    <Box width="100%">
+    <Box width='100%'>
       {/* 创建账户 */}
       {singUpStep === 0 && !signUpFail && (
         <React.Fragment>
           <Text
-            fontSize="34px"
-            marginBottom="29px"
+            fontSize='34px'
+            marginBottom='29px'
             bold
             style={{ textTransform: 'capitalize' }}
           >
             {t('loginWelcome')}
           </Text>
-          <Text color="textOrigin">{t('loginSubTitle')}</Text>
+          <Text color='textOrigin'>{t('loginSubTitle')}</Text>
           <SignUpWarpper>
             <WalletAddress address={account} />
-            <FailButton onClick={() => {
-              dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
-            }}>{t('loginCreatAccount')}</FailButton>
+            <FailButton
+              onClick={() => {
+                dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
+              }}
+            >
+              {t('loginCreatAccount')}
+            </FailButton>
           </SignUpWarpper>
-          <Text color="textTips">{t('loginSubTips')}</Text>
+          <Text color='textTips'>{t('loginSubTips')}</Text>
         </React.Fragment>
       )}
       {/* 没有nft，不能注册，注册失败 */}
       {singUpStep === 0 && signUpFail && (
         <React.Fragment>
           <Text
-            fontSize="34px"
-            marginBottom="29px"
+            fontSize='34px'
+            marginBottom='29px'
             bold
             style={{ textTransform: 'capitalize' }}
           >
             {t('loginWelcome')}
           </Text>
-          <Text color="textOrigin">{t('loginSubTitle')}</Text>
+          <Text color='textOrigin'>{t('loginSubTitle')}</Text>
           <SignUpWarpper>
             <WalletAddress address={account} />
             <SignUpFail />
           </SignUpWarpper>
-          <Text color="textTips">{t('loginSubTips')}</Text>
+          <Text color='textTips'>{t('loginSubTips')}</Text>
         </React.Fragment>
       )}
       {/* <Button
@@ -178,29 +184,39 @@ export const SignUp: React.FC<{
       </Button> */}
       {/* 正常情况下走注册流程 */}
       {/* 选择头像 */}
-      {singUpStep === 1 && !signUpFail &&
+      {singUpStep === 1 && !signUpFail && (
         <Nft>
-          <Flex alignItems="baseline" flexWrap='wrap'>
-            <NftTitle fontSize="18px">{t('login Already have an NFT avatar')}</NftTitle>
-            <Text fontSize="14px">{t('login After you hold and pledge your NFT avatar, you can register successfully')}</Text>
+          <Flex alignItems='baseline' flexWrap='wrap'>
+            <NftTitle fontSize='18px'>
+              {t('login Already have an NFT avatar')}
+            </NftTitle>
+            <Text fontSize='14px'>
+              {t(
+                'login After you hold and pledge your NFT avatar, you can register successfully',
+              )}
+            </Text>
           </Flex>
           <StakeNFT status={1} />
           <Flex pt='20px' justifyContent='center'>
-            <FailButton onClick={() => {
-              if (!isStakeNft) {
-                toastError(t('login Please approve and select an avatar'))
-                return
-              }
-              dispatch(storeAction.changeSignUpStep({ singUpStep: 2 }));
-            }}>{t('loginSignUpNext')}</FailButton>
+            <FailButton
+              onClick={() => {
+                if (!isStakeNft) {
+                  toastError(t('login Please approve and select an avatar'));
+                  return;
+                }
+                dispatch(storeAction.changeSignUpStep({ singUpStep: 2 }));
+              }}
+            >
+              {t('loginSignUpNext')}
+            </FailButton>
           </Flex>
         </Nft>
-      }
+      )}
       {/* 设置昵称 */}
       {singUpStep === 2 && <SignUpSetName status={isStakeNft} />}
       {/* {singUpStep === 2 && <SignUpSetName />} */}
       {singUpStep === 3 && (
-        <Box paddingTop='30px' width="100%">
+        <Box paddingTop='30px' width='100%'>
           {/* <Text
             fontSize="34px"
             marginBottom="24px"
@@ -211,18 +227,18 @@ export const SignUp: React.FC<{
           </Text> */}
           <WalletAddress address={account} />
           <Flex
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
+            flexDirection='column'
+            justifyContent='center'
+            alignItems='center'
           >
             <img
-              width="230px"
+              width='230px'
               src={require('../images/login_right_images.png').default}
             />
             <SignUpText>{t('loginSignupSuccess')}</SignUpText>
             <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
             <Button
-              scale="ld"
+              scale='ld'
               onClick={() => signHandle()}
               style={{ textTransform: 'capitalize' }}
             >

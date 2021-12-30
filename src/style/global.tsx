@@ -1,5 +1,5 @@
 import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, keyframes } from 'styled-components';
 import { PancakeTheme } from 'uikit';
 
 declare module 'styled-components' {
@@ -7,6 +7,20 @@ declare module 'styled-components' {
     main: string;
   }
 }
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`;
 
 const GlobalStyle = createGlobalStyle`
   /* prettier-ignore */
@@ -130,6 +144,18 @@ const GlobalStyle = createGlobalStyle`
       z-index:99999;
     }
   }
+
+    /* 背景canvas */
+    .particles {
+      background-color: ${({ theme }) => theme.colors.primaryDark};
+      animation: ${fadeIn};
+      animation-duration: 0.5s;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
 `;
 
 export default GlobalStyle;

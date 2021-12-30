@@ -6,7 +6,7 @@ export const scales = {
   LD: 'ld',
   MD: 'md',
   SM: 'sm',
-  XS: 'xs'
+  XS: 'xs',
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];
@@ -14,26 +14,26 @@ export type Scale = typeof scales[keyof typeof scales];
 export enum SortType {
   DEFAULT = 'default',
   UP = 'up',
-  DOWN = 'down'
+  DOWN = 'down',
 }
 
 export const scaleVariants = {
   [scales.LD]: {
     minWidth: '108px',
-    minWidthBig: '108px'
+    minWidthBig: '108px',
   },
   [scales.MD]: {
     minWidth: '148px',
-    minWidthBig: '168px'
+    minWidthBig: '168px',
   },
   [scales.SM]: {
     minWidth: '80px',
-    minWidthBig: '128px'
+    minWidthBig: '128px',
   },
   [scales.XS]: {
     minWidth: '60px',
-    minWidthBig: '100px'
-  }
+    minWidthBig: '100px',
+  },
 };
 
 const DropDownHeader = styled.div`
@@ -44,7 +44,9 @@ const DropDownHeader = styled.div`
   justify-content: flex-start;
   padding: 0px 20px;
   box-shadow: ${({ theme }) => theme.shadows.inset};
-  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.isDark ? theme.colors.inputSecondary : theme.colors.primaryBright};
   border-radius: 16px;
   background: ${({ theme }) => theme.colors.input};
   transition: border-radius 0.15s;
@@ -56,7 +58,8 @@ const DropDownListContainer = styled.div<{ scale: Scale }>`
   height: 0;
   position: absolute;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.input};
+  background: ${({ theme }) =>
+    theme.isDark ? theme.colors.input : theme.colors.primaryBright};
   z-index: ${({ theme }) => theme.zIndices.dropdown};
   transition: transform 0.15s, opacity 0.15s;
   transform: scaleY(0);
@@ -155,7 +158,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = ({
   isOpen,
   setIsOpen,
   fillWidth,
-  children
+  children,
 }) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -165,7 +168,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = ({
   useEffect(() => {
     setContainerSize({
       width: dropdownRef.current.offsetWidth, // Consider border
-      height: dropdownRef.current.offsetHeight
+      height: dropdownRef.current.offsetHeight,
     });
 
     const handleClickOutside = () => {
@@ -196,5 +199,5 @@ export const DropDown: React.FunctionComponent<DropDownProps> = ({
 };
 
 DropDown.defaultProps = {
-  scale: scales.MD
+  scale: scales.MD,
 };

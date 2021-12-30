@@ -18,6 +18,8 @@ const PageContainerStyled = styled(Box)`
   /* FIXME: 解决失败, 用另外的方法 */
   /* padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题 */
   /* transform: translate(0, 0, 0); */
+  background: ${({ theme }) =>
+    theme.isDark ? 'transparent' : theme.colors.background};
 `;
 
 const ChildrenWrapper = styled(Box)`
@@ -44,7 +46,7 @@ const InnerBox = styled(Flex)`
   top: 0;
   z-index: 2;
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const CennerBox = styled(Box)<{ showSidebar?: boolean }>`

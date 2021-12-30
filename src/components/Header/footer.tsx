@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization';
 import { Logo } from './logo';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
-import { useThemeManager } from 'store/app/hooks';
+import useTheme from 'hooks/useTheme';
 
 const FooterWarpper = styled(Flex)`
   justify-content: center;
@@ -39,7 +39,7 @@ const SubText = styled(Text)<{
 
 export const Footer = React.memo(() => {
   const { t } = useTranslation();
-  const [isDark] = useThemeManager();
+  const { isDark } = useTheme();
 
   return (
     <FooterWarpper flexDirection='column'>

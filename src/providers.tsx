@@ -18,8 +18,8 @@ import { useThemeManager } from 'store/app/hooks';
 
 const ThemeProviderWrapper = props => {
   const [isDark] = useThemeManager();
-  // return <ThemeProvider theme={dark} {...props} />;
-  return <ThemeProvider theme={isDark ? dark : light} {...props} />;
+  return <ThemeProvider theme={light} {...props} />;
+  // return <ThemeProvider theme={isDark ? dark : light} {...props} />;
 };
 
 const Providers: React.FC = ({ children }) => {

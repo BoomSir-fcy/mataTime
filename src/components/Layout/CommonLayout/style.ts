@@ -23,7 +23,7 @@ export const LayoutMiddleWrapper = styled(Box)`
     /* width: 670px; */
     /* margin-left: 15px;
     margin-right: 15px; */
-    background: ${({ theme }) => theme.colors.primaryDark};
+    background: ${({ theme }) => theme.colors.background};
     
 `
 export const LayoutRightWrapper = styled(Box)`

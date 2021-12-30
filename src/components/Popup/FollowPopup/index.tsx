@@ -13,7 +13,7 @@ import { PopupWrapper, PopupContentWrapper } from './style';
 import { FollowBtn } from 'view/News/components/MentionItem/style';
 
 import { Api } from 'apis';
-import client from 'utils/client'
+import client from 'utils/client';
 
 type Iprops = {
   children: React.ReactElement;
@@ -24,10 +24,10 @@ type Iprops = {
 export const FollowPopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const myself = useStore(p => p.loginReducer.userInfo);
-  const { children, uid, callback = () => { } } = props;
+  const { children, uid, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   // 获取个人信息
   const getUserInfo = async () => {
@@ -85,25 +85,13 @@ export const FollowPopup = React.memo((props: Iprops) => {
           <div className='number'>
             <Flex className='cloums'>
               {t('followFans')}
-              <Text
-                fontWeight='bold'
-                color='white'
-                ml='10px'
-                maxWidth='30px'
-                ellipsis
-              >
+              <Text fontWeight='bold' ml='10px' maxWidth='30px' ellipsis>
                 {userInfo.fans_num || 0}
               </Text>
             </Flex>
             <Flex className='cloums'>
               {t('followText')}
-              <Text
-                fontWeight='bold'
-                color='white'
-                ml='10px'
-                maxWidth='30px'
-                ellipsis
-              >
+              <Text fontWeight='bold' ml='10px' maxWidth='30px' ellipsis>
                 {userInfo.attention_num || 0}
               </Text>
             </Flex>
@@ -134,9 +122,9 @@ export const FollowPopup = React.memo((props: Iprops) => {
       invert: false,
       stylePadding: '0',
       background: theme.colors.tertiary,
-      tooltipPadding: 0
+      tooltipPadding: 0,
     },
-  )
+  );
 
   useEffect(() => {
     if (uid) {
@@ -147,19 +135,19 @@ export const FollowPopup = React.memo((props: Iprops) => {
   return (
     <PopupWrapper
       onClick={e => e.stopPropagation()}
-    // onMouseOver={(e: any) => {
-    //   if (timer) {
-    //     clearTimeout(timer);
-    //   }
-    //   e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-    //   setVisible(true);
-    // }}
-    // onMouseLeave={(e: any) => {
-    //   e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-    //   timer = setTimeout(() => {
-    //     setVisible(false);
-    //   }, 300);
-    // }}
+      // onMouseOver={(e: any) => {
+      //   if (timer) {
+      //     clearTimeout(timer);
+      //   }
+      //   e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
+      //   setVisible(true);
+      // }}
+      // onMouseLeave={(e: any) => {
+      //   e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
+      //   timer = setTimeout(() => {
+      //     setVisible(false);
+      //   }, 300);
+      // }}
     >
       {/* {children} */}
       {tooltipVisible && tooltip}

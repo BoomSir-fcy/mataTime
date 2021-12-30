@@ -44,7 +44,7 @@ export const styleVariants = {
     // backgroundSize: "20px 36px, calc(100% - 20px) 36px, 20px 38px",
   },
   [variants.SECONDARY]: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'primaryDark',
     boxShadow: 'none',
     border: '1px solid',
     borderColor: 'white',

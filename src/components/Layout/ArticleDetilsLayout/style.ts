@@ -38,7 +38,7 @@ export const RightCard = styled(Flex)`
   overflow: auto;
 `;
 export const CommentListBox = styled(Card)`
-  background-color: ${({ theme }) => theme.colors.primaryDark};
+  background-color: ${({ theme }) => theme.colors.background};
   overflow: visible;
   margin-bottom: 50px;
 `;
