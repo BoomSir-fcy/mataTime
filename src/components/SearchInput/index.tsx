@@ -11,6 +11,7 @@ import SearchUserItem from './SearchUserItem';
 import SearchTopicItem from './SearchTopicItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getEncodeValue } from 'utils/urlQueryPath';
+import CircleLoader from 'components/Loader/CircleLoader';
 
 
 const SearchBox = styled(Card) <{ focus?: boolean, result?: boolean }>`
@@ -29,27 +30,21 @@ const SearchBox = styled(Card) <{ focus?: boolean, result?: boolean }>`
 const ButtonStyled = styled(Button) <{ focus?: boolean }>`
   font-weight: 400;
   opacity: ${({ focus }) => focus ? 1 : 0};
+  height: auto;
+
+`
+const ButtonStyledLine = styled(ButtonStyled)`
+  &:focus{
+    outline: 3px solid ${({ theme }) => theme.colors.textPrimary};
+  }
 `
 
 const InputStyled = styled(Input)`
   background: transparent;
   border: none;
   box-shadow: none;
-`
 
-const DatalistStyled = styled.datalist`
-  background: red;
 `
-
-const OptionStyled = styled.option`
-  background: pink;
-`
-
-const DropDownStyled = styled(DropDown)`
-  background: ${({ theme }) => theme.colors.backgroundCard};
-  background: red;
-`
-
 const ResultBox = styled(Box)`
   background: ${({ theme }) => theme.colors.background};
   box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.2);
@@ -64,6 +59,14 @@ const ResultBox = styled(Box)`
   min-width: 300px;
 `
 
+const BlurInput = styled.input`
+  position: fixed;
+  height: 0;
+  top: -1000px;
+  right: -1000px;
+  opacity: 0;
+`
+
 interface SearchInputProps extends BoxProps {
 
 }
@@ -74,16 +77,18 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const [value, setValue] = useState('')
   const [focus, setFocus] = useState(false)
   const [toFocus, setToFocus] = useState(false)
-  const [isOpen, setIsOpen] = useState(true)
   const inputRef = useRef<HTMLInputElement>(null)
+  const blurRef = useRef<HTMLInputElement>(null)
   const dispatch = useDispatch();
-  const { resultListOfPeoples, resultListOfTopic } = useStore(p => p.search);
+  const { resultListOfPeoples, resultListOfTopic, loading } = useStore(p => p.search);
   const resultLength = useSearchResultLength()
   const { push, replace } = useHistory()
   const { pathname } = useLocation()
 
   const debouncedOnChange = useMemo(
-    () => debounce((e) => dispatch(fetchThunk.fetchSearchAsync(e)), 300),
+    () => debounce((e) => dispatch(fetchThunk.fetchSearchAsync({
+      search: e
+    })), 300),
     [dispatch, value],
   )
 
@@ -99,30 +104,39 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   }
 
   const handleSubmit = useCallback((e: FormEvent) => {
+    console.log(value)
+    e.preventDefault();
+    if (!value || value === '#' || value === '@') return
+    debouncedOnChange.cancel()
+    dispatch(storeAction.setSearchDisplayPeople({ list: [] }))
+    dispatch(storeAction.setSearchDisplayTopic({ list: [] }))
+    dispatch(fetchThunk.fetchSearchAsync({
+      search: value,
+      fetchDisplay: true
+    }))
+    // if (!loading) {
+    //   dispatch(storeAction.setSearchDisplayPeople({ list: resultListOfPeoples }))
+    //   dispatch(storeAction.setSearchDisplayTopic({ list: resultListOfTopic }))
+    // } else {
+    //   dispatch(storeAction.setSearchDisplayPeople({ list: [] }))
+    //   dispatch(storeAction.setSearchDisplayTopic({ list: [] }))
+    //   dispatch(fetchThunk.fetchSearchAsync({
+    //     search: value,
+    //     fetchDisplay: true
+    //   }))
+    // }
     if (pathname === '/search') {
       replace(`/search?q=${getEncodeValue(value)}`)
     } else {
       push(`/search?q=${getEncodeValue(value)}`)
     }
-    // dispatch(storeAction.setSearchDisplayPeople, { list: resultListOfPeoples })
-    // dispatch(storeAction.setSearchDisplayTopic, { list: resultListOfTopic })
-    e.preventDefault()
-  }, [pathname, push, replace])
+    if (blurRef.current) {
+      blurRef.current.focus()
+    }
+  }, [value, dispatch, loading, resultListOfPeoples, resultListOfTopic, debouncedOnChange, pathname, push, replace])
 
-  useEffect(() => {
-    let timer = null
-    if (!focus) {
-      timer = setTimeout(() => {
-        setIsOpen(false)
-      }, 100)
-    } else {
-      setIsOpen(true)
-    }
-    return () => {
-      if (timer) clearTimeout(timer)
-    }
-  }, [focus])
-  // onKeyDown={handleKeyDown} 
+
+
   return (
     <Box {...props}>
       <form
@@ -142,9 +156,15 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
         <label htmlFor="search">
           <SearchBox focus={focus} isBoxShadow result={!!resultLength}>
             <Flex height="100%" alignItems="center" >
-              <ButtonStyled focus padding="0" variant='text'>
-                <Icon name='icon-sousuo' size={16}></Icon>
-              </ButtonStyled>
+              {
+                loading
+                  ?
+                  <CircleLoader />
+                  :
+                  <ButtonStyled focus padding="0" variant='text'>
+                    <Icon name='icon-sousuo' size={16}></Icon>
+                  </ButtonStyled>
+              }
               <InputStyled
                 value={value}
                 ref={inputRef}
@@ -152,30 +172,31 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 list="ice-cream-flavors"
                 onChange={(e) => { searchChange(e) }}
                 onKeyDown={startSearch.bind(this)}
-
-                type="text"
+                type="search"
                 id="search"
                 placeholder={t('SearchPlaceholder')}
               />
 
-              <ButtonStyled
-                tabIndex={-1}
+              <ButtonStyledLine
+                // tabIndex={-1}
                 onMouseDown={() => setToFocus(true)}
                 onClick={() => {
-                  dispatch(fetchThunk.fetchSearchAsync(''))
+                  dispatch(fetchThunk.fetchSearchAsync({
+                    search: ''
+                  }))
                   setValue('')
                 }}
                 focus={focus}
                 padding="0"
                 variant='text'>
                 <Icon name='icon-guanbi2fill' size={19} />
-              </ButtonStyled>
+              </ButtonStyledLine>
             </Flex>
           </SearchBox>
         </label>
         <Box onMouseDown={() => setToFocus(true)} position="relative" height="0">
           {
-            isOpen && (
+            focus && (
               <ResultBox>
                 <Box>
                   {
@@ -202,6 +223,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
           }
         </Box>
       </form>
+      <BlurInput type="radio" ref={blurRef} />
     </Box>
 
   )

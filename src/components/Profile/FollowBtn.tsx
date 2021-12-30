@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Button, ButtonProps, ButtonVariant } from 'uikit';
 import debounce from 'lodash/debounce'
-import { Avatar } from 'components';
+import { Avatar, CancelAttentionModal } from 'components';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 import { Certification } from './certification';
@@ -12,37 +12,40 @@ import { useTranslation } from 'contexts';
 interface FollowBtnProps extends ButtonProps {
   attention: boolean
   uid: number
-  onChanges?: (isAttention: boolean) => void
+  address: string,
+  nft_image: string,
+  onChanges: (attention: boolean) => void
 }
 
 export const FollowBtn: React.FC<FollowBtnProps> = ({
-  attention, uid, onChanges, ...props
+  attention, uid, onChanges, address, nft_image, ...props
 }) => {
   const { t } = useTranslation()
 
-  const [isAttention, setIsAttention] = useState(attention)
+  const [visibility, setVisibility] = useState(false)
   const [foucs, setFoucs] = useState(false)
   const btnVariant: ButtonVariant = useMemo(() => {
-    if (isAttention && foucs) return 'tertiary'
-    if (isAttention) return 'secondary'
+    if (attention && foucs) return 'tertiary'
+    if (attention) return 'secondary'
     return 'primary'
-  }, [isAttention, foucs])
+  }, [attention, foucs])
 
   const btnText = useMemo(() => {
-    if (isAttention && foucs) return 'followCancelText'
-    if (isAttention) return 'meFollowed'
+    if (attention && foucs) return 'followCancelText'
+    if (attention) return 'meFollowed'
     return 'followText'
-  }, [isAttention, foucs])
+  }, [attention, foucs])
 
   const followUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
-      if (Api.isSuccess(res) && onChanges) {
-        onChanges(true)
+      if (Api.isSuccess(res)) {
+        // onChanges(true)
       } else {
-        // setIsAttention(prep => !prep)
+        onChanges(false)
       }
     } catch (error) {
+      onChanges(false)
       console.error(error);
     }
   };
@@ -50,50 +53,63 @@ export const FollowBtn: React.FC<FollowBtnProps> = ({
   // 取消关注
   const unFollowUser = async (focus_uid: number) => {
     try {
+      onChanges(false)
+      setVisibility(false)
       const res = await Api.MeApi.unFollowUser(focus_uid);
       if (Api.isSuccess(res) && onChanges) {
-        onChanges(false)
       } else {
-        // setIsAttention(prep => !prep)
+        onChanges(true)
       }
     } catch (error) {
+      onChanges(true)
       console.error(error);
     }
   };
 
-  const debouncedOnChange = useMemo(
-    () => debounce((isFollowing) => handleChangeState(isFollowing), 500),
-    [],
-  )
-
-  const handleChangeState = useCallback(async (isFollowing) => {
-    if (attention === isFollowing) return
-    if (isFollowing) {
-      await followUser(uid)
-      return
-    }
-    await unFollowUser(uid)
-  }, [uid, attention])
-
   const handleClick = useCallback(() => {
-    setIsAttention(prep => {
-      debouncedOnChange(!prep)
-      return !prep
-    })
-  }, [setIsAttention])
+    if (!attention) {
+      onChanges(!attention)
+      followUser(uid)
+    } else {
+      setVisibility(true)
+    }
+  }, [attention, onChanges, uid, setVisibility])
+
+
   return (
-    <Button
-      onMouseEnter={() => setFoucs(true)}
-      onMouseLeave={() => setFoucs(false)}
-      onBlur={() => setFoucs(false)}
-      variant={btnVariant}
-      minWidth="110px"
-      width="110px"
-      ml="36px"
-      onClick={handleClick}
-      {...props}
-    >
-      {t(btnText)}
-    </Button>
+    <>
+      <Button
+        onMouseEnter={() => setFoucs(true)}
+        onMouseLeave={() => setFoucs(false)}
+        onBlur={() => setFoucs(false)}
+        variant={btnVariant}
+        minWidth="110px"
+        width="110px"
+        ml="36px"
+        onClick={handleClick}
+        {...props}
+      >
+        {
+          props.variant === 'text'
+            ?
+            <Text color={attention ? 'textTips' : 'textPrimary'}>{t(btnText)}</Text>
+            :
+            t(btnText)
+        }
+      </Button>
+      <CancelAttentionModal
+        title={t('meUnsubscribeTips')}
+        show={visibility}
+        params={{
+          uid,
+          address,
+          nft_image
+        }}
+        confirm={() => unFollowUser(uid)}
+        onClose={() =>
+          setVisibility(false)
+        }
+      />
+    </>
   )
 }

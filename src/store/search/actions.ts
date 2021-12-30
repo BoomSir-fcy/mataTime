@@ -8,3 +8,10 @@ export const setSearchDisplayPeople = createAction<{
 export const setSearchDisplayTopic = createAction<{
   list: SearchTopicInfo[],
 }>('search/setSearchDisplayTopic')
+
+interface UpdatePeopleState extends Partial<SearchUserInfo> {
+  uid: number
+
+}
+
+export const updatePeopleState = createAction<UpdatePeopleState>('search/updatePeopleState')

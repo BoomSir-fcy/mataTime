@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text, Button, FlexProps } from 'uikit';
 import { Avatar } from 'components';
@@ -34,22 +34,21 @@ export const UserFlowItem: React.FC<UserFlowItemProps> = ({
   ...props
 }) => {
 
-
   return (
     <Flex width="100%" justifyContent="flex-start" alignItems="center" {...props}>
       <Flex flex="1">
-        <Avatar pd="10px 0" src={nft_image} scale="md" />
+        <Avatar uid={uid} pd="10px 0" src={nft_image} scale="md" />
         <Box ml="22px">
-          <Flex>
+          <Flex alignItems="center" flexWrap="wrap">
             <Text fontSize='18px' bold>{nick_name}</Text>
-            <Text fontSize='14px' color='textTips'>@{shortenAddress(address)}</Text>
+            <Text fontSize='14px' ml="12px" color='textTips'>@{shortenAddress(address)}</Text>
           </Flex>
           <Box>
-            <Text ellipsis maxLine={2}>{introduction}</Text>
+            <Text fontSize='14px' color='textTips' ellipsis maxLine={2}>{introduction}</Text>
           </Box>
         </Box>
       </Flex>
-      <FollowBtn uid={uid} attention={is_attention} onChanges={onChanges} />
+      <FollowBtn uid={uid} attention={is_attention} onChanges={onChanges} address={address} nft_image={nft_image} />
     </Flex>
   )
 }

@@ -13,6 +13,7 @@ export interface SearchUserInfo {
 export interface SearchTopicInfo {
   topic_name: string
   topic_id: number
+  post_num: number
 }
 
 export interface SearchState {

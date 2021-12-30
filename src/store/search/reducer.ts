@@ -3,7 +3,7 @@ import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { RedirectToSwap } from 'libs/mini-swap/Swap/redirects';
 import { SearchUserInfo, SearchTopicInfo, SearchState } from './types'
-import { setSearchDisplayPeople, setSearchDisplayTopic } from './actions'
+import { setSearchDisplayPeople, setSearchDisplayTopic, updatePeopleState } from './actions'
 
 const initialState: SearchState = {
   resultListOfPeoples: [],
@@ -13,7 +13,7 @@ const initialState: SearchState = {
   historyList: [],
   placeHolderSearch: '',
   displayResultListOfPeoples: [],
-  displayResultListOfTopic: []
+  displayResultListOfTopic: [],
 };
 
 export const fetchSearchPeopleAsync = createAsyncThunk(
@@ -40,10 +40,15 @@ export const fetchSearchPeopleAsync = createAsyncThunk(
   },
 );
 
-export const fetchSearchAsync = createAsyncThunk(
+export const fetchSearchAsync = createAsyncThunk<any, {
+  search: string
+  fetchDisplay?: boolean
+}>(
   'fetch/fetchSearchAsync',
-  async (search: string, { dispatch }) => {
+  async ({ search, fetchDisplay }, { dispatch }) => {
+    console.log(search, fetchDisplay, '=fetchDisplay')
     const result = {
+      fetchDisplay,
       resultListOfPeoples: [],
       resultListOfTopic: [],
     }
@@ -111,10 +116,14 @@ export const Search = createSlice({
         state.errorMsg = 'error'
       })
       .addCase(fetchSearchAsync.fulfilled, (state, action) => {
-        const { resultListOfPeoples, resultListOfTopic } = action.payload;
+        const { resultListOfPeoples, resultListOfTopic, fetchDisplay } = action.payload;
         console.log(resultListOfTopic, 11221)
         state.resultListOfPeoples = resultListOfPeoples
         state.resultListOfTopic = resultListOfTopic
+        if (fetchDisplay) {
+          state.displayResultListOfPeoples = resultListOfPeoples
+          state.displayResultListOfTopic = resultListOfTopic
+        }
       })
       .addCase(fetchSearchAsync.rejected, (state, action) => {
         state.resultListOfPeoples = []
@@ -128,6 +137,27 @@ export const Search = createSlice({
       .addCase(setSearchDisplayTopic, (state, action) => {
         const { list } = action.payload
         state.displayResultListOfTopic = list
+      })
+      .addCase(updatePeopleState, (state, action) => {
+        const { uid, ...userInfo } = action.payload
+        state.displayResultListOfPeoples = state.displayResultListOfPeoples.map(item => {
+          if (item.uid === uid) {
+            return {
+              ...item,
+              ...userInfo,
+            }
+          }
+          return item
+        })
+        state.resultListOfPeoples = state.resultListOfPeoples.map(item => {
+          if (item.uid === uid) {
+            return {
+              ...item,
+              ...userInfo,
+            }
+          }
+          return item
+        })
       })
   },
 });

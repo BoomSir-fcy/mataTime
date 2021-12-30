@@ -62,6 +62,7 @@ const GlobalStyle = createGlobalStyle`
   [role="button"] {
     cursor: pointer;
   }
+
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -97,6 +98,12 @@ const GlobalStyle = createGlobalStyle`
 
   input[type=number] {
     -moz-appearance: textfield;
+  }
+  input[type=search]{
+    -webkit-appearance:none;
+  }
+  input[type=search]::-webkit-search-cancel-button {
+    display: none;
   }
 
   * {

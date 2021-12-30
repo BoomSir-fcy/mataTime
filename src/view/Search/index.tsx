@@ -4,8 +4,10 @@ import { Box, Text, Flex } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { Crumbs, UserFlowItem } from 'components'
 import SearchInput from 'components/SearchInput'
+import SearchTopicItem from 'components/SearchInput/SearchTopicItem'
 import Tabs from 'components/Tabs'
-import { useStore } from 'store'
+import { storeAction, useStore } from 'store'
+import { useDispatch } from 'react-redux'
 
 const tabDatas = [
   {
@@ -20,8 +22,9 @@ const tabDatas = [
 
 const Search = () => {
   const { t } = useTranslation()
+  const dispatch = useDispatch();
 
-  const { resultListOfPeoples, resultListOfTopic } = useStore(p => p.search);
+  const { resultListOfPeoples, resultListOfTopic, displayResultListOfPeoples, displayResultListOfTopic } = useStore(p => p.search);
 
   const [activeType, setActiveType] = useState(tabDatas[0].type)
 
@@ -56,24 +59,39 @@ const Search = () => {
           }}
         />
         <Box>
-          {
-            resultListOfPeoples.map(item => {
-              return (
-                <UserFlowItem
-                  padding="10px 29px 10px 19px"
-                  uid={item.uid}
-                  address={item.address}
-                  is_attention={item.is_attention}
-                  nft_image={item.nft_image}
-                  introduction={item.introduction}
-                  nick_name={item.nick_name}
-                  onChanges={() => {
-
-                  }}
-                />
-              )
-            })
-          }
+          <Box>
+            {
+              activeType === tabDatas[0].type && displayResultListOfPeoples.map(item => {
+                return (
+                  <UserFlowItem
+                    padding="10px 29px 10px 19px"
+                    uid={item.uid}
+                    key={`u_${item.uid}`}
+                    address={item.address}
+                    is_attention={item.is_attention}
+                    nft_image={item.nft_image}
+                    introduction={item.introduction}
+                    nick_name={item.nick_name}
+                    onChanges={(is_attention) => {
+                      dispatch(storeAction.updatePeopleState({
+                        uid: item.uid,
+                        is_attention
+                      }))
+                    }}
+                  />
+                )
+              })
+            }
+          </Box>
+          <Box>
+            {
+              activeType === tabDatas[1].type && displayResultListOfTopic.map(item => {
+                return (
+                  <SearchTopicItem key={`t_${item.topic_id}`} id={item.topic_id} post_num={item.post_num} name={item.topic_name} />
+                )
+              })
+            }
+          </Box>
         </Box>
       </Box>
     </Box>
