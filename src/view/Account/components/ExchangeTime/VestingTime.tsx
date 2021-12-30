@@ -238,7 +238,7 @@ const VestingTime: React.FC<init> = ({}) => {
           </Table>
         </TableBox>
         <PaginateStyle alignItems='center' justifyContent='end'>
-          <Text mr='16px' fontSize='14px' color='textTips'>
+          <Text className='totalPage' fontSize='14px' color='textTips'>
             {t('Account Total %page% page', { page: pageCount })}
           </Text>
           <ReactPaginate
@@ -247,7 +247,7 @@ const VestingTime: React.FC<init> = ({}) => {
             forcePage={page - 1}
             disableInitialCallback={true}
             onPageChange={handlePageClick}
-            pageRangeDisplayed={4}
+            pageRangeDisplayed={3}
             marginPagesDisplayed={1}
             pageCount={pageCount}
             previousLabel='<'

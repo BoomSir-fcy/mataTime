@@ -324,8 +324,8 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
   return (
     <>
       {source === 'TASK' ? (
-        <Crumbs back>
-          <Flex width='100%'>
+        <Crumbs back justifyContent='start'>
+          <Flex width='max-content'>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
                 {tag.toUpperCase()}
