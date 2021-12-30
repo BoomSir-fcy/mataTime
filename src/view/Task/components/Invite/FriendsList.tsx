@@ -93,7 +93,7 @@ const FriendsList: React.FC<{
       </Table>
 
       <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text mr='16px' fontSize='14px' color='textTips'>
+        <Text className='totalPage' fontSize='14px' color='textTips'>
           {t('Account Total %page% page', { page: total })}
         </Text>
         <ReactPaginate
@@ -102,7 +102,7 @@ const FriendsList: React.FC<{
           forcePage={pageNum - 1}
           disableInitialCallback={true}
           onPageChange={handlePageClick}
-          pageRangeDisplayed={4}
+          pageRangeDisplayed={3}
           marginPagesDisplayed={1}
           pageCount={total}
           previousLabel='<'

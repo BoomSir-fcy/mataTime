@@ -8,6 +8,8 @@ import { useToast } from 'hooks';
 import { storeAction, useStore } from 'store';
 import { Api } from 'apis';
 
+import { useTag } from './hook';
+
 import useIm from 'hooks/imHooks/useIm';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -27,18 +29,24 @@ const CenterCard = styled(Box)`
 `;
 
 const Home: React.FC = (props: any) => {
+  const { match } = props;
   const { t } = useTranslation();
   const { replace } = useHistory();
   const { pathname } = useLocation();
+  const { getUserTag } = useTag();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
+  const userTag = useStore(p => p.post);
+  const { user_tags1, user_tags2 } = userTag;
   const [refresh, setRefresh] = useState(false);
+  const [getTab, setGetTab] = useState(true);
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
   });
+  const [userTags, setUserTags] = useState([]);
   const articleRefs = React.useRef(null);
-
+  const tabsRefs = React.useRef(null);
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
@@ -71,17 +79,39 @@ const Home: React.FC = (props: any) => {
     const temp = {
       ...filterVal,
     };
-    // setArticleIds({})
-    replace(`${pathname || ''}?attention=${item.value}`);
-    temp[item.paramsName] = item.value;
+    const params = item?.tabs ? `&type=${item.tabs}` : '';
+    replace(`${pathname || ''}?attention=${item.value}${params}`);
     dispatch(
-      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 }),
+      storeAction.postUpdateArticleParams({
+        attention: item.value,
+        user_tags1: [...user_tags1],
+        user_tags2: [...user_tags2],
+        page: 1,
+      }),
     );
+    temp[item.paramsName] = item.value;
     setFilterVal(temp);
     setRefresh(!refresh);
   };
 
-  const { match } = props;
+  const getTags = async () => {
+    try {
+      const res = await getUserTag();
+      setUserTags(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setGetTab(false);
+    }
+  };
+
+  React.useEffect(() => {
+    getTags();
+  }, []);
+
+  const toTop = () => {
+    articleRefs?.current?.reload(1);
+  };
 
   return (
     <PageContainer>
@@ -90,23 +120,28 @@ const Home: React.FC = (props: any) => {
           <Crumbs
             top
             zIndex={1005}
-            callBack={() => tabsChange(filterVal)}
+            callBack={() => toTop()}
             title={t('homeHeaderTitle')}
           />
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
+            ref={tabsRefs}
+            tags={userTags}
             tabsChange={tabsChange}
+            params={parsedQs.type}
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
-          <ArticleList
-            key={refresh}
-            ref={articleRefs}
-            setNonce={setNonce}
-            nonce={nonce}
-            topicName={match.params.name}
-            filterValObj={filterVal}
-            {...props}
-          />
+          {!getTab && (
+            <ArticleList
+              key={refresh}
+              ref={articleRefs}
+              setNonce={setNonce}
+              nonce={nonce}
+              topicName={match.params.name}
+              filterValObj={filterVal}
+              {...props}
+            />
+          )}
         </CenterCard>
       </Flex>
     </PageContainer>

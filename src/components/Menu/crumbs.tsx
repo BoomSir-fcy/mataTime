@@ -21,7 +21,6 @@ const CrumbsWraper = styled(Box)`
 
 const Card = styled(Flex)<{ zIndex?: number }>`
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -55,16 +54,27 @@ export const Crumbs: React.FC<{
   top?: boolean;
   zIndex?: number;
   children?: any;
+  justifyContent?: string;
   callBack?: () => void;
 }> = React.memo(
-  ({ back, top, title, centerTitle, zIndex, children, callBack }) => {
+  ({
+    back,
+    top,
+    title,
+    centerTitle,
+    zIndex,
+    children,
+    justifyContent,
+    callBack,
+  }) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const colors = theme.colors.white_black;
     const { isPushed, setIsPushed, isMobile } = useMenuNav();
 
     const goBack = () => {
-      document.referrer === '' ? history.replace('/') : history.goBack();
+      // document.referrer === '' ? history.replace('/') : history.goBack();
+      window.history.length > 2 ? history.goBack() : history.replace('/');
     };
 
     const goTop = () => {
@@ -79,7 +89,10 @@ export const Crumbs: React.FC<{
 
     return (
       <CrumbsWraper>
-        <Card zIndex={zIndex}>
+        <Card
+          justifyContent={justifyContent ? justifyContent : 'space-between'}
+          zIndex={zIndex}
+        >
           <Flex alignItems='center' style={centerTitle && { width: '100%' }}>
             <MenuButton
               aria-label='Toggle menu'
