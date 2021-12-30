@@ -1,10 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
+import { SearchUserInfo, SearchTopicInfo } from './types'
 
-export const postGetArticle = createAction('post/get/article');
-export const postUpdateArticle = createAction<Api.Home.post[]>(
-  'post/update/article'
-);
-export const postUpdateArticleParams = createAction<{
-  attention: number;
-  page: number;
-}>('post/update/article/params');
+export const setSearchDisplayPeople = createAction<{
+  list: SearchUserInfo[],
+}>('search/setSearchDisplayPeople')
+
+export const setSearchDisplayTopic = createAction<{
+  list: SearchTopicInfo[],
+}>('search/setSearchDisplayTopic')

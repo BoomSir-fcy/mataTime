@@ -78,7 +78,7 @@
   "ReportModalComplain5": "Expressed the intention of self-harm or suicide",
   "SearchPlaceholder": "Search SOFI",
   "HotTopicTitle": "Trends for you",
-  "HotTopicUnit": "%value% posts",
+  "HotTopicUnit": "%value% post%s%",
   "HotTopicRefreshSuccess": "Refresh succeeded",
   "HotTopicRefreshFail": "Refresh Fail",
   "recommendPeopleTitle": "You might like",

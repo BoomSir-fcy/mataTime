@@ -13,7 +13,8 @@ import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
 import { Post, postReducer, postAction, fetchPostAsync } from './post';
-import { SearchState, searchReducer, searchAction, fetchSearchPeopleAsync, fetchSearchAsync } from './search';
+import { searchReducer, searchAction, fetchSearchPeopleAsync, fetchSearchAsync } from './search';
+import { SearchState } from './search/types';
 
 import { TaskState } from './task/type';
 export interface Store {

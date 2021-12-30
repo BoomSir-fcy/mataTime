@@ -18,26 +18,32 @@ import {
   ContentParsing,
   MorePostPopup,
 } from 'components';
-import { SearchItem } from './styled'
+import { SearchItem, LinkItem } from './styles'
+import { getEncodeValue } from 'utils/urlQueryPath';
 
 interface SearchTopicItemProps {
-  length?: number
+  post_num?: number
   name?: string
+  id?: number
+  onTab?: (id: number) => void
 }
 
-const SearchTopicItem: React.FC<SearchTopicItemProps> = ({ length, name, ...props }) => {
+const SearchTopicItem: React.FC<SearchTopicItemProps> = ({ id, post_num, onTab, name, ...props }) => {
   const { t } = useTranslation()
 
-
   return (
-    <Link to="/aaa">
+    <LinkItem onFocus={() => onTab && onTab(id)} to={`/topicList/${id}/${getEncodeValue(name)}`}>
       <SearchItem alignItems="center" justifyContent="space-between">
         <Box width="100%">
-          <Text bold ellipsis width="100%">#{name}54awwasedwdsajdsahdbasbdaskbndsajkasd </Text>
-          <Text fontSize='14px' color='textTips'>{length} items </Text>
+          <Text bold ellipsis width="100%">#{name}</Text>
+          <Text fontSize='14px' color='textTips'>
+            {t('HotTopicUnit', {
+              value: post_num > 999 ? '999+' : post_num,
+              s: post_num > 1 ? 's' : '',
+            })}</Text>
         </Box>
       </SearchItem>
-    </Link>
+    </LinkItem>
   )
 }
 

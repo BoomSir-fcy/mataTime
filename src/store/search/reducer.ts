@@ -1,39 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { postUpdateArticleParams, postUpdateArticle } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { RedirectToSwap } from 'libs/mini-swap/Swap/redirects';
+import { SearchUserInfo, SearchTopicInfo, SearchState } from './types'
+import { setSearchDisplayPeople, setSearchDisplayTopic } from './actions'
 
-interface SearchUserInfo {
-  display_format: number // 显示的格式
-  introduction: string // 介绍
-  location: number // 所在地
-  nft_image: string // nft图像
-  nick_name: string // 昵称
-  status: number // 
-  uid: number
-}
-
-interface SearchTopicInfo {
-  topic_name: string
-}
-
-export interface SearchState {
-  resultListOfPeoples: SearchUserInfo[],
-  resultListOfTopic: SearchTopicInfo[],
-  loading: boolean,
-  errorMsg: string,
-  historyList: string[],
-  placeHolderSearch: string,
-}
-
-const initialState = {
+const initialState: SearchState = {
   resultListOfPeoples: [],
   resultListOfTopic: [],
   loading: false,
   errorMsg: '',
   historyList: [],
   placeHolderSearch: '',
+  displayResultListOfPeoples: [],
+  displayResultListOfTopic: []
 };
 
 export const fetchSearchPeopleAsync = createAsyncThunk(
@@ -140,6 +120,14 @@ export const Search = createSlice({
         state.resultListOfPeoples = []
         state.resultListOfTopic = []
         state.errorMsg = 'error'
+      })
+      .addCase(setSearchDisplayPeople, (state, action) => {
+        const { list } = action.payload
+        state.displayResultListOfPeoples = list
+      })
+      .addCase(setSearchDisplayTopic, (state, action) => {
+        const { list } = action.payload
+        state.displayResultListOfTopic = list
       })
   },
 });

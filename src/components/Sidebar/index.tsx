@@ -1,7 +1,7 @@
 import React from 'react';
 import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
-import Search from './Search';
+import Search from '../SearchInput';
 import Swap from './swap';
 import HotTopic from './hotTopic';
 import RecommendPeople from './recommendPeople';
@@ -59,7 +59,7 @@ const Sidebar = props => {
 
   return (
     <SidebarStyled {...props} style={{ top: state.top }} ref={ref}>
-      <Search mb="15px" />
+      <Search mt="15px" mb="15px" />
       {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
       <Swap />
       <RecommendPeople />

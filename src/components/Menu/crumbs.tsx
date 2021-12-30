@@ -19,16 +19,16 @@ const CrumbsWraper = styled(Box)`
   }
 `;
 
-const Card = styled(Flex)<{ zIndex?: number }>`
+const Card = styled(Flex) <{ zIndex?: number, hideBorder?: boolean }>`
   align-items: center;
   justify-content: space-between;
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-bottom: 1px solid ${({ theme, hideBorder }) => !hideBorder ? 'transparent' : theme.colors.borderThemeColor};
   position: fixed;
   top: 0;
   background: ${({ theme }) => theme.colors.background};
-  z-index: ${({ zIndex }) => zIndex || 1005};
+  z-index: ${({ zIndex }) => zIndex};
   transform: translateZ(1px);
   ${({ theme }) => theme.mediaQueries.md} {
     position: sticky;
@@ -55,9 +55,10 @@ export const Crumbs: React.FC<{
   top?: boolean;
   zIndex?: number;
   children?: any;
+  hideBorder?: boolean
   callBack?: () => void;
 }> = React.memo(
-  ({ back, top, title, centerTitle, zIndex, children, callBack }) => {
+  ({ back, top, hideBorder, title, centerTitle, zIndex = 1005, children, callBack }) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const colors = theme.colors.white_black;
@@ -77,9 +78,11 @@ export const Crumbs: React.FC<{
       }
     };
 
+    console.log(hideBorder, 'hideBorder')
+
     return (
       <CrumbsWraper>
-        <Card zIndex={zIndex}>
+        <Card hideBorder={hideBorder} zIndex={zIndex}>
           <Flex alignItems='center' style={centerTitle && { width: '100%' }}>
             <MenuButton
               aria-label='Toggle menu'
