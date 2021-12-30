@@ -26,7 +26,6 @@ export const fetchPostAsync = createAsyncThunk(
   async (params: Api.Home.queryListParams, { dispatch }) => {
     // dispatch()
     dispatch(setLoading(true));
-    console.log(params);
     const response: Api.Home.postData = await Api.HomeApi.getArticleList({
       ...params,
       user_tags1:
