@@ -1,9 +1,23 @@
+import qs from 'qs';
 import { Http } from '../http';
 
 export class HomeApi extends Http {
   // 文章列表
   async getArticleList(params: Api.Home.queryListParams) {
-    const res: Api.Home.postData = await this.get('/v1/post/list', params);
+    const paramsStr = qs.stringify(
+      {
+        user_tags1: params.user_tags1,
+        user_tags2: params.user_tags2,
+      },
+      { arrayFormat: 'repeat' },
+    );
+    const res: Api.Home.postData = await this.get(`/v1/post/list`, params);
+    return res;
+  }
+
+  // 获取用户的tag分类列表
+  async getUserTag() {
+    const res = await this.get('/v1/user/tag/cat-list');
     return res;
   }
 
@@ -11,7 +25,7 @@ export class HomeApi extends Http {
   async getPostRewardAuthor(post_type: string, post_id: number) {
     const res = await this.get('/v1/reward/reward-author/user-post-stat', {
       post_type,
-      post_id
+      post_id,
     });
     return res;
   }

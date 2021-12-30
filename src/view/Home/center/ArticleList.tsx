@@ -24,6 +24,8 @@ const ArticleComponents = (props, ref) => {
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const article = useStore(p => p.post);
   const dispatch = useDispatch();
+  const userTag = useStore(p => p.post);
+  const { user_tags1, user_tags2 } = userTag;
   // const [page, setPage] = useState(1);
   // const [loading, setLoading] = useState(false);
   // const [listData, setListData] = useState([]);
@@ -48,6 +50,8 @@ const ArticleComponents = (props, ref) => {
           attention: 1,
           page: current || page,
           per_page: pageSize,
+          user_tags1,
+          user_tags2,
           ...props.filterValObj,
         }),
       );
@@ -70,9 +74,16 @@ const ArticleComponents = (props, ref) => {
 
   useEffect(() => {
     if (addListNum === 0) {
-      Getlist()
+      Getlist();
     }
-  }, [addListNum, Getlist])
+  }, [addListNum]);
+
+  React.useEffect(() => {
+    if (Number(props.filterValObj.attention) === 3) {
+      setIsEnd(false);
+      Getlist(1);
+    }
+  }, [user_tags1, user_tags2]);
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
@@ -121,13 +132,16 @@ const ArticleComponents = (props, ref) => {
 
   return (
     <ArticleListBox>
-      <List loading={loading || !isEnd} renderList={(type) => {
-        if (type === 1 && list?.length !== 0) {
-          return
-        }
-        Getlist()
-      }}>
-        {(list ?? []).map((item) => (
+      <List
+        loading={loading || !isEnd}
+        renderList={type => {
+          if (type === 1 && list?.length !== 0) {
+            return;
+          }
+          Getlist();
+        }}
+      >
+        {(list ?? []).map(item => (
           <MeItemWrapper key={`${item.id}`}>
             {
               // 浏览自己的不扣费
