@@ -19,11 +19,11 @@ export const fetchPostAsync = createAsyncThunk(
   'fetch/getArticle',
   async (params: Api.Home.queryListParams, { dispatch }) => {
     // dispatch()
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     const response: Api.Home.postData = await Api.HomeApi.getArticleList(
       params,
     );
-    dispatch(setLoading(false))
+    dispatch(setLoading(false));
     if (Api.isSuccess(response)) {
       return {
         list: response.data.List,
@@ -41,7 +41,7 @@ export const Post = createSlice({
   initialState,
   reducers: {
     setLoading: (state, { payload }) => {
-      state.loading = payload
+      state.loading = payload;
     },
   },
   extraReducers: builder => {
@@ -49,18 +49,18 @@ export const Post = createSlice({
       .addCase(fetchPostAsync.fulfilled, (state, action) => {
         const { list, page, per_page, attention } = action.payload;
         let articleList = list ?? [];
-        const { length } = state.list
+        const { length } = state.list;
         if (page === 1) {
           state.list = articleList;
         } else {
-          const list = state.list.concat(articleList)
-          state.list = uniqBy(list, 'id')
+          const list = state.list.concat(articleList);
+          state.list = uniqBy(list, 'id');
         }
         state.lastList =
           articleList.length >= per_page || page > 1 ? articleList : [];
         state.page = articleList.length >= per_page ? page + 1 : page;
         state.attention = Number(attention);
-        state.addListNum = state.list.length - length
+        state.addListNum = state.list.length - length;
       })
       .addCase(postUpdateArticleParams, (state, action) => {
         const { page, attention } = action.payload;
@@ -74,9 +74,6 @@ export const Post = createSlice({
   },
 });
 
-export const {
-  setLoading,
-} = Post.actions
-
+export const { setLoading } = Post.actions;
 
 export default Post.reducer;

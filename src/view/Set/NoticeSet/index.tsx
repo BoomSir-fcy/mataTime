@@ -35,7 +35,7 @@ const NoticeSet = () => {
   const { t } = useTranslation();
   const { toastSuccess, toastError, toastInfo } = useToast();
   const [state, setState] = useImmer({
-    msg_remind: setting.msg_remind === 1 ? true : false
+    msg_remind: setting.msg_remind === 1 ? true : false,
   });
 
   const setNotice = async (params: Api.Set.likeSetParams) => {
@@ -101,7 +101,7 @@ const NoticeSet = () => {
             onChange={() => setNotice({ msg_remind: state.msg_remind ? 2 : 1 })}
           />
         </Rows>
-        <Text color="textTips" mt="11px">
+        <Text color='textTips' mt='11px'>
           {t('setMsgNotificationTips')}
         </Text>
       </Column>

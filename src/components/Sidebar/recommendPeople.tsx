@@ -38,7 +38,7 @@ export const UserTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.white_black};
   width: 100px;
   min-width: 0;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -128,7 +128,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
             p.cancelFollow = false;
           });
         }
-      } catch (error) { }
+      } catch (error) {}
     },
     [list],
   );

@@ -195,10 +195,10 @@ const VestingTime: React.FC<init> = ({}) => {
         <TableBox>
           <Table>
             <Row>
-              <HeadText>{t('Round')}</HeadText>
-              <HeadText>{t('Vesting end TIME')}</HeadText>
-              <HeadText>{t('Vesting $TIME')}</HeadText>
-              <HeadText>{t('Claimable $TIME')}</HeadText>
+              <HeadText>{t('walleteTableRound')}</HeadText>
+              <HeadText>{t('walleteTableVesting end TIME')}</HeadText>
+              <HeadText>{t('walleteTableVesting $TIME')}</HeadText>
+              <HeadText>{t('walleteTableClaimable $TIME')}</HeadText>
               <HeadText></HeadText>
             </Row>
             {HistoryList.length

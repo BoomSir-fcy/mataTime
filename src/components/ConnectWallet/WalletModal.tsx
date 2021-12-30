@@ -7,7 +7,7 @@ import useAuth from 'hooks/useAuth';
 import { useTranslation } from 'contexts/Localization';
 import connectors, {
   walletLocalStorageKey,
-  connectorLocalStorageKey
+  connectorLocalStorageKey,
 } from 'config/wallet/config';
 import { ConnectorNames } from 'config/wallet';
 import WalletItem from './WalletItem';
@@ -22,18 +22,20 @@ const WalletModalStyled = styled.div<{
   left: 0;
   margin: auto;
   padding: 22px 26px;
-  z-index: 14;
+  z-index: 1000;
   /* background-color: ${({ theme }) => theme.colors.borderColor}; */
   border-radius: ${({ theme }) => theme.radii.card};
-  /* transform: ${({ show }) => (show ? 'translateX(0)' : 'translateX(500px)')}; */
-  transform: ${({ show }) => (show ? 'rotate3d(1, 0, 0, 0deg)' : 'rotate3d(1, 0, 0, 90deg)')};
+  /* transform: ${({ show }) =>
+    show ? 'translateX(0)' : 'translateX(500px)'}; */
+  transform: ${({ show }) =>
+    show ? 'rotate3d(1, 0, 0, 0deg)' : 'rotate3d(1, 0, 0, 90deg)'};
   background: rgba(28, 28, 28, 0.9);
   transition: 300ms transform;
   width: 500px;
   max-width: 100%;
 `;
 
-export const Cover = styled(Box) <{ show?: boolean }>`
+export const Cover = styled(Box)<{ show?: boolean }>`
   position: fixed;
   top: 0px;
   right: 0px;
@@ -45,16 +47,16 @@ export const Cover = styled(Box) <{ show?: boolean }>`
 
 const WalletModal: React.FC<{ show?: boolean; onClick?: (e: any) => void }> = ({
   show,
-  onClick
+  onClick,
 }) => {
   const { t } = useTranslation();
   const { login, logout } = useAuth();
 
   return (
     <WalletModalStyled onClick={onClick} show={show}>
-      <Flex mt="28px" flexWrap="wrap">
+      <Flex mt='28px' flexWrap='wrap'>
         {connectors.map((item, index) => (
-          <Box maxWidth="42%" margin="12px" mt="0" key={item.title}>
+          <Box maxWidth='42%' margin='12px' mt='0' key={item.title}>
             <WalletItem walletConfig={item} login={login} />
           </Box>
         ))}

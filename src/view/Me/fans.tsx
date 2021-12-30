@@ -100,7 +100,6 @@ const Fans = React.memo(() => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
       if (Api.isSuccess(res)) {
-        toast.success(res.data);
         await getFansList(1);
         setState(p => {
           p.hoverIndex = 0;
@@ -121,7 +120,6 @@ const Fans = React.memo(() => {
         setState(p => {
           p.cancelFollow = false;
         });
-        toast.success(res.data);
       }
     } catch (error) {
       console.error(error);

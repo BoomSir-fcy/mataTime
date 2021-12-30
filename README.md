@@ -41,6 +41,7 @@ REACT_APP_NODE_2 = "https://data-seed-prebsc-2-s3.binance.org:8545/"
 REACT_APP_NODE_3 = "https://data-seed-prebsc-1-s3.binance.org:8545/"
 
 REACT_APP_WEB_URL = "http://localhost:3000/#"
+REACT_APP_GRAPH_API = "https://api.thegraph.com/subgraphs/name/dinosaur-eggs"
 
 React_APP_WS_URL = "ws://192.168.101.112:8888"
 
