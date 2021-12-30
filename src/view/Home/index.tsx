@@ -47,7 +47,6 @@ const Home: React.FC = (props: any) => {
   const [userTags, setUserTags] = useState([]);
   const articleRefs = React.useRef(null);
   const tabsRefs = React.useRef(null);
-
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);

@@ -75,6 +75,9 @@ export const Post = createSlice({
         state.attention = Number(attention);
         state.loading = false;
       })
+      .addCase(fetchPostAsync.rejected, (state, action) => {
+        state.loading = false;
+      })
       .addCase(postUpdateArticleParams, (state, action) => {
         const { page, attention } = action.payload;
         state.list = [];

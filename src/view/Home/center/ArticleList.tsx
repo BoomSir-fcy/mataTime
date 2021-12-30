@@ -133,7 +133,7 @@ const ArticleComponents = (props, ref) => {
   return (
     <ArticleListBox>
       <List
-        loading={loading || !isEnd}
+        loading={loading}
         renderList={type => {
           if (type === 1 && list?.length !== 0) {
             return;

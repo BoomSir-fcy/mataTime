@@ -195,8 +195,8 @@ const TabsComponent = (props, ref) => {
           </TableRightBox>
         )}
       </TabsBox>
-
-      {params === 'explore' && (
+      {((params === 'explore' && Number(currentLeftIndex) === 3) ||
+        Number(currentLeftIndex) === 3) && (
         <ExploreContent>
           {(tags?.[0] ?? []).map((item, key) => (
             <ExploreButton
@@ -206,7 +206,10 @@ const TabsComponent = (props, ref) => {
                 const index = tag.findIndex(it => it === item.ID);
                 index !== -1 ? tag.splice(index, 1) : (tag = [...tag, item.ID]);
                 dispatch(
-                  storeAction.postSetParamsTag({ user_tags1: tag, user_tags2 }),
+                  storeAction.postSetParamsTag({
+                    user_tags1: tag,
+                    user_tags2,
+                  }),
                 );
               }}
               variant={

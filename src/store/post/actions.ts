@@ -14,3 +14,6 @@ export const postUpdateArticleParams = createAction<{
   attention: number;
   page: number;
 }>('post/update/article/params');
+export const postResetArticleParams = createAction<{
+  attention: number;
+}>('post/reset/article/params');
