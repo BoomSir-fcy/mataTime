@@ -22,7 +22,8 @@ It correctly bundles React in production mode and optimizes the build for the be
 <!-- 测试环境/内网本地 -->
 
 REACT_APP_VERSION = $npm_package_version
-REACT_APP_API_HOST = "http://192.168.101.112:8888"
+REACT_APP_API_HOST = "http://192.168.101.129:8888"
+REACT_APP_DSG_API_HOST = "https://api.dsgmetaverse.com/"
 GENERATE_SOURCEMAP = false
 port=3007
 
@@ -40,10 +41,10 @@ REACT_APP_NODE_2 = "https://data-seed-prebsc-2-s3.binance.org:8545/"
 
 REACT_APP_NODE_3 = "https://data-seed-prebsc-1-s3.binance.org:8545/"
 
-REACT_APP_WEB_URL = "http://localhost:3000/#"
-REACT_APP_GRAPH_API = "https://api.thegraph.com/subgraphs/name/dinosaur-eggs"
+REACT_APP_WEB_URL = "http://localhost:3000"
 
-React_APP_WS_URL = "ws://192.168.101.112:8888"
+React_APP_WS_URL = "ws://192.168.101.129:8888"
+REACT_APP_GRAPH_API = "https://api.thegraph.com/subgraphs/name/dinosaur-eggs"
 
 <!-- 外网 -->
 
