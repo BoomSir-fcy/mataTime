@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { postUpdateArticleParams, postUpdateArticle } from './actions';
+import {
+  postUpdateArticleParams,
+  postUpdateArticle,
+  postSetParamsTag,
+} from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { stat } from 'fs';
@@ -9,6 +13,8 @@ const initialState = {
   lastList: [],
   page: 1,
   attention: 2,
+  user_tags1: [],
+  user_tags2: [],
   addListNum: -1,
   loading: false,
 };
@@ -20,10 +26,15 @@ export const fetchPostAsync = createAsyncThunk(
   async (params: Api.Home.queryListParams, { dispatch }) => {
     // dispatch()
     dispatch(setLoading(true));
-    const response: Api.Home.postData = await Api.HomeApi.getArticleList(
-      params,
-    );
-    dispatch(setLoading(false));
+    const response: Api.Home.postData = await Api.HomeApi.getArticleList({
+      ...params,
+      user_tags1:
+        Number(params.attention) === 3 ? params.user_tags1.join(',') : [],
+      user_tags2:
+        Number(params.attention) === 3 ? params.user_tags2.join(',') : [],
+      attention: Number(params.attention) === 3 ? 1 : params.attention,
+    });
+    // dispatch(setLoading(false));
     if (Api.isSuccess(response)) {
       return {
         list: response.data.List,
@@ -52,21 +63,30 @@ export const Post = createSlice({
         const { length } = state.list;
         if (page === 1) {
           state.list = articleList;
+          state.addListNum = -1;
         } else {
           const list = state.list.concat(articleList);
           state.list = uniqBy(list, 'id');
+          state.addListNum = state.list.length - length;
         }
         state.lastList =
           articleList.length >= per_page || page > 1 ? articleList : [];
         state.page = articleList.length >= per_page ? page + 1 : page;
         state.attention = Number(attention);
-        state.addListNum = state.list.length - length;
+        state.loading = false;
+      })
+      .addCase(fetchPostAsync.rejected, (state, action) => {
+        state.loading = false;
       })
       .addCase(postUpdateArticleParams, (state, action) => {
         const { page, attention } = action.payload;
         state.list = [];
         state.page = page;
         state.attention = Number(attention);
+      })
+      .addCase(postSetParamsTag, (state, action) => {
+        state.user_tags1 = action.payload.user_tags1;
+        state.user_tags2 = action.payload.user_tags2;
       })
       .addCase(postUpdateArticle, (state, action) => {
         state.list = action.payload;

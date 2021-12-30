@@ -28,6 +28,8 @@ const getCustomStyles = (
     padding: padding ? padding : fillBody ? '18px 0' : '18px 20px',
     zIndex: 200,
     inset: '50% auto auto 50%',
+    maxHeight: '80vh',
+    overflowY: 'auto',
   },
   overlay: {
     backgroundColor: 'rgba(98, 98, 98, 0.3)',

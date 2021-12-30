@@ -103,7 +103,9 @@ const Faq: React.FC = () => {
             <AnswerRuleList>
               <Flex>
                 <HeadText width='8%'>{t('FAQ Round')}</HeadText>
-                <HeadText width='22%'>$TIME to be exchanged</HeadText>
+                <HeadText width='22%'>
+                  {t('FAQ $TIME to be exchanged')}
+                </HeadText>
                 <HeadText width='15%'>
                   {t('FAQ DSG required for exchange')}
                 </HeadText>

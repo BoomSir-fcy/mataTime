@@ -195,7 +195,7 @@ const Invite: React.FC = () => {
         {/* 普通邀请 */}
         <ContentBox flexDirection='column'>
           <Text mb='25px' fontSize='18px' bold>
-            Invitation Overview
+            {t('Invitation Overview')}
           </Text>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
@@ -321,14 +321,17 @@ const Invite: React.FC = () => {
 
 const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
   const source = window.location.search?.split('=')[1];
+  const { t } = useTranslation();
+
   return (
     <>
       {source === 'TASK' ? (
-        <Crumbs back>
-          <Flex width='100%'>
+        <Crumbs back justifyContent='start'>
+          <Flex width='max-content'>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
-                {tag.toUpperCase()}
+                {/* {tag.toUpperCase()} */}
+                {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
           </Flex>
@@ -339,7 +342,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
           <ContentBox>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
-                {tag.toUpperCase()}
+                {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
           </ContentBox>

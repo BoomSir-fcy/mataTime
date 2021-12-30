@@ -131,7 +131,7 @@ export const TableList: React.FC<{
                   </ItemText>
                   <ItemText>
                     <Flex>
-                      <Text width='56%' color='textTips' ellipsis>
+                      <Text maxWidth='56%' color='textTips' ellipsis>
                         {item.sender_nickname}
                       </Text>
                       <Text ml='10px' color='textTips' ellipsis>
@@ -154,14 +154,14 @@ export const TableList: React.FC<{
       </Table>
       {data.length > 0 && (
         <PaginateStyle alignItems='center' justifyContent='end'>
-          <Text mr='16px' fontSize='14px' color='textTips'>
+          <Text className='totalPage' fontSize='14px' color='textTips'>
             总共 {pageCount}页
           </Text>
           <ReactPaginate
             breakLabel='...'
             nextLabel='>'
             onPageChange={handlePageClick}
-            pageRangeDisplayed={4}
+            pageRangeDisplayed={3}
             marginPagesDisplayed={1}
             pageCount={pageCount}
             previousLabel='<'
