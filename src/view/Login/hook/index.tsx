@@ -50,8 +50,10 @@ export const FetchNftsList = async account => {
     for (let i = 0; i < Nftlist.length; i++) {
       for (let j = 0; j < supAddress.length; j++) {
         if (
-          Nftlist[i].properties.token.toLowerCase() ===
-          supAddress[j].toLowerCase()
+          (Nftlist[i].properties.token.toLowerCase() ===
+            supAddress[j].toLowerCase())
+          &&
+          (Nftlist[i].properties.owner_status === 0) // 判断头像状态
         ) {
           list.push(Nftlist[i]);
         }
