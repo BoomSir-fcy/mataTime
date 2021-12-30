@@ -61,15 +61,14 @@ const ExploreContent = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
-const ExploreCol = styled(Flex)`
-  margin-top: 25px;
-`;
+const ExploreCol = styled(Flex)``;
 
 const ExploreButton = styled(Button)`
   min-width: 100px;
   font-weight: bold;
   margin-right: 20px;
   padding: 0 25px;
+  margin-bottom: 25px;
 `;
 
 const ExploreRadioButton = styled(Button)`
@@ -77,6 +76,7 @@ const ExploreRadioButton = styled(Button)`
   height: 27px;
   font-weight: bold;
   margin-right: 20px;
+  margin-bottom: 20px;
   padding: 0 5px;
   border-radius: 14px;
 `;

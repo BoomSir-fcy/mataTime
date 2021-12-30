@@ -26,11 +26,13 @@ export const fetchPostAsync = createAsyncThunk(
   async (params: Api.Home.queryListParams, { dispatch }) => {
     // dispatch()
     dispatch(setLoading(true));
-    // console.log(params);
+    console.log(params);
     const response: Api.Home.postData = await Api.HomeApi.getArticleList({
       ...params,
-      user_tags1: Number(params.attention) === 3 ? params.user_tags1 : [],
-      user_tags2: Number(params.attention) === 3 ? params.user_tags2 : [],
+      user_tags1:
+        Number(params.attention) === 3 ? params.user_tags1.join(',') : [],
+      user_tags2:
+        Number(params.attention) === 3 ? params.user_tags2.join(',') : [],
       attention: Number(params.attention) === 3 ? 1 : params.attention,
     });
     // dispatch(setLoading(false));
