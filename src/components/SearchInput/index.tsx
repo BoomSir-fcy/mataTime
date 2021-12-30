@@ -5,13 +5,16 @@ import { fetchThunk, storeAction, useStore } from 'store';
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Button, Card, Input, CardProps, BoxProps } from 'uikit';
-import { DropDown, Icon } from 'components';
 import { useSearchResultLength } from 'store/search/hooks';
 import SearchUserItem from './SearchUserItem';
 import SearchTopicItem from './SearchTopicItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getEncodeValue } from 'utils/urlQueryPath';
 import CircleLoader from 'components/Loader/CircleLoader';
+import { BASE_USER_PROFILE_URL } from 'config';
+import { HoverLink } from '../Layout/HoverLink'
+import { Icon } from '../Icon'
+import { UserFlowItem } from '../Profile/UserFlowItem'
 
 
 const SearchBox = styled(Card) <{ focus?: boolean, result?: boolean }>`
@@ -136,7 +139,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   }, [value, dispatch, loading, resultListOfPeoples, resultListOfTopic, debouncedOnChange, pathname, push, replace])
 
 
-
   return (
     <Box {...props}>
       <form
@@ -204,6 +206,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                       <SearchTopicItem
                         post_num={21}
                         id={item.topic_id}
+                        key={`t_${item.topic_id}`}
                         name={item.topic_name} />
                     ))
                   }
@@ -213,8 +216,34 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                         uid={item.uid}
                         user_avator_url={item.nft_image}
                         nick_name={item.nick_name}
+                        address={item.address}
                         avatarCallback={undefined}
+                        key={`u_${item.uid}`}
                       />
+                      // <HoverLink to={`${BASE_USER_PROFILE_URL}${item.uid}`}>
+                      //   <UserFlowItem
+                      //     hideIntro
+                      //     textBtn
+                      //     padding="10px 18px"
+                      //     uid={item.uid}
+                      //     key={`u_${item.uid}`}
+                      //     address={item.address}
+                      //     is_attention={item.is_attention}
+                      //     nft_image={item.nft_image}
+                      //     introduction={item.introduction}
+                      //     nick_name={item.nick_name}
+                      //     btnProps={{
+                      //       width: '30px',
+                      //       minWidth: '30px'
+                      //     }}
+                      //     onChanges={(is_attention) => {
+                      //       dispatch(storeAction.updatePeopleState({
+                      //         uid: item.uid,
+                      //         is_attention
+                      //       }))
+                      //     }}
+                      //   />
+                      // </HoverLink>
                     ))
                   }
                 </Box>

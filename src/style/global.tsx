@@ -1,6 +1,7 @@
 import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config';
 import { createGlobalStyle } from 'styled-components';
 import { PancakeTheme } from 'uikit';
+import { mediaQueries } from 'uikit/theme/base';
 
 declare module 'styled-components' {
   export interface DefaultTheme extends PancakeTheme {
@@ -135,6 +136,79 @@ const GlobalStyle = createGlobalStyle`
     /* 点击图片放大层级 */
     .react-images__positioner{
       z-index:99999;
+    }
+  }
+
+  .show-media-lg {
+    display: none;
+    ${mediaQueries.lg} {
+      display: block;
+    }
+  }
+  .show-media-md {
+    display: none;
+    ${mediaQueries.md} {
+      display: block;
+    }
+  }
+  .show-media-nav {
+    display: none;
+    ${mediaQueries.nav} {
+      display: block;
+    }
+  }
+  .show-media-sm {
+    display: none;
+    ${mediaQueries.sm} {
+      display: block;
+    }
+  }
+  .show-media-xl {
+    display: none;
+    ${mediaQueries.xl} {
+      display: block;
+    }
+  }
+  .show-media-xs {
+    display: none;
+    ${mediaQueries.xs} {
+      display: block;
+    }
+  }
+  .hide-media-lg {
+    display: block;
+    ${mediaQueries.lg} {
+      display: none;
+    }
+  }
+  .hide-media-md {
+    display: block;
+    ${mediaQueries.md} {
+      display: none;
+    }
+  }
+  .hide-media-nav {
+    display: block;
+    ${mediaQueries.nav} {
+      display: none;
+    }
+  }
+  .hide-media-sm {
+    display: block;
+    ${mediaQueries.sm} {
+      display: none;
+    }
+  }
+  .hide-media-xl {
+    display: block;
+    ${mediaQueries.xl} {
+      display: none;
+    }
+  }
+  .hide-media-xs {
+    display: block;
+    ${mediaQueries.xs} {
+      display: none;
     }
   }
 `;

@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { Box, Text, Flex } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import { Crumbs, UserFlowItem } from 'components'
+import { Crumbs, UserFlowItem, HoverLink } from 'components'
 import SearchInput from 'components/SearchInput'
 import SearchTopicItem from 'components/SearchInput/SearchTopicItem'
+import SearchUserItem from 'components/SearchInput/SearchUserItem'
 import Tabs from 'components/Tabs'
 import { storeAction, useStore } from 'store'
 import { useDispatch } from 'react-redux'
+import { BASE_USER_PROFILE_URL } from 'config'
 
 const tabDatas = [
   {
@@ -63,22 +65,30 @@ const Search = () => {
             {
               activeType === tabDatas[0].type && displayResultListOfPeoples.map(item => {
                 return (
-                  <UserFlowItem
-                    padding="10px 29px 10px 19px"
-                    uid={item.uid}
-                    key={`u_${item.uid}`}
-                    address={item.address}
-                    is_attention={item.is_attention}
-                    nft_image={item.nft_image}
-                    introduction={item.introduction}
-                    nick_name={item.nick_name}
-                    onChanges={(is_attention) => {
-                      dispatch(storeAction.updatePeopleState({
-                        uid: item.uid,
-                        is_attention
-                      }))
-                    }}
-                  />
+                  // <SearchUserItem
+                  //   uid={item.uid}
+                  //   user_avator_url={item.nft_image}
+                  //   nick_name={item.nick_name}
+                  //   avatarCallback={undefined}
+                  // />
+                  <HoverLink to={`${BASE_USER_PROFILE_URL}${item.uid}`}>
+                    <UserFlowItem
+                      padding="10px 29px 10px 19px"
+                      uid={item.uid}
+                      key={`u_${item.uid}`}
+                      address={item.address}
+                      is_attention={item.is_attention}
+                      nft_image={item.nft_image}
+                      introduction={item.introduction}
+                      nick_name={item.nick_name}
+                      onChanges={(is_attention) => {
+                        dispatch(storeAction.updatePeopleState({
+                          uid: item.uid,
+                          is_attention
+                        }))
+                      }}
+                    />
+                  </HoverLink>
                 )
               })
             }

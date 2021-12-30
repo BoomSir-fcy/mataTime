@@ -90,8 +90,6 @@ export const Crumbs: React.FC<{
       }
     };
 
-    console.log(hideBorder, 'hideBorder')
-
     return (
       <CrumbsWraper>
         <Card

@@ -7,19 +7,10 @@ import { useTranslation } from 'contexts/Localization'
 import { Flex, Box, Button, Text, Input, CardProps } from 'uikit';
 import { useSearchResultLength } from 'store/search/hooks';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import {
-  FollowPopup,
-  MorePopup,
-  Icon,
-  Avatar,
-  MoreOperatorEnum,
-  ImgList,
-  // FollowPopupD,
-  ContentParsing,
-  MorePostPopup,
-} from 'components';
-import { SearchItem, LinkItem } from './styles'
+import { HoverLink } from '../Layout'
+import { SearchItem } from './styles'
 import { getEncodeValue } from 'utils/urlQueryPath';
+
 
 interface SearchTopicItemProps {
   post_num?: number
@@ -32,7 +23,7 @@ const SearchTopicItem: React.FC<SearchTopicItemProps> = ({ id, post_num, onTab, 
   const { t } = useTranslation()
 
   return (
-    <LinkItem onFocus={() => onTab && onTab(id)} to={`/topicList/${id}/${getEncodeValue(name)}`}>
+    <HoverLink onFocus={() => onTab && onTab(id)} to={`/topicList/${id}/${getEncodeValue(name)}`}>
       <SearchItem alignItems="center" justifyContent="space-between">
         <Box width="100%">
           <Text bold ellipsis width="100%">#{name}</Text>
@@ -43,7 +34,7 @@ const SearchTopicItem: React.FC<SearchTopicItemProps> = ({ id, post_num, onTab, 
             })}</Text>
         </Box>
       </SearchItem>
-    </LinkItem>
+    </HoverLink>
   )
 }
 
