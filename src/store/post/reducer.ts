@@ -9,6 +9,8 @@ const initialState = {
   lastList: [],
   page: 1,
   attention: 2,
+  user_tags1: [],
+  user_tags2: [],
   addListNum: -1,
   loading: false,
 };
@@ -63,9 +65,11 @@ export const Post = createSlice({
         state.addListNum = state.list.length - length;
       })
       .addCase(postUpdateArticleParams, (state, action) => {
-        const { page, attention } = action.payload;
+        const { page, attention, user_tags1, user_tags2 } = action.payload;
         state.list = [];
         state.page = page;
+        state.user_tags1 = user_tags1;
+        state.user_tags2 = user_tags2;
         state.attention = Number(attention);
       })
       .addCase(postUpdateArticle, (state, action) => {

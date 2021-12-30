@@ -43,6 +43,7 @@ const Home: React.FC = (props: any) => {
   });
   const [userTags, setUserTags] = useState([]);
   const articleRefs = React.useRef(null);
+  const tabsRefs = React.useRef(null);
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
@@ -76,11 +77,19 @@ const Home: React.FC = (props: any) => {
     const temp = {
       ...filterVal,
     };
-    // setArticleIds({})
-    replace(`${pathname || ''}?attention=${item.value}`);
+    const { useTag1, useTag2 } = tabsRefs?.current?.getTags();
+    // console.log(useTag1, useTag2);
+    const params = item?.tabs ? `&type=${item.tabs}` : '';
+    replace(`${pathname || ''}?attention=${item.value}${params}`);
+
     temp[item.paramsName] = item.value;
     dispatch(
-      storeAction.postUpdateArticleParams({ attention: item.value, page: 1 }),
+      storeAction.postUpdateArticleParams({
+        attention: item.value,
+        user_tags1: [...useTag1],
+        user_tags2: [...useTag2],
+        page: 1,
+      }),
     );
     setFilterVal(temp);
     setRefresh(!refresh);
@@ -111,8 +120,10 @@ const Home: React.FC = (props: any) => {
           />
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
+            ref={tabsRefs}
             tags={userTags}
             tabsChange={tabsChange}
+            params={parsedQs.type}
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
           <ArticleList
