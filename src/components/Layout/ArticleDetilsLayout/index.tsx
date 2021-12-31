@@ -41,7 +41,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
       remind_user,
     }).then(res => {
       if (Api.isSuccess(res)) {
-        toastSuccess(res.data);
+        toastSuccess(t('comment success'));
         setRefresh(refresh === 1 ? 2 : 1);
       }
     });
