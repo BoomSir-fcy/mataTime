@@ -3,17 +3,28 @@ import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { RedirectToSwap } from 'libs/mini-swap/Swap/redirects';
 import { SearchUserInfo, SearchTopicInfo, SearchState } from './types'
-import { setSearchDisplayPeople, setSearchDisplayTopic, updatePeopleState } from './actions'
+import {
+  setSearchDisplayPeople, setSearchDisplayTopic, updatePeopleState, addSearchHistoryData,
+  changeSearchUserFilter,
+  removeSearchHistoryData, clearSearchHistoryData
+} from './actions'
+import { SEARCH_MAX_HISTORY_LEN } from 'config';
+
+const LOCAL_STORAGE_SEARCH_HISTORY_KEY = 'search_history_list'
+
+const historyListStore = localStorage.getItem(LOCAL_STORAGE_SEARCH_HISTORY_KEY)
 
 const initialState: SearchState = {
   resultListOfPeoples: [],
   resultListOfTopic: [],
   loading: false,
+  dispalyLoading: false,
   errorMsg: '',
-  historyList: [],
+  historyList: historyListStore ? JSON.parse(historyListStore) : [],
   placeHolderSearch: '',
   displayResultListOfPeoples: [],
   displayResultListOfTopic: [],
+  filterUser: 1,
 };
 
 export const fetchSearchPeopleAsync = createAsyncThunk(
@@ -71,6 +82,9 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     }
 
     dispatch(setErrorMsg(''))
+    if (fetchDisplay) {
+      dispatch(setDispalyLoading(true))
+    }
     dispatch(setLoading(true))
     const fetchTopic = Api.HomeApi.queryHotTopicList({
       topic_name: searchVal,
@@ -80,6 +94,7 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     const fetchPeople = Api.UserApi.searchUser(searchVal)
     const [responseTopic, responsePeople] = await Promise.all([disableTopic ? null : fetchTopic, disablePeople ? null : fetchPeople])
     dispatch(setLoading(false))
+    dispatch(setDispalyLoading(false))
     console.log(responseTopic, responsePeople)
     if (Api.isSuccess(responseTopic)) {
       console.log('isSuccess', responseTopic)
@@ -98,6 +113,9 @@ export const Search = createSlice({
   reducers: {
     setLoading: (state, { payload }) => {
       state.loading = payload
+    },
+    setDispalyLoading: (state, { payload }) => {
+      state.dispalyLoading = payload
     },
     setErrorMsg: (state, { payload }) => {
       state.errorMsg = payload
@@ -159,12 +177,39 @@ export const Search = createSlice({
           return item
         })
       })
+      .addCase(addSearchHistoryData, (state, action) => {
+        const filterList = state.historyList.filter(item => {
+          const sameId = item.searchId !== action.payload.searchId
+          const sameText = item.text === undefined ? true : item.text !== action.payload.text
+          const sameUid = item.uid === undefined ? true : item.uid !== action.payload.uid
+          const sameTopic = item.topic_id === undefined ? true : item.topic_id !== action.payload.topic_id
+          return sameId && sameText && sameUid && sameTopic
+        })
+        state.historyList = [action.payload].concat(filterList).slice(0, SEARCH_MAX_HISTORY_LEN)
+        localStorage.setItem(LOCAL_STORAGE_SEARCH_HISTORY_KEY, JSON.stringify(state.historyList))
+      })
+      .addCase(removeSearchHistoryData, (state, action) => {
+        state.historyList = state.historyList.filter(item => item.searchId !== action.payload)
+        localStorage.setItem(LOCAL_STORAGE_SEARCH_HISTORY_KEY, JSON.stringify(state.historyList))
+      })
+      .addCase(clearSearchHistoryData, (state, action) => {
+        state.historyList = []
+        localStorage.setItem(LOCAL_STORAGE_SEARCH_HISTORY_KEY, JSON.stringify(state.historyList))
+      })
+      .addCase(changeSearchUserFilter, (state, action) => {
+        state.filterUser = action.payload
+      })
+
+    //       export const addSearchHistoryData = createAction<SearchHistoryList>('search/history/add')
+    // export const removeSearchHistoryData = createAction<SearchHistoryList>('search/history/remove')
+    // export const clearSearchHistoryData = createAction('search/history/clear')
   },
 });
 
 export const {
   setLoading,
   setErrorMsg,
+  setDispalyLoading,
 } = Search.actions
 
 

@@ -16,13 +16,31 @@ export interface SearchTopicInfo {
   post_num: number
 }
 
+export interface SearchTextInfo {
+  text: string
+  searchId: string
+}
+
+
+export enum SearchHistiryType {
+  USER,
+  TOPIC,
+  TEXT,
+}
+
+export interface SearchHistoryList extends Partial<SearchUserInfo>, Partial<SearchTopicInfo>, Partial<SearchTextInfo> {
+  type: SearchHistiryType,
+}
+
 export interface SearchState {
   resultListOfPeoples: SearchUserInfo[],
   displayResultListOfPeoples: SearchUserInfo[],
   resultListOfTopic: SearchTopicInfo[],
   displayResultListOfTopic: SearchTopicInfo[],
   loading: boolean,
+  dispalyLoading: boolean,
   errorMsg: string,
-  historyList: string[],
+  historyList: SearchHistoryList[],
   placeHolderSearch: string,
+  filterUser: number // 1 所有人 2 仅关注
 }

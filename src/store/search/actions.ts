@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { SearchUserInfo, SearchTopicInfo } from './types'
+import { SearchUserInfo, SearchTopicInfo, SearchHistoryList } from './types'
 
 export const setSearchDisplayPeople = createAction<{
   list: SearchUserInfo[],
@@ -15,3 +15,9 @@ interface UpdatePeopleState extends Partial<SearchUserInfo> {
 }
 
 export const updatePeopleState = createAction<UpdatePeopleState>('search/updatePeopleState')
+
+export const addSearchHistoryData = createAction<SearchHistoryList>('search/history/add')
+export const removeSearchHistoryData = createAction<string>('search/history/remove')
+export const clearSearchHistoryData = createAction('search/history/clear')
+
+export const changeSearchUserFilter = createAction<number>('search/filter/user')

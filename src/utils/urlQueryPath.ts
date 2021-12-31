@@ -14,6 +14,6 @@ export const getDecodeValue = (search) => {
     return decodeURIComponent(search)
   } catch (error) {
     console.error(error)
-    return ''
+    return search
   }
 }

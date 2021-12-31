@@ -70,7 +70,7 @@ export const UserFlowItem: React.FC<UserFlowItemProps> = ({
           onChanges={onChanges}
           address={address}
           nft_image={nft_image}
-        // {...btnProps}
+          {...btnProps}
         />
       </Box>
     </Flex>

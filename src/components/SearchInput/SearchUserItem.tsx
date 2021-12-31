@@ -8,13 +8,21 @@ import {
 import { SearchItem } from './styles'
 import { HoverLink } from '../Layout'
 import { shortenAddress } from 'utils/contract';
+import { FollowBtn } from 'components/Profile/FollowBtn';
+import { storeAction } from 'store';
+import { useDispatch } from 'react-redux';
+import RemoveHistoryBtn from './RemoveHistoryBtn';
 
 interface SearchUserItemProps {
   uid?: number
   user_avator_url?: string
   nick_name?: string
   address?: string
+  isHistory?: boolean
+  searchId?: string
+  is_attention?: boolean
   onTab?: (uid: number) => void
+  onClick?: () => void
   avatarCallback?: (type: string) => void
 }
 
@@ -25,12 +33,16 @@ const SearchUserItem: React.FC<SearchUserItemProps> = ({
   avatarCallback,
   nick_name,
   address,
+  is_attention,
+  isHistory,
+  searchId,
   ...props }) => {
   const { t } = useTranslation()
 
+  const dispatch = useDispatch();
 
   return (
-    <HoverLink onFocus={() => onTab && onTab(uid)} to={`${BASE_USER_PROFILE_URL}${uid}`}>
+    <HoverLink onFocus={() => onTab && onTab(uid)} to={`${BASE_USER_PROFILE_URL}${uid}`} {...props}>
       <SearchItem alignItems="center" justifyContent="space-between">
         <Flex>
           <Avatar
@@ -41,15 +53,35 @@ const SearchUserItem: React.FC<SearchUserItemProps> = ({
             scale='md'
           />
           <Box ml="8px">
-            <Text maxWidth="120px" ellipsis>{nick_name}</Text>
+            <Text bold maxWidth="120px" ellipsis>{nick_name}</Text>
             <Text maxWidth="120px" ellipsis color='textTips'>@{shortenAddress(address)}</Text>
           </Box>
         </Flex>
-        <Button tabIndex={-1} padding="0" style={{ fontWeight: 400 }} variant='text'>
-          <Text style={{
-            transform: 'rotateZ(45deg)'
-          }} fontSize='24px'>+</Text>
-        </Button>
+        {
+          isHistory
+            ?
+            <RemoveHistoryBtn searchId={searchId} />
+            :
+            (
+              <FollowBtn
+                ml="8px"
+                padding="0"
+                width='auto'
+                minWidth='auto'
+                variant='text'
+                uid={uid}
+                attention={is_attention}
+                onChanges={(is_attention) => {
+                  dispatch(storeAction.updatePeopleState({
+                    uid: uid,
+                    is_attention
+                  }))
+                }}
+                address={address}
+                nft_image={user_avator_url}
+              />
+            )
+        }
       </SearchItem>
     </HoverLink>
   )
