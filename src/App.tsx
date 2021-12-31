@@ -51,6 +51,7 @@ const Account = React.lazy(() => import('./view/Account'));
 const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 const Swap = React.lazy(() => import('./view/Swap'));
+const Search = React.lazy(() => import('./view/Search'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -138,6 +139,7 @@ function App() {
                 <Route path='/me' component={Me} />
                 <Route path='/set' component={Set} />
                 <Route path='/account' component={Account} />
+                <Route path='/search' component={Search} />
                 {/* <Route path='/swap' component={Swap} /> */}
                 {process.env.NODE_ENV === 'development' && (
                   <>

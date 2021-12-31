@@ -20,8 +20,6 @@ const Gotop = () => {
   let scrollTop = 0;
   let topValue = 0;
   const [IsShow, setIsShow] = useState(false);
-  // console.log(window.innerHeight);
-  // console.log(window.scrollY);
 
   const getScollTop = () => {
     let scrollTop = 0;

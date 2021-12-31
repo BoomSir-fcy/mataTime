@@ -13,6 +13,8 @@ import type { WalletState } from './wallet/type';
 import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
 import { Post, postReducer, postAction, fetchPostAsync } from './post';
+import { searchReducer, searchAction, fetchSearchPeopleAsync, fetchSearchAsync } from './search';
+import { SearchState } from './search/types';
 
 import { TaskState } from './task/type';
 export interface Store {
@@ -23,6 +25,7 @@ export interface Store {
   wallet: WalletState;
   task: TaskState;
   post: Post;
+  search: SearchState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -36,7 +39,8 @@ export const store = configureStore({
     pools: poolsReduce,
     wallet: walletReduce,
     task: taskReduce,
-    post: postReducer
+    post: postReducer,
+    search: searchReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -51,11 +55,14 @@ export const storeAction = {
   ...appAction,
   ...coinsAction,
   ...walletAction,
-  ...postAction
+  ...postAction,
+  ...searchAction
 };
 export const fetchThunk = {
   fetchUserInfoAsync,
-  fetchPostAsync
+  fetchPostAsync,
+  fetchSearchPeopleAsync,
+  fetchSearchAsync,
 };
 
 export const Dispatch = {

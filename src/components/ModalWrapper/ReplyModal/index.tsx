@@ -10,7 +10,7 @@ import {
   ReportModalWrapper,
   ReportContentWrapper,
   ReplyTargetWrapper,
-  ReplyConentWrapper
+  ReplyConentWrapper,
 } from './style';
 import MentionItem from 'view/News/components/MentionItem';
 
@@ -35,7 +35,7 @@ export const ReplyModal = React.memo((props: IProp) => {
     itemData,
     replyType,
     commentId = '',
-    postId = ''
+    postId = '',
   } = props;
 
   // 评论
@@ -47,10 +47,10 @@ export const ReplyModal = React.memo((props: IProp) => {
         pid: postId,
         comment_id: commentId,
         comment: res,
-        remind_user
+        remind_user,
       }).then(res => {
         if (Api.isSuccess(res)) {
-          toastSuccess(res.data);
+          toastSuccess(t('comment success'));
           onSuccess();
         }
       });
@@ -61,10 +61,10 @@ export const ReplyModal = React.memo((props: IProp) => {
       Api.CommentApi.createComment({
         pid: postId,
         comment: res,
-        remind_user
+        remind_user,
       }).then(res => {
         if (Api.isSuccess(res)) {
-          toastSuccess(res.data);
+          toastSuccess(t('comment success'));
           onSuccess();
         }
       });
@@ -72,7 +72,7 @@ export const ReplyModal = React.memo((props: IProp) => {
   };
 
   return (
-    <ModalWrapper creactOnUse visible={show} setVisible={onClose} top="40%">
+    <ModalWrapper creactOnUse visible={show} setVisible={onClose} top='40%'>
       <ReportModalWrapper>
         <ReportContentWrapper>
           <ReplyTargetWrapper>
@@ -83,11 +83,11 @@ export const ReplyModal = React.memo((props: IProp) => {
             />
           </ReplyTargetWrapper>
           <ReplyConentWrapper>
-            <div className="left">
-              <Avatar className="avatar" src={userInfo.nft_image} scale="md" />
+            <div className='left'>
+              <Avatar className='avatar' src={userInfo.nft_image} scale='md' />
             </div>
-            <div className="right">
-              <Editor type="comment" sendArticle={sendArticle} />
+            <div className='right'>
+              <Editor type='comment' sendArticle={sendArticle} />
             </div>
           </ReplyConentWrapper>
         </ReportContentWrapper>

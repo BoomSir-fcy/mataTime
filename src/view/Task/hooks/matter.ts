@@ -66,7 +66,7 @@ export const useFetchInviteFriendsList = () => {
     })
   }
 
-  return { list, pageNum, total, setPageNum, loading }
+  return { list, pageNum, pageSize, total, setPageNum, loading }
 }
 
 

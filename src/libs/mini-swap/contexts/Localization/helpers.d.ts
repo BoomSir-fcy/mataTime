@@ -283,6 +283,8 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Money-hungry Dino": string;
     "Enter an amount": string;
     "Transaction rejected.": string;
+    "Enter valid list location": string;
+    "Error importing list": string;
     translationLast: string;
     translationEnd: string;
 } | {
@@ -573,6 +575,7 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Money-hungry Dino": string;
     "Enter an amount": string;
     "Transaction rejected.": string;
+    "Enter valid list location": string;
     translationLast: string;
     translationEnd: string;
 } | {
@@ -863,6 +866,8 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Money-hungry Dino": string;
     "Enter an amount": string;
     "Transaction rejected.": string;
+    "Enter valid list location": string;
+    "Error importing list": string;
     translationLast: string;
     translationEnd: string;
 }>;

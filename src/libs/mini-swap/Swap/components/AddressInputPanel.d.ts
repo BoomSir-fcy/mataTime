@@ -1,3 +1,4 @@
+/// <reference types="react" />
 export default function AddressInputPanel({ id, value, onChange, }: {
     id?: string;
     value: string;

@@ -68,14 +68,15 @@ export const ShieldModal = React.memo((props: IProp) => {
 type OperatorIprop = {
   onQuery: Function;
   onClose: Function;
+  queryText?: string
 }
 export const ModalOperator = React.memo((props: OperatorIprop) => {
   const { t } = useTranslation()
-  const { onQuery, onClose } = props
+  const { onQuery, onClose, queryText } = props
   return (
     <ModalOperatorWrapper>
       <ModalOperatorQueryWrapper onClick={() => { onClose() }}>{t('modalCancel')}</ModalOperatorQueryWrapper>
-      <ModalOperatorCancerWrapper onClick={() => { onQuery() }}>{t('modalQuery')}</ModalOperatorCancerWrapper>
+      <ModalOperatorCancerWrapper onClick={() => { onQuery() }}>{queryText || t('modalQuery')}</ModalOperatorCancerWrapper>
     </ModalOperatorWrapper>
   )
 })

@@ -19,15 +19,15 @@ const CrumbsWraper = styled(Box)`
   }
 `;
 
-const Card = styled(Flex)<{ zIndex?: number }>`
+const Card = styled(Flex) <{ zIndex?: number, hideBorder?: boolean }>`
   align-items: center;
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-bottom: 1px solid ${({ theme, hideBorder }) => !hideBorder ? 'transparent' : theme.colors.borderThemeColor};
   position: fixed;
   top: 0;
   background: ${({ theme }) => theme.colors.background};
-  z-index: ${({ zIndex }) => zIndex || 1005};
+  z-index: ${({ zIndex }) => zIndex};
   transform: translateZ(1px);
   ${({ theme }) => theme.mediaQueries.md} {
     position: sticky;
@@ -54,17 +54,20 @@ export const Crumbs: React.FC<{
   top?: boolean;
   zIndex?: number;
   children?: any;
+  hideBorder?: boolean;
   justifyContent?: string;
   callBack?: () => void;
+
 }> = React.memo(
   ({
     back,
     top,
     title,
     centerTitle,
-    zIndex,
+    zIndex = 1005,
     children,
     justifyContent,
+    hideBorder,
     callBack,
   }) => {
     const { t } = useTranslation();
@@ -90,6 +93,7 @@ export const Crumbs: React.FC<{
     return (
       <CrumbsWraper>
         <Card
+          hideBorder={hideBorder}
           justifyContent={justifyContent ? justifyContent : 'space-between'}
           zIndex={zIndex}
         >

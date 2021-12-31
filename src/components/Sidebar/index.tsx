@@ -1,13 +1,15 @@
 import React from 'react';
 import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
-import Search from './search';
+import Search from '../SearchInput';
 import Swap from './swap';
 import HotTopic from './hotTopic';
 import RecommendPeople from './recommendPeople';
 import FooterCopyright from './footerCopyright';
 import styled from 'styled-components';
 import { REFRESH_TIME_BURN_PER_CIRCLE } from 'config';
+import SearchFilter from 'components/SearchInput/SearchFilter';
+import { useLocation } from 'react-router-dom';
 
 const SidebarStyled = styled(Box)`
   position: sticky;
@@ -25,6 +27,7 @@ const Sidebar = props => {
     scroll: 10,
     top: ''
   });
+  const { pathname } = useLocation()
 
   const HandleScroll = React.useCallback(
     event => {
@@ -59,7 +62,13 @@ const Sidebar = props => {
 
   return (
     <SidebarStyled {...props} style={{ top: state.top }} ref={ref}>
-      <Search />
+      {
+        pathname === '/search'
+          ?
+          <SearchFilter mt="15px" mb="15px" />
+          :
+          <Search mt="15px" mb="15px" />
+      }
       {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
       <Swap />
       <RecommendPeople />

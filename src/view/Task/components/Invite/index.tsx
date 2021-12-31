@@ -111,7 +111,7 @@ const BtnFlex = styled(Flex)`
 `;
 const Invite: React.FC = () => {
   const { inviteInfo } = useInviteCount();
-  const { list, pageNum, setPageNum, loading, total } =
+  const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteFriendsList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -302,6 +302,7 @@ const Invite: React.FC = () => {
             list={list}
             total={total}
             pageNum={pageNum}
+            pageSize={pageSize}
             handlePageClick={handlePageClick}
           />
         </ContentBox>

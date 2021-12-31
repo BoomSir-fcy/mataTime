@@ -108,7 +108,8 @@ const HotTopic: React.FC = () => {
             </Hot>
             <HotCount>
               {t('HotTopicUnit', {
-                value: item.post_num > 999 ? '999+' : item.post_num
+                value: item.post_num > 999 ? '999+' : item.post_num,
+                s: item.post_num > 1 ? 's' : '',
               })}
             </HotCount>
           </Flex>
