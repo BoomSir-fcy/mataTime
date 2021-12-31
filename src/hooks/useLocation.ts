@@ -1,21 +1,22 @@
-import { useDispatch } from 'react-redux';
 import React from 'react';
-import { useStore, storeAction } from 'store';
+import { useDispatch } from 'react-redux';
+import { storeAction } from 'store';
+import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
 export function useLocation() {
   const dispatch = useDispatch();
-  const setting = useStore(p => p.appReducer.systemCustom);
-  const { languange } = setting;
+  const { currentLanguage } = useTranslation();
 
   const request = async () => {
-    const systemLang = languange?.value?.code;
     try {
       const res = await Api.UserApi.getLocation();
       if (Api.isSuccess(res)) {
         const location: [] = res.data.reduce((prve, current) => {
           const country =
-            systemLang === 'zh-tw' ? current.LocaltionZh : current.LocationEn;
+            currentLanguage?.locale === 'zh-TW'
+              ? current.LocaltionZh
+              : current.LocationEn;
           prve.push({
             ...current,
             id: current.ID,
