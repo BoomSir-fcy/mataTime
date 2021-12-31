@@ -52,7 +52,7 @@ const SearchTopicItem: React.FC<SearchTopicItemProps> = ({
         </Box>
         {
           isHistory && (
-            <RemoveHistoryBtn searchId={searchId} />
+            <RemoveHistoryBtn type='button' searchId={searchId} />
           )
         }
       </SearchItem>

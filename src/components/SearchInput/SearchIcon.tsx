@@ -22,7 +22,7 @@ const SearchIcon = () => {
         justifyContent='center'
         alignItems='center'
       >
-        <Image width={20} height={20} src='images/search-dark.png' />
+        <Image width={20} height={20} src='/images/search-dark.png' />
       </Flex>
     </TopBox>
   );

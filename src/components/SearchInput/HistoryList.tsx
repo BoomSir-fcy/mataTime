@@ -96,7 +96,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
           <>
             <Flex justifyContent='space-between' alignItems='center' padding='8px 18px'>
               <Text fontSize='18px' bold>{t('Recent')}</Text>
-              <Button variant='text' onClick={(event) => {
+              <Button type='button' variant='text' onClick={(event) => {
                 setVisibility(true)
                 event.stopPropagation()
                 event.preventDefault()

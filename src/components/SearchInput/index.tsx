@@ -214,6 +214,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 }}
                 focus={focus}
                 padding="0"
+                type='button'
                 variant='text'>
                 <Icon name='icon-guanbi2fill' size={19} />
               </ButtonStyledLine>

@@ -42,7 +42,7 @@ const SearchTextItem: React.FC<SearchTextItemProps> = ({
         </Flex>
         {
           isHistory && (
-            <RemoveHistoryBtn searchId={searchId} />
+            <RemoveHistoryBtn type='button' searchId={searchId} />
           )
         }
       </SearchItem>
