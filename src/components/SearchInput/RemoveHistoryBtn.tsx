@@ -15,7 +15,7 @@ const RemoveHistoryBtn: React.FC<RemoveHistoryBtnProps> = ({
   const dispatch = useDispatch();
 
   return (
-    <Button onClick={(event) => {
+    <Button type='button' onClick={(event) => {
       event.stopPropagation()
       event.preventDefault()
       dispatch(storeAction.removeSearchHistoryData(searchId))

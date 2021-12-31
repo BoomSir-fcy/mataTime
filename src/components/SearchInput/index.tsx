@@ -87,7 +87,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const [focus, setFocus] = useState(false)
   const [toFocus, setToFocus] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const blurRef = useRef<HTMLInputElement>(null)
   const dispatch = useDispatch();
   const { resultListOfPeoples, resultListOfTopic, loading, historyList } = useStore(p => p.search);
   const resultLength = useSearchResultLength()
@@ -132,9 +131,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
       search,
       fetchDisplay: true
     }))
-    if (blurRef.current) {
-      blurRef.current.focus()
-    }
   }, [dispatch, debouncedOnChange])
 
   const handleSubmit = useCallback((search) => {
@@ -147,9 +143,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
       push(getSearchPath({
         q: search,
       }))
-    }
-    if (blurRef.current) {
-      blurRef.current.focus()
     }
     dispatch(storeAction.addSearchHistoryData({
       text: search,
@@ -181,6 +174,10 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
         onSubmit={(event) => {
           event.preventDefault();
           handleSubmit(`${value}`.trim())
+          if (inputRef.current) {
+            inputRef.current.blur()
+          }
+
         }}
         action="">
         <label htmlFor="search">
@@ -217,6 +214,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 }}
                 focus={focus}
                 padding="0"
+                type='button'
                 variant='text'>
                 <Icon name='icon-guanbi2fill' size={19} />
               </ButtonStyledLine>
@@ -283,7 +281,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
           }
         </Box>
       </form>
-      <BlurInput type="radio" ref={blurRef} />
     </Box>
 
   )
