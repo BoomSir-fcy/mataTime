@@ -10,14 +10,19 @@ import Tabs from 'components/Tabs'
 import { storeAction, useStore } from 'store'
 import { useDispatch } from 'react-redux'
 import { BASE_USER_PROFILE_URL } from 'config'
+import useParsedQueryString from 'hooks/useParsedQueryString'
+import { useHistory } from 'react-router-dom'
+import { getSearchPath } from 'utils/urlQueryPath'
 
 const tabDatas = [
   {
-    lable: '用户',
+    lable: 'People',
+    tLable: 'People',
     type: 'user',
   },
   {
-    lable: '话题',
+    lable: 'Topic',
+    tLable: 'Topic',
     type: 'topic',
   },
 ]
@@ -25,10 +30,10 @@ const tabDatas = [
 const Search = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch();
+  const parsedQs = useParsedQueryString();
+  const { replace } = useHistory()
 
   const {
-    resultListOfPeoples,
-    resultListOfTopic,
     displayResultListOfPeoples,
     displayResultListOfTopic,
     dispalyLoading,
@@ -36,6 +41,12 @@ const Search = () => {
   } = useStore(p => p.search);
 
   const [activeType, setActiveType] = useState(tabDatas[0].type)
+
+  useEffect(() => {
+    if (parsedQs.f) {
+      setActiveType(parsedQs.f)
+    }
+  }, [parsedQs.f])
 
   const userList = useMemo(() => {
     if (filterUser === 2) return displayResultListOfPeoples.filter(item => item.is_attention)
@@ -69,6 +80,10 @@ const Search = () => {
           active={activeType}
           datas={tabDatas}
           onChange={(tab) => {
+            replace(getSearchPath({
+              ...parsedQs,
+              f: tab.type
+            }))
             setActiveType(tab.type)
           }}
         />

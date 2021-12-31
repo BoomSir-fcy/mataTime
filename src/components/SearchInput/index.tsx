@@ -5,13 +5,13 @@ import uniqueId from 'lodash/uniqueId'
 import { fetchThunk, storeAction, useStore } from 'store';
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'contexts/Localization'
-import { Flex, Box, Button, Card, Input, CardProps, BoxProps } from 'uikit';
+import { Flex, Box, Button, Card, Input, CardProps, BoxProps, Empty } from 'uikit';
 import { useSearchResultLength } from 'store/search/hooks';
 import SearchUserItem from './SearchUserItem';
 import SearchTopicItem from './SearchTopicItem';
 import HistoryList from './HistoryList';
 import { useHistory, useLocation } from 'react-router-dom';
-import { getDecodeValue, getEncodeValue } from 'utils/urlQueryPath';
+import { getDecodeValue, getEncodeValue, getSearchPath } from 'utils/urlQueryPath';
 import CircleLoader from 'components/Loader/CircleLoader';
 import { BASE_USER_PROFILE_URL } from 'config';
 import { HoverLink } from '../Layout/HoverLink'
@@ -95,10 +95,13 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const { pathname } = useLocation()
   const parsedQs = useParsedQueryString();
 
+  const isSearchPath = pathname === '/search'
+
   useEffect(() => {
     const query = getDecodeValue(parsedQs.q)
     if (query && pathname === '/search') {
       setValue(query)
+      handleSearchDispaly(query)
     }
   }, [pathname, parsedQs.q])
 
@@ -109,57 +112,61 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
     [dispatch, value],
   )
 
+  useEffect(() => {
+    const search = `${value}`.trim()
+    if (search) {
+      debouncedOnChange(search)
+    }
+  }, [value])
+
   const searchChange = useCallback((e) => {
     setValue(e.target.value)
-    debouncedOnChange(e.target.value)
   }, [setValue])
 
-  const startSearch = (e) => {
-    if (e.code === 'Enter' && value) {
-      console.debug(value)
-    }
-  }
-
-  const handleSubmit = useCallback((e: FormEvent) => {
-    e.preventDefault();
-    if (!value || value === '#' || value === '@') return
+  const handleSearchDispaly = useCallback((search) => {
+    if (!search || search === '#' || search === '@') return
     debouncedOnChange.cancel()
     dispatch(storeAction.setSearchDisplayPeople({ list: [] }))
     dispatch(storeAction.setSearchDisplayTopic({ list: [] }))
     dispatch(fetchThunk.fetchSearchAsync({
-      search: value,
+      search,
       fetchDisplay: true
     }))
-    // if (!loading) {
-    //   dispatch(storeAction.setSearchDisplayPeople({ list: resultListOfPeoples }))
-    //   dispatch(storeAction.setSearchDisplayTopic({ list: resultListOfTopic }))
-    // } else {
-    //   dispatch(storeAction.setSearchDisplayPeople({ list: [] }))
-    //   dispatch(storeAction.setSearchDisplayTopic({ list: [] }))
-    //   dispatch(fetchThunk.fetchSearchAsync({
-    //     search: value,
-    //     fetchDisplay: true
-    //   }))
-    // }
+    if (blurRef.current) {
+      blurRef.current.focus()
+    }
+  }, [dispatch, debouncedOnChange])
+
+  const handleSubmit = useCallback((search) => {
+    handleSearchDispaly(search)
     if (pathname === '/search') {
-      replace(`/search?q=${getEncodeValue(value)}`)
+      replace(getSearchPath({
+        q: search,
+      }))
     } else {
-      push(`/search?q=${getEncodeValue(value)}`)
+      push(getSearchPath({
+        q: search,
+      }))
     }
     if (blurRef.current) {
       blurRef.current.focus()
     }
     dispatch(storeAction.addSearchHistoryData({
-      text: value,
+      text: search,
       searchId: uniqueId('search_'),
       type: SearchHistiryType.TEXT
     }))
-  }, [value, dispatch, loading, resultListOfPeoples, resultListOfTopic, debouncedOnChange, pathname, push, replace])
+  }, [dispatch, pathname, push, replace])
 
-
+  const showTopicLen = useMemo(() => {
+    if (value?.[0] === '#') return undefined
+    return 3
+  }, [value])
   return (
     <Box {...props}>
       <form
+        name='searchForm'
+        id='searchForm'
         onFocus={() => {
           setFocus(true)
         }}
@@ -171,27 +178,29 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
           }
           setFocus(false)
         }}
-        onSubmit={handleSubmit}
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit(`${value}`.trim())
+        }}
         action="">
         <label htmlFor="search">
           <SearchBox focus={focus} isBoxShadow result={!!resultLength}>
             <Flex height="100%" alignItems="center" >
-              {
-                loading
-                  ?
-                  <CircleLoader />
-                  :
-                  <ButtonStyled focus padding="0" variant='text'>
+              <ButtonStyled focus padding="0" variant='text'>
+                {
+                  loading
+                    ?
+                    <CircleLoader />
+                    :
                     <Icon name='icon-sousuo' size={16}></Icon>
-                  </ButtonStyled>
-              }
+                }
+              </ButtonStyled>
               <InputStyled
                 value={value}
                 ref={inputRef}
                 autoComplete="off"
                 list="ice-cream-flavors"
                 onChange={(e) => { searchChange(e) }}
-                onKeyDown={startSearch.bind(this)}
                 type="search"
                 id="search"
                 placeholder={t('SearchPlaceholder')}
@@ -223,7 +232,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                     ?
                     <Box>
                       {
-                        resultListOfTopic.slice(0, 3).map(item => (
+                        resultListOfTopic.slice(0, showTopicLen).map(item => (
                           <SearchTopicItem
                             post_num={item.post_num}
                             id={item.topic_id}
@@ -255,8 +264,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                                 type: SearchHistiryType.USER
                               }))
                             }}
+
                           />
                         ))
+                      }
+                      {
+                        !loading && resultListOfTopic.length === 0 && resultListOfPeoples.length === 0 && (
+                          <Empty />
+                        )
                       }
                     </Box>
                     :

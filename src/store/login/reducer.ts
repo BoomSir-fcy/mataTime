@@ -119,7 +119,6 @@ export const login = createSlice({
         state.nft = action.payload;
       })
       .addCase(setNftAddr, (state, action) => {
-        console.log(action.payload)
         state.nftAddr = action.payload;
       })
       .addCase(setSigninLoading, (state, action) => {

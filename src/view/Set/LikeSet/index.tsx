@@ -52,7 +52,6 @@ const LikeSet: React.FC = () => {
     });
   };
 
-  // console.log(languange);
   return (
     <NoticeSetBox isBoxShadow>
       {/* <Column>

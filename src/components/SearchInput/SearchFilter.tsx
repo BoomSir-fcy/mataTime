@@ -14,7 +14,7 @@ const SearchFilter: React.FC<CardProps> = ({ ...props }) => {
 
   return (
     <Card isRadius padding="18px" {...props}>
-      <Text>搜索过滤</Text>
+      <Text>{t('Search filters')}</Text>
       <Flex mt="18px">
         <Radio
           scale="sm"
@@ -27,7 +27,7 @@ const SearchFilter: React.FC<CardProps> = ({ ...props }) => {
           value="1"
         />
         <label htmlFor="gs1">
-          <Text ml="12px">{t('任何人')}</Text>
+          <Text ml="12px">{t('From anyone')}</Text>
         </label>
       </Flex>
       <Flex mt="18px">
@@ -42,7 +42,7 @@ const SearchFilter: React.FC<CardProps> = ({ ...props }) => {
           value="1"
         />
         <label htmlFor="gs2">
-          <Text ml="12px">{t('仅关注')}</Text>
+          <Text ml="12px">{t('People you follow')}</Text>
         </label>
       </Flex>
     </Card>

@@ -34,9 +34,9 @@ const Tabs: React.FC<TabsProps> = ({
       <Flex alignItems="baseline">
         {
           datas.map(item => {
-            console.log(item, keys)
             return (<Button
               variant='text'
+              key={item[keys]}
               padding='0'
               width={item.width || itemWidth}
               onClick={() => {

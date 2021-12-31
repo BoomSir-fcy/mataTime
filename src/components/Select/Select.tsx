@@ -181,7 +181,6 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   children,
   childrenHeight
 }) => {
-  console.log(idKey, defaultId)
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);

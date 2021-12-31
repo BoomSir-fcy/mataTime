@@ -25,11 +25,11 @@ const ClearModal = React.memo((props: IProp) => {
   return (
     <ModalWrapper
       creactOnUse
-      title={title || t('Clear all recent searches？')}
+      title={title || t('Clear all recent searches?')}
       visible={show}
       setVisible={onClose}
     >
-      <Text mb="32px" maxWidth="413px">{t('This can’t be undone and you’ll remove all your recent searches')}</Text>
+      <Text mb="32px" maxWidth="413px">{t("This can't be undone and you'll remove all your recent searches")}</Text>
       <ModalOperator queryText={t('Clear')} onClose={onClose} onQuery={() => {
         dispatch(storeAction.clearSearchHistoryData())
         onClose()

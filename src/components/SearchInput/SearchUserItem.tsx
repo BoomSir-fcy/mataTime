@@ -63,23 +63,28 @@ const SearchUserItem: React.FC<SearchUserItemProps> = ({
             <RemoveHistoryBtn searchId={searchId} />
             :
             (
-              <FollowBtn
-                ml="8px"
-                padding="0"
-                width='auto'
-                minWidth='auto'
-                variant='text'
-                uid={uid}
-                attention={is_attention}
-                onChanges={(is_attention) => {
-                  dispatch(storeAction.updatePeopleState({
-                    uid: uid,
-                    is_attention
-                  }))
-                }}
-                address={address}
-                nft_image={user_avator_url}
-              />
+              <Box onClick={(event) => {
+                event.stopPropagation()
+                event.preventDefault()
+              }}>
+                <FollowBtn
+                  ml="8px"
+                  padding="0"
+                  width='auto'
+                  minWidth='auto'
+                  variant='text'
+                  uid={uid}
+                  attention={is_attention}
+                  onChanges={(is_attention) => {
+                    dispatch(storeAction.updatePeopleState({
+                      uid: uid,
+                      is_attention
+                    }))
+                  }}
+                  address={address}
+                  nft_image={user_avator_url}
+                />
+              </Box>
             )
         }
       </SearchItem>

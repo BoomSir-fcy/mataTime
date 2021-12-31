@@ -9,6 +9,8 @@ import {
   removeSearchHistoryData, clearSearchHistoryData
 } from './actions'
 import { SEARCH_MAX_HISTORY_LEN } from 'config';
+import { orderBy } from 'lodash';
+import { useAppDispatch } from 'libs/mini-swap/state';
 
 const LOCAL_STORAGE_SEARCH_HISTORY_KEY = 'search_history_list'
 
@@ -38,7 +40,6 @@ export const fetchSearchPeopleAsync = createAsyncThunk(
     dispatch(setErrorMsg(''))
     dispatch(setLoading(true))
     const response = await Api.UserApi.searchUser(name)
-    console.log(response, 'response')
     dispatch(setLoading(false))
     if (Api.isSuccess(response)) {
       return {
@@ -56,14 +57,13 @@ export const fetchSearchAsync = createAsyncThunk<any, {
   fetchDisplay?: boolean
 }>(
   'fetch/fetchSearchAsync',
-  async ({ search, fetchDisplay }, { dispatch }) => {
-    console.log(search, fetchDisplay, '=fetchDisplay')
+  async ({ search, fetchDisplay }, { dispatch, getState }) => {
     const result = {
       fetchDisplay,
       resultListOfPeoples: [],
       resultListOfTopic: [],
     }
-    if (!search) {
+    if (!`${search}`.trim()) {
       return result
     }
     if (search === '#' || search === '@') {
@@ -95,13 +95,14 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     const [responseTopic, responsePeople] = await Promise.all([disableTopic ? null : fetchTopic, disablePeople ? null : fetchPeople])
     dispatch(setLoading(false))
     dispatch(setDispalyLoading(false))
-    console.log(responseTopic, responsePeople)
     if (Api.isSuccess(responseTopic)) {
-      console.log('isSuccess', responseTopic)
       result.resultListOfTopic = responseTopic.data?.List || []
     }
+    const uid = (getState() as any)?.loginReducer?.userInfo?.uid
     if (Api.isSuccess(responsePeople)) {
-      result.resultListOfPeoples = responsePeople.data || []
+      // 只显示50条用户 太多了有点卡
+      const peopleList = (responsePeople.data || []).slice(0, 50).filter(item => item.uid !== uid)
+      result.resultListOfPeoples = orderBy(peopleList, item => item.is_attention ? 0 : 1)
     }
     return result
   },
@@ -125,7 +126,6 @@ export const Search = createSlice({
     builder
       .addCase(fetchSearchPeopleAsync.fulfilled, (state, action) => {
         const { list } = action.payload;
-        console.log(list, '=list')
         state.resultListOfPeoples = list || []
       })
       .addCase(fetchSearchPeopleAsync.rejected, (state, action) => {
@@ -135,7 +135,6 @@ export const Search = createSlice({
       })
       .addCase(fetchSearchAsync.fulfilled, (state, action) => {
         const { resultListOfPeoples, resultListOfTopic, fetchDisplay } = action.payload;
-        console.log(resultListOfTopic, 11221)
         state.resultListOfPeoples = resultListOfPeoples
         state.resultListOfTopic = resultListOfTopic
         if (fetchDisplay) {

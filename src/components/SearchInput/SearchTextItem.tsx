@@ -8,7 +8,7 @@ import {
 import { SearchItem } from './styles'
 import { HoverLink } from '../Layout'
 import { shortenAddress } from 'utils/contract';
-import { getEncodeValue } from 'utils/urlQueryPath';
+import { getSearchPath } from 'utils/urlQueryPath';
 import { useLocation } from 'react-router-dom';
 import SearchIcon from './SearchIcon'
 import RemoveHistoryBtn from './RemoveHistoryBtn';
@@ -30,7 +30,9 @@ const SearchTextItem: React.FC<SearchTextItemProps> = ({
   const { pathname } = useLocation()
 
   return (
-    <HoverLink replace={pathname === '/search'} to={`/search?q=${getEncodeValue(text)}`} {...props}>
+    <HoverLink replace={pathname === '/search'} to={getSearchPath({
+      q: text,
+    })} {...props}>
       <SearchItem alignItems="center" justifyContent="space-between">
         <Flex alignItems="center">
           <SearchIcon />

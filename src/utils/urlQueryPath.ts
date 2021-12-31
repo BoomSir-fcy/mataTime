@@ -17,3 +17,8 @@ export const getDecodeValue = (search) => {
     return search
   }
 }
+
+export const getSearchPath = (query) => {
+  const f = query.f ? query.f : (query.q?.[0] === '#' ? 'topic' : (query.q?.[0] === '#' ? 'user' : ''))
+  return `/search?q=${getEncodeValue(query.q) || ''}&f=${f}`
+}
