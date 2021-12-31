@@ -107,8 +107,8 @@ const TabsComponent = (props, ref) => {
     isThrottle,
     tabLeftArr = [
       {
-        label: t('homeTabAll'),
-        value: '1',
+        label: t('homeTabFocus'),
+        value: '2',
         paramsName: 'attention',
       },
       {
@@ -118,8 +118,8 @@ const TabsComponent = (props, ref) => {
         paramsName: 'attention',
       },
       {
-        label: t('homeTabFocus'),
-        value: '2',
+        label: t('homeTabAll'),
+        value: '1',
         paramsName: 'attention',
       },
     ],
@@ -149,8 +149,8 @@ const TabsComponent = (props, ref) => {
     if (tags.length > 0 && Number(currentLeftIndex) === 3) {
       dispatch(
         storeAction.postSetParamsTag({
-          user_tags1: [tags?.[0][0]?.ID],
-          user_tags2: [tags?.[1][0]?.ID],
+          user_tags1: [...tags?.[0].map(row => row.ID)],
+          user_tags2: [...tags?.[1].map(row => row.ID)],
         }),
       );
     }
