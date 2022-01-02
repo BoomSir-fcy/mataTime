@@ -3,6 +3,7 @@ import {
   postUpdateArticleParams,
   postUpdateArticle,
   postSetParamsTag,
+  postSetUserTags,
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
@@ -17,6 +18,7 @@ const initialState = {
   user_tags2: [],
   addListNum: -1,
   loading: false,
+  userTags: [],
 };
 
 export type Post = typeof initialState;
@@ -77,6 +79,9 @@ export const Post = createSlice({
       })
       .addCase(fetchPostAsync.rejected, (state, action) => {
         state.loading = false;
+      })
+      .addCase(postSetUserTags, (state, action) => {
+        state.userTags = action.payload;
       })
       .addCase(postUpdateArticleParams, (state, action) => {
         const { page, attention } = action.payload;

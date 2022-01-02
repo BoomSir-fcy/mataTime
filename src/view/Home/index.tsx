@@ -37,14 +37,15 @@ const Home: React.FC = (props: any) => {
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
+  const userTags = useStore(p => p.post.userTags);
   const userTag = useStore(p => p.post);
   const { user_tags1, user_tags2 } = userTag;
   const [refresh, setRefresh] = useState(false);
-  const [getTab, setGetTab] = useState(true);
+  const [getTab, setGetTab] = useState(!userTags.length);
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
   });
-  const [userTags, setUserTags] = useState([]);
+  // const [userTags, setUserTags] = useState([]);
   const articleRefs = React.useRef(null);
   const tabsRefs = React.useRef(null);
   // 阅读文章扣费
@@ -97,7 +98,8 @@ const Home: React.FC = (props: any) => {
   const getTags = async () => {
     try {
       const res = await getUserTag();
-      setUserTags(res);
+      // setUserTags(res);
+      dispatch(storeAction.postSetUserTags(res))
     } catch (error) {
       console.log(error);
     } finally {
@@ -131,6 +133,7 @@ const Home: React.FC = (props: any) => {
             params={parsedQs.type}
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
+          {/* {( */}
           {!getTab && (
             <ArticleList
               key={refresh}
