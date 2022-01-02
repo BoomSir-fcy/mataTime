@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { withRouter, useHistory, useLocation } from 'react-router-dom';
+import { withRouter, useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Editor, Crumbs } from 'components';
-import { Flex, Box } from 'uikit';
+import { Editor, Crumbs, Icon } from 'components';
+import { Flex, Box, Button } from 'uikit';
 import { useToast } from 'hooks';
 import { storeAction, useStore } from 'store';
 import { Api } from 'apis';
@@ -101,7 +101,7 @@ const Home: React.FC = (props: any) => {
       // setUserTags(res);
       dispatch(storeAction.postSetUserTags(res))
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setGetTab(false);
     }
@@ -124,7 +124,13 @@ const Home: React.FC = (props: any) => {
             zIndex={1005}
             callBack={() => toTop()}
             title={t('homeHeaderTitle')}
-          />
+          >
+            <Link className='hide-media-md' to="/search">
+              <Button variant='text'>
+                <Icon name='icon-sousuo' size={16}></Icon>
+              </Button>
+            </Link>
+          </Crumbs>
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
             ref={tabsRefs}

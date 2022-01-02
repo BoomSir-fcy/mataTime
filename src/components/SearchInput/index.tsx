@@ -95,11 +95,9 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const { pathname } = useLocation()
   const parsedQs = useParsedQueryString();
 
-  const isSearchPath = pathname === '/search'
-
   useEffect(() => {
     const query = getDecodeValue(parsedQs.q)
-    if (query && pathname === '/search') {
+    if (parsedQs.q && pathname === '/search') {
       setValue(query)
       handleSearchDispaly(query)
     }
