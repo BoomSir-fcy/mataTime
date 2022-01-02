@@ -15,6 +15,7 @@ import RemoveHistoryBtn from './RemoveHistoryBtn';
 
 interface SearchUserItemProps {
   uid?: number
+  mineUserId?: number
   user_avator_url?: string
   nick_name?: string
   address?: string
@@ -36,6 +37,7 @@ const SearchUserItem: React.FC<SearchUserItemProps> = ({
   is_attention,
   isHistory,
   searchId,
+  mineUserId,
   ...props }) => {
   const { t } = useTranslation()
 
@@ -67,23 +69,25 @@ const SearchUserItem: React.FC<SearchUserItemProps> = ({
                 event.stopPropagation()
                 event.preventDefault()
               }}>
-                <FollowBtn
-                  ml="8px"
-                  padding="0"
-                  width='auto'
-                  minWidth='auto'
-                  variant='text'
-                  uid={uid}
-                  attention={is_attention}
-                  onChanges={(is_attention) => {
-                    dispatch(storeAction.updatePeopleState({
-                      uid: uid,
-                      is_attention
-                    }))
-                  }}
-                  address={address}
-                  nft_image={user_avator_url}
-                />
+                {mineUserId !== uid && (
+                  <FollowBtn
+                    ml="8px"
+                    padding="0"
+                    width='auto'
+                    minWidth='auto'
+                    variant='text'
+                    uid={uid}
+                    attention={is_attention}
+                    onChanges={(is_attention) => {
+                      dispatch(storeAction.updatePeopleState({
+                        uid: uid,
+                        is_attention
+                      }))
+                    }}
+                    address={address}
+                    nft_image={user_avator_url}
+                  />
+                )}
               </Box>
             )
         }
