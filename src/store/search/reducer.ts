@@ -98,10 +98,9 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     if (Api.isSuccess(responseTopic)) {
       result.resultListOfTopic = responseTopic.data?.List || []
     }
-    const uid = (getState() as any)?.loginReducer?.userInfo?.uid
     if (Api.isSuccess(responsePeople)) {
       // 只显示50条用户 太多了有点卡
-      const peopleList = (responsePeople.data || []).slice(0, 50).filter(item => item.uid !== uid)
+      const peopleList = (responsePeople.data || []).slice(0, 50)
       result.resultListOfPeoples = orderBy(peopleList, item => item.is_attention ? 0 : 1)
     }
     return result

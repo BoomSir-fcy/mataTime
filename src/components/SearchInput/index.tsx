@@ -89,16 +89,15 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const dispatch = useDispatch();
   const { resultListOfPeoples, resultListOfTopic, loading, historyList } = useStore(p => p.search);
+  const { uid } = useStore(p => p.loginReducer.userInfo)
   const resultLength = useSearchResultLength()
   const { push, replace } = useHistory()
   const { pathname } = useLocation()
   const parsedQs = useParsedQueryString();
 
-  const isSearchPath = pathname === '/search'
-
   useEffect(() => {
     const query = getDecodeValue(parsedQs.q)
-    if (query && pathname === '/search') {
+    if (parsedQs.q && pathname === '/search') {
       setValue(query)
       handleSearchDispaly(query)
     }
@@ -249,6 +248,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                         resultListOfPeoples.map(item => (
                           <SearchUserItem
                             uid={item.uid}
+                            mineUserId={uid}
                             user_avator_url={item.nft_image}
                             nick_name={item.nick_name}
                             address={item.address}

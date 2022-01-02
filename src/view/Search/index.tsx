@@ -57,13 +57,13 @@ const Search = () => {
     <Box>
       <Crumbs
         top
-        back
+        // back
         zIndex={1005}
         hideBorder={false}
         callBack={() => {
 
         }}
-        title={t('homeHeaderTitle')}
+        title={t('Search')}
       >
         <Flex alignItems='center' flex='1' >
           <SearchInput ml='44px' width='100%' />

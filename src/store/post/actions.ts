@@ -17,3 +17,5 @@ export const postUpdateArticleParams = createAction<{
 export const postResetArticleParams = createAction<{
   attention: number;
 }>('post/reset/article/params');
+
+export const postSetUserTags = createAction<any[]>('post/postSetUserTags');

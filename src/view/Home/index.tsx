@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { withRouter, useHistory, useLocation } from 'react-router-dom';
+import { withRouter, useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Editor, Crumbs } from 'components';
-import { Flex, Box } from 'uikit';
+import { Editor, Crumbs, Icon } from 'components';
+import { Flex, Box, Button } from 'uikit';
 import { useToast } from 'hooks';
 import { storeAction, useStore } from 'store';
 import { Api } from 'apis';
@@ -37,14 +37,15 @@ const Home: React.FC = (props: any) => {
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
+  const userTags = useStore(p => p.post.userTags);
   const userTag = useStore(p => p.post);
   const { user_tags1, user_tags2 } = userTag;
   const [refresh, setRefresh] = useState(false);
-  const [getTab, setGetTab] = useState(true);
+  const [getTab, setGetTab] = useState(!userTags.length);
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
   });
-  const [userTags, setUserTags] = useState([]);
+  // const [userTags, setUserTags] = useState([]);
   const articleRefs = React.useRef(null);
   const tabsRefs = React.useRef(null);
   // 阅读文章扣费
@@ -97,9 +98,10 @@ const Home: React.FC = (props: any) => {
   const getTags = async () => {
     try {
       const res = await getUserTag();
-      setUserTags(res);
+      // setUserTags(res);
+      dispatch(storeAction.postSetUserTags(res))
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setGetTab(false);
     }
@@ -122,7 +124,13 @@ const Home: React.FC = (props: any) => {
             zIndex={1005}
             callBack={() => toTop()}
             title={t('homeHeaderTitle')}
-          />
+          >
+            <Link className='hide-media-md' to="/search">
+              <Button variant='text'>
+                <Icon name='icon-sousuo' size={16}></Icon>
+              </Button>
+            </Link>
+          </Crumbs>
           <Editor type='post' sendArticle={sendArticle} />
           <Tabs
             ref={tabsRefs}
@@ -131,6 +139,7 @@ const Home: React.FC = (props: any) => {
             params={parsedQs.type}
             defCurrentLeft={Number(parsedQs.attention) || attention || 2}
           />
+          {/* {( */}
           {!getTab && (
             <ArticleList
               key={refresh}
