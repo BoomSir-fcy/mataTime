@@ -62,7 +62,7 @@ export const ReplyTargetWrapper = styled(Box)`
     top: 70px;
     width: 5px;
     height: calc(100% - 75px);
-    background: #000;
+    background: ${({ theme }) => theme.colors.white};
     border-radius: 3px;
     position: absolute;
     content: '';
