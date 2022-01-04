@@ -52,7 +52,6 @@ const LikeSet: React.FC = () => {
     });
   };
 
-  // console.log(languange);
   return (
     <NoticeSetBox isBoxShadow>
       {/* <Column>
@@ -97,9 +96,9 @@ const LikeSet: React.FC = () => {
           onChange={(val: any) => setLanguage(val)}
         /> */}
         <Select
-          disabled
           options={languagesOptions}
           defaultId={currentLanguage.code}
+          idKey="code"
           onChange={(val: any) => setLanguage(val.value)}
         />
       </Column>

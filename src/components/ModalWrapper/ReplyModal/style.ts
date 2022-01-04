@@ -33,7 +33,7 @@ export const ModalTitleWrapper = styled(Box)`
 `;
 export const ReportModalWrapper = styled(Box)`
   width: 40vw;
-  max-width: 670px;
+  max-width: 600px;
   min-width: 88vw;
   ${({ theme }) => theme.mediaQueries.sm} {
     min-width: 300px;
@@ -62,7 +62,7 @@ export const ReplyTargetWrapper = styled(Box)`
     top: 70px;
     width: 5px;
     height: calc(100% - 75px);
-    background: #000;
+    background: ${({ theme }) => theme.colors.white};
     border-radius: 3px;
     position: absolute;
     content: '';

@@ -195,10 +195,10 @@ const VestingTime: React.FC<init> = ({}) => {
         <TableBox>
           <Table>
             <Row>
-              <HeadText>{t('Round')}</HeadText>
-              <HeadText>{t('Vesting end TIME')}</HeadText>
-              <HeadText>{t('Vesting $TIME')}</HeadText>
-              <HeadText>{t('Claimable $TIME')}</HeadText>
+              <HeadText>{t('walleteTableRound')}</HeadText>
+              <HeadText>{t('walleteTableVesting end TIME')}</HeadText>
+              <HeadText>{t('walleteTableVesting $TIME')}</HeadText>
+              <HeadText>{t('walleteTableClaimable $TIME')}</HeadText>
               <HeadText></HeadText>
             </Row>
             {HistoryList.length
@@ -238,7 +238,7 @@ const VestingTime: React.FC<init> = ({}) => {
           </Table>
         </TableBox>
         <PaginateStyle alignItems='center' justifyContent='end'>
-          <Text mr='16px' fontSize='14px' color='textTips'>
+          <Text className='totalPage' fontSize='14px' color='textTips'>
             {t('Account Total %page% page', { page: pageCount })}
           </Text>
           <ReactPaginate
@@ -247,7 +247,7 @@ const VestingTime: React.FC<init> = ({}) => {
             forcePage={page - 1}
             disableInitialCallback={true}
             onPageChange={handlePageClick}
-            pageRangeDisplayed={4}
+            pageRangeDisplayed={3}
             marginPagesDisplayed={1}
             pageCount={pageCount}
             previousLabel='<'

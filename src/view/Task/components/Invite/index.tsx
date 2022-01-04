@@ -4,11 +4,7 @@ import styled from 'styled-components';
 import { Box, Text, Flex, Button, Empty } from 'uikit';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { useDispatch } from 'react-redux';
-import {
-  GetTaskTag,
-  useFetchInviteFriendsList,
-  useInviteCount,
-} from 'view/Task/hooks/matter';
+import { GetTaskTag, useInviteCount } from 'view/Task/hooks/matter';
 import { Variant, Group } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
 import TaskItem from '../TaskContent/TaskItem';
@@ -16,7 +12,6 @@ import { useTranslation } from 'contexts/Localization';
 import { useTask } from 'store/task/hooks';
 import { partition } from 'lodash';
 import InviteModal from './InviteModal';
-import FriendsList from '../FriendsList';
 import { useWeb3React } from '@web3-react/core';
 import { useToast } from 'hooks';
 import { copyContent } from 'utils';
@@ -27,6 +22,7 @@ import { Step } from './step';
 import { StakeNFT } from '../NftList';
 import useMenuNav from 'hooks/useMenuNav';
 import { Link } from 'react-router-dom';
+import { useStore } from 'store';
 
 export const ContentBox = styled(Flex)`
   padding: 10px 14px;
@@ -115,7 +111,6 @@ const BtnFlex = styled(Flex)`
 const Invite: React.FC = () => {
   useFetchNftList();
   const { inviteInfo } = useInviteCount();
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -126,6 +121,8 @@ const Invite: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { isMobile } = useMenuNav();
   const [inviteList, setInviteList] = useState([]);
+
+  const NftList = useStore(p => p.loginReducer.nftList);
 
   useEffect(() => {
     if (data.length) {
@@ -286,23 +283,29 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        <ContentBox>
-          <Text fontSize='18px' bold>
-            Special Invitation
-          </Text>
-        </ContentBox>
-        <ContentBox>
-          <Flex flexDirection='column'>
-            <Text>{t('SpecialInvitationDescribe')}</Text>
-            <Step />
-          </Flex>
-        </ContentBox>
-        <StakeNFT
-          handleClickNft={() => {
-            setInviteType(2);
-            setVisible(true);
-          }}
-        />
+
+        {NftList.length && (
+          <>
+            <ContentBox>
+              <Text fontSize='18px' bold>
+                Special Invitation
+              </Text>
+            </ContentBox>
+            <ContentBox>
+              <Flex flexDirection='column'>
+                <Text>{t('SpecialInvitationDescribe')}</Text>
+                <Step />
+              </Flex>
+            </ContentBox>
+            <StakeNFT
+              handleClickNft={() => {
+                setInviteType(2);
+                setVisible(true);
+              }}
+            />
+          </>
+        )}
+
         {/* 复制链接弹窗 */}
         <InviteModal
           type={inviteType}
@@ -318,14 +321,17 @@ const Invite: React.FC = () => {
 
 const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
   const source = window.location.search?.split('=')[1];
+  const { t } = useTranslation();
+
   return (
     <>
       {source === 'TASK' ? (
-        <Crumbs back>
-          <Flex width='100%'>
+        <Crumbs back justifyContent='start'>
+          <Flex width='max-content'>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
-                {tag.toUpperCase()}
+                {/* {tag.toUpperCase()} */}
+                {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
           </Flex>
@@ -336,7 +342,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
           <ContentBox>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
-                {tag.toUpperCase()}
+                {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
           </ContentBox>

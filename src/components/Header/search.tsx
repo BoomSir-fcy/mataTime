@@ -25,7 +25,7 @@ export const Search = React.memo(() => {
       <Svg viewBox="0 0 45 45" width="30px">
         <image xlinkHref={require('./images/icon_search.png').default} />
       </Svg>
-      <InputBox placeholder="搜索 SOFI" />
+      <InputBox placeholder="搜索" />
     </SearchBox>
   )
 })

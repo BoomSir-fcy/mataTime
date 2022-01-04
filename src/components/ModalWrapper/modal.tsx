@@ -10,10 +10,11 @@ const getCustomStyles = (
   fillBody?: boolean,
   top?: string,
   padding?: string,
+  left?: string,
 ) => ({
   content: {
     top: top ? top : '50%',
-    left: '50%',
+    left: left ? left : '50%',
     right: 'auto',
     bottom: 'auto',
     transform: 'translate(-50%, -50%)',
@@ -24,26 +25,29 @@ const getCustomStyles = (
     // boxShadow: theme.card.boxShadow,
     border: 0,
     overflow: 'visible',
-    padding: padding ? padding : (fillBody ? '18px 0' : '18px 20px'),
-    zIndex: 200
+    padding: padding ? padding : fillBody ? '18px 0' : '18px 20px',
+    zIndex: 200,
+    inset: '50% auto auto 50%',
+    maxHeight: '80vh',
+    overflowY: 'auto',
   },
   overlay: {
     backgroundColor: 'rgba(98, 98, 98, 0.3)',
-    zIndex: 200
-  }
+    zIndex: 200,
+  },
 });
 
 const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
   return (
     <Flex
       padding={!fillBody ? '0' : '0 20px'}
-      mb="8px"
-      justifyContent="space-between"
-      alignItems="center"
+      mb='8px'
+      justifyContent='space-between'
+      alignItems='center'
     >
       <Heading>{title}</Heading>
-      <Button onClick={onClose} padding="0" variant="text">
-        <CloseLineIcon width={16} color="white_black"></CloseLineIcon>
+      <Button onClick={onClose} padding='0' variant='text'>
+        <CloseLineIcon width={16} color='white_black'></CloseLineIcon>
       </Button>
     </Flex>
   );
@@ -72,12 +76,19 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     top,
     padding,
   }) => {
+    var OutCenterBox = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
+    // let left;
+    // if (OutCenterBox) {
+    //   const rectObject = OutCenterBox.getBoundingClientRect();
+    //   left = `${rectObject.left + 214}px`;
+    //   console.log(left);
+    // }
 
     const customStyles = getCustomStyles(theme, fillBody, top, padding);
     const onClose = useCallback(() => {
       if (setVisible) {
-        setVisible(false)
+        setVisible(false);
       }
     }, [setVisible]);
     if (!visible && creactOnUse) return null;
@@ -88,7 +99,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         onRequestClose={onClose}
         style={customStyles}
         ariaHideApp={false}
-        contentLabel="Example Modal"
+        contentLabel='Example Modal'
       >
         {!customizeTitle && (
           <ModalHeaderStyled
@@ -100,5 +111,5 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         {children}
       </Modal>
     );
-  }
+  },
 );

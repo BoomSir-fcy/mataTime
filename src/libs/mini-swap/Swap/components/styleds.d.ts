@@ -1,3 +1,4 @@
+/// <reference types="react" />
 export declare const Wrapper: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>;
 export declare const ArrowWrapper: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {
     clickable: boolean;
