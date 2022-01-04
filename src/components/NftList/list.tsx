@@ -36,7 +36,10 @@ const Column = styled(Flex)`
     margin-left: 17px;
   }
   .active {
-    box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.white};
+    box-shadow: ${({ theme }) =>
+      theme.isDark
+        ? `0px 0px 9px 5px ${theme.colors.white}`
+        : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
   }
 `;
 const GetAuthorizeBox = styled(Box)`

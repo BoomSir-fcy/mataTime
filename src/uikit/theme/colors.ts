@@ -68,7 +68,7 @@ export const lightColors: Colors = {
   CircleBg: '#e8f0fd',
   progressBar: '#000',
   gradients: {
-    footer: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
+    footer: '#fff',
     signinBackground: 'radial-gradient(circle, #262f38, #050a0e)',
     bubblegum: 'linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)',
     cardHeader: 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)',

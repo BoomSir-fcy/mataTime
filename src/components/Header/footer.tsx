@@ -11,7 +11,7 @@ import useTheme from 'hooks/useTheme';
 const FooterWarpper = styled(Flex)`
   justify-content: center;
   width: 100%;
-  height: 125px;
+  /* height: 125px; */
   padding-left: 45px;
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background: ${({ theme }) => theme.colors.gradients.footer};
@@ -22,7 +22,7 @@ const FooterWarpper = styled(Flex)`
 
 const LogoWrapper = styled(Box)`
   width: 220px;
-  height: 40px;
+  /* height: 40px; */
   ${mediaQueriesSize.marginbmd};
 `;
 
