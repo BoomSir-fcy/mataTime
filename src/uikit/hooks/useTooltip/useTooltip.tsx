@@ -14,14 +14,18 @@ const invertTheme = (currentTheme: DefaultTheme, invert: boolean) => {
   }
   return dark;
 };
-// const portalRoot = document.getElementById('portal-root');
-// 解决打赏和连接钱包层级问题
-const portalRoot = document.getElementById('root');
+// const Portal = document.getElementById('portal-root');
+// // 解决打赏和连接钱包层级问题
+// const Root = document.getElementById('root');
 
 const useTooltip = (
   content: React.ReactNode,
   options: TooltipOptions,
+  ParentElement = 'portal-root',
 ): TooltipRefs => {
+  // // 解决打赏和连接钱包层级问题
+  const portalRoot = document.getElementById(ParentElement);
+
   const {
     placement = 'auto',
     trigger = 'hover',

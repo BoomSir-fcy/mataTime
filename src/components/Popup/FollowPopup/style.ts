@@ -57,6 +57,7 @@ export const PopupContentWrapper = styled(Box)`
       }
       .number {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         max-width: 100%;
@@ -136,6 +137,7 @@ export const FollowContentWrapper = styled(Box)`
       }
       .number {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         max-width: 100%;

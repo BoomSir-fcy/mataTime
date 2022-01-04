@@ -85,8 +85,8 @@ const FollowPopup: React.FC<{
                   fontWeight='bold'
                   color='white'
                   ml='10px'
-                  maxWidth='30px'
-                  ellipsis
+                  // maxWidth='30px'
+                  // ellipsis
                 >
                   {userInfo.fans_num || 0}
                 </Text>
@@ -97,8 +97,8 @@ const FollowPopup: React.FC<{
                   fontWeight='bold'
                   color='white'
                   ml='10px'
-                  maxWidth='30px'
-                  ellipsis
+                  // maxWidth='30px'
+                  // ellipsis
                 >
                   {userInfo.attention_num || 0}
                 </Text>

@@ -13,14 +13,14 @@ import { GetPostRewardAuthor } from './hook';
 
 import 'reactjs-popup/dist/index.css';
 
-const StyledPopup = styled(Popup) <{ isMobile: boolean }>`
+const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
   position: relative;
   &-overlay {
     z-index: 98 !important;
   }
   &-content {
     width: ${({ isMobile }) =>
-    isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
+      isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
     left: ${({ isMobile }) => (isMobile ? '4px !important' : 'atuo')};
   }
 `;
@@ -105,6 +105,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
       tooltipOffset: [0, 5],
       background: 'transparent',
     },
+    'root',
   );
 
   // const close = () => {
