@@ -33,7 +33,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
-  const sendArticle = (res, image_urls, remind_user) => {
+  const sendArticle = (res, image_urls, remind_user, reset) => {
     if (!res) return;
     Api.CommentApi.createComment({
       pid: itemData.id,
@@ -41,6 +41,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
       remind_user,
     }).then(res => {
       if (Api.isSuccess(res)) {
+        reset && reset();
         toastSuccess(t('comment success'));
         setRefresh(refresh === 1 ? 2 : 1);
       }

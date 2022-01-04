@@ -52,7 +52,12 @@ const Home: React.FC = (props: any) => {
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
-  const sendArticle = async (content: string, image_urls, remind_user) => {
+  const sendArticle = async (
+    content: string,
+    image_urls,
+    remind_user,
+    reset,
+  ) => {
     if (!content) return false;
     try {
       const res = await Api.HomeApi.createArticle({
@@ -61,7 +66,8 @@ const Home: React.FC = (props: any) => {
         remind_user,
       });
       if (Api.isSuccess(res)) {
-        // setRefresh(!refresh);
+        // setRefresh(!refresh)
+        reset && reset();
         articleRefs?.current?.reload(1);
       }
     } catch (error) {
@@ -99,7 +105,7 @@ const Home: React.FC = (props: any) => {
     try {
       const res = await getUserTag();
       // setUserTags(res);
-      dispatch(storeAction.postSetUserTags(res))
+      dispatch(storeAction.postSetUserTags(res));
     } catch (error) {
       console.error(error);
     } finally {
@@ -125,7 +131,7 @@ const Home: React.FC = (props: any) => {
             callBack={() => toTop()}
             title={t('homeHeaderTitle')}
           >
-            <Link className='hide-media-md' to="/search">
+            <Link className='hide-media-md' to='/search'>
               <Button variant='text'>
                 <Icon name='icon-sousuo' size={16}></Icon>
               </Button>

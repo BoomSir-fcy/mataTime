@@ -220,8 +220,10 @@ const TabsComponent = (props, ref) => {
             </ExploreButton>
           ))}
           <ExploreCol>
-            <Text color='textTips'>{t('tagsFilter')}</Text>
-            <Flex ml='30px' font-size='14px'>
+            <Text color='textTips' width='60px'>
+              {t('tagsFilter')}
+            </Text>
+            <Flex font-size='14px' flexWrap='wrap'>
               {(tags?.[1] ?? []).map((item, keys) => (
                 <ExploreRadioButton
                   key={`${item.Name}_${keys}`}
