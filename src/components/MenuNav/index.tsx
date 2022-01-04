@@ -50,13 +50,11 @@ const MobileOnlyOverlay = styled(Overlay)`
 const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
   const { t } = useTranslation();
   const { isPushed, setIsPushed, isMobile } = useMenuNav();
-
-  console.log(PickNft);
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
   return (
     <MenuContener isMobile={isMobile}>
-      <Panel isMobile={isMobile} isPushed={isPushed} showMenu>
+      <Panel padding={PickNft} isMobile={isMobile} isPushed={isPushed} showMenu>
         {/* <Flex flex='1' flexDirection='column'>
           <Logo />
           <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>

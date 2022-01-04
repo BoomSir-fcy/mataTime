@@ -95,7 +95,6 @@ const PickNft: React.FC = () => {
             </MobileShow>
             <Flex maxWidth='100%' flexWrap='wrap' flex='1'>
               <MenuNav PickNft>
-                <Text>test</Text>
                 <Tabbar onClick={setActiveIndex} activeIndex={activeIndex} />
               </MenuNav>
               <ListBox activeIndex={activeIndex} data={renderList} />

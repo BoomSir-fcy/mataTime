@@ -30,7 +30,7 @@ const PageContainer = styled(Container)`
 `;
 const BoxStyled = styled(Box)<{ disabled?: boolean }>`
   background-color: ${({ theme, disabled }) =>
-    disabled ? theme.colors.disabled : theme.colors.backgroundLight};
+    disabled ? theme.colors.backgroundDisabled : theme.colors.backgroundLight};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   border-radius: ${({ theme }) => theme.radii.card};
   /* width: 30%; */
