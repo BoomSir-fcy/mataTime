@@ -19,11 +19,13 @@ const CrumbsWraper = styled(Box)`
   }
 `;
 
-const Card = styled(Flex) <{ zIndex?: number, hideBorder?: boolean }>`
+const Card = styled(Flex)<{ zIndex?: number; hideBorder?: boolean }>`
   align-items: center;
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid ${({ theme, hideBorder }) => !hideBorder ? 'transparent' : theme.colors.borderThemeColor};
+  border-bottom: 1px solid
+    ${({ theme, hideBorder }) =>
+      hideBorder ? 'transparent' : theme.colors.borderThemeColor};
   position: fixed;
   top: 0;
   background: ${({ theme }) => theme.colors.background};
@@ -57,7 +59,6 @@ export const Crumbs: React.FC<{
   hideBorder?: boolean;
   justifyContent?: string;
   callBack?: () => void;
-
 }> = React.memo(
   ({
     back,
