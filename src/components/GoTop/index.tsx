@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex } from 'uikit';
+import { Icon } from 'components';
 
 const TopBox = styled(Box)`
   position: fixed;
@@ -55,6 +56,7 @@ const Gotop = () => {
       window.removeEventListener('scroll', bindHandleScroll);
     };
   }, []);
+  const size = 20;
   return (
     <TopBox style={{ opacity: IsShow ? '1' : '0' }} onClick={Top}>
       <Flex
@@ -63,12 +65,7 @@ const Gotop = () => {
         justifyContent='center'
         alignItems='center'
       >
-        <img
-          width='20px'
-          height='auto'
-          src={require('assets/images/common/goTop.png').default}
-          alt=''
-        />
+        <Icon size={size} color='white_black' current={1} name='icon-jiantou' />
       </Flex>
     </TopBox>
   );
