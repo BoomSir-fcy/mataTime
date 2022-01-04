@@ -11,7 +11,9 @@ import {
   getSinglePoolContract,
   getCashierDeskContract,
   getRewardAuthorContract,
-  getInvitationContract
+  getInvitationContract,
+  getExPhotoContract,
+  getTicketNftContract,
 } from 'utils/contractHelpers';
 import { getContract } from 'utils/contract';
 
@@ -27,7 +29,7 @@ export const useERC20 = (address: string) => {
   const { library } = useActiveWeb3React();
   return useMemo(
     () => getBep20Contract(address, library.getSigner()),
-    [address, library]
+    [address, library],
   );
 };
 
@@ -38,7 +40,7 @@ export const useERC721 = (address: string) => {
   const { library } = useActiveWeb3React();
   return useMemo(
     () => getErc721Contract(address, library.getSigner()),
-    [address, library]
+    [address, library],
   );
 };
 
@@ -48,7 +50,7 @@ export const useERC721 = (address: string) => {
 function useContract(
   address: string | undefined,
   ABI: any,
-  withSignerIfPossible = true
+  withSignerIfPossible = true,
 ): Contract | null {
   const { library, account } = useActiveWeb3React();
 
@@ -59,7 +61,7 @@ function useContract(
         address,
         ABI,
         library,
-        withSignerIfPossible && account ? account : undefined
+        withSignerIfPossible && account ? account : undefined,
       );
     } catch (error) {
       console.error('Failed to get contract', error);
@@ -70,7 +72,7 @@ function useContract(
 
 export function useTokenContract(
   tokenAddress?: string,
-  withSignerIfPossible?: boolean
+  withSignerIfPossible?: boolean,
 ): Contract | null {
   return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible);
 }
@@ -84,7 +86,7 @@ export const useDsgNft = (address: string) => {
   const { library } = useActiveWeb3React();
   return useMemo(
     () => getDsgNftContract(address, library.getSigner()),
-    [address, library]
+    [address, library],
   );
 };
 
@@ -92,7 +94,7 @@ export const useErc20EarnNftPool = () => {
   const { library } = useActiveWeb3React();
   return useMemo(
     () => getErc20EarnNftPoolContract(library.getSigner()),
-    [library]
+    [library],
   );
 };
 
@@ -110,7 +112,7 @@ export const useLiquidityPool = () => {
   const { library } = useActiveWeb3React();
   return useMemo(
     () => getLiquidityPoolContract(library.getSigner()),
-    [library]
+    [library],
   );
 };
 
@@ -127,4 +129,12 @@ export const useCashierDesk = () => {
 export const useInvitation = () => {
   const { library } = useActiveWeb3React();
   return useMemo(() => getInvitationContract(library.getSigner()), [library]);
+};
+export const useExPhotoContract = () => {
+  const { library } = useActiveWeb3React();
+  return useMemo(() => getExPhotoContract(library.getSigner()), [library]);
+};
+export const useTicketNftContract = () => {
+  const { library } = useActiveWeb3React();
+  return useMemo(() => getTicketNftContract(library.getSigner()), [library]);
 };

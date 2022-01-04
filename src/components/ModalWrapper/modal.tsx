@@ -1,9 +1,14 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
-import { DefaultTheme } from 'styled-components';
-import { Heading, Flex, CloseLineIcon, Button } from 'uikit';
+import styled, { DefaultTheme } from 'styled-components';
+import { Heading, Flex, CloseLineIcon, Button, Box } from 'uikit';
 
 import useTheme from 'hooks/useTheme';
+
+const BoxStyle = styled(Box)<{ overflow?: string }>`
+  overflow-y: ${({ overflow }) => overflow || 'auto'};
+  max-height: calc(80vh - 100px);
+`;
 
 const getCustomStyles = (
   theme: DefaultTheme,
@@ -29,7 +34,6 @@ const getCustomStyles = (
     zIndex: 200,
     inset: '50% auto auto 50%',
     maxHeight: '80vh',
-    overflowY: 'auto',
   },
   overlay: {
     backgroundColor: 'rgba(98, 98, 98, 0.3)',
@@ -62,6 +66,7 @@ interface ModalWrapperProps {
   fillBody?: boolean;
   top?: string;
   padding?: string;
+  overflow?: string;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -75,6 +80,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     fillBody,
     top,
     padding,
+    overflow,
   }) => {
     var OutCenterBox = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
@@ -108,7 +114,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
             title={title}
           />
         )}
-        {children}
+        <BoxStyle overflow={overflow}>{children}</BoxStyle>
       </Modal>
     );
   },

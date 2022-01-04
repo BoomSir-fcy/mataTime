@@ -55,6 +55,22 @@ export default {
   },
   Invitation: {
     56: '',
-    97: '',
+    97: '0x6955FF14b433846CA5c0f63c04D111e137C78850',
+  },
+  ticketsPhotoNft: {
+    56: '0x442f3Dc5C1a5c89012074b9d03bbea2CA2215B21',
+    97: '0x95B3eF7446Cbe0F2837Bb4Bdcc3A201119fb4A4A',
+  },
+  ExPhotoNft: {
+    56: '0xE5fdBF8Db71eaFbc81a841c0C4A3f74206d10cfD',
+    97: '0x4c73eBc280DF709914D444d5A877ACB78f4EA200',
+  },
+  ExPhoto: {
+    56: '0xa7e77ed285d0E59Db7B722b311Bd47feE04c3d01',
+    97: '0xd107ceD1a36a3276FB3832231e00BF306762931a',
+  },
+  dsgaf: {
+    56: '0xE3D5FDFBb8DafA41E0222F508a0470d21c115404',
+    97: '0x43338D14CbcBa94605d738a6ba5A2AAD253A5E35',
   },
 };

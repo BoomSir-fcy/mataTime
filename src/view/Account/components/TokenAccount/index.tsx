@@ -29,6 +29,7 @@ import {
 import useMenuNav from 'hooks/useMenuNav';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import { useInviteCount } from 'view/Task/hooks/matter';
+import { Icon } from 'components';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -85,14 +86,21 @@ const PostTab = styled(ContentTab)`
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
-const IncomeComp = ({ TodayIncome, TotalIncome }) => {
+const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
+  const size = isMobile ? 26 : 36;
   const { t } = useTranslation();
   const { inviteInfo } = useInviteCount();
   return (
     <RightBox justifyContent='space-between' alignItems='center'>
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/airplane.png').default} />
-        <Flex mr='6px' flexDirection='column' justifyContent='space-between'>
+        <Icon
+          size={size}
+          color='white_black'
+          current={1}
+          name='icon-zhifeiji1'
+        />
+        {/* <Img src={require('assets/images/myWallet/airplane.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('My Rebate(TIME)')}
           </Text>
@@ -102,8 +110,14 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/today.png').default} />
-        <Flex flexDirection='column' justifyContent='space-between'>
+        <Icon
+          size={size}
+          color='white_black'
+          current={1}
+          name='icon-leijishouyi'
+        />
+        {/* <Img src={require('assets/images/myWallet/today.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Day income')}
           </Text>
@@ -113,8 +127,14 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/total.png').default} />
-        <Flex flexDirection='column' justifyContent='space-between'>
+        <Icon
+          size={size}
+          color='white_black'
+          current={1}
+          name='icon-zongshouyi'
+        />
+        {/* <Img src={require('assets/images/myWallet/total.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Cumulative income')}
           </Text>
@@ -315,12 +335,20 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           </TabText>
         </Flex>
         {!isMobile && (
-          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+          <IncomeComp
+            isMobile={isMobile}
+            TodayIncome={TodayIncome}
+            TotalIncome={TotalIncome}
+          />
         )}
       </ContentTab>
       {isMobile && (
         <ContentTab>
-          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+          <IncomeComp
+            isMobile={isMobile}
+            TodayIncome={TodayIncome}
+            TotalIncome={TotalIncome}
+          />
         </ContentTab>
       )}
       <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />

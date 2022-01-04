@@ -198,7 +198,7 @@ const Edit: React.FC = () => {
                 <CenterImg
                   width='250px'
                   height='250px'
-                  src={require('view/Login/images/LOGO2.svg').default}
+                  src='/images/LOGO2.svg'
                 />
               </CommonCircle>
             </ComponentsWrapper>

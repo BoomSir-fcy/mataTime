@@ -7,12 +7,12 @@ import { useTranslation } from 'contexts/Localization';
 import Logo from './Logo';
 import Nav from './Nav';
 import NavFooter from './NavFooter';
-import { Panel } from './styled'
-import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from "./config";
+import { Panel } from './styled';
+import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from './config';
 import { ProfileMenu } from './ProfileMenu';
 import { useStore } from 'store';
 
-const MenuContener = styled(Flex) <{ isMobile: boolean }>`
+const MenuContener = styled(Flex)<{ isMobile: boolean }>`
   height: 100vh;
   width: ${({ isMobile }) => (isMobile ? '0' : `${SIDEBAR_WIDTH_FULL}px`)};
   /* border: 1px red solid; */
@@ -32,10 +32,10 @@ const UserBox = styled(Flex)`
   align-items: center;
   margin-top: 12px;
   margin-right: 8px;
-`
+`;
 
 export interface MenuNavProps {
-  // seconds?: number
+  PickNft?: boolean;
 }
 
 const MobileOnlyOverlay = styled(Overlay)`
@@ -47,25 +47,42 @@ const MobileOnlyOverlay = styled(Overlay)`
   }
 `;
 
-const MenuNav: React.FC<MenuNavProps> = ({ }) => {
+const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
   const { t } = useTranslation();
-  const { isPushed, setIsPushed, isMobile } = useMenuNav()
-
+  const { isPushed, setIsPushed, isMobile } = useMenuNav();
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
   return (
     <MenuContener isMobile={isMobile}>
-      <Panel isMobile={isMobile} isPushed={isPushed} showMenu>
-        <Flex flex="1" flexDirection="column">
+      <Panel padding={PickNft} isMobile={isMobile} isPushed={isPushed} showMenu>
+        {/* <Flex flex='1' flexDirection='column'>
           <Logo />
           <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
             <ProfileMenu />
           </UserBox>
           <Nav />
         </Flex>
-        <NavFooter />
+        <NavFooter /> */}
+        {PickNft ? (
+          children
+        ) : (
+          <>
+            <Flex flex='1' flexDirection='column'>
+              <Logo />
+              <UserBox as={Link} to='/me'>
+                <ProfileMenu />
+              </UserBox>
+              <Nav />
+            </Flex>
+            <NavFooter />
+          </>
+        )}
       </Panel>
-      <MobileOnlyOverlay show={isPushed} onClick={() => setIsPushed(false)} role="presentation" />
+      <MobileOnlyOverlay
+        show={isPushed}
+        onClick={() => setIsPushed(false)}
+        role='presentation'
+      />
     </MenuContener>
   );
 };

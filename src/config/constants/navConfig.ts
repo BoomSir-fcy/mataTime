@@ -222,6 +222,15 @@ export const menuNavConfig: MenuNavConfig[] = [
         lable: 'setMenuPreference',
         path: '/set/preference',
       },
+      {
+        icon: 'icon-shouye',
+        activeIcon: 'icon-shouye1',
+        path: '/picknft',
+        hide: true,
+        hideLeft: true,
+        hideRight: true,
+        lable: 'homeMenuHome',
+      },
     ],
   },
 ];
