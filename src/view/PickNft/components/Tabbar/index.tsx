@@ -57,15 +57,17 @@ const BoxCardStyled = styled(Flex)`
 `;
 
 const TabBoxStyled = styled(Flex)`
-  width: 100%;
-  overflow: auto;
+  flex-direction: column;
+  justify-content: start;
+  /* width: 100%; */
+  /* overflow: auto; */
   /* flex-wrap: wrap; */
-  ${({ theme }) => theme.mediaQueries.md} {
+  /* ${({ theme }) => theme.mediaQueries.md} {
     display: block;
   }
   ::-webkit-scrollbar {
     height: 4px;
-  }
+  } */
   .active {
     background: ${({ theme }) => theme.colors.backgroundCard};
   }
