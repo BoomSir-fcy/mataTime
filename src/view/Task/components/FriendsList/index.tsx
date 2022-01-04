@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Empty, Flex, Spinner, Text } from 'uikit';
 import { useFetchInviteFriendsList } from 'view/Task/hooks/matter';
@@ -51,7 +51,7 @@ const ItemText = styled(Text)`
   }
 `;
 const FriendsList: React.FC = React.memo(() => {
-  const { list, pageNum, setPageNum, loading, total } =
+  const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteFriendsList();
   const { t } = useTranslation();
 
@@ -62,6 +62,16 @@ const FriendsList: React.FC = React.memo(() => {
     [setPageNum],
   );
 
+  const getTotalPage = totalNum => {
+    if (pageSize != 0 && totalNum % pageSize == 0) {
+      return parseInt(String(totalNum / pageSize));
+    }
+    if (pageSize != 0 && totalNum % pageSize != 0) {
+      return parseInt(String(totalNum / pageSize)) + 1;
+    }
+  };
+
+  const totalPage = useMemo(() => getTotalPage(total), [total]);
   return (
     <>
       <Crumbs back />
@@ -109,7 +119,7 @@ const FriendsList: React.FC = React.memo(() => {
 
           <PaginateStyle alignItems='center' justifyContent='end'>
             <Text mr='16px' fontSize='14px' color='textTips'>
-              {t('Account Total %page% page', { page: total })}
+              {t('Account Total %page% page', { page: totalPage })}
             </Text>
             <ReactPaginate
               breakLabel='...'
@@ -119,7 +129,7 @@ const FriendsList: React.FC = React.memo(() => {
               onPageChange={handlePageClick}
               pageRangeDisplayed={4}
               marginPagesDisplayed={1}
-              pageCount={total}
+              pageCount={totalPage}
               previousLabel='<'
               renderOnZeroPageCount={null}
             />

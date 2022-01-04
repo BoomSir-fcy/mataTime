@@ -283,7 +283,6 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-
         {NftList.length && (
           <>
             <ContentBox>
