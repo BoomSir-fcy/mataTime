@@ -55,8 +55,8 @@ export const ReportContentWrapper = styled(Box)`
 
 export const ReplyTargetWrapper = styled(Box)`
   position: relative;
-  overflow-y: auto;
-  max-height: 200px;
+  /* overflow-y: auto;
+  max-height: 200px; */
   &::before {
     left: 27px;
     top: 70px;
