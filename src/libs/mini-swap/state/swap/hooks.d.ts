@@ -27,7 +27,7 @@ export declare function useDerivedSwapInfo(): {
     pairState?: PairState;
 };
 export declare function queryParametersToSwapState(parsedQs: ParsedQs): SwapState;
-export declare function useDefaultsFromURLSearch(outputCurrency?: string, inputCurrencyId?: string): {
+export declare function useDefaultsFromURLSearch(outputCurrency?: string, inputCurrency?: string): {
     inputCurrencyId: string | undefined;
     outputCurrencyId: string | undefined;
 } | undefined;

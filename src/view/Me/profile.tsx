@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Link } from 'react-router-dom';
@@ -8,8 +8,11 @@ import {
   Certification,
   List,
   MoreOperatorEnum,
-  Icon
+  Icon,
+  FollowButton,
+  CancelAttentionModal,
 } from 'components';
+import { debounce } from 'lodash';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
@@ -35,6 +38,7 @@ import CommonCircle from 'components/Cirde/CommonCircle';
 import useAuth from 'hooks/useAuth';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import useMenuNav from 'hooks/useMenuNav';
+import eventBus from 'utils/eventBus';
 
 const Center = styled(Box)`
   width: 100%;
@@ -130,15 +134,19 @@ const CenterImg = styled.img`
   left: 8%;
 `;
 
+const FollowButtonBox = styled(Box)`
+  ${mediaQueriesSize.marginr}
+`;
+
 const Profile: React.FC<any> = props => {
   const [state, setState] = useImmer({
     profile: {
-      label_list: []
+      label_list: [],
     } as Api.User.userInfoParams,
     loading: false,
     list: [],
     page: 1,
-    totalPage: 0
+    totalPage: 0,
   });
   const { t, currentLanguage } = useTranslation();
   const country = useStore(p => p.appReducer.localtion);
@@ -151,7 +159,14 @@ const Profile: React.FC<any> = props => {
   const { isDark } = useTheme();
   const defaultImages = isDark ? defaultDarkImages : defaultLightImages;
   const { languange } = setting;
-
+  const [FollowState, setFollowState] = useImmer({
+    cancelFollow: false,
+    cancelParams: {
+      uid: 0,
+      address: '',
+      nft_image: '',
+    },
+  });
   const [isEnd, setIsEnd] = useState(false);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
@@ -161,6 +176,20 @@ const Profile: React.FC<any> = props => {
 
   const { isMobile } = useMenuNav();
 
+  const FollowData = useMemo(() => {
+    const data = {
+      address: profile.address,
+      display_format: profile.display_format,
+      introduction: profile.introduction,
+      location: profile.location,
+      nft_image: profile.nft_image,
+      nick_name: profile.nick_name,
+      uid: profile.uid,
+      attention_status: profile.is_attention,
+    };
+    return data;
+  }, [profile]);
+
   const init = async (offset?: number) => {
     try {
       setState(p => {
@@ -168,7 +197,7 @@ const Profile: React.FC<any> = props => {
       });
       const [profile, tweet] = await Promise.all([
         Api.MeApi.getProfile(uid),
-        Api.MeApi.getProfileMsg({ page: offset || page, perpage, uid })
+        Api.MeApi.getProfileMsg({ page: offset || page, perpage, uid }),
       ]);
       if (Api.isSuccess(profile)) {
         setState(p => {
@@ -207,7 +236,7 @@ const Profile: React.FC<any> = props => {
       COMMONT,
       EXPAND,
       SHIELD,
-      DELPOST
+      DELPOST,
     } = MoreOperatorEnum;
     const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
@@ -244,10 +273,43 @@ const Profile: React.FC<any> = props => {
       setNonce(prep => prep + 1);
     }
   };
+  const followUser = async (focus_uid: number) => {
+    try {
+      const res = await Api.MeApi.followUser(focus_uid);
+      if (Api.isSuccess(res)) {
+        init(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  // 取消关注
+  const unFollowRequest = async item => {
+    try {
+      const res = await Api.MeApi.unFollowUser(item.uid);
+      if (Api.isSuccess(res)) {
+        setFollowState(p => {
+          p.cancelFollow = false;
+        });
+        init(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   React.useEffect(() => {
     init(1);
   }, [uid]);
+
+  // 添加事件监听，用于更新状态
+  const updateProfile = useCallback(() => init(1), [uid, page, perpage]);
+  React.useEffect(() => {
+    eventBus.addEventListener('updateProfile', updateProfile);
+    return () => {
+      eventBus.removeEventListener('updateProfile', updateProfile);
+    };
+  }, [updateProfile]);
 
   const locationDisplay = React.useMemo(() => {
     const defaultCountry = country?.find(item => item.ID === profile.location);
@@ -255,14 +317,13 @@ const Profile: React.FC<any> = props => {
       ? defaultCountry?.LocationEn
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
-
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
-            backgroundImage: `url(${profile.background_image})`
+            backgroundImage: `url(${profile.background_image})`,
           }}
         >
           {!profile.background_image && (
@@ -323,7 +384,25 @@ const Profile: React.FC<any> = props => {
                 </Button> */}
               </>
             ) : (
-              <Popup user={profile} onCallback={() => init(1)} />
+              <Flex alignItems='center'>
+                <FollowButtonBox>
+                  <FollowButton
+                    data={FollowData}
+                    followFunc={debounce(() => followUser(uid), 1000)}
+                    unFollowFunc={() =>
+                      setFollowState(p => {
+                        p.cancelParams = {
+                          uid,
+                          address: profile.address,
+                          nft_image: profile.nft_image,
+                        };
+                        p.cancelFollow = true;
+                      })
+                    }
+                  />
+                </FollowButtonBox>
+                <Popup user={profile} onCallback={() => init(1)} />
+              </Flex>
             )}
           </Info>
           <Content>
@@ -393,8 +472,8 @@ const Profile: React.FC<any> = props => {
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               postUid={uid}
               callback={(data, type) => {
@@ -415,8 +494,8 @@ const Profile: React.FC<any> = props => {
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(data, type) => {
                 // if (_type === MoreOperatorEnum.EXPAND) {
@@ -430,6 +509,20 @@ const Profile: React.FC<any> = props => {
           </MeItemWrapper>
         ))}
       </List>
+      <CancelAttentionModal
+        title={t('meUnsubscribeTips')}
+        show={FollowState.cancelFollow}
+        params={FollowState.cancelParams}
+        confirm={debounce(
+          () => unFollowRequest(FollowState.cancelParams),
+          1000,
+        )}
+        onClose={() =>
+          setFollowState(p => {
+            p.cancelFollow = false;
+          })
+        }
+      />
     </Center>
   );
 };

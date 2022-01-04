@@ -37,7 +37,7 @@ export const SearchPop = (props: Iprops) => {
             res.data && setUserList(res.data);
           }
         });
-      }, 400)
+      }, 400),
     );
   }, [nicKName]);
 
@@ -51,13 +51,13 @@ export const SearchPop = (props: Iprops) => {
         Api.HomeApi.queryHotTopicList({
           page: 1,
           per_page: 50,
-          topic_name: topicValue
+          topic_name: topicValue,
         }).then(res => {
           if (Api.isSuccess(res)) {
             setTopicList(res.data.List || []);
           }
         });
-      }, 400)
+      }, 400),
     );
   }, [topicValue]);
 
@@ -103,6 +103,7 @@ export const SearchPop = (props: Iprops) => {
                 onClick={e => callback(item, type)}
               >
                 <Avatar
+                  disableFollow
                   src={item.nft_image}
                   style={{ width: '50px', height: '50px' }}
                   scale='md'

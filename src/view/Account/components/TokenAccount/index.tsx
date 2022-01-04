@@ -10,23 +10,26 @@ import {
   useFetchWalletInfo,
   useFetchApproveNum,
   useFetTimeIncometoday,
-  useFetTimeIncomeList
+  useFetTimeIncomeList,
+  useFetchMinimum,
 } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
 import { useStore } from 'store';
-import { formatDisplayApr } from 'utils/formatBalance';
+import { formatDisplayApr, getBalanceAmount } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
-import { useTokenBalance } from '../ExchangeTime/hook';
 import { useTranslation } from 'contexts/Localization';
 import { useDispatch } from 'react-redux';
 import {
   fetchTimeIncometoday,
   fetchMatterIncometoday,
   fetchIncomeList,
-  fetchMatterIncomeList
+  fetchMatterIncomeList,
 } from 'store/wallet/reducer';
 import useMenuNav from 'hooks/useMenuNav';
+import { useTokenBalance } from 'hooks/useTokenBalance';
+import { useInviteCount } from 'view/Task/hooks/matter';
+import { Icon } from 'components';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -60,29 +63,61 @@ const TabText = styled(Text)`
 `;
 const RightBox = styled(Flex)`
   min-width: 23vw;
+  flex-wrap: wrap;
 `;
 const IncomeBox = styled(Flex)`
   align-items: center;
   ${({ theme }) => theme.mediaQueriesSize.marginr}
   width: max-content;
+  /* min-width: 160px; */
 `;
 const Img = styled.img`
-  width: 36px;
-  height: 36px;
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  margin-right: 12px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 const PostTab = styled(ContentTab)`
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
-const IncomeComp = ({ TodayIncome, TotalIncome }) => {
+const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
+  const size = isMobile ? 26 : 36;
   const { t } = useTranslation();
-
+  const { inviteInfo } = useInviteCount();
   return (
     <RightBox justifyContent='space-between' alignItems='center'>
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/today.png').default} />
-        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+        <Icon
+          size={size}
+          color='white_black'
+          current={1}
+          name='icon-zhifeiji1'
+        />
+        {/* <Img src={require('assets/images/myWallet/airplane.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
+          <Text fontSize='14px' color='textTips'>
+            {t('My Rebate(TIME)')}
+          </Text>
+          <Text color='white_black' fontWeight='bold'>
+            {inviteInfo.total_rebate}
+          </Text>
+        </Flex>
+      </IncomeBox>
+      <IncomeBox>
+        <Icon
+          size={size}
+          color='white_black'
+          current={1}
+          name='icon-leijishouyi'
+        />
+        {/* <Img src={require('assets/images/myWallet/today.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Day income')}
           </Text>
@@ -92,8 +127,14 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/total.png').default} />
-        <Flex ml='22px' flexDirection='column' justifyContent='space-between'>
+        <Icon
+          size={size}
+          color='white_black'
+          current={1}
+          name='icon-zongshouyi'
+        />
+        {/* <Img src={require('assets/images/myWallet/total.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Cumulative income')}
           </Text>
@@ -106,9 +147,10 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
   );
 };
 
-const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
+const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   useFetchWalletInfo();
   useFetchApproveNum();
+  useFetchMinimum();
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -119,15 +161,16 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
     freeze_balance: '0',
     token_type: 1,
     total_balance: '0',
-    uid: 0
+    uid: 0,
   };
   const [WalletInfo, setWalletInfo] = useState(info);
-  const [walletBalance, setwalletBalance] = useState(0);
+  const [walletBalance, setwalletBalance] = useState('0');
   const [tokenAddress, settokenAddress] = useState('');
   const [ActiveToken, setActiveToken] = useState(1);
   const [pageSize, setpageSize] = useState(5);
   const [day, setday] = useState(7);
   const [readType, setreadType] = useState(1);
+  const [TokenWithDrawMinNum, setTokenWithDrawMinNum] = useState('0');
   const timeAddress = getTimeAddress();
   const MatterAddress = getMatterAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
@@ -138,8 +181,9 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
   const MatterIncometoday = useStore(p => p.wallet.MatterIncometoday);
   const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
   const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
+  const WithDrawMinNum = useStore(p => p.wallet.WithDrawMinNum);
 
-  useFetTimeIncometoday(day);
+  // useFetTimeIncometoday(day);
   // useFetTimeIncomeList(1, pageSize, 1);
 
   const TodayIncome = useMemo(() => {
@@ -197,9 +241,16 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
   };
 
   useEffect(() => {
+    if (activeToken === 'TIME') {
+      setTokenWithDrawMinNum(WithDrawMinNum.time_minimum);
+    } else {
+      setTokenWithDrawMinNum(WithDrawMinNum.meta_minimum);
+    }
+  }, [WithDrawMinNum, activeToken]);
+  useEffect(() => {
     const getTokenType = () => {
       // 获取路由的token参数
-      const search = route.location.search;
+      const { search } = route?.location || {};
       const myQuery = search => {
         return new URLSearchParams(search);
       };
@@ -213,15 +264,15 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
   useEffect(() => {
     if (account) {
       if (activeToken === 'TIME') {
-        setwalletBalance(timeBalance);
+        setwalletBalance(getBalanceAmount(timeBalance).toString());
         settokenAddress(timeAddress);
       } else {
-        setwalletBalance(matterBalance);
+        setwalletBalance(getBalanceAmount(matterBalance).toString());
         settokenAddress(MatterAddress);
       }
     }
     return () => {
-      setwalletBalance(0);
+      setwalletBalance('0');
     };
   }, [
     account,
@@ -229,7 +280,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
     timeBalance,
     timeAddress,
     MatterAddress,
-    activeToken
+    activeToken,
   ]);
 
   useEffect(() => {
@@ -257,6 +308,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
           Token={activeToken}
           Balance={walletBalance}
           TokenAddr={tokenAddress}
+          TokenWithDrawMinNum={TokenWithDrawMinNum}
         />
         {!isMobile && (
           <Recharge
@@ -283,12 +335,20 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
           </TabText>
         </Flex>
         {!isMobile && (
-          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+          <IncomeComp
+            isMobile={isMobile}
+            TodayIncome={TodayIncome}
+            TotalIncome={TotalIncome}
+          />
         )}
       </ContentTab>
       {isMobile && (
         <ContentTab>
-          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+          <IncomeComp
+            isMobile={isMobile}
+            TodayIncome={TodayIncome}
+            TotalIncome={TotalIncome}
+          />
         </ContentTab>
       )}
       <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
@@ -302,7 +362,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
                 dispatch(fetchIncomeList({ page: 1, pageSize, readType: 1 }));
               }}
             >
-              Post
+              {t('walletePost')}
             </TabText>
             <TabText
               className={readType === 2 ? 'active' : ''}
@@ -311,7 +371,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo((route) => {
                 dispatch(fetchIncomeList({ page: 1, pageSize, readType: 2 }));
               }}
             >
-              Comment
+              {t('walleteComment')}
             </TabText>
           </Flex>
         </PostTab>

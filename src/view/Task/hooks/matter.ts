@@ -47,10 +47,8 @@ export const useFetchInviteFriendsList = () => {
   const [total, setTotal] = useState(1)
   const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
-    if (account) {
       getList()
-    }
-  }, [pageNum, account])
+  }, [pageNum])
   const getList = () => {
     setLoading(true);
     Api.TaskApi.getInviteList(pageNum, pageSize).then((res: any) => {
@@ -68,30 +66,15 @@ export const useFetchInviteFriendsList = () => {
     })
   }
 
-  return { list, pageNum, total, setPageNum, loading }
+  return { list, pageNum, pageSize, total, setPageNum, loading }
 }
 
-// 签到
-export const useSignIn = () => {
-  useEffect(() => {
-    onSignIn();
-  }, [])
-
-  const onSignIn = async () => {
-    try {
-      const res = await Api.TaskApi.SignIn();
-      return res;
-    } catch (error) {
-      throw new Error('SignIn Error');
-    }
-  }
-}
 
 // 领取任务
 export const receive = async (dispatch: any, taskId: number) => {
   try {
     const res = await Api.TaskApi.receive(taskId);
-    await dispatch(fetchTaskListAsync({ isSignIn: false }))
+    if (res.code === 1) await dispatch(fetchTaskListAsync({ isSignIn: false }))
     return res;
   } catch (error) {
     throw new Error('Receive Error');

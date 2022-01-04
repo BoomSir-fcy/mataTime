@@ -1,44 +1,38 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
+
+const homepath = '/'
+const listenPaths = ['/topicList']
 
 export default function ScrollBarApdater() {
   const { pathname } = useLocation();
-  // useEffect(() => {
-  //   // XXX: 不加滚动条会不滚动 卧液布值道定理
-  //   setTimeout(() => {
-  //     // document.body.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
-  //     window.scrollTo({
-  //       behavior: 'smooth',
-  //       top: 0,
-  //     });
-  //   }, 0);
-  // }, [pathname]);
+  const { listen } = useHistory();
+  const [scrollState, setScrollState] = useState({})
+  const [oldPath, setOldPath] = useState('/')
+
+  useEffect(() => {
+    const unListen = listen((location) => {
+      if (pathname === homepath || listenPaths.some(item => item.includes(pathname))) {
+        setScrollState(state => ({
+          ...state,
+          [pathname]: {
+            y: window.scrollY,
+          },
+        }))
+      }
+    })
+    return unListen
+  }, [pathname])
+
+  useEffect(() => {
+    if (oldPath !== pathname) {
+      setOldPath(pathname)
+      window.scrollTo({
+        // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
+        behavior: 'auto',
+        top: scrollState[pathname]?.y || 0,
+      });
+    }
+  }, [pathname, scrollState, oldPath]);
   return null;
 }
-
-export const useReStoreScrollTop = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    try {
-      let scrollY = sessionStorage.getItem(pathname);
-      setTimeout(() => {
-        // document.body.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
-        window.scrollTo({
-          behavior: 'smooth',
-          top: Number(scrollY),
-        });
-      }, 0);
-    } catch (error) {
-      console.log(error);
-    }
-
-    return () => {
-      try {
-        console.log(window.scrollY);
-        sessionStorage.setItem(pathname, String(window.scrollY));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  }, [pathname]);
-};

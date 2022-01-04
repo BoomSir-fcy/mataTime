@@ -30,7 +30,7 @@ export const CancelButton = styled(Button)`
   width: 100px;
   height: 35px;
   border-radius: 10px;
-  background: #4d535f;
+  background: ${({ theme }) => theme.colors.tertiary};
   margin-top: 12px;
   padding: 0;
   margin-right: 20px;
@@ -40,11 +40,13 @@ export const SlateBox = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
   border-radius: ${({ theme }) => theme.radii.card};
-  padding: 8px;
+  /* padding-left: 4px; */
+  padding: 15px 0 20px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 15px;
+    padding: 15px 15px 30px;
   }
-  padding-bottom: 30px;
+  max-width: calc(100vw - 15px);
+  margin: 0 auto;
   z-index: 1004;
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
@@ -55,8 +57,8 @@ export const SlateBox = styled.div`
     }
     padding-bottom: 16px;
     border-radius: 5px;
-    min-height: 112px !important;
-    max-height: 120px;
+    min-height: 160px !important;
+    max-height: 200px;
     overflow-y: auto;
     &::-webkit-scrollbar {
       /*滚动条整体样式*/

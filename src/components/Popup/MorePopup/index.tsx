@@ -16,7 +16,9 @@ export enum MoreOperatorEnum {
   FOLLOW = 'FOLLOW',
   CANCEL_FOLLOW = 'CANCEL_FOLLOW',
   COMMONT = 'COMMONT',
-  EXPAND = 'EXPAND' // 折叠展开
+  EXPAND = 'EXPAND', // 折叠展开
+  LIKE = 'LIKE', // 点赞
+  BOOKMARK = 'BOOKMARK', // 收藏
 }
 
 type Iprops = {
@@ -29,7 +31,7 @@ export const MorePopup = React.memo((props: Iprops) => {
   const { t } = useTranslation();
   const UID = useSelector((state: any) => state.loginReducer.userInfo.uid);
 
-  const { children, data, callback = () => { } } = props;
+  const { children, data, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<boolean>(false);
   const [editShow, setEditShow] = useState<boolean>(false);
@@ -55,8 +57,8 @@ export const MorePopup = React.memo((props: Iprops) => {
         ...data,
         post: {
           ...data.post,
-          is_fav: 1
-        }
+          is_fav: 1,
+        },
       });
       toast.success(t('moreCollectionSuccess'));
     }
@@ -71,8 +73,8 @@ export const MorePopup = React.memo((props: Iprops) => {
         ...data,
         post: {
           ...data.post,
-          is_fav: 0
-        }
+          is_fav: 0,
+        },
       });
       toast.success(t('moreCancelCollectionSuccess'));
     }
@@ -117,8 +119,8 @@ export const MorePopup = React.memo((props: Iprops) => {
     window.open(
       `https://twitter.com/intent/tweet?text=${text.replace(
         /#/g,
-        ''
-      )}&hashtags=${parseComments(text)}&url=${url}`
+        '',
+      )}&hashtags=${parseComments(text)}&url=${url}`,
     );
     setVisible(false);
   };
@@ -203,7 +205,7 @@ export const MorePopup = React.memo((props: Iprops) => {
       >
         {children}
         {visible ? (
-          <PopupContentWrapper id="more-popup-content">
+          <PopupContentWrapper id='more-popup-content'>
             {isOwn ? (
               <>
                 <p
@@ -258,8 +260,8 @@ export const MorePopup = React.memo((props: Iprops) => {
               onClick={() => {
                 copyContent(
                   process.env.REACT_APP_WEB_URL +
-                  '/articleDetils/' +
-                  data.post.post_id || ''
+                    '/articleDetils/' +
+                    data.post.post_id || '',
                 );
               }}
             >

@@ -33,8 +33,11 @@ export const ModalTitleWrapper = styled(Box)`
 `;
 export const ReportModalWrapper = styled(Box)`
   width: 40vw;
-  max-width: 670px;
-  min-width: 300px;
+  max-width: 600px;
+  min-width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    min-width: 300px;
+  }
   max-height: 500px;
   background: ${({ theme }) => theme.colors.greyBackground};
   border-radius: ${({ theme }) => theme.radii.card};
@@ -43,7 +46,7 @@ export const ReportModalWrapper = styled(Box)`
 
 export const ReportContentWrapper = styled(Box)`
   margin-top: 5px;
-  padding: 0 10px;
+  padding: 0px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 0 20px;
   }
@@ -52,12 +55,14 @@ export const ReportContentWrapper = styled(Box)`
 
 export const ReplyTargetWrapper = styled(Box)`
   position: relative;
+  overflow-y: auto;
+  max-height: 200px;
   &::before {
     left: 27px;
     top: 70px;
     width: 5px;
     height: calc(100% - 75px);
-    background: #000;
+    background: ${({ theme }) => theme.colors.white};
     border-radius: 3px;
     position: absolute;
     content: '';
@@ -71,10 +76,10 @@ export const ReplyConentWrapper = styled(Box)`
     width: 60px;
     box-sizing: border-box;
     padding-top: 5px;
-    ${({ theme }) => theme.mediaQueriesSize.marginr}
+    /* ${({ theme }) => theme.mediaQueriesSize.marginr} */
   }
   .right {
     flex: 1;
-    max-width: calc(100% - 82px);
+    max-width: calc(100% - 64px);
   }
 `;

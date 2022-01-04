@@ -59,7 +59,7 @@ export const LanguageProvider: React.FC<{ lang?: string }> = ({ lang, children }
 
       // Merge the EN locale to ensure that any locale fetched has all the keys
       languageMap.set(language.locale, { ...enLocale, ...locale })
-      localStorage.setItem(LS_KEY, language.locale)
+      // localStorage.setItem(LS_KEY, language.locale)
 
       setState((prevState) => ({
         ...prevState,
@@ -67,7 +67,7 @@ export const LanguageProvider: React.FC<{ lang?: string }> = ({ lang, children }
         currentLanguage: language,
       }))
     } else {
-      localStorage.setItem(LS_KEY, language.locale)
+      // localStorage.setItem(LS_KEY, language.locale)
       setState((prevState) => ({
         ...prevState,
         isFetching: false,
@@ -88,7 +88,7 @@ export const LanguageProvider: React.FC<{ lang?: string }> = ({ lang, children }
 
       // Merge the EN locale to ensure that any locale fetched has all the keys
       languageMap.set(localeKeys, { ...enLocale, ...locale })
-      localStorage.setItem(LS_KEY, localeKeys)
+      // localStorage.setItem(LS_KEY, localeKeys)
 
       setState((prevState) => ({
         ...prevState,
@@ -96,7 +96,7 @@ export const LanguageProvider: React.FC<{ lang?: string }> = ({ lang, children }
         currentLanguage: languages[localeKeys],
       }))
     } else {
-      localStorage.setItem(LS_KEY, localeKeys)
+      // localStorage.setItem(LS_KEY, localeKeys)
       setState((prevState) => ({
         ...prevState,
         isFetching: false,

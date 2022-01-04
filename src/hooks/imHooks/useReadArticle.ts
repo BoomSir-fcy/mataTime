@@ -7,8 +7,8 @@ import useInterval from '../useInterval'
 
 // 视图范围优化
 const VIEW_PADDING = {
-  top: 200, // 忽略顶部200px的内容
-  bottom: 200 // 忽略底部200px的内容
+  top: 100, // 忽略顶部100px的内容
+  bottom: 100 // 忽略底部100px的内容
 };
 
 /**
@@ -36,9 +36,10 @@ const useReadArticle = (nonce?: number | boolean) => {
 
   useInterval(fetchHandle, isBrowserTabActiveRef.current ? timeStep * 1000 : null)
 
+  const articlePositionsVal = useDebounce(articlePositions, 1000)
 
   const handleScroll = useCallback(() => {
-    if (!Object.keys(articlePositions).length) {
+    if (!Object.keys(articlePositionsVal).length) {
       setArticleIds({})
       return
     } // 页面刷新的时候可能会触发onScroll 事件, 排除这种情况
@@ -46,8 +47,8 @@ const useReadArticle = (nonce?: number | boolean) => {
     const top = window.scrollY + VIEW_PADDING.top
     const bottom = top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom
     const topViews = {}
-    Object.keys(articlePositions).forEach(item => {
-      const { offsetTop, offsetBottom, readType, articleId } = articlePositions[item]
+    Object.keys(articlePositionsVal).forEach(item => {
+      const { offsetTop, offsetBottom, readType, articleId } = articlePositionsVal[item]
       // 碰撞检测
       /**
        * @dev 碰撞检测
@@ -71,7 +72,7 @@ const useReadArticle = (nonce?: number | boolean) => {
       }
     })
     setArticleIds(topViews)
-  }, [articlePositions, setArticleIds])
+  }, [articlePositionsVal, setArticleIds])
 
   const debouncedOnChange = useMemo(
     () => debounce(() => handleScroll(), 300),

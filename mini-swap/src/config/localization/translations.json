@@ -8,7 +8,7 @@
   "Total %asset% Supply": "Total %asset% Supply",
   "Locked": "Locked",
   "Total Liquidity": "Total Liquidity",
-  "View on PolygonScan": "View on PolygonScan",
+  "View on BscScan": "View on BscScan",
   "Finished": "Finished",
   "Project site": "Project site",
   "Project Site": "Project Site",
@@ -282,6 +282,8 @@
   "Money-hungry Dino": "Money-hungry Dino",
   "Enter an amount": "Enter an amount",
   "Transaction rejected.": "Transaction rejected.",
+  "Enter valid list location": "Enter valid list location",
+  "Error importing list": "Error importing list",
   "translationLast": "translationLast",
   "translationEnd": "translationEnd"
 }

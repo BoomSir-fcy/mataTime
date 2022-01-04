@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Empty, Flex, Spinner, Text } from 'uikit';
 import { useFetchInviteFriendsList } from 'view/Task/hooks/matter';
@@ -53,64 +53,78 @@ const FriendsList: React.FC<{
   loading?: boolean;
   total?: number;
   pageNum?: number;
+  pageSize?: number;
   handlePageClick: (event: any) => void;
-}> = React.memo(({ list, loading, total, pageNum, handlePageClick }) => {
-  const { t } = useTranslation();
-  return (
-    <Flex width='100%' flexDirection='column' justifyContent='end'>
-      <Table>
-        <Row>
-          <HeadText>{t('Nickname')}</HeadText>
-          <HeadText>{t('Address')}</HeadText>
-          <HeadText>{t('Invitation Time')}</HeadText>
-          <HeadText>{t('My Rebate(TIME)')}</HeadText>
-        </Row>
-        {list?.length ? (
-          list.map(item => (
-            <Row key={item.uid} className='LinkRow'>
-              <ItemText small ellipsis>
-                {item.nick_name}
-              </ItemText>
-              <ItemText small ellipsis>
-                {shortenAddress(item.address)}
-              </ItemText>
-              <ItemText small ellipsis>
-                {dayjs(item.add_time).format(t('YYYY-MM-DD HH:mm:ss'))}
-              </ItemText>
-              <ItemText small ellipsis>
-                {item.timer}
-              </ItemText>
-            </Row>
-          ))
-        ) : (
-          <>{!loading && <Empty />}</>
-        )}
-        {loading && (
-          <Flex alignItems='center' justifyContent='center'>
-            <Spinner />
-          </Flex>
-        )}
-      </Table>
+}> = React.memo(
+  ({ list, loading, total, pageNum, pageSize, handlePageClick }) => {
+    const { t } = useTranslation();
 
-      <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text mr='16px' fontSize='14px' color='textTips'>
-          {t('Account Total %page% page', { page: total })}
-        </Text>
-        <ReactPaginate
-          breakLabel='...'
-          nextLabel='>'
-          forcePage={pageNum - 1}
-          disableInitialCallback={true}
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={4}
-          marginPagesDisplayed={1}
-          pageCount={total}
-          previousLabel='<'
-          renderOnZeroPageCount={null}
-        />
-      </PaginateStyle>
-    </Flex>
-  );
-});
+    const getTotalPage = totalNum => {
+      if (pageSize != 0 && totalNum % pageSize == 0) {
+        return parseInt(String(totalNum / pageSize));
+      }
+      if (pageSize != 0 && totalNum % pageSize != 0) {
+        return parseInt(String(totalNum / pageSize)) + 1;
+      }
+    };
+
+    const totalPage = useMemo(() => getTotalPage(total), [total]);
+    return (
+      <Flex width='100%' flexDirection='column' justifyContent='end'>
+        <Table>
+          <Row>
+            <HeadText>{t('Nickname')}</HeadText>
+            <HeadText>{t('Address')}</HeadText>
+            <HeadText>{t('Invitation Time')}</HeadText>
+            <HeadText>{t('My Rebate(TIME)')}</HeadText>
+          </Row>
+          {list?.length ? (
+            list.map(item => (
+              <Row key={item.uid} className='LinkRow'>
+                <ItemText small ellipsis>
+                  {item.nick_name}
+                </ItemText>
+                <ItemText small ellipsis>
+                  {shortenAddress(item.address)}
+                </ItemText>
+                <ItemText small ellipsis>
+                  {dayjs(item.add_time).format(t('YYYY-MM-DD HH:mm:ss'))}
+                </ItemText>
+                <ItemText small ellipsis>
+                  {item.timer}
+                </ItemText>
+              </Row>
+            ))
+          ) : (
+            <>{!loading && <Empty />}</>
+          )}
+          {loading && (
+            <Flex alignItems='center' justifyContent='center'>
+              <Spinner />
+            </Flex>
+          )}
+        </Table>
+
+        <PaginateStyle alignItems='center' justifyContent='end'>
+          <Text className='totalPage' fontSize='14px' color='textTips'>
+            {t('Account Total %page% page', { page: totalPage })}
+          </Text>
+          <ReactPaginate
+            breakLabel='...'
+            nextLabel='>'
+            forcePage={pageNum - 1}
+            disableInitialCallback={true}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            pageCount={totalPage}
+            previousLabel='<'
+            renderOnZeroPageCount={null}
+          />
+        </PaginateStyle>
+      </Flex>
+    );
+  },
+);
 
 export default FriendsList;

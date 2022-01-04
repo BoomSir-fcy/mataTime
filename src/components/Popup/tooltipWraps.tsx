@@ -41,7 +41,6 @@ const FollowPopup: React.FC<{
   const onAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.onAttentionFocus(uid);
     if (Api.isSuccess(res)) {
-      toastSuccess(res.data);
       getUserInfo();
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
     } else {
@@ -53,7 +52,6 @@ const FollowPopup: React.FC<{
   const cancelAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.cancelAttentionFocus(uid);
     if (Api.isSuccess(res)) {
-      toastSuccess(res.data);
       getUserInfo();
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
     } else {
@@ -87,8 +85,8 @@ const FollowPopup: React.FC<{
                   fontWeight='bold'
                   color='white'
                   ml='10px'
-                  maxWidth='30px'
-                  ellipsis
+                  // maxWidth='30px'
+                  // ellipsis
                 >
                   {userInfo.fans_num || 0}
                 </Text>
@@ -99,8 +97,8 @@ const FollowPopup: React.FC<{
                   fontWeight='bold'
                   color='white'
                   ml='10px'
-                  maxWidth='30px'
-                  ellipsis
+                  // maxWidth='30px'
+                  // ellipsis
                 >
                   {userInfo.attention_num || 0}
                 </Text>
@@ -149,10 +147,10 @@ const TooltipWrapRef = (props, ref) => {
         padding: 0,
         border: '0',
         backgroundColor: 'transparent',
-        zIndex: 99
+        zIndex: 99,
       }}
       arrowStyle={{
-        opacity: '0'
+        opacity: '0',
       }}
     >
       <FollowPopup uid={props.uid} callback={type => changeStatus(type)} />

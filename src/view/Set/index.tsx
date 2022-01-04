@@ -12,7 +12,7 @@ const Set = props => {
       <Switch>
         <Route path={`${props.match.path}/safeset`} component={SafeSet} />
         <Route path={`${props.match.path}/noticeset`} component={NoticeSet} />
-        <Route path={`${props.match.path}/likeset`} component={LikeSet} />
+        <Route path={`${props.match.path}/preference`} component={LikeSet} />
       </Switch>
     </Container>
   );

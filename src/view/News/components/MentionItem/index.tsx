@@ -11,7 +11,7 @@ import {
   ImgList,
   // FollowPopupD,
   ContentParsing,
-  MorePostPopup
+  MorePostPopup,
 } from 'components';
 import { Box, Flex, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
@@ -43,7 +43,7 @@ const MentionItem: React.FC<IProps> = props => {
     postUid,
     size = 'nomal',
     itemData = {},
-    callback = () => {}
+    callback = () => {},
   } = props;
   const mentionRef: any = useRef();
   const { push } = useHistory();
@@ -136,7 +136,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
   size = 'nomal',
   postUid,
   itemData = {},
-  callback
+  callback,
 }) => {
   const popupRef = React.useRef(null);
   const theme = useTheme();
@@ -145,27 +145,28 @@ export const MentionItemUser: React.FC<UserProps> = ({
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
         <div className='user-left-wrapper'>
-          <Link to={'/me/profile/' + (itemData.uid || itemData.user_id)}>
-            <Avatar
-              uid={itemData.uid || itemData.user_id}
-              className='avatar'
-              src={itemData.user_avator_url}
-              callback={type => {
-                console.log(type);
-                callback(
-                  {
-                    ...itemData,
-                    is_attention: type === 'CANCEL_FOLLOW' ? 0 : 1
-                  },
-                  type
-                );
-              }}
-              scale='md'
-            />
-          </Link>
+          <Box minWidth='50px'>
+            <Link to={'/me/profile/' + (itemData.uid || itemData.user_id)}>
+              <Avatar
+                uid={itemData.uid || itemData.user_id}
+                className='avatar'
+                src={itemData.user_avator_url}
+                callback={type => {
+                  callback(
+                    {
+                      ...itemData,
+                      is_attention: type === 'CANCEL_FOLLOW' ? 0 : 1,
+                    },
+                    type,
+                  );
+                }}
+                scale='md'
+              />
+            </Link>
+          </Box>
           <div className='user-info'>
             <div>
-              <Text className='user-name'>
+              <Text ellipsis className='user-name'>
                 {itemData.user_name || itemData.nick_name}
               </Text>
               <Text color='textTips' className='time'>
@@ -202,14 +203,14 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 padding: 0,
                 border: '0',
                 backgroundColor: 'transparent',
-                zIndex: 99
+                zIndex: 99,
               }}
               overlayStyle={{
-                zIndex: 98
+                zIndex: 98,
               }}
               arrowStyle={{
                 color: theme.colors.tertiary,
-                stroke: theme.colors.tertiary
+                stroke: theme.colors.tertiary,
               }}
             >
               <MorePostPopup

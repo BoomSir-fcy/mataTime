@@ -12,7 +12,7 @@ import { useStore } from 'store';
 import dayjs from 'dayjs';
 import {
   fetchTimeExchangeList,
-  fetchRewardNumAsync
+  fetchRewardNumAsync,
 } from 'store/wallet/reducer';
 import { useRewardErc20, useRewardErc20All } from './hook';
 import Dots from 'components/Loader/Dots';
@@ -21,6 +21,10 @@ import { formatDisplayApr } from 'utils/formatBalance';
 const CountBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  /* overflow: auto; */
+`;
+const TableBox = styled(Box)`
+  width: 100%;
   overflow: auto;
 `;
 const Table = styled(Flex)`
@@ -96,7 +100,7 @@ const ClaimButton: React.FC<btn> = ({ upDate, all, ReleaseAmount, id }) => {
         setpending(false);
       }
     },
-    [onWithdraw]
+    [onWithdraw],
   );
   // 全部领取
   const handleRewardAll = useCallback(async () => {
@@ -162,7 +166,7 @@ const VestingTime: React.FC<init> = ({}) => {
   const upDate = useCallback(() => {
     setLoading(true);
     setPage(1);
-    // dispatch(fetchTimeExchangeList({ account, page: 1, pageSize }))
+    dispatch(fetchTimeExchangeList({ account, page: 1, pageSize }));
     dispatch(fetchRewardNumAsync(account));
   }, [dispatch, account, pageSize]);
 
@@ -188,51 +192,53 @@ const VestingTime: React.FC<init> = ({}) => {
         <ClaimButton ReleaseAmount={RewardNum} all upDate={upDate} />
       </WithDrawAllBox>
       <CountBox>
-        <Table>
-          <Row>
-            <HeadText>{t('Round')}</HeadText>
-            <HeadText>{t('Vesting end TIME')}</HeadText>
-            <HeadText>{t('Vesting $TIME')}</HeadText>
-            <HeadText>{t('Claimable $TIME')}</HeadText>
-            <HeadText></HeadText>
-          </Row>
-          {HistoryList.length
-            ? HistoryList.map((item, index) => (
-                <Row key={`${item.round}${index}`}>
-                  {item.totalPage > 0 && (
-                    <>
-                      <ItemText>{item.round}</ItemText>
-                      <ItemText>
-                        {dayjs(item.endTime * 1000).format(
-                          t('YYYY-MM-DD hh:mm:ss')
-                        )}
-                      </ItemText>
-                      <ItemText>
-                        {formatDisplayApr(item.RemainingAmount)}
-                      </ItemText>
-                      <ItemText>
-                        {formatDisplayApr(item.ReleaseAmount)}
-                      </ItemText>
-                      <ItemText>
-                        <ClaimButton
-                          ReleaseAmount={item.ReleaseAmount}
-                          id={item.id}
-                          upDate={upDate}
-                        />
-                      </ItemText>
-                    </>
-                  )}
-                </Row>
-              ))
-            : !Loading && <Empty />}
-          {Loading && (
-            <LoadingAnimation>
-              <Spinner />
-            </LoadingAnimation>
-          )}
-        </Table>
+        <TableBox>
+          <Table>
+            <Row>
+              <HeadText>{t('walleteTableRound')}</HeadText>
+              <HeadText>{t('walleteTableVesting end TIME')}</HeadText>
+              <HeadText>{t('walleteTableVesting $TIME')}</HeadText>
+              <HeadText>{t('walleteTableClaimable $TIME')}</HeadText>
+              <HeadText></HeadText>
+            </Row>
+            {HistoryList.length
+              ? HistoryList.map((item, index) => (
+                  <Row key={`${item.round}${index}`}>
+                    {item.totalPage > 0 && (
+                      <>
+                        <ItemText>{item.round}</ItemText>
+                        <ItemText>
+                          {dayjs(item.endTime * 1000).format(
+                            t('YYYY-MM-DD hh:mm:ss'),
+                          )}
+                        </ItemText>
+                        <ItemText>
+                          {formatDisplayApr(item.RemainingAmount)}
+                        </ItemText>
+                        <ItemText>
+                          {formatDisplayApr(item.ReleaseAmount)}
+                        </ItemText>
+                        <ItemText>
+                          <ClaimButton
+                            ReleaseAmount={item.ReleaseAmount}
+                            id={item.id}
+                            upDate={upDate}
+                          />
+                        </ItemText>
+                      </>
+                    )}
+                  </Row>
+                ))
+              : !Loading && <Empty />}
+            {Loading && (
+              <LoadingAnimation>
+                <Spinner />
+              </LoadingAnimation>
+            )}
+          </Table>
+        </TableBox>
         <PaginateStyle alignItems='center' justifyContent='end'>
-          <Text mr='16px' fontSize='14px' color='textTips'>
+          <Text className='totalPage' fontSize='14px' color='textTips'>
             {t('Account Total %page% page', { page: pageCount })}
           </Text>
           <ReactPaginate
@@ -241,7 +247,7 @@ const VestingTime: React.FC<init> = ({}) => {
             forcePage={page - 1}
             disableInitialCallback={true}
             onPageChange={handlePageClick}
-            pageRangeDisplayed={4}
+            pageRangeDisplayed={3}
             marginPagesDisplayed={1}
             pageCount={pageCount}
             previousLabel='<'

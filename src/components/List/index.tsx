@@ -20,8 +20,11 @@ export const NoDataWrapper = styled(Box)`
   color: ${({ theme }) => theme.colors.textTips};
 `;
 
+// 加载类型 1: 初始化加载, 2: 滚动加载, 3: TODO: 下拉刷新
+type LoadType = 1 | 2 | 3
+
 interface Iprops {
-  renderList: () => void;
+  renderList: (type?: LoadType) => void;
   marginTop?: number;
   loading?: boolean;
   appReducer: any;
@@ -42,8 +45,8 @@ class ListComponents extends React.Component<Iprops> {
     loading: true;
   };
 
-  loadList() {
-    this.props.renderList();
+  loadList(type?: LoadType) {
+    this.props.renderList(type);
   }
 
   componentDidMount() {
@@ -53,7 +56,7 @@ class ListComponents extends React.Component<Iprops> {
         isDark: systemCustom.isDark
       },
       () => {
-        this.loadList();
+        this.loadList(1);
       }
     );
     // this.props?.onRef(this.props);
@@ -67,10 +70,10 @@ class ListComponents extends React.Component<Iprops> {
   scrollRenderHandler() {
     if (!this.listBox.current) return false;
     if (
-      window.pageYOffset + window.innerHeight >=
+      window.pageYOffset + window.innerHeight + 50 >=
       this.listBox.current.offsetHeight + this.listBox.current.offsetTop
     ) {
-      this.loadList();
+      this.loadList(2);
     }
   }
 

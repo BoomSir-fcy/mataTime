@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import GlobalStyle from 'style/global';
-import VConsole from 'vconsole';
+// import VConsole from 'vconsole';
 import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk, storeAction } from 'store';
@@ -23,13 +23,10 @@ import useUnreadMsg from 'hooks/imHooks/useUnreadMsg';
 import history from './routerHistory';
 import AccountUpdater from './view/Updater/AccountUpdater';
 import EventBusUpdater from './view/Updater/EventBusUpdater';
-import ScrollBarApdater, {
-  useReStoreScrollTop,
-} from './view/Updater/ScrollBarApdater';
+import ScrollBarApdater from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
+import Gotop from 'components/GoTop';
 
-import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/en';
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -54,6 +51,8 @@ const Account = React.lazy(() => import('./view/Account'));
 const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 const PickNft = React.lazy(() => import('./view/PickNft'));
+const Swap = React.lazy(() => import('./view/Swap'));
+const Search = React.lazy(() => import('./view/Search'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -61,7 +60,6 @@ const Container = styled(Box)`
 `;
 
 const Updater = () => {
-  useReStoreScrollTop();
   return (
     <>
       <AccountUpdater />
@@ -117,7 +115,6 @@ function App() {
       <Container id='bg'>
         <PageContainer>
           <React.Suspense fallback={<PageLoader />}>
-            <Updater />
             <Box className='popupBoundary'>
               <Switch>
                 <Route path='/' exact render={props => <Home {...props} />} />
@@ -144,6 +141,8 @@ function App() {
                 <Route path='/set' component={Set} />
                 <Route path='/account' component={Account} />
                 <Route path='/picknft' component={PickNft} />
+                <Route path='/search' component={Search} />
+                {/* <Route path='/swap' component={Swap} /> */}
                 {process.env.NODE_ENV === 'development' && (
                   <>
                     <Route path='/faucet-smart' component={FaucetSmart} />
@@ -152,8 +151,10 @@ function App() {
                 )}
               </Switch>
             </Box>
+            <Updater />
           </React.Suspense>
         </PageContainer>
+        <Gotop />
       </Container>
       <ToastComponents />
     </Router>

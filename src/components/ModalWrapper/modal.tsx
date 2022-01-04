@@ -1,19 +1,25 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
-import { DefaultTheme } from 'styled-components';
-import { Heading, Flex, CloseLineIcon, Button } from 'uikit';
+import styled, { DefaultTheme } from 'styled-components';
+import { Heading, Flex, CloseLineIcon, Button, Box } from 'uikit';
 
 import useTheme from 'hooks/useTheme';
+
+const BoxStyle = styled(Box)<{ overflow?: string }>`
+  overflow-y: ${({ overflow }) => overflow || 'auto'};
+  max-height: calc(80vh - 100px);
+`;
 
 const getCustomStyles = (
   theme: DefaultTheme,
   fillBody?: boolean,
   top?: string,
   padding?: string,
+  left?: string,
 ) => ({
   content: {
     top: top ? top : '50%',
-    left: '50%',
+    left: left ? left : '50%',
     right: 'auto',
     bottom: 'auto',
     transform: 'translate(-50%, -50%)',
@@ -24,26 +30,28 @@ const getCustomStyles = (
     // boxShadow: theme.card.boxShadow,
     border: 0,
     overflow: 'visible',
-    padding: padding ? padding : (fillBody ? '18px 0' : '18px 20px'),
-    zIndex: 200
+    padding: padding ? padding : fillBody ? '18px 0' : '18px 20px',
+    zIndex: 200,
+    inset: '50% auto auto 50%',
+    maxHeight: '80vh',
   },
   overlay: {
     backgroundColor: 'rgba(98, 98, 98, 0.3)',
-    zIndex: 200
-  }
+    zIndex: 200,
+  },
 });
 
 const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
   return (
     <Flex
       padding={!fillBody ? '0' : '0 20px'}
-      mb="8px"
-      justifyContent="space-between"
-      alignItems="center"
+      mb='8px'
+      justifyContent='space-between'
+      alignItems='center'
     >
       <Heading>{title}</Heading>
-      <Button onClick={onClose} padding="0" variant="text">
-        <CloseLineIcon width={16} color="white_black"></CloseLineIcon>
+      <Button onClick={onClose} padding='0' variant='text'>
+        <CloseLineIcon width={16} color='white_black'></CloseLineIcon>
       </Button>
     </Flex>
   );
@@ -58,6 +66,7 @@ interface ModalWrapperProps {
   fillBody?: boolean;
   top?: string;
   padding?: string;
+  overflow?: string;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -71,13 +80,21 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     fillBody,
     top,
     padding,
+    overflow,
   }) => {
+    var OutCenterBox = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
+    // let left;
+    // if (OutCenterBox) {
+    //   const rectObject = OutCenterBox.getBoundingClientRect();
+    //   left = `${rectObject.left + 214}px`;
+    //   console.log(left);
+    // }
 
     const customStyles = getCustomStyles(theme, fillBody, top, padding);
     const onClose = useCallback(() => {
       if (setVisible) {
-        setVisible(false)
+        setVisible(false);
       }
     }, [setVisible]);
     if (!visible && creactOnUse) return null;
@@ -88,7 +105,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         onRequestClose={onClose}
         style={customStyles}
         ariaHideApp={false}
-        contentLabel="Example Modal"
+        contentLabel='Example Modal'
       >
         {!customizeTitle && (
           <ModalHeaderStyled
@@ -97,8 +114,8 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
             title={title}
           />
         )}
-        {children}
+        <BoxStyle overflow={overflow}>{children}</BoxStyle>
       </Modal>
     );
-  }
+  },
 );

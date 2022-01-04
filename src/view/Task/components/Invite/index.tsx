@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import {
   GetTaskTag,
   useFetchInviteFriendsList,
-  useInviteCount
+  useInviteCount,
 } from 'view/Task/hooks/matter';
 import { Variant, Group } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
@@ -23,6 +23,7 @@ import { useToast } from 'hooks';
 import { copyContent } from 'utils';
 import { shortenAddress } from 'utils/contract';
 import Header from '../Header';
+import useMenuNav from 'hooks/useMenuNav';
 
 const ContentBox = styled(Flex)`
   padding: 10px 14px;
@@ -70,7 +71,7 @@ const ContentFlex = styled(Flex)`
   margin: 10px 0;
   transition: all 0.3s;
   @media (max-width: 415px) {
-    max-width: 180px;
+    max-width: 150px;
   }
   ${({ theme }) => theme.mediaQueries.lg} {
     width: 310px;
@@ -85,7 +86,7 @@ const ProgressBox = styled(Flex)`
   margin: 10px 0;
   transition: all 0.3s;
   @media (max-width: 415px) {
-    max-width: 180px;
+    max-width: 150px;
   }
   ${({ theme }) => theme.mediaQueries.lg} {
     align-items: center;
@@ -110,7 +111,7 @@ const BtnFlex = styled(Flex)`
 `;
 const Invite: React.FC = () => {
   const { inviteInfo } = useInviteCount();
-  const { list, pageNum, setPageNum, loading, total } =
+  const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteFriendsList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -121,6 +122,7 @@ const Invite: React.FC = () => {
   const [inviteList, setInviteList] = useState([]);
   const [inviteType, setInviteType] = useState(1);
   const [visible, setVisible] = useState(false);
+  const { isMobile } = useMenuNav();
 
   useEffect(() => {
     if (data.length) {
@@ -135,7 +137,7 @@ const Invite: React.FC = () => {
     event => {
       setPageNum(event.selected + 1);
     },
-    [setPageNum]
+    [setPageNum],
   );
 
   // 复制链接
@@ -193,7 +195,7 @@ const Invite: React.FC = () => {
         {/* 普通邀请 */}
         <ContentBox flexDirection='column'>
           <Text mb='25px' fontSize='18px' bold>
-            Invitation Overview
+            {t('Invitation Overview')}
           </Text>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
@@ -217,7 +219,7 @@ const Invite: React.FC = () => {
                 <Text className='text-title' color='textTips' small>
                   {t('My Rebate(TIME)')}
                 </Text>
-                <Text color='textPrimary' fontSize='20px' bold>
+                <Text fontSize='20px' bold>
                   {inviteInfo.total_rebate}
                 </Text>
               </Flex>
@@ -229,7 +231,7 @@ const Invite: React.FC = () => {
                     {t('My Address')}
                   </Text>
                   <Text mr='20px' color='textTips' small>
-                    {account && shortenAddress(account, 10)}
+                    {account && shortenAddress(account, isMobile ? 5 : 10)}
                   </Text>
                   <Icon
                     name={'icon-fuzhi'}
@@ -300,6 +302,7 @@ const Invite: React.FC = () => {
             list={list}
             total={total}
             pageNum={pageNum}
+            pageSize={pageSize}
             handlePageClick={handlePageClick}
           />
         </ContentBox>
@@ -319,14 +322,17 @@ const Invite: React.FC = () => {
 
 const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
   const source = window.location.search?.split('=')[1];
+  const { t } = useTranslation();
+
   return (
     <>
       {source === 'TASK' ? (
-        <Crumbs back>
-          <Flex width='100%'>
+        <Crumbs back justifyContent='start'>
+          <Flex width='max-content'>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
-                {tag.toUpperCase()}
+                {/* {tag.toUpperCase()} */}
+                {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
           </Flex>
@@ -337,7 +343,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
           <ContentBox>
             <StyledTag ml='20px' variant={tag}>
               <Text fontSize='18px' bold>
-                {tag.toUpperCase()}
+                {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
           </ContentBox>

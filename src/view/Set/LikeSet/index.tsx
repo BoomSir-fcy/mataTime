@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { languagesOptions } from 'config/localization';
 import { useTranslation } from 'contexts/Localization';
 import {
   useThemeManager,
-  useLanguange,
-  useNotification
+  // useLanguange,
+  useNotification,
 } from 'store/app/hooks';
 import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
-import { languages } from 'config/localization';
 
 const NoticeSetBox = styled(Card)`
   /* height: 700px; */
@@ -35,13 +35,15 @@ const Column = styled(Flex)`
 const LikeSet: React.FC = () => {
   const [isDark, toggleThemeHandle] = useThemeManager();
   const [notification, setNotification] = useNotification();
-  const [languange, setUseLanguage] = useLanguange();
+  // const [languange, setUseLanguage] = useLanguange();
+  // const { setLanguage, currentLanguage } = useTranslation();
+
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
-    isTranslation: false
+    isTranslation: false,
   });
-  const { t, currentLanguage } = useTranslation();
+  const { t, currentLanguage, setLanguage } = useTranslation();
 
   // 自动翻译
   const setTranslation = () => {
@@ -64,35 +66,40 @@ const LikeSet: React.FC = () => {
       <Column>
         <Rows>
           <Title>{t('settingMsgtitle')}</Title>
-          <Text color="textTips" mt="11px">
+          <Text color='textTips' mt='11px'>
             {t('settingMsgText')}
           </Text>
         </Rows>
         <Toggle checked={notification} onClick={setNotification} />
       </Column>
-      <Column alignItems="center">
+      <Column alignItems='center'>
         <Rows>
           <Title>{t('settingLanguagetitle')}</Title>
-          <Text color="textTips" mt="11px">
+          <Text color='textTips' mt='11px'>
             {t('settingLanguageText')}
           </Text>
         </Rows>
-        <Select
-          disabled
+        {/* <Select
           options={[
             {
               id: 1,
               label: 'English（EN）',
-              value: languages['en-US']
+              value: languages['en-US'],
             },
             {
               id: 2,
-              label: '简体中文（CN）',
-              value: languages['zh-CN']
-            }
+              label: '繁體中文（CN）',
+              value: languages['zh-TW'],
+            },
           ]}
-          defaultId={1} // XXX: 屏蔽中文
-          onChange={(val: any) => setUseLanguage(val)}
+          defaultId={languange.id} // XXX: 屏蔽中文
+          onChange={(val: any) => setLanguage(val)}
+        /> */}
+        <Select
+          options={languagesOptions}
+          defaultId={currentLanguage.code}
+          idKey="code"
+          onChange={(val: any) => setLanguage(val.value)}
         />
       </Column>
       {/* <Column>

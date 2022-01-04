@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import WalletModal, { Cover } from 'components/ConnectWallet/WalletModal'
 import { useWeb3React } from '@web3-react/core'
+import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config'
 
 const ConnectWallet = React.createContext({ onConnectWallet: null })
 
@@ -20,6 +21,17 @@ const ConnectWalletProvider = ({ children }) => {
       setShow(false)
     }
   }, [chainId])
+
+  const OPEN_CLASS_NAME = ` ${CONNECT_WALLET_BODY_CLASS_NAME}`;
+  
+  useEffect(() => {
+    if (show) {
+      document.body.className = `${document.body.className}${OPEN_CLASS_NAME}`
+    } else {
+      const reg = new RegExp(OPEN_CLASS_NAME, 'g')
+      document.body.className = `${document.body.className}`.replace(reg, '')
+    }
+  }, [show])
 
   return (
     <ConnectWallet.Provider value={{ onConnectWallet }}>

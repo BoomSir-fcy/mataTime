@@ -91,9 +91,16 @@ const PageContainer: React.FC = ({ children }) => {
         <Flex width='100%' alignItems='flex-start' justifyContent='center'>
           {showMenuNav && <MenuNav />}
           <LineStyled />
-          <Flex flex='1' alignItems='flex-start' justifyContent='space-between'>
+          <Flex
+            width='100%'
+            flex='1'
+            alignItems='flex-start'
+            justifyContent='space-between'
+          >
             <InnerBox flex='1' flexDirection='column'>
-              <CennerBox showSidebar={showSidebar}>{children}</CennerBox>
+              <CennerBox id='OutCenterBox' showSidebar={showSidebar}>
+                {children}
+              </CennerBox>
             </InnerBox>
             <LineStyled mr='14px' />
             {showSidebar && (

@@ -9,11 +9,14 @@ import {
   Text,
   BalanceText,
   light,
-  dark
+  dark,
 } from 'uikit';
 import ReactLoading from 'react-loading';
 import { languagesOptions } from 'config/localization';
-import { formatLocalisedCompactNumber } from 'utils/formatBalance';
+import {
+  formatLocalisedCompactNumber,
+  getBalanceNumber,
+} from 'utils/formatBalance';
 import { useStore } from 'store';
 import { Select } from 'components';
 import { useTranslation } from 'contexts/Localization';
@@ -22,10 +25,13 @@ import {
   useCoinsList,
   useCoinsState,
   useFetchCoinInfo,
-  useFetchCoinsList
+  useFetchCoinsList,
 } from 'store/coins/hooks';
 import CoinItem from './CoinItem';
 import { DropDown } from '../DropDown';
+import { getTimeAddress, getMatterAddress } from 'utils/addressHelpers';
+import { useTotalSupply } from 'hooks/useTokenBalance';
+import { useTimeShopBalance } from 'hooks/useTimeShopBalance';
 
 const StyledPage = styled(Card)`
   width: 300px;
@@ -53,23 +59,32 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   useFetchCoinInfo(currentCoin?.coin_id);
 
   const coins = useStore(p => p.coins.clickCoins);
-  const [coinSymbol, setCoinSymbol] = useState('')
-  
+  const [coinSymbol, setCoinSymbol] = useState('');
+  const timeAddress = getTimeAddress();
+  const MatterAddress = getMatterAddress();
+
+  // 获取time Matter 的 totalSupply
+  const TimeSupply = useTotalSupply(timeAddress);
+  const MatterSupply = useTotalSupply(MatterAddress);
+  const TimeShopBalance = useTimeShopBalance();
+
   useEffect(() => {
     if (coins?.symbol) {
-      setCoinSymbol(coins?.symbol)
+      setCoinSymbol(coins?.symbol);
     }
-  }, [coins])
+  }, [coins]);
 
   useEffect(() => {
     if (coinSymbol) {
-      const activeCoin = coinsList.find(item => item.coin_symbol === coinSymbol)
+      const activeCoin = coinsList.find(
+        item => item.coin_symbol === coinSymbol,
+      );
       if (activeCoin) {
-        setCurrentCoin(activeCoin)
-        setCoinSymbol('')
+        setCurrentCoin(activeCoin);
+        setCoinSymbol('');
       }
     }
-  }, [coinSymbol, coinsList])
+  }, [coinSymbol, coinsList]);
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {
@@ -78,9 +93,18 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   }, [currentCoin, coinsList]);
 
   const marketCap = useMemo(() => {
-    const value = new BigNumber(currentCoin?.circulating_supply).times(
-      currentCoin?.current_price
-    );
+    let value;
+    const Symbol = currentCoin?.coin_symbol;
+    if (Symbol === 'MATTER' || Symbol === 'TIME') {
+      const supply = getBalanceNumber(
+        Symbol === 'MATTER' ? MatterSupply : TimeSupply?.minus(TimeShopBalance),
+      );
+      value = new BigNumber(supply).times(currentCoin?.current_price);
+    } else {
+      value = new BigNumber(currentCoin?.circulating_supply).times(
+        currentCoin?.current_price,
+      );
+    }
     if (value.isFinite()) {
       return value.toNumber();
     }
@@ -95,14 +119,14 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   const dispalyTotalVolume = useMemo(() => {
     if (!Number(currentCoin?.total_volume)) return '--';
     return `$ ${formatLocalisedCompactNumber(
-      Number(currentCoin?.total_volume)
+      Number(currentCoin?.total_volume),
     )}`;
   }, [currentCoin?.total_volume]);
 
   return (
     <StyledPage {...props}>
       {!loaded ? (
-        <Flex height="100%" justifyContent="center" alignItems="center">
+        <Flex height='100%' justifyContent='center' alignItems='center'>
           <ReactLoading
             type={'cylon'}
             color={
@@ -114,7 +138,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
         </Flex>
       ) : (
         <>
-          <StyledPageItem pt="8px">
+          <StyledPageItem pt='8px'>
             <CoinItem
               showHelp
               onTouch={() => setIsOpen(!isOpen)}
@@ -123,42 +147,50 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
           </StyledPageItem>
           <Box>
             <DropDown fillWidth isOpen={isOpen} setIsOpen={setIsOpen}>
-              <StyledPageItem>
-                {coinsList.map(item => (
-                  <CoinItem
-                    key={item.coin_id}
-                    fillClickArea
-                    isActive={item.coin_id === currentCoin?.coin_id}
-                    onClick={coin => {
-                      setIsOpen(!isOpen);
-                      setCurrentCoin(coin);
-                    }}
-                    coinInfo={item}
-                  />
-                ))}
-              </StyledPageItem>
+              <Box
+                style={{
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                }}
+                maxHeight='300px'
+              >
+                <StyledPageItem>
+                  {coinsList.map(item => (
+                    <CoinItem
+                      key={item.coin_id}
+                      fillClickArea
+                      isActive={item.coin_id === currentCoin?.coin_id}
+                      onClick={coin => {
+                        setIsOpen(!isOpen);
+                        setCurrentCoin(coin);
+                      }}
+                      coinInfo={item}
+                    />
+                  ))}
+                </StyledPageItem>
+              </Box>
             </DropDown>
           </Box>
           <StyledPageItem>
             {!!Number(currentCoin?.current_price) ? (
-              <Flex mt="8px" justifyContent="space-between">
+              <Flex mt='8px' justifyContent='space-between'>
                 <Box>
-                  <Text fontSize="14px" color="textTips">
+                  <Text fontSize='14px' color='textTips'>
                     {t('MARKET CAP')}
                   </Text>
-                  <Text fontWeight="bold" color="primary" fontSize="14px">
+                  <Text fontWeight='bold' color='primary' fontSize='14px'>
                     {totalSupplyValue}
                   </Text>
                 </Box>
                 <Box>
-                  <Text fontSize="14px" color="textTips" textAlign="right">
+                  <Text fontSize='14px' color='textTips' textAlign='right'>
                     {t('VOLUME')}
                   </Text>
                   <Text
-                    fontWeight="bold"
-                    color="primary"
-                    fontSize="14px"
-                    textAlign="right"
+                    fontWeight='bold'
+                    color='primary'
+                    fontSize='14px'
+                    textAlign='right'
                   >
                     {dispalyTotalVolume}
                   </Text>
@@ -166,10 +198,10 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
               </Flex>
             ) : (
               <Text
-                fontSize="14px"
-                textAlign="center"
-                mt="16px"
-                color="textgrey"
+                fontSize='14px'
+                textAlign='center'
+                mt='16px'
+                color='textgrey'
               >
                 {t('commonCoinMarketEmpty')}
               </Text>

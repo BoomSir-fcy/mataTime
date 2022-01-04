@@ -38,56 +38,91 @@ const MentionOperator: React.FC<IProps> = ({
   callback,
   replyType = 'comment',
   commentId = '',
-  postId = ''
+  postId = '',
 }) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
+
   const changeLike = () => {
     if (type === 'Article') {
       Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({
-        post_id: itemData.post_id
+        post_id: itemData.post_id,
       }).then(res => {
         if (Api.isSuccess(res)) {
-          callback({
-            ...itemData,
-            like_num:
-              isLike === 1
-                ? itemData.post.like_num - 1
-                : itemData.post.like_num + 1,
-            post: {
-              ...itemData.post,
+          callback(
+            {
+              ...itemData,
               like_num:
                 isLike === 1
                   ? itemData.post.like_num - 1
                   : itemData.post.like_num + 1,
-              is_like: isLike === 1 ? 0 : 1
-            }
-          });
+              post: {
+                ...itemData.post,
+                like_num:
+                  isLike === 1
+                    ? itemData.post.like_num - 1
+                    : itemData.post.like_num + 1,
+                is_like: isLike === 1 ? 0 : 1,
+              },
+            },
+            MoreOperatorEnum.LIKE,
+          );
           setIsLike(isLike === 1 ? 0 : 1);
           // toastSuccess(
           //   isLike === 0
           //     ? t('commonMsgUnlikeSuccess')
           //     : t('commonMsgUnlikeError')
           // );
+        } else if (res?.code === 30_006_006) {
+          callback(
+            {
+              ...itemData,
+              like_num: itemData.post.like_num + 1,
+              post: {
+                ...itemData.post,
+                like_num: itemData.post.like_num + 1,
+                is_like: 1,
+              },
+            },
+            MoreOperatorEnum.LIKE,
+          );
+          setIsLike(1);
+        } else if (res?.code === 30_006_007) {
+          callback(
+            {
+              ...itemData,
+              like_num: itemData.post.like_num - 1,
+              post: {
+                ...itemData.post,
+                like_num: itemData.post.like_num - 1,
+                is_like: 0,
+              },
+            },
+            MoreOperatorEnum.LIKE,
+          );
+          setIsLike(0);
         }
       });
     }
 
     if (type === 'Comment') {
       Api.CommentApi[isLike === 1 ? 'commentCancelLike' : 'commentLike']({
-        comment_id: itemData.id
+        comment_id: itemData.id,
       }).then(res => {
         if (Api.isSuccess(res)) {
           setIsLike(isLike === 1 ? 0 : 1);
-          callback({
-            ...itemData,
-            is_like: isLike === 1 ? 0 : 1,
-            like_num:
-              isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1
-          });
+          callback(
+            {
+              ...itemData,
+              is_like: isLike === 1 ? 0 : 1,
+              like_num:
+                isLike === 1 ? itemData.like_num - 1 : itemData.like_num + 1,
+            },
+            MoreOperatorEnum.LIKE,
+          );
           // toastSuccess(res.data);
         }
       });
@@ -100,14 +135,14 @@ const MentionOperator: React.FC<IProps> = ({
 
   return (
     <MentionOperatorWrapper>
-      <Flex justifyContent="space-between" className="mention-operator">
+      <Flex justifyContent='space-between' className='mention-operator'>
         <Flex>
-          <Box onClick={() => setReplyVisible(true)} className="operator-item">
+          <Box onClick={() => setReplyVisible(true)} className='operator-item'>
             <Icon
-              name="icon-pinglun"
-              margin="0 10px 0 0"
+              name='icon-pinglun'
+              margin='0 10px 0 0'
               size={18}
-              color="textTips"
+              color='textTips'
             />
             {itemData.comment_num || 0}
           </Box>
@@ -116,20 +151,20 @@ const MentionOperator: React.FC<IProps> = ({
             {itemData.share_num || 0}
           </Box> */}
           {hasLike && (
-            <Box className="operator-item" onClick={changeLike}>
+            <Box className='operator-item' onClick={changeLike}>
               {isLike === 1 ? (
                 <Icon
                   size={18}
-                  name="icon-aixin1"
-                  margin="0 10px 0 0"
-                  color="#EC612B"
+                  name='icon-aixin1'
+                  margin='0 10px 0 0'
+                  color='#EC612B'
                 />
               ) : (
                 <Icon
                   size={18}
-                  name="icon-aixin"
-                  margin="0 10px 0 0"
-                  color="textTips"
+                  name='icon-aixin'
+                  margin='0 10px 0 0'
+                  color='textTips'
                 />
               )}
               {itemData.like_num || 0}

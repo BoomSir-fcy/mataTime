@@ -36,6 +36,8 @@ const useAuth = () => {
             const hasSetup = await setupNetwork();
             if (hasSetup) {
               activate(connector);
+            } else {
+              toastError(error.message)
             }
           } else {
             window.localStorage.removeItem(connectorLocalStorageKey);

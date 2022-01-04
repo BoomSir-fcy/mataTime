@@ -161,6 +161,7 @@ export interface SelectProps {
   scale?: Scale;
   sort?: SortType;
   childrenHeight?: string
+  idKey?: string
 }
 
 export interface OptionProps {
@@ -169,7 +170,17 @@ export interface OptionProps {
   id?: string | number;
 }
 
-export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, disabled, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children, childrenHeight }) => {
+export const Select: React.FunctionComponent<SelectProps> = ({
+  options,
+  defaultId,
+  disabled,
+  onChange,
+  idKey,
+  scale,
+  fillWidth,
+  children,
+  childrenHeight
+}) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -185,12 +196,12 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
   useEffect(() => {
     if (defaultId) {
       options.forEach((item, index) => {
-        if (item.id === defaultId && index !== selectedOptionIndex) {
+        if ((item.value?.[idKey] || item.id) === defaultId && index !== selectedOptionIndex) {
           setSelectedOptionIndex(index);
         }
       });
     }
-  }, [defaultId, options, selectedOptionIndex]);
+  }, [defaultId, idKey, options, selectedOptionIndex]);
 
   const onOptionClicked = (selectedIndex: number) => () => {
     setSelectedOptionIndex(selectedIndex);

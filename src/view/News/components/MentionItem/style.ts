@@ -10,10 +10,13 @@ export const MentionItemWrapper = styled.div`
   .mention-content {
     cursor: pointer;
     box-sizing: border-box;
-    padding: 15px 0 15px 73px;
     color: ${({ theme }) => theme.colors.white_black};
-    // word-wrap:break-word;
+    word-wrap: break-word;
     word-break: break-all;
+    padding: 8px 0 8px 64px;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      padding: 15px 0 15px 64px;
+    }
   }
 `;
 export const MentionItemUserWrapper = styled.div`
@@ -33,6 +36,13 @@ export const MentionItemUserWrapper = styled.div`
         .user-name {
           font-size: 18px;
           font-weight: bold;
+          max-width: 210px;
+          ${({ theme }) => theme.mediaQueries.xs} {
+            max-width: 350px;
+          }
+          ${({ theme }) => theme.mediaQueries.sm} {
+            max-width: max-content;
+          }
         }
         .time {
           margin-top: 5px;

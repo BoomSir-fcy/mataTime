@@ -34,6 +34,7 @@ export declare const ZHTW: Language;
 export declare const languages: {
     'en-US': Language;
     'zh-CN': Language;
+    'zh-TW': Language;
 };
 export declare const languageList: Language[];
 export declare type SupportLanguage = keyof typeof languages;

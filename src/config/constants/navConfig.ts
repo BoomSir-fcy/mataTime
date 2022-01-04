@@ -143,12 +143,14 @@ export const menuNavConfig: MenuNavConfig[] = [
   },
   {
     path: '/me',
+    customName: 'me',
     children: [
       {
         icon: 'icon-gerenxinxi',
         activeIcon: 'icon-gerenxinxi1',
         lable: 'meMenuHome',
         path: '/me',
+        customName: 'me',
         markPath: ['/me/edit'],
       },
       {
@@ -218,18 +220,18 @@ export const menuNavConfig: MenuNavConfig[] = [
         icon: 'icon-aixin',
         activeIcon: 'icon-aixin1',
         lable: 'setMenuPreference',
-        path: '/set/likeset',
+        path: '/set/preference',
+      },
+      {
+        icon: 'icon-shouye',
+        activeIcon: 'icon-shouye1',
+        path: '/picknft',
+        hide: true,
+        hideLeft: true,
+        hideRight: true,
+        lable: 'homeMenuHome',
       },
     ],
-  },
-  {
-    icon: 'icon-shouye',
-    activeIcon: 'icon-shouye1',
-    path: '/picknft',
-    hide: true,
-    hideLeft: true,
-    hideRight: true,
-    lable: 'homeMenuHome',
   },
 ];
 

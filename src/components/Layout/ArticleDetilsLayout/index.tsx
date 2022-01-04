@@ -10,7 +10,7 @@ import useReadArticle from 'hooks/imHooks/useReadArticle';
 
 import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
-import { PageContainer } from './style';
+import { PageStyle } from './style';
 
 import MentionItem from 'view/News/components/MentionItem';
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -33,7 +33,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
 
-  const sendArticle = (res, image_urls, remind_user) => {
+  const sendArticle = (res, image_urls, remind_user, reset) => {
     if (!res) return;
     Api.CommentApi.createComment({
       pid: itemData.id,
@@ -41,7 +41,8 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
       remind_user,
     }).then(res => {
       if (Api.isSuccess(res)) {
-        toastSuccess(res.data);
+        reset && reset();
+        toastSuccess(t('comment success'));
         setRefresh(refresh === 1 ? 2 : 1);
       }
     });
@@ -70,7 +71,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
   }, []);
 
   return (
-    <PageContainer>
+    <PageStyle>
       <Crumbs back title={t('newsBack')} />
       {Boolean(itemData.id) ? (
         <>
@@ -128,7 +129,7 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
       ) : (
         <Spinner />
       )}
-    </PageContainer>
+    </PageStyle>
   );
 };
 export default ArticleDetilsLayout;

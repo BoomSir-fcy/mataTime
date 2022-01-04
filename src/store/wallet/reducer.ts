@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
 import { changeActiveToken } from './actions';
-import { FetchMatterIncomeList, FetchMatterIncometoday } from './fetch';
+import {
+  FetchMatterIncomeList,
+  FetchMatterIncometoday,
+  FetchMinimum,
+} from './fetch';
 import {
   FetchApproveNum,
   FetchDSGApproveNum,
@@ -9,7 +13,7 @@ import {
   FetchIncomeList,
   FetchRewardNum,
   FetchTimeIncometoday,
-  FetchTimeShopInfo
+  FetchTimeShopInfo,
 } from './hooks';
 import { WalletState } from './type';
 
@@ -17,7 +21,7 @@ const initialState: WalletState = {
   ApproveNum: {
     time: 0,
     matter: 0,
-    dsg: 0
+    dsg: 0,
   },
   wallet: [
     {
@@ -26,8 +30,8 @@ const initialState: WalletState = {
       freeze_balance: '0',
       token_type: 1,
       total_balance: '0',
-      uid: 0
-    }
+      uid: 0,
+    },
   ],
   TimeInfo: [],
   CurrentRound: {
@@ -36,7 +40,7 @@ const initialState: WalletState = {
     max_time_token: 0,
     right_now_release: 0,
     times: 1,
-    total_dsg: 0
+    total_dsg: 0,
   },
   TimeExchangeList: [],
   activeToken: localStorage.getItem('activeToken')
@@ -45,33 +49,37 @@ const initialState: WalletState = {
   rewardNum: 0,
   spendTimeInfo: {
     burnCoinTody: '0',
-    averageBurnTime: '0'
+    averageBurnTime: '0',
   },
   TimeIncomeList: {
     index: 0,
     record: [],
     size: 10,
     total: 0,
-    creator_percent: 0
+    creator_percent: 0,
   },
   TimeIncometoday: {
     data: [],
     today_income: '0',
     total_income: '0',
-    loadStatus: 0
+    loadStatus: 0,
   },
   MatterIncomeList: {
     now_page: 0,
     matter_history: [],
     page_size: 0,
-    total_size: 0
+    total_size: 0,
   },
   MatterIncometoday: {
     data: [],
     today_income: '0',
     total_income: '0',
-    loadStatus: 0
-  }
+    loadStatus: 0,
+  },
+  WithDrawMinNum: {
+    meta_minimum: '0',
+    time_minimum: '0',
+  },
 };
 
 // Async thunks
@@ -81,7 +89,7 @@ export const fetchWalletAsync = createAsyncThunk<any>(
   async () => {
     const res = await Api.AccountApi.balance();
     return res.data;
-  }
+  },
 );
 // 授权数量
 export const fetchApproveNumAsync = createAsyncThunk<any, string>(
@@ -89,7 +97,7 @@ export const fetchApproveNumAsync = createAsyncThunk<any, string>(
   async account => {
     const res = await FetchApproveNum(account);
     return res;
-  }
+  },
 );
 // DSG授权数量
 export const fetchDSGApproveNumAsync = createAsyncThunk<any, string>(
@@ -97,7 +105,7 @@ export const fetchDSGApproveNumAsync = createAsyncThunk<any, string>(
   async account => {
     const res = await FetchDSGApproveNum(account);
     return res;
-  }
+  },
 );
 // Time兑换详情
 export const fetchTimeShopInfo = createAsyncThunk<any>(
@@ -105,7 +113,7 @@ export const fetchTimeShopInfo = createAsyncThunk<any>(
   async () => {
     const res = await FetchTimeShopInfo();
     return res;
-  }
+  },
 );
 // Time兑换历史
 export const fetchTimeExchangeList = createAsyncThunk<any, any>(
@@ -113,7 +121,7 @@ export const fetchTimeExchangeList = createAsyncThunk<any, any>(
   async ({ account, page, pageSize = 10 }) => {
     const res = await FetchExchangeList(account, page, pageSize);
     return res;
-  }
+  },
 );
 
 // DSG全部可领取数量
@@ -122,7 +130,7 @@ export const fetchRewardNumAsync = createAsyncThunk<any, string>(
   async account => {
     const res = await FetchRewardNum(account);
     return res;
-  }
+  },
 );
 
 // 今日 消耗
@@ -131,7 +139,7 @@ export const fetchWalletBurncointoday = createAsyncThunk<string>(
   async () => {
     const res = await Api.AccountApi.getWalletBurncointoday();
     return res;
-  }
+  },
 );
 
 // 平均消耗
@@ -140,7 +148,7 @@ export const fetchWalletAverageburntime = createAsyncThunk<string>(
   async () => {
     const res = await Api.AccountApi.getWalletAverageburntime();
     return res;
-  }
+  },
 );
 
 // time收益记录
@@ -149,16 +157,16 @@ export const fetchIncomeList = createAsyncThunk<any, any>(
   async ({ page, pageSize = 5, readType }) => {
     const res = await FetchIncomeList(page, pageSize, readType);
     return res;
-  }
+  },
 );
 
 // time今日收益和K线记录
 export const fetchTimeIncometoday = createAsyncThunk<any, any>(
   'wallet/fetchTimeIncometoday',
   async ({ day }) => {
-    const res = await FetchTimeIncometoday(day);
+    const res = await FetchTimeIncometoday(day - 1);
     return res;
-  }
+  },
 );
 
 // Matter收益记录
@@ -167,7 +175,7 @@ export const fetchMatterIncomeList = createAsyncThunk<any, any>(
   async ({ page, pageSize = 5 }) => {
     const res = await FetchMatterIncomeList(page, pageSize);
     return res;
-  }
+  },
 );
 
 // Matter今日收益和K线记录
@@ -176,8 +184,18 @@ export const fetchMatterIncometoday = createAsyncThunk<any, any>(
   async ({ day }) => {
     const res = await FetchMatterIncometoday(day);
     return res;
-  }
+  },
 );
+
+//  Time Matter最小提币数量
+export const fetchMinimum = createAsyncThunk<any>(
+  'wallet/fetchMinimum',
+  async () => {
+    const res = await FetchMinimum();
+    return res;
+  },
+);
+
 export const wallet = createSlice({
   name: 'wallet',
   initialState,
@@ -235,8 +253,11 @@ export const wallet = createSlice({
       })
       .addCase(fetchMatterIncometoday.fulfilled, (state, action) => {
         state.MatterIncometoday = { ...action.payload, loadStatus: 1 };
+      })
+      .addCase(fetchMinimum.fulfilled, (state, action) => {
+        state.WithDrawMinNum = action.payload;
       });
-  }
+  },
 });
 
 export default wallet.reducer;

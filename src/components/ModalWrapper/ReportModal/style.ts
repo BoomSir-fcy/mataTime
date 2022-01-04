@@ -30,8 +30,10 @@ export const ModalTitleWrapper = styled(Box)`
 `;
 export const ReportModalWrapper = styled(Box)`
   max-width: 500px;
-  width: 40vw;
-  min-width: 300px;
+  width: 88vw;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 40vw;
+  }
 `;
 
 export const ReportContentWrapper = styled(Box)`
@@ -44,7 +46,7 @@ export const ReportContentWrapper = styled(Box)`
     line-height: 54px;
     box-sizing: border-box;
     padding: 0 12px;
-    border-bottom: 1px solid #4d535f;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
     cursor: pointer;
     &:last-child {
       border: 0;

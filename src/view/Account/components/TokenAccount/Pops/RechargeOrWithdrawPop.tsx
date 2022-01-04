@@ -60,12 +60,13 @@ const NumberBox = styled(Flex)`
 // type 1 充值 2 提币
 interface init {
   type: number;
-  balance: number;
+  balance: string;
   token: string;
   TokenAddr: string;
   onClose: () => void;
   withdrawalBalance: string;
   decimals?: number;
+  TokenWithDrawMinNum: string;
 }
 
 const MoneyModal: React.FC<init> = ({
@@ -76,6 +77,7 @@ const MoneyModal: React.FC<init> = ({
   onClose,
   withdrawalBalance,
   decimals = 18,
+  TokenWithDrawMinNum,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -94,7 +96,7 @@ const MoneyModal: React.FC<init> = ({
     setpending(true);
     if (type === 1) {
       // 充值
-      if (balance === 0) {
+      if (balance === '0') {
         setpending(false);
         return;
       }
@@ -127,9 +129,11 @@ const MoneyModal: React.FC<init> = ({
       } else {
         num = val;
       }
-      if (Number(num) < 100) {
+      if (Number(num) < Number(TokenWithDrawMinNum)) {
         toast.error(
-          t('Account Minimum withdrawal amount %amount%', { amount: 100 }),
+          t('Account Minimum withdrawal amount %amount%', {
+            amount: TokenWithDrawMinNum,
+          }),
         );
         setpending(false);
         return;
@@ -166,8 +170,12 @@ const MoneyModal: React.FC<init> = ({
     (e: React.FormEvent<HTMLInputElement>) => {
       const chkPrice = val => {
         val = val.replace(/,/g, '.');
-        if (Number(val) > (type === 1 ? balance : Number(withdrawalBalance))) {
-          return type === 1 ? String(balance) : withdrawalBalance;
+        if (
+          new BigNumber(val).isGreaterThan(
+            type === 1 ? balance : withdrawalBalance,
+          )
+        ) {
+          return type === 1 ? balance : withdrawalBalance;
         }
         return val;
       };
@@ -194,8 +202,10 @@ const MoneyModal: React.FC<init> = ({
               key={item}
               onClick={() => {
                 if (approvedNum === 0) return;
-                const Num = Number(item) > balance ? String(balance) : item;
-                setVal(Num);
+                const Num = new BigNumber(item).isGreaterThan(balance)
+                  ? balance
+                  : item;
+                setVal(Num.toString());
               }}
             >
               <Text fontWeight='bold' fontSize='16px'>
@@ -211,12 +221,12 @@ const MoneyModal: React.FC<init> = ({
           {getFullDisplayBalance(
             type === 1
               ? new BigNumber(balance)
-              : new BigNumber(Number(withdrawalBalance)),
+              : new BigNumber(withdrawalBalance),
             0,
           )}
         </Text>
       </Flex>
-      <InputBox mb='26px'>
+      <InputBox mb='10px'>
         <MyInput
           disabled={approvedNum === 0}
           noShadow
@@ -240,6 +250,13 @@ const MoneyModal: React.FC<init> = ({
           MAX
         </Max>
       </InputBox>
+      {type === 2 && (
+        <Text mb='10px' color='textTips'>
+          {t('Account Minimum withdrawal amount %amount%', {
+            amount: TokenWithDrawMinNum,
+          })}
+        </Text>
+      )}
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
           mb='10px'

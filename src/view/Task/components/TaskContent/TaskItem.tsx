@@ -105,7 +105,7 @@ const TaskItem: React.FC<{
         toastError(t('Received failed'));
       }
     } catch (error) {
-      toastError(t('Received failed'));
+      // toastError(t('Received failed'));
     } finally {
       setpengdingType(false);
     }
@@ -202,7 +202,13 @@ const TaskItem: React.FC<{
             {getBtnText()}
           </ReceiveButton>
         ) : (
-          <Button scale={isMobile ? 'sm' : 'md'} onClick={onConnectWallet}>
+          <Button
+            scale={isMobile ? 'sm' : 'md'}
+            onClick={e => {
+              e.stopPropagation();
+              onConnectWallet();
+            }}
+          >
             {t('Connect Wallet')}
           </Button>
         )}

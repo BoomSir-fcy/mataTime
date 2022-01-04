@@ -60,6 +60,8 @@ LogicErrCantFindUsers    = newLogicError(30_005_006, "cant find users.")        
  LogicErrUnLikePost        = newLogicError(30_006_003, "failed to cancel like post") // 取消点赞帖子失败
  LogicErrLikeComment       = newLogicError(30_006_004, "failed to like comment") // 未知错误导致点赞评论失败
  LogicErrCancelLikeComment = newLogicError(30_006_005, "failed to cancel the like comment") // 取消点赞评论失败
+LogicErrReadyLike         = newLogicError(30_006_006, "ready list")
+ LogicErrCantFindPostID    = newLogicError(30_006_007, "cant find id")
 
  // 收藏相关
  LogicErrfav         = newLogicError(30_007_001, "favourite error.") // 未知错误导致收藏失败

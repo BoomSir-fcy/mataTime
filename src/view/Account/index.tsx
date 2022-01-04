@@ -5,7 +5,7 @@ import {
   Route,
   withRouter,
   Link,
-  useLocation
+  useLocation,
 } from 'react-router-dom';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
@@ -61,7 +61,7 @@ const Account = props => {
   };
 
   return (
-    <Box width="100%">
+    <Box width='100%'>
       <CenterCard>
         <Crumbs title={getHeadTitle()}>
           {!isMobile && (
@@ -101,38 +101,38 @@ const Account = props => {
 
 const HeaderTips = ({ t, CurrentRound, isMobile }) => {
   return (
-    <Flex alignItems="center" flexWrap="wrap">
+    <Flex alignItems='center' flexWrap='wrap'>
       <Flex>
         <Tips
           src={require('assets/images/myWallet/broadcast.png').default}
-          alt=""
+          alt=''
         />
-        <Text mr="10px" fontSize="14px" color="textTips">
+        <Text mr='10px' fontSize='14px' color='textTips'>
           {t(
-            'Time Community fair release activities are in progress, the current exchange coefficient is'
+            'Time Community fair release activities are in progress, the current exchange coefficient is',
           )}
         </Text>
       </Flex>
       <Text
         ml={isMobile ? '28px' : ''}
-        mr="18px"
-        fontSize="14px"
-        color="textPrimary"
+        mr='18px'
+        fontSize='14px'
+        color='textPrimary'
       >
         1 DSG =
         {formatDisplayApr(
           new BigNumber(CurrentRound.max_time_token)
             .div(CurrentRound.max_dsg_token)
-            .toNumber()
+            .toNumber(),
         )}{' '}
         TIME
       </Text>
       <Text
         as={Link}
-        to="/account/time"
-        mr="10px"
-        fontSize="14px"
-        color="textPrimary"
+        to='/account/time'
+        mr='10px'
+        fontSize='14px'
+        color='textPrimary'
       >
         {t('Time Exchange')} {'>'}
       </Text>

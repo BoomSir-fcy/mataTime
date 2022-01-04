@@ -60,6 +60,7 @@ var merge__default = /*#__PURE__*/_interopDefaultLegacy(merge);
 
 var EN = { locale: 'en-US', language: 'English', code: 'en' };
 var ZHCN = { locale: 'zh-CN', language: '简体中文', code: 'CN' };
+var ZHTW = { locale: 'zh-TW', language: '繁體中文', code: 'zh-tw' };
 var languages = {
     // 'ar-SA': AR,
     // 'bn-BD': BN,
@@ -88,202 +89,202 @@ var languages = {
     // 'uk-UA': UK,
     // 'vi-VN': VI,
     'zh-CN': ZHCN,
-    // 'zh-TW': ZHTW,
+    'zh-TW': ZHTW,
 };
 Object.values(languages);
 
-var dataFormat$1 = "YYYY-MM-DD";
-var airTime$1 = "HHA, MMM-DD";
-var Exchange$1 = "Exchange";
-var Locked$1 = "Locked";
-var Finished$1 = "Finished";
-var Total$1 = "Total";
-var End$1 = "End";
-var Close$1 = "Close";
-var Max$1 = "Max";
-var Cancel$1 = "Cancel";
-var Confirm$1 = "Confirm";
-var Warning$1 = "Warning";
-var Core$1 = "Core";
-var Available$1 = "Available";
-var Select$1 = "Select";
-var Connect$1 = "Connect";
-var Details$1 = "Details";
-var Trade$1 = "Trade";
-var More$1 = "More";
-var Liquidity$1 = "Liquidity";
-var Token$1 = "Token";
-var Pairs$1 = "Pairs";
-var Accounts$1 = "Accounts";
-var Active$1 = "Active";
-var Inactive$1 = "Inactive";
-var Dual$1 = "Dual";
-var Compound$1 = "Compound";
-var Search$1 = "Search";
-var History$1 = "History";
-var Burned$1 = "Burned";
-var Logout$1 = "Logout";
-var Confirmed$1 = "Confirmed";
-var Show$1 = "Show";
-var Hide$1 = "Hide";
-var Stake$1 = "Stake";
-var Balance$2 = "Balance";
-var Live$1 = "Live";
-var Start$1 = "Start";
-var Finish$1 = "Finish";
-var Enable$1 = "Enable";
-var Enabling$1 = "Enabling";
-var Expired$1 = "Expired";
-var Calculating$1 = "Calculating";
-var All$1 = "All";
-var d$1 = "d";
-var h$1 = "h";
-var m$1 = "m";
-var Blocks$1 = "Blocks";
-var Buy$1 = "Buy";
-var Filter$1 = "Filter";
-var Volume$1 = "Volume";
-var Tokens$1 = "Tokens";
-var Contact$1 = "Contact";
-var Merch$1 = "Merch";
-var New$1 = "New";
-var Rates$1 = "Rates";
-var Price$1 = "Price";
-var Prices$1 = "Prices";
-var Amount$1 = "Amount";
-var Simple$1 = "Simple";
-var Detailed$1 = "Detailed";
-var Remove$1 = "Remove";
-var Input$5 = "Input";
-var Output$1 = "Output";
-var From$1 = "From";
-var To$1 = "To";
-var Swap$2 = "Swap";
-var Audio$2 = "Audio";
-var minutes$1 = "minutes";
-var Manage$2 = "Manage";
-var Import$1 = "Import";
-var via$1 = "via";
-var Lists$1 = "Lists";
-var See$1 = "See";
-var Loaded$1 = "Loaded";
-var Loading$2 = "Loading";
-var Recipient$1 = "Recipient";
-var Dismiss$1 = "Dismiss";
-var Latest$1 = "Latest";
-var Claimed$1 = "Claimed";
-var Settings$1 = "Settings";
-var Supply$1 = "Supply";
-var Learn$1 = "Learn";
-var Wrap$1 = "Wrap";
-var Unwrap$1 = "Unwrap";
-var Fee$1 = "Fee";
-var Route$1 = "Route";
-var translationLast$1 = "translationLast";
-var translationEnd$1 = "translationEnd";
+var dataFormat$2 = "YYYY-MM-DD";
+var airTime$2 = "HHA, MMM-DD";
+var Exchange$2 = "Exchange";
+var Locked$2 = "Locked";
+var Finished$2 = "Finished";
+var Total$2 = "Total";
+var End$2 = "End";
+var Close$2 = "Close";
+var Max$2 = "Max";
+var Cancel$2 = "Cancel";
+var Confirm$2 = "Confirm";
+var Warning$2 = "Warning";
+var Core$2 = "Core";
+var Available$2 = "Available";
+var Select$2 = "Select";
+var Connect$2 = "Connect";
+var Details$2 = "Details";
+var Trade$2 = "Trade";
+var More$2 = "More";
+var Liquidity$2 = "Liquidity";
+var Token$2 = "Token";
+var Pairs$2 = "Pairs";
+var Accounts$2 = "Accounts";
+var Active$2 = "Active";
+var Inactive$2 = "Inactive";
+var Dual$2 = "Dual";
+var Compound$2 = "Compound";
+var Search$2 = "Search";
+var History$2 = "History";
+var Burned$2 = "Burned";
+var Logout$2 = "Logout";
+var Confirmed$2 = "Confirmed";
+var Show$2 = "Show";
+var Hide$2 = "Hide";
+var Stake$2 = "Stake";
+var Balance$3 = "Balance";
+var Live$2 = "Live";
+var Start$2 = "Start";
+var Finish$2 = "Finish";
+var Enable$2 = "Enable";
+var Enabling$2 = "Enabling";
+var Expired$2 = "Expired";
+var Calculating$2 = "Calculating";
+var All$2 = "All";
+var d$2 = "d";
+var h$2 = "h";
+var m$2 = "m";
+var Blocks$2 = "Blocks";
+var Buy$2 = "Buy";
+var Filter$2 = "Filter";
+var Volume$2 = "Volume";
+var Tokens$2 = "Tokens";
+var Contact$2 = "Contact";
+var Merch$2 = "Merch";
+var New$2 = "New";
+var Rates$2 = "Rates";
+var Price$2 = "Price";
+var Prices$2 = "Prices";
+var Amount$2 = "Amount";
+var Simple$2 = "Simple";
+var Detailed$2 = "Detailed";
+var Remove$2 = "Remove";
+var Input$6 = "Input";
+var Output$2 = "Output";
+var From$2 = "From";
+var To$2 = "To";
+var Swap$3 = "Swap";
+var Audio$3 = "Audio";
+var minutes$2 = "minutes";
+var Manage$3 = "Manage";
+var Import$2 = "Import";
+var via$2 = "via";
+var Lists$2 = "Lists";
+var See$2 = "See";
+var Loaded$2 = "Loaded";
+var Loading$3 = "Loading";
+var Recipient$2 = "Recipient";
+var Dismiss$2 = "Dismiss";
+var Latest$2 = "Latest";
+var Claimed$2 = "Claimed";
+var Settings$2 = "Settings";
+var Supply$2 = "Supply";
+var Learn$2 = "Learn";
+var Wrap$2 = "Wrap";
+var Unwrap$2 = "Unwrap";
+var Fee$2 = "Fee";
+var Route$2 = "Route";
+var translationLast$2 = "translationLast";
+var translationEnd$2 = "translationEnd";
 var translations = {
-	dataFormat: dataFormat$1,
-	airTime: airTime$1,
-	Exchange: Exchange$1,
+	dataFormat: dataFormat$2,
+	airTime: airTime$2,
+	Exchange: Exchange$2,
 	"Connect Wallet": "Connect Wallet",
 	"Your %asset% Balance": "Your %asset% Balance",
 	"My %asset%": "My %asset%",
 	"Total %asset% Supply": "Total %asset% Supply",
-	Locked: Locked$1,
+	Locked: Locked$2,
 	"Total Liquidity": "Total Liquidity",
-	"View on PolygonScan": "View on PolygonScan",
-	Finished: Finished$1,
+	"View on BscScan": "View on BscScan",
+	Finished: Finished$2,
 	"Project site": "Project site",
 	"Project Site": "Project Site",
 	"See Token Info": "See Token Info",
-	Total: Total$1,
-	End: End$1,
+	Total: Total$2,
+	End: End$2,
 	"View Project Site": "View Project Site",
 	"Create a pool for your token": "Create a pool for your token",
-	Close: Close$1,
-	Max: Max$1,
+	Close: Close$2,
+	Max: Max$2,
 	"%num% %symbol% Available": "%num% %symbol% Available",
-	Cancel: Cancel$1,
-	Confirm: Confirm$1,
-	Warning: Warning$1,
+	Cancel: Cancel$2,
+	Confirm: Confirm$2,
+	Warning: Warning$2,
 	"I understand": "I understand",
 	"Pending Confirmation": "Pending Confirmation",
 	"Buy new tokens with a brand new token sale model.": "Buy new tokens with a brand new token sale model.",
 	"You get the tokens.": "You get the tokens.",
 	"Want to launch your own IFO?": "Want to launch your own IFO?",
 	"Apply to launch": "Apply to launch",
-	Core: Core$1,
-	Available: Available$1,
+	Core: Core$2,
+	Available: Available$2,
 	"Sign out": "Sign out",
-	Select: Select$1,
+	Select: Select$2,
 	"Launch Time": "Launch Time",
 	"For Sale": "For Sale",
 	"Done!": "Done!",
 	"Read more": "Read more",
-	Connect: Connect$1,
+	Connect: Connect$2,
 	"Loading…": "Loading…",
-	Details: Details$1,
+	Details: Details$2,
 	"Wallet Disconnected": "Wallet Disconnected",
-	Trade: Trade$1,
-	More: More$1,
-	Liquidity: Liquidity$1,
-	Token: Token$1,
-	Pairs: Pairs$1,
-	Accounts: Accounts$1,
-	Active: Active$1,
-	Inactive: Inactive$1,
-	Dual: Dual$1,
-	Compound: Compound$1,
+	Trade: Trade$2,
+	More: More$2,
+	Liquidity: Liquidity$2,
+	Token: Token$2,
+	Pairs: Pairs$2,
+	Accounts: Accounts$2,
+	Active: Active$2,
+	Inactive: Inactive$2,
+	Dual: Dual$2,
+	Compound: Compound$2,
 	"In Wallet": "In Wallet",
 	"Loading...": "Loading...",
-	Search: Search$1,
-	History: History$1,
-	Burned: Burned$1,
+	Search: Search$2,
+	History: History$2,
+	Burned: Burned$2,
 	"To burn": "To burn",
 	"Total Value Locked": "Total Value Locked",
 	"Your wallet": "Your wallet",
-	Logout: Logout$1,
-	Confirmed: Confirmed$1,
-	Show: Show$1,
-	Hide: Hide$1,
+	Logout: Logout$2,
+	Confirmed: Confirmed$2,
+	Show: Show$2,
+	Hide: Hide$2,
 	"Stake LP tokens": "Stake LP tokens",
-	Stake: Stake$1,
+	Stake: Stake$2,
 	"I understand that people can view my wallet if they know my username": "I understand that people can view my wallet if they know my username",
 	"Please connect your wallet to continue": "Please connect your wallet to continue",
 	"Get %symbol%": "Get %symbol%",
-	Balance: Balance$2,
+	Balance: Balance$3,
 	"Oops, page not found.": "Oops, page not found.",
 	"Back Home": "Back Home",
-	Live: Live$1,
-	Start: Start$1,
-	Finish: Finish$1,
+	Live: Live$2,
+	Start: Start$2,
+	Finish: Finish$2,
 	"Connect wallet to view": "Connect wallet to view",
 	"Your volume": "Your volume",
 	"Since start": "Since start",
-	Enable: Enable$1,
-	Enabling: Enabling$1,
-	Expired: Expired$1,
-	Calculating: Calculating$1,
+	Enable: Enable$2,
+	Enabling: Enabling$2,
+	Expired: Expired$2,
+	Calculating: Calculating$2,
 	"Your history": "Your history",
-	All: All$1,
+	All: All$2,
 	"%num%d": "%num%d",
-	d: d$1,
-	h: h$1,
-	m: m$1,
+	d: d$2,
+	h: h$2,
+	m: m$2,
 	"Success!": "Success!",
-	Blocks: Blocks$1,
+	Blocks: Blocks$2,
 	"Add to Metamask": "Add to Metamask",
 	"Insufficient %symbol% balance": "Insufficient %symbol% balance",
-	Buy: Buy$1,
+	Buy: Buy$2,
 	"Locate Assets": "Locate Assets",
 	"%symbol% required": "%symbol% required",
 	"Your History": "Your History",
-	Filter: Filter$1,
-	Volume: Volume$1,
-	Tokens: Tokens$1,
-	Contact: Contact$1,
-	Merch: Merch$1,
-	New: New$1,
+	Filter: Filter$2,
+	Volume: Volume$2,
+	Tokens: Tokens$2,
+	Contact: Contact$2,
+	Merch: Merch$2,
+	New: New$2,
 	"Output is estimated. You will receive at least %amount% %symbol% or the transaction will revert.": "Output is estimated. You will receive at least  %amount% %symbol% or the transaction will revert.",
 	"Output is estimated. You will receive at least": "Output is estimated. You will receive at least",
 	"or the transaction will revert.": "or the transaction will revert.",
@@ -306,7 +307,7 @@ var translations = {
 	"Share of Pool": "Share of Pool",
 	"%assetA% per %assetB%": "%assetA% per %assetB%",
 	"%asset% Deposited": "%asset% Deposited",
-	Rates: Rates$1,
+	Rates: Rates$2,
 	"Create Pool & Supply": "Create Pool & Supply",
 	"Confirm Supply": "Confirm Supply",
 	"Confirm Swap": "Confirm Swap",
@@ -326,29 +327,29 @@ var translations = {
 	"Invalid pair.": "Invalid pair.",
 	"You don’t have liquidity in this pool yet.": "You don’t have liquidity in this pool yet.",
 	"%assetA%/%assetB% Burned": "%assetA%/%assetB% Burned",
-	Price: Price$1,
-	Prices: Prices$1,
+	Price: Price$2,
+	Prices: Prices$2,
 	"Remove %assetA%-%assetB% liquidity": "Remove %assetA%-%assetB% liquidity",
-	Amount: Amount$1,
-	Simple: Simple$1,
-	Detailed: Detailed$1,
+	Amount: Amount$2,
+	Simple: Simple$2,
+	Detailed: Detailed$2,
 	"Receive WBNB": "Receive WBNB",
 	"Receive BNB": "Receive BNB",
-	Remove: Remove$1,
-	Input: Input$5,
-	Output: Output$1,
+	Remove: Remove$2,
+	Input: Input$6,
+	Output: Output$2,
 	"Trade tokens in an instant": "Trade tokens in an instant",
 	"From (estimated)": "From (estimated)",
-	From: From$1,
+	From: From$2,
 	"To (estimated)": "To (estimated)",
-	To: To$1,
+	To: To$2,
 	"+ Add a send (optional)": "+ Add a send (optional)",
 	"- Remove send": "- Remove send",
 	"Slippage Tolerance": "Slippage Tolerance",
 	"Insufficient liquidity for this trade.": "Insufficient liquidity for this trade.",
 	"Try enabling multi-hop trades.": "Try enabling multi-hop trades.",
 	"Price Impact High": "Price Impact High",
-	Swap: Swap$2,
+	Swap: Swap$3,
 	"Swap Anyway": "Swap Anyway",
 	"Recent Transactions": "Recent Transactions",
 	"clear all": "clear all",
@@ -364,14 +365,14 @@ var translations = {
 	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "Bypasses confirmation modals and allows high slippage trades. Use at your own risk.",
 	"Disable Multihops": "Disable Multihops",
 	"Restricts swaps to direct pairs only.": "Restricts swaps to direct pairs only.",
-	Audio: Audio$2,
+	Audio: Audio$3,
 	"🐰 Turn down your volume a bit before you swap": "🐰 Turn down your volume a bit before you swap",
 	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "Your transaction will revert if the price changes unfavorably by more than this percentage.",
 	"Enter a valid slippage percentage": "Enter a valid slippage percentage",
 	"Your transaction may fail": "Your transaction may fail",
 	"Your transaction may be frontrun": "Your transaction may be frontrun",
 	"Your transaction will revert if it is pending for more than this long.": "Your transaction will revert if it is pending for more than this long.",
-	minutes: minutes$1,
+	minutes: minutes$2,
 	"Token Amount": "Token Amount",
 	"Balance: %amount%": "Balance: %amount%",
 	"LP tokens in your wallet": "LP tokens in your wallet",
@@ -382,24 +383,24 @@ var translations = {
 	"Expanded results from inactive Token Lists": "Expanded results from inactive Token Lists",
 	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
 	"No results found.": "No results found.",
-	Manage: Manage$2,
+	Manage: Manage$3,
 	"Manage Tokens": "Manage your token list",
 	"Import Tokens": "Import Tokens",
 	"Import List": "Import List",
 	"Import at your own risk": "Import at your own risk",
 	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.",
 	"If you purchase a token from this list, you may not be able to sell it back.": "If you purchase a token from this list, you may not be able to sell it back.",
-	Import: Import$1,
-	via: via$1,
+	Import: Import$2,
+	via: via$2,
 	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.",
 	"If you purchase an arbitrary token, you may be unable to sell it back.": "If you purchase an arbitrary token, you may be unable to sell it back.",
 	"Unknown Source": "Unknown Source",
-	Lists: Lists$1,
-	See: See$1,
+	Lists: Lists$2,
+	See: See$2,
 	"Update list": "Update list",
 	"https:// or ipfs:// or ENS name": "https:// or ipfs:// or ENS name",
-	Loaded: Loaded$1,
-	Loading: Loading$2,
+	Loaded: Loaded$2,
+	Loading: Loading$3,
 	"Enter valid token address": "Enter valid token address",
 	"Custom Token": "Custom Token",
 	"Custom Tokens": "Custom Tokens",
@@ -410,11 +411,11 @@ var translations = {
 	"Added %asset%": "Added %asset%",
 	"Transaction Submitted": "Transaction Submitted",
 	"Wallet Address or ENS name": "Wallet Address or ENS name",
-	Recipient: Recipient$1,
+	Recipient: Recipient$2,
 	"Waiting For Confirmation": "Waiting For Confirmation",
 	"Confirm this transaction in your wallet": "Confirm this transaction in your wallet",
-	Dismiss: Dismiss$1,
-	Latest: Latest$1,
+	Dismiss: Dismiss$2,
+	Latest: Latest$2,
 	"Notice for trading %symbol%": "Notice for trading %symbol%",
 	"To trade SAFEMOON, you must:": "To trade SAFEMOON, you must:",
 	"Click on the settings icon": "Click on the settings icon",
@@ -423,35 +424,35 @@ var translations = {
 	"5% fee = redistributed to all existing holders": "5% fee = redistributed to all existing holders",
 	"5% fee = used to add liquidity": "5% fee = used to add liquidity",
 	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "Warning: BONDLY has been compromised. Please remove liqudity until further notice.",
-	Claimed: Claimed$1,
-	Settings: Settings$1,
+	Claimed: Claimed$2,
+	Settings: Settings$2,
 	"Transaction deadline": "Transaction deadline",
 	"Convert ERC-20 to BEP-20": "Convert ERC-20 to BEP-20",
 	"Need help ?": "Need help ?",
 	"Select a token": "Select a token",
 	"Enter a recipient": "Enter a recipient",
 	"Invalid recipient": "Invalid recipient",
-	Supply: Supply$1,
+	Supply: Supply$2,
 	"Your Liquidity": "Your Liquidity",
 	"Remove liquidity to receive tokens back": "Remove liquidity to receive tokens back",
 	"Trade anything. No registration, no hassle.": "Trade anything. No registration, no hassle.",
 	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.",
-	Learn: Learn$1,
+	Learn: Learn$2,
 	"BNB token": "BNB token",
 	"BTC token": "BTC token",
 	"Earn passive income with crypto.": "Earn passive income with crypto.",
 	"Unwrap %amoun% %symbolA% to %symbolB%": "Unwrap %amoun% %symbolA% to %symbolB%",
 	"Wrap %amoun% %symbolA% to %symbolB%": "Wrap %amoun% %symbolA% to %symbolB%",
-	Wrap: Wrap$1,
-	Unwrap: Unwrap$1,
+	Wrap: Wrap$2,
+	Unwrap: Unwrap$2,
 	"Aggregate trading": "Aggregate trading",
 	"Unable to get trading pool rewards using Aggregate trading": "Unable to get trading pool rewards using Aggregate trading",
 	"Disable Route": "Disable Route",
 	"Minimum received": "Minimum received",
 	"Price Impact": "Price Impact",
 	"Liquidity Provider Fee": "Liquidity Provider Fee",
-	Fee: Fee$1,
-	Route: Route$1,
+	Fee: Fee$2,
+	Route: Route$2,
 	"Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.",
 	"The difference between the market price and estimated price due to trade size.": "The difference between the market price and estimated price due to trade size.",
 	"for each trade a 0.3% fee is paid": "for each trade a 0.3% fee is paid",
@@ -465,203 +466,205 @@ var translations = {
 	"Money-hungry Dino": "Money-hungry Dino",
 	"Enter an amount": "Enter an amount",
 	"Transaction rejected.": "Transaction rejected.",
-	translationLast: translationLast$1,
-	translationEnd: translationEnd$1
+	"Enter valid list location": "Enter valid list location",
+	"Error importing list": "Error importing list",
+	translationLast: translationLast$2,
+	translationEnd: translationEnd$2
 };
 
-var dataFormat = "YYYY-MM-DD";
-var airTime = "HHA, MMM-DD";
-var Exchange = "兑换";
-var Locked = "已锁定";
-var Finished = "已完成";
-var Total = "总计";
-var End = "结束";
-var Close = "关闭";
-var Max = "最大";
-var Cancel = "取消";
-var Confirm = "确认";
-var Warning = "警告";
-var Core = "核心";
-var Available = "可用";
-var Select = "选择";
-var Connect = "连接";
-var Details = "详情";
-var Trade = "交易";
-var More = "更多";
-var Liquidity = "流动性";
-var Token = "代币";
-var Pairs = "币对";
-var Accounts = "账户";
-var Active = "有效";
-var Inactive = "停用";
-var Dual = "双重";
-var Compound = "复利";
-var Search = "搜索";
-var History = "历史记录";
-var Burned = "销毁";
-var Logout = "退出";
-var Confirmed = "已确认";
-var Show = "显示";
-var Hide = "隐藏";
-var Stake = "质押";
-var Balance$1 = "余额";
-var Live = "实时";
-var Start = "开始";
-var Finish = "完成";
-var Enable = "启用";
-var Enabling = "启用";
-var Expired = "已过期";
-var Calculating = "正在计算";
-var All = "全部";
-var d = "天";
-var h = "小时";
-var m = "分钟";
-var Blocks = "区块";
-var Buy = "购买";
-var Filter = "筛选器";
-var Volume = "交易量";
-var Tokens = "代币";
-var Contact = "联系";
-var Merch = "商品";
-var New = "新";
-var Rates = "汇率";
-var Price = "价格";
-var Prices = "价格";
-var Amount = "金额";
-var Simple = "简单";
-var Detailed = "详细";
-var Remove = "移除";
-var Input$4 = "输入";
-var Output = "输出";
-var From = "从";
-var To = "到";
-var Swap$1 = "兑换";
-var Audio$1 = "音频";
-var minutes = "分钟";
-var Manage$1 = "管理";
-var Import = "导入";
-var via = "通过";
-var Lists = "列表";
-var See = "查看";
-var Loaded = "已加载";
-var Loading$1 = "正在加载";
-var Recipient = "接收人";
-var Dismiss = "取消";
-var Latest = "最新";
-var Claimed = "已领取";
-var Settings = "设置";
-var Supply = "供应";
-var Accept = "同意";
-var Learn = "了解";
-var Wrap = "兑换";
-var Unwrap = "兑换";
-var Route = "路由";
-var Fee = "手续费";
-var translationLast = "translationLast";
-var translationEnd = "translationEnd";
+var dataFormat$1 = "YYYY-MM-DD";
+var airTime$1 = "HHA, MMM-DD";
+var Exchange$1 = "兑换";
+var Locked$1 = "已锁定";
+var Finished$1 = "已完成";
+var Total$1 = "总计";
+var End$1 = "结束";
+var Close$1 = "关闭";
+var Max$1 = "最大";
+var Cancel$1 = "取消";
+var Confirm$1 = "确认";
+var Warning$1 = "警告";
+var Core$1 = "核心";
+var Available$1 = "可用";
+var Select$1 = "选择";
+var Connect$1 = "连接";
+var Details$1 = "详情";
+var Trade$1 = "交易";
+var More$1 = "更多";
+var Liquidity$1 = "流动性";
+var Token$1 = "代币";
+var Pairs$1 = "币对";
+var Accounts$1 = "账户";
+var Active$1 = "有效";
+var Inactive$1 = "停用";
+var Dual$1 = "双重";
+var Compound$1 = "复利";
+var Search$1 = "搜索";
+var History$1 = "历史记录";
+var Burned$1 = "销毁";
+var Logout$1 = "退出";
+var Confirmed$1 = "已确认";
+var Show$1 = "显示";
+var Hide$1 = "隐藏";
+var Stake$1 = "质押";
+var Balance$2 = "余额";
+var Live$1 = "实时";
+var Start$1 = "开始";
+var Finish$1 = "完成";
+var Enable$1 = "启用";
+var Enabling$1 = "启用";
+var Expired$1 = "已过期";
+var Calculating$1 = "正在计算";
+var All$1 = "全部";
+var d$1 = "天";
+var h$1 = "小时";
+var m$1 = "分钟";
+var Blocks$1 = "区块";
+var Buy$1 = "购买";
+var Filter$1 = "筛选器";
+var Volume$1 = "交易量";
+var Tokens$1 = "代币";
+var Contact$1 = "联系";
+var Merch$1 = "商品";
+var New$1 = "新";
+var Rates$1 = "汇率";
+var Price$1 = "价格";
+var Prices$1 = "价格";
+var Amount$1 = "金额";
+var Simple$1 = "简单";
+var Detailed$1 = "详细";
+var Remove$1 = "移除";
+var Input$5 = "输入";
+var Output$1 = "输出";
+var From$1 = "从";
+var To$1 = "到";
+var Swap$2 = "兑换";
+var Audio$2 = "音频";
+var minutes$1 = "分钟";
+var Manage$2 = "管理";
+var Import$1 = "导入";
+var via$1 = "通过";
+var Lists$1 = "列表";
+var See$1 = "查看";
+var Loaded$1 = "已加载";
+var Loading$2 = "正在加载";
+var Recipient$1 = "接收人";
+var Dismiss$1 = "取消";
+var Latest$1 = "最新";
+var Claimed$1 = "已领取";
+var Settings$1 = "设置";
+var Supply$1 = "供应";
+var Accept$1 = "同意";
+var Learn$1 = "了解";
+var Wrap$1 = "兑换";
+var Unwrap$1 = "兑换";
+var Route$1 = "路由";
+var Fee$1 = "手续费";
+var translationLast$1 = "translationLast";
+var translationEnd$1 = "translationEnd";
 var translationsZhCN = {
-	dataFormat: dataFormat,
-	airTime: airTime,
-	Exchange: Exchange,
+	dataFormat: dataFormat$1,
+	airTime: airTime$1,
+	Exchange: Exchange$1,
 	"Connect Wallet": "连接钱包",
 	"Your %asset% Balance": "您的 %asset% 余额",
 	"My %asset%": "我的 %asset%",
 	"Total %asset% Supply": "%asset% 总供应量",
-	Locked: Locked,
+	Locked: Locked$1,
 	"Total Liquidity": "总流动性",
-	"View on PolygonScan": "在 PolygonScan 上查看",
-	Finished: Finished,
+	"View on BscScan": "在 BscScan 上查看",
+	Finished: Finished$1,
 	"Project site": "项目网站",
 	"Project Site": "Project Site",
 	"See Token Info": "查看代币信息",
-	Total: Total,
-	End: End,
+	Total: Total$1,
+	End: End$1,
 	"View Project Site": "查看项目网站",
 	"Create a pool for your token": "为您的代币创建资金池",
-	Close: Close,
-	Max: Max,
+	Close: Close$1,
+	Max: Max$1,
 	"%num% %symbol% Available": "%num% %symbol% 可用",
-	Cancel: Cancel,
-	Confirm: Confirm,
-	Warning: Warning,
+	Cancel: Cancel$1,
+	Confirm: Confirm$1,
+	Warning: Warning$1,
 	"I understand": "我了解",
 	"Pending Confirmation": "等待确认",
 	"Buy new tokens with a brand new token sale model.": "使用全新的代币销售模型购买新代币。",
 	"You get the tokens.": "您获得了代币。",
 	"Want to launch your own IFO?": "想要发起您自己的 IFO？",
 	"Apply to launch": "申请发起",
-	Core: Core,
-	Available: Available,
+	Core: Core$1,
+	Available: Available$1,
 	"Sign out": "退出",
-	Select: Select,
+	Select: Select$1,
 	"Launch Time": "发起时间",
 	"For Sale": "待售",
 	"Done!": "完成！",
 	"Read more": "阅读更多",
-	Connect: Connect,
+	Connect: Connect$1,
 	"Loading…": "正在加载…",
-	Details: Details,
+	Details: Details$1,
 	"Wallet Disconnected": "钱包已断开连接",
-	Trade: Trade,
-	More: More,
-	Liquidity: Liquidity,
-	Token: Token,
-	Pairs: Pairs,
-	Accounts: Accounts,
-	Active: Active,
-	Inactive: Inactive,
-	Dual: Dual,
-	Compound: Compound,
+	Trade: Trade$1,
+	More: More$1,
+	Liquidity: Liquidity$1,
+	Token: Token$1,
+	Pairs: Pairs$1,
+	Accounts: Accounts$1,
+	Active: Active$1,
+	Inactive: Inactive$1,
+	Dual: Dual$1,
+	Compound: Compound$1,
 	"In Wallet": "钱包中",
 	"Loading...": "正在加载…",
-	Search: Search,
-	History: History,
-	Burned: Burned,
+	Search: Search$1,
+	History: History$1,
+	Burned: Burned$1,
 	"To burn": "要焚毁",
 	"Total Value Locked": "锁定的总价值",
 	"Your wallet": "您的钱包",
-	Logout: Logout,
-	Confirmed: Confirmed,
-	Show: Show,
-	Hide: Hide,
+	Logout: Logout$1,
+	Confirmed: Confirmed$1,
+	Show: Show$1,
+	Hide: Hide$1,
 	"Stake LP tokens": "质押 LP 代币",
-	Stake: Stake,
+	Stake: Stake$1,
 	"I understand that people can view my wallet if they know my username": "我了解，如果其他人知道我的用户名，他们就可以查看我的钱包",
 	"Please connect your wallet to continue": "请连接您的钱包以继续",
 	"Get %symbol%": "获取 %symbol%",
-	Balance: Balance$1,
+	Balance: Balance$2,
 	"Oops, page not found.": "糟糕，找不到页面",
 	"Back Home": "返回首页",
-	Live: Live,
-	Start: Start,
-	Finish: Finish,
+	Live: Live$1,
+	Start: Start$1,
+	Finish: Finish$1,
 	"Connect wallet to view": "连接要查看的钱包",
 	"Your volume": "交易量",
 	"Since start": "自开始以来的时间",
-	Enable: Enable,
-	Enabling: Enabling,
-	Expired: Expired,
-	Calculating: Calculating,
+	Enable: Enable$1,
+	Enabling: Enabling$1,
+	Expired: Expired$1,
+	Calculating: Calculating$1,
 	"Your history": "历史记录",
-	All: All,
+	All: All$1,
 	"%num%d": "%num%d",
-	d: d,
-	h: h,
-	m: m,
+	d: d$1,
+	h: h$1,
+	m: m$1,
 	"Success!": "成功！",
-	Blocks: Blocks,
+	Blocks: Blocks$1,
 	"Add to Metamask": "添加到 Metamask",
 	"Insufficient %symbol% balance": "%symbol% 余额不足",
-	Buy: Buy,
+	Buy: Buy$1,
 	"Locate Assets": "查找资产",
 	"%symbol% required": "需要 %symbol%",
 	"Your History": "历史记录",
-	Filter: Filter,
-	Volume: Volume,
-	Tokens: Tokens,
-	Contact: Contact,
-	Merch: Merch,
-	New: New,
+	Filter: Filter$1,
+	Volume: Volume$1,
+	Tokens: Tokens$1,
+	Contact: Contact$1,
+	Merch: Merch$1,
+	New: New$1,
 	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "输出为估值。如果价格变化超过 %slippage%%，则您的交易将被撤回。",
 	"Output is estimated. You will receive at least  %amount% %symbol% or the transaction will revert.": "输出为估值。你将收到最少%amount% %symbol%，否则您的交易将被撤回。",
 	"Output is estimated. You will receive at least": "输出为估值。你将收到最少",
@@ -684,7 +687,7 @@ var translationsZhCN = {
 	"Share of Pool": "资金池中的份额",
 	"%assetA% per %assetB%": "%assetA%/%assetB%",
 	"%asset% Deposited": "已入金 %asset%",
-	Rates: Rates,
+	Rates: Rates$1,
 	"Create Pool & Supply": "创建资金池和供应",
 	"Confirm Supply": "确认供应",
 	"Confirm Swap": "确认兑换",
@@ -704,29 +707,29 @@ var translationsZhCN = {
 	"Invalid pair.": "币对无效。",
 	"You don’t have liquidity in this pool yet.": "您在此资金池中还没有流动性。",
 	"%assetA%/%assetB% Burned": "已焚毁 %assetA%/%assetB%",
-	Price: Price,
-	Prices: Prices,
+	Price: Price$1,
+	Prices: Prices$1,
 	"Remove %assetA%-%assetB% liquidity": "移除 %assetA%-%assetB% 流动性",
-	Amount: Amount,
-	Simple: Simple,
-	Detailed: Detailed,
+	Amount: Amount$1,
+	Simple: Simple$1,
+	Detailed: Detailed$1,
 	"Receive WBNB": "接收 WBNB",
 	"Receive BNB": "接收 BNB",
-	Remove: Remove,
-	Input: Input$4,
-	Output: Output,
+	Remove: Remove$1,
+	Input: Input$5,
+	Output: Output$1,
 	"Trade tokens in an instant": "即时交易兑换代币",
 	"From (estimated)": "从（估计）",
-	From: From,
+	From: From$1,
 	"To (estimated)": "到（估计）",
-	To: To,
+	To: To$1,
 	"+ Add a send (optional)": "+ 添加发送（可选）",
 	"- Remove send": "- 移除发送",
 	"Slippage Tolerance": "滑点容差",
 	"Insufficient liquidity for this trade.": "此交易的流动性不足。",
 	"Try enabling multi-hop trades.": "尝试启用多跳交易。",
 	"Price Impact High": "价格影响较高",
-	Swap: Swap$1,
+	Swap: Swap$2,
 	"Swap Anyway": "仍要兑换",
 	"Recent Transactions": "最近的交易",
 	"clear all": "全部清除",
@@ -742,14 +745,14 @@ var translationsZhCN = {
 	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "绕过确认模式并允许高滑点交易。使用风险自负。",
 	"Disable Multihops": "禁用多跳",
 	"Restricts swaps to direct pairs only.": "将兑换限制为仅限直接币对。",
-	Audio: Audio$1,
+	Audio: Audio$2,
 	"🐰 Turn down your volume a bit before you swap": "🐰 在您兑换之前略微调低音量",
 	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果价格变动幅度超过此百分比，您的交易将被撤回。",
 	"Enter a valid slippage percentage": "输入有效的滑点百分比",
 	"Your transaction may fail": "您的交易可能会失败",
 	"Your transaction may be frontrun": "您的交易可能会被超前交易",
 	"Your transaction will revert if it is pending for more than this long.": "如果您的交易等待处理的时间超过此时间，它将被撤回。",
-	minutes: minutes,
+	minutes: minutes$1,
 	"Token Amount": "代币金额",
 	"Balance: %amount%": "余额：%amount%",
 	"LP tokens in your wallet": "您的钱包中的 LP 代币",
@@ -760,24 +763,24 @@ var translationsZhCN = {
 	"Expanded results from inactive Token Lists": "来自停用代币列表的扩展结果",
 	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "代币来自停用列表。在下方导入特定代币或点击“管理”以激活更多列表。",
 	"No results found.": "未找到结果。",
-	Manage: Manage$1,
+	Manage: Manage$2,
 	"Manage Tokens": "管理代币",
 	"Import Tokens": "导入代币",
 	"Import List": "导入列表",
 	"Import at your own risk": "导入风险自负",
 	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "添加此列表，即表示您完全信任数据的正确性。任何人都可以创建列表，包括创建现有列表的虚假版本和声称代表没有列表的项目的列表。",
 	"If you purchase a token from this list, you may not be able to sell it back.": "如果您购买了此列表中的代币，则可能无法将其出售。",
-	Import: Import,
-	via: via,
+	Import: Import$1,
+	via: via$1,
 	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "任何人都可以在 BSC 上使用任意名称创建 BEP20 代币，包括创建虚假版本的现有代币和声称代表没有代币的项目的代币。",
 	"If you purchase an arbitrary token, you may be unable to sell it back.": "如果您购买任意代币，可能无法将其出售。",
 	"Unknown Source": "未知来源",
-	Lists: Lists,
-	See: See,
+	Lists: Lists$1,
+	See: See$1,
 	"Update list": "更新列表",
 	"https:// or ipfs:// or ENS name": "https:// 或 ipfs:// 或 ENS 名称",
-	Loaded: Loaded,
-	Loading: Loading$1,
+	Loaded: Loaded$1,
+	Loading: Loading$2,
 	"Enter valid token address": "输入有效的代币地址",
 	"Custom Token": "自定义代币",
 	"Custom Tokens": "自定义代币",
@@ -788,11 +791,11 @@ var translationsZhCN = {
 	"Added %asset%": "已添加 %asset%",
 	"Transaction Submitted": "已提交交易",
 	"Wallet Address or ENS name": "钱包地址或 ENS 名称",
-	Recipient: Recipient,
+	Recipient: Recipient$1,
 	"Waiting For Confirmation": "正在等待确认",
 	"Confirm this transaction in your wallet": "在您的钱包中确认此交易",
-	Dismiss: Dismiss,
-	Latest: Latest,
+	Dismiss: Dismiss$1,
+	Latest: Latest$1,
 	"Notice for trading %symbol%": "关于 %symbol% 的交易须知",
 	"To trade SAFEMOON, you must:": "若要交易 SafeMoon，您必须：",
 	"Click on the settings icon": "点击设置图标",
@@ -801,29 +804,29 @@ var translationsZhCN = {
 	"5% fee = redistributed to all existing holders": "5% 费用 = 分配给所有持有者",
 	"5% fee = used to add liquidity": "5% 费用 = 用于添加流动性",
 	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "警告：BONDLY 已被攻击，在得到进一步通知之前，请移除流动性",
-	Claimed: Claimed,
-	Settings: Settings,
+	Claimed: Claimed$1,
+	Settings: Settings$1,
 	"Transaction deadline": "交易截止期",
 	"Convert ERC-20 to BEP-20": "将 ERC-20 转换为 BEP-20",
 	"Need help ?": "需要帮助？",
 	"Select a token": "选择代币",
 	"Enter a recipient": "输入接收人",
 	"Invalid recipient": "接收人无效",
-	Supply: Supply,
-	Accept: Accept,
+	Supply: Supply$1,
+	Accept: Accept$1,
 	"Price Updated": "价格已更新",
 	"Your Liquidity": "您的流动性",
 	"Remove liquidity to receive tokens back": "移除流动性以收回代币",
 	"Trade anything. No registration, no hassle.": "交易任何代币。无需注册，不必麻烦。",
 	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "只需连接您的钱包，即可在 Binance Smart Chain 上快速交易任何代币。",
-	Learn: Learn,
+	Learn: Learn$1,
 	"BNB token": "BNB 代币",
 	"BTC token": "BTC 代币",
 	"Earn passive income with crypto.": "利用加密货币赚取被动收入。",
 	"Unwrap %amoun% %symbolA% to %symbolB%": "兑换 %amoun% %symbolA% 到 %symbolB%",
 	"Wrap %amoun% %symbolA% to %symbolB%": "兑换 %amoun% %symbolA% 到 %symbolB%",
-	Wrap: Wrap,
-	Unwrap: Unwrap,
+	Wrap: Wrap$1,
+	Unwrap: Unwrap$1,
 	"Aggregate trading": "聚合交易",
 	"Unable to get trading pool rewards using Aggregate trading": "使用聚合交易无法获得交易挖矿奖励",
 	"Disable Route": "禁用路由",
@@ -831,7 +834,7 @@ var translationsZhCN = {
 	"Maximum sold": "最大出售量",
 	"Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "如果在交易确认之前价格有较大的不利变动，你的交易将被退回。",
 	"Price Impact": "价格影响",
-	Route: Route,
+	Route: Route$1,
 	"The difference between the market price and your price due to trade size.": "由于交易规模，市场价格与您的价格之间的差异。",
 	"The difference between the market price and estimated price due to trade size.": "由于交易规模造成的市场价格与估计价格之间的差异 ",
 	"for each trade a 0.3% fee is paid": "每笔交易需要支付0.3%的手续费，其中",
@@ -842,11 +845,396 @@ var translationsZhCN = {
 	"0.025% to %symbol% holder": "0.025%分配给%symbol%质押用户",
 	"0.06% to operation fund": "0.06%分配给运营基金",
 	"Liquidity Provider Fee": "流动性提供者费用",
-	Fee: Fee,
+	Fee: Fee$1,
 	"Routing through these tokens resulted in the best price for your trade.": "使交易获得最佳价格的路由。",
 	"Money-hungry Dino": "贪财龙",
 	"Enter an amount": "输入金额",
 	"Transaction rejected.": "交易被拒绝。",
+	"Enter valid list location": "輸入有效的列表位置",
+	translationLast: translationLast$1,
+	translationEnd: translationEnd$1
+};
+
+var dataFormat = "YYYY-MM-DD";
+var airTime = "HHA, MMM-DD";
+var Exchange = "兌換";
+var Locked = "已鎖定";
+var Finished = "已完成";
+var Total = "總計";
+var End = "結束";
+var Close = "關閉";
+var Max = "最大";
+var Cancel = "取消";
+var Confirm = "確認";
+var Warning = "警告";
+var Core = "核心";
+var Available = "可用";
+var Select = "選擇";
+var Connect = "連接";
+var Details = "詳情";
+var Trade = "交易";
+var More = "更多";
+var Liquidity = "流動性";
+var Token = "代幣";
+var Pairs = "幣對";
+var Accounts = "賬戶";
+var Active = "有效";
+var Inactive = "停用";
+var Dual = "雙重";
+var Compound = "復利";
+var Search = "搜索";
+var History = "歷史記錄";
+var Burned = "銷毀";
+var Logout = "退出";
+var Confirmed = "已確認";
+var Show = "顯示";
+var Hide = "隱藏";
+var Stake = "質押";
+var Balance$1 = "余額";
+var Live = "實時";
+var Start = "開始";
+var Finish = "完成";
+var Enable = "啟用";
+var Enabling = "啟用";
+var Expired = "已過期";
+var Calculating = "正在計算";
+var All = "全部";
+var d = "天";
+var h = "小時";
+var m = "分鐘";
+var Blocks = "區塊";
+var Buy = "購買";
+var Filter = "篩選器";
+var Volume = "交易量";
+var Tokens = "代幣";
+var Contact = "聯系";
+var Merch = "商品";
+var New = "新";
+var Rates = "匯率";
+var Price = "價格";
+var Prices = "價格";
+var Amount = "金額";
+var Simple = "簡單";
+var Detailed = "詳細";
+var Remove = "移除";
+var Input$4 = "輸入";
+var Output = "輸出";
+var From = "從";
+var To = "到";
+var Swap$1 = "兌換";
+var Audio$1 = "音頻";
+var minutes = "分鐘";
+var Manage$1 = "管理";
+var Import = "導入";
+var via = "通過";
+var Lists = "列表";
+var See = "查看";
+var Loaded = "已加載";
+var Loading$1 = "正在加載";
+var Recipient = "接收人";
+var Dismiss = "取消";
+var Latest = "最新";
+var Claimed = "已領取";
+var Settings = "設置";
+var Supply = "供應";
+var Accept = "同意";
+var Learn = "了解";
+var Wrap = "兌換";
+var Unwrap = "兌換";
+var Route = "路由";
+var Fee = "手續費";
+var translationLast = "translationLast";
+var translationEnd = "translationEnd";
+var translationsZhTW = {
+	dataFormat: dataFormat,
+	airTime: airTime,
+	Exchange: Exchange,
+	"Connect Wallet": "連接錢包",
+	"Your %asset% Balance": "您的 %asset% 余額",
+	"My %asset%": "我的 %asset%",
+	"Total %asset% Supply": "%asset% 總供應量",
+	Locked: Locked,
+	"Total Liquidity": "總流動性",
+	"View on BscScan": "在 BscScan 上查看",
+	Finished: Finished,
+	"Project site": "項目網站",
+	"Project Site": "Project Site",
+	"See Token Info": "查看代幣信息",
+	Total: Total,
+	End: End,
+	"View Project Site": "查看項目網站",
+	"Create a pool for your token": "為您的代幣創建資金池",
+	Close: Close,
+	Max: Max,
+	"%num% %symbol% Available": "%num% %symbol% 可用",
+	Cancel: Cancel,
+	Confirm: Confirm,
+	Warning: Warning,
+	"I understand": "我了解",
+	"Pending Confirmation": "等待確認",
+	"Buy new tokens with a brand new token sale model.": "使用全新的代幣銷售模型購買新代幣。",
+	"You get the tokens.": "您獲得了代幣。",
+	"Want to launch your own IFO?": "想要發起您自己的 IFO？",
+	"Apply to launch": "申請發起",
+	Core: Core,
+	Available: Available,
+	"Sign out": "退出",
+	Select: Select,
+	"Launch Time": "發起時間",
+	"For Sale": "待售",
+	"Done!": "完成！",
+	"Read more": "閱讀更多",
+	Connect: Connect,
+	"Loading…": "正在加載…",
+	Details: Details,
+	"Wallet Disconnected": "錢包已斷開連接",
+	Trade: Trade,
+	More: More,
+	Liquidity: Liquidity,
+	Token: Token,
+	Pairs: Pairs,
+	Accounts: Accounts,
+	Active: Active,
+	Inactive: Inactive,
+	Dual: Dual,
+	Compound: Compound,
+	"In Wallet": "錢包中",
+	"Loading...": "正在加載…",
+	Search: Search,
+	History: History,
+	Burned: Burned,
+	"To burn": "要焚毀",
+	"Total Value Locked": "鎖定的總價值",
+	"Your wallet": "您的錢包",
+	Logout: Logout,
+	Confirmed: Confirmed,
+	Show: Show,
+	Hide: Hide,
+	"Stake LP tokens": "質押 LP 代幣",
+	Stake: Stake,
+	"I understand that people can view my wallet if they know my username": "我了解，如果其他人知道我的用戶名，他們就可以查看我的錢包",
+	"Please connect your wallet to continue": "請連接您的錢包以繼續",
+	"Get %symbol%": "獲取 %symbol%",
+	Balance: Balance$1,
+	"Oops, page not found.": "糟糕，找不到頁面",
+	"Back Home": "返回首頁",
+	Live: Live,
+	Start: Start,
+	Finish: Finish,
+	"Connect wallet to view": "連接要查看的錢包",
+	"Your volume": "交易量",
+	"Since start": "自開始以來的時間",
+	Enable: Enable,
+	Enabling: Enabling,
+	Expired: Expired,
+	Calculating: Calculating,
+	"Your history": "歷史記錄",
+	All: All,
+	"%num%d": "%num%d",
+	d: d,
+	h: h,
+	m: m,
+	"Success!": "成功！",
+	Blocks: Blocks,
+	"Add to Metamask": "添加到 Metamask",
+	"Insufficient %symbol% balance": "%symbol% 余額不足",
+	Buy: Buy,
+	"Locate Assets": "查找資產",
+	"%symbol% required": "需要 %symbol%",
+	"Your History": "歷史記錄",
+	Filter: Filter,
+	Volume: Volume,
+	Tokens: Tokens,
+	Contact: Contact,
+	Merch: Merch,
+	New: New,
+	"Output is estimated. If the price changes by more than %slippage%% your transaction will revert.": "輸出為估值。如果價格變化超過 %slippage%%，則您的交易將被撤回。",
+	"Output is estimated. You will receive at least  %amount% %symbol% or the transaction will revert.": "輸出為估值。你將收到最少%amount% %symbol%，否則您的交易將被撤回。",
+	"Output is estimated. You will receive at least": "輸出為估值。你將收到最少",
+	"or the transaction will revert.": "否則您的交易將被撤回。",
+	"Supplying %amountA% %symbolA% and %amountB% %symbolB%": "正在供應 %amountA% %symbolA% 和 %amountB% %symbolB%",
+	"Removing %amountA% %symbolA% and %amountB% %symbolB%": "正在移除 %amountA% %symbolA% 和 %amountB% %symbolB%",
+	"Swapping %amountA% %symbolA% for %amountB% %symbolB%": "正在將 %amountA% %symbolA% 兌換為 %amountB% %symbolB%",
+	"Add Liquidity": "增加流動性",
+	"Add liquidity to receive LP tokens": "增加流動性以接收 LP 代幣",
+	"Liquidity providers earn a 0.1% trading fee on all trades made for that token pair, proportional to their share of the liquidity pool.": "流動性供應商將對該代幣對的所有交易賺取 0.1% 的交易費，與他們在流動性資金池中的份額成正比。",
+	"You are creating a pool": "您正在創建資金池",
+	"You are the first liquidity provider.": "您是第一個流動性供應商。",
+	"The ratio of tokens you add will set the price of this pool.": "您添加的代幣比率將設置此資金池的價格。",
+	"Once you are happy with the rate click supply to review.": "如果您對匯率滿意，請點擊「供應」以進行檢查。",
+	"Initial prices and pool share": "初始價格和資金池份額",
+	"Prices and pool share": "價格和資金池份額",
+	"Unsupported Asset": "不受支持的資產",
+	"Enabling %asset%": "正在批準 %asset%",
+	"Enable %asset%": "批準 %asset%",
+	"Share of Pool": "資金池中的份額",
+	"%assetA% per %assetB%": "%assetA%/%assetB%",
+	"%asset% Deposited": "已入金 %asset%",
+	Rates: Rates,
+	"Create Pool & Supply": "創建資金池和供應",
+	"Confirm Supply": "確認供應",
+	"Confirm Swap": "確認兌換",
+	"Connect to a wallet to view your liquidity.": "連接到錢包以查看您的流動性。",
+	"Connect to a wallet to find pools": "連接到錢包以查找資金池",
+	"Select a token to find your liquidity.": "選擇代幣以查找您的流動性。",
+	"No liquidity found.": "未找到流動性。",
+	"Don't see a pool you joined?": "未看到您加入的資金池？",
+	"Find other LP tokens": "查找其他 LP 代幣",
+	"Import Pool": "導入資金池",
+	"Import an existing pool": "導入現有資金池",
+	"Select a Token": "選擇代幣",
+	"Pool Found!": "發現資金池！",
+	"No pool found.": "未找到資金池。",
+	"Create pool.": "創建資金池。",
+	"Manage this pool.": "管理此資金池。",
+	"Invalid pair.": "幣對無效。",
+	"You don』t have liquidity in this pool yet.": "您在此資金池中還沒有流動性。",
+	"%assetA%/%assetB% Burned": "已焚毀 %assetA%/%assetB%",
+	Price: Price,
+	Prices: Prices,
+	"Remove %assetA%-%assetB% liquidity": "移除 %assetA%-%assetB% 流動性",
+	Amount: Amount,
+	Simple: Simple,
+	Detailed: Detailed,
+	"Receive WBNB": "接收 WBNB",
+	"Receive BNB": "接收 BNB",
+	Remove: Remove,
+	Input: Input$4,
+	Output: Output,
+	"Trade tokens in an instant": "即時交易兌換代幣",
+	"From (estimated)": "從（估計）",
+	From: From,
+	"To (estimated)": "到（估計）",
+	To: To,
+	"+ Add a send (optional)": "+ 添加發送（可選）",
+	"- Remove send": "- 移除發送",
+	"Slippage Tolerance": "滑點容差",
+	"Insufficient liquidity for this trade.": "此交易的流動性不足。",
+	"Try enabling multi-hop trades.": "嘗試啟用多跳交易。",
+	"Price Impact High": "價格影響較高",
+	Swap: Swap$1,
+	"Swap Anyway": "仍要兌換",
+	"Recent Transactions": "最近的交易",
+	"clear all": "全部清除",
+	"Clear all": "全部清除",
+	"No recent transactions": "最近沒有交易",
+	"Are you sure?": "您確定嗎？",
+	"Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.": "專家模式會關閉「確認」交易提示，並允許進行常會導致匯率不佳和資金損失的高滑點交易。",
+	"Only use this mode if you know what you』re doing.": "請僅在您清楚自身需求時才使用此模式。",
+	"Turn On Expert Mode": "開啟專家模式",
+	"Transaction Settings": "交易設置",
+	"Interface Settings": "界面設置",
+	"Toggle Expert Mode": "切換專家模式",
+	"Bypasses confirmation modals and allows high slippage trades. Use at your own risk.": "繞過確認模式並允許高滑點交易。使用風險自負。",
+	"Disable Multihops": "禁用多跳",
+	"Restricts swaps to direct pairs only.": "將兌換限製為僅限直接幣對。",
+	Audio: Audio$1,
+	"🐰 Turn down your volume a bit before you swap": "🐰 在您兌換之前略微調低音量",
+	"Your transaction will revert if the price changes unfavorably by more than this percentage.": "如果價格變動幅度超過此百分比，您的交易將被撤回。",
+	"Enter a valid slippage percentage": "輸入有效的滑點百分比",
+	"Your transaction may fail": "您的交易可能會失敗",
+	"Your transaction may be frontrun": "您的交易可能會被超前交易",
+	"Your transaction will revert if it is pending for more than this long.": "如果您的交易等待處理的時間超過此時間，它將被撤回。",
+	minutes: minutes,
+	"Token Amount": "代幣金額",
+	"Balance: %amount%": "余額：%amount%",
+	"LP tokens in your wallet": "您的錢包中的 LP 代幣",
+	"Pooled %asset%": "已入池 %asset%",
+	"By adding liquidity, you will earn 0.1% of all transactions for the pair, proportional to your share in the pool. The fees accrued each day will be added to the pool the following day, and you can receive your earnings by removing your liquidity.": "通過添加流動性，您將賺取該幣對所有交易額的0.1%，與您在資金池中的份額成正比。每天累計的費用將在次日添加到資金池中，可通過解除流動性來領取收益。",
+	"Common bases": "一般基準",
+	"These tokens are commonly paired with other tokens.": "這些代幣通常與其他代幣配對。",
+	"Expanded results from inactive Token Lists": "來自停用代幣列表的擴展結果",
+	"Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.": "代幣來自停用列表。在下方導入特定代幣或點擊「管理」以激活更多列表。",
+	"No results found.": "未找到結果。",
+	Manage: Manage$1,
+	"Manage Tokens": "管理代幣",
+	"Import Tokens": "導入代幣",
+	"Import List": "導入列表",
+	"Import at your own risk": "導入風險自負",
+	"By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.": "添加此列表，即表示您完全信任數據的正確性。任何人都可以創建列表，包括創建現有列表的虛假版本和聲稱代表沒有列表的項目的列表。",
+	"If you purchase a token from this list, you may not be able to sell it back.": "如果您購買了此列表中的代幣，則可能無法將其出售。",
+	Import: Import,
+	via: via,
+	"Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.": "任何人都可以在 BSC 上使用任意名稱創建 BEP20 代幣，包括創建虛假版本的現有代幣和聲稱代表沒有代幣的項目的代幣。",
+	"If you purchase an arbitrary token, you may be unable to sell it back.": "如果您購買任意代幣，可能無法將其出售。",
+	"Unknown Source": "未知來源",
+	Lists: Lists,
+	See: See,
+	"Update list": "更新列表",
+	"https:// or ipfs:// or ENS name": "https:// 或 ipfs:// 或 ENS 名稱",
+	Loaded: Loaded,
+	Loading: Loading$1,
+	"Enter valid token address": "輸入有效的代幣地址",
+	"Custom Token": "自定義代幣",
+	"Custom Tokens": "自定義代幣",
+	"Unknown Error": "未知錯誤",
+	"Select ": "選擇幣種",
+	"Search name or paste address": "搜索名稱或粘貼地址",
+	"Add %asset% to Metamask": "將 %asset% 添加到 Metamask",
+	"Added %asset%": "已添加 %asset%",
+	"Transaction Submitted": "已提交交易",
+	"Wallet Address or ENS name": "錢包地址或 ENS 名稱",
+	Recipient: Recipient,
+	"Waiting For Confirmation": "正在等待確認",
+	"Confirm this transaction in your wallet": "在您的錢包中確認此交易",
+	Dismiss: Dismiss,
+	Latest: Latest,
+	"Notice for trading %symbol%": "關於 %symbol% 的交易須知",
+	"To trade SAFEMOON, you must:": "若要交易 SafeMoon，您必須：",
+	"Click on the settings icon": "點擊設置圖標",
+	"Set your slippage tolerance to 12%+": "把滑點設置為 12% 或更高",
+	"This is because SafeMoon taxes a 10% fee on each transaction:": "這是因為交易 SafeMoon 時需支付 10% 的費用：",
+	"5% fee = redistributed to all existing holders": "5% 費用 = 分配給所有持有者",
+	"5% fee = used to add liquidity": "5% 費用 = 用於添加流動性",
+	"Warning: BONDLY has been compromised. Please remove liqudity until further notice.": "警告：BONDLY 已被攻擊，在得到進一步通知之前，請移除流動性",
+	Claimed: Claimed,
+	Settings: Settings,
+	"Transaction deadline": "交易截止期",
+	"Convert ERC-20 to BEP-20": "將 ERC-20 轉換為 BEP-20",
+	"Need help ?": "需要幫助？",
+	"Select a token": "選擇代幣",
+	"Enter a recipient": "輸入接收人",
+	"Invalid recipient": "接收人無效",
+	Supply: Supply,
+	Accept: Accept,
+	"Price Updated": "價格已更新",
+	"Your Liquidity": "您的流動性",
+	"Remove liquidity to receive tokens back": "移除流動性以收回代幣",
+	"Trade anything. No registration, no hassle.": "交易任何代幣。無需註冊，不必麻煩。",
+	"Trade any token on Binance Smart Chain in seconds, just by connecting your wallet.": "只需連接您的錢包，即可在 Binance Smart Chain 上快速交易任何代幣。",
+	Learn: Learn,
+	"BNB token": "BNB 代幣",
+	"BTC token": "BTC 代幣",
+	"Earn passive income with crypto.": "利用加密貨幣賺取被動收入。",
+	"Unwrap %amoun% %symbolA% to %symbolB%": "兌換 %amoun% %symbolA% 到 %symbolB%",
+	"Wrap %amoun% %symbolA% to %symbolB%": "兌換 %amoun% %symbolA% 到 %symbolB%",
+	Wrap: Wrap,
+	Unwrap: Unwrap,
+	"Aggregate trading": "聚合交易",
+	"Unable to get trading pool rewards using Aggregate trading": "使用聚合交易無法獲得交易挖礦獎勵",
+	"Disable Route": "禁用路由",
+	"Minimum received": "最小獲得量",
+	"Maximum sold": "最大出售量",
+	"Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "如果在交易確認之前價格有較大的不利變動，你的交易將被退回。",
+	"Price Impact": "價格影響",
+	Route: Route,
+	"The difference between the market price and your price due to trade size.": "由於交易規模，市場價格與您的價格之間的差異。",
+	"The difference between the market price and estimated price due to trade size.": "由於交易規模造成的市場價格與估計價格之間的差異 ",
+	"for each trade a 0.3% fee is paid": "每筆交易需要支付0.3%的手續費，其中",
+	"0.1% to the LP token holders": "0.1%分配給流動性提供者",
+	"0.04% to the %symbol% stakers": "0.04%分配給持有%symbol%並質押的用戶",
+	"0.05% buyback %symbol% and burn": "0.05%回購%symbol%進行銷毀",
+	"0.025% buyback %symbol%, then to %symbol% LP": "0.025%回購%symbol%註入%symbol%交易對的流動性池",
+	"0.025% to %symbol% holder": "0.025%分配給%symbol%質押用戶",
+	"0.06% to operation fund": "0.06%分配給運營基金",
+	"Liquidity Provider Fee": "流動性提供者費用",
+	Fee: Fee,
+	"Routing through these tokens resulted in the best price for your trade.": "使交易獲得最佳價格的路由。",
+	"Money-hungry Dino": "貪財龍",
+	"Enter an amount": "輸入金額",
+	"Transaction rejected.": "交易被拒絕。",
+	"Enter valid list location": "輸入有效的列表位置",
+	"Error importing list": "導入列表時出錯",
 	translationLast: translationLast,
 	translationEnd: translationEnd
 };
@@ -855,9 +1243,8 @@ var _a$c;
 var translation = (_a$c = {},
     _a$c[EN.locale] = translations,
     _a$c[ZHCN.locale] = translationsZhCN,
+    _a$c[ZHTW.locale] = translationsZhTW,
     _a$c);
-// const publicUrl = process.env.PUBLIC_URL
-var LS_KEY = 'storage_language';
 var fetchLocale = function (locale) { return tslib.__awaiter(void 0, void 0, void 0, function () {
     return tslib.__generator(this, function (_a) {
         // const response = await fetch(`${publicUrl}/locales/${locale}.json`)
@@ -867,8 +1254,9 @@ var fetchLocale = function (locale) { return tslib.__awaiter(void 0, void 0, voi
 }); };
 var getLanguageCodeFromLS = function () {
     try {
-        var codeFromStorage = localStorage.getItem(LS_KEY);
-        return codeFromStorage || EN.locale;
+        // const codeFromStorage = localStorage.getItem(LS_KEY)
+        // return codeFromStorage || EN.locale
+        return EN.locale;
     }
     catch (_a) {
         return EN.locale;
@@ -6788,11 +7176,11 @@ var LanguageProvider = function (_a) {
                     enLocale = languageMap.get(EN.locale);
                     // Merge the EN locale to ensure that any locale fetched has all the keys
                     languageMap.set(language.locale, tslib.__assign(tslib.__assign({}, enLocale), locale));
-                    localStorage.setItem(LS_KEY, language.locale);
+                    // localStorage.setItem(LS_KEY, language.locale)
                     setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: language })); });
                     return [3 /*break*/, 3];
                 case 2:
-                    localStorage.setItem(LS_KEY, language.locale);
+                    // localStorage.setItem(LS_KEY, language.locale)
                     setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: language })); });
                     _a.label = 3;
                 case 3: return [2 /*return*/];
@@ -6814,11 +7202,11 @@ var LanguageProvider = function (_a) {
                     enLocale = languageMap.get(EN.locale);
                     // Merge the EN locale to ensure that any locale fetched has all the keys
                     languageMap.set(localeKeys, tslib.__assign(tslib.__assign({}, enLocale), locale));
-                    localStorage.setItem(LS_KEY, localeKeys);
+                    // localStorage.setItem(LS_KEY, localeKeys)
                     setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: languages[localeKeys] })); });
                     return [3 /*break*/, 3];
                 case 2:
-                    localStorage.setItem(LS_KEY, localeKeys);
+                    // localStorage.setItem(LS_KEY, localeKeys)
                     setState(function (prevState) { return (tslib.__assign(tslib.__assign({}, prevState), { isFetching: false, currentLanguage: languages[localeKeys] })); });
                     _a.label = 3;
                 case 3: return [2 /*return*/];
@@ -7581,14 +7969,14 @@ function queryParametersToSwapState(parsedQs) {
         _a;
 }
 // updates the swap state to use the defaults for a given network
-function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
+function useDefaultsFromURLSearch(outputCurrency, inputCurrency) {
     var chainId = useActiveWeb3React().chainId;
     var dispatch = reactRedux.useDispatch();
     var _a = tslib.__read(React.useState(), 2), result = _a[0], setResult = _a[1];
     React.useEffect(function () {
         if (!chainId)
             return;
-        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrencyId: inputCurrencyId });
+        var parsed = queryParametersToSwapState({ outputCurrency: outputCurrency, inputCurrency: inputCurrency });
         dispatch(replaceSwapState({
             typedValue: parsed.typedValue,
             field: parsed.independentField,
@@ -7598,7 +7986,7 @@ function useDefaultsFromURLSearch(outputCurrency, inputCurrencyId) {
         }));
         setResult({ inputCurrencyId: parsed[Field$2.INPUT].currencyId, outputCurrencyId: parsed[Field$2.OUTPUT].currencyId });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, chainId, outputCurrency, inputCurrencyId]);
+    }, [dispatch, chainId, outputCurrency, inputCurrency]);
     return result;
 }
 function useSwapCurrencies() {
@@ -8821,7 +9209,7 @@ var styleVariants$2 = (_b$3 = {},
         color: 'backgroundAlt'
     },
     _b$3[variants$5.DANGER] = {
-        // backgroundColor: "failure",
+        backgroundColor: "failure",
         // color: "white",
         color: 'white',
         backgroundRepeat: 'no-repeat',
@@ -11132,7 +11520,7 @@ function Updater() {
                         },
                     }));
                     var toast = receipt.status === 1 ? toastSuccess : toastError;
-                    toast(t("Transaction receipt"), jsxRuntime.jsxs(Flex, tslib.__assign({ flexDirection: "column" }, { children: [jsxRuntime.jsx(Text, { children: (_b = (_a = transactions[hash]) === null || _a === void 0 ? void 0 : _a.summary) !== null && _b !== void 0 ? _b : "Hash: " + hash.slice(0, 8) + "..." + hash.slice(58, 65) }, void 0), chainId && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t("View on PolygonScan") }), void 0))] }), void 0));
+                    toast(t("Transaction receipt"), jsxRuntime.jsxs(Flex, tslib.__assign({ flexDirection: "column" }, { children: [jsxRuntime.jsx(Text, { children: (_b = (_a = transactions[hash]) === null || _a === void 0 ? void 0 : _a.summary) !== null && _b !== void 0 ? _b : "Hash: " + hash.slice(0, 8) + "..." + hash.slice(58, 65) }, void 0), chainId && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t("View on BscScan") }), void 0))] }), void 0));
                 }
                 else {
                     dispatch(checkedTransaction({ chainId: chainId, hash: hash, blockNumber: lastBlockNumber }));
@@ -11422,7 +11810,7 @@ function AddressInputPanel(_a) {
         onChange(withoutSpaces);
     }, [onChange]);
     var error = Boolean(value.length > 0 && !loading && !address);
-    return (jsxRuntime.jsx(InputPanel$1, tslib.__assign({ id: id }, { children: jsxRuntime.jsx(ContainerRow, tslib.__assign({ error: error }, { children: jsxRuntime.jsx(InputContainer, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, { children: t('Recipient') }, void 0), address && chainId && (jsxRuntime.jsxs(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(name !== null && name !== void 0 ? name : address, 'address', chainId) }, { children: ["(", t('View on PolygonScan'), ")"] }), void 0))] }, void 0), jsxRuntime.jsx(Input$1, { className: "recipient-address-input", type: "text", autoComplete: "off", autoCorrect: "off", autoCapitalize: "off", spellCheck: "false", placeholder: t('Wallet Address or ENS name'), error: error, pattern: "^(0x[a-fA-F0-9]{40})$", onChange: handleInput, value: value }, void 0)] }), void 0) }, void 0) }), void 0) }), void 0));
+    return (jsxRuntime.jsx(InputPanel$1, tslib.__assign({ id: id }, { children: jsxRuntime.jsx(ContainerRow, tslib.__assign({ error: error }, { children: jsxRuntime.jsx(InputContainer, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, { children: t('Recipient') }, void 0), address && chainId && (jsxRuntime.jsxs(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(name !== null && name !== void 0 ? name : address, 'address', chainId) }, { children: ["(", t('View on BscScan'), ")"] }), void 0))] }, void 0), jsxRuntime.jsx(Input$1, { className: "recipient-address-input", type: "text", autoComplete: "off", autoCorrect: "off", autoCapitalize: "off", spellCheck: "false", placeholder: t('Wallet Address or ENS name'), error: error, pattern: "^(0x[a-fA-F0-9]{40})$", onChange: handleInput, value: value }, void 0)] }), void 0) }, void 0) }), void 0) }), void 0));
 }
 var templateObject_1$n, templateObject_2$f, templateObject_3$9, templateObject_4$4;
 
@@ -11507,7 +11895,7 @@ function TransactionSubmittedContent(_a) {
     var library = useActiveWeb3React().library;
     var t = useTranslation().t;
     var token = wrappedCurrency(currencyToAdd, chainId);
-    return (jsxRuntime.jsx(Wrapper$4, { children: jsxRuntime.jsxs(Section, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Icon$c, { strokeWidth: 0.5, width: "90px", color: "primary" }, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Transaction Submitted') }), void 0), chainId && hash && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t('View on PolygonScan') }), void 0)), currencyToAdd && ((_b = library === null || library === void 0 ? void 0 : library.provider) === null || _b === void 0 ? void 0 : _b.isMetaMask) && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", mt: "12px", width: "fit-content", onClick: function () { return registerToken(token.address, token.symbol, token.decimals); } }, { children: jsxRuntime.jsxs(RowFixed, { children: [t('Add %asset% to Metamask', { asset: currencyToAdd.symbol }), jsxRuntime.jsx(Icon$3, { width: "16px", ml: "6px" }, void 0)] }, void 0) }), void 0)), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss, mt: "20px" }, { children: t('Close') }), void 0)] }), void 0)] }, void 0) }, void 0));
+    return (jsxRuntime.jsx(Wrapper$4, { children: jsxRuntime.jsxs(Section, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Icon$c, { strokeWidth: 0.5, width: "90px", color: "primary" }, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Transaction Submitted') }), void 0), chainId && hash && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t('View on BscScan') }), void 0)), currencyToAdd && ((_b = library === null || library === void 0 ? void 0 : library.provider) === null || _b === void 0 ? void 0 : _b.isMetaMask) && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", mt: "12px", width: "fit-content", onClick: function () { return registerToken(token.address, token.symbol, token.decimals); } }, { children: jsxRuntime.jsxs(RowFixed, { children: [t('Add %asset% to Metamask', { asset: currencyToAdd.symbol }), jsxRuntime.jsx(Icon$3, { width: "16px", ml: "6px" }, void 0)] }, void 0) }), void 0)), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss, mt: "20px" }, { children: t('Close') }), void 0)] }), void 0)] }, void 0) }, void 0));
 }
 function ConfirmationModalContent(_a) {
     var bottomContent = _a.bottomContent, topContent = _a.topContent;
@@ -12055,14 +12443,14 @@ function ImportToken(_a) {
     var inactiveTokenList = useCombinedInactiveList();
     return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "lg" }, { children: [jsxRuntime.jsx(Message, tslib.__assign({ variant: "warning" }, { children: jsxRuntime.jsxs(Text, { children: [t('Anyone can create a %token% token on %chain% with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.', {
                             token: 'ERC20',
-                            chain: 'Polygon'
+                            chain: 'BscScan'
                         }), jsxRuntime.jsx("br", {}, void 0), jsxRuntime.jsx("br", {}, void 0), t('If you purchase an arbitrary token, you may be unable to sell it back.')] }, void 0) }), void 0), tokens.map(function (token) {
                 var _a, _b;
                 var list = chainId && ((_b = (_a = inactiveTokenList === null || inactiveTokenList === void 0 ? void 0 : inactiveTokenList[chainId]) === null || _a === void 0 ? void 0 : _a[token.address]) === null || _b === void 0 ? void 0 : _b.list);
                 var address = token.address
                     ? token.address.substring(0, 6) + "..." + token.address.substring(token.address.length - 4)
                     : null;
-                return (jsxRuntime.jsxs(Grid, tslib.__assign({ gridTemplateRows: "1fr 1fr 1fr", gridGap: "4px" }, { children: [list !== undefined ? (jsxRuntime.jsxs(Tag, tslib.__assign({ variant: "success", outline: true, scale: "sm", startIcon: list.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: list.logoURI, size: "12px" }, void 0) }, { children: [t('via'), " ", list.name] }), void 0)) : (jsxRuntime.jsx(Tag, tslib.__assign({ variant: "failure", outline: true, scale: "sm", startIcon: jsxRuntime.jsx(Icon$f, { color: "failure" }, void 0) }, { children: t('Unknown Source') }), void 0)), jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "8px" }, { children: token.name }), void 0), jsxRuntime.jsxs(Text, { children: ["(", token.symbol, ")"] }, void 0)] }), void 0), chainId && (jsxRuntime.jsxs(Flex, tslib.__assign({ justifyContent: "space-between", width: "100%" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "4px" }, { children: address }), void 0), jsxRuntime.jsxs(Link, tslib.__assign({ href: getBscScanLink(token.address, 'address', chainId), external: true }, { children: ["(", t('View on PolygonScan'), ")"] }), void 0)] }), void 0))] }), token.address));
+                return (jsxRuntime.jsxs(Grid, tslib.__assign({ gridTemplateRows: "1fr 1fr 1fr", gridGap: "4px" }, { children: [list !== undefined ? (jsxRuntime.jsxs(Tag, tslib.__assign({ variant: "success", outline: true, scale: "sm", startIcon: list.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: list.logoURI, size: "12px" }, void 0) }, { children: [t('via'), " ", list.name] }), void 0)) : (jsxRuntime.jsx(Tag, tslib.__assign({ variant: "failure", outline: true, scale: "sm", startIcon: jsxRuntime.jsx(Icon$f, { color: "failure" }, void 0) }, { children: t('Unknown Source') }), void 0)), jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "8px" }, { children: token.name }), void 0), jsxRuntime.jsxs(Text, { children: ["(", token.symbol, ")"] }, void 0)] }), void 0), chainId && (jsxRuntime.jsxs(Flex, tslib.__assign({ justifyContent: "space-between", width: "100%" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ mr: "4px" }, { children: address }), void 0), jsxRuntime.jsxs(Link, tslib.__assign({ href: getBscScanLink(token.address, 'address', chainId), external: true }, { children: ["(", t('View on BscScan'), ")"] }), void 0)] }), void 0))] }), token.address));
             }), jsxRuntime.jsxs(Flex, tslib.__assign({ justifyContent: "space-between", alignItems: "center" }, { children: [jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center", onClick: function () { return setConfirmed(!confirmed); } }, { children: [jsxRuntime.jsx(Checkbox, { scale: "sm", name: "confirmed", type: "checkbox", checked: confirmed, onChange: function () { return setConfirmed(!confirmed); } }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ ml: "8px", style: { userSelect: 'none' } }, { children: t('I understand') }), void 0)] }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "danger", disabled: !confirmed, onClick: function () {
                             tokens.map(function (token) { return addToken(token); });
                             if (handleCurrencySelect) {
@@ -12220,7 +12608,7 @@ function ManageLists(_a) {
         setModalView(CurrencyModalView.importList);
         setListUrl(listUrlInput);
     }, [listUrlInput, setImportList, setListUrl, setModalView, tempList]);
-    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
+    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: t(addError) }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
 }
 var templateObject_1$d, templateObject_2$8, templateObject_3$3;
 

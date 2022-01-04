@@ -7,16 +7,16 @@ export const PopupWrapper = styled.span`
 export const PopupContentWrapper = styled(Box)`
   width: 300px;
   min-height: 100px;
-  position: absolute;
-  left: 10px;
-  top: 22px;
-  background: #4d535f;
+  /* position: absolute; */
+  /* left: 10px; */
+  /* top: 22px; */
+  background: ${({ theme }) => theme.colors.tertiary};
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   box-sizing: border-box;
   padding: 15px;
-  z-index: 1099;
-  overflow: hidden;
+  /* z-index: 1099; */
+  /* overflow: hidden; */
   .content {
     display: flex;
     align-items: center;
@@ -57,6 +57,7 @@ export const PopupContentWrapper = styled(Box)`
       }
       .number {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         max-width: 100%;
@@ -88,7 +89,7 @@ export const PopupContentWrapper = styled(Box)`
 
 export const FollowContentWrapper = styled(Box)`
   width: 300px;
-  background: #4d535f;
+  background: ${({ theme }) => theme.colors.tertiary};
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   box-sizing: border-box;
@@ -136,6 +137,7 @@ export const FollowContentWrapper = styled(Box)`
       }
       .number {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         max-width: 100%;

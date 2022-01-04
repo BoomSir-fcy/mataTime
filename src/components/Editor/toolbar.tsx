@@ -6,6 +6,8 @@ import { Box, Flex, Button, Svg } from 'uikit';
 import { Emoji } from './emoji';
 import { Icon } from 'components';
 import { Api } from 'apis';
+import client from 'utils/client'
+import imageCompression, { cutDownImg } from 'utils/imageCompression'
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -49,19 +51,26 @@ const InsertImageButton: React.FC<{
         return toastError(t('uploadImgMaxMsg'));
 
       for (let image of imageFile) {
-        if (image.size > imgMaxSize)
-          return toastError(t('commonUploadMaxSize'));
-        fileList.push(await readFileAsync(image));
+        const compressImage = await cutDownImg(image)
+        fileList.push(compressImage);
       }
       const res = await Api.CommonApi.uploadImgList({
         base64: fileList,
-        dir_name: 'common'
+        dir_name: 'common',
       });
       if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
       const imgList = (res.data ?? []).map(item => item.full_path);
       onSuccess(imgList);
     } catch (error) {
-      console.log(error);
+      if ((error as Error).message === '1') {
+        toastError(t('File format error'));
+        return
+      }
+      if ((error as Error).message === '2') {
+        toastError(t('commonUploadMaxSize'));
+        return
+      }
+      console.error(error)
     } finally {
       onError();
     }
@@ -73,6 +82,7 @@ const InsertImageButton: React.FC<{
         <Icon size={size} color='white_black' current name='icon-tupian' />
         <input
           id='upload-images'
+          name="upload-images"
           ref={imageInput}
           onChange={() => {
             callbackSelectImg();
@@ -81,6 +91,8 @@ const InsertImageButton: React.FC<{
           multiple={multiple}
           type='file'
           accept='image/*'
+          capture={!client.ios}
+          // capture={true}
           hidden
         />
       </label>
@@ -106,7 +118,7 @@ export const Toolbar: React.FC<{
     onError,
     onSuccess,
     selectImgLength,
-    type
+    type,
   }) => {
     const size = 20;
     return (
@@ -139,5 +151,5 @@ export const Toolbar: React.FC<{
         ) : null}
       </EditorToolbar>
     );
-  }
+  },
 );

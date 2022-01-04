@@ -3,10 +3,17 @@ import styled, { useTheme } from 'styled-components';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { Text, Flex, Box, TextProps } from 'uikit';
 import { chartData } from './data';
+import { useTranslation } from 'contexts/Localization';
 
 const BoxContener = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   ${({ theme }) => theme.mediaQueriesSize.padding}
+  .pie-chart {
+    overflow-y: hidden;
+    ${({ theme }) => theme.mediaQueries.lg} {
+      overflow: hidden;
+    }
+  }
 `;
 
 const RADIAN = Math.PI / 180;
@@ -59,15 +66,25 @@ const renderCustomizedLabel = (props: any) => {
   );
 };
 export default function AnswerChart() {
-  const white_black = useTheme().colors.white_black;
+  const { white_black } = useTheme().colors;
+  const { t } = useTranslation();
+
+  // const chartLanuangeData = (chartData ?? []).map(row => {
+  //   return { ...row, name: t(row.name) };
+  // });
 
   return (
     <BoxContener mt='32px'>
       <Text bold fontSize='24px'>
-        Distribution of $TIME
+        {t('walleteDistribution')}
       </Text>
       <Flex justifyContent='center'>
-        <PieChart margin={{ left: 300 }} width={1000} height={360}>
+        <PieChart
+          margin={{ left: 300 }}
+          width={1000}
+          height={360}
+          className='pie-chart'
+        >
           <Pie
             data={chartData}
             cx={200}
@@ -79,6 +96,7 @@ export default function AnswerChart() {
             dataKey='value'
             startAngle={20}
             endAngle={380}
+            className='pie'
           >
             {chartData.map((entry, index) => (
               // eslint-disable-next-line

@@ -1,31 +1,46 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { createPortal } from "react-dom";
-import { usePopper } from "react-popper";
-import { ThemeProvider, DefaultTheme } from "styled-components";
-import { light, dark } from "../../theme";
-import isTouchDevice from "../../util/isTouchDevice";
-import { StyledTooltip, Arrow } from "./StyledTooltip";
-import { TooltipOptions, TooltipRefs } from "./types";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { usePopper } from 'react-popper';
+import { ThemeProvider, DefaultTheme } from 'styled-components';
+import { light, dark } from '../../theme';
+import isTouchDevice from '../../util/isTouchDevice';
+import { StyledTooltip, Arrow } from './StyledTooltip';
+import { TooltipOptions, TooltipRefs } from './types';
 
-const invertTheme = (currentTheme: DefaultTheme) => {
+const invertTheme = (currentTheme: DefaultTheme, invert: boolean) => {
+  if (!invert) return currentTheme;
   if (currentTheme.isDark) {
     return light;
   }
   return dark;
 };
+// const Portal = document.getElementById('portal-root');
+// // 解决打赏和连接钱包层级问题
+// const Root = document.getElementById('root');
 
-const portalRoot = document.getElementById("portal-root");
+const useTooltip = (
+  content: React.ReactNode,
+  options: TooltipOptions,
+  ParentElement = 'portal-root',
+): TooltipRefs => {
+  // // 解决打赏和连接钱包层级问题
+  const portalRoot = document.getElementById(ParentElement);
 
-const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipRefs => {
   const {
-    placement = "auto",
-    trigger = "hover",
+    placement = 'auto',
+    trigger = 'hover',
     arrowPadding = 16,
     tooltipPadding = { left: 16, right: 16 },
     tooltipOffset = [0, 10],
+    invert = true,
+    stylePadding,
+    background,
+    hideArrow,
   } = options;
   const [targetElement, setTargetElement] = useState<HTMLElement | null>(null);
-  const [tooltipElement, setTooltipElement] = useState<HTMLElement | null>(null);
+  const [tooltipElement, setTooltipElement] = useState<HTMLElement | null>(
+    null,
+  );
   const [arrowElement, setArrowElement] = useState<HTMLElement | null>(null);
 
   const [visible, setVisible] = useState(false);
@@ -40,7 +55,7 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
         setVisible(false);
       };
 
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         if (hideTimeout.current) {
           window.clearTimeout(hideTimeout.current);
         }
@@ -58,7 +73,7 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
         hide();
       }
     },
-    [tooltipElement, trigger]
+    [tooltipElement, trigger],
   );
 
   const showTooltip = useCallback(
@@ -66,7 +81,7 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
       e.stopPropagation();
       e.preventDefault();
       setVisible(true);
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         if (e.target === targetElement) {
           // If we were about to close the tooltip and got back to it
           // then prevent closing it.
@@ -77,7 +92,7 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
         }
       }
     },
-    [tooltipElement, targetElement, trigger]
+    [tooltipElement, targetElement, trigger],
   );
 
   const toggleTooltip = useCallback(
@@ -85,52 +100,52 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
       e.stopPropagation();
       setVisible(!visible);
     },
-    [visible]
+    [visible],
   );
 
   // Trigger = hover
   useEffect(() => {
-    if (targetElement === null || trigger !== "hover") return undefined;
+    if (targetElement === null || trigger !== 'hover') return undefined;
 
     if (isTouchDevice()) {
-      targetElement.addEventListener("touchstart", showTooltip);
-      targetElement.addEventListener("touchend", hideTooltip);
+      targetElement.addEventListener('touchstart', showTooltip);
+      targetElement.addEventListener('touchend', hideTooltip);
     } else {
-      targetElement.addEventListener("mouseenter", showTooltip);
-      targetElement.addEventListener("mouseleave", hideTooltip);
+      targetElement.addEventListener('mouseenter', showTooltip);
+      targetElement.addEventListener('mouseleave', hideTooltip);
     }
     return () => {
-      targetElement.removeEventListener("touchstart", showTooltip);
-      targetElement.removeEventListener("touchend", hideTooltip);
-      targetElement.removeEventListener("mouseenter", showTooltip);
-      targetElement.removeEventListener("mouseleave", showTooltip);
+      targetElement.removeEventListener('touchstart', showTooltip);
+      targetElement.removeEventListener('touchend', hideTooltip);
+      targetElement.removeEventListener('mouseenter', showTooltip);
+      targetElement.removeEventListener('mouseleave', showTooltip);
     };
   }, [trigger, targetElement, hideTooltip, showTooltip]);
 
   // Keep tooltip open when cursor moves from the targetElement to the tooltip
   useEffect(() => {
-    if (tooltipElement === null || trigger !== "hover") return undefined;
+    if (tooltipElement === null || trigger !== 'hover') return undefined;
 
-    tooltipElement.addEventListener("mouseenter", showTooltip);
-    tooltipElement.addEventListener("mouseleave", hideTooltip);
+    tooltipElement.addEventListener('mouseenter', showTooltip);
+    tooltipElement.addEventListener('mouseleave', hideTooltip);
     return () => {
-      tooltipElement.removeEventListener("mouseenter", showTooltip);
-      tooltipElement.removeEventListener("mouseleave", hideTooltip);
+      tooltipElement.removeEventListener('mouseenter', showTooltip);
+      tooltipElement.removeEventListener('mouseleave', hideTooltip);
     };
   }, [trigger, tooltipElement, hideTooltip, showTooltip]);
 
   // Trigger = click
   useEffect(() => {
-    if (targetElement === null || trigger !== "click") return undefined;
+    if (targetElement === null || trigger !== 'click') return undefined;
 
-    targetElement.addEventListener("click", toggleTooltip);
+    targetElement.addEventListener('click', toggleTooltip);
 
-    return () => targetElement.removeEventListener("click", toggleTooltip);
+    return () => targetElement.removeEventListener('click', toggleTooltip);
   }, [trigger, targetElement, visible, toggleTooltip]);
 
   // Handle click outside
   useEffect(() => {
-    if (trigger !== "click") return undefined;
+    if (trigger !== 'click') return undefined;
 
     const handleClickOutside = ({ target }: Event) => {
       if (target instanceof Node) {
@@ -144,20 +159,20 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
         }
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [trigger, targetElement, tooltipElement]);
 
   // Trigger = focus
   useEffect(() => {
-    if (targetElement === null || trigger !== "focus") return undefined;
+    if (targetElement === null || trigger !== 'focus') return undefined;
 
-    targetElement.addEventListener("focus", showTooltip);
-    targetElement.addEventListener("blur", hideTooltip);
+    targetElement.addEventListener('focus', showTooltip);
+    targetElement.addEventListener('blur', hideTooltip);
     return () => {
-      targetElement.removeEventListener("focus", showTooltip);
-      targetElement.removeEventListener("blur", hideTooltip);
+      targetElement.removeEventListener('focus', showTooltip);
+      targetElement.removeEventListener('blur', hideTooltip);
     };
   }, [trigger, targetElement, showTooltip, hideTooltip]);
 
@@ -175,18 +190,34 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
     placement,
     modifiers: [
       {
-        name: "arrow",
+        name: 'arrow',
         options: { element: arrowElement, padding: arrowPadding },
       },
-      { name: "offset", options: { offset: tooltipOffset } },
-      { name: "preventOverflow", options: { padding: tooltipPadding } },
+      { name: 'offset', options: { offset: tooltipOffset } },
+      { name: 'preventOverflow', options: { padding: tooltipPadding } },
     ],
   });
 
   const tooltip = (
-    <StyledTooltip ref={setTooltipElement} style={styles.popper} {...attributes.popper}>
-      <ThemeProvider theme={invertTheme}>{content}</ThemeProvider>
-      <Arrow ref={setArrowElement} style={styles.arrow} />
+    <StyledTooltip
+      ref={setTooltipElement}
+      style={{
+        ...styles.popper,
+        background,
+        padding: stylePadding,
+      }}
+      {...attributes.popper}
+    >
+      <ThemeProvider theme={defaultTheme => invertTheme(defaultTheme, invert)}>
+        {content}
+      </ThemeProvider>
+      {!hideArrow && (
+        <Arrow
+          ref={setArrowElement}
+          background={background}
+          style={styles.arrow}
+        />
+      )}
     </StyledTooltip>
   );
 
@@ -196,6 +227,7 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
     targetRef: setTargetElement,
     tooltip: tooltipInPortal ?? tooltip,
     tooltipVisible: visible,
+    close: hideTooltip,
   };
 };
 

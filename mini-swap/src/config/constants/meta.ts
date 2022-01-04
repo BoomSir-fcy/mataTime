@@ -6,7 +6,7 @@ const PAGE_TITLE = 'Magician'
 export const DEFAULT_META: PageMeta = {
   title: PAGE_TITLE,
   description:
-    'The most popular AMM on Polygon by user count! Earn MBT through yield farming, then stake it in Syrup Pools to earn more tokens! Initial Farm Offerings, NFTs, and more, on a platform you can trust.',
+    'The most popular AMM on BscScan by user count! Earn MBT through yield farming, then stake it in Syrup Pools to earn more tokens! Initial Farm Offerings, NFTs, and more, on a platform you can trust.',
   image: '/images/dinosaur.jpg',
 }
 

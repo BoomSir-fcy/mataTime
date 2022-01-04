@@ -14,6 +14,13 @@ import { PoolsState } from './pools/types';
 import * as walletAction from './wallet/actions';
 import { Post, postReducer, postAction, fetchPostAsync } from './post';
 import picknftReducer from './picknft';
+import {
+  searchReducer,
+  searchAction,
+  fetchSearchPeopleAsync,
+  fetchSearchAsync,
+} from './search';
+import { SearchState } from './search/types';
 
 import { TaskState } from './task/type';
 import { PickNftState } from './types';
@@ -26,6 +33,7 @@ export interface Store {
   task: TaskState;
   post: Post;
   pickNft: PickNftState;
+  search: SearchState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -41,6 +49,7 @@ export const store = configureStore({
     task: taskReduce,
     post: postReducer,
     pickNft: picknftReducer,
+    search: searchReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -56,10 +65,13 @@ export const storeAction = {
   ...coinsAction,
   ...walletAction,
   ...postAction,
+  ...searchAction,
 };
 export const fetchThunk = {
   fetchUserInfoAsync,
   fetchPostAsync,
+  fetchSearchPeopleAsync,
+  fetchSearchAsync,
 };
 
 export const Dispatch = {

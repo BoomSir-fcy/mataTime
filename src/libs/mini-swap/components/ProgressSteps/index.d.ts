@@ -1,3 +1,4 @@
+/// <reference types="react" />
 interface ProgressCirclesProps {
     steps: boolean[];
     disabled?: boolean;

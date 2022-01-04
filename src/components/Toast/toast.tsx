@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 export const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
   return (
     <ToastContainer
-      containerId="toast"
-      position="top-right"
+      containerId='toast'
+      position='top-right'
       limit={100}
       autoClose={3000}
       newestOnTop={false}
@@ -17,6 +17,7 @@ export const ToastComponents: React.FC<ToastContainerProps> = React.memo(() => {
       pauseOnFocusLoss
       draggable
       pauseOnHover
+      style={{ zIndex: '99999', transform: 'translateZ(1px)' }}
     />
   );
 });

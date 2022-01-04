@@ -1,5 +1,7 @@
+import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config';
 import { createGlobalStyle } from 'styled-components';
 import { PancakeTheme } from 'uikit';
+import { mediaQueries } from 'uikit/theme/base';
 
 declare module 'styled-components' {
   export interface DefaultTheme extends PancakeTheme {
@@ -61,6 +63,7 @@ const GlobalStyle = createGlobalStyle`
   [role="button"] {
     cursor: pointer;
   }
+
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -97,12 +100,18 @@ const GlobalStyle = createGlobalStyle`
   input[type=number] {
     -moz-appearance: textfield;
   }
+  input[type=search]{
+    -webkit-appearance:none;
+  }
+  input[type=search]::-webkit-search-cancel-button {
+    display: none;
+  }
 
   * {
-    font-family: Futura, 'SourceHanSansCN', sans-serif;
+    font-family: Arial, 'SourceHanSansCN', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    -webkit-overflow-scrolling: touch;
+    /* -webkit-overflow-scrolling: touch; */
   }
   /* html, body{
     height: 100%;
@@ -113,7 +122,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${({ theme }) => theme.colors.background};
     overflow-y: scroll;
     /* overflow-x: auto; */
-    &.ReactModal__Body--open, &.mini-swap-Modal__Body--open{
+    &.ReactModal__Body--open, &.mini-swap-Modal__Body--open, &.${CONNECT_WALLET_BODY_CLASS_NAME}{
       overflow: hidden;
       padding-right: 8px;
     }
@@ -127,6 +136,79 @@ const GlobalStyle = createGlobalStyle`
     /* 点击图片放大层级 */
     .react-images__positioner{
       z-index:99999;
+    }
+  }
+
+  .show-media-lg {
+    display: none;
+    ${mediaQueries.lg} {
+      display: block;
+    }
+  }
+  .show-media-md {
+    display: none;
+    ${mediaQueries.md} {
+      display: block;
+    }
+  }
+  .show-media-nav {
+    display: none;
+    ${mediaQueries.nav} {
+      display: block;
+    }
+  }
+  .show-media-sm {
+    display: none;
+    ${mediaQueries.sm} {
+      display: block;
+    }
+  }
+  .show-media-xl {
+    display: none;
+    ${mediaQueries.xl} {
+      display: block;
+    }
+  }
+  .show-media-xs {
+    display: none;
+    ${mediaQueries.xs} {
+      display: block;
+    }
+  }
+  .hide-media-lg {
+    display: block;
+    ${mediaQueries.lg} {
+      display: none;
+    }
+  }
+  .hide-media-md {
+    display: block;
+    ${mediaQueries.md} {
+      display: none;
+    }
+  }
+  .hide-media-nav {
+    display: block;
+    ${mediaQueries.nav} {
+      display: none;
+    }
+  }
+  .hide-media-sm {
+    display: block;
+    ${mediaQueries.sm} {
+      display: none;
+    }
+  }
+  .hide-media-xl {
+    display: block;
+    ${mediaQueries.xl} {
+      display: none;
+    }
+  }
+  .hide-media-xs {
+    display: block;
+    ${mediaQueries.xs} {
+      display: none;
     }
   }
 `;
