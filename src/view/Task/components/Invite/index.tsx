@@ -4,28 +4,27 @@ import styled from 'styled-components';
 import { Box, Text, Flex, Button, Empty } from 'uikit';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { useDispatch } from 'react-redux';
-import {
-  GetTaskTag,
-  useFetchInviteFriendsList,
-  useInviteCount,
-} from 'view/Task/hooks/matter';
+import { GetTaskTag, useInviteCount } from 'view/Task/hooks/matter';
 import { Variant, Group } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
 import TaskItem from '../TaskContent/TaskItem';
 import { useTranslation } from 'contexts/Localization';
 import { useTask } from 'store/task/hooks';
 import { partition } from 'lodash';
-import SpecialInvite from './SpecialInvite';
-import FriendsList from './FriendsList';
 import InviteModal from './InviteModal';
 import { useWeb3React } from '@web3-react/core';
 import { useToast } from 'hooks';
 import { copyContent } from 'utils';
 import { shortenAddress } from 'utils/contract';
 import Header from '../Header';
+import { useFetchNftList } from 'view/Login/hook';
+import { Step } from './step';
+import { StakeNFT } from '../NftList';
 import useMenuNav from 'hooks/useMenuNav';
+import { Link } from 'react-router-dom';
+import { useStore } from 'store';
 
-const ContentBox = styled(Flex)`
+export const ContentBox = styled(Flex)`
   padding: 10px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
@@ -110,19 +109,20 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
+  useFetchNftList();
   const { inviteInfo } = useInviteCount();
-  const { list, pageNum, pageSize, setPageNum, loading, total } =
-    useFetchInviteFriendsList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { toastSuccess, toastError } = useToast();
   const { taskList } = useTask();
   const { data } = taskList;
-  const [inviteList, setInviteList] = useState([]);
   const [inviteType, setInviteType] = useState(1);
   const [visible, setVisible] = useState(false);
   const { isMobile } = useMenuNav();
+  const [inviteList, setInviteList] = useState([]);
+
+  const NftList = useStore(p => p.loginReducer.nftList);
 
   useEffect(() => {
     if (data.length) {
@@ -132,13 +132,6 @@ const Invite: React.FC = () => {
       dispatch(fetchTaskListAsync({ isSignIn: false }));
     }
   }, [data.length, dispatch]);
-
-  const handlePageClick = useCallback(
-    event => {
-      setPageNum(event.selected + 1);
-    },
-    [setPageNum],
-  );
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
@@ -194,9 +187,14 @@ const Invite: React.FC = () => {
         </ContentBox>
         {/* 普通邀请 */}
         <ContentBox flexDirection='column'>
-          <Text mb='25px' fontSize='18px' bold>
-            {t('Invitation Overview')}
-          </Text>
+          <Flex justifyContent='space-between'>
+            <Text mb='25px' fontSize='18px' bold>
+              Invitation Overview
+            </Text>
+            <Button as={Link} to='/task/friendsList'>
+              {t('邀请记录')}
+            </Button>
+          </Flex>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
               <Flex mb='10px' alignItems='center'>
@@ -285,27 +283,27 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {/* <ContentBox>
-          <Text fontSize="18px" bold>Special Invitation</Text>
-        </ContentBox>
-        <ContentBox>
-          <SpecialInvite />
-        </ContentBox> */}
-        <ContentBox>
-          <Text fontSize='18px' bold>
-            {t('Invited Friends List')}
-          </Text>
-        </ContentBox>
-        <ContentBox>
-          <FriendsList
-            loading={loading}
-            list={list}
-            total={total}
-            pageNum={pageNum}
-            pageSize={pageSize}
-            handlePageClick={handlePageClick}
-          />
-        </ContentBox>
+        {NftList.length && (
+          <>
+            <ContentBox>
+              <Text fontSize='18px' bold>
+                Special Invitation
+              </Text>
+            </ContentBox>
+            <ContentBox>
+              <Flex flexDirection='column'>
+                <Text>{t('SpecialInvitationDescribe')}</Text>
+                <Step />
+              </Flex>
+            </ContentBox>
+            <StakeNFT
+              handleClickNft={() => {
+                setInviteType(2);
+                setVisible(true);
+              }}
+            />
+          </>
+        )}
 
         {/* 复制链接弹窗 */}
         <InviteModal

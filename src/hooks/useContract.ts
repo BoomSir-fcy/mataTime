@@ -11,6 +11,7 @@ import {
   getSinglePoolContract,
   getCashierDeskContract,
   getRewardAuthorContract,
+  getInvitationContract,
   getExPhotoContract,
   getTicketNftContract,
 } from 'utils/contractHelpers';
@@ -125,6 +126,10 @@ export const useCashierDesk = () => {
   return useMemo(() => getCashierDeskContract(library.getSigner()), [library]);
 };
 
+export const useInvitation = () => {
+  const { library } = useActiveWeb3React();
+  return useMemo(() => getInvitationContract(library.getSigner()), [library]);
+};
 export const useExPhotoContract = () => {
   const { library } = useActiveWeb3React();
   return useMemo(() => getExPhotoContract(library.getSigner()), [library]);

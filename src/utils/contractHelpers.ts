@@ -16,6 +16,7 @@ import {
   getTimeShopAddress,
   getCashierDeskAddress,
   getRewardAuthorAddress,
+  getInvitationAddress,
   getExPhotoAddress,
   getTicketNftAddress,
 } from 'utils/addressHelpers';
@@ -25,6 +26,7 @@ import bep20Abi from 'config/abi/erc20.json';
 import erc721Abi from 'config/abi/erc721.json';
 import MultiCallAbi from 'config/abi/Multicall.json';
 import CashierDeskAbi from 'config/abi/CashierDesk.json';
+import InvitationAbi from 'config/abi/Invitation.json';
 import ExPhotoAbi from 'config/abi/exphoto.json';
 import mysteryBoxAbi from 'config/abi/mysteryBox.json';
 
@@ -98,6 +100,13 @@ export const getCashierDeskContract = (
 ) => {
   return getContract(CashierDeskAbi, getCashierDeskAddress(), signer);
 };
+
+export const getInvitationContract = (
+  signer?: ethers.Signer | ethers.providers.Provider
+) => {
+  return getContract(InvitationAbi, getInvitationAddress(), signer);
+};
+
 export const getExPhotoContract = (
   signer?: ethers.Signer | ethers.providers.Provider,
 ) => {

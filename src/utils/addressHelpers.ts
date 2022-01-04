@@ -59,6 +59,9 @@ export const getBnbAddress = () => {
   return getAddress(addresses.Wbnb);
 };
 
+export const getInvitationAddress = () => {
+  return getAddress(addresses.Invitation);
+};
 export const getDsgAvatarNftAddress = () => {
   return getAddress(addresses.ExPhotoNft);
 };

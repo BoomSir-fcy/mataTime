@@ -7,14 +7,15 @@ import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 const StepOutBox = styled(Box)`
-  margin-left: 30px;
   ${mediaQueriesSize.marginb}
 `;
 
 const StepBox = styled(Flex)`
+  width: 80%;
   justify-content: space-between;
   align-items: center;
   padding: 16px 5px 30px;
+  margin: 0 auto;
   .active {
     background: ${({ theme }) => theme.colors.gradients.buttonBg};
     border-width: 1px;
@@ -48,8 +49,12 @@ const Line = styled.div`
 const PositionText = styled(Text)`
   position: absolute;
   width: max-content;
-  top: 60px;
-  max-width: 150px;
+  top: 40px;
+  max-width: 100px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    top: 60px;
+    max-width: 160px;
+  }
 `;
 export const Step: React.FC<{ step?: number }> = React.memo(({ step }) => {
   const { t } = useTranslation();
