@@ -82,8 +82,8 @@ const NowrapBtn = styled(Button)`
   word-break: keep-all;
 `;
 const AvatarBox = styled.div`
-  width: 102px;
-  height: 104px;
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
 `;
 

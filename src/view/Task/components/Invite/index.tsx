@@ -26,8 +26,11 @@ import Header from '../Header';
 import useMenuNav from 'hooks/useMenuNav';
 
 const ContentBox = styled(Flex)`
-  padding: 10px 14px;
+  padding: 5px 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 10px 14px;
+  }
 `;
 const CardBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -264,7 +267,7 @@ const Invite: React.FC = () => {
                 </Flex>
               </Box>
               <Box className='bottom-card'>
-                <Flex justifyContent='space-between' alignItems='end'>
+                <Flex justifyContent='space-between' alignItems='flex-end'>
                   <Flex flexDirection='column'>
                     <Text color='textPrimary' fontSize='20px' bold>
                       {`${inviteInfo.proportion}%`}

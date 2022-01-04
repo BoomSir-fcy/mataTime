@@ -20,8 +20,8 @@ const FlexButton = styled(Flex)`
 `;
 
 const CompleteButton = styled(Button)`
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.background};
+  /* color: ${({ theme }) => theme.colors.white}; */
+  /* background-color: ${({ theme }) => theme.colors.background}; */
 `;
 
 export const SignUpcomplete = React.memo(() => {

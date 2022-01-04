@@ -6,7 +6,7 @@ export const scales = {
   LD: 'ld',
   MD: 'md',
   SM: 'sm',
-  XS: 'xs'
+  XS: 'xs',
 } as const;
 
 export type Scale = typeof scales[keyof typeof scales];
@@ -14,26 +14,26 @@ export type Scale = typeof scales[keyof typeof scales];
 export enum SortType {
   DEFAULT = 'default',
   UP = 'up',
-  DOWN = 'down'
+  DOWN = 'down',
 }
 
 export const scaleVariants = {
   [scales.LD]: {
     minWidth: '108px',
-    minWidthBig: '108px'
+    minWidthBig: '108px',
   },
   [scales.MD]: {
     minWidth: '148px',
-    minWidthBig: '168px'
+    minWidthBig: '168px',
   },
   [scales.SM]: {
     minWidth: '80px',
-    minWidthBig: '128px'
+    minWidthBig: '128px',
   },
   [scales.XS]: {
     minWidth: '60px',
-    minWidthBig: '100px'
-  }
+    minWidthBig: '100px',
+  },
 };
 
 const DropDownHeader = styled.div`
@@ -69,7 +69,14 @@ const DropDownListContainer = styled.div<{ scale: Scale }>`
   }
 `;
 
-const DropDownContainer = styled.div<{ isOpen: boolean, width: number, scale: Scale, fillWidth: boolean, height: number, childrenHeight: string }>`
+const DropDownContainer = styled.div<{
+  isOpen: boolean;
+  width: number;
+  scale: Scale;
+  fillWidth: boolean;
+  height: number;
+  childrenHeight: string;
+}>`
   cursor: pointer;
   width: ${({ width, fillWidth }) => (fillWidth ? '100%' : `${width}px`)};
   position: relative;
@@ -105,11 +112,12 @@ const DropDownContainer = styled.div<{ isOpen: boolean, width: number, scale: Sc
         box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
       }
     `}
-    ${props =>
-    props.isOpen && props.childrenHeight &&
+  ${props =>
+    props.isOpen &&
+    props.childrenHeight &&
     css`
       ${DropDownListContainer} {
-        height:${props.childrenHeight};
+        height: ${props.childrenHeight};
         overflow-y: auto;
         transform: scaleY(1);
         opacity: 1;
@@ -160,7 +168,7 @@ export interface SelectProps {
   onSortClick?: () => void;
   scale?: Scale;
   sort?: SortType;
-  childrenHeight?: string
+  childrenHeight?: string;
 }
 
 export interface OptionProps {
@@ -169,7 +177,19 @@ export interface OptionProps {
   id?: string | number;
 }
 
-export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultId, disabled, onChange, sort, scale, activeIndex, onSortClick, fillWidth, children, childrenHeight }) => {
+export const Select: React.FunctionComponent<SelectProps> = ({
+  options,
+  defaultId,
+  disabled,
+  onChange,
+  sort,
+  scale,
+  activeIndex,
+  onSortClick,
+  fillWidth,
+  children,
+  childrenHeight,
+}) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -177,7 +197,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const toggling = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled) return
+    if (disabled) return;
     setIsOpen(!isOpen);
     event.stopPropagation();
   };
@@ -204,7 +224,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
   useEffect(() => {
     setContainerSize({
       width: dropdownRef.current.offsetWidth, // Consider border
-      height: dropdownRef.current.offsetHeight
+      height: dropdownRef.current.offsetHeight,
     });
 
     const handleClickOutside = () => {
@@ -218,7 +238,14 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
   }, []);
 
   return (
-    <DropDownContainer childrenHeight={childrenHeight} scale={scale} isOpen={isOpen} fillWidth={fillWidth} ref={containerRef} {...containerSize}>
+    <DropDownContainer
+      childrenHeight={childrenHeight}
+      scale={scale}
+      isOpen={isOpen}
+      fillWidth={fillWidth}
+      ref={containerRef}
+      {...containerSize}
+    >
       {/* {
         sort && (
           sort === SortType.DOWN
@@ -234,7 +261,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
           {children}
         </DropDownHeader>
       )}
-      <ArrowDropDownIcon className="drop-svg" color="text" onClick={toggling} />
+      <ArrowDropDownIcon className='drop-svg' color='text' onClick={toggling} />
       <DropDownListContainer scale={scale}>
         <DropDownList ref={dropdownRef}>
           {options.map((option, index) =>
@@ -242,7 +269,7 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
               <ListItem onClick={onOptionClicked(index)} key={option.label}>
                 <Text>{option.label}</Text>
               </ListItem>
-            ) : null
+            ) : null,
           )}
         </DropDownList>
       </DropDownListContainer>
@@ -251,5 +278,5 @@ export const Select: React.FunctionComponent<SelectProps> = ({ options, defaultI
 };
 
 Select.defaultProps = {
-  scale: scales.MD
+  scale: scales.MD,
 };

@@ -63,6 +63,7 @@ export const PopupContentWrapper = styled(Box)`
         .cloums {
           min-width: 0;
           display: flex;
+          align-items: center;
           color: ${({ theme }) => theme.colors.textTips};
         }
         p {
@@ -142,6 +143,7 @@ export const FollowContentWrapper = styled(Box)`
         .cloums {
           min-width: 0;
           display: flex;
+          align-items: center;
           color: ${({ theme }) => theme.colors.textTips};
         }
         p {
