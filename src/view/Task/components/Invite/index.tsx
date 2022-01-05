@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Crumbs, Icon } from 'components';
 import styled from 'styled-components';
-import { Box, Text, Flex, Button, Empty } from 'uikit';
+import { Box, Text, Flex, Button, Empty, Spinner } from 'uikit';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { useDispatch } from 'react-redux';
 import { GetTaskTag, useInviteCount } from 'view/Task/hooks/matter';
@@ -117,7 +117,6 @@ const Invite: React.FC = () => {
   const { toastSuccess, toastError } = useToast();
   const { taskList } = useTask();
   const { data } = taskList;
-  const [inviteType, setInviteType] = useState(1);
   const [visible, setVisible] = useState(false);
   const { isMobile } = useMenuNav();
   const [inviteList, setInviteList] = useState([]);
@@ -136,14 +135,6 @@ const Invite: React.FC = () => {
   // 复制链接
   const Url = `${window.location.origin}/login`;
   const copyUrl = `${Url}?InviteAddress=${account}`;
-  const onCopyLink = useCallback(() => {
-    // 普通邀请
-    if (inviteType === 1) {
-      copyContent(copyUrl);
-      toastSuccess(t('CopyLinkSuccess'));
-      setVisible(false);
-    }
-  }, [inviteType, copyUrl]);
 
   const tag: Variant = useMemo(() => GetTaskTag(Group.INVITE), []);
 
@@ -271,7 +262,6 @@ const Invite: React.FC = () => {
                   </Flex>
                   <Button
                     onClick={() => {
-                      setInviteType(1);
                       setVisible(true);
                     }}
                   >
@@ -283,7 +273,7 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {NftList.length && (
+        {NftList.length ? (
           <>
             <ContentBox>
               <Text fontSize='18px' bold>
@@ -296,22 +286,25 @@ const Invite: React.FC = () => {
                 <Step />
               </Flex>
             </ContentBox>
-            <StakeNFT
-              handleClickNft={() => {
-                setInviteType(2);
-                setVisible(true);
-              }}
-            />
+            <StakeNFT nftList={NftList} />
           </>
+        ) : (
+          <Flex justifyContent='center' alignItems='center'>
+            <Spinner />
+          </Flex>
         )}
 
         {/* 复制链接弹窗 */}
         <InviteModal
-          type={inviteType}
+          type={1}
           t={t}
           visible={visible}
           setVisible={() => setVisible(false)}
-          onCopyLink={onCopyLink}
+          onCopyLink={() => {
+            copyContent(copyUrl);
+            toastSuccess(t('CopyLinkSuccess'));
+            setVisible(false);
+          }}
         />
       </Box>
     </>

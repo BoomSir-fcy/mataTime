@@ -1,10 +1,93 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Api } from 'apis';
+import BigNumber from 'bignumber.js';
 import { taskContents } from './config';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { Group } from '../type';
 import { useWeb3React } from '@web3-react/core';
 import { useImmer } from 'use-immer';
+import { useInvitation } from 'hooks/useContract';
+import invitationAbi from 'config/abi/Invitation.json';
+import { getInvitationAddress } from 'utils/addressHelpers';
+import multicall from 'utils/multicall';
+import { getBalanceNumber } from 'utils/formatBalance';
+
+// 注册生成的邀请码
+export const useGenCodes = () => {
+  const inviteContract = useInvitation();
+  const handleGenCodes = useCallback(async (nftId: number|string, codeHashs: string[]) => {
+    console.log(inviteContract, 'inviteContract')
+    const tx = await inviteContract.genCodes(nftId, codeHashs)
+    const receipt = await tx.wait()
+    console.log(receipt);
+    
+    return receipt.status
+  }, [inviteContract])
+
+  return { onGenCodes: handleGenCodes }
+}
+
+
+// 生成邀请码的个数
+export const getNftGenCodeCount = async (nftId: number) => {
+  const inviteAddress = getInvitationAddress();
+  const calls = [
+    {
+      address: inviteAddress,
+      name: 'nftGenCodeCount',
+      params: [nftId],
+    },
+  ];
+  try {
+    const res = await multicall(invitationAbi, calls);
+    return getBalanceNumber(new BigNumber(res[0][0].toJSON().hex), 0);
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * 基本信息
+ * @returns {
+ *  nft_  可以分发邀请码的NFT地址
+ *  userProfile_  用户合约地址
+ *  codeLockDuration_  邀请码锁定有效时间
+ *  maxGendCodeCount_  一个NFT最多可生成的NFT数量
+ *  toToken_  邀请码生成的NFT合约地址
+ * }
+ */
+export const useView = () => {
+  const inviteContract = useInvitation();
+  const handleView = useCallback(async () => {
+    const tx = await inviteContract.getView()
+    const receipt = await tx.wait()
+    console.log('getView=====>', receipt);
+    
+    return receipt.status
+  }, [inviteContract])
+  return { onView: handleView }
+}
+
+/**
+ * 邀请码信息
+ * @returns {
+ *  lockUser  锁定的用户(如果被锁定的话)
+ *  lockedAt  锁定时间, 如果锁定时间 + 邀请码锁定有效时间 > 当前时间 并且邀请码没有被使用的话，其它用户则可以锁定
+ *  generator  生成邀请码的用户
+ *  state  邀请码现在的状态 1.未使用 2.已使用
+ * }
+ */
+export const useCodeView = () => {
+  const inviteContract = useInvitation();
+  const handleCodeView = useCallback(async (codeHash: string) => {
+    const tx = await inviteContract.getCodeView(codeHash)
+    const receipt = await tx.wait()
+    console.log('getCodeView=====>', receipt);
+    
+    return receipt.status
+  }, [inviteContract])
+  return { onCodeView: handleCodeView }
+}
 
 // 邀请统计
 export const useInviteCount = () => {
