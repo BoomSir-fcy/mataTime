@@ -291,6 +291,7 @@
   "AccountAmount": "Amount",
   "AccountBlock": "Block",
   "Account Minimum withdrawal amount %amount%": "Minimum withdrawal amount %amount%",
+  "Account Fee withdrawal amount %amount%": "Withdrawal fee %amount%",
   "Account Available Balance": "Available Balance",
   "Account Please enter the recharge amount": "Please enter the recharge amount",
   "Account Please enter the withdrawal amount": "Please enter the withdrawal amount",

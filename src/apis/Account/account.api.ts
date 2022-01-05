@@ -22,6 +22,12 @@ export class AccountApi extends Http {
     return res;
   }
 
+  // 手续费
+  async getWithdrawFee() {
+    const res = await this.get('/v1/wallet/get_withdraw_fee');
+    return res;
+  }
+
   async TimeIncomerecord(params?: Api.Account.TimeIncomerecord) {
     const res = await this.get('/v1/wallet/incomerecord', params);
     return res;

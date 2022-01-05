@@ -171,6 +171,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const [day, setday] = useState(7);
   const [readType, setreadType] = useState(1);
   const [TokenWithDrawMinNum, setTokenWithDrawMinNum] = useState('0');
+  const [TokenWithDrawFee, setTokenWithDrawFee] = useState('0');
   const timeAddress = getTimeAddress();
   const MatterAddress = getMatterAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
@@ -181,7 +182,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const MatterIncometoday = useStore(p => p.wallet.MatterIncometoday);
   const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
   const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
-  const WithDrawMinNum = useStore(p => p.wallet.WithDrawMinNum);
+  const WithDrawSetting = useStore(p => p.wallet.WithDrawSetting);
 
   // useFetTimeIncometoday(day);
   // useFetTimeIncomeList(1, pageSize, 1);
@@ -242,11 +243,13 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
 
   useEffect(() => {
     if (activeToken === 'TIME') {
-      setTokenWithDrawMinNum(WithDrawMinNum.time_minimum);
+      setTokenWithDrawMinNum(WithDrawSetting.time_minimum);
+      setTokenWithDrawFee(WithDrawSetting?.withdraw_time_fee);
     } else {
-      setTokenWithDrawMinNum(WithDrawMinNum.meta_minimum);
+      setTokenWithDrawMinNum(WithDrawSetting.meta_minimum);
+      setTokenWithDrawFee(WithDrawSetting?.withdraw_meta_fee);
     }
-  }, [WithDrawMinNum, activeToken]);
+  }, [WithDrawSetting, activeToken]);
   useEffect(() => {
     const getTokenType = () => {
       // 获取路由的token参数
@@ -309,6 +312,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           Balance={walletBalance}
           TokenAddr={tokenAddress}
           TokenWithDrawMinNum={TokenWithDrawMinNum}
+          TokenWithDrawFee={TokenWithDrawFee}
         />
         {!isMobile && (
           <Recharge

@@ -290,6 +290,7 @@
   "AccountAmount": "金額",
   "AccountBlock": "區塊",
   "Account Minimum withdrawal amount %amount%": "最小提現額度%amount%",
+  "Account Fee withdrawal amount %amount%": "提現手续费%amount%",
   "Account Available Balance": "可用余額",
   "Account Please enter the recharge amount": "請輸入充值金額",
   "Account Please enter the withdrawal amount": "請輸入提現金額",
