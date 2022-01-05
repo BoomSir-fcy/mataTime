@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { usePopper } from 'react-popper';
 import { ThemeProvider, DefaultTheme } from 'styled-components';
+import { isApp } from 'utils/client';
 import { light, dark } from '../../theme';
 import isTouchDevice from '../../util/isTouchDevice';
 import { StyledTooltip, Arrow } from './StyledTooltip';
@@ -175,6 +176,13 @@ const useTooltip = (
       targetElement.removeEventListener('blur', hideTooltip);
     };
   }, [trigger, targetElement, showTooltip, hideTooltip]);
+
+  useEffect(() => {
+    if (trigger === 'click' && isApp()) {
+      document.addEventListener('scroll', hideTooltip);
+    }
+    return () => document.removeEventListener('scroll', hideTooltip);
+  }, [trigger, hideTooltip]);
 
   // On small screens Popper.js tries to squeeze the tooltip to available space without overflowing beyound the edge
   // of the screen. While it works fine when the element is in the middle of the screen it does not handle well the
