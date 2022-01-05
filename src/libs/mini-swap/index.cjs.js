@@ -133,6 +133,7 @@ var Live$2 = "Live";
 var Start$2 = "Start";
 var Finish$2 = "Finish";
 var Enable$2 = "Enable";
+var Enabled$2 = "Enable";
 var Enabling$2 = "Enabling";
 var Expired$2 = "Expired";
 var Calculating$2 = "Calculating";
@@ -262,6 +263,7 @@ var translations = {
 	"Your volume": "Your volume",
 	"Since start": "Since start",
 	Enable: Enable$2,
+	Enabled: Enabled$2,
 	Enabling: Enabling$2,
 	Expired: Expired$2,
 	Calculating: Calculating$2,
@@ -512,6 +514,7 @@ var Live$1 = "实时";
 var Start$1 = "开始";
 var Finish$1 = "完成";
 var Enable$1 = "启用";
+var Enabled$1 = "已启用";
 var Enabling$1 = "启用";
 var Expired$1 = "已过期";
 var Calculating$1 = "正在计算";
@@ -642,6 +645,7 @@ var translationsZhCN = {
 	"Your volume": "交易量",
 	"Since start": "自开始以来的时间",
 	Enable: Enable$1,
+	Enabled: Enabled$1,
 	Enabling: Enabling$1,
 	Expired: Expired$1,
 	Calculating: Calculating$1,
@@ -895,6 +899,7 @@ var Live = "實時";
 var Start = "開始";
 var Finish = "完成";
 var Enable = "啟用";
+var Enabled = "已啟用";
 var Enabling = "啟用";
 var Expired = "已過期";
 var Calculating = "正在計算";
@@ -1025,6 +1030,7 @@ var translationsZhTW = {
 	"Your volume": "交易量",
 	"Since start": "自開始以來的時間",
 	Enable: Enable,
+	Enabled: Enabled,
 	Enabling: Enabling,
 	Expired: Expired,
 	Calculating: Calculating,

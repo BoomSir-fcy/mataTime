@@ -39,7 +39,7 @@ export const ReplyModal = React.memo((props: IProp) => {
   } = props;
 
   // 评论
-  const sendArticle = (res, imags_list, remind_user) => {
+  const sendArticle = (res, imags_list, remind_user, reset) => {
     if (!res) return;
     if (replyType === 'comment') {
       // 针对评论
@@ -50,6 +50,7 @@ export const ReplyModal = React.memo((props: IProp) => {
         remind_user,
       }).then(res => {
         if (Api.isSuccess(res)) {
+          reset && reset();
           toastSuccess(t('comment success'));
           onSuccess();
         }

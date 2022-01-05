@@ -337,8 +337,8 @@ export const Editor = (props: Iprops) => {
       JSON.stringify(newValue2),
       imgList.join(','),
       userIdList.join(','),
+      restInput,
     );
-    restInput();
   };
 
   const searchSelect = (data, type) => {

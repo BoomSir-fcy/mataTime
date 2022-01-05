@@ -71,7 +71,12 @@ export default function HttpUpdater() {
   }, [availableBalance]);
 
   return (
-    <ModalWrapper padding='0' customizeTitle visible={visible}>
+    <ModalWrapper
+      overflow='visible'
+      padding='0'
+      customizeTitle
+      visible={visible}
+    >
       <InsufficientBalanceModal
         title={t('Insufficient $TIME balance')}
         tips={t(
