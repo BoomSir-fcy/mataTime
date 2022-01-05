@@ -9,7 +9,6 @@ import { copyContent } from 'utils';
 import { ContentBox } from '../Invite';
 import InviteModal from '../Invite/InviteModal';
 import { useToast } from 'hooks';
-import { fetchInviteCode } from 'store/task/reducer';
 import { Api } from 'apis';
 import { getNftGenCodeCount, useGenCodes } from 'view/Task/hooks/matter';
 import { useImmer } from 'use-immer';

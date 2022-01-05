@@ -46,48 +46,6 @@ export const getNftGenCodeCount = async (nftId: number) => {
   }
 }
 
-/**
- * 基本信息
- * @returns {
- *  nft_  可以分发邀请码的NFT地址
- *  userProfile_  用户合约地址
- *  codeLockDuration_  邀请码锁定有效时间
- *  maxGendCodeCount_  一个NFT最多可生成的NFT数量
- *  toToken_  邀请码生成的NFT合约地址
- * }
- */
-export const useView = () => {
-  const inviteContract = useInvitation();
-  const handleView = useCallback(async () => {
-    const tx = await inviteContract.getView()
-    const receipt = await tx.wait()
-    console.log('getView=====>', receipt);
-    
-    return receipt.status
-  }, [inviteContract])
-  return { onView: handleView }
-}
-
-/**
- * 邀请码信息
- * @returns {
- *  lockUser  锁定的用户(如果被锁定的话)
- *  lockedAt  锁定时间, 如果锁定时间 + 邀请码锁定有效时间 > 当前时间 并且邀请码没有被使用的话，其它用户则可以锁定
- *  generator  生成邀请码的用户
- *  state  邀请码现在的状态 1.未使用 2.已使用
- * }
- */
-export const useCodeView = () => {
-  const inviteContract = useInvitation();
-  const handleCodeView = useCallback(async (codeHash: string) => {
-    const tx = await inviteContract.getCodeView(codeHash)
-    const receipt = await tx.wait()
-    console.log('getCodeView=====>', receipt);
-    
-    return receipt.status
-  }, [inviteContract])
-  return { onCodeView: handleCodeView }
-}
 
 // 邀请统计
 export const useInviteCount = () => {
