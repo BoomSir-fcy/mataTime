@@ -70,7 +70,7 @@ class ListComponents extends React.Component<Iprops> {
   scrollRenderHandler() {
     if (!this.listBox.current) return false;
     if (
-      window.pageYOffset + window.innerHeight + 50 >=
+      window.pageYOffset + window.innerHeight + 300 >=
       this.listBox.current.offsetHeight + this.listBox.current.offsetTop
     ) {
       this.loadList(2);
