@@ -27,10 +27,26 @@ const CennerBox = styled(Container)`
   color: ${({ theme }) => theme.colors.white};
 `;
 const StepBox = styled(Box)`
-  padding: 0 20px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 0 40px;
+  padding: 10px 20px;
+  display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 20px 40px;
+    display: block;
   }
+`;
+const StepBoxMobile = styled(Box)`
+  padding: 10px 20px;
+  display: block;
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: none;
+  }
+`;
+const LeftBox = styled(Flex)`
+  flex: 1;
+  /* width: 100%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 62%;
+  } */
 `;
 
 const PickNft: React.FC = () => {
@@ -99,7 +115,7 @@ const PickNft: React.FC = () => {
             <MenuNav PickNft>
               <Tabbar onClick={setActiveIndex} activeIndex={activeIndex} />
             </MenuNav>
-            <Box>
+            <Box style={{ flex: 1 }}>
               <Crumbs zIndex={9} title={t(' ')} justifyContent='start'>
                 <Flex alignItems='baseline' flexWrap='wrap'>
                   <Text mr='20px' fontSize='18px' fontWeight='bold'>
@@ -112,23 +128,21 @@ const PickNft: React.FC = () => {
               </Crumbs>
               <Flex justifyContent='center' flexWrap='wrap'>
                 <MobileShow width='100%'>
-                  <StepBox>
+                  <StepBoxMobile>
                     <Step noTitle />
-                  </StepBox>
+                  </StepBoxMobile>
                   <ShowCard
                     balance={avatarBalance?.length}
                     avatarNft={avatarNfts}
                   />
                 </MobileShow>
-                <Flex flexWrap='wrap' flex='1'>
-                  <Flex flexDirection='column'>
-                    <MobileHide>
-                      <StepBox>
-                        <Step noTitle />
-                      </StepBox>
-                    </MobileHide>
+                <Flex flex='1'>
+                  <LeftBox flexDirection='column'>
+                    <StepBox>
+                      <Step noTitle />
+                    </StepBox>
                     <ListBox activeIndex={activeIndex} data={renderList} />
-                  </Flex>
+                  </LeftBox>
                   <MobileHide>
                     <ShowCard
                       balance={avatarBalance?.length}

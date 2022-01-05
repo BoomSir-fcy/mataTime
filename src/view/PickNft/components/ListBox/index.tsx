@@ -11,8 +11,7 @@ import FlexAutoWarpper from 'components/Layout/FlexAutoWarpper';
 import { updateSelectData } from 'store/picknft/actions';
 import { useStore } from 'store';
 
-const PageContainer = styled(Container)`
-  /* padding-top: 0; */
+const PageContainer = styled(Flex)`
   flex: 1;
   /* max-height: 50vh;
   overflow: auto; */
@@ -20,9 +19,9 @@ const PageContainer = styled(Container)`
   max-width: 600px;
   padding-left: 4px;
   padding-right: 4px;
-  ${({ theme }) => theme.mediaQueries.xs} {
+  /* ${({ theme }) => theme.mediaQueries.xs} {
     min-width: 348px;
-  }
+  } */
   /* ${({ theme }) => theme.mediaQueries.md} {
     max-height: none;
     overflow: hidden;
@@ -37,14 +36,12 @@ const BoxStyled = styled(Box)<{ disabled?: boolean }>`
   min-width: 138px;
   position: relative;
 `;
-const TextBoxStyled = styled(Box)<{ disabled?: boolean }>`
-  background-color: ${({ theme }) => theme.colors.background};
-`;
 const SelectIconStyled = styled(SelectIcon)`
   position: absolute;
   top: 8px;
   right: 8px;
   z-index: 8;
+  width: 32px;
 `;
 const CardStyled = styled(Card)<{ showLimit?: boolean }>`
   /* ${({ theme }) => theme.mediaQueriesSize.margin} */
@@ -58,7 +55,7 @@ const CardStyled = styled(Card)<{ showLimit?: boolean }>`
     display: inline-block;
     padding-bottom: 30%;
   } */
-  height: ${({ showLimit }) => (showLimit ? 'auto' : 'auto')};
+  height: max-content;
 `;
 
 const LimitBox = styled(Box)`
@@ -140,7 +137,7 @@ const ListBox: React.FC<Props> = ({ data, activeIndex }) => {
                 )}
                 <BoxStyled disabled={!item.enable} theme={light}>
                   {checkSelctActiceId(item) && (
-                    <SelectIconStyled color='primary' />
+                    <SelectIconStyled color='textPrimary' />
                   )}
 
                   <Image width={240} height={240} src={item.src} />

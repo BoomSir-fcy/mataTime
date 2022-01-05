@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ChromePicker } from 'react-color';
 import { Heading, Text, Card, Box, Image, Flex, Button, light } from 'uikit';
@@ -17,10 +17,15 @@ import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
 import { fetchNftApprovalAsync, fetchStuffAllLimitsAsync } from 'store/picknft';
 // import { fetchNftUserDataAsync } from 'store/nfts'
 import { formatHexadecimal } from 'utils/formatNumber';
-import { ConnectWalletButton } from 'components';
+import { ConnectWalletButton, Icon, ModalWrapper } from 'components';
 import { NftInfo } from 'store/types';
 import { useStore } from 'store';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import LockModal from '../pop/lock';
+import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 
+dayjs.extend(duration);
 interface ColorRgba {
   r: number;
   g: number;
@@ -32,9 +37,9 @@ const PageContainer = styled(Container)`
   padding-left: 4px;
   padding-right: 4px;
   padding-bottom: 0;
+  padding-top: 10px;
   ${({ theme }) => theme.mediaQueries.md} {
-    position: sticky;
-    top: 84px;
+    padding-top: 92px;
   }
 `;
 
@@ -85,6 +90,7 @@ const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
 const CardStyled = styled(Card)`
   padding: 16px;
   overflow: visible;
+  border-radius: 20px;
 `;
 
 const ImageStyled = styled(Image)<{ zIndex?: number }>`
@@ -152,6 +158,10 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
   const dispatch = useDispatch();
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
+  const [visible, setVisible] = useState(false);
+  const [LeftTime, setLeftTime] = useState(0);
+  const DownTime = useCountdownTime(LeftTime);
+
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],
@@ -182,11 +192,34 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
     setColorRgba(color.rgb);
   }, []);
 
+  const onClose = useCallback(() => {
+    setLeftTime(1641376800);
+    setVisible(false);
+  }, [setVisible]);
+
   return (
     <PageContainer>
+      <Flex justifyContent='end'>
+        <Flex
+          width='50%'
+          maxWidth='150px'
+          alignItems='baseline'
+          justifyContent='space-between'
+          mb='20px'
+        >
+          <Text fontSize='14px'>{t('锁定')}</Text>
+          <Text bold>{DownTime}</Text>
+          <Icon
+            size={23}
+            current={1}
+            name='icon-suo'
+            onClick={() => setVisible(true)}
+          />
+        </Flex>
+      </Flex>
       <CardStyled>
         <Heading mb='16px' textAlign='center'>
-          {t('The Original Dinos')}
+          {t('Bored Ape')}
         </Heading>
         <BoxStyled rgba={colorRgba}>
           {selectData.map(item => (
@@ -310,6 +343,15 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
           )}
         </Flex>
       </BoxPaddingStyled>
+      {/* 输入框弹窗 */}
+      <ModalWrapper
+        title={t('锁定NFT')}
+        creactOnUse
+        visible={visible}
+        setVisible={setVisible}
+      >
+        <LockModal onClose={onClose} />
+      </ModalWrapper>
       {/* <BoxPaddingStyled>
         <Card padding='8px 24px'>
           <Flex alignItems='center'>
