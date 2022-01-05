@@ -14,8 +14,8 @@ import { useStore } from 'store';
 const PageContainer = styled(Container)`
   /* padding-top: 0; */
   flex: 1;
-  max-height: 50vh;
-  overflow: auto;
+  /* max-height: 50vh;
+  overflow: auto; */
   min-width: 100%;
   max-width: 600px;
   padding-left: 4px;
@@ -23,10 +23,10 @@ const PageContainer = styled(Container)`
   ${({ theme }) => theme.mediaQueries.xs} {
     min-width: 348px;
   }
-  ${({ theme }) => theme.mediaQueries.md} {
+  /* ${({ theme }) => theme.mediaQueries.md} {
     max-height: none;
     overflow: hidden;
-  }
+  } */
 `;
 const BoxStyled = styled(Box)<{ disabled?: boolean }>`
   background-color: ${({ theme, disabled }) =>
@@ -44,7 +44,7 @@ const SelectIconStyled = styled(SelectIcon)`
   position: absolute;
   top: 8px;
   right: 8px;
-  z-index: 99;
+  z-index: 8;
 `;
 const CardStyled = styled(Card)<{ showLimit?: boolean }>`
   /* ${({ theme }) => theme.mediaQueriesSize.margin} */

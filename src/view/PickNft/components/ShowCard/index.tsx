@@ -200,15 +200,20 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
           ))}
         </BoxStyled>
         <PickerBox>
-          <Flex mt='8px' alignItems='center'>
-            <ShowColorPicker
-              rgba={colorRgba}
-              onClick={() => setDisplayColorPicker(true)}
-            />
-            <Box ml='8px'>
-              <Text fontSize='14px'>{t('Color')}</Text>
-              <Text fontSize='14px'>#{colorHex}</Text>
-            </Box>
+          <Flex alignItems='center' justifyContent='space-between'>
+            <Flex mt='8px' alignItems='center'>
+              <ShowColorPicker
+                rgba={colorRgba}
+                onClick={() => setDisplayColorPicker(true)}
+              />
+              <Box ml='8px'>
+                <Text fontSize='14px'>{t('Color')}</Text>
+                <Text fontSize='14px'>#{colorHex}</Text>
+              </Box>
+            </Flex>
+            <Button mt='8px' onClick={randomPickHandle}>
+              {t('Random')}
+            </Button>
           </Flex>
           {displayColorPicker && (
             <ColorPicker>
@@ -233,10 +238,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
         {t('Create you own personalized avatars!')}
       </Text>
       <BoxPaddingStyled>
-        <Flex justifyContent='space-between'>
-          <Button onClick={randomPickHandle} variant='secondary' scale='ld'>
-            {t('Random')}
-          </Button>
+        <Flex justifyContent='center'>
           {!account ? (
             <ConnectWalletButton />
           ) : isApprove ? (
@@ -308,7 +310,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
           )}
         </Flex>
       </BoxPaddingStyled>
-      <BoxPaddingStyled>
+      {/* <BoxPaddingStyled>
         <Card padding='8px 24px'>
           <Flex alignItems='center'>
             <Text fontSize='14px'>{t('Currently holding Drawing boards')}</Text>
@@ -323,7 +325,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
             </Text>
           </Flex>
         </Card>
-      </BoxPaddingStyled>
+      </BoxPaddingStyled> */}
     </PageContainer>
   );
 };

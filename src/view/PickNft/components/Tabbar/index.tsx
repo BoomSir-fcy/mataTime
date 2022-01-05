@@ -7,6 +7,7 @@ import { useTranslation } from 'contexts/Localization';
 import { stuffLable } from 'config/constants/stuffImages';
 import { MobileHide, MobileShow } from '../Styled';
 import { useStore } from 'store';
+import Logo from 'components/MenuNav/Logo';
 
 const PageContainer = styled(Box)`
   width: 100%;
@@ -18,10 +19,11 @@ const PageContainer = styled(Box)`
 `;
 
 const CardStyled = styled(Card)`
+  padding-top: 22px;
   width: 100%;
   min-width: 100%;
   height: 100%;
-  display: none;
+  /* display: none; */
   background: ${({ theme }) => theme.colors.primaryDark};
   min-height: 100vh;
   border: none;
@@ -29,9 +31,9 @@ const CardStyled = styled(Card)`
     border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
     border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   }
-  ${({ theme }) => theme.mediaQueries.md} {
+  /* ${({ theme }) => theme.mediaQueries.md} {
     display: block;
-  }
+  } */
 `;
 
 const PaddingBox = styled(Box)`
@@ -79,11 +81,11 @@ const ButtonStyled = styled(Button)`
   height: 42px;
   border-radius: 42px;
   font-weight: 400;
-  margin-top: 4px;
+  margin-bottom: 20px;
   flex-shrink: 0;
-  ${({ theme }) => theme.mediaQueries.md} {
+  /* ${({ theme }) => theme.mediaQueries.md} {
     min-width: 80%;
-  }
+  } */
   /* text-align: left; */
   justify-content: start; // HACK: text-align: left;
 `;
@@ -110,36 +112,41 @@ const Tabbar: React.FC<Props> = ({ activeIndex, onClick }) => {
 
   return (
     <PageContainer>
-      <MobileHide>
-        <CardStyled>
-          <ImgBox>
+      {/* <MobileHide>
+      </MobileHide> */}
+      <CardStyled>
+        {/* <ImgBox>
             <img src='/images/LOGO2.svg' alt='' />
-          </ImgBox>
-          <PaddingBox>
-            <Heading scale='md' pl='14px'>
-              {t('Synthesize')}
-            </Heading>
-            <TabBoxStyled mt='8px'>
-              {stuffLableRenderData.map((item, index) => (
-                <ButtonStyled
-                  className={activeIndex === index ? 'active' : ''}
-                  variant='text'
-                  color={activeIndex === index ? 'primary' : 'text'}
-                  scale='sm'
-                  key={item.lable}
-                  onClick={() => onClick(index)}
+          </ImgBox> */}
+        <Logo />
+        <PaddingBox mt='20px'>
+          <Heading scale='md' mb='30px' pl='14px'>
+            {t('Synthesize')}
+          </Heading>
+          <TabBoxStyled mt='8px'>
+            {stuffLableRenderData.map((item, index) => (
+              <ButtonStyled
+                className={activeIndex === index ? 'active' : ''}
+                variant='text'
+                color={activeIndex === index ? 'primary' : 'text'}
+                scale='sm'
+                key={item.lable}
+                onClick={() => onClick(index)}
+              >
+                <Text
+                  bold={activeIndex === index}
+                  fontSize='18px'
+                  color={activeIndex === index ? 'white' : 'text'}
                 >
-                  <Text color={activeIndex === index ? 'white' : 'text'}>
-                    {t(item.lable)} ({item.length})
-                  </Text>
-                  {/* {t(item.lable)} ({item.length}) */}
-                </ButtonStyled>
-              ))}
-            </TabBoxStyled>
-          </PaddingBox>
-        </CardStyled>
-      </MobileHide>
-      <MobileShow>
+                  {t(item.lable)} ({item.length})
+                </Text>
+                {/* {t(item.lable)} ({item.length}) */}
+              </ButtonStyled>
+            ))}
+          </TabBoxStyled>
+        </PaddingBox>
+      </CardStyled>
+      {/* <MobileShow>
         <BoxCardStyled>
           <TabBoxStyled mt='8px'>
             {stuffLable.map((item, index) => (
@@ -156,7 +163,7 @@ const Tabbar: React.FC<Props> = ({ activeIndex, onClick }) => {
             ))}
           </TabBoxStyled>
         </BoxCardStyled>
-      </MobileShow>
+      </MobileShow> */}
     </PageContainer>
   );
 };

@@ -12,7 +12,7 @@ import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from './config';
 import { ProfileMenu } from './ProfileMenu';
 import { useStore } from 'store';
 
-const MenuContener = styled(Flex)<{ isMobile: boolean }>`
+const MenuContener = styled(Flex)<{ isMobile: boolean; PickNft: boolean }>`
   height: 100vh;
   width: ${({ isMobile }) => (isMobile ? '0' : `${SIDEBAR_WIDTH_FULL}px`)};
   /* border: 1px red solid; */
@@ -22,7 +22,7 @@ const MenuContener = styled(Flex)<{ isMobile: boolean }>`
   flex-shrink: 0;
   /* margin-top: 22px; */
   flex-direction: column;
-  z-index: 10;
+  z-index: ${({ PickNft }) => (PickNft ? 1010 : 10)};
 `;
 
 const UserBox = styled(Flex)`
@@ -53,7 +53,7 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
   return (
-    <MenuContener isMobile={isMobile}>
+    <MenuContener PickNft={PickNft} isMobile={isMobile}>
       <Panel padding={PickNft} isMobile={isMobile} isPushed={isPushed} showMenu>
         {/* <Flex flex='1' flexDirection='column'>
           <Logo />

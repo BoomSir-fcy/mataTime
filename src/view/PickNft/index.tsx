@@ -14,6 +14,8 @@ import { MobileHide, MobileShow } from './components/Styled';
 import { useStore } from 'store';
 import Container from 'components/Layout/Container';
 import MenuNav from 'components/MenuNav';
+import { Crumbs } from 'components';
+import { Step } from 'view/Login/components';
 
 const CennerBox = styled(Container)`
   width: 100%;
@@ -22,6 +24,13 @@ const CennerBox = styled(Container)`
   /* ${({ theme }) => theme.mediaQueries.md} {
     max-width: 984px;
   } */
+  color: ${({ theme }) => theme.colors.white};
+`;
+const StepBox = styled(Box)`
+  padding: 0 20px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 0 40px;
+  }
 `;
 
 const PickNft: React.FC = () => {
@@ -86,25 +95,49 @@ const PickNft: React.FC = () => {
         </Flex>
       ) : (
         <CennerBox>
-          <Flex justifyContent='center' flexWrap='wrap'>
-            <MobileShow width='100%'>
-              <ShowCard
-                balance={avatarBalance?.length}
-                avatarNft={avatarNfts}
-              />
-            </MobileShow>
-            <Flex maxWidth='100%' flexWrap='wrap' flex='1'>
-              <MenuNav PickNft>
-                <Tabbar onClick={setActiveIndex} activeIndex={activeIndex} />
-              </MenuNav>
-              <ListBox activeIndex={activeIndex} data={renderList} />
-            </Flex>
-            <MobileHide>
-              <ShowCard
-                balance={avatarBalance?.length}
-                avatarNft={avatarNfts}
-              />
-            </MobileHide>
+          <Flex>
+            <MenuNav PickNft>
+              <Tabbar onClick={setActiveIndex} activeIndex={activeIndex} />
+            </MenuNav>
+            <Box>
+              <Crumbs zIndex={9} title={t(' ')} justifyContent='start'>
+                <Flex alignItems='baseline' flexWrap='wrap'>
+                  <Text mr='20px' fontSize='18px' fontWeight='bold'>
+                    {t('创建无聊猴NFT头像')}
+                  </Text>
+                  <Text fontSize='14px' color='textTips'>
+                    {t('特殊邀请者才能拥有的专属无聊猴NFT头像')}
+                  </Text>
+                </Flex>
+              </Crumbs>
+              <Flex justifyContent='center' flexWrap='wrap'>
+                <MobileShow width='100%'>
+                  <StepBox>
+                    <Step noTitle />
+                  </StepBox>
+                  <ShowCard
+                    balance={avatarBalance?.length}
+                    avatarNft={avatarNfts}
+                  />
+                </MobileShow>
+                <Flex flexWrap='wrap' flex='1'>
+                  <Flex flexDirection='column'>
+                    <MobileHide>
+                      <StepBox>
+                        <Step noTitle />
+                      </StepBox>
+                    </MobileHide>
+                    <ListBox activeIndex={activeIndex} data={renderList} />
+                  </Flex>
+                  <MobileHide>
+                    <ShowCard
+                      balance={avatarBalance?.length}
+                      avatarNft={avatarNfts}
+                    />
+                  </MobileHide>
+                </Flex>
+              </Flex>
+            </Box>
           </Flex>
         </CennerBox>
       )}

@@ -22,7 +22,7 @@ const CrumbsWraper = styled(Box)`
 const Card = styled(Flex)<{ zIndex?: number; hideBorder?: boolean }>`
   align-items: center;
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid
     ${({ theme, hideBorder }) =>
       hideBorder ? 'transparent' : theme.colors.borderThemeColor};
