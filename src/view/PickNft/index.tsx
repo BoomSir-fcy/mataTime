@@ -2,9 +2,9 @@ import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Heading, Text, Flex, Spinner, Box, LinkExternal } from 'uikit';
 import styled from 'styled-components';
-import { useFetchCodeUsed, useFetchStuffAllInfo } from 'store/picknft/hooks';
+import { useFetchCodeInfo, useFetchInviteInfo, useFetchStuffAllInfo, usePickNftState } from 'store/picknft/hooks';
 import { useDispatch } from 'react-redux';
-import { randomPick } from 'store/picknft/actions';
+import { randomPick, setInviteCodes } from 'store/picknft/actions';
 import useTheme from 'hooks/useTheme';
 import { useTranslation } from 'contexts/Localization';
 import Tabbar from './components/Tabbar';
@@ -16,6 +16,7 @@ import Container from 'components/Layout/Container';
 import MenuNav from 'components/MenuNav';
 import { Crumbs } from 'components';
 import { Step } from 'view/Login/components';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const CennerBox = styled(Container)`
   width: 100%;
@@ -48,11 +49,22 @@ const PickNft: React.FC = () => {
   const { account } = useWeb3React();
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useDispatch();
-  const InviteCode = localStorage.getItem('InviteCode');
+  const { codes, codeInfo, selectData, stuffRes, loaded } = usePickNftState()
 
-  useFetchCodeUsed(InviteCode);
+  const parsedQs = useParsedQueryString();
+  useEffect(() => {
+    if (parsedQs.c && parsedQs.l && parsedQs.h) {
+      dispatch(setInviteCodes({
+        code: parsedQs.c,
+        lock_hash: parsedQs.l,
+        code_hash: parsedQs.h,
+      }))
+    }
+  }, [parsedQs])
+
+  useFetchCodeInfo();
+  useFetchInviteInfo()
   useFetchStuffAllInfo();
-  const { selectData, stuffRes, codeUsed, loaded } = useStore(p => p.pickNft);
 
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
@@ -98,7 +110,7 @@ const PickNft: React.FC = () => {
                   <StepBoxMobile>
                     <Step noTitle />
                   </StepBoxMobile>
-                  <ShowCard InviteCode={InviteCode} />
+                  <ShowCard />
                 </MobileShow>
                 <Flex flex='1'>
                   <LeftBox flexDirection='column'>
@@ -108,7 +120,7 @@ const PickNft: React.FC = () => {
                     <ListBox activeIndex={activeIndex} data={renderList} />
                   </LeftBox>
                   <MobileHide>
-                    <ShowCard InviteCode={InviteCode} />
+                    <ShowCard />
                   </MobileHide>
                 </Flex>
               </Flex>

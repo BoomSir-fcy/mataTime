@@ -17,6 +17,15 @@ export const exchangeToPhtot = async (
   return receipt.status;
 };
 
+export const lockInviteCode = async (
+  masterChefContract,
+  code,
+) => {
+  const tx = await masterChefContract.lockCode(`0x${code}`);
+  const receipt = await tx.wait();
+  return receipt.status;
+};
+
 export const buyTicketNft = async (masterChefContract, amount) => {
   const value = new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString();
   const tx = await masterChefContract.buyTicketNFT(amount);

@@ -1,10 +1,11 @@
 import exphotoAbi from 'config/abi/exphoto.json';
+import invitationAbi from 'config/abi/Invitation.json';
 import multicall from 'utils/multicall';
-import { getExPhotoAddress } from 'utils/addressHelpers';
+import { getInvitationAddress } from 'utils/addressHelpers';
 import stuffRes from 'config/constants/stuffImages';
 
 export const fetchStuffAllInfo = async () => {
-  const exPhotoNftAddress = getExPhotoAddress();
+  const exPhotoNftAddress = getInvitationAddress();
   try {
     const calls = [];
     stuffRes.forEach((item, index) => {
@@ -19,7 +20,7 @@ export const fetchStuffAllInfo = async () => {
         params: [index],
       });
     });
-    const [...res] = await multicall(exphotoAbi, calls);
+    const [...res] = await multicall(invitationAbi, calls);
     const result = {
       limitSizes: [],
       createdSizes: [],

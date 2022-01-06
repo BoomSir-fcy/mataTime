@@ -9,7 +9,7 @@ import { useToast } from 'hooks';
 import useTheme from 'hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
-import { useFetchNftApproval } from 'store/picknft/hooks';
+import { useFetchNftApproval, usePickNftState } from 'store/picknft/hooks';
 import Container from 'components/Layout/Container';
 import { randomPick } from 'store/picknft/actions';
 import { ExChangeResult, useExchangePhoto } from 'view/PickNft/hooks/exchange';
@@ -61,7 +61,7 @@ const BoxPaddingStyled = styled(Box)`
   }
 `;
 
-const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
+const BoxStyled = styled(Box) <{ rgba: ColorRgba }>`
   width: 24vh;
   height: 24vh;
   max-width: 100%;
@@ -87,7 +87,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 
-const ImageStyled = styled(Image)<{ zIndex?: number }>`
+const ImageStyled = styled(Image) <{ zIndex?: number }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -98,7 +98,7 @@ const PickerBox = styled(Box)`
   position: relative;
 `;
 
-const ShowColorPicker = styled(Box)<{ rgba: ColorRgba }>`
+const ShowColorPicker = styled(Box) <{ rgba: ColorRgba }>`
   width: 75px;
   height: 35px;
   background: ${({ rgba }) =>
@@ -120,11 +120,7 @@ const Cover = styled(Box)`
   left: 0px;
 `;
 
-interface AvatarShowCard {
-  InviteCode: string;
-}
-
-const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
+const ShowCard: React.FC = () => {
   useFetchNftApproval();
 
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
@@ -147,7 +143,6 @@ const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { toastSuccess, toastError } = useToast();
-  const { selectData, isApprove } = useStore(p => p.pickNft);
   const dispatch = useDispatch();
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
@@ -161,6 +156,8 @@ const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
     [dispatch],
   );
   const [pendingTx, setPendingTx] = useState(false);
+  const { codes, selectData, isApprove, codeInfo } = usePickNftState()
+
 
   const onMintHandle = useCallback(async () => {
     const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
@@ -336,7 +333,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
         visible={visible}
         setVisible={setVisible}
       >
-        <LockModal onClose={onClose} InviteCode={InviteCode} />
+        <LockModal onClose={onClose} InviteCode={codes.lock_hash} />
       </ModalWrapper>
     </PageContainer>
   );

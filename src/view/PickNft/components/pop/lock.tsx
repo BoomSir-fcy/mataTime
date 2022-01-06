@@ -10,6 +10,7 @@ import Dots from 'components/Loader/Dots';
 import { useStore } from 'store';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization';
+import { useLockInviteCode } from 'view/PickNft/hooks/exchange';
 
 const CountBox = styled(Box)`
   width: 88vw;
@@ -47,12 +48,13 @@ const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
   const { account } = useWeb3React();
   const [val, setVal] = useState('');
   const [pending, setpending] = useState(false);
+  const { onLockCode } = useLockInviteCode();
 
   // 授权
   const handLock = useCallback(async () => {
     setpending(true);
     try {
-      // await onApprove(token);
+      await onLockCode(val);
       toast.success(t('锁定成功'));
       onClose();
     } catch (e) {
@@ -61,7 +63,7 @@ const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
     } finally {
       setpending(false);
     }
-  }, [account]);
+  }, [account, onLockCode, val]);
 
   useEffect(() => {
     setVal(InviteCode);

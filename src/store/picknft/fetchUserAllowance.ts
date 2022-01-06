@@ -22,12 +22,39 @@ export const fetchCodeUsed = async code => {
       },
     ];
     const [codeInfo] = await multicall(invitationAbi, calls);
-    console.log(codeInfo);
     return codeInfo[0];
   } catch (error) {
     return [];
   }
 };
+
+export const fetchCodeInfo = async (lockHash) => {
+  const exPhotoNftAddress = getInvitationAddress();
+  try {
+    const calls = [{
+      address: exPhotoNftAddress,
+      name: 'getCodeView',
+      params: [`0x${lockHash}`],
+    }];
+
+    const [res] = await multicall(invitationAbi, calls);
+    return {
+      generator: res.generator,
+      lockUser: res.lockUser,
+      state: res.state,
+      lockedAt: res.lockedAt.toNumber() * 1000,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      generator: '0x0000000000000000000000000000000000000000',
+      lockUser: '0x0000000000000000000000000000000000000000',
+      state: 1,
+      lockedAt: 0
+    };
+    // return [index, [], []]
+  }
+}
 
 export const fetchNftApproval = async account => {
   const exPhotoNftAddress = getTicketNftAddress();

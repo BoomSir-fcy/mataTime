@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -8,18 +8,37 @@ import {
   fetchTicketAllowanceAsync,
   fetchTicketPriceAsync,
   fetchCodeUsedAsync,
+  fetchInviteInfoAsync,
 } from '.';
 import { State, PickNftState } from '../types';
+import { fetchInviteInfo } from './fetchInviteInfo';
 
-export const useFetchCodeUsed = code => {
+
+export const usePickNftState = () => {
+  const pickNft = useSelector((p: {
+    pickNft: PickNftState
+  }) => p.pickNft)
+  return pickNft
+}
+
+export const useFetchInviteInfo = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchInviteInfoAsync())
+  }, [dispatch])
+}
+
+export const useFetchCodeInfo = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
+  const { codes } = usePickNftState()
 
   useEffect(() => {
-    if (account && code) {
-      dispatch(fetchCodeUsedAsync(code));
+
+    if (account && codes.lock_hash) {
+      dispatch(fetchCodeUsedAsync(codes.lock_hash));
     }
-  }, [dispatch, account]);
+  }, [dispatch, account, codes.lock_hash]);
 };
 
 export const useFetchNftApproval = () => {

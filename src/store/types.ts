@@ -61,8 +61,13 @@ export interface StuffElementLimit {
   createdSize: number;
   enable?: boolean;
 }
-export interface StuffElementRender extends StuffElementLimit, StuffElement {}
+export interface StuffElementRender extends StuffElementLimit, StuffElement { }
 
+export interface InviteCodes {
+  code: string;
+  code_hash: string;
+  lock_hash: string;
+}
 export interface PickNftState {
   selectData: StuffElement[];
   stuffRes: StuffElementRender[][];
@@ -76,6 +81,20 @@ export interface PickNftState {
     limit?: string;
     loaded: boolean;
   };
+  codes: InviteCodes;
+  inviteInfo: {
+    nft_: string;
+    userProfile_: string;
+    codeLockDuration_: number;
+    maxGendCodeCount_: number;
+    toToken_: string;
+  },
+  codeInfo: {
+    lockUser: string;
+    lockedAt: number;
+    address: string;
+    state: string;
+  }
 }
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

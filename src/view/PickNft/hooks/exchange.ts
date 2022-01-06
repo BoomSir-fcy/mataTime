@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useExPhotoContract } from 'hooks/useContract';
-import { exchangeToPhtot } from 'utils/myCalls';
+import { useInvitation } from 'hooks/useContract';
+import { exchangeToPhtot, lockInviteCode } from 'utils/myCalls';
 import isZero from 'utils/isZero';
 
 export enum ExChangeResult {
@@ -10,7 +10,7 @@ export enum ExChangeResult {
 }
 
 export const useExchangePhoto = () => {
-  const masterContract = useExPhotoContract();
+  const masterContract = useInvitation();
   const handleExchange = useCallback(
     async (ids: number[], nickname: string, code: string, color: string) => {
       console.debug(ids, nickname);
@@ -33,4 +33,20 @@ export const useExchangePhoto = () => {
   );
 
   return { onExchange: handleExchange };
+};
+
+export const useLockInviteCode = () => {
+  const masterContract = useInvitation();
+  const handleLockCode = useCallback(
+    async (code: string) => {
+      const receipt = await lockInviteCode(
+        masterContract,
+        code,
+      );
+      return receipt
+    },
+    [masterContract],
+  );
+
+  return { onLockCode: handleLockCode };
 };
