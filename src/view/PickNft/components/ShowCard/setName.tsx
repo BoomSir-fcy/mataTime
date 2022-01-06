@@ -1,18 +1,22 @@
 /* eslint-disable */
 import React, { useCallback, useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
+import history from 'routerHistory';
 import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { BIG_TEN } from 'utils/bigNumber';
 import Dots from 'components/Loader/Dots';
-import { useStore } from 'store';
-import { toast } from 'react-toastify';
+import { Api } from 'apis';
+import { useStore, storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
 import { shortenAddress } from 'utils/contract';
 import { useImmer } from 'use-immer';
 import { getBLen } from 'utils';
+import { useContract } from 'view/Login/hook';
+import { useToast } from 'hooks';
+import { useLogin, useSignIn } from 'view/Login/hooks';
 
 const CountBox = styled(Box)``;
 
@@ -55,7 +59,7 @@ const BtnBox = styled(Flex)`
 `;
 
 interface init {
-  onComplete: (name: string) => void
+  onComplete: (name: string) => void;
 }
 
 const SetNickName: React.FC<init> = ({ onComplete }) => {
@@ -69,6 +73,73 @@ const SetNickName: React.FC<init> = ({ onComplete }) => {
     isSignin: false,
     nickName: '',
   });
+  const { checkNickname } = useContract();
+  const { siginInVerify, getUserName } = useSignIn();
+  const { toastSuccess, toastWarning, toastError } = useToast();
+  const { loginCallback } = useLogin();
+
+  let timer: any = 0;
+  // 轮询查找用户是否注册
+  const verify = () => {
+    timer = setInterval(async () => {
+      toastWarning(t('loginSigninSearch'));
+      const res = await siginInVerify(account.toLowerCase());
+      if (Boolean(res)) {
+        timer && clearInterval(timer);
+        signIn();
+      }
+    }, 6000);
+  };
+
+  const signIn = async () => {
+    timer && clearInterval(timer);
+    const res = await loginCallback(2);
+    dispatch(storeAction.setSigninLoading(false));
+    if (Api.isSuccess(res)) {
+      const user: any = await getUserName();
+      if (Api.isSuccess(user)) {
+        dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
+        dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
+        history.push('/login');
+      }
+    } else {
+      toastError(res.data);
+      setState(p => {
+        p.isSignin = true;
+      });
+    }
+  };
+
+  const submitProfile = React.useCallback(async () => {
+    if (!state.nickName) {
+      sethaveNickName(false);
+      return;
+    }
+    setpending(true);
+    const res = await checkNickname(state.nickName);
+    if (!res[0] && res[1]) {
+      try {
+        const userInfo = await onComplete(state.nickName);
+        if (Boolean(userInfo)) {
+          verify();
+        } else {
+          dispatch(storeAction.setSigninLoading(false));
+          toastError(t('loginSignupFail'));
+        }
+      } catch (error) {
+        toastError(t('loginSignupFail'));
+        console.log(error);
+      } finally {
+        setpending(false);
+      }
+    } else if (!res[0] && !res[1]) {
+      toastError(t('loginSetNickNameFail'));
+    } else {
+      toastError(t('loginSetNickNameRepeat'));
+    }
+    setpending(false);
+  }, [state]);
 
   return (
     <CountBox>
@@ -112,16 +183,7 @@ const SetNickName: React.FC<init> = ({ onComplete }) => {
       <BtnBox justifyContent='center'>
         <Submit
           scale='ld'
-          onClick={async () => {
-            try {
-              setpending(true)
-              await onComplete(state.nickName)
-            } catch (error) {
-              console.log(error)
-            } finally {
-              setpending(false)
-            }
-          }}
+          onClick={state.isSignin ? signIn : submitProfile}
           disabled={!haveNickName || pending}
         >
           {Boolean(pending) ? (
