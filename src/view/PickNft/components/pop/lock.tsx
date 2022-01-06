@@ -37,32 +37,30 @@ const MyInput = styled(Input)`
 `;
 
 interface init {
-  onClose: () => void;
+  onLock: (val: string) => void;
   InviteCode: string;
 }
 
-const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
+const LockModal: React.FC<init> = ({ onLock, InviteCode }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const [val, setVal] = useState('');
   const [pending, setpending] = useState(false);
-  const { onLockCode } = useLockInviteCode();
 
   // 授权
   const handLock = useCallback(async () => {
     setpending(true);
     try {
-      await onLockCode(val);
+      await onLock(val);
       toast.success(t('锁定成功'));
-      onClose();
     } catch (e) {
       console.error(e);
       toast.error(t('Lock failed'));
     } finally {
       setpending(false);
     }
-  }, [account, onLockCode, val]);
+  }, [account, onLock, val]);
 
   useEffect(() => {
     setVal(InviteCode);

@@ -12,7 +12,7 @@ import { useTranslation } from 'contexts/Localization';
 import { useFetchNftApproval, usePickNftState } from 'store/picknft/hooks';
 import Container from 'components/Layout/Container';
 import { randomPick } from 'store/picknft/actions';
-import { ExChangeResult, useExchangePhoto } from 'view/PickNft/hooks/exchange';
+import { ExChangeResult, useExchangePhoto, useLockInviteCode } from 'view/PickNft/hooks/exchange';
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
 import { fetchCodeInfoAsync, fetchNftApprovalAsync, fetchStuffAllLimitsAsync } from 'store/picknft';
 // import { fetchNftUserDataAsync } from 'store/nfts'
@@ -142,6 +142,7 @@ const ShowCard: React.FC = () => {
   // const [LeftTime, setLeftTime] = useState(0);
   const { codes, selectData, codeInfo, inviteInfo, inviteLoading } = usePickNftState()
 
+  const { onLockCode } = useLockInviteCode();
 
 
   const LeftTime = useMemo(() => {
@@ -178,6 +179,12 @@ const ShowCard: React.FC = () => {
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
+
+  const handLock = useCallback(async (val) => {
+    await onLockCode(val);
+    dispatch(fetchCodeInfoAsync(codes))
+    setVisible(false);
+  }, [onLockCode]);
 
   const onClose = useCallback(() => {
     setVisible(false);
@@ -272,10 +279,7 @@ const ShowCard: React.FC = () => {
                   ?
                   <StateModal onClose={onClose} state={codeInfo.state} />
                   :
-                  <LockModal onClose={() => {
-                    setVisible(false);
-                    dispatch(fetchCodeInfoAsync(codes))
-                  }} InviteCode={codes.lock_hash} />
+                  <LockModal onLock={handLock} InviteCode={codes.lock_hash} />
               }
             </>
         }
