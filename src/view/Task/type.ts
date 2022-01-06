@@ -45,3 +45,26 @@ export enum Group {
 export interface TagProps {
   variant?: Variant;
 }
+
+// 可邀请的nft信息
+export interface InvitableNftInfo {
+  image?: string;
+  name?: string;
+  token?: string;
+  token_id?: string;
+}
+
+// 邀请码信息
+export interface CodeInfo {
+  id: number;
+  ntf_token?: string;
+  nftid?: string;
+  code?: string;
+  code_hash?: string;
+  lock_hash?: string;
+  status?: number;
+  created_at?: number;
+  locked_at?: string;
+  used_at?: string;
+  used_uid?: string;
+}
