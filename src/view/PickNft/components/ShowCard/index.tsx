@@ -25,6 +25,7 @@ import duration from 'dayjs/plugin/duration';
 import LockModal from '../pop/lock';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 import SetNickName from './setName';
+import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
 
 dayjs.extend(duration);
 interface ColorRgba {
@@ -173,7 +174,8 @@ const ShowCard: React.FC = () => {
 
   const onClose = useCallback(() => {
     setVisible(false);
-  }, [setVisible]);
+    dispatch(fetchCodeInfo(codes.lock_hash))
+  }, [setVisible, dispatch, codes]);
 
   return (
     <PageContainer>
