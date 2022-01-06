@@ -204,7 +204,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   as={Link}
                   to={`/me/profile/${item.user_id}`}
                 >
-                  <Avatar src={item.user_avator_url} scale='md' />
+                  <Avatar
+                    uid={item.user_id}
+                    src={item.user_avator_url}
+                    scale='md'
+                  />
                 </Box>
                 <div style={{ flex: 1, marginLeft: '14px' }}>
                   <CommentHeader justifyContent='space-between' mb='15px'>

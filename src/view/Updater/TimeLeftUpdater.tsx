@@ -43,7 +43,7 @@ export default function TimeLeftUpdater() {
   }, [availableBalance, im])
 
   return (
-    <ModalWrapper padding="0" customizeTitle visible={visible} >
+    <ModalWrapper overflow='visible' padding="0" customizeTitle visible={visible} >
       <InsufficientBalanceModal
         title={t('$TIME balance less than 5 minutes')}
         tips={t('Metatime deducts fees based on reading time and needs to recharge in advance before browsing platform information')}

@@ -117,7 +117,7 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
               )}
               powered={
                 <Flex padding='0 20px 20px'>
-                  <Text>Powered by &nbsp;</Text>
+                  <Text>{t('Powered by')} &nbsp;</Text>
                   <LinkExternal
                     color='primary'
                     height='24px'

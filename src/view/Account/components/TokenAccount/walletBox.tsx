@@ -73,6 +73,7 @@ interface Wallet {
   TokenAddr: string;
   BalanceInfo: Api.Account.Balance;
   TokenWithDrawMinNum: string;
+  TokenWithDrawFee: string;
 }
 const WalletBox: React.FC<Wallet> = ({
   Token,
@@ -80,6 +81,7 @@ const WalletBox: React.FC<Wallet> = ({
   TokenAddr,
   BalanceInfo,
   TokenWithDrawMinNum,
+  TokenWithDrawFee,
   ...props
 }) => {
   const size = 20;
@@ -247,6 +249,7 @@ const WalletBox: React.FC<Wallet> = ({
           balance={Balance}
           withdrawalBalance={BalanceInfo.available_balance}
           TokenWithDrawMinNum={TokenWithDrawMinNum}
+          TokenWithDrawFee={TokenWithDrawFee}
         />
       </ModalWrapper>
 
