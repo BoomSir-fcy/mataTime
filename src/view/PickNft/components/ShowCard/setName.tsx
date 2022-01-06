@@ -99,6 +99,7 @@ const SetNickName: React.FC<init> = ({ onComplete }) => {
       const user: any = await getUserName();
       if (Api.isSuccess(user)) {
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
+        dispatch(storeAction.changeSignUp({ isSignup: true }));
         dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
         history.push('/login');
       }
