@@ -2,6 +2,7 @@ import React from 'react';
 import { ModalWrapper } from 'components';
 import { Flex, Text, Button, Box } from 'uikit';
 import styled from 'styled-components';
+import Dots from 'components/Loader/Dots';
 
 const Content = styled(Box)`
   padding: 15px 20px;
@@ -17,12 +18,13 @@ const CountBox = styled(Box)`
   }
 `;
 const InviteModal: React.FC<{
+  loading?: boolean;
   type?: number;
   visible?: boolean;
   setVisible?: () => void;
   t?: (key: string) => string;
   onCopyLink?: () => void;
-}> = React.memo(({ type, visible, setVisible, t, onCopyLink }) => {
+}> = React.memo(({ type, loading, visible, setVisible, t, onCopyLink }) => {
   return (
     <ModalWrapper
       title={type === 1 ? t('Invite friends') : t('Special Invitation')}
@@ -48,7 +50,7 @@ const InviteModal: React.FC<{
             </Text>
           )}
           <Button margin='0 auto' width='50%' onClick={onCopyLink}>
-            {t('Copy Link')}
+            {loading ? <Dots>{t('Copy Link')}</Dots> : t('Copy Link')}
           </Button>
         </Flex>
       </CountBox>

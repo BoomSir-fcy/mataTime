@@ -1,10 +1,138 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Api } from 'apis';
+import BigNumber from 'bignumber.js';
 import { taskContents } from './config';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { Group } from '../type';
 import { useWeb3React } from '@web3-react/core';
 import { useImmer } from 'use-immer';
+import { useInvitation } from 'hooks/useContract';
+import invitationAbi from 'config/abi/Invitation.json';
+import { getInvitationAddress } from 'utils/addressHelpers';
+import multicall from 'utils/multicall';
+import { getBalanceNumber } from 'utils/formatBalance';
+
+// 注册生成的邀请码
+export const useGenCodes = () => {
+  const inviteContract = useInvitation();
+  const handleGenCodes = useCallback(async (nftId: number|string, codeHashs: string[]) => {
+    const tx = await inviteContract.genCodes(nftId, codeHashs)
+    const receipt = await tx.wait()
+    return receipt.status
+  }, [inviteContract])
+
+  return { onGenCodes: handleGenCodes }
+}
+
+// 获取邀请的nft基本信息
+export const useNftBaseView = () => {
+  const [state, setState] = useImmer({
+    tokenAddress: [],
+    defaultCodeList: []
+  });
+
+  useEffect(() => {
+    getNftView();
+  }, [])
+
+  const getNftView = useCallback(
+    async () => {
+      const nftInfo = await getView();
+      const codeList = [];
+      for (let i = 0; i < nftInfo.maxGendCodeCount; i++) {
+        codeList.push({ id: i + 1, status: 0 });
+      }
+      setState(p => {
+        p.tokenAddress = nftInfo.nftAddress;
+        p.defaultCodeList = codeList;
+      })
+    },
+    [],
+  )
+  return { tokenAddress: state.tokenAddress, defaultCodeList: state.defaultCodeList };
+}
+
+// 生成邀请码的个数
+export const getNftGenCodeCount = async (nftId: number|string) => {
+  const inviteAddress = getInvitationAddress();
+  const calls = [
+    {
+      address: inviteAddress,
+      name: 'nftGenCodeCount',
+      params: [nftId],
+    },
+  ];
+  try {
+    const res = await multicall(invitationAbi, calls);
+    return getBalanceNumber(new BigNumber(res[0][0].toJSON().hex), 0);
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// 查询可邀请的nft_token地址
+export const getInvitedNftTokenAddress = async () => {
+  const inviteAddress = getInvitationAddress();
+  const calls = [
+    {
+      address: inviteAddress,
+      name: 'nft',
+      params: [],
+    },
+  ];
+  try {
+    const tokenAddress = await multicall(invitationAbi, calls);
+    return tokenAddress.map(v => v.toString());
+  } catch (error) {
+    return [];
+  }
+}
+
+/**
+ * 邀请码信息
+ * @returns {
+ *  lockUser  锁定的用户(如果被锁定的话)
+ *  lockedAt  锁定时间, 如果锁定时间 + 邀请码锁定有效时间 > 当前时间 并且邀请码没有被使用的话，其它用户则可以锁定
+ *  generator  生成邀请码的用户
+ *  state  邀请码现在的状态 1.未使用 2.已使用
+ * }
+ */
+export const getView = async () => {
+  const inviteAddress = getInvitationAddress();
+  const calls = [
+    {
+      address: inviteAddress,
+      name: 'getView',
+      params: [],
+    },
+  ];
+  try {
+    const info = await multicall(invitationAbi, calls);
+    const nftInfo = {
+      nftAddress: info[0].nft_?.toLowerCase(),
+      userAddress: info[0].userProfile_,
+      codeLockDuration: new BigNumber(info[0].codeLockDuration_.toJSON().hex).toNumber(),
+      maxGendCodeCount: new BigNumber(info[0].maxGendCodeCount_.toJSON().hex).toNumber(),
+      toToken: info[0].toToken_
+    };
+    return nftInfo;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// 获取已生成邀请码的列表
+  // const getExistCodeList = async (nftToken: string, nftIds: string) => {
+  //   try {
+  //     const res = await Api.TaskApi.getCodeList(nftToken, nftIds);
+  //     if (Api.isSuccess(res)) {
+  //       return res.data || [];
+  //     }
+  //   } catch (err) {
+  //     return [];
+  //   }
+  // };
 
 // 邀请统计
 export const useInviteCount = () => {
