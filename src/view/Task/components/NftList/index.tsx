@@ -22,7 +22,10 @@ export const StakeNFT: React.FC<{
     const newList = nftList.map(item => {
       return {
         ...item,
-        defaultCodeList: codeObjs[item.token_id] || defaultCodeList,
+        defaultCodeList: defaultCodeList.map((v, index) => {
+          const nftCode = codeObjs[item.token_id] || {};
+          return { ...v, ...nftCode[index] };
+        }),
       };
     });
     setNftCodeList(newList);

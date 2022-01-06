@@ -102,7 +102,7 @@ const FriendsList: React.FC = React.memo(() => {
                     <ItemText maxWidth='70%' small ellipsis>
                       {item.nick_name}
                     </ItemText>
-                    <SpecialTag small>Special</SpecialTag>
+                    {/* <SpecialTag small>Special</SpecialTag> */}
                   </Flex>
                   <ItemText small ellipsis>
                     {shortenAddress(item.address)}
