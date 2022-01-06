@@ -7,3 +7,4 @@ export * from './ReplyModal';
 export * from './CancelAttentionModal';
 export * from './CommonInquiryModal';
 export * from './CommentModal';
+export * from './shieldUserModal';

@@ -19,5 +19,11 @@ export const MeItemWrapper = styled(Card)`
   transition: background 0.3s;
   &:hover {
     background: ${({ theme }) => theme.colors.hoverList};
+    .icon-shield {
+      opacity: 1;
+    }
+  }
+  .icon-shield {
+    opacity: 0;
   }
 `;
