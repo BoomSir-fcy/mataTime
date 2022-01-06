@@ -13,19 +13,11 @@ import { useStore } from 'store';
 
 const PageContainer = styled(Flex)`
   flex: 1;
-  /* max-height: 50vh;
-  overflow: auto; */
   min-width: 100%;
   max-width: 600px;
   padding-left: 4px;
   padding-right: 4px;
-  /* ${({ theme }) => theme.mediaQueries.xs} {
-    min-width: 348px;
-  } */
-  /* ${({ theme }) => theme.mediaQueries.md} {
-    max-height: none;
-    overflow: hidden;
-  } */
+  padding-top: 30px;
 `;
 const BoxStyled = styled(Box)<{ disabled?: boolean }>`
   background-color: ${({ theme, disabled }) =>

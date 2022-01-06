@@ -24,6 +24,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import LockModal from '../pop/lock';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
+import SetNickName from './setName';
 
 dayjs.extend(duration);
 interface ColorRgba {
@@ -37,26 +38,16 @@ const PageContainer = styled(Container)`
   padding-left: 4px;
   padding-right: 4px;
   padding-bottom: 0;
-  padding-top: 10px;
+  padding-top: 16px;
   ${({ theme }) => theme.mediaQueries.md} {
-    padding-top: 92px;
+    padding-top: 30px;
   }
 `;
 
 const BoxPaddingStyled = styled(Box)`
-  ${({ theme }) => theme.mediaQueries.xl} {
-    padding-top: 4px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xs} {
-    padding-top: 8px;
-  }
+  padding-top: 8px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding-top: 8px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
     padding-top: 16px;
   }
 `;
@@ -151,7 +142,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
   const dispatch = useDispatch();
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [LeftTime, setLeftTime] = useState(0);
   const DownTime = useCountdownTime(LeftTime);
   const nickname = '';
@@ -193,7 +184,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
           justifyContent='space-between'
           mb='20px'
         >
-          <Text fontSize='14px'>{t('锁定')}</Text>
+          <Text fontSize='14px'>{t('locking')}</Text>
           <Text bold>{DownTime}</Text>
           <Icon
             size={23}
@@ -246,92 +237,15 @@ const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
           )}
         </PickerBox>
       </CardStyled>
-      <Text
-        maxWidth='100%'
-        fontSize='14px'
-        textAlign='center'
-        mt='8px'
-        color='textPrimary'
-      >
-        {/* {t('Combine your mini-dragons with a rarity of %rate%', { rate: '21%'})} */}
-        {t('Create you own personalized avatars!')}
-      </Text>
       <BoxPaddingStyled>
-        <Flex justifyContent='center'>
-          {!account ? (
-            <ConnectWalletButton />
-          ) : isApprove ? (
-            <Button
-              disabled={pendingTx}
-              onClick={async () => {
-                setPendingTx(true);
-                try {
-                  const status = await onMintHandle();
-                  if (status === ExChangeResult.SUCCESS) {
-                    toastSuccess(
-                      t('Successfully Mint!'),
-                      t('You can view this Avatar in the bag'),
-                    );
-                  } else if (status === ExChangeResult.AVATAR_EXISTS) {
-                    toastError(
-                      t('Error'),
-                      t(
-                        'Sorry, this Avatar is existent, please replace the parts and try again',
-                      ),
-                    );
-                  } else {
-                    toastError(
-                      t('Error'),
-                      t(
-                        'Sorry, this Avatar has not a part left, please replace the parts and try again',
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  toastError(
-                    t('Error'),
-                    t(
-                      'Please try again. Confirm the transaction and make sure you are paying enough gas!',
-                    ),
-                  );
-                  console.error(e);
-                } finally {
-                  setPendingTx(false);
-                }
-              }}
-              scale='ld'
-            >
-              {pendingTx ? <Dots>{t('Minting')}</Dots> : t('Mint')}
-            </Button>
-          ) : (
-            <Button
-              disabled={pendingTx}
-              onClick={async () => {
-                setPendingTx(true);
-                try {
-                  setPendingTx(true);
-                  const status = await onApprove();
-                  if (status) {
-                    dispatch(fetchNftApprovalAsync());
-                  }
-                } finally {
-                  setPendingTx(false);
-                }
-              }}
-              scale='ld'
-            >
-              {pendingTx ? (
-                <Dots>{t('Enabling %asset%', { asset: 'NFT' })}</Dots>
-              ) : (
-                t('Enable %asset%', { asset: 'NFT' })
-              )}
-            </Button>
-          )}
-        </Flex>
+        <SetNickName />
+        {/* <Flex>
+          {!account ? <ConnectWalletButton /> : }
+        </Flex> */}
       </BoxPaddingStyled>
       {/* 输入框弹窗 */}
       <ModalWrapper
-        title={t('锁定NFT')}
+        title={t('Lock NFT')}
         creactOnUse
         visible={visible}
         setVisible={setVisible}

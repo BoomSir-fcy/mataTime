@@ -86,25 +86,22 @@ const PickNft: React.FC = () => {
               <Crumbs zIndex={9} title={t(' ')} justifyContent='start'>
                 <Flex alignItems='baseline' flexWrap='wrap'>
                   <Text mr='20px' fontSize='18px' fontWeight='bold'>
-                    {t('创建无聊猴NFT头像')}
-                  </Text>
-                  <Text fontSize='14px' color='textTips'>
-                    {t('特殊邀请者才能拥有的专属无聊猴NFT头像')}
+                    {t('Customize your METAYC style')}
                   </Text>
                 </Flex>
               </Crumbs>
               <Flex justifyContent='center' flexWrap='wrap'>
                 <MobileShow width='100%'>
-                  <StepBoxMobile>
+                  {/* <StepBoxMobile>
                     <Step noTitle />
-                  </StepBoxMobile>
+                  </StepBoxMobile> */}
                   <ShowCard InviteCode={InviteCode} />
                 </MobileShow>
                 <Flex flex='1'>
                   <LeftBox flexDirection='column'>
-                    <StepBox>
+                    {/* <StepBox>
                       <Step noTitle />
-                    </StepBox>
+                    </StepBox> */}
                     <ListBox activeIndex={activeIndex} data={renderList} />
                   </LeftBox>
                   <MobileHide>
