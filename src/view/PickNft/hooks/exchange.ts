@@ -20,6 +20,13 @@ export const useExchangePhoto = () => {
       const exists = await masterContract.checkTokenID(tx.toJSON());
 
       if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 此头像已存在
+      console.log(12211221)
+      console.log(
+        nickname,
+        code,
+        tx.toJSON().hex,
+        color,
+      )
       const receipt = await exchangeToPhtot(
         masterContract,
         nickname,

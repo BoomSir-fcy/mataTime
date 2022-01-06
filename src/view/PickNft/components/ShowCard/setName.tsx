@@ -57,9 +57,11 @@ const BtnBox = styled(Flex)`
   }
 `;
 
-interface init {}
+interface init {
+  onComplete: (name: string) => void
+}
 
-const SetNickName: React.FC<init> = ({}) => {
+const SetNickName: React.FC<init> = ({ onComplete }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -113,7 +115,16 @@ const SetNickName: React.FC<init> = ({}) => {
       <BtnBox justifyContent='center'>
         <Submit
           scale='ld'
-          onClick={() => {}}
+          onClick={async () => {
+            try {
+              setpending(true)
+              await onComplete(state.nickName)
+            } catch (error) {
+              console.log(error)
+            } finally {
+              setpending(false)
+            }
+          }}
           disabled={!haveNickName || pending}
         >
           {Boolean(pending) ? (

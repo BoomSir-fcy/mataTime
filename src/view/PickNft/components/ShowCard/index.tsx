@@ -138,36 +138,40 @@ const ShowCard: React.FC = () => {
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
   const [visible, setVisible] = useState(false);
-  const [LeftTime, setLeftTime] = useState(0);
-  const DownTime = useCountdownTime(LeftTime);
-  const nickname = '';
-  const code = '';
+  // const [LeftTime, setLeftTime] = useState(0);
+  const { codes, selectData, codeInfo, inviteInfo } = usePickNftState()
+
+  const LeftTime = useMemo(() => {
+    if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
+      return inviteInfo.codeLockDuration_ + codeInfo.lockedAt
+    }
+    return 0
+  }, [inviteInfo])
+
+  console.log(LeftTime, 'LeftTime')
+  const [DownTime, hour, minute] = useCountdownTime(LeftTime);
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],
   );
-  const [pendingTx, setPendingTx] = useState(false);
-  const { codes, selectData, isApprove, codeInfo } = usePickNftState()
 
-
-  const onMintHandle = useCallback(async () => {
+  const onMintHandle = useCallback(async (value) => {
     const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
     const res = await onExchange(
       sortData.map(item => item.id),
-      nickname,
-      code,
+      value,
+      codes.code,
       `0x${colorHex}${colorAlpha}`,
     );
     dispatch(fetchStuffAllLimitsAsync());
     return res;
-  }, [selectData, dispatch, onExchange, account, colorHex, colorAlpha]);
+  }, [selectData, dispatch, onExchange, codes.code, account, colorHex, colorAlpha]);
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
 
   const onClose = useCallback(() => {
-    setLeftTime(1641376800);
     setVisible(false);
   }, [setVisible]);
 
@@ -182,7 +186,7 @@ const ShowCard: React.FC = () => {
           mb='20px'
         >
           <Text fontSize='14px'>{t('locking')}</Text>
-          <Text bold>{DownTime}</Text>
+          <Text bold color={minute < 2 ? 'failure' : 'text'}>{DownTime}</Text>
           <Icon
             size={23}
             current={1}
@@ -235,7 +239,7 @@ const ShowCard: React.FC = () => {
         </PickerBox>
       </CardStyled>
       <BoxPaddingStyled>
-        <SetNickName />
+        <SetNickName onComplete={onMintHandle} />
         {/* <Flex>
           {!account ? <ConnectWalletButton /> : }
         </Flex> */}
