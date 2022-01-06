@@ -52,9 +52,6 @@ const NameVerify = styled(Text)`
 
 const BtnBox = styled(Flex)`
   padding: 16px 0;
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding: 30px 0;
-  }
 `;
 
 interface init {}
@@ -77,7 +74,7 @@ const SetNickName: React.FC<init> = ({}) => {
         <Text>{t('loginInputTitleNickname')}</Text>
         <WalletAddr>{shortenAddress(account, 3)}</WalletAddr>
       </Flex>
-      <InputItems marginBottom='46px' alignItems='center'>
+      <InputItems marginBottom='30px' alignItems='center'>
         <Box width='100%'>
           <MyInput
             onChange={event => {
