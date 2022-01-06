@@ -21,20 +21,13 @@ const InputBox = styled(Flex)`
   position: relative;
   align-items: center;
 `;
-const Max = styled(Text)`
-  position: absolute;
-  right: 15px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  cursor: pointer;
-  font-size: 14px;
-`;
 const SureBtn = styled(Button)`
   padding: 6px 30px;
   width: 60%;
 `;
 const MyInput = styled(Input)`
   border-radius: 10px;
-  padding: 12px 50px 12px 16px;
+  padding: 12px 16px;
   height: 50px;
   background: ${({ theme }) => theme.colors.backgroundTextArea};
   &::placeholder {
@@ -53,6 +46,7 @@ const LockModal: React.FC<init> = ({ onClose }) => {
   const { account } = useWeb3React();
   const [val, setVal] = useState('');
   const [pending, setpending] = useState(false);
+  const InviteCode = localStorage.getItem('InviteCode');
 
   // 授权
   const handLock = useCallback(async () => {
@@ -69,6 +63,9 @@ const LockModal: React.FC<init> = ({ onClose }) => {
     }
   }, [account]);
 
+  useEffect(() => {
+    setVal(InviteCode);
+  }, [InviteCode]);
   return (
     <CountBox>
       <InputBox mb='10px'>

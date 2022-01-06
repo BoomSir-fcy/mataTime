@@ -158,7 +158,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
   const dispatch = useDispatch();
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [LeftTime, setLeftTime] = useState(0);
   const DownTime = useCountdownTime(LeftTime);
 

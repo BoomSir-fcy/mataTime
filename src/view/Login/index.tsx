@@ -4,7 +4,7 @@ import {
   useHistory,
   useLocation,
   withRouter,
-  RouteComponentProps
+  RouteComponentProps,
 } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 import { useDispatch } from 'react-redux';
@@ -118,10 +118,10 @@ const SignInBox = () => {
   const { logout, login } = useAuth();
   const { toastError } = useToast();
   const redict = (location?.state as any)?.from?.pathname;
-  const [Pending, setPending] = useState(false)
+  const [Pending, setPending] = useState(false);
 
   const signIn = async () => {
-    setPending(true)
+    setPending(true);
     //2.1 用户已经注册登录钱包签名
     // await window.ethereum.enable();
     const res = await loginCallback(2);
@@ -140,29 +140,31 @@ const SignInBox = () => {
       // dispatch(storeAction.changeReset());
       toastError(t('loginSigninFail') || res?.msg);
     }
-    setPending(false)
+    setPending(false);
   };
 
   return (
     <React.Fragment>
       <Text
-        fontSize="34px"
-        marginBottom="29px"
+        fontSize='34px'
+        marginBottom='29px'
         bold
         style={{ textTransform: 'capitalize' }}
       >
         {t('loginWelcome')}
       </Text>
-      <Text color="textOrigin">{t('loginSubTitle')}</Text>
+      <Text color='textOrigin'>{t('loginSubTitle')}</Text>
       <SignUpWarpper>
         <WalletAddress address={account} />
-        <FailButton disabled={Pending} onClick={() => signIn()}>{t('login Log in')}</FailButton>
+        <FailButton disabled={Pending} onClick={() => signIn()}>
+          {t('login Log in')}
+        </FailButton>
       </SignUpWarpper>
-      <Text color="textTips">{t('loginSubTips')}</Text>
+      <Text color='textTips'>{t('loginSubTips')}</Text>
     </React.Fragment>
   );
 };
-const Login: React.FC<RouteComponentProps> = React.memo((route) => {
+const Login: React.FC<RouteComponentProps> = React.memo(route => {
   useFetchSupportNFT();
   useFetchNftList();
 
@@ -181,7 +183,7 @@ const Login: React.FC<RouteComponentProps> = React.memo((route) => {
     nftStatus,
     signUpFail,
     isStakeNft,
-    singUpStep
+    singUpStep,
   } = loginReduce;
   const { account } = useWeb3React();
   const { loginCallback } = useLogin();
@@ -198,7 +200,6 @@ const Login: React.FC<RouteComponentProps> = React.memo((route) => {
   //   dispatch(storeAction.setChainId({ chainId: parseInt(chainId) }));
   // };
 
-
   // 查询是否有质押的NFT
   const getStakeType = async account => {
     const nftStake = await FetchNftStakeType(account);
@@ -212,20 +213,26 @@ const Login: React.FC<RouteComponentProps> = React.memo((route) => {
     }
   };
 
+  // 获取邀请地址和邀请code码
   const getInviteAddress = () => {
-    // 获取邀请地址
-    const search = route.location.search
-    const myQuery = (search) => {
+    const search = route.location.search;
+    const myQuery = search => {
       return new URLSearchParams(search);
-    }
-    const InviteAddress = myQuery(search).get("InviteAddress");
+    };
+    // 获取邀请地址
+    const InviteAddress = myQuery(search).get('InviteAddress');
     if (InviteAddress) {
-      localStorage.setItem("InviteAddress", InviteAddress);
+      localStorage.setItem('InviteAddress', InviteAddress);
     }
-  }
+
+    const InviteCode = myQuery(search).get('code');
+    if (InviteCode) {
+      localStorage.setItem('InviteCode', InviteCode);
+    }
+  };
 
   useEffect(() => {
-    getInviteAddress()
+    getInviteAddress();
     return () => {
       dispatch(storeAction.changeReset());
     };
@@ -279,19 +286,23 @@ const Login: React.FC<RouteComponentProps> = React.memo((route) => {
       </LeftBox>
       <Content>
         <Container>
-          {singUpStep === 0 && <LogoWarpper>
-            <Logo
-              style={{ marginLeft: '-10px' }}
-              url="/"
-              src={`${require(isDark
-                ? './images/LOGO2.svg'
-                : './images/light_logo.svg').default
+          {singUpStep === 0 && (
+            <LogoWarpper>
+              <Logo
+                style={{ marginLeft: '-10px' }}
+                url='/'
+                src={`${
+                  require(isDark
+                    ? './images/LOGO2.svg'
+                    : './images/light_logo.svg').default
                 }`}
-            />
-          </LogoWarpper>}
+              />
+            </LogoWarpper>
+          )}
           {/* 登录或注册 */}
-          {isSignin ?
-            <SignInBox /> :
+          {isSignin ? (
+            <SignInBox />
+          ) : (
             <>
               {!signUpFail && singUpStep > 0 && account && <Step />}
               {isSignup ? (
@@ -300,7 +311,7 @@ const Login: React.FC<RouteComponentProps> = React.memo((route) => {
                 <LoginJoin />
               )}
             </>
-          }
+          )}
         </Container>
         <Footer />
       </Content>
