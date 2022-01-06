@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
-import { Empty, Flex, Spinner, Text } from 'uikit';
+import { Box, Empty, Flex, Spinner, Text } from 'uikit';
 import { useFetchInviteFriendsList } from 'view/Task/hooks/matter';
 import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
@@ -22,7 +22,7 @@ const Table = styled(Flex)`
 const Row = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: 40% 20% 20% 20%;
   align-items: center;
   min-height: 30px;
 `;
@@ -35,7 +35,6 @@ const HeadText = styled(Text)`
   }
 `;
 const ItemText = styled(Text)`
-  color: ${({ theme }) => theme.colors.white_black};
   font-size: 14px;
   margin-bottom: 10px;
   &:first-child {
@@ -49,6 +48,12 @@ const ItemText = styled(Text)`
     width: 50px;
     max-height: 50px;
   }
+`;
+const SpecialTag = styled(Text)`
+  padding: 0 10px;
+  margin-bottom: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.backgroundPrimary};
+  border-radius: 8px;
 `;
 const FriendsList: React.FC = React.memo(() => {
   const { list, pageNum, pageSize, setPageNum, loading, total } =
@@ -93,9 +98,12 @@ const FriendsList: React.FC = React.memo(() => {
             {list?.length ? (
               list.map(item => (
                 <Row key={item.uid} className='LinkRow'>
-                  <ItemText small ellipsis>
-                    {item.nick_name}
-                  </ItemText>
+                  <Flex flexWrap='wrap' alignItems='baseline'>
+                    <ItemText maxWidth='70%' small ellipsis>
+                      {item.nick_name}
+                    </ItemText>
+                    <SpecialTag small>Special</SpecialTag>
+                  </Flex>
                   <ItemText small ellipsis>
                     {shortenAddress(item.address)}
                   </ItemText>

@@ -4,8 +4,13 @@ import styled from 'styled-components';
 import { Box, Text, Flex, Button, Empty, Spinner } from 'uikit';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { useDispatch } from 'react-redux';
-import { GetTaskTag, useInviteCount } from 'view/Task/hooks/matter';
-import { Variant, Group } from 'view/Task/type';
+import {
+  getInvitedNftTokenAddress,
+  GetTaskTag,
+  useInviteCount,
+  useNftBaseView,
+} from 'view/Task/hooks/matter';
+import { Variant, Group, InvitableNftInfo } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
 import TaskItem from '../TaskContent/TaskItem';
 import { useTranslation } from 'contexts/Localization';
@@ -110,6 +115,7 @@ const BtnFlex = styled(Flex)`
 `;
 const Invite: React.FC = () => {
   useFetchNftList();
+  const { tokenAddress, defaultCodeList } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -120,8 +126,43 @@ const Invite: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { isMobile } = useMenuNav();
   const [inviteList, setInviteList] = useState([]);
+  const [invitableNftList, setInvitableNftList] = useState<InvitableNftInfo[]>(
+    [],
+  );
 
   const NftList = useStore(p => p.loginReducer.nftList);
+  const userInfo: any = useStore(p => p.loginReducer.userInfo);
+
+  useEffect(() => {
+    console.log(NftList);
+
+    if (NftList.length > 0 && tokenAddress) {
+      getNftList();
+    }
+  }, [NftList.length, tokenAddress]);
+
+  // 获取可邀请的nft列表，当前已注册的nft默认可以邀请
+  const getNftList = useCallback(async () => {
+    console.log(tokenAddress);
+    const nftList = NftList.filter(
+      v => tokenAddress.toString().indexOf(v.properties.token) !== -1,
+    ).map(item => {
+      return {
+        name: item.name,
+        image: item.image,
+        token: item.properties.token,
+        token_id: item.properties.token_id,
+      };
+    });
+    nftList.unshift({
+      name: userInfo.nick_name,
+      image: userInfo.nft_image,
+      token: userInfo.nft_address,
+      token_id: userInfo.nft_id,
+    });
+
+    setInvitableNftList(nftList);
+  }, [NftList, userInfo, tokenAddress]);
 
   useEffect(() => {
     if (data.length) {
@@ -183,7 +224,7 @@ const Invite: React.FC = () => {
               Invitation Overview
             </Text>
             <Button as={Link} to='/task/friendsList'>
-              {t('邀请记录')}
+              {t('InvitationRecord')}
             </Button>
           </Flex>
           <Flex flexWrap='wrap' justifyContent='space-between'>
@@ -273,7 +314,7 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {NftList.length ? (
+        {invitableNftList.length ? (
           <>
             <ContentBox>
               <Text fontSize='18px' bold>
@@ -286,7 +327,10 @@ const Invite: React.FC = () => {
                 <Step />
               </Flex>
             </ContentBox>
-            <StakeNFT nftList={NftList} />
+            <StakeNFT
+              nftList={invitableNftList}
+              defaultCodeList={defaultCodeList}
+            />
           </>
         ) : (
           <Flex justifyContent='center' alignItems='center'>

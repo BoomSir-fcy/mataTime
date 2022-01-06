@@ -12,6 +12,9 @@ import { useToast } from 'hooks';
 import { Api } from 'apis';
 import { getNftGenCodeCount, useGenCodes } from 'view/Task/hooks/matter';
 import { useImmer } from 'use-immer';
+import { debounce } from 'lodash';
+import useConnectWallet from 'hooks/useConnectWallet';
+import { CodeInfo, InvitableNftInfo } from 'view/Task/type';
 
 const NftFlex = styled(Flex)`
   width: 100%;
@@ -80,114 +83,119 @@ const ReceivedBox = styled(Flex)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
 `;
 
-interface CodeInfo {
-  id: number;
-  ntf_token?: string;
-  nftid?: string;
-  code?: string;
-  code_hash?: string;
-  lock_hash?: string;
-  status?: number;
-  created_at?: number;
-  locked_at?: string;
-  used_at?: string;
-  used_uid?: string;
-}
-
 const NftAvatar: React.FC<{
-  NftInfo?: any;
-}> = ({ NftInfo }) => {
+  NftInfo?: InvitableNftInfo;
+  defaultCodeList?: CodeInfo[];
+}> = ({ NftInfo, defaultCodeList }) => {
   const { onGenCodes } = useGenCodes();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const { t } = useTranslation();
   const { toastSuccess } = useToast();
   const [visible, setVisible] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [activeInfo, setActiveInfo] = useState<CodeInfo>();
 
+  const nftToken = NftInfo.token;
+  const nftId = NftInfo.token_id;
+
   // 0 未生成, 1未使用, 2提交合约, 3锁定, 4已使用
-  const [codeList, setCodeList] = useState<CodeInfo[]>([
-    { id: 1, status: 0 },
-    { id: 2, status: 0 },
-    { id: 3, status: 0 },
-  ]);
+  const [codeList, setCodeList] = useState<CodeInfo[]>(defaultCodeList);
 
   useEffect(() => {
     checkCodeStatus();
   }, []);
 
   const checkCodeStatus = useCallback(async () => {
-    const nftId = NftInfo.properties.token_id || '';
     const codeCount = await getNftGenCodeCount(nftId);
-    console.log(codeCount);
-    if (codeCount) {
-      const list = codeList.map((item, i) => {
-        return { ...item, status: codeCount === item.id ? 2 : item.status };
+    console.log(nftId, '------', codeCount);
+    setCodeList(prep => {
+      return prep.map((item, i) => {
+        return {
+          ...item,
+          status: item.status <= 2 && item.id <= codeCount ? 2 : item.status,
+        };
       });
-      setCodeList([...list]);
-    }
-  }, [NftInfo]);
+    });
+  }, [nftId]);
 
   // 获取邀请码信息
-  const getInviteCode = async (nftToken, nftId) => {
-    if (codeList[0]?.code) {
-      return codeList;
-    }
-    try {
-      const res = await Api.TaskApi.getInviteCode(nftToken, nftId);
-      if (Api.isSuccess(res)) {
-        const list = res.data || [];
-        const rsList = list.map((v, i) => {
-          return { ...v, ...codeList[i] };
-        });
-        setCodeList(rsList);
-        return rsList;
-      } else {
-        return [];
+  const getInviteCode = useCallback(
+    async (nftToken, nftId) => {
+      if (codeList[0]?.code) {
+        return;
       }
-    } catch (err) {
-      return [];
-    }
-  };
-
-  const handleGenCode = async (info: any) => {
-    console.log('info=========>', info);
-    setActiveInfo(info);
-    setSubmitLoading(true);
-
-    const nftToken = NftInfo.properties.token || '';
-    const nftId = NftInfo.properties.token_id || '';
-    // 未生成邀请码
-    if (info.status === 0) {
-      const tempCodeList = await getInviteCode(nftToken, nftId);
-      const codeHash = tempCodeList[info.id - 1]?.code_hash;
       try {
-        await onGenCodes(nftId, [getCodeHash(codeHash)]);
-        setVisible(true);
-        setSubmitLoading(false);
+        const res = await Api.TaskApi.getInviteCode(nftToken, nftId);
+        if (Api.isSuccess(res)) {
+          const list = res.data || [];
+          setCodeList(pre => {
+            return pre.map((v, i) => {
+              return { ...list[i], ...v };
+            });
+          });
+        }
+      } catch (err) {}
+    },
+    [nftToken, nftId],
+  );
+
+  // 获取已生成邀请码的列表
+  // const getCodeList = useCallback(async () => {
+  //   try {
+  //     const res = await Api.TaskApi.getCodeList(nftToken, nftId);
+  //     if (Api.isSuccess(res)) {
+  //       const list = res.data || [];
+  //       if (list.length) {
+  //         setCodeList(pre => {
+  //           return pre.map((v, i) => {
+  //             return { ...v, ...list[i] };
+  //           });
+  //         });
+  //       }
+  //     }
+  //   } catch (err) {}
+  // }, [nftToken, nftId]);
+
+  const handleGenCode = useCallback(
+    async (info: any) => {
+      console.log('info=========>', info);
+      setSubmitLoading(true);
+      try {
+        // 未生成邀请码
+        if (info.status === 0) {
+          await getInviteCode(nftToken, nftId);
+        }
+        // 未提交合约
+        if (info.status < 2) {
+          const codeHash = codeList[info.id - 1]?.code_hash;
+          await onGenCodes(nftId, [getCodeHash(codeHash)]);
+        }
       } catch (err) {
         setSubmitLoading(false);
+        return false;
       }
-    } else {
-      // todo: 获取已生成邀请码的列表
+      // 获取更新状态
+      setActiveInfo(codeList.filter(v => v.id === info.id)[0]);
       setTimeout(() => {
-        setSubmitLoading(false);
         setVisible(true);
+        setSubmitLoading(false);
       }, 5000);
-    }
-  };
+    },
+    [nftToken, nftId, codeList],
+  );
 
   // 获得codeHash值
-  const getCodeHash = (codeHash: string) => {
+  const getCodeHash = useCallback((codeHash: string) => {
     if (codeHash && codeHash.length === 16)
       return `0x${codeHash}000000000000000000000000000000000000000000000000`;
     else return `0x${codeHash}`;
-  };
+  }, []);
 
   // 复制链接
   const onCopyLink = useCallback(() => {
-    const copyUrl = `${window.location.origin}/login?code=${activeInfo?.code}`;
+    const copyUrl = `${window.location.origin}/login?c=${activeInfo?.code}&h=${activeInfo?.code_hash}&l=${activeInfo?.lock_hash}`;
     copyContent(copyUrl);
     toastSuccess(t('CopyLinkSuccess'));
     setVisible(false);
@@ -203,7 +211,7 @@ const NftAvatar: React.FC<{
       <NftFlex>
         <NftAvatarBox>
           <Text mb='10px'>
-            {NftInfo.name} #{NftInfo.properties.token_id}
+            {NftInfo.name} #{NftInfo.token_id}
           </Text>
           <ActiveImg
             className='active'
@@ -212,58 +220,68 @@ const NftAvatar: React.FC<{
             scale='ld'
           />
         </NftAvatarBox>
-        <NftDrawBox>
-          <Flex mb='10px' justifyContent='space-between' alignItems='center'>
-            <Text small>点击NFT画板分享给好友</Text>
-            <Text small>剩余{getTimes}次</Text>
-          </Flex>
-          <Flex>
-            {codeList.map((item, index) => (
-              <Column key={item.id}>
-                <AvatarBox>
-                  {item.id === 4 ? (
-                    <ReceivedBox>
-                      <Icon name={'icon-complete'} color='primary' size={25} />
-                      <Text mt='16px' color='textTips' small>
-                        {t('NFT has been collected')}
-                      </Text>
-                    </ReceivedBox>
-                  ) : (
-                    <>
-                      <Loading visible={submitLoading} />
-                      <ActiveImg
-                        // className={
-                        //   item.id > 1 && codeList[item.id - 1].status <= 1
-                        //     ? 'disable'
-                        //     : 'active'
-                        // }
-                        className='active'
-                        disableFollow
-                        src={require('assets/images/task/monkey.jpg').default}
-                        scale='ld'
-                        onClick={() => {
-                          // if (
-                          //   item.id > 1 &&
-                          //   codeList[item.id - 1].status <= 1
-                          // ) {
-                          //   return false;
-                          // }
-                          handleGenCode(item);
-                        }}
-                      />
-                      <Icon
-                        className='icon'
-                        name={'icon-fenxiang'}
-                        color='textPrimary'
-                        size={18}
-                      />
-                    </>
-                  )}
-                </AvatarBox>
-              </Column>
-            ))}
-          </Flex>
-        </NftDrawBox>
+        {account ? (
+          <NftDrawBox>
+            <Flex mb='10px' justifyContent='space-between' alignItems='center'>
+              <Text small>点击NFT画板分享给好友</Text>
+              <Text small>剩余{getTimes}次</Text>
+            </Flex>
+            <Flex>
+              {codeList.map((item, index) => (
+                <Column key={item.id}>
+                  <AvatarBox>
+                    {item.id === 4 ? (
+                      <ReceivedBox>
+                        <Icon
+                          name={'icon-complete'}
+                          color='primary'
+                          size={25}
+                        />
+                        <Text mt='16px' color='textTips' small>
+                          {t('NFT has been collected')}
+                        </Text>
+                      </ReceivedBox>
+                    ) : (
+                      <>
+                        {item.id === activeInfo?.id && (
+                          <Loading visible={submitLoading} />
+                        )}
+                        <ActiveImg
+                          className={
+                            item.id > 1 && codeList[index - 1].status <= 1
+                              ? 'disable'
+                              : 'active'
+                          }
+                          // className='active'
+                          disableFollow
+                          src={require('assets/images/task/monkey.jpg').default}
+                          scale='ld'
+                          onClick={() => {
+                            if (
+                              item.id > 1 &&
+                              codeList[index - 1].status <= 1
+                            ) {
+                              return false;
+                            }
+                            handleGenCode(item);
+                          }}
+                        />
+                        <Icon
+                          className='icon'
+                          name={'icon-fenxiang'}
+                          color='textPrimary'
+                          size={18}
+                        />
+                      </>
+                    )}
+                  </AvatarBox>
+                </Column>
+              ))}
+            </Flex>
+          </NftDrawBox>
+        ) : (
+          <Button onClick={onConnectWallet}>{t('Connect Wallet')}</Button>
+        )}
       </NftFlex>
 
       {/* 复制链接弹窗 */}
