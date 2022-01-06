@@ -36,7 +36,6 @@ const MyInput = styled(Input)`
   }
 `;
 
-// type 1 充值 2 提币
 interface init {
   onClose: () => void;
   InviteCode: string;
@@ -59,7 +58,7 @@ const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
       onClose();
     } catch (e) {
       console.error(e);
-      toast.error(t('锁定失败'));
+      toast.error(t('Lock failed'));
     } finally {
       setpending(false);
     }
@@ -79,11 +78,13 @@ const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
               setVal(e.currentTarget.value);
             }
           }}
-          placeholder={t('锁定NFT邀请名额，您将有更多的选择')}
+          placeholder={t(
+            'Lock the NFT invitation quota, you will have more choices',
+          )}
         />
       </InputBox>
       <Text mb='16px' fontSize='14px' color='textOrigin'>
-        {t('* 锁定之后10分钟内有效')}
+        * {t('Effective within 10 minutes after being locked')}
       </Text>
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
@@ -93,7 +94,7 @@ const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
             handLock();
           }}
         >
-          {pending ? <Dots>{t('锁定NFT')}</Dots> : t('锁定NFT')}
+          {pending ? <Dots>{t('Lock NFT')}</Dots> : t('Lock NFT')}
         </SureBtn>
       </Flex>
     </CountBox>

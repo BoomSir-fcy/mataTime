@@ -112,13 +112,8 @@ const Tabbar: React.FC<Props> = ({ activeIndex, onClick }) => {
 
   return (
     <PageContainer>
-      {/* <MobileHide>
-      </MobileHide> */}
       <CardStyled>
-        {/* <ImgBox>
-            <img src='/images/LOGO2.svg' alt='' />
-          </ImgBox> */}
-        <Logo />
+        <Logo noLink />
         <PaddingBox mt='20px'>
           <Heading scale='md' mb='30px' pl='14px'>
             {t('Synthesize')}
@@ -140,30 +135,11 @@ const Tabbar: React.FC<Props> = ({ activeIndex, onClick }) => {
                 >
                   {t(item.lable)} ({item.length})
                 </Text>
-                {/* {t(item.lable)} ({item.length}) */}
               </ButtonStyled>
             ))}
           </TabBoxStyled>
         </PaddingBox>
       </CardStyled>
-      {/* <MobileShow>
-        <BoxCardStyled>
-          <TabBoxStyled mt='8px'>
-            {stuffLable.map((item, index) => (
-              <ButtonStyled
-                variant='text'
-                scale='sm'
-                key={item.lable}
-                onClick={() => onClick(index)}
-              >
-                <Text color={activeIndex === index ? 'primary' : 'text'}>
-                  {t(item.lable)} ({item.length})
-                </Text>
-              </ButtonStyled>
-            ))}
-          </TabBoxStyled>
-        </BoxCardStyled>
-      </MobileShow> */}
     </PageContainer>
   );
 };

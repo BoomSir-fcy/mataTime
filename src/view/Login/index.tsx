@@ -190,6 +190,8 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
   const { getUserName } = useSignIn();
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
+
+  const [InviteCode, setInviteCode] = useState('');
   // const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 选择链
@@ -225,9 +227,11 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
       localStorage.setItem('InviteAddress', InviteAddress);
     }
 
-    const InviteCode = myQuery(search).get('code');
-    if (InviteCode) {
-      localStorage.setItem('InviteCode', InviteCode);
+    const Code_c = myQuery(search).get('c');
+    const Code_h = myQuery(search).get('h');
+    const Code_l = myQuery(search).get('l');
+    if (Code_c && Code_h && Code_l) {
+      setInviteCode(route.location.search);
     }
   };
 
@@ -237,12 +241,6 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
       dispatch(storeAction.changeReset());
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (isSignin) {
-  //     signIn();
-  //   }
-  // }, [isSignin]);
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
@@ -277,12 +275,6 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
     <LoginContainer>
       <LeftBox>
         <HomeBanner />
-        {/* {nftBoolean && (
-          <Nft>
-            <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>
-            <StakeNFT status={1} />
-          </Nft>
-        )} */}
       </LeftBox>
       <Content>
         <Container>
@@ -306,7 +298,11 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
             <>
               {!signUpFail && singUpStep > 0 && account && <Step />}
               {isSignup ? (
-                <SignUp signUpFail={signUpFail} isStakeNft={isStakeNft} />
+                <SignUp
+                  InviteCode={InviteCode}
+                  signUpFail={signUpFail}
+                  isStakeNft={isStakeNft}
+                />
               ) : (
                 <LoginJoin />
               )}
