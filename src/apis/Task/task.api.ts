@@ -27,9 +27,15 @@ export class TaskApi extends Http {
     return res;
   }
   
-  // 邀请详情
+  // 生成邀请码
   async getInviteCode(nft_token: string, nft_id: string) {
     const res = await this.get('/v1/user/invite-code', { nft_token, nft_id });
+    return res;
+  }
+
+  // 已生成的邀请码列表
+  async getInviteCodeList(nft_token: string, nft_id: string) {
+    const res = await this.get('/v1/user/invite-detail', { nft_token, nft_id });
     return res;
   }
 }
