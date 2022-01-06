@@ -98,7 +98,6 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
       }
     }, [setVisible]);
     if (!visible && creactOnUse) return null;
-
     return (
       <Modal
         isOpen={visible}

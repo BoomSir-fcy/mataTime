@@ -137,7 +137,6 @@ const ShowCard: React.FC = () => {
   const dispatch = useDispatch();
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
-  const [visible, setVisible] = useState(false);
   // const [LeftTime, setLeftTime] = useState(0);
   const { codes, selectData, codeInfo, inviteInfo } = usePickNftState()
 
@@ -150,6 +149,7 @@ const ShowCard: React.FC = () => {
 
   console.log(LeftTime, 'LeftTime')
   const [DownTime, hour, minute] = useCountdownTime(LeftTime);
+  const [visible, setVisible] = useState(true);
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],

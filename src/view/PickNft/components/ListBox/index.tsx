@@ -107,7 +107,7 @@ const ListBox: React.FC<Props> = ({ data, activeIndex }) => {
 
   return (
     <PageContainer>
-      <Flex justifyContent='space-around' flexWrap='wrap'>
+      <Flex justifyContent='space-around' flexWrap='wrap' maxHeight='50vh'>
         <FlexAutoWarpper>
           {data?.map((item, index) => {
             // if (item.isDefault) return null

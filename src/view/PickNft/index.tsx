@@ -1,8 +1,21 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { Heading, Text, Flex, Spinner, Box, LinkExternal } from 'uikit';
+import {
+  Heading,
+  Text,
+  Flex,
+  Spinner,
+  Box,
+  LinkExternal,
+  useMatchBreakpoints,
+} from 'uikit';
 import styled from 'styled-components';
-import { useFetchCodeInfo, useFetchInviteInfo, useFetchStuffAllInfo, usePickNftState } from 'store/picknft/hooks';
+import {
+  useFetchCodeInfo,
+  useFetchInviteInfo,
+  useFetchStuffAllInfo,
+  usePickNftState,
+} from 'store/picknft/hooks';
 import { useDispatch } from 'react-redux';
 import { randomPick, setInviteCodes } from 'store/picknft/actions';
 import useTheme from 'hooks/useTheme';
@@ -49,21 +62,25 @@ const PickNft: React.FC = () => {
   const { account } = useWeb3React();
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useDispatch();
-  const { codes, codeInfo, selectData, stuffRes, loaded } = usePickNftState()
+  const { codes, codeInfo, selectData, stuffRes, loaded } = usePickNftState();
+  const { isLg, isXl, isXxl } = useMatchBreakpoints();
+  const isMd = isLg === false && isXl === false && isXxl === false;
 
   const parsedQs = useParsedQueryString();
   useEffect(() => {
     if (parsedQs.c && parsedQs.l && parsedQs.h) {
-      dispatch(setInviteCodes({
-        code: parsedQs.c,
-        lock_hash: parsedQs.l,
-        code_hash: parsedQs.h,
-      }))
+      dispatch(
+        setInviteCodes({
+          code: parsedQs.c,
+          lock_hash: parsedQs.l,
+          code_hash: parsedQs.h,
+        }),
+      );
     }
-  }, [parsedQs])
+  }, [parsedQs]);
 
   useFetchCodeInfo();
-  useFetchInviteInfo()
+  useFetchInviteInfo();
   useFetchStuffAllInfo();
 
   const randomPickHandle = useCallback(
@@ -103,14 +120,7 @@ const PickNft: React.FC = () => {
                 </Flex>
               </Crumbs>
               <Flex justifyContent='center' flexWrap='wrap'>
-                <MobileShow width='100%'>
-                  {/* <StepBoxMobile>
-                    <Step noTitle />
-                  </StepBoxMobile>
-                  <ShowCard />
-                  </StepBoxMobile> */}
-                  <ShowCard />
-                </MobileShow>
+                <MobileShow width='100%'>{isMd && <ShowCard />}</MobileShow>
                 <Flex flex='1'>
                   <LeftBox flexDirection='column'>
                     {/* <StepBox>
@@ -118,9 +128,7 @@ const PickNft: React.FC = () => {
                     </StepBox> */}
                     <ListBox activeIndex={activeIndex} data={renderList} />
                   </LeftBox>
-                  <MobileHide>
-                    <ShowCard />
-                  </MobileHide>
+                  <MobileHide>{!isMd && <ShowCard />}</MobileHide>
                 </Flex>
               </Flex>
             </Box>
