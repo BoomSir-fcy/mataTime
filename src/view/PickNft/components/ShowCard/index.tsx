@@ -181,11 +181,8 @@ const ShowCard: React.FC = () => {
 
   const onClose = useCallback(() => {
     setVisible(false);
-    console.log(codes, '===')
-    dispatch(fetchCodeInfoAsync(codes))
+    // dispatch(fetchCodeInfoAsync(codes))
   }, [setVisible, dispatch, codes]);
-
-  console.log(inviteLoading, 'inviteLoading')
 
   return (
     <PageContainer>
@@ -275,7 +272,10 @@ const ShowCard: React.FC = () => {
                   ?
                   <StateModal onClose={onClose} state={codeInfo.state} />
                   :
-                  <LockModal onClose={onClose} InviteCode={codes.lock_hash} />
+                  <LockModal onClose={() => {
+                    setVisible(false);
+                    dispatch(fetchCodeInfoAsync(codes))
+                  }} InviteCode={codes.lock_hash} />
               }
             </>
         }
