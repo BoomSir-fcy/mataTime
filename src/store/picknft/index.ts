@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import random from 'lodash/random';
 import stuffRes from 'config/constants/stuffImages';
-import { PickNftState, AppThunk } from '../types';
+import { PickNftState, AppThunk, InviteCodes } from '../types';
 import { updateSelectData, randomPick, setInviteCodes } from './actions';
 import {
   fetchCodeUsed,
@@ -47,9 +47,9 @@ const initialState: PickNftState = {
   }
 };
 export const fetchCodeInfoAsync =
-  (code: string): AppThunk =>
+  (codes: InviteCodes): AppThunk =>
     async dispatch => {
-      const data = await fetchCodeInfo(code);
+      const data = await fetchCodeInfo(codes);
       // dispatch(setCodeUsed(data));
       dispatch(setCodeInfo(data));
       dispatch(setInviteLoading(false));

@@ -181,7 +181,8 @@ const ShowCard: React.FC = () => {
 
   const onClose = useCallback(() => {
     setVisible(false);
-    dispatch(fetchCodeInfoAsync(codes.lock_hash))
+    console.log(codes, '===')
+    dispatch(fetchCodeInfoAsync(codes))
   }, [setVisible, dispatch, codes]);
 
   console.log(inviteLoading, 'inviteLoading')
@@ -260,8 +261,8 @@ const ShowCard: React.FC = () => {
         title={t('Lock NFT')}
         creactOnUse
         visible={visible}
-        setVisible={() => setVisible(true)}
-        customizeTitle
+        setVisible={() => setVisible(codeInfo.state !== 1)}
+        customizeTitle={codeInfo.state !== 1}
       >
         {
           inviteLoading

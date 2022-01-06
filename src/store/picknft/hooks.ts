@@ -35,10 +35,10 @@ export const useFetchCodeInfo = () => {
 
   useEffect(() => {
 
-    if (account && codes.lock_hash) {
-      dispatch(fetchCodeInfoAsync(codes.lock_hash));
+    if (account && codes.code_hash) {
+      dispatch(fetchCodeInfoAsync(codes));
     }
-  }, [dispatch, account, codes.lock_hash]);
+  }, [dispatch, account, codes.code_hash]);
 };
 
 export const useFetchNftApproval = () => {

@@ -9,6 +9,7 @@ import {
   getDsgafAddress,
   getInvitationAddress,
 } from 'utils/addressHelpers';
+import { InviteCodes } from 'store/types';
 
 // 查询code是否被使用
 export const fetchCodeUsed = async code => {
@@ -28,22 +29,26 @@ export const fetchCodeUsed = async code => {
   }
 };
 
-export const fetchCodeInfo = async (lockHash) => {
+export const fetchCodeInfo = async (codes: InviteCodes) => {
   const exPhotoNftAddress = getInvitationAddress();
   try {
     const calls = [{
       address: exPhotoNftAddress,
       name: 'getCodeView',
-      params: [`0x${lockHash}`],
+      params: [`0x${codes.code_hash}`],
+    }, {
+      address: exPhotoNftAddress,
+      name: 'getCodeView',
+      params: [`0x${codes.lock_hash}`],
     }];
 
-    const [res] = await multicall(invitationAbi, calls);
-    console.log(res)
+    const [hashRes, Lockres] = await multicall(invitationAbi, calls);
+    console.log(hashRes, 'as')
     return {
-      generator: res.generator,
-      lockUser: res.lockUser,
-      state: res.state,
-      lockedAt: res.lockedAt.toNumber() * 1000,
+      generator: hashRes.generator,
+      lockUser: hashRes.lockUser,
+      state: hashRes.state,
+      lockedAt: Lockres.lockedAt.toNumber() * 1000,
     };
   } catch (error) {
     console.error(error);
