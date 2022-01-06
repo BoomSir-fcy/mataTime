@@ -38,19 +38,21 @@ const initialState: PickNftState = {
     maxGendCodeCount_: 0,
     toToken_: '',
   },
+  inviteLoading: true,
   codeInfo: {
     lockUser: '',
     lockedAt: 0,
     address: '',
-    state: '',
+    state: 0,
   }
 };
-export const fetchCodeUsedAsync =
-  (code?: string): AppThunk =>
+export const fetchCodeInfoAsync =
+  (code: string): AppThunk =>
     async dispatch => {
       const data = await fetchCodeInfo(code);
-      dispatch(setCodeUsed(data));
+      // dispatch(setCodeUsed(data));
       dispatch(setCodeInfo(data));
+      dispatch(setInviteLoading(false));
     };
 export const fetchNftApprovalAsync =
   (account?: string): AppThunk =>
@@ -102,6 +104,10 @@ export const picknft = createSlice({
     setTicketAllowance: (state, action) => {
       const { payload } = action;
       state.allowanceTicket = payload;
+    },
+    setInviteLoading: (state, action) => {
+      const { payload } = action;
+      state.inviteLoading = payload;
     },
     setInviteInfo: (state, action) => {
       const { payload } = action;
@@ -203,6 +209,7 @@ export const {
   setCodeUsed,
   setCodeInfo,
   setStuffAllLimits,
+  setInviteLoading,
   setInviteInfo,
 } = picknft.actions;
 

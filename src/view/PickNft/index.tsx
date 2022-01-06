@@ -56,6 +56,14 @@ const LeftBox = styled(Flex)`
   flex: 1;
 `;
 
+/* 
+  TODO:
+  1.用户未锁定
+  2.用户已锁定
+  3.锁定用户不是自己
+  4.已使用
+*/
+
 const PickNft: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();

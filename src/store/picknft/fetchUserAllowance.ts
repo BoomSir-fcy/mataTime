@@ -38,6 +38,7 @@ export const fetchCodeInfo = async (lockHash) => {
     }];
 
     const [res] = await multicall(invitationAbi, calls);
+    console.log(res)
     return {
       generator: res.generator,
       lockUser: res.lockUser,
@@ -49,7 +50,7 @@ export const fetchCodeInfo = async (lockHash) => {
     return {
       generator: '0x0000000000000000000000000000000000000000',
       lockUser: '0x0000000000000000000000000000000000000000',
-      state: 1,
+      state: 0,
       lockedAt: 0
     };
     // return [index, [], []]

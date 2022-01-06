@@ -82,6 +82,7 @@ export interface PickNftState {
     loaded: boolean;
   };
   codes: InviteCodes;
+  inviteLoading: boolean;
   inviteInfo: {
     nft_: string;
     userProfile_: string;
@@ -93,7 +94,7 @@ export interface PickNftState {
     lockUser: string;
     lockedAt: number;
     address: string;
-    state: string;
+    state: number;
   }
 }
 export type AppThunk<ReturnType = void> = ThunkAction<

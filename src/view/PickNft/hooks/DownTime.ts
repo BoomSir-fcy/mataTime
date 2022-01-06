@@ -8,6 +8,7 @@ export const useCountdownTime = (endTime: number) => {
   const timer = useRef<ReturnType<typeof setTimeout>>(null);
   const [hour, setHour] = useState(0)
   const [minute, setMinute] = useState(0)
+  const [second, setSecond] = useState(0)
   const [secondsRemaining, setSecondsRemaining] = useState('00:00:00');
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export const useCountdownTime = (endTime: number) => {
       }
       setHour(hours)
       setMinute(Number(minutes))
+      setSecond(Number(seconds))
     };
     if (endTime > 0) {
       timer.current = setInterval(() => {

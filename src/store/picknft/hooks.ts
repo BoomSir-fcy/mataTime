@@ -7,7 +7,7 @@ import {
   fetchStuffAllLimitsAsync,
   fetchTicketAllowanceAsync,
   fetchTicketPriceAsync,
-  fetchCodeUsedAsync,
+  fetchCodeInfoAsync,
   fetchInviteInfoAsync,
 } from '.';
 import { State, PickNftState } from '../types';
@@ -36,7 +36,7 @@ export const useFetchCodeInfo = () => {
   useEffect(() => {
 
     if (account && codes.lock_hash) {
-      dispatch(fetchCodeUsedAsync(codes.lock_hash));
+      dispatch(fetchCodeInfoAsync(codes.lock_hash));
     }
   }, [dispatch, account, codes.lock_hash]);
 };

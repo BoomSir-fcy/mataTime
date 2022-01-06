@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ChromePicker } from 'react-color';
-import { Heading, Text, Card, Box, Image, Flex, Button, light } from 'uikit';
+import { Heading, Text, Card, Box, Image, Flex, Button, light, Spinner } from 'uikit';
 import styled from 'styled-components';
 import Dots from 'components/Loader/Dots';
 import { orderBy } from 'lodash';
@@ -14,7 +14,7 @@ import Container from 'components/Layout/Container';
 import { randomPick } from 'store/picknft/actions';
 import { ExChangeResult, useExchangePhoto } from 'view/PickNft/hooks/exchange';
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
-import { fetchNftApprovalAsync, fetchStuffAllLimitsAsync } from 'store/picknft';
+import { fetchCodeInfoAsync, fetchNftApprovalAsync, fetchStuffAllLimitsAsync } from 'store/picknft';
 // import { fetchNftUserDataAsync } from 'store/nfts'
 import { formatHexadecimal } from 'utils/formatNumber';
 import { ConnectWalletButton, Icon, ModalWrapper } from 'components';
@@ -23,6 +23,7 @@ import { useStore } from 'store';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import LockModal from '../pop/lock';
+import StateModal from '../pop/state';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 import SetNickName from './setName';
 import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
@@ -139,7 +140,9 @@ const ShowCard: React.FC = () => {
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
   // const [LeftTime, setLeftTime] = useState(0);
-  const { codes, selectData, codeInfo, inviteInfo } = usePickNftState()
+  const { codes, selectData, codeInfo, inviteInfo, inviteLoading } = usePickNftState()
+
+
 
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
@@ -148,13 +151,17 @@ const ShowCard: React.FC = () => {
     return 0
   }, [inviteInfo])
 
-  console.log(LeftTime, 'LeftTime')
   const [DownTime, hour, minute] = useCountdownTime(LeftTime);
   const [visible, setVisible] = useState(true);
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],
   );
+
+  const codeState = useMemo(() => {
+    // if (codeInfo.state === '2') return 
+    return codeInfo.state
+  }, [codeInfo])
 
   const onMintHandle = useCallback(async (value) => {
     const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
@@ -174,8 +181,10 @@ const ShowCard: React.FC = () => {
 
   const onClose = useCallback(() => {
     setVisible(false);
-    dispatch(fetchCodeInfo(codes.lock_hash))
+    dispatch(fetchCodeInfoAsync(codes.lock_hash))
   }, [setVisible, dispatch, codes]);
+
+  console.log(inviteLoading, 'inviteLoading')
 
   return (
     <PageContainer>
@@ -251,9 +260,24 @@ const ShowCard: React.FC = () => {
         title={t('Lock NFT')}
         creactOnUse
         visible={visible}
-        setVisible={setVisible}
+        setVisible={() => setVisible(true)}
+        customizeTitle
       >
-        <LockModal onClose={onClose} InviteCode={codes.lock_hash} />
+        {
+          inviteLoading
+            ?
+            <Spinner />
+            :
+            <>
+              {
+                codeInfo.state !== 1
+                  ?
+                  <StateModal onClose={onClose} state={codeInfo.state} />
+                  :
+                  <LockModal onClose={onClose} InviteCode={codes.lock_hash} />
+              }
+            </>
+        }
       </ModalWrapper>
     </PageContainer>
   );

@@ -136,7 +136,7 @@ const NftAvatar: React.FC<{
             });
           });
         }
-      } catch (err) {}
+      } catch (err) { }
     },
     [nftToken, nftId],
   );
@@ -188,9 +188,10 @@ const NftAvatar: React.FC<{
 
   // 获得codeHash值
   const getCodeHash = useCallback((codeHash: string) => {
-    if (codeHash && codeHash.length === 16)
-      return `0x${codeHash}000000000000000000000000000000000000000000000000`;
-    else return `0x${codeHash}`;
+    return `0x${codeHash}`;
+    // if (codeHash && codeHash.length === 16)
+    //   return `0x${codeHash}000000000000000000000000000000000000000000000000`;
+    // else return `0x${codeHash}`;
   }, []);
 
   // 复制链接
