@@ -67,6 +67,7 @@ export interface PickNftState {
   selectData: StuffElement[];
   stuffRes: StuffElementRender[][];
   isApprove: boolean;
+  codeUsed: boolean;
   loaded: boolean;
   allowanceTicket: string;
   ticketInfo: {

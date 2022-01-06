@@ -1,12 +1,33 @@
 import dsgnftAbi from 'config/abi/mysteryBox.json';
 import erc20ABI from 'config/abi/erc20.json';
 import exphotoAbi from 'config/abi/exphoto.json';
+import invitationAbi from 'config/abi/Invitation.json';
 import multicall from 'utils/multicall';
 import {
   getExPhotoAddress,
   getTicketNftAddress,
   getDsgafAddress,
+  getInvitationAddress,
 } from 'utils/addressHelpers';
+
+// 查询code是否被使用
+export const fetchCodeUsed = async code => {
+  const InvitationAddress = getInvitationAddress();
+  try {
+    const calls = [
+      {
+        address: InvitationAddress,
+        name: 'codeInfo',
+        params: [code],
+      },
+    ];
+    const [codeInfo] = await multicall(invitationAbi, calls);
+    console.log(codeInfo);
+    return codeInfo[0];
+  } catch (error) {
+    return [];
+  }
+};
 
 export const fetchNftApproval = async account => {
   const exPhotoNftAddress = getTicketNftAddress();

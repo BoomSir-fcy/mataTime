@@ -7,8 +7,20 @@ import {
   fetchStuffAllLimitsAsync,
   fetchTicketAllowanceAsync,
   fetchTicketPriceAsync,
+  fetchCodeUsedAsync,
 } from '.';
 import { State, PickNftState } from '../types';
+
+export const useFetchCodeUsed = code => {
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+
+  useEffect(() => {
+    if (account && code) {
+      dispatch(fetchCodeUsedAsync(code));
+    }
+  }, [dispatch, account]);
+};
 
 export const useFetchNftApproval = () => {
   const dispatch = useDispatch();
@@ -20,6 +32,7 @@ export const useFetchNftApproval = () => {
     }
   }, [dispatch, account]);
 };
+
 export const useFetchTicketNftApproval = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();

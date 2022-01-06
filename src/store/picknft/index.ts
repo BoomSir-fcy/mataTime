@@ -4,6 +4,7 @@ import stuffRes from 'config/constants/stuffImages';
 import { PickNftState, AppThunk } from '../types';
 import { updateSelectData, randomPick } from './actions';
 import {
+  fetchCodeUsed,
   fetchNftApproval,
   fetchTicketAllowance,
   fetchTicketPrice,
@@ -14,6 +15,7 @@ const initialState: PickNftState = {
   selectData: [],
   stuffRes: JSON.parse(JSON.stringify(stuffRes)),
   isApprove: false,
+  codeUsed: false,
   loaded: false,
   allowanceTicket: '0',
   ticketInfo: {
@@ -23,7 +25,12 @@ const initialState: PickNftState = {
     loaded: false,
   },
 };
-
+export const fetchCodeUsedAsync =
+  (code?: string): AppThunk =>
+  async dispatch => {
+    const data = await fetchCodeUsed(code);
+    dispatch(setNftApproval(data));
+  };
 export const fetchNftApprovalAsync =
   (account?: string): AppThunk =>
   async dispatch => {
@@ -51,6 +58,10 @@ export const picknft = createSlice({
   name: 'PickNft',
   initialState,
   reducers: {
+    setCodeUsed: (state, action) => {
+      const { payload } = action;
+      state.codeUsed = payload;
+    },
     setNftApproval: (state, action) => {
       const { payload } = action;
       state.isApprove = payload;

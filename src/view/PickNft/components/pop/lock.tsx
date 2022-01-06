@@ -38,15 +38,15 @@ const MyInput = styled(Input)`
 // type 1 充值 2 提币
 interface init {
   onClose: () => void;
+  InviteCode: string;
 }
 
-const LockModal: React.FC<init> = ({ onClose }) => {
+const LockModal: React.FC<init> = ({ onClose, InviteCode }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const [val, setVal] = useState('');
   const [pending, setpending] = useState(false);
-  const InviteCode = localStorage.getItem('InviteCode');
 
   // 授权
   const handLock = useCallback(async () => {

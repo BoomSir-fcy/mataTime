@@ -62,12 +62,6 @@ const BoxPaddingStyled = styled(Box)`
 `;
 
 const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
-  /* max-width: 300px;
-  max-height: 300px;
-  min-width: 160px;
-  min-height: 160px;
-  width: 16vw;
-  height: 16vw; */
   width: 24vh;
   height: 24vh;
   max-width: 100%;
@@ -127,11 +121,10 @@ const Cover = styled(Box)`
 `;
 
 interface AvatarShowCard {
-  avatarNft: NftInfo[];
-  balance: number;
+  InviteCode: string;
 }
 
-const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
+const ShowCard: React.FC<AvatarShowCard> = ({ InviteCode }) => {
   useFetchNftApproval();
 
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
@@ -161,7 +154,8 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
   const [visible, setVisible] = useState(true);
   const [LeftTime, setLeftTime] = useState(0);
   const DownTime = useCountdownTime(LeftTime);
-
+  const nickname = '';
+  const code = '';
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],
@@ -172,21 +166,13 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
     const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
     const res = await onExchange(
       sortData.map(item => item.id),
-      avatarNft[0]?.properties?.token_id,
+      nickname,
+      code,
       `0x${colorHex}${colorAlpha}`,
     );
-    // dispatch(fetchNftUserDataAsync(account))
     dispatch(fetchStuffAllLimitsAsync());
     return res;
-  }, [
-    selectData,
-    dispatch,
-    onExchange,
-    account,
-    colorHex,
-    colorAlpha,
-    avatarNft,
-  ]);
+  }, [selectData, dispatch, onExchange, account, colorHex, colorAlpha]);
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
@@ -276,7 +262,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
             <ConnectWalletButton />
           ) : isApprove ? (
             <Button
-              disabled={pendingTx || !avatarNft?.length}
+              disabled={pendingTx}
               onClick={async () => {
                 setPendingTx(true);
                 try {
@@ -319,7 +305,7 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
             </Button>
           ) : (
             <Button
-              disabled={pendingTx || !avatarNft?.length}
+              disabled={pendingTx}
               onClick={async () => {
                 setPendingTx(true);
                 try {
@@ -350,24 +336,8 @@ const ShowCard: React.FC<AvatarShowCard> = ({ avatarNft, balance }) => {
         visible={visible}
         setVisible={setVisible}
       >
-        <LockModal onClose={onClose} />
+        <LockModal onClose={onClose} InviteCode={InviteCode} />
       </ModalWrapper>
-      {/* <BoxPaddingStyled>
-        <Card padding='8px 24px'>
-          <Flex alignItems='center'>
-            <Text fontSize='14px'>{t('Currently holding Drawing boards')}</Text>
-            <Text bold ml='8px' color='textPrimary'>
-              {avatarNft?.length}
-            </Text>
-          </Flex>
-          <Flex alignItems='center' mt='8px'>
-            <Text fontSize='14px'>{t('Currently holding an Avatar NFT')}</Text>
-            <Text bold ml='8px' color='textPrimary'>
-              {balance}
-            </Text>
-          </Flex>
-        </Card>
-      </BoxPaddingStyled> */}
     </PageContainer>
   );
 };
