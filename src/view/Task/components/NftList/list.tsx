@@ -10,7 +10,11 @@ import { ContentBox } from '../Invite';
 import InviteModal from '../Invite/InviteModal';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
-import { getNftGenCodeCount, useGenCodes } from 'view/Task/hooks/matter';
+import {
+  getExistCodeList,
+  getNftGenCodeCount,
+  useGenCodes,
+} from 'view/Task/hooks/matter';
 import { useImmer } from 'use-immer';
 import { debounce } from 'lodash';
 import useConnectWallet from 'hooks/useConnectWallet';
@@ -65,8 +69,8 @@ const AvatarBox = styled.div`
   border-radius: 10px;
   .icon {
     position: absolute;
-    bottom: 8%;
-    right: 5%;
+    bottom: 12%;
+    right: 8%;
     background-color: ${({ theme }) => theme.colors.white};
     border-radius: 50%;
   }
@@ -103,25 +107,8 @@ const NftAvatar: React.FC<{
   // 0 未生成, 1未使用, 2提交合约, 3锁定, 4已使用
   const [codeList, setCodeList] = useState<CodeInfo[]>(defaultCodeList);
 
-  useEffect(() => {
-    checkCodeStatus();
-  }, []);
-
-  const checkCodeStatus = useCallback(async () => {
-    const codeCount = await getNftGenCodeCount(nftId);
-    console.log(nftId, '------', codeCount);
-    setCodeList(prep => {
-      return prep.map((item, i) => {
-        return {
-          ...item,
-          status: item.status <= 2 && item.id <= codeCount ? 2 : item.status,
-        };
-      });
-    });
-  }, [nftId]);
-
-  // 获取邀请码信息
-  const getInviteCode = useCallback(
+  // 生成邀请码
+  const genInviteCode = useCallback(
     async (nftToken, nftId) => {
       if (codeList[0]?.code) {
         return;
@@ -130,9 +117,29 @@ const NftAvatar: React.FC<{
         const res = await Api.TaskApi.getInviteCode(nftToken, nftId);
         if (Api.isSuccess(res)) {
           const list = res.data || [];
+          if (list.length) {
+            setCodeList(pre => {
+              return pre.map((v, i) => {
+                return { ...v, ...list[i] };
+              });
+            });
+          }
+        }
+      } catch (err) { }
+    },
+    [nftToken, nftId],
+  );
+
+  // 获取已生成的邀请码信息
+  const getLastExistCodeList = useCallback(
+    async (nftToken, nftId) => {
+      try {
+        const res = await getExistCodeList(nftToken, nftId);
+        if (Api.isSuccess(res)) {
+          const obj = res.data || {};
           setCodeList(pre => {
             return pre.map((v, i) => {
-              return { ...list[i], ...v };
+              return { ...v, ...obj[nftId][i] };
             });
           });
         }
@@ -141,58 +148,34 @@ const NftAvatar: React.FC<{
     [nftToken, nftId],
   );
 
-  // 获取已生成邀请码的列表
-  // const getCodeList = useCallback(async () => {
-  //   try {
-  //     const res = await Api.TaskApi.getCodeList(nftToken, nftId);
-  //     if (Api.isSuccess(res)) {
-  //       const list = res.data || [];
-  //       if (list.length) {
-  //         setCodeList(pre => {
-  //           return pre.map((v, i) => {
-  //             return { ...v, ...list[i] };
-  //           });
-  //         });
-  //       }
-  //     }
-  //   } catch (err) {}
-  // }, [nftToken, nftId]);
-
-  const handleGenCode = useCallback(
-    async (info: any) => {
-      console.log('info=========>', info);
-      setSubmitLoading(true);
-      try {
-        // 未生成邀请码
-        if (info.status === 0) {
-          await getInviteCode(nftToken, nftId);
-        }
-        // 未提交合约
-        if (info.status < 2) {
-          const codeHash = codeList[info.id - 1]?.code_hash;
-          await onGenCodes(nftId, [getCodeHash(codeHash)]);
-        }
-      } catch (err) {
-        setSubmitLoading(false);
-        return false;
+  const handleGenCode = async (info: any, index) => {
+    console.log('info=========>', info);
+    setActiveInfo(info);
+    setSubmitLoading(true);
+    try {
+      // 未生成邀请码
+      if (info.status === 0) {
+        console.log('生成邀请码');
+        await genInviteCode(nftToken, nftId);
       }
-      // 获取更新状态
-      setActiveInfo(codeList.filter(v => v.id === info.id)[0]);
-      setTimeout(() => {
-        setVisible(true);
-        setSubmitLoading(false);
-      }, 5000);
-    },
-    [nftToken, nftId, codeList],
-  );
+      // 未提交合约
+      if (info.status < 2) {
+        console.log('提交合约');
+        const codeHash = codeList[index]?.code_hash;
+        await onGenCodes(nftId, [`0x${codeHash}`]);
+      }
+    } catch (err) {
+      setSubmitLoading(false);
+      return false;
+    }
 
-  // 获得codeHash值
-  const getCodeHash = useCallback((codeHash: string) => {
-    return `0x${codeHash}`;
-    // if (codeHash && codeHash.length === 16)
-    //   return `0x${codeHash}000000000000000000000000000000000000000000000000`;
-    // else return `0x${codeHash}`;
-  }, []);
+    // 获取最新状态
+    await getLastExistCodeList(nftToken, nftId);
+
+    if (!info?.code) setActiveInfo(codeList.filter(v => v.id === info.id)[0]);
+    setVisible(true);
+    setSubmitLoading(false);
+  };
 
   // 复制链接
   const onCopyLink = useCallback(() => {
@@ -200,7 +183,7 @@ const NftAvatar: React.FC<{
     copyContent(copyUrl);
     toastSuccess(t('CopyLinkSuccess'));
     setVisible(false);
-  }, []);
+  }, [activeInfo]);
 
   // 剩余分享次数
   const getTimes = useMemo(() => {
@@ -229,9 +212,9 @@ const NftAvatar: React.FC<{
             </Flex>
             <Flex>
               {codeList.map((item, index) => (
-                <Column key={item.id}>
+                <Column key={item.id || item?.code}>
                   <AvatarBox>
-                    {item.id === 4 ? (
+                    {item.status === 4 ? (
                       <ReceivedBox>
                         <Icon
                           name={'icon-complete'}
@@ -244,27 +227,23 @@ const NftAvatar: React.FC<{
                       </ReceivedBox>
                     ) : (
                       <>
-                        {item.id === activeInfo?.id && (
+                        {item?.code === activeInfo?.code && (
                           <Loading visible={submitLoading} />
                         )}
                         <ActiveImg
                           className={
-                            item.id > 1 && codeList[index - 1].status <= 1
+                            index >= 1 && codeList[index - 1].status <= 1
                               ? 'disable'
                               : 'active'
                           }
-                          // className='active'
                           disableFollow
                           src={require('assets/images/task/monkey.jpg').default}
                           scale='ld'
                           onClick={() => {
-                            if (
-                              item.id > 1 &&
-                              codeList[index - 1].status <= 1
-                            ) {
+                            if (index >= 1 && codeList[index - 1].status <= 1) {
                               return false;
                             }
-                            handleGenCode(item);
+                            handleGenCode(item, index);
                           }}
                         />
                         <Icon

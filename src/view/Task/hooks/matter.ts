@@ -123,16 +123,16 @@ export const getView = async () => {
 }
 
 // 获取已生成邀请码的列表
-  // const getExistCodeList = async (nftToken: string, nftIds: string) => {
-  //   try {
-  //     const res = await Api.TaskApi.getCodeList(nftToken, nftIds);
-  //     if (Api.isSuccess(res)) {
-  //       return res.data || [];
-  //     }
-  //   } catch (err) {
-  //     return [];
-  //   }
-  // };
+export const getExistCodeList = async (nftToken: string, nftIds: string) => {
+  try {
+    const res = await Api.TaskApi.getInviteCodeList(nftToken, nftIds);
+    if (Api.isSuccess(res)) {
+      return res.data || {};
+    }
+  } catch (err) {
+    return {};
+  }
+};
 
 // 邀请统计
 export const useInviteCount = () => {
