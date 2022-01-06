@@ -113,7 +113,8 @@ export const WalletAddress: React.FC<{
 export const SignUp: React.FC<{
   signUpFail?: boolean;
   isStakeNft?: boolean;
-}> = ({ signUpFail, isStakeNft }) => {
+  InviteCode?: string;
+}> = ({ signUpFail, isStakeNft, InviteCode }) => {
   const dispatch = useDispatch();
   const { singUpStep } = useStore(p => p.loginReducer);
   const { account } = useWeb3React();
@@ -128,7 +129,7 @@ export const SignUp: React.FC<{
   return (
     <Box width='100%'>
       {/* 创建账户 */}
-      {singUpStep === 0 && !signUpFail && (
+      {singUpStep === 0 && (!signUpFail || InviteCode) && (
         <React.Fragment>
           <Text
             fontSize='34px'
@@ -143,9 +144,8 @@ export const SignUp: React.FC<{
             <WalletAddress address={account} />
             <FailButton
               onClick={() => {
-                const InviteCode = localStorage.getItem('InviteCode');
                 if (InviteCode) {
-                  history.push('/picknft');
+                  history.push(`/picknft${InviteCode}`);
                 } else {
                   dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
                 }
@@ -158,7 +158,7 @@ export const SignUp: React.FC<{
         </React.Fragment>
       )}
       {/* 没有nft，不能注册，注册失败 */}
-      {singUpStep === 0 && signUpFail && (
+      {singUpStep === 0 && signUpFail && !InviteCode && (
         <React.Fragment>
           <Text
             fontSize='34px'
