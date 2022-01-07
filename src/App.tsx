@@ -9,7 +9,7 @@ import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk, storeAction } from 'store';
 import { useFetchTimeBurnData } from 'store/wallet/hooks';
-import { CommonLayout, ToastComponents } from 'components';
+import { CommonLayout, ToastComponents, Navigation } from 'components';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import PageLoader from 'components/Loader/PageLoader';
 import PageContainer from 'components/Layout/PageContainer';
@@ -153,6 +153,7 @@ function App() {
           </React.Suspense>
         </PageContainer>
         <Gotop />
+        <Navigation />
       </Container>
       <ToastComponents />
     </Router>
