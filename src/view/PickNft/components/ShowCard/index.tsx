@@ -150,14 +150,20 @@ const ShowCard: React.FC = () => {
       return inviteInfo.codeLockDuration_ + codeInfo.lockedAt
     }
     return 0
-  }, [inviteInfo])
+  }, [inviteInfo.codeLockDuration_, codeInfo.lockedAt])
 
-  const [DownTime, hour, minute] = useCountdownTime(LeftTime);
+  const [DownTime, hour, minute, second] = useCountdownTime(LeftTime);
   const [visible, setVisible] = useState(true);
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],
   );
+
+  useEffect(() => {
+    if (!(hour >= 0 && minute >= 0 && second >= 0)) {
+      setVisible(true)
+    }
+  }, [hour, minute, second])
 
   const codeState = useMemo(() => {
     // if (codeInfo.state === '2') return 

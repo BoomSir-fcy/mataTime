@@ -49,5 +49,5 @@ export const useCountdownTime = (endTime: number) => {
     };
   }, [setSecondsRemaining, endTime, timer]);
 
-  return [secondsRemaining, hour, minute];
+  return [secondsRemaining, hour, minute, second];
 };
