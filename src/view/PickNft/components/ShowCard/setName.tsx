@@ -107,7 +107,7 @@ const SetNickName: React.FC<init> = ({
         dispatch(storeAction.changeUpdateProfile({ ...user.data }));
         dispatch(storeAction.changeSignUp({ isSignup: true }));
         dispatch(storeAction.changeSignUpStep({ singUpStep: 3 }));
-        history.push('/login');
+        history.push('/login?finished=true');
       }
     } else {
       toastError(res.data);
