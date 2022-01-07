@@ -11,7 +11,7 @@ import {
   fetchCodeInfo,
 } from './fetchUserAllowance';
 import { fetchStuffAllInfo } from './fetchStuffInfo';
-import { fetchInviteInfo } from './fetchInviteInfo';
+import { fetchInviteInfo, fetchMetaycInfo } from './fetchInviteInfo';
 
 const initialState: PickNftState = {
   selectData: [],
@@ -38,6 +38,11 @@ const initialState: PickNftState = {
     maxGendCodeCount_: 0,
     toToken_: '',
   },
+  buyInfo: {
+    enableBuy: true,
+    price: '0',
+    loading: false,
+  },
   inviteLoading: true,
   codeInfo: {
     lockUser: '',
@@ -53,6 +58,18 @@ export const fetchCodeInfoAsync =
       // dispatch(setCodeUsed(data));
       dispatch(setCodeInfo(data));
       dispatch(setInviteLoading(false));
+    };
+export const fetchMetaycInfoAsync =
+  (): AppThunk =>
+    async dispatch => {
+      dispatch(setBuyInfo({
+        loading: true,
+      }));
+      const data = await fetchMetaycInfo();
+      dispatch(setBuyInfo({
+        ...data,
+        loading: false,
+      }));
     };
 export const fetchNftApprovalAsync =
   (account?: string): AppThunk =>
@@ -124,6 +141,14 @@ export const picknft = createSlice({
       const { payload } = action;
       state.codeInfo = {
         ...payload
+      }
+    },
+    setBuyInfo: (state, action) => {
+      const { payload } = action;
+      state.buyInfo = {
+        ...state.buyInfo,
+        ...payload,
+        // loading: false,
       }
     },
     setStuffAllLimits: (state, action) => {
@@ -211,6 +236,7 @@ export const {
   setStuffAllLimits,
   setInviteLoading,
   setInviteInfo,
+  setBuyInfo,
 } = picknft.actions;
 
 export default picknft.reducer;

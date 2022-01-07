@@ -90,6 +90,11 @@ export interface PickNftState {
     maxGendCodeCount_: number;
     toToken_: string;
   },
+  buyInfo: {
+    enableBuy: boolean
+    price: string
+    loading: boolean
+  },
   codeInfo: {
     lockUser: string;
     lockedAt: number;

@@ -9,7 +9,7 @@ import { useToast } from 'hooks';
 import useTheme from 'hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
-import { useFetchNftApproval, usePickNftState } from 'store/picknft/hooks';
+import { useFetchBuyInfo, useFetchNftApproval, usePickNftState } from 'store/picknft/hooks';
 import Container from 'components/Layout/Container';
 import { randomPick } from 'store/picknft/actions';
 import { ExChangeResult, useExchangeAndBuyPhoto } from 'view/PickNft/hooks/exchange';
@@ -18,7 +18,6 @@ import { fetchCodeInfoAsync, fetchNftApprovalAsync, fetchStuffAllLimitsAsync } f
 // import { fetchNftUserDataAsync } from 'store/nfts'
 import { formatHexadecimal } from 'utils/formatNumber';
 import { ConnectWalletButton, Icon, ModalWrapper } from 'components';
-import { NftInfo } from 'store/types';
 import { useStore } from 'store';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -27,6 +26,8 @@ import StateModal from '../pop/state';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 import SetNickName from './setName';
 import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
+import { formatDisplayApr, getFullDisplayBalance } from 'utils/formatBalance';
+import BigNumber from 'bignumber.js';
 
 dayjs.extend(duration);
 interface ColorRgba {
@@ -123,8 +124,8 @@ const BtnBox = styled(Flex)`
 `;
 
 const CreateShowCard: React.FC = () => {
-  useFetchNftApproval();
-
+  // useFetchNftApproval();
+  useFetchBuyInfo();
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [colorRgba, setColorRgba] = useState<ColorRgba>({
     r: 246,
@@ -149,7 +150,7 @@ const CreateShowCard: React.FC = () => {
   const { onExchange } = useExchangeAndBuyPhoto();
   const { onApprove } = useNftApproveExPhoto();
   // const [LeftTime, setLeftTime] = useState(0);
-  const { codes, selectData, codeInfo, inviteInfo, inviteLoading } = usePickNftState();
+  const { codes, selectData, codeInfo, inviteInfo, inviteLoading, buyInfo } = usePickNftState();
 
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
@@ -178,21 +179,27 @@ const CreateShowCard: React.FC = () => {
   const [pending, setpending] = useState(false);
 
   const onMintHandle = useCallback(async () => {
-    setpending(true)
-    const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
-    const res = await onExchange(
-      sortData.map(item => item.id),
-      `0x${colorHex}${colorAlpha}`,
-      '100000000000000000'
-    );
-    dispatch(fetchStuffAllLimitsAsync());
-    setpending(true)
-    return res;
-  }, [selectData, setpending, dispatch, onExchange, codes.code, account, colorHex, colorAlpha]);
+    try {
+      setpending(true)
+      const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
+      const res = await onExchange(
+        sortData.map(item => item.id),
+        `0x${colorHex}${colorAlpha}`,
+        buyInfo.price
+      );
+      // dispatch(fetchStuffAllLimitsAsync());
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setpending(false)
+    }
+  }, [selectData, setpending, dispatch, onExchange, codes.code, account, colorHex, colorAlpha, buyInfo.price]);
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
+
+  console.log(buyInfo)
 
 
   return (
@@ -243,14 +250,18 @@ const CreateShowCard: React.FC = () => {
       <BoxPaddingStyled>
         <BtnBox justifyContent='center'>
           <Submit
+            isLoading={buyInfo.loading}
             scale='ld'
             onClick={onMintHandle}
-            disabled={pending}
+            disabled={pending || !buyInfo.enableBuy}
           >
-            {Boolean(pending) ? (
-              <Dots>{t('loginSignUpComplete')}</Dots>
+            {pending ? (
+              <Dots>{t('Minting')}</Dots>
             ) : (
-              t('loginSignUpComplete')
+              t('Mint METAYC NFT with %price% %symbol%', {
+                price: getFullDisplayBalance(new BigNumber(buyInfo.price), undefined, 1),
+                symbol: 'BNB'
+              })
             )}
           </Submit>
         </BtnBox>

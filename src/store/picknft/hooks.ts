@@ -9,6 +9,7 @@ import {
   fetchTicketPriceAsync,
   fetchCodeInfoAsync,
   fetchInviteInfoAsync,
+  fetchMetaycInfoAsync,
 } from '.';
 import { State, PickNftState } from '../types';
 import { fetchInviteInfo } from './fetchInviteInfo';
@@ -39,6 +40,14 @@ export const useFetchCodeInfo = () => {
       dispatch(fetchCodeInfoAsync(codes));
     }
   }, [dispatch, account, codes.code_hash]);
+};
+
+export const useFetchBuyInfo = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchMetaycInfoAsync())
+  }, [dispatch]);
 };
 
 export const useFetchNftApproval = () => {
