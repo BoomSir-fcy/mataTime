@@ -141,6 +141,7 @@ function App() {
                 <Route path='/set' component={Set} />
                 <Route path='/account' component={Account} />
                 <Route path='/picknft' component={PickNft} />
+                <Route path='/create' component={PickNft} />
                 <Route path='/search' component={Search} />
                 {/* <Route path='/swap' component={Swap} /> */}
                 {process.env.NODE_ENV === 'development' && (
