@@ -28,8 +28,10 @@ const initialState: PickNftState = {
   },
   codes: {
     code: '54ec8296b88e1e0e678a8aa918f6e6324ffc925364285bf57debbacf973f5581',
-    code_hash: '4a3037bbc979534f168bd18cae63179b255600af8fcfe8efb677df039e92974f',
-    lock_hash: '8ed1ffe3ff633ea24e5e4ce8123febcdb5b1b0f01483e78b910364aab912e2be',
+    code_hash:
+      '4a3037bbc979534f168bd18cae63179b255600af8fcfe8efb677df039e92974f',
+    lock_hash:
+      '8ed1ffe3ff633ea24e5e4ce8123febcdb5b1b0f01483e78b910364aab912e2be',
   },
   inviteInfo: {
     nft_: '',
@@ -44,36 +46,34 @@ const initialState: PickNftState = {
     lockedAt: 0,
     address: '',
     state: 0,
-  }
+  },
 };
 export const fetchCodeInfoAsync =
   (codes: InviteCodes): AppThunk =>
-    async dispatch => {
-      const data = await fetchCodeInfo(codes);
-      // dispatch(setCodeUsed(data));
-      dispatch(setCodeInfo(data));
-      dispatch(setInviteLoading(false));
-    };
+  async dispatch => {
+    const data = await fetchCodeInfo(codes);
+    // dispatch(setCodeUsed(data));
+    dispatch(setCodeInfo(data));
+    dispatch(setInviteLoading(false));
+  };
 export const fetchNftApprovalAsync =
   (account?: string): AppThunk =>
-    async dispatch => {
-      const data = await fetchNftApproval(account);
-      dispatch(setNftApproval(data));
-    };
+  async dispatch => {
+    const data = await fetchNftApproval(account);
+    dispatch(setNftApproval(data));
+  };
 
 export const fetchTicketAllowanceAsync =
   (account?: string): AppThunk =>
-    async dispatch => {
-      const data = await fetchTicketAllowance(account);
-      dispatch(setTicketAllowance(data));
-    };
+  async dispatch => {
+    const data = await fetchTicketAllowance(account);
+    dispatch(setTicketAllowance(data));
+  };
 
-export const fetchInviteInfoAsync =
-  (): AppThunk =>
-    async dispatch => {
-      const data = await fetchInviteInfo();
-      dispatch(setInviteInfo(data));
-    };
+export const fetchInviteInfoAsync = (): AppThunk => async dispatch => {
+  const data = await fetchInviteInfo();
+  dispatch(setInviteInfo(data));
+};
 
 export const fetchTicketPriceAsync = (): AppThunk => async dispatch => {
   const data = await fetchTicketPrice();
@@ -123,8 +123,8 @@ export const picknft = createSlice({
     setCodeInfo: (state, action) => {
       const { payload } = action;
       state.codeInfo = {
-        ...payload
-      }
+        ...payload,
+      };
     },
     setStuffAllLimits: (state, action) => {
       const { payload } = action;
@@ -139,8 +139,8 @@ export const picknft = createSlice({
             enable:
               !(payload.limitSizes?.[index]?.[0]?.[subIndex] || 0) ||
               (payload.limitSizes?.[index]?.[0]?.[subIndex] || 0) -
-              (payload.createdSizes?.[index]?.[0]?.[subIndex] || 0) >
-              0,
+                (payload.createdSizes?.[index]?.[0]?.[subIndex] || 0) >
+                0,
           };
           if (payload.limitSizes?.[index]?.[0]?.[subIndex]) {
             limitData.push({
@@ -195,8 +195,8 @@ export const picknft = createSlice({
     builder.addCase(setInviteCodes, (state, { payload }) => {
       state.codes = {
         ...state.codes,
-        ...payload
-      }
+        ...payload,
+      };
     });
   },
 });
