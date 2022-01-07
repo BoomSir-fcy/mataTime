@@ -25,6 +25,7 @@ import { Api } from 'apis';
 
 import sloganImg from 'assets/images/login_slogan_img.png';
 import HomeBanner from 'components/Cirde/HomeBanner';
+import { SignUpcomplete } from './components/signUpComplete';
 
 /* eslint-disable */
 const LoginContainer = styled(Flex)`
@@ -107,6 +108,18 @@ const SignUpWarpper = styled(Flex)`
     padding-bottom: 100px;
   }
 `;
+
+const SignUpText = styled(Text)`
+  font-size: 34px;
+  font-weight: bold;
+  text-transform: capitalize;
+  ${mediaQueriesSize.marginUD}
+`;
+const SignUpSubText = styled(Text)`
+  font-size: 20px;
+  ${mediaQueriesSize.marginb}
+`;
+
 const SignInBox = () => {
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -192,6 +205,8 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
   const [isDark] = useThemeManager();
 
   const [InviteCode, setInviteCode] = useState('');
+  const [IsFinished, setIsFinished] = useState(false);
+
   // const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 选择链
@@ -221,12 +236,20 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
     const myQuery = search => {
       return new URLSearchParams(search);
     };
+
+    // 已经完成注册
+    const Finished = myQuery(search).get('finished');
+    if (Finished) {
+      setIsFinished(Boolean(Finished));
+    }
+
     // 获取邀请地址
     const InviteAddress = myQuery(search).get('InviteAddress');
     if (InviteAddress) {
       localStorage.setItem('InviteAddress', InviteAddress);
     }
 
+    // 锁定code码
     const Code_c = myQuery(search).get('c');
     const Code_h = myQuery(search).get('h');
     const Code_l = myQuery(search).get('l');
@@ -277,38 +300,70 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
         <HomeBanner />
       </LeftBox>
       <Content>
-        <Container>
-          {singUpStep === 0 && (
-            <LogoWarpper>
-              <Logo
-                style={{ marginLeft: '-10px' }}
-                url='/'
-                src={`${
-                  require(isDark
-                    ? './images/LOGO2.svg'
-                    : './images/light_logo.svg').default
-                }`}
-              />
-            </LogoWarpper>
-          )}
-          {/* 登录或注册 */}
-          {isSignin ? (
-            <SignInBox />
-          ) : (
-            <>
-              {!signUpFail && singUpStep > 0 && account && <Step />}
-              {isSignup ? (
-                <SignUp
-                  InviteCode={InviteCode}
-                  signUpFail={signUpFail}
-                  isStakeNft={isStakeNft}
+        {IsFinished && singUpStep >= 3 ? (
+          <Container>
+            {singUpStep === 3 && (
+              <Box paddingTop='30px' width='100%'>
+                <WalletAddress address={account} />
+                <Flex
+                  flexDirection='column'
+                  justifyContent='center'
+                  alignItems='center'
+                >
+                  <img
+                    width='230px'
+                    src={require('./images/login_right_images.png').default}
+                  />
+                  <SignUpText>{t('loginSignupSuccess')}</SignUpText>
+                  <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
+                  <Button
+                    scale='ld'
+                    onClick={() => {
+                      dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
+                    }}
+                    style={{ textTransform: 'capitalize' }}
+                  >
+                    {t('loginSignUpNext')}
+                  </Button>
+                </Flex>
+              </Box>
+            )}
+            {singUpStep === 4 && <SignUpcomplete />}
+          </Container>
+        ) : (
+          <Container>
+            {singUpStep === 0 && (
+              <LogoWarpper>
+                <Logo
+                  style={{ marginLeft: '-10px' }}
+                  url='/'
+                  src={`${
+                    require(isDark
+                      ? './images/LOGO2.svg'
+                      : './images/light_logo.svg').default
+                  }`}
                 />
-              ) : (
-                <LoginJoin />
-              )}
-            </>
-          )}
-        </Container>
+              </LogoWarpper>
+            )}
+            {/* 登录或注册 */}
+            {isSignin ? (
+              <SignInBox />
+            ) : (
+              <>
+                {!signUpFail && singUpStep > 0 && account && <Step />}
+                {isSignup ? (
+                  <SignUp
+                    InviteCode={InviteCode}
+                    signUpFail={signUpFail}
+                    isStakeNft={isStakeNft}
+                  />
+                ) : (
+                  <LoginJoin />
+                )}
+              </>
+            )}
+          </Container>
+        )}
         <Footer />
       </Content>
     </LoginContainer>
