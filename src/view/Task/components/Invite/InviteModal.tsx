@@ -27,6 +27,7 @@ const InviteModal: React.FC<{
 }> = React.memo(({ type, loading, visible, setVisible, t, onCopyLink }) => {
   return (
     <ModalWrapper
+      overflow='visible'
       title={type === 1 ? t('Invite friends') : t('Special Invitation')}
       creactOnUse
       visible={visible}
