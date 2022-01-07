@@ -110,11 +110,12 @@ export const getView = async () => {
   ];
   try {
     const info = await multicall(invitationAbi, calls);
+    
     const nftInfo = {
       nftAddress: info[0].nft_?.toLowerCase(),
       userAddress: info[0].userProfile_,
       codeLockDuration: new BigNumber(info[0].codeLockDuration_.toJSON().hex).toNumber(),
-      maxGendCodeCount: new BigNumber(info[0].maxGendCodeCount_.toJSON().hex).toNumber(),
+      maxGendCodeCount: new BigNumber(info[0].maxGenCodeCount_.toJSON().hex).toNumber(),
       toToken: info[0].toToken_
     };
     return nftInfo;
