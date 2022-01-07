@@ -45,6 +45,62 @@
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "nft_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "code",
+				"type": "bytes32"
+			}
+		],
+		"name": "GenCode",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "serder",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "halfHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "LockEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": false,
 				"internalType": "address",
 				"name": "userAddress",
@@ -89,25 +145,6 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "tokenID",
-				"type": "uint256"
-			}
-		],
-		"name": "DecodeToken",
-		"outputs": [
-			{
-				"internalType": "uint8[]",
-				"name": "",
-				"type": "uint8[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
@@ -131,25 +168,6 @@
 				"internalType": "contract IDsgNft",
 				"name": "",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "createID",
-				"type": "uint256"
-			}
-		],
-		"name": "checkTokenID",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -256,59 +274,6 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint8[]",
-				"name": "dif",
-				"type": "uint8[]"
-			}
-		],
-		"name": "encodeToken",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenID",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "nickname",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "code",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "created",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "bg_color",
-				"type": "uint256"
-			}
-		],
-		"name": "exchange",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "createTokenID",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "userAddress",
 				"type": "address"
@@ -346,24 +311,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "nftId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes32[]",
-				"name": "codeHashs",
-				"type": "bytes32[]"
-			}
-		],
-		"name": "genCodes",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "getChainID",
 		"outputs": [
@@ -374,78 +321,6 @@
 			}
 		],
 		"stateMutability": "pure",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "codeHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "getCodeView",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "lockUser",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "lockedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "generator",
-				"type": "address"
-			},
-			{
-				"internalType": "uint8",
-				"name": "state",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "index",
-				"type": "uint8"
-			}
-		],
-		"name": "getCreatedSize",
-		"outputs": [
-			{
-				"internalType": "uint8[]",
-				"name": "",
-				"type": "uint8[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "index",
-				"type": "uint8"
-			}
-		],
-		"name": "getLimitSize",
-		"outputs": [
-			{
-				"internalType": "uint8[]",
-				"name": "",
-				"type": "uint8[]"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -465,62 +340,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getView",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "nft_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "userProfile_",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "codeLockDuration_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "maxGendCodeCount_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "toToken_",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "contract IERC721",
-				"name": "nft_",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_to_token",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "userProfile_",
-				"type": "address"
-			}
-		],
-		"name": "initialize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -548,21 +367,21 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "maxGenCodeCount",
+		"outputs": [
 			{
-				"internalType": "bytes32",
-				"name": "halfHash",
-				"type": "bytes32"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
-		"name": "lockCode",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "maxGendCodeCount",
+		"name": "min_nft_value",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -619,40 +438,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes",
-				"name": "data",
-				"type": "bytes"
-			}
-		],
-		"name": "onERC721Received",
-		"outputs": [
-			{
-				"internalType": "bytes4",
-				"name": "",
-				"type": "bytes4"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
@@ -673,57 +458,16 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "switch_buy_nft",
+		"outputs": [
 			{
-				"internalType": "uint8",
-				"name": "depth",
-				"type": "uint8"
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
-		"name": "setDepth",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "index",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint8",
-				"name": "limit",
-				"type": "uint8"
-			}
-		],
-		"name": "setMaxDepth",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "index",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint8",
-				"name": "limit",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint8",
-				"name": "maxSize",
-				"type": "uint8"
-			}
-		],
-		"name": "setOneLimit",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -756,25 +500,6 @@
 		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "i",
-				"type": "uint256"
-			}
-		],
-		"name": "uint256ToString",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -837,6 +562,414 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IERC721",
+				"name": "nft_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_to_token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "userProfile_",
+				"type": "address"
+			}
+		],
+		"name": "initialize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "nftId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "codeHashs",
+				"type": "bytes32[]"
+			}
+		],
+		"name": "genCodes",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "halfHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "lockCode",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "nickname",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "code",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "created",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "bg_color",
+				"type": "uint256"
+			}
+		],
+		"name": "exchange",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "createTokenID",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "index",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint8",
+				"name": "limit",
+				"type": "uint8"
+			}
+		],
+		"name": "setMaxDepth",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "index",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint8",
+				"name": "limit",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint8",
+				"name": "maxSize",
+				"type": "uint8"
+			}
+		],
+		"name": "setOneLimit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "depth",
+				"type": "uint8"
+			}
+		],
+		"name": "setDepth",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "index",
+				"type": "uint8"
+			}
+		],
+		"name": "getLimitSize",
+		"outputs": [
+			{
+				"internalType": "uint8[]",
+				"name": "",
+				"type": "uint8[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "index",
+				"type": "uint8"
+			}
+		],
+		"name": "getCreatedSize",
+		"outputs": [
+			{
+				"internalType": "uint8[]",
+				"name": "",
+				"type": "uint8[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "createID",
+				"type": "uint256"
+			}
+		],
+		"name": "checkTokenID",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8[]",
+				"name": "dif",
+				"type": "uint8[]"
+			}
+		],
+		"name": "encodeToken",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenID",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenID",
+				"type": "uint256"
+			}
+		],
+		"name": "DecodeToken",
+		"outputs": [
+			{
+				"internalType": "uint8[]",
+				"name": "",
+				"type": "uint8[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "i",
+				"type": "uint256"
+			}
+		],
+		"name": "uint256ToString",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getView",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "nft_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "userProfile_",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "codeLockDuration_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "maxGenCodeCount_",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "toToken_",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "codeHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "getCodeView",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "lockUser",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lockedAt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "generator",
+				"type": "address"
+			},
+			{
+				"internalType": "uint8",
+				"name": "state",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "onERC721Received",
+		"outputs": [
+			{
+				"internalType": "bytes4",
+				"name": "",
+				"type": "bytes4"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "created",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "bg_color",
+				"type": "uint256"
+			}
+		],
+		"name": "Exchange_NFT",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "set_buy_nft_value",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "status",
+				"type": "bool"
+			}
+		],
+		"name": "switch_status",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "WithdrawValue",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	}
 ]
