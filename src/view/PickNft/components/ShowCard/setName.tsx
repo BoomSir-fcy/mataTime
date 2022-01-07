@@ -60,9 +60,15 @@ const BtnBox = styled(Flex)`
 
 interface init {
   onComplete: (name: string) => void;
+  onOpen: () => void;
+  isLockAvailable: boolean;
 }
 
-const SetNickName: React.FC<init> = ({ onComplete }) => {
+const SetNickName: React.FC<init> = ({
+  onComplete,
+  onOpen,
+  isLockAvailable,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -181,17 +187,23 @@ const SetNickName: React.FC<init> = ({ onComplete }) => {
         </Box>
       </InputItems>
       <BtnBox justifyContent='center'>
-        <Submit
-          scale='ld'
-          onClick={state.isSignin ? signIn : submitProfile}
-          disabled={!haveNickName || pending}
-        >
-          {Boolean(pending) ? (
-            <Dots>{t('loginSignUpComplete')}</Dots>
-          ) : (
-            t('loginSignUpComplete')
-          )}
-        </Submit>
+        {isLockAvailable ? (
+          <Submit
+            scale='ld'
+            onClick={state.isSignin ? signIn : submitProfile}
+            disabled={!haveNickName || pending}
+          >
+            {Boolean(pending) ? (
+              <Dots>{t('loginSignUpComplete')}</Dots>
+            ) : (
+              t('loginSignUpComplete')
+            )}
+          </Submit>
+        ) : (
+          <Submit scale='ld' onClick={onOpen}>
+            {t('Lock NFT')}
+          </Submit>
+        )}
       </BtnBox>
     </CountBox>
   );
