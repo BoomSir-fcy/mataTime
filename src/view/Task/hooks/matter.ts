@@ -92,10 +92,11 @@ export const getInvitedNftTokenAddress = async () => {
 /**
  * 邀请码信息
  * @returns {
- *  lockUser  锁定的用户(如果被锁定的话)
- *  lockedAt  锁定时间, 如果锁定时间 + 邀请码锁定有效时间 > 当前时间 并且邀请码没有被使用的话，其它用户则可以锁定
- *  generator  生成邀请码的用户
- *  state  邀请码现在的状态 1.未使用 2.已使用
+ *  nft_ 可以分发邀请码的NFT地址
+ *  userProfile_ 用户合约地址
+ *  codeLockDuration_ 邀请码锁定有效时间
+ *  maxGendCodeCount_ 一个NFT最多可生成的NFT数量
+ *  toToken_ 邀请码生成的NFT合约地址
  * }
  */
 export const getView = async () => {
@@ -117,6 +118,43 @@ export const getView = async () => {
       toToken: info[0].toToken_
     };
     return nftInfo;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * 邀请码信息
+ * @returns {
+ *  lockUser  锁定的用户(如果被锁定的话)
+ *  lockedAt  锁定时间, 如果锁定时间 + 邀请码锁定有效时间 > 当前时间 并且邀请码没有被使用的话，其它用户则可以锁定
+ *  generator  生成邀请码的用户
+ *  state  邀请码现在的状态 1.未使用 2.已使用
+ * }
+ */
+export const getCodeViewList = async (codeHashs: string[]) => {
+  const inviteAddress = getInvitationAddress();
+  const calls =codeHashs.map(item => {
+    return {
+      address: inviteAddress,
+      name: 'getCodeView',
+      params: [item],
+    }
+  })
+  
+  try {
+    const infoList = await multicall(invitationAbi, calls);
+    console.log(codeHashs,'----------infoList----------', infoList);
+    
+    const codeViewList = infoList.map(item => {
+      return {
+        lockUser: item.lockUser,
+        lockedAt: new BigNumber(item.lockedAt.toJSON().hex).toNumber(),
+        generator: item.generator,
+        status: item.state,
+      }
+    })
+    return codeViewList;
   } catch (error) {
     throw error;
   }
