@@ -107,7 +107,7 @@ const FriendsList: React.FC = React.memo(() => {
                       {item.nick_name}
                     </ItemText>
                     {item.invitation_type === 1 && (
-                      <SpecialTag small>Special</SpecialTag>
+                      <SpecialTag small>{t('Special')}</SpecialTag>
                     )}
                   </Flex>
                   <ItemText small ellipsis>
