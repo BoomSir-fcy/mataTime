@@ -1,7 +1,17 @@
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ChromePicker } from 'react-color';
-import { Heading, Text, Card, Box, Image, Flex, Button, light, Spinner } from 'uikit';
+import {
+  Heading,
+  Text,
+  Card,
+  Box,
+  Image,
+  Flex,
+  Button,
+  light,
+  Spinner,
+} from 'uikit';
 import styled from 'styled-components';
 import Dots from 'components/Loader/Dots';
 import { orderBy } from 'lodash';
@@ -12,9 +22,17 @@ import { useTranslation } from 'contexts/Localization';
 import { useFetchNftApproval, usePickNftState } from 'store/picknft/hooks';
 import Container from 'components/Layout/Container';
 import { randomPick } from 'store/picknft/actions';
-import { ExChangeResult, useExchangePhoto, useLockInviteCode } from 'view/PickNft/hooks/exchange';
+import {
+  ExChangeResult,
+  useExchangePhoto,
+  useLockInviteCode,
+} from 'view/PickNft/hooks/exchange';
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
-import { fetchCodeInfoAsync, fetchNftApprovalAsync, fetchStuffAllLimitsAsync } from 'store/picknft';
+import {
+  fetchCodeInfoAsync,
+  fetchNftApprovalAsync,
+  fetchStuffAllLimitsAsync,
+} from 'store/picknft';
 // import { fetchNftUserDataAsync } from 'store/nfts'
 import { formatHexadecimal } from 'utils/formatNumber';
 import { ConnectWalletButton, Icon, ModalWrapper } from 'components';
@@ -113,7 +131,7 @@ const Cover = styled(Box)`
   left: 0px;
 `;
 
-const RegisterShowCard: React.FC = () => {
+const ShowCard: React.FC = () => {
   useFetchNftApproval();
 
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
@@ -140,20 +158,25 @@ const RegisterShowCard: React.FC = () => {
   const { onExchange } = useExchangePhoto();
   const { onApprove } = useNftApproveExPhoto();
   // const [LeftTime, setLeftTime] = useState(0);
-  const { codes, selectData, codeInfo, inviteInfo, inviteLoading } = usePickNftState()
+  const { codes, selectData, codeInfo, inviteInfo, inviteLoading } =
+    usePickNftState();
 
   const { onLockCode } = useLockInviteCode();
 
-
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
-      return inviteInfo.codeLockDuration_ + codeInfo.lockedAt
+      return inviteInfo.codeLockDuration_ + codeInfo.lockedAt;
     }
-    return 0
-  }, [inviteInfo.codeLockDuration_, codeInfo.lockedAt])
+    return 0;
+  }, [inviteInfo.codeLockDuration_, codeInfo.lockedAt]);
 
   const [DownTime, hour, minute, second] = useCountdownTime(LeftTime);
   const [visible, setVisible] = useState(true);
+
+  const isLockAvailable = useMemo(() => {
+    return hour >= 0 && minute >= 0 && second >= 0;
+  }, [hour, minute, second]);
+
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
     [dispatch],
@@ -161,41 +184,60 @@ const RegisterShowCard: React.FC = () => {
 
   useEffect(() => {
     if (!(hour >= 0 && minute >= 0 && second >= 0)) {
-      setVisible(true)
+      setVisible(true);
     }
-  }, [hour, minute, second])
+  }, [hour, minute, second]);
 
   const codeState = useMemo(() => {
-    // if (codeInfo.state === '2') return 
-    return codeInfo.state
-  }, [codeInfo])
+    // if (codeInfo.state === '2') return
+    return codeInfo.state;
+  }, [codeInfo]);
 
-  const onMintHandle = useCallback(async (value) => {
-    const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
-    const res = await onExchange(
-      sortData.map(item => item.id),
-      value,
+  const onMintHandle = useCallback(
+    async value => {
+      const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
+      const res = await onExchange(
+        sortData.map(item => item.id),
+        value,
+        codes.code,
+        `0x${colorHex}${colorAlpha}`,
+      );
+      dispatch(fetchStuffAllLimitsAsync());
+      return res;
+    },
+    [
+      selectData,
+      dispatch,
+      onExchange,
       codes.code,
-      `0x${colorHex}${colorAlpha}`,
-    );
-    dispatch(fetchStuffAllLimitsAsync());
-    return res;
-  }, [selectData, dispatch, onExchange, codes.code, account, colorHex, colorAlpha]);
+      account,
+      colorHex,
+      colorAlpha,
+    ],
+  );
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
 
-  const handLock = useCallback(async (val) => {
-    await onLockCode(val);
-    dispatch(fetchCodeInfoAsync(codes))
-    setVisible(false);
-  }, [onLockCode]);
+  const handLock = useCallback(
+    async val => {
+      await onLockCode(val);
+      dispatch(fetchCodeInfoAsync(codes));
+      setVisible(false);
+    },
+    [onLockCode],
+  );
 
   const onClose = useCallback(() => {
     setVisible(false);
     // dispatch(fetchCodeInfoAsync(codes))
   }, [setVisible, dispatch, codes]);
+
+  const onOpen = useCallback(() => {
+    setVisible(true);
+    // dispatch(fetchCodeInfoAsync(codes))
+  }, [setVisible]);
 
   return (
     <PageContainer>
@@ -208,7 +250,9 @@ const RegisterShowCard: React.FC = () => {
           mb='20px'
         >
           <Text fontSize='14px'>{t('locking')}</Text>
-          <Text bold color={minute < 2 ? 'failure' : 'text'}>{DownTime}</Text>
+          <Text bold color={minute < 2 ? 'failure' : 'text'}>
+            {DownTime}
+          </Text>
           <Icon
             size={23}
             current={1}
@@ -261,10 +305,11 @@ const RegisterShowCard: React.FC = () => {
         </PickerBox>
       </CardStyled>
       <BoxPaddingStyled>
-        <SetNickName onComplete={onMintHandle} />
-        {/* <Flex>
-          {!account ? <ConnectWalletButton /> : }
-        </Flex> */}
+        <SetNickName
+          isLockAvailable={isLockAvailable}
+          onComplete={onMintHandle}
+          onOpen={onOpen}
+        />
       </BoxPaddingStyled>
       {/* 输入框弹窗 */}
       <ModalWrapper
@@ -273,24 +318,20 @@ const RegisterShowCard: React.FC = () => {
         setVisible={() => setVisible(codeInfo.state !== 1)}
         customizeTitle={codeInfo.state !== 1}
       >
-        {
-          inviteLoading
-            ?
-            <Spinner />
-            :
-            <>
-              {
-                codeInfo.state !== 1
-                  ?
-                  <StateModal onClose={onClose} state={codeInfo.state} />
-                  :
-                  <LockModal onLock={handLock} InviteCode={codes.lock_hash} />
-              }
-            </>
-        }
+        {inviteLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            {codeInfo.state !== 1 ? (
+              <StateModal onClose={onClose} state={codeInfo.state} />
+            ) : (
+              <LockModal onLock={handLock} InviteCode={codes.lock_hash} />
+            )}
+          </>
+        )}
       </ModalWrapper>
     </PageContainer>
   );
 };
 
-export default RegisterShowCard;
+export default ShowCard;
