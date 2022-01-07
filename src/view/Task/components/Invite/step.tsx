@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
-import { useStore } from 'store';
-import { ConnectWalletButton } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
@@ -12,6 +10,7 @@ const StepOutBox = styled(Box)`
 
 const StepBox = styled(Flex)`
   width: 80%;
+  height: 130px;
   justify-content: space-between;
   align-items: center;
   padding: 16px 5px 30px;
@@ -49,7 +48,7 @@ const Line = styled.div`
 const PositionText = styled(Text)`
   position: absolute;
   width: max-content;
-  top: 40px;
+  top: 50px;
   max-width: 100px;
   ${({ theme }) => theme.mediaQueries.lg} {
     top: 60px;

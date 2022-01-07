@@ -157,7 +157,7 @@ const NftAvatar: React.FC<{
     [codeList, nftToken, nftId],
   );
 
-  // 获取最新状态
+  // 获取邀请码提交到合约的最新状态
   const getLastSubmitStatus = useCallback(
     async nftId => {
       try {
