@@ -39,6 +39,7 @@ const CardBox = styled(Box)`
     ${({ theme }) => theme.mediaQueriesSize.padding};
   }
   &.right-card {
+    flex: 1;
     max-width: 410px;
   }
   .text-title {
@@ -227,12 +228,14 @@ const Invite: React.FC = () => {
             <CardBox className='right-card'>
               <Box className='top-card'>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('My Address')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small>
-                    {account && shortenAddress(account, isMobile ? 5 : 10)}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('My Address')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small>
+                      {account && shortenAddress(account, isMobile ? 5 : 10)}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -245,12 +248,14 @@ const Invite: React.FC = () => {
                   />
                 </Flex>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('Invitation Link')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small ellipsis>
-                    {Url}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('Invitation Link')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small ellipsis>
+                      {Url}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'

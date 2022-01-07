@@ -154,6 +154,10 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  .icon-shangjiantou:before {
+    content: "\\eb6d";
+  }
+
   .icon-pingbi2:before {
     content: "\\e693";
   }

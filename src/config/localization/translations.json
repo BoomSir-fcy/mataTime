@@ -211,6 +211,7 @@
   "meHeaderFollow": "my Following",
   "meHeaderFans": "my followers",
   "meHeaderMyCollection": "My Bookmarks",
+  "meHeaderShieldNumber": "Number of people blocked",
   "meHeaderNum%value%": "%value%",
   "meHeaderPeople%value%": "%value%",
   "meEditProfile": "Edit Profile",

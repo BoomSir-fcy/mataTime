@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  withRouter
-} from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import { Container } from './container';
 
 const Account = React.lazy(() => import('./account'));
@@ -37,6 +32,7 @@ const Me = props => {
             <Route path={`${props.match.path}/praise`} component={Praise} />
             <Route path={`${props.match.path}/collect`} component={Collect} />
             <Route path={`${props.match.path}/invite`} component={Invite} />
+            <Route path={`${props.match.path}/shield`} component={Shield} />
           </Container>
         )}
       />

@@ -15,10 +15,11 @@ import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
   min-height: 500px;
-  ${({ theme }) => theme.mediaQueriesSize.padding}
+  /* ${({ theme }) => theme.mediaQueriesSize.padding} */
   background-color: transparent;
   max-width: calc(100vw - 8px);
 `;
+
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
@@ -26,12 +27,19 @@ const Column = styled(Flex)`
   margin-left: 22px;
   width: calc(100% - 70px);
 `;
+
 const ContentBox = styled(Flex)`
+  padding: 14px 8px;
   min-height: 60px;
-  margin-bottom: 28px;
+  /* margin-bottom: 28px; */
   justify-content: space-between;
   align-content: center;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  &:hover {
+    background: ${({ theme }) => theme.colors.hoverList};
+  }
 `;
+
 const WrapText = styled(Text)`
   word-wrap: break-word;
 `;
@@ -167,6 +175,7 @@ const Follow = React.memo(() => {
                 <Flex
                   as={Link}
                   to={`/me/profile/${item.uid}`}
+                  alignItems='center'
                   style={{ width: 'calc(100% - 120px)' }}
                 >
                   <Avatar uid={item.uid} src={item.nft_image} scale='md' />
