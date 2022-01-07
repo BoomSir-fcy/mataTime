@@ -151,12 +151,15 @@ const Invite: React.FC = () => {
         token_id: item.properties.token_id,
       };
     });
-    nftList.unshift({
-      name: userInfo.nft_name,
-      image: userInfo.nft_image,
-      token: userInfo.nft_address,
-      token_id: userInfo.nft_id,
-    });
+
+    if (tokenAddress.toString().indexOf(userInfo.nft_address) !== -1) {
+      nftList.unshift({
+        name: userInfo.nft_name,
+        image: userInfo.nft_image,
+        token: userInfo.nft_address,
+        token_id: userInfo.nft_id,
+      });
+    }
 
     setInvitableNftList(nftList);
   }, [NftList, userInfo, tokenAddress]);
