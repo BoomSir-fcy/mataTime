@@ -1,4 +1,4 @@
 const images = require('images')
 
-images(1300, 1300)
-.save('./default.png'); 
+images(1062, 1062)
+  .save('./default.png'); 
