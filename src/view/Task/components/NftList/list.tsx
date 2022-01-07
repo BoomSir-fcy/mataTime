@@ -46,6 +46,7 @@ const NftAvatarBox = styled(Flex)`
 const NftDrawBox = styled(Flex)`
   flex-direction: column;
   margin-top: 10px;
+  min-width: 50%;
 `;
 const ActiveImg = styled(Avatar)`
   border-radius: 10px;
@@ -216,10 +217,14 @@ const NftAvatar: React.FC<{
         {account ? (
           <NftDrawBox>
             <Flex mb='10px' justifyContent='space-between' alignItems='center'>
-              <Text small>点击NFT画板分享给好友</Text>
-              <Text small>剩余{getTimes}次</Text>
+              <Text small>
+                {t('Click NFT Sketchpad to share with friends')}
+              </Text>
+              <Text small>
+                {t('Remaining %count% times', { count: getTimes })}
+              </Text>
             </Flex>
-            <Flex>
+            <Flex justifyContent='space-between'>
               {codeList.map((item, index) => (
                 <Column key={item.id}>
                   <AvatarBox>

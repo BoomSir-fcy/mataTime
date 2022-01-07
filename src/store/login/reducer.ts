@@ -31,6 +31,7 @@ const initialState = {
   isStakeNft: false,
   signUpFail: false,
   signinLoading: false,
+  nftLoading: false,
   singUpStep: 0,
   userInfo: {} as Api.User.userInfoParams,
   nft: {} as any,
@@ -68,7 +69,8 @@ export const fetchUserInfoAsync = createAsyncThunk(
 // Async thunks
 export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
   'fetch/getNftInfo',
-  async account => {
+  async (account, { dispatch }) => {
+    dispatch(setNftLoading(true))
     const info = await FetchNftsList(account);
     return info;
   }
@@ -77,7 +79,11 @@ export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
 export const login = createSlice({
   name: 'login',
   initialState,
-  reducers: {},
+  reducers: {
+    setNftLoading(state, action) {
+      state.nftLoading = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(changeSignUp, (state, action) => {
@@ -126,7 +132,11 @@ export const login = createSlice({
       })
       .addCase(fetchUserNftInfoAsync.fulfilled, (state, action) => {
         state.nftStatus = true;
+        state.nftLoading = false;
         state.nftList = action.payload;
+      })
+      .addCase(fetchUserNftInfoAsync.rejected, (state, action) => {
+        state.nftLoading = false;
       })
       .addCase(setUserToken, (state, { payload }) => {
         if (payload) {
@@ -164,5 +174,9 @@ export const login = createSlice({
       });
   }
 });
+
+export const {
+  setNftLoading
+} = login.actions
 
 export default login.reducer;
