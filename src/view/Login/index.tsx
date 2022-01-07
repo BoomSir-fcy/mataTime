@@ -26,6 +26,7 @@ import { Api } from 'apis';
 import sloganImg from 'assets/images/login_slogan_img.png';
 import HomeBanner from 'components/Cirde/HomeBanner';
 import { SignUpcomplete } from './components/signUpComplete';
+import { SignFinished } from './components/finished';
 
 /* eslint-disable */
 const LoginContainer = styled(Flex)`
@@ -302,33 +303,8 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
       <Content>
         {IsFinished && singUpStep >= 3 ? (
           <Container>
-            {singUpStep === 3 && (
-              <Box paddingTop='30px' width='100%'>
-                <WalletAddress address={account} />
-                <Flex
-                  flexDirection='column'
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  <img
-                    width='230px'
-                    src={require('./images/login_right_images.png').default}
-                  />
-                  <SignUpText>{t('loginSignupSuccess')}</SignUpText>
-                  <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>
-                  <Button
-                    scale='ld'
-                    onClick={() => {
-                      dispatch(storeAction.changeSignUpStep({ singUpStep: 4 }));
-                    }}
-                    style={{ textTransform: 'capitalize' }}
-                  >
-                    {t('loginSignUpNext')}
-                  </Button>
-                </Flex>
-              </Box>
-            )}
-            {singUpStep === 4 && <SignUpcomplete />}
+            <Step />
+            <SignFinished />
           </Container>
         ) : (
           <Container>

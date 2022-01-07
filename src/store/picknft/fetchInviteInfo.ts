@@ -7,10 +7,12 @@ import stuffRes from 'config/constants/stuffImages';
 export const fetchInviteInfo = async () => {
   const exPhotoNftAddress = getInvitationAddress();
   try {
-    const calls = [{
-      address: exPhotoNftAddress,
-      name: 'getView',
-    }];
+    const calls = [
+      {
+        address: exPhotoNftAddress,
+        name: 'getView',
+      },
+    ];
 
     const [res] = await multicall(invitationAbi, calls);
     return {
@@ -23,7 +25,7 @@ export const fetchInviteInfo = async () => {
       nft_: res.nft_,
       userProfile_: res.userProfile_,
       codeLockDuration_: res.codeLockDuration_.toNumber() * 1000,
-      maxGendCodeCount_: res.maxGendCodeCount_.toNumber(),
+      maxGendCodeCount_: res.maxGenCodeCount_.toNumber(),
       toToken_: res.toToken_,
     };
   } catch (error) {
@@ -63,4 +65,4 @@ export const fetchMetaycInfo = async () => {
       price: '0'
     };
   }
-}
+};

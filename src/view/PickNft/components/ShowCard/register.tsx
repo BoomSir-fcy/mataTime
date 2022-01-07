@@ -72,7 +72,7 @@ const BoxPaddingStyled = styled(Box)`
   }
 `;
 
-const BoxStyled = styled(Box) <{ rgba: ColorRgba }>`
+const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
   width: 24vh;
   height: 24vh;
   max-width: 100%;
@@ -98,7 +98,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 
-const ImageStyled = styled(Image) <{ zIndex?: number }>`
+const ImageStyled = styled(Image)<{ zIndex?: number }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -109,7 +109,7 @@ const PickerBox = styled(Box)`
   position: relative;
 `;
 
-const ShowColorPicker = styled(Box) <{ rgba: ColorRgba }>`
+const ShowColorPicker = styled(Box)<{ rgba: ColorRgba }>`
   width: 75px;
   height: 35px;
   background: ${({ rgba }) =>
@@ -164,6 +164,12 @@ const ShowCard: React.FC = () => {
   const { onLockCode } = useLockInviteCode();
 
   const LeftTime = useMemo(() => {
+    console.log(
+      inviteInfo.codeLockDuration_,
+      codeInfo.lockedAt,
+      inviteInfo.codeLockDuration_ + codeInfo.lockedAt,
+    );
+
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
       return inviteInfo.codeLockDuration_ + codeInfo.lockedAt;
     }

@@ -115,6 +115,7 @@ const SetNickName: React.FC<init> = ({
         p.isSignin = true;
       });
     }
+    setpending(false);
   };
 
   const submitProfile = React.useCallback(async () => {
@@ -136,15 +137,15 @@ const SetNickName: React.FC<init> = ({
       } catch (error) {
         toastError(t('loginSignupFail'));
         console.log(error);
-      } finally {
         setpending(false);
       }
     } else if (!res[0] && !res[1]) {
+      setpending(false);
       toastError(t('loginSetNickNameFail'));
     } else {
+      setpending(false);
       toastError(t('loginSetNickNameRepeat'));
     }
-    setpending(false);
   }, [state]);
 
   return (
