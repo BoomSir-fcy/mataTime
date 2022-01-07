@@ -10,13 +10,7 @@ import { ContentBox } from '../Invite';
 import InviteModal from '../Invite/InviteModal';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
-import {
-  getExistCodeList,
-  getNftGenCodeCount,
-  useGenCodes,
-} from 'view/Task/hooks/matter';
-import { useImmer } from 'use-immer';
-import { debounce } from 'lodash';
+import { getNftGenCodeCount, useGenCodes } from 'view/Task/hooks/matter';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CodeInfo, InvitableNftInfo } from 'view/Task/type';
 
@@ -52,6 +46,7 @@ const NftAvatarBox = styled(Flex)`
 const NftDrawBox = styled(Flex)`
   flex-direction: column;
   margin-top: 10px;
+  min-width: 50%;
 `;
 const ActiveImg = styled(Avatar)`
   border-radius: 10px;
@@ -85,6 +80,7 @@ const ReceivedBox = styled(Flex)`
   padding: 0 5px;
   border-radius: inherit;
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
+  cursor: not-allowed;
 `;
 
 const NftAvatar: React.FC<{
@@ -96,7 +92,7 @@ const NftAvatar: React.FC<{
   const { account } = useWeb3React();
   const { onConnectWallet } = useConnectWallet();
   const { t } = useTranslation();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const [visible, setVisible] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [activeInfo, setActiveInfo] = useState<CodeInfo>();
@@ -174,7 +170,10 @@ const NftAvatar: React.FC<{
           const codeHash = tempList[index]?.code_hash;
           await onGenCodes(nftId, [`0x${codeHash}`]);
         }
-      } catch (err) {
+      } catch (err: any) {
+        if (err?.data?.code === 3) {
+          toastError(t('exceeds the maximum number that can be generated'));
+        }
         setSubmitLoading(false);
         return false;
       }
@@ -218,10 +217,14 @@ const NftAvatar: React.FC<{
         {account ? (
           <NftDrawBox>
             <Flex mb='10px' justifyContent='space-between' alignItems='center'>
-              <Text small>点击NFT画板分享给好友</Text>
-              <Text small>剩余{getTimes}次</Text>
+              <Text small>
+                {t('Click NFT Sketchpad to share with friends')}
+              </Text>
+              <Text small>
+                {t('Remaining %count% times', { count: getTimes })}
+              </Text>
             </Flex>
-            <Flex>
+            <Flex justifyContent='space-between'>
               {codeList.map((item, index) => (
                 <Column key={item.id}>
                   <AvatarBox>

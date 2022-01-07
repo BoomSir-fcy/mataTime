@@ -130,6 +130,7 @@ const Invite: React.FC = () => {
     [],
   );
 
+  const nftLoading = useStore(p => p.loginReducer.nftLoading);
   const NftList = useStore(p => p.loginReducer.nftList);
   const userInfo: any = useStore(p => p.loginReducer.userInfo);
 
@@ -151,12 +152,15 @@ const Invite: React.FC = () => {
         token_id: item.properties.token_id,
       };
     });
-    nftList.unshift({
-      name: userInfo.nft_name,
-      image: userInfo.nft_image,
-      token: userInfo.nft_address,
-      token_id: userInfo.nft_id,
-    });
+
+    if (tokenAddress.toString().indexOf(userInfo.nft_address) !== -1) {
+      nftList.unshift({
+        name: userInfo.nft_name,
+        image: userInfo.nft_image,
+        token: userInfo.nft_address,
+        token_id: userInfo.nft_id,
+      });
+    }
 
     setInvitableNftList(nftList);
   }, [NftList, userInfo, tokenAddress]);
@@ -311,24 +315,26 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {invitableNftList.length ? (
-          <>
-            <ContentBox>
-              <Text fontSize='18px' bold>
-                Special Invitation
-              </Text>
-            </ContentBox>
-            <ContentBox>
-              <Flex flexDirection='column'>
-                <Text>{t('SpecialInvitationDescribe')}</Text>
-                <Step />
-              </Flex>
-            </ContentBox>
-            <StakeNFT
-              nftList={invitableNftList}
-              defaultCodeList={defaultCodeList}
-            />
-          </>
+        {!nftLoading ? (
+          invitableNftList.length ? (
+            <>
+              <ContentBox>
+                <Text fontSize='18px' bold>
+                  {t('Special Invitation')}
+                </Text>
+              </ContentBox>
+              <ContentBox>
+                <Flex flexDirection='column'>
+                  <Text>{t('SpecialInvitationDescribe')}</Text>
+                  <Step />
+                </Flex>
+              </ContentBox>
+              <StakeNFT
+                nftList={invitableNftList}
+                defaultCodeList={defaultCodeList}
+              />
+            </>
+          ) : null
         ) : (
           <Flex justifyContent='center' alignItems='center'>
             <Spinner />

@@ -99,10 +99,16 @@ const FriendsList: React.FC = React.memo(() => {
               list.map(item => (
                 <Row key={item.uid} className='LinkRow'>
                   <Flex flexWrap='wrap' alignItems='baseline'>
-                    <ItemText maxWidth='70%' small ellipsis>
+                    <ItemText
+                      maxWidth={item.invitation_type === 1 ? '70%' : ''}
+                      small
+                      ellipsis
+                    >
                       {item.nick_name}
                     </ItemText>
-                    {/* <SpecialTag small>Special</SpecialTag> */}
+                    {item.invitation_type === 1 && (
+                      <SpecialTag small>{t('Special')}</SpecialTag>
+                    )}
                   </Flex>
                   <ItemText small ellipsis>
                     {shortenAddress(item.address)}
