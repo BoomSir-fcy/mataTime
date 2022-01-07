@@ -3,7 +3,7 @@
   "wallet": "wallet",
   "Dark": "Dark mode",
   "connectWallet": "connect wallet",
-  "Connect Wallet": "connect wallet",
+  "Connect Wallet": "Connect Wallet",
   "翻译规范: key值使用英文字符串, value 为对应翻译值": "",
   "Example: This is a passage": "Example: This is a passage",
   "Example: There is a variable: %variableA% here": "Example: There is a variable: %variableA% here",
