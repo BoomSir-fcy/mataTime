@@ -263,7 +263,6 @@ const ShowCard: React.FC = () => {
       {/* 输入框弹窗 */}
       <ModalWrapper
         title={t('Lock NFT')}
-        creactOnUse
         visible={visible}
         setVisible={() => setVisible(codeInfo.state !== 1)}
         customizeTitle={codeInfo.state !== 1}
