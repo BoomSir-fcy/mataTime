@@ -233,6 +233,15 @@ export const menuNavConfig: MenuNavConfig[] = [
       },
     ],
   },
+  {
+    icon: 'icon-shouye',
+    activeIcon: 'icon-shouye1',
+    path: '/create',
+    hide: true,
+    hideLeft: true,
+    hideRight: true,
+    lable: 'createNft',
+  }
 ];
 
 const getHidePath = (

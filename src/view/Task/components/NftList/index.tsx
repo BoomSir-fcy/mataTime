@@ -14,7 +14,7 @@ export const StakeNFT: React.FC<{
     if (nftList.length) {
       getDefaultExistCodeList();
     }
-  }, []);
+  }, [nftList]);
 
   const getDefaultExistCodeList = useCallback(async () => {
     const nftIds = nftList.map(v => v.token_id).join(',');

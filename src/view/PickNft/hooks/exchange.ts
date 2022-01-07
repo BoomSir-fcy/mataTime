@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useInvitation } from 'hooks/useContract';
-import { exchangeToPhtot, lockInviteCode } from 'utils/myCalls';
+import { exchangeToPhtot, lockInviteCode, exchangeAndBuyToPhtot } from 'utils/myCalls';
 import isZero from 'utils/isZero';
 
 export enum ExChangeResult {
@@ -33,6 +33,30 @@ export const useExchangePhoto = () => {
         code,
         tx.toJSON().hex,
         color,
+      );
+      return ExChangeResult.SUCCESS;
+    },
+    [masterContract],
+  );
+
+  return { onExchange: handleExchange };
+};
+
+export const useExchangeAndBuyPhoto = () => {
+  const masterContract = useInvitation();
+  const handleExchange = useCallback(
+    async (ids: number[], color: string, value: string) => {
+      const tx = await masterContract.encodeToken(ids);
+      const owner = await masterContract._nft_address(tx.toJSON());
+      if (!isZero(owner)) return ExChangeResult.AVATAR_EXISTS; // 此头像已存在
+      const exists = await masterContract.checkTokenID(tx.toJSON());
+
+      if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 此头像已存在
+      const receipt = await exchangeAndBuyToPhtot(
+        masterContract,
+        tx.toJSON().hex,
+        color,
+        value
       );
       return ExChangeResult.SUCCESS;
     },

@@ -17,6 +17,19 @@ export const exchangeToPhtot = async (
   return receipt.status;
 };
 
+export const exchangeAndBuyToPhtot = async (
+  masterChefContract,
+  created,
+  color,
+  value,
+) => {
+  const tx = await masterChefContract.Exchange_NFT(created, color, {
+    value,
+  });
+  const receipt = await tx.wait();
+  return receipt.status;
+};
+
 export const lockInviteCode = async (
   masterChefContract,
   code,

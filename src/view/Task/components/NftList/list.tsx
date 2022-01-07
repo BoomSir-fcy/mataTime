@@ -10,7 +10,11 @@ import { ContentBox } from '../Invite';
 import InviteModal from '../Invite/InviteModal';
 import { useToast } from 'hooks';
 import { Api } from 'apis';
-import { getNftGenCodeCount, useGenCodes } from 'view/Task/hooks/matter';
+import {
+  getNftGenCodeCount,
+  useGenCodes,
+  getCodeViewList,
+} from 'view/Task/hooks/matter';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { CodeInfo, InvitableNftInfo } from 'view/Task/type';
 
@@ -103,6 +107,29 @@ const NftAvatar: React.FC<{
   // 0 未生成, 1未使用, 2提交合约, 3锁定, 4已使用
   const [codeList, setCodeList] = useState<CodeInfo[]>(defaultCodeList);
 
+  useEffect(() => {
+    getLastReceivedStatus();
+  }, [defaultCodeList[0]?.code_hash]);
+
+  // 获取邀请码是否被使用的最新状态
+  const getLastReceivedStatus = useCallback(async () => {
+    try {
+      if (defaultCodeList[0]?.code_hash) {
+        const lastStatusList = await getCodeViewList(
+          defaultCodeList.map(v => `0x${v.code_hash}`),
+        );
+        setCodeList(pre => {
+          return pre.map((item, i) => {
+            return {
+              ...item,
+              status: lastStatusList[i].status === 2 ? 4 : item.status,
+            };
+          });
+        });
+      }
+    } catch (error) {}
+  }, [defaultCodeList]);
+
   // 生成邀请码
   const genInviteCode = useCallback(
     async (nftToken, nftId) => {
@@ -131,7 +158,7 @@ const NftAvatar: React.FC<{
   );
 
   // 获取最新状态
-  const getLastStatus = useCallback(
+  const getLastSubmitStatus = useCallback(
     async nftId => {
       try {
         const codeCount = await getNftGenCodeCount(nftId);
@@ -146,7 +173,7 @@ const NftAvatar: React.FC<{
             });
           });
         }
-      } catch (err) { }
+      } catch (err) {}
     },
     [nftId],
   );
@@ -179,7 +206,7 @@ const NftAvatar: React.FC<{
       }
 
       // 获取最新状态
-      await getLastStatus(nftId);
+      await getLastSubmitStatus(nftId);
       if (!info?.code) setActiveInfo(tempList.filter(v => v.id === info.id)[0]);
       setVisible(true);
       setSubmitLoading(false);

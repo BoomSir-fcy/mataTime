@@ -135,10 +135,10 @@ const Invite: React.FC = () => {
   const userInfo: any = useStore(p => p.loginReducer.userInfo);
 
   useEffect(() => {
-    if (NftList.length > 0 && tokenAddress) {
+    if (tokenAddress && tokenAddress?.length) {
       getNftList();
     }
-  }, [NftList.length, tokenAddress]);
+  }, [NftList, tokenAddress]);
 
   // 获取可邀请的nft列表，当前已注册的nft默认可以邀请
   const getNftList = useCallback(async () => {
@@ -146,7 +146,7 @@ const Invite: React.FC = () => {
       v => tokenAddress.toString().indexOf(v.properties.token) !== -1,
     ).map(item => {
       return {
-        name: item.name,
+        name: 'DSGAV',
         image: item.image,
         token: item.properties.token,
         token_id: item.properties.token_id,
@@ -155,13 +155,12 @@ const Invite: React.FC = () => {
 
     if (tokenAddress.toString().indexOf(userInfo.nft_address) !== -1) {
       nftList.unshift({
-        name: userInfo.nft_name,
+        name: 'DSGAV',
         image: userInfo.nft_image,
         token: userInfo.nft_address,
         token_id: userInfo.nft_id,
       });
     }
-
     setInvitableNftList(nftList);
   }, [NftList, userInfo, tokenAddress]);
 
