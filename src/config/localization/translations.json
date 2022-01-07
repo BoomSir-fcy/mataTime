@@ -550,6 +550,10 @@
   "editorComment": "Comment",
   "editorTime": "Income",
   "editorReward": "Reward",
+  "unShiled": "Unblock",
+  "shieldUserSuccess": "User blocked successfully",
+  "shieldUserUnSuccess": "Unblock successfully",
+  "shieldUserFail": "Failed to block user",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",
@@ -619,5 +623,6 @@
   "http-error-30013003": "Failed to claim task ",
   "http-error-30013004": "Task status list does not exist ",
   "http-error-30013005": "Task income record does not exist ",
+  "http-error-30001011": "can not block users repeatedly",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

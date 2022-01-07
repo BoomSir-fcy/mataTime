@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { debounce } from 'lodash';
+import { useToast } from 'hooks';
 import { Flex, Box, Text, Button } from 'uikit';
-import { ModalWrapper } from 'components';
+import { ModalWrapper, MoreOperatorEnum } from 'components';
 import { useTranslation } from 'contexts/Localization';
+import { Api } from 'apis';
 
 const Content = styled(Box)`
   width: 100%;
@@ -16,13 +19,31 @@ const Content = styled(Box)`
 const Footer = styled(Flex)`
   justify-content: space-between;
   align-content: center;
+  padding-bottom: 20px;
 `;
 
 export const ShiledUserModal: React.FC<{
+  userinfo: Api.Home.post;
   visible: boolean;
+  callback: (data: Api.Home.post, type?: string) => void;
   onClose: () => void;
-}> = React.memo(({ visible, onClose }) => {
+}> = React.memo(({ userinfo, visible, callback, onClose }) => {
   const { t } = useTranslation();
+  const { toastError, toastSuccess } = useToast();
+
+  const shield = async () => {
+    try {
+      const res = await Api.MeApi.shieldUser(userinfo.user_id);
+      if (Api.isSuccess(res)) {
+        callback(userinfo, MoreOperatorEnum.BLOCKUSER);
+        toastSuccess(t('shieldUserSuccess'));
+      } else {
+        toastError(t(`http-error-${res.code}`));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ModalWrapper
@@ -34,8 +55,12 @@ export const ShiledUserModal: React.FC<{
         <Text color='white_black'>{t('shieldUserModalDes')}</Text>
       </Content>
       <Footer>
-        <Button variant='secondary'>{t('modalCancel')}</Button>
-        <Button>{t('modalQuery')}</Button>
+        <Button variant='secondary' onClick={onClose}>
+          {t('modalCancel')}
+        </Button>
+        <Button onClick={debounce(() => shield(), 1000)}>
+          {t('modalQuery')}
+        </Button>
       </Footer>
     </ModalWrapper>
   );

@@ -552,6 +552,10 @@
   "editorComment": "評論",
   "editorTime": "收益",
   "editorReward": "打賞",
+  "unShiled": "取消屏蔽",
+  "shieldUserSuccess": "屏蔽用戶成功",
+  "shieldUserUnSuccess": "取消屏蔽成功",
+  "shieldUserFail": "屏蔽用戶失敗",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",
@@ -621,5 +625,6 @@
   "http-error-30013003": "領取任務失敗",
   "http-error-30013004": "任務狀態列表不存在",
   "http-error-30013005": "任務歷史收益記錄不存在",
+  "http-error-30001011": "不能重複屏蔽用戶",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

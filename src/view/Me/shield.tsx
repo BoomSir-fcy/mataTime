@@ -1,20 +1,17 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
+import { useToast } from 'hooks';
 import { Avatar, Icon, Crumbs, List } from 'components';
 import { Card, Box, Button, Flex, Text } from 'uikit';
 import { Api } from 'apis';
 
+import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
-
-const Msg = styled(Box)`
-  color: #b5b5b5;
-  font-size: 14px;
-`;
 
 const Content = styled(Card)`
   min-height: 500px;
-  ${({ theme }) => theme.mediaQueriesSize.padding}
   max-width: calc(100vw - 8px);
   background-color: transparent;
 `;
@@ -27,20 +24,37 @@ const Column = styled(Flex)`
   margin-left: 22px;
 `;
 
-const ContentBox = styled(Box)`
-  float: left;
-  width: 100%;
-  height: 60px;
-  margin-bottom: 28px;
-  button {
-    background: ${({ theme }) => theme.colors.tertiary};
-    float: right;
-    margin-top: 15px;
+const ContentBox = styled(Flex)`
+  padding: 14px 8px;
+  min-height: 60px;
+  /* margin-bottom: 28px; */
+  justify-content: space-between;
+  align-content: center;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  &:hover {
+    background: ${({ theme }) => theme.colors.hoverList};
+  }
+`;
+
+const WrapText = styled(Text)`
+  word-wrap: break-word;
+`;
+
+const NameText = styled(Text)`
+  max-width: 100%;
+  width: max-content;
+`;
+
+const NameFlex = styled(Flex)`
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
   }
 `;
 
 const Shield = React.memo(() => {
   const { t } = useTranslation();
+  const { toastError, toastSuccess } = useToast();
   const [state, setState] = useImmer({
     loading: false,
     page: 1,
@@ -49,89 +63,46 @@ const Shield = React.memo(() => {
     list: [],
   });
 
-  const people = [
-    {
-      uname: '满克斯',
-      dunpai: true,
-      present: '@0x32...9239',
-      isFollow: '取消屏蔽',
-    },
-    {
-      uname: '乔布斯',
-      dunpai: false,
-      present: '巴里拉里',
-      isFollow: '取消屏蔽',
-    },
-    {
-      uname: '马克思',
-      dunpai: true,
-      present: '个人主页的介绍',
-      isFollow: '取消屏蔽',
-    },
-  ];
-  const [peopleState, setPeopleState] = useState(people);
+  const { loading, page, total, totalPage, list } = state;
 
-  // 屏蔽列表
-  const ShieldList = () => {
-    // 屏蔽
-    const shieldUser = async (pid: number) => {
-      try {
-        const res = await Api.MeApi.shieldUser(pid);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // 取消屏蔽
-    const unShieldUser = async (pid: number) => {
-      try {
-        const res = await Api.MeApi.shieldUser(pid);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const setPeople = useCallback(
-      index => {
-        if (peopleState[index].isFollow) {
-          peopleState.splice(index, 1);
-        }
-        const res = peopleState.map((item, subIndex) => {
-          if (index === subIndex) {
-            return {
-              ...item,
-            };
-          }
-          return {
-            ...item,
-          };
-        });
-        setPeopleState(res);
-      },
-      [peopleState],
-    );
-
-    return peopleState.map((item, index) => {
-      return (
-        <ContentBox>
-          <Avatar scale='md' style={{ float: 'left' }} />
-          <Column style={{ float: 'left' }}>
-            <div>
-              <span className='username'>{item.uname}</span>{' '}
-              <Icon
-                name={item.dunpai ? 'icon-dunpai' : null}
-                margin='0 5px 0 5px'
-                size={15}
-                color='#699a4d'
-              />{' '}
-              <span className='msg'>@0x32...9239</span>
-            </div>
-            <Msg>{item.present}</Msg>
-          </Column>
-          <Button onClick={() => shieldUser(1)}>取消屏蔽</Button>
-        </ContentBox>
-      );
+  const getList = async (offest?: number) => {
+    setState(p => {
+      p.loading = true;
     });
+    try {
+      const res = await Api.MeApi.getShieldList(offest || page);
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = offest
+            ? [...(res.data.list || [])]
+            : [...state.list, ...(res.data.list || [])];
+          p.page = (offest || state.page) + 1;
+          p.totalPage = res.data.total_page;
+          p.total = res.data.totalCount;
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setState(p => {
+        p.loading = false;
+      });
+    }
+  };
+
+  // 取消屏蔽
+  const unShield = async uid => {
+    try {
+      const res = await Api.MeApi.unShieldUser(uid);
+      if (Api.isSuccess(res)) {
+        getList(1);
+        toastSuccess(t('shieldUserUnSuccess'));
+      } else {
+        toastError(t(`http-error-${res.code}`));
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -142,11 +113,53 @@ const Shield = React.memo(() => {
             {t('meHeaderShieldNumber')}
           </Text>
           <Text fontSize='14px'>
-            {t('meHeaderPeople%value%', { value: 0 })}
+            {t('meHeaderPeople%value%', { value: total })}
           </Text>
         </Flex>
       </Crumbs>
-      <Content isBoxShadow>{ShieldList()}</Content>
+      <Content isBoxShadow>
+        <List
+          marginTop={13}
+          loading={loading}
+          renderList={() => {
+            if (loading || page > totalPage) return false;
+            getList();
+          }}
+        >
+          {list.map((item, index) => (
+            <ContentBox key={index}>
+              <Flex
+                as={Link}
+                to={`/me/profile/${item.user_shield_id}`}
+                alignItems='center'
+                style={{ width: 'calc(100% - 140px)' }}
+              >
+                <Avatar
+                  uid={item.user_shield_id}
+                  src={item.nft_image}
+                  scale='md'
+                />
+                <Column>
+                  <NameFlex>
+                    <NameText ellipsis color='white_black' mr='13px'>
+                      {item.nick_name}
+                    </NameText>
+                    <Text color='textTips'>
+                      @{shortenAddress(item.address)}
+                    </Text>
+                  </NameFlex>
+                  <WrapText small color='textTips' ellipsis>
+                    {item.introduction}
+                  </WrapText>
+                </Column>
+              </Flex>
+              <Button onClick={() => unShield(item.user_shield_id)}>
+                {t('unShiled')}
+              </Button>
+            </ContentBox>
+          ))}
+        </List>
+      </Content>
     </Box>
   );
 });
