@@ -52,7 +52,7 @@ export const useNftBaseView = () => {
   return { tokenAddress: state.tokenAddress, defaultCodeList: state.defaultCodeList };
 }
 
-// 生成邀请码的个数
+// 提交到合约的个数
 export const getNftGenCodeCount = async (nftId: number|string) => {
   const inviteAddress = getInvitationAddress();
   const calls = [
@@ -90,7 +90,7 @@ export const getInvitedNftTokenAddress = async () => {
 }
 
 /**
- * 邀请码信息
+ * 基本信息
  * @returns {
  *  nft_ 可以分发邀请码的NFT地址
  *  userProfile_ 用户合约地址
@@ -152,7 +152,7 @@ export const getCodeViewList = async (codeHashs: string[]) => {
         lockUser: item.lockUser,
         lockedAt: new BigNumber(item.lockedAt.toJSON().hex).toNumber(),
         generator: item.generator,
-        status: item.state,
+        status: item.state, // 1-未使用  2-已使用
       }
     })
     return codeViewList;
