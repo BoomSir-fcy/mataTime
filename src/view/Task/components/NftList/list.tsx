@@ -127,7 +127,7 @@ const NftAvatar: React.FC<{
           });
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   }, [defaultCodeList]);
 
   // 生成邀请码
@@ -174,7 +174,7 @@ const NftAvatar: React.FC<{
           });
         }
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
     },
     [setCodeList],
@@ -182,9 +182,9 @@ const NftAvatar: React.FC<{
 
   useEffect(() => {
     if (nftId && codeList.length) {
-      getLastSubmitStatus(nftId)
+      getLastSubmitStatus(nftId);
     }
-  }, [codeList.length, nftId, getLastSubmitStatus])
+  }, [codeList.length, nftId, getLastSubmitStatus]);
 
   // 点击无聊猴画板
   const handleGenCode = useCallback(
@@ -232,10 +232,8 @@ const NftAvatar: React.FC<{
 
   // 剩余分享次数
   const getTimes = useMemo(() => {
-    return codeList.filter(v => v.status !== 4).length;
+    return codeList.filter(v => v.status < 2).length;
   }, [codeList]);
-
-  console.log(codeList, nftId, 'codeList')
 
   return (
     <ContentBox>
@@ -283,7 +281,8 @@ const NftAvatar: React.FC<{
                         )}
                         <ActiveImg
                           className={
-                            index >= 1 && codeList[index - 1].status <= 1
+                            (index >= 1 && codeList[index - 1].status < 2) ||
+                            item?.code === ''
                               ? 'disable'
                               : 'active'
                           }
@@ -291,7 +290,11 @@ const NftAvatar: React.FC<{
                           src={require('assets/images/task/monkey.jpg').default}
                           scale='ld'
                           onClick={() => {
-                            if (index >= 1 && codeList[index - 1].status <= 1) {
+                            // 若上一个邀请码已提交合约，则可点击下一个
+                            if (
+                              (index >= 1 && codeList[index - 1].status < 2) ||
+                              item?.code === ''
+                            ) {
                               return false;
                             }
                             handleGenCode(item, index);
