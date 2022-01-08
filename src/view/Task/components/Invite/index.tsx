@@ -165,13 +165,14 @@ const Invite: React.FC = () => {
   }, [NftList, userInfo, tokenAddress]);
 
   useEffect(() => {
+    if (data.length <= 0) {
+      dispatch(fetchTaskListAsync({ isSignIn: false }));
+    }
     if (data.length) {
       const inviteList = partition(data, ['task_group', Group.INVITE])[0];
       setInviteList(inviteList);
-    } else {
-      dispatch(fetchTaskListAsync({ isSignIn: false }));
     }
-  }, [data.length, dispatch]);
+  }, [data, dispatch]);
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
