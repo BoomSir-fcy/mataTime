@@ -31,6 +31,10 @@ export const StakeNFT: React.FC<{
     setNftCodeList(newList);
   }, [nftList]);
 
+  // getNftsGenCodeCount()
+
+
+
   return (
     <>
       {nftCodeList.map((item, index) => {
