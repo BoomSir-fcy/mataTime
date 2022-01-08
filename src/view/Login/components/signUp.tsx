@@ -42,7 +42,7 @@ const WalletBody = styled(Flex)`
 const FailButton = styled(Button)`
   /* width: 45%; */
   margin-top: 15px;
-  padding: 0 10px;
+  padding: 0 4px;
   width: 248px;
   ${({ theme }) => theme.mediaQueries.md} {
     margin-top: 23px;
@@ -87,10 +87,10 @@ const SignUpFail = () => {
   const { t } = useTranslation();
   const { buyInfo } = usePickNftState();
 
-  const goRouter = (router?: string) => {
+  const goRouter = (goRouter?: string) => {
     dispatch(storeAction.changeReset);
-    if (router) {
-      history.push(router);
+    if (goRouter) {
+      history.push(goRouter);
     } else {
       window.open(GET_DSG_NFT_URL);
     }
@@ -125,7 +125,7 @@ const SignUpFail = () => {
                 : 'tertiary'
               : 'primary'
           }
-          onClick={goRouter}
+          onClick={() => goRouter('')}
         >
           {t('loginBuyNft')}
         </FailButton>
