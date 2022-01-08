@@ -241,8 +241,7 @@ const Profile: React.FC<any> = props => {
       DELPOST,
       BLOCKUSER,
     } = MoreOperatorEnum;
-    const handleChangeList =
-      type === SHIELD || type === DELPOST || type === BLOCKUSER;
+    const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
 
     if (
@@ -250,7 +249,8 @@ const Profile: React.FC<any> = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       setIsEnd(false);
       init(1);

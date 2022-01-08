@@ -628,5 +628,7 @@
   "http-error-30013004": "Task status list does not exist ",
   "http-error-30013005": "Task income record does not exist ",
   "http-error-30001011": "can not block users repeatedly",
+  "http-error-30008004": "User does not allow others to view his watchlist",
+  "http-error-30008005": "User does not allow others to view his followers list",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

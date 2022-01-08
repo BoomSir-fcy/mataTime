@@ -92,7 +92,8 @@ const ArticleComponents = (props, ref) => {
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
       type === MoreOperatorEnum.SETTOP ||
       type === MoreOperatorEnum.CANCEL_SETTOP ||
-      type === MoreOperatorEnum.COMMONT
+      type === MoreOperatorEnum.COMMONT ||
+      type === MoreOperatorEnum.BLOCKUSER
     ) {
       setIsEnd(false);
       Getlist(1);
@@ -105,9 +106,7 @@ const ArticleComponents = (props, ref) => {
     }
 
     const handleChangeList =
-      type === MoreOperatorEnum.SHIELD ||
-      type === MoreOperatorEnum.DELPOST ||
-      type === MoreOperatorEnum.BLOCKUSER;
+      type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST;
     let arr = [];
     list.forEach((item: any) => {
       let obj = item;

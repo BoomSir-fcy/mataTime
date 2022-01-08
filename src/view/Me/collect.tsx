@@ -73,10 +73,7 @@ const Collect = props => {
       BLOCKUSER,
     } = MoreOperatorEnum;
     const handleChangeList =
-      type === SHIELD ||
-      type === DELPOST ||
-      type === BOOKMARK ||
-      type === BLOCKUSER;
+      type === SHIELD || type === DELPOST || type === BOOKMARK;
     let arr = [];
 
     if (
@@ -84,14 +81,13 @@ const Collect = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       init(1);
       return;
     }
 
-    // 折叠
-    if (type === EXPAND) return setNonce(prep => prep + 1);
     listData.forEach((item: any) => {
       let obj = item;
       if (item.id === newItem.id) {
