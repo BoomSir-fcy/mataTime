@@ -28,6 +28,7 @@ import SetNickName from './setName';
 import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
 import { formatDisplayApr, getFullDisplayBalance } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
+import { useHistory, useLocation } from 'react-router-dom';
 
 dayjs.extend(duration);
 interface ColorRgba {
@@ -142,6 +143,7 @@ const CreateShowCard: React.FC = () => {
     ];
   }, [colorRgba]);
 
+  const { replace } = useHistory()
   const { theme } = useTheme();
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -182,18 +184,33 @@ const CreateShowCard: React.FC = () => {
     try {
       setpending(true)
       const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
-      const res = await onExchange(
+      const status = await onExchange(
         sortData.map(item => item.id),
         `0x${colorHex}${colorAlpha}`,
         buyInfo.price
       );
+      if (status === ExChangeResult.SUCCESS) {
+        replace('/login')
+        // TODO: 翻译
+        toastSuccess('Successfully Mint!')
+      } else if (status === ExChangeResult.AVATAR_EXISTS) {
+        toastError(
+          t(
+            'Sorry, this Avatar is existent, please replace the parts and try again',
+          ),
+        );
+      }
       // dispatch(fetchStuffAllLimitsAsync());
     } catch (error) {
       console.error(error)
+      toastError(
+        t('Error'),
+        t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+      )
     } finally {
       setpending(false)
     }
-  }, [selectData, setpending, dispatch, onExchange, codes.code, account, colorHex, colorAlpha, buyInfo.price]);
+  }, [selectData, setpending, dispatch, onExchange, replace, codes.code, account, colorHex, colorAlpha, buyInfo.price]);
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);

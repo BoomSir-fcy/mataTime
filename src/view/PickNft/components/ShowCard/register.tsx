@@ -45,6 +45,7 @@ import StateModal from '../pop/state';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 import SetNickName from './setName';
 import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
+import { useFetchNftList } from 'view/Login/hook';
 
 dayjs.extend(duration);
 interface ColorRgba {
@@ -72,7 +73,7 @@ const BoxPaddingStyled = styled(Box)`
   }
 `;
 
-const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
+const BoxStyled = styled(Box) <{ rgba: ColorRgba }>`
   width: 24vh;
   height: 24vh;
   max-width: 100%;
@@ -98,7 +99,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 
-const ImageStyled = styled(Image)<{ zIndex?: number }>`
+const ImageStyled = styled(Image) <{ zIndex?: number }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -109,7 +110,7 @@ const PickerBox = styled(Box)`
   position: relative;
 `;
 
-const ShowColorPicker = styled(Box)<{ rgba: ColorRgba }>`
+const ShowColorPicker = styled(Box) <{ rgba: ColorRgba }>`
   width: 75px;
   height: 35px;
   background: ${({ rgba }) =>
@@ -133,6 +134,9 @@ const Cover = styled(Box)`
 
 const ShowCard: React.FC = () => {
   useFetchNftApproval();
+  useFetchNftList();
+
+  const NftList = useStore(p => p.loginReducer.nftList);
 
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [colorRgba, setColorRgba] = useState<ColorRgba>({
@@ -156,8 +160,6 @@ const ShowCard: React.FC = () => {
   const { toastSuccess, toastError } = useToast();
   const dispatch = useDispatch();
   const { onExchange } = useExchangePhoto();
-  const { onApprove } = useNftApproveExPhoto();
-  // const [LeftTime, setLeftTime] = useState(0);
   const { codes, selectData, codeInfo, inviteInfo, inviteLoading } =
     usePickNftState();
 
@@ -324,7 +326,7 @@ const ShowCard: React.FC = () => {
         ) : (
           <>
             {codeInfo.state !== 1 ? (
-              <StateModal onClose={onClose} state={codeInfo.state} />
+              <StateModal onClose={onClose} nftLength={NftList.length} state={codeInfo.state} />
             ) : (
               <LockModal
                 onLock={handLock}

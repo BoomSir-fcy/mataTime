@@ -40,9 +40,10 @@ const MyInput = styled(Input)`
 interface init {
   onClose: () => void;
   state: number; // 邀请码现在的状态 0.为生成 1.未使用 2.已使用
+  nftLength: number
 }
 
-const StateModal: React.FC<init> = ({ onClose, state }) => {
+const StateModal: React.FC<init> = ({ onClose, state, nftLength }) => {
   const { t } = useTranslation();
 
   return (
@@ -51,14 +52,22 @@ const StateModal: React.FC<init> = ({ onClose, state }) => {
         * {t('Effective within 10 minutes after being locked')}
       </Text> */}
       {
-        state === 0 && (
-          <Text fontSize='18px' bold textAlign="center">{t('当前邀请码不正确')}</Text>
+        nftLength === 0 ? (
+          <Text fontSize='18px' bold textAlign="center">{t('您暂无邀请资格')}</Text>
         )
-      }
-      {
-        state === 2 && (
-          <Text fontSize='18px' bold textAlign="center">{t('当前邀请码已被使用')}</Text>
-        )
+          :
+          (<>
+            {
+              state === 0 && (
+                <Text fontSize='18px' bold textAlign="center">{t('当前邀请码不正确')}</Text>
+              )
+            }
+            {
+              state === 2 && (
+                <Text fontSize='18px' bold textAlign="center">{t('当前邀请码已被使用')}</Text>
+              )
+            }
+          </>)
       }
       <Flex marginTop="16px" flexDirection='column' justifyContent='center' alignItems='center'>
         <Link to="/login">
