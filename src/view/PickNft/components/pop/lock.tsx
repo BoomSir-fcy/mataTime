@@ -39,28 +39,43 @@ const MyInput = styled(Input)`
 interface init {
   onLock: (val: string) => void;
   InviteCode: string;
+  lockUser: string;
+  isLockAvailable: boolean;
 }
 
-const LockModal: React.FC<init> = ({ onLock, InviteCode }) => {
+const LockModal: React.FC<init> = ({
+  onLock,
+  InviteCode,
+  lockUser,
+  isLockAvailable,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const [val, setVal] = useState('');
   const [pending, setpending] = useState(false);
 
-  // 授权
+  // 锁定
   const handLock = useCallback(async () => {
+    if (lockUser !== account && isLockAvailable) {
+      toast.error(t('邀请码已被其他用户锁定'));
+      return;
+    }
+    if (lockUser === account && isLockAvailable) {
+      toast.error(t('邀请码已被您锁定'));
+      return;
+    }
     setpending(true);
     try {
       await onLock(val);
-      toast.success(t('锁定成功'));
+      toast.success(t('Locked successfully'));
     } catch (e) {
       console.error(e);
       toast.error(t('Lock failed'));
     } finally {
       setpending(false);
     }
-  }, [account, onLock, val]);
+  }, [account, onLock, val, isLockAvailable, lockUser]);
 
   useEffect(() => {
     setVal(InviteCode);

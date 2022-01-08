@@ -1,6 +1,10 @@
 import { useCallback } from 'react';
 import { useInvitation } from 'hooks/useContract';
-import { exchangeToPhtot, lockInviteCode, exchangeAndBuyToPhtot } from 'utils/myCalls';
+import {
+  exchangeToPhtot,
+  lockInviteCode,
+  exchangeAndBuyToPhtot,
+} from 'utils/myCalls';
 import isZero from 'utils/isZero';
 
 export enum ExChangeResult {
@@ -18,15 +22,9 @@ export const useExchangePhoto = () => {
       const owner = await masterContract._nft_address(tx.toJSON());
       if (!isZero(owner)) return ExChangeResult.AVATAR_EXISTS; // 此头像已存在
       const exists = await masterContract.checkTokenID(tx.toJSON());
+      if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 物件个数用完了
 
-      if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 此头像已存在
-      console.log(12211221)
-      console.log(
-        nickname,
-        code,
-        tx.toJSON().hex,
-        color,
-      )
+      console.log(nickname, code, tx.toJSON().hex, color);
       const receipt = await exchangeToPhtot(
         masterContract,
         nickname,
@@ -56,7 +54,7 @@ export const useExchangeAndBuyPhoto = () => {
         masterContract,
         tx.toJSON().hex,
         color,
-        value
+        value,
       );
       return ExChangeResult.SUCCESS;
     },
@@ -70,11 +68,8 @@ export const useLockInviteCode = () => {
   const masterContract = useInvitation();
   const handleLockCode = useCallback(
     async (code: string) => {
-      const receipt = await lockInviteCode(
-        masterContract,
-        code,
-      );
-      return receipt
+      const receipt = await lockInviteCode(masterContract, code);
+      return receipt;
     },
     [masterContract],
   );

@@ -17,6 +17,7 @@ import { getBLen } from 'utils';
 import { useContract } from 'view/Login/hook';
 import { useToast } from 'hooks';
 import { useLogin, useSignIn } from 'view/Login/hooks';
+import { ExChangeResult } from 'view/PickNft/hooks/exchange';
 
 const CountBox = styled(Box)``;
 
@@ -83,7 +84,6 @@ const SetNickName: React.FC<init> = ({
   const { siginInVerify, getUserName } = useSignIn();
   const { toastSuccess, toastWarning, toastError } = useToast();
   const { loginCallback } = useLogin();
-
   let timer: any = 0;
   // 轮询查找用户是否注册
   const verify = () => {
@@ -100,7 +100,6 @@ const SetNickName: React.FC<init> = ({
   const signIn = async () => {
     timer && clearInterval(timer);
     const res = await loginCallback(2);
-    dispatch(storeAction.setSigninLoading(false));
     if (Api.isSuccess(res)) {
       const user: any = await getUserName();
       if (Api.isSuccess(user)) {
@@ -127,12 +126,17 @@ const SetNickName: React.FC<init> = ({
     const res = await checkNickname(state.nickName);
     if (!res[0] && res[1]) {
       try {
-        const userInfo = await onComplete(state.nickName);
-        if (Boolean(userInfo)) {
+        const status = await onComplete(state.nickName);
+        console.log(status, '----');
+        if (Number(status) === ExChangeResult.SUCCESS) {
           verify();
-        } else {
-          dispatch(storeAction.setSigninLoading(false));
-          toastError(t('loginSignupFail'));
+        } else if (Number(status) === ExChangeResult.AVATAR_EXISTS) {
+          toastError(
+            t(
+              'Sorry, this Avatar is existent, please replace the parts and try again',
+            ),
+          );
+          setpending(false);
         }
       } catch (error) {
         toastError(t('loginSignupFail'));

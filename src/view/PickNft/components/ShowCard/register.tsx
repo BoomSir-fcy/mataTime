@@ -164,12 +164,6 @@ const ShowCard: React.FC = () => {
   const { onLockCode } = useLockInviteCode();
 
   const LeftTime = useMemo(() => {
-    console.log(
-      inviteInfo.codeLockDuration_,
-      codeInfo.lockedAt,
-      inviteInfo.codeLockDuration_ + codeInfo.lockedAt,
-    );
-
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
       return inviteInfo.codeLockDuration_ + codeInfo.lockedAt;
     }
@@ -179,8 +173,9 @@ const ShowCard: React.FC = () => {
   const [DownTime, hour, minute, second] = useCountdownTime(LeftTime);
   const [visible, setVisible] = useState(true);
 
+  // 是否被锁定
   const isLockAvailable = useMemo(() => {
-    return hour >= 0 && minute >= 0 && second >= 0;
+    return hour > 0 || minute > 0 || second > 0;
   }, [hour, minute, second]);
 
   const randomPickHandle = useCallback(
@@ -189,7 +184,7 @@ const ShowCard: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!(hour >= 0 && minute >= 0 && second >= 0)) {
+    if (!(hour > 0 || minute > 0 || second > 0)) {
       setVisible(true);
     }
   }, [hour, minute, second]);
@@ -331,7 +326,12 @@ const ShowCard: React.FC = () => {
             {codeInfo.state !== 1 ? (
               <StateModal onClose={onClose} state={codeInfo.state} />
             ) : (
-              <LockModal onLock={handLock} InviteCode={codes.lock_hash} />
+              <LockModal
+                onLock={handLock}
+                InviteCode={codes.lock_hash}
+                lockUser={codeInfo.lockUser}
+                isLockAvailable={isLockAvailable}
+              />
             )}
           </>
         )}

@@ -32,21 +32,24 @@ export const fetchCodeUsed = async code => {
 export const fetchCodeInfo = async (codes: InviteCodes) => {
   const exPhotoNftAddress = getInvitationAddress();
   try {
-    const calls = [{
-      address: exPhotoNftAddress,
-      name: 'getCodeView',
-      params: [`0x${codes.code_hash}`],
-    }, {
-      address: exPhotoNftAddress,
-      name: 'getCodeView',
-      params: [`0x${codes.lock_hash}`],
-    }];
+    const calls = [
+      {
+        address: exPhotoNftAddress,
+        name: 'getCodeView',
+        params: [`0x${codes.code_hash}`],
+      },
+      {
+        address: exPhotoNftAddress,
+        name: 'getCodeView',
+        params: [`0x${codes.lock_hash}`],
+      },
+    ];
 
     const [hashRes, Lockres] = await multicall(invitationAbi, calls);
-    console.log(hashRes, Lockres, 'as', Lockres.lockedAt.toNumber() * 1000)
+    console.log(hashRes, Lockres, 'as', Lockres.lockedAt.toNumber() * 1000);
     return {
       generator: hashRes.generator,
-      lockUser: hashRes.lockUser,
+      lockUser: Lockres.lockUser,
       state: hashRes.state,
       lockedAt: Lockres.lockedAt.toNumber() * 1000,
     };
@@ -56,11 +59,11 @@ export const fetchCodeInfo = async (codes: InviteCodes) => {
       generator: '0x0000000000000000000000000000000000000000',
       lockUser: '0x0000000000000000000000000000000000000000',
       state: 0,
-      lockedAt: 0
+      lockedAt: 0,
     };
     // return [index, [], []]
   }
-}
+};
 
 export const fetchNftApproval = async account => {
   const exPhotoNftAddress = getTicketNftAddress();
