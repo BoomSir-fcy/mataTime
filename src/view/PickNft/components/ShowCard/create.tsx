@@ -191,6 +191,7 @@ const CreateShowCard: React.FC = () => {
       );
       if (status === ExChangeResult.SUCCESS) {
         replace('/login')
+        // TODO: 翻译
         toastSuccess('Successfully Mint!')
       } else if (status === ExChangeResult.AVATAR_EXISTS) {
         toastError(
