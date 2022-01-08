@@ -23,7 +23,9 @@ const initialState: SearchState = {
   resultListOfPostLen: 0,
   loading: false,
   dispalyLoading: false,
+  postLoading: false,
   errorMsg: '',
+  searchVal: '',
   historyList: historyListStore ? JSON.parse(historyListStore) : [],
   placeHolderSearch: '',
   displayResultListOfPeoples: [],
@@ -97,6 +99,7 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     }
 
     dispatch(setErrorMsg(''))
+    dispatch(setSearchVal(searchVal))
     if (fetchDisplay) {
       dispatch(setDispalyLoading(true))
     }
@@ -141,6 +144,15 @@ export const fetchSearchAsync = createAsyncThunk<any, {
   },
 );
 
+export const fetchSearchPostAsync = createAsyncThunk('', async (params, { dispatch, getState }) => {
+  dispatch(setPostLoading(true))
+
+  const { search } = getState() as { search: SearchState }
+  const fetchPost = Api.SearchApi.getSearchPost(search.searchVal)
+  
+
+})
+
 export const Search = createSlice({
   name: 'search',
   initialState,
@@ -150,6 +162,12 @@ export const Search = createSlice({
     },
     setDispalyLoading: (state, { payload }) => {
       state.dispalyLoading = payload
+    },
+    setPostLoading: (state, { payload }) => {
+      state.postLoading = payload
+    },
+    setSearchVal: (state, { payload }) => {
+      state.searchVal = payload
     },
     setErrorMsg: (state, { payload }) => {
       state.errorMsg = payload
@@ -245,6 +263,8 @@ export const {
   setLoading,
   setErrorMsg,
   setDispalyLoading,
+  setPostLoading,
+  setSearchVal,
 } = Search.actions
 
 

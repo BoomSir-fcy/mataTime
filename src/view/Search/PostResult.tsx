@@ -13,6 +13,7 @@ import { BASE_USER_PROFILE_URL } from 'config';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useHistory } from 'react-router-dom';
 import { getSearchPath } from 'utils/urlQueryPath';
+import PostList from 'components/Post/PostList';
 
 const tabDatas = [
   {
@@ -38,10 +39,10 @@ const tabDatas = [
 ];
 
 interface PostResultProps {
-  list: [];
+  list?: [];
 }
 
-const PostResult = () => {
+const PostResult: React.FC<PostResultProps> = ({ list }) => {
   const { t } = useTranslation();
 
   return (
@@ -50,6 +51,7 @@ const PostResult = () => {
         list
       } */}
       <Text>PostResult</Text>
+      {/* <PostList list={list} /> */}
     </Box>
   );
 };

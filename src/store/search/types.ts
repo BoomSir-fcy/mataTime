@@ -43,7 +43,9 @@ export interface SearchState {
   displayResultListOfPost: Api.Home.post[],
   loading: boolean,
   dispalyLoading: boolean,
+  postLoading: boolean,
   errorMsg: string,
+  searchVal: string,
   historyList: SearchHistoryList[],
   placeHolderSearch: string,
   filterUser: number // 1 所有人 2 仅关注
