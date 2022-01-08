@@ -26,6 +26,8 @@ declare namespace Api {
       address: string;
       label_list?: string[];
       post_num?: number;
+      allow_watch_attention: numbner;
+      allow_watch_fans: numbner;
     }
 
     interface updateProfileParams {

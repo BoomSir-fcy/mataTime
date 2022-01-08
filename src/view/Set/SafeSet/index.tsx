@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Card, Text, Button } from 'uikit';
+import { useImmer } from 'use-immer';
+import { Flex, Card, Text, Button, Toggle } from 'uikit';
 import { useStore } from 'store';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
@@ -30,6 +31,10 @@ const Column = styled(Flex)`
 const SafeSet = () => {
   const { t } = useTranslation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
+  const [state, setState] = useImmer({
+    allow_watch_attention: true,
+    allow_watch_fans: true,
+  });
 
   // 更新邮箱
   const updateEmail = async (email: string) => {
@@ -40,16 +45,38 @@ const SafeSet = () => {
     }
   };
 
+  console.log(userInfo.allow_watch_attention);
+  console.log(userInfo.allow_watch_fans);
+
+  // 1允许，2不允许
   return (
     <SafeSetBox isBoxShadow>
       <Rows>
         <Column>
           <Title>{t('setWalletAddress')}</Title>
-          <Text color="textTips" mt="11px">
+          <Text color='textTips' mt='11px'>
             {t('setWalletAddressTips')}
           </Text>
         </Column>
         <Title>{shortenAddress(userInfo.address)}</Title>
+      </Rows>
+      <Rows>
+        <Column>
+          <Title>别人观看我的关注</Title>
+          <Text color='textTips' mt='11px'>
+            {t('setWalletAddressTips')}
+          </Text>
+        </Column>
+        <Toggle checked={true} />
+      </Rows>
+      <Rows>
+        <Column>
+          <Title>别人观看我的粉丝</Title>
+          <Text color='textTips' mt='11px'>
+            {t('setWalletAddressTips')}
+          </Text>
+        </Column>
+        <Toggle checked={true} />
       </Rows>
       {/* <Rows>
         <Column>
