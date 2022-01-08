@@ -127,7 +127,7 @@ const NftAvatar: React.FC<{
           });
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   }, [defaultCodeList]);
 
   // 生成邀请码
@@ -173,10 +173,18 @@ const NftAvatar: React.FC<{
             });
           });
         }
-      } catch (err) {}
+      } catch (err) {
+        console.error(err)
+      }
     },
-    [nftId],
+    [setCodeList],
   );
+
+  useEffect(() => {
+    if (nftId && codeList.length) {
+      getLastSubmitStatus(nftId)
+    }
+  }, [codeList.length, nftId, getLastSubmitStatus])
 
   // 点击无聊猴画板
   const handleGenCode = useCallback(
@@ -226,6 +234,8 @@ const NftAvatar: React.FC<{
   const getTimes = useMemo(() => {
     return codeList.filter(v => v.status !== 4).length;
   }, [codeList]);
+
+  console.log(codeList, nftId, 'codeList')
 
   return (
     <ContentBox>
