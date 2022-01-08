@@ -224,12 +224,10 @@ const CreateShowCard: React.FC = () => {
       // dispatch(fetchStuffAllLimitsAsync());
     } catch (error) {
       console.error(error);
-      toastError(
-        t('Error'),
-        t(
-          'Please try again. Confirm the transaction and make sure you are paying enough gas!',
-        ),
-      );
+      const errTip = `${t('Error')}! ${t(
+        'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+      )}`;
+      toastError(errTip);
     } finally {
       setpending(false);
     }
@@ -270,8 +268,8 @@ const CreateShowCard: React.FC = () => {
           ))}
         </BoxStyled>
         <PickerBox>
-          <Flex alignItems='center' justifyContent='space-between'>
-            <Flex mt='8px' alignItems='center'>
+          <Flex alignItems='center' justifyContent='flex-end'>
+            {/* <Flex mt='8px' alignItems='center'>
               <ShowColorPicker
                 rgba={colorRgba}
                 onClick={() => setDisplayColorPicker(true)}
@@ -280,12 +278,12 @@ const CreateShowCard: React.FC = () => {
                 <Text fontSize='14px'>{t('Color')}</Text>
                 <Text fontSize='14px'>#{colorHex}</Text>
               </Box>
-            </Flex>
+            </Flex> */}
             <Button mt='8px' onClick={randomPickHandle}>
               {t('Random')}
             </Button>
           </Flex>
-          {displayColorPicker && (
+          {/* {displayColorPicker && (
             <ColorPicker>
               <Cover onClick={() => setDisplayColorPicker(false)} />
               <ChromePicker
@@ -294,7 +292,7 @@ const CreateShowCard: React.FC = () => {
                 onChange={handleColorChange}
               />
             </ColorPicker>
-          )}
+          )} */}
         </PickerBox>
       </CardStyled>
       <BoxPaddingStyled>
@@ -308,7 +306,7 @@ const CreateShowCard: React.FC = () => {
             {pending ? (
               <Dots>{t('Minting')}</Dots>
             ) : (
-              t('Mint METAYC NFT with %price% %symbol%', {
+              t('Mint METAYC (%price% %symbol%)', {
                 price: getFullDisplayBalance(
                   new BigNumber(buyInfo.price),
                   undefined,

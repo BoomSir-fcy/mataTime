@@ -107,7 +107,7 @@
   "******start*****@hhhhhhhhhhhhhh********": "@qi翻译开始",
   "MARKET CAP": "市值",
   "VOLUME": "交易额",
-  "Mint METAYC NFT with %price% %symbol%": "以%price%%symbol% 铸造METAYC NFT",
+  "Mint METAYC (%price% %symbol%)": "铸造METAYC (%price% %symbol%)",
   "Minting": "铸造中",
   "Update time:": "更新时间:",
   "Powered by CoinMarketCap": "由CoinMarketCap提供",

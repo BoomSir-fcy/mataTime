@@ -95,7 +95,7 @@ const SignUpFail = () => {
       <Flex justifyContent='space-between' flexWrap='wrap'>
         {buyInfo.enableBuy && !buyInfo.loading ? (
           <FailButton scale='ld' onClick={() => goRouter('/create')}>
-            {t('Mint METAYC NFT with %price% %symbol%', {
+            {t('Mint METAYC (%price% %symbol%)', {
               price: getFullDisplayBalance(
                 new BigNumber(buyInfo.price),
                 undefined,

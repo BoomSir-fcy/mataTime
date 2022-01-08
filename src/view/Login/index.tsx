@@ -67,7 +67,7 @@ const Content = styled(Card)`
   }
 `;
 const LogoWarpper = styled(Box)`
-  width: 337px;
+  max-width: 337px;
   height: 60px;
   ${mediaQueriesSize.marginbmd}
 `;

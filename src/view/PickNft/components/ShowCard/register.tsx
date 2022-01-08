@@ -73,7 +73,7 @@ const BoxPaddingStyled = styled(Box)`
   }
 `;
 
-const BoxStyled = styled(Box) <{ rgba: ColorRgba }>`
+const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
   width: 24vh;
   height: 24vh;
   max-width: 100%;
@@ -99,7 +99,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 
-const ImageStyled = styled(Image) <{ zIndex?: number }>`
+const ImageStyled = styled(Image)<{ zIndex?: number }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -110,7 +110,7 @@ const PickerBox = styled(Box)`
   position: relative;
 `;
 
-const ShowColorPicker = styled(Box) <{ rgba: ColorRgba }>`
+const ShowColorPicker = styled(Box)<{ rgba: ColorRgba }>`
   width: 75px;
   height: 35px;
   background: ${({ rgba }) =>
@@ -280,8 +280,8 @@ const ShowCard: React.FC = () => {
           ))}
         </BoxStyled>
         <PickerBox>
-          <Flex alignItems='center' justifyContent='space-between'>
-            <Flex mt='8px' alignItems='center'>
+          <Flex alignItems='center' justifyContent='flex-end'>
+            {/* <Flex mt='8px' alignItems='center'>
               <ShowColorPicker
                 rgba={colorRgba}
                 onClick={() => setDisplayColorPicker(true)}
@@ -290,12 +290,12 @@ const ShowCard: React.FC = () => {
                 <Text fontSize='14px'>{t('Color')}</Text>
                 <Text fontSize='14px'>#{colorHex}</Text>
               </Box>
-            </Flex>
+            </Flex> */}
             <Button mt='8px' onClick={randomPickHandle}>
               {t('Random')}
             </Button>
           </Flex>
-          {displayColorPicker && (
+          {/* {displayColorPicker && (
             <ColorPicker>
               <Cover onClick={() => setDisplayColorPicker(false)} />
               <ChromePicker
@@ -304,7 +304,7 @@ const ShowCard: React.FC = () => {
                 onChange={handleColorChange}
               />
             </ColorPicker>
-          )}
+          )} */}
         </PickerBox>
       </CardStyled>
       <BoxPaddingStyled>
@@ -325,8 +325,12 @@ const ShowCard: React.FC = () => {
           <Spinner />
         ) : (
           <>
-            {codeInfo.state !== 1 ? (
-              <StateModal onClose={onClose} nftLength={NftList.length} state={codeInfo.state} />
+            {codeInfo.state !== 1 || NftList.length !== 0 ? (
+              <StateModal
+                onClose={onClose}
+                nftLength={NftList.length}
+                state={codeInfo.state}
+              />
             ) : (
               <LockModal
                 onLock={handLock}
