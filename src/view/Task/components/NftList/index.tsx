@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { orderBy } from 'lodash';
 import { getExistCodeList } from 'view/Task/hooks/matter';
 import { CodeInfo, InvitableNftInfo } from 'view/Task/type';
 
@@ -8,7 +7,8 @@ import NftAvatar from './list';
 export const StakeNFT: React.FC<{
   nftList?: InvitableNftInfo[];
   defaultCodeList?: CodeInfo[];
-}> = ({ nftList, defaultCodeList }) => {
+  maxGendCodeCount?: number;
+}> = ({ nftList, defaultCodeList, maxGendCodeCount }) => {
   const [nftCodeList, setNftCodeList] = useState([]);
 
   useEffect(() => {
@@ -23,14 +23,10 @@ export const StakeNFT: React.FC<{
     const newList = nftList.map(item => {
       return {
         ...item,
-        defaultCodeList: orderBy(
-          defaultCodeList.map((v, index) => {
-            const nftCode = codeObjs[item.token_id] || {};
-            return { ...v, ...nftCode[index] };
-          }),
-          'status',
-          'desc',
-        ),
+        defaultCodeList: defaultCodeList.map((v, index) => {
+          const nftCode = codeObjs[item.token_id] || {};
+          return { ...v, ...nftCode[index] };
+        }),
       };
     });
     setNftCodeList(newList);
@@ -44,6 +40,7 @@ export const StakeNFT: React.FC<{
             key={item.token_id}
             NftInfo={item}
             defaultCodeList={item.defaultCodeList}
+            maxGendCodeCount={maxGendCodeCount}
           />
         );
       })}

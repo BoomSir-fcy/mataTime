@@ -90,7 +90,8 @@ const ReceivedBox = styled(Flex)`
 const NftAvatar: React.FC<{
   NftInfo?: InvitableNftInfo;
   defaultCodeList?: CodeInfo[];
-}> = ({ NftInfo, defaultCodeList }) => {
+  maxGendCodeCount?: number;
+}> = ({ NftInfo, defaultCodeList, maxGendCodeCount }) => {
   const { onGenCodes } = useGenCodes();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -140,8 +141,19 @@ const NftAvatar: React.FC<{
         const res = await Api.TaskApi.getInviteCode(nftToken, nftId);
         if (Api.isSuccess(res)) {
           const list = res.data || [];
+
+          // 转移nft情况，若转移前有已提交的邀请码，则转移后从数组开头填充剩余未生成的邀请码个数
+          const fillLen = maxGendCodeCount - list.length;
+          if (fillLen > 0) {
+            for (let i = fillLen; i > 0; i--) {
+              list.unshift({ id: fillLen, status: 0 });
+            }
+          }
           if (list.length) {
             const newList = codeList.map((v, i) => {
+              if (checkTransferNft(v)) {
+                return v;
+              }
               return { ...v, ...list[i] };
             });
             setCodeList([...newList]);
@@ -236,6 +248,12 @@ const NftAvatar: React.FC<{
     return codeList.filter(v => v.status < 2).length;
   }, [codeList]);
 
+  const checkTransferNft = useCallback((item?: CodeInfo) => {
+    return item?.code === '';
+  }, []);
+
+  // console.log(nftId, '-----', codeList);
+
   return (
     <ContentBox>
       <NftFlex>
@@ -283,7 +301,7 @@ const NftAvatar: React.FC<{
                         <ActiveImg
                           className={
                             (index >= 1 && codeList[index - 1].status < 2) ||
-                            item?.code === ''
+                            checkTransferNft(item)
                               ? 'disable'
                               : 'active'
                           }
@@ -294,7 +312,7 @@ const NftAvatar: React.FC<{
                             // 若上一个邀请码已提交合约，则可点击下一个
                             if (
                               (index >= 1 && codeList[index - 1].status < 2) ||
-                              item?.code === ''
+                              checkTransferNft(item)
                             ) {
                               return false;
                             }
