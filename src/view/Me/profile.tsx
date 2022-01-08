@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Crumbs,
   Avatar,
@@ -32,11 +32,12 @@ import MentionOperator from 'view/News/components/MentionOperator';
 import defaultDarkImages from 'assets/images/default_background.png';
 import defaultLightImages from 'assets/images/default_light_background.png';
 
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+
 import { ComponentsWrapper } from 'components/Cirde/PageContainer';
 import CommonCircle from 'components/Cirde/CommonCircle';
 
 import useAuth from 'hooks/useAuth';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import useMenuNav from 'hooks/useMenuNav';
 import eventBus from 'utils/eventBus';
 
@@ -139,6 +140,7 @@ const FollowButtonBox = styled(Box)`
 `;
 
 const Profile: React.FC<any> = props => {
+  const history = useHistory();
   const [state, setState] = useImmer({
     profile: {
       label_list: [],
@@ -237,8 +239,10 @@ const Profile: React.FC<any> = props => {
       EXPAND,
       SHIELD,
       DELPOST,
+      BLOCKUSER,
     } = MoreOperatorEnum;
-    const handleChangeList = type === SHIELD || type === DELPOST;
+    const handleChangeList =
+      type === SHIELD || type === DELPOST || type === BLOCKUSER;
     let arr = [];
 
     if (
@@ -317,6 +321,7 @@ const Profile: React.FC<any> = props => {
       ? defaultCountry?.LocationEn
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
+
   return (
     <Center>
       <Crumbs title={t('meHome')} back={Boolean(uid)} />
@@ -419,11 +424,19 @@ const Profile: React.FC<any> = props => {
               <Text className="text">Email：{profile.email}</Text> */}
             </Box>
             <Flex className='number'>
-              <Text className='text'>
+              <Text
+                as={!uid || Number(uid) === currentUid.uid ? '' : Link}
+                to={`/me/user/fans?uid=${uid}`}
+                className='text'
+              >
                 {t('meFans')}
                 <Text className='value'>{profile.fans_num}</Text>
               </Text>
-              <Text className='text'>
+              <Text
+                as={!uid || Number(uid) === currentUid.uid ? '' : Link}
+                to={`/me/user/follow?uid=${uid}`}
+                className='text'
+              >
                 {t('meFollow')}
                 <Text className='value'>{profile.attention_num}</Text>
               </Text>

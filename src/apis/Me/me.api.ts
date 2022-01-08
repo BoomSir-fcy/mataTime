@@ -2,8 +2,8 @@ import { Http } from '../http';
 
 export class MeApi extends Http {
   // 关注列表
-  async followList(page?: number, perpage?: number) {
-    const res = await this.get('/v1/attention/list', { page, perpage });
+  async followList(page?: number, perpage?: number, uid?: string) {
+    const res = await this.get('/v1/attention/list', { page, perpage, uid });
     return res;
   }
   // 关注用户
@@ -18,8 +18,12 @@ export class MeApi extends Http {
   }
 
   // 粉丝列表
-  async fansList(page?: number, perpage?: number) {
-    const res = await this.get('/v1/attention/fans_list', { page, perpage });
+  async fansList(page?: number, perpage?: number, uid?: string) {
+    const res = await this.get('/v1/attention/fans_list', {
+      page,
+      perpage,
+      uid,
+    });
     return res;
   }
 
