@@ -28,7 +28,8 @@ export const useGenCodes = () => {
 export const useNftBaseView = () => {
   const [state, setState] = useImmer({
     tokenAddress: [],
-    defaultCodeList: []
+    defaultCodeList: [],
+    maxGendCodeCount: 3
   });
 
   useEffect(() => {
@@ -45,11 +46,15 @@ export const useNftBaseView = () => {
       setState(p => {
         p.tokenAddress = nftInfo.nftAddress;
         p.defaultCodeList = codeList;
+        p.maxGendCodeCount = nftInfo.maxGendCodeCount;
       })
     },
     [],
   )
-  return { tokenAddress: state.tokenAddress, defaultCodeList: state.defaultCodeList };
+  return { 
+    tokenAddress: state.tokenAddress, 
+    defaultCodeList: state.defaultCodeList, 
+    maxGendCodeCount: state.maxGendCodeCount };
 }
 
 // 提交到合约的个数

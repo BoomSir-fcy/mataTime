@@ -115,7 +115,7 @@ const BtnFlex = styled(Flex)`
 `;
 const Invite: React.FC = () => {
   useFetchNftList();
-  const { tokenAddress, defaultCodeList } = useNftBaseView();
+  const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -332,6 +332,7 @@ const Invite: React.FC = () => {
               <StakeNFT
                 nftList={invitableNftList}
                 defaultCodeList={defaultCodeList}
+                maxGendCodeCount={maxGendCodeCount}
               />
             </>
           ) : null
