@@ -1,7 +1,17 @@
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ChromePicker } from 'react-color';
-import { Heading, Text, Card, Box, Image, Flex, Button, light, Spinner } from 'uikit';
+import {
+  Heading,
+  Text,
+  Card,
+  Box,
+  Image,
+  Flex,
+  Button,
+  light,
+  Spinner,
+} from 'uikit';
 import styled from 'styled-components';
 import Dots from 'components/Loader/Dots';
 import { orderBy } from 'lodash';
@@ -9,12 +19,23 @@ import { useToast } from 'hooks';
 import useTheme from 'hooks/useTheme';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'contexts/Localization';
-import { useFetchBuyInfo, useFetchNftApproval, usePickNftState } from 'store/picknft/hooks';
+import {
+  useFetchBuyInfo,
+  useFetchNftApproval,
+  usePickNftState,
+} from 'store/picknft/hooks';
 import Container from 'components/Layout/Container';
 import { randomPick } from 'store/picknft/actions';
-import { ExChangeResult, useExchangeAndBuyPhoto } from 'view/PickNft/hooks/exchange';
+import {
+  ExChangeResult,
+  useExchangeAndBuyPhoto,
+} from 'view/PickNft/hooks/exchange';
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
-import { fetchCodeInfoAsync, fetchNftApprovalAsync, fetchStuffAllLimitsAsync } from 'store/picknft';
+import {
+  fetchCodeInfoAsync,
+  fetchNftApprovalAsync,
+  fetchStuffAllLimitsAsync,
+} from 'store/picknft';
 // import { fetchNftUserDataAsync } from 'store/nfts'
 import { formatHexadecimal } from 'utils/formatNumber';
 import { ConnectWalletButton, Icon, ModalWrapper } from 'components';
@@ -56,7 +77,7 @@ const BoxPaddingStyled = styled(Box)`
   }
 `;
 
-const BoxStyled = styled(Box) <{ rgba: ColorRgba }>`
+const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
   width: 24vh;
   height: 24vh;
   max-width: 100%;
@@ -82,7 +103,7 @@ const CardStyled = styled(Card)`
   border-radius: 20px;
 `;
 
-const ImageStyled = styled(Image) <{ zIndex?: number }>`
+const ImageStyled = styled(Image)<{ zIndex?: number }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -93,7 +114,7 @@ const PickerBox = styled(Box)`
   position: relative;
 `;
 
-const ShowColorPicker = styled(Box) <{ rgba: ColorRgba }>`
+const ShowColorPicker = styled(Box)<{ rgba: ColorRgba }>`
   width: 75px;
   height: 35px;
   background: ${({ rgba }) =>
@@ -143,7 +164,7 @@ const CreateShowCard: React.FC = () => {
     ];
   }, [colorRgba]);
 
-  const { replace } = useHistory()
+  const { replace } = useHistory();
   const { theme } = useTheme();
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -152,14 +173,15 @@ const CreateShowCard: React.FC = () => {
   const { onExchange } = useExchangeAndBuyPhoto();
   const { onApprove } = useNftApproveExPhoto();
   // const [LeftTime, setLeftTime] = useState(0);
-  const { codes, selectData, codeInfo, inviteInfo, inviteLoading, buyInfo } = usePickNftState();
+  const { codes, selectData, codeInfo, inviteInfo, inviteLoading, buyInfo } =
+    usePickNftState();
 
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
-      return inviteInfo.codeLockDuration_ + codeInfo.lockedAt
+      return inviteInfo.codeLockDuration_ + codeInfo.lockedAt;
     }
-    return 0
-  }, [inviteInfo.codeLockDuration_, codeInfo.lockedAt])
+    return 0;
+  }, [inviteInfo.codeLockDuration_, codeInfo.lockedAt]);
 
   const [DownTime, hour, minute, second] = useCountdownTime(LeftTime);
   const [visible, setVisible] = useState(true);
@@ -170,29 +192,28 @@ const CreateShowCard: React.FC = () => {
 
   useEffect(() => {
     if (!(hour >= 0 && minute >= 0 && second >= 0)) {
-      setVisible(true)
+      setVisible(true);
     }
-  }, [hour, minute, second])
+  }, [hour, minute, second]);
 
   const codeState = useMemo(() => {
-    // if (codeInfo.state === '2') return 
-    return codeInfo.state
-  }, [codeInfo])
+    // if (codeInfo.state === '2') return
+    return codeInfo.state;
+  }, [codeInfo]);
   const [pending, setpending] = useState(false);
 
   const onMintHandle = useCallback(async () => {
     try {
-      setpending(true)
+      setpending(true);
       const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
       const status = await onExchange(
         sortData.map(item => item.id),
         `0x${colorHex}${colorAlpha}`,
-        buyInfo.price
+        buyInfo.price,
       );
       if (status === ExChangeResult.SUCCESS) {
-        replace('/login')
-        // TODO: 翻译
-        toastSuccess('Successfully Mint!')
+        replace('/login');
+        toastSuccess('Successfully Mint!');
       } else if (status === ExChangeResult.AVATAR_EXISTS) {
         toastError(
           t(
@@ -202,22 +223,34 @@ const CreateShowCard: React.FC = () => {
       }
       // dispatch(fetchStuffAllLimitsAsync());
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toastError(
         t('Error'),
-        t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-      )
+        t(
+          'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+        ),
+      );
     } finally {
-      setpending(false)
+      setpending(false);
     }
-  }, [selectData, setpending, dispatch, onExchange, replace, codes.code, account, colorHex, colorAlpha, buyInfo.price]);
+  }, [
+    selectData,
+    setpending,
+    dispatch,
+    onExchange,
+    replace,
+    codes.code,
+    account,
+    colorHex,
+    colorAlpha,
+    buyInfo.price,
+  ]);
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
 
-  console.log(buyInfo)
-
+  console.log(buyInfo);
 
   return (
     <PageContainer>
@@ -276,8 +309,12 @@ const CreateShowCard: React.FC = () => {
               <Dots>{t('Minting')}</Dots>
             ) : (
               t('Mint METAYC NFT with %price% %symbol%', {
-                price: getFullDisplayBalance(new BigNumber(buyInfo.price), undefined, 1),
-                symbol: 'BNB'
+                price: getFullDisplayBalance(
+                  new BigNumber(buyInfo.price),
+                  undefined,
+                  1,
+                ),
+                symbol: 'BNB',
               })
             )}
           </Submit>

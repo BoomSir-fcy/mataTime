@@ -389,7 +389,12 @@
   "Lock the NFT invitation quota, you will have more choices": "锁定NFT邀请名额，您将有更多的选择",
   "Effective within 10 minutes after being locked": "锁定之后10分钟内有效",
   "Sorry, this Avatar has not a part left, please replace the parts and try again": "很抱歉，此头像没有剩余部件，请更换部件并重试",
-
+  "Invitation code has been locked by another user": "邀请码已被其他用户锁定",
+  "The invitation code has been locked by you": "邀请码已被您锁定",
+  "You are not eligible to be invited": "您暂无被邀请资格",
+  "The current invitation code is incorrect": "当前邀请码不正确",
+  "The current invitation code has already been used": "当前邀请码已被使用",
+  "Successfully Mint!": "铸造成功!",
   "******end*****@FCY********": "@FCY翻译结束",
   "******start**2021-12-09**@kksam********": "@kksam翻译结束",
   "rewardAutherSuccess": "打赏成功",

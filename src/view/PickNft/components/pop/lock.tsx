@@ -58,11 +58,11 @@ const LockModal: React.FC<init> = ({
   // 锁定
   const handLock = useCallback(async () => {
     if (lockUser !== account && isLockAvailable) {
-      toast.error(t('邀请码已被其他用户锁定'));
+      toast.error(t('Invitation code has been locked by another user'));
       return;
     }
     if (lockUser === account && isLockAvailable) {
-      toast.error(t('邀请码已被您锁定'));
+      toast.warning(t('The invitation code has been locked by you'));
       return;
     }
     setpending(true);
