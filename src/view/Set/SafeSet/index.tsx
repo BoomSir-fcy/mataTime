@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
+import { useDispatch } from 'react-redux';
 import { Flex, Card, Text, Button, Toggle } from 'uikit';
-import { useStore } from 'store';
+import { useStore, storeAction } from 'store';
 import { Api } from 'apis';
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
@@ -30,6 +31,7 @@ const Column = styled(Flex)`
 
 const SafeSet = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const [state, setState] = useImmer({
     allow_watch_attention: true,
@@ -45,10 +47,36 @@ const SafeSet = () => {
     }
   };
 
-  console.log(userInfo.allow_watch_attention);
-  console.log(userInfo.allow_watch_fans);
+  const updateAllowStatus = async (filed: string) => {
+    try {
+      const res = await Api.UserApi.updateUserInfo({
+        ...userInfo,
+        [filed]: state[filed] ? 2 : 1,
+      });
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p[filed] = state[filed] ? false : true;
+        });
+        dispatch(
+          storeAction.changeUpdateProfile({
+            ...res.data,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  // 1允许，2不允许
+  React.useEffect(() => {
+    // 1允许，2不允许
+    setState(p => {
+      p.allow_watch_attention =
+        userInfo.allow_watch_attention === 1 ? true : false;
+      p.allow_watch_fans = userInfo.allow_watch_fans === 1 ? true : false;
+    });
+  }, [userInfo]);
+
   return (
     <SafeSetBox isBoxShadow>
       <Rows>
@@ -62,21 +90,21 @@ const SafeSet = () => {
       </Rows>
       <Rows>
         <Column>
-          <Title>别人观看我的关注</Title>
-          <Text color='textTips' mt='11px'>
-            {t('setWalletAddressTips')}
-          </Text>
+          <Title>{t('allow_watch_attention')}</Title>
         </Column>
-        <Toggle checked={true} />
+        <Toggle
+          checked={state.allow_watch_attention}
+          onChange={() => updateAllowStatus('allow_watch_attention')}
+        />
       </Rows>
       <Rows>
         <Column>
-          <Title>别人观看我的粉丝</Title>
-          <Text color='textTips' mt='11px'>
-            {t('setWalletAddressTips')}
-          </Text>
+          <Title>{t('allow_watch_fans')}</Title>
         </Column>
-        <Toggle checked={true} />
+        <Toggle
+          checked={state.allow_watch_fans}
+          onChange={() => updateAllowStatus('allow_watch_fans')}
+        />
       </Rows>
       {/* <Rows>
         <Column>

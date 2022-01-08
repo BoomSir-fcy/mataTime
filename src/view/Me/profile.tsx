@@ -425,7 +425,7 @@ const Profile: React.FC<any> = props => {
             </Box>
             <Flex className='number'>
               <Text
-                as={!uid || Number(uid) === currentUid.uid ? '' : Link}
+                as={Boolean(uid) && profile.allow_watch_fans === 1 ? Link : ''}
                 to={`/me/user/fans?uid=${uid}`}
                 className='text'
               >
@@ -433,7 +433,11 @@ const Profile: React.FC<any> = props => {
                 <Text className='value'>{profile.fans_num}</Text>
               </Text>
               <Text
-                as={!uid || Number(uid) === currentUid.uid ? '' : Link}
+                as={
+                  Boolean(uid) && profile.allow_watch_attention === 1
+                    ? Link
+                    : ''
+                }
                 to={`/me/user/follow?uid=${uid}`}
                 className='text'
               >
