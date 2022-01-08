@@ -111,7 +111,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   )
 
   useEffect(() => {
-    const search = `${value}`.trim()
+    const search = value ? `${value}`.trim() : value
     if (search) {
       debouncedOnChange(search)
     }
@@ -122,7 +122,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   }, [setValue])
 
   const handleSearchDispaly = useCallback((search) => {
-    if (!search || search === '#' || search === '@') return
+    // if (!search || search === '#' || search === '@') return
     debouncedOnChange.cancel()
     dispatch(storeAction.setSearchDisplayPeople({ list: [] }))
     dispatch(storeAction.setSearchDisplayTopic({ list: [] }))

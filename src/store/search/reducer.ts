@@ -19,6 +19,8 @@ const historyListStore = localStorage.getItem(LOCAL_STORAGE_SEARCH_HISTORY_KEY)
 const initialState: SearchState = {
   resultListOfPeoples: [],
   resultListOfTopic: [],
+  resultListOfPost: [],
+  resultListOfPostLen: 0,
   loading: false,
   dispalyLoading: false,
   errorMsg: '',
@@ -26,6 +28,7 @@ const initialState: SearchState = {
   placeHolderSearch: '',
   displayResultListOfPeoples: [],
   displayResultListOfTopic: [],
+  displayResultListOfPost: [],
   filterUser: 1,
 };
 
@@ -62,8 +65,11 @@ export const fetchSearchAsync = createAsyncThunk<any, {
       fetchDisplay,
       resultListOfPeoples: [],
       resultListOfTopic: [],
+      resultListOfPost: [],
+      resultListOfPostLen: 0,
     }
-    if (!`${search}`.trim()) {
+    console.log(search, '=search')
+    if (!search || !`${search}`.trim()) {
       return result
     }
     if (search === '#' || search === '@') {
@@ -71,14 +77,23 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     }
     let disablePeople = false;
     let disableTopic = false;
+    let disableTotal = false;
+    let disablePost = false;
     let searchVal = search
     if (search?.[0] === '#') {
       disablePeople = true
+      disableTotal = true
+      disablePost = true
       searchVal = searchVal.slice(1)
-    }
-    if (search?.[0] === '@') {
+    } else if (search?.[0] === '@') {
       disableTopic = true
+      disableTotal = true
+      disablePost = true
       searchVal = searchVal.slice(1)
+    } else {
+      disableTopic = true
+      disablePeople = true
+      disablePost = true
     }
 
     dispatch(setErrorMsg(''))
@@ -92,7 +107,15 @@ export const fetchSearchAsync = createAsyncThunk<any, {
       page: 1
     })
     const fetchPeople = Api.UserApi.searchUser(searchVal)
-    const [responseTopic, responsePeople] = await Promise.all([disableTopic ? null : fetchTopic, disablePeople ? null : fetchPeople])
+    const fetchTotal = Api.SearchApi.getSearchTotal(searchVal)
+    const fetchPost = Api.SearchApi.getSearchPost(searchVal)
+
+    const [responseTopic, responsePeople, responseTotal, responsePost] = await Promise.all([
+      disableTopic ? null : fetchTopic,
+      disablePeople ? null : fetchPeople,
+      disableTotal ? null : fetchTotal,
+      disablePost ? null : fetchPost,
+    ])
     dispatch(setLoading(false))
     dispatch(setDispalyLoading(false))
     if (Api.isSuccess(responseTopic)) {
@@ -102,6 +125,17 @@ export const fetchSearchAsync = createAsyncThunk<any, {
       // 只显示50条用户 太多了有点卡
       const peopleList = (responsePeople.data || []).slice(0, 50)
       result.resultListOfPeoples = orderBy(peopleList, item => item.is_attention ? 0 : 1)
+    }
+    if (Api.isSuccess(responseTotal)){
+      result.resultListOfTopic = responseTotal.data?.Topic?.List || []
+      // 只显示50条用户 太多了有点卡
+      const peopleList = (responseTotal.data?.Users || []).slice(0, 50)
+      result.resultListOfPeoples = orderBy(peopleList, item => item.is_attention ? 0 : 1)
+      result.resultListOfPostLen = responseTotal.data?.post_number || 0
+    }
+    if (Api.isSuccess(responsePost)){
+      console.log(responsePost)
+      result.resultListOfPost = responsePost.data || []
     }
     return result
   },
@@ -133,12 +167,15 @@ export const Search = createSlice({
         state.errorMsg = 'error'
       })
       .addCase(fetchSearchAsync.fulfilled, (state, action) => {
-        const { resultListOfPeoples, resultListOfTopic, fetchDisplay } = action.payload;
+        const { resultListOfPeoples, resultListOfTopic, resultListOfPost, resultListOfPostLen, fetchDisplay } = action.payload;
         state.resultListOfPeoples = resultListOfPeoples
         state.resultListOfTopic = resultListOfTopic
+        state.resultListOfPost = resultListOfPost
+        state.resultListOfPostLen = resultListOfPostLen
         if (fetchDisplay) {
           state.displayResultListOfPeoples = resultListOfPeoples
           state.displayResultListOfTopic = resultListOfTopic
+          state.displayResultListOfPost = resultListOfPost
         }
       })
       .addCase(fetchSearchAsync.rejected, (state, action) => {

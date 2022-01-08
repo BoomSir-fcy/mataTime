@@ -32,11 +32,15 @@ export interface SearchHistoryList extends Partial<SearchUserInfo>, Partial<Sear
   type: SearchHistiryType,
 }
 
+
 export interface SearchState {
   resultListOfPeoples: SearchUserInfo[],
   displayResultListOfPeoples: SearchUserInfo[],
   resultListOfTopic: SearchTopicInfo[],
   displayResultListOfTopic: SearchTopicInfo[],
+  resultListOfPost: Api.Home.post[],
+  resultListOfPostLen: number,
+  displayResultListOfPost: Api.Home.post[],
   loading: boolean,
   dispalyLoading: boolean,
   errorMsg: string,
