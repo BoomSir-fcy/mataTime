@@ -139,12 +139,21 @@ export const SignUp: React.FC<{
           >
             {t('loginWelcome')}
           </Text>
-          <Text color='textOrigin'>{t('loginSubTitle')}</Text>
+          {InviteCode && signUpFail ? (
+            <Box style={{ textAlign: 'center' }}>
+              <Text color='textOrigin'>{t('loginCodeTitle1')}</Text>
+              <Text color='textOrigin'>{t('loginCodeTitle2')}</Text>
+              <Text color='textOrigin'>{t('loginCodeTitle3')}</Text>
+            </Box>
+          ) : (
+            <Text color='textOrigin'>{t('loginSubTitle')}</Text>
+          )}
           <SignUpWarpper>
             <WalletAddress address={account} />
             <FailButton
               onClick={() => {
-                if (InviteCode) {
+                // 有邀请码并且没有小恐龙头像
+                if (InviteCode && signUpFail) {
                   history.push(`/picknft${InviteCode}`);
                 } else {
                   dispatch(storeAction.changeSignUpStep({ singUpStep: 1 }));
