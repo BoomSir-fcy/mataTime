@@ -212,8 +212,8 @@ const CreateShowCard: React.FC = () => {
         buyInfo.price,
       );
       if (status === ExChangeResult.SUCCESS) {
-        replace('/login');
         toastSuccess('Successfully Mint!');
+        replace('/login');
       } else if (status === ExChangeResult.AVATAR_EXISTS) {
         toastError(
           t(

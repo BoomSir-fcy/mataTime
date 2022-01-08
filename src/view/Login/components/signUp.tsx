@@ -40,12 +40,11 @@ const WalletBody = styled(Flex)`
   margin-bottom: 30px;
 `;
 const FailButton = styled(Button)`
-  width: 45%;
-  min-width: max-content;
+  /* width: 45%; */
   margin-top: 15px;
   padding: 0 10px;
+  width: 248px;
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 205px;
     margin-top: 23px;
   }
 `;
@@ -74,6 +73,14 @@ const NftTitle = styled(Text)`
   font-weight: bold;
   ${mediaQueriesSize.marginr}
 `;
+
+const FailBox = styled(Flex)`
+  justify-content: space-around;
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    justify-content: space-between;
+  }
+`;
+
 const SignUpFail = () => {
   useFetchBuyInfo();
   const dispatch = useDispatch();
@@ -92,7 +99,7 @@ const SignUpFail = () => {
   return (
     <Flex width='100%' flexDirection='column'>
       <Text color='textOrigin'>{t('loginSignUpFail')}</Text>
-      <Flex justifyContent='space-between' flexWrap='wrap'>
+      <FailBox flexWrap='wrap'>
         {buyInfo.enableBuy && !buyInfo.loading ? (
           <FailButton scale='ld' onClick={() => goRouter('/create')}>
             {t('Mint METAYC (%price% %symbol%)', {
@@ -122,7 +129,7 @@ const SignUpFail = () => {
         >
           {t('loginBuyNft')}
         </FailButton>
-      </Flex>
+      </FailBox>
     </Flex>
   );
 };
