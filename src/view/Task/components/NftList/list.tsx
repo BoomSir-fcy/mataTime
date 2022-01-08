@@ -173,10 +173,18 @@ const NftAvatar: React.FC<{
             });
           });
         }
-      } catch (err) {}
+      } catch (err) {
+        console.error(err);
+      }
     },
-    [nftId],
+    [setCodeList],
   );
+
+  useEffect(() => {
+    if (nftId && codeList.length) {
+      getLastSubmitStatus(nftId);
+    }
+  }, [codeList.length, nftId, getLastSubmitStatus]);
 
   // 点击无聊猴画板
   const handleGenCode = useCallback(
@@ -224,7 +232,7 @@ const NftAvatar: React.FC<{
 
   // 剩余分享次数
   const getTimes = useMemo(() => {
-    return codeList.filter(v => v.status !== 4).length;
+    return codeList.filter(v => v.status < 2).length;
   }, [codeList]);
 
   return (
@@ -273,7 +281,8 @@ const NftAvatar: React.FC<{
                         )}
                         <ActiveImg
                           className={
-                            index >= 1 && codeList[index - 1].status <= 1
+                            (index >= 1 && codeList[index - 1].status < 2) ||
+                            item?.code === ''
                               ? 'disable'
                               : 'active'
                           }
@@ -281,7 +290,11 @@ const NftAvatar: React.FC<{
                           src={require('assets/images/task/monkey.jpg').default}
                           scale='ld'
                           onClick={() => {
-                            if (index >= 1 && codeList[index - 1].status <= 1) {
+                            // 若上一个邀请码已提交合约，则可点击下一个
+                            if (
+                              (index >= 1 && codeList[index - 1].status < 2) ||
+                              item?.code === ''
+                            ) {
                               return false;
                             }
                             handleGenCode(item, index);

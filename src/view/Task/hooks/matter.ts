@@ -15,7 +15,7 @@ import { getBalanceNumber } from 'utils/formatBalance';
 // 注册生成的邀请码
 export const useGenCodes = () => {
   const inviteContract = useInvitation();
-  const handleGenCodes = useCallback(async (nftId: number|string, codeHashs: string[]) => {
+  const handleGenCodes = useCallback(async (nftId: number | string, codeHashs: string[]) => {
     const tx = await inviteContract.genCodes(nftId, codeHashs)
     const receipt = await tx.wait()
     return receipt.status
@@ -53,7 +53,7 @@ export const useNftBaseView = () => {
 }
 
 // 提交到合约的个数
-export const getNftGenCodeCount = async (nftId: number|string) => {
+export const getNftGenCodeCount = async (nftId: number | string) => {
   const inviteAddress = getInvitationAddress();
   const calls = [
     {
@@ -69,6 +69,25 @@ export const getNftGenCodeCount = async (nftId: number|string) => {
     throw error;
   }
 }
+
+// 提交到合约的个数
+// export const getNftsGenCodeCount = async (nftIds: number[] | string[]) => {
+//   const inviteAddress = getInvitationAddress();
+//   const calls = nftIds.map(nftId => {
+//     return {
+//       address: inviteAddress,
+//       name: 'nftGenCodeCount',
+//       params: [nftId],
+//     }
+//   })
+//   try {
+//     const [res] = await multicall(invitationAbi, calls);
+//     return res[0].toNumber()
+//   } catch (error) {
+//     console.log(error)
+//     return null
+//   }
+// }
 
 
 // 查询可邀请的nft_token地址
@@ -110,7 +129,7 @@ export const getView = async () => {
   ];
   try {
     const info = await multicall(invitationAbi, calls);
-    
+
     const nftInfo = {
       nftAddress: info[0].nft_?.toLowerCase(),
       userAddress: info[0].userProfile_,
@@ -135,18 +154,18 @@ export const getView = async () => {
  */
 export const getCodeViewList = async (codeHashs: string[]) => {
   const inviteAddress = getInvitationAddress();
-  const calls =codeHashs.map(item => {
+  const calls = codeHashs.map(item => {
     return {
       address: inviteAddress,
       name: 'getCodeView',
       params: [item],
     }
   })
-  
+
   try {
     const infoList = await multicall(invitationAbi, calls);
-    console.log(codeHashs,'----------infoList----------', infoList);
-    
+    console.log(codeHashs, '----------infoList----------', infoList);
+
     const codeViewList = infoList.map(item => {
       return {
         lockUser: item.lockUser,
@@ -214,7 +233,7 @@ export const useFetchInviteFriendsList = () => {
   const [total, setTotal] = useState(1)
   const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
-      getList()
+    getList()
   }, [pageNum])
   const getList = () => {
     setLoading(true);
