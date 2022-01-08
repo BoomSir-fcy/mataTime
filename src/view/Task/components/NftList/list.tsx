@@ -215,7 +215,8 @@ const NftAvatar: React.FC<{
 
       // 获取最新状态
       await getLastSubmitStatus(nftId);
-      if (!info?.code) setActiveInfo(tempList.filter(v => v.id === info.id)[0]);
+      if (!info?.code_hash)
+        setActiveInfo(tempList.filter(v => v.id === info.id)[0]);
       setVisible(true);
       setSubmitLoading(false);
     },
