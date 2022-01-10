@@ -14,6 +14,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useHistory } from 'react-router-dom';
 import { getSearchPath } from 'utils/urlQueryPath';
 import PostList from 'components/Post/PostList';
+import { fetchSearchPostDetailAsync } from 'store/search/reducer';
 
 const tabDatas = [
   {
@@ -60,7 +61,10 @@ const PostResult: React.FC<PostResultProps> = ({
     dispatch(fetchThunk.fetchSearchPostAsync());
   }, [dispatch]);
 
-  const updateList = useCallback(() => {}, []);
+  const updateList = useCallback(id => {
+    console.log(id, 'id');
+    dispatch(fetchSearchPostDetailAsync(id));
+  }, []);
 
   return (
     <Box>

@@ -52,4 +52,7 @@ export interface SearchState {
   historyList: SearchHistoryList[],
   placeHolderSearch: string,
   filterUser: number // 1 所有人 2 仅关注
+  searchPostMap: {
+    [id: string]: Api.Home.post
+  }
 }

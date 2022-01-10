@@ -35,6 +35,7 @@ const initialState: SearchState = {
   displayResultListOfTopic: [],
   displayResultListOfPost: [],
   filterUser: 1,
+  searchPostMap: {},
 };
 
 export const fetchSearchPeopleAsync = createAsyncThunk(
@@ -181,6 +182,26 @@ export const fetchSearchPostAsync = (refresh?: boolean) => async (dispatch, getS
   dispatch(setPostLoading(false))
   dispatch(setSearchPost(result))
 }
+
+export const fetchSearchPostDetailAsync = (id: string|number) => async (dispatch, getState) => {
+  
+  try {
+
+    const detailRes = await Api.HomeApi.articleFindById({
+      id: `${id}`,
+    })
+    if (Api.isSuccess(detailRes)){
+      console.log(detailRes)
+      dispatch(setPostDetail({
+        id,
+      }))
+    }
+  } catch (error) {
+    console.error(error)    
+  }
+
+}
+
 // export const fetchSearchPostAsync = async ((refresh?: boolean), { dispatch, getState }) => {
 //   dispatch(setPostLoading(true))
   
@@ -229,6 +250,15 @@ export const Search = createSlice({
     setErrorMsg: (state, { payload }) => {
       state.errorMsg = payload
     },
+    setPostDetail: (state, { payload }) => {
+      const { id, post } = payload
+      state.searchPostMap = {
+        ...state.searchPostMap,
+        [id]: {
+          ...post
+        }
+      }
+    },
     setSearchPost: (state, action) => {
       const { resultListOfPost, fetchDisplay, seart_index, refresh } = action.payload;
       // state.resultListOfPost = resultListOfPost
@@ -237,14 +267,21 @@ export const Search = createSlice({
       // if (fetchDisplay) {
       //   state.displayResultListOfPost = resultListOfPost
       // }
-      
+      resultListOfPost.forEach(item => {
+        state.searchPostMap = {
+          ...state.searchPostMap,
+          [item.id]: {
+            ...item
+          }
+        }
+      })
       if (refresh) {
         state.resultListOfPost = resultListOfPost
         state.searchPostaddListNum = -1;
       } else {
         const list = state.resultListOfPost.concat(resultListOfPost);
         const length = resultListOfPost.length
-        state.resultListOfPost = uniqBy(list, 'post_id');
+        state.resultListOfPost = uniqBy(list, 'id');
         state.searchPostaddListNum = state.resultListOfPost.length - length;
       }
       
@@ -347,6 +384,7 @@ export const {
   setPostLoading,
   setSearchVal,
   setSearchPost,
+  setPostDetail,
 } = Search.actions
 
 

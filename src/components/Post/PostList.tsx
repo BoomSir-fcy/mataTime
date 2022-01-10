@@ -57,49 +57,49 @@ const PostList: React.FC<PostListPorps> = ({
         }}
       >
         {(list ?? []).map(item => (
-          <HoverLink to={`/articleDetils/${item.post_id || item.id}`}>
-            <MeItemWrapper key={`${item.id || item.post_id}`}>
-              {
-                // 浏览自己的不扣费
-                currentUid?.uid !== item.user_id && (
-                  <SpendTimeViewWithArticle
-                    nonce={nonce}
-                    setNonce={setNonce}
-                    readType={ReadType.ARTICLE}
-                    articleId={item.id || item.post_id}
-                  />
-                )
-              }
-              <MentionItem
-                itemData={{
+          // <HoverLink to={`/articleDetils/${item.post_id || item.id}`}>
+          <MeItemWrapper key={`${item.id || item.post_id}`}>
+            {
+              // 浏览自己的不扣费
+              currentUid?.uid !== item.user_id && (
+                <SpendTimeViewWithArticle
+                  nonce={nonce}
+                  setNonce={setNonce}
+                  readType={ReadType.ARTICLE}
+                  articleId={item.id || item.post_id}
+                />
+              )
+            }
+            <MentionItem
+              itemData={{
+                ...item,
+                post_id: item.id,
+                post: {
                   ...item,
                   post_id: item.id,
-                  post: {
-                    ...item,
-                    post_id: item.id,
-                  },
-                }}
-                callback={(item: any, type: MoreOperatorEnum) => {
-                  handleUpdateList(item, type);
-                }}
-              />
-              <MentionOperator
-                replyType='twitter'
-                postId={`${item.id}`}
-                itemData={{
+                },
+              }}
+              callback={(item: any, type: MoreOperatorEnum) => {
+                handleUpdateList(item, type);
+              }}
+            />
+            <MentionOperator
+              replyType='twitter'
+              postId={`${item.id}`}
+              itemData={{
+                ...item,
+                post_id: item.id,
+                post: {
                   ...item,
                   post_id: item.id,
-                  post: {
-                    ...item,
-                    post_id: item.id,
-                  },
-                }}
-                callback={(item: any, type?: MoreOperatorEnum) => {
-                  handleUpdateList(item, type);
-                }}
-              />
-            </MeItemWrapper>
-          </HoverLink>
+                },
+              }}
+              callback={(item: any, type?: MoreOperatorEnum) => {
+                handleUpdateList(item, type);
+              }}
+            />
+          </MeItemWrapper>
+          // </HoverLink>
         ))}
       </List>
     </ArticleListBox>

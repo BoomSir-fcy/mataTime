@@ -45,7 +45,6 @@ const MentionOperator: React.FC<IProps> = ({
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
-
   const changeLike = () => {
     if (type === 'Article') {
       Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({
@@ -137,7 +136,14 @@ const MentionOperator: React.FC<IProps> = ({
     <MentionOperatorWrapper>
       <Flex justifyContent='space-between' className='mention-operator'>
         <Flex>
-          <Box onClick={() => setReplyVisible(true)} className='operator-item'>
+          <Box
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              setReplyVisible(true);
+            }}
+            className='operator-item'
+          >
             <Icon
               name='icon-pinglun'
               margin='0 10px 0 0'
@@ -151,7 +157,14 @@ const MentionOperator: React.FC<IProps> = ({
             {itemData.share_num || 0}
           </Box> */}
           {hasLike && (
-            <Box className='operator-item' onClick={changeLike}>
+            <Box
+              className='operator-item'
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                changeLike();
+              }}
+            >
               {isLike === 1 ? (
                 <Icon
                   size={18}
@@ -180,20 +193,27 @@ const MentionOperator: React.FC<IProps> = ({
         )}
       </Flex>
       {/* 回复 */}
-      <ReplyModal
-        replyType={replyType}
-        show={replyVisible}
-        commentId={commentId}
-        postId={postId}
-        itemData={itemData}
-        onSuccess={() => {
-          setReplyVisible(false);
-          callback(itemData, MoreOperatorEnum.COMMONT);
+      <Box
+        onClick={e => {
+          e.preventDefault();
+          e.stopPropagation();
         }}
-        onClose={() => {
-          setReplyVisible(false);
-        }}
-      />
+      >
+        <ReplyModal
+          replyType={replyType}
+          show={replyVisible}
+          commentId={commentId}
+          postId={postId}
+          itemData={itemData}
+          onSuccess={() => {
+            setReplyVisible(false);
+            callback(itemData, MoreOperatorEnum.COMMONT);
+          }}
+          onClose={() => {
+            setReplyVisible(false);
+          }}
+        />
+      </Box>
     </MentionOperatorWrapper>
   );
 };
