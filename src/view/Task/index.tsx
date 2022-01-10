@@ -16,6 +16,7 @@ const Task: React.FC = () => {
     <BgBox>
       {pathname === '/task' && <TaskPage />}
       {pathname === '/task/invite' && <TaskInvite />}
+      {pathname === '/task/invites' && <TaskInvite />}
       {pathname === '/task/friendsList' && <FriendsList />}
     </BgBox>
   );
