@@ -93,12 +93,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
   return (
     <RightBox justifyContent='space-between' alignItems='center'>
       <IncomeBox>
-        <Icon
-          size={size}
-          color='white_black'
-          current={1}
-          name='icon-zhifeiji1'
-        />
+        <Icon size={size} color='white_black' name='icon-zhifeiji1' />
         {/* <Img src={require('assets/images/myWallet/airplane.png').default} /> */}
         <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
@@ -110,12 +105,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Icon
-          size={size}
-          color='white_black'
-          current={1}
-          name='icon-leijishouyi'
-        />
+        <Icon size={size} color='white_black' name='icon-leijishouyi' />
         {/* <Img src={require('assets/images/myWallet/today.png').default} /> */}
         <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
@@ -127,12 +117,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Icon
-          size={size}
-          color='white_black'
-          current={1}
-          name='icon-zongshouyi'
-        />
+        <Icon size={size} color='white_black' name='icon-zongshouyi' />
         {/* <Img src={require('assets/images/myWallet/total.png').default} /> */}
         <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
