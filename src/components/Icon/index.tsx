@@ -44,7 +44,7 @@ export const Icon = ({
         margin: margin || '0',
         cursor: Boolean(current) ? 'pointer' : '',
         fontWeight: bold ? 'bold' : '',
-        ...style
+        ...style,
       }}
       {...props}
     />

@@ -188,6 +188,7 @@ const MoneyModal: React.FC<init> = ({
     },
     [setVal, balance, withdrawalBalance],
   );
+
   return (
     <CountBox>
       {type === 1 && (
@@ -244,9 +245,13 @@ const MoneyModal: React.FC<init> = ({
           }
         />
         <Max
-          style={type === 1 && approvedNum === 0 ? { cursor: 'no-drop' } : {}}
+          style={
+            (type === 1 && approvedNum === 0) || approvedNum === 0
+              ? { cursor: 'no-drop' }
+              : {}
+          }
           onClick={() => {
-            if (type === 1 && approvedNum === 0) return;
+            if ((type === 1 && approvedNum === 0) || approvedNum === 0) return;
             setVal(String(type === 1 ? balance : withdrawalBalance));
           }}
         >

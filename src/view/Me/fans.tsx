@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import { toast } from 'react-toastify';
 import { Avatar, List, CancelAttentionModal } from 'components';
 import { Box, Button, Flex, Card, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
@@ -10,14 +9,18 @@ import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 import { Crumbs } from 'components';
 
+import useParsedQueryString from 'hooks/useParsedQueryString';
+
 import { CrumbsHead } from './components';
 
 const Content = styled(Card)`
   min-height: 500px;
-  ${({ theme }) => theme.mediaQueriesSize.padding}
+  /* ${({ theme }) => theme.mediaQueriesSize.padding} */
   max-width: calc(100vw - 8px);
   background-color: transparent;
+  padding-bottom: 50px;
 `;
+
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
@@ -25,11 +28,16 @@ const Column = styled(Flex)`
   margin-left: 22px;
   width: calc(100% - 70px);
 `;
+
 const ContentBox = styled(Flex)`
+  padding: 14px 8px;
   min-height: 60px;
-  margin-bottom: 28px;
   justify-content: space-between;
   align-content: center;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  &:hover {
+    background: ${({ theme }) => theme.colors.hoverList};
+  }
 `;
 const WrapText = styled(Text)`
   word-wrap: break-word;
@@ -69,13 +77,14 @@ const Fans = React.memo(() => {
     list: [],
   });
   const { loading, page, total, totalPage, list } = state;
+  const parsedQs = useParsedQueryString();
 
   const getFansList = async (offest?: number) => {
     setState(p => {
       p.loading = true;
     });
     try {
-      const res = await Api.MeApi.fansList(offest || page);
+      const res = await Api.MeApi.fansList(offest || page, null, parsedQs.uid);
       if (Api.isSuccess(res)) {
         setState(p => {
           p.list = offest
@@ -128,21 +137,6 @@ const Fans = React.memo(() => {
 
   return (
     <Box>
-      {/* <CrumbsHead>
-        <Flex>
-          <Text
-            fontWeight="bold"
-            mr="10px"
-            fontSize="14px"
-            style={{ textTransform: 'capitalize' }}
-          >
-            {t('meHeaderFans')}
-          </Text>
-          <Text fontSize="14px">
-            {t('meHeaderPeople%value%', { value: total })}
-          </Text>
-        </Flex>
-      </CrumbsHead> */}
       <Crumbs title={t('meHome')}>
         <Flex>
           <Text
@@ -151,7 +145,7 @@ const Fans = React.memo(() => {
             fontSize='14px'
             style={{ textTransform: 'capitalize' }}
           >
-            {t('meHeaderFans')}
+            {!parsedQs.uid ? t('meHeaderFans') : t('meHeaderHerFans')}
           </Text>
           <Text fontSize='14px'>
             {t('meHeaderPeople%value%', { value: state.total })}
@@ -173,6 +167,7 @@ const Fans = React.memo(() => {
                 <Flex
                   as={Link}
                   to={`/me/profile/${item.uid}`}
+                  alignItems='center'
                   style={{ width: 'calc(100% - 140px)' }}
                 >
                   <Avatar uid={item.uid} src={item.nft_image} scale='md' />
@@ -190,72 +185,76 @@ const Fans = React.memo(() => {
                     </WrapText>
                   </Column>
                 </Flex>
-                {item.attention_status === 0 ? (
+                {!parsedQs.uid && (
                   <React.Fragment>
-                    {state.hoverStatus && state.hoverIndex === index ? (
-                      <MinWidthButton
-                        onClick={() => followUser(item.uid)}
-                        onMouseLeave={() =>
-                          setState(p => {
-                            p.hoverIndex = 0;
-                            p.hoverStatus = false;
-                          })
-                        }
-                      >
-                        {t('meFocusOn')}
-                      </MinWidthButton>
+                    {item.attention_status === 0 ? (
+                      <React.Fragment>
+                        {state.hoverStatus && state.hoverIndex === index ? (
+                          <MinWidthButton
+                            onClick={() => followUser(item.uid)}
+                            onMouseLeave={() =>
+                              setState(p => {
+                                p.hoverIndex = 0;
+                                p.hoverStatus = false;
+                              })
+                            }
+                          >
+                            {t('meFocusOn')}
+                          </MinWidthButton>
+                        ) : (
+                          <MinWidthButton
+                            onClick={() => followUser(item.uid)}
+                            onMouseEnter={() =>
+                              setState(p => {
+                                p.hoverIndex = index;
+                                p.hoverStatus = true;
+                              })
+                            }
+                            variant='secondary'
+                          >
+                            {t('meNotFollowed')}
+                          </MinWidthButton>
+                        )}
+                      </React.Fragment>
                     ) : (
-                      <MinWidthButton
-                        onClick={() => followUser(item.uid)}
-                        onMouseEnter={() =>
-                          setState(p => {
-                            p.hoverIndex = index;
-                            p.hoverStatus = true;
-                          })
-                        }
-                        variant='secondary'
-                      >
-                        {t('meNotFollowed')}
-                      </MinWidthButton>
-                    )}
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    {state.hoverStatus && state.hoverIndex === index ? (
-                      <MinWidthButton
-                        onClick={() =>
-                          setState(p => {
-                            p.cancelFollow = true;
-                            p.cancelParams = item;
-                          })
-                        }
-                        variant='tertiary'
-                        onMouseLeave={() =>
-                          setState(p => {
-                            p.hoverIndex = 0;
-                            p.hoverStatus = false;
-                          })
-                        }
-                      >
-                        {t('meUnsubscribe')}
-                      </MinWidthButton>
-                    ) : (
-                      <MinWidthButton
-                        onClick={() =>
-                          setState(p => {
-                            p.cancelFollow = true;
-                            p.cancelParams = item;
-                          })
-                        }
-                        onMouseEnter={() =>
-                          setState(p => {
-                            p.hoverIndex = index;
-                            p.hoverStatus = true;
-                          })
-                        }
-                      >
-                        {t('meMutualAttention')}
-                      </MinWidthButton>
+                      <React.Fragment>
+                        {state.hoverStatus && state.hoverIndex === index ? (
+                          <MinWidthButton
+                            onClick={() =>
+                              setState(p => {
+                                p.cancelFollow = true;
+                                p.cancelParams = item;
+                              })
+                            }
+                            variant='tertiary'
+                            onMouseLeave={() =>
+                              setState(p => {
+                                p.hoverIndex = 0;
+                                p.hoverStatus = false;
+                              })
+                            }
+                          >
+                            {t('meUnsubscribe')}
+                          </MinWidthButton>
+                        ) : (
+                          <MinWidthButton
+                            onClick={() =>
+                              setState(p => {
+                                p.cancelFollow = true;
+                                p.cancelParams = item;
+                              })
+                            }
+                            onMouseEnter={() =>
+                              setState(p => {
+                                p.hoverIndex = index;
+                                p.hoverStatus = true;
+                              })
+                            }
+                          >
+                            {t('meMutualAttention')}
+                          </MinWidthButton>
+                        )}
+                      </React.Fragment>
                     )}
                   </React.Fragment>
                 )}

@@ -70,9 +70,13 @@ const Collect = props => {
       SHIELD,
       DELPOST,
       BOOKMARK,
+      BLOCKUSER,
     } = MoreOperatorEnum;
     const handleChangeList =
-      type === SHIELD || type === DELPOST || type === BOOKMARK;
+      type === SHIELD ||
+      type === DELPOST ||
+      type === BOOKMARK ||
+      type === BLOCKUSER;
     let arr = [];
 
     if (
