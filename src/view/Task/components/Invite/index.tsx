@@ -115,7 +115,7 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
-  useFetchNftList();
+  // useFetchNftList();
   const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
@@ -220,7 +220,7 @@ const Invite: React.FC = () => {
           <Text>{t('InviteRuleContent2')}</Text>
         </ContentBox>
         {/* 普通邀请 */}
-        <ContentBox flexDirection='column'>
+        {/* <ContentBox flexDirection='column'>
           <Flex justifyContent='space-between'>
             <Text mb='25px' fontSize='18px' bold>
               Invitation Overview
@@ -318,7 +318,7 @@ const Invite: React.FC = () => {
               </Box>
             </CardBox>
           </Flex>
-        </ContentBox>
+        </ContentBox> */}
         {/* 特殊邀请 */}
         {!nftLoading ? (
           invitableNftList.length ? (
