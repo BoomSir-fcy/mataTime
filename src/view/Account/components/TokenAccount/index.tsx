@@ -63,7 +63,7 @@ const TabText = styled(Text)`
   cursor: pointer;
 `;
 const RightBox = styled(Flex)`
-  min-width: 23vw;
+  min-width: 20vw;
   flex-wrap: wrap;
 `;
 const IncomeBox = styled(Flex)`
