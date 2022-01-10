@@ -54,7 +54,7 @@ export default {
     97: '0x094616F0BdFB0b526bD735Bf66Eca0Ad254ca81F',
   },
   Invitation: {
-    56: '',
+    56: '0x0343F91e92662271bbB9884CD730233A3Ecbf435',
     97: '0xA40E2F77c7A0D3506fE9d118f2CA9d411f36B53C',
   },
   ticketsPhotoNft: {

@@ -115,7 +115,7 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
-  // useFetchNftList();
+  useFetchNftList();
   const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
@@ -323,7 +323,7 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {/* {!nftLoading ? (
+        {!nftLoading ? (
           invitableNftList.length ? (
             <>
               <ContentBox>
@@ -348,7 +348,7 @@ const Invite: React.FC = () => {
           <Flex justifyContent='center' alignItems='center'>
             <Spinner />
           </Flex>
-        )} */}
+        )}
 
         {/* 复制链接弹窗 */}
         <InviteModal
