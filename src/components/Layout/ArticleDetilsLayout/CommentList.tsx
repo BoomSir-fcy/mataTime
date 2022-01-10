@@ -134,8 +134,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       DELPOST,
       BLOCKUSER,
     } = MoreOperatorEnum;
-    const handleChangeList =
-      type === SHIELD || type === DELPOST || type || BLOCKUSER;
+    const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
 
     if (
@@ -143,7 +142,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       initList();
       return;

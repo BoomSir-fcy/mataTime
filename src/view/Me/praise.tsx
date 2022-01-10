@@ -73,10 +73,7 @@ const Praise = React.memo(props => {
       BLOCKUSER,
     } = MoreOperatorEnum;
     const handleChangeList =
-      type === SHIELD ||
-      type === DELPOST ||
-      type === LIKE ||
-      type === BLOCKUSER;
+      type === SHIELD || type === DELPOST || type === LIKE;
     let arr = [];
 
     if (
@@ -84,7 +81,8 @@ const Praise = React.memo(props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       init(1);
       return;

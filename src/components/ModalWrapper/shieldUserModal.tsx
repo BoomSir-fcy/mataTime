@@ -22,6 +22,11 @@ const Footer = styled(Flex)`
   padding-bottom: 20px;
 `;
 
+const ButtonAction = styled(Button)`
+  width: 100px;
+  height: 35px;
+`;
+
 export const ShiledUserModal: React.FC<{
   userinfo: Api.Home.post;
   visible: boolean;
@@ -35,6 +40,7 @@ export const ShiledUserModal: React.FC<{
     try {
       const res = await Api.MeApi.shieldUser(userinfo.user_id);
       if (Api.isSuccess(res)) {
+        onClose();
         callback(userinfo, MoreOperatorEnum.BLOCKUSER);
         toastSuccess(t('shieldUserSuccess'));
       } else {
@@ -55,12 +61,12 @@ export const ShiledUserModal: React.FC<{
         <Text color='white_black'>{t('shieldUserModalDes')}</Text>
       </Content>
       <Footer>
-        <Button variant='secondary' onClick={onClose}>
+        <ButtonAction variant='secondary' onClick={onClose}>
           {t('modalCancel')}
-        </Button>
-        <Button onClick={debounce(() => shield(), 1000)}>
+        </ButtonAction>
+        <ButtonAction onClick={debounce(() => shield(), 1000)}>
           {t('modalQuery')}
-        </Button>
+        </ButtonAction>
       </Footer>
     </ModalWrapper>
   );
