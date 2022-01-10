@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { BASE_USER_PROFILE_URL } from 'config';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useHistory } from 'react-router-dom';
-import { getSearchPath } from 'utils/urlQueryPath';
+import { getDecodeValue, getSearchPath } from 'utils/urlQueryPath';
 import PostResult from './PostResult';
 import useDebounce from 'hooks/useDebounce';
 
@@ -80,15 +80,22 @@ const Search = () => {
   // const search = useDebounce(searchVal, 300)
 
   useEffect(() => {
-    dispatch(fetchThunk.fetchSearchPostAsync(true));
-    console.log(searchVal, 'searchVal');
-    replace(
-      getSearchPath({
-        ...parsedQs,
-        q: searchVal,
-      }),
-    );
-  }, [searchVal, replace, dispatch]);
+    if (getDecodeValue(parsedQs.q) !== searchVal || !resultListOfPost.length) {
+      console.log(
+        searchVal,
+        getDecodeValue(parsedQs.q),
+        resultListOfPost.length,
+        'searchVal',
+      );
+      dispatch(fetchThunk.fetchSearchPostAsync(true));
+      replace(
+        getSearchPath({
+          ...parsedQs,
+          q: searchVal,
+        }),
+      );
+    }
+  }, [searchVal, replace, dispatch, parsedQs.q, resultListOfPost.length]);
 
   return (
     <Box>

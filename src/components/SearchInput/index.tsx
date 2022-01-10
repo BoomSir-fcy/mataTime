@@ -110,6 +110,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
     resultListOfTopic,
     loading,
     historyList,
+    searchVal,
     resultListOfPostLen,
   } = useStore(p => p.search);
   const { uid } = useStore(p => p.loginReducer.userInfo);
@@ -135,7 +136,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
               search: e,
             }),
           ),
-        300,
+        500,
       ),
     [dispatch],
   );
@@ -281,7 +282,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 <Box>
                   {Boolean(resultListOfPostLen) && (
                     <SearchPostLen
-                      text={value}
+                      text={searchVal}
                       post_num={resultListOfPostLen}
                       pathname={pathname}
                     />
