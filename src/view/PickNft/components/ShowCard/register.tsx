@@ -172,13 +172,13 @@ const ShowCard: React.FC = () => {
     return 0;
   }, [inviteInfo.codeLockDuration_, codeInfo.lockedAt]);
 
-  const [DownTime, hour, minute, second] = useCountdownTime(LeftTime);
+  const [DownTime, hour, minute, second, IsEnd] = useCountdownTime(LeftTime);
   const [visible, setVisible] = useState(true);
 
   // 是否被锁定
   const isLockAvailable = useMemo(() => {
-    return hour > 0 || minute > 0 || second > 0;
-  }, [hour, minute, second]);
+    return Boolean(!IsEnd);
+  }, [IsEnd]);
 
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),
@@ -186,10 +186,10 @@ const ShowCard: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!(hour > 0 || minute > 0 || second > 0)) {
+    if (IsEnd) {
       setVisible(true);
     }
-  }, [hour, minute, second]);
+  }, [IsEnd]);
 
   const codeState = useMemo(() => {
     // if (codeInfo.state === '2') return
