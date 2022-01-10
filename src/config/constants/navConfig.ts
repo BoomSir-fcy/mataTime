@@ -38,6 +38,12 @@ export const menuNavConfig: MenuNavConfig[] = [
     lable: 'homeMenuTask',
   },
   {
+    icon: 'icon-zhifeiji1',
+    activeIcon: 'icon-zhifeiji',
+    lable: 'meMenuInvite',
+    path: '/task/invite',
+  },
+  {
     icon: 'icon-tixing',
     activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
