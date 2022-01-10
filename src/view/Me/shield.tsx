@@ -1,10 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
 import { Avatar, Icon, Crumbs, List } from 'components';
 import { Card, Box, Button, Flex, Text } from 'uikit';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { fetchThunk, storeAction, useStore } from 'store';
 import { Api } from 'apis';
 
 import { shortenAddress } from 'utils/contract';
@@ -53,6 +56,9 @@ const NameFlex = styled(Flex)`
 `;
 
 const Shield = React.memo(() => {
+  const dispatch = useDispatch();
+  const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
+  const postParams = useStore(p => p.post);
   const { t } = useTranslation();
   const { toastError, toastSuccess } = useToast();
   const [state, setState] = useImmer({
@@ -77,7 +83,7 @@ const Shield = React.memo(() => {
             ? [...(res.data.list || [])]
             : [...state.list, ...(res.data.list || [])];
           p.page = (offest || state.page) + 1;
-          p.totalPage = res.data.total_page;
+          p.totalPage = res.data.totalCount / res.data.page_size;
           p.total = res.data.totalCount;
         });
       }
@@ -104,6 +110,20 @@ const Shield = React.memo(() => {
       console.error(error);
     }
   };
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(
+        fetchThunk.fetchPostAsync({
+          attention: postParams.attention,
+          page: 1,
+          per_page: pageSize,
+          user_tags1: postParams.user_tags1,
+          user_tags2: postParams.user_tags2,
+        }),
+      );
+    };
+  }, []);
 
   return (
     <Box>
