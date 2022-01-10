@@ -10,11 +10,15 @@ const StepOutBox = styled(Box)`
 
 const StepBox = styled(Flex)`
   width: 80%;
-  height: 130px;
+  height: 170px;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   padding: 16px 5px 30px;
   margin: 0 auto;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    height: 130px;
+    align-items: center;
+  }
   .active {
     background: ${({ theme }) => theme.colors.gradients.buttonBg};
     border-width: 1px;
@@ -52,7 +56,7 @@ const PositionText = styled(Text)`
   max-width: 100px;
   ${({ theme }) => theme.mediaQueries.lg} {
     top: 60px;
-    max-width: 160px;
+    max-width: 180px;
   }
 `;
 export const Step: React.FC<{ step?: number }> = React.memo(({ step }) => {
