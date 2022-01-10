@@ -281,7 +281,7 @@
   "******start*****@bigCongee********": "@bigCongee翻译开始",
   "delCommentTitle": "是否删除这条评论?",
   "delCommentContent": "删除该评论后，该评论将不会出现在评论列表中！",
-  "sendArticleMsgMaxWords": "字数不可超过280个",
+  "sendArticleMsgMaxWordsOf%num%": "字数不可超过%num%个",
   "sendArticleMsgMaxTime": "间隔时间需超过3秒!",
   "******end*****@bigCongee********": "@bigCongee翻译结束",
   "******start*****@FCY********": "@FCY翻译开始",

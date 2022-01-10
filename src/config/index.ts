@@ -37,7 +37,9 @@ export const ARTICLE_IMAGE_CLASS_NAME = 'article-image-display_with_load';
 export const CONNECT_WALLET_BODY_CLASS_NAME =
   'connect-wallet-modal__Body--open';
 
-export const ARTICLE_POST_MAX_LEN = 280; // 发帖最大数量
+export const ARTICLE_POST_MAX_LEN = 600; // 发帖最大数量
+
+export const ARTICLE_COMMENTS_MAX_LEN = 280; // 发帖最大数量
 // 帖子显示折行
 export const ARTICLE_POST_MAX_ROW = 12;
 
