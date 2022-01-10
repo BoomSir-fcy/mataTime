@@ -45,6 +45,8 @@ export interface SearchState {
   dispalyLoading: boolean,
   postLoading: boolean,
   postIsEnd: boolean,
+  seart_index: number,
+  searchPostaddListNum: number,
   errorMsg: string,
   searchVal: string,
   historyList: SearchHistoryList[],

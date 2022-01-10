@@ -7,13 +7,14 @@ import SearchInput from 'components/SearchInput';
 import SearchTopicItem from 'components/SearchInput/SearchTopicItem';
 import SearchUserItem from 'components/SearchInput/SearchUserItem';
 import Tabs from 'components/Tabs';
-import { storeAction, useStore } from 'store';
+import { fetchThunk, storeAction, useStore } from 'store';
 import { useDispatch } from 'react-redux';
 import { BASE_USER_PROFILE_URL } from 'config';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useHistory } from 'react-router-dom';
 import { getSearchPath } from 'utils/urlQueryPath';
 import PostResult from './PostResult';
+import useDebounce from 'hooks/useDebounce';
 
 enum TabTypes {
   TOTAL = 'total',
@@ -54,7 +55,7 @@ const Search = () => {
   const {
     displayResultListOfPeoples,
     displayResultListOfTopic,
-    displayResultListOfPost,
+    resultListOfPost,
     dispalyLoading,
     postLoading,
     postIsEnd,
@@ -75,6 +76,12 @@ const Search = () => {
       return displayResultListOfPeoples.filter(item => item.is_attention);
     return displayResultListOfPeoples;
   }, [filterUser, displayResultListOfPeoples]);
+
+  // const search = useDebounce(searchVal, 300)
+
+  // useEffect(() => {
+  //   dispatch(fetchThunk.fetchSearchPostAsync(true));
+  // }, [searchVal, dispatch]);
 
   return (
     <Box>
@@ -101,6 +108,13 @@ const Search = () => {
           active={activeType}
           datas={tabDatas}
           onChange={tab => {
+            console.log(
+              getSearchPath({
+                ...parsedQs,
+                f: tab.type,
+              }),
+            );
+            console.log(parsedQs);
             replace(
               getSearchPath({
                 ...parsedQs,
@@ -115,7 +129,7 @@ const Search = () => {
         ) : (
           <Box>
             <Box>
-              {activeType === TabTypes.TOTAL && userList.length && (
+              {activeType === TabTypes.TOTAL && Boolean(userList.length) && (
                 <>
                   <Text padding='15px 29px 10px 19px' bold>
                     {t('People')}
@@ -146,31 +160,29 @@ const Search = () => {
                   })}
                 </>
               )}
+              {activeType === TabTypes.TOTAL && resultListOfPost.length && (
+                <PostResult
+                  list={resultListOfPost}
+                  loading={postLoading}
+                  searchVal={searchVal}
+                  isEnd={postIsEnd}
+                />
+              )}
               {activeType === TabTypes.TOTAL &&
-                displayResultListOfPost.length && (
-                  <PostResult
-                    list={displayResultListOfPost}
-                    loading={postLoading}
-                    searchVal={searchVal}
-                    isEnd={postIsEnd}
-                  />
-                )}
-              {activeType === TabTypes.TOTAL &&
-                displayResultListOfPost.length === 0 &&
+                resultListOfPost.length === 0 &&
                 userList.length === 0 && <Empty />}
             </Box>
             <Box>
+              {activeType === TabTypes.POST && resultListOfPost.length && (
+                <PostResult
+                  list={resultListOfPost}
+                  loading={postLoading}
+                  searchVal={searchVal}
+                  isEnd={postIsEnd}
+                />
+              )}
               {activeType === TabTypes.POST &&
-                displayResultListOfPost.length && (
-                  <PostResult
-                    list={displayResultListOfPost}
-                    loading={postLoading}
-                    searchVal={searchVal}
-                    isEnd={postIsEnd}
-                  />
-                )}
-              {activeType === TabTypes.POST &&
-                displayResultListOfPost.length === 0 && <Empty />}
+                resultListOfPost.length === 0 && <Empty />}
             </Box>
             <Box>
               {activeType === TabTypes.USER &&

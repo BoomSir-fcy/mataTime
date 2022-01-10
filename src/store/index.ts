@@ -19,6 +19,7 @@ import {
   searchAction,
   fetchSearchPeopleAsync,
   fetchSearchAsync,
+  fetchSearchPostAsync,
 } from './search';
 import { SearchState } from './search/types';
 
@@ -72,6 +73,7 @@ export const fetchThunk = {
   fetchPostAsync,
   fetchSearchPeopleAsync,
   fetchSearchAsync,
+  fetchSearchPostAsync,
 };
 
 export const Dispatch = {

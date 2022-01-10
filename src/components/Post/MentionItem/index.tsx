@@ -49,12 +49,6 @@ const MentionItem: React.FC<MentionItemProps> = ({
   const { push } = useHistory();
   const { pathname } = useLocation();
 
-  const goDetils = () => {
-    // XXX: 总感觉这样写有问题
-    if (pathname.includes('articleDetils')) return;
-    push(`/articleDetils/${itemData.post_id || itemData.id}`);
-  };
-
   return (
     <MentionItemWrapper ref={mentionRef}>
       <MentionItemUser
@@ -66,12 +60,7 @@ const MentionItem: React.FC<MentionItemProps> = ({
           callback(data, type);
         }}
       />
-      <Box
-        className='mention-content'
-        onClick={() => {
-          goDetils();
-        }}
-      >
+      <Box className='mention-content'>
         <ContentParsing
           content={itemData.content}
           callback={(type: MoreOperatorEnum) => {

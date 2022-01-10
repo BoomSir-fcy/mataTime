@@ -8,7 +8,7 @@ import {
   changeSearchUserFilter,
   removeSearchHistoryData, clearSearchHistoryData
 } from './actions'
-import { SEARCH_MAX_HISTORY_LEN } from 'config';
+import { MAX_SPEND_TIME_PAGE_TATOL, SEARCH_MAX_HISTORY_LEN } from 'config';
 import { orderBy } from 'lodash';
 import { useAppDispatch } from 'libs/mini-swap/state';
 
@@ -25,6 +25,8 @@ const initialState: SearchState = {
   dispalyLoading: false,
   postLoading: false,
   postIsEnd: false,
+  seart_index: 0,
+  searchPostaddListNum: -1,
   errorMsg: '',
   searchVal: '',
   historyList: historyListStore ? JSON.parse(historyListStore) : [],
@@ -61,10 +63,9 @@ export const fetchSearchPeopleAsync = createAsyncThunk(
 export const fetchSearchAsync = createAsyncThunk<any, {
   search: string
   fetchDisplay?: boolean
-  searchPost?: boolean
 }>(
   'fetch/fetchSearchAsync',
-  async ({ search, fetchDisplay, searchPost }, { dispatch, getState }) => {
+  async ({ search, fetchDisplay }, { dispatch, getState }) => {
     const result = {
       fetchDisplay,
       resultListOfPeoples: [],
@@ -94,10 +95,10 @@ export const fetchSearchAsync = createAsyncThunk<any, {
       disableTopic = true
       disablePeople = true
     }
-    let disablePost = true;
-    if (searchPost) {
-      disablePost = false;
-    }
+    // let disablePost = true;
+    // if (searchPost) {
+    //   disablePost = false;
+    // }
 
     dispatch(setErrorMsg(''))
     dispatch(setSearchVal(search))
@@ -112,13 +113,13 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     })
     const fetchPeople = Api.UserApi.searchUser(searchVal)
     const fetchTotal = Api.SearchApi.getSearchTotal(searchVal)
-    const fetchPost = Api.SearchApi.getSearchPost(search)
+    // const fetchPost = Api.SearchApi.getSearchPost(search)
 
-    const [responseTopic, responsePeople, responseTotal, responsePost] = await Promise.all([
+    const [responseTopic, responsePeople, responseTotal] = await Promise.all([
       disableTopic ? null : fetchTopic,
       disablePeople ? null : fetchPeople,
       disableTotal ? null : fetchTotal,
-      disablePost ? null : fetchPost,
+      // disablePost ? null : fetchPost,
     ])
     dispatch(setLoading(false))
     dispatch(setDispalyLoading(false))
@@ -137,22 +138,77 @@ export const fetchSearchAsync = createAsyncThunk<any, {
       result.resultListOfPeoples = orderBy(peopleList, item => item.is_attention ? 0 : 1)
       result.resultListOfPostLen = responseTotal.data?.post_number || 0
     }
-    if (Api.isSuccess(responsePost)){
-      console.log(responsePost)
-      result.resultListOfPost = responsePost.data || []
-    }
+    // if (Api.isSuccess(responsePost)){
+    //   console.log(responsePost)
+    //   result.resultListOfPost = responsePost.data || []
+    // }
     return result
   },
 );
 
-export const fetchSearchPostAsync = createAsyncThunk('', async (params, { dispatch, getState }) => {
+
+export const fetchSearchPostAsync = (refresh?: boolean) => async (dispatch, getState) => {
   dispatch(setPostLoading(true))
+  const result = {
+    refresh,
+    fetchDisplay: true,
+    resultListOfPost: [],
+    seart_index: 0,
+  }
 
   const { search } = getState() as { search: SearchState }
-  const fetchPost = Api.SearchApi.getSearchPost(search.searchVal)
-  
+  if (!search.searchVal) return
+  try {
 
-})
+    console.log({
+      key: search.searchVal,
+      start: refresh ? 0 : search.seart_index || 0,
+      limit: MAX_SPEND_TIME_PAGE_TATOL,
+    })
+    const fetchPost = await Api.SearchApi.getSearchPost({
+      key: search.searchVal,
+      start: refresh ? 0 : search.seart_index || 0,
+      limit: MAX_SPEND_TIME_PAGE_TATOL,
+    }) 
+    if (Api.isSuccess(fetchPost)){
+      console.log(fetchPost)
+      result.resultListOfPost = fetchPost.data?.data || []
+      result.seart_index = fetchPost.data?.start
+    }
+  } catch (error) {
+    console.error(error)    
+  }
+  dispatch(setPostLoading(false))
+  dispatch(setSearchPost(result))
+}
+// export const fetchSearchPostAsync = async ((refresh?: boolean), { dispatch, getState }) => {
+//   dispatch(setPostLoading(true))
+  
+//   const result = {
+//     fetchDisplay: true,
+//     resultListOfPost: [],
+//     seart_index: 0,
+//   }
+
+//   const { search } = getState() as { search: SearchState }
+//   try {
+//     const fetchPost = await Api.SearchApi.getSearchPost({
+//       key: search.searchVal,
+//       start: refresh ? 0 : search.seart_index,
+//       limit: MAX_SPEND_TIME_PAGE_TATOL,
+//     }) 
+//     if (Api.isSuccess(fetchPost)){
+//       console.log(fetchPost)
+//       result.resultListOfPost = fetchPost.data?.data || []
+//       result.seart_index = fetchPost.data?.seart_index
+//     }
+//   } catch (error) {
+//     console.error(error)    
+//   }
+//   dispatch(setPostLoading(false))
+//   dispatch(setSearchPost(result))
+
+// }
 
 export const Search = createSlice({
   name: 'search',
@@ -173,6 +229,30 @@ export const Search = createSlice({
     setErrorMsg: (state, { payload }) => {
       state.errorMsg = payload
     },
+    setSearchPost: (state, action) => {
+      const { resultListOfPost, fetchDisplay, seart_index, refresh } = action.payload;
+      // state.resultListOfPost = resultListOfPost
+      // console.log(seart_index, 'seart_index')
+      state.seart_index = seart_index
+      // if (fetchDisplay) {
+      //   state.displayResultListOfPost = resultListOfPost
+      // }
+      
+      if (refresh) {
+        state.resultListOfPost = resultListOfPost
+        state.searchPostaddListNum = -1;
+      } else {
+        const list = state.resultListOfPost.concat(resultListOfPost);
+        const length = resultListOfPost.length
+        state.resultListOfPost = uniqBy(list, 'post_id');
+        state.searchPostaddListNum = state.resultListOfPost.length - length;
+      }
+      
+      console.log(state.resultListOfPost, 'state.resultListOfPost')
+      // state.lastList =
+      //   articleList.length >= per_page || page > 1 ? articleList : [];
+      // state.page = articleList.length >= per_page ? page + 1 : page;
+    }
   },
   extraReducers: builder => {
     builder
@@ -186,15 +266,15 @@ export const Search = createSlice({
         state.errorMsg = 'error'
       })
       .addCase(fetchSearchAsync.fulfilled, (state, action) => {
-        const { resultListOfPeoples, resultListOfTopic, resultListOfPost, resultListOfPostLen, fetchDisplay } = action.payload;
+        const { resultListOfPeoples, resultListOfTopic, resultListOfPostLen, fetchDisplay } = action.payload;
         state.resultListOfPeoples = resultListOfPeoples
         state.resultListOfTopic = resultListOfTopic
-        state.resultListOfPost = resultListOfPost
+        // state.resultListOfPost = resultListOfPost
         state.resultListOfPostLen = resultListOfPostLen
         if (fetchDisplay) {
           state.displayResultListOfPeoples = resultListOfPeoples
           state.displayResultListOfTopic = resultListOfTopic
-          state.displayResultListOfPost = resultListOfPost
+          // state.displayResultListOfPost = resultListOfPost
         }
       })
       .addCase(fetchSearchAsync.rejected, (state, action) => {
@@ -266,6 +346,7 @@ export const {
   setDispalyLoading,
   setPostLoading,
   setSearchVal,
+  setSearchPost,
 } = Search.actions
 
 

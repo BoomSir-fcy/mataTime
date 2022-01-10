@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, MoreOperatorEnum } from 'components';
+import { HoverLink, List, MoreOperatorEnum } from 'components';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
@@ -24,6 +24,7 @@ interface PostListPorps {
 const PostList: React.FC<PostListPorps> = ({
   list,
   loading,
+  isEnd,
   getList,
   updateList,
 }) => {
@@ -49,54 +50,56 @@ const PostList: React.FC<PostListPorps> = ({
       <List
         loading={loading}
         renderList={type => {
-          if (type === 1 && list?.length !== 0) {
+          if ((type === 1 && list?.length !== 0) || loading || isEnd) {
             return;
           }
           getList(type);
         }}
       >
         {(list ?? []).map(item => (
-          <MeItemWrapper key={`${item.id}`}>
-            {
-              // 浏览自己的不扣费
-              currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle
-                  nonce={nonce}
-                  setNonce={setNonce}
-                  readType={ReadType.ARTICLE}
-                  articleId={item.id}
-                />
-              )
-            }
-            <MentionItem
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
+          <HoverLink to={`/articleDetils/${item.post_id || item.id}`}>
+            <MeItemWrapper key={`${item.id || item.post_id}`}>
+              {
+                // 浏览自己的不扣费
+                currentUid?.uid !== item.user_id && (
+                  <SpendTimeViewWithArticle
+                    nonce={nonce}
+                    setNonce={setNonce}
+                    readType={ReadType.ARTICLE}
+                    articleId={item.id || item.post_id}
+                  />
+                )
+              }
+              <MentionItem
+                itemData={{
                   ...item,
                   post_id: item.id,
-                },
-              }}
-              callback={(item: any, type: MoreOperatorEnum) => {
-                handleUpdateList(item, type);
-              }}
-            />
-            <MentionOperator
-              replyType='twitter'
-              postId={`${item.id}`}
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
+                  post: {
+                    ...item,
+                    post_id: item.id,
+                  },
+                }}
+                callback={(item: any, type: MoreOperatorEnum) => {
+                  handleUpdateList(item, type);
+                }}
+              />
+              <MentionOperator
+                replyType='twitter'
+                postId={`${item.id}`}
+                itemData={{
                   ...item,
                   post_id: item.id,
-                },
-              }}
-              callback={(item: any, type?: MoreOperatorEnum) => {
-                handleUpdateList(item, type);
-              }}
-            />
-          </MeItemWrapper>
+                  post: {
+                    ...item,
+                    post_id: item.id,
+                  },
+                }}
+                callback={(item: any, type?: MoreOperatorEnum) => {
+                  handleUpdateList(item, type);
+                }}
+              />
+            </MeItemWrapper>
+          </HoverLink>
         ))}
       </List>
     </ArticleListBox>
