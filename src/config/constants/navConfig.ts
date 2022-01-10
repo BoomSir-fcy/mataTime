@@ -41,7 +41,7 @@ export const menuNavConfig: MenuNavConfig[] = [
     icon: 'icon-zhifeiji1',
     activeIcon: 'icon-zhifeiji',
     lable: 'meMenuInvite',
-    path: '/task/invite',
+    path: '/task/invites',
   },
   {
     icon: 'icon-tixing',
@@ -271,7 +271,7 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath(['/task/invite', '/task/friendsList'], menuNavConfig, 'hideRight');
+  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList'], menuNavConfig, 'hideRight');
 })();
 
 export default menuNavConfig;
