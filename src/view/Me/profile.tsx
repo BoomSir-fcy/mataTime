@@ -65,6 +65,10 @@ const Info = styled(Flex)`
 `;
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
+  margin-bottom: 10px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 0;
+  }
   .name {
     min-width: 0;
     word-wrap: break-word;
@@ -81,6 +85,7 @@ const Desc = styled(Box)`
     color: ${({ theme }) => theme.colors.textTips};
   }
   .marginLeft {
+    margin-left: 10px;
     ${({ theme }) => theme.mediaQueries.sm} {
       margin-left: 30px;
     }
@@ -317,9 +322,31 @@ const Profile: React.FC<any> = props => {
       ? defaultCountry?.LocationEn
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
+
+  const baseInfoBox = useMemo(() => {
+    return (
+      <Desc>
+        <Text className='name' ellipsis maxLine={2}>
+          {profile.nick_name}
+        </Text>
+        <Flex mt='5px' flexWrap='wrap'>
+          <Flex>
+            {/* <Certification /> */}
+            <Text className='text'>@{shortenAddress(profile.address)}</Text>
+          </Flex>
+          {locationDisplay && (
+            <Flex className='marginLeft' alignItems='center'>
+              <Icon name='icon-dizhi' color={gray} />
+              <Text className='text'>{locationDisplay}</Text>
+            </Flex>
+          )}
+        </Flex>
+      </Desc>
+    );
+  }, [locationDisplay, profile]);
   return (
     <Center>
-      <Crumbs title={t('meHome')} back={Boolean(uid)} />
+      <Crumbs title={t('meHome')} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -354,25 +381,7 @@ const Profile: React.FC<any> = props => {
                 scale={isMobile ? 'ld' : 'xl'}
                 src={profile.nft_image}
               />
-              <Desc>
-                <Text className='name' ellipsis maxLine={2}>
-                  {profile.nick_name}
-                </Text>
-                <Flex mt='5px' flexWrap='wrap'>
-                  <Flex>
-                    {/* <Certification /> */}
-                    <Text className='text'>
-                      @{shortenAddress(profile.address)}
-                    </Text>
-                  </Flex>
-                  {locationDisplay && (
-                    <Flex className='marginLeft' alignItems='center'>
-                      <Icon name='icon-dizhi' color={gray} />
-                      <Text className='text'>{locationDisplay}</Text>
-                    </Flex>
-                  )}
-                </Flex>
-              </Desc>
+              {!isMobile && baseInfoBox}
             </Flex>
             {!uid || Number(uid) === currentUid.uid ? (
               <>
@@ -407,6 +416,7 @@ const Profile: React.FC<any> = props => {
           </Info>
           <Content>
             <Box className='desc'>
+              {isMobile && baseInfoBox}
               <Text className='text' style={{ wordBreak: 'break-word' }}>
                 {profile.introduction}
               </Text>

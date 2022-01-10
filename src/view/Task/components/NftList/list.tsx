@@ -174,7 +174,7 @@ const NftAvatar: React.FC<{
     async nftId => {
       try {
         const codeCount = await getNftGenCodeCount(nftId);
-        console.log(nftId, '----', codeCount);
+        // console.log(nftId, '----', codeCount);
         if (codeCount) {
           setCodeList(pre => {
             return pre.map((item, i) => {
@@ -207,12 +207,12 @@ const NftAvatar: React.FC<{
       try {
         // 未生成邀请码
         if (info.status === 0) {
-          console.log('生成邀请码');
+          // console.log('生成邀请码');
           tempList = await genInviteCode(nftToken, nftId);
         }
         // 未提交合约
         if (info.status < 2) {
-          console.log('提交合约');
+          // console.log('提交合约');
 
           const codeHash = tempList[index]?.code_hash;
           await onGenCodes(nftId, [`0x${codeHash}`]);
@@ -282,7 +282,7 @@ const NftAvatar: React.FC<{
               {codeList.map((item, index) => (
                 <Column key={item.id}>
                   <AvatarBox>
-                    {item.status === 4 ? (
+                    {item.status === 4 && !checkTransferNft(item) ? (
                       <ReceivedBox>
                         <Icon
                           name={'icon-complete'}

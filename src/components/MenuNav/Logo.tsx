@@ -10,7 +10,7 @@ const LogoWarpper = styled(Box)`
   display: block;
 `;
 const ImageStyled = styled(Image)`
-  margin-left: -22px;
+  margin-left: -23px;
   max-width: 100%;
   max-height: 100%;
 `;

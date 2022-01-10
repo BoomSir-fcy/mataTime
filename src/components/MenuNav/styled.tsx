@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
 import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from './config';
 
-export const NavItemStyled = styled(Flex) <{ isactive?: number }>`
+export const NavItemStyled = styled(Flex)<{ isactive?: number }>`
   align-items: center;
   width: max-content;
   /* height: 40px; */
@@ -49,6 +49,8 @@ const StyledPanel = styled.div<{
 }>`
   position: fixed;
   padding-top: ${({ padding }) => (padding ? 0 : '22px')};
+  padding-left: 8px;
+  padding-right: 8px;
   top: 0;
   display: flex;
   flex-direction: column;
