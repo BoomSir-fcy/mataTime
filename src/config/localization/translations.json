@@ -588,6 +588,7 @@
   "editorComment": "Comment",
   "editorTime": "Income",
   "editorReward": "Reward",
+  "recommendReload": "Refresh",
   "unShiled": "Unblock",
   "shieldUserSuccess": "User blocked successfully",
   "shieldUserUnSuccess": "Unblock successfully",
