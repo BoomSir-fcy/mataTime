@@ -248,9 +248,6 @@ const CreateShowCard: React.FC = () => {
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
-
-  console.log(buyInfo);
-
   return (
     <PageContainer>
       <CardStyled>

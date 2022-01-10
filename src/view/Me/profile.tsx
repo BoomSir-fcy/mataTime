@@ -241,8 +241,7 @@ const Profile: React.FC<any> = props => {
       DELPOST,
       BLOCKUSER,
     } = MoreOperatorEnum;
-    const handleChangeList =
-      type === SHIELD || type === DELPOST || type === BLOCKUSER;
+    const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
 
     if (
@@ -250,7 +249,8 @@ const Profile: React.FC<any> = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       setIsEnd(false);
       init(1);
@@ -425,7 +425,7 @@ const Profile: React.FC<any> = props => {
             </Box>
             <Flex className='number'>
               <Text
-                as={!uid || Number(uid) === currentUid.uid ? '' : Link}
+                as={Boolean(uid) && profile.allow_watch_fans === 1 ? Link : ''}
                 to={`/me/user/fans?uid=${uid}`}
                 className='text'
               >
@@ -433,7 +433,11 @@ const Profile: React.FC<any> = props => {
                 <Text className='value'>{profile.fans_num}</Text>
               </Text>
               <Text
-                as={!uid || Number(uid) === currentUid.uid ? '' : Link}
+                as={
+                  Boolean(uid) && profile.allow_watch_attention === 1
+                    ? Link
+                    : ''
+                }
                 to={`/me/user/follow?uid=${uid}`}
                 className='text'
               >

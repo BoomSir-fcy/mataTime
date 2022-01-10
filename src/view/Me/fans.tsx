@@ -137,7 +137,7 @@ const Fans = React.memo(() => {
 
   return (
     <Box>
-      <Crumbs title={t('meHome')}>
+      <Crumbs title={t('meHome')} back={Boolean(parsedQs.uid)}>
         <Flex>
           <Text
             fontWeight='bold'

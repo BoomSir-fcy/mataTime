@@ -38,21 +38,24 @@ export const fetchInviteInfo = async () => {
     };
     // return [index, [], []]
   }
-}
+};
 
 export const fetchMetaycInfo = async () => {
   const exPhotoNftAddress = getInvitationAddress();
   try {
-    const calls = [{
-      address: exPhotoNftAddress,
-      name: 'min_nft_value',
-    }, {
-      address: exPhotoNftAddress,
-      name: 'switch_buy_nft',
-    }];
+    const calls = [
+      {
+        address: exPhotoNftAddress,
+        name: 'min_nft_value',
+      },
+      {
+        address: exPhotoNftAddress,
+        name: 'switch_buy_nft',
+      },
+    ];
 
     const [value, switch_buy] = await multicall(invitationAbi, calls);
-    console.log(value[0].toJSON().hex, switch_buy)
+    // console.log(value[0].toJSON().hex, switch_buy)
     return {
       // 基本信息
       enableBuy: switch_buy[0],
@@ -62,7 +65,7 @@ export const fetchMetaycInfo = async () => {
     return {
       // 基本信息
       enableBuy: false,
-      price: '0'
+      price: '0',
     };
   }
 };

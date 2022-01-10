@@ -592,6 +592,8 @@
   "shieldUserSuccess": "User blocked successfully",
   "shieldUserUnSuccess": "Unblock successfully",
   "shieldUserFail": "Failed to block user",
+  "allow_watch_attention": "Whether to allow others to view my follow",
+  "allow_watch_fans": "Whether to allow others to watch my followers",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",
@@ -662,5 +664,7 @@
   "http-error-30013004": "Task status list does not exist ",
   "http-error-30013005": "Task income record does not exist ",
   "http-error-30001011": "can not block users repeatedly",
+  "http-error-30008004": "User does not allow others to view his watchlist",
+  "http-error-30008005": "User does not allow others to view his followers list",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
