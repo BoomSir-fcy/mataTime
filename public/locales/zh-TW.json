@@ -284,7 +284,7 @@
   "******start*****@bigCongee********": "@bigCongee翻譯開始",
   "delCommentTitle": "是否刪除這條評論?",
   "delCommentContent": "刪除該評論後，該評論將不會出現在評論列表中！",
-  "sendArticleMsgMaxWords": "字數不可超過280個",
+  "sendArticleMsgMaxWordsOf%num%": "字數不可超過%num%個",
   "sendArticleMsgMaxTime": "間隔時間需超過3秒!",
   "******end*****@bigCongee********": "@bigCongee翻譯結束",
   "******start*****@FCY********": "@FCY翻譯開始",
