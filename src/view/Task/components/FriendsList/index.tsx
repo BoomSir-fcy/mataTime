@@ -7,8 +7,12 @@ import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import { shortenAddress } from 'utils/contract';
 import dayjs from 'dayjs';
-import { ContentBox } from '../Invite';
+// import { ContentBox } from '../Invite';
 import { Crumbs } from 'components';
+
+export const ContentBox = styled(Flex)`
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+`;
 
 const Table = styled(Flex)`
   flex-direction: column;
@@ -16,7 +20,7 @@ const Table = styled(Flex)`
   width: 100%;
   min-height: 300px;
   .LinkRow {
-    cursor: pointer;
+    /* cursor: pointer; */
   }
 `;
 const Row = styled.div`
@@ -79,12 +83,12 @@ const FriendsList: React.FC = React.memo(() => {
   const totalPage = useMemo(() => getTotalPage(total), [total]);
   return (
     <>
-      <Crumbs back />
+      {/* <Crumbs back />
       <ContentBox>
         <Text fontSize='18px' bold>
           {t('Invited Friends List')}
         </Text>
-      </ContentBox>
+      </ContentBox> */}
 
       <ContentBox>
         <Flex width='100%' flexDirection='column' justifyContent='end'>

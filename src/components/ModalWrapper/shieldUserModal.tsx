@@ -4,8 +4,11 @@ import { debounce } from 'lodash';
 import { useToast } from 'hooks';
 import { Flex, Box, Text, Button } from 'uikit';
 import { ModalWrapper, MoreOperatorEnum } from 'components';
+import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
+
+import useTheme from 'hooks/useTheme';
 
 const Content = styled(Box)`
   width: 100%;
@@ -33,7 +36,8 @@ export const ShiledUserModal: React.FC<{
   callback: (data: Api.Home.post, type?: string) => void;
   onClose: () => void;
 }> = React.memo(({ userinfo, visible, callback, onClose }) => {
-  const { t } = useTranslation();
+  const { t, getHTML } = useTranslation();
+  const { theme } = useTheme();
   const { toastError, toastSuccess } = useToast();
 
   const shield = async () => {
@@ -58,7 +62,13 @@ export const ShiledUserModal: React.FC<{
       setVisible={onClose}
     >
       <Content>
-        <Text color='white_black'>{t('shieldUserModalDes')}</Text>
+        <Text color='white_black'>
+          {getHTML('shieldUserModalDes', {
+            value: `<span style="color:${
+              theme.colors.backgroundPrimary
+            }">@${shortenAddress(userinfo?.user_address)}</span>`,
+          })}
+        </Text>
       </Content>
       <Footer>
         <ButtonAction variant='secondary' onClick={onClose}>
