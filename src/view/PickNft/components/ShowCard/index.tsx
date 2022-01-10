@@ -1,20 +1,15 @@
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import CreateShowCard from './create'
-import RegisterShowCard from './register'
-
+import CreateShowCard from './create';
+import RegisterShowCard from './register';
 
 const ShowCard: React.FC = () => {
+  const { pathname } = useLocation();
 
-  const { pathname } = useLocation()
-
-  console.log(pathname)
   if (pathname === '/create') {
-    return <CreateShowCard />
+    return <CreateShowCard />;
   }
-  return (
-    <RegisterShowCard />
-  );
+  return <RegisterShowCard />;
 };
 
 export default ShowCard;
