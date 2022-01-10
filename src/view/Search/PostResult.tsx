@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Box, Text, Flex, Empty, Spinner } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import { Crumbs, UserFlowItem, HoverLink } from 'components';
+import { Crumbs, UserFlowItem, HoverLink, MoreOperatorEnum } from 'components';
 import SearchInput from 'components/SearchInput';
 import SearchTopicItem from 'components/SearchInput/SearchTopicItem';
 import SearchUserItem from 'components/SearchInput/SearchUserItem';
 import Tabs from 'components/Tabs';
-import { storeAction, useStore } from 'store';
+import { fetchThunk, storeAction, useStore } from 'store';
 import { useDispatch } from 'react-redux';
 import { BASE_USER_PROFILE_URL } from 'config';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -39,19 +39,43 @@ const tabDatas = [
 ];
 
 interface PostResultProps {
-  list?: [];
+  list: Api.Home.post[];
+  loading: boolean;
+  isEnd: boolean;
+  searchVal: string;
+  // getList: (type?: number) => void;
+  // updateList: (id: number, type: MoreOperatorEnum) => void;
 }
 
-const PostResult: React.FC<PostResultProps> = ({ list }) => {
+const PostResult: React.FC<PostResultProps> = ({
+  list,
+  loading,
+  isEnd,
+  searchVal,
+}) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const getList = useCallback(() => {
+    dispatch(
+      fetchThunk.fetchSearchAsync({
+        search: searchVal,
+        fetchDisplay: true,
+      }),
+    );
+  }, [dispatch]);
+
+  const updateList = useCallback(() => {}, []);
 
   return (
     <Box>
-      {/* {
-        list
-      } */}
-      <Text>PostResult</Text>
-      {/* <PostList list={list} /> */}
+      <PostList
+        list={list}
+        loading={loading}
+        isEnd={isEnd}
+        getList={getList}
+        updateList={updateList}
+      />
     </Box>
   );
 };

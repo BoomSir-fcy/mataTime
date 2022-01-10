@@ -24,6 +24,7 @@ const initialState: SearchState = {
   loading: false,
   dispalyLoading: false,
   postLoading: false,
+  postIsEnd: false,
   errorMsg: '',
   searchVal: '',
   historyList: historyListStore ? JSON.parse(historyListStore) : [],
@@ -60,9 +61,10 @@ export const fetchSearchPeopleAsync = createAsyncThunk(
 export const fetchSearchAsync = createAsyncThunk<any, {
   search: string
   fetchDisplay?: boolean
+  searchPost?: boolean
 }>(
   'fetch/fetchSearchAsync',
-  async ({ search, fetchDisplay }, { dispatch, getState }) => {
+  async ({ search, fetchDisplay, searchPost }, { dispatch, getState }) => {
     const result = {
       fetchDisplay,
       resultListOfPeoples: [],
@@ -70,7 +72,6 @@ export const fetchSearchAsync = createAsyncThunk<any, {
       resultListOfPost: [],
       resultListOfPostLen: 0,
     }
-    console.log(search, '=search')
     if (!search || !`${search}`.trim()) {
       return result
     }
@@ -80,26 +81,26 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     let disablePeople = false;
     let disableTopic = false;
     let disableTotal = false;
-    let disablePost = false;
     let searchVal = search
     if (search?.[0] === '#') {
       disablePeople = true
       disableTotal = true
-      disablePost = true
       searchVal = searchVal.slice(1)
     } else if (search?.[0] === '@') {
       disableTopic = true
       disableTotal = true
-      disablePost = true
       searchVal = searchVal.slice(1)
     } else {
       disableTopic = true
       disablePeople = true
-      disablePost = true
+    }
+    let disablePost = true;
+    if (searchPost) {
+      disablePost = false;
     }
 
     dispatch(setErrorMsg(''))
-    dispatch(setSearchVal(searchVal))
+    dispatch(setSearchVal(search))
     if (fetchDisplay) {
       dispatch(setDispalyLoading(true))
     }
@@ -111,7 +112,7 @@ export const fetchSearchAsync = createAsyncThunk<any, {
     })
     const fetchPeople = Api.UserApi.searchUser(searchVal)
     const fetchTotal = Api.SearchApi.getSearchTotal(searchVal)
-    const fetchPost = Api.SearchApi.getSearchPost(searchVal)
+    const fetchPost = Api.SearchApi.getSearchPost(search)
 
     const [responseTopic, responsePeople, responseTotal, responsePost] = await Promise.all([
       disableTopic ? null : fetchTopic,

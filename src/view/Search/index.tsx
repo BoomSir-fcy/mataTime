@@ -56,6 +56,9 @@ const Search = () => {
     displayResultListOfTopic,
     displayResultListOfPost,
     dispalyLoading,
+    postLoading,
+    postIsEnd,
+    searchVal,
     filterUser,
   } = useStore(p => p.search);
 
@@ -143,13 +146,29 @@ const Search = () => {
                   })}
                 </>
               )}
-              {activeType === TabTypes.TOTAL && <PostResult />}
+              {activeType === TabTypes.TOTAL &&
+                displayResultListOfPost.length && (
+                  <PostResult
+                    list={displayResultListOfPost}
+                    loading={postLoading}
+                    searchVal={searchVal}
+                    isEnd={postIsEnd}
+                  />
+                )}
               {activeType === TabTypes.TOTAL &&
                 displayResultListOfPost.length === 0 &&
                 userList.length === 0 && <Empty />}
             </Box>
             <Box>
-              {activeType === TabTypes.POST && <PostResult />}
+              {activeType === TabTypes.POST &&
+                displayResultListOfPost.length && (
+                  <PostResult
+                    list={displayResultListOfPost}
+                    loading={postLoading}
+                    searchVal={searchVal}
+                    isEnd={postIsEnd}
+                  />
+                )}
               {activeType === TabTypes.POST &&
                 displayResultListOfPost.length === 0 && <Empty />}
             </Box>

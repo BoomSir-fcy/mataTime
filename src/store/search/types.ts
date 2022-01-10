@@ -44,6 +44,7 @@ export interface SearchState {
   loading: boolean,
   dispalyLoading: boolean,
   postLoading: boolean,
+  postIsEnd: boolean,
   errorMsg: string,
   searchVal: string,
   historyList: SearchHistoryList[],
