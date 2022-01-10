@@ -236,6 +236,10 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 postUid={postUid}
                 data={itemData}
                 callback={(data: any, type) => {
+                  if (type === MoreOperatorEnum.BLOCKUSER) {
+                    setIsShileUser(!isShileUser);
+                    return;
+                  }
                   popupRef?.current?.close();
                   callback(data, type);
                 }}
