@@ -79,9 +79,16 @@ const Search = () => {
 
   // const search = useDebounce(searchVal, 300)
 
-  // useEffect(() => {
-  //   dispatch(fetchThunk.fetchSearchPostAsync(true));
-  // }, [searchVal, dispatch]);
+  useEffect(() => {
+    dispatch(fetchThunk.fetchSearchPostAsync(true));
+    console.log(searchVal, 'searchVal');
+    replace(
+      getSearchPath({
+        ...parsedQs,
+        q: searchVal,
+      }),
+    );
+  }, [searchVal, replace, dispatch]);
 
   return (
     <Box>
@@ -108,13 +115,6 @@ const Search = () => {
           active={activeType}
           datas={tabDatas}
           onChange={tab => {
-            console.log(
-              getSearchPath({
-                ...parsedQs,
-                f: tab.type,
-              }),
-            );
-            console.log(parsedQs);
             replace(
               getSearchPath({
                 ...parsedQs,

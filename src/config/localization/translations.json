@@ -285,7 +285,7 @@
   "******start*****@bigCongee********": "@bigCongee翻译开始",
   "delCommentTitle": "Whether to delete this comment?",
   "delCommentContent": "After deleting this comment, it will not appear in the comment list!",
-  "sendArticleMsgMaxWords": "Write no more than 280 words",
+  "sendArticleMsgMaxWordsOf%num%": "Write no more than %num% words",
   "sendArticleMsgMaxTime": "The interval should be more than 3 seconds!",
   "******end*****@bigCongee********": "@bigCongee翻译结束",
   "******start*****@FCY********": "@FCY翻译开始",

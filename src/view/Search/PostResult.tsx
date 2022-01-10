@@ -57,7 +57,6 @@ const PostResult: React.FC<PostResultProps> = ({
   const dispatch = useDispatch();
 
   const getList = useCallback(() => {
-    console.log(212112);
     dispatch(fetchThunk.fetchSearchPostAsync());
   }, [dispatch]);
 
