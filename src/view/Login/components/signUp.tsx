@@ -6,6 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Box, Flex, Text, Button, Card } from 'uikit';
 import { useStore, storeAction } from 'store';
 import { StakeNFT } from 'components/NftList';
+import BigNumber from 'bignumber.js';
 
 import { SignUpSetName } from './signUpSetName';
 import { SignUpcomplete } from './signUpComplete';
@@ -17,6 +18,8 @@ import { walletLocalStorageKey, walletIcon } from 'config/wallet';
 import { useTranslation } from 'contexts/Localization';
 import { useToast } from 'hooks';
 import { GET_DSG_NFT_URL } from 'config';
+import { useFetchBuyInfo, usePickNftState } from 'store/picknft/hooks';
+import { getFullDisplayBalance } from 'utils/formatBalance';
 
 const SignUpWarpper = styled(Flex)`
   padding-top: 50px;
@@ -37,11 +40,12 @@ const WalletBody = styled(Flex)`
   margin-bottom: 30px;
 `;
 const FailButton = styled(Button)`
-  width: 45%;
-  margin-bottom: 15px;
+  /* width: 45%; */
+  margin-top: 15px;
+  padding: 0 4px;
+  width: 248px;
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 205px;
-    margin-bottom: 23px;
+    margin-top: 23px;
   }
 `;
 const SignUpText = styled(Text)`
@@ -69,27 +73,63 @@ const NftTitle = styled(Text)`
   font-weight: bold;
   ${mediaQueriesSize.marginr}
 `;
+
+const FailBox = styled(Flex)`
+  justify-content: space-around;
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    justify-content: space-between;
+  }
+`;
+
 const SignUpFail = () => {
+  useFetchBuyInfo();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { buyInfo } = usePickNftState();
 
-  const goRouter = () => {
+  const goRouter = (goRouter?: string) => {
     dispatch(storeAction.changeReset);
-    // history.push('/');
-    window.open(GET_DSG_NFT_URL);
+    if (goRouter) {
+      history.push(goRouter);
+    } else {
+      window.open(GET_DSG_NFT_URL);
+    }
   };
 
   return (
     <Flex width='100%' flexDirection='column'>
-      <Flex justifyContent='space-between'>
-        <FailButton scale='ld' variant='tertiary' disabled>
-          {t('loginCreatAccount')}
-        </FailButton>
-        <FailButton scale='ld' onClick={goRouter}>
-          {t('loginGetNft')}
-        </FailButton>
-      </Flex>
       <Text color='textOrigin'>{t('loginSignUpFail')}</Text>
+      <FailBox flexWrap='wrap'>
+        {buyInfo.enableBuy && !buyInfo.loading ? (
+          <FailButton scale='ld' onClick={() => goRouter('/create')}>
+            {t('Mint METAYC (%price% %symbol%)', {
+              price: getFullDisplayBalance(
+                new BigNumber(buyInfo.price),
+                undefined,
+                1,
+              ),
+              symbol: 'BNB',
+            })}
+          </FailButton>
+        ) : (
+          <FailButton scale='ld' variant='tertiary' disabled>
+            {t('loginCreatAccount')}
+          </FailButton>
+        )}
+        <FailButton
+          scale='ld'
+          variant={
+            buyInfo.enableBuy
+              ? buyInfo.loading
+                ? 'primary'
+                : 'tertiary'
+              : 'primary'
+          }
+          onClick={() => goRouter('')}
+        >
+          {t('loginBuyNft')}
+        </FailButton>
+      </FailBox>
     </Flex>
   );
 };

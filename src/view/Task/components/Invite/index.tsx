@@ -43,6 +43,7 @@ const CardBox = styled(Box)`
     ${({ theme }) => theme.mediaQueriesSize.padding};
   }
   &.right-card {
+    flex: 1;
     max-width: 410px;
   }
   .text-title {
@@ -115,7 +116,7 @@ const BtnFlex = styled(Flex)`
 `;
 const Invite: React.FC = () => {
   useFetchNftList();
-  const { tokenAddress, defaultCodeList } = useNftBaseView();
+  const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -165,13 +166,14 @@ const Invite: React.FC = () => {
   }, [NftList, userInfo, tokenAddress]);
 
   useEffect(() => {
+    if (data.length <= 0) {
+      dispatch(fetchTaskListAsync({ isSignIn: false }));
+    }
     if (data.length) {
       const inviteList = partition(data, ['task_group', Group.INVITE])[0];
       setInviteList(inviteList);
-    } else {
-      dispatch(fetchTaskListAsync({ isSignIn: false }));
     }
-  }, [data.length, dispatch]);
+  }, [data, dispatch]);
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
@@ -257,12 +259,14 @@ const Invite: React.FC = () => {
             <CardBox className='right-card'>
               <Box className='top-card'>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('My Address')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small>
-                    {account && shortenAddress(account, isMobile ? 5 : 10)}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('My Address')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small>
+                      {account && shortenAddress(account, isMobile ? 5 : 10)}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -275,12 +279,14 @@ const Invite: React.FC = () => {
                   />
                 </Flex>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('Invitation Link')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small ellipsis>
-                    {Url}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('Invitation Link')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small ellipsis>
+                      {Url}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -331,6 +337,7 @@ const Invite: React.FC = () => {
               <StakeNFT
                 nftList={invitableNftList}
                 defaultCodeList={defaultCodeList}
+                maxGendCodeCount={maxGendCodeCount}
               />
             </>
           ) : null

@@ -11,7 +11,7 @@ import { useStore } from 'store';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization';
 import { useLockInviteCode } from 'view/PickNft/hooks/exchange';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const CountBox = styled(Box)`
   width: 88vw;
@@ -40,45 +40,51 @@ const MyInput = styled(Input)`
 interface init {
   onClose: () => void;
   state: number; // 邀请码现在的状态 0.为生成 1.未使用 2.已使用
-  nftLength: number
+  nftLength: number;
 }
 
 const StateModal: React.FC<init> = ({ onClose, state, nftLength }) => {
   const { t } = useTranslation();
+  console.log(nftLength);
 
   return (
     <CountBox>
       {/* <Text mb='16px' fontSize='14px' color='textOrigin'>
         * {t('Effective within 10 minutes after being locked')}
       </Text> */}
-      {
-        nftLength === 0 ? (
-          <Text fontSize='18px' bold textAlign="center">{t('您暂无邀请资格')}</Text>
-        )
-          :
-          (<>
-            {
-              state === 0 && (
-                <Text fontSize='18px' bold textAlign="center">{t('当前邀请码不正确')}</Text>
-              )
-            }
-            {
-              state === 2 && (
-                <Text fontSize='18px' bold textAlign="center">{t('当前邀请码已被使用')}</Text>
-              )
-            }
-          </>)
-      }
-      <Flex marginTop="16px" flexDirection='column' justifyContent='center' alignItems='center'>
-        <Link to="/login">
+      {nftLength !== 0 ? (
+        <Text fontSize='18px' bold textAlign='center'>
+          {t('You are not eligible to be invited')}
+        </Text>
+      ) : (
+        <>
+          {state === 0 && (
+            <Text fontSize='18px' bold textAlign='center'>
+              {t('The current invitation code is incorrect')}
+            </Text>
+          )}
+          {state === 2 && (
+            <Text fontSize='18px' bold textAlign='center'>
+              {t('The current invitation code has already been used')}
+            </Text>
+          )}
+        </>
+      )}
+      <Flex
+        marginTop='16px'
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+      >
+        <Link to='/login'>
           <Button
             mb='10px'
-            width="100%"
+            width='100%'
             onClick={() => {
               onClose();
             }}
           >
-            {t('我知道了')}
+            {t('I see!')}
           </Button>
         </Link>
       </Flex>

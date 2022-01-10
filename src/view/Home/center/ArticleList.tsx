@@ -105,7 +105,9 @@ const ArticleComponents = (props, ref) => {
     }
 
     const handleChangeList =
-      type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST;
+      type === MoreOperatorEnum.SHIELD ||
+      type === MoreOperatorEnum.DELPOST ||
+      type === MoreOperatorEnum.BLOCKUSER;
     let arr = [];
     list.forEach((item: any) => {
       let obj = item;

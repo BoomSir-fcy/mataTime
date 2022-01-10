@@ -19,7 +19,6 @@ import Dots from '../Loader/Dots';
 const Point = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 16px;
-  margin-left: 17px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -129,7 +128,11 @@ const NftAvatar: React.FC<{
         </NodataDom>
       ) : (
         <>
-          <Flex justifyContent='space-between' alignItems='center'>
+          <Flex
+            justifyContent='space-between'
+            alignItems='center'
+            padding='0 15px'
+          >
             <Point>{!Boolean(status) && t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />

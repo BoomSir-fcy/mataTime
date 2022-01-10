@@ -190,12 +190,12 @@ export const menuNavConfig: MenuNavConfig[] = [
         lable: 'meMenuInvite',
         path: '/task/invite',
       },
-      // {
-      //   icon: 'icon-pingbi1',
-      //   activeIcon: 'icon-pingbi',
-      //   title: 'meMenuShield',
-      //   path: '/me/shield',
-      // },
+      {
+        icon: 'icon-pingbi1',
+        activeIcon: 'icon-pingbi',
+        lable: 'meMenuShield',
+        path: '/me/shield',
+      },
     ],
   },
   {

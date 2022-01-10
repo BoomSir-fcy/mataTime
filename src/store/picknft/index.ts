@@ -55,37 +55,39 @@ const initialState: PickNftState = {
 };
 export const fetchCodeInfoAsync =
   (codes: InviteCodes): AppThunk =>
-    async dispatch => {
-      const data = await fetchCodeInfo(codes);
-      // dispatch(setCodeUsed(data));
-      dispatch(setCodeInfo(data));
-      dispatch(setInviteLoading(false));
-    };
-export const fetchMetaycInfoAsync =
-  (): AppThunk =>
-    async dispatch => {
-      dispatch(setBuyInfo({
-        loading: true,
-      }));
-      const data = await fetchMetaycInfo();
-      dispatch(setBuyInfo({
-        ...data,
-        loading: false,
-      }));
-    };
+  async dispatch => {
+    const data = await fetchCodeInfo(codes);
+    // dispatch(setCodeUsed(data));
+    dispatch(setCodeInfo(data));
+    dispatch(setInviteLoading(false));
+  };
+export const fetchMetaycInfoAsync = (): AppThunk => async dispatch => {
+  dispatch(
+    setBuyInfo({
+      loading: true,
+    }),
+  );
+  const data = await fetchMetaycInfo();
+  dispatch(
+    setBuyInfo({
+      ...data,
+      loading: false,
+    }),
+  );
+};
 export const fetchNftApprovalAsync =
   (account?: string): AppThunk =>
-    async dispatch => {
-      const data = await fetchNftApproval(account);
-      dispatch(setNftApproval(data));
-    };
+  async dispatch => {
+    const data = await fetchNftApproval(account);
+    dispatch(setNftApproval(data));
+  };
 
 export const fetchTicketAllowanceAsync =
   (account?: string): AppThunk =>
-    async dispatch => {
-      const data = await fetchTicketAllowance(account);
-      dispatch(setTicketAllowance(data));
-    };
+  async dispatch => {
+    const data = await fetchTicketAllowance(account);
+    dispatch(setTicketAllowance(data));
+  };
 
 export const fetchInviteInfoAsync = (): AppThunk => async dispatch => {
   const data = await fetchInviteInfo();
@@ -149,7 +151,7 @@ export const picknft = createSlice({
         ...state.buyInfo,
         ...payload,
         // loading: false,
-      }
+      };
     },
     setStuffAllLimits: (state, action) => {
       const { payload } = action;
@@ -164,8 +166,8 @@ export const picknft = createSlice({
             enable:
               !(payload.limitSizes?.[index]?.[0]?.[subIndex] || 0) ||
               (payload.limitSizes?.[index]?.[0]?.[subIndex] || 0) -
-              (payload.createdSizes?.[index]?.[0]?.[subIndex] || 0) >
-              0,
+                (payload.createdSizes?.[index]?.[0]?.[subIndex] || 0) >
+                0,
           };
           if (payload.limitSizes?.[index]?.[0]?.[subIndex]) {
             limitData.push({

@@ -7,7 +7,8 @@ import NftAvatar from './list';
 export const StakeNFT: React.FC<{
   nftList?: InvitableNftInfo[];
   defaultCodeList?: CodeInfo[];
-}> = ({ nftList, defaultCodeList }) => {
+  maxGendCodeCount?: number;
+}> = ({ nftList, defaultCodeList, maxGendCodeCount }) => {
   const [nftCodeList, setNftCodeList] = useState([]);
 
   useEffect(() => {
@@ -31,10 +32,6 @@ export const StakeNFT: React.FC<{
     setNftCodeList(newList);
   }, [nftList]);
 
-  // getNftsGenCodeCount()
-
-
-
   return (
     <>
       {nftCodeList.map((item, index) => {
@@ -43,6 +40,7 @@ export const StakeNFT: React.FC<{
             key={item.token_id}
             NftInfo={item}
             defaultCodeList={item.defaultCodeList}
+            maxGendCodeCount={maxGendCodeCount}
           />
         );
       })}

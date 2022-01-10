@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useStore } from 'store';
 import { Flex, Box, Text } from 'uikit';
-import { Avatar } from 'components';
+import { Avatar, Icon } from 'components';
 import { shortenAddress } from 'utils/contract';
 
 const Content = styled(Flex)`
@@ -26,14 +26,6 @@ const UserTitle = styled(Flex)`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .icon {
-    width: 0px;
-    height: 0px;
-    border-bottom: 7px solid transparent;
-    border-left: 7px solid ${({ theme }) => theme.colors.white_black};
-    border-right: 7px solid transparent;
-    border-top: 7px solid transparent;
-  }
 `;
 
 export const ProfileMenu = React.memo(() => {
@@ -46,7 +38,7 @@ export const ProfileMenu = React.memo(() => {
           <Content>
             <UserTitle>
               <Text className='name'>{userInfo.nick_name}</Text>
-              <Box className='icon'></Box>
+              <Icon size={14} color='white_black' name='icon-shangjiantou' />
             </UserTitle>
             <Text color='textTips'>@{shortenAddress(userInfo.address, 1)}</Text>
           </Content>

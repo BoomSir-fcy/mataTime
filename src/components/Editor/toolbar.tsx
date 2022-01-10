@@ -6,8 +6,8 @@ import { Box, Flex, Button, Svg } from 'uikit';
 import { Emoji } from './emoji';
 import { Icon } from 'components';
 import { Api } from 'apis';
-import client from 'utils/client'
-import imageCompression, { cutDownImg } from 'utils/imageCompression'
+import client from 'utils/client';
+import imageCompression, { cutDownImg } from 'utils/imageCompression';
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -51,7 +51,7 @@ const InsertImageButton: React.FC<{
         return toastError(t('uploadImgMaxMsg'));
 
       for (let image of imageFile) {
-        const compressImage = await cutDownImg(image)
+        const compressImage = await cutDownImg(image);
         fileList.push(compressImage);
       }
       const res = await Api.CommonApi.uploadImgList({
@@ -64,13 +64,13 @@ const InsertImageButton: React.FC<{
     } catch (error) {
       if ((error as Error).message === '1') {
         toastError(t('File format error'));
-        return
+        return;
       }
       if ((error as Error).message === '2') {
         toastError(t('commonUploadMaxSize'));
-        return
+        return;
       }
-      console.error(error)
+      console.error(error);
     } finally {
       onError();
     }
@@ -78,11 +78,11 @@ const InsertImageButton: React.FC<{
 
   return (
     <React.Fragment>
-      <label htmlFor='upload-images'>
+      <label htmlFor='upload-images' title={t('editorUploadImg')}>
         <Icon size={size} color='white_black' current name='icon-tupian' />
         <input
           id='upload-images'
-          name="upload-images"
+          name='upload-images'
           ref={imageInput}
           onChange={() => {
             callbackSelectImg();
@@ -121,6 +121,8 @@ export const Toolbar: React.FC<{
     type,
   }) => {
     const size = 20;
+    const { t } = useTranslation();
+
     return (
       <EditorToolbar alignItems='center'>
         <EmojiButton callbackEmoji={callbackEmoji} />
@@ -139,6 +141,7 @@ export const Toolbar: React.FC<{
               current={1}
               name='icon-aite'
               onClick={callbackInserAt}
+              title={t('editorUser')}
             />
             <Icon
               size={size}
@@ -146,6 +149,7 @@ export const Toolbar: React.FC<{
               current={1}
               name='icon-a-xiaoxi1'
               onClick={callbackInserTopic}
+              title={t('editorTopic')}
             />
           </>
         ) : null}

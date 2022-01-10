@@ -28,7 +28,8 @@ export const useGenCodes = () => {
 export const useNftBaseView = () => {
   const [state, setState] = useImmer({
     tokenAddress: [],
-    defaultCodeList: []
+    defaultCodeList: [],
+    maxGendCodeCount: 3
   });
 
   useEffect(() => {
@@ -45,11 +46,15 @@ export const useNftBaseView = () => {
       setState(p => {
         p.tokenAddress = nftInfo.nftAddress;
         p.defaultCodeList = codeList;
+        p.maxGendCodeCount = nftInfo.maxGendCodeCount;
       })
     },
     [],
   )
-  return { tokenAddress: state.tokenAddress, defaultCodeList: state.defaultCodeList };
+  return { 
+    tokenAddress: state.tokenAddress, 
+    defaultCodeList: state.defaultCodeList, 
+    maxGendCodeCount: state.maxGendCodeCount };
 }
 
 // 提交到合约的个数
@@ -69,25 +74,6 @@ export const getNftGenCodeCount = async (nftId: number | string) => {
     throw error;
   }
 }
-
-// 提交到合约的个数
-// export const getNftsGenCodeCount = async (nftIds: number[] | string[]) => {
-//   const inviteAddress = getInvitationAddress();
-//   const calls = nftIds.map(nftId => {
-//     return {
-//       address: inviteAddress,
-//       name: 'nftGenCodeCount',
-//       params: [nftId],
-//     }
-//   })
-//   try {
-//     const [res] = await multicall(invitationAbi, calls);
-//     return res[0].toNumber()
-//   } catch (error) {
-//     console.log(error)
-//     return null
-//   }
-// }
 
 
 // 查询可邀请的nft_token地址
@@ -164,7 +150,7 @@ export const getCodeViewList = async (codeHashs: string[]) => {
 
   try {
     const infoList = await multicall(invitationAbi, calls);
-    console.log(codeHashs, '----------infoList----------', infoList);
+    // console.log(codeHashs, '----------infoList----------', infoList);
 
     const codeViewList = infoList.map(item => {
       return {

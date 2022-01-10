@@ -55,7 +55,7 @@ const Praise = React.memo(props => {
           });
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 更新列表
@@ -70,9 +70,13 @@ const Praise = React.memo(props => {
       SHIELD,
       DELPOST,
       LIKE,
+      BLOCKUSER,
     } = MoreOperatorEnum;
     const handleChangeList =
-      type === SHIELD || type === DELPOST || type === LIKE;
+      type === SHIELD ||
+      type === DELPOST ||
+      type === LIKE ||
+      type === BLOCKUSER;
     let arr = [];
 
     if (
