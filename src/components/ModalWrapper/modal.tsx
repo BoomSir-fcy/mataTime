@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
 import styled, { DefaultTheme } from 'styled-components';
+import { variant } from 'styled-system';
 import { Heading, Flex, CloseLineIcon, Button, Box } from 'uikit';
 
 import useTheme from 'hooks/useTheme';
@@ -19,7 +20,7 @@ const getCustomStyles = (
 ) => ({
   content: {
     top: top ? top : '50%',
-    left: left ? left : '50%',
+    left: left,
     right: 'auto',
     bottom: 'auto',
     transform: 'translate(-50%, -50%)',
@@ -57,8 +58,14 @@ const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
   );
 };
 
+const scales = {
+  XS: 'xs',
+  MD: 'md',
+  XL: 'xl',
+} as const;
 interface ModalWrapperProps {
   visible: boolean;
+  scale?: typeof scales[keyof typeof scales];
   setVisible?: (state: boolean) => void;
   title?: string;
   creactOnUse?: boolean;
@@ -82,23 +89,22 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     padding,
     overflow,
   }) => {
-    var OutCenterBox = document.querySelector('#OutCenterBox');
+    var OutCenterBox: HTMLElement = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
-    // let left;
-    // if (OutCenterBox) {
-    //   const rectObject = OutCenterBox.getBoundingClientRect();
-    //   left = `${rectObject.left + 214}px`;
-    //   console.log(left);
-    // }
+    let left;
+    if (OutCenterBox) {
+      const rectObject = OutCenterBox.getBoundingClientRect();
+      left = `${rectObject.left}px`;
+      console.log(left);
+    }
 
-    const customStyles = getCustomStyles(theme, fillBody, top, padding);
+    const customStyles = getCustomStyles(theme, fillBody, top, padding, left);
     const onClose = useCallback(() => {
       if (setVisible) {
         setVisible(false);
       }
     }, [setVisible]);
     if (!visible && creactOnUse) return null;
-
     return (
       <Modal
         isOpen={visible}
@@ -119,3 +125,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     );
   },
 );
+
+ModalWrapper.defaultProps = {
+  scale: scales.XL,
+};

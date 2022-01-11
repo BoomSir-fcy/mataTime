@@ -6,6 +6,7 @@ export const ModalOperatorWrapper = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 20px;
 `;
 
 export const ModalOperatorQueryWrapper = styled(Button)`

@@ -50,6 +50,7 @@ const Test = React.lazy(() => import('./view/Test'));
 const Account = React.lazy(() => import('./view/Account'));
 const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
+const PickNft = React.lazy(() => import('./view/PickNft'));
 const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
 
@@ -139,6 +140,8 @@ function App() {
                 <Route path='/me' component={Me} />
                 <Route path='/set' component={Set} />
                 <Route path='/account' component={Account} />
+                <Route path='/picknft' component={PickNft} />
+                <Route path='/create' component={PickNft} />
                 <Route path='/search' component={Search} />
                 {/* <Route path='/swap' component={Swap} /> */}
                 {process.env.NODE_ENV === 'development' && (

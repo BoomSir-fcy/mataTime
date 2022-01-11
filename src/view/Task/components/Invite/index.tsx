@@ -1,31 +1,35 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Crumbs, Icon } from 'components';
 import styled from 'styled-components';
-import { Box, Text, Flex, Button, Empty } from 'uikit';
+import { Box, Text, Flex, Button, Empty, Spinner } from 'uikit';
 import { fetchTaskListAsync } from 'store/task/reducer';
 import { useDispatch } from 'react-redux';
 import {
+  getInvitedNftTokenAddress,
   GetTaskTag,
-  useFetchInviteFriendsList,
   useInviteCount,
+  useNftBaseView,
 } from 'view/Task/hooks/matter';
-import { Variant, Group } from 'view/Task/type';
+import { Variant, Group, InvitableNftInfo } from 'view/Task/type';
 import StyledTag from '../TaskContent/StyledTag';
 import TaskItem from '../TaskContent/TaskItem';
 import { useTranslation } from 'contexts/Localization';
 import { useTask } from 'store/task/hooks';
 import { partition } from 'lodash';
-import SpecialInvite from './SpecialInvite';
-import FriendsList from './FriendsList';
 import InviteModal from './InviteModal';
 import { useWeb3React } from '@web3-react/core';
 import { useToast } from 'hooks';
 import { copyContent } from 'utils';
 import { shortenAddress } from 'utils/contract';
 import Header from '../Header';
+import { useFetchNftList } from 'view/Login/hook';
+import { Step } from './step';
+import { StakeNFT } from '../NftList';
 import useMenuNav from 'hooks/useMenuNav';
+import { Link } from 'react-router-dom';
+import { useStore } from 'store';
 
-const ContentBox = styled(Flex)`
+export const ContentBox = styled(Flex)`
   padding: 10px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
@@ -39,6 +43,7 @@ const CardBox = styled(Box)`
     ${({ theme }) => theme.mediaQueriesSize.padding};
   }
   &.right-card {
+    flex: 1;
     max-width: 410px;
   }
   .text-title {
@@ -110,47 +115,69 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
+  // useFetchNftList();
+  const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
-  const { list, pageNum, pageSize, setPageNum, loading, total } =
-    useFetchInviteFriendsList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { toastSuccess, toastError } = useToast();
   const { taskList } = useTask();
   const { data } = taskList;
-  const [inviteList, setInviteList] = useState([]);
-  const [inviteType, setInviteType] = useState(1);
   const [visible, setVisible] = useState(false);
   const { isMobile } = useMenuNav();
+  const [inviteList, setInviteList] = useState([]);
+  const [invitableNftList, setInvitableNftList] = useState<InvitableNftInfo[]>(
+    [],
+  );
+
+  const nftLoading = useStore(p => p.loginReducer.nftLoading);
+  const NftList = useStore(p => p.loginReducer.nftList);
+  const userInfo: any = useStore(p => p.loginReducer.userInfo);
 
   useEffect(() => {
+    if (tokenAddress && tokenAddress?.length) {
+      getNftList();
+    }
+  }, [NftList, tokenAddress]);
+
+  // 获取可邀请的nft列表，当前已注册的nft默认可以邀请
+  const getNftList = useCallback(async () => {
+    const nftList = NftList.filter(
+      v => tokenAddress.toString().indexOf(v.properties.token) !== -1,
+    ).map(item => {
+      return {
+        name: 'DSGAV',
+        image: item.image,
+        token: item.properties.token,
+        token_id: item.properties.token_id,
+      };
+    });
+
+    if (tokenAddress.toString().indexOf(userInfo.nft_address) !== -1) {
+      nftList.unshift({
+        name: 'DSGAV',
+        image: userInfo.nft_image,
+        token: userInfo.nft_address,
+        token_id: userInfo.nft_id,
+      });
+    }
+    setInvitableNftList(nftList);
+  }, [NftList, userInfo, tokenAddress]);
+
+  useEffect(() => {
+    if (data.length <= 0) {
+      dispatch(fetchTaskListAsync({ isSignIn: false }));
+    }
     if (data.length) {
       const inviteList = partition(data, ['task_group', Group.INVITE])[0];
       setInviteList(inviteList);
-    } else {
-      dispatch(fetchTaskListAsync({ isSignIn: false }));
     }
-  }, [data.length, dispatch]);
-
-  const handlePageClick = useCallback(
-    event => {
-      setPageNum(event.selected + 1);
-    },
-    [setPageNum],
-  );
+  }, [data, dispatch]);
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
   const copyUrl = `${Url}?InviteAddress=${account}`;
-  const onCopyLink = useCallback(() => {
-    // 普通邀请
-    if (inviteType === 1) {
-      copyContent(copyUrl);
-      toastSuccess(t('CopyLinkSuccess'));
-      setVisible(false);
-    }
-  }, [inviteType, copyUrl]);
 
   const tag: Variant = useMemo(() => GetTaskTag(Group.INVITE), []);
 
@@ -194,9 +221,17 @@ const Invite: React.FC = () => {
         </ContentBox>
         {/* 普通邀请 */}
         <ContentBox flexDirection='column'>
-          <Text mb='25px' fontSize='18px' bold>
-            {t('Invitation Overview')}
-          </Text>
+          <Flex justifyContent='space-between'>
+            <Text mb='25px' fontSize='18px' bold>
+              Invitation Overview
+            </Text>
+            {/* <Button as={Link} to='/task/friendsList'>
+              {t('InvitationRecord')}
+            </Button> */}
+            <Button as={Link} to='/account?readType=3'>
+              {t('InvitationRecord')}
+            </Button>
+          </Flex>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
               <Flex mb='10px' alignItems='center'>
@@ -227,12 +262,14 @@ const Invite: React.FC = () => {
             <CardBox className='right-card'>
               <Box className='top-card'>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('My Address')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small>
-                    {account && shortenAddress(account, isMobile ? 5 : 10)}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('My Address')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small>
+                      {account && shortenAddress(account, isMobile ? 5 : 10)}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -245,12 +282,14 @@ const Invite: React.FC = () => {
                   />
                 </Flex>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('Invitation Link')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small ellipsis>
-                    {Url}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('Invitation Link')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small ellipsis>
+                      {Url}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -273,7 +312,6 @@ const Invite: React.FC = () => {
                   </Flex>
                   <Button
                     onClick={() => {
-                      setInviteType(1);
                       setVisible(true);
                     }}
                   >
@@ -285,35 +323,44 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {/* <ContentBox>
-          <Text fontSize="18px" bold>Special Invitation</Text>
-        </ContentBox>
-        <ContentBox>
-          <SpecialInvite />
-        </ContentBox> */}
-        <ContentBox>
-          <Text fontSize='18px' bold>
-            {t('Invited Friends List')}
-          </Text>
-        </ContentBox>
-        <ContentBox>
-          <FriendsList
-            loading={loading}
-            list={list}
-            total={total}
-            pageNum={pageNum}
-            pageSize={pageSize}
-            handlePageClick={handlePageClick}
-          />
-        </ContentBox>
+        {/* {!nftLoading ? (
+          invitableNftList.length ? (
+            <>
+              <ContentBox>
+                <Text fontSize='18px' bold>
+                  {t('Special Invitation')}
+                </Text>
+              </ContentBox>
+              <ContentBox>
+                <Flex flexDirection='column'>
+                  <Text>{t('SpecialInvitationDescribe')}</Text>
+                  <Step />
+                </Flex>
+              </ContentBox>
+              <StakeNFT
+                nftList={invitableNftList}
+                defaultCodeList={defaultCodeList}
+                maxGendCodeCount={maxGendCodeCount}
+              />
+            </>
+          ) : null
+        ) : (
+          <Flex justifyContent='center' alignItems='center'>
+            <Spinner />
+          </Flex>
+        )} */}
 
         {/* 复制链接弹窗 */}
         <InviteModal
-          type={inviteType}
+          type={1}
           t={t}
           visible={visible}
           setVisible={() => setVisible(false)}
-          onCopyLink={onCopyLink}
+          onCopyLink={() => {
+            copyContent(copyUrl);
+            toastSuccess(t('CopyLinkSuccess'));
+            setVisible(false);
+          }}
         />
       </Box>
     </>

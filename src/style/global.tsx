@@ -141,9 +141,9 @@ const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: "iconfont"; /* Project id 2883938 */
-    src: url('/fonts/iconfont.woff2?t=1641352466279') format('woff2'),
-        url('/fonts/iconfont.woff?t=1641352466279') format('woff'),
-        url('/fonts/iconfont.ttf?t=1641352466279') format('truetype');
+    src: url('/font/iconfont.woff2?t=1641352466279') format('woff2'),
+        url('/font/iconfont.woff?t=1641352466279') format('woff'),
+        url('/font/iconfont.ttf?t=1641352466279') format('truetype');
   }
 
   .iconfont {
@@ -152,6 +152,26 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-shangjiantou:before {
+    content: "\\eb6d";
+  }
+
+  .icon-pingbi2:before {
+    content: "\\e693";
+  }
+
+  .icon-changyonggoupiaorenshanchu:before {
+    content: "\\e645";
+  }
+
+  .icon-tousu:before {
+    content: "\\e6a9";
+  }
+
+  .icon-suo:before {
+    content: "\\e62c";
   }
 
   .icon-jiantou:before {
@@ -481,8 +501,6 @@ const GlobalStyle = createGlobalStyle`
   .icon-shouye:before {
     content: "\\e6e4";
   }
-
-
 
   .show-media-lg {
     display: none;
