@@ -66,6 +66,10 @@ const Info = styled(Flex)`
 `;
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
+  margin-bottom: 10px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 0;
+  }
   .name {
     min-width: 0;
     word-wrap: break-word;
@@ -82,6 +86,7 @@ const Desc = styled(Box)`
     color: ${({ theme }) => theme.colors.textTips};
   }
   .marginLeft {
+    margin-left: 10px;
     ${({ theme }) => theme.mediaQueries.sm} {
       margin-left: 30px;
     }
@@ -360,7 +365,7 @@ const Profile: React.FC<any> = props => {
 
   return (
     <Center>
-      <Crumbs title={t('meHome')} back={Boolean(uid)} />
+      <Crumbs title={t('meHome')} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{

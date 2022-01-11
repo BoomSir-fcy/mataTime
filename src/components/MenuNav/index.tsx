@@ -31,8 +31,7 @@ const UserBox = styled(Flex)`
   height: 70px;
   align-items: center;
   margin-top: 12px;
-  margin-right: 8px;
-  padding-left: 8px;
+  /* margin-right: 8px; */
 `;
 
 export interface MenuNavProps {
@@ -68,7 +67,7 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
           children
         ) : (
           <>
-            <Flex flex='1' flexDirection='column'>
+            <Flex flex='1' flexDirection='column' padding='0 8px'>
               <Logo />
               <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
                 <ProfileMenu />

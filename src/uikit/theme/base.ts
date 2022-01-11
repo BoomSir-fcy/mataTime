@@ -177,7 +177,7 @@ const mediaMarginRightMd = `
 // xxl: 1600
 const mediaQueriesPadding = `
   ${mediaQueries.xxs} {
-    padding: 4px 4px;
+    padding: 8px 4px;
   }
   ${mediaQueries.xs} {
     padding: 8px 15px;
