@@ -55,7 +55,7 @@ const Praise = React.memo(props => {
           });
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // 更新列表
@@ -70,6 +70,7 @@ const Praise = React.memo(props => {
       SHIELD,
       DELPOST,
       LIKE,
+      BLOCKUSER,
     } = MoreOperatorEnum;
     const handleChangeList =
       type === SHIELD || type === DELPOST || type === LIKE;
@@ -80,7 +81,8 @@ const Praise = React.memo(props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       init(1);
       return;

@@ -19,7 +19,7 @@ const PageContainer = styled(Flex)`
   padding-right: 4px;
   padding-top: 30px;
 `;
-const BoxStyled = styled(Box) <{ disabled?: boolean }>`
+const BoxStyled = styled(Box)<{ disabled?: boolean }>`
   background-color: ${({ theme, disabled }) =>
     disabled ? theme.colors.backgroundDisabled : theme.colors.backgroundLight};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
@@ -35,7 +35,7 @@ const SelectIconStyled = styled(SelectIcon)`
   z-index: 8;
   width: 32px;
 `;
-const CardStyled = styled(Card) <{ showLimit?: boolean }>`
+const CardStyled = styled(Card)<{ showLimit?: boolean }>`
   /* ${({ theme }) => theme.mediaQueriesSize.margin} */
   margin: 8px;
   margin-bottom: 24px;
@@ -104,8 +104,6 @@ const ListBox: React.FC<Props> = ({ data, activeIndex }) => {
     },
     [selectData],
   );
-
-  console.log(data)
 
   return (
     <PageContainer>

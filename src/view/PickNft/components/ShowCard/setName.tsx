@@ -127,7 +127,6 @@ const SetNickName: React.FC<init> = ({
     if (!res[0] && res[1]) {
       try {
         const status = await onComplete(state.nickName);
-        console.log(status, '----');
         if (Number(status) === ExChangeResult.SUCCESS) {
           verify();
         } else if (Number(status) === ExChangeResult.AVATAR_EXISTS) {
@@ -140,7 +139,7 @@ const SetNickName: React.FC<init> = ({
         }
       } catch (error) {
         toastError(t('loginSignupFail'));
-        console.log(error);
+        console.error(error);
         setpending(false);
       }
     } else if (!res[0] && !res[1]) {

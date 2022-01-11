@@ -30,6 +30,7 @@ import useMenuNav from 'hooks/useMenuNav';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import { useInviteCount } from 'view/Task/hooks/matter';
 import { Icon } from 'components';
+import FriendsList from 'view/Task/components/FriendsList';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -62,7 +63,7 @@ const TabText = styled(Text)`
   cursor: pointer;
 `;
 const RightBox = styled(Flex)`
-  min-width: 23vw;
+  min-width: 20vw;
   flex-wrap: wrap;
 `;
 const IncomeBox = styled(Flex)`
@@ -92,14 +93,8 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
   const { inviteInfo } = useInviteCount();
   return (
     <RightBox justifyContent='space-between' alignItems='center'>
-      <IncomeBox>
-        <Icon
-          size={size}
-          color='white_black'
-          current={1}
-          name='icon-zhifeiji1'
-        />
-        {/* <Img src={require('assets/images/myWallet/airplane.png').default} /> */}
+      {/* <IncomeBox>
+        <Icon size={size} color='white_black' name='icon-zhifeiji1' />
         <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('My Rebate(TIME)')}
@@ -108,14 +103,9 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
             {inviteInfo.total_rebate}
           </Text>
         </Flex>
-      </IncomeBox>
+      </IncomeBox> */}
       <IncomeBox>
-        <Icon
-          size={size}
-          color='white_black'
-          current={1}
-          name='icon-leijishouyi'
-        />
+        <Icon size={size} color='white_black' name='icon-leijishouyi' />
         {/* <Img src={require('assets/images/myWallet/today.png').default} /> */}
         <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
@@ -127,12 +117,7 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Icon
-          size={size}
-          color='white_black'
-          current={1}
-          name='icon-zongshouyi'
-        />
+        <Icon size={size} color='white_black' name='icon-zongshouyi' />
         {/* <Img src={require('assets/images/myWallet/total.png').default} /> */}
         <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
@@ -261,6 +246,10 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
       if (TokenType) {
         setActiveToken(Number(TokenType));
       }
+      const MyreadType = myQuery(search).get('readType');
+      if (MyreadType) {
+        setreadType(Number(MyreadType));
+      }
     };
     getTokenType();
   }, []);
@@ -377,14 +366,26 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
             >
               {t('walleteComment')}
             </TabText>
+            <TabText
+              className={readType === 3 ? 'active' : ''}
+              onClick={() => {
+                setreadType(3);
+              }}
+            >
+              {t('My Rebate')}
+            </TabText>
           </Flex>
         </PostTab>
       )}
-      <EarningsRecord
-        readType={readType}
-        type={ActiveToken}
-        info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo}
-      />
+      {readType === 3 && ActiveToken === 1 ? (
+        <FriendsList />
+      ) : (
+        <EarningsRecord
+          readType={readType}
+          type={ActiveToken}
+          info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo}
+        />
+      )}
     </NoPdBottom>
   );
 });

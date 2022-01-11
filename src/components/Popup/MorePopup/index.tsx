@@ -19,6 +19,7 @@ export enum MoreOperatorEnum {
   EXPAND = 'EXPAND', // 折叠展开
   LIKE = 'LIKE', // 点赞
   BOOKMARK = 'BOOKMARK', // 收藏
+  BLOCKUSER = 'BLOCKUSER', // 屏蔽用户
 }
 
 type Iprops = {
@@ -289,13 +290,20 @@ export const MorePopup = React.memo((props: Iprops) => {
                 >
                   {t('moreReport')}
                 </p>
-                <p
+                {/* <p
                   onClick={() => {
                     setInqueryType('shield');
                     setCommonInqueryShow(true);
                   }}
                 >
                   {t('moreShield')}
+                </p> */}
+                <p
+                  onClick={() => {
+                    callback(data, MoreOperatorEnum.BLOCKUSER);
+                  }}
+                >
+                  {t('popupShieldUser')}
                 </p>
               </>
             ) : null}

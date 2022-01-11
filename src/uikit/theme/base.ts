@@ -7,11 +7,11 @@ export const breakpointMap: { [key: string]: number } = {
   md: 768,
   lg: 968,
   xl: 1280,
-  xxl: 1600
+  xxl: 1600,
 };
 
 const breakpoints: Breakpoints = Object.values(breakpointMap).map(
-  breakpoint => `${breakpoint}px`
+  breakpoint => `${breakpoint}px`,
 );
 
 export const mediaQueries: MediaQueries = {
@@ -22,7 +22,7 @@ export const mediaQueries: MediaQueries = {
   lg: `@media screen and (min-width: ${breakpointMap.lg}px)`,
   xl: `@media screen and (min-width: ${breakpointMap.xl}px)`,
   xxl: `@media screen and (min-width: ${breakpointMap.xxl}px)`,
-  nav: `@media screen and (min-width: ${breakpointMap.lg}px)`
+  nav: `@media screen and (min-width: ${breakpointMap.lg}px)`,
 };
 
 const mediaMarginUpAndDown = `
@@ -180,11 +180,11 @@ const mediaQueriesPadding = `
     padding: 8px 4px;
   }
   ${mediaQueries.xs} {
-    padding: 8px 8px;
+    padding: 8px 15px;
   }
 
   ${mediaQueries.sm} {
-    padding: 8px 16px;
+    padding: 8px 15px;
   }
 
   ${mediaQueries.lg} {
@@ -192,7 +192,7 @@ const mediaQueriesPadding = `
   }
 
   ${mediaQueries.xl} {
-    padding: 16px 8px;
+    padding: 16px 14px;
   }
 `;
 
@@ -231,7 +231,7 @@ export const mediaQueriesSize: MediaQueriesSize = {
   marginLRmd: mediaMarginLeftAndRightMd,
   padding: mediaQueriesPadding,
   paddingsm: mediaPaddingSM,
-  paddingxs: mediaPaddingXs
+  paddingxs: mediaPaddingXs,
 };
 
 export const shadows = {
@@ -244,7 +244,7 @@ export const shadows = {
   input: 'inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21);',
   inset: 'inset 0px 1px 3px 0px rgba(65, 104, 237, 0.21)',
   box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)',
-  nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)'
+  nav: '0px 0px 10px 0px rgba(51, 51, 51, 0.4)',
 };
 
 const spacing: Spacing = [0, 4, 8, 16, 24, 32, 48, 64];
@@ -254,12 +254,12 @@ const radii = {
   default: '16px',
   nftImage: '10px',
   card: '10px',
-  circle: '50%'
+  circle: '50%',
 };
 
 const zIndices = {
   dropdown: 10,
-  modal: 100
+  modal: 100,
 };
 
 /* eslint-disable */
@@ -271,6 +271,6 @@ export default {
   shadows,
   radii,
   zIndices,
-  mediaQueriesSize
+  mediaQueriesSize,
   // breakpointMap,
 };

@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  withRouter
-} from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import { Container } from './container';
 
 const Account = React.lazy(() => import('./account'));
@@ -31,12 +26,24 @@ const Me = props => {
               exact
               component={Profile}
             />
+
+            <Route
+              path={`${props.match.path}/user/follow`}
+              exact
+              component={Follow}
+            />
+            <Route
+              path={`${props.match.path}/user/fans`}
+              exact
+              component={Fans}
+            />
             <Route path={`${props.match.path}/edit`} component={Edit} />
             <Route path={`${props.match.path}/follow`} component={Follow} />
             <Route path={`${props.match.path}/fans`} component={Fans} />
             <Route path={`${props.match.path}/praise`} component={Praise} />
             <Route path={`${props.match.path}/collect`} component={Collect} />
             <Route path={`${props.match.path}/invite`} component={Invite} />
+            <Route path={`${props.match.path}/shield`} component={Shield} />
           </Container>
         )}
       />

@@ -2,8 +2,8 @@ import { Http } from '../http';
 
 export class MeApi extends Http {
   // 关注列表
-  async followList(page?: number, perpage?: number) {
-    const res = await this.get('/v1/attention/list', { page, perpage });
+  async followList(page?: number, perpage?: number, uid?: string) {
+    const res = await this.get('/v1/attention/list', { page, perpage, uid });
     return res;
   }
   // 关注用户
@@ -18,8 +18,12 @@ export class MeApi extends Http {
   }
 
   // 粉丝列表
-  async fansList(page?: number, perpage?: number) {
-    const res = await this.get('/v1/attention/fans_list', { page, perpage });
+  async fansList(page?: number, perpage?: number, uid?: string) {
+    const res = await this.get('/v1/attention/fans_list', {
+      page,
+      perpage,
+      uid,
+    });
     return res;
   }
 
@@ -55,14 +59,19 @@ export class MeApi extends Http {
     return res;
   }
 
+  // 屏蔽列表
+  async getShieldList(page?: number, perpage?: number) {
+    const res = await this.get('/v1/user/shield-list', { page, perpage });
+    return res;
+  }
   // 屏蔽
-  async shieldUser(pid: number) {
-    const res = await this.post('/v1/post/add_shield', pid);
+  async shieldUser(shield_uid: number) {
+    const res = await this.post('/v1/user/add-shield', { shield_uid });
     return res;
   }
   // 取消屏蔽
-  async unShieldUser(pid: number) {
-    const res = await this.post('/v1/post/cancel_shield', pid);
+  async unShieldUser(shield_uid: number) {
+    const res = await this.post('/v1/user/cancel-shield', { shield_uid });
     return res;
   }
 
@@ -82,7 +91,7 @@ export class MeApi extends Http {
   async reportComment(comment_id: number, content: string) {
     const res = await this.post('/v1/comment/add_complain', {
       comment_id,
-      content
+      content,
     });
     return res;
   }
@@ -94,8 +103,14 @@ export class MeApi extends Http {
   }
 
   // 个人(他人)主页
-  async getProfileMsg({ page, perpage, uid }: {
-    page: number, perpage: number, uid?: number
+  async getProfileMsg({
+    page,
+    perpage,
+    uid,
+  }: {
+    page: number;
+    perpage: number;
+    uid?: number;
   }) {
     const res = await this.get('/v1/user/home_msg', { page, perpage, uid });
     return res;
@@ -104,7 +119,7 @@ export class MeApi extends Http {
   async reportUser(uid: number, reason: string) {
     const res = await this.post('/v1/user/report_user', {
       to_uid: uid,
-      reason
+      reason,
     });
     return res;
   }

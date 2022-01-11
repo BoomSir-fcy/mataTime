@@ -38,6 +38,12 @@ export const menuNavConfig: MenuNavConfig[] = [
     lable: 'homeMenuTask',
   },
   {
+    icon: 'icon-zhifeiji1',
+    activeIcon: 'icon-zhifeiji',
+    lable: 'meMenuInvite',
+    path: '/task/invites',
+  },
+  {
     icon: 'icon-tixing',
     activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
@@ -74,21 +80,21 @@ export const menuNavConfig: MenuNavConfig[] = [
       },
     ],
   },
-  {
-    icon: 'icon-youxiang',
-    activeIcon: 'icon-youxiang1',
-    path: '/letter',
-    badgeName: 'letter',
-    coming: true,
-    lable: 'homeMenuLetter',
-  },
-  {
-    icon: 'icon-qitawenti',
-    activeIcon: 'icon-qitawenti1',
-    coming: true,
-    path: '/other',
-    lable: 'homeMenuOther',
-  },
+  // {
+  //   icon: 'icon-youxiang',
+  //   activeIcon: 'icon-youxiang1',
+  //   path: '/letter',
+  //   badgeName: 'letter',
+  //   coming: true,
+  //   lable: 'homeMenuLetter',
+  // },
+  // {
+  //   icon: 'icon-qitawenti',
+  //   activeIcon: 'icon-qitawenti1',
+  //   coming: true,
+  //   path: '/other',
+  //   lable: 'homeMenuOther',
+  // },
   {
     icon: 'icon-qianbao2',
     activeIcon: 'icon-a-qianbao1',
@@ -190,12 +196,12 @@ export const menuNavConfig: MenuNavConfig[] = [
         lable: 'meMenuInvite',
         path: '/task/invite',
       },
-      // {
-      //   icon: 'icon-pingbi1',
-      //   activeIcon: 'icon-pingbi',
-      //   title: 'meMenuShield',
-      //   path: '/me/shield',
-      // },
+      {
+        icon: 'icon-pingbi1',
+        activeIcon: 'icon-pingbi',
+        lable: 'meMenuShield',
+        path: '/me/shield',
+      },
     ],
   },
   {
@@ -265,7 +271,7 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath(['/task/invite', '/task/friendsList'], menuNavConfig, 'hideRight');
+  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList'], menuNavConfig, 'hideRight');
 })();
 
 export default menuNavConfig;

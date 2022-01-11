@@ -45,7 +45,6 @@ const MentionOperator: React.FC<IProps> = ({
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
 
-
   const changeLike = () => {
     if (type === 'Article') {
       Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({
@@ -143,6 +142,7 @@ const MentionOperator: React.FC<IProps> = ({
               margin='0 10px 0 0'
               size={18}
               color='textTips'
+              title={t('editorComment')}
             />
             {itemData.comment_num || 0}
           </Box>
@@ -158,6 +158,7 @@ const MentionOperator: React.FC<IProps> = ({
                   name='icon-aixin1'
                   margin='0 10px 0 0'
                   color='#EC612B'
+                  title={t('editorLike')}
                 />
               ) : (
                 <Icon
@@ -165,6 +166,7 @@ const MentionOperator: React.FC<IProps> = ({
                   name='icon-aixin'
                   margin='0 10px 0 0'
                   color='textTips'
+                  title={t('editorLike')}
                 />
               )}
               {itemData.like_num || 0}

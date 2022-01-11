@@ -15,11 +15,11 @@ import { GET_DSG_NFT_URL } from 'config';
 import { NftButton } from './approve';
 
 import Dots from '../Loader/Dots';
+import { useToast } from 'hooks';
 
 const Point = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 16px;
-  margin-left: 17px;
 `;
 const Column = styled(Flex)`
   flex-direction: column;
@@ -116,6 +116,8 @@ const NftAvatar: React.FC<{
   const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem);
   const NftList = useStore(p => p.loginReducer.nftList);
   const nft = useStore(p => p.loginReducer.nft);
+  const { toastWarning, toastError } = useToast();
+
   return (
     <GetAuthorizeBox>
       {Nodata ? (
@@ -129,7 +131,11 @@ const NftAvatar: React.FC<{
         </NodataDom>
       ) : (
         <>
-          <Flex justifyContent='space-between' alignItems='center'>
+          <Flex
+            justifyContent='space-between'
+            alignItems='center'
+            padding='0 15px'
+          >
             <Point>{!Boolean(status) && t('setNftAvatarListTips')}</Point>
             {NftInfo?.needApprove ? (
               <StakeAllBtn token={NftInfo.address} account={account} />
@@ -160,6 +166,8 @@ const NftAvatar: React.FC<{
                             storeAction.setUserNftStake({ isStakeNft: true }),
                           );
                           dispatch(storeAction.setUserNft(item));
+                        } else {
+                          toastWarning(t('You should approve first!'));
                         }
                       }}
                     />

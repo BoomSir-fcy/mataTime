@@ -45,7 +45,6 @@ interface init {
 
 const StateModal: React.FC<init> = ({ onClose, state, nftLength }) => {
   const { t } = useTranslation();
-  console.log(nftLength);
 
   return (
     <CountBox>

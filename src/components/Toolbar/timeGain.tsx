@@ -34,26 +34,26 @@ export const TimeGain: React.FC<{
     <PopupWrap
       ref={Popref}
       trigger={
-        <PopupButton>
-          <Box width="18px" mr="10px">
-            <TimeIcon width={18} height={18} src="/images/tokens/TIME.svg" />
+        <PopupButton title={t('editorTime')}>
+          <Box width='18px' mr='10px'>
+            <TimeIcon width={18} height={18} src='/images/tokens/TIME.svg' />
           </Box>
-          <Text color="textTips">
+          <Text color='textTips'>
             {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
           </Text>
         </PopupButton>
       }
-      position="top center"
+      position='top center'
       arrowStyle={{
         color: theme.colors.tertiary,
-        stroke: theme.colors.tertiary
+        stroke: theme.colors.tertiary,
       }}
     >
       <PopupContent>
-        <Text color="textTips" style={{ flex: 1, minWidth: 80 }}>
+        <Text color='textTips' style={{ flex: 1, minWidth: 80 }}>
           Time {t('Time Rewards')}
         </Text>
-        <Text fontWeight="bold" ellipsis>
+        <Text fontWeight='bold' ellipsis>
           {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
         </Text>
       </PopupContent>

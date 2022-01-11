@@ -12,6 +12,7 @@ import {
   light,
   Spinner,
 } from 'uikit';
+import { useStore, storeAction } from 'store';
 import styled from 'styled-components';
 import Dots from 'components/Loader/Dots';
 import { orderBy } from 'lodash';
@@ -39,7 +40,6 @@ import {
 // import { fetchNftUserDataAsync } from 'store/nfts'
 import { formatHexadecimal } from 'utils/formatNumber';
 import { ConnectWalletButton, Icon, ModalWrapper } from 'components';
-import { useStore } from 'store';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import LockModal from '../pop/lock';
@@ -213,6 +213,7 @@ const CreateShowCard: React.FC = () => {
       );
       if (status === ExChangeResult.SUCCESS) {
         toastSuccess('Successfully Mint!');
+        dispatch(storeAction.changeReset);
         replace('/login');
       } else if (status === ExChangeResult.AVATAR_EXISTS) {
         toastError(
@@ -247,9 +248,6 @@ const CreateShowCard: React.FC = () => {
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
-
-  console.log(buyInfo);
-
   return (
     <PageContainer>
       <CardStyled>

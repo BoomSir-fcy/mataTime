@@ -92,7 +92,8 @@ const ArticleComponents = (props, ref) => {
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
       type === MoreOperatorEnum.SETTOP ||
       type === MoreOperatorEnum.CANCEL_SETTOP ||
-      type === MoreOperatorEnum.COMMONT
+      type === MoreOperatorEnum.COMMONT ||
+      type === MoreOperatorEnum.BLOCKUSER
     ) {
       setIsEnd(false);
       Getlist(1);

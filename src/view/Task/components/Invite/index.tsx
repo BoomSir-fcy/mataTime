@@ -43,6 +43,7 @@ const CardBox = styled(Box)`
     ${({ theme }) => theme.mediaQueriesSize.padding};
   }
   &.right-card {
+    flex: 1;
     max-width: 410px;
   }
   .text-title {
@@ -114,7 +115,7 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
-  useFetchNftList();
+  // useFetchNftList();
   const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
@@ -224,7 +225,10 @@ const Invite: React.FC = () => {
             <Text mb='25px' fontSize='18px' bold>
               Invitation Overview
             </Text>
-            <Button as={Link} to='/task/friendsList'>
+            {/* <Button as={Link} to='/task/friendsList'>
+              {t('InvitationRecord')}
+            </Button> */}
+            <Button as={Link} to='/account?readType=3'>
               {t('InvitationRecord')}
             </Button>
           </Flex>
@@ -258,12 +262,14 @@ const Invite: React.FC = () => {
             <CardBox className='right-card'>
               <Box className='top-card'>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('My Address')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small>
-                    {account && shortenAddress(account, isMobile ? 5 : 10)}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('My Address')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small>
+                      {account && shortenAddress(account, isMobile ? 5 : 10)}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -276,12 +282,14 @@ const Invite: React.FC = () => {
                   />
                 </Flex>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text mr='20px' small>
-                    {t('Invitation Link')}
-                  </Text>
-                  <Text mr='20px' color='textTips' small ellipsis>
-                    {Url}
-                  </Text>
+                  <Flex>
+                    <Text mr='20px' small>
+                      {t('Invitation Link')}
+                    </Text>
+                    <Text mr='20px' color='textTips' small ellipsis>
+                      {Url}
+                    </Text>
+                  </Flex>
                   <Icon
                     name={'icon-fuzhi'}
                     color='textPrimary'
@@ -315,7 +323,7 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {!nftLoading ? (
+        {/* {!nftLoading ? (
           invitableNftList.length ? (
             <>
               <ContentBox>
@@ -340,7 +348,7 @@ const Invite: React.FC = () => {
           <Flex justifyContent='center' alignItems='center'>
             <Spinner />
           </Flex>
-        )}
+        )} */}
 
         {/* 复制链接弹窗 */}
         <InviteModal

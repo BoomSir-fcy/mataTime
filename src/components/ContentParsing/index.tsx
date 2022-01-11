@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
-import { tokens } from 'config';
+import { ARTICLE_POST_MAX_ROW, tokens } from 'config';
 import {
   SQUARE_REGEXP,
   HTTP_REGEXP,
@@ -18,7 +18,7 @@ import history from 'routerHistory';
 type IProps = {
   content: string;
   callback?: Function;
-  disableParseSquare?: boolean
+  disableParseSquare?: boolean;
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -57,7 +57,6 @@ const ParagraphItem = styled.div`
   }
 `;
 
-
 export const ContentParsing = (props: IProps) => {
   const ref: any = useRef();
   const dispatch = useDispatch();
@@ -68,7 +67,9 @@ export const ContentParsing = (props: IProps) => {
 
   useEffect(() => {
     try {
-      let arr = Array.isArray(JSON.parse(props.content)) ? JSON.parse(props.content) : [];
+      let arr = Array.isArray(JSON.parse(props.content))
+        ? JSON.parse(props.content)
+        : [];
       setParsingResult(arr);
     } catch (err: any) {}
   }, [props.content]);
@@ -86,11 +87,9 @@ export const ContentParsing = (props: IProps) => {
     }, 0);
   }, []);
 
-  const { push } = useHistory()
+  const { push } = useHistory();
   const goRouter = router => {
-    push(router, {
-      
-    });
+    push(router, {});
   };
 
   // 解析内容
@@ -101,11 +100,11 @@ export const ContentParsing = (props: IProps) => {
     replacedText = reactStringReplace(text, HTTP_REGEXP, (match, i) => (
       <a
         key={match + i}
-        target="_blank"
+        target='_blank'
         onClick={event => event.stopPropagation()}
         href={match}
         title={match}
-        rel="noreferrer"
+        rel='noreferrer'
       >
         {match}
       </a>
@@ -119,18 +118,18 @@ export const ContentParsing = (props: IProps) => {
       (match, i) => (
         <a
           onClick={event => {
-            event.preventDefault()
+            event.preventDefault();
             event.stopPropagation();
             const coinsKey = match.toLowerCase();
             dispatch(storeAction.setTopicCoins(tokens[coinsKey]));
           }}
           title={match}
-          href="/"
+          href='/'
           key={match + i}
         >
           ${match}&nbsp;
         </a>
-      )
+      ),
     );
     // Match hashtags
     if (!disableParseSquare) {
@@ -143,12 +142,16 @@ export const ContentParsing = (props: IProps) => {
             onClick={event => {
               event.stopPropagation();
             }}
-            to={() => `/topicList/empty/${encodeURI(encodeURIComponent(match.slice(1, match.length)))}`}
+            to={() =>
+              `/topicList/empty/${encodeURI(
+                encodeURIComponent(match.slice(1, match.length)),
+              )}`
+            }
             key={match + i}
           >
             {match}&nbsp;
           </Link>
-        )
+        ),
       );
     }
     return replacedText;
@@ -168,7 +171,7 @@ export const ContentParsing = (props: IProps) => {
           <Link
             onClick={e => e.stopPropagation()}
             to={`/topicList/empty/${children?.map((n, index) =>
-              serialize2(n, 'topic', index)
+              serialize2(n, 'topic', index),
             )}`}
           >
             {children?.map((n, index) => serialize2(n, null, index))}
@@ -185,18 +188,19 @@ export const ContentParsing = (props: IProps) => {
     }
   };
 
-
   return (
     <ContentParsingWrapper>
       {parsingResult &&
         parsingResult.length > 0 &&
         parsingResult.map((item: any, index) => {
           if (!expand) {
-            return index < 8 && serialize2(item, null, index);
+            return (
+              index < ARTICLE_POST_MAX_ROW && serialize2(item, null, index)
+            );
           }
           return serialize2(item, null, index);
         })}
-      {parsingResult && parsingResult.length > 8 ? (
+      {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
         <ExpandWrapper>
           <span
             onClick={(e: any) => {
