@@ -32,11 +32,12 @@ export const ModalTitleWrapper = styled(Box)`
   }
 `;
 export const ReportModalWrapper = styled(Box)`
-  width: 40vw;
-  max-width: 600px;
-  min-width: 88vw;
+  /* min-width: 88vw; */
+  width: 100%;
+  min-width: 350px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    min-width: 300px;
+    max-width: 600px;
+    width: 600px;
   }
   max-height: 500px;
   background: ${({ theme }) => theme.colors.greyBackground};
@@ -48,7 +49,7 @@ export const ReportContentWrapper = styled(Box)`
   margin-top: 5px;
   padding: 0px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 0 20px;
+    /* padding: 0 20px; */
   }
   box-sizing: border-box;
 `;

@@ -289,6 +289,9 @@
   "Transaction rejected.": "交易被拒絕。",
   "Enter valid list location": "輸入有效的列表位置",
   "Error importing list": "導入列表時出錯",
+  "titleSetting": "設置",
+  "titleHistory": "歷史",
+  "titleExchange": "交換",
   "translationLast": "translationLast",
   "translationEnd": "translationEnd"
 }
