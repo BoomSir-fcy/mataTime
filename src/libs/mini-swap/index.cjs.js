@@ -181,6 +181,9 @@ var Wrap$2 = "Wrap";
 var Unwrap$2 = "Unwrap";
 var Fee$2 = "Fee";
 var Route$2 = "Route";
+var titleSetting$2 = "Settings";
+var titleHistory$2 = "History";
+var titleExchange$2 = "Exchange";
 var translationLast$2 = "translationLast";
 var translationEnd$2 = "translationEnd";
 var translations = {
@@ -470,6 +473,9 @@ var translations = {
 	"Transaction rejected.": "Transaction rejected.",
 	"Enter valid list location": "Enter valid list location",
 	"Error importing list": "Error importing list",
+	titleSetting: titleSetting$2,
+	titleHistory: titleHistory$2,
+	titleExchange: titleExchange$2,
 	translationLast: translationLast$2,
 	translationEnd: translationEnd$2
 };
@@ -563,6 +569,9 @@ var Wrap$1 = "兑换";
 var Unwrap$1 = "兑换";
 var Route$1 = "路由";
 var Fee$1 = "手续费";
+var titleSetting$1 = "设置";
+var titleHistory$1 = "历史";
+var titleExchange$1 = "交换";
 var translationLast$1 = "translationLast";
 var translationEnd$1 = "translationEnd";
 var translationsZhCN = {
@@ -854,7 +863,11 @@ var translationsZhCN = {
 	"Money-hungry Dino": "贪财龙",
 	"Enter an amount": "输入金额",
 	"Transaction rejected.": "交易被拒绝。",
-	"Enter valid list location": "輸入有效的列表位置",
+	"Enter valid list location": "输入有效的列表位置",
+	"Error importing list": "导入列表时出错",
+	titleSetting: titleSetting$1,
+	titleHistory: titleHistory$1,
+	titleExchange: titleExchange$1,
 	translationLast: translationLast$1,
 	translationEnd: translationEnd$1
 };
@@ -948,6 +961,9 @@ var Wrap = "兌換";
 var Unwrap = "兌換";
 var Route = "路由";
 var Fee = "手續費";
+var titleSetting = "設置";
+var titleHistory = "歷史";
+var titleExchange = "交換";
 var translationLast = "translationLast";
 var translationEnd = "translationEnd";
 var translationsZhTW = {
@@ -1241,6 +1257,9 @@ var translationsZhTW = {
 	"Transaction rejected.": "交易被拒絕。",
 	"Enter valid list location": "輸入有效的列表位置",
 	"Error importing list": "導入列表時出錯",
+	titleSetting: titleSetting,
+	titleHistory: titleHistory,
+	titleExchange: titleExchange,
 	translationLast: translationLast,
 	translationEnd: translationEnd
 };
@@ -11771,56 +11790,7 @@ var SwapWarningTokens = {
 var Dots = styled__default["default"].span(templateObject_1$o || (templateObject_1$o = tslib.__makeTemplateObject(["\n  &::after {\n    display: inline-block;\n    animation: ellipsis 1.25s infinite;\n    content: '.';\n    width: 1em;\n    text-align: left;\n  }\n  @keyframes ellipsis {\n    0% {\n      content: '.';\n    }\n    33% {\n      content: '..';\n    }\n    66% {\n      content: '...';\n    }\n  }\n"], ["\n  &::after {\n    display: inline-block;\n    animation: ellipsis 1.25s infinite;\n    content: '.';\n    width: 1em;\n    text-align: left;\n  }\n  @keyframes ellipsis {\n    0% {\n      content: '.';\n    }\n    33% {\n      content: '..';\n    }\n    66% {\n      content: '...';\n    }\n  }\n"])));
 var templateObject_1$o;
 
-var InputPanel$1 = styled__default["default"].div(templateObject_1$n || (templateObject_1$n = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: 1.25rem;\n  background-color: ", ";\n  z-index: 1;\n  width: 100%;\n"], ["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: 1.25rem;\n  background-color: ", ";\n  z-index: 1;\n  width: 100%;\n"])), function (_a) {
-    var theme = _a.theme;
-    return theme.colors.backgroundAlt;
-});
-var ContainerRow = styled__default["default"].div(templateObject_2$f || (templateObject_2$f = tslib.__makeTemplateObject(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border-radius: 1.25rem;\n  border: 1px solid ", ";\n  transition: border-color 300ms ", ",\n    color 500ms ", ";\n  background-color: ", ";\n"], ["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border-radius: 1.25rem;\n  border: 1px solid ", ";\n  transition: border-color 300ms ", ",\n    color 500ms ", ";\n  background-color: ", ";\n"])), function (_a) {
-    var error = _a.error, theme = _a.theme;
-    return (error ? theme.colors.failure : theme.colors.background);
-}, function (_a) {
-    var error = _a.error;
-    return (error ? 'step-end' : 'step-start');
-}, function (_a) {
-    var error = _a.error;
-    return (error ? 'step-end' : 'step-start');
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.backgroundAlt;
-});
-var InputContainer = styled__default["default"].div(templateObject_3$9 || (templateObject_3$9 = tslib.__makeTemplateObject(["\n  flex: 1;\n  padding: 1rem;\n"], ["\n  flex: 1;\n  padding: 1rem;\n"])));
-var Input$1 = styled__default["default"].input(templateObject_4$4 || (templateObject_4$4 = tslib.__makeTemplateObject(["\n  font-size: 1.25rem;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  width: 0;\n  background-color: ", ";\n  transition: color 300ms ", ";\n  color: ", ";\n  overflow: hidden;\n  text-overflow: ellipsis;\n  font-weight: 500;\n  width: 100%;\n  ::placeholder {\n    color: ", ";\n  }\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"], ["\n  font-size: 1.25rem;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  width: 0;\n  background-color: ", ";\n  transition: color 300ms ", ";\n  color: ", ";\n  overflow: hidden;\n  text-overflow: ellipsis;\n  font-weight: 500;\n  width: 100%;\n  ::placeholder {\n    color: ", ";\n  }\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"])), function (_a) {
-    var theme = _a.theme;
-    return theme.colors.backgroundAlt;
-}, function (_a) {
-    var error = _a.error;
-    return (error ? 'step-end' : 'step-start');
-}, function (_a) {
-    var error = _a.error, theme = _a.theme;
-    return (error ? theme.colors.failure : theme.colors.primary);
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.textDisabled;
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.textDisabled;
-});
-function AddressInputPanel(_a) {
-    var id = _a.id, value = _a.value, onChange = _a.onChange;
-    var chainId = useActiveWeb3React().chainId;
-    var t = useTranslation().t;
-    var _b = useENS(value), address = _b.address, loading = _b.loading, name = _b.name;
-    var handleInput = React.useCallback(function (event) {
-        var input = event.target.value;
-        var withoutSpaces = input.replace(/\s+/g, '');
-        onChange(withoutSpaces);
-    }, [onChange]);
-    var error = Boolean(value.length > 0 && !loading && !address);
-    return (jsxRuntime.jsx(InputPanel$1, tslib.__assign({ id: id }, { children: jsxRuntime.jsx(ContainerRow, tslib.__assign({ error: error }, { children: jsxRuntime.jsx(InputContainer, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, { children: t('Recipient') }, void 0), address && chainId && (jsxRuntime.jsxs(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(name !== null && name !== void 0 ? name : address, 'address', chainId) }, { children: ["(", t('View on BscScan'), ")"] }), void 0))] }, void 0), jsxRuntime.jsx(Input$1, { className: "recipient-address-input", type: "text", autoComplete: "off", autoCorrect: "off", autoCapitalize: "off", spellCheck: "false", placeholder: t('Wallet Address or ENS name'), error: error, pattern: "^(0x[a-fA-F0-9]{40})$", onChange: handleInput, value: value }, void 0)] }), void 0) }, void 0) }), void 0) }), void 0));
-}
-var templateObject_1$n, templateObject_2$f, templateObject_3$9, templateObject_4$4;
-
-var Card = styled__default["default"](Box)(templateObject_1$m || (templateObject_1$m = tslib.__makeTemplateObject(["\n  width: ", ";\n  border-radius: 16px;\n  padding: 1.25rem;\n  padding: ", ";\n  border: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n"], ["\n  width: ", ";\n  border-radius: 16px;\n  padding: 1.25rem;\n  padding: ", ";\n  border: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n"])), function (_a) {
+var Card = styled__default["default"](Box)(templateObject_1$n || (templateObject_1$n = tslib.__makeTemplateObject(["\n  width: ", ";\n  border-radius: 16px;\n  padding: 1.25rem;\n  padding: ", ";\n  border: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n"], ["\n  width: ", ";\n  border-radius: 16px;\n  padding: 1.25rem;\n  padding: ", ";\n  border: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n"])), function (_a) {
     var width = _a.width;
     return width !== null && width !== void 0 ? width : '100%';
 }, function (_a) {
@@ -11836,264 +11806,25 @@ var Card = styled__default["default"](Box)(templateObject_1$m || (templateObject
     var theme = _a.theme;
     return theme.colors.background;
 });
-styled__default["default"](Card)(templateObject_2$e || (templateObject_2$e = tslib.__makeTemplateObject(["\n  border: 1px solid ", ";\n  background-color: ", ";\n"], ["\n  border: 1px solid ", ";\n  background-color: ", ";\n"])), function (_a) {
+styled__default["default"](Card)(templateObject_2$f || (templateObject_2$f = tslib.__makeTemplateObject(["\n  border: 1px solid ", ";\n  background-color: ", ";\n"], ["\n  border: 1px solid ", ";\n  background-color: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.background;
 }, function (_a) {
     var theme = _a.theme;
     return theme.colors.backgroundAlt;
 });
-var LightGreyCard = styled__default["default"](Card)(templateObject_3$8 || (templateObject_3$8 = tslib.__makeTemplateObject(["\n  border: 1px solid ", ";\n  background-color: ", ";\n"], ["\n  border: 1px solid ", ";\n  background-color: ", ";\n"])), function (_a) {
+var LightGreyCard = styled__default["default"](Card)(templateObject_3$9 || (templateObject_3$9 = tslib.__makeTemplateObject(["\n  border: 1px solid ", ";\n  background-color: ", ";\n"], ["\n  border: 1px solid ", ";\n  background-color: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.cardBorder;
 }, function (_a) {
     var theme = _a.theme;
     return theme.colors.background;
 });
-var GreyCard = styled__default["default"](Card)(templateObject_4$3 || (templateObject_4$3 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n"], ["\n  background-color: ", ";\n"])), function (_a) {
+var GreyCard = styled__default["default"](Card)(templateObject_4$4 || (templateObject_4$4 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n"], ["\n  background-color: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.dropdown;
 });
-var templateObject_1$m, templateObject_2$e, templateObject_3$8, templateObject_4$3;
-
-// Set of helper functions to facilitate wallet setup
-/**
- * Prompt the user to add a custom token to metamask
- * @param tokenAddress
- * @param tokenSymbol
- * @param tokenDecimals
- * @returns {boolean} true if the token has been added, false otherwise
- */
-var registerToken = function (tokenAddress, tokenSymbol, tokenDecimals) { return tslib.__awaiter(void 0, void 0, void 0, function () {
-    var tokenAdded;
-    return tslib.__generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, window.ethereum.request({
-                    method: 'wallet_watchAsset',
-                    params: {
-                        type: 'ERC20',
-                        options: {
-                            address: tokenAddress,
-                            symbol: tokenSymbol,
-                            decimals: tokenDecimals,
-                            image: "" + BASE_TOKEN_URL + tokenAddress + ".png",
-                        },
-                    },
-                })];
-            case 1:
-                tokenAdded = _a.sent();
-                return [2 /*return*/, tokenAdded];
-        }
-    });
-}); };
-
-var Wrapper$4 = styled__default["default"].div(templateObject_1$l || (templateObject_1$l = tslib.__makeTemplateObject(["\n  width: 100%;\n"], ["\n  width: 100%;\n"])));
-var Section = styled__default["default"](AutoColumn)(templateObject_2$d || (templateObject_2$d = tslib.__makeTemplateObject(["\n  padding: 24px;\n"], ["\n  padding: 24px;\n"])));
-var ConfirmedIcon = styled__default["default"](ColumnCenter)(templateObject_3$7 || (templateObject_3$7 = tslib.__makeTemplateObject(["\n  padding: 24px 0;\n"], ["\n  padding: 24px 0;\n"])));
-function ConfirmationPendingContent(_a) {
-    var pendingText = _a.pendingText;
-    var t = useTranslation().t;
-    return (jsxRuntime.jsxs(Wrapper$4, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Spinner, {}, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Waiting For Confirmation') }), void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ bold: true, small: true, textAlign: "center" }, { children: pendingText }), void 0) }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ small: true, color: "textSubtle", textAlign: "center" }, { children: t('Confirm this transaction in your wallet') }), void 0)] }), void 0)] }, void 0));
-}
-function TransactionSubmittedContent(_a) {
-    var _b;
-    var onDismiss = _a.onDismiss, chainId = _a.chainId, hash = _a.hash, currencyToAdd = _a.currencyToAdd;
-    var library = useActiveWeb3React().library;
-    var t = useTranslation().t;
-    var token = wrappedCurrency(currencyToAdd, chainId);
-    return (jsxRuntime.jsx(Wrapper$4, { children: jsxRuntime.jsxs(Section, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Icon$c, { strokeWidth: 0.5, width: "90px", color: "primary" }, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Transaction Submitted') }), void 0), chainId && hash && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t('View on BscScan') }), void 0)), currencyToAdd && ((_b = library === null || library === void 0 ? void 0 : library.provider) === null || _b === void 0 ? void 0 : _b.isMetaMask) && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", mt: "12px", width: "fit-content", onClick: function () { return registerToken(token.address, token.symbol, token.decimals); } }, { children: jsxRuntime.jsxs(RowFixed, { children: [t('Add %asset% to Metamask', { asset: currencyToAdd.symbol }), jsxRuntime.jsx(Icon$3, { width: "16px", ml: "6px" }, void 0)] }, void 0) }), void 0)), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss, mt: "20px" }, { children: t('Close') }), void 0)] }), void 0)] }, void 0) }, void 0));
-}
-function ConfirmationModalContent(_a) {
-    var bottomContent = _a.bottomContent, topContent = _a.topContent;
-    return (jsxRuntime.jsxs(Wrapper$4, { children: [jsxRuntime.jsx(Box, { children: topContent() }, void 0), jsxRuntime.jsx(Box, { children: bottomContent() }, void 0)] }, void 0));
-}
-function TransactionErrorContent(_a) {
-    var message = _a.message, onDismiss = _a.onDismiss;
-    var t = useTranslation().t;
-    return (jsxRuntime.jsxs(Wrapper$4, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ justify: "center" }, { children: [jsxRuntime.jsx(Icon$f, { color: "failure", width: "64px" }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textAlign: 'center', width: '85%' } }, { children: message }), void 0)] }), void 0), jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center", pt: "24px" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss }, { children: t('Dismiss') }), void 0) }), void 0)] }, void 0));
-}
-var TransactionConfirmationModal = function (_a) {
-    var title = _a.title, onDismiss = _a.onDismiss, customOnDismiss = _a.customOnDismiss, attemptingTxn = _a.attemptingTxn, hash = _a.hash, pendingText = _a.pendingText, content = _a.content, currencyToAdd = _a.currencyToAdd;
-    var chainId = useActiveWeb3React().chainId;
-    var handleDismiss = React.useCallback(function () {
-        if (customOnDismiss) {
-            customOnDismiss();
-        }
-        onDismiss();
-    }, [customOnDismiss, onDismiss]);
-    if (!chainId)
-        return null;
-    return (jsxRuntime.jsx(Modal, tslib.__assign({ title: title, headerBackground: "gradients.cardHeader", onDismiss: handleDismiss }, { children: attemptingTxn ? (jsxRuntime.jsx(ConfirmationPendingContent, { pendingText: pendingText }, void 0)) : hash ? (jsxRuntime.jsx(TransactionSubmittedContent, { chainId: chainId, hash: hash, onDismiss: onDismiss, currencyToAdd: currencyToAdd }, void 0)) : (content()) }), void 0));
-};
-var templateObject_1$l, templateObject_2$d, templateObject_3$7;
-
-var QuestionWrapper = styled__default["default"].div(templateObject_1$k || (templateObject_1$k = tslib.__makeTemplateObject(["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"], ["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"])));
-var QuestionHelper = function (_a) {
-    var text = _a.text, _b = _a.color, color = _b === void 0 ? "textSubtle" : _b, _c = _a.trigger, trigger = _c === void 0 ? 'hover' : _c, _d = _a.placement, placement = _d === void 0 ? 'right-end' : _d, props = tslib.__rest(_a, ["text", "color", "trigger", "placement"]);
-    var _e = useTooltip(text, { placement: placement, trigger: trigger }), targetRef = _e.targetRef, tooltip = _e.tooltip, tooltipVisible = _e.tooltipVisible;
-    return (jsxRuntime.jsxs(Box, tslib.__assign({}, props, { children: [tooltipVisible && tooltip, jsxRuntime.jsx(QuestionWrapper, tslib.__assign({ ref: targetRef }, { children: jsxRuntime.jsx(Icon$5, { color: color, width: "16px" }, void 0) }), void 0)] }), void 0));
-};
-var templateObject_1$k;
-
-var Wrapper$3 = styled__default["default"].div(templateObject_1$j || (templateObject_1$j = tslib.__makeTemplateObject(["\n  position: relative;\n  padding: 20px;\n  padding-top: 0;\n"], ["\n  position: relative;\n  padding: 20px;\n  padding-top: 0;\n"])));
-var ArrowWrapper = styled__default["default"].div(templateObject_3$6 || (templateObject_3$6 = tslib.__makeTemplateObject(["\n  padding: 2px;\n\n  ", "\n"], ["\n  padding: 2px;\n\n  ", "\n"])), function (_a) {
-    var clickable = _a.clickable;
-    return clickable
-        ? styled.css(templateObject_2$c || (templateObject_2$c = tslib.__makeTemplateObject(["\n          :hover {\n            cursor: pointer;\n            opacity: 0.8;\n          }\n        "], ["\n          :hover {\n            cursor: pointer;\n            opacity: 0.8;\n          }\n        "]))) : null;
-});
-var ErrorText = styled__default["default"](Text)(templateObject_4$2 || (templateObject_4$2 = tslib.__makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (_a) {
-    var theme = _a.theme, severity = _a.severity;
-    return severity === 3 || severity === 4
-        ? theme.colors.failure
-        : severity === 2
-            ? theme.colors.warning
-            : severity === 1
-                ? theme.colors.text
-                : theme.colors.success;
-});
-var StyledBalanceMaxMini = styled__default["default"].button(templateObject_5$1 || (templateObject_5$1 = tslib.__makeTemplateObject(["\n  height: 22px;\n  width: 22px;\n  background-color: ", ";\n  border: none;\n  border-radius: 50%;\n  padding: 0.2rem;\n  font-size: 0.875rem;\n  font-weight: 400;\n  margin-left: 0.4rem;\n  cursor: pointer;\n  color: ", ";\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  float: right;\n\n  :hover {\n    background-color: ", ";\n  }\n  :focus {\n    background-color: ", ";\n    outline: none;\n  }\n"], ["\n  height: 22px;\n  width: 22px;\n  background-color: ", ";\n  border: none;\n  border-radius: 50%;\n  padding: 0.2rem;\n  font-size: 0.875rem;\n  font-weight: 400;\n  margin-left: 0.4rem;\n  cursor: pointer;\n  color: ", ";\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  float: right;\n\n  :hover {\n    background-color: ", ";\n  }\n  :focus {\n    background-color: ", ";\n    outline: none;\n  }\n"])), function (_a) {
-    var theme = _a.theme;
-    return theme.colors.background;
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.text;
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.dropdown;
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.dropdown;
-});
-var TruncatedText = styled__default["default"](Text).attrs({ ellipsis: true })(templateObject_6 || (templateObject_6 = tslib.__makeTemplateObject(["\n  width: 220px;\n"], ["\n  width: 220px;\n"])));
-var SwapCallbackErrorInner = styled__default["default"].div(templateObject_7 || (templateObject_7 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border-radius: 1rem;\n  display: flex;\n  align-items: center;\n  font-size: 0.825rem;\n  width: 100%;\n  padding: 3rem 1.25rem 1rem 1rem;\n  margin-top: -2rem;\n  color: ", ";\n  z-index: -1;\n  p {\n    padding: 0;\n    margin: 0;\n    font-weight: 500;\n  }\n"], ["\n  background-color: ", ";\n  border-radius: 1rem;\n  display: flex;\n  align-items: center;\n  font-size: 0.825rem;\n  width: 100%;\n  padding: 3rem 1.25rem 1rem 1rem;\n  margin-top: -2rem;\n  color: ", ";\n  z-index: -1;\n  p {\n    padding: 0;\n    margin: 0;\n    font-weight: 500;\n  }\n"])), function (_a) {
-    var theme = _a.theme;
-    return theme.colors.failure + "33";
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.failure;
-});
-var SwapCallbackErrorInnerAlertTriangle = styled__default["default"].div(templateObject_8 || (templateObject_8 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-right: 12px;\n  border-radius: 12px;\n  min-width: 48px;\n  height: 48px;\n"], ["\n  background-color: ", ";\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-right: 12px;\n  border-radius: 12px;\n  min-width: 48px;\n  height: 48px;\n"])), function (_a) {
-    var theme = _a.theme;
-    return theme.colors.failure + "33";
-});
-function SwapCallbackError(_a) {
-    var error = _a.error;
-    return (jsxRuntime.jsxs(SwapCallbackErrorInner, { children: [jsxRuntime.jsx(SwapCallbackErrorInnerAlertTriangle, { children: jsxRuntime.jsx(Icon$f, { width: "24px" }, void 0) }, void 0), jsxRuntime.jsx("p", { children: error }, void 0)] }, void 0));
-}
-var SwapShowAcceptChanges = styled__default["default"](AutoColumn)(templateObject_9 || (templateObject_9 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"], ["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"])), function (_a) {
-    var theme = _a.theme;
-    return "" + theme.colors.input;
-});
-var templateObject_1$j, templateObject_2$c, templateObject_3$6, templateObject_4$2, templateObject_5$1, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
-
-/**
- * Formatted version of price impact text with warning colors
- */
-function FormattedPriceImpact(_a) {
-    var priceImpact = _a.priceImpact;
-    return (jsxRuntime.jsx(ErrorText, tslib.__assign({ fontSize: "14px", severity: warningSeverity(priceImpact) }, { children: priceImpact ? (priceImpact.lessThan(ONE_BIPS) ? '<0.01%' : priceImpact.toFixed(2) + "%") : '-' }), void 0));
-}
-
-/**
- * Formatted version of price impact text with warning colors
- */
-function LiquidityProviderFee() {
-    var t = useTranslation().t;
-    var nftInfo = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_STAKE_NFT_INFO);
-    var swapToken = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_TOKEN);
-    var swapvToken = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_V_TOKEN);
-    return (jsxRuntime.jsxs(Flex, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Fee') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ mb: "12px" }, { children: [t('for each trade a 0.3% fee is paid'), ":"] }), void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.1% to the LP token holders')] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.04% to the %symbol% stakers', {
-                                    symbol: t(nftInfo.name) + " NFT"
-                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.05% buyback %symbol% and burn', {
-                                    symbol: swapToken.symbol
-                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.025% buyback %symbol%, then to %symbol% LP', {
-                                    symbol: swapToken.symbol
-                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.025% to %symbol% holder', {
-                                    symbol: swapvToken.symbol
-                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.06% to operation fund')] }, void 0)] }, void 0), placement: "top-start", ml: "4px" }, void 0)] }, void 0));
-}
-
-var SwapModalFooterContainer = styled__default["default"](AutoColumn)(templateObject_1$i || (templateObject_1$i = tslib.__makeTemplateObject(["\n  margin-top: 24px;\n  padding: 16px;\n  border-radius: ", ";\n  border: 1px solid ", ";\n  background-color: ", ";\n"], ["\n  margin-top: 24px;\n  padding: 16px;\n  border-radius: ", ";\n  border: 1px solid ", ";\n  background-color: ", ";\n"])), function (_a) {
-    var theme = _a.theme;
-    return theme.radii.default;
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.cardBorder;
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.background;
-});
-function SwapModalFooter(_a) {
-    var _b, _c, _d, _e;
-    var trade = _a.trade, onConfirm = _a.onConfirm, allowedSlippage = _a.allowedSlippage, swapErrorMessage = _a.swapErrorMessage, disabledConfirm = _a.disabledConfirm;
-    var t = useTranslation().t;
-    var _f = tslib.__read(React.useState(false), 2), showInverted = _f[0], setShowInverted = _f[1];
-    var slippageAdjustedAmounts = React.useMemo(function () { return computeSlippageAdjustedAmounts(trade, allowedSlippage); }, [allowedSlippage, trade]);
-    var _g = React.useMemo(function () { return computeTradePriceBreakdown(trade); }, [trade]), priceImpactWithoutFee = _g.priceImpactWithoutFee, realizedLPFee = _g.realizedLPFee;
-    var severity = warningSeverity(priceImpactWithoutFee);
-    return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(SwapModalFooterContainer, { children: [jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t("Price") }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "14px", style: {
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    textAlign: 'right',
-                                    paddingLeft: '10px',
-                                } }, { children: [formatExecutionPrice(trade, showInverted), jsxRuntime.jsx(StyledBalanceMaxMini, tslib.__assign({ onClick: function () { return setShowInverted(!showInverted); } }, { children: jsxRuntime.jsx(Icon$b, { width: "14px" }, void 0) }), void 0)] }), void 0)] }), void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT ? t("Minimum received") : t("Maximum sold") }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t("Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT
-                                            ? (_c = (_b = slippageAdjustedAmounts[Field$2.OUTPUT]) === null || _b === void 0 ? void 0 : _b.toSignificant(4)) !== null && _c !== void 0 ? _c : '-'
-                                            : (_e = (_d = slippageAdjustedAmounts[Field$2.INPUT]) === null || _d === void 0 ? void 0 : _d.toSignificant(4)) !== null && _e !== void 0 ? _e : '-' }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", marginLeft: "4px" }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT
-                                            ? trade.outputAmount.currency.symbol
-                                            : trade.inputAmount.currency.symbol }), void 0)] }, void 0)] }, void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t("Price Impact") }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t("The difference between the market price and your price due to trade size."), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(FormattedPriceImpact, { priceImpact: priceImpactWithoutFee }, void 0)] }, void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(LiquidityProviderFee, {}, void 0), jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: realizedLPFee ? (realizedLPFee === null || realizedLPFee === void 0 ? void 0 : realizedLPFee.toSignificant(6)) + " " + trade.inputAmount.currency.symbol : '-' }), void 0)] }, void 0)] }, void 0), jsxRuntime.jsxs(AutoRow, { children: [jsxRuntime.jsx(Button, tslib.__assign({ variant: severity > 2 ? 'danger' : 'primary', onClick: onConfirm, disabled: disabledConfirm, mt: "12px", id: "confirm-swap-or-send", width: "100%" }, { children: severity > 2 ? t('Swap Anyway') : t('Confirm Swap') }), void 0), swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null] }, void 0)] }, void 0));
-}
-var templateObject_1$i;
-
-function SwapModalHeader(_a) {
-    var _b, _c;
-    var trade = _a.trade, allowedSlippage = _a.allowedSlippage, recipient = _a.recipient, showAcceptChanges = _a.showAcceptChanges, onAcceptChanges = _a.onAcceptChanges;
-    var t = useTranslation().t;
-    var slippageAdjustedAmounts = React.useMemo(function () { return computeSlippageAdjustedAmounts(trade, allowedSlippage); }, [trade, allowedSlippage]);
-    var priceImpactWithoutFee = React.useMemo(function () { return computeTradePriceBreakdown(trade); }, [trade]).priceImpactWithoutFee;
-    var priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
-    return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "flex-end" }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ gap: "0px" }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: trade.inputAmount.currency, size: "24px", style: { marginRight: '12px' } }, void 0), jsxRuntime.jsx(TruncatedText, tslib.__assign({ fontSize: "24px", color: showAcceptChanges && trade.tradeType === dsgswapSdk.TradeType.EXACT_OUTPUT ? 'primary' : 'text' }, { children: trade.inputAmount.toSignificant(6) }), void 0)] }), void 0), jsxRuntime.jsx(RowFixed, tslib.__assign({ gap: "0px" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "24px", ml: "10px" }, { children: trade.inputAmount.currency.symbol }), void 0) }), void 0)] }), void 0), jsxRuntime.jsx(RowFixed, { children: jsxRuntime.jsx(Icon$d, { width: "16px", ml: "4px" }, void 0) }, void 0), jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "flex-end" }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ gap: "0px" }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: trade.outputAmount.currency, size: "24px", style: { marginRight: '12px' } }, void 0), jsxRuntime.jsx(TruncatedText, tslib.__assign({ fontSize: "24px", color: priceImpactSeverity > 2
-                                    ? 'failure'
-                                    : showAcceptChanges && trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT
-                                        ? 'primary'
-                                        : 'text' }, { children: trade.outputAmount.toSignificant(6) }), void 0)] }), void 0), jsxRuntime.jsx(RowFixed, tslib.__assign({ gap: "0px" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "24px", ml: "10px" }, { children: trade.outputAmount.currency.symbol }), void 0) }), void 0)] }), void 0), showAcceptChanges ? (jsxRuntime.jsx(SwapShowAcceptChanges, tslib.__assign({ justify: "flex-start", gap: "0px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$f, { mr: "8px" }, void 0), jsxRuntime.jsxs(Text, tslib.__assign({ bold: true }, { children: [" ", t('Price Updated')] }), void 0)] }, void 0), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onAcceptChanges }, { children: t('Accept') }), void 0)] }, void 0) }), void 0)) : null, jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "flex-start", gap: "sm", style: { padding: '24px 0 0 0px' } }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT ? (jsxRuntime.jsxs(Text, tslib.__assign({ small: true, color: "textSubtle", textAlign: "left", style: { width: '100%' } }, { children: [t('Output is estimated. You will receive at least'), "\u00A0", jsxRuntime.jsxs("b", { children: [(_b = slippageAdjustedAmounts[Field$2.OUTPUT]) === null || _b === void 0 ? void 0 : _b.toSignificant(6), " ", trade.outputAmount.currency.symbol] }, void 0), "\u00A0", t('or the transaction will revert.')] }), void 0)) : (jsxRuntime.jsxs(Text, tslib.__assign({ small: true, color: "textSubtle", textAlign: "left", style: { width: '100%' } }, { children: [t('Input is estimated. You will sell at most'), "\u00A0", jsxRuntime.jsxs("b", { children: [(_c = slippageAdjustedAmounts[Field$2.INPUT]) === null || _c === void 0 ? void 0 : _c.toSignificant(6), " ", trade.inputAmount.currency.symbol] }, void 0), "\u00A0", t('or the transaction will revert.')] }), void 0)) }), void 0), recipient !== null ? (jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "flex-start", gap: "sm", style: { padding: '12px 0 0 0px' } }, { children: jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle" }, { children: [t('Output will be sent to'), ' ', jsxRuntime.jsx("b", tslib.__assign({ title: recipient }, { children: isAddress(recipient) ? shortenAddress(recipient) : recipient }), void 0)] }), void 0) }), void 0)) : null] }), void 0));
-}
-
-/**
- * Returns true if the trade requires a confirmation of details before we can submit it
- * @param tradeA trade A
- * @param tradeB trade B
- */
-function tradeMeaningfullyDiffers(tradeA, tradeB) {
-    return (tradeA.tradeType !== tradeB.tradeType ||
-        !dsgswapSdk.currencyEquals(tradeA.inputAmount.currency, tradeB.inputAmount.currency) ||
-        !tradeA.inputAmount.equalTo(tradeB.inputAmount) ||
-        !dsgswapSdk.currencyEquals(tradeA.outputAmount.currency, tradeB.outputAmount.currency) ||
-        !tradeA.outputAmount.equalTo(tradeB.outputAmount));
-}
-var ConfirmSwapModal = function (_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-    var trade = _a.trade, originalTrade = _a.originalTrade, onAcceptChanges = _a.onAcceptChanges, allowedSlippage = _a.allowedSlippage, onConfirm = _a.onConfirm, onDismiss = _a.onDismiss, customOnDismiss = _a.customOnDismiss, recipient = _a.recipient, swapErrorMessage = _a.swapErrorMessage, attemptingTxn = _a.attemptingTxn, txHash = _a.txHash;
-    var showAcceptChanges = React.useMemo(function () { return Boolean(trade && originalTrade && tradeMeaningfullyDiffers(trade, originalTrade)); }, [originalTrade, trade]);
-    var t = useTranslation().t;
-    var modalHeader = React.useCallback(function () {
-        return trade ? (jsxRuntime.jsx(SwapModalHeader, { trade: trade, allowedSlippage: allowedSlippage, recipient: recipient, showAcceptChanges: showAcceptChanges, onAcceptChanges: onAcceptChanges }, void 0)) : null;
-    }, [allowedSlippage, onAcceptChanges, recipient, showAcceptChanges, trade]);
-    var modalBottom = React.useCallback(function () {
-        return trade ? (jsxRuntime.jsx(SwapModalFooter, { onConfirm: onConfirm, trade: trade, disabledConfirm: showAcceptChanges, swapErrorMessage: swapErrorMessage, allowedSlippage: allowedSlippage }, void 0)) : null;
-    }, [allowedSlippage, onConfirm, showAcceptChanges, swapErrorMessage, trade]);
-    // text to show while loading
-    var pendingText = t('Swapping %amountA% %symbolA% for %amountB% %symbolB%', {
-        amountA: (_c = (_b = trade === null || trade === void 0 ? void 0 : trade.inputAmount) === null || _b === void 0 ? void 0 : _b.toSignificant(6)) !== null && _c !== void 0 ? _c : '',
-        symbolA: (_f = (_e = (_d = trade === null || trade === void 0 ? void 0 : trade.inputAmount) === null || _d === void 0 ? void 0 : _d.currency) === null || _e === void 0 ? void 0 : _e.symbol) !== null && _f !== void 0 ? _f : '',
-        amountB: (_h = (_g = trade === null || trade === void 0 ? void 0 : trade.outputAmount) === null || _g === void 0 ? void 0 : _g.toSignificant(6)) !== null && _h !== void 0 ? _h : '',
-        symbolB: (_l = (_k = (_j = trade === null || trade === void 0 ? void 0 : trade.outputAmount) === null || _j === void 0 ? void 0 : _j.currency) === null || _k === void 0 ? void 0 : _k.symbol) !== null && _l !== void 0 ? _l : '',
-    });
-    var confirmationContent = React.useCallback(function () {
-        return swapErrorMessage ? (jsxRuntime.jsx(TransactionErrorContent, { onDismiss: onDismiss, message: swapErrorMessage }, void 0)) : (jsxRuntime.jsx(ConfirmationModalContent, { topContent: modalHeader, bottomContent: modalBottom }, void 0));
-    }, [onDismiss, modalBottom, modalHeader, swapErrorMessage]);
-    return (jsxRuntime.jsx(TransactionConfirmationModal, { title: t('Confirm Swap'), onDismiss: onDismiss, customOnDismiss: customOnDismiss, attemptingTxn: attemptingTxn, hash: txHash, content: confirmationContent, pendingText: pendingText, currencyToAdd: trade === null || trade === void 0 ? void 0 : trade.outputAmount.currency }, void 0));
-};
+var templateObject_1$n, templateObject_2$f, templateObject_3$9, templateObject_4$4;
 
 /**
  * Returns the previous value of the given value
@@ -12107,6 +11838,14 @@ var usePreviousValue = function (value) {
     }, [value]);
     return ref.current;
 };
+
+var QuestionWrapper = styled__default["default"].div(templateObject_1$m || (templateObject_1$m = tslib.__makeTemplateObject(["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"], ["\n  :hover,\n  :focus {\n    opacity: 0.7;\n  }\n"])));
+var QuestionHelper = function (_a) {
+    var text = _a.text, _b = _a.color, color = _b === void 0 ? "textSubtle" : _b, _c = _a.trigger, trigger = _c === void 0 ? 'hover' : _c, _d = _a.placement, placement = _d === void 0 ? 'right-end' : _d, props = tslib.__rest(_a, ["text", "color", "trigger", "placement"]);
+    var _e = useTooltip(text, { placement: placement, trigger: trigger }), targetRef = _e.targetRef, tooltip = _e.tooltip, tooltipVisible = _e.tooltipVisible;
+    return (jsxRuntime.jsxs(Box, tslib.__assign({}, props, { children: [tooltipVisible && tooltip, jsxRuntime.jsx(QuestionWrapper, tslib.__assign({ ref: targetRef }, { children: jsxRuntime.jsx(Icon$5, { color: color, width: "16px" }, void 0) }), void 0)] }), void 0));
+};
+var templateObject_1$m;
 
 var ErrorBoundary = /** @class */ (function (_super) {
     tslib.__extends(ErrorBoundary, _super);
@@ -12172,7 +11911,7 @@ var FlexAutoWarpper = function (_a) {
     return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs(ErrorBoundary, { children: [children, autoDom] }, void 0) }, void 0));
 };
 
-var BaseWrapper = styled__default["default"].div(templateObject_1$h || (templateObject_1$h = tslib.__makeTemplateObject(["\n  border: 1px solid ", ";\n  border-radius: 10px;\n  display: flex;\n  padding: 6px;\n  margin-bottom: 4px !important;\n\n  align-items: center;\n  :hover {\n    cursor: ", ";\n    background-color: ", ";\n  }\n\n  background-color: ", ";\n  opacity: ", ";\n"], ["\n  border: 1px solid ", ";\n  border-radius: 10px;\n  display: flex;\n  padding: 6px;\n  margin-bottom: 4px !important;\n\n  align-items: center;\n  :hover {\n    cursor: ", ";\n    background-color: ", ";\n  }\n\n  background-color: ", ";\n  opacity: ", ";\n"])), function (_a) {
+var BaseWrapper = styled__default["default"].div(templateObject_1$l || (templateObject_1$l = tslib.__makeTemplateObject(["\n  border: 1px solid ", ";\n  border-radius: 10px;\n  display: flex;\n  padding: 6px;\n  margin-bottom: 4px !important;\n\n  align-items: center;\n  :hover {\n    cursor: ", ";\n    background-color: ", ";\n  }\n\n  background-color: ", ";\n  opacity: ", ";\n"], ["\n  border: 1px solid ", ";\n  border-radius: 10px;\n  display: flex;\n  padding: 6px;\n  margin-bottom: 4px !important;\n\n  align-items: center;\n  :hover {\n    cursor: ", ";\n    background-color: ", ";\n  }\n\n  background-color: ", ";\n  opacity: ", ";\n"])), function (_a) {
     var theme = _a.theme, disable = _a.disable;
     return (disable ? 'transparent' : theme.colors.dropdown);
 }, function (_a) {
@@ -12202,10 +11941,10 @@ function CommonBases(_a) {
                             return (jsxRuntime.jsxs(BaseWrapper, tslib.__assign({ onClick: function () { return !selected && onSelect(token); }, disable: selected }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: inactiveTokens[token.address] || token, style: { marginRight: 8 } }, void 0), jsxRuntime.jsx(Text, { children: token.symbol }, void 0)] }), token.address));
                         })] }), void 0) }), void 0)] }), void 0));
 }
-var templateObject_1$h;
+var templateObject_1$l;
 
-var rotate = styled.keyframes(templateObject_1$g || (templateObject_1$g = tslib.__makeTemplateObject(["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"], ["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"])));
-var StyledSVG = styled__default["default"].svg(templateObject_2$b || (templateObject_2$b = tslib.__makeTemplateObject(["\n  animation: 2s ", " linear infinite;\n  height: ", ";\n  width: ", ";\n  path {\n    stroke: ", ";\n  }\n"], ["\n  animation: 2s ", " linear infinite;\n  height: ", ";\n  width: ", ";\n  path {\n    stroke: ", ";\n  }\n"
+var rotate = styled.keyframes(templateObject_1$k || (templateObject_1$k = tslib.__makeTemplateObject(["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"], ["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"])));
+var StyledSVG = styled__default["default"].svg(templateObject_2$e || (templateObject_2$e = tslib.__makeTemplateObject(["\n  animation: 2s ", " linear infinite;\n  height: ", ";\n  width: ", ";\n  path {\n    stroke: ", ";\n  }\n"], ["\n  animation: 2s ", " linear infinite;\n  height: ", ";\n  width: ", ";\n  path {\n    stroke: ", ";\n  }\n"
     /**
      * Takes in custom size and stroke for circle color, default to primary color as fill,
      * need ...rest for layered styles on top
@@ -12228,17 +11967,17 @@ function CircleLoader(_a) {
     var _b = _a.size, size = _b === void 0 ? '16px' : _b, stroke = _a.stroke, rest = tslib.__rest(_a, ["size", "stroke"]);
     return (jsxRuntime.jsx(StyledSVG, tslib.__assign({ viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg", size: size, stroke: stroke }, rest, { children: jsxRuntime.jsx("path", { d: "M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 9.27455 20.9097 6.80375 19.1414 5", strokeWidth: "2.5", strokeLinecap: "round", strokeLinejoin: "round" }, void 0) }), void 0));
 }
-var templateObject_1$g, templateObject_2$b;
+var templateObject_1$k, templateObject_2$e;
 
-var TokenSection = styled__default["default"].div(templateObject_1$f || (templateObject_1$f = tslib.__makeTemplateObject(["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) auto;\n  grid-gap: 16px;\n  align-items: center;\n\n  opacity: ", ";\n"], ["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) auto;\n  grid-gap: 16px;\n  align-items: center;\n\n  opacity: ", ";\n"])), function (_a) {
+var TokenSection = styled__default["default"].div(templateObject_1$j || (templateObject_1$j = tslib.__makeTemplateObject(["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) auto;\n  grid-gap: 16px;\n  align-items: center;\n\n  opacity: ", ";\n"], ["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) auto;\n  grid-gap: 16px;\n  align-items: center;\n\n  opacity: ", ";\n"])), function (_a) {
     var dim = _a.dim;
     return (dim ? '0.4' : '1');
 });
-var CheckIcon = styled__default["default"](Icon$g)(templateObject_2$a || (templateObject_2$a = tslib.__makeTemplateObject(["\n  height: 16px;\n  width: 16px;\n  margin-right: 6px;\n  stroke: ", ";\n"], ["\n  height: 16px;\n  width: 16px;\n  margin-right: 6px;\n  stroke: ", ";\n"])), function (_a) {
+var CheckIcon = styled__default["default"](Icon$g)(templateObject_2$d || (templateObject_2$d = tslib.__makeTemplateObject(["\n  height: 16px;\n  width: 16px;\n  margin-right: 6px;\n  stroke: ", ";\n"], ["\n  height: 16px;\n  width: 16px;\n  margin-right: 6px;\n  stroke: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.success;
 });
-var NameOverflow = styled__default["default"].div(templateObject_3$5 || (templateObject_3$5 = tslib.__makeTemplateObject(["\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  max-width: 140px;\n  font-size: 12px;\n"], ["\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  max-width: 140px;\n  font-size: 12px;\n"])));
+var NameOverflow = styled__default["default"].div(templateObject_3$8 || (templateObject_3$8 = tslib.__makeTemplateObject(["\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  max-width: 140px;\n  font-size: 12px;\n"], ["\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  max-width: 140px;\n  font-size: 12px;\n"])));
 function ImportRow(_a) {
     var _b, _c;
     var token = _a.token, style = _a.style, dim = _a.dim, showImportView = _a.showImportView, setImportToken = _a.setImportToken;
@@ -12258,18 +11997,18 @@ function ImportRow(_a) {
                     showImportView();
                 } }, { children: t('Import') }), void 0)) : (jsxRuntime.jsxs(RowFixed, tslib.__assign({ style: { minWidth: 'fit-content' } }, { children: [jsxRuntime.jsx(CheckIcon, {}, void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: "success" }, { children: "Active" }), void 0)] }), void 0))] }), void 0));
 }
-var templateObject_1$f, templateObject_2$a, templateObject_3$5;
+var templateObject_1$j, templateObject_2$d, templateObject_3$8;
 
 function currencyKey(currency) {
     return currency instanceof dsgswapSdk.Token ? currency.address : currency === dsgswapSdk.getActiveETHERWidthChainId() ? 'ETHER' : '';
 }
-var StyledBalanceText = styled__default["default"](Text)(templateObject_1$e || (templateObject_1$e = tslib.__makeTemplateObject(["\n  white-space: nowrap;\n  overflow: hidden;\n  max-width: 5rem;\n  text-overflow: ellipsis;\n"], ["\n  white-space: nowrap;\n  overflow: hidden;\n  max-width: 5rem;\n  text-overflow: ellipsis;\n"])));
-var FixedContentRow = styled__default["default"].div(templateObject_2$9 || (templateObject_2$9 = tslib.__makeTemplateObject(["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-gap: 16px;\n  align-items: center;\n"], ["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-gap: 16px;\n  align-items: center;\n"])));
+var StyledBalanceText = styled__default["default"](Text)(templateObject_1$i || (templateObject_1$i = tslib.__makeTemplateObject(["\n  white-space: nowrap;\n  overflow: hidden;\n  max-width: 5rem;\n  text-overflow: ellipsis;\n"], ["\n  white-space: nowrap;\n  overflow: hidden;\n  max-width: 5rem;\n  text-overflow: ellipsis;\n"])));
+var FixedContentRow = styled__default["default"].div(templateObject_2$c || (templateObject_2$c = tslib.__makeTemplateObject(["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-gap: 16px;\n  align-items: center;\n"], ["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-gap: 16px;\n  align-items: center;\n"])));
 function Balance(_a) {
     var balance = _a.balance;
     return jsxRuntime.jsx(StyledBalanceText, tslib.__assign({ title: balance.toExact() }, { children: balance.toSignificant(4) }), void 0);
 }
-var MenuItem = styled__default["default"](RowBetween)(templateObject_3$4 || (templateObject_3$4 = tslib.__makeTemplateObject(["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) minmax(0, 72px);\n  grid-gap: 8px;\n  cursor: ", ";\n  pointer-events: ", ";\n  :hover {\n    background-color: ", ";\n  }\n  opacity: ", ";\n"], ["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) minmax(0, 72px);\n  grid-gap: 8px;\n  cursor: ", ";\n  pointer-events: ", ";\n  :hover {\n    background-color: ", ";\n  }\n  opacity: ", ";\n"])), function (_a) {
+var MenuItem = styled__default["default"](RowBetween)(templateObject_3$7 || (templateObject_3$7 = tslib.__makeTemplateObject(["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) minmax(0, 72px);\n  grid-gap: 8px;\n  cursor: ", ";\n  pointer-events: ", ";\n  :hover {\n    background-color: ", ";\n  }\n  opacity: ", ";\n"], ["\n  padding: 4px 20px;\n  height: 56px;\n  display: grid;\n  grid-template-columns: auto minmax(auto, 1fr) minmax(0, 72px);\n  grid-gap: 8px;\n  cursor: ", ";\n  pointer-events: ", ";\n  :hover {\n    background-color: ", ";\n  }\n  opacity: ", ";\n"])), function (_a) {
     var disabled = _a.disabled;
     return !disabled && 'pointer';
 }, function (_a) {
@@ -12334,7 +12073,7 @@ function CurrencyList(_a) {
     var itemKey = React.useCallback(function (index, data) { return currencyKey(data[index]); }, []);
     return (jsxRuntime.jsx(reactWindow.FixedSizeList, tslib.__assign({ height: height, ref: fixedListRef, width: "100%", itemData: itemData, itemCount: itemData.length, itemSize: 56, itemKey: itemKey }, { children: Row }), void 0));
 }
-var templateObject_1$e, templateObject_2$9, templateObject_3$4;
+var templateObject_1$i, templateObject_2$c, templateObject_3$7;
 
 // compare two token amounts with highest one coming first
 function balanceComparator(balanceA, balanceB) {
@@ -12476,8 +12215,8 @@ var CurrencyModalView;
 function listVersionLabel(version) {
     return "v" + version.major + "." + version.minor + "." + version.patch;
 }
-var Wrapper$2 = styled__default["default"](Column)(templateObject_1$d || (templateObject_1$d = tslib.__makeTemplateObject(["\n  width: 100%;\n  height: 100%;\n"], ["\n  width: 100%;\n  height: 100%;\n"])));
-var RowWrapper = styled__default["default"](Row)(templateObject_2$8 || (templateObject_2$8 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border: solid 1px;\n  border-color: ", ";\n  transition: 200ms;\n  align-items: center;\n  padding: 1rem;\n  border-radius: 10px;\n"], ["\n  background-color: ", ";\n  border: solid 1px;\n  border-color: ", ";\n  transition: 200ms;\n  align-items: center;\n  padding: 1rem;\n  border-radius: 10px;\n"])), function (_a) {
+var Wrapper$4 = styled__default["default"](Column)(templateObject_1$h || (templateObject_1$h = tslib.__makeTemplateObject(["\n  width: 100%;\n  height: 100%;\n"], ["\n  width: 100%;\n  height: 100%;\n"])));
+var RowWrapper = styled__default["default"](Row)(templateObject_2$b || (templateObject_2$b = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border: solid 1px;\n  border-color: ", ";\n  transition: 200ms;\n  align-items: center;\n  padding: 1rem;\n  border-radius: 10px;\n"], ["\n  background-color: ", ";\n  border: solid 1px;\n  border-color: ", ";\n  transition: 200ms;\n  align-items: center;\n  padding: 1rem;\n  border-radius: 10px;\n"])), function (_a) {
     var active = _a.active, theme = _a.theme;
     return (active ? theme.colors.success + "19" : 'transparent');
 }, function (_a) {
@@ -12523,7 +12262,7 @@ var ListRow = React.memo(function ListRow(_a) {
                     }
                 } }, void 0)] }), listUrl));
 });
-var ListContainer = styled__default["default"].div(templateObject_3$3 || (templateObject_3$3 = tslib.__makeTemplateObject(["\n  padding: 1rem 0;\n  height: 100%;\n  overflow: auto;\n"], ["\n  padding: 1rem 0;\n  height: 100%;\n  overflow: auto;\n"])));
+var ListContainer = styled__default["default"].div(templateObject_3$6 || (templateObject_3$6 = tslib.__makeTemplateObject(["\n  padding: 1rem 0;\n  height: 100%;\n  overflow: auto;\n"], ["\n  padding: 1rem 0;\n  height: 100%;\n  overflow: auto;\n"])));
 function ManageLists(_a) {
     var setModalView = _a.setModalView, setImportList = _a.setImportList, setListUrl = _a.setListUrl;
     var _b = tslib.__read(React.useState(''), 2), listUrlInput = _b[0], setListUrlInput = _b[1];
@@ -12614,12 +12353,12 @@ function ManageLists(_a) {
         setModalView(CurrencyModalView.importList);
         setListUrl(listUrlInput);
     }, [listUrlInput, setImportList, setListUrl, setModalView, tempList]);
-    return (jsxRuntime.jsxs(Wrapper$2, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: t(addError) }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
+    return (jsxRuntime.jsxs(Wrapper$4, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "list-add-input", scale: "lg", placeholder: t('https:// or ipfs:// or ENS name'), value: listUrlInput, onChange: handleInput }, void 0) }, void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: t(addError) }), void 0)) : null] }), void 0), tempList && (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { paddingTop: 0 } }, { children: jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [tempList.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: tempList.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "4px", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true }, { children: tempList.name }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle", small: true, textTransform: "lowercase" }, { children: [tempList.tokens.length, " ", t('Tokens')] }), void 0)] }), void 0)] }, void 0), isImported ? (jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$a, { width: "16px", mr: "10px" }, void 0), jsxRuntime.jsx(Text, { children: t('Loaded') }, void 0)] }, void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "fit-content", onClick: handleImport }, { children: t('Import') }), void 0))] }, void 0) }), void 0) }), void 0)), jsxRuntime.jsx(ListContainer, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: sortedLists.map(function (listUrl) { return (jsxRuntime.jsx(ListRow, { listUrl: listUrl }, listUrl)); }) }), void 0) }, void 0)] }, void 0));
 }
-var templateObject_1$d, templateObject_2$8, templateObject_3$3;
+var templateObject_1$h, templateObject_2$b, templateObject_3$6;
 
-var Wrapper$1 = styled__default["default"].div(templateObject_1$c || (templateObject_1$c = tslib.__makeTemplateObject(["\n  width: 100%;\n  height: calc(100% - 60px);\n  position: relative;\n  padding-bottom: 60px;\n"], ["\n  width: 100%;\n  height: calc(100% - 60px);\n  position: relative;\n  padding-bottom: 60px;\n"])));
-var Footer$1 = styled__default["default"].div(templateObject_2$7 || (templateObject_2$7 = tslib.__makeTemplateObject(["\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n"], ["\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n"])));
+var Wrapper$3 = styled__default["default"].div(templateObject_1$g || (templateObject_1$g = tslib.__makeTemplateObject(["\n  width: 100%;\n  height: calc(100% - 60px);\n  position: relative;\n  padding-bottom: 60px;\n"], ["\n  width: 100%;\n  height: calc(100% - 60px);\n  position: relative;\n  padding-bottom: 60px;\n"])));
+var Footer$1 = styled__default["default"].div(templateObject_2$a || (templateObject_2$a = tslib.__makeTemplateObject(["\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n"], ["\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n"])));
 function ManageTokens(_a) {
     var setModalView = _a.setModalView, setImportToken = _a.setImportToken;
     var chainId = useActiveWeb3React().chainId;
@@ -12649,21 +12388,21 @@ function ManageTokens(_a) {
             userAddedTokens.map(function (token) { return (jsxRuntime.jsxs(RowBetween, tslib.__assign({ width: "100%" }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: token, size: "20px" }, void 0), jsxRuntime.jsx(Link, tslib.__assign({ external: true, href: getBscScanLink(token.address, 'address', chainId), color: "textSubtle", ml: "10px" }, { children: token.symbol }), void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(IconButton, tslib.__assign({ variant: "text", onClick: function () { return removeToken(chainId, token.address); } }, { children: jsxRuntime.jsx(Icon$7, {}, void 0) }), void 0), jsxRuntime.jsx(LinkExternal, { href: getBscScanLink(token.address, 'address', chainId) }, void 0)] }, void 0)] }), token.address)); }));
     }, [userAddedTokens, chainId, removeToken]);
     var isAddressValid = searchQuery === '' || isAddress(searchQuery);
-    return (jsxRuntime.jsx(Wrapper$1, { children: jsxRuntime.jsxs(Column, tslib.__assign({ style: { width: '100%', flex: '1 1' } }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "token-search-input", scale: "lg", placeholder: "0x0000", value: searchQuery, autoComplete: "off", ref: inputRef, onChange: handleInput, isWarning: !isAddressValid }, void 0) }, void 0), !isAddressValid && jsxRuntime.jsx(Text, tslib.__assign({ color: "failure" }, { children: t('Enter valid token address') }), void 0), searchToken && (jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken, style: { height: 'fit-content' } }, void 0))] }), void 0), tokenList, jsxRuntime.jsxs(Footer$1, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ bold: true, color: "textSubtle" }, { children: [userAddedTokens === null || userAddedTokens === void 0 ? void 0 : userAddedTokens.length, " ", userAddedTokens.length === 1 ? t('Custom Token') : t('Custom Tokens')] }), void 0), userAddedTokens.length > 0 && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", onClick: handleRemoveAll }, { children: t('Clear all') }), void 0))] }, void 0)] }), void 0) }, void 0));
+    return (jsxRuntime.jsx(Wrapper$3, { children: jsxRuntime.jsxs(Column, tslib.__assign({ style: { width: '100%', flex: '1 1' } }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "14px" }, { children: [jsxRuntime.jsx(Row, { children: jsxRuntime.jsx(Input$3, { id: "token-search-input", scale: "lg", placeholder: "0x0000", value: searchQuery, autoComplete: "off", ref: inputRef, onChange: handleInput, isWarning: !isAddressValid }, void 0) }, void 0), !isAddressValid && jsxRuntime.jsx(Text, tslib.__assign({ color: "failure" }, { children: t('Enter valid token address') }), void 0), searchToken && (jsxRuntime.jsx(ImportRow, { token: searchToken, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken, style: { height: 'fit-content' } }, void 0))] }), void 0), tokenList, jsxRuntime.jsxs(Footer$1, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ bold: true, color: "textSubtle" }, { children: [userAddedTokens === null || userAddedTokens === void 0 ? void 0 : userAddedTokens.length, " ", userAddedTokens.length === 1 ? t('Custom Token') : t('Custom Tokens')] }), void 0), userAddedTokens.length > 0 && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", onClick: handleRemoveAll }, { children: t('Clear all') }), void 0))] }, void 0)] }), void 0) }, void 0));
 }
-var templateObject_1$c, templateObject_2$7;
+var templateObject_1$g, templateObject_2$a;
 
-var StyledButtonMenu = styled__default["default"](ButtonMenu)(templateObject_1$b || (templateObject_1$b = tslib.__makeTemplateObject(["\n  width: 100%;\n"], ["\n  width: 100%;\n"])));
+var StyledButtonMenu = styled__default["default"](ButtonMenu)(templateObject_1$f || (templateObject_1$f = tslib.__makeTemplateObject(["\n  width: 100%;\n"], ["\n  width: 100%;\n"])));
 function Manage(_a) {
     var setModalView = _a.setModalView, setImportList = _a.setImportList, setImportToken = _a.setImportToken, setListUrl = _a.setListUrl;
     var _b = tslib.__read(React.useState(true), 2), showLists = _b[0], setShowLists = _b[1];
     var t = useTranslation().t;
     return (jsxRuntime.jsxs(ModalBody, { children: [jsxRuntime.jsxs(StyledButtonMenu, tslib.__assign({ activeIndex: showLists ? 0 : 1, onItemClick: function () { return setShowLists(function (prev) { return !prev; }); }, scale: "sm", variant: "subtle", mb: "32px" }, { children: [jsxRuntime.jsx(ButtonMenuItem, tslib.__assign({ width: "50%" }, { children: t('Lists') }), void 0), jsxRuntime.jsx(ButtonMenuItem, tslib.__assign({ width: "50%" }, { children: t('Tokens') }), void 0)] }), void 0), showLists ? (jsxRuntime.jsx(ManageLists, { setModalView: setModalView, setImportList: setImportList, setListUrl: setListUrl }, void 0)) : (jsxRuntime.jsx(ManageTokens, { setModalView: setModalView, setImportToken: setImportToken }, void 0))] }, void 0));
 }
-var templateObject_1$b;
+var templateObject_1$f;
 
-var Wrapper = styled__default["default"].div(templateObject_1$a || (templateObject_1$a = tslib.__makeTemplateObject(["\n  position: relative;\n  width: 100%;\n"], ["\n  position: relative;\n  width: 100%;\n"])));
-var TextDot = styled__default["default"].div(templateObject_2$6 || (templateObject_2$6 = tslib.__makeTemplateObject(["\n  height: 3px;\n  width: 3px;\n  background-color: ", ";\n  border-radius: 50%;\n"], ["\n  height: 3px;\n  width: 3px;\n  background-color: ", ";\n  border-radius: 50%;\n"])), function (_a) {
+var Wrapper$2 = styled__default["default"].div(templateObject_1$e || (templateObject_1$e = tslib.__makeTemplateObject(["\n  position: relative;\n  width: 100%;\n"], ["\n  position: relative;\n  width: 100%;\n"])));
+var TextDot = styled__default["default"].div(templateObject_2$9 || (templateObject_2$9 = tslib.__makeTemplateObject(["\n  height: 3px;\n  width: 3px;\n  background-color: ", ";\n  border-radius: 50%;\n"], ["\n  height: 3px;\n  width: 3px;\n  background-color: ", ";\n  border-radius: 50%;\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.text;
 });
@@ -12694,16 +12433,16 @@ function ImportList(_a) {
             dispatch(removeList(listURL));
         });
     }, [adding, dispatch, fetchList, listURL, onImport]);
-    return (jsxRuntime.jsx(Wrapper, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsx(RowBetween, { children: jsxRuntime.jsxs(RowFixed, { children: [list.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: list.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "sm", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true, mr: "6px" }, { children: list.name }), void 0), jsxRuntime.jsx(TextDot, {}, void 0), jsxRuntime.jsxs(Text, tslib.__assign({ small: true, color: "textSubtle", ml: "6px" }, { children: [list.tokens.length, " tokens"] }), void 0)] }, void 0), jsxRuntime.jsx(Link, tslib.__assign({ small: true, external: true, ellipsis: true, maxWidth: "90%", href: "https://tokenlists.org/token-list?url=" + listURL }, { children: listURL }), void 0)] }), void 0)] }, void 0) }, void 0) }), void 0), jsxRuntime.jsx(Message, tslib.__assign({ variant: "danger" }, { children: jsxRuntime.jsxs(Flex, tslib.__assign({ flexDirection: "column" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px", textAlign: "center", color: theme.colors.failure, mb: "16px" }, { children: t('Import at your own risk') }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: theme.colors.failure, mb: "8px" }, { children: t('By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.') }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ bold: true, color: theme.colors.failure, mb: "16px" }, { children: typeof 'If you purchase a token from this list, you may not be able to sell it back.' }), void 0), jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Checkbox, { name: "confirmed", type: "checkbox", checked: confirmed, onChange: function () { return setConfirmed(!confirmed); }, scale: "sm" }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ ml: "10px", style: { userSelect: 'none' } }, { children: t('I understand') }), void 0)] }), void 0)] }), void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ disabled: !confirmed, onClick: handleAddList }, { children: t('Import') }), void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0) }), void 0) }, void 0));
+    return (jsxRuntime.jsx(Wrapper$2, { children: jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "md" }, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsx(Card, tslib.__assign({ padding: "12px 20px" }, { children: jsxRuntime.jsx(RowBetween, { children: jsxRuntime.jsxs(RowFixed, { children: [list.logoURI && jsxRuntime.jsx(ListLogo, { logoURI: list.logoURI, size: "40px" }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "sm", style: { marginLeft: '20px' } }, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ bold: true, mr: "6px" }, { children: list.name }), void 0), jsxRuntime.jsx(TextDot, {}, void 0), jsxRuntime.jsxs(Text, tslib.__assign({ small: true, color: "textSubtle", ml: "6px" }, { children: [list.tokens.length, " tokens"] }), void 0)] }, void 0), jsxRuntime.jsx(Link, tslib.__assign({ small: true, external: true, ellipsis: true, maxWidth: "90%", href: "https://tokenlists.org/token-list?url=" + listURL }, { children: listURL }), void 0)] }), void 0)] }, void 0) }, void 0) }), void 0), jsxRuntime.jsx(Message, tslib.__assign({ variant: "danger" }, { children: jsxRuntime.jsxs(Flex, tslib.__assign({ flexDirection: "column" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px", textAlign: "center", color: theme.colors.failure, mb: "16px" }, { children: t('Import at your own risk') }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: theme.colors.failure, mb: "8px" }, { children: t('By adding this list you are implicitly trusting that the data is correct. Anyone can create a list, including creating fake versions of existing lists and lists that claim to represent projects that do not have one.') }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ bold: true, color: theme.colors.failure, mb: "16px" }, { children: typeof 'If you purchase a token from this list, you may not be able to sell it back.' }), void 0), jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Checkbox, { name: "confirmed", type: "checkbox", checked: confirmed, onChange: function () { return setConfirmed(!confirmed); }, scale: "sm" }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ ml: "10px", style: { userSelect: 'none' } }, { children: t('I understand') }), void 0)] }), void 0)] }), void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ disabled: !confirmed, onClick: handleAddList }, { children: t('Import') }), void 0), addError ? (jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textOverflow: 'ellipsis', overflow: 'hidden' } }, { children: addError }), void 0)) : null] }), void 0) }), void 0) }, void 0));
 }
-var templateObject_1$a, templateObject_2$6;
+var templateObject_1$e, templateObject_2$9;
 
-var Footer = styled__default["default"].div(templateObject_1$9 || (templateObject_1$9 = tslib.__makeTemplateObject(["\n  width: 100%;\n  background-color: ", ";\n  text-align: center;\n"], ["\n  width: 100%;\n  background-color: ", ";\n  text-align: center;\n"])), function (_a) {
+var Footer = styled__default["default"].div(templateObject_1$d || (templateObject_1$d = tslib.__makeTemplateObject(["\n  width: 100%;\n  background-color: ", ";\n  text-align: center;\n"], ["\n  width: 100%;\n  background-color: ", ";\n  text-align: center;\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.backgroundAlt;
 });
-var StyledModalContainer$1 = styled__default["default"](ModalContainer)(templateObject_2$5 || (templateObject_2$5 = tslib.__makeTemplateObject(["\n  max-width: 420px;\n  width: 100%;\n"], ["\n  max-width: 420px;\n  width: 100%;\n"])));
-var StyledModalBody = styled__default["default"](ModalBody)(templateObject_3$2 || (templateObject_3$2 = tslib.__makeTemplateObject(["\n  padding: 24px;\n"], ["\n  padding: 24px;\n"])));
+var StyledModalContainer$1 = styled__default["default"](ModalContainer)(templateObject_2$8 || (templateObject_2$8 = tslib.__makeTemplateObject(["\n  max-width: 420px;\n  width: 100%;\n"], ["\n  max-width: 420px;\n  width: 100%;\n"])));
+var StyledModalBody = styled__default["default"](ModalBody)(templateObject_3$5 || (templateObject_3$5 = tslib.__makeTemplateObject(["\n  padding: 24px;\n"], ["\n  padding: 24px;\n"])));
 function CurrencySearchModal(_a) {
     var _b;
     var _c = _a.onDismiss, onDismiss = _c === void 0 ? function () { return null; } : _c, onCurrencySelect = _a.onCurrencySelect, selectedCurrency = _a.selectedCurrency, otherSelectedCurrency = _a.otherSelectedCurrency, _d = _a.showCommonBases, showCommonBases = _d === void 0 ? false : _d;
@@ -12733,9 +12472,9 @@ function CurrencySearchModal(_a) {
         _b);
     return (jsxRuntime.jsxs(StyledModalContainer$1, tslib.__assign({ minWidth: "320px" }, { children: [jsxRuntime.jsxs(ModalHeader, { children: [jsxRuntime.jsxs(ModalTitle, { children: [config[modalView].onBack && jsxRuntime.jsx(ModalBackButton, { onBack: config[modalView].onBack }, void 0), jsxRuntime.jsx(Heading, { children: config[modalView].title }, void 0)] }, void 0), jsxRuntime.jsx(ModalCloseButton, { onDismiss: onDismiss }, void 0)] }, void 0), jsxRuntime.jsxs(StyledModalBody, { children: [modalView === CurrencyModalView.search ? (jsxRuntime.jsx(CurrencySearch, { onCurrencySelect: handleCurrencySelect, selectedCurrency: selectedCurrency, otherSelectedCurrency: otherSelectedCurrency, showCommonBases: showCommonBases, showImportView: function () { return setModalView(CurrencyModalView.importToken); }, setImportToken: setImportToken }, void 0)) : modalView === CurrencyModalView.importToken && importToken ? (jsxRuntime.jsx(ImportToken, { tokens: [importToken], handleCurrencySelect: handleCurrencySelect }, void 0)) : modalView === CurrencyModalView.importList && importList && listURL ? (jsxRuntime.jsx(ImportList, { list: importList, listURL: listURL, onImport: function () { return setModalView(CurrencyModalView.manage); } }, void 0)) : modalView === CurrencyModalView.manage ? (jsxRuntime.jsx(Manage, { setModalView: setModalView, setImportToken: setImportToken, setImportList: setImportList, setListUrl: setListUrl }, void 0)) : (''), modalView === CurrencyModalView.search && (jsxRuntime.jsx(Footer, { children: jsxRuntime.jsx(Button, tslib.__assign({ scale: "sm", variant: "text", onClick: function () { return setModalView(CurrencyModalView.manage); }, className: "list-token-manage-button" }, { children: t('Manage Tokens') }), void 0) }, void 0))] }, void 0)] }), void 0));
 }
-var templateObject_1$9, templateObject_2$5, templateObject_3$2;
+var templateObject_1$d, templateObject_2$8, templateObject_3$5;
 
-var StyledInput = styled__default["default"].input(templateObject_1$8 || (templateObject_1$8 = tslib.__makeTemplateObject(["\n  color: ", ";\n  width: 0;\n  position: relative;\n  font-weight: 500;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  background-color: transparent;\n  font-size: 16px;\n  text-align: ", ";\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  &:disabled {\n    /* background-color: ", "; */\n    box-shadow: none;\n    /* color: ", "; */\n    cursor: not-allowed;\n  }\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  [type='number'] {\n    -moz-appearance: textfield;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"], ["\n  color: ", ";\n  width: 0;\n  position: relative;\n  font-weight: 500;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  background-color: transparent;\n  font-size: 16px;\n  text-align: ", ";\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  &:disabled {\n    /* background-color: ", "; */\n    box-shadow: none;\n    /* color: ", "; */\n    cursor: not-allowed;\n  }\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  [type='number'] {\n    -moz-appearance: textfield;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"])), function (_a) {
+var StyledInput = styled__default["default"].input(templateObject_1$c || (templateObject_1$c = tslib.__makeTemplateObject(["\n  color: ", ";\n  width: 0;\n  position: relative;\n  font-weight: 500;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  background-color: transparent;\n  font-size: 16px;\n  text-align: ", ";\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  &:disabled {\n    /* background-color: ", "; */\n    box-shadow: none;\n    /* color: ", "; */\n    cursor: not-allowed;\n  }\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  [type='number'] {\n    -moz-appearance: textfield;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"], ["\n  color: ", ";\n  width: 0;\n  position: relative;\n  font-weight: 500;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  background-color: transparent;\n  font-size: 16px;\n  text-align: ", ";\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  &:disabled {\n    /* background-color: ", "; */\n    box-shadow: none;\n    /* color: ", "; */\n    cursor: not-allowed;\n  }\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  [type='number'] {\n    -moz-appearance: textfield;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"])), function (_a) {
     var error = _a.error, theme = _a.theme;
     return (error ? theme.colors.failure : theme.colors.text);
 }, function (_a) {
@@ -12752,7 +12491,7 @@ var StyledInput = styled__default["default"].input(templateObject_1$8 || (templa
     return theme.colors.text;
 });
 var inputRegex = RegExp("^\\d*(?:\\\\[.])?\\d*$"); // match escaped "." characters via in a non-capturing group
-var Input = React__default["default"].memo(function InnerInput(_a) {
+var Input$1 = React__default["default"].memo(function InnerInput(_a) {
     var value = _a.value, onUserInput = _a.onUserInput, placeholder = _a.placeholder, decimals = _a.decimals, rest = tslib.__rest(_a, ["value", "onUserInput", "placeholder", "decimals"]);
     var enforcer = React.useCallback(function (event) {
         if (event.currentTarget.validity.valid) {
@@ -12769,25 +12508,25 @@ var Input = React__default["default"].memo(function InnerInput(_a) {
         // text-specific options
         type: "text", placeholder: placeholder || '0.0', minLength: 1, maxLength: 79, spellCheck: "false" }), void 0));
 });
-var templateObject_1$8;
+var templateObject_1$c;
 
-var InputRow = styled__default["default"].div(templateObject_1$7 || (templateObject_1$7 = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  padding: ", ";\n"], ["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  padding: ", ";\n"])), function (_a) {
+var InputRow = styled__default["default"].div(templateObject_1$b || (templateObject_1$b = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  padding: ", ";\n"], ["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  padding: ", ";\n"])), function (_a) {
     var selected = _a.selected;
     return (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem');
 });
-var CurrencySelectButton = styled__default["default"](Button).attrs({ variant: 'text', scale: 'sm' })(templateObject_2$4 || (templateObject_2$4 = tslib.__makeTemplateObject(["\n  padding: 0 0.5rem;\n"], ["\n  padding: 0 0.5rem;\n"])));
-var LabelRow = styled__default["default"].div(templateObject_3$1 || (templateObject_3$1 = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  color: ", ";\n  font-size: 0.75rem;\n  line-height: 1rem;\n  padding: 0.75rem 1rem 0 1rem;\n"], ["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  color: ", ";\n  font-size: 0.75rem;\n  line-height: 1rem;\n  padding: 0.75rem 1rem 0 1rem;\n"])), function (_a) {
+var CurrencySelectButton = styled__default["default"](Button).attrs({ variant: 'text', scale: 'sm' })(templateObject_2$7 || (templateObject_2$7 = tslib.__makeTemplateObject(["\n  padding: 0 0.5rem;\n"], ["\n  padding: 0 0.5rem;\n"])));
+var LabelRow = styled__default["default"].div(templateObject_3$4 || (templateObject_3$4 = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  color: ", ";\n  font-size: 0.75rem;\n  line-height: 1rem;\n  padding: 0.75rem 1rem 0 1rem;\n"], ["\n  display: flex;\n  flex-flow: row nowrap;\n  align-items: center;\n  color: ", ";\n  font-size: 0.75rem;\n  line-height: 1rem;\n  padding: 0.75rem 1rem 0 1rem;\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.text;
 });
-var InputPanel = styled__default["default"].div(templateObject_4$1 || (templateObject_4$1 = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: ", ";\n  background-color: ", ";\n  z-index: 1;\n"], ["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: ", ";\n  background-color: ", ";\n  z-index: 1;\n"])), function (_a) {
+var InputPanel$1 = styled__default["default"].div(templateObject_4$3 || (templateObject_4$3 = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: ", ";\n  background-color: ", ";\n  z-index: 1;\n"], ["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: ", ";\n  background-color: ", ";\n  z-index: 1;\n"])), function (_a) {
     var hideInput = _a.hideInput;
     return (hideInput ? '8px' : '20px');
 }, function (_a) {
     var theme = _a.theme;
     return theme.colors.background;
 });
-var Container = styled__default["default"].div(templateObject_5 || (templateObject_5 = tslib.__makeTemplateObject(["\n  border-radius: 10px;\n  background-color: ", ";\n  box-shadow: ", ";\n"], ["\n  border-radius: 10px;\n  background-color: ", ";\n  box-shadow: ", ";\n"])), function (_a) {
+var Container = styled__default["default"].div(templateObject_5$1 || (templateObject_5$1 = tslib.__makeTemplateObject(["\n  border-radius: 10px;\n  background-color: ", ";\n  box-shadow: ", ";\n"], ["\n  border-radius: 10px;\n  background-color: ", ";\n  box-shadow: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.input;
 }, function (_a) {
@@ -12804,9 +12543,9 @@ function CurrencyInputPanel(_a) {
     var t = useTranslation().t;
     var translatedLabel = label || t('Input');
     var _g = tslib.__read(useModal(jsxRuntime.jsx(CurrencySearchModal, { onCurrencySelect: onCurrencySelect, selectedCurrency: currency, otherSelectedCurrency: otherCurrency, showCommonBases: showCommonBases }, void 0)), 1), onPresentCurrencyModal = _g[0];
-    return (jsxRuntime.jsx(InputPanel, tslib.__assign({ id: id }, { children: jsxRuntime.jsxs(Container, tslib.__assign({ hideInput: hideInput }, { children: [!hideInput && (jsxRuntime.jsx(LabelRow, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: translatedLabel }), void 0), account && (jsxRuntime.jsx(Text, tslib.__assign({ onClick: onMax, fontSize: "14px", style: { display: 'inline', cursor: 'pointer' } }, { children: !hideBalance && !!currency && selectedCurrencyBalance
+    return (jsxRuntime.jsx(InputPanel$1, tslib.__assign({ id: id }, { children: jsxRuntime.jsxs(Container, tslib.__assign({ hideInput: hideInput }, { children: [!hideInput && (jsxRuntime.jsx(LabelRow, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: translatedLabel }), void 0), account && (jsxRuntime.jsx(Text, tslib.__assign({ onClick: onMax, fontSize: "14px", style: { display: 'inline', cursor: 'pointer' } }, { children: !hideBalance && !!currency && selectedCurrencyBalance
                                     ? t('Balance: %amount%', { amount: (_b = selectedCurrencyBalance === null || selectedCurrencyBalance === void 0 ? void 0 : selectedCurrencyBalance.toSignificant(6)) !== null && _b !== void 0 ? _b : '' })
-                                    : ' -' }), void 0))] }, void 0) }, void 0)), jsxRuntime.jsxs(InputRow, tslib.__assign({ style: hideInput ? { padding: '0', borderRadius: '8px' } : {}, selected: disableCurrencySelect }, { children: [!hideInput && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(Input, { className: "token-amount-input", disabled: disabled, decimals: currency === null || currency === void 0 ? void 0 : currency.decimals, value: value, onUserInput: function (val) {
+                                    : ' -' }), void 0))] }, void 0) }, void 0)), jsxRuntime.jsxs(InputRow, tslib.__assign({ style: hideInput ? { padding: '0', borderRadius: '8px' } : {}, selected: disableCurrencySelect }, { children: [!hideInput && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(Input$1, { className: "token-amount-input", disabled: disabled, decimals: currency === null || currency === void 0 ? void 0 : currency.decimals, value: value, onUserInput: function (val) {
                                         onUserInput(val);
                                     } }, void 0), account && currency && showMaxButton && label !== 'To' && (jsxRuntime.jsx(Button, tslib.__assign({ onClick: onMax, scale: "sm", variant: "text" }, { children: "MAX" }), void 0))] }, void 0)), jsxRuntime.jsx(CurrencySelectButton, tslib.__assign({ selected: !!currency, className: "open-currency-select-button", onClick: function () {
                                 if (!disableCurrencySelect) {
@@ -12821,163 +12560,7 @@ function CurrencyInputPanel(_a) {
                                             ? currency.symbol.slice(0, 4) + "..." + currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
                                             : currency === null || currency === void 0 ? void 0 : currency.symbol) || t('Select') }), void 0)), !disableCurrencySelect && jsxRuntime.jsx(Icon$9, { color: 'primary' }, void 0)] }), void 0) }), void 0)] }), void 0)] }), void 0) }), void 0));
 }
-var templateObject_1$7, templateObject_2$4, templateObject_3$1, templateObject_4$1, templateObject_5;
-
-/**
- * Returns the last value of type T that passes a filter function
- * @param value changing value
- * @param filterFn function that determines whether a given value should be considered for the last value
- */
-function useLast(value, filterFn) {
-    var _a = tslib.__read(React.useState(filterFn && filterFn(value) ? value : undefined), 2), last = _a[0], setLast = _a[1];
-    React.useEffect(function () {
-        setLast(function (prev) {
-            var shouldUse = filterFn ? filterFn(value) : true;
-            if (shouldUse)
-                return value;
-            return prev;
-        });
-    }, [filterFn, value]);
-    return last;
-}
-function isDefined(x) {
-    return x !== null && x !== undefined;
-}
-/**
- * Returns the last truthy value of type T
- * @param value changing value
- */
-function useLastTruthy(value) {
-    return useLast(value, isDefined);
-}
-
-var SwapRoute = React.memo(function SwapRoute(_a) {
-    var trade = _a.trade, polyData = _a.polyData, isPolyMethed = _a.isPolyMethed;
-    var renderPath = isPolyMethed ? polyData.protocols : trade.route.path;
-    return (jsxRuntime.jsx(Flex, tslib.__assign({ flexWrap: "wrap", width: "100%", justifyContent: "flex-end", alignItems: "center" }, { children: renderPath.map(function (token, i, path) {
-            var isLastItem = i === path.length - 1;
-            var currency = unwrappedToken(token);
-            return (
-            // eslint-disable-next-line react/no-array-index-key
-            jsxRuntime.jsxs(React.Fragment, { children: [jsxRuntime.jsx(Flex, tslib.__assign({ alignItems: "end" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", ml: "0.125rem", mr: "0.125rem" }, { children: currency.symbol }), void 0) }), void 0), !isLastItem && jsxRuntime.jsx(Icon$8, { width: "12px" }, void 0)] }, i));
-        }) }), void 0));
-});
-
-function TradeSummary(_a) {
-    var _b, _c, _d, _e;
-    var trade = _a.trade, allowedSlippage = _a.allowedSlippage;
-    var t = useTranslation().t;
-    var _f = computeTradePriceBreakdown(trade), priceImpactWithoutFee = _f.priceImpactWithoutFee, realizedLPFee = _f.realizedLPFee;
-    var isExactIn = trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT;
-    var slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage);
-    return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ style: { padding: '0' } }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: isExactIn ? t('Minimum received') : t('Maximum sold') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t('Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.'), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsx(RowFixed, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: isExactIn
-                                ? (_c = ((_b = slippageAdjustedAmounts[Field$2.OUTPUT]) === null || _b === void 0 ? void 0 : _b.toSignificant(4)) + " " + trade.outputAmount.currency.symbol) !== null && _c !== void 0 ? _c : '-'
-                                : (_e = ((_d = slippageAdjustedAmounts[Field$2.INPUT]) === null || _d === void 0 ? void 0 : _d.toSignificant(4)) + " " + trade.inputAmount.currency.symbol) !== null && _e !== void 0 ? _e : '-' }), void 0) }, void 0)] }, void 0), jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Price Impact') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t('The difference between the market price and estimated price due to trade size.'), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsx(FormattedPriceImpact, { priceImpact: priceImpactWithoutFee }, void 0)] }, void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(LiquidityProviderFee, {}, void 0), jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: realizedLPFee ? realizedLPFee.toSignificant(4) + " " + trade.inputAmount.currency.symbol : '-' }), void 0)] }, void 0)] }, void 0)] }), void 0));
-}
-function TradeSummaryPloy(_a) {
-    var _b, _c, _d;
-    var polyData = _a.polyData;
-    var t = useTranslation().t;
-    return (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { padding: '0' } }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "textSubtle" }, { children: t('Minimum received') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t('Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.'), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsx(RowFixed, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: (_d = ((_b = polyData === null || polyData === void 0 ? void 0 : polyData.toCurrencyAmount) === null || _b === void 0 ? void 0 : _b.toSignificant(4)) + " " + ((_c = polyData === null || polyData === void 0 ? void 0 : polyData.toToken) === null || _c === void 0 ? void 0 : _c.symbol)) !== null && _d !== void 0 ? _d : '-' }), void 0) }, void 0)] }, void 0) }), void 0));
-}
-function AdvancedSwapDetails(_a) {
-    var trade = _a.trade, isPolyMethed = _a.isPolyMethed, polyData = _a.polyData;
-    var _b = tslib.__read(useUserSlippageTolerance(), 1), allowedSlippage = _b[0];
-    var t = useTranslation().t;
-    var showRoute = !isPolyMethed ? Boolean(trade && trade.route.path.length > 2) : Boolean(polyData && polyData.protocols.length > 2);
-    return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "0px" }, { children: [isPolyMethed && (jsxRuntime.jsx(TradeSummaryPloy, { polyData: polyData }, void 0)), (trade && !isPolyMethed) && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(TradeSummary, { trade: trade, allowedSlippage: allowedSlippage }, void 0), showRoute && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ style: { padding: '0' } }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ minWidth: "80px" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Route') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t("Routing through these tokens resulted in the best price for your trade."), ml: "4px", placement: "top-start" }, void 0)] }), void 0), jsxRuntime.jsx(SwapRoute, { isPolyMethed: isPolyMethed, polyData: polyData, trade: trade }, void 0)] }), void 0) }, void 0))] }, void 0))] }), void 0));
-}
-
-var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$6 || (templateObject_1$6 = tslib.__makeTemplateObject(["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"], ["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"])), function (_a) {
-    var show = _a.show;
-    return (show ? '0' : 0);
-}, function (_a) {
-    var theme = _a.theme;
-    return theme.colors.invertedContrast;
-}, function (_a) {
-    var show = _a.show;
-    return (show ? 'translateY(0%)' : 'translateY(-128%)');
-}, function (_a) {
-    var show = _a.show;
-    return (show ? 'auto' : '60px');
-}, function (_a) {
-    var show = _a.show;
-    return (show ? 'visible' : 'hide');
-});
-function AdvancedSwapDetailsDropdown(_a) {
-    var _b;
-    var trade = _a.trade, isPolyMethed = _a.isPolyMethed, polyData = _a.polyData, rest = tslib.__rest(_a, ["trade", "isPolyMethed", "polyData"]);
-    var lastTrade = useLastTruthy(trade);
-    var show = Boolean(isPolyMethed ? polyData : trade);
-    return (jsxRuntime.jsx(AdvancedDetailsFooter, tslib.__assign({ show: show }, { children: show && jsxRuntime.jsx(AdvancedSwapDetails, tslib.__assign({}, rest, { isPolyMethed: isPolyMethed, polyData: polyData, trade: (_b = trade !== null && trade !== void 0 ? trade : lastTrade) !== null && _b !== void 0 ? _b : undefined }), void 0) }), void 0));
-}
-var templateObject_1$6;
-
-/**
- * Given the price impact, get user confirmation.
- *
- * @param priceImpactWithoutFee price impact of the trade without the fee.
- */
-function confirmPriceImpactWithoutFee(priceImpactWithoutFee) {
-    if (!priceImpactWithoutFee.lessThan(PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN)) {
-        return (
-        // eslint-disable-next-line no-alert
-        window.prompt("This swap has a price impact of at least " + PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN.toFixed(0) + "%. Please type the word \"confirm\" to continue with this swap.") === 'confirm');
-    }
-    if (!priceImpactWithoutFee.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) {
-        // eslint-disable-next-line no-alert
-        return window.confirm("This swap has a price impact of at least " + ALLOWED_PRICE_IMPACT_HIGH.toFixed(0) + "%. Please confirm that you would like to continue with this swap.");
-    }
-    return true;
-}
-
-function TradePrice(_a) {
-    var _b, _c, _d, _e, _f;
-    var price = _a.price, showInverted = _a.showInverted, setShowInverted = _a.setShowInverted;
-    var formattedPrice = showInverted ? price === null || price === void 0 ? void 0 : price.toSignificant(6) : (_b = price === null || price === void 0 ? void 0 : price.invert()) === null || _b === void 0 ? void 0 : _b.toSignificant(6);
-    var show = Boolean((price === null || price === void 0 ? void 0 : price.baseCurrency) && (price === null || price === void 0 ? void 0 : price.quoteCurrency));
-    var label = showInverted
-        ? ((_c = price === null || price === void 0 ? void 0 : price.quoteCurrency) === null || _c === void 0 ? void 0 : _c.symbol) + " per " + ((_d = price === null || price === void 0 ? void 0 : price.baseCurrency) === null || _d === void 0 ? void 0 : _d.symbol)
-        : ((_e = price === null || price === void 0 ? void 0 : price.baseCurrency) === null || _e === void 0 ? void 0 : _e.symbol) + " per " + ((_f = price === null || price === void 0 ? void 0 : price.quoteCurrency) === null || _f === void 0 ? void 0 : _f.symbol);
-    return (jsxRuntime.jsx(Text, tslib.__assign({ style: { justifyContent: 'center', alignItems: 'center', display: 'flex' } }, { children: show ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [formattedPrice !== null && formattedPrice !== void 0 ? formattedPrice : '-', " ", label, jsxRuntime.jsx(StyledBalanceMaxMini, tslib.__assign({ onClick: function () { return setShowInverted(!showInverted); } }, { children: jsxRuntime.jsx(Icon$b, { width: "14px" }, void 0) }), void 0)] }, void 0)) : ('-') }), void 0));
-}
-
-var Grouping = styled__default["default"](RowBetween)(templateObject_1$5 || (templateObject_1$5 = tslib.__makeTemplateObject(["\n  width: 50%;\n"], ["\n  width: 50%;\n"])));
-var Circle = styled__default["default"].div(templateObject_2$3 || (templateObject_2$3 = tslib.__makeTemplateObject(["\n  min-width: 20px;\n  min-height: 20px;\n  background-color: ", ";\n  border-radius: 50%;\n  color: #ffffff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 8px;\n  font-size: 12px;\n"], ["\n  min-width: 20px;\n  min-height: 20px;\n  background-color: ", ";\n  border-radius: 50%;\n  color: #ffffff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 8px;\n  font-size: 12px;\n"])), function (_a) {
-    var theme = _a.theme, confirmed = _a.confirmed, disabled = _a.disabled;
-    return disabled ? theme.colors.backgroundDisabled : confirmed ? theme.colors.success : theme.colors.primary;
-});
-var CircleRow = styled__default["default"].div(templateObject_3 || (templateObject_3 = tslib.__makeTemplateObject(["\n  width: calc(100% - 20px);\n  display: flex;\n  align-items: center;\n"], ["\n  width: calc(100% - 20px);\n  display: flex;\n  align-items: center;\n"])));
-var Connector = styled__default["default"].div(templateObject_4 || (templateObject_4 = tslib.__makeTemplateObject(["\n  width: 100%;\n  height: 2px;\n  background: linear-gradient(\n    90deg,\n    ", "\n      0%,\n    ", "\n      80%\n  );\n  opacity: 0.6;\n"], ["\n  width: 100%;\n  height: 2px;\n  background: linear-gradient(\n    90deg,\n    ", "\n      0%,\n    ", "\n      80%\n  );\n  opacity: 0.6;\n"])), function (_a) {
-    var theme = _a.theme, prevConfirmed = _a.prevConfirmed, disabled = _a.disabled;
-    return disabled ? theme.colors.backgroundDisabled : prevConfirmed ? theme.colors.success : theme.colors.primary;
-}, function (_a) {
-    var theme = _a.theme, prevConfirmed = _a.prevConfirmed, disabled = _a.disabled;
-    return disabled
-        ? theme.colors.backgroundDisabled
-        : prevConfirmed
-            ? theme.colors.primary
-            : theme.colors.backgroundDisabled;
-});
-/**
- * Based on array of steps, create a step counter of circles.
- * A circle can be enabled, disabled, or confirmed. States are derived
- * from previous step.
- *
- * An extra circle is added to represent the ability to swap, add, or remove.
- * This step will never be marked as complete (because no 'txn done' state in body ui).
- *
- * @param steps  array of booleans where true means step is complete
- */
-function ProgressCircles(_a) {
-    var steps = _a.steps, _b = _a.disabled, disabled = _b === void 0 ? false : _b, rest = tslib.__rest(_a, ["steps", "disabled"]);
-    return (jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "center" }, rest, { children: jsxRuntime.jsxs(Grouping, { children: [steps.map(function (step, i) {
-                    return (
-                    // eslint-disable-next-line react/no-array-index-key
-                    jsxRuntime.jsxs(CircleRow, { children: [jsxRuntime.jsx(Circle, tslib.__assign({ confirmed: step, disabled: disabled || (!steps[i - 1] && i !== 0) }, { children: step ? '✓' : i + 1 }), void 0), jsxRuntime.jsx(Connector, { prevConfirmed: step, disabled: disabled }, void 0)] }, i));
-                }), jsxRuntime.jsx(Circle, tslib.__assign({ disabled: disabled || !steps[steps.length - 1] }, { children: steps.length + 1 }), void 0)] }, void 0) }), void 0));
-}
-var templateObject_1$5, templateObject_2$3, templateObject_3, templateObject_4;
+var templateObject_1$b, templateObject_2$7, templateObject_3$4, templateObject_4$3, templateObject_5$1;
 
 var SlippageError;
 (function (SlippageError) {
@@ -13088,9 +12671,10 @@ var SettingsModal = function (_a) {
 };
 
 function SettingsTab() {
+    var t = useTranslation().t;
     var _a = tslib.__read(useModal(jsxRuntime.jsx(SettingsModal, {}, void 0)), 1), onPresentSettingsModal = _a[0];
     var _b = tslib.__read(useExpertModeManager(), 1), expertMode = _b[0];
-    return (jsxRuntime.jsx(NotificationDot, tslib.__assign({ show: expertMode }, { children: jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", p: 0, onClick: onPresentSettingsModal, id: "open-settings-dialog-button" }, { children: jsxRuntime.jsx(Icon$6, { color: "primary", width: "22px" }, void 0) }), void 0) }), void 0));
+    return (jsxRuntime.jsx(NotificationDot, tslib.__assign({ show: expertMode }, { children: jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", p: 0, onClick: onPresentSettingsModal, id: "open-settings-dialog-button", title: t('titleSetting') }, { children: jsxRuntime.jsx(Icon$6, { color: "primary", width: "22px" }, void 0) }), void 0) }), void 0));
 }
 
 // helper that can take a ethers library transaction response and add it to the list of transactions
@@ -13145,11 +12729,11 @@ function useHasPendingApproval(tokenAddress, spender) {
     }, [allTransactions, spender, tokenAddress]);
 }
 
-var TransactionState = styled__default["default"].div(templateObject_1$4 || (templateObject_1$4 = tslib.__makeTemplateObject(["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  text-decoration: none !important;\n  border-radius: 0.5rem;\n  padding: 0.25rem 0rem;\n  font-weight: 500;\n  font-size: 0.825rem;\n  color: ", ";\n"], ["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  text-decoration: none !important;\n  border-radius: 0.5rem;\n  padding: 0.25rem 0rem;\n  font-weight: 500;\n  font-size: 0.825rem;\n  color: ", ";\n"])), function (_a) {
+var TransactionState = styled__default["default"].div(templateObject_1$a || (templateObject_1$a = tslib.__makeTemplateObject(["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  text-decoration: none !important;\n  border-radius: 0.5rem;\n  padding: 0.25rem 0rem;\n  font-weight: 500;\n  font-size: 0.825rem;\n  color: ", ";\n"], ["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  text-decoration: none !important;\n  border-radius: 0.5rem;\n  padding: 0.25rem 0rem;\n  font-weight: 500;\n  font-size: 0.825rem;\n  color: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     return theme.colors.primary;
 });
-var IconWrapper = styled__default["default"].div(templateObject_2$2 || (templateObject_2$2 = tslib.__makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (_a) {
+var IconWrapper = styled__default["default"].div(templateObject_2$6 || (templateObject_2$6 = tslib.__makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (_a) {
     var pending = _a.pending, success = _a.success, theme = _a.theme;
     return pending ? theme.colors.primary : success ? theme.colors.success : theme.colors.failure;
 });
@@ -13164,7 +12748,7 @@ function Transaction(_a) {
         return null;
     return (jsxRuntime.jsxs(TransactionState, tslib.__assign({ pending: pending, success: success }, { children: [jsxRuntime.jsx(LinkExternal, tslib.__assign({ href: getBscScanLink(tx.hash, 'transaction', chainId) }, { children: summary !== null && summary !== void 0 ? summary : tx.hash }), void 0), jsxRuntime.jsx(IconWrapper, tslib.__assign({ pending: pending, success: success }, { children: pending ? jsxRuntime.jsx(CircleLoader, {}, void 0) : success ? jsxRuntime.jsx(Icon$a, { color: "success" }, void 0) : jsxRuntime.jsx(Icon$7, { color: "failure" }, void 0) }), void 0)] }), void 0));
 }
-var templateObject_1$4, templateObject_2$2;
+var templateObject_1$a, templateObject_2$6;
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a, b) {
@@ -13195,19 +12779,20 @@ var TransactionsModal = function (_a) {
 };
 
 var Transactions = function () {
+    var t = useTranslation().t;
     var _a = tslib.__read(useModal(jsxRuntime.jsx(TransactionsModal, {}, void 0)), 1), onPresentTransactionsModal = _a[0];
-    return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", p: 0, onClick: onPresentTransactionsModal, ml: "16px" }, { children: jsxRuntime.jsx(Icon$4, { color: "primary", width: "22px" }, void 0) }), void 0) }, void 0));
+    return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", p: 0, onClick: onPresentTransactionsModal, ml: "16px", title: t('titleHistory') }, { children: jsxRuntime.jsx(Icon$4, { color: "primary", width: "22px" }, void 0) }), void 0) }, void 0));
 };
 
-var BoxStyled = styled__default["default"](Box)(templateObject_1$3 || (templateObject_1$3 = tslib.__makeTemplateObject(["\n  padding: 20px;\n  width: 100%;\n"], ["\n  padding: 20px;\n  width: 100%;\n"])));
-var AppHeaderContainer = styled__default["default"](Flex)(templateObject_2$1 || (templateObject_2$1 = tslib.__makeTemplateObject(["\n  align-items: flex-end;\n  justify-content: space-between;\n  width: 100%;\n"], ["\n  align-items: flex-end;\n  justify-content: space-between;\n  width: 100%;\n"])));
+var BoxStyled = styled__default["default"](Box)(templateObject_1$9 || (templateObject_1$9 = tslib.__makeTemplateObject(["\n  padding: 20px;\n  width: 100%;\n"], ["\n  padding: 20px;\n  width: 100%;\n"])));
+var AppHeaderContainer = styled__default["default"](Flex)(templateObject_2$5 || (templateObject_2$5 = tslib.__makeTemplateObject(["\n  align-items: flex-end;\n  justify-content: space-between;\n  width: 100%;\n"], ["\n  align-items: flex-end;\n  justify-content: space-between;\n  width: 100%;\n"])));
 var AppHeader = function (_a) {
     var title = _a.title, subtitle = _a.subtitle, helper = _a.helper, backTo = _a.backTo, hideSetting = _a.hideSetting, tips = _a.tips, _b = _a.noConfig, noConfig = _b === void 0 ? false : _b;
     return (jsxRuntime.jsxs(BoxStyled, { children: [jsxRuntime.jsxs(AppHeaderContainer, { children: [jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center", mr: noConfig ? 0 : '16px' }, { children: [backTo && (jsxRuntime.jsx(IconButton, tslib.__assign({ as: reactRouterDom.Link, to: backTo }, { children: jsxRuntime.jsx(Icon$e, { color: 'primary', width: "32px" }, void 0) }), void 0)), jsxRuntime.jsxs(Flex, tslib.__assign({ alignContent: subtitle ? '' : 'center', justifyContent: subtitle ? '' : 'center', flexDirection: subtitle ? 'column' : 'row' }, { children: [jsxRuntime.jsxs(Flex, tslib.__assign({ alignItems: "center" }, { children: [jsxRuntime.jsx(Heading, tslib.__assign({ as: "h2", mb: subtitle ? '8px' : '0' }, { children: title }), void 0), helper && jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: helper, ml: "4px", mr: "4px" }, void 0)] }), void 0), jsxRuntime.jsx(Flex, tslib.__assign({ alignItems: "center" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ ml: "0px", color: "text", fontSize: "14px" }, { children: subtitle }), void 0) }), void 0)] }), void 0)] }), void 0), !noConfig && (jsxRuntime.jsxs(Flex, { children: [hideSetting ? null : jsxRuntime.jsx(SettingsTab, {}, void 0), jsxRuntime.jsx(Transactions, {}, void 0)] }, void 0))] }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ mt: "8px", ml: "0px", color: "text", fontSize: "14px" }, { children: tips }), void 0)] }, void 0));
 };
-var templateObject_1$3, templateObject_2$1;
+var templateObject_1$9, templateObject_2$5;
 
-var BodyWrapper = styled__default["default"](Card$1)(templateObject_1$2 || (templateObject_1$2 = tslib.__makeTemplateObject(["\n  max-width: 436px;\n  width: 100%;\n  z-index: 1;\n"], ["\n  max-width: 436px;\n  width: 100%;\n  z-index: 1;\n"
+var BodyWrapper = styled__default["default"](Card$1)(templateObject_1$8 || (templateObject_1$8 = tslib.__makeTemplateObject(["\n  max-width: 436px;\n  width: 100%;\n  z-index: 1;\n"], ["\n  max-width: 436px;\n  width: 100%;\n  z-index: 1;\n"
     /**
      * The styled container element that wraps the content of most pages and the tabs.
      */
@@ -13219,7 +12804,7 @@ function AppBody(_a) {
     var children = _a.children;
     return jsxRuntime.jsx(BodyWrapper, { children: children }, void 0);
 }
-var templateObject_1$2;
+var templateObject_1$8;
 
 var ConnectWallet = React__default["default"].createContext({ onConnectWallet: null });
 var ConnectWalletProvider = function (_a) {
@@ -13674,6 +13259,442 @@ function maxAmountSpend(currencyAmount) {
     return currencyAmount;
 }
 
+var Grouping = styled__default["default"](RowBetween)(templateObject_1$7 || (templateObject_1$7 = tslib.__makeTemplateObject(["\n  width: 50%;\n"], ["\n  width: 50%;\n"])));
+var Circle = styled__default["default"].div(templateObject_2$4 || (templateObject_2$4 = tslib.__makeTemplateObject(["\n  min-width: 20px;\n  min-height: 20px;\n  background-color: ", ";\n  border-radius: 50%;\n  color: #ffffff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 8px;\n  font-size: 12px;\n"], ["\n  min-width: 20px;\n  min-height: 20px;\n  background-color: ", ";\n  border-radius: 50%;\n  color: #ffffff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 8px;\n  font-size: 12px;\n"])), function (_a) {
+    var theme = _a.theme, confirmed = _a.confirmed, disabled = _a.disabled;
+    return disabled ? theme.colors.backgroundDisabled : confirmed ? theme.colors.success : theme.colors.primary;
+});
+var CircleRow = styled__default["default"].div(templateObject_3$3 || (templateObject_3$3 = tslib.__makeTemplateObject(["\n  width: calc(100% - 20px);\n  display: flex;\n  align-items: center;\n"], ["\n  width: calc(100% - 20px);\n  display: flex;\n  align-items: center;\n"])));
+var Connector = styled__default["default"].div(templateObject_4$2 || (templateObject_4$2 = tslib.__makeTemplateObject(["\n  width: 100%;\n  height: 2px;\n  background: linear-gradient(\n    90deg,\n    ", "\n      0%,\n    ", "\n      80%\n  );\n  opacity: 0.6;\n"], ["\n  width: 100%;\n  height: 2px;\n  background: linear-gradient(\n    90deg,\n    ", "\n      0%,\n    ", "\n      80%\n  );\n  opacity: 0.6;\n"])), function (_a) {
+    var theme = _a.theme, prevConfirmed = _a.prevConfirmed, disabled = _a.disabled;
+    return disabled ? theme.colors.backgroundDisabled : prevConfirmed ? theme.colors.success : theme.colors.primary;
+}, function (_a) {
+    var theme = _a.theme, prevConfirmed = _a.prevConfirmed, disabled = _a.disabled;
+    return disabled
+        ? theme.colors.backgroundDisabled
+        : prevConfirmed
+            ? theme.colors.primary
+            : theme.colors.backgroundDisabled;
+});
+/**
+ * Based on array of steps, create a step counter of circles.
+ * A circle can be enabled, disabled, or confirmed. States are derived
+ * from previous step.
+ *
+ * An extra circle is added to represent the ability to swap, add, or remove.
+ * This step will never be marked as complete (because no 'txn done' state in body ui).
+ *
+ * @param steps  array of booleans where true means step is complete
+ */
+function ProgressCircles(_a) {
+    var steps = _a.steps, _b = _a.disabled, disabled = _b === void 0 ? false : _b, rest = tslib.__rest(_a, ["steps", "disabled"]);
+    return (jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "center" }, rest, { children: jsxRuntime.jsxs(Grouping, { children: [steps.map(function (step, i) {
+                    return (
+                    // eslint-disable-next-line react/no-array-index-key
+                    jsxRuntime.jsxs(CircleRow, { children: [jsxRuntime.jsx(Circle, tslib.__assign({ confirmed: step, disabled: disabled || (!steps[i - 1] && i !== 0) }, { children: step ? '✓' : i + 1 }), void 0), jsxRuntime.jsx(Connector, { prevConfirmed: step, disabled: disabled }, void 0)] }, i));
+                }), jsxRuntime.jsx(Circle, tslib.__assign({ disabled: disabled || !steps[steps.length - 1] }, { children: steps.length + 1 }), void 0)] }, void 0) }), void 0));
+}
+var templateObject_1$7, templateObject_2$4, templateObject_3$3, templateObject_4$2;
+
+var Wrapper$1 = styled__default["default"].div(templateObject_1$6 || (templateObject_1$6 = tslib.__makeTemplateObject(["\n  position: relative;\n  padding: 20px;\n  padding-top: 0;\n"], ["\n  position: relative;\n  padding: 20px;\n  padding-top: 0;\n"])));
+var ArrowWrapper = styled__default["default"].div(templateObject_3$2 || (templateObject_3$2 = tslib.__makeTemplateObject(["\n  padding: 2px;\n\n  ", "\n"], ["\n  padding: 2px;\n\n  ", "\n"])), function (_a) {
+    var clickable = _a.clickable;
+    return clickable
+        ? styled.css(templateObject_2$3 || (templateObject_2$3 = tslib.__makeTemplateObject(["\n          :hover {\n            cursor: pointer;\n            opacity: 0.8;\n          }\n        "], ["\n          :hover {\n            cursor: pointer;\n            opacity: 0.8;\n          }\n        "]))) : null;
+});
+var ErrorText = styled__default["default"](Text)(templateObject_4$1 || (templateObject_4$1 = tslib.__makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (_a) {
+    var theme = _a.theme, severity = _a.severity;
+    return severity === 3 || severity === 4
+        ? theme.colors.failure
+        : severity === 2
+            ? theme.colors.warning
+            : severity === 1
+                ? theme.colors.text
+                : theme.colors.success;
+});
+var StyledBalanceMaxMini = styled__default["default"].button(templateObject_5 || (templateObject_5 = tslib.__makeTemplateObject(["\n  height: 22px;\n  width: 22px;\n  background-color: ", ";\n  border: none;\n  border-radius: 50%;\n  padding: 0.2rem;\n  font-size: 0.875rem;\n  font-weight: 400;\n  margin-left: 0.4rem;\n  cursor: pointer;\n  color: ", ";\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  float: right;\n\n  :hover {\n    background-color: ", ";\n  }\n  :focus {\n    background-color: ", ";\n    outline: none;\n  }\n"], ["\n  height: 22px;\n  width: 22px;\n  background-color: ", ";\n  border: none;\n  border-radius: 50%;\n  padding: 0.2rem;\n  font-size: 0.875rem;\n  font-weight: 400;\n  margin-left: 0.4rem;\n  cursor: pointer;\n  color: ", ";\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  float: right;\n\n  :hover {\n    background-color: ", ";\n  }\n  :focus {\n    background-color: ", ";\n    outline: none;\n  }\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.background;
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.text;
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.dropdown;
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.dropdown;
+});
+var TruncatedText = styled__default["default"](Text).attrs({ ellipsis: true })(templateObject_6 || (templateObject_6 = tslib.__makeTemplateObject(["\n  width: 220px;\n"], ["\n  width: 220px;\n"])));
+var SwapCallbackErrorInner = styled__default["default"].div(templateObject_7 || (templateObject_7 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  border-radius: 1rem;\n  display: flex;\n  align-items: center;\n  font-size: 0.825rem;\n  width: 100%;\n  padding: 3rem 1.25rem 1rem 1rem;\n  margin-top: -2rem;\n  color: ", ";\n  z-index: -1;\n  p {\n    padding: 0;\n    margin: 0;\n    font-weight: 500;\n  }\n"], ["\n  background-color: ", ";\n  border-radius: 1rem;\n  display: flex;\n  align-items: center;\n  font-size: 0.825rem;\n  width: 100%;\n  padding: 3rem 1.25rem 1rem 1rem;\n  margin-top: -2rem;\n  color: ", ";\n  z-index: -1;\n  p {\n    padding: 0;\n    margin: 0;\n    font-weight: 500;\n  }\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.failure + "33";
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.failure;
+});
+var SwapCallbackErrorInnerAlertTriangle = styled__default["default"].div(templateObject_8 || (templateObject_8 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-right: 12px;\n  border-radius: 12px;\n  min-width: 48px;\n  height: 48px;\n"], ["\n  background-color: ", ";\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-right: 12px;\n  border-radius: 12px;\n  min-width: 48px;\n  height: 48px;\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.failure + "33";
+});
+function SwapCallbackError(_a) {
+    var error = _a.error;
+    return (jsxRuntime.jsxs(SwapCallbackErrorInner, { children: [jsxRuntime.jsx(SwapCallbackErrorInnerAlertTriangle, { children: jsxRuntime.jsx(Icon$f, { width: "24px" }, void 0) }, void 0), jsxRuntime.jsx("p", { children: error }, void 0)] }, void 0));
+}
+var SwapShowAcceptChanges = styled__default["default"](AutoColumn)(templateObject_9 || (templateObject_9 = tslib.__makeTemplateObject(["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"], ["\n  background-color: ", ";\n  padding: 0.5rem;\n  border-radius: 12px;\n  margin-top: 8px;\n"])), function (_a) {
+    var theme = _a.theme;
+    return "" + theme.colors.input;
+});
+var templateObject_1$6, templateObject_2$3, templateObject_3$2, templateObject_4$1, templateObject_5, templateObject_6, templateObject_7, templateObject_8, templateObject_9;
+
+function TradePrice(_a) {
+    var _b, _c, _d, _e, _f;
+    var price = _a.price, showInverted = _a.showInverted, setShowInverted = _a.setShowInverted;
+    var formattedPrice = showInverted ? price === null || price === void 0 ? void 0 : price.toSignificant(6) : (_b = price === null || price === void 0 ? void 0 : price.invert()) === null || _b === void 0 ? void 0 : _b.toSignificant(6);
+    var show = Boolean((price === null || price === void 0 ? void 0 : price.baseCurrency) && (price === null || price === void 0 ? void 0 : price.quoteCurrency));
+    var label = showInverted
+        ? ((_c = price === null || price === void 0 ? void 0 : price.quoteCurrency) === null || _c === void 0 ? void 0 : _c.symbol) + " per " + ((_d = price === null || price === void 0 ? void 0 : price.baseCurrency) === null || _d === void 0 ? void 0 : _d.symbol)
+        : ((_e = price === null || price === void 0 ? void 0 : price.baseCurrency) === null || _e === void 0 ? void 0 : _e.symbol) + " per " + ((_f = price === null || price === void 0 ? void 0 : price.quoteCurrency) === null || _f === void 0 ? void 0 : _f.symbol);
+    return (jsxRuntime.jsx(Text, tslib.__assign({ style: { justifyContent: 'center', alignItems: 'center', display: 'flex' } }, { children: show ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [formattedPrice !== null && formattedPrice !== void 0 ? formattedPrice : '-', " ", label, jsxRuntime.jsx(StyledBalanceMaxMini, tslib.__assign({ onClick: function () { return setShowInverted(!showInverted); } }, { children: jsxRuntime.jsx(Icon$b, { width: "14px" }, void 0) }), void 0)] }, void 0)) : ('-') }), void 0));
+}
+
+/**
+ * Given the price impact, get user confirmation.
+ *
+ * @param priceImpactWithoutFee price impact of the trade without the fee.
+ */
+function confirmPriceImpactWithoutFee(priceImpactWithoutFee) {
+    if (!priceImpactWithoutFee.lessThan(PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN)) {
+        return (
+        // eslint-disable-next-line no-alert
+        window.prompt("This swap has a price impact of at least " + PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN.toFixed(0) + "%. Please type the word \"confirm\" to continue with this swap.") === 'confirm');
+    }
+    if (!priceImpactWithoutFee.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) {
+        // eslint-disable-next-line no-alert
+        return window.confirm("This swap has a price impact of at least " + ALLOWED_PRICE_IMPACT_HIGH.toFixed(0) + "%. Please confirm that you would like to continue with this swap.");
+    }
+    return true;
+}
+
+/**
+ * Returns the last value of type T that passes a filter function
+ * @param value changing value
+ * @param filterFn function that determines whether a given value should be considered for the last value
+ */
+function useLast(value, filterFn) {
+    var _a = tslib.__read(React.useState(filterFn && filterFn(value) ? value : undefined), 2), last = _a[0], setLast = _a[1];
+    React.useEffect(function () {
+        setLast(function (prev) {
+            var shouldUse = filterFn ? filterFn(value) : true;
+            if (shouldUse)
+                return value;
+            return prev;
+        });
+    }, [filterFn, value]);
+    return last;
+}
+function isDefined(x) {
+    return x !== null && x !== undefined;
+}
+/**
+ * Returns the last truthy value of type T
+ * @param value changing value
+ */
+function useLastTruthy(value) {
+    return useLast(value, isDefined);
+}
+
+/**
+ * Formatted version of price impact text with warning colors
+ */
+function FormattedPriceImpact(_a) {
+    var priceImpact = _a.priceImpact;
+    return (jsxRuntime.jsx(ErrorText, tslib.__assign({ fontSize: "14px", severity: warningSeverity(priceImpact) }, { children: priceImpact ? (priceImpact.lessThan(ONE_BIPS) ? '<0.01%' : priceImpact.toFixed(2) + "%") : '-' }), void 0));
+}
+
+var SwapRoute = React.memo(function SwapRoute(_a) {
+    var trade = _a.trade, polyData = _a.polyData, isPolyMethed = _a.isPolyMethed;
+    var renderPath = isPolyMethed ? polyData.protocols : trade.route.path;
+    return (jsxRuntime.jsx(Flex, tslib.__assign({ flexWrap: "wrap", width: "100%", justifyContent: "flex-end", alignItems: "center" }, { children: renderPath.map(function (token, i, path) {
+            var isLastItem = i === path.length - 1;
+            var currency = unwrappedToken(token);
+            return (
+            // eslint-disable-next-line react/no-array-index-key
+            jsxRuntime.jsxs(React.Fragment, { children: [jsxRuntime.jsx(Flex, tslib.__assign({ alignItems: "end" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", ml: "0.125rem", mr: "0.125rem" }, { children: currency.symbol }), void 0) }), void 0), !isLastItem && jsxRuntime.jsx(Icon$8, { width: "12px" }, void 0)] }, i));
+        }) }), void 0));
+});
+
+/**
+ * Formatted version of price impact text with warning colors
+ */
+function LiquidityProviderFee() {
+    var t = useTranslation().t;
+    var nftInfo = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_STAKE_NFT_INFO);
+    var swapToken = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_TOKEN);
+    var swapvToken = dsgswapSdk.getValueWithChainId(dsgswapSdk.SWAP_V_TOKEN);
+    return (jsxRuntime.jsxs(Flex, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Fee') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(Text, tslib.__assign({ mb: "12px" }, { children: [t('for each trade a 0.3% fee is paid'), ":"] }), void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.1% to the LP token holders')] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.04% to the %symbol% stakers', {
+                                    symbol: t(nftInfo.name) + " NFT"
+                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.05% buyback %symbol% and burn', {
+                                    symbol: swapToken.symbol
+                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.025% buyback %symbol%, then to %symbol% LP', {
+                                    symbol: swapToken.symbol
+                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.025% to %symbol% holder', {
+                                    symbol: swapvToken.symbol
+                                })] }, void 0), jsxRuntime.jsxs(Text, { children: ["-", t('0.06% to operation fund')] }, void 0)] }, void 0), placement: "top-start", ml: "4px" }, void 0)] }, void 0));
+}
+
+function TradeSummary(_a) {
+    var _b, _c, _d, _e;
+    var trade = _a.trade, allowedSlippage = _a.allowedSlippage;
+    var t = useTranslation().t;
+    var _f = computeTradePriceBreakdown(trade), priceImpactWithoutFee = _f.priceImpactWithoutFee, realizedLPFee = _f.realizedLPFee;
+    var isExactIn = trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT;
+    var slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage);
+    return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ style: { padding: '0' } }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: isExactIn ? t('Minimum received') : t('Maximum sold') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t('Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.'), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsx(RowFixed, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: isExactIn
+                                ? (_c = ((_b = slippageAdjustedAmounts[Field$2.OUTPUT]) === null || _b === void 0 ? void 0 : _b.toSignificant(4)) + " " + trade.outputAmount.currency.symbol) !== null && _c !== void 0 ? _c : '-'
+                                : (_e = ((_d = slippageAdjustedAmounts[Field$2.INPUT]) === null || _d === void 0 ? void 0 : _d.toSignificant(4)) + " " + trade.inputAmount.currency.symbol) !== null && _e !== void 0 ? _e : '-' }), void 0) }, void 0)] }, void 0), jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Price Impact') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t('The difference between the market price and estimated price due to trade size.'), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsx(FormattedPriceImpact, { priceImpact: priceImpactWithoutFee }, void 0)] }, void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(LiquidityProviderFee, {}, void 0), jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: realizedLPFee ? realizedLPFee.toSignificant(4) + " " + trade.inputAmount.currency.symbol : '-' }), void 0)] }, void 0)] }, void 0)] }), void 0));
+}
+function TradeSummaryPloy(_a) {
+    var _b, _c, _d;
+    var polyData = _a.polyData;
+    var t = useTranslation().t;
+    return (jsxRuntime.jsx(AutoColumn, tslib.__assign({ style: { padding: '0' } }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "textSubtle" }, { children: t('Minimum received') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t('Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.'), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsx(RowFixed, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: (_d = ((_b = polyData === null || polyData === void 0 ? void 0 : polyData.toCurrencyAmount) === null || _b === void 0 ? void 0 : _b.toSignificant(4)) + " " + ((_c = polyData === null || polyData === void 0 ? void 0 : polyData.toToken) === null || _c === void 0 ? void 0 : _c.symbol)) !== null && _d !== void 0 ? _d : '-' }), void 0) }, void 0)] }, void 0) }), void 0));
+}
+function AdvancedSwapDetails(_a) {
+    var trade = _a.trade, isPolyMethed = _a.isPolyMethed, polyData = _a.polyData;
+    var _b = tslib.__read(useUserSlippageTolerance(), 1), allowedSlippage = _b[0];
+    var t = useTranslation().t;
+    var showRoute = !isPolyMethed ? Boolean(trade && trade.route.path.length > 2) : Boolean(polyData && polyData.protocols.length > 2);
+    return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "0px" }, { children: [isPolyMethed && (jsxRuntime.jsx(TradeSummaryPloy, { polyData: polyData }, void 0)), (trade && !isPolyMethed) && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsx(TradeSummary, { trade: trade, allowedSlippage: allowedSlippage }, void 0), showRoute && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs(RowBetween, tslib.__assign({ style: { padding: '0' } }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ minWidth: "80px" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", color: "text" }, { children: t('Route') }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t("Routing through these tokens resulted in the best price for your trade."), ml: "4px", placement: "top-start" }, void 0)] }), void 0), jsxRuntime.jsx(SwapRoute, { isPolyMethed: isPolyMethed, polyData: polyData, trade: trade }, void 0)] }), void 0) }, void 0))] }, void 0))] }), void 0));
+}
+
+var AdvancedDetailsFooter = styled__default["default"].div(templateObject_1$5 || (templateObject_1$5 = tslib.__makeTemplateObject(["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"], ["\n  margin-top: ", ";\n  padding-top: 0;\n  padding-bottom: 0;\n  width: 100%;\n  max-width: 400px;\n  border-radius: 0;\n  background-color: ", ";\n\n  /* transform: ", "; */\n  /* max-height: ", "; */\n  /* overflow:  ", ";; */\n  transition: transform 300ms ease-in-out;\n"])), function (_a) {
+    var show = _a.show;
+    return (show ? '0' : 0);
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.invertedContrast;
+}, function (_a) {
+    var show = _a.show;
+    return (show ? 'translateY(0%)' : 'translateY(-128%)');
+}, function (_a) {
+    var show = _a.show;
+    return (show ? 'auto' : '60px');
+}, function (_a) {
+    var show = _a.show;
+    return (show ? 'visible' : 'hide');
+});
+function AdvancedSwapDetailsDropdown(_a) {
+    var _b;
+    var trade = _a.trade, isPolyMethed = _a.isPolyMethed, polyData = _a.polyData, rest = tslib.__rest(_a, ["trade", "isPolyMethed", "polyData"]);
+    var lastTrade = useLastTruthy(trade);
+    var show = Boolean(isPolyMethed ? polyData : trade);
+    return (jsxRuntime.jsx(AdvancedDetailsFooter, tslib.__assign({ show: show }, { children: show && jsxRuntime.jsx(AdvancedSwapDetails, tslib.__assign({}, rest, { isPolyMethed: isPolyMethed, polyData: polyData, trade: (_b = trade !== null && trade !== void 0 ? trade : lastTrade) !== null && _b !== void 0 ? _b : undefined }), void 0) }), void 0));
+}
+var templateObject_1$5;
+
+// Set of helper functions to facilitate wallet setup
+/**
+ * Prompt the user to add a custom token to metamask
+ * @param tokenAddress
+ * @param tokenSymbol
+ * @param tokenDecimals
+ * @returns {boolean} true if the token has been added, false otherwise
+ */
+var registerToken = function (tokenAddress, tokenSymbol, tokenDecimals) { return tslib.__awaiter(void 0, void 0, void 0, function () {
+    var tokenAdded;
+    return tslib.__generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20',
+                        options: {
+                            address: tokenAddress,
+                            symbol: tokenSymbol,
+                            decimals: tokenDecimals,
+                            image: "" + BASE_TOKEN_URL + tokenAddress + ".png",
+                        },
+                    },
+                })];
+            case 1:
+                tokenAdded = _a.sent();
+                return [2 /*return*/, tokenAdded];
+        }
+    });
+}); };
+
+var Wrapper = styled__default["default"].div(templateObject_1$4 || (templateObject_1$4 = tslib.__makeTemplateObject(["\n  width: 100%;\n"], ["\n  width: 100%;\n"])));
+var Section = styled__default["default"](AutoColumn)(templateObject_2$2 || (templateObject_2$2 = tslib.__makeTemplateObject(["\n  padding: 24px;\n"], ["\n  padding: 24px;\n"])));
+var ConfirmedIcon = styled__default["default"](ColumnCenter)(templateObject_3$1 || (templateObject_3$1 = tslib.__makeTemplateObject(["\n  padding: 24px 0;\n"], ["\n  padding: 24px 0;\n"])));
+function ConfirmationPendingContent(_a) {
+    var pendingText = _a.pendingText;
+    var t = useTranslation().t;
+    return (jsxRuntime.jsxs(Wrapper, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Spinner, {}, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Waiting For Confirmation') }), void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ bold: true, small: true, textAlign: "center" }, { children: pendingText }), void 0) }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ small: true, color: "textSubtle", textAlign: "center" }, { children: t('Confirm this transaction in your wallet') }), void 0)] }), void 0)] }, void 0));
+}
+function TransactionSubmittedContent(_a) {
+    var _b;
+    var onDismiss = _a.onDismiss, chainId = _a.chainId, hash = _a.hash, currencyToAdd = _a.currencyToAdd;
+    var library = useActiveWeb3React().library;
+    var t = useTranslation().t;
+    var token = wrappedCurrency(currencyToAdd, chainId);
+    return (jsxRuntime.jsx(Wrapper, { children: jsxRuntime.jsxs(Section, { children: [jsxRuntime.jsx(ConfirmedIcon, { children: jsxRuntime.jsx(Icon$c, { strokeWidth: 0.5, width: "90px", color: "primary" }, void 0) }, void 0), jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "12px", justify: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "20px" }, { children: t('Transaction Submitted') }), void 0), chainId && hash && (jsxRuntime.jsx(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(hash, 'transaction', chainId) }, { children: t('View on BscScan') }), void 0)), currencyToAdd && ((_b = library === null || library === void 0 ? void 0 : library.provider) === null || _b === void 0 ? void 0 : _b.isMetaMask) && (jsxRuntime.jsx(Button, tslib.__assign({ variant: "tertiary", mt: "12px", width: "fit-content", onClick: function () { return registerToken(token.address, token.symbol, token.decimals); } }, { children: jsxRuntime.jsxs(RowFixed, { children: [t('Add %asset% to Metamask', { asset: currencyToAdd.symbol }), jsxRuntime.jsx(Icon$3, { width: "16px", ml: "6px" }, void 0)] }, void 0) }), void 0)), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss, mt: "20px" }, { children: t('Close') }), void 0)] }), void 0)] }, void 0) }, void 0));
+}
+function ConfirmationModalContent(_a) {
+    var bottomContent = _a.bottomContent, topContent = _a.topContent;
+    return (jsxRuntime.jsxs(Wrapper, { children: [jsxRuntime.jsx(Box, { children: topContent() }, void 0), jsxRuntime.jsx(Box, { children: bottomContent() }, void 0)] }, void 0));
+}
+function TransactionErrorContent(_a) {
+    var message = _a.message, onDismiss = _a.onDismiss;
+    var t = useTranslation().t;
+    return (jsxRuntime.jsxs(Wrapper, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ justify: "center" }, { children: [jsxRuntime.jsx(Icon$f, { color: "failure", width: "64px" }, void 0), jsxRuntime.jsx(Text, tslib.__assign({ color: "failure", style: { textAlign: 'center', width: '85%' } }, { children: message }), void 0)] }), void 0), jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center", pt: "24px" }, { children: jsxRuntime.jsx(Button, tslib.__assign({ onClick: onDismiss }, { children: t('Dismiss') }), void 0) }), void 0)] }, void 0));
+}
+var TransactionConfirmationModal = function (_a) {
+    var title = _a.title, onDismiss = _a.onDismiss, customOnDismiss = _a.customOnDismiss, attemptingTxn = _a.attemptingTxn, hash = _a.hash, pendingText = _a.pendingText, content = _a.content, currencyToAdd = _a.currencyToAdd;
+    var chainId = useActiveWeb3React().chainId;
+    var handleDismiss = React.useCallback(function () {
+        if (customOnDismiss) {
+            customOnDismiss();
+        }
+        onDismiss();
+    }, [customOnDismiss, onDismiss]);
+    if (!chainId)
+        return null;
+    return (jsxRuntime.jsx(Modal, tslib.__assign({ title: title, headerBackground: "gradients.cardHeader", onDismiss: handleDismiss }, { children: attemptingTxn ? (jsxRuntime.jsx(ConfirmationPendingContent, { pendingText: pendingText }, void 0)) : hash ? (jsxRuntime.jsx(TransactionSubmittedContent, { chainId: chainId, hash: hash, onDismiss: onDismiss, currencyToAdd: currencyToAdd }, void 0)) : (content()) }), void 0));
+};
+var templateObject_1$4, templateObject_2$2, templateObject_3$1;
+
+var SwapModalFooterContainer = styled__default["default"](AutoColumn)(templateObject_1$3 || (templateObject_1$3 = tslib.__makeTemplateObject(["\n  margin-top: 24px;\n  padding: 16px;\n  border-radius: ", ";\n  border: 1px solid ", ";\n  background-color: ", ";\n"], ["\n  margin-top: 24px;\n  padding: 16px;\n  border-radius: ", ";\n  border: 1px solid ", ";\n  background-color: ", ";\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.radii.default;
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.cardBorder;
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.background;
+});
+function SwapModalFooter(_a) {
+    var _b, _c, _d, _e;
+    var trade = _a.trade, onConfirm = _a.onConfirm, allowedSlippage = _a.allowedSlippage, swapErrorMessage = _a.swapErrorMessage, disabledConfirm = _a.disabledConfirm;
+    var t = useTranslation().t;
+    var _f = tslib.__read(React.useState(false), 2), showInverted = _f[0], setShowInverted = _f[1];
+    var slippageAdjustedAmounts = React.useMemo(function () { return computeSlippageAdjustedAmounts(trade, allowedSlippage); }, [allowedSlippage, trade]);
+    var _g = React.useMemo(function () { return computeTradePriceBreakdown(trade); }, [trade]), priceImpactWithoutFee = _g.priceImpactWithoutFee, realizedLPFee = _g.realizedLPFee;
+    var severity = warningSeverity(priceImpactWithoutFee);
+    return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(SwapModalFooterContainer, { children: [jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t("Price") }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "14px", style: {
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                    textAlign: 'right',
+                                    paddingLeft: '10px',
+                                } }, { children: [formatExecutionPrice(trade, showInverted), jsxRuntime.jsx(StyledBalanceMaxMini, tslib.__assign({ onClick: function () { return setShowInverted(!showInverted); } }, { children: jsxRuntime.jsx(Icon$b, { width: "14px" }, void 0) }), void 0)] }), void 0)] }), void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT ? t("Minimum received") : t("Maximum sold") }), void 0), jsxRuntime.jsx(QuestionHelper, { text: t("Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."), ml: "4px", placement: "top-start" }, void 0)] }, void 0), jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT
+                                            ? (_c = (_b = slippageAdjustedAmounts[Field$2.OUTPUT]) === null || _b === void 0 ? void 0 : _b.toSignificant(4)) !== null && _c !== void 0 ? _c : '-'
+                                            : (_e = (_d = slippageAdjustedAmounts[Field$2.INPUT]) === null || _d === void 0 ? void 0 : _d.toSignificant(4)) !== null && _e !== void 0 ? _e : '-' }), void 0), jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px", marginLeft: "4px" }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT
+                                            ? trade.outputAmount.currency.symbol
+                                            : trade.inputAmount.currency.symbol }), void 0)] }, void 0)] }, void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: t("Price Impact") }), void 0), jsxRuntime.jsx(QuestionHelper, { placement: "top-start", text: t("The difference between the market price and your price due to trade size."), ml: "4px" }, void 0)] }, void 0), jsxRuntime.jsx(FormattedPriceImpact, { priceImpact: priceImpactWithoutFee }, void 0)] }, void 0), jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(LiquidityProviderFee, {}, void 0), jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "14px" }, { children: realizedLPFee ? (realizedLPFee === null || realizedLPFee === void 0 ? void 0 : realizedLPFee.toSignificant(6)) + " " + trade.inputAmount.currency.symbol : '-' }), void 0)] }, void 0)] }, void 0), jsxRuntime.jsxs(AutoRow, { children: [jsxRuntime.jsx(Button, tslib.__assign({ variant: severity > 2 ? 'danger' : 'primary', onClick: onConfirm, disabled: disabledConfirm, mt: "12px", id: "confirm-swap-or-send", width: "100%" }, { children: severity > 2 ? t('Swap Anyway') : t('Confirm Swap') }), void 0), swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null] }, void 0)] }, void 0));
+}
+var templateObject_1$3;
+
+function SwapModalHeader(_a) {
+    var _b, _c;
+    var trade = _a.trade, allowedSlippage = _a.allowedSlippage, recipient = _a.recipient, showAcceptChanges = _a.showAcceptChanges, onAcceptChanges = _a.onAcceptChanges;
+    var t = useTranslation().t;
+    var slippageAdjustedAmounts = React.useMemo(function () { return computeSlippageAdjustedAmounts(trade, allowedSlippage); }, [trade, allowedSlippage]);
+    var priceImpactWithoutFee = React.useMemo(function () { return computeTradePriceBreakdown(trade); }, [trade]).priceImpactWithoutFee;
+    var priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
+    return (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "flex-end" }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ gap: "0px" }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: trade.inputAmount.currency, size: "24px", style: { marginRight: '12px' } }, void 0), jsxRuntime.jsx(TruncatedText, tslib.__assign({ fontSize: "24px", color: showAcceptChanges && trade.tradeType === dsgswapSdk.TradeType.EXACT_OUTPUT ? 'primary' : 'text' }, { children: trade.inputAmount.toSignificant(6) }), void 0)] }), void 0), jsxRuntime.jsx(RowFixed, tslib.__assign({ gap: "0px" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "24px", ml: "10px" }, { children: trade.inputAmount.currency.symbol }), void 0) }), void 0)] }), void 0), jsxRuntime.jsx(RowFixed, { children: jsxRuntime.jsx(Icon$d, { width: "16px", ml: "4px" }, void 0) }, void 0), jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "flex-end" }, { children: [jsxRuntime.jsxs(RowFixed, tslib.__assign({ gap: "0px" }, { children: [jsxRuntime.jsx(CurrencyLogo, { currency: trade.outputAmount.currency, size: "24px", style: { marginRight: '12px' } }, void 0), jsxRuntime.jsx(TruncatedText, tslib.__assign({ fontSize: "24px", color: priceImpactSeverity > 2
+                                    ? 'failure'
+                                    : showAcceptChanges && trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT
+                                        ? 'primary'
+                                        : 'text' }, { children: trade.outputAmount.toSignificant(6) }), void 0)] }), void 0), jsxRuntime.jsx(RowFixed, tslib.__assign({ gap: "0px" }, { children: jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "24px", ml: "10px" }, { children: trade.outputAmount.currency.symbol }), void 0) }), void 0)] }), void 0), showAcceptChanges ? (jsxRuntime.jsx(SwapShowAcceptChanges, tslib.__assign({ justify: "flex-start", gap: "0px" }, { children: jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsxs(RowFixed, { children: [jsxRuntime.jsx(Icon$f, { mr: "8px" }, void 0), jsxRuntime.jsxs(Text, tslib.__assign({ bold: true }, { children: [" ", t('Price Updated')] }), void 0)] }, void 0), jsxRuntime.jsx(Button, tslib.__assign({ onClick: onAcceptChanges }, { children: t('Accept') }), void 0)] }, void 0) }), void 0)) : null, jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "flex-start", gap: "sm", style: { padding: '24px 0 0 0px' } }, { children: trade.tradeType === dsgswapSdk.TradeType.EXACT_INPUT ? (jsxRuntime.jsxs(Text, tslib.__assign({ small: true, color: "textSubtle", textAlign: "left", style: { width: '100%' } }, { children: [t('Output is estimated. You will receive at least'), "\u00A0", jsxRuntime.jsxs("b", { children: [(_b = slippageAdjustedAmounts[Field$2.OUTPUT]) === null || _b === void 0 ? void 0 : _b.toSignificant(6), " ", trade.outputAmount.currency.symbol] }, void 0), "\u00A0", t('or the transaction will revert.')] }), void 0)) : (jsxRuntime.jsxs(Text, tslib.__assign({ small: true, color: "textSubtle", textAlign: "left", style: { width: '100%' } }, { children: [t('Input is estimated. You will sell at most'), "\u00A0", jsxRuntime.jsxs("b", { children: [(_c = slippageAdjustedAmounts[Field$2.INPUT]) === null || _c === void 0 ? void 0 : _c.toSignificant(6), " ", trade.inputAmount.currency.symbol] }, void 0), "\u00A0", t('or the transaction will revert.')] }), void 0)) }), void 0), recipient !== null ? (jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "flex-start", gap: "sm", style: { padding: '12px 0 0 0px' } }, { children: jsxRuntime.jsxs(Text, tslib.__assign({ color: "textSubtle" }, { children: [t('Output will be sent to'), ' ', jsxRuntime.jsx("b", tslib.__assign({ title: recipient }, { children: isAddress(recipient) ? shortenAddress(recipient) : recipient }), void 0)] }), void 0) }), void 0)) : null] }), void 0));
+}
+
+/**
+ * Returns true if the trade requires a confirmation of details before we can submit it
+ * @param tradeA trade A
+ * @param tradeB trade B
+ */
+function tradeMeaningfullyDiffers(tradeA, tradeB) {
+    return (tradeA.tradeType !== tradeB.tradeType ||
+        !dsgswapSdk.currencyEquals(tradeA.inputAmount.currency, tradeB.inputAmount.currency) ||
+        !tradeA.inputAmount.equalTo(tradeB.inputAmount) ||
+        !dsgswapSdk.currencyEquals(tradeA.outputAmount.currency, tradeB.outputAmount.currency) ||
+        !tradeA.outputAmount.equalTo(tradeB.outputAmount));
+}
+var ConfirmSwapModal = function (_a) {
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    var trade = _a.trade, originalTrade = _a.originalTrade, onAcceptChanges = _a.onAcceptChanges, allowedSlippage = _a.allowedSlippage, onConfirm = _a.onConfirm, onDismiss = _a.onDismiss, customOnDismiss = _a.customOnDismiss, recipient = _a.recipient, swapErrorMessage = _a.swapErrorMessage, attemptingTxn = _a.attemptingTxn, txHash = _a.txHash;
+    var showAcceptChanges = React.useMemo(function () { return Boolean(trade && originalTrade && tradeMeaningfullyDiffers(trade, originalTrade)); }, [originalTrade, trade]);
+    var t = useTranslation().t;
+    var modalHeader = React.useCallback(function () {
+        return trade ? (jsxRuntime.jsx(SwapModalHeader, { trade: trade, allowedSlippage: allowedSlippage, recipient: recipient, showAcceptChanges: showAcceptChanges, onAcceptChanges: onAcceptChanges }, void 0)) : null;
+    }, [allowedSlippage, onAcceptChanges, recipient, showAcceptChanges, trade]);
+    var modalBottom = React.useCallback(function () {
+        return trade ? (jsxRuntime.jsx(SwapModalFooter, { onConfirm: onConfirm, trade: trade, disabledConfirm: showAcceptChanges, swapErrorMessage: swapErrorMessage, allowedSlippage: allowedSlippage }, void 0)) : null;
+    }, [allowedSlippage, onConfirm, showAcceptChanges, swapErrorMessage, trade]);
+    // text to show while loading
+    var pendingText = t('Swapping %amountA% %symbolA% for %amountB% %symbolB%', {
+        amountA: (_c = (_b = trade === null || trade === void 0 ? void 0 : trade.inputAmount) === null || _b === void 0 ? void 0 : _b.toSignificant(6)) !== null && _c !== void 0 ? _c : '',
+        symbolA: (_f = (_e = (_d = trade === null || trade === void 0 ? void 0 : trade.inputAmount) === null || _d === void 0 ? void 0 : _d.currency) === null || _e === void 0 ? void 0 : _e.symbol) !== null && _f !== void 0 ? _f : '',
+        amountB: (_h = (_g = trade === null || trade === void 0 ? void 0 : trade.outputAmount) === null || _g === void 0 ? void 0 : _g.toSignificant(6)) !== null && _h !== void 0 ? _h : '',
+        symbolB: (_l = (_k = (_j = trade === null || trade === void 0 ? void 0 : trade.outputAmount) === null || _j === void 0 ? void 0 : _j.currency) === null || _k === void 0 ? void 0 : _k.symbol) !== null && _l !== void 0 ? _l : '',
+    });
+    var confirmationContent = React.useCallback(function () {
+        return swapErrorMessage ? (jsxRuntime.jsx(TransactionErrorContent, { onDismiss: onDismiss, message: swapErrorMessage }, void 0)) : (jsxRuntime.jsx(ConfirmationModalContent, { topContent: modalHeader, bottomContent: modalBottom }, void 0));
+    }, [onDismiss, modalBottom, modalHeader, swapErrorMessage]);
+    return (jsxRuntime.jsx(TransactionConfirmationModal, { title: t('Confirm Swap'), onDismiss: onDismiss, customOnDismiss: customOnDismiss, attemptingTxn: attemptingTxn, hash: txHash, content: confirmationContent, pendingText: pendingText, currencyToAdd: trade === null || trade === void 0 ? void 0 : trade.outputAmount.currency }, void 0));
+};
+
+var InputPanel = styled__default["default"].div(templateObject_1$2 || (templateObject_1$2 = tslib.__makeTemplateObject(["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: 1.25rem;\n  background-color: ", ";\n  z-index: 1;\n  width: 100%;\n"], ["\n  display: flex;\n  flex-flow: column nowrap;\n  position: relative;\n  border-radius: 1.25rem;\n  background-color: ", ";\n  z-index: 1;\n  width: 100%;\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.backgroundAlt;
+});
+var ContainerRow = styled__default["default"].div(templateObject_2$1 || (templateObject_2$1 = tslib.__makeTemplateObject(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border-radius: 1.25rem;\n  border: 1px solid ", ";\n  transition: border-color 300ms ", ",\n    color 500ms ", ";\n  background-color: ", ";\n"], ["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  border-radius: 1.25rem;\n  border: 1px solid ", ";\n  transition: border-color 300ms ", ",\n    color 500ms ", ";\n  background-color: ", ";\n"])), function (_a) {
+    var error = _a.error, theme = _a.theme;
+    return (error ? theme.colors.failure : theme.colors.background);
+}, function (_a) {
+    var error = _a.error;
+    return (error ? 'step-end' : 'step-start');
+}, function (_a) {
+    var error = _a.error;
+    return (error ? 'step-end' : 'step-start');
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.backgroundAlt;
+});
+var InputContainer = styled__default["default"].div(templateObject_3 || (templateObject_3 = tslib.__makeTemplateObject(["\n  flex: 1;\n  padding: 1rem;\n"], ["\n  flex: 1;\n  padding: 1rem;\n"])));
+var Input = styled__default["default"].input(templateObject_4 || (templateObject_4 = tslib.__makeTemplateObject(["\n  font-size: 1.25rem;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  width: 0;\n  background-color: ", ";\n  transition: color 300ms ", ";\n  color: ", ";\n  overflow: hidden;\n  text-overflow: ellipsis;\n  font-weight: 500;\n  width: 100%;\n  ::placeholder {\n    color: ", ";\n  }\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"], ["\n  font-size: 1.25rem;\n  outline: none;\n  border: none;\n  flex: 1 1 auto;\n  width: 0;\n  background-color: ", ";\n  transition: color 300ms ", ";\n  color: ", ";\n  overflow: hidden;\n  text-overflow: ellipsis;\n  font-weight: 500;\n  width: 100%;\n  ::placeholder {\n    color: ", ";\n  }\n  padding: 0px;\n  -webkit-appearance: textfield;\n\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n\n  ::-webkit-outer-spin-button,\n  ::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n  }\n\n  ::placeholder {\n    color: ", ";\n  }\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.backgroundAlt;
+}, function (_a) {
+    var error = _a.error;
+    return (error ? 'step-end' : 'step-start');
+}, function (_a) {
+    var error = _a.error, theme = _a.theme;
+    return (error ? theme.colors.failure : theme.colors.primary);
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.textDisabled;
+}, function (_a) {
+    var theme = _a.theme;
+    return theme.colors.textDisabled;
+});
+function AddressInputPanel(_a) {
+    var id = _a.id, value = _a.value, onChange = _a.onChange;
+    var chainId = useActiveWeb3React().chainId;
+    var t = useTranslation().t;
+    var _b = useENS(value), address = _b.address, loading = _b.loading, name = _b.name;
+    var handleInput = React.useCallback(function (event) {
+        var input = event.target.value;
+        var withoutSpaces = input.replace(/\s+/g, '');
+        onChange(withoutSpaces);
+    }, [onChange]);
+    var error = Boolean(value.length > 0 && !loading && !address);
+    return (jsxRuntime.jsx(InputPanel, tslib.__assign({ id: id }, { children: jsxRuntime.jsx(ContainerRow, tslib.__assign({ error: error }, { children: jsxRuntime.jsx(InputContainer, { children: jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Text, { children: t('Recipient') }, void 0), address && chainId && (jsxRuntime.jsxs(Link, tslib.__assign({ external: true, small: true, href: getBscScanLink(name !== null && name !== void 0 ? name : address, 'address', chainId) }, { children: ["(", t('View on BscScan'), ")"] }), void 0))] }, void 0), jsxRuntime.jsx(Input, { className: "recipient-address-input", type: "text", autoComplete: "off", autoCorrect: "off", autoCapitalize: "off", spellCheck: "false", placeholder: t('Wallet Address or ENS name'), error: error, pattern: "^(0x[a-fA-F0-9]{40})$", onChange: handleInput, value: value }, void 0)] }), void 0) }, void 0) }), void 0) }), void 0));
+}
+var templateObject_1$2, templateObject_2$1, templateObject_3, templateObject_4;
+
 var SafemoonWarning = function () {
     var t = useTranslation().t;
     return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(Text, { children: [t('To trade SAFEMOON, you must:'), " "] }, void 0), jsxRuntime.jsxs(Text, { children: ["\u2022 ", t('Click on the settings icon')] }, void 0), jsxRuntime.jsxs(Text, tslib.__assign({ mb: "24px" }, { children: ["\u2022 ", t('Set your slippage tolerance to 12%+')] }), void 0), jsxRuntime.jsx(Text, { children: t('This is because SafeMoon taxes a 10% fee on each transaction:') }, void 0), jsxRuntime.jsxs(Text, { children: ["\u2022 ", t('5% fee = redistributed to all existing holders')] }, void 0), jsxRuntime.jsxs(Text, { children: ["\u2022 ", t('5% fee = used to add liquidity')] }, void 0)] }, void 0));
@@ -13814,7 +13835,11 @@ function Swap(_a) {
             _b[Field$2.OUTPUT] = parsedAmount,
             _b) : (_c = {},
         _c[Field$2.INPUT] = independentField === Field$2.INPUT ? parsedAmount : trade === null || trade === void 0 ? void 0 : trade.inputAmount,
-        _c[Field$2.OUTPUT] = independentField === Field$2.OUTPUT ? parsedAmount : ((polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.toCurrencyAmount : trade === null || trade === void 0 ? void 0 : trade.outputAmount),
+        _c[Field$2.OUTPUT] = independentField === Field$2.OUTPUT
+            ? parsedAmount
+            : (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed)
+                ? polyData === null || polyData === void 0 ? void 0 : polyData.toCurrencyAmount
+                : trade === null || trade === void 0 ? void 0 : trade.outputAmount,
         _c);
     var _u = useSwapActionHandlers(), onSwitchTokens = _u.onSwitchTokens, onCurrencySelection = _u.onCurrencySelection, onUserInput = _u.onUserInput, onChangeRecipient = _u.onChangeRecipient;
     var isValid = !swapInputError;
@@ -13836,8 +13861,8 @@ function Swap(_a) {
         _d[independentField] = typedValue,
         _d[dependentField] = showWrap
             ? (_f = (_e = parsedAmounts[independentField]) === null || _e === void 0 ? void 0 : _e.toExact()) !== null && _f !== void 0 ? _f : ''
-            // : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
-            : (_h = (_g = parsedAmounts[dependentField]) === null || _g === void 0 ? void 0 : _g.toSignificant(6, undefined, independentField === Field$2.INPUT ? dsgswapSdk.Rounding.ROUND_DOWN : dsgswapSdk.Rounding.ROUND_UP)) !== null && _h !== void 0 ? _h : '',
+            : // : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+                (_h = (_g = parsedAmounts[dependentField]) === null || _g === void 0 ? void 0 : _g.toSignificant(6, undefined, independentField === Field$2.INPUT ? dsgswapSdk.Rounding.ROUND_DOWN : dsgswapSdk.Rounding.ROUND_UP)) !== null && _h !== void 0 ? _h : '',
         _d);
     var route = trade === null || trade === void 0 ? void 0 : trade.route;
     var userHasSpecifiedInputOutput = Boolean(currencies[Field$2.INPUT] && currencies[Field$2.OUTPUT] && ((_j = parsedAmounts[independentField]) === null || _j === void 0 ? void 0 : _j.greaterThan(dsgswapSdk.JSBI.BigInt(0))));
@@ -13846,7 +13871,9 @@ function Swap(_a) {
     var _x = tslib.__read(useApproveCallbackFromTrade(trade, allowedSlippage), 2), approvalAsLiquild = _x[0], approveCallbackAsLiquild = _x[1];
     var _y = tslib.__read(useApproveCallbackPolyTrade(polyData === null || polyData === void 0 ? void 0 : polyData.fromCurrencyTokenAmount, polySpender), 2), approvalAsPoly = _y[0], approveCallbackAsPloy = _y[1];
     var _z = tslib.__read(React.useMemo(function () {
-        return (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? [approvalAsPoly, approveCallbackAsPloy] : [approvalAsLiquild, approveCallbackAsLiquild];
+        return (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed)
+            ? [approvalAsPoly, approveCallbackAsPloy]
+            : [approvalAsLiquild, approveCallbackAsLiquild];
     }, [polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, approvalAsLiquild, approveCallbackAsLiquild, approvalAsPoly, approveCallbackAsPloy]), 2), approval = _z[0], approveCallback = _z[1];
     // const [approval, approveCallback] = useApproveCallbackFromTradeOrPoly(polyData?.isPolyMethed, trade, polyData?.currencyAmount, allowedSlippage)
     // check if user has gone through approval process, used to show two step buttons, reset on token change
@@ -13913,7 +13940,8 @@ function Swap(_a) {
                                 swapErrorMessage: error.message,
                                 txHash: undefined,
                             });
-                        }).finally(function () {
+                        })
+                            .finally(function () {
                             setPolySwapPending(false);
                         })];
                 case 2:
@@ -13934,7 +13962,7 @@ function Swap(_a) {
     var priceImpactSeverity = warningSeverity(priceImpactWithoutFee, allowedSlippage);
     // show approve flow when: no error on inputs, not approved or pending, or approved in current session
     // never show if price impact is above threshold in non expert mode
-    var showApproveFlowTrade = (!swapInputError) &&
+    var showApproveFlowTrade = !swapInputError &&
         (approval === ApprovalState.NOT_APPROVED ||
             approval === ApprovalState.PENDING ||
             (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
@@ -14025,94 +14053,82 @@ function Swap(_a) {
         if (noRoute && userHasSpecifiedInputOutput && !polyData.isPolyMethed)
             return (jsxRuntime.jsxs(GreyCardStyled, tslib.__assign({ style: { textAlign: 'center' } }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ color: "textSubtle", mb: "4px" }, { children: t('Insufficient liquidity for this trade.') }), void 0), singleHopOnly && (jsxRuntime.jsx(Text, tslib.__assign({ color: "textSubtle", mb: "4px" }, { children: t('Try enabling multi-hop trades.') }), void 0))] }), void 0));
         if (showApproveFlow)
-            return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Button, tslib.__assign({ variant: approval === ApprovalState.APPROVED ? 'success' : 'primary', onClick: approveCallback, disabled: approval !== ApprovalState.NOT_APPROVED || approvalSubmitted, width: "48%" }, { children: approval === ApprovalState.PENDING ? (jsxRuntime.jsxs(AutoRow, tslib.__assign({ gap: "6px", justify: "center" }, { children: [t('Enabling'), " ", jsxRuntime.jsx(CircleLoader, { stroke: "white" }, void 0)] }), void 0)) : approvalSubmitted && approval === ApprovalState.APPROVED ? (t('Enabled')) : (t('Enable %asset%', { asset: (_b = (_a = currencies[Field$2.INPUT]) === null || _a === void 0 ? void 0 : _a.symbol) !== null && _b !== void 0 ? _b : '' })) }), void 0), polyData.isPolyMethed
-                                ?
-                                    jsxRuntime.jsx(Button, tslib.__assign({ width: "48%", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
-                                            return tslib.__generator(this, function (_a) {
-                                                switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, handlePolySwap()];
-                                                    case 1:
-                                                        _a.sent();
-                                                        setTimeout(function () {
-                                                            onPresentConfirmModal();
-                                                        }, 0);
-                                                        return [2 /*return*/];
-                                                }
-                                            });
-                                        }); } }, { children: polySwapPending
-                                            ?
-                                                jsxRuntime.jsx(Dots, { children: t('Swap') }, void 0)
-                                            :
-                                                swapInputError || t('Swap') }), void 0)
-                                :
-                                    jsxRuntime.jsx(Button, tslib.__assign({ variant: isValid && priceImpactSeverity > 2 ? 'danger' : 'primary', onClick: function () {
-                                            if (isExpertMode) {
-                                                handleSwap();
-                                            }
-                                            else {
-                                                setSwapState({
-                                                    tradeToConfirm: trade,
-                                                    attemptingTxn: false,
-                                                    swapErrorMessage: undefined,
-                                                    txHash: undefined,
-                                                });
+            return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(RowBetween, { children: [jsxRuntime.jsx(Button, tslib.__assign({ variant: approval === ApprovalState.APPROVED ? 'success' : 'primary', onClick: approveCallback, disabled: approval !== ApprovalState.NOT_APPROVED || approvalSubmitted, width: "48%" }, { children: approval === ApprovalState.PENDING ? (jsxRuntime.jsxs(AutoRow, tslib.__assign({ gap: "6px", justify: "center" }, { children: [t('Enabling'), " ", jsxRuntime.jsx(CircleLoader, { stroke: "white" }, void 0)] }), void 0)) : approvalSubmitted && approval === ApprovalState.APPROVED ? (t('Enabled')) : (t('Enable %asset%', { asset: (_b = (_a = currencies[Field$2.INPUT]) === null || _a === void 0 ? void 0 : _a.symbol) !== null && _b !== void 0 ? _b : '' })) }), void 0), polyData.isPolyMethed ? (jsxRuntime.jsx(Button, tslib.__assign({ width: "48%", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
+                                    return tslib.__generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, handlePolySwap()];
+                                            case 1:
+                                                _a.sent();
                                                 setTimeout(function () {
                                                     onPresentConfirmModal();
                                                 }, 0);
-                                            }
-                                        }, width: "48%", id: "swap-button", disabled: !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode) }, { children: priceImpactSeverity > 3 && !isExpertMode
-                                            ? t('Price Impact High')
-                                            : priceImpactSeverity > 2
-                                                ? t('Swap Anyway')
-                                                : t('Swap') }), void 0)] }, void 0), jsxRuntime.jsx(Column, tslib.__assign({ style: { marginTop: '1rem' } }, { children: jsxRuntime.jsx(ProgressCircles, { steps: [approval === ApprovalState.APPROVED] }, void 0) }), void 0)] }, void 0));
-        return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: polyData.isPolyMethed
-                ?
-                    jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
-                            return tslib.__generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, handlePolySwap()];
-                                    case 1:
-                                        _a.sent();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); } }, { children: polySwapPending ? jsxRuntime.jsx(Dots, { children: t('Swap') }, void 0) : swapInputError || t('Swap') }), void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ variant: isValid && priceImpactSeverity > 2 ? 'danger' : 'primary', onClick: function () {
+                                    if (isExpertMode) {
+                                        handleSwap();
+                                    }
+                                    else {
+                                        setSwapState({
+                                            tradeToConfirm: trade,
+                                            attemptingTxn: false,
+                                            swapErrorMessage: undefined,
+                                            txHash: undefined,
+                                        });
                                         setTimeout(function () {
                                             onPresentConfirmModal();
                                         }, 0);
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); } }, { children: polySwapPending
-                            ?
-                                jsxRuntime.jsx(Dots, { children: t('Swap') }, void 0)
-                            :
-                                swapInputError || t('Swap') }), void 0)
-                :
-                    jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", variant: polyData.isPolyMethed ? 'primary' : (isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'danger' : 'primary'), onClick: function () {
-                            if (isExpertMode) {
-                                handleSwap();
-                            }
-                            else {
-                                setSwapState({
-                                    tradeToConfirm: trade,
-                                    attemptingTxn: false,
-                                    swapErrorMessage: undefined,
-                                    txHash: undefined,
-                                });
+                                    }
+                                }, width: "48%", id: "swap-button", disabled: !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode) }, { children: priceImpactSeverity > 3 && !isExpertMode
+                                    ? t('Price Impact High')
+                                    : priceImpactSeverity > 2
+                                        ? t('Swap Anyway')
+                                        : t('Swap') }), void 0))] }, void 0), jsxRuntime.jsx(Column, tslib.__assign({ style: { marginTop: '1rem' } }, { children: jsxRuntime.jsx(ProgressCircles, { steps: [approval === ApprovalState.APPROVED] }, void 0) }), void 0)] }, void 0));
+        return (jsxRuntime.jsx(Flex, tslib.__assign({ justifyContent: "center" }, { children: polyData.isPolyMethed ? (jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", disabled: !isValid || polySwapPending, onClick: function () { return tslib.__awaiter(_this, void 0, void 0, function () {
+                    return tslib.__generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, handlePolySwap()];
+                            case 1:
+                                _a.sent();
                                 setTimeout(function () {
                                     onPresentConfirmModal();
                                 }, 0);
-                            }
-                        }, id: "swap-button", disabled: !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError }, { children: (swapInputError ||
-                            (priceImpactSeverity > 3 && !isExpertMode
-                                ? t('Swap Anyway')
-                                : priceImpactSeverity > 2
-                                    ? t('Swap Anyway')
-                                    : t('Swap'))) }), void 0) }), void 0));
+                                return [2 /*return*/];
+                        }
+                    });
+                }); } }, { children: polySwapPending ? jsxRuntime.jsx(Dots, { children: t('Swap') }, void 0) : swapInputError || t('Swap') }), void 0)) : (jsxRuntime.jsx(Button, tslib.__assign({ width: "100%", variant: polyData.isPolyMethed
+                    ? 'primary'
+                    : isValid && priceImpactSeverity > 2 && !swapCallbackError
+                        ? 'danger'
+                        : 'primary', onClick: function () {
+                    if (isExpertMode) {
+                        handleSwap();
+                    }
+                    else {
+                        setSwapState({
+                            tradeToConfirm: trade,
+                            attemptingTxn: false,
+                            swapErrorMessage: undefined,
+                            txHash: undefined,
+                        });
+                        setTimeout(function () {
+                            onPresentConfirmModal();
+                        }, 0);
+                    }
+                }, id: "swap-button", disabled: !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError }, { children: swapInputError ||
+                    (priceImpactSeverity > 3 && !isExpertMode
+                        ? t('Swap Anyway')
+                        : priceImpactSeverity > 2
+                            ? t('Swap Anyway')
+                            : t('Swap')) }), void 0)) }), void 0));
     };
-    return (jsxRuntime.jsx("div", { children: jsxRuntime.jsxs(AppBody, { children: [jsxRuntime.jsx(AppHeader, { title: t('Exchange'), helper: titlehelper, tips: subTitleTips }, void 0), jsxRuntime.jsxs(Wrapper$3, tslib.__assign({ id: "swap-page" }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsx(CurrencyInputPanel, { label: independentField === Field$2.OUTPUT && !showWrap && trade ? t('From (estimated)') : t('From'), value: formattedAmounts[Field$2.INPUT], showMaxButton: false, currency: currencies[Field$2.INPUT], onUserInput: handleTypeInput, onMax: handleMaxInput, onCurrencySelect: handleInputSelect, otherCurrency: currencies[Field$2.OUTPUT], id: "swap-currency-input", showCommonBases: true }, void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "space-between" }, { children: jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: isExpertMode ? 'space-between' : 'center', style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: true }, { children: jsxRuntime.jsx(Icon$1, { width: "20px", onClick: function () {
+    return (jsxRuntime.jsx("div", { children: jsxRuntime.jsxs(AppBody, { children: [jsxRuntime.jsx(AppHeader, { title: t('Exchange'), helper: titlehelper, tips: subTitleTips }, void 0), jsxRuntime.jsxs(Wrapper$1, tslib.__assign({ id: "swap-page" }, { children: [jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "md" }, { children: [jsxRuntime.jsx(CurrencyInputPanel, { label: independentField === Field$2.OUTPUT && !showWrap && trade ? t('From (estimated)') : t('From'), value: formattedAmounts[Field$2.INPUT], showMaxButton: false, currency: currencies[Field$2.INPUT], onUserInput: handleTypeInput, onMax: handleMaxInput, onCurrencySelect: handleInputSelect, otherCurrency: currencies[Field$2.OUTPUT], id: "swap-currency-input", showCommonBases: true }, void 0), jsxRuntime.jsx(AutoColumn, tslib.__assign({ justify: "space-between" }, { children: jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: isExpertMode ? 'space-between' : 'center', style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: true, title: t('titleExchange') }, { children: jsxRuntime.jsx(Icon$1, { width: "20px", onClick: function () {
                                                         setApprovalSubmitted(false); // reset 2 step UI for approvals
                                                         onSwitchTokens();
                                                     }, color: currencies[Field$2.INPUT] && currencies[Field$2.OUTPUT] ? 'primary' : 'text' }, void 0) }), void 0), recipient === null && !showWrap && isExpertMode ? (jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "add-recipient-button", onClick: function () { return onChangeRecipient(''); } }, { children: t('+ Add a send (optional)') }), void 0)) : null] }), void 0) }), void 0), jsxRuntime.jsx(CurrencyInputPanel, { value: formattedAmounts[Field$2.OUTPUT], onUserInput: handleTypeOutput, 
                                     // label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
-                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: false }, { children: jsxRuntime.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.jsx(RowBetween, tslib.__assign({ align: "center" }, { children: jsxRuntime.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.jsxs(Box, tslib.__assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0), jsxRuntime.jsx(Box, { children: powered }, void 0)] }, void 0) }, void 0));
+                                    label: independentField === Field$2.INPUT && !showWrap && trade ? t('To') : t('To'), showMaxButton: false, currency: currencies[Field$2.OUTPUT], onCurrencySelect: handleOutputSelect, otherCurrency: currencies[Field$2.INPUT], id: "swap-currency-output", disabled: disabledOutput, showCommonBases: true }, void 0), isExpertMode && recipient !== null && !showWrap ? (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs(AutoRow, tslib.__assign({ justify: "space-between", style: { padding: '0 1rem' } }, { children: [jsxRuntime.jsx(ArrowWrapper, tslib.__assign({ clickable: false, title: t('titleExchange') }, { children: jsxRuntime.jsx(Icon$1, { width: "32px" }, void 0) }), void 0), jsxRuntime.jsx(Button, tslib.__assign({ variant: "text", id: "remove-recipient-button", onClick: function () { return onChangeRecipient(null); } }, { children: t('- Remove send') }), void 0)] }), void 0), jsxRuntime.jsx(AddressInputPanel, { id: "recipient", value: recipient, onChange: onChangeRecipient }, void 0)] }, void 0)) : null, showWrap ? null : (jsxRuntime.jsxs(AutoColumn, tslib.__assign({ gap: "8px", style: { padding: '0' } }, { children: [(Boolean(trade) || polyData.isPolyMethed) && (jsxRuntime.jsx(RowBetween, tslib.__assign({ align: "center" }, { children: jsxRuntime.jsx(TradePrice, { price: (polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed) ? polyData === null || polyData === void 0 ? void 0 : polyData.price : trade === null || trade === void 0 ? void 0 : trade.executionPrice, showInverted: showInverted, setShowInverted: setShowInverted }, void 0) }), void 0)), allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (jsxRuntime.jsxs(RowBetween, tslib.__assign({ align: "center" }, { children: [jsxRuntime.jsx(Text, tslib.__assign({ fontSize: "16px" }, { children: t('Slippage Tolerance') }), void 0), jsxRuntime.jsxs(Text, tslib.__assign({ fontSize: "16px", color: "textSubtle" }, { children: [allowedSlippage / 100, "%"] }), void 0)] }), void 0))] }), void 0))] }), void 0), !swapIsUnsupported ? (jsxRuntime.jsx(AdvancedSwapDetailsDropdown, { isPolyMethed: polyData === null || polyData === void 0 ? void 0 : polyData.isPolyMethed, polyData: polyData, trade: trade }, void 0)) : (jsxRuntime.jsx(UnsupportedCurrencyFooter, { currencies: [currencies.INPUT, currencies.OUTPUT] }, void 0)), jsxRuntime.jsxs(Box, tslib.__assign({ mt: "0.5rem" }, { children: [isExpertMode && swapErrorMessage ? jsxRuntime.jsx(SwapCallbackError, { error: swapErrorMessage }, void 0) : null, getButtonSupported()] }), void 0)] }), void 0), jsxRuntime.jsx(Box, { children: powered }, void 0)] }, void 0) }, void 0));
 }
 var templateObject_1;
 
