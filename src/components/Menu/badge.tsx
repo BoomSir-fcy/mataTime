@@ -10,11 +10,12 @@ export const Badge: React.FC<{
   }
   return (
     <Text
-      color="white"
+      color='white'
       style={{
         position: 'absolute',
         right: '0',
-        padding: '0 6px',
+        top: '-2px',
+        padding: '0 5px',
         height: '15px',
         display: 'flex',
         justifyContent: 'center',
@@ -22,7 +23,7 @@ export const Badge: React.FC<{
         background: '#EC612B',
         borderRadius: '5px',
         fontWeight: 400,
-        fontSize: '12px'
+        fontSize: '12px',
       }}
     >
       {count}

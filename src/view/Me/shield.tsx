@@ -83,7 +83,7 @@ const Shield = React.memo(() => {
             ? [...(res.data.list || [])]
             : [...state.list, ...(res.data.list || [])];
           p.page = (offest || state.page) + 1;
-          p.totalPage = res.data.totalCount / res.data.page_size;
+          p.totalPage = Math.ceil(res.data.totalCount / res.data.page_size);
           p.total = res.data.totalCount;
         });
       }
