@@ -109,6 +109,7 @@ export type Colors = {
   textSubtle: string;
   textOrigin: string;
   textgrey: string;
+  textAssist: string;
   borderThemeColor: string;
   borderColor: string;
   searchTopicBg: string;

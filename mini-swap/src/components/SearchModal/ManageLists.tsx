@@ -249,7 +249,7 @@ function ManageLists({
         </Row>
         {addError ? (
           <Text color="failure" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-            {addError}
+            {t(addError)}
           </Text>
         ) : null}
       </AutoColumn>

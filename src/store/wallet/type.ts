@@ -27,9 +27,11 @@ export interface WalletState {
   TimeIncometoday: IncometodayInfo;
   MatterIncomeList: MatterIncomeListInfo;
   MatterIncometoday: IncometodayInfo;
-  WithDrawMinNum: {
+  WithDrawSetting: {
     meta_minimum: string;
     time_minimum: string;
+    withdraw_time_fee: string;
+    withdraw_meta_fee: string;
   };
 }
 export interface TimeInfo {

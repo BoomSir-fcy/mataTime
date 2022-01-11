@@ -45,15 +45,15 @@ const StyledPanel = styled.div<{
   isPushed: boolean;
   showMenu: boolean;
   isMobile: boolean;
+  padding?: boolean;
 }>`
   position: fixed;
-  padding-top: 22px;
+  padding-top: ${({ padding }) => (padding ? 0 : '22px')};
   top: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   flex-shrink: 0;
-  /* background-color: ${({ theme }) => theme.nav.background}; */
   background: ${({ theme }) => theme.colors.background};
   width: ${({ isPushed }) => (isPushed ? `${SIDEBAR_WIDTH_FULL}px` : 0)};
   height: 100%;
@@ -72,6 +72,7 @@ interface Props {
   showMenu: boolean;
   isPushed: boolean;
   isMobile: boolean;
+  padding?: boolean;
 }
 
 export const Panel: React.FC<Props> = ({
@@ -79,9 +80,15 @@ export const Panel: React.FC<Props> = ({
   showMenu,
   isMobile,
   children,
+  padding,
 }) => {
   return (
-    <StyledPanel isMobile={isMobile} isPushed={isPushed} showMenu={showMenu}>
+    <StyledPanel
+      isMobile={isMobile}
+      isPushed={isPushed}
+      showMenu={showMenu}
+      padding={padding}
+    >
       {children}
     </StyledPanel>
   );

@@ -6,29 +6,31 @@ const dispatchHttpErrorEvent = (data: Api.Error) => {
   if (data?.code === ResponseCode.INSUFFICIENT_BALANCE) {
     eventBus.dispatchEvent(
       new MessageEvent('insufficient', {
-        data
-      })
+        data,
+      }),
     );
-    return
+    return;
   }
   // 余额不足
   if (data?.code === ResponseCode.USER_INSUFFICIENT_BALANCE) {
     eventBus.dispatchEvent(
       new MessageEvent('insufficient', {
-        data
-      })
+        data,
+      }),
     );
-    return
+    return;
   }
   // 任务签到
   if (data?.code === ResponseCode.TASK_SIGN_IN) return;
+  // 注册查询
+  if (data?.code === ResponseCode.SIGININVERIFY) return;
   if (data?.code !== 1) {
     eventBus.dispatchEvent(
       new MessageEvent('httpError', {
-        data
-      })
+        data,
+      }),
     );
   }
-}
+};
 
-export default dispatchHttpErrorEvent
+export default dispatchHttpErrorEvent;

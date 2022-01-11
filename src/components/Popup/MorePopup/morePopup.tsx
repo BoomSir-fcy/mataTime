@@ -32,6 +32,7 @@ enum MoreOperatorEnum {
   COMMONT = 'COMMONT',
   LIKE = 'LIKE', // 点赞
   BOOKMARK = 'BOOKMARK', // 收藏
+  BLOCKUSER = 'BLOCKUSER', // 屏蔽用户
 }
 
 const PopupWrapper = styled(Box)`
@@ -315,7 +316,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
               >
                 {t('moreReport')}
               </Text>
-              <Text
+              {/* <Text
                 textTransform='capitalize'
                 onClick={() => {
                   setInqueryType('shield');
@@ -323,6 +324,17 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
                 }}
               >
                 {t('moreShield')}
+              </Text> */}
+              <Text
+                textTransform='capitalize'
+                onClick={() => {
+                  // setInqueryType('shield');
+                  // setCommonInqueryShow(true);
+
+                  callback(data, MoreOperatorEnum.BLOCKUSER);
+                }}
+              >
+                {t('popupShieldUser')}
               </Text>
             </>
           )}

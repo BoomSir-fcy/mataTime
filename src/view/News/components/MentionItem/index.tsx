@@ -12,14 +12,18 @@ import {
   // FollowPopupD,
   ContentParsing,
   MorePostPopup,
+  ShiledUserModal,
 } from 'components';
-import { Box, Flex, Text } from 'uikit';
+import { Box, Flex, Text, Button } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { relativeTime } from 'utils';
+
+import { useTranslation } from 'contexts/Localization';
 
 import { MentionItemWrapper, MentionItemUserWrapper } from './style';
 
 import moreIcon from 'assets/images/social/more.png';
+import { useStore } from 'store';
 
 const PopupButton = styled(Flex)`
   align-items: center;
@@ -140,6 +144,9 @@ export const MentionItemUser: React.FC<UserProps> = ({
 }) => {
   const popupRef = React.useRef(null);
   const theme = useTheme();
+  const uid = useStore(p => p.loginReducer.userInfo.uid);
+  const { t } = useTranslation();
+  const [isShileUser, setIsShileUser] = React.useState(false);
 
   return (
     <MentionItemUserWrapper>
@@ -186,6 +193,18 @@ export const MentionItemUser: React.FC<UserProps> = ({
             >
               <img src={moreIcon} alt="more" />
             </MorePopup> */}
+            {itemData.uid !== uid && itemData.user_id !== uid && (
+              <Button
+                onClick={() => setIsShileUser(!isShileUser)}
+                variant='text'
+                className='icon-shield'
+                mr='18px'
+                padding='0'
+                title={t('popupShieldUser')}
+              >
+                <Icon color='textAssist' name='icon-pingbi2' />
+              </Button>
+            )}
             <Popup
               ref={popupRef}
               trigger={
@@ -218,6 +237,10 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 postUid={postUid}
                 data={itemData}
                 callback={(data: any, type) => {
+                  if (type === MoreOperatorEnum.BLOCKUSER) {
+                    setIsShileUser(!isShileUser);
+                    return;
+                  }
                   popupRef?.current?.close();
                   callback(data, type);
                 }}
@@ -226,6 +249,12 @@ export const MentionItemUser: React.FC<UserProps> = ({
           </div>
         )}
       </div>
+      <ShiledUserModal
+        userinfo={itemData}
+        visible={isShileUser}
+        callback={(data, type) => callback(data, type)}
+        onClose={() => setIsShileUser(!isShileUser)}
+      />
     </MentionItemUserWrapper>
   );
 };

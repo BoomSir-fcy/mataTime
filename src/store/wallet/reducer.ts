@@ -76,9 +76,11 @@ const initialState: WalletState = {
     total_income: '0',
     loadStatus: 0,
   },
-  WithDrawMinNum: {
+  WithDrawSetting: {
     meta_minimum: '0',
     time_minimum: '0',
+    withdraw_time_fee: '0',
+    withdraw_meta_fee: '0',
   },
 };
 
@@ -255,7 +257,7 @@ export const wallet = createSlice({
         state.MatterIncometoday = { ...action.payload, loadStatus: 1 };
       })
       .addCase(fetchMinimum.fulfilled, (state, action) => {
-        state.WithDrawMinNum = action.payload;
+        state.WithDrawSetting = action.payload;
       });
   },
 });

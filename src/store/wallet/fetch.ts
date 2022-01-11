@@ -30,12 +30,18 @@ export const FetchMatterIncometoday = async days => {
   }
 };
 
-// Time Matter最小提币数量
+// Time Matter最小提币数量 && 手续费
 export const FetchMinimum = async () => {
   try {
-    const res = await Api.AccountApi.getMinimum();
-    if (Api.isSuccess(res)) {
-      return res.data;
+    const [min, fee] = await Promise.all([
+      Api.AccountApi.getMinimum(),
+      Api.AccountApi.getWithdrawFee(),
+    ]);
+    if (Api.isSuccess(min) || Api.isSuccess(fee)) {
+      return {
+        ...min.data,
+        ...fee.data,
+      };
     } else {
       throw new Error('errCode');
     }

@@ -7,7 +7,7 @@ export const baseColors = {
   primaryDark: '#000',
   secondary: '#7645D9',
   success: '#4168ED',
-  primaryGreen: "#287452",
+  primaryGreen: '#287452',
   warning: '#FFB237',
   transparent: 'transparent',
   blue: '#5A79F8',
@@ -23,12 +23,12 @@ export const additionalColors = {
   bronze: '#E7974D',
   orange: '#FF780B',
   upPrice: '#287452',
-  downPrice: '#ec612b'
+  downPrice: '#ec612b',
 };
 
 export const nftTokenColors = {
   triangleDinosaur: '#F3A5C4',
-  meat: '#8A260E'
+  meat: '#8A260E',
 };
 
 export const lightColors: Colors = {
@@ -63,6 +63,7 @@ export const lightColors: Colors = {
   textgrey: '#7A83A0',
   borderThemeColor: '#EDEDED',
   borderColor: '#EDEDED',
+  textAssist: '#D5D5D5',
   disableStep: '#4D535F',
   ThemeText: '#4168ED',
   CircleBg: '#e8f0fd',
@@ -76,10 +77,10 @@ export const lightColors: Colors = {
     violet: 'linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
     progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
-    buttonBg: 'linear-gradient(90deg, #353535, #080808)'
+    buttonBg: 'linear-gradient(90deg, #353535, #080808)',
   },
   shadow: {
-    box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)'
+    box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)',
   },
   editorText: '#000',
   editorBoxBg: '#fff',
@@ -122,6 +123,7 @@ export const darkColors: Colors = {
   textDisabled: '#666171',
   textOrigin: '#EC612B',
   textgrey: '#B5B5B5',
+  textAssist: '#D5D5D5',
   borderThemeColor: '#3A4459',
   borderColor: '#4D535F',
   disableStep: '#000',
@@ -137,10 +139,10 @@ export const darkColors: Colors = {
     violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
     progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
-    buttonBg: 'linear-gradient(90deg, #353535, #080808)'
+    buttonBg: 'linear-gradient(90deg, #353535, #080808)',
   },
   shadow: {
-    box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)'
+    box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)',
   },
   editorText: '#FFFFFF',
   editorBoxBg: 'transparent',
@@ -148,5 +150,5 @@ export const darkColors: Colors = {
   searchTopicHoverBg: '#191f2d',
   searchTopicTxt: '#fff',
   commentBorder: '#ccc',
-  hoverList: '#1f1f1f'
+  hoverList: '#1f1f1f',
 };

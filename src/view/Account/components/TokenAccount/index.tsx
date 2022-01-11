@@ -29,6 +29,8 @@ import {
 import useMenuNav from 'hooks/useMenuNav';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import { useInviteCount } from 'view/Task/hooks/matter';
+import { Icon } from 'components';
+import FriendsList from 'view/Task/components/FriendsList';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -61,7 +63,7 @@ const TabText = styled(Text)`
   cursor: pointer;
 `;
 const RightBox = styled(Flex)`
-  min-width: 23vw;
+  min-width: 20vw;
   flex-wrap: wrap;
 `;
 const IncomeBox = styled(Flex)`
@@ -85,14 +87,15 @@ const PostTab = styled(ContentTab)`
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
-const IncomeComp = ({ TodayIncome, TotalIncome }) => {
+const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
+  const size = isMobile ? 26 : 36;
   const { t } = useTranslation();
   const { inviteInfo } = useInviteCount();
   return (
     <RightBox justifyContent='space-between' alignItems='center'>
-      <IncomeBox>
-        <Img src={require('assets/images/myWallet/airplane.png').default} />
-        <Flex mr='6px' flexDirection='column' justifyContent='space-between'>
+      {/* <IncomeBox>
+        <Icon size={size} color='white_black' name='icon-zhifeiji1' />
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('My Rebate(TIME)')}
           </Text>
@@ -100,10 +103,11 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
             {inviteInfo.total_rebate}
           </Text>
         </Flex>
-      </IncomeBox>
+      </IncomeBox> */}
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/today.png').default} />
-        <Flex flexDirection='column' justifyContent='space-between'>
+        <Icon size={size} color='white_black' name='icon-leijishouyi' />
+        {/* <Img src={require('assets/images/myWallet/today.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Day income')}
           </Text>
@@ -113,8 +117,9 @@ const IncomeComp = ({ TodayIncome, TotalIncome }) => {
         </Flex>
       </IncomeBox>
       <IncomeBox>
-        <Img src={require('assets/images/myWallet/total.png').default} />
-        <Flex flexDirection='column' justifyContent='space-between'>
+        <Icon size={size} color='white_black' name='icon-zongshouyi' />
+        {/* <Img src={require('assets/images/myWallet/total.png').default} /> */}
+        <Flex ml='12px' flexDirection='column' justifyContent='space-between'>
           <Text fontSize='14px' color='textTips'>
             {t('Account Cumulative income')}
           </Text>
@@ -151,6 +156,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const [day, setday] = useState(7);
   const [readType, setreadType] = useState(1);
   const [TokenWithDrawMinNum, setTokenWithDrawMinNum] = useState('0');
+  const [TokenWithDrawFee, setTokenWithDrawFee] = useState('0');
   const timeAddress = getTimeAddress();
   const MatterAddress = getMatterAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
@@ -161,7 +167,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const MatterIncometoday = useStore(p => p.wallet.MatterIncometoday);
   const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
   const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
-  const WithDrawMinNum = useStore(p => p.wallet.WithDrawMinNum);
+  const WithDrawSetting = useStore(p => p.wallet.WithDrawSetting);
 
   // useFetTimeIncometoday(day);
   // useFetTimeIncomeList(1, pageSize, 1);
@@ -222,21 +228,27 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
 
   useEffect(() => {
     if (activeToken === 'TIME') {
-      setTokenWithDrawMinNum(WithDrawMinNum.time_minimum);
+      setTokenWithDrawMinNum(WithDrawSetting.time_minimum);
+      setTokenWithDrawFee(WithDrawSetting?.withdraw_time_fee);
     } else {
-      setTokenWithDrawMinNum(WithDrawMinNum.meta_minimum);
+      setTokenWithDrawMinNum(WithDrawSetting.meta_minimum);
+      setTokenWithDrawFee(WithDrawSetting?.withdraw_meta_fee);
     }
-  }, [WithDrawMinNum, activeToken]);
+  }, [WithDrawSetting, activeToken]);
   useEffect(() => {
     const getTokenType = () => {
       // 获取路由的token参数
-      const search = route.location.search;
+      const { search } = route?.location || {};
       const myQuery = search => {
         return new URLSearchParams(search);
       };
       const TokenType = myQuery(search).get('token');
       if (TokenType) {
         setActiveToken(Number(TokenType));
+      }
+      const MyreadType = myQuery(search).get('readType');
+      if (MyreadType) {
+        setreadType(Number(MyreadType));
       }
     };
     getTokenType();
@@ -289,6 +301,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           Balance={walletBalance}
           TokenAddr={tokenAddress}
           TokenWithDrawMinNum={TokenWithDrawMinNum}
+          TokenWithDrawFee={TokenWithDrawFee}
         />
         {!isMobile && (
           <Recharge
@@ -315,12 +328,20 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           </TabText>
         </Flex>
         {!isMobile && (
-          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+          <IncomeComp
+            isMobile={isMobile}
+            TodayIncome={TodayIncome}
+            TotalIncome={TotalIncome}
+          />
         )}
       </ContentTab>
       {isMobile && (
         <ContentTab>
-          <IncomeComp TodayIncome={TodayIncome} TotalIncome={TotalIncome} />
+          <IncomeComp
+            isMobile={isMobile}
+            TodayIncome={TodayIncome}
+            TotalIncome={TotalIncome}
+          />
         </ContentTab>
       )}
       <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
@@ -334,7 +355,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
                 dispatch(fetchIncomeList({ page: 1, pageSize, readType: 1 }));
               }}
             >
-              Post
+              {t('walletePost')}
             </TabText>
             <TabText
               className={readType === 2 ? 'active' : ''}
@@ -343,16 +364,28 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
                 dispatch(fetchIncomeList({ page: 1, pageSize, readType: 2 }));
               }}
             >
-              Comment
+              {t('walleteComment')}
+            </TabText>
+            <TabText
+              className={readType === 3 ? 'active' : ''}
+              onClick={() => {
+                setreadType(3);
+              }}
+            >
+              {t('My Rebate')}
             </TabText>
           </Flex>
         </PostTab>
       )}
-      <EarningsRecord
-        readType={readType}
-        type={ActiveToken}
-        info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo}
-      />
+      {readType === 3 && ActiveToken === 1 ? (
+        <FriendsList />
+      ) : (
+        <EarningsRecord
+          readType={readType}
+          type={ActiveToken}
+          info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo}
+        />
+      )}
     </NoPdBottom>
   );
 });

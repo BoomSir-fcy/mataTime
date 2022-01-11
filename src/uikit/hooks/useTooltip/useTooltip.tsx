@@ -2,25 +2,31 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { usePopper } from 'react-popper';
 import { ThemeProvider, DefaultTheme } from 'styled-components';
+import { isApp } from 'utils/client';
 import { light, dark } from '../../theme';
 import isTouchDevice from '../../util/isTouchDevice';
 import { StyledTooltip, Arrow } from './StyledTooltip';
 import { TooltipOptions, TooltipRefs } from './types';
 
 const invertTheme = (currentTheme: DefaultTheme, invert: boolean) => {
-  if (!invert) return currentTheme
+  if (!invert) return currentTheme;
   if (currentTheme.isDark) {
     return light;
   }
   return dark;
 };
-
-const portalRoot = document.getElementById('portal-root');
+// const Portal = document.getElementById('portal-root');
+// // 解决打赏和连接钱包层级问题
+// const Root = document.getElementById('root');
 
 const useTooltip = (
   content: React.ReactNode,
   options: TooltipOptions,
+  ParentElement = 'portal-root',
 ): TooltipRefs => {
+  // // 解决打赏和连接钱包层级问题
+  const portalRoot = document.getElementById(ParentElement);
+
   const {
     placement = 'auto',
     trigger = 'hover',
@@ -171,6 +177,13 @@ const useTooltip = (
     };
   }, [trigger, targetElement, showTooltip, hideTooltip]);
 
+  useEffect(() => {
+    if (trigger === 'click' && isApp()) {
+      document.addEventListener('scroll', hideTooltip);
+    }
+    return () => document.removeEventListener('scroll', hideTooltip);
+  }, [trigger, hideTooltip]);
+
   // On small screens Popper.js tries to squeeze the tooltip to available space without overflowing beyound the edge
   // of the screen. While it works fine when the element is in the middle of the screen it does not handle well the
   // cases when the target element is very close to the edge of the screen - no margin is applied between the tooltip
@@ -203,7 +216,9 @@ const useTooltip = (
       }}
       {...attributes.popper}
     >
-      <ThemeProvider theme={(defaultTheme) => invertTheme(defaultTheme, invert)}>{content}</ThemeProvider>
+      <ThemeProvider theme={defaultTheme => invertTheme(defaultTheme, invert)}>
+        {content}
+      </ThemeProvider>
       {!hideArrow && (
         <Arrow
           ref={setArrowElement}

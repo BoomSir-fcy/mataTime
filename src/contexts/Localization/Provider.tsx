@@ -5,6 +5,9 @@ import { ContextApi, ContextData, ProviderState } from './types';
 import { LS_KEY, fetchLocale, getLanguageCodeFromLS } from './helpers';
 import translations from 'config/localization/translations.json';
 
+import 'dayjs/locale/zh-tw';
+import 'dayjs/locale/en';
+
 const initialState: ProviderState = {
   isFetching: true,
   currentLanguage: EN,
@@ -27,8 +30,8 @@ export const LanguageProvider: React.FC = ({ children }) => {
   const { currentLanguage } = state;
 
   useEffect(() => {
-    dayjs.locale(currentLanguage.dayjsCode || 'en');
-  }, [currentLanguage.code])
+    dayjs.locale(currentLanguage?.dayjsCode || 'en');
+  }, [currentLanguage.code]);
 
   useEffect(() => {
     const fetchInitialLocales = async () => {

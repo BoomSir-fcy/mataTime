@@ -7,7 +7,6 @@ export const NewsMeWrapper = styled.div`
 
 export const MeItemWrapper = styled(Card)`
   width: 100%;
-  width: 100%;
   box-sizing: border-box;
   ${({ theme }) => theme.mediaQueriesSize.padding}
   padding-top: 40px;
@@ -19,5 +18,11 @@ export const MeItemWrapper = styled(Card)`
   transition: background 0.3s;
   &:hover {
     background: ${({ theme }) => theme.colors.hoverList};
+    .icon-shield {
+      opacity: 1;
+    }
+  }
+  .icon-shield {
+    opacity: 0;
   }
 `;

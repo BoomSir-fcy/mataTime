@@ -19,6 +19,7 @@ import { getBLen } from 'utils';
 
 const InputItems = styled(Flex)`
   position: relative;
+  justify-content: space-between;
   width: 100%;
 `;
 const InputText = styled(Text)`
@@ -33,7 +34,7 @@ const InputNftImg = styled.img`
   ${mediaQueriesSize.marginr}
 `;
 const InputNickName = styled.input`
-  max-width: 381px;
+  /* max-width: 381px; */
   width: 100%;
   height: 50px;
   color: ${({ theme }) => theme.colors.white_black};
@@ -64,7 +65,7 @@ const NameVerify = styled(Text)`
   width: 100%;
   position: absolute;
   left: 2px;
-  top: 75px;
+  top: 55px;
 `;
 const WalletAddr = styled.div`
   position: absolute;
@@ -236,49 +237,43 @@ export const SignUpSetName: React.FC<{
       </Text> */}
       {/* <WalletAddress address={account} /> */}
       <Box paddingTop='100px'>
-        <InputItems marginBottom='46px' alignItems='center'>
+        <InputItems marginBottom='60px' alignItems='center'>
           <InputText>{t('loginInputTitleNickname')}</InputText>
           <NickNameBox>
-            <Box
-              style={{
-                position: 'relative',
+            <InputNickName
+              onChange={event => {
+                const { value } = event.target;
+                if (event.target.value.length < 1) {
+                  sethaveNickName(false);
+                } else {
+                  sethaveNickName(true);
+                }
+                let nick_name = value
+                  .replace(/(^\s*)|(\s*$)/g, '')
+                  .replace(/\s+/g, ' ');
+                // if (getBLen(event.target.value) > 30) {
+                //   setState(p => {
+                //     p.nickName = p.nickName;
+                //   });
+                // } else {
+                // }
+                setState(p => {
+                  p.nickName = nick_name;
+                });
               }}
-            >
-              <InputNickName
-                onChange={event => {
-                  const { value } = event.target;
-                  if (event.target.value.length < 1) {
-                    sethaveNickName(false);
-                  } else {
-                    sethaveNickName(true);
-                  }
-                  let nick_name = value
-                    .replace(/(^\s*)|(\s*$)/g, '')
-                    .replace(/\s+/g, ' ');
-                  // if (getBLen(event.target.value) > 30) {
-                  //   setState(p => {
-                  //     p.nickName = p.nickName;
-                  //   });
-                  // } else {
-                  // }
-                  setState(p => {
-                    p.nickName = nick_name;
-                  });
-                }}
-                value={state.nickName}
-                maxLength={30}
-                placeholder={t('loginSetNickNameEmpty')}
-              />
-              <WalletAddr>{shortenAddress(account)}</WalletAddr>
-            </Box>
-            <Text
-              color={getBLen(state.nickName) > 30 ? 'failure' : 'textTips'}
-              textAlign='right'
-              ellipsis
-            >
-              {t('loginCountCharacters', { value: getBLen(state.nickName) })}
-            </Text>
+              value={state.nickName}
+              maxLength={30}
+              placeholder={t('loginSetNickNameEmpty')}
+            />
+            <WalletAddr>{shortenAddress(account)}</WalletAddr>
             <NameVerify small color='textTips' textAlign='right'>
+              <Text
+                color={getBLen(state.nickName) > 30 ? 'failure' : 'textTips'}
+                textAlign='right'
+                ellipsis
+              >
+                {t('loginCountCharacters', { value: getBLen(state.nickName) })}
+              </Text>
               {t('loginInputValueNickname')}
             </NameVerify>
           </NickNameBox>

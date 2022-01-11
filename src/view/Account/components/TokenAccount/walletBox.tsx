@@ -15,6 +15,7 @@ import duration from 'dayjs/plugin/duration';
 import { useEstimatedServiceTime } from 'store/wallet/hooks';
 import useMenuNav from 'hooks/useMenuNav';
 import HistoryModal from './Pops/HistoryModal';
+import { Icon } from 'components';
 
 const Content = styled(Flex)`
   flex-direction: column;
@@ -32,7 +33,7 @@ const TopInfo = styled(Flex)`
   align-items: center;
   flex-wrap: wrap;
 `;
-const Icon = styled(Image)`
+const IconToken = styled(Image)`
   ${({ theme }) => theme.mediaQueriesSize.marginr}
   min-width: 43px;
 `;
@@ -72,6 +73,7 @@ interface Wallet {
   TokenAddr: string;
   BalanceInfo: Api.Account.Balance;
   TokenWithDrawMinNum: string;
+  TokenWithDrawFee: string;
 }
 const WalletBox: React.FC<Wallet> = ({
   Token,
@@ -79,8 +81,10 @@ const WalletBox: React.FC<Wallet> = ({
   TokenAddr,
   BalanceInfo,
   TokenWithDrawMinNum,
+  TokenWithDrawFee,
   ...props
 }) => {
+  const size = 20;
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -116,7 +120,7 @@ const WalletBox: React.FC<Wallet> = ({
     <Content {...props}>
       <TopInfo mb='4px'>
         <Flex alignItems='center'>
-          <Icon
+          <IconToken
             src={`/images/tokens/${Token}.svg`}
             width={43}
             height={43}
@@ -125,11 +129,17 @@ const WalletBox: React.FC<Wallet> = ({
           <Text fontSize='26px'>{Token}</Text>
         </Flex>
         <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
-          <ChangeToken
+          {/* <ChangeToken
             src={require('assets/images/myWallet/changeToken.png').default}
             alt=''
+          /> */}
+          <Icon
+            size={size}
+            color='textPrimary'
+            current={1}
+            name='icon-qiehuan'
           />
-          <NumText fontSize='14px' color='textPrimary'>
+          <NumText ml='12px' fontSize='14px' color='textPrimary'>
             {t('Account %token% Wallet', {
               token: Token === 'TIME' ? 'MATTER' : 'TIME',
             })}
@@ -239,6 +249,7 @@ const WalletBox: React.FC<Wallet> = ({
           balance={Balance}
           withdrawalBalance={BalanceInfo.available_balance}
           TokenWithDrawMinNum={TokenWithDrawMinNum}
+          TokenWithDrawFee={TokenWithDrawFee}
         />
       </ModalWrapper>
 

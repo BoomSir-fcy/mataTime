@@ -1,41 +1,45 @@
-import React, { useEffect, useState, ReactElement, StrictMode } from 'react'
-import styled from 'styled-components'
+import React, { useEffect, useState, ReactElement, StrictMode } from 'react';
+import styled from 'styled-components';
 
 interface State {
-  hasError: boolean
-  children?: any
+  hasError: boolean;
+  children?: any;
 }
 class ErrorBoundary extends React.Component<any, State> {
   constructor(props) {
-    super(props)
-    this.state = { hasError: false }
+    super(props);
+    this.state = { hasError: false };
   }
 
   componentDidCatch(error, errorInfo) {
     // Catch errors in any components below and re-render with error message
     this.setState({
       hasError: true,
-    })
+    });
     // You can also log error messages to an error reporting service here
   }
 
   render() {
-    const { children } = this.props
-    const { hasError } = this.state
-    if (hasError) return children?.[0] || null
+    const { children } = this.props;
+    const { hasError } = this.state;
+    if (hasError) return children?.[0] || null;
     // Normally, just render children
-    return <>{children}</>
+    return <>{children}</>;
   }
 }
 
 interface FlexAutoWarpperProps {
-  lineMax?: number
-  flatNum?: number
+  lineMax?: number;
+  flatNum?: number;
 }
 
-const FlexAutoWarpper: React.FC<FlexAutoWarpperProps> = ({ children, lineMax = 6, flatNum = 3 }) => {
-  const [childrenLength, setChildrenLength] = useState(0)
-  const [autoDom, setAutoDom] = useState(null)
+const FlexAutoWarpper: React.FC<FlexAutoWarpperProps> = ({
+  children,
+  lineMax = 6,
+  flatNum = 3,
+}) => {
+  const [childrenLength, setChildrenLength] = useState(0);
+  const [autoDom, setAutoDom] = useState(null);
 
   /**
    *
@@ -47,48 +51,50 @@ const FlexAutoWarpper: React.FC<FlexAutoWarpperProps> = ({ children, lineMax = 6
    */
   useEffect(() => {
     try {
-      if (!children || !(children as any).length) return
-      if (childrenLength === (children as any)?.length) return
+      if (!children || !(children as any).length) return;
+      if (childrenLength === (children as any)?.length) return;
       if (childrenLength !== (children as any).length) {
-        setChildrenLength((children as any).length)
+        setChildrenLength((children as any).length);
       }
-      const realChildren = (children as any)?.flat(flatNum)
-      const len = realChildren.length
-      const sliceLen = Math.min(lineMax, realChildren.length - 1)
-      const InvisibleDoms = realChildren?.slice(len - sliceLen, len).map((item) => {
-        if (!item) return item
-        return {
-          ...item,
-          props: {
-            ...item?.props,
-            style: {
-              ...item?.props?.style,
-              visibility: 'hidden',
-              height: 0,
-              minHight: 0,
-              maxHeight: 0,
-              marginTop: 0,
-              marginBottom: 0,
-              paddingBottom: 0,
-              paddingTop: 0,
+      const realChildren = (children as any)?.flat(flatNum);
+      const len = realChildren.length;
+      const sliceLen = Math.min(lineMax, realChildren.length - 1);
+      const InvisibleDoms = realChildren
+        ?.slice(len - sliceLen, len)
+        .map(item => {
+          if (!item) return item;
+          return {
+            ...item,
+            props: {
+              ...item?.props,
+              style: {
+                ...item?.props?.style,
+                visibility: 'hidden',
+                height: 0,
+                minHight: 0,
+                maxHeight: 0,
+                marginTop: 0,
+                marginBottom: 0,
+                paddingBottom: 0,
+                paddingTop: 0,
+              },
             },
-          },
-        }
-      })
-      setAutoDom(InvisibleDoms)
+          };
+        });
+      setAutoDom(InvisibleDoms);
     } catch (error) {
-      setAutoDom(null)
+      setAutoDom(null);
     }
-  }, [children, childrenLength, lineMax, flatNum, setAutoDom])
+  }, [children, childrenLength, lineMax, flatNum, setAutoDom]);
 
   return (
     <>
       <ErrorBoundary>
         {children}
-        {/* {autoDom} */}
+        {autoDom}
       </ErrorBoundary>
     </>
-  )
-}
+  );
+};
 
-export default FlexAutoWarpper
+export default FlexAutoWarpper;

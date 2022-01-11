@@ -9,6 +9,19 @@ declare module 'styled-components' {
 
 const PaginateStyle = styled(Flex)`
   padding-top: 20px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  overflow-x: auto;
+  .totalPage {
+    margin-right: 0;
+    margin-bottom: 10px;
+    width: 90%;
+    ${({ theme }) => theme.mediaQueries.xs} {
+      margin-right: 16px;
+      margin-bottom: 0;
+      width: max-content;
+    }
+  }
   ul,
   li {
     padding: 0;
@@ -18,6 +31,7 @@ const PaginateStyle = styled(Flex)`
   ul {
     display: flex;
     align-items: center;
+    max-width: 84vw;
   }
   li {
     width: 28px;

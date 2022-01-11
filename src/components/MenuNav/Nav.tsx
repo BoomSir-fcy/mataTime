@@ -30,21 +30,21 @@ const NavStyled = styled(Box)`
   overflow-x: hidden;
 `;
 
-const NavShowBox = styled(Box) <{ translateX?: string }>`
+const NavShowBox = styled(Box)<{ translateX?: string }>`
   position: absolute;
   width: 100%;
   transition: transform 0.3s;
   transform: ${({ translateX }) => `translateX(${translateX})`};
 `;
 
-const Nav: React.FC<NavProps> = ({ }) => {
+const Nav: React.FC<NavProps> = ({}) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const [displayChildren, setDisplayChildren] = useState([]);
   const dispatch = useDispatch();
   const unReadMsg = useSelector((state: any) => state.loginReducer.unReadMsg);
   const notification = useSelector(
-    (state: any) => state.appReducer.systemCustom.notification
+    (state: any) => state.appReducer.systemCustom.notification,
   );
 
   const currentUid = useStore(p => p.loginReducer.userInfo);
@@ -58,22 +58,22 @@ const Nav: React.FC<NavProps> = ({ }) => {
             if (subItem.customName === 'me') {
               return {
                 ...subItem,
-                path: `${subItem.path}/profile/${currentUid.uid}`
-              }
+                path: `${subItem.path}/profile/${currentUid.uid}`,
+              };
             }
-            return { ...subItem }
-          })
-        }
+            return { ...subItem };
+          }),
+        };
       }
       if (item.customName === 'me') {
         return {
           ...item,
-          path: `${item.path}/profile/${currentUid.uid}`
-        }
+          path: `${item.path}/profile/${currentUid.uid}`,
+        };
       }
-      return { ...item }
-    })
-  }, [currentUid.uid])
+      return { ...item };
+    });
+  }, [currentUid.uid]);
 
   const menu = renderConfig.filter(row => row.lable);
 
@@ -81,7 +81,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
 
   const activeChildren = useMemo(() => {
     const activeConfig = renderConfig.find(item =>
-      item?.children?.some(subItem => subItem.path === pathname)
+      item?.children?.some(subItem => subItem.path === pathname),
     );
     if (activeConfig) return activeConfig.children;
     return null;
@@ -94,7 +94,7 @@ const Nav: React.FC<NavProps> = ({ }) => {
   }, [activeChildren]);
 
   return (
-    <NavStyled mt="16px">
+    <NavStyled mt='16px'>
       <NavShowBox translateX={activeChildren ? '-100%' : '0'}>
         {menu.map(item => {
           return (

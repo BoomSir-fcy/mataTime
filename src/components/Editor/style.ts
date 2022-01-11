@@ -40,11 +40,12 @@ export const SlateBox = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
   border-radius: ${({ theme }) => theme.radii.card};
+  /* padding-left: 4px; */
   padding: 15px 0 20px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 15px 15px 30px;
   }
-  max-width: calc(100vw - 15px);
+  max-width: calc(100vw - 20px);
   margin: 0 auto;
   z-index: 1004;
   div.text-box {

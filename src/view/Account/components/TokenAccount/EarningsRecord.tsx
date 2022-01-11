@@ -27,7 +27,7 @@ const CountBox = styled(Box)`
 const TableBox = styled(Box)`
   width: 100%;
   overflow: auto;
-`
+`;
 const Table = styled(Flex)`
   flex-direction: column;
   align-items: center;
@@ -184,28 +184,28 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
             </Row>
             {TaskHistoryList.length
               ? TaskHistoryList.map((item, index) => (
-                <Row
-                  className='matterStyle'
-                  key={`${item.create_time}${index}`}
-                >
-                  {item.task_type && (
-                    <>
-                      <ItemText>
-                        {dayjs(item.create_time * 1000).format(
-                          t('YYYY-MM-DD HH:mm:ss'),
-                        )}
-                      </ItemText>
-                      <ItemText>
-                        {GetTaskTag(item.task_group).toUpperCase()}
-                      </ItemText>
-                      <ItemText>
-                        {t(getItemTaskName(item.task_name_id))}
-                      </ItemText>
-                      <ItemText>{item.change}</ItemText>
-                    </>
-                  )}
-                </Row>
-              ))
+                  <Row
+                    className='matterStyle'
+                    key={`${item.create_time}${index}`}
+                  >
+                    {item.task_type && (
+                      <>
+                        <ItemText>
+                          {dayjs(item.create_time * 1000).format(
+                            t('YYYY-MM-DD HH:mm:ss'),
+                          )}
+                        </ItemText>
+                        <ItemText>
+                          {GetTaskTag(item.task_group).toUpperCase()}
+                        </ItemText>
+                        <ItemText>
+                          {t(getItemTaskName(item.task_name_id))}
+                        </ItemText>
+                        <ItemText>{item.change}</ItemText>
+                      </>
+                    )}
+                  </Row>
+                ))
               : !Loading && <Empty />}
             {Loading && (
               <LoadingAnimation>
@@ -246,8 +246,9 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
                   className='LinkRow'
                   key={`${item.read.post_id}${index}`}
                   as={Link}
-                  to={`/articleDetils/${readType === 1 ? item.read.post_id : item.cinfo?.pid
-                    }`}
+                  to={`/articleDetils/${
+                    readType === 1 ? item.read.post_id : item.cinfo?.pid
+                  }`}
                 >
                   <ItemText>
                     <Flex alignItems='center'>
@@ -276,7 +277,7 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
       </TableBox>
 
       <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text mr='16px' fontSize='14px' color='textTips'>
+        <Text className='totalPage' fontSize='14px' color='textTips'>
           {t('Account Total %page% page', { page: pageCount })}
         </Text>
         <ReactPaginate
@@ -285,7 +286,7 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
           forcePage={page - 1}
           disableInitialCallback={true}
           onPageChange={handlePageClick}
-          pageRangeDisplayed={4}
+          pageRangeDisplayed={3}
           marginPagesDisplayed={1}
           pageCount={pageCount}
           previousLabel='<'

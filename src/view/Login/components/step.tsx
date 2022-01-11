@@ -8,6 +8,9 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 
 const StepOutBox = styled(Box)`
   ${mediaQueriesSize.marginb}
+  .marginbot {
+    ${({ theme }) => theme.mediaQueriesSize.marginb}
+  }
 `;
 
 const StepBox = styled(Flex)`
@@ -49,7 +52,9 @@ const PositionText = styled(Text)`
   width: max-content;
   bottom: -32px;
 `;
-export const Step: React.FC = React.memo(() => {
+export const Step: React.FC<{
+  noTitle?: boolean;
+}> = ({ noTitle }) => {
   const { t } = useTranslation();
   const loading = useStore(p => p.loginReducer.signinLoading);
   const nft = useStore(p => p.loginReducer.nft);
@@ -57,34 +62,40 @@ export const Step: React.FC = React.memo(() => {
 
   return (
     <StepOutBox>
-      <Text
-        fontSize='34px'
-        marginBottom='29px'
-        bold
-        style={{ textTransform: 'capitalize' }}
-      >
-        {t('loginWelcome')}
-      </Text>
-      <StepBox>
-        <StepItem className='active'>
-          1
-          <PositionText fontSize='18px'>
-            {t('login Choose Avatar')}
-          </PositionText>
-        </StepItem>
-        <Line className='activeLine' />
-        <StepItem className={singUpStep > 1 ? 'active' : ''}>
-          2
-          <PositionText fontSize='18px'>{t('login Set nickname')}</PositionText>
-        </StepItem>
-        <Line className={singUpStep > 1 ? 'activeLine' : ''} />
-        <StepItem className={singUpStep > 2 ? 'active' : ''}>
-          3
-          <PositionText fontSize='18px'>
-            {t('login Complete registration')}
-          </PositionText>
-        </StepItem>
-      </StepBox>
+      <Box className={noTitle ? 'noMargin' : 'marginbot'}>
+        {!noTitle && (
+          <Text
+            fontSize='34px'
+            marginBottom='29px'
+            bold
+            style={{ textTransform: 'capitalize' }}
+          >
+            {t('loginWelcome')}
+          </Text>
+        )}
+        <StepBox>
+          <StepItem className='active'>
+            1
+            <PositionText fontSize='18px'>
+              {t('login Choose Avatar')}
+            </PositionText>
+          </StepItem>
+          <Line className='activeLine' />
+          <StepItem className={singUpStep > 1 ? 'active' : ''}>
+            2
+            <PositionText fontSize='18px'>
+              {t('login Set nickname')}
+            </PositionText>
+          </StepItem>
+          <Line className={singUpStep > 1 ? 'activeLine' : ''} />
+          <StepItem className={singUpStep > 2 ? 'active' : ''}>
+            3
+            <PositionText fontSize='18px'>
+              {t('login Complete registration')}
+            </PositionText>
+          </StepItem>
+        </StepBox>
+      </Box>
     </StepOutBox>
   );
-});
+};

@@ -145,7 +145,7 @@ export const RewardInput: React.FC<{
               onCallBack(amount, evnet);
             }}
           >
-            {t('Confirm')}
+            {t('rewardAutherConfirm')}
           </Submit>
         </Flex>
       )}

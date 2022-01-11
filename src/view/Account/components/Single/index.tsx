@@ -39,38 +39,23 @@ const Single: React.FC = () => {
       <Box pt='16px'>
         <Container>
           <Box mt=''>
-            <Text>
-              TIME single token staking mining: both TIME and DSG tokens can be
-              mined.
-            </Text>
-            <Text>
-              The logic of acquiring TIME: 20% of the TIME tokens consumed by
-              users are added to the staking pool every day for staking users to
-              mine TIME
-            </Text>
-            <Text>
-              The logic of acquiring DSG: 15% of the swapped DSG are directly
-              distributed to the staking pool, 20% will go into value locked
-              account, and will be released linearly in the next 6 months
-            </Text>
+            <Text>{t('walleteStakingText1')}</Text>
+            <Text>{t('walleteStakingText2')}</Text>
+            <Text>{t('walleteStakingText3')}</Text>
           </Box>
           <Box mt='28px'>
             <Text fontSize='14px' color='textTips'>
-              While staking TIME, you need to choose lock-up period. The sTIME
-              acquired after the staking process is the certificate used for
-              Metatime governance, it&apos;s also the certificate for
-              calculating staking income. The longer the lock-up time, the more
-              sTIME you can get from each TIME.
+              {t('walleteStakingText4')}
             </Text>
           </Box>
           <AnswerRuleList>
             <AnswerRuleListBox>
               <Flex>
-                <Text width='25%'>Vesting period</Text>
+                <Text width='25%'>{t('walleteVesting period')}</Text>
                 {boostData.map(item => {
                   return (
                     <Text key={item.lable} width='15%'>
-                      {item.lable}
+                      {t(item.lableUnit, { value: item.lable })}
                     </Text>
                   );
                 })}
@@ -80,7 +65,7 @@ const Single: React.FC = () => {
                 <Text width="15%">2 years</Text> */}
               </Flex>
               <Flex>
-                <Text width='25%'>Boost Factor</Text>
+                <Text width='25%'>{t('walleteBoost Factor')}</Text>
                 {boostData.map(item => {
                   return (
                     <Text key={item.value} width='15%'>

@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
-import { tokens } from 'config';
+import { ARTICLE_POST_MAX_ROW, tokens } from 'config';
 import {
   SQUARE_REGEXP,
   HTTP_REGEXP,
@@ -194,11 +194,13 @@ export const ContentParsing = (props: IProps) => {
         parsingResult.length > 0 &&
         parsingResult.map((item: any, index) => {
           if (!expand) {
-            return index < 8 && serialize2(item, null, index);
+            return (
+              index < ARTICLE_POST_MAX_ROW && serialize2(item, null, index)
+            );
           }
           return serialize2(item, null, index);
         })}
-      {parsingResult && parsingResult.length > 8 ? (
+      {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
         <ExpandWrapper>
           <span
             onClick={(e: any) => {

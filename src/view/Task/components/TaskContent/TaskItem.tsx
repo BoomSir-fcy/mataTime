@@ -157,27 +157,29 @@ const TaskItem: React.FC<{
             </Text>
           </Flex>
         </ContentFlex>
-        {info?.Expand && (
-          <ProgressBox>
-            <Flex width='100%' mb='13px' justifyContent='space-between'>
-              <Text small color='textTips'>
-                {t('progress')}
-              </Text>
-              <Text
-                small
-                color='textTips'
-              >{`${info.Expand.now}/${info.Expand?.max}`}</Text>
-            </Flex>
-            <Box width='100%'>
-              <Progress
-                color='progressBar'
-                scale='sm'
-                variant='round'
-                primaryStep={(info.Expand?.now / info.Expand?.max) * 100}
-              />
-            </Box>
-          </ProgressBox>
-        )}
+        <ProgressBox>
+          {info?.Expand && (
+            <>
+              <Flex width='100%' mb='13px' justifyContent='space-between'>
+                <Text small color='textTips'>
+                  {t('progress')}
+                </Text>
+                <Text
+                  small
+                  color='textTips'
+                >{`${info.Expand.now}/${info.Expand?.max}`}</Text>
+              </Flex>
+              <Box width='100%'>
+                <Progress
+                  color='progressBar'
+                  scale='sm'
+                  variant='round'
+                  primaryStep={(info.Expand?.now / info.Expand?.max) * 100}
+                />
+              </Box>
+            </>
+          )}
+        </ProgressBox>
       </ItemFlex>
       <ItemFlex>
         <MatterFlex>

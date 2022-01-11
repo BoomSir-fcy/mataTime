@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import { useLocation } from 'react-router-dom';
-import { TaskPage, TaskInvite } from './components';
+import { TaskPage, TaskInvite, FriendsList } from './components';
 
 const BgBox = styled(Box)`
   height: auto;
@@ -16,6 +16,8 @@ const Task: React.FC = () => {
     <BgBox>
       {pathname === '/task' && <TaskPage />}
       {pathname === '/task/invite' && <TaskInvite />}
+      {pathname === '/task/invites' && <TaskInvite />}
+      {pathname === '/task/friendsList' && <FriendsList />}
     </BgBox>
   );
 };

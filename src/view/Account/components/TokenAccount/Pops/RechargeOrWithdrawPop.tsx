@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { BIG_TEN } from 'utils/bigNumber';
+import { formatDisplayApr } from 'utils/formatBalance';
 import { getFullDisplayBalance } from 'utils/formatBalance';
 import { useDpWd } from '../../../hooks/walletInfo';
 import Dots from 'components/Loader/Dots';
@@ -67,6 +68,7 @@ interface init {
   withdrawalBalance: string;
   decimals?: number;
   TokenWithDrawMinNum: string;
+  TokenWithDrawFee: string;
 }
 
 const MoneyModal: React.FC<init> = ({
@@ -78,6 +80,7 @@ const MoneyModal: React.FC<init> = ({
   withdrawalBalance,
   decimals = 18,
   TokenWithDrawMinNum,
+  TokenWithDrawFee,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -185,6 +188,7 @@ const MoneyModal: React.FC<init> = ({
     },
     [setVal, balance, withdrawalBalance],
   );
+
   return (
     <CountBox>
       {type === 1 && (
@@ -241,9 +245,13 @@ const MoneyModal: React.FC<init> = ({
           }
         />
         <Max
-          style={type === 1 && approvedNum === 0 ? { cursor: 'no-drop' } : {}}
+          style={
+            (type === 1 && approvedNum === 0) || approvedNum === 0
+              ? { cursor: 'no-drop' }
+              : {}
+          }
           onClick={() => {
-            if (type === 1 && approvedNum === 0) return;
+            if ((type === 1 && approvedNum === 0) || approvedNum === 0) return;
             setVal(String(type === 1 ? balance : withdrawalBalance));
           }}
         >
@@ -251,11 +259,18 @@ const MoneyModal: React.FC<init> = ({
         </Max>
       </InputBox>
       {type === 2 && (
-        <Text mb='10px' color='textTips'>
-          {t('Account Minimum withdrawal amount %amount%', {
-            amount: TokenWithDrawMinNum,
-          })}
-        </Text>
+        <Flex mb='10px'>
+          <Text color='textTips'>
+            {t('Account Minimum withdrawal amount %amount%', {
+              amount: TokenWithDrawMinNum,
+            })}
+          </Text>
+          <Text ml='20px' color='textTips'>
+            {t('Account Fee withdrawal amount %amount%', {
+              amount: formatDisplayApr(Number(TokenWithDrawFee)),
+            })}
+          </Text>
+        </Flex>
       )}
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn

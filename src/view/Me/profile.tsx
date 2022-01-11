@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Crumbs,
   Avatar,
@@ -32,11 +32,12 @@ import MentionOperator from 'view/News/components/MentionOperator';
 import defaultDarkImages from 'assets/images/default_background.png';
 import defaultLightImages from 'assets/images/default_light_background.png';
 
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+
 import { ComponentsWrapper } from 'components/Cirde/PageContainer';
 import CommonCircle from 'components/Cirde/CommonCircle';
 
 import useAuth from 'hooks/useAuth';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import useMenuNav from 'hooks/useMenuNav';
 import eventBus from 'utils/eventBus';
 
@@ -65,6 +66,10 @@ const Info = styled(Flex)`
 `;
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
+  margin-bottom: 10px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 0;
+  }
   .name {
     min-width: 0;
     word-wrap: break-word;
@@ -81,6 +86,7 @@ const Desc = styled(Box)`
     color: ${({ theme }) => theme.colors.textTips};
   }
   .marginLeft {
+    margin-left: 10px;
     ${({ theme }) => theme.mediaQueries.sm} {
       margin-left: 30px;
     }
@@ -138,7 +144,44 @@ const FollowButtonBox = styled(Box)`
   ${mediaQueriesSize.marginr}
 `;
 
+const ProfileDesc: React.FC<{
+  profile: any;
+  className?: string;
+}> = ({ profile, className }) => {
+  const gray = useTheme().colors.textTips;
+  const { currentLanguage } = useTranslation();
+  const country = useStore(p => p.appReducer.localtion);
+
+  const locationDisplay = React.useMemo(() => {
+    const defaultCountry = country?.find(item => item.ID === profile.location);
+    return currentLanguage.locale === EN.locale
+      ? defaultCountry?.LocationEn
+      : defaultCountry?.LocaltionZh;
+  }, [country, profile.location]);
+
+  return (
+    <Desc className={className}>
+      <Text className='name' ellipsis maxLine={2}>
+        {profile.nick_name}
+      </Text>
+      <Flex mt='5px' flexWrap='wrap'>
+        <Flex>
+          {/* <Certification /> */}
+          <Text className='text'>@{shortenAddress(profile.address)}</Text>
+        </Flex>
+        {locationDisplay && (
+          <Flex className='marginLeft' alignItems='center'>
+            <Icon name='icon-dizhi' color={gray} />
+            <Text className='text'>{locationDisplay}</Text>
+          </Flex>
+        )}
+      </Flex>
+    </Desc>
+  );
+};
+
 const Profile: React.FC<any> = props => {
+  const history = useHistory();
   const [state, setState] = useImmer({
     profile: {
       label_list: [],
@@ -237,6 +280,7 @@ const Profile: React.FC<any> = props => {
       EXPAND,
       SHIELD,
       DELPOST,
+      BLOCKUSER,
     } = MoreOperatorEnum;
     const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
@@ -246,7 +290,8 @@ const Profile: React.FC<any> = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT
+      type === COMMONT ||
+      type === BLOCKUSER
     ) {
       setIsEnd(false);
       init(1);
@@ -317,9 +362,10 @@ const Profile: React.FC<any> = props => {
       ? defaultCountry?.LocationEn
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
+
   return (
     <Center>
-      <Crumbs title={t('meHome')} back={Boolean(uid)} />
+      <Crumbs title={t('meHome')} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -358,25 +404,7 @@ const Profile: React.FC<any> = props => {
                 scale={isMobile ? 'ld' : 'xl'}
                 src={profile.nft_image}
               />
-              <Desc>
-                <Text className='name' ellipsis maxLine={2}>
-                  {profile.nick_name}
-                </Text>
-                <Flex mt='5px' flexWrap='wrap'>
-                  <Flex>
-                    {/* <Certification /> */}
-                    <Text className='text'>
-                      @{shortenAddress(profile.address)}
-                    </Text>
-                  </Flex>
-                  {locationDisplay && (
-                    <Flex className='marginLeft' alignItems='center'>
-                      <Icon name='icon-dizhi' color={gray} />
-                      <Text className='text'>{locationDisplay}</Text>
-                    </Flex>
-                  )}
-                </Flex>
-              </Desc>
+              <ProfileDesc className='show-media-sm' profile={profile} />
             </Flex>
             {!uid || Number(uid) === currentUid.uid ? (
               <>
@@ -410,6 +438,7 @@ const Profile: React.FC<any> = props => {
             )}
           </Info>
           <Content>
+            <ProfileDesc className='hide-media-sm' profile={profile} />
             <Box className='desc'>
               <Text className='text' style={{ wordBreak: 'break-word' }}>
                 {profile.introduction}
@@ -423,11 +452,23 @@ const Profile: React.FC<any> = props => {
               <Text className="text">Email：{profile.email}</Text> */}
             </Box>
             <Flex className='number'>
-              <Text className='text'>
+              <Text
+                as={Boolean(uid) && profile.allow_watch_fans === 1 ? Link : ''}
+                to={`/me/user/fans?uid=${uid}`}
+                className='text'
+              >
                 {t('meFans')}
                 <Text className='value'>{profile.fans_num}</Text>
               </Text>
-              <Text className='text'>
+              <Text
+                as={
+                  Boolean(uid) && profile.allow_watch_attention === 1
+                    ? Link
+                    : ''
+                }
+                to={`/me/user/follow?uid=${uid}`}
+                className='text'
+              >
                 {t('meFollow')}
                 <Text className='value'>{profile.attention_num}</Text>
               </Text>

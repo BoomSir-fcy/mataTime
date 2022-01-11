@@ -10,23 +10,36 @@ const LogoWarpper = styled(Box)`
   display: block;
 `;
 const ImageStyled = styled(Image)`
-  margin-left: -22px;
+  margin-left: -23px;
   max-width: 100%;
   max-height: 100%;
 `;
-const Logo: React.FC<BoxProps> = props => {
+
+export interface LogoProps extends BoxProps {
+  noLink?: boolean;
+}
+const Logo: React.FC<LogoProps> = ({ noLink, ...props }) => {
   const [isDark] = useThemeManager();
 
   return (
     <LogoWarpper {...props} width='100%'>
-      <Link to={'/'}>
+      {noLink ? (
         <ImageStyled
           src={isDark ? logo : lightLogo}
           width={175}
           height={38}
           alt=''
         />
-      </Link>
+      ) : (
+        <Link to={'/'}>
+          <ImageStyled
+            src={isDark ? logo : lightLogo}
+            width={175}
+            height={38}
+            alt=''
+          />
+        </Link>
+      )}
     </LogoWarpper>
   );
 };

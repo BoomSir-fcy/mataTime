@@ -11,16 +11,18 @@ import RewardAuthModal from './RewardAuthModal';
 import useMenuNav from 'hooks/useMenuNav';
 import { GetPostRewardAuthor } from './hook';
 
+import { useTranslation } from 'contexts/Localization';
+
 import 'reactjs-popup/dist/index.css';
 
-const StyledPopup = styled(Popup) <{ isMobile: boolean }>`
+const StyledPopup = styled(Popup)<{ isMobile: boolean }>`
   position: relative;
   &-overlay {
     z-index: 98 !important;
   }
   &-content {
     width: ${({ isMobile }) =>
-    isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
+      isMobile ? 'calc(100% - 8px)!important' : 'atuo'};
     left: ${({ isMobile }) => (isMobile ? '4px !important' : 'atuo')};
   }
 `;
@@ -45,6 +47,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   const dispatch = useDispatch();
   const reward: reward[] = data.reward_stats || [];
   const postList = useStore(p => p.post.list);
+  const { t } = useTranslation();
   const { isMobile } = useMenuNav();
   const { isReward } = GetPostRewardAuthor();
   const [visible, setVisible] = React.useState(false);
@@ -105,6 +108,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
       tooltipOffset: [0, 5],
       background: 'transparent',
     },
+    'root',
   );
 
   // const close = () => {
@@ -120,7 +124,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
         <></>
       ) : (
         <React.Fragment>
-          <PopupButton ref={targetRef}>
+          <PopupButton ref={targetRef} title={t('editorReward')}>
             <Box width='18px' mr='10px'>
               <Image
                 src={require('assets/images/reward.svg').default}

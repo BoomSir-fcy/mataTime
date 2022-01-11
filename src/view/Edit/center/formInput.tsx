@@ -29,14 +29,21 @@ const Title = styled.div`
 `;
 
 const WidthBox = styled(Flex)`
-  max-width: 380px;
-  width: 60vw;
-  min-width: 200px;
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 380px;
+    width: 60vw;
+    min-width: 200px;
+  }
 `;
 
 const Rows = styled(Flex)`
   justify-content: flex-start;
+  flex-direction: column;
   margin-bottom: 26px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+  }
   textarea {
     background: ${({ theme }) => theme.colors.backgroundTextArea};
     width: 100%;
@@ -98,7 +105,7 @@ const FormInput = React.forwardRef((props, ref) => {
   const profile = useStore(p => p.loginReducer.userInfo);
   const { t } = useTranslation();
   const [state, setState] = useImmer<Api.User.updateProfileParams>({
-    ...profile
+    ...profile,
   });
   const [defaultLocationId, setdefaultLocationId] = useState(profile.location);
 
@@ -115,7 +122,7 @@ const FormInput = React.forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     getFrom() {
       return state;
-    }
+    },
   }));
 
   return (
@@ -125,7 +132,7 @@ const FormInput = React.forwardRef((props, ref) => {
         <div>
           <InputRows>
             <input
-              type="text"
+              type='text'
               onChange={event =>
                 setState(p => {
                   p.nick_name = event.target.value;
@@ -144,18 +151,18 @@ const FormInput = React.forwardRef((props, ref) => {
         <Title>{t('loginInputTitleDisplayFormat')}</Title>
         <RadioBox>
           <Radio
-            scale="sm"
-            type="radio"
-            id="gs"
+            scale='sm'
+            type='radio'
+            id='gs'
             checked={state.display_format === 1}
             onChange={event =>
               setState(p => {
                 p.display_format = Number(event.target.value);
               })
             }
-            value="1"
+            value='1'
           />
-          <label htmlFor="gs">{t('loginInputDisplayRadio1')}</label>
+          <label htmlFor='gs'>{t('loginInputDisplayRadio1')}</label>
           {/* <input
             type="radio"
             name="gs"
@@ -172,7 +179,7 @@ const FormInput = React.forwardRef((props, ref) => {
       </Rows>
       <Rows>
         <Title>{t('loginInputTitleIntroduction')}</Title>
-        <WidthBox flexDirection="column">
+        <WidthBox flexDirection='column'>
           <textarea
             placeholder={t('loginInputIntroduction')}
             onChange={event =>
@@ -190,7 +197,7 @@ const FormInput = React.forwardRef((props, ref) => {
         <Select
           options={country}
           defaultId={defaultLocationId}
-          childrenHeight="120px"
+          childrenHeight='120px'
           onChange={(val: any) => {
             setdefaultLocationId(val.ID);
             setState(p => {

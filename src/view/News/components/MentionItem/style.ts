@@ -13,9 +13,9 @@ export const MentionItemWrapper = styled.div`
     color: ${({ theme }) => theme.colors.white_black};
     word-wrap: break-word;
     word-break: break-all;
-    padding: 8px 0 8px 73px;
+    padding: 8px 0 8px 64px;
     ${({ theme }) => theme.mediaQueries.sm} {
-      padding: 15px 0 15px 73px;
+      padding: 15px 0 15px 64px;
     }
   }
 `;

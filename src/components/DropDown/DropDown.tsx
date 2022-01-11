@@ -159,6 +159,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = ({
   setIsOpen,
   fillWidth,
   children,
+  ...props
 }) => {
   const containerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -188,6 +189,7 @@ export const DropDown: React.FunctionComponent<DropDownProps> = ({
       fillWidth={fillWidth}
       ref={containerRef}
       {...containerSize}
+      {...props}
     >
       <DropDownListContainer scale={scale}>
         <DropDownList onClick={() => setIsOpen(false)} ref={dropdownRef}>

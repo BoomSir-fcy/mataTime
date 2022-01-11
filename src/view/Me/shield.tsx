@@ -1,51 +1,24 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { Avatar, Icon } from 'components';
-import { Box, Button, Flex } from 'uikit';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useImmer } from 'use-immer';
+import { useToast } from 'hooks';
+import { Avatar, Icon, Crumbs, List } from 'components';
+import { Card, Box, Button, Flex, Text } from 'uikit';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { fetchThunk, storeAction, useStore } from 'store';
 import { Api } from 'apis';
 
-const Header = styled(Flex)`
-  width: 100%;
-  height: 70px;
-  padding: 0 16px;
-  line-height: 70px;
-  background: #191f2d;
-  justify-content: space-between;
-  border-radius: 10px;
-  .title {
-    color: #fff;
-    font-weight: bold;
-  }
-  .myFollow {
-    margin-right: 10px;
-    font-size: 14px;
-    color: #fff;
-  }
-  .msg {
-    font-size: 14px;
-    color: ${({ theme }) => theme.colors.textgrey};
-  }
+import { shortenAddress } from 'utils/contract';
+import { useTranslation } from 'contexts/Localization';
+
+const Content = styled(Card)`
+  min-height: 500px;
+  max-width: calc(100vw - 8px);
+  background-color: transparent;
 `;
-const Msg = styled(Box)`
-  color: ${({ theme }) => theme.colors.textgrey};
-  font-size: 14px;
-`;
-const Content = styled(Box)`
-  width: 100%;
-  height: 705px;
-  padding: 29px 19px;
-  background: #191f2d;
-  border-radius: 10px;
-  margin-top: 10px;
-  overflow: hidden;
-  .msg {
-    color: ${({ theme }) => theme.colors.textgrey};
-    font-size: 14px;
-  }
-  .username {
-    color: #fff;
-  }
-`;
+
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
@@ -53,117 +26,160 @@ const Column = styled(Flex)`
   float: left;
   margin-left: 22px;
 `;
-const Rows = styled(Flex)`
+
+const ContentBox = styled(Flex)`
+  padding: 14px 8px;
+  min-height: 60px;
+  /* margin-bottom: 28px; */
   justify-content: space-between;
+  align-content: center;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  &:hover {
+    background: ${({ theme }) => theme.colors.hoverList};
+  }
 `;
-const ContentBox = styled(Box)`
-  float: left;
-  width: 100%;
-  height: 60px;
-  margin-bottom: 28px;
-  button {
-    background: ${({ theme }) => theme.colors.tertiary};
-    float: right;
-    margin-top: 15px;
+
+const WrapText = styled(Text)`
+  word-wrap: break-word;
+`;
+
+const NameText = styled(Text)`
+  max-width: 100%;
+  width: max-content;
+`;
+
+const NameFlex = styled(Flex)`
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
   }
 `;
 
 const Shield = React.memo(() => {
-  const people = [
-    {
-      uname: '满克斯',
-      dunpai: true,
-      present: '@0x32...9239',
-      isFollow: '取消屏蔽',
-    },
-    {
-      uname: '乔布斯',
-      dunpai: false,
-      present: '巴里拉里',
-      isFollow: '取消屏蔽',
-    },
-    {
-      uname: '马克思',
-      dunpai: true,
-      present: '个人主页的介绍',
-      isFollow: '取消屏蔽',
-    },
-  ];
-  const [peopleState, setPeopleState] = useState(people);
+  const dispatch = useDispatch();
+  const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
+  const postParams = useStore(p => p.post);
+  const { t } = useTranslation();
+  const { toastError, toastSuccess } = useToast();
+  const [state, setState] = useImmer({
+    loading: false,
+    page: 1,
+    total: 0,
+    totalPage: 1,
+    list: [],
+  });
 
-  // 屏蔽列表
-  const ShieldList = () => {
-    // 屏蔽
-    const shieldUser = async (pid: number) => {
-      try {
-        const res = await Api.MeApi.shieldUser(pid);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const { loading, page, total, totalPage, list } = state;
 
-    // 取消屏蔽
-    const unShieldUser = async (pid: number) => {
-      try {
-        const res = await Api.MeApi.shieldUser(pid);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const setPeople = useCallback(
-      index => {
-        if (peopleState[index].isFollow) {
-          peopleState.splice(index, 1);
-        }
-        const res = peopleState.map((item, subIndex) => {
-          if (index === subIndex) {
-            return {
-              ...item,
-            };
-          }
-          return {
-            ...item,
-          };
-        });
-        setPeopleState(res);
-      },
-      [peopleState],
-    );
-
-    return peopleState.map((item, index) => {
-      return (
-        <ContentBox>
-          <Avatar scale='md' style={{ float: 'left' }} />
-          <Column style={{ float: 'left' }}>
-            <div>
-              <span className='username'>{item.uname}</span>{' '}
-              <Icon
-                name={item.dunpai ? 'icon-dunpai' : null}
-                margin='0 5px 0 5px'
-                size={15}
-                color='#699a4d'
-              />{' '}
-              <span className='msg'>@0x32...9239</span>
-            </div>
-            <Msg>{item.present}</Msg>
-          </Column>
-          <Button onClick={() => shieldUser(1)}>取消屏蔽</Button>
-        </ContentBox>
-      );
+  const getList = async (offest?: number) => {
+    setState(p => {
+      p.loading = true;
     });
+    try {
+      const res = await Api.MeApi.getShieldList(offest || page);
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p.list = offest
+            ? [...(res.data.list || [])]
+            : [...state.list, ...(res.data.list || [])];
+          p.page = (offest || state.page) + 1;
+          p.totalPage = Math.ceil(res.data.totalCount / res.data.page_size);
+          p.total = res.data.totalCount;
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setState(p => {
+        p.loading = false;
+      });
+    }
   };
+
+  // 取消屏蔽
+  const unShield = async uid => {
+    try {
+      const res = await Api.MeApi.unShieldUser(uid);
+      if (Api.isSuccess(res)) {
+        getList(1);
+        toastSuccess(t('shieldUserUnSuccess'));
+      } else {
+        toastError(t(`http-error-${res.code}`));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(
+        fetchThunk.fetchPostAsync({
+          attention: postParams.attention,
+          page: 1,
+          per_page: pageSize,
+          user_tags1: postParams.user_tags1,
+          user_tags2: postParams.user_tags2,
+        }),
+      );
+    };
+  }, []);
+
   return (
     <Box>
-      <Header>
-        <div className='title'>个人主页</div>
-        <div>
-          <span className='myFollow'>屏蔽人数</span>
-          <span className='msg'>138人</span>
-        </div>
-      </Header>
-
-      <Content>{ShieldList()}</Content>
+      <Crumbs title={t('meHome')}>
+        <Flex>
+          <Text fontWeight='bold' mr='10px' fontSize='14px'>
+            {t('meHeaderShieldNumber')}
+          </Text>
+          <Text fontSize='14px'>
+            {t('meHeaderPeople%value%', { value: total })}
+          </Text>
+        </Flex>
+      </Crumbs>
+      <Content isBoxShadow>
+        <List
+          marginTop={13}
+          loading={loading}
+          renderList={() => {
+            if (loading || page > totalPage) return false;
+            getList();
+          }}
+        >
+          {list.map((item, index) => (
+            <ContentBox key={index}>
+              <Flex
+                as={Link}
+                to={`/me/profile/${item.user_shield_id}`}
+                alignItems='center'
+                style={{ width: 'calc(100% - 140px)' }}
+              >
+                <Avatar
+                  uid={item.user_shield_id}
+                  src={item.nft_image}
+                  scale='md'
+                />
+                <Column>
+                  <NameFlex>
+                    <NameText ellipsis color='white_black' mr='13px'>
+                      {item.nick_name}
+                    </NameText>
+                    <Text color='textTips'>
+                      @{shortenAddress(item.address)}
+                    </Text>
+                  </NameFlex>
+                  <WrapText small color='textTips' ellipsis>
+                    {item.introduction}
+                  </WrapText>
+                </Column>
+              </Flex>
+              <Button onClick={() => unShield(item.user_shield_id)}>
+                {t('unShiled')}
+              </Button>
+            </ContentBox>
+          ))}
+        </List>
+      </Content>
     </Box>
   );
 });

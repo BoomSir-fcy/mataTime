@@ -169,6 +169,7 @@ export interface SelectProps {
   scale?: Scale;
   sort?: SortType;
   childrenHeight?: string;
+  idKey?: string;
 }
 
 export interface OptionProps {
@@ -183,9 +184,10 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   disabled,
   onChange,
   sort,
-  scale,
   activeIndex,
   onSortClick,
+  idKey,
+  scale,
   fillWidth,
   children,
   childrenHeight,
@@ -205,12 +207,15 @@ export const Select: React.FunctionComponent<SelectProps> = ({
   useEffect(() => {
     if (defaultId) {
       options.forEach((item, index) => {
-        if (item.id === defaultId && index !== selectedOptionIndex) {
+        if (
+          (item.value?.[idKey] || item.id) === defaultId &&
+          index !== selectedOptionIndex
+        ) {
           setSelectedOptionIndex(index);
         }
       });
     }
-  }, [defaultId, options, selectedOptionIndex]);
+  }, [defaultId, idKey, options, selectedOptionIndex]);
 
   const onOptionClicked = (selectedIndex: number) => () => {
     setSelectedOptionIndex(selectedIndex);

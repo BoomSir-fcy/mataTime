@@ -28,6 +28,7 @@ export const CancelAttentionModal = React.memo((props: IProp) => {
   return (
     <ModalWrapper
       creactOnUse
+      overflow='visible'
       title={title || t('meTitle')}
       visible={show}
       setVisible={onClose}
@@ -37,9 +38,8 @@ export const CancelAttentionModal = React.memo((props: IProp) => {
           <Avatar disableFollow scale='md' src={params.nft_image} />
           <div className='des-box'>
             {getHTML('meUnsubscribeContent', {
-              value: `<span style="color:${
-                theme.colors.backgroundPrimary
-              }">@${shortenAddress(params.address)}</span>`,
+              value: `<span style="color:${theme.colors.backgroundPrimary
+                }">@${shortenAddress(params.address)}</span>`,
             })}
           </div>
         </CancelAttentionContentWrapper>

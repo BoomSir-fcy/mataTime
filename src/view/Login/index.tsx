@@ -25,6 +25,8 @@ import { Api } from 'apis';
 
 import sloganImg from 'assets/images/login_slogan_img.png';
 import HomeBanner from 'components/Cirde/HomeBanner';
+import { SignUpcomplete } from './components/signUpComplete';
+import { SignFinished } from './components/finished';
 
 /* eslint-disable */
 const LoginContainer = styled(Flex)`
@@ -107,6 +109,18 @@ const SignUpWarpper = styled(Flex)`
     padding-bottom: 100px;
   }
 `;
+
+const SignUpText = styled(Text)`
+  font-size: 34px;
+  font-weight: bold;
+  text-transform: capitalize;
+  ${mediaQueriesSize.marginUD}
+`;
+const SignUpSubText = styled(Text)`
+  font-size: 20px;
+  ${mediaQueriesSize.marginb}
+`;
+
 const SignInBox = () => {
   const { account } = useWeb3React();
   const dispatch = useDispatch();
@@ -190,6 +204,10 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
   const { getUserName } = useSignIn();
   const [showStakeNft, setshowStakeNft] = useState(false);
   const [isDark] = useThemeManager();
+
+  const [InviteCode, setInviteCode] = useState('');
+  const [IsFinished, setIsFinished] = useState(false);
+
   // const nftBoolean = showStakeNft && singUpStep === 1 && account;
 
   // 选择链
@@ -213,15 +231,32 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
     }
   };
 
+  // 获取邀请地址和邀请code码
   const getInviteAddress = () => {
     // 获取邀请地址
     const search = route.location.search;
     const myQuery = search => {
       return new URLSearchParams(search);
     };
+
+    // 已经完成注册
+    const Finished = myQuery(search).get('finished');
+    if (Finished) {
+      setIsFinished(Boolean(Finished));
+    }
+
+    // 获取邀请地址
     const InviteAddress = myQuery(search).get('InviteAddress');
     if (InviteAddress) {
       localStorage.setItem('InviteAddress', InviteAddress);
+    }
+
+    // 锁定code码
+    const Code_c = myQuery(search).get('c');
+    const Code_h = myQuery(search).get('h');
+    const Code_l = myQuery(search).get('l');
+    if (Code_c && Code_h && Code_l) {
+      setInviteCode(route.location.search);
     }
   };
 
@@ -231,12 +266,6 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
       dispatch(storeAction.changeReset());
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (isSignin) {
-  //     signIn();
-  //   }
-  // }, [isSignin]);
 
   // 1链接钱包后 首先查询是否有质押
   useEffect(() => {
@@ -271,41 +300,47 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
     <LoginContainer>
       <LeftBox>
         <HomeBanner />
-        {/* {nftBoolean && (
-          <Nft>
-            <Text fontSize="30px">{t('setCheangeNftAvatar')}</Text>
-            <StakeNFT status={1} />
-          </Nft>
-        )} */}
       </LeftBox>
       <Content>
-        <Container>
-          {singUpStep === 0 && (
-            <LogoWarpper>
-              <Logo
-                url='/'
-                src={`${
-                  require(isDark
-                    ? 'assets/images/logo.svg'
-                    : 'assets/images/light_logo.svg').default
-                }`}
-              />
-            </LogoWarpper>
-          )}
-          {/* 登录或注册 */}
-          {isSignin ? (
-            <SignInBox />
-          ) : (
-            <>
-              {!signUpFail && singUpStep > 0 && account && <Step />}
-              {isSignup ? (
-                <SignUp signUpFail={signUpFail} isStakeNft={isStakeNft} />
-              ) : (
-                <LoginJoin />
-              )}
-            </>
-          )}
-        </Container>
+        {IsFinished && singUpStep >= 3 ? (
+          <Container>
+            <Step />
+            <SignFinished />
+          </Container>
+        ) : (
+          <Container>
+            {singUpStep === 0 && (
+              <LogoWarpper>
+                <Logo
+                  style={{ marginLeft: '-10px' }}
+                  url='/'
+                  src={`${
+                    require(isDark
+                      ? './images/logo.svg'
+                      : './images/light_logo.svg').default
+                  }`}
+                />
+              </LogoWarpper>
+            )}
+            {/* 登录或注册 */}
+            {isSignin ? (
+              <SignInBox />
+            ) : (
+              <>
+                {!signUpFail && singUpStep > 0 && account && <Step />}
+                {isSignup ? (
+                  <SignUp
+                    InviteCode={InviteCode}
+                    signUpFail={signUpFail}
+                    isStakeNft={isStakeNft}
+                  />
+                ) : (
+                  <LoginJoin />
+                )}
+              </>
+            )}
+          </Container>
+        )}
         <Footer />
       </Content>
     </LoginContainer>

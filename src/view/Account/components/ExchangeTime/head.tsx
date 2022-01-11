@@ -93,9 +93,9 @@ export const TimeHeader: React.FC<init> = React.memo(
             <AnimationRingIcon bgColor active3 active1 isRotate width='8rem'>
               <FaqBox>
                 <WhiteText fontSize='30px' bold>
-                  Current Round
+                  {t('walleteCurrent Round')}
                 </WhiteText>
-                <WhiteText fontSize='24px'>Rate</WhiteText>
+                <WhiteText fontSize='24px'>{t('walleteRate')}</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
             <ScaleBox>
@@ -136,9 +136,9 @@ export const TimeHeader: React.FC<init> = React.memo(
             <AnimationRingIcon active2 isRotate width='8rem'>
               <FaqBox>
                 <WhiteText fontSize='30px' bold>
-                  Next Round
+                  {t('walleteNext Round')}
                 </WhiteText>
-                <WhiteText fontSize='24px'>Rate</WhiteText>
+                <WhiteText fontSize='24px'>{t('walleteRate')}</WhiteText>
               </FaqBox>
             </AnimationRingIcon>
             <ScaleBox>

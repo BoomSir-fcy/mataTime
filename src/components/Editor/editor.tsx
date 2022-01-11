@@ -45,7 +45,7 @@ import { useTranslation } from 'contexts/Localization';
 import { getPostBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
-import { ARTICLE_POST_MAX_LEN } from 'config';
+import { ARTICLE_POST_MAX_LEN, ARTICLE_COMMENTS_MAX_LEN } from 'config';
 import { isApp } from 'utils/client';
 
 type Iprops = {
@@ -205,6 +205,11 @@ export const Editor = (props: Iprops) => {
   const mentionRef = useRef<HTMLDivElement | null>();
   const { userList, search, index } = stateEdit;
 
+  const maxCreateNum = useMemo(() => {
+    if (type === 'comment') return ARTICLE_COMMENTS_MAX_LEN;
+    return ARTICLE_POST_MAX_LEN;
+  }, [type]);
+
   const renderElement = useCallback(props => {
     switch (props.element.type) {
       case 'mention':
@@ -328,17 +333,21 @@ export const Editor = (props: Iprops) => {
     let { content } = deepContent(newValue2);
     if (!content.length && !imgList.length) return;
     //限制用户输入数量
-    if (articleLength > ARTICLE_POST_MAX_LEN) {
+    if (articleLength > maxCreateNum) {
       setTimeId(null);
-      return toast.warning(t('sendArticleMsgMaxWords'));
+      return toast.warning(
+        t('sendArticleMsgMaxWordsOf%num%', {
+          num: maxCreateNum,
+        }),
+      );
     }
 
     props.sendArticle(
       JSON.stringify(newValue2),
       imgList.join(','),
       userIdList.join(','),
+      restInput,
     );
-    restInput();
   };
 
   const searchSelect = (data, type) => {
@@ -492,11 +501,9 @@ export const Editor = (props: Iprops) => {
               <Text
                 mt='12px'
                 mr='12px'
-                color={
-                  articleLength > ARTICLE_POST_MAX_LEN ? 'downPrice' : 'primary'
-                }
+                color={articleLength > maxCreateNum ? 'downPrice' : 'primary'}
               >
-                {ARTICLE_POST_MAX_LEN - articleLength}
+                {maxCreateNum - articleLength}
               </Text>
             }
             {initValue ? (

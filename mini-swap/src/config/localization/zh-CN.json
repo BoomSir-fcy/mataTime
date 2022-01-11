@@ -78,6 +78,7 @@
   "Your volume": "交易量",
   "Since start": "自开始以来的时间",
   "Enable": "启用",
+  "Enabled": "已启用",
   "Enabling": "启用",
   "Expired": "已过期",
   "Calculating": "正在计算",
@@ -286,6 +287,11 @@
   "Money-hungry Dino": "贪财龙",
   "Enter an amount": "输入金额",
   "Transaction rejected.": "交易被拒绝。",
+  "Enter valid list location": "输入有效的列表位置",
+  "Error importing list": "导入列表时出错",
+  "titleSetting": "设置",
+  "titleHistory": "历史",
+  "titleExchange": "交换",
   "translationLast": "translationLast",
   "translationEnd": "translationEnd"
 }

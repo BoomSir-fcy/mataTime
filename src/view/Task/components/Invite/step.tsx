@@ -1,20 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
-import { useStore } from 'store';
-import { ConnectWalletButton } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 const StepOutBox = styled(Box)`
-  margin-left: 30px;
   ${mediaQueriesSize.marginb}
 `;
 
 const StepBox = styled(Flex)`
+  width: 80%;
+  height: 170px;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   padding: 16px 5px 30px;
+  margin: 0 auto;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    height: 130px;
+    align-items: center;
+  }
   .active {
     background: ${({ theme }) => theme.colors.gradients.buttonBg};
     border-width: 1px;
@@ -48,8 +52,12 @@ const Line = styled.div`
 const PositionText = styled(Text)`
   position: absolute;
   width: max-content;
-  top: 60px;
-  max-width: 150px;
+  top: 50px;
+  max-width: 100px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    top: 60px;
+    max-width: 180px;
+  }
 `;
 export const Step: React.FC<{ step?: number }> = React.memo(({ step }) => {
   const { t } = useTranslation();

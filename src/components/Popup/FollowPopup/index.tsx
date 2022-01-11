@@ -85,13 +85,25 @@ export const FollowPopup = React.memo((props: Iprops) => {
           <div className='number'>
             <Flex className='cloums'>
               {t('followFans')}
-              <Text fontWeight='bold' ml='10px' maxWidth='30px' ellipsis>
+              <Text
+                fontWeight='bold'
+                color='white'
+                ml='10px'
+                // maxWidth='30px'
+                // ellipsis
+              >
                 {userInfo.fans_num || 0}
               </Text>
             </Flex>
             <Flex className='cloums'>
               {t('followText')}
-              <Text fontWeight='bold' ml='10px' maxWidth='30px' ellipsis>
+              <Text
+                fontWeight='bold'
+                color='white'
+                ml='10px'
+                // maxWidth='30px'
+                // ellipsis
+              >
                 {userInfo.attention_num || 0}
               </Text>
             </Flex>
