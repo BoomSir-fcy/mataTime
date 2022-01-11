@@ -316,8 +316,8 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
                   url='/'
                   src={`${
                     require(isDark
-                      ? './images/logo.svg'
-                      : './images/light_logo.svg').default
+                      ? 'assets/images/logo.svg'
+                      : 'assets/images/light_logo.svg').default
                   }`}
                 />
               </LogoWarpper>

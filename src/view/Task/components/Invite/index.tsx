@@ -391,8 +391,8 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
         <>
           <Header />
           <ContentBox>
-            <StyledTag color='primaryBright' ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
+            <StyledTag ml='20px' variant={tag}>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>
