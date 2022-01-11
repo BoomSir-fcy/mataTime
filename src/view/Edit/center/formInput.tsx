@@ -29,14 +29,21 @@ const Title = styled.div`
 `;
 
 const WidthBox = styled(Flex)`
-  max-width: 380px;
-  width: 60vw;
-  min-width: 200px;
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 380px;
+    width: 60vw;
+    min-width: 200px;
+  }
 `;
 
 const Rows = styled(Flex)`
   justify-content: flex-start;
+  flex-direction: column;
   margin-bottom: 26px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+  }
   textarea {
     background: ${({ theme }) => theme.colors.backgroundTextArea};
     width: 100%;

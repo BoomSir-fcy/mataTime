@@ -45,7 +45,7 @@ export const SlateBox = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 15px 15px 30px;
   }
-  max-width: calc(100vw - 15px);
+  max-width: calc(100vw - 20px);
   margin: 0 auto;
   z-index: 1004;
   div.text-box {

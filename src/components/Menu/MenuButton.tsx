@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import { Button } from "uikit";
+import styled from 'styled-components';
+import { Button } from 'uikit';
 
 const MenuButton = styled(Button)`
   color: ${({ theme }) => theme.colors.text};
-  padding: 0 8px;
+  padding: 0 8px 0 0;
   border-radius: 8px;
   height: 64px;
   margin-right: 0;
@@ -12,8 +12,8 @@ const MenuButton = styled(Button)`
   }
 `;
 MenuButton.defaultProps = {
-  variant: "text",
-  size: "sm",
+  variant: 'text',
+  size: 'sm',
 };
 
 export default MenuButton;
