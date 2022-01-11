@@ -43,6 +43,7 @@ const RewardAuthModalStyled = styled(Box)`
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.greyBackground};
   ${({ theme }) => theme.mediaQueries.lg} {
+    margin-left: -100px;
     width: 418px;
   }
 `;

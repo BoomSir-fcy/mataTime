@@ -192,7 +192,7 @@ const mediaQueriesPadding = `
   }
 
   ${mediaQueries.xl} {
-    padding: 16px 8px;
+    padding: 16px 14px;
   }
 `;
 
