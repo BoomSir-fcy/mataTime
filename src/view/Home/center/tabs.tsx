@@ -31,7 +31,10 @@ const TableLeftBox = styled(Flex)`
   font-weight: 400;
   color: ${({ theme }) => theme.colors.textTips};
   & div {
-    padding: 0 20px;
+    padding-right: 20px;
+    ${({ theme }) => theme.mediaQueries.md} {
+      padding: 0 20px;
+    }
     cursor: pointer;
   }
   .leftActive {

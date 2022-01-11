@@ -75,6 +75,12 @@ const Content = styled(Flex)`
   }
 `;
 
+const EmptyContent = styled(Flex)`
+  padding-top: 20px;
+  justify-content: center;
+  align-content: center;
+`;
+
 type Iprops = {};
 
 const RecommendPeople: React.FC<Iprops> = props => {
@@ -184,8 +190,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
   };
 
   return (
-    isInit &&
-    state.list.length > 0 && (
+    isInit && (
       <RecommendPeopleBox isBoxShadow isRadius>
         <HeadAction>
           <TitleText>{t('recommendPeopleTitle')}</TitleText>
@@ -235,6 +240,12 @@ const RecommendPeople: React.FC<Iprops> = props => {
             />
           </Content>
         ))}
+
+        {state.list.length <= 0 && (
+          <EmptyContent>
+            <Text>{t('noRecommendations')}</Text>
+          </EmptyContent>
+        )}
 
         <CancelAttentionModal
           title={t('meUnsubscribeTips')}

@@ -7,10 +7,13 @@ flex-wrap: wrap;
 overflow: hidden;
 img{
   object-fit: cover;
+  object-position: top;
   width:50%;
   display: block;
   cursor: pointer;
-  max-height:640px;
+  max-height: 150px;
+  padding-right: 1px;
+  padding-bottom: 1px;
 }
 .imgListRightBox{
   flex:50%;
