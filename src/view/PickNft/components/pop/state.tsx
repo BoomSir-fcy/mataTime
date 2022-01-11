@@ -49,7 +49,7 @@ const StateModal: React.FC<init> = ({ onClose, state, nftLength }) => {
   return (
     <CountBox>
       {/* <Text mb='16px' fontSize='14px' color='textOrigin'>
-        * {t('Effective within 10 minutes after being locked')}
+        * {t('You can lock the invitation code for 10 minutes')}
       </Text> */}
       {nftLength !== 0 ? (
         <Text fontSize='18px' bold textAlign='center'>
