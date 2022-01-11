@@ -41,9 +41,6 @@ const NavItem: React.FC<NavItemProps> = ({
     );
   }, [pathname, markPath, path]);
 
-  const collapse = () => {
-    setIsPushed(pre => (pre ? false : pre));
-  };
   if (hide) return null;
   if (coming) {
     return (
@@ -71,7 +68,7 @@ const NavItem: React.FC<NavItemProps> = ({
       isactive={isActive ? 1 : 0}
       as={Link}
       to={path}
-      onClick={collapse}
+      onClick={() => setIsPushed(pre => (pre ? false : pre))}
     >
       <IconBox>
         {/* {isActive ? (activeIcon || icon) : icon} */}

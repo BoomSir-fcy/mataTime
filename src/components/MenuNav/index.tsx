@@ -67,7 +67,7 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
           children
         ) : (
           <>
-            <Flex flex='1' flexDirection='column'>
+            <Flex flex='1' flexDirection='column' padding='0 8px'>
               <Logo />
               <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
                 <ProfileMenu />

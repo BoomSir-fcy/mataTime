@@ -70,7 +70,7 @@ const NavFooter: React.FC<NavFooterProps> = ({}) => {
   }, [percent, temp]);
 
   return (
-    <Box mb='32px'>
+    <Box mb='32px' padding='0 8px'>
       <TimeInfoBox flexDirection='column' justifyContent='center'>
         <Flex alignItems='center'>
           <Box position='relative' width='33px' height='33px'>

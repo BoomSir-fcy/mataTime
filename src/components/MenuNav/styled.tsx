@@ -49,8 +49,6 @@ const StyledPanel = styled.div<{
 }>`
   position: fixed;
   padding-top: ${({ padding }) => (padding ? 0 : '22px')};
-  padding-left: 8px;
-  padding-right: 8px;
   top: 0;
   display: flex;
   flex-direction: column;
