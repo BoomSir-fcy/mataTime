@@ -206,6 +206,9 @@ const mediaPaddingSM = `
 `;
 
 const mediaPaddingXs = `
+  ${mediaQueries.xxs} {
+    padding: 0 8px;
+  }
   ${mediaQueries.xs} {
     padding: 0 10px;
   }

@@ -32,6 +32,9 @@ import { useStore } from 'store';
 export const ContentBox = styled(Flex)`
   padding: 10px 14px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueries.xxs} {
+    padding: 10px 8px;
+  }
 `;
 const CardBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -183,7 +186,7 @@ const Invite: React.FC = () => {
 
   return (
     <>
-      <InviteHeader tag={tag} />
+      <InviteHeader tag={tag} isMobile={isMobile} />
       <Box>
         <Box>
           <ContentBox justifyContent='space-between'>
@@ -367,24 +370,40 @@ const Invite: React.FC = () => {
   );
 };
 
-const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
-  const source = window.location.search?.split('=')[1];
-  const { t } = useTranslation();
+const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
+  ({ tag, isMobile }) => {
+    const source = window.location.search?.split('=')[1];
+    const { t } = useTranslation();
 
-  return (
-    <>
-      {source === 'TASK' ? (
-        <Crumbs back justifyContent='start'>
-          <Flex width='max-content'>
-            <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
-                {/* {tag.toUpperCase()} */}
-                {t(`Task ${tag}`).toUpperCase()}
-              </Text>
-            </StyledTag>
-          </Flex>
-        </Crumbs>
-      ) : (
+    const headerBox = useMemo(() => {
+      return (
+        <Flex width={isMobile ? '100%' : '90%'} justifyContent='space-between'>
+          <StyledTag variant={tag}>
+            <Text fontSize='18px' bold>
+              {t(`Task ${tag}`).toUpperCase()}
+            </Text>
+          </StyledTag>
+          <Button
+            startIcon={
+              <img
+                src={require('assets/images/task/rankingIcon.png').default}
+                alt=''
+              />
+            }
+            as={Link}
+            to={'/task/rankingList'}
+          >
+            {t('Invitation Leaderboard')}
+          </Button>
+        </Flex>
+      );
+    }, [isMobile]);
+    return (
+      <>
+        {/* {source === 'TASK' ? ( */}
+        <Crumbs back>{!isMobile && headerBox}</Crumbs>
+        {isMobile && <ContentBox>{headerBox}</ContentBox>}
+        {/* ) : (
         <>
           <Header />
           <ContentBox>
@@ -395,8 +414,9 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
             </StyledTag>
           </ContentBox>
         </>
-      )}
-    </>
-  );
-});
+      )} */}
+      </>
+    );
+  },
+);
 export default Invite;
