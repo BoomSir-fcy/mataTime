@@ -15,6 +15,7 @@ import PageLoader from 'components/Loader/PageLoader';
 import PageContainer from 'components/Layout/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
+import { isApp } from 'utils/client';
 
 import useEagerConnect from 'hooks/useEagerConnect';
 import { RewardAuthorContract } from 'components/RewardAuth/hook';
@@ -53,6 +54,7 @@ const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 const PickNft = React.lazy(() => import('./view/PickNft'));
 const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
+const Post = React.lazy(() => import('./view/Post'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -143,7 +145,8 @@ function App() {
                 <Route path='/picknft' component={PickNft} />
                 <Route path='/create' component={PickNft} />
                 <Route path='/search' component={Search} />
-                {/* <Route path='/swap' component={Swap} /> */}
+                <Route path='/post' component={Post} />
+                <Route path='/swap' component={Swap} />
                 {process.env.NODE_ENV === 'development' && (
                   <>
                     <Route path='/faucet-smart' component={FaucetSmart} />
@@ -156,7 +159,7 @@ function App() {
           </React.Suspense>
         </PageContainer>
         <Gotop />
-        <Navigation />
+        {isApp() && <Navigation />}
       </Container>
       <ToastComponents />
     </Router>

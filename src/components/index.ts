@@ -25,5 +25,6 @@ export * from './Loading';
 export * from './Toolbar';
 export * from './Popup/MorePopup/morePopup';
 export * from './Popup/popupWraps';
-export * from './Navigation';
+export * from './MenuNav/NavTbs';
+export * from './Send';
 export { DropDown } from './DropDown';

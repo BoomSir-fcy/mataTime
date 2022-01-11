@@ -14,8 +14,7 @@ export const Badge: React.FC<{
       style={{
         position: 'absolute',
         right: '0',
-        top: '-2px',
-        padding: '0 5px',
+        padding: '0 6px',
         height: '15px',
         display: 'flex',
         justifyContent: 'center',

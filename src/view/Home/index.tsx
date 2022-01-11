@@ -2,9 +2,9 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { withRouter, useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Editor, Crumbs, Icon } from 'components';
+import { Editor, Crumbs, Icon, SendPost } from 'components';
 import { Flex, Box, Button } from 'uikit';
-import { useToast } from 'hooks';
+import { isApp } from 'utils/client';
 import { storeAction, useStore } from 'store';
 import { Api } from 'apis';
 
@@ -137,7 +137,7 @@ const Home: React.FC = (props: any) => {
               </Button>
             </Link>
           </Crumbs>
-          <Editor type='post' sendArticle={sendArticle} />
+          {!isApp() && <Editor type='post' sendArticle={sendArticle} />}
           <Tabs
             ref={tabsRefs}
             tags={userTags}
@@ -159,6 +159,7 @@ const Home: React.FC = (props: any) => {
           )}
         </CenterCard>
       </Flex>
+      <SendPost />
     </PageContainer>
   );
 };
