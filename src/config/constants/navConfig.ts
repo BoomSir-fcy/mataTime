@@ -145,6 +145,14 @@ export const menuNavConfig: MenuNavConfig[] = [
         path: '/account/reward',
         lable: 'AccountMenu Reward',
       },
+      {
+        icon: 'icon-w59',
+        activeIcon: 'icon-w59',
+        lable: 'AccountMenu Time',
+        hideRight: true,
+        hide: true,
+        path: '/swap',
+      },
     ],
   },
   {

@@ -303,13 +303,13 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           TokenWithDrawMinNum={TokenWithDrawMinNum}
           TokenWithDrawFee={TokenWithDrawFee}
         />
-        {!isMobile && (
+        {/* {!isMobile && (
           <Recharge
             Token={activeToken}
             balance={walletBalance}
             TokenAddr={tokenAddress}
           />
-        )}
+        )} */}
       </Flex>
       {/* token切换 */}
       <ContentTab>

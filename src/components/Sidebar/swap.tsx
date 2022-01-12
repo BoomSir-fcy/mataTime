@@ -22,6 +22,8 @@ import { useCoinsList } from 'store/coins/hooks';
 const SwapBox = styled(Box)<{ width?: string }>`
   /* margin-top:15px; */
   /* height: 436px; */
+  min-width: 300px;
+  max-width: 436px;
   width: ${({ width }) => width || '300px'};
 `;
 
