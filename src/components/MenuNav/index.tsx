@@ -71,7 +71,11 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
             <Flex flex='1' flexDirection='column' padding='0 8px'>
               <Logo />
               {!isApp() && (
-                <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
+                <UserBox
+                  as={Link}
+                  to={`/me/profile/${currentUid.uid}`}
+                  onClick={() => setIsPushed(pre => (pre ? false : pre))}
+                >
                   <ProfileMenu />
                 </UserBox>
               )}

@@ -121,7 +121,25 @@ export const ImgList = (props: Iprops) => {
           </Modal>
         </ModalGateway>
       )}
-      {list.length === 3 ? (
+      {list.length === 2 && (
+        <>
+          <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            style={{ maxHeight: '300px', borderRadius: '10px 0 0 10px' }}
+            onClick={() => preViewImg(0)}
+            src={list[0]}
+            alt=''
+          />
+          <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            style={{ maxHeight: '300px', borderRadius: '0 10px 10px 0' }}
+            onClick={() => preViewImg(0)}
+            src={list[1]}
+            alt=''
+          />
+        </>
+      )}
+      {list.length === 3 && (
         <>
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
@@ -147,7 +165,8 @@ export const ImgList = (props: Iprops) => {
             />
           </div>
         </>
-      ) : (
+      )}
+      {list.length > 3 &&
         list.map((item, index) => (
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
@@ -157,8 +176,7 @@ export const ImgList = (props: Iprops) => {
             key={index}
             alt=''
           />
-        ))
-      )}
+        ))}
     </ImgListBox>
   ) : null;
 };

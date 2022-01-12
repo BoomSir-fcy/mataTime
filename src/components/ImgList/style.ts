@@ -21,6 +21,7 @@ img{
   flex-direction: column;
   img{
     width:100%;
+    max-height: 150px;
   }
 }
 `
