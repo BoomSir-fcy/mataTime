@@ -245,7 +245,7 @@
   "setMsgNotificationTips": "開啟或關閉來自瀏覽器的授權消息通知，開啟後將會通過瀏覽器的消息提醒您",
   "setCheangeNftAvatar": "選擇並質押頭像",
   "setNftAvatar": "NFT 頭像",
-  "setNftAvatarGetMore": "獲取更多NTF頭像可更換頭像",
+  "setNftAvatarGetMore": "獲取更多NFT頭像可更換頭像",
   "setNftAvatarList": "平臺僅支持將持有的NFT圖片作為頭像，暫不支持上傳圖片",
   "setNftAvatarListTips": "支持部分主流NFT系列，即將支持更多的NFT系列頭像",
   "setNftAuthorization": "授權",
