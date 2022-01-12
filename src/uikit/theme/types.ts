@@ -67,6 +67,7 @@ export type Gradients = {
   gold: string;
   progress: string;
   buttonBg: string;
+  shalou: string;
 };
 
 export type Colors = {

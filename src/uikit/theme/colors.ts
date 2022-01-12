@@ -78,6 +78,7 @@ export const lightColors: Colors = {
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
     progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     buttonBg: 'linear-gradient(90deg, #353535, #080808)',
+    shalou: 'linear-gradient(#0f0f0f 0%, #666 50%, #fff 50%, #fff 100%)',
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)',
@@ -140,6 +141,7 @@ export const darkColors: Colors = {
     gold: 'linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)',
     progress: 'linear-gradient(90deg, #5B3CE0, #5A7EFA)',
     buttonBg: 'linear-gradient(90deg, #353535, #080808)',
+    shalou: 'linear-gradient(#fff 0%, #fff 50%, #0f0f0f 50%, #666 100%)',
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)',
