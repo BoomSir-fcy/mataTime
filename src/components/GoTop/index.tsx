@@ -65,7 +65,7 @@ const Gotop = () => {
         justifyContent='center'
         alignItems='center'
       >
-        <Icon size={size} color='white_black' current={1} name='icon-jiantou' />
+        <Icon size={size} color='white' current={1} name='icon-jiantou' />
       </Flex>
     </TopBox>
   );

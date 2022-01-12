@@ -118,6 +118,7 @@ export type Colors = {
   // Gradients
   gradients: Gradients;
   CircleBg: string;
+  CircleBgD: string;
   progressBar: string;
   // box shadow
   shadow: {

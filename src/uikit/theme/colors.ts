@@ -67,6 +67,7 @@ export const lightColors: Colors = {
   disableStep: '#4D535F',
   ThemeText: '#4168ED',
   CircleBg: '#e8f0fd',
+  CircleBgD: '#3f3f3f',
   progressBar: '#000',
   gradients: {
     footer: '#fff',
@@ -89,7 +90,7 @@ export const lightColors: Colors = {
   searchTopicTxt: '#000',
   searchTopicHoverBg: '#F5F5F5',
   commentBorder: '#ccc',
-  hoverList: '#F5F5F5'
+  hoverList: '#F5F5F5',
 };
 
 export const darkColors: Colors = {
@@ -130,6 +131,7 @@ export const darkColors: Colors = {
   disableStep: '#000',
   ThemeText: '#4168ED',
   CircleBg: '#3f3f3f',
+  CircleBgD: '#3f3f3f',
   progressBar: '#FFFFFF',
   gradients: {
     footer: '#000',
