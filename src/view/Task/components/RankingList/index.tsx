@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { Crumbs } from 'components';
 import { Box, Text, Flex, Spinner, Empty } from 'uikit';
 import { ContentBox } from '../Invite';
@@ -39,7 +39,7 @@ const BgBox = styled(Box)`
     no-repeat;
   background-size: 260px;
   background-position-x: center;
-  background-position-y: 10%;
+  background-position-y: 20px;
   ${({ theme }) => theme.mediaQueriesSize.paddingxs}
   ${({ theme }) => theme.mediaQueries.md} {
     height: 100vh;
@@ -120,39 +120,29 @@ const ItemText = styled(Text)`
     text-align: right;
   }
   img {
-    width: 50px;
-    max-height: 50px;
+    width: 30px;
+    max-height: 30px;
   }
 `;
 
 const RankingList: React.FC = React.memo(() => {
   const { t } = useTranslation();
-  const list = [
-    {
-      uid: 1,
-      ranking: 1,
-      nick_name: '昵称1',
-      address: '0x03F916437cDaf04be4EF21178Be73455d11098F8',
-      number: 11,
-      awards: 10000,
-    },
-    {
-      uid: 2,
-      ranking: 2,
-      nick_name: '昵称2',
-      address: '0x03F916437cDaf04be4EF21178Be73455d11098F8',
-      number: 22,
-      awards: 10000,
-    },
-    {
-      uid: 3,
-      ranking: 3,
-      nick_name: '昵称3',
-      address: '0x03F916437cDaf04be4EF21178Be73455d11098F8',
-      number: 33,
-      awards: 10000,
-    },
-  ];
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const tempList = [];
+    for (let i = 0; i < 10; i++) {
+      tempList.push({
+        uid: i + 1,
+        ranking: i + 1,
+        nick_name: '昵称1',
+        address: '0x03F916437cDaf04be4EF21178Be73455d11098F8',
+        number: 11,
+        awards: 10000,
+      });
+    }
+    setList(tempList);
+  }, []);
   const { pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteRankingList();
 
@@ -172,6 +162,36 @@ const RankingList: React.FC = React.memo(() => {
     }
   };
   const totalPage = useMemo(() => getTotalPage(total), [total]);
+  const renderRanking = useCallback(number => {
+    if (number === 1) {
+      return (
+        <img
+          width='30px'
+          src={require('assets/images/task/first.png').default}
+          alt=''
+        />
+      );
+    }
+    if (number === 2) {
+      return (
+        <img
+          width='30px'
+          src={require('assets/images/task/second.png').default}
+          alt=''
+        />
+      );
+    }
+    if (number === 3) {
+      return (
+        <img
+          width='30px'
+          src={require('assets/images/task/third.png').default}
+          alt=''
+        />
+      );
+    }
+    return number;
+  }, []);
   return (
     <RankingFlex>
       <RankingBox>
@@ -210,7 +230,7 @@ const RankingList: React.FC = React.memo(() => {
                 {list?.length ? (
                   list.map(item => (
                     <Row key={item.uid} className='LinkRow'>
-                      <ItemText>{item.ranking}</ItemText>
+                      <ItemText>{renderRanking(item.ranking)}</ItemText>
                       <ItemText small ellipsis>
                         {item.nick_name}
                       </ItemText>

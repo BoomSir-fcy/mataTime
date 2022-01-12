@@ -375,10 +375,10 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
     const source = window.location.search?.split('=')[1];
     const { t } = useTranslation();
 
-    const headerBox = useMemo(() => {
+    const HeaderBox = useMemo(() => {
       return (
-        <Flex width={isMobile ? '100%' : '90%'} justifyContent='space-between'>
-          <StyledTag variant={tag}>
+        <Flex width='100%' justifyContent='space-between'>
+          <StyledTag ml={source === 'TASK' ? '10px' : ''} variant={tag}>
             <Text fontSize='18px' bold>
               {t(`Task ${tag}`).toUpperCase()}
             </Text>
@@ -397,24 +397,19 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
           </Button>
         </Flex>
       );
-    }, [isMobile]);
+    }, [source]);
     return (
       <>
-        {/* {source === 'TASK' ? ( */}
-        <Crumbs back>{!isMobile && headerBox}</Crumbs>
-        {isMobile && <ContentBox>{headerBox}</ContentBox>}
-        {/* ) : (
-        <>
-          <Header />
-          <ContentBox>
-            <StyledTag variant={tag}>
-              <Text fontSize='18px' bold>
-                {t(`Task ${tag}`).toUpperCase()}
-              </Text>
-            </StyledTag>
-          </ContentBox>
-        </>
-      )} */}
+        {source === 'TASK' ? (
+          <Crumbs back justifyContent='start'>
+            {HeaderBox}
+          </Crumbs>
+        ) : (
+          <>
+            <Header />
+            <ContentBox>{HeaderBox}</ContentBox>
+          </>
+        )}
       </>
     );
   },
