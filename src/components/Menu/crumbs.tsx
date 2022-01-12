@@ -10,7 +10,7 @@ import { useTranslation } from 'contexts/Localization';
 import MenuButton from './MenuButton';
 
 const CrumbsWraper = styled(Box)`
-  padding-bottom: 70px;
+  padding-bottom: 60px;
   ${({ theme }) => theme.mediaQueries.md} {
     position: sticky;
     top: 0;
@@ -99,17 +99,19 @@ export const Crumbs: React.FC<{
           zIndex={zIndex}
         >
           <Flex alignItems='center' style={centerTitle && { width: '100%' }}>
-            <MenuButton
-              aria-label='Toggle menu'
-              onClick={() => setIsPushed(prep => !prep)}
-              mr='24px'
-            >
-              {isPushed ? (
-                <HamburgerCloseIcon width='24px' color='textSubtle' />
-              ) : (
-                <HamburgerIcon width='24px' color='textSubtle' />
-              )}
-            </MenuButton>
+            {!back && (
+              <MenuButton
+                aria-label='Toggle menu'
+                onClick={() => setIsPushed(prep => !prep)}
+                mr='24px'
+              >
+                {isPushed ? (
+                  <HamburgerCloseIcon width='24px' color='textSubtle' />
+                ) : (
+                  <HamburgerIcon width='24px' color='textSubtle' />
+                )}
+              </MenuButton>
+            )}
             {!back ? (
               <Text
                 onClick={goTop}

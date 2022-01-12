@@ -30,10 +30,10 @@ import { Link } from 'react-router-dom';
 import { useStore } from 'store';
 
 export const ContentBox = styled(Flex)`
-  padding: 10px 14px;
+  padding: 10px 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  ${({ theme }) => theme.mediaQueries.xxs} {
-    padding: 10px 8px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 10px 14px;
   }
 `;
 const CardBox = styled(Box)`
@@ -118,7 +118,7 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
-  // useFetchNftList();
+  useFetchNftList();
   const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
@@ -326,7 +326,7 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {/* {!nftLoading ? (
+        {!nftLoading ? (
           invitableNftList.length ? (
             <>
               <ContentBox>
@@ -351,7 +351,7 @@ const Invite: React.FC = () => {
           <Flex justifyContent='center' alignItems='center'>
             <Spinner />
           </Flex>
-        )} */}
+        )}
 
         {/* 复制链接弹窗 */}
         <InviteModal
@@ -407,7 +407,7 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
         <>
           <Header />
           <ContentBox>
-            <StyledTag ml='20px' variant={tag}>
+            <StyledTag variant={tag}>
               <Text fontSize='18px' bold>
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>

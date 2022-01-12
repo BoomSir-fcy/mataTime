@@ -15,6 +15,10 @@ interface PageSectionProps extends FlexProps {
 }
 
 const PageContainerStyled = styled(Box)`
+  padding-bottom: 70px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-bottom: 0;
+  }
   /* FIXME: 解决失败, 用另外的方法 */
   /* padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题 */
   /* transform: translate(0, 0, 0); */

@@ -188,11 +188,11 @@ const mediaQueriesPadding = `
   }
 
   ${mediaQueries.lg} {
-    padding: 20px 25px;
+    padding: 16px 14px;
   }
 
   ${mediaQueries.xl} {
-    padding: 16px 14px;
+    padding: 20px 25px;
   }
 `;
 
