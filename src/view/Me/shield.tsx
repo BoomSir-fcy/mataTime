@@ -22,8 +22,6 @@ const Content = styled(Card)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  height: 60px;
-  float: left;
   margin-left: 22px;
 `;
 
@@ -83,7 +81,7 @@ const Shield = React.memo(() => {
             ? [...(res.data.list || [])]
             : [...state.list, ...(res.data.list || [])];
           p.page = (offest || state.page) + 1;
-          p.totalPage = res.data.totalCount / res.data.page_size;
+          p.totalPage = Math.ceil(res.data.totalCount / res.data.page_size);
           p.total = res.data.totalCount;
         });
       }

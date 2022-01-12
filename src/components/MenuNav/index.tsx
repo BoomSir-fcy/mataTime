@@ -11,6 +11,7 @@ import { Panel } from './styled';
 import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from './config';
 import { ProfileMenu } from './ProfileMenu';
 import { useStore } from 'store';
+import { isApp } from 'utils/client';
 
 const MenuContener = styled(Flex)<{ isMobile: boolean; PickNft: boolean }>`
   height: 100vh;
@@ -31,8 +32,7 @@ const UserBox = styled(Flex)`
   height: 70px;
   align-items: center;
   margin-top: 12px;
-  margin-right: 8px;
-  padding-left: 8px;
+  /* margin-right: 8px; */
 `;
 
 export interface MenuNavProps {
@@ -68,11 +68,13 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
           children
         ) : (
           <>
-            <Flex flex='1' flexDirection='column'>
+            <Flex flex='1' flexDirection='column' padding='0 8px'>
               <Logo />
-              <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
-                <ProfileMenu />
-              </UserBox>
+              {!isApp() && (
+                <UserBox as={Link} to={`/me/profile/${currentUid.uid}`}>
+                  <ProfileMenu />
+                </UserBox>
+              )}
               <Nav />
             </Flex>
             <NavFooter />

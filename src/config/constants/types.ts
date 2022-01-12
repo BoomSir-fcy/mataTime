@@ -1,8 +1,8 @@
-import { ChainId } from '../wallet/config'
+import { ChainId } from '../wallet/config';
 
 export interface Address {
-  [ChainId.BSC_MAINNET]: string
-  [ChainId.BSC_TESTNET]?: string
+  [ChainId.BSC_MAINNET]: string;
+  [ChainId.BSC_TESTNET]?: string;
 }
 
 // export interface MenuNavLink {
@@ -18,26 +18,30 @@ export interface Address {
 //   badge?: number
 // }
 export interface MenuNavBase {
-  path: string,
-  icon?: string,
-  lable?: string
-  activeIcon?: string,
-  coming?: boolean // 是否弹窗敬请期待
-  hide?: boolean // 隐藏导航栏lable及图标
-  hideLeft?: boolean // 隐藏左侧导航栏
-  hideRight?: boolean // 隐藏右侧swap
-  markPath?: string[] // 子页面标记
-  badgeName?: string // 微标明
+  path: string;
+  icon?: string;
+  lable?: string;
+  activeIcon?: string;
+  coming?: boolean; // 是否弹窗敬请期待
+  hide?: boolean; // 隐藏导航栏lable及图标
+  hideLeft?: boolean; // 隐藏左侧导航栏
+  hideRight?: boolean; // 隐藏右侧swap
+  markPath?: string[]; // 子页面标记
+  badgeName?: string; // 微标明
 }
 
 export interface MenuNavConfig extends MenuNavBase {
-  badgeName?: string // 微标明
-  children?: MenuNavConfig[]
-  customName?: string
+  badgeName?: string; // 微标明
+  children?: MenuNavConfig[];
+  customName?: string;
 }
 
 export interface MenuNavLink extends MenuNavBase {
-  badge?: number // 微数
+  badge?: number; // 微数
 }
 
-
+export interface TbasMenuConfig {
+  path: string;
+  icon: string;
+  badgeName?: boolean; // 微标明
+}

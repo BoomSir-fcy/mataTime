@@ -9,12 +9,13 @@ import { Router, Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchThunk, storeAction } from 'store';
 import { useFetchTimeBurnData } from 'store/wallet/hooks';
-import { CommonLayout, ToastComponents } from 'components';
+import { CommonLayout, ToastComponents, Navigation } from 'components';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import PageLoader from 'components/Loader/PageLoader';
 import PageContainer from 'components/Layout/PageContainer';
 import { Box } from 'uikit';
 import { storage } from 'config';
+import { isApp } from 'utils/client';
 
 import useEagerConnect from 'hooks/useEagerConnect';
 import { RewardAuthorContract } from 'components/RewardAuth/hook';
@@ -53,6 +54,7 @@ const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
 const PickNft = React.lazy(() => import('./view/PickNft'));
 const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
+const Post = React.lazy(() => import('./view/Post'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -143,6 +145,7 @@ function App() {
                 <Route path='/picknft' component={PickNft} />
                 <Route path='/create' component={PickNft} />
                 <Route path='/search' component={Search} />
+                <Route path='/post' component={Post} />
                 <Route path='/swap' component={Swap} />
                 {process.env.NODE_ENV === 'development' && (
                   <>
@@ -156,6 +159,7 @@ function App() {
           </React.Suspense>
         </PageContainer>
         <Gotop />
+        {isApp() && <Navigation />}
       </Container>
       <ToastComponents />
     </Router>
