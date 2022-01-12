@@ -6,13 +6,13 @@ import { Flex } from 'uikit';
 
 const Content = styled(Flex)`
   position: fixed;
-  right: 20px;
+  right: 5%;
   bottom: 15%;
   cursor: pointer;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background: ${({ theme }) => theme.colors.gradients.buttonBg};
   border: 1px solid ${({ theme }) => theme.colors.white_black};
   border-radius: 50%;

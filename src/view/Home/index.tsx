@@ -166,7 +166,7 @@ const Home: React.FC = (props: any) => {
           )}
         </CenterCard>
       </Flex>
-      <SendPost />
+      {isApp() && <SendPost />}
     </PageContainer>
   );
 };
