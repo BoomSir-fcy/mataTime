@@ -37,7 +37,7 @@ const BgBox = styled(Box)`
   align-items: center;
   background: url('${require('assets/images/task/ranking.png').default}')
     no-repeat;
-  background-size: 300px;
+  background-size: 260px;
   background-position-x: center;
   background-position-y: 10%;
   ${({ theme }) => theme.mediaQueriesSize.paddingxs}
@@ -48,20 +48,30 @@ const BgBox = styled(Box)`
   .coin1 {
     transform: scale(0.6);
     position: absolute;
-    top: 7%;
-    left: 6%;
+    top: 5%;
+    left: -10%;
+    ${({ theme }) => theme.mediaQueries.md} {
+      top: 10%;
+      left: 6%;
+    }
   }
   .coin2 {
     transform: scale(0.6);
     position: absolute;
-    top: 15%;
-    left: 45%;
+    top: 16%;
+    left: 35%;
+    ${({ theme }) => theme.mediaQueries.md} {
+      left: 45%;
+    }
   }
   .coin3 {
     transform: scale(0.6);
     position: absolute;
-    top: 13%;
-    left: 79%;
+    top: 17%;
+    left: 70%;
+    ${({ theme }) => theme.mediaQueries.md} {
+      left: 79%;
+    }
   }
 `;
 const ContentCard = styled(Box)`
@@ -69,7 +79,7 @@ const ContentCard = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
   box-shadow: 0px 0px 20px 0px rgba(255, 255, 255, 0.58);
   border-radius: 10px;
-  margin-top: 200px;
+  margin-top: 180px;
   ${({ theme }) => theme.mediaQueriesSize.padding}
   ${({ theme }) => theme.mediaQueries.md} {
     margin-top: 0px;
@@ -84,9 +94,12 @@ const Table = styled(Flex)`
 const Row = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 10% 40% 20% 10% 20%;
+  grid-template-columns: 10% 20% 30% 20% 20%;
   align-items: center;
   min-height: 30px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: 10% 35% 20% 15% 20%;
+  }
 `;
 const HeadText = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
@@ -161,7 +174,7 @@ const RankingList: React.FC = React.memo(() => {
   const totalPage = useMemo(() => getTotalPage(total), [total]);
   return (
     <RankingFlex>
-      <RankingBox width='calc(100% - 300px)'>
+      <RankingBox>
         <Crumbs back />
         <ContentBox>
           <Text fontSize='18px' bold>
@@ -185,7 +198,7 @@ const RankingList: React.FC = React.memo(() => {
             alt=''
           />
           <ContentCard>
-            <Flex width='100%' flexDirection='column' justifyContent='end'>
+            <Flex width='100%' flexDirection='column' justifyContent='flex-end'>
               <Table>
                 <Row>
                   <HeadText>{t('Ranking')}</HeadText>
@@ -222,7 +235,7 @@ const RankingList: React.FC = React.memo(() => {
                 )}
               </Table>
 
-              <PaginateStyle alignItems='center' justifyContent='end'>
+              <PaginateStyle alignItems='center' justifyContent='flex-end'>
                 <Text mr='16px' fontSize='14px' color='textTips'>
                   {t('Account Total %page% page', { page: totalPage })}
                 </Text>
@@ -243,7 +256,7 @@ const RankingList: React.FC = React.memo(() => {
           </ContentCard>
         </BgBox>
       </RankingBox>
-      <RuleBox width='300px'>
+      <RuleBox>
         <Rule />
       </RuleBox>
     </RankingFlex>

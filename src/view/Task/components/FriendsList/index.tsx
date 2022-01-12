@@ -91,7 +91,7 @@ const FriendsList: React.FC = React.memo(() => {
       </ContentBox> */}
 
       <ContentBox>
-        <Flex width='100%' flexDirection='column' justifyContent='end'>
+        <Flex width='100%' flexDirection='column' justifyContent='flex-end'>
           <Table>
             <Row>
               <HeadText>{t('Nickname')}</HeadText>
@@ -135,7 +135,7 @@ const FriendsList: React.FC = React.memo(() => {
             )}
           </Table>
 
-          <PaginateStyle alignItems='center' justifyContent='end'>
+          <PaginateStyle alignItems='center' justifyContent='flex-end'>
             <Text mr='16px' fontSize='14px' color='textTips'>
               {t('Account Total %page% page', { page: totalPage })}
             </Text>

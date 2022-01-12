@@ -254,13 +254,13 @@ export const useFetchInviteRankingList = () => {
   }, [pageNum])
   const getList = () => {
     setLoading(true);
-    Api.TaskApi.getInviteList(pageNum, pageSize).then((res: any) => {
+    Api.TaskApi.getRankingList(pageNum, pageSize).then((res: any) => {
       if (Api.isSuccess(res)) {
         const temp = res.data;
         setList(temp?.Users);
         setTotal(temp?.total_size || 1);
         setPageNum(temp?.now_page || 1);
-        setPageSize(temp?.page_size || 20);
+        setPageSize(temp?.page_size || 10);
       }
     }).catch(() => {
       setList([]);

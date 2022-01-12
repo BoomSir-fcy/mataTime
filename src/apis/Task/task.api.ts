@@ -38,4 +38,10 @@ export class TaskApi extends Http {
     const res = await this.get('/v1/user/invite-detail', { nft_token, nft_id });
     return res;
   }
+  
+  // 邀请排行榜
+  async getRankingList(page: number, pageSize: number) {
+    const res = await this.get('/v1/task/invite-leaderboard', { page, pageSize });
+    return res;
+  }
 }
