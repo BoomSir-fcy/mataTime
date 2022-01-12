@@ -22,8 +22,6 @@ const Content = styled(Card)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  height: 60px;
-  float: left;
   margin-left: 22px;
 `;
 
