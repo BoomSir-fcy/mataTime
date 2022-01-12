@@ -259,7 +259,11 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
       setInviteCode(route.location.search);
     }
   };
-
+  useEffect(() => {
+    if (!isDark) {
+      document.getElementById('particles').style.background = '#000';
+    }
+  }, [isDark]);
   useEffect(() => {
     getInviteAddress();
     return () => {

@@ -30,11 +30,12 @@ import MenuNav from 'components/MenuNav';
 import { Crumbs } from 'components';
 import { Step } from 'view/Login/components';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useThemeManager } from 'store/app/hooks';
 
 const CennerBox = styled(Container)`
   width: 100%;
   padding: 0;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.white};
 `;
 const StepBox = styled(Box)`
@@ -56,6 +57,12 @@ const LeftBox = styled(Flex)`
   flex: 1;
 `;
 
+const PinkBox = styled(Box)`
+  /* background: ${({ theme }) => theme.colors.editorBoxBg};
+  max-height: max-content;
+  min-height: 100vh; */
+`;
+
 /* 
   TODO:
   1.用户未锁定
@@ -73,6 +80,7 @@ const PickNft: React.FC = () => {
   const { codes, codeInfo, selectData, stuffRes, loaded } = usePickNftState();
   const { isLg, isXl, isXxl } = useMatchBreakpoints();
   const isMd = isLg === false && isXl === false && isXxl === false;
+  const [isDark] = useThemeManager();
 
   const parsedQs = useParsedQueryString();
   useEffect(() => {
@@ -97,6 +105,12 @@ const PickNft: React.FC = () => {
   );
 
   useEffect(() => {
+    if (!isDark) {
+      document.getElementById('particles').style.background = '#fff';
+    }
+  }, [isDark]);
+
+  useEffect(() => {
     if (loaded && selectData.length === 0) {
       randomPickHandle();
     }
@@ -108,7 +122,7 @@ const PickNft: React.FC = () => {
   );
 
   return (
-    <Box>
+    <PinkBox>
       {!loaded ? (
         <Flex justifyContent='center'>
           <Spinner />
@@ -143,7 +157,7 @@ const PickNft: React.FC = () => {
           </Flex>
         </CennerBox>
       )}
-    </Box>
+    </PinkBox>
   );
 };
 
