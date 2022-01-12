@@ -19,10 +19,10 @@ import {
 import { Address } from 'config/constants/types';
 import { useCoinsList } from 'store/coins/hooks';
 
-const SwapBox = styled.div`
+const SwapBox = styled(Box)<{ width?: string }>`
   /* margin-top:15px; */
-  width: 300px;
   /* height: 436px; */
+  width: ${({ width }) => width || '300px'};
 `;
 
 const defaultStyle = {
@@ -41,7 +41,10 @@ const transitionStyles = {
   exited: { boxShadow: outShadow },
 };
 
-const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
+const Swap: React.FC<{ onlySwap?: boolean; width?: string }> = ({
+  onlySwap,
+  width,
+}) => {
   const { chainId } = useWeb3React();
   const { t, currentLanguage } = useTranslation();
 
@@ -89,13 +92,14 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
   }, [coins]);
 
   return (
-    <SwapBox>
+    <SwapBox width={width}>
       {!onlySwap && (
         <Transition in={inPropCoin} timeout={500}>
           {state => (
             <CoinMarketCap
               mb='14px'
               style={{
+                width,
                 ...defaultStyle,
                 ...transitionStyles[state],
               }}

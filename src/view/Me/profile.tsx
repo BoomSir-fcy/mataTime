@@ -11,6 +11,7 @@ import {
   Icon,
   FollowButton,
   CancelAttentionModal,
+  SendPost,
 } from 'components';
 import { debounce } from 'lodash';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
@@ -365,7 +366,7 @@ const Profile: React.FC<any> = props => {
 
   return (
     <Center>
-      <Crumbs title={t('meHome')} />
+      <Crumbs title={t('meHome')} back={Number(uid) !== currentUid.uid} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -568,6 +569,7 @@ const Profile: React.FC<any> = props => {
           })
         }
       />
+      <SendPost />
     </Center>
   );
 };

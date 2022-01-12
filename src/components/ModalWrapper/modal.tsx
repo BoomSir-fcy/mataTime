@@ -20,7 +20,7 @@ const getCustomStyles = (
 ) => ({
   content: {
     top: top ? top : '50%',
-    left: left,
+    left: left ? left : '50%',
     right: 'auto',
     bottom: 'auto',
     transform: 'translate(-50%, -50%)',
@@ -91,14 +91,13 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
   }) => {
     var OutCenterBox: HTMLElement = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
-    let left;
-    if (OutCenterBox) {
-      const rectObject = OutCenterBox.getBoundingClientRect();
-      left = `${rectObject.left}px`;
-      console.log(left);
-    }
+    // let left;
+    // if (OutCenterBox) {
+    //   const rectObject = OutCenterBox.getBoundingClientRect();
+    //   left = `${rectObject.left}px`;
+    // }
 
-    const customStyles = getCustomStyles(theme, fillBody, top, padding, left);
+    const customStyles = getCustomStyles(theme, fillBody, top, padding);
     const onClose = useCallback(() => {
       if (setVisible) {
         setVisible(false);
