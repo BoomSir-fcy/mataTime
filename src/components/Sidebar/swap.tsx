@@ -21,8 +21,10 @@ import { useCoinsList } from 'store/coins/hooks';
 
 const SwapBox = styled.div`
   /* margin-top:15px; */
-  width: 300px;
   /* height: 436px; */
+  width: 98vw;
+  min-width: 300px;
+  max-width: 450px;
 `;
 
 const defaultStyle = {

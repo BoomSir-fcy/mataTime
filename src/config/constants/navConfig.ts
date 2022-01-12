@@ -145,6 +145,14 @@ export const menuNavConfig: MenuNavConfig[] = [
         path: '/account/reward',
         lable: 'AccountMenu Reward',
       },
+      {
+        icon: 'icon-w59',
+        activeIcon: 'icon-w59',
+        lable: 'AccountMenu Time',
+        hideRight: true,
+        hide: true,
+        path: '/swap',
+      },
     ],
   },
   {
@@ -247,7 +255,7 @@ export const menuNavConfig: MenuNavConfig[] = [
     hideLeft: true,
     hideRight: true,
     lable: 'createNft',
-  }
+  },
 ];
 
 const getHidePath = (
@@ -271,7 +279,11 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList'], menuNavConfig, 'hideRight');
+  return getHidePath(
+    ['/task/invite', '/task/invites', '/task/friendsList'],
+    menuNavConfig,
+    'hideRight',
+  );
 })();
 
 export default menuNavConfig;
