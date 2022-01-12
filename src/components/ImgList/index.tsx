@@ -68,6 +68,13 @@ export const ImgList = (props: Iprops) => {
     const imgDoms = imgRef?.current?.getElementsByClassName(
       ARTICLE_IMAGE_CLASS_NAME,
     );
+    // 图片未加载出来，去掉边框
+    if (imgRef?.current) {
+      const divDom: HTMLDivElement = imgRef.current;
+      if (!divDom.hasChildNodes()) {
+        divDom.style.border = '0';
+      }
+    }
     if (imgDoms?.length === 1) {
       const imgDom = (Array.from(imgDoms) as HTMLImageElement[])[0];
       imgDom.addEventListener('load', () => {
@@ -90,28 +97,6 @@ export const ImgList = (props: Iprops) => {
     }
   }, [imgRef, list]);
 
-  const setBorderRadius = useCallback(
-    (index: number) => {
-      if (list.length === 1) {
-        return '10px';
-      }
-      if (index === 0) {
-        return '10px 0 0 0';
-      }
-      if (index === 1) {
-        return '0 10px 0 0';
-      }
-      if (index === list.length - 2) {
-        return '0 0 0 10px';
-      }
-      if (index === list.length - 1) {
-        return '0 0 10px 0';
-      }
-      return '0';
-    },
-    [list],
-  );
-
   return list.length > 0 ? (
     <ImgListBox ref={imgRef} onClick={e => e.stopPropagation()}>
       {modalIsOpen && (
@@ -125,14 +110,14 @@ export const ImgList = (props: Iprops) => {
         <>
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{ maxHeight: '300px', borderRadius: '10px 0 0 10px' }}
+            style={{ maxHeight: '300px', paddingBottom: '0' }}
             onClick={() => preViewImg(0)}
             src={list[0]}
             alt=''
           />
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{ maxHeight: '300px', borderRadius: '0 10px 10px 0' }}
+            style={{ maxHeight: '300px', paddingBottom: '0' }}
             onClick={() => preViewImg(0)}
             src={list[1]}
             alt=''
@@ -143,7 +128,10 @@ export const ImgList = (props: Iprops) => {
         <>
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{ maxHeight: '300px', borderRadius: '10px 0 0 10px' }}
+            style={{
+              maxHeight: '300px',
+              paddingBottom: '0',
+            }}
             onClick={() => preViewImg(0)}
             src={list[0]}
             alt=''
@@ -151,14 +139,14 @@ export const ImgList = (props: Iprops) => {
           <div className='imgListRightBox'>
             <img
               className={ARTICLE_IMAGE_CLASS_NAME}
-              style={{ borderRadius: '0 10px 0 0' }}
+              style={{ paddingRight: '0' }}
               onClick={() => preViewImg(1)}
               src={list[1]}
               alt=''
             />
             <img
               className={ARTICLE_IMAGE_CLASS_NAME}
-              style={{ borderRadius: '0 0 10px 0' }}
+              style={{ paddingBottom: '0' }}
               onClick={() => preViewImg(2)}
               src={list[2]}
               alt=''
@@ -170,7 +158,12 @@ export const ImgList = (props: Iprops) => {
         list.map((item, index) => (
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{ borderRadius: setBorderRadius(index) }}
+            style={{
+              paddingBottom:
+                index === list.length - 2 || index === list.length - 1
+                  ? '0'
+                  : '1px',
+            }}
             onClick={() => preViewImg(index)}
             src={item}
             key={index}

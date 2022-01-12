@@ -30,8 +30,11 @@ import { Link } from 'react-router-dom';
 import { useStore } from 'store';
 
 export const ContentBox = styled(Flex)`
-  padding: 10px 14px;
+  padding: 10px 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 10px 14px;
+  }
 `;
 const CardBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -388,7 +391,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
         <>
           <Header />
           <ContentBox>
-            <StyledTag ml='20px' variant={tag}>
+            <StyledTag variant={tag}>
               <Text fontSize='18px' bold>
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>
