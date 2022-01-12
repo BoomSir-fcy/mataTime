@@ -131,11 +131,18 @@ const Home: React.FC = (props: any) => {
             callBack={() => toTop()}
             title={t('homeHeaderTitle')}
           >
-            <Link className='hide-media-md' to='/search'>
-              <Button variant='text'>
-                <Icon name='icon-sousuo' size={16}></Icon>
-              </Button>
-            </Link>
+            <Flex>
+              <Link className='hide-media-md' to='/swap'>
+                <Button variant='text'>
+                  <Icon name='icon-duihuan1' size={16}></Icon>
+                </Button>
+              </Link>
+              <Link className='hide-media-md' to='/search'>
+                <Button variant='text'>
+                  <Icon name='icon-sousuo' size={16}></Icon>
+                </Button>
+              </Link>
+            </Flex>
           </Crumbs>
           {!isApp() && <Editor type='post' sendArticle={sendArticle} />}
           <Tabs

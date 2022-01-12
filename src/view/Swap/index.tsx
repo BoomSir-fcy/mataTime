@@ -8,6 +8,7 @@ import { mediaQueriesSize } from 'uikit/theme/base';
 
 const Content = styled(Flex)`
   width: 100%;
+  margin-top: 10px;
   ${mediaQueriesSize.paddingxs}
 `;
 
