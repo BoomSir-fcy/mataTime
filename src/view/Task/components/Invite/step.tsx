@@ -46,7 +46,7 @@ const Line = styled.div`
   width: 8vw;
   height: 3px;
   margin: 0 20px;
-  background: ${({ theme }) => theme.colors.borderColor};
+  background: ${({ theme }) => theme.colors.white_black};
 `;
 
 const PositionText = styled(Text)`
@@ -68,11 +68,11 @@ export const Step: React.FC<{ step?: number }> = React.memo(({ step }) => {
         <StepItem className='active'>
           1<PositionText small>{t('SpecialInvitationStep1')}</PositionText>
         </StepItem>
-        <Line className='activeLine' />
+        <Line />
         <StepItem className='active'>
           2<PositionText small>{t('SpecialInvitationStep2')}</PositionText>
         </StepItem>
-        <Line className='activeLine' />
+        <Line />
         <StepItem className='active'>
           3<PositionText small>{t('SpecialInvitationStep3')}</PositionText>
         </StepItem>

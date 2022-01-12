@@ -175,7 +175,7 @@ const Swap: React.FC<{ onlySwap?: boolean; width?: string }> = ({
                     failure: light.colors.failure,
                     text: light.colors.white_black,
                     backgroundDisabled: light.colors.tertiary,
-                    primary: light.colors.textPrimary,
+                    primary: light.colors.text,
                     success: light.colors.success,
                     textSubtle: light.colors.textTips,
                     backgroundAlt: light.colors.backgroundCard,
