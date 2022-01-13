@@ -6,8 +6,7 @@ import { useLocation } from 'hooks';
 const PageContainer = styled(Box)`
   position: relative;
   max-width: 100%;
-  background: ${({ theme }) => theme.colors.primaryDark};
-
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 export const Container = props => {

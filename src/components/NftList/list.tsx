@@ -36,14 +36,20 @@ const Column = styled(Flex)`
     margin-left: 17px;
   }
   .active {
-    box-shadow: 0px 0px 9px 5px ${({ theme }) => theme.colors.white};
+    box-shadow: ${({ theme }) =>
+      theme.isDark
+        ? `0px 0px 9px 5px ${theme.colors.white}`
+        : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
   }
 `;
 const GetAuthorizeBox = styled(Box)`
   padding: 10px 0 17px 0;
   margin-top: 10px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.backgroundDisabled};
+  background: ${({ theme }) =>
+    theme.isDark
+      ? theme.colors.backgroundDisabled
+      : theme.colors.backgroundThemeCard};
 `;
 const GetAuthorize = styled(Flex)`
   /* justify-content: space-between; */
@@ -54,7 +60,7 @@ const GetAuthorize = styled(Flex)`
     height: 4px;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.white_black};
   }
 `;
 const AvatarName = styled(Text)`
@@ -76,8 +82,8 @@ const NowrapBtn = styled(Button)`
   word-break: keep-all;
 `;
 const AvatarBox = styled.div`
-  width: 102px;
-  height: 104px;
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
 `;
 

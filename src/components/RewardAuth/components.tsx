@@ -75,7 +75,7 @@ export const RewardIncome: React.FC<{
           </Flex>
         ) : (
           <Flex width='100%'>
-            <Text width='80%' textAlign='center' color='white'>
+            <Text width='80%' textAlign='center'>
               {t('rewardAutherAlreadyText3')}
             </Text>
           </Flex>
@@ -84,7 +84,6 @@ export const RewardIncome: React.FC<{
           <QuestionHelper
             mt='5px'
             ml='5px'
-            color='white'
             text={
               <>
                 <Text fontSize='14px'>{t('rewardAutherTipsText1')}</Text>

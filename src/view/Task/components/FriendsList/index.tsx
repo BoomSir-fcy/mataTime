@@ -13,12 +13,16 @@ import { Crumbs } from 'components';
 export const ContentBox = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
-
+const TableBox = styled(Box)`
+  width: 100%;
+  overflow: auto;
+`;
 const Table = styled(Flex)`
   flex-direction: column;
   align-items: center;
   width: 100%;
   min-height: 300px;
+  min-width: 600px;
   .LinkRow {
     /* cursor: pointer; */
   }
@@ -91,7 +95,7 @@ const FriendsList: React.FC = React.memo(() => {
       </ContentBox> */}
 
       <ContentBox>
-        <Flex width='100%' flexDirection='column' justifyContent='end'>
+        <TableBox>
           <Table>
             <Row>
               <HeadText>{t('Nickname')}</HeadText>
@@ -152,7 +156,7 @@ const FriendsList: React.FC = React.memo(() => {
               renderOnZeroPageCount={null}
             />
           </PaginateStyle>
-        </Flex>
+        </TableBox>
       </ContentBox>
     </>
   );

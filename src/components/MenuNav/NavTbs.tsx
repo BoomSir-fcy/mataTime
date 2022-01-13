@@ -42,6 +42,10 @@ export const Navigation = React.memo(() => {
     history.push(route);
   };
 
+  if (location.pathname === '/login') {
+    return <></>;
+  }
+
   return (
     <NavigationContainer>
       {tbasNavConfig.map((row, index) => (

@@ -306,7 +306,7 @@ const Invite: React.FC = () => {
                 </Flex>
               </Box>
               <Box className='bottom-card'>
-                <Flex justifyContent='space-between' alignItems='end'>
+                <Flex justifyContent='space-between' alignItems='flex-end'>
                   <Flex flexDirection='column'>
                     <Text color='textPrimary' fontSize='20px' bold>
                       {`${inviteInfo.proportion}%`}
@@ -380,7 +380,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
         <Crumbs back justifyContent='start'>
           <Flex width='max-content'>
             <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {/* {tag.toUpperCase()} */}
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>
@@ -392,7 +392,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
           <Header />
           <ContentBox>
             <StyledTag variant={tag}>
-              <Text fontSize='18px' bold>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>

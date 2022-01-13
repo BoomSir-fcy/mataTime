@@ -227,7 +227,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 {loading ? (
                   <CircleLoader />
                 ) : (
-                  <Icon name='icon-sousuo' size={16}></Icon>
+                  <Icon name='icon-sousuo' size={16} color='white_black'></Icon>
                 )}
               </ButtonStyled>
               <InputStyled
@@ -259,7 +259,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 type='button'
                 variant='text'
               >
-                <Icon name='icon-guanbi2fill' size={19} color='white_black' />
+                <Icon name='icon-guanbi2fill' size={19} />
               </ButtonStyledLine>
             </Flex>
           </SearchBox>

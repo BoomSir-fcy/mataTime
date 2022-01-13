@@ -20,8 +20,8 @@ const FlexButton = styled(Flex)`
 `;
 
 const CompleteButton = styled(Button)`
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.primaryDark};
+  /* color: ${({ theme }) => theme.colors.white}; */
+  /* background-color: ${({ theme }) => theme.colors.background}; */
 `;
 
 export const SignUpcomplete = React.memo(() => {
@@ -41,8 +41,8 @@ export const SignUpcomplete = React.memo(() => {
   return (
     <Box>
       <Text
-        fontSize="34px"
-        marginBottom="26px"
+        fontSize='34px'
+        marginBottom='26px'
         bold
         style={{ textTransform: 'capitalize' }}
       >
@@ -51,15 +51,15 @@ export const SignUpcomplete = React.memo(() => {
       <Box>
         <Follow ref={followRefs} />
       </Box>
-      <FlexButton paddingBottom="20px">
+      <FlexButton paddingBottom='20px'>
         <Button
-          mr="20px"
-          scale="ld"
+          mr='20px'
+          scale='ld'
           onClick={debounce(() => followRefs?.current?.reload(), 1000)}
         >
           {t('loginSignUpChangeBatch')}
         </Button>
-        <CompleteButton variant="secondary" scale="ld" onClick={complete}>
+        <CompleteButton variant='secondary' scale='ld' onClick={complete}>
           {t('loginSignUpComplete')}
         </CompleteButton>
       </FlexButton>

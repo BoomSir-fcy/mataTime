@@ -11,7 +11,6 @@ import Logo from 'components/MenuNav/Logo';
 
 const PageContainer = styled(Box)`
   width: 100%;
-  /* position: relative; */
   ${({ theme }) => theme.mediaQueries.md} {
     max-width: 214px;
     min-width: 184px;
@@ -24,16 +23,13 @@ const CardStyled = styled(Card)`
   min-width: 100%;
   height: 100%;
   /* display: none; */
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
   min-height: 100vh;
   border: none;
   ${({ theme }) => theme.mediaQueries.sm} {
     border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
     border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   }
-  /* ${({ theme }) => theme.mediaQueries.md} {
-    display: block;
-  } */
 `;
 
 const PaddingBox = styled(Box)`
@@ -61,15 +57,6 @@ const BoxCardStyled = styled(Flex)`
 const TabBoxStyled = styled(Flex)`
   flex-direction: column;
   justify-content: start;
-  /* width: 100%; */
-  /* overflow: auto; */
-  /* flex-wrap: wrap; */
-  /* ${({ theme }) => theme.mediaQueries.md} {
-    display: block;
-  }
-  ::-webkit-scrollbar {
-    height: 4px;
-  } */
   .active {
     background: ${({ theme }) => theme.colors.backgroundCard};
   }
@@ -123,7 +110,7 @@ const Tabbar: React.FC<Props> = ({ activeIndex, onClick }) => {
               <ButtonStyled
                 className={activeIndex === index ? 'active' : ''}
                 variant='text'
-                color={activeIndex === index ? 'primary' : 'text'}
+                color={activeIndex === index ? 'white_black' : 'textSubtle'}
                 scale='sm'
                 key={item.lable}
                 onClick={() => onClick(index)}
@@ -131,7 +118,7 @@ const Tabbar: React.FC<Props> = ({ activeIndex, onClick }) => {
                 <Text
                   bold={activeIndex === index}
                   fontSize='18px'
-                  color={activeIndex === index ? 'white' : 'text'}
+                  color={activeIndex === index ? 'white_black' : 'textSubtle'}
                 >
                   {t(item.lable)} ({item.length})
                 </Text>

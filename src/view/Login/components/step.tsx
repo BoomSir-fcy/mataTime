@@ -4,8 +4,10 @@ import { Box, Flex, Text } from 'uikit';
 import { useStore } from 'store';
 import { ConnectWalletButton } from 'components';
 import { useTranslation } from 'contexts/Localization';
+import { mediaQueriesSize } from 'uikit/theme/base';
 
 const StepOutBox = styled(Box)`
+  ${mediaQueriesSize.marginb}
   .marginbot {
     ${({ theme }) => theme.mediaQueriesSize.marginb}
   }
@@ -18,9 +20,10 @@ const StepBox = styled(Flex)`
   .active {
     background: ${({ theme }) => theme.colors.gradients.buttonBg};
     border-width: 1px;
+    color: ${({ theme }) => theme.colors.white};
   }
   .activeLine {
-    background: ${({ theme }) => theme.colors.white};
+    background: ${({ theme }) => theme.colors.white_black};
   }
 `;
 
@@ -32,8 +35,9 @@ const StepItem = styled(Flex)`
   align-items: center;
   width: 3rem;
   height: 3rem;
-  background: ${({ theme }) => theme.colors.disableStep};
-  border: 2px solid ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) =>
+    theme.isDark ? theme.colors.disableStep : theme.colors.white};
+  border: 2px solid ${({ theme }) => theme.colors.white_black};
   border-radius: 50%;
 `;
 

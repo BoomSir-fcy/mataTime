@@ -36,7 +36,7 @@ export const Badge = styled(Text)`
   top: -6px;
   right: -8px;
   font-size: 12px;
-  line-height: 12px;
+  line-height: 14px;
   display: block;
   text-align: center;
 `;
@@ -54,8 +54,7 @@ const StyledPanel = styled.div<{
   flex-direction: column;
   justify-content: space-between;
   flex-shrink: 0;
-  /* background-color: ${({ theme }) => theme.nav.background}; */
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
   width: ${({ isPushed }) => (isPushed ? `${SIDEBAR_WIDTH_FULL}px` : 0)};
   height: 100%;
   transition: padding-top 0.2s, width 0.2s cubic-bezier(0.4, 0, 0.2, 1);

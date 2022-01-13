@@ -101,7 +101,7 @@ const Content = styled(Box)`
   .text {
     font-size: 18px;
     & a {
-      color: #7393ff;
+      color: ${({ theme }) => theme.colors.textPrimary};
     }
   }
   .number {
@@ -387,7 +387,11 @@ const Profile: React.FC<any> = props => {
                 <CenterImg
                   width='250px'
                   height='250px'
-                  src={require('view/Login/images/LOGO2.svg').default}
+                  src={
+                    require(isDark
+                      ? 'assets/images/logo.svg'
+                      : 'assets/images/light_logo.svg').default
+                  }
                 />
               </CommonCircle>
             </ComponentsWrapper>
