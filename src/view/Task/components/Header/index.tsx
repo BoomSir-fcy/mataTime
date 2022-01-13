@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crumbs } from 'components';
+import { Crumbs, Icon } from 'components';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { Box, Flex, Text, Spinner } from 'uikit';
@@ -19,10 +19,16 @@ const Time = styled.img`
 const HeaderTips = ({ t }) => {
   return (
     <Flex alignItems='center'>
-      <Time src={require('assets/images/myWallet/time.png').default} alt='' />
+      {/* <Time src={require('assets/images/myWallet/time.png').default} alt='' /> */}
+      <Icon
+        name='icon-miaobiao'
+        size={20}
+        color='white_black'
+        margin='0 8px 0 0'
+      />
       <Text small color='textTips'>
         {t(
-          'Note that all tasks are refreshed at 0:00 UTC. Please get your $Matter before 0:00 UTC!'
+          'Note that all tasks are refreshed at 0:00 UTC. Please get your $Matter before 0:00 UTC!',
         )}
       </Text>
     </Flex>

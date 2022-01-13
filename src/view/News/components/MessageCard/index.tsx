@@ -19,7 +19,7 @@ const BoxStyled = styled(Flex)`
 const ContentBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundCard};
   overflow: hidden;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.text};
   width: 100%;
   ${({ theme }) => theme.mediaQueries.sm} {
     width: 170px;
@@ -72,14 +72,8 @@ const MessageCard: React.FC<MessageCardProps> = ({
       <Flex flex='1' padding='16px'>
         <Avatar uid={uid} src={avatar} scale='md' />
         <Flex flexDirection='column' ml='16px' flex='1'>
-          <Flex alignItems='center'>
-            <Text
-              maxWidth='100px'
-              ellipsis
-              bold
-              fontSize='18px'
-              color='primary'
-            >
+          <Flex alignItems='baseline'>
+            <Text maxWidth='100px' ellipsis bold fontSize='18px'>
               {title}
             </Text>
             <Text ellipsis ml='16px' fontSize='14px' color='textTips'>

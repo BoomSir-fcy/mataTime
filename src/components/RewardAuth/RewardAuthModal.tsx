@@ -294,7 +294,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                       </Box>
                       <QuestionHelper
                         ml='15px'
-                        color='white'
+                        color='white_black'
                         text={
                           <>
                             <Text fontSize='14px'>

@@ -134,12 +134,16 @@ const Home: React.FC = (props: any) => {
             <Flex>
               <Link className='hide-media-md' to='/swap'>
                 <Button variant='text'>
-                  <Icon name='icon-duihuan1' size={16}></Icon>
+                  <Icon
+                    name='icon-duihuan1'
+                    size={20}
+                    color='white_black'
+                  ></Icon>
                 </Button>
               </Link>
               <Link className='hide-media-md' to='/search'>
                 <Button variant='text'>
-                  <Icon name='icon-sousuo' size={16}></Icon>
+                  <Icon name='icon-sousuo' size={20} color='white_black'></Icon>
                 </Button>
               </Link>
             </Flex>
@@ -166,7 +170,7 @@ const Home: React.FC = (props: any) => {
           )}
         </CenterCard>
       </Flex>
-      <SendPost />
+      {isApp() && <SendPost />}
     </PageContainer>
   );
 };

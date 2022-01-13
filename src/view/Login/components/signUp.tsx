@@ -35,7 +35,10 @@ const WalletBody = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 70px;
-  background: ${({ theme }) => theme.colors.backgroundDisabled};
+  background: ${({ theme }) =>
+    theme.isDark
+      ? theme.colors.backgroundDisabled
+      : theme.colors.backgroundThemeCard};
   border-radius: ${({ theme }) => theme.radii.card};
   margin-bottom: 30px;
 `;

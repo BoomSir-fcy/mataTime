@@ -67,6 +67,7 @@ export type Gradients = {
   gold: string;
   progress: string;
   buttonBg: string;
+  shalou: string;
 };
 
 export type Colors = {
@@ -117,9 +118,12 @@ export type Colors = {
   // Gradients
   gradients: Gradients;
   CircleBg: string;
+  CircleBgD: string;
+  progressBar: string;
   // box shadow
   shadow: {
     box: string;
+    dropdown: string;
   };
 
   // Additional colors

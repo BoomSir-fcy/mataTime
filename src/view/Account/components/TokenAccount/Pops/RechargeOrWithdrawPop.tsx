@@ -277,17 +277,12 @@ const MoneyModal: React.FC<init> = ({
           mb='10px'
           disable={pending}
           onClick={() => {
-            if (type === 1) {
-              if (approvedNum > 0) {
-                // 充值
-                handSure();
-              } else {
-                // 授权
-                handleApprove();
-              }
-            } else {
-              //提现
+            if (approvedNum > 0) {
+              // 充值、提现
               handSure();
+            } else {
+              // 授权
+              handleApprove();
             }
           }}
         >
@@ -304,9 +299,13 @@ const MoneyModal: React.FC<init> = ({
               t('Account Approve')
             )
           ) : pending ? (
-            <Dots>{t('Account Trading')}</Dots>
-          ) : (
+            <Dots>
+              {approvedNum > 0 ? t('Account Trading') : t('Account Approving')}
+            </Dots>
+          ) : approvedNum > 0 ? (
             t('Account Confirm')
+          ) : (
+            t('Account Approve')
           )}
         </SureBtn>
         <Text fontSize='14px' color='textTips'>

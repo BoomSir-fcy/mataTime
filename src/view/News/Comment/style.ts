@@ -21,7 +21,7 @@ export const CommentItemWrapper = styled(Card)`
     padding-left: 73px;
     padding-top: 15px;
     a {
-      color: #4168ed;
+      color: ${({ theme }) => theme.colors.ThemeText};
       margin-left: 10px;
       margin-right: 15px;
     }

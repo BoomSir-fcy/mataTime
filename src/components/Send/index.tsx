@@ -6,15 +6,15 @@ import { Flex } from 'uikit';
 
 const Content = styled(Flex)`
   position: fixed;
-  right: 20px;
-  bottom: 15%;
+  right: 5%;
+  bottom: calc(12% + 40px + 20px);
   cursor: pointer;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background: ${({ theme }) => theme.colors.gradients.buttonBg};
-  border: 1px solid ${({ theme }) => theme.colors.white_black};
+  border: 1px solid ${({ theme }) => theme.colors.white};
   border-radius: 50%;
 `;
 

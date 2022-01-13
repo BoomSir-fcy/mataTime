@@ -39,6 +39,7 @@ export const LoginJoin: React.FC = React.memo(() => {
         /> */}
         {/* <ConnectWalletButton loading={loading ? 1 : 0} /> */}
         <AnimationRingIcon
+          color='white_black'
           style={{ cursor: 'pointer' }}
           onClick={onConnectWallet}
           active2

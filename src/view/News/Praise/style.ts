@@ -15,7 +15,7 @@ export const PraiseItemWrapper = styled(Card)`
   .reply-wrapper {
     font-size: 16px;
     font-weight: 400;
-    color: #b5b5b5;
+    color: ${({ theme }) => theme.colors.textgrey};
     display: flex;
     box-sizing: border-box;
     padding-left: 73px;

@@ -6,7 +6,7 @@ import { TaskPage, TaskInvite, FriendsList, RankingList } from './components';
 
 const BgBox = styled(Box)`
   height: auto;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const Task: React.FC = () => {

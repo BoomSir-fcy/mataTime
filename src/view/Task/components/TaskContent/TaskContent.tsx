@@ -1,3 +1,4 @@
+import { Icon } from 'components';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
@@ -17,7 +18,7 @@ const TaskTitle = styled(Flex)`
     padding: 10px 14px;
   }
 `;
-const CollapseIcon = styled.img<{ collapse: boolean }>`
+const CollapseIcon = styled(Icon)<{ collapse: boolean }>`
   max-width: 18px;
   transition: all 0.3s;
   transform: ${({ collapse }) =>
@@ -46,7 +47,7 @@ const TaskContent: React.FC<TaskContentProps> = React.memo(
       <Box>
         <TaskTitle onClick={() => setCollapse(collapse => !collapse)}>
           <StyledTag variant={tag}>
-            <Text fontSize='18px' bold>
+            <Text color='primaryBright' fontSize='18px' bold>
               {t(`Task ${tag}`).toUpperCase()}
             </Text>
           </StyledTag>
@@ -55,8 +56,11 @@ const TaskContent: React.FC<TaskContentProps> = React.memo(
               {t('Task Rewards')}
             </RewardsText>
             <CollapseIcon
+              name='icon-fanhui1'
               collapse={collapse}
-              src={require('assets/images/task/back.png').default}
+              size={18}
+              color='white_black'
+              // src={require('assets/images/task/back.png').default}
             />
           </Flex>
         </TaskTitle>

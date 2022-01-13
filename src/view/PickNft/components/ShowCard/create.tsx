@@ -82,8 +82,8 @@ const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
   height: 24vh;
   max-width: 100%;
   max-height: 100%;
-  min-width: 130px;
-  min-height: 130px;
+  min-width: 200px;
+  min-height: 200px;
   ${({ theme }) => theme.mediaQueries.md} {
     max-width: 300px;
     max-height: 300px;

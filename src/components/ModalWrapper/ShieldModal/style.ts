@@ -45,7 +45,7 @@ export const ShieldContentWrapper = styled(Box)`
     color: ${({ theme }) => theme.colors.white_black};
     margin-left: 28px;
     a {
-      color: #4168ed;
+      color: ${({ theme }) => theme.colors.ThemeText};
     }
   }
 `;

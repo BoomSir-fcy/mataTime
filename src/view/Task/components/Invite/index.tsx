@@ -229,12 +229,12 @@ const Invite: React.FC = () => {
             <Text mb='25px' fontSize='18px' bold>
               Invitation Overview
             </Text>
-            {/* <Button as={Link} to='/task/friendsList'>
-              {t('InvitationRecord')}
-            </Button> */}
-            <Button as={Link} to='/account?readType=3'>
+            <Button as={Link} to='/task/friendsList'>
               {t('InvitationRecord')}
             </Button>
+            {/* <Button as={Link} to='/account?readType=3'>
+              {t('InvitationRecord')}
+            </Button> */}
           </Flex>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
@@ -307,7 +307,7 @@ const Invite: React.FC = () => {
                 </Flex>
               </Box>
               <Box className='bottom-card'>
-                <Flex justifyContent='space-between' alignItems='end'>
+                <Flex justifyContent='space-between' alignItems='flex-end'>
                   <Flex flexDirection='column'>
                     <Text color='textPrimary' fontSize='20px' bold>
                       {`${inviteInfo.proportion}%`}
@@ -379,8 +379,11 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
     const HeaderBox = useMemo(() => {
       return (
         <Flex width='100%' justifyContent='space-between' alignItems='center'>
-          <StyledTag ml={source === 'TASK' ? '10px' : ''} variant={tag}>
-            <Text fontSize='18px' bold>
+          <StyledTag
+            ml={source === 'TASK' && !isMobile ? '10px' : ''}
+            variant={tag}
+          >
+            <Text color='primaryBright' fontSize='18px' bold>
               {t(`Task ${tag}`).toUpperCase()}
             </Text>
           </StyledTag>
@@ -403,9 +406,16 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
     return (
       <>
         {source === 'TASK' ? (
-          <Crumbs back justifyContent='start'>
-            {HeaderBox}
-          </Crumbs>
+          isMobile ? (
+            <>
+              <Crumbs back justifyContent='start' />
+              <ContentBox>{HeaderBox}</ContentBox>
+            </>
+          ) : (
+            <Crumbs back justifyContent='start'>
+              {HeaderBox}
+            </Crumbs>
+          )
         ) : (
           <>
             <Header />

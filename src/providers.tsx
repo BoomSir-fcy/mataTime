@@ -3,8 +3,12 @@ import { light, dark } from 'uikit';
 import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ThemeProvider } from 'styled-components';
-import { RefreshContextProvider } from 'contexts/RefreshContext'
-import { ToastsProvider, LanguageProvider, MenuNavContentProvider } from 'contexts';
+import { RefreshContextProvider } from 'contexts/RefreshContext';
+import {
+  ToastsProvider,
+  LanguageProvider,
+  MenuNavContentProvider,
+} from 'contexts';
 import { ConnectWalletProvider } from 'contexts/ConnectWalletContext';
 import { RewardAuthContextProvider } from 'contexts/RewardAuthContext';
 import { ImContextProvider } from 'contexts/ImContext';
@@ -14,8 +18,8 @@ import { useThemeManager } from 'store/app/hooks';
 
 const ThemeProviderWrapper = props => {
   const [isDark] = useThemeManager();
-  return <ThemeProvider theme={dark} {...props} />;
-  // return <ThemeProvider theme={isDark ? dark : light} {...props} />;
+  // return <ThemeProvider theme={isDark} {...props} />;
+  return <ThemeProvider theme={isDark ? dark : light} {...props} />;
 };
 
 const Providers: React.FC = ({ children }) => {

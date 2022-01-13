@@ -67,7 +67,7 @@ const MatterFlex = styled(Flex)`
   }
 `;
 const ReceiveButton = styled(Button)<{ disabled: boolean; status: number }>`
-  min-width: 125px;
+  width: 120px;
   ${({ theme, disabled, status }) =>
     status <= 2
       ? `
@@ -171,7 +171,7 @@ const TaskItem: React.FC<{
               </Flex>
               <Box width='100%'>
                 <Progress
-                  color='primary'
+                  color='progressBar'
                   scale='sm'
                   variant='round'
                   primaryStep={(info.Expand?.now / info.Expand?.max) * 100}
@@ -205,6 +205,7 @@ const TaskItem: React.FC<{
           </ReceiveButton>
         ) : (
           <Button
+            margin='10px 0'
             scale={isMobile ? 'sm' : 'md'}
             onClick={e => {
               e.stopPropagation();

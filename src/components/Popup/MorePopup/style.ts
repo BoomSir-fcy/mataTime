@@ -20,7 +20,7 @@ export const PopupContentWrapper = styled(Box)`
     font-size: 14px;
     font-family: Alibaba PuHuiTi;
     font-weight: 400;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     line-height: 36px;
     cursor: pointer;
   }
