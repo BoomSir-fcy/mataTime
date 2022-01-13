@@ -14,11 +14,11 @@ import useMenuNav from 'hooks/useMenuNav';
 import { useStore } from 'store';
 import { formatDisplayApr } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
-import { Crumbs } from 'components';
+import { Crumbs, Icon } from 'components';
 import { useFetTimeInfo } from 'store/wallet/hooks';
 
 const CenterCard = styled(Box)`
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
   width: calc(100vw - 8px);
   /* overflow: hidden; */
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -103,9 +103,15 @@ const HeaderTips = ({ t, CurrentRound, isMobile }) => {
   return (
     <Flex alignItems='center' flexWrap='wrap'>
       <Flex>
-        <Tips
+        {/* <Tips
           src={require('assets/images/myWallet/broadcast.png').default}
           alt=''
+        /> */}
+        <Icon
+          name='icon-gonggao'
+          size={18}
+          margin='0 10px 0 0'
+          color='white_black'
         />
         <Text mr='10px' fontSize='14px' color='textTips'>
           {t(

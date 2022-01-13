@@ -43,6 +43,7 @@ const RewardAuthModalStyled = styled(Box)`
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.greyBackground};
   ${({ theme }) => theme.mediaQueries.lg} {
+    margin-left: -100px;
     width: 418px;
   }
 `;
@@ -293,7 +294,7 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                       </Box>
                       <QuestionHelper
                         ml='15px'
-                        color='white'
+                        color='white_black'
                         text={
                           <>
                             <Text fontSize='14px'>

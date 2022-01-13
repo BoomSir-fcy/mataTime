@@ -90,7 +90,13 @@ export const TimeHeader: React.FC<init> = React.memo(
           alignItems='center'
         >
           <RoundBox>
-            <AnimationRingIcon bgColor active3 active1 isRotate width='8rem'>
+            <AnimationRingIcon
+              bgColor='CircleBgD'
+              active3
+              active1
+              isRotate
+              width='8rem'
+            >
               <FaqBox>
                 <WhiteText fontSize='30px' bold>
                   {t('walleteCurrent Round')}

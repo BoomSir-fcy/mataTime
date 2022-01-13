@@ -285,6 +285,9 @@
   "Transaction rejected.": "Transaction rejected.",
   "Enter valid list location": "Enter valid list location",
   "Error importing list": "Error importing list",
+  "titleSetting": "Settings",
+  "titleHistory": "History",
+  "titleExchange": "Exchange",
   "translationLast": "translationLast",
   "translationEnd": "translationEnd"
 }

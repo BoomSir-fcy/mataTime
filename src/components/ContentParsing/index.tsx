@@ -28,7 +28,7 @@ const ExpandWrapper = styled.div`
   text-align: center;
   span {
     cursor: pointer;
-    color: #7393ff;
+    color: ${({ theme }) => theme.colors.textPrimary};
     font-size: 12px;
   }
 `;
@@ -45,7 +45,7 @@ const ParagraphItem = styled.div`
     font-weight: 400;
   }
   a {
-    color: #7393ff;
+    color: ${({ theme }) => theme.colors.textPrimary};
     cursor: pointer;
     font-family: Arial;
     /* margin: 0 5px; */

@@ -34,7 +34,7 @@ const HandleButton = ({
   const [pendingTx, setPendingTx] = useState(false);
 
   if (!account) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton />;
   }
   if (!isApproved) {
     return (
@@ -54,7 +54,7 @@ const HandleButton = ({
       {showView && (
         <Button
           width={100}
-          margin="0 12px"
+          margin='0 12px'
           disabled={pendingTx}
           onClick={onView}
         >
@@ -63,7 +63,8 @@ const HandleButton = ({
       )}
       <Button
         width={100}
-        margin="0 12px"
+        margin='0 12px'
+        variant='primaryGreen'
         disabled={pendingTx || !canHarvest}
         onClick={async () => {
           setPendingTx(true);
@@ -96,12 +97,12 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
   pid,
   onView,
   showView,
-  rewardTokenPrice
+  rewardTokenPrice,
 }) => {
   const { account } = useWeb3React();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { toastSuccess, toastError } = useToast()
+  const { toastSuccess, toastError } = useToast();
 
   const { onApprove } = useApproveErc20Pool(depositToken, poolAddress);
   const handleApprove = useCallback(async () => {
@@ -121,16 +122,21 @@ const PoolActionHarvest: React.FC<HarvestProps> = ({
       toastSuccess(t('Your earnings have been harvested to your wallet!'));
     } catch (error) {
       if ((error as any)?.code !== 4001) {
-        toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'));
+        toastError(
+          t('Error'),
+          t(
+            'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+          ),
+        );
       }
     }
   }, [onHarvest, dispatch, t, toastSuccess, toastError, account]);
 
-  const canHarvest = new BigNumber(earnings).isGreaterThan(0)
+  const canHarvest = new BigNumber(earnings).isGreaterThan(0);
 
   return (
     <ContainerItem>
-      <Flex justifyContent="center" alignItems="center">
+      <Flex justifyContent='center' alignItems='center'>
         <HandleButton
           canHarvest={canHarvest}
           isApproved={isApproved}

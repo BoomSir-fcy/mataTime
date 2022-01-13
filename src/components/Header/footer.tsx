@@ -6,11 +6,12 @@ import { useTranslation } from 'contexts/Localization';
 import { Logo } from './logo';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
+import useTheme from 'hooks/useTheme';
 
 const FooterWarpper = styled(Flex)`
   justify-content: center;
   width: 100%;
-  height: 125px;
+  /* height: 125px; */
   padding-left: 45px;
   border-top: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   background: ${({ theme }) => theme.colors.gradients.footer};
@@ -21,7 +22,7 @@ const FooterWarpper = styled(Flex)`
 
 const LogoWrapper = styled(Box)`
   width: 220px;
-  height: 40px;
+  /* height: 40px; */
   ${mediaQueriesSize.marginbmd};
 `;
 
@@ -38,11 +39,19 @@ const SubText = styled(Text)<{
 
 export const Footer = React.memo(() => {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
 
   return (
     <FooterWarpper flexDirection='column'>
       <LogoWrapper>
-        <Logo url='/' src='/images/LOGO2.svg' />
+        <Logo
+          url='/'
+          src={
+            require(isDark
+              ? 'assets/images/logo.svg'
+              : 'assets/images/light_logo.svg').default
+          }
+        />
       </LogoWrapper>
       <Flex>
         <SubText as={Link} to='/'>

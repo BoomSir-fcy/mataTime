@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Modal from 'react-modal';
 import styled, { DefaultTheme } from 'styled-components';
+import { variant } from 'styled-system';
 import { Heading, Flex, CloseLineIcon, Button, Box } from 'uikit';
 
 import useTheme from 'hooks/useTheme';
@@ -57,8 +58,14 @@ const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
   );
 };
 
+const scales = {
+  XS: 'xs',
+  MD: 'md',
+  XL: 'xl',
+} as const;
 interface ModalWrapperProps {
   visible: boolean;
+  scale?: typeof scales[keyof typeof scales];
   setVisible?: (state: boolean) => void;
   title?: string;
   creactOnUse?: boolean;
@@ -82,13 +89,12 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     padding,
     overflow,
   }) => {
-    var OutCenterBox = document.querySelector('#OutCenterBox');
+    var OutCenterBox: HTMLElement = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
     // let left;
     // if (OutCenterBox) {
     //   const rectObject = OutCenterBox.getBoundingClientRect();
-    //   left = `${rectObject.left + 214}px`;
-    //   console.log(left);
+    //   left = `${rectObject.left}px`;
     // }
 
     const customStyles = getCustomStyles(theme, fillBody, top, padding);
@@ -118,3 +124,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     );
   },
 );
+
+ModalWrapper.defaultProps = {
+  scale: scales.XL,
+};

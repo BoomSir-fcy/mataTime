@@ -6,20 +6,24 @@ import { Icon } from 'components';
 const TopBox = styled(Box)`
   position: fixed;
   right: 5%;
-  bottom: 5%;
+  bottom: 12%;
   cursor: pointer;
   z-index: 1000;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.white};
-  background: linear-gradient(90deg, #353535, #080808);
+  background: ${({ theme }) => theme.colors.gradients.buttonBg};
   transition: opacity 0.5s;
 `;
 
 const Gotop = () => {
   let scrollTop = 0;
   let topValue = 0;
+  let startX = 0;
+  let startY = 0;
+  let moveEndX = 0;
+  let moveEndY = 0;
   const [IsShow, setIsShow] = useState(false);
 
   const getScollTop = () => {
@@ -43,6 +47,30 @@ const Gotop = () => {
     }, 0);
   };
 
+  const touchstart = e => {
+    e.preventDefault();
+    startX = e.changedTouches[0].pageX;
+    startY = e.changedTouches[0].pageY;
+  };
+  const touchmove = e => {
+    e.preventDefault();
+
+    moveEndX = e.changedTouches[0].pageX;
+    moveEndY = e.changedTouches[0].pageY;
+    let X = moveEndX - startX;
+    let Y = moveEndY - startY;
+    if (Math.abs(Y) > Math.abs(X) && Y > 0) {
+      scrollTop = Y;
+      if (scrollTop <= topValue) {
+        setIsShow(false);
+      } else {
+        setIsShow(true);
+      }
+      setTimeout(() => {
+        topValue = scrollTop;
+      }, 0);
+    }
+  };
   const Top = () => {
     window.scrollTo({
       top: 0,
@@ -52,8 +80,12 @@ const Gotop = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', bindHandleScroll);
+    window.addEventListener('touchstart', e => touchstart(e));
+    window.addEventListener('touchmove', e => touchmove(e));
     return () => {
       window.removeEventListener('scroll', bindHandleScroll);
+      window.removeEventListener('touchstart', touchstart);
+      window.removeEventListener('touchmove', touchmove);
     };
   }, []);
   const size = 20;
@@ -65,7 +97,7 @@ const Gotop = () => {
         justifyContent='center'
         alignItems='center'
       >
-        <Icon size={size} color='white_black' current={1} name='icon-jiantou' />
+        <Icon size={size} color='white' current={1} name='icon-jiantou' />
       </Flex>
     </TopBox>
   );

@@ -78,8 +78,8 @@ const BoxStyled = styled(Box)<{ rgba: ColorRgba }>`
   height: 24vh;
   max-width: 100%;
   max-height: 100%;
-  min-width: 130px;
-  min-height: 130px;
+  min-width: 200px;
+  min-height: 200px;
   ${({ theme }) => theme.mediaQueries.md} {
     max-width: 300px;
     max-height: 300px;
@@ -177,7 +177,7 @@ const ShowCard: React.FC = () => {
 
   // 是否被锁定
   const isLockAvailable = useMemo(() => {
-    return Boolean(!IsEnd);
+    return Boolean(!IsEnd) && Boolean(codeInfo.lockedAt);
   }, [IsEnd]);
 
   const randomPickHandle = useCallback(
@@ -260,6 +260,7 @@ const ShowCard: React.FC = () => {
             size={23}
             current={1}
             name='icon-suo'
+            color='white_black'
             onClick={() => setVisible(true)}
           />
         </Flex>

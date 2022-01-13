@@ -290,13 +290,20 @@ export const MorePopup = React.memo((props: Iprops) => {
                 >
                   {t('moreReport')}
                 </p>
-                <p
+                {/* <p
                   onClick={() => {
                     setInqueryType('shield');
                     setCommonInqueryShow(true);
                   }}
                 >
                   {t('moreShield')}
+                </p> */}
+                <p
+                  onClick={() => {
+                    callback(data, MoreOperatorEnum.BLOCKUSER);
+                  }}
+                >
+                  {t('popupShieldUser')}
                 </p>
               </>
             ) : null}

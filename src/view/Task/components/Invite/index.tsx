@@ -30,8 +30,11 @@ import { Link } from 'react-router-dom';
 import { useStore } from 'store';
 
 export const ContentBox = styled(Flex)`
-  padding: 10px 14px;
+  padding: 10px 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 10px 14px;
+  }
 `;
 const CardBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -115,7 +118,7 @@ const BtnFlex = styled(Flex)`
   }
 `;
 const Invite: React.FC = () => {
-  // useFetchNftList();
+  useFetchNftList();
   const { tokenAddress, defaultCodeList, maxGendCodeCount } = useNftBaseView();
   const { inviteInfo } = useInviteCount();
   const { t } = useTranslation();
@@ -225,7 +228,10 @@ const Invite: React.FC = () => {
             <Text mb='25px' fontSize='18px' bold>
               Invitation Overview
             </Text>
-            <Button as={Link} to='/task/friendsList'>
+            {/* <Button as={Link} to='/task/friendsList'>
+              {t('InvitationRecord')}
+            </Button> */}
+            <Button as={Link} to='/account?readType=3'>
               {t('InvitationRecord')}
             </Button>
           </Flex>
@@ -300,7 +306,7 @@ const Invite: React.FC = () => {
                 </Flex>
               </Box>
               <Box className='bottom-card'>
-                <Flex justifyContent='space-between' alignItems='end'>
+                <Flex justifyContent='space-between' alignItems='flex-end'>
                   <Flex flexDirection='column'>
                     <Text color='textPrimary' fontSize='20px' bold>
                       {`${inviteInfo.proportion}%`}
@@ -320,7 +326,7 @@ const Invite: React.FC = () => {
           </Flex>
         </ContentBox>
         {/* 特殊邀请 */}
-        {/* {!nftLoading ? (
+        {!nftLoading ? (
           invitableNftList.length ? (
             <>
               <ContentBox>
@@ -345,7 +351,7 @@ const Invite: React.FC = () => {
           <Flex justifyContent='center' alignItems='center'>
             <Spinner />
           </Flex>
-        )} */}
+        )}
 
         {/* 复制链接弹窗 */}
         <InviteModal
@@ -374,7 +380,7 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
         <Crumbs back justifyContent='start'>
           <Flex width='max-content'>
             <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {/* {tag.toUpperCase()} */}
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>
@@ -385,8 +391,8 @@ const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
         <>
           <Header />
           <ContentBox>
-            <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
+            <StyledTag variant={tag}>
+              <Text color='primaryBright' fontSize='18px' bold>
                 {t(`Task ${tag}`).toUpperCase()}
               </Text>
             </StyledTag>

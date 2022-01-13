@@ -12,7 +12,7 @@ export const EditorWarpper = styled(Box)`
   ${mediaQueriesSize.marginbsm}
 `;
 export const MentionBox = styled.span`
-  color: #7393ff;
+  color: ${({ theme }) => theme.colors.textPrimary};
   cursor: pointer;
 `;
 export const SendButton = styled(Button)`
@@ -20,7 +20,7 @@ export const SendButton = styled(Button)`
   width: 100px;
   height: 35px;
   border-radius: 10px;
-  background-color: #4168ed;
+  background-color: ${({ theme }) => theme.colors.backgroundPrimary};
   margin-top: 12px;
   padding: 0;
 `;
@@ -45,7 +45,7 @@ export const SlateBox = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 15px 15px 30px;
   }
-  max-width: calc(100vw - 15px);
+  max-width: calc(100vw - 20px);
   margin: 0 auto;
   z-index: 1004;
   div.text-box {
@@ -90,7 +90,7 @@ export const Toolbar = styled(Flex)`
     }
     i {
       vertical-align: middle;
-      color: #7393ff;
+      color: ${({ theme }) => theme.colors.textPrimary};
       font-size: 20px;
     }
   }

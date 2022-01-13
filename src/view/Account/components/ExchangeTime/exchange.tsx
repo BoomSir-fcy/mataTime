@@ -117,7 +117,7 @@ const FaqOutBox = ({ isMobile }) => {
         color='white_black'
         active1
         active3
-        bgColor
+        bgColor='CircleBg'
         showImg
         isRotate
         width='8rem'

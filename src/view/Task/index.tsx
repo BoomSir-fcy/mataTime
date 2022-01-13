@@ -6,7 +6,7 @@ import { TaskPage, TaskInvite, FriendsList } from './components';
 
 const BgBox = styled(Box)`
   height: auto;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const Task: React.FC = () => {
@@ -16,6 +16,7 @@ const Task: React.FC = () => {
     <BgBox>
       {pathname === '/task' && <TaskPage />}
       {pathname === '/task/invite' && <TaskInvite />}
+      {pathname === '/task/invites' && <TaskInvite />}
       {pathname === '/task/friendsList' && <FriendsList />}
     </BgBox>
   );

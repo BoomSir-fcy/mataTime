@@ -31,7 +31,10 @@ const TableLeftBox = styled(Flex)`
   font-weight: 400;
   color: ${({ theme }) => theme.colors.textTips};
   & div {
-    padding: 0 20px;
+    padding-right: 20px;
+    ${({ theme }) => theme.mediaQueries.md} {
+      padding: 0 20px;
+    }
     cursor: pointer;
   }
   .leftActive {
@@ -149,8 +152,8 @@ const TabsComponent = (props, ref) => {
     if (tags.length > 0 && Number(currentLeftIndex) === 3) {
       dispatch(
         storeAction.postSetParamsTag({
-          user_tags1: [...tags?.[0].map(row => row.ID)],
-          user_tags2: [...tags?.[1].map(row => row.ID)],
+          user_tags1: [...tags?.[0].map(row => row.id)],
+          user_tags2: [...tags?.[1].map(row => row.id)],
         }),
       );
     }
@@ -200,11 +203,11 @@ const TabsComponent = (props, ref) => {
         <ExploreContent>
           {(tags?.[0] ?? []).map((item, key) => (
             <ExploreButton
-              key={`${item.Name}_${key}`}
+              key={`${item.name}_${key}`}
               onClick={() => {
                 let tag = [...user_tags1];
-                const index = tag.findIndex(it => it === item.ID);
-                index !== -1 ? tag.splice(index, 1) : (tag = [...tag, item.ID]);
+                const index = tag.findIndex(it => it === item.id);
+                index !== -1 ? tag.splice(index, 1) : (tag = [...tag, item.id]);
                 dispatch(
                   storeAction.postSetParamsTag({
                     user_tags1: tag,
@@ -213,10 +216,10 @@ const TabsComponent = (props, ref) => {
                 );
               }}
               variant={
-                user_tags1.indexOf(item.ID) > -1 ? 'primary' : 'tertiary'
+                user_tags1.indexOf(item.id) > -1 ? 'primary' : 'tertiary'
               }
             >
-              {item.Name}
+              {item.name}
             </ExploreButton>
           ))}
           <ExploreCol>
@@ -226,13 +229,13 @@ const TabsComponent = (props, ref) => {
             <Flex font-size='14px' flexWrap='wrap'>
               {(tags?.[1] ?? []).map((item, keys) => (
                 <ExploreRadioButton
-                  key={`${item.Name}_${keys}`}
+                  key={`${item.name}_${keys}`}
                   onClick={() => {
                     let tag = [...user_tags2];
-                    const index = tag.findIndex(it => it === item.ID);
+                    const index = tag.findIndex(it => it === item.id);
                     index !== -1
                       ? tag.splice(index, 1)
-                      : (tag = [...tag, item.ID]);
+                      : (tag = [...tag, item.id]);
                     dispatch(
                       storeAction.postSetParamsTag({
                         user_tags1,
@@ -241,10 +244,10 @@ const TabsComponent = (props, ref) => {
                     );
                   }}
                   variant={
-                    user_tags2.indexOf(item.ID) > -1 ? 'primary' : 'text'
+                    user_tags2.indexOf(item.id) > -1 ? 'primary' : 'text'
                   }
                 >
-                  {item.Name}
+                  {item.name}
                 </ExploreRadioButton>
               ))}
             </Flex>

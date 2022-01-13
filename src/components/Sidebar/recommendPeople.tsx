@@ -24,7 +24,7 @@ const TitleText = styled(Text)`
 `;
 const MoreBtn = styled.span`
   font-size: 14px;
-  color: #7393ff;
+  color: ${({ theme }) => theme.colors.textPrimary};
   cursor: pointer;
 `;
 const UserInfo = styled(Flex)`
@@ -73,6 +73,12 @@ const Content = styled(Flex)`
   &:hover {
     background-color: ${({ theme }) => theme.colors.hoverList};
   }
+`;
+
+const EmptyContent = styled(Flex)`
+  padding-top: 20px;
+  justify-content: center;
+  align-content: center;
 `;
 
 type Iprops = {};
@@ -184,8 +190,7 @@ const RecommendPeople: React.FC<Iprops> = props => {
   };
 
   return (
-    isInit &&
-    state.list.length > 0 && (
+    isInit && (
       <RecommendPeopleBox isBoxShadow isRadius>
         <HeadAction>
           <TitleText>{t('recommendPeopleTitle')}</TitleText>
@@ -235,6 +240,12 @@ const RecommendPeople: React.FC<Iprops> = props => {
             />
           </Content>
         ))}
+
+        {state.list.length <= 0 && (
+          <EmptyContent>
+            <Text>{t('noRecommendations')}</Text>
+          </EmptyContent>
+        )}
 
         <CancelAttentionModal
           title={t('meUnsubscribeTips')}

@@ -11,6 +11,7 @@ import {
   Icon,
   FollowButton,
   CancelAttentionModal,
+  SendPost,
 } from 'components';
 import { debounce } from 'lodash';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
@@ -66,6 +67,10 @@ const Info = styled(Flex)`
 `;
 const Desc = styled(Box)`
   ${mediaQueriesSize.marginl}
+  margin-bottom: 10px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 0;
+  }
   .name {
     min-width: 0;
     word-wrap: break-word;
@@ -82,6 +87,7 @@ const Desc = styled(Box)`
     color: ${({ theme }) => theme.colors.textTips};
   }
   .marginLeft {
+    margin-left: 10px;
     ${({ theme }) => theme.mediaQueries.sm} {
       margin-left: 30px;
     }
@@ -95,7 +101,7 @@ const Content = styled(Box)`
   .text {
     font-size: 18px;
     & a {
-      color: #7393ff;
+      color: ${({ theme }) => theme.colors.textPrimary};
     }
   }
   .number {
@@ -138,6 +144,42 @@ const CenterImg = styled.img`
 const FollowButtonBox = styled(Box)`
   ${mediaQueriesSize.marginr}
 `;
+
+const ProfileDesc: React.FC<{
+  profile: any;
+  className?: string;
+}> = ({ profile, className }) => {
+  const gray = useTheme().colors.textTips;
+  const { currentLanguage } = useTranslation();
+  const country = useStore(p => p.appReducer.localtion);
+
+  const locationDisplay = React.useMemo(() => {
+    const defaultCountry = country?.find(item => item.ID === profile.location);
+    return currentLanguage.locale === EN.locale
+      ? defaultCountry?.LocationEn
+      : defaultCountry?.LocaltionZh;
+  }, [country, profile.location]);
+
+  return (
+    <Desc className={className}>
+      <Text className='name' ellipsis maxLine={2}>
+        {profile.nick_name}
+      </Text>
+      <Flex mt='5px' flexWrap='wrap'>
+        <Flex>
+          {/* <Certification /> */}
+          <Text className='text'>@{shortenAddress(profile.address)}</Text>
+        </Flex>
+        {locationDisplay && (
+          <Flex className='marginLeft' alignItems='center'>
+            <Icon name='icon-dizhi' color={gray} />
+            <Text className='text'>{locationDisplay}</Text>
+          </Flex>
+        )}
+      </Flex>
+    </Desc>
+  );
+};
 
 const Profile: React.FC<any> = props => {
   const history = useHistory();
@@ -324,7 +366,7 @@ const Profile: React.FC<any> = props => {
 
   return (
     <Center>
-      <Crumbs title={t('meHome')} back={Boolean(uid)} />
+      <Crumbs title={t('meHome')} back={Number(uid) !== currentUid.uid} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -345,7 +387,11 @@ const Profile: React.FC<any> = props => {
                 <CenterImg
                   width='250px'
                   height='250px'
-                  src={require('view/Login/images/LOGO2.svg').default}
+                  src={
+                    require(isDark
+                      ? 'assets/images/logo.svg'
+                      : 'assets/images/light_logo.svg').default
+                  }
                 />
               </CommonCircle>
             </ComponentsWrapper>
@@ -359,25 +405,7 @@ const Profile: React.FC<any> = props => {
                 scale={isMobile ? 'ld' : 'xl'}
                 src={profile.nft_image}
               />
-              <Desc>
-                <Text className='name' ellipsis maxLine={2}>
-                  {profile.nick_name}
-                </Text>
-                <Flex mt='5px' flexWrap='wrap'>
-                  <Flex>
-                    {/* <Certification /> */}
-                    <Text className='text'>
-                      @{shortenAddress(profile.address)}
-                    </Text>
-                  </Flex>
-                  {locationDisplay && (
-                    <Flex className='marginLeft' alignItems='center'>
-                      <Icon name='icon-dizhi' color={gray} />
-                      <Text className='text'>{locationDisplay}</Text>
-                    </Flex>
-                  )}
-                </Flex>
-              </Desc>
+              <ProfileDesc className='show-media-sm' profile={profile} />
             </Flex>
             {!uid || Number(uid) === currentUid.uid ? (
               <>
@@ -411,6 +439,7 @@ const Profile: React.FC<any> = props => {
             )}
           </Info>
           <Content>
+            <ProfileDesc className='hide-media-sm' profile={profile} />
             <Box className='desc'>
               <Text className='text' style={{ wordBreak: 'break-word' }}>
                 {profile.introduction}
@@ -540,6 +569,7 @@ const Profile: React.FC<any> = props => {
           })
         }
       />
+      <SendPost />
     </Center>
   );
 };

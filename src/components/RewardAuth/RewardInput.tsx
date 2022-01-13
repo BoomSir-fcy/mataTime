@@ -18,7 +18,7 @@ const InputCell = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 50px;
-  background: #343434;
+  background: ${({ theme }) => theme.colors.input};
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 const InputToken = styled(Input)`
@@ -118,7 +118,7 @@ export const RewardInput: React.FC<{
         <Flex justifyContent='space-between' alignItems='flex-end'>
           <Box mr='15px'>
             <Flex mb='15px' justifyContent='space-between'>
-              <Text color='white'>{t('rewardAutherAmount')}</Text>
+              <Text>{t('Amount')}</Text>
               <Text
                 color='textTips'
                 style={{ minWidth: 0, maxWidth: 150 }}
@@ -136,9 +136,7 @@ export const RewardInput: React.FC<{
                 }}$`}
                 onChange={handleChange}
               />
-              <Text color='white' mr='23px'>
-                {current && current[2]}
-              </Text>
+              <Text mr='23px'>{current && current[2]}</Text>
             </InputCell>
           </Box>
           <Submit

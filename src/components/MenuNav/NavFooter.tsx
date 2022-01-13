@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useStore } from 'store';
 import { REFRESH_TIME_BURN_PER_CIRCLE } from 'config';
 import { Link } from 'react-router-dom';
 import { Circle } from 'rc-progress';
-import { Box, Flex, Text, Image } from 'uikit'
+import { Box, Flex, Text, Image } from 'uikit';
 import { useTokenBalance } from 'hooks/useTokenBalance';
 import { getTimeAddress } from 'utils/addressHelpers';
 import { formatDisplayBalanceWithSymbol } from 'utils/formatBalance';
 import { usePlatformTimeBalance } from 'store/wallet/hooks';
-import { useTranslation } from 'contexts/Localization'
+import { useTranslation } from 'contexts/Localization';
 import { ProfileMenu } from './ProfileMenu';
-import Shalou from './Shalou'
-
+import Shalou from './Shalou';
+import useTheme from 'hooks/useTheme';
 
 export interface NavFooterProps {
   // seconds?: number
 }
-
 
 const User = styled(Flex)`
   display: block;
@@ -33,9 +32,9 @@ const TimeInfoBox = styled(Flex)`
   border-radius: 10px;
   padding-left: 12px;
   margin-bottom: 30px;
-`
+`;
 
-const strokeWidth = 8
+const strokeWidth = 8;
 
 const DownTimeBox = styled(Box)`
   position: absolute;
@@ -45,53 +44,68 @@ const DownTimeBox = styled(Box)`
   border-radius: 50%;
   top: ${strokeWidth}%;
   left: ${strokeWidth}%;
-`
+`;
 
-const PERCENT_MAX = 100
+const PERCENT_MAX = 100;
 
-const NavFooter: React.FC<NavFooterProps> = ({ }) => {
-  const { t } = useTranslation()
+const NavFooter: React.FC<NavFooterProps> = ({}) => {
+  const { t } = useTranslation();
+  const { isDark } = useTheme();
 
-  const [percent, setPercent] = useState(0)
-  const [temp, setTemp] = useState(0)
+  const [percent, setPercent] = useState(0);
+  const [temp, setTemp] = useState(0);
   const burnCoinTody = useStore(p => p.wallet.spendTimeInfo.burnCoinTody);
-  const { availableBalance } = usePlatformTimeBalance()
+  const { availableBalance } = usePlatformTimeBalance();
 
   useEffect(() => {
     const timer = setInterval(() => {
       setPercent(prep => {
-        if (prep >= PERCENT_MAX) return PERCENT_MAX / (REFRESH_TIME_BURN_PER_CIRCLE / 1000)
-        return prep + (PERCENT_MAX / (REFRESH_TIME_BURN_PER_CIRCLE / 1000))
-      })
-      setTemp(prep => prep + 1)
-    }, 1000)
+        if (prep >= PERCENT_MAX)
+          return PERCENT_MAX / (REFRESH_TIME_BURN_PER_CIRCLE / 1000);
+        return prep + PERCENT_MAX / (REFRESH_TIME_BURN_PER_CIRCLE / 1000);
+      });
+      setTemp(prep => prep + 1);
+    }, 1000);
     return () => {
-      clearInterval(timer)
-    }
-  }, [percent, temp])
+      clearInterval(timer);
+    };
+  }, [percent, temp]);
 
   return (
-    <Box mb="32px" mr="8px">
-      <TimeInfoBox flexDirection="column" justifyContent="center">
-        <Flex alignItems="center">
-          <Box position="relative" width="33px" height="33px">
-            <Circle percent={percent} strokeWidth={strokeWidth} trailWidth={2} strokeColor="#ffffff" />
+    <Box mb='32px' padding='0 8px'>
+      <TimeInfoBox flexDirection='column' justifyContent='center'>
+        <Flex alignItems='center'>
+          <Box position='relative' width='33px' height='33px'>
+            <Circle
+              percent={percent}
+              strokeWidth={strokeWidth}
+              trailWidth={2}
+              strokeColor={isDark ? '#FFF' : '#000'}
+            />
             <DownTimeBox>
               <Shalou />
             </DownTimeBox>
           </Box>
-          <Box ml="16px">
-            <Text color="textTips" fontSize="14px">{t('Today bunrt')}</Text>
-            <Text color="white_black" fontSize="14px">{burnCoinTody}</Text>
+          <Box ml='16px'>
+            <Text color='textTips' fontSize='14px'>
+              {t('Today bunrt')}
+            </Text>
+            <Text color='white_black' fontSize='14px'>
+              {burnCoinTody}
+            </Text>
           </Box>
         </Flex>
-        <Flex mt="8px" alignItems="center">
-          <Box width="33px" height="33px">
-            <Image src="/images/tokens/TIME.svg" width={37} height={37} />
+        <Flex mt='8px' alignItems='center'>
+          <Box width='33px' height='33px'>
+            <Image src='/images/tokens/TIME.svg' width={37} height={37} />
           </Box>
-          <Box ml="16px">
-            <Text color="textTips" fontSize="14px">{t('Time left')}</Text>
-            <Text color="white_black" fontSize="14px">{formatDisplayBalanceWithSymbol(availableBalance, 0)}</Text>
+          <Box ml='16px'>
+            <Text color='textTips' fontSize='14px'>
+              {t('Time left')}
+            </Text>
+            <Text color='white_black' fontSize='14px'>
+              {formatDisplayBalanceWithSymbol(availableBalance, 0)}
+            </Text>
           </Box>
         </Flex>
       </TimeInfoBox>
@@ -99,6 +113,6 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
         <ProfileMenu />
       </User> */}
     </Box>
-  )
-}
-export default NavFooter
+  );
+};
+export default NavFooter;

@@ -8,6 +8,7 @@ declare module 'styled-components' {
 }
 
 const PaginateStyle = styled(Flex)`
+  padding-top: 20px;
   flex-wrap: wrap;
   padding-top: 20px;
   overflow-x: auto;
@@ -54,8 +55,8 @@ const PaginateStyle = styled(Flex)`
     }
     &:hover {
       /* border: 1px solid  ${({ theme }) => theme.colors.primaryDark}; */
-      background-color: ${({ theme }) => theme.colors.white};
-      color: ${({ theme }) => theme.colors.primaryDark};
+      background-color: ${({ theme }) => theme.colors.white_black};
+      color: ${({ theme }) => theme.colors.white};
     }
     &.disabled {
       cursor: no-drop;
@@ -65,9 +66,9 @@ const PaginateStyle = styled(Flex)`
     }
   }
   .selected {
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.white_black};
     border: 1px solid ${({ theme }) => theme.colors.white};
-    color: ${({ theme }) => theme.colors.primaryDark};
+    color: ${({ theme }) => theme.colors.background};
   }
 `;
 

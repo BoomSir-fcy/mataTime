@@ -157,7 +157,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
 
   const handleSearchDispaly = useCallback(
     search => {
-      // if (!search || search === '#' || search === '@') return
+      if (!search || search === '#' || search === '@') return;
       debouncedOnChange.cancel();
       dispatch(storeAction.setSearchDisplayPeople({ list: [] }));
       dispatch(storeAction.setSearchDisplayTopic({ list: [] }));
@@ -234,7 +234,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 {loading ? (
                   <CircleLoader />
                 ) : (
-                  <Icon name='icon-sousuo' size={16}></Icon>
+                  <Icon name='icon-sousuo' size={16} color='white_black'></Icon>
                 )}
               </ButtonStyled>
               <InputStyled
@@ -280,13 +280,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
             <ResultBox>
               {value ? (
                 <Box>
-                  {Boolean(resultListOfPostLen) && (
-                    <SearchPostLen
-                      text={searchVal}
-                      post_num={resultListOfPostLen}
-                      pathname={pathname}
-                    />
-                  )}
                   {resultListOfTopic.slice(0, showTopicLen).map(item => (
                     <SearchTopicItem
                       post_num={item.post_num}

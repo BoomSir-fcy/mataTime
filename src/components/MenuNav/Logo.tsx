@@ -5,12 +5,13 @@ import { Box, BoxProps, Image } from 'uikit';
 import { useThemeManager } from 'store/app/hooks';
 import logo from 'assets/images/logo.svg';
 import lightLogo from 'assets/images/light_logo.svg';
+import useMenuNav from 'hooks/useMenuNav';
 
 const LogoWarpper = styled(Box)`
   display: block;
 `;
 const ImageStyled = styled(Image)`
-  margin-left: -22px;
+  margin-left: -23px;
   max-width: 100%;
   max-height: 100%;
 `;
@@ -20,6 +21,7 @@ export interface LogoProps extends BoxProps {
 }
 const Logo: React.FC<LogoProps> = ({ noLink, ...props }) => {
   const [isDark] = useThemeManager();
+  const { setIsPushed } = useMenuNav();
 
   return (
     <LogoWarpper {...props} width='100%'>
@@ -31,7 +33,7 @@ const Logo: React.FC<LogoProps> = ({ noLink, ...props }) => {
           alt=''
         />
       ) : (
-        <Link to={'/'}>
+        <Link to={'/'} onClick={() => setIsPushed(pre => (pre ? false : pre))}>
           <ImageStyled
             src={isDark ? logo : lightLogo}
             width={175}

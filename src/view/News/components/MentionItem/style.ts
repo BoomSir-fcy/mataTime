@@ -58,9 +58,9 @@ export const MentionItemUserWrapper = styled.div`
           padding: 0 10px;
           height: 35px;
           font-size: 14px;
-          border: 2px solid #4168ed;
+          border: 2px solid ${({ theme }) => theme.colors.backgroundPrimary};
           border-radius: 10px;
-          color: #ffffff;
+          color: ${({ theme }) => theme.colors.text};
         }
       }
     }
@@ -97,7 +97,7 @@ export const MentionItemUserWrapper = styled.div`
             padding: 0 10px;
             height: 35px;
             font-size: 14px;
-            border: 2px solid #4168ed;
+            border: 2px solid ${({ theme }) => theme.colors.backgroundPrimary};
             border-radius: 10px;
           }
           .user-name {
@@ -108,7 +108,7 @@ export const MentionItemUserWrapper = styled.div`
             margin-top: 5px;
             font-size: 14px;
             font-weight: 400;
-            color: #b5b5b5;
+            color: ${({ theme }) => theme.colors.textgrey};
             span {
               margin-right: 20px;
             }
@@ -147,7 +147,7 @@ export const MentionItemUserWrapper = styled.div`
         font-size: 16px;
         font-family: Alibaba PuHuiTi;
         font-weight: 400;
-        color: #b5b5b5;
+        color: ${({ theme }) => theme.colors.textgrey};
         display: flex;
         align-items: center;
         margin-right: 75px;
