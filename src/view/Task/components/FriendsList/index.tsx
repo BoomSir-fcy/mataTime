@@ -13,6 +13,12 @@ import { Crumbs } from 'components';
 export const ContentBox = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
+
+export const TitleBox = styled(Flex)`
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+`;
+
 const TableBox = styled(Box)`
   width: 100%;
   overflow: auto;
@@ -63,7 +69,11 @@ const SpecialTag = styled(Text)`
   border: 1px solid ${({ theme }) => theme.colors.backgroundPrimary};
   border-radius: 8px;
 `;
-const FriendsList: React.FC = React.memo(() => {
+
+interface init {
+  showTitle?: boolean;
+}
+const FriendsList: React.FC<init> = React.memo(({ showTitle = true }) => {
   const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteFriendsList();
   const { t } = useTranslation();
@@ -87,13 +97,16 @@ const FriendsList: React.FC = React.memo(() => {
   const totalPage = useMemo(() => getTotalPage(total), [total]);
   return (
     <>
-      {/* <Crumbs back />
-      <ContentBox>
-        <Text fontSize='18px' bold>
-          {t('Invited Friends List')}
-        </Text>
-      </ContentBox> */}
-
+      {showTitle && (
+        <React.Fragment>
+          <Crumbs back />
+          <TitleBox>
+            <Text fontSize='18px' bold>
+              {t('Invited Friends List')}
+            </Text>
+          </TitleBox>
+        </React.Fragment>
+      )}
       <ContentBox>
         <TableBox>
           <Table>
