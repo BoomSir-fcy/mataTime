@@ -41,7 +41,7 @@ export class TaskApi extends Http {
   
   // 邀请排行榜
   async getRankingList(page: number, pageSize: number) {
-    const res = await this.get('/v1/task/invite-leaderboard', { page, pageSize });
+    const res = await this.get('/v1/activity/invite-leaderboard', { page, pageSize });
     return res;
   }
 }

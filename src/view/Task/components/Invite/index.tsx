@@ -169,14 +169,15 @@ const Invite: React.FC = () => {
   }, [NftList, userInfo, tokenAddress]);
 
   useEffect(() => {
-    if (data.length <= 0) {
-      dispatch(fetchTaskListAsync({ isSignIn: false }));
-    }
+    dispatch(fetchTaskListAsync({ isSignIn: false }));
+  }, []);
+
+  useEffect(() => {
     if (data.length) {
       const inviteList = partition(data, ['task_group', Group.INVITE])[0];
       setInviteList(inviteList);
     }
-  }, [data, dispatch]);
+  }, [data]);
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
@@ -377,13 +378,14 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
 
     const HeaderBox = useMemo(() => {
       return (
-        <Flex width='100%' justifyContent='space-between'>
+        <Flex width='100%' justifyContent='space-between' alignItems='center'>
           <StyledTag ml={source === 'TASK' ? '10px' : ''} variant={tag}>
             <Text fontSize='18px' bold>
               {t(`Task ${tag}`).toUpperCase()}
             </Text>
           </StyledTag>
           <Button
+            style={{ maxWidth: isMobile ? '150px' : '' }}
             startIcon={
               <img
                 src={require('assets/images/task/rankingIcon.png').default}
@@ -397,7 +399,7 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
           </Button>
         </Flex>
       );
-    }, [source]);
+    }, [source, isMobile]);
     return (
       <>
         {source === 'TASK' ? (

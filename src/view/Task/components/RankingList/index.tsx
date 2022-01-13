@@ -90,11 +90,12 @@ const Table = styled(Flex)`
   align-items: center;
   width: 100%;
   min-height: 300px;
+  height: 350px;
 `;
 const Row = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 10% 20% 30% 20% 20%;
+  grid-template-columns: 10% 25% 25% 20% 20%;
   align-items: center;
   min-height: 30px;
   ${({ theme }) => theme.mediaQueries.md} {
@@ -127,23 +128,8 @@ const ItemText = styled(Text)`
 
 const RankingList: React.FC = React.memo(() => {
   const { t } = useTranslation();
-  const [list, setList] = useState([]);
 
-  useEffect(() => {
-    const tempList = [];
-    for (let i = 0; i < 10; i++) {
-      tempList.push({
-        uid: i + 1,
-        ranking: i + 1,
-        nick_name: '昵称1',
-        address: '0x03F916437cDaf04be4EF21178Be73455d11098F8',
-        number: 11,
-        awards: 10000,
-      });
-    }
-    setList(tempList);
-  }, []);
-  const { pageNum, pageSize, setPageNum, loading, total } =
+  const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteRankingList();
 
   const handlePageClick = useCallback(
@@ -229,19 +215,19 @@ const RankingList: React.FC = React.memo(() => {
                 </Row>
                 {list?.length ? (
                   list.map(item => (
-                    <Row key={item.uid} className='LinkRow'>
-                      <ItemText>{renderRanking(item.ranking)}</ItemText>
+                    <Row key={item.superior_uid} className='LinkRow'>
+                      <ItemText>{renderRanking(item.rank)}</ItemText>
                       <ItemText small ellipsis>
-                        {item.nick_name}
+                        {item.superior_nickname}
                       </ItemText>
                       <ItemText small ellipsis>
-                        {shortenAddress(item.address)}
+                        {shortenAddress(item.superior)}
                       </ItemText>
                       <ItemText small ellipsis>
-                        {item.number}
+                        {item.invite_num}
                       </ItemText>
                       <ItemText small ellipsis>
-                        {item.awards}DSG
+                        {item.income}DSG
                       </ItemText>
                     </Row>
                   ))
