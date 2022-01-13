@@ -74,7 +74,7 @@ const InputStyled = styled(Input)`
 `;
 const ResultBox = styled(Box)`
   background: ${({ theme }) => theme.colors.background};
-  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: ${({ theme }) => theme.colors.shadow.dropdown};
   border-radius: 10px;
   height: 571px;
   max-height: 571px;
@@ -259,7 +259,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 type='button'
                 variant='text'
               >
-                <Icon name='icon-guanbi2fill' size={19} />
+                <Icon name='icon-guanbi2fill' size={19} color='white_black' />
               </ButtonStyledLine>
             </Flex>
           </SearchBox>

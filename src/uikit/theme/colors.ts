@@ -83,6 +83,7 @@ export const lightColors: Colors = {
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(34, 30, 28, 0.14)',
+    dropdown: '0px 0px 10px 0px rgb(0, 0, 0, 0.2)',
   },
   editorText: '#000',
   editorBoxBg: '#fff',
@@ -147,6 +148,7 @@ export const darkColors: Colors = {
   },
   shadow: {
     box: '0px 0px 5px 0px rgba(180, 200, 169, 0.3)',
+    dropdown: '0px 0px 10px 0px rgba(255, 255, 255, 0.2)',
   },
   editorText: '#FFFFFF',
   editorBoxBg: 'transparent',

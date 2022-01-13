@@ -55,7 +55,10 @@ const Single: React.FC = () => {
                 {boostData.map(item => {
                   return (
                     <Text key={item.lable} width='15%'>
-                      {t(item.lableUnit, { value: item.lable })}
+                      {t(item.lableUnit, {
+                        value: item.lable,
+                        s: Number(item.lable) > 1 ? 's' : '',
+                      })}
                     </Text>
                   );
                 })}
