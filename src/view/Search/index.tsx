@@ -16,6 +16,10 @@ import { getDecodeValue, getSearchPath } from 'utils/urlQueryPath';
 import PostResult from './PostResult';
 import useDebounce from 'hooks/useDebounce';
 
+const UserBox = styled(Box)`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+`;
+
 enum TabTypes {
   TOTAL = 'total',
   POST = 'post',
@@ -61,6 +65,7 @@ const Search = () => {
     postIsEnd,
     searchVal,
     filterUser,
+    searchPostMap,
   } = useStore(p => p.search);
 
   const [activeType, setActiveType] = useState(tabDatas[0].type);
@@ -137,7 +142,7 @@ const Search = () => {
           <Box>
             <Box>
               {activeType === TabTypes.TOTAL && Boolean(userList.length) && (
-                <>
+                <UserBox>
                   <Text padding='15px 29px 10px 19px' bold>
                     {t('People')}
                   </Text>
@@ -165,11 +170,12 @@ const Search = () => {
                       </HoverLink>
                     );
                   })}
-                </>
+                </UserBox>
               )}
               {activeType === TabTypes.TOTAL && resultListOfPost.length && (
                 <PostResult
                   list={resultListOfPost}
+                  map={searchPostMap}
                   loading={postLoading}
                   searchVal={searchVal}
                   isEnd={postIsEnd}
@@ -183,6 +189,7 @@ const Search = () => {
               {activeType === TabTypes.POST && resultListOfPost.length && (
                 <PostResult
                   list={resultListOfPost}
+                  map={searchPostMap}
                   loading={postLoading}
                   searchVal={searchVal}
                   isEnd={postIsEnd}

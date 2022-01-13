@@ -44,6 +44,9 @@ interface PostResultProps {
   loading: boolean;
   isEnd: boolean;
   searchVal: string;
+  map: {
+    [id: string]: Api.Home.post;
+  };
   // getList: (type?: number) => void;
   // updateList: (id: number, type: MoreOperatorEnum) => void;
 }
@@ -53,6 +56,7 @@ const PostResult: React.FC<PostResultProps> = ({
   loading,
   isEnd,
   searchVal,
+  map,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -69,6 +73,7 @@ const PostResult: React.FC<PostResultProps> = ({
   return (
     <Box>
       <PostList
+        map={map}
         list={list}
         loading={loading}
         isEnd={isEnd}

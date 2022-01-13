@@ -158,5 +158,13 @@ export const MentionItemUserWrapper = styled.div`
         }
       }
     }
+    &:hover {
+      .icon-shield {
+        opacity: 1;
+      }
+    }
+    .icon-shield {
+      opacity: 0;
+    }
   }
 `;
