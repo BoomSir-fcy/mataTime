@@ -378,7 +378,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
         </PostTab>
       )}
       {readType === 3 && ActiveToken === 1 ? (
-        <FriendsList />
+        <FriendsList showTitle={false} />
       ) : (
         <EarningsRecord
           readType={readType}

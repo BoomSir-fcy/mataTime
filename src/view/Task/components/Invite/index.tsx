@@ -228,12 +228,12 @@ const Invite: React.FC = () => {
             <Text mb='25px' fontSize='18px' bold>
               Invitation Overview
             </Text>
-            {/* <Button as={Link} to='/task/friendsList'>
-              {t('InvitationRecord')}
-            </Button> */}
-            <Button as={Link} to='/account?readType=3'>
+            <Button as={Link} to='/task/friendsList'>
               {t('InvitationRecord')}
             </Button>
+            {/* <Button as={Link} to='/account?readType=3'>
+              {t('InvitationRecord')}
+            </Button> */}
           </Flex>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
