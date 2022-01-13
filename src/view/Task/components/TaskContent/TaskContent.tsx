@@ -11,9 +11,12 @@ import { useTranslation } from 'contexts/Localization';
 const TaskTitle = styled(Flex)`
   justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
+  padding: 10px 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   cursor: pointer;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 10px 14px;
+  }
 `;
 const CollapseIcon = styled(Icon)<{ collapse: boolean }>`
   max-width: 18px;

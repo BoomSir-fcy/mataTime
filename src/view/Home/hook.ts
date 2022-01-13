@@ -10,7 +10,7 @@ export function useTag() {
         let lastArr = [];
         const tag = (res?.data ?? []).reduce(
           (tags, current) => {
-            current.Type === 1
+            current.type === 1
               ? (firstArr = [...firstArr, current])
               : (lastArr = [...lastArr, current]);
 

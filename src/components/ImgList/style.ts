@@ -5,6 +5,9 @@ margin-top:10px;
 width:100%;
 flex-wrap: wrap;
 overflow: hidden;
+border: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+border-radius: 10px;
+
 img{
   object-fit: cover;
   object-position: top;
@@ -12,8 +15,10 @@ img{
   display: block;
   cursor: pointer;
   max-height: 150px;
-  padding-right: 1px;
   padding-bottom: 1px;
+  &:nth-child(2n + 1) {
+    padding-right: 1px;
+  }
 }
 .imgListRightBox{
   flex:50%;
@@ -21,6 +26,7 @@ img{
   flex-direction: column;
   img{
     width:100%;
+    max-height: 150px;
   }
 }
 `
