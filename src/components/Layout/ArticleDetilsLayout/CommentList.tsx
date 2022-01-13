@@ -20,7 +20,7 @@ import { ReadType } from 'hooks/imHooks/types';
 
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { MAX_SPEND_TIME_PAGE_TATOL, DEFAULT_FIRST_COMMENT_PAGE } from 'config';
 import {
   CommentListBox,
   CommentTitle,
@@ -106,7 +106,10 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     if (!itemData.id) return;
     Api.CommentApi.getCommentList({
       pid: itemData.id,
-      prepage: MAX_SPEND_TIME_PAGE_TATOL,
+      prepage:
+        (current || page) === 1
+          ? DEFAULT_FIRST_COMMENT_PAGE
+          : MAX_SPEND_TIME_PAGE_TATOL,
       page: current || page,
       sort_add_time: sortTime,
       sort_like: sortLike,

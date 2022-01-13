@@ -22,7 +22,9 @@ const Content = styled(Card)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
+  min-height: 60px;
   margin-left: 22px;
+  width: calc(100% - 70px);
 `;
 
 const ContentBox = styled(Flex)`

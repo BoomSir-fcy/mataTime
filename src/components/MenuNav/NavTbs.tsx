@@ -13,8 +13,8 @@ const NavigationContainer = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 75px;
-  background: ${({theme}) => theme.colors.background};
-  box-shadow: ${({theme}) => theme.colors.tabsShadows};
+  background: ${({ theme }) => theme.colors.background};
+  box-shadow: ${({ theme }) => theme.colors.tabsShadows};
   border-radius: 50px 50px 0 0;
   position: fixed;
   bottom: 0;
@@ -27,7 +27,7 @@ const TabButton = styled(Button)<{ active: boolean }>`
   height: 50px;
   ${({ theme, active }) =>
     active && {
-      background: theme.colors.backgroundCard,
+      background: theme.colors.tabsCurrentBackground,
     }}
 `;
 
@@ -47,6 +47,14 @@ export const Navigation = React.memo(() => {
     return <></>;
   }
 
+  // todo 后面优化
+  const top = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <NavigationContainer>
       {tbasNavConfig.map((row, index) => (
@@ -54,7 +62,9 @@ export const Navigation = React.memo(() => {
           key={index}
           variant='text'
           active={location.pathname === row.path}
-          onClick={() => goRoute(row.path)}
+          onClick={() =>
+            location.pathname === row.path ? top() : goRoute(row.path)
+          }
         >
           <Icon name={row.icon} color={tabsColor} size={25} />
           {row.badgeName && notification && (

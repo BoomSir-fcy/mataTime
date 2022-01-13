@@ -27,6 +27,7 @@ export const REFRESH_TIME_BURN_PER_CIRCLE = 1000 * 60; // 60 秒 转完一圈
 
 export const SERVICE_TIME_LIMIT = 60 * 5; // 剩余使用时间, 小于这个时间后提示用户 单位 （s）
 export const PER_ARTICLE_FETCH_SPEND = 3; // 拉取每条文章花费TIME数
+export const DEFAULT_FIRST_COMMENT_PAGE = 2; // 评论第一次获取
 export const MAX_SPEND_TIME_PAGE_TATOL = 5; // 拉取花费TIME的接口时最大条数
 export const MAX_PER_SPEND_TIME =
   PER_ARTICLE_FETCH_SPEND * MAX_SPEND_TIME_PAGE_TATOL; // 单次最大花费

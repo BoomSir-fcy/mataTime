@@ -471,7 +471,7 @@ export const Editor = (props: Iprops) => {
           }}
         >
           <Editable
-            autoFocus={!isApp()}
+            autoFocus
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             placeholder={

@@ -93,6 +93,7 @@ export type Colors = {
   inpuShadows: string;
   tabsShadows: string;
   tabsAction: string;
+  tabsCurrentBackground: string;
   inputSecondary: string;
   inputSelect: string;
   background: string;
