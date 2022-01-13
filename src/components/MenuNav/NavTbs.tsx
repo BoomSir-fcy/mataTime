@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Icon, Badge } from 'components';
 import { Flex, Button, Image } from 'uikit';
@@ -13,8 +13,8 @@ const NavigationContainer = styled(Flex)`
   align-items: center;
   width: 100%;
   height: 75px;
-  background: #000000;
-  box-shadow: 0px -6px 8px 0px rgba(255, 255, 255, 0.15);
+  background: ${({theme}) => theme.colors.background};
+  box-shadow: ${({theme}) => theme.colors.tabsShadows};
   border-radius: 50px 50px 0 0;
   position: fixed;
   bottom: 0;
@@ -37,6 +37,7 @@ export const Navigation = React.memo(() => {
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const notification = useStore(p => p.appReducer.systemCustom.notification);
   const unReadMsg = useStore(p => p.loginReducer.unReadMsg);
+  const tabsColor = useTheme().colors.tabsAction;
 
   const goRoute = (route: string) => {
     history.push(route);
@@ -55,7 +56,7 @@ export const Navigation = React.memo(() => {
           active={location.pathname === row.path}
           onClick={() => goRoute(row.path)}
         >
-          <Icon name={row.icon} size={25} />
+          <Icon name={row.icon} color={tabsColor} size={25} />
           {row.badgeName && notification && (
             <Badge count={unReadMsg.mineTotalMsgNum} />
           )}
