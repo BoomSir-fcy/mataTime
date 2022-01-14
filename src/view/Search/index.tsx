@@ -20,6 +20,17 @@ const UserBox = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
+const FlexShowMd = styled(Flex)`
+  display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: flex;
+  }
+`;
+
+const BoxStyled = styled(Box)`
+  ${({ theme }) => theme.mediaQueriesSize.paddingxs};
+`;
+
 enum TabTypes {
   TOTAL = 'total',
   POST = 'post',
@@ -120,13 +131,14 @@ const Search = () => {
         callBack={() => {}}
         title={t('Search')}
       >
-        <Flex alignItems='center' flex='1'>
+        <FlexShowMd alignItems='center' flex='1'>
           <SearchInput ml='44px' width='100%' />
-          {/* <Box width="100%">
-          </Box> */}
-        </Flex>
+        </FlexShowMd>
       </Crumbs>
       <Box>
+        <BoxStyled className='hide-media-md' mt='16px'>
+          <SearchInput width='100%' />
+        </BoxStyled>
         <Tabs
           pl='16px'
           pb='8px'
