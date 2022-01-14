@@ -1,18 +1,21 @@
+import useThemesValue from "hooks/useThemesValue";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { ThemeProvider, DefaultTheme } from "styled-components";
-import { light, dark } from "../../theme";
+// import { light, dark } from "../../theme";
 import isTouchDevice from "../../util/isTouchDevice";
 import { StyledTooltip, Arrow } from "./StyledTooltip";
 import { TooltipOptions, TooltipRefs } from "./types";
 
-const invertTheme = (currentTheme: DefaultTheme) => {
+const invertTheme = (currentTheme: DefaultTheme, { light, dark }) => {
+  console.log(currentTheme, light, dark)
   if (currentTheme.isDark) {
     return light;
   }
   return dark;
 };
+
 
 const portalRoot = document.getElementById("portal-root");
 
@@ -183,9 +186,11 @@ const useTooltip = (content: React.ReactNode, options: TooltipOptions): TooltipR
     ],
   });
 
+  const { dark, light } = useThemesValue()
+
   const tooltip = (
     <StyledTooltip ref={setTooltipElement} style={styles.popper} {...attributes.popper}>
-      <ThemeProvider theme={invertTheme}>{content}</ThemeProvider>
+      <ThemeProvider theme={(currentTheme) => invertTheme(currentTheme, { dark, light })}>{content}</ThemeProvider>
       <Arrow ref={setArrowElement} style={styles.arrow} />
     </StyledTooltip>
   );

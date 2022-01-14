@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Token } from 'dsgswap-sdk';
 import { CurrencyModalView } from './types';
 export default function ManageTokens({ setModalView, setImportToken, }: {

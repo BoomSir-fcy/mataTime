@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { TokenList } from '@uniswap/token-lists';
 interface ImportProps {
     listURL: string;

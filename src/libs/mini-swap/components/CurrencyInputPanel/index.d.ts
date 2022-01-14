@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Currency, Pair } from 'dsgswap-sdk';
 interface CurrencyInputPanelProps {
     value: string;

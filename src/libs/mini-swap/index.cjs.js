@@ -9206,7 +9206,7 @@ var scaleVariants$1 = (_a$7 = {},
 var styleVariants$2 = (_b$3 = {},
     _b$3[variants$5.PRIMARY] = {
         background: 'linear-gradient(90deg, #353535, #080808)',
-        color: 'primary',
+        color: '#fff',
         border: '1px solid',
         borderColor: 'primary'
         // backgroundRepeat: "no-repeat",
@@ -10779,138 +10779,16 @@ var base = {
     }, {});
 }))();
 
-var baseColors = {
-    failure: "#ec4f2b",
-    primary: "#5D95E7",
-    primaryBright: "#53DEE9",
-    primaryDark: "#0098A1",
-    secondary: "#7645D9",
-    success: "#5D95E7",
-    warning: "#FFB237",
-    transparent: "transparent",
-};
-var additionalColors = {
-    binance: "#F0B90B",
-    overlay: "#626262",
-    gold: "#FFC700",
-    silver: "#B2B2B2",
-    bronze: "#E7974D",
-    orange: "#FF780B",
-};
-var nftTokenColors = {
-    triangleDinosaur: "#F3A5C4",
-    meat: "#8A260E",
-};
-var lightColors = tslib.__assign(tslib.__assign(tslib.__assign(tslib.__assign({}, baseColors), additionalColors), nftTokenColors), { smHeadText: '#56604E', smTitletext: '#759290', white_blue: '#010101', white: "white", background: "#FAF9FA", backgroundPage: "#f5fdfc", backgroundLight: "#E7EFF9", backgroundSelect: "#F5F5F5", backgroundDisabled: "#969696", backgroundPrimary: "#8EB5EF", backgroundMember: "#5D95E7", backgroundCard: "#FFFFFF", backgroundAlt: "#FFFFFF", cardBorder: "#E7E3EB", contrast: "#191326", dropdown: "#F6F6F6", dropdownDeep: "#EEEEEE", invertedContrast: "#FFFFFF", input: "#F5F5F5", inputPanel: "#E7EFF9", inpuShadows: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)", inputSecondary: "#d7caec", inputSelect: "#DBDBDB", tertiary: "#EFF4F5", text: "#283433", white_black: '#000', member_num: '#305C9C', textValue: "#7E7E7E", textPrimary: "#5D95E7", textSubtle: "#5D95E7", textDisabled: "#BDC2C4", disabled: "#E9EAEB", gradients: {
-        bubblegum: "linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)",
-        inverseBubblegum: "linear-gradient(139.73deg, #F3EFFF 0%, #E5FDFF 100%)",
-        cardHeader: "linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)",
-        blue: "linear-gradient(180deg, #A7E8F1 0%, #94E1F2 100%)",
-        violet: "linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)",
-        violetAlt: "linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)",
-        gold: "linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)",
-    } });
-var darkColors = tslib.__assign(tslib.__assign(tslib.__assign(tslib.__assign({}, baseColors), additionalColors), nftTokenColors), { smHeadText: '#B3C7E3', smTitletext: '#759290', white_blue: '#5D95E7', white: "white", secondary: "#9A6AFF", background: "#08060B", backgroundPage: "#0B1513", backgroundLight: "#334542", backgroundSelect: "#2f3836", backgroundDisabled: "#3c3742", backgroundPrimary: "#8EB5EF", backgroundMember: 'rgba(93, 149, 231, 0.498)', backgroundCard: "#191F2D", backgroundAlt: "#212827", cardBorder: "#383241", contrast: "#FFFFFF", dropdown: "#1E1D20", dropdownDeep: "#212827", invertedContrast: "#191326", input: "#292D34", inputPanel: "#21262A", inpuShadows: "inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)", inputSelect: "#292D34", inputSecondary: "#262130", primaryDark: "#0098A1", tertiary: "#353547", text: "#bad1bd", white_black: '#FFFFFF', member_num: '#FFFFFF', textValue: "#7E7E7E", textPrimary: "#5D95E7", textSubtle: "#5D95E7", textDisabled: "#666171", disabled: "#524B63", gradients: {
-        bubblegum: "linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)",
-        inverseBubblegum: "linear-gradient(139.73deg, #3D2A54 0%, #313D5C 100%)",
-        cardHeader: "linear-gradient(166.77deg, #3B4155 0%, #3A3045 100%)",
-        blue: "linear-gradient(180deg, #00707F 0%, #19778C 100%)",
-        violet: "linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)",
-        violetAlt: "linear-gradient(180deg, #434575 0%, #66578D 100%)",
-        gold: "linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)",
-    } });
-
-var light$6 = {
-    background: lightColors.backgroundAlt,
-};
-var dark$6 = {
-    background: darkColors.backgroundAlt,
+var ThemesValue = React__default["default"].createContext({ dark: null, light: null });
+var ThemesValueProvider = function (_a) {
+    var children = _a.children, light = _a.light, dark = _a.dark;
+    return jsxRuntime.jsx(ThemesValue.Provider, tslib.__assign({ value: { dark: dark, light: light } }, { children: children }), void 0);
 };
 
-var light$5 = {
-    background: lightColors.backgroundCard,
-    boxShadow: shadows.box,
-    boxShadowActive: shadows.active,
-    boxShadowSuccess: shadows.success,
-    boxShadowWarning: shadows.warning,
-    cardHeaderBackground: {
-        default: lightColors.gradients.cardHeader,
-        blue: lightColors.gradients.blue,
-        bubblegum: lightColors.gradients.bubblegum,
-        violet: lightColors.gradients.violet,
-    },
-    dropShadow: "drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))",
+var useThemesValue = function () {
+    var _a = React.useContext(ThemesValue), dark = _a.dark, light = _a.light;
+    return { dark: dark, light: light };
 };
-var dark$5 = {
-    background: darkColors.backgroundCard,
-    boxShadow: shadows.box,
-    boxShadowActive: shadows.active,
-    boxShadowSuccess: shadows.success,
-    boxShadowWarning: shadows.warning,
-    cardHeaderBackground: {
-        default: darkColors.gradients.cardHeader,
-        blue: darkColors.gradients.blue,
-        bubblegum: lightColors.gradients.bubblegum,
-        violet: darkColors.gradients.violet,
-    },
-    dropShadow: "drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))",
-};
-
-var light$4 = {
-    handleBackground: lightColors.backgroundAlt,
-    handleShadow: lightColors.textDisabled,
-};
-var dark$4 = {
-    handleBackground: darkColors.backgroundAlt,
-    handleShadow: darkColors.textDisabled,
-};
-
-var light$3 = {
-    handleBackground: lightColors.backgroundAlt,
-};
-var dark$3 = {
-    handleBackground: darkColors.backgroundAlt,
-};
-
-var light$2 = {
-    handleBackground: lightColors.backgroundAlt,
-};
-var dark$2 = {
-    handleBackground: darkColors.backgroundAlt,
-};
-
-var light$1 = {
-    background: lightColors.backgroundAlt,
-};
-var dark$1 = {
-    background: darkColors.backgroundAlt,
-};
-
-var light = {
-    background: darkColors.backgroundAlt,
-    text: darkColors.text,
-    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1)",
-};
-var dark = {
-    background: lightColors.backgroundAlt,
-    text: lightColors.text,
-    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1)",
-};
-
-var darkFilter = {
-    brightness: 'brightness(0.8)',
-    grayscale: 'grayscale(95%)',
-    blur: 'blur(32px)',
-};
-var lightFilter = {
-    brightness: 'brightness(1)',
-    grayscale: 'grayscale(95%)',
-    blur: 'blur(32px)',
-};
-
-var darkTheme = tslib.__assign(tslib.__assign({}, base), { isDark: true, filter: darkFilter, alert: dark$6, colors: darkColors, card: dark$5, toggle: dark$2, modal: dark$1, pancakeToggle: dark$4, radio: dark$3, tooltip: dark });
-
-var lightTheme = tslib.__assign(tslib.__assign({}, base), { isDark: false, filter: lightFilter, alert: light$6, colors: lightColors, card: light$5, toggle: light$2, modal: light$1, pancakeToggle: light$4, radio: light$3, tooltip: light });
 
 var isTouchDevice = function () {
     return "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
@@ -10932,11 +10810,13 @@ var StyledTooltip = styled__default["default"].div(templateObject_2$k || (templa
 }, Arrow, Arrow, Arrow, Arrow);
 var templateObject_1$C, templateObject_2$k;
 
-var invertTheme = function (currentTheme) {
+var invertTheme = function (currentTheme, _a) {
+    var light = _a.light, dark = _a.dark;
+    console.log(currentTheme, light, dark);
     if (currentTheme.isDark) {
-        return lightTheme;
+        return light;
     }
-    return darkTheme;
+    return dark;
 };
 var portalRoot = document.getElementById("portal-root");
 var useTooltip = function (content, options) {
@@ -11078,7 +10958,8 @@ var useTooltip = function (content, options) {
             { name: "preventOverflow", options: { padding: tooltipPadding } },
         ],
     }), styles = _k.styles, attributes = _k.attributes;
-    var tooltip = (jsxRuntime.jsxs(StyledTooltip, tslib.__assign({ ref: setTooltipElement, style: styles.popper }, attributes.popper, { children: [jsxRuntime.jsx(styled.ThemeProvider, tslib.__assign({ theme: invertTheme }, { children: content }), void 0), jsxRuntime.jsx(Arrow, { ref: setArrowElement, style: styles.arrow }, void 0)] }), void 0));
+    var _l = useThemesValue(), dark = _l.dark, light = _l.light;
+    var tooltip = (jsxRuntime.jsxs(StyledTooltip, tslib.__assign({ ref: setTooltipElement, style: styles.popper }, attributes.popper, { children: [jsxRuntime.jsx(styled.ThemeProvider, tslib.__assign({ theme: function (currentTheme) { return invertTheme(currentTheme, { dark: dark, light: light }); } }, { children: content }), void 0), jsxRuntime.jsx(Arrow, { ref: setArrowElement, style: styles.arrow }, void 0)] }), void 0));
     var tooltipInPortal = portalRoot ? reactDom.createPortal(tooltip, portalRoot) : null;
     return {
         targetRef: setTargetElement,
@@ -11099,7 +10980,7 @@ var ModalBody = styled__default["default"](Flex)(templateObject_3$d || (template
 var IconButtonStyled = styled__default["default"](IconButton)(templateObject_4$7 || (templateObject_4$7 = tslib.__makeTemplateObject(["\n  width: auto;\n"], ["\n  width: auto;\n"])));
 var ModalCloseButton = function (_a) {
     var onDismiss = _a.onDismiss;
-    return (jsxRuntime.jsx(IconButtonStyled, tslib.__assign({ variant: "text", onClick: onDismiss, "aria-label": "Close the dialog" }, { children: jsxRuntime.jsx(Icon$7, { color: "primary" }, void 0) }), void 0));
+    return (jsxRuntime.jsx(IconButtonStyled, tslib.__assign({ variant: "text", onClick: onDismiss, "aria-label": "Close the dialog" }, { children: jsxRuntime.jsx(Icon$7, { width: 16, color: "primary" }, void 0) }), void 0));
 };
 var ModalBackButton = function (_a) {
     var onBack = _a.onBack;
@@ -11420,6 +11301,139 @@ styled.createGlobalStyle(templateObject_1$v || (templateObject_1$v = tslib.__mak
     return theme.colors.input;
 }, mediaQueries.lg, mediaQueries.md, mediaQueries.nav, mediaQueries.sm, mediaQueries.xl, mediaQueries.xs, mediaQueries.lg, mediaQueries.md, mediaQueries.nav, mediaQueries.sm, mediaQueries.xl, mediaQueries.xs);
 var templateObject_1$v;
+
+var baseColors = {
+    failure: "#ec4f2b",
+    primary: "#5D95E7",
+    primaryBright: "#53DEE9",
+    primaryDark: "#0098A1",
+    secondary: "#7645D9",
+    success: "#5D95E7",
+    warning: "#FFB237",
+    transparent: "transparent",
+};
+var additionalColors = {
+    binance: "#F0B90B",
+    overlay: "#626262",
+    gold: "#FFC700",
+    silver: "#B2B2B2",
+    bronze: "#E7974D",
+    orange: "#FF780B",
+};
+var nftTokenColors = {
+    triangleDinosaur: "#F3A5C4",
+    meat: "#8A260E",
+};
+var lightColors = tslib.__assign(tslib.__assign(tslib.__assign(tslib.__assign({}, baseColors), additionalColors), nftTokenColors), { smHeadText: '#56604E', smTitletext: '#759290', white_blue: '#010101', white: "white", background: "#FAF9FA", backgroundPage: "#f5fdfc", backgroundLight: "#E7EFF9", backgroundSelect: "#F5F5F5", backgroundDisabled: "#969696", backgroundPrimary: "#8EB5EF", backgroundMember: "#5D95E7", backgroundCard: "#FFFFFF", backgroundAlt: "#FFFFFF", cardBorder: "#E7E3EB", contrast: "#191326", dropdown: "#F6F6F6", dropdownDeep: "#EEEEEE", invertedContrast: "#FFFFFF", input: "#F5F5F5", inputPanel: "#E7EFF9", inpuShadows: "inset 0px 1px 3px 0px rgba(16, 64, 54, 0.21)", inputSecondary: "#d7caec", inputSelect: "#DBDBDB", tertiary: "#EFF4F5", text: "#283433", white_black: '#000', member_num: '#305C9C', textValue: "#7E7E7E", textPrimary: "#5D95E7", textSubtle: "#5D95E7", textDisabled: "#BDC2C4", disabled: "#E9EAEB", gradients: {
+        bubblegum: "linear-gradient(139.73deg, #E5FDFF 0%, #F3EFFF 100%)",
+        inverseBubblegum: "linear-gradient(139.73deg, #F3EFFF 0%, #E5FDFF 100%)",
+        cardHeader: "linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)",
+        blue: "linear-gradient(180deg, #A7E8F1 0%, #94E1F2 100%)",
+        violet: "linear-gradient(180deg, #E2C9FB 0%, #CDB8FA 100%)",
+        violetAlt: "linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)",
+        gold: "linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)",
+    } });
+var darkColors = tslib.__assign(tslib.__assign(tslib.__assign(tslib.__assign({}, baseColors), additionalColors), nftTokenColors), { smHeadText: '#B3C7E3', smTitletext: '#759290', white_blue: '#5D95E7', white: "white", secondary: "#9A6AFF", background: "#08060B", backgroundPage: "#0B1513", backgroundLight: "#334542", backgroundSelect: "#2f3836", backgroundDisabled: "#3c3742", backgroundPrimary: "#8EB5EF", backgroundMember: 'rgba(93, 149, 231, 0.498)', backgroundCard: "#191F2D", backgroundAlt: "#212827", cardBorder: "#383241", contrast: "#FFFFFF", dropdown: "#1E1D20", dropdownDeep: "#212827", invertedContrast: "#191326", input: "#292D34", inputPanel: "#21262A", inpuShadows: "inset 0px 3px 2px 0px rgba(0, 0, 0, 0.35)", inputSelect: "#292D34", inputSecondary: "#262130", primaryDark: "#0098A1", tertiary: "#353547", text: "#bad1bd", white_black: '#FFFFFF', member_num: '#FFFFFF', textValue: "#7E7E7E", textPrimary: "#5D95E7", textSubtle: "#5D95E7", textDisabled: "#666171", disabled: "#524B63", gradients: {
+        bubblegum: "linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)",
+        inverseBubblegum: "linear-gradient(139.73deg, #3D2A54 0%, #313D5C 100%)",
+        cardHeader: "linear-gradient(166.77deg, #3B4155 0%, #3A3045 100%)",
+        blue: "linear-gradient(180deg, #00707F 0%, #19778C 100%)",
+        violet: "linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)",
+        violetAlt: "linear-gradient(180deg, #434575 0%, #66578D 100%)",
+        gold: "linear-gradient(180deg, #FFD800 0%, #FDAB32 100%)",
+    } });
+
+var light$6 = {
+    background: lightColors.backgroundAlt,
+};
+var dark$6 = {
+    background: darkColors.backgroundAlt,
+};
+
+var light$5 = {
+    background: lightColors.backgroundCard,
+    boxShadow: shadows.box,
+    boxShadowActive: shadows.active,
+    boxShadowSuccess: shadows.success,
+    boxShadowWarning: shadows.warning,
+    cardHeaderBackground: {
+        default: lightColors.gradients.cardHeader,
+        blue: lightColors.gradients.blue,
+        bubblegum: lightColors.gradients.bubblegum,
+        violet: lightColors.gradients.violet,
+    },
+    dropShadow: "drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))",
+};
+var dark$5 = {
+    background: darkColors.backgroundCard,
+    boxShadow: shadows.box,
+    boxShadowActive: shadows.active,
+    boxShadowSuccess: shadows.success,
+    boxShadowWarning: shadows.warning,
+    cardHeaderBackground: {
+        default: darkColors.gradients.cardHeader,
+        blue: darkColors.gradients.blue,
+        bubblegum: lightColors.gradients.bubblegum,
+        violet: darkColors.gradients.violet,
+    },
+    dropShadow: "drop-shadow(0px 1px 4px rgba(25, 19, 38, 0.15))",
+};
+
+var light$4 = {
+    handleBackground: lightColors.backgroundAlt,
+    handleShadow: lightColors.textDisabled,
+};
+var dark$4 = {
+    handleBackground: darkColors.backgroundAlt,
+    handleShadow: darkColors.textDisabled,
+};
+
+var light$3 = {
+    handleBackground: lightColors.backgroundAlt,
+};
+var dark$3 = {
+    handleBackground: darkColors.backgroundAlt,
+};
+
+var light$2 = {
+    handleBackground: lightColors.backgroundAlt,
+};
+var dark$2 = {
+    handleBackground: darkColors.backgroundAlt,
+};
+
+var light$1 = {
+    background: lightColors.backgroundAlt,
+};
+var dark$1 = {
+    background: darkColors.backgroundAlt,
+};
+
+var light = {
+    background: darkColors.backgroundAlt,
+    text: darkColors.text,
+    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1)",
+};
+var dark = {
+    background: lightColors.backgroundAlt,
+    text: lightColors.text,
+    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1)",
+};
+
+var darkFilter = {
+    brightness: 'brightness(0.8)',
+    grayscale: 'grayscale(95%)',
+    blur: 'blur(32px)',
+};
+var lightFilter = {
+    brightness: 'brightness(1)',
+    grayscale: 'grayscale(95%)',
+    blur: 'blur(32px)',
+};
+
+var darkTheme = tslib.__assign(tslib.__assign({}, base), { isDark: true, filter: darkFilter, alert: dark$6, colors: darkColors, card: dark$5, toggle: dark$2, modal: dark$1, pancakeToggle: dark$4, radio: dark$3, tooltip: dark });
+
+var lightTheme = tslib.__assign(tslib.__assign({}, base), { isDark: false, filter: lightFilter, alert: light$6, colors: lightColors, card: light$5, toggle: light$2, modal: light$1, pancakeToggle: light$4, radio: light$3, tooltip: light });
 
 // Components
 var ConnectorNames;
@@ -14696,7 +14710,10 @@ store.dispatch(updateVersion());
 
 var ThemeProviderWrapper = function (_a) {
     var isDark = _a.isDark, resetTheme = _a.resetTheme, props = tslib.__rest(_a, ["isDark", "resetTheme"]);
-    return jsxRuntime.jsx(styled.ThemeProvider, tslib.__assign({ theme: isDark ? merge__default["default"](darkTheme, resetTheme === null || resetTheme === void 0 ? void 0 : resetTheme.dark) : merge__default["default"](lightTheme, resetTheme === null || resetTheme === void 0 ? void 0 : resetTheme.light) }, props), void 0);
+    var _dark = merge__default["default"](darkTheme, resetTheme === null || resetTheme === void 0 ? void 0 : resetTheme.dark);
+    var _light = merge__default["default"](lightTheme, resetTheme === null || resetTheme === void 0 ? void 0 : resetTheme.light);
+    return jsxRuntime.jsx(ThemesValueProvider, tslib.__assign({ dark: _dark, light: _light }, { children: jsxRuntime.jsx(styled.ThemeProvider, tslib.__assign({ theme: isDark ? _dark : _light }, props), void 0) }), void 0);
+    // return <ThemeProvider theme={isDark ? merge(dark, resetTheme?.dark) : merge(light, resetTheme?.light)} {...props} />
 };
 var Providers = function (_a) {
     var isDark = _a.isDark; _a.chainId; var lang = _a.lang, children = _a.children, resetTheme = _a.resetTheme, onConnectWallet = _a.onConnectWallet, props = tslib.__rest(_a, ["isDark", "chainId", "lang", "children", "resetTheme", "onConnectWallet"]);

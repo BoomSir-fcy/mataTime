@@ -1,4 +1,3 @@
-/// <reference types="react" />
 /**
  * Formatted version of price impact text with warning colors
  */
