@@ -128,6 +128,22 @@ const MentionOperator: React.FC<IProps> = ({
     }
   };
 
+  const getCommentInfo = async id => {
+    try {
+      const detailRes = await Api.HomeApi.articleFindById({
+        id: `${id}`,
+      });
+      if (Api.isSuccess(detailRes)) {
+        return detailRes.data;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     setIsLike(itemData.is_like);
   }, [itemData.is_like]);
@@ -188,9 +204,37 @@ const MentionOperator: React.FC<IProps> = ({
         commentId={commentId}
         postId={postId}
         itemData={itemData}
-        onSuccess={() => {
+        onSuccess={async () => {
+          let callBackData = {};
+          // 评论
+          if (itemData?.comment) {
+            callback(itemData, MoreOperatorEnum.COMMONT);
+          } else if (itemData?.post) {
+            // 帖子
+            const CommentInfo = await getCommentInfo(itemData.id);
+            if (CommentInfo) {
+              callBackData = {
+                ...itemData,
+                comment_num: CommentInfo.comment_num,
+                post: {
+                  ...itemData.post,
+                  comment_num: CommentInfo.comment_num,
+                },
+              };
+              callback(callBackData, MoreOperatorEnum.COMMONT);
+            } else {
+              callBackData = {
+                ...itemData,
+                comment_num: itemData.post.comment_num + 1,
+                post: {
+                  ...itemData.post,
+                  comment_num: itemData.post.comment_num + 1,
+                },
+              };
+              callback(callBackData, MoreOperatorEnum.COMMONT);
+            }
+          }
           setReplyVisible(false);
-          callback(itemData, MoreOperatorEnum.COMMONT);
         }}
         onClose={() => {
           setReplyVisible(false);
