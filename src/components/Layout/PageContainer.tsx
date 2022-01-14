@@ -8,6 +8,7 @@ import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
 import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig';
 import Crumbs from './crumbs';
+import client from 'utils/client';
 
 interface PageSectionProps extends FlexProps {
   containerProps?: BoxProps;
@@ -67,6 +68,9 @@ const GlobalStyle = createGlobalStyle`
     .mini-swap-Modal__Body--open-sidebar{
       z-index: 20;
     }
+    .mini-swap-Modal__Body--open-mobile-swap{
+      z-index: 1001; /* 比滚到顶部高一点 */
+    }
   }
 `;
 
@@ -103,7 +107,13 @@ const PageContainer: React.FC = ({ children }) => {
             alignItems='flex-start'
             justifyContent='space-between'
           >
-            <InnerBox flex='1' flexDirection='column'>
+            <InnerBox
+              className={`${
+                client.isApp ? 'mini-swap-Modal__Body--open-mobile-swap' : ''
+              }`}
+              flex='1'
+              flexDirection='column'
+            >
               <CennerBox id='OutCenterBox' showSidebar={showSidebar}>
                 {children}
               </CennerBox>
