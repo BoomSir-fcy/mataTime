@@ -60,6 +60,8 @@ const Praise = React.memo(props => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum) => {
+    console.log(newItem, 'rrrrr');
+
     const {
       FOLLOW,
       CANCEL_FOLLOW,
@@ -81,7 +83,7 @@ const Praise = React.memo(props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT ||
+      // type === COMMONT ||
       type === BLOCKUSER
     ) {
       init(1);
