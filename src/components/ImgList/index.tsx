@@ -117,6 +117,19 @@ export const ImgList = (props: Iprops) => {
           }
         />
       )}
+      {list.length === 1 && (
+        <>
+          <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            style={{
+              paddingBottom: 0,
+            }}
+            onClick={() => preViewImg(0)}
+            src={list[0]}
+            alt=''
+          />
+        </>
+      )}
       {list.length === 2 && (
         <>
           <img
