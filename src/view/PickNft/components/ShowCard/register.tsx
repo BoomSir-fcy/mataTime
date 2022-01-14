@@ -178,7 +178,7 @@ const ShowCard: React.FC = () => {
   // 是否被锁定
   const isLockAvailable = useMemo(() => {
     return Boolean(!IsEnd) && Boolean(codeInfo.lockedAt);
-  }, [IsEnd]);
+  }, [IsEnd, codeInfo.lockedAt]);
 
   const randomPickHandle = useCallback(
     () => dispatch(randomPick()),

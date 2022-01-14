@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Percent } from 'dsgswap-sdk';
 /**
  * Formatted version of price impact text with warning colors

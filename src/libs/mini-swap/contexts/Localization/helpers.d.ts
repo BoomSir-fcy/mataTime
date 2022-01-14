@@ -79,6 +79,7 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Your volume": string;
     "Since start": string;
     Enable: string;
+    Enabled: string;
     Enabling: string;
     Expired: string;
     Calculating: string;
@@ -285,6 +286,9 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Transaction rejected.": string;
     "Enter valid list location": string;
     "Error importing list": string;
+    titleSetting: string;
+    titleHistory: string;
+    titleExchange: string;
     translationLast: string;
     translationEnd: string;
 } | {
@@ -367,6 +371,7 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Your volume": string;
     "Since start": string;
     Enable: string;
+    Enabled: string;
     Enabling: string;
     Expired: string;
     Calculating: string;
@@ -576,6 +581,10 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Enter an amount": string;
     "Transaction rejected.": string;
     "Enter valid list location": string;
+    "Error importing list": string;
+    titleSetting: string;
+    titleHistory: string;
+    titleExchange: string;
     translationLast: string;
     translationEnd: string;
 } | {
@@ -658,6 +667,7 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Your volume": string;
     "Since start": string;
     Enable: string;
+    Enabled: string;
     Enabling: string;
     Expired: string;
     Calculating: string;
@@ -868,6 +878,9 @@ export declare const fetchLocale: (locale: any) => Promise<{
     "Transaction rejected.": string;
     "Enter valid list location": string;
     "Error importing list": string;
+    titleSetting: string;
+    titleHistory: string;
+    titleExchange: string;
     translationLast: string;
     translationEnd: string;
 }>;

@@ -33,7 +33,7 @@ export const IconButtonStyled = styled(IconButton)`
 export const ModalCloseButton: React.FC<{ onDismiss: ModalProps["onDismiss"] }> = ({ onDismiss }) => {
   return (
     <IconButtonStyled variant="text" onClick={onDismiss} aria-label="Close the dialog">
-      <CloseIcon color="primary" />
+      <CloseIcon width={16} color="primary" />
     </IconButtonStyled>
   );
 };

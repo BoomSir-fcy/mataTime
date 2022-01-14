@@ -9,6 +9,7 @@ import { LanguageProvider } from 'contexts/Localization'
 import { RefreshContextProvider } from 'contexts/RefreshContext'
 import { ToastsProvider } from 'contexts/ToastsContext'
 import { ConnectWalletProvider } from 'contexts/ConnectWalletContext'
+import { ThemesValueProvider } from 'contexts/ThemesValueContext'
 import store from 'state'
 import { SupportLanguage } from 'config/localization/languages'
 
@@ -23,7 +24,13 @@ const ThemeProviderWrapper:React.FC<{
   isDark?: boolean
   resetTheme?: ThemeProps
 }> = ({ isDark, resetTheme, ...props }) => {
-  return <ThemeProvider theme={isDark ? merge(dark, resetTheme?.dark) : merge(light, resetTheme?.light)} {...props} />
+  
+  const _dark = merge(dark, resetTheme?.dark)
+  const _light = merge(light, resetTheme?.light)
+  return <ThemesValueProvider dark={_dark} light={_light}>
+    <ThemeProvider theme={isDark ? _dark : _light} {...props} />
+  </ThemesValueProvider>
+  // return <ThemeProvider theme={isDark ? merge(dark, resetTheme?.dark) : merge(light, resetTheme?.light)} {...props} />
 }
 
 export interface ProvidersPorps {
