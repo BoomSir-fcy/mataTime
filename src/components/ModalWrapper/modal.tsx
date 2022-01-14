@@ -24,7 +24,7 @@ const getCustomStyles = (
     right: 'auto',
     bottom: 'auto',
     transform: 'translate(-50%, -50%)',
-    minWidth: '240px',
+    minWidth: '320px',
     // height: '238px',
     background: theme.colors.greyBackground,
     borderRadius: theme.radii.card,
@@ -111,6 +111,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         style={customStyles}
         ariaHideApp={false}
         contentLabel='Example Modal'
+        onAfterOpen={() => (document.body.style.padding = '0')}
       >
         {!customizeTitle && (
           <ModalHeaderStyled

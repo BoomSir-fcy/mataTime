@@ -4,7 +4,7 @@ export interface TooltipRefs {
   targetRef: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   tooltip: React.ReactNode;
   tooltipVisible: boolean;
-  close: (event: Event) => void;
+  close: (event?: Event) => void;
 }
 
 export interface TooltipOptions {

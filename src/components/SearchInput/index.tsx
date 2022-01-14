@@ -40,6 +40,7 @@ import { UserFlowItem } from '../Profile/UserFlowItem';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { SearchHistiryType } from 'store/search/types';
 import SearchFilter from './SearchFilter';
+import SearchPostLen from './SearchPostLen';
 
 const SearchBox = styled(Card)<{ focus?: boolean; result?: boolean }>`
   position: relative;
@@ -104,8 +105,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const [toFocus, setToFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const { resultListOfPeoples, resultListOfTopic, loading, historyList } =
-    useStore(p => p.search);
+  const {
+    resultListOfPeoples,
+    resultListOfTopic,
+    loading,
+    historyList,
+    searchVal,
+    resultListOfPostLen,
+  } = useStore(p => p.search);
   const { uid } = useStore(p => p.loginReducer.userInfo);
   const resultLength = useSearchResultLength();
   const { push, replace } = useHistory();
@@ -129,13 +136,13 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
               search: e,
             }),
           ),
-        300,
+        500,
       ),
-    [dispatch, value],
+    [dispatch],
   );
 
   useEffect(() => {
-    const search = `${value}`.trim();
+    const search = value ? `${value}`.trim() : value;
     if (search) {
       debouncedOnChange(search);
     }
@@ -225,7 +232,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
             <Flex height='100%' alignItems='center'>
               <ButtonStyled focus padding='0' variant='text'>
                 {loading ? (
-                  <CircleLoader />
+                  <CircleLoader color='white_black' />
                 ) : (
                   <Icon name='icon-sousuo' size={16} color='white_black'></Icon>
                 )}

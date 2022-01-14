@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Token } from 'dsgswap-sdk';
 import { TokenList } from '@uniswap/token-lists';
 import { CurrencyModalView } from './types';

@@ -49,10 +49,10 @@ const useTooltip = (
   const hideTimeout = useRef<number>();
 
   const hideTooltip = useCallback(
-    (e: Event) => {
+    (e?: Event) => {
       const hide = () => {
-        e.stopPropagation();
-        e.preventDefault();
+        e?.stopPropagation();
+        e?.preventDefault();
         setVisible(false);
       };
 
@@ -99,6 +99,7 @@ const useTooltip = (
   const toggleTooltip = useCallback(
     (e: Event) => {
       e.stopPropagation();
+      e.preventDefault();
       setVisible(!visible);
     },
     [visible],

@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Trade } from 'dsgswap-sdk';
 import { PolyData } from 'state/types';
 export interface AdvancedSwapDetailsProps {
