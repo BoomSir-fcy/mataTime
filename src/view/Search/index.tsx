@@ -93,12 +93,12 @@ const Search = () => {
         'searchVal',
       );
       dispatch(fetchThunk.fetchSearchPostAsync(true));
-      replace(
-        getSearchPath({
-          ...parsedQs,
-          q: searchVal,
-        }),
-      );
+      // replace(
+      //   getSearchPath({
+      //     ...parsedQs,
+      //     q: searchVal,
+      //   }),
+      // );
     }
   }, [searchVal, replace, dispatch, parsedQs.q, resultListOfPost.length]);
 
@@ -140,53 +140,72 @@ const Search = () => {
           <Spinner />
         ) : (
           <Box>
+            {activeType === TabTypes.TOTAL && (
+              <Box>
+                {Boolean(userList.length) && (
+                  <UserBox>
+                    <Text padding='15px 29px 10px 19px' bold>
+                      {t('People')}
+                    </Text>
+                    {userList.slice(0, 3).map(item => {
+                      return (
+                        <HoverLink to={`${BASE_USER_PROFILE_URL}${item.uid}`}>
+                          <UserFlowItem
+                            padding='10px 29px 10px 19px'
+                            uid={item.uid}
+                            key={`u_${item.uid}`}
+                            address={item.address}
+                            is_attention={item.is_attention}
+                            nft_image={item.nft_image}
+                            introduction={item.introduction}
+                            nick_name={item.nick_name}
+                            onChanges={is_attention => {
+                              dispatch(
+                                storeAction.updatePeopleState({
+                                  uid: item.uid,
+                                  is_attention,
+                                }),
+                              );
+                            }}
+                          />
+                        </HoverLink>
+                      );
+                    })}
+                  </UserBox>
+                )}
+                {resultListOfPost.length ? (
+                  <PostResult
+                    list={resultListOfPost}
+                    map={searchPostMap}
+                    loading={postLoading}
+                    searchVal={searchVal}
+                    isEnd={postIsEnd}
+                  />
+                ) : (
+                  <></>
+                )}
+                {resultListOfPost.length === 0 && userList.length === 0 && (
+                  <Empty />
+                )}
+              </Box>
+            )}
             <Box>
-              {activeType === TabTypes.TOTAL && Boolean(userList.length) && (
-                <UserBox>
-                  <Text padding='15px 29px 10px 19px' bold>
-                    {t('People')}
-                  </Text>
-                  {userList.slice(0, 3).map(item => {
-                    return (
-                      <HoverLink to={`${BASE_USER_PROFILE_URL}${item.uid}`}>
-                        <UserFlowItem
-                          padding='10px 29px 10px 19px'
-                          uid={item.uid}
-                          key={`u_${item.uid}`}
-                          address={item.address}
-                          is_attention={item.is_attention}
-                          nft_image={item.nft_image}
-                          introduction={item.introduction}
-                          nick_name={item.nick_name}
-                          onChanges={is_attention => {
-                            dispatch(
-                              storeAction.updatePeopleState({
-                                uid: item.uid,
-                                is_attention,
-                              }),
-                            );
-                          }}
-                        />
-                      </HoverLink>
-                    );
-                  })}
-                </UserBox>
+              {activeType === TabTypes.POST && (
+                <>
+                  {resultListOfPost.length ? (
+                    <PostResult
+                      list={resultListOfPost}
+                      map={searchPostMap}
+                      loading={postLoading}
+                      searchVal={searchVal}
+                      isEnd={postIsEnd}
+                    />
+                  ) : (
+                    <Empty />
+                  )}
+                </>
               )}
-              {activeType === TabTypes.TOTAL && resultListOfPost.length && (
-                <PostResult
-                  list={resultListOfPost}
-                  map={searchPostMap}
-                  loading={postLoading}
-                  searchVal={searchVal}
-                  isEnd={postIsEnd}
-                />
-              )}
-              {activeType === TabTypes.TOTAL &&
-                resultListOfPost.length === 0 &&
-                userList.length === 0 && <Empty />}
-            </Box>
-            <Box>
-              {activeType === TabTypes.POST && resultListOfPost.length && (
+              {/* {activeType === TabTypes.POST && resultListOfPost.length && (
                 <PostResult
                   list={resultListOfPost}
                   map={searchPostMap}
@@ -196,7 +215,7 @@ const Search = () => {
                 />
               )}
               {activeType === TabTypes.POST &&
-                resultListOfPost.length === 0 && <Empty />}
+                resultListOfPost.length === 0 && <Empty />} */}
             </Box>
             <Box>
               {activeType === TabTypes.USER &&
