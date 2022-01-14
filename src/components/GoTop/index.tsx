@@ -66,10 +66,8 @@ const Gotop = () => {
     // scrollTop = Top;
 
     if (Top < topValue || Top === 0) {
-      console.log(topValue - Top, '向上');
       setIsShow(false);
     } else {
-      console.log(topValue - Top, '向下');
       setIsShow(true);
     }
     setTimeout(() => {
