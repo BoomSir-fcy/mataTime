@@ -19,7 +19,7 @@ type IProp = {
   itemData: any;
   replyType: string;
   commentId?: string;
-  postId?: string;
+  postId?: any;
   onSuccess?: () => void;
   onClose: () => void;
 };
@@ -44,7 +44,7 @@ export const ReplyModal = React.memo((props: IProp) => {
     if (replyType === 'comment') {
       // 针对评论
       Api.CommentApi.createComment({
-        pid: postId,
+        pid: Number(postId),
         comment_id: commentId,
         comment: res,
         remind_user,
@@ -60,7 +60,7 @@ export const ReplyModal = React.memo((props: IProp) => {
     if (replyType === 'twitter') {
       // 针对推文
       Api.CommentApi.createComment({
-        pid: postId,
+        pid: Number(postId),
         comment: res,
         remind_user,
       }).then(res => {

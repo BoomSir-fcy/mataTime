@@ -32,15 +32,27 @@ export interface SearchHistoryList extends Partial<SearchUserInfo>, Partial<Sear
   type: SearchHistiryType,
 }
 
+
 export interface SearchState {
   resultListOfPeoples: SearchUserInfo[],
   displayResultListOfPeoples: SearchUserInfo[],
   resultListOfTopic: SearchTopicInfo[],
   displayResultListOfTopic: SearchTopicInfo[],
+  resultListOfPost: Api.Home.post[],
+  resultListOfPostLen: number,
+  displayResultListOfPost: Api.Home.post[],
   loading: boolean,
   dispalyLoading: boolean,
+  postLoading: boolean,
+  postIsEnd: boolean,
+  seart_index: number,
+  searchPostaddListNum: number,
   errorMsg: string,
+  searchVal: string,
   historyList: SearchHistoryList[],
   placeHolderSearch: string,
   filterUser: number // 1 所有人 2 仅关注
+  searchPostMap: {
+    [id: string]: Api.Home.post
+  }
 }
