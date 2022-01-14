@@ -22,6 +22,8 @@ const Content = styled(Card)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
+  min-height: 60px;
+  width: calc(100% - 70px);
   margin-left: 10px;
   ${({ theme }) => theme.mediaQueries.md} {
     margin-left: 22px;

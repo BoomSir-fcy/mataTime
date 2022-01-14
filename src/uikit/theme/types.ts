@@ -91,6 +91,9 @@ export type Colors = {
   invertedContrast: string;
   input: string;
   inpuShadows: string;
+  tabsShadows: string;
+  tabsAction: string;
+  tabsCurrentBackground: string;
   inputSecondary: string;
   inputSelect: string;
   background: string;
