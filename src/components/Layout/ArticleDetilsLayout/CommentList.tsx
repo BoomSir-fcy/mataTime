@@ -106,10 +106,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     if (!itemData.id) return;
     Api.CommentApi.getCommentList({
       pid: itemData.id,
-      prepage:
-        (current || page) === 1
-          ? DEFAULT_FIRST_COMMENT_PAGE
-          : MAX_SPEND_TIME_PAGE_TATOL,
+      prepage: MAX_SPEND_TIME_PAGE_TATOL,
       page: current || page,
       sort_add_time: sortTime,
       sort_like: sortLike,
