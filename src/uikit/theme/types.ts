@@ -126,6 +126,7 @@ export type Colors = {
   // box shadow
   shadow: {
     box: string;
+    dropdown: string;
   };
 
   // Additional colors

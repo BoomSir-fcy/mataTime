@@ -34,9 +34,9 @@ const Column = styled(Flex)`
   width: max-content;
   position: relative;
   cursor: pointer;
-  &:not(:last-child) {
+  /* &:not(:last-child) {
     ${({ theme }) => theme.mediaQueriesSize.marginr}
-  }
+  } */
 `;
 const NftAvatarBox = styled(Flex)`
   width: 211px;
@@ -66,8 +66,8 @@ const ActiveImg = styled(Avatar)`
 `;
 const AvatarBox = styled.div`
   position: relative;
-  width: 102px;
-  height: 104px;
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
   .icon {
     position: absolute;

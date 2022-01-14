@@ -40,6 +40,7 @@ import { UserFlowItem } from '../Profile/UserFlowItem';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { SearchHistiryType } from 'store/search/types';
 import SearchFilter from './SearchFilter';
+import SearchPostLen from './SearchPostLen';
 
 const SearchBox = styled(Card)<{ focus?: boolean; result?: boolean }>`
   position: relative;
@@ -74,7 +75,7 @@ const InputStyled = styled(Input)`
 `;
 const ResultBox = styled(Box)`
   background: ${({ theme }) => theme.colors.background};
-  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: ${({ theme }) => theme.colors.shadow.dropdown};
   border-radius: 10px;
   height: 571px;
   max-height: 571px;
@@ -104,8 +105,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const [toFocus, setToFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const { resultListOfPeoples, resultListOfTopic, loading, historyList } =
-    useStore(p => p.search);
+  const {
+    resultListOfPeoples,
+    resultListOfTopic,
+    loading,
+    historyList,
+    searchVal,
+    resultListOfPostLen,
+  } = useStore(p => p.search);
   const { uid } = useStore(p => p.loginReducer.userInfo);
   const resultLength = useSearchResultLength();
   const { push, replace } = useHistory();
@@ -129,13 +136,13 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
               search: e,
             }),
           ),
-        300,
+        500,
       ),
-    [dispatch, value],
+    [dispatch],
   );
 
   useEffect(() => {
-    const search = `${value}`.trim();
+    const search = value ? `${value}`.trim() : value;
     if (search) {
       debouncedOnChange(search);
     }
@@ -259,7 +266,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
                 type='button'
                 variant='text'
               >
-                <Icon name='icon-guanbi2fill' size={19} />
+                <Icon name='icon-guanbi2fill' size={19} color='white_black' />
               </ButtonStyledLine>
             </Flex>
           </SearchBox>

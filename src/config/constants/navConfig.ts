@@ -295,11 +295,7 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath(
-    ['/task/invite', '/task/invites', '/task/friendsList'],
-    menuNavConfig,
-    'hideRight',
-  );
+  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList', '/task/rankingList'], menuNavConfig, 'hideRight');
 })();
 
 export default menuNavConfig;

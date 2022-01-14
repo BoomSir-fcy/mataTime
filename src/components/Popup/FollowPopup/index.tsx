@@ -41,7 +41,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
   const onAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.onAttentionFocus(uid);
     if (Api.isSuccess(res)) {
-      toast.success(res.data);
+      toast.success(t('commonMsgFollowSuccess') || res.data);
       getUserInfo();
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
     } else {
@@ -53,7 +53,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
   const cancelAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.cancelAttentionFocus(uid);
     if (Api.isSuccess(res)) {
-      toast.success(res.data);
+      toast.success(t('commonMsgUnFollowSuccess') || res.data);
       getUserInfo();
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
     } else {
