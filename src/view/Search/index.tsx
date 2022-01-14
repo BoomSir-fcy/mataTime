@@ -66,6 +66,7 @@ const Search = () => {
     searchVal,
     filterUser,
     searchPostMap,
+    historyList,
   } = useStore(p => p.search);
 
   const [activeType, setActiveType] = useState(tabDatas[0].type);
@@ -82,25 +83,32 @@ const Search = () => {
     return displayResultListOfPeoples;
   }, [filterUser, displayResultListOfPeoples]);
 
+  useEffect(() => {
+    // console.log(historyList, 'historyList');
+    if (historyList[0]?.text) {
+      dispatch(fetchThunk.fetchSearchPostAsync(true));
+    }
+  }, [historyList[0], dispatch]);
+
   // const search = useDebounce(searchVal, 300)
 
-  useEffect(() => {
-    if (getDecodeValue(parsedQs.q) !== searchVal || !resultListOfPost.length) {
-      console.log(
-        searchVal,
-        getDecodeValue(parsedQs.q),
-        resultListOfPost.length,
-        'searchVal',
-      );
-      dispatch(fetchThunk.fetchSearchPostAsync(true));
-      // replace(
-      //   getSearchPath({
-      //     ...parsedQs,
-      //     q: searchVal,
-      //   }),
-      // );
-    }
-  }, [searchVal, replace, dispatch, parsedQs.q, resultListOfPost.length]);
+  // useEffect(() => {
+  //   if (getDecodeValue(parsedQs.q) !== searchVal || !resultListOfPost.length) {
+  //     console.log(
+  //       searchVal,
+  //       getDecodeValue(parsedQs.q),
+  //       resultListOfPost.length,
+  //       'searchVal',
+  //     );
+  //     dispatch(fetchThunk.fetchSearchPostAsync(true));
+  //     // replace(
+  //     //   getSearchPath({
+  //     //     ...parsedQs,
+  //     //     q: searchVal,
+  //     //   }),
+  //     // );
+  //   }
+  // }, [searchVal, replace, dispatch, parsedQs.q, resultListOfPost.length]);
 
   return (
     <Box>

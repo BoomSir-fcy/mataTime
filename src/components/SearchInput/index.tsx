@@ -232,7 +232,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
             <Flex height='100%' alignItems='center'>
               <ButtonStyled focus padding='0' variant='text'>
                 {loading ? (
-                  <CircleLoader />
+                  <CircleLoader color='white_black' />
                 ) : (
                   <Icon name='icon-sousuo' size={16} color='white_black'></Icon>
                 )}

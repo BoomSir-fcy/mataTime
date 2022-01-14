@@ -72,7 +72,15 @@ export const UserFlowItem: React.FC<UserFlowItemProps> = ({
           </Flex>
           {!hideIntro && (
             <Box className='show-media-sm'>
-              <Text fontSize='14px' color='textTips' ellipsis maxLine={2}>
+              <Text
+                fontSize='14px'
+                color='textTips'
+                ellipsis
+                maxLine={2}
+                style={{
+                  wordBreak: 'break-word',
+                }}
+              >
                 {introduction}
               </Text>
             </Box>
