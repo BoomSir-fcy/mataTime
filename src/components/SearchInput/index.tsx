@@ -220,7 +220,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
         }}
         onSubmit={event => {
           event.preventDefault();
-          handleSubmit(`${value}`.trim());
+          if (!value) return;
+          handleSubmit(value.trim());
           if (inputRef.current) {
             inputRef.current.blur();
           }
