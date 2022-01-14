@@ -1,4 +1,3 @@
-/// <reference types="react" />
 export interface SlippageTabsProps {
     rawSlippage: number;
     setRawSlippage: (rawSlippage: number) => void;

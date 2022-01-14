@@ -35,7 +35,7 @@ export const scaleVariants = {
 export const styleVariants = {
   [variants.PRIMARY]: {
     background: 'linear-gradient(90deg, #353535, #080808)',
-    color: 'primary',
+    color: '#fff',
     border: '1px solid',
     borderColor: 'primary'
     // backgroundRepeat: "no-repeat",

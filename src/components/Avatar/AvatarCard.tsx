@@ -27,9 +27,7 @@ export const AvatarCard: React.FC<AvatarCardProps> = ({
     <Flex style={{ flex: 1, minWidth: 0 }}>
       <Avatar disableFollow uid={uid} src={avatar} scale={scale} />
       <Box ml='8px' style={{ minWidth: 0 }}>
-        <Text color={'#FFF'} ellipsis>
-          {userName}
-        </Text>
+        <Text ellipsis>{userName}</Text>
         <Text color='textTips' className='time'>
           <span>@{shortenAddress(address)}</span>
           {time}

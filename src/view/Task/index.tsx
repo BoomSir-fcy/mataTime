@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import { useLocation } from 'react-router-dom';
-import { TaskPage, TaskInvite, FriendsList } from './components';
+import { TaskPage, TaskInvite, FriendsList, RankingList } from './components';
 
 const BgBox = styled(Box)`
   height: auto;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const Task: React.FC = () => {
@@ -18,6 +18,7 @@ const Task: React.FC = () => {
       {pathname === '/task/invite' && <TaskInvite />}
       {pathname === '/task/invites' && <TaskInvite />}
       {pathname === '/task/friendsList' && <FriendsList />}
+      {pathname === '/task/rankingList' && <RankingList />}
     </BgBox>
   );
 };

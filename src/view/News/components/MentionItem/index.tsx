@@ -208,8 +208,9 @@ export const MentionItemUser: React.FC<UserProps> = ({
             <Popup
               ref={popupRef}
               trigger={
-                <PopupButton title={t('popupMore')}>
-                  <img src={moreIcon} alt='more' />
+                <PopupButton>
+                  {/* <img src={moreIcon} alt='more' /> */}
+                  <Icon name='icon-gengduo' size={20} color='white_black' />
                 </PopupButton>
               }
               nested

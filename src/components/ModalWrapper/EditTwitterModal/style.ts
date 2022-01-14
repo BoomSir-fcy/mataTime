@@ -20,7 +20,7 @@ export const ModalTitleWrapper = styled(Box)`
     font-size: 18px;
     font-family: Alibaba PuHuiTi;
     font-weight: bold;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
   }
   .close {
     width: 20px;
@@ -50,7 +50,7 @@ export const ReportContentWrapper = styled(Box)`
     font-size: 16px;
     font-family: Alibaba PuHuiTi;
     font-weight: 400;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     line-height: 54px;
     box-sizing: border-box;
     padding: 0 12px;

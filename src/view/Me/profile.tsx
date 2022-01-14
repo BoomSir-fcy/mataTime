@@ -11,6 +11,7 @@ import {
   Icon,
   FollowButton,
   CancelAttentionModal,
+  SendPost,
 } from 'components';
 import { debounce } from 'lodash';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
@@ -100,7 +101,7 @@ const Content = styled(Box)`
   .text {
     font-size: 18px;
     & a {
-      color: #7393ff;
+      color: ${({ theme }) => theme.colors.textPrimary};
     }
   }
   .number {
@@ -290,7 +291,7 @@ const Profile: React.FC<any> = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT ||
+      // type === COMMONT ||
       type === BLOCKUSER
     ) {
       setIsEnd(false);
@@ -365,7 +366,7 @@ const Profile: React.FC<any> = props => {
 
   return (
     <Center>
-      <Crumbs title={t('meHome')} />
+      <Crumbs title={t('meHome')} back={Number(uid) !== currentUid.uid} />
       <ProfileCard isBoxShadow>
         <HeadTop
           style={{
@@ -386,7 +387,11 @@ const Profile: React.FC<any> = props => {
                 <CenterImg
                   width='250px'
                   height='250px'
-                  src={require('view/Login/images/LOGO2.svg').default}
+                  src={
+                    require(isDark
+                      ? 'assets/images/logo.svg'
+                      : 'assets/images/light_logo.svg').default
+                  }
                 />
               </CommonCircle>
             </ComponentsWrapper>
@@ -564,6 +569,7 @@ const Profile: React.FC<any> = props => {
           })
         }
       />
+      <SendPost />
     </Center>
   );
 };

@@ -13,7 +13,7 @@ const AnswerRuleList = styled(Box)`
   margin-top: 28px;
   margin-bottom: 16px;
   padding: 16px 20px;
-  border: 1px solid #fff;
+  border: 1px solid ${({ theme }) => theme.colors.white_black};
   border-radius: 10px;
   width: 100%;
   max-width: 580px;
@@ -55,7 +55,10 @@ const Single: React.FC = () => {
                 {boostData.map(item => {
                   return (
                     <Text key={item.lable} width='15%'>
-                      {t(item.lableUnit, { value: item.lable })}
+                      {t(item.lableUnit, {
+                        value: item.lable,
+                        s: Number(item.lable) > 1 ? 's' : '',
+                      })}
                     </Text>
                   );
                 })}

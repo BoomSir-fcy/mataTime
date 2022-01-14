@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Flex, Box, Text, Image, Button, Heading, CloseLineIcon } from 'uikit';
 import styled from 'styled-components';
+import history from 'routerHistory';
 import { useWeb3React } from '@web3-react/core';
-import { ConnectWalletButton, ModalWrapper } from 'components';
+import { ConnectWalletButton, ModalWrapper, Icon } from 'components';
 import RechargeOrWithdrawPop from './Pops/RechargeOrWithdrawPop';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
@@ -15,26 +16,27 @@ import duration from 'dayjs/plugin/duration';
 import { useEstimatedServiceTime } from 'store/wallet/hooks';
 import useMenuNav from 'hooks/useMenuNav';
 import HistoryModal from './Pops/HistoryModal';
-import { Icon } from 'components';
 
 const Content = styled(Flex)`
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
   min-width: 300px;
-  background: url('${({ theme }) => (theme.isDark ? walletBg : walletBg_w)}')
-    no-repeat;
-  background-position: right 30px bottom 14px;
-  background-size: 80px;
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 const TopInfo = styled(Flex)`
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  margin-bottom: 16px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    margin-bottom: 0;
+    align-items: end;
+    flex-direction: column;
+  }
+  height: 100%;
 `;
 const IconToken = styled(Image)`
-  ${({ theme }) => theme.mediaQueriesSize.marginr}
+  margin-right: 30px;
   min-width: 43px;
 `;
 const LeftBox = styled(Flex)`
@@ -54,6 +56,12 @@ const Fount = styled(Text)`
 `;
 const WithdrawBtn = styled(Button)`
   min-width: 80px;
+  margin-right: 4px;
+  margin-top: 20px;
+  width: max-content;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-right: 20px;
+  }
   &:disabled {
     background: ${({ theme }) => theme.colors.backgroundDisabled};
   }
@@ -61,10 +69,9 @@ const WithdrawBtn = styled(Button)`
 const ChangeTokenBtn = styled(Flex)`
   cursor: pointer;
 `;
-const ChangeToken = styled.img`
-  width: 21px;
-  display: inline-block;
-  margin-right: 12px;
+
+const LogoBox = styled(Flex)`
+  ${({ theme }) => theme.mediaQueriesSize.marginr}
 `;
 
 interface Wallet {
@@ -118,122 +125,100 @@ const WalletBox: React.FC<Wallet> = ({
   }, [Token]);
   return (
     <Content {...props}>
-      <TopInfo mb='4px'>
-        <Flex alignItems='center'>
-          <IconToken
-            src={`/images/tokens/${Token}.svg`}
-            width={43}
-            height={43}
-            alt=''
-          />
-          <Text fontSize='26px'>{Token}</Text>
-        </Flex>
-        <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
-          {/* <ChangeToken
-            src={require('assets/images/myWallet/changeToken.png').default}
-            alt=''
-          /> */}
-          <Icon
-            size={size}
-            color='textPrimary'
-            current={1}
-            name='icon-qiehuan'
-          />
-          <NumText ml='12px' fontSize='14px' color='textPrimary'>
-            {t('Account %token% Wallet', {
-              token: Token === 'TIME' ? 'MATTER' : 'TIME',
-            })}
-          </NumText>
-        </ChangeTokenBtn>
-      </TopInfo>
-      <Flex
-        mb={isMobile ? '20px' : ''}
-        alignItems='flex-end'
-        justifyContent='space-between'
-      >
-        <LeftBox>
-          <Flex alignItems='baseline'>
-            <Fount mr='16px'>{t('Account balance')}</Fount>
-            <NumText>
-              {formatDisplayApr(Number(BalanceInfo.available_balance))}
+      {isMobile && (
+        <TopInfo>
+          <LogoCom Token={Token} />
+          <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
+            <Icon
+              size={size}
+              color='textPrimary'
+              current={1}
+              name='icon-qiehuan'
+            />
+            <NumText ml='12px' fontSize='14px' color='textPrimary'>
+              {t('Account %token% Wallet', {
+                token: Token === 'TIME' ? 'MATTER' : 'TIME',
+              })}
             </NumText>
-          </Flex>
-          <Flex alignItems='baseline'>
-            <Fount mr='16px'>{t('Account Frozen amount')}</Fount>
-            <NumText>
-              {formatDisplayApr(Number(BalanceInfo.freeze_balance))}
-            </NumText>
-          </Flex>
-          {Token === 'TIME' ? (
-            <>
-              <Flex alignItems='baseline'>
-                <Fount mr='16px'>{t('Account Estimated use of')}</Fount>
-                <NumText>
-                  {leftTime > 0
-                    ? t('More than %time% hours', { time: ReleaseTime })
-                    : 0}
-                </NumText>
-              </Flex>
-            </>
-          ) : (
-            <Fount>
-              {t(
-                'Account Over %num% can be withdrawn to the wallet on the chain',
-                { num: TokenWithDrawMinNum },
-              )}
-            </Fount>
-          )}
-        </LeftBox>
-        {!isMobile && (
-          <Box>
-            {account ? (
-              <WithdrawBtn
-                disabled={
-                  Token === 'MATTER' &&
-                  Number(BalanceInfo.available_balance) <
-                    Number(TokenWithDrawMinNum)
-                }
-                onClick={() => openModaal(2)}
-              >
-                {t('Accountwithdraw')}
-              </WithdrawBtn>
+          </ChangeTokenBtn>
+        </TopInfo>
+      )}
+      <Flex alignItems='flex-start' justifyContent='space-between'>
+        <Flex>
+          {!isMobile && <LogoCom Token={Token} />}
+          <LeftBox>
+            <Flex alignItems='baseline'>
+              <Fount mr='16px'>{t('Account balance')}</Fount>
+              <NumText>
+                {formatDisplayApr(Number(BalanceInfo.available_balance))}
+              </NumText>
+            </Flex>
+            <Flex alignItems='baseline'>
+              <Fount mr='16px'>{t('Account Frozen amount')}</Fount>
+              <NumText>
+                {formatDisplayApr(Number(BalanceInfo.freeze_balance))}
+              </NumText>
+            </Flex>
+            {Token === 'TIME' ? (
+              <>
+                <Flex alignItems='baseline'>
+                  <Fount mr='16px'>{t('Account Estimated use of')}</Fount>
+                  <NumText>
+                    {leftTime > 0
+                      ? t('More than %time% hours', { time: ReleaseTime })
+                      : 0}
+                  </NumText>
+                </Flex>
+              </>
             ) : (
-              <ConnectWalletButton />
+              <Fount>
+                {t(
+                  'Account Over %num% can be withdrawn to the wallet on the chain',
+                  { num: TokenWithDrawMinNum },
+                )}
+              </Fount>
             )}
-          </Box>
+          </LeftBox>
+        </Flex>
+        {!isMobile && (
+          <TopInfo>
+            <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
+              <Icon
+                size={size}
+                color='textPrimary'
+                current={1}
+                name='icon-qiehuan'
+              />
+              <NumText ml='12px' fontSize='14px' color='textPrimary'>
+                {t('Account %token% Wallet', {
+                  token: Token === 'TIME' ? 'MATTER' : 'TIME',
+                })}
+              </NumText>
+            </ChangeTokenBtn>
+
+            <BtnCom
+              t={t}
+              account={account}
+              openModaal={openModaal}
+              Token={Token}
+              BalanceInfo={BalanceInfo}
+              TokenWithDrawMinNum={TokenWithDrawMinNum}
+              setVisibleHistory={setVisibleHistory}
+            />
+          </TopInfo>
         )}
       </Flex>
       {isMobile && (
-        <Flex alignItems='center' justifyContent='space-between'>
-          <Text
-            style={{ cursor: 'pointer' }}
-            color='textPrimary'
-            onClick={() => setVisibleHistory(true)}
-          >
-            {t('Account history record')}
-          </Text>
-          {account ? (
-            <Box>
-              <WithdrawBtn mr='20px' onClick={() => openModaal(1)}>
-                {t('AccountRecharge')}
-              </WithdrawBtn>
-              <WithdrawBtn
-                disabled={
-                  Token === 'MATTER' &&
-                  Number(BalanceInfo.available_balance) <
-                    Number(TokenWithDrawMinNum)
-                }
-                onClick={() => openModaal(2)}
-              >
-                {t('Accountwithdraw')}
-              </WithdrawBtn>
-            </Box>
-          ) : (
-            <ConnectWalletButton />
-          )}
-        </Flex>
+        <BtnCom
+          t={t}
+          account={account}
+          openModaal={openModaal}
+          Token={Token}
+          BalanceInfo={BalanceInfo}
+          TokenWithDrawMinNum={TokenWithDrawMinNum}
+          setVisibleHistory={setVisibleHistory}
+        />
       )}
-
       {/* 输入框弹窗 */}
       <ModalWrapper
         title={ModalTitle}
@@ -263,6 +248,72 @@ const WalletBox: React.FC<Wallet> = ({
         <HistoryModal token={Token} type={1} />
       </ModalWrapper>
     </Content>
+  );
+};
+
+const LogoCom = ({ Token }) => {
+  return (
+    <LogoBox alignItems='flex-start'>
+      <IconToken
+        src={`/images/tokens/${Token}.svg`}
+        width={43}
+        height={43}
+        alt=''
+      />
+      <Text fontSize='26px'>{Token}</Text>
+    </LogoBox>
+  );
+};
+const BtnCom = ({
+  account,
+  openModaal,
+  t,
+  Token,
+  BalanceInfo,
+  TokenWithDrawMinNum,
+  setVisibleHistory,
+}) => {
+  return (
+    <Flex alignItems='center'>
+      {account ? (
+        <>
+          {Token === 'TIME' && (
+            <WithdrawBtn
+              variant='success'
+              onClick={() => {
+                history.push('/swap');
+              }}
+            >
+              {t('Buy')} TIME
+            </WithdrawBtn>
+          )}
+          <WithdrawBtn variant='primaryGreen' onClick={() => openModaal(1)}>
+            {t('AccountRecharge')}
+          </WithdrawBtn>
+          <WithdrawBtn
+            disabled={
+              Token === 'MATTER' &&
+              Number(BalanceInfo.available_balance) <
+                Number(TokenWithDrawMinNum)
+            }
+            onClick={() => openModaal(2)}
+          >
+            {t('Accountwithdraw')}
+          </WithdrawBtn>
+          <Box mt='20px' width='max-content'>
+            <Icon
+              size={21}
+              color='textPrimary'
+              current={1}
+              onClick={() => setVisibleHistory(true)}
+              name='icon-lishi'
+            />
+          </Box>
+        </>
+      ) : (
+        <ConnectWalletButton />
+      )}
+    </Flex>
   );
 };
 

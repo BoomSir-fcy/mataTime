@@ -303,13 +303,13 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
           TokenWithDrawMinNum={TokenWithDrawMinNum}
           TokenWithDrawFee={TokenWithDrawFee}
         />
-        {!isMobile && (
+        {/* {!isMobile && (
           <Recharge
             Token={activeToken}
             balance={walletBalance}
             TokenAddr={tokenAddress}
           />
-        )}
+        )} */}
       </Flex>
       {/* token切换 */}
       <ContentTab>
@@ -378,7 +378,7 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
         </PostTab>
       )}
       {readType === 3 && ActiveToken === 1 ? (
-        <FriendsList />
+        <FriendsList showTitle={false} />
       ) : (
         <EarningsRecord
           readType={readType}

@@ -8,6 +8,7 @@ import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
 import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig';
 import Crumbs from './crumbs';
+import client from 'utils/client';
 
 interface PageSectionProps extends FlexProps {
   containerProps?: BoxProps;
@@ -15,9 +16,15 @@ interface PageSectionProps extends FlexProps {
 }
 
 const PageContainerStyled = styled(Box)`
+  padding-bottom: 70px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-bottom: 0;
+  }
   /* FIXME: 解决失败, 用另外的方法 */
   /* padding-left: calc(100vw - 100%); // 解决页面滚动条抖动问题 */
   /* transform: translate(0, 0, 0); */
+  background: ${({ theme }) =>
+    theme.isDark ? 'transparent' : theme.colors.background};
 `;
 
 const ChildrenWrapper = styled(Box)`
@@ -44,7 +51,7 @@ const InnerBox = styled(Flex)`
   top: 0;
   z-index: 2;
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.primaryDark};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const CennerBox = styled(Box)<{ showSidebar?: boolean }>`
@@ -60,6 +67,9 @@ const GlobalStyle = createGlobalStyle`
   .mini-swap-Modal__Body--open {
     .mini-swap-Modal__Body--open-sidebar{
       z-index: 20;
+    }
+    .mini-swap-Modal__Body--open-mobile-swap{
+      z-index: 1001; /* 比滚到顶部高一点 */
     }
   }
 `;
@@ -97,7 +107,13 @@ const PageContainer: React.FC = ({ children }) => {
             alignItems='flex-start'
             justifyContent='space-between'
           >
-            <InnerBox flex='1' flexDirection='column'>
+            <InnerBox
+              className={`${
+                client.isApp ? 'mini-swap-Modal__Body--open-mobile-swap' : ''
+              }`}
+              flex='1'
+              flexDirection='column'
+            >
               <CennerBox id='OutCenterBox' showSidebar={showSidebar}>
                 {children}
               </CennerBox>

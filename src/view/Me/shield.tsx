@@ -22,9 +22,18 @@ const Content = styled(Card)`
 const Column = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  height: 60px;
-  float: left;
-  margin-left: 22px;
+  min-height: 60px;
+  width: calc(100% - 70px);
+  margin-left: 10px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-left: 22px;
+  }
+  .address {
+    margin-left: 0;
+    ${({ theme }) => theme.mediaQueries.md} {
+      margin-left: 12px;
+    }
+  }
 `;
 
 const ContentBox = styled(Flex)`
@@ -164,7 +173,7 @@ const Shield = React.memo(() => {
                     <NameText ellipsis color='white_black' mr='13px'>
                       {item.nick_name}
                     </NameText>
-                    <Text color='textTips'>
+                    <Text className='address' color='textTips'>
                       @{shortenAddress(item.address)}
                     </Text>
                   </NameFlex>

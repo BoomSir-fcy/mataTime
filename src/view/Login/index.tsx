@@ -60,15 +60,15 @@ const Content = styled(Card)`
   align-items: baseline;
   border-radius: 0;
   border-left: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-  background-color: ${({ theme }) => theme.colors.primaryDark};
+  background-color: ${({ theme }) => theme.colors.background};
   ${({ theme }) => theme.mediaQueries.md} {
     align-items: flex-end;
     width: 37vw;
   }
 `;
 const LogoWarpper = styled(Box)`
-  max-width: 337px;
-  height: 60px;
+  width: 337px;
+  /* height: 60px; */
   ${mediaQueriesSize.marginbmd}
 `;
 const Container = styled(Box)`
@@ -233,6 +233,7 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
 
   // 获取邀请地址和邀请code码
   const getInviteAddress = () => {
+    // 获取邀请地址
     const search = route.location.search;
     const myQuery = search => {
       return new URLSearchParams(search);
@@ -258,7 +259,11 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
       setInviteCode(route.location.search);
     }
   };
-
+  useEffect(() => {
+    if (!isDark) {
+      document.getElementById('particles').style.background = '#000';
+    }
+  }, [isDark]);
   useEffect(() => {
     getInviteAddress();
     return () => {
@@ -315,8 +320,8 @@ const Login: React.FC<RouteComponentProps> = React.memo(route => {
                   url='/'
                   src={`${
                     require(isDark
-                      ? './images/LOGO2.svg'
-                      : './images/light_logo.svg').default
+                      ? 'assets/images/logo.svg'
+                      : 'assets/images/light_logo.svg').default
                   }`}
                 />
               </LogoWarpper>

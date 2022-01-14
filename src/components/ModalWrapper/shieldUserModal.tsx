@@ -33,8 +33,8 @@ const ButtonAction = styled(Button)`
 export const ShiledUserModal: React.FC<{
   userinfo: Api.Home.post;
   visible: boolean;
-  callback: (data: Api.Home.post, type?: string) => void;
-  onClose: () => void;
+  callback: (data: Api.Home.post, type?: MoreOperatorEnum) => void;
+  onClose: (e?) => void;
 }> = React.memo(({ userinfo, visible, callback, onClose }) => {
   const { t, getHTML } = useTranslation();
   const { theme } = useTheme();
@@ -74,7 +74,16 @@ export const ShiledUserModal: React.FC<{
         <ButtonAction variant='secondary' onClick={onClose}>
           {t('modalCancel')}
         </ButtonAction>
-        <ButtonAction onClick={debounce(() => shield(), 1000)}>
+        {/* <ButtonAction onClick={debounce(() => shield(), 1000)}>
+          {t('modalQuery')}
+        </ButtonAction> */}
+        <ButtonAction
+          onClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            shield();
+          }}
+        >
           {t('modalQuery')}
         </ButtonAction>
       </Footer>

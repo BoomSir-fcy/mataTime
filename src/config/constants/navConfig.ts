@@ -1,4 +1,4 @@
-import { MenuNavConfig } from './types';
+import { MenuNavConfig, TbasMenuConfig } from './types';
 
 export const pathConfig = {
   messageAtMePath: '/notification/me',
@@ -145,6 +145,14 @@ export const menuNavConfig: MenuNavConfig[] = [
         path: '/account/reward',
         lable: 'AccountMenu Reward',
       },
+      {
+        icon: 'icon-w59',
+        activeIcon: 'icon-w59',
+        lable: 'AccountMenu Time',
+        hideRight: true,
+        hide: true,
+        path: '/swap',
+      },
     ],
   },
   {
@@ -247,7 +255,23 @@ export const menuNavConfig: MenuNavConfig[] = [
     hideLeft: true,
     hideRight: true,
     lable: 'createNft',
-  }
+  },
+];
+
+export const tbasNavConfig: TbasMenuConfig[] = [
+  {
+    icon: 'icon-shouye',
+    path: '/',
+  },
+  {
+    icon: 'icon-tixing',
+    path: pathConfig.messageAtMePath,
+    badgeName: true,
+  },
+  {
+    icon: 'icon-qianbao2',
+    path: '/account',
+  },
 ];
 
 const getHidePath = (
@@ -271,7 +295,7 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList'], menuNavConfig, 'hideRight');
+  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList', '/task/rankingList'], menuNavConfig, 'hideRight');
 })();
 
 export default menuNavConfig;

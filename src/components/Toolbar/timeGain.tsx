@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import BigNumber from 'bignumber.js';
-import { Flex, Box, Text, Image } from 'uikit';
+import { Flex, Box, Text, Image, useTooltip } from 'uikit';
 import { PopupWrap, Icon } from 'components';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
@@ -29,34 +29,64 @@ export const TimeGain: React.FC<{
   const theme = useTheme();
   const Popref = React.useRef(null);
   const { t } = useTranslation();
-
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    <PopupContent>
+      <Text color='textTips' style={{ flex: 1, minWidth: 80 }}>
+        Time {t('Time Rewards')}
+      </Text>
+      <Text fontWeight='bold' ellipsis>
+        {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
+      </Text>
+    </PopupContent>,
+    {
+      placement: 'top-start',
+      trigger: 'click',
+      stylePadding: '0',
+      // hideArrow: true,
+      invert: false,
+      tooltipPadding: 0,
+      tooltipOffset: [0, 5],
+      background: theme.colors.greyBackground,
+    },
+  );
   return (
-    <PopupWrap
-      ref={Popref}
-      trigger={
-        <PopupButton title={t('editorTime')}>
-          <Box width='18px' mr='10px'>
-            <TimeIcon width={18} height={18} src='/images/tokens/TIME.svg' />
-          </Box>
-          <Text color='textTips'>
-            {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
-          </Text>
-        </PopupButton>
-      }
-      position='top center'
-      arrowStyle={{
-        color: theme.colors.tertiary,
-        stroke: theme.colors.tertiary,
-      }}
-    >
-      <PopupContent>
-        <Text color='textTips' style={{ flex: 1, minWidth: 80 }}>
-          Time {t('Time Rewards')}
-        </Text>
-        <Text fontWeight='bold' ellipsis>
+    <Box>
+      <PopupButton ref={targetRef} title={t('editorTime')}>
+        <Box width='18px' mr='10px'>
+          <TimeIcon width={18} height={18} src='/images/tokens/TIME.svg' />
+        </Box>
+        <Text color='textTips'>
           {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
         </Text>
-      </PopupContent>
-    </PopupWrap>
+      </PopupButton>
+      {tooltipVisible && tooltip}
+    </Box>
+    // <PopupWrap
+    //   ref={Popref}
+    //   trigger={
+    //     <PopupButton title={t('editorTime')}>
+    //       <Box width='18px' mr='10px'>
+    //         <TimeIcon width={18} height={18} src='/images/tokens/TIME.svg' />
+    //       </Box>
+    //       <Text color='textTips'>
+    //         {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
+    //       </Text>
+    //     </PopupButton>
+    //   }
+    //   position='top center'
+    //   arrowStyle={{
+    //     color: theme.colors.tertiary,
+    //     stroke: theme.colors.tertiary,
+    //   }}
+    // >
+    //   <PopupContent>
+    //     <Text color='textTips' style={{ flex: 1, minWidth: 80 }}>
+    //       Time {t('Time Rewards')}
+    //     </Text>
+    //     <Text fontWeight='bold' ellipsis>
+    //       {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
+    //     </Text>
+    //   </PopupContent>
+    // </PopupWrap>
   );
 });

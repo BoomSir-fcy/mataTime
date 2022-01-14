@@ -11,6 +11,7 @@ import { SetApi } from './Set';
 import { AttentionApi } from './Attention';
 import { AccountApi } from './Account';
 import { TaskApi } from './Task';
+import { SearchApi } from './Search';
 
 const isSuccess = (res: Api.Error) => {
   return res && res.code === 1;
@@ -30,5 +31,6 @@ export const Api = {
   SetApi: new SetApi(),
   AttentionApi: new AttentionApi(),
   AccountApi: new AccountApi(),
+  SearchApi: new SearchApi(),
   TaskApi: new TaskApi()
 };

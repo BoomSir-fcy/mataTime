@@ -26,7 +26,7 @@ const PopupWrapper = styled(Box)`
   div {
     font-size: 14px;
     font-weight: 400;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.text};
     line-height: 36px;
     cursor: pointer;
   }

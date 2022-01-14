@@ -12,6 +12,7 @@ import { usePlatformTimeBalance } from 'store/wallet/hooks';
 import { useTranslation } from 'contexts/Localization';
 import { ProfileMenu } from './ProfileMenu';
 import Shalou from './Shalou';
+import useTheme from 'hooks/useTheme';
 
 export interface NavFooterProps {
   // seconds?: number
@@ -49,6 +50,7 @@ const PERCENT_MAX = 100;
 
 const NavFooter: React.FC<NavFooterProps> = ({}) => {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
 
   const [percent, setPercent] = useState(0);
   const [temp, setTemp] = useState(0);
@@ -78,7 +80,7 @@ const NavFooter: React.FC<NavFooterProps> = ({}) => {
               percent={percent}
               strokeWidth={strokeWidth}
               trailWidth={2}
-              strokeColor='#ffffff'
+              strokeColor={isDark ? '#FFF' : '#000'}
             />
             <DownTimeBox>
               <Shalou />

@@ -6,30 +6,30 @@ import { useDispatch } from 'react-redux';
 import { Flex, Text, Box, Button } from 'uikit';
 import { useSinglePoolState } from 'store/pools/hooks';
 import { fetchSpVaultUserAsync } from 'store/pools/thunks';
-import { ModalWrapper } from 'components'
+import { Icon, ModalWrapper } from 'components';
 import { useStakePool, useWithdrawPool } from '../../hooks/pools';
-import StakeModal from '../PoolModal/StakeModal'
-import UnStakeModal from '../PoolModal/UnStakeModal'
+import StakeModal from '../PoolModal/StakeModal';
+import UnStakeModal from '../PoolModal/UnStakeModal';
 import PoolStakeInfo, { PoolDispalynUserData } from './PoolStakeInfo';
 
 const ButtonStyled = styled(Button)`
   padding: 0 8px;
-`
+`;
 
 interface PoolActionStakeProps {
-  isApproved: boolean
-  depositToken: address
-  rewardToken0: address
-  rewardToken1: address
-  depositSymbol: string
-  rewardToken0Symbol: string
-  rewardToken1Symbol: string
-  poolAddress: string
-  rewardToken0Decimals: number
-  rewardToken1Decimals: number
-  depositDecimals: number
-  pid: string
-  dispalynUserData?: PoolDispalynUserData
+  isApproved: boolean;
+  depositToken: address;
+  rewardToken0: address;
+  rewardToken1: address;
+  depositSymbol: string;
+  rewardToken0Symbol: string;
+  rewardToken1Symbol: string;
+  poolAddress: string;
+  rewardToken0Decimals: number;
+  rewardToken1Decimals: number;
+  depositDecimals: number;
+  pid: string;
+  dispalynUserData?: PoolDispalynUserData;
 }
 
 const PoolActionStake: React.FC<PoolActionStakeProps> = ({
@@ -47,22 +47,20 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
   pid,
   dispalynUserData,
 }) => {
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+  const { userStakesMap } = useSinglePoolState();
+  const { t } = useTranslation();
 
-  const dispatch = useDispatch()
-  const { account } = useWeb3React()
-  const { userStakesMap } = useSinglePoolState()
-  const { t } = useTranslation()
+  const [visible, setVisible] = useState(false);
+  const [visibleView, setVisibleView] = useState(false);
 
-  const [visible, setVisible] = useState(false)
-  const [visibleView, setVisibleView] = useState(false)
-
-  const { onStake } = useStakePool(pid)
-  const { onWithdraw } = useWithdrawPool()
+  const { onStake } = useStakePool(pid);
+  const { onWithdraw } = useWithdrawPool();
 
   const updateUserData = useCallback(() => {
-    dispatch(fetchSpVaultUserAsync(account))
-
-  }, [dispatch, account])
+    dispatch(fetchSpVaultUserAsync(account));
+  }, [dispatch, account]);
 
   return (
     <Box>
@@ -75,49 +73,86 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
         rewardToken1Symbol={rewardToken1Symbol}
         {...dispalynUserData}
       >
-        {
-          isApproved && (userStakesMap[pid] ? (
+        {isApproved &&
+          (userStakesMap[pid] ? (
             <Flex>
-              <Button
+              {/* <Button
                 padding={0}
                 width={23}
                 height={23}
                 style={{
-                  borderRadius: "0"
+                  borderRadius: '0',
                 }}
                 onClick={() => setVisible(true)}
               >
-                <Text style={{ transform: "translateY(-3%)" }} fontSize='22px' bold lineHeight={1} padding={0} >+</Text>
-              </Button>
+                <Text style={{ transform: "translateY(-3%)" }} fontSize='22px' bold lineHeight={1} padding={0} color='white'>+</Text>
+                
+              </Button> */}
+              <Icon
+                name='icon-jia'
+                size={23}
+                color='ThemeText'
+                onClick={() => setVisible(true)}
+              />
               {/* <Button onClick={() => setVisible(true)}>{t('Increase')}</Button> */}
               {/* <Button onClick={() => setVisibleView(true)} ml="12px">{t('View')}</Button> */}
             </Flex>
-          )
-            :
-            <Button padding={0} width={23} height={23} style={{
-              borderRadius: "0"
-            }} onClick={() => setVisible(true)}>
-              <Text style={{ transform: "translateY(-3%)" }} fontSize='22px' bold lineHeight={1} padding={0} >+</Text>
-            </Button>)
-        }
+          ) : (
+            <Icon
+              name='icon-jia'
+              size={23}
+              color='ThemeText'
+              onClick={() => setVisible(true)}
+            />
+            // <Button
+            //   padding={0}
+            //   width={23}
+            //   height={23}
+            //   style={{
+            //     borderRadius: '0',
+            //   }}
+            //   onClick={() => setVisible(true)}
+            // >
+            //   <Text
+            //     style={{ transform: 'translateY(-3%)' }}
+            //     fontSize='22px'
+            //     bold
+            //     lineHeight={1}
+            //     padding={0}
+            //   >
+            //     +
+            //   </Text>
+            // </Button>
+          ))}
       </PoolStakeInfo>
-      <ModalWrapper title={t('Stake')} creactOnUse visible={visible} setVisible={setVisible}>
+      <ModalWrapper
+        title={t('Stake')}
+        creactOnUse
+        visible={visible}
+        setVisible={setVisible}
+      >
         <StakeModal
           max={dispalynUserData.tokenBalance}
           decimals={depositDecimals}
           depositSymbol={depositSymbol}
-          onConfirm={async (amount) => {
-            await onStake(amount)
-            updateUserData()
+          onConfirm={async amount => {
+            await onStake(amount);
+            updateUserData();
           }}
           onDismiss={() => setVisible(false)}
         />
       </ModalWrapper>
-      <ModalWrapper fillBody title={t('View')} creactOnUse visible={visibleView} setVisible={setVisibleView}>
+      <ModalWrapper
+        fillBody
+        title={t('View')}
+        creactOnUse
+        visible={visibleView}
+        setVisible={setVisibleView}
+      >
         <UnStakeModal
-          onConfirm={async (pid) => {
-            await onWithdraw(pid)
-            updateUserData()
+          onConfirm={async pid => {
+            await onWithdraw(pid);
+            updateUserData();
           }}
           onDismiss={() => setVisibleView(false)}
           depositToken={depositToken}
@@ -133,11 +168,11 @@ const PoolActionStake: React.FC<PoolActionStakeProps> = ({
         />
       </ModalWrapper>
     </Box>
-  )
+  );
   // max: BigNumber
   // decimals?: number
   // onConfirm?: (amount: string) => void
   // onDismiss?: () => void
-}
+};
 
 export default PoolActionStake;

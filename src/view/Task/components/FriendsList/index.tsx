@@ -14,11 +14,21 @@ export const ContentBox = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 
+export const TitleBox = styled(Flex)`
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+`;
+
+const TableBox = styled(Box)`
+  width: 100%;
+  overflow: auto;
+`;
 const Table = styled(Flex)`
   flex-direction: column;
   align-items: center;
   width: 100%;
   min-height: 300px;
+  min-width: 600px;
   .LinkRow {
     /* cursor: pointer; */
   }
@@ -59,7 +69,11 @@ const SpecialTag = styled(Text)`
   border: 1px solid ${({ theme }) => theme.colors.backgroundPrimary};
   border-radius: 8px;
 `;
-const FriendsList: React.FC = React.memo(() => {
+
+interface init {
+  showTitle?: boolean;
+}
+const FriendsList: React.FC<init> = React.memo(({ showTitle = true }) => {
   const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteFriendsList();
   const { t } = useTranslation();
@@ -83,15 +97,18 @@ const FriendsList: React.FC = React.memo(() => {
   const totalPage = useMemo(() => getTotalPage(total), [total]);
   return (
     <>
-      {/* <Crumbs back />
+      {showTitle && (
+        <React.Fragment>
+          <Crumbs back />
+          <TitleBox>
+            <Text fontSize='18px' bold>
+              {t('Invited Friends List')}
+            </Text>
+          </TitleBox>
+        </React.Fragment>
+      )}
       <ContentBox>
-        <Text fontSize='18px' bold>
-          {t('Invited Friends List')}
-        </Text>
-      </ContentBox> */}
-
-      <ContentBox>
-        <Flex width='100%' flexDirection='column' justifyContent='end'>
+        <TableBox>
           <Table>
             <Row>
               <HeadText>{t('Nickname')}</HeadText>
@@ -135,7 +152,7 @@ const FriendsList: React.FC = React.memo(() => {
             )}
           </Table>
 
-          <PaginateStyle alignItems='center' justifyContent='end'>
+          <PaginateStyle alignItems='center' justifyContent='flex-end'>
             <Text mr='16px' fontSize='14px' color='textTips'>
               {t('Account Total %page% page', { page: totalPage })}
             </Text>
@@ -152,7 +169,7 @@ const FriendsList: React.FC = React.memo(() => {
               renderOnZeroPageCount={null}
             />
           </PaginateStyle>
-        </Flex>
+        </TableBox>
       </ContentBox>
     </>
   );

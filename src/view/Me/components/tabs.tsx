@@ -34,7 +34,7 @@ const TabItems = styled(Flex)`
       display: block;
       width: 100%;
       height: 3px;
-      background: #4168ed;
+      background: ${({ theme }) => theme.colors.backgroundPrimary};
     }
   }
 `;
@@ -44,14 +44,14 @@ export const Tabs = React.memo(() => {
   const menu = [
     {
       title: t('homeTabAll'),
-      value: '0'
-    }
+      value: '0',
+    },
   ];
 
   return (
     <TabsBox isBoxShadow>
       {menu.map((row, index: number) => (
-        <TabItems key={index} className="active">
+        <TabItems key={index} className='active'>
           {row.title}
         </TabItems>
       ))}

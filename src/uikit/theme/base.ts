@@ -188,11 +188,11 @@ const mediaQueriesPadding = `
   }
 
   ${mediaQueries.lg} {
-    padding: 20px 25px;
+    padding: 16px 14px;
   }
 
   ${mediaQueries.xl} {
-    padding: 16px 14px;
+    padding: 20px 25px;
   }
 `;
 
@@ -206,6 +206,9 @@ const mediaPaddingSM = `
 `;
 
 const mediaPaddingXs = `
+  ${mediaQueries.xxs} {
+    padding: 0 8px;
+  }
   ${mediaQueries.xs} {
     padding: 0 10px;
   }

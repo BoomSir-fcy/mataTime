@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
+import useTheme from 'hooks/useTheme';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { Text, Flex, Box, TextProps } from 'uikit';
 import { chartData } from './data';
@@ -18,8 +19,7 @@ const BoxContener = styled(Box)`
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = (props: any) => {
-  const { cx, cy, midAngle, outerRadius, value, percent, name, white_black } =
-    props;
+  const { cx, cy, midAngle, outerRadius, value, percent, name, color } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius - 20) * cos;
@@ -36,7 +36,7 @@ const renderCustomizedLabel = (props: any) => {
     <g>
       <path
         d={`M${sx + dx},${sy + dy}L${mx},${my}L${ex},${ey}`}
-        stroke='#fff'
+        stroke={color}
         fill='none'
       />
       <circle
@@ -51,7 +51,7 @@ const renderCustomizedLabel = (props: any) => {
         x={ex + (cos >= 0 ? 1 : -1) * -180}
         y={ey - 12}
         textAnchor={textAnchor}
-        fill='#fff'
+        fill={color}
       >{`${name} ${(percent * 100).toFixed(2)}%)`}</text>
       {/* <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
@@ -66,7 +66,11 @@ const renderCustomizedLabel = (props: any) => {
   );
 };
 export default function AnswerChart() {
-  const { white_black } = useTheme().colors;
+  const {
+    theme: {
+      colors: { text },
+    },
+  } = useTheme();
   const { t } = useTranslation();
 
   // const chartLanuangeData = (chartData ?? []).map(row => {
@@ -100,7 +104,7 @@ export default function AnswerChart() {
           >
             {chartData.map((entry, index) => (
               // eslint-disable-next-line
-              <Cell key={`cell-${index}`} fill={entry.color} />
+              <Cell color={text} key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
           <Tooltip />

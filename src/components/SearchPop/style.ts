@@ -48,7 +48,7 @@ export const SearchPopBox = styled(Flex)`
         width: 4px;
       }
       &::-webkit-scrollbar-thumb {
-        background: #4168ed;
+        background: ${({ theme }) => theme.colors.backgroundPrimary};
         border-radius: 2px;
       }
       &-item {

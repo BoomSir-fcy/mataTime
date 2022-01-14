@@ -17,7 +17,7 @@ export const ModalOperatorQueryWrapper = styled(Button)`
 export const ModalOperatorCancerWrapper = styled(Button)`
   width: 100px;
   height: 35px;
-  background: #4168ED;
+  background: ${({ theme }) => theme.colors.backgroundPrimary};
   border-radius: 10px;
 `
 
@@ -46,7 +46,7 @@ export const ShieldContentWrapper = styled(Box)`
     color: ${({ theme }) => theme.colors.white_black};
     margin-left: 28px;
     a{
-      color: #4168ED;
+      color: ${({ theme }) => theme.colors.ThemeText};
     }
   }
 `

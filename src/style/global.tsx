@@ -1,5 +1,5 @@
 import { CONNECT_WALLET_BODY_CLASS_NAME } from 'config';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, keyframes } from 'styled-components';
 import { PancakeTheme } from 'uikit';
 import { mediaQueries } from 'uikit/theme/base';
 
@@ -8,6 +8,20 @@ declare module 'styled-components' {
     main: string;
   }
 }
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`;
 
 const GlobalStyle = createGlobalStyle`
   /* prettier-ignore */
@@ -139,6 +153,17 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
+    /* 背景canvas */
+    .particles {
+      background-color: ${({ theme }) => theme.colors.primaryDark};
+      animation: ${fadeIn};
+      animation-duration: 0.5s;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   @font-face {
     font-family: "iconfont"; /* Project id 2883938 */
     src: url('/font/iconfont.woff2?t=1641352466279') format('woff2'),

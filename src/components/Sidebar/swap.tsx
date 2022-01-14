@@ -19,10 +19,12 @@ import {
 import { Address } from 'config/constants/types';
 import { useCoinsList } from 'store/coins/hooks';
 
-const SwapBox = styled.div`
+const SwapBox = styled(Box)<{ width?: string }>`
   /* margin-top:15px; */
-  width: 300px;
   /* height: 436px; */
+  min-width: 300px;
+  max-width: 436px;
+  width: ${({ width }) => width || '300px'};
 `;
 
 const defaultStyle = {
@@ -41,7 +43,10 @@ const transitionStyles = {
   exited: { boxShadow: outShadow },
 };
 
-const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
+const Swap: React.FC<{ onlySwap?: boolean; width?: string }> = ({
+  onlySwap,
+  width,
+}) => {
   const { chainId } = useWeb3React();
   const { t, currentLanguage } = useTranslation();
 
@@ -89,13 +94,14 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
   }, [coins]);
 
   return (
-    <SwapBox>
+    <SwapBox width={width}>
       {!onlySwap && (
         <Transition in={inPropCoin} timeout={500}>
           {state => (
             <CoinMarketCap
               mb='14px'
               style={{
+                width,
                 ...defaultStyle,
                 ...transitionStyles[state],
               }}
@@ -168,11 +174,15 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
                     dropdown: light.colors.input,
                     failure: light.colors.failure,
                     text: light.colors.white_black,
-                    backgroundDisabled: light.colors.tertiary,
-                    primary: light.colors.textPrimary,
-                    textSubtle: light.colors.white_black,
-                    backgroundAlt: light.colors.backgroundAlt,
-                    invertedContrast: light.colors.invertedContrast,
+                    backgroundDisabled: light.colors.input,
+                    primary: light.colors.text,
+                    success: light.colors.success,
+                    textSubtle: light.colors.textTips,
+                    backgroundAlt: light.colors.backgroundCard,
+                    background: light.colors.background,
+                    input: light.colors.input,
+                    dropdownDeep: light.colors.backgroundCard,
+                    invertedContrast: light.colors.backgroundCard,
                   },
                   shadows: {
                     inset: 'none',
@@ -184,6 +194,11 @@ const Swap: React.FC<{ onlySwap?: boolean }> = ({ onlySwap }) => {
                   },
                   zIndices: {
                     modal: 9999,
+                  },
+                  tooltip: {
+                    background: dark.colors.background,
+                    text: dark.colors.white_black,
+                    boxShadow: 'none',
                   },
                 },
               }}

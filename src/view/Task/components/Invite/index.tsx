@@ -30,8 +30,11 @@ import { Link } from 'react-router-dom';
 import { useStore } from 'store';
 
 export const ContentBox = styled(Flex)`
-  padding: 10px 14px;
+  padding: 10px 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 10px 14px;
+  }
 `;
 const CardBox = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -166,14 +169,15 @@ const Invite: React.FC = () => {
   }, [NftList, userInfo, tokenAddress]);
 
   useEffect(() => {
-    if (data.length <= 0) {
-      dispatch(fetchTaskListAsync({ isSignIn: false }));
-    }
+    dispatch(fetchTaskListAsync({ isSignIn: false }));
+  }, []);
+
+  useEffect(() => {
     if (data.length) {
       const inviteList = partition(data, ['task_group', Group.INVITE])[0];
       setInviteList(inviteList);
     }
-  }, [data, dispatch]);
+  }, [data]);
 
   // 复制链接
   const Url = `${window.location.origin}/login`;
@@ -183,7 +187,7 @@ const Invite: React.FC = () => {
 
   return (
     <>
-      <InviteHeader tag={tag} />
+      <InviteHeader tag={tag} isMobile={isMobile} />
       <Box>
         <Box>
           <ContentBox justifyContent='space-between'>
@@ -223,14 +227,14 @@ const Invite: React.FC = () => {
         <ContentBox flexDirection='column'>
           <Flex justifyContent='space-between'>
             <Text mb='25px' fontSize='18px' bold>
-              Invitation Overview
+              {t('Invitation Overview')}
             </Text>
-            {/* <Button as={Link} to='/task/friendsList'>
-              {t('InvitationRecord')}
-            </Button> */}
-            <Button as={Link} to='/account?readType=3'>
+            <Button as={Link} to='/task/friendsList'>
               {t('InvitationRecord')}
             </Button>
+            {/* <Button as={Link} to='/account?readType=3'>
+              {t('InvitationRecord')}
+            </Button> */}
           </Flex>
           <Flex flexWrap='wrap' justifyContent='space-between'>
             <CardBox className='left-card'>
@@ -303,7 +307,7 @@ const Invite: React.FC = () => {
                 </Flex>
               </Box>
               <Box className='bottom-card'>
-                <Flex justifyContent='space-between' alignItems='end'>
+                <Flex justifyContent='space-between' alignItems='flex-end'>
                   <Flex flexDirection='column'>
                     <Text color='textPrimary' fontSize='20px' bold>
                       {`${inviteInfo.proportion}%`}
@@ -367,36 +371,59 @@ const Invite: React.FC = () => {
   );
 };
 
-const InviteHeader: React.FC<{ tag: Variant }> = React.memo(({ tag }) => {
-  const source = window.location.search?.split('=')[1];
-  const { t } = useTranslation();
+const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
+  ({ tag, isMobile }) => {
+    const source = window.location.search?.split('=')[1];
+    const { t } = useTranslation();
 
-  return (
-    <>
-      {source === 'TASK' ? (
-        <Crumbs back justifyContent='start'>
-          <Flex width='max-content'>
-            <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
-                {/* {tag.toUpperCase()} */}
-                {t(`Task ${tag}`).toUpperCase()}
-              </Text>
-            </StyledTag>
-          </Flex>
-        </Crumbs>
-      ) : (
-        <>
-          <Header />
-          <ContentBox>
-            <StyledTag ml='20px' variant={tag}>
-              <Text fontSize='18px' bold>
-                {t(`Task ${tag}`).toUpperCase()}
-              </Text>
-            </StyledTag>
-          </ContentBox>
-        </>
-      )}
-    </>
-  );
-});
+    const HeaderBox = useMemo(() => {
+      return (
+        <Flex width='100%' justifyContent='space-between' alignItems='center'>
+          <StyledTag
+            ml={source === 'TASK' && !isMobile ? '10px' : ''}
+            variant={tag}
+          >
+            <Text color='primaryBright' fontSize='18px' bold>
+              {t(`Task ${tag}`).toUpperCase()}
+            </Text>
+          </StyledTag>
+          <Button
+            style={{ maxWidth: isMobile ? '150px' : '' }}
+            startIcon={
+              <img
+                src={require('assets/images/task/rankingIcon.png').default}
+                alt=''
+              />
+            }
+            as={Link}
+            to={'/task/rankingList'}
+          >
+            {t('Invitation Leaderboard')}
+          </Button>
+        </Flex>
+      );
+    }, [source, isMobile]);
+    return (
+      <>
+        {source === 'TASK' ? (
+          isMobile ? (
+            <>
+              <Crumbs back justifyContent='start' />
+              <ContentBox>{HeaderBox}</ContentBox>
+            </>
+          ) : (
+            <Crumbs back justifyContent='start'>
+              {HeaderBox}
+            </Crumbs>
+          )
+        ) : (
+          <>
+            <Header />
+            <ContentBox>{HeaderBox}</ContentBox>
+          </>
+        )}
+      </>
+    );
+  },
+);
 export default Invite;

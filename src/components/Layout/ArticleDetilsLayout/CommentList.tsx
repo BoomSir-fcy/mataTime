@@ -20,7 +20,7 @@ import { ReadType } from 'hooks/imHooks/types';
 
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { MAX_SPEND_TIME_PAGE_TATOL, DEFAULT_FIRST_COMMENT_PAGE } from 'config';
 import {
   CommentListBox,
   CommentTitle,
@@ -117,6 +117,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         setListData([...listData, ...(res.data.list || [])]);
         // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
         setTotalPage(res.data.total_page);
+        setRefresh(false);
       }
     });
   };

@@ -34,9 +34,9 @@ const Column = styled(Flex)`
   width: max-content;
   position: relative;
   cursor: pointer;
-  &:not(:last-child) {
+  /* &:not(:last-child) {
     ${({ theme }) => theme.mediaQueriesSize.marginr}
-  }
+  } */
 `;
 const NftAvatarBox = styled(Flex)`
   width: 211px;
@@ -55,7 +55,10 @@ const NftDrawBox = styled(Flex)`
 const ActiveImg = styled(Avatar)`
   border-radius: 10px;
   &.active {
-    box-shadow: 0px 0px 5px 2px ${({ theme }) => theme.colors.white};
+    box-shadow: ${({ theme }) =>
+      theme.isDark
+        ? `0px 0px 9px 5px ${theme.colors.white}`
+        : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
   }
   &.disable {
     cursor: not-allowed;
@@ -63,8 +66,8 @@ const ActiveImg = styled(Avatar)`
 `;
 const AvatarBox = styled.div`
   position: relative;
-  width: 102px;
-  height: 104px;
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
   .icon {
     position: absolute;

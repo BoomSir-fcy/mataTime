@@ -80,7 +80,7 @@ const PoolCardHeader: React.FC<PoolCardHeader> = ({
         </Flex>
       </ContainerStyled>
       <CardTipsStyled>
-        <TextTipsStyled textAlign='center' color='white'>
+        <TextTipsStyled textAlign='center'>
           {t('Earn')} {rewardToken0Symbol}
           &#38;
           {rewardToken1Symbol}
