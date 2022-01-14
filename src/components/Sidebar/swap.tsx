@@ -143,8 +143,7 @@ const Swap: React.FC<{ onlySwap?: boolean; width?: string }> = ({
                   colors: {
                     dropdown: dark.colors.input,
                     failure: light.colors.failure,
-                    text: 'red',
-                    // text: dark.colors.white_black,
+                    text: dark.colors.white_black,
                     backgroundDisabled: dark.colors.tertiary,
                     primary: dark.colors.primary,
                     success: dark.colors.success,
