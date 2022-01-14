@@ -124,6 +124,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum) => {
+    console.log(newItem, 'wwwww');
+
     const {
       FOLLOW,
       CANCEL_FOLLOW,
