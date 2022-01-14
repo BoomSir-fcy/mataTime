@@ -277,14 +277,16 @@ const BtnCom = ({
     <Flex alignItems='center'>
       {account ? (
         <>
-          <WithdrawBtn
-            variant='success'
-            onClick={() => {
-              history.push('/swap');
-            }}
-          >
-            {t('Buy')} TIME
-          </WithdrawBtn>
+          {Token === 'TIME' && (
+            <WithdrawBtn
+              variant='success'
+              onClick={() => {
+                history.push('/swap');
+              }}
+            >
+              {t('Buy')} TIME
+            </WithdrawBtn>
+          )}
           <WithdrawBtn variant='primaryGreen' onClick={() => openModaal(1)}>
             {t('AccountRecharge')}
           </WithdrawBtn>

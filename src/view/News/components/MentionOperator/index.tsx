@@ -211,7 +211,7 @@ const MentionOperator: React.FC<IProps> = ({
             callback(itemData, MoreOperatorEnum.COMMONT);
           } else if (itemData?.post) {
             // 帖子
-            const CommentInfo = await getCommentInfo(itemData.id);
+            const CommentInfo = await getCommentInfo(postId);
             if (CommentInfo) {
               callBackData = {
                 ...itemData,
