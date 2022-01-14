@@ -244,9 +244,41 @@ export const useFetchInviteFriendsList = () => {
         setLoading(false);
       });
   };
-
   return { list, pageNum, pageSize, total, setPageNum, loading };
 };
+
+// 邀请排行榜列表
+export const useFetchInviteRankingList = () => {
+  const { account } = useWeb3React()
+  const [list, setList] = useState([])
+  const [pageNum, setPageNum] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
+  const [total, setTotal] = useState(1)
+  const [loading, setLoading] = useState<boolean>(false)
+  useEffect(() => {
+    getList()
+  }, [pageNum])
+  const getList = () => {
+    setLoading(true);
+    Api.TaskApi.getRankingList(pageNum, pageSize).then((res: any) => {
+      if (Api.isSuccess(res)) {
+        const temp = res.data;
+        setList(temp?.list);
+        // setTotal(temp?.total_count || 1);
+        // 默认只显示排行榜的前20名
+        setTotal(temp?.total_count > 20 ? 20 : temp?.total_count);
+        setPageNum(temp?.page || 1);
+        setPageSize(temp?.page_size || 10);
+      }
+    }).catch(() => {
+      setList([]);
+    }).finally(() => {
+      setLoading(false);
+    })
+  }
+
+  return { list, pageNum, pageSize, total, setPageNum, loading }
+}
 
 // 领取任务
 export const receive = async (dispatch: any, taskId: number) => {

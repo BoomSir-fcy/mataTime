@@ -152,7 +152,7 @@ const FriendsList: React.FC<init> = React.memo(({ showTitle = true }) => {
             )}
           </Table>
 
-          <PaginateStyle alignItems='center' justifyContent='end'>
+          <PaginateStyle alignItems='center' justifyContent='flex-end'>
             <Text mr='16px' fontSize='14px' color='textTips'>
               {t('Account Total %page% page', { page: totalPage })}
             </Text>
