@@ -137,7 +137,11 @@ export const Crumbs: React.FC<{
                     color={colors}
                     fontWeight='bold'
                   />
-                  <Text className='text' ml='16px'>
+                  <Text
+                    className='text'
+                    ml='16px'
+                    style={{ whiteSpace: 'nowrap' }}
+                  >
                     {t('newsBack')}
                   </Text>
                 </Flex>
