@@ -32,14 +32,14 @@ const Rule: React.FC = React.memo(() => {
         <Text small mt='30px'>
           {t('RankingRule1')}
         </Text>
-        <Text small>{t('RankingRule1Describe1')}</Text>
-        <Text small>{t('RankingRule1Describe2')}</Text>
-        <Text small>{t('RankingRule1Describe3')}</Text>
-        <Text small>{t('RankingRule1Describe4')}</Text>
         <Text small mt='20px'>
           {t('RankingRule2')}
         </Text>
         <Text small>{t('RankingRule2Describe1')}</Text>
+        <Text small>{t('RankingRule2Describe2')}</Text>
+        <Text small>{t('RankingRule2Describe3')}</Text>
+        <Text small>{t('RankingRule2Describe4')}</Text>
+        <Text small>{t('RankingRule2Describe5')}</Text>
         <Text small mt='20px'>
           {t('RankingRule3')}
         </Text>
