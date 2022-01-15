@@ -55,7 +55,6 @@ export const fetchMetaycInfo = async () => {
     ];
 
     const [value, switch_buy] = await multicall(invitationAbi, calls);
-    // console.log(value[0].toJSON().hex, switch_buy)
     return {
       // 基本信息
       enableBuy: switch_buy[0],

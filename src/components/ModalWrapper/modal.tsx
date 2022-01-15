@@ -111,7 +111,6 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         style={customStyles}
         ariaHideApp={false}
         contentLabel='Example Modal'
-        onAfterOpen={() => (document.body.style.padding = '0')}
       >
         {!customizeTitle && (
           <ModalHeaderStyled

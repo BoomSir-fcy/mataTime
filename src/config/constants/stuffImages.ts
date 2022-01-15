@@ -14,7 +14,6 @@ export interface StuffElement {
 
 export type StuffLable = { lable: string; length: number }[];
 
-console.log(stuffRes);
 export const stuffLable = (() =>
   stuffRes.map(item => ({
     lable: item[0].lable,

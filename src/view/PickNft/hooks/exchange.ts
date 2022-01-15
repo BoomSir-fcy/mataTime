@@ -24,7 +24,6 @@ export const useExchangePhoto = () => {
       const exists = await masterContract.checkTokenID(tx.toJSON());
       if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 物件个数用完了
 
-      // console.log(nickname, code, tx.toJSON().hex, color);
       const receipt = await exchangeToPhtot(
         masterContract,
         nickname,
@@ -44,7 +43,6 @@ export const useExchangeAndBuyPhoto = () => {
   const masterContract = useInvitation();
   const handleExchange = useCallback(
     async (ids: number[], color: string, value: string) => {
-      console.log(ids, color, value)
       const tx = await masterContract.encodeToken(ids);
       const owner = await masterContract._nft_address(tx.toJSON());
       if (!isZero(owner)) return ExChangeResult.AVATAR_EXISTS; // 此头像已存在

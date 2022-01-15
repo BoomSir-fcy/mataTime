@@ -43,7 +43,6 @@ const PostResult: React.FC<PostResultProps> = ({
   }, [dispatch]);
 
   const updateList = useCallback(id => {
-    console.log(id, 'id');
     dispatch(fetchSearchPostDetailAsync(id));
   }, []);
 

@@ -177,7 +177,6 @@ const NftAvatar: React.FC<{
     async nftId => {
       try {
         const codeCount = await getNftGenCodeCount(nftId);
-        // console.log(nftId, '----', codeCount);
         if (codeCount) {
           setCodeList(pre => {
             return pre.map((item, i) => {
@@ -210,13 +209,10 @@ const NftAvatar: React.FC<{
       try {
         // 未生成邀请码
         if (info.status === 0) {
-          // console.log('生成邀请码');
           tempList = await genInviteCode(nftToken, nftId);
         }
         // 未提交合约
         if (info.status < 2) {
-          // console.log('提交合约');
-
           const codeHash = tempList[index]?.code_hash;
           await onGenCodes(nftId, [`0x${codeHash}`]);
         }
@@ -254,8 +250,6 @@ const NftAvatar: React.FC<{
   const checkTransferNft = useCallback((item?: CodeInfo) => {
     return item?.code === '';
   }, []);
-
-  // console.log(nftId, '-----', codeList);
 
   return (
     <ContentBox>
@@ -301,16 +295,7 @@ const NftAvatar: React.FC<{
                         {item?.id === activeInfo?.id && (
                           <Loading visible={submitLoading} />
                         )}
-                        <ActiveImg
-                          className={
-                            (index >= 1 && codeList[index - 1].status < 2) ||
-                            checkTransferNft(item)
-                              ? 'disable'
-                              : 'active'
-                          }
-                          disableFollow
-                          src={require('assets/images/task/monkey.jpg').default}
-                          scale='ld'
+                        <Box
                           onClick={() => {
                             // 若上一个邀请码已提交合约，则可点击下一个
                             if (
@@ -321,13 +306,27 @@ const NftAvatar: React.FC<{
                             }
                             handleGenCode(item, index);
                           }}
-                        />
-                        <Icon
-                          className='icon'
-                          name={'icon-fenxiang'}
-                          color='textPrimary'
-                          size={18}
-                        />
+                        >
+                          <ActiveImg
+                            className={
+                              (index >= 1 && codeList[index - 1].status < 2) ||
+                              checkTransferNft(item)
+                                ? 'disable'
+                                : 'active'
+                            }
+                            disableFollow
+                            src={
+                              require('assets/images/task/monkey.jpg').default
+                            }
+                            scale='ld'
+                          />
+                          <Icon
+                            className='icon'
+                            name={'icon-fenxiang'}
+                            color='textPrimary'
+                            size={18}
+                          />
+                        </Box>
                       </>
                     )}
                   </AvatarBox>

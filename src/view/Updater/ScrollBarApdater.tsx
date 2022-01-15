@@ -30,7 +30,6 @@ export default function ScrollBarApdater() {
   useEffect(() => {
     if (oldPath !== pathname) {
       setOldPath(pathname);
-      console.log(scrollState[pathname]?.y);
       window.scrollTo({
         // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
         behavior: 'auto',
