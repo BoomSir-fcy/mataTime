@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Currency, Token } from 'dsgswap-sdk';
 interface CurrencySearchProps {
     selectedCurrency?: Currency | null;

@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Currency } from 'dsgswap-sdk';
 import { InjectedModalProps } from 'pancake-uikit';
 interface CurrencySearchModalProps extends InjectedModalProps {

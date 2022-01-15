@@ -39,6 +39,26 @@
       "lable": "Eyes",
       "isBase": true,
       "isDefault": false
+    },
+    {
+      "index": 0,
+      "id": 4,
+      "src": "/images/stuff/1_2_Eyes/Eyes Tears2.png",
+      "images": "/images/compress-stuff/1_2_Eyes/Eyes Tears2.png",
+      "zIndex": 2,
+      "lable": "Eyes",
+      "isBase": true,
+      "isDefault": false
+    },
+    {
+      "index": 0,
+      "id": 5,
+      "src": "/images/stuff/1_2_Eyes/Eyes Tears3.png",
+      "images": "/images/compress-stuff/1_2_Eyes/Eyes Tears3.png",
+      "zIndex": 2,
+      "lable": "Eyes",
+      "isBase": true,
+      "isDefault": false
     }
   ],
   [
@@ -67,6 +87,26 @@
       "id": 2,
       "src": "/images/stuff/2_4_Headdress/Hair-3.png",
       "images": "/images/compress-stuff/2_4_Headdress/Hair-3.png",
+      "zIndex": 4,
+      "lable": "Headdress",
+      "isBase": true,
+      "isDefault": false
+    },
+    {
+      "index": 1,
+      "id": 3,
+      "src": "/images/stuff/2_4_Headdress/Hair-4.png",
+      "images": "/images/compress-stuff/2_4_Headdress/Hair-4.png",
+      "zIndex": 4,
+      "lable": "Headdress",
+      "isBase": true,
+      "isDefault": false
+    },
+    {
+      "index": 1,
+      "id": 4,
+      "src": "/images/stuff/2_4_Headdress/Hair-5.png",
+      "images": "/images/compress-stuff/2_4_Headdress/Hair-5.png",
       "zIndex": 4,
       "lable": "Headdress",
       "isBase": true,
@@ -113,6 +153,26 @@
       "lable": "Phone",
       "isBase": true,
       "isDefault": false
+    },
+    {
+      "index": 2,
+      "id": 4,
+      "src": "/images/stuff/3_3_Phone/Phone-5.png",
+      "images": "/images/compress-stuff/3_3_Phone/Phone-5.png",
+      "zIndex": 3,
+      "lable": "Phone",
+      "isBase": true,
+      "isDefault": false
+    },
+    {
+      "index": 2,
+      "id": 5,
+      "src": "/images/stuff/3_3_Phone/Phone-6.png",
+      "images": "/images/compress-stuff/3_3_Phone/Phone-6.png",
+      "zIndex": 3,
+      "lable": "Phone",
+      "isBase": true,
+      "isDefault": false
     }
   ],
   [
@@ -141,6 +201,26 @@
       "id": 2,
       "src": "/images/stuff/4_7_Mouth/Mouth-3.png",
       "images": "/images/compress-stuff/4_7_Mouth/Mouth-3.png",
+      "zIndex": 7,
+      "lable": "Mouth",
+      "isBase": true,
+      "isDefault": false
+    },
+    {
+      "index": 3,
+      "id": 3,
+      "src": "/images/stuff/4_7_Mouth/Mouth-4.png",
+      "images": "/images/compress-stuff/4_7_Mouth/Mouth-4.png",
+      "zIndex": 7,
+      "lable": "Mouth",
+      "isBase": true,
+      "isDefault": false
+    },
+    {
+      "index": 3,
+      "id": 4,
+      "src": "/images/stuff/4_7_Mouth/Mouth-5.png",
+      "images": "/images/compress-stuff/4_7_Mouth/Mouth-5.png",
       "zIndex": 7,
       "lable": "Mouth",
       "isBase": true,
@@ -197,6 +277,26 @@
       "lable": "Clothes",
       "isBase": false,
       "isDefault": false
+    },
+    {
+      "index": 4,
+      "id": 5,
+      "src": "/images/stuff/5_5_Clothes_Optional/Cloth-5.png",
+      "images": "/images/compress-stuff/5_5_Clothes_Optional/Cloth-5.png",
+      "zIndex": 5,
+      "lable": "Clothes",
+      "isBase": false,
+      "isDefault": false
+    },
+    {
+      "index": 4,
+      "id": 6,
+      "src": "/images/stuff/5_5_Clothes_Optional/Cloth-6.png",
+      "images": "/images/compress-stuff/5_5_Clothes_Optional/Cloth-6.png",
+      "zIndex": 5,
+      "lable": "Clothes",
+      "isBase": false,
+      "isDefault": false
     }
   ],
   [
@@ -249,6 +349,26 @@
       "lable": "Accessories",
       "isBase": false,
       "isDefault": false
+    },
+    {
+      "index": 5,
+      "id": 5,
+      "src": "/images/stuff/6_6_Accessories_Optional/Accessories-5.png",
+      "images": "/images/compress-stuff/6_6_Accessories_Optional/Accessories-5.png",
+      "zIndex": 6,
+      "lable": "Accessories",
+      "isBase": false,
+      "isDefault": false
+    },
+    {
+      "index": 5,
+      "id": 6,
+      "src": "/images/stuff/6_6_Accessories_Optional/Accessories-6.png",
+      "images": "/images/compress-stuff/6_6_Accessories_Optional/Accessories-6.png",
+      "zIndex": 6,
+      "lable": "Accessories",
+      "isBase": false,
+      "isDefault": false
     }
   ],
   [
@@ -297,6 +417,26 @@
       "id": 4,
       "src": "/images/stuff/7_1_Background_Optional/BG-stuff-4.jpg",
       "images": "/images/compress-stuff/7_1_Background_Optional/BG-stuff-4.jpg",
+      "zIndex": 1,
+      "lable": "Background",
+      "isBase": false,
+      "isDefault": false
+    },
+    {
+      "index": 6,
+      "id": 5,
+      "src": "/images/stuff/7_1_Background_Optional/BG-stuff-5.jpg",
+      "images": "/images/compress-stuff/7_1_Background_Optional/BG-stuff-5.jpg",
+      "zIndex": 1,
+      "lable": "Background",
+      "isBase": false,
+      "isDefault": false
+    },
+    {
+      "index": 6,
+      "id": 6,
+      "src": "/images/stuff/7_1_Background_Optional/BG-stuff-6.jpg",
+      "images": "/images/compress-stuff/7_1_Background_Optional/BG-stuff-6.jpg",
       "zIndex": 1,
       "lable": "Background",
       "isBase": false,

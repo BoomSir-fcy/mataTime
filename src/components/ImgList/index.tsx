@@ -1,6 +1,7 @@
 import { ARTICLE_IMAGE_CLASS_NAME } from 'config';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import Carousel, { Modal, ModalGateway } from 'react-images';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 import { Image } from 'uikit';
 import { ImgListBox } from './style';
 type Iprops = {
@@ -54,12 +55,9 @@ export const ImgList = (props: Iprops) => {
   const { list = [] } = props;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [previewImgList, setPreviewImgList] = useState([]);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const preViewImg = index => {
-    setPreviewImgList(
-      [...list.slice(index), ...list.slice(0, index)].map(item => ({
-        source: item,
-      })),
-    );
+    setPreviewImgList([...list.slice(index), ...list.slice(0, index)]);
     setModalIsOpen(true);
   };
 
@@ -100,11 +98,37 @@ export const ImgList = (props: Iprops) => {
   return list.length > 0 ? (
     <ImgListBox ref={imgRef} onClick={e => e.stopPropagation()}>
       {modalIsOpen && (
-        <ModalGateway>
-          <Modal onClose={() => setModalIsOpen(false)}>
-            <Carousel views={previewImgList} />
-          </Modal>
-        </ModalGateway>
+        <Lightbox
+          mainSrc={previewImgList[photoIndex]}
+          nextSrc={previewImgList[(photoIndex + 1) % previewImgList.length]}
+          prevSrc={
+            previewImgList[
+              (photoIndex + previewImgList.length - 1) % previewImgList.length
+            ]
+          }
+          onCloseRequest={() => setModalIsOpen(false)}
+          onMovePrevRequest={() =>
+            setPhotoIndex(
+              pre => (pre + previewImgList.length - 1) % previewImgList.length,
+            )
+          }
+          onMoveNextRequest={() =>
+            setPhotoIndex(pre => (pre + 1) % previewImgList.length)
+          }
+        />
+      )}
+      {list.length === 1 && (
+        <>
+          <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            style={{
+              paddingBottom: 0,
+            }}
+            onClick={() => preViewImg(0)}
+            src={list[0]}
+            alt=''
+          />
+        </>
       )}
       {list.length === 2 && (
         <>

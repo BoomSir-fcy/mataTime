@@ -16,29 +16,6 @@ import { getSearchPath } from 'utils/urlQueryPath';
 import PostList from 'components/Post/PostList';
 import { fetchSearchPostDetailAsync } from 'store/search/reducer';
 
-const tabDatas = [
-  {
-    lable: '综合',
-    tLable: '综合',
-    type: 'total',
-  },
-  {
-    lable: '最新',
-    tLable: '最新',
-    type: 'post',
-  },
-  {
-    lable: 'People',
-    tLable: 'People',
-    type: 'user',
-  },
-  {
-    lable: 'Topic',
-    tLable: 'Topic',
-    type: 'topic',
-  },
-];
-
 interface PostResultProps {
   list: Api.Home.post[];
   loading: boolean;

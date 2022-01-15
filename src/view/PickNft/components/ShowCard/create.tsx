@@ -47,7 +47,11 @@ import StateModal from '../pop/state';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 import SetNickName from './setName';
 import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
-import { formatDisplayApr, getFullDisplayBalance } from 'utils/formatBalance';
+import {
+  formatDisplayApr,
+  getBalanceNumber,
+  getFullDisplayBalance,
+} from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -248,6 +252,11 @@ const CreateShowCard: React.FC = () => {
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
+
+  const totalAmount = useMemo(() => {
+    return getBalanceNumber(new BigNumber(buyInfo.price).times(1));
+  }, [buyInfo.price]);
+
   return (
     <PageContainer>
       <CardStyled>
@@ -305,11 +314,7 @@ const CreateShowCard: React.FC = () => {
               <Dots>{t('Minting')}</Dots>
             ) : (
               t('Mint METAYC (%price% %symbol%)', {
-                price: getFullDisplayBalance(
-                  new BigNumber(buyInfo.price),
-                  undefined,
-                  1,
-                ),
+                price: totalAmount,
                 symbol: 'BNB',
               })
             )}

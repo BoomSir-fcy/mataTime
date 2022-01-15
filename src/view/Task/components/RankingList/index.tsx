@@ -97,6 +97,7 @@ const Row = styled.div`
   display: grid;
   grid-template-columns: 10% 25% 25% 20% 20%;
   align-items: center;
+  justify-items: center;
   min-height: 30px;
   ${({ theme }) => theme.mediaQueries.md} {
     grid-template-columns: 10% 35% 20% 15% 20%;

@@ -291,7 +291,7 @@ const Profile: React.FC<any> = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT ||
+      // type === COMMONT ||
       type === BLOCKUSER
     ) {
       setIsEnd(false);

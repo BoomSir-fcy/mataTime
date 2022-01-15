@@ -174,12 +174,13 @@ const Swap: React.FC<{ onlySwap?: boolean; width?: string }> = ({
                     dropdown: light.colors.input,
                     failure: light.colors.failure,
                     text: light.colors.white_black,
-                    backgroundDisabled: light.colors.tertiary,
+                    backgroundDisabled: light.colors.input,
                     primary: light.colors.text,
                     success: light.colors.success,
                     textSubtle: light.colors.textTips,
                     backgroundAlt: light.colors.backgroundCard,
                     background: light.colors.background,
+                    input: light.colors.input,
                     dropdownDeep: light.colors.backgroundCard,
                     invertedContrast: light.colors.backgroundCard,
                   },
@@ -193,6 +194,11 @@ const Swap: React.FC<{ onlySwap?: boolean; width?: string }> = ({
                   },
                   zIndices: {
                     modal: 9999,
+                  },
+                  tooltip: {
+                    background: dark.colors.background,
+                    text: dark.colors.white_black,
+                    boxShadow: 'none',
                   },
                 },
               }}

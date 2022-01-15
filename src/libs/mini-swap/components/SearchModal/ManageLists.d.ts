@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { TokenList } from '@uniswap/token-lists';
 import { CurrencyModalView } from './types';
 declare function ManageLists({ setModalView, setImportList, setListUrl, }: {

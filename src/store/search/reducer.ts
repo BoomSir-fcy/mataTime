@@ -171,20 +171,19 @@ export const fetchSearchPostAsync =
     const { search } = getState() as { search: SearchState };
     if (!search.searchVal) return;
     try {
-      console.log({
-        key: search.searchVal,
-        start: refresh ? 0 : search.seart_index || 0,
-        limit: MAX_SPEND_TIME_PAGE_TATOL,
-      });
+      // console.log({
+      //   key: search.searchVal,
+      //   start: refresh ? 0 : search.seart_index || 0,
+      //   limit: MAX_SPEND_TIME_PAGE_TATOL,
+      // });
       const fetchPost = await Api.SearchApi.getSearchPost({
         key: search.searchVal,
         start: refresh ? 0 : search.seart_index || 0,
         limit: MAX_SPEND_TIME_PAGE_TATOL,
       });
       if (Api.isSuccess(fetchPost)) {
-        console.log(fetchPost);
+        // console.log(fetchPost);
         if (!Boolean(fetchPost.data?.data)) {
-          console.log('到底了');
           dispatch(setPostEnd(true));
         } else {
           dispatch(setPostEnd(false));
@@ -206,7 +205,6 @@ export const fetchSearchPostDetailAsync =
         id: `${id}`,
       });
       if (Api.isSuccess(detailRes)) {
-        console.log(detailRes.data, '-------------------');
         dispatch(
           setPostDetail({
             id,
@@ -306,7 +304,7 @@ export const Search = createSlice({
         state.searchPostaddListNum = state.resultListOfPost.length - length;
       }
 
-      console.log(state.resultListOfPost, 'state.resultListOfPost');
+      // console.log(state.resultListOfPost, 'state.resultListOfPost');
       // state.lastList =
       //   articleList.length >= per_page || page > 1 ? articleList : [];
       // state.page = articleList.length >= per_page ? page + 1 : page;

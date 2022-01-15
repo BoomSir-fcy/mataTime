@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { Price } from 'dsgswap-sdk';
 interface TradePriceProps {
     price?: Price;
