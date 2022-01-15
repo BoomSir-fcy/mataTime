@@ -17,6 +17,7 @@ declare namespace Api {
       remind_user: string;
       pid: number;
       comment: string;
+      first_comment_id?: string | number;
     };
     type commentLike = {
       comment_id: string;

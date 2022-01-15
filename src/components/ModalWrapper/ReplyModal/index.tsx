@@ -39,7 +39,13 @@ export const ReplyModal = React.memo((props: IProp) => {
   } = props;
 
   // 评论
-  const sendArticle = (res, imags_list, remind_user, reset) => {
+  const sendArticle = (
+    res,
+    imags_list,
+    remind_user,
+    reset,
+    first_comment_id,
+  ) => {
     if (!res) return;
     if (replyType === 'comment') {
       // 针对评论
@@ -48,6 +54,7 @@ export const ReplyModal = React.memo((props: IProp) => {
         comment_id: commentId,
         comment: res,
         remind_user,
+        first_comment_id: '0',
       }).then(res => {
         if (Api.isSuccess(res)) {
           reset && reset();
