@@ -90,6 +90,7 @@ export const ImgList = (props: Iprops) => {
       imgDom.addEventListener('load', () => {
         // 正方形图片
         if (imgDom.naturalHeight === imgDom.naturalWidth) {
+          imgDom.parentElement.style.width = '300px';
           imgDom.style.width = '300px';
           imgDom.style.maxHeight = '300px';
         }
