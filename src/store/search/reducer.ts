@@ -150,10 +150,6 @@ export const fetchSearchAsync = createAsyncThunk<
       );
       result.resultListOfPostLen = responseTotal.data?.post_number || 0;
     }
-    // if (Api.isSuccess(responsePost)){
-    //   console.log(responsePost)
-    //   result.resultListOfPost = responsePost.data || []
-    // }
     return result;
   },
 );
@@ -171,18 +167,13 @@ export const fetchSearchPostAsync =
     const { search } = getState() as { search: SearchState };
     if (!search.searchVal) return;
     try {
-      // console.log({
-      //   key: search.searchVal,
-      //   start: refresh ? 0 : search.seart_index || 0,
-      //   limit: MAX_SPEND_TIME_PAGE_TATOL,
-      // });
+
       const fetchPost = await Api.SearchApi.getSearchPost({
         key: search.searchVal,
         start: refresh ? 0 : search.seart_index || 0,
         limit: MAX_SPEND_TIME_PAGE_TATOL,
       });
       if (Api.isSuccess(fetchPost)) {
-        // console.log(fetchPost);
         if (!Boolean(fetchPost.data?.data)) {
           dispatch(setPostEnd(true));
         } else {
@@ -216,35 +207,6 @@ export const fetchSearchPostDetailAsync =
       console.error(error);
     }
   };
-
-// export const fetchSearchPostAsync = async ((refresh?: boolean), { dispatch, getState }) => {
-//   dispatch(setPostLoading(true))
-
-//   const result = {
-//     fetchDisplay: true,
-//     resultListOfPost: [],
-//     seart_index: 0,
-//   }
-
-//   const { search } = getState() as { search: SearchState }
-//   try {
-//     const fetchPost = await Api.SearchApi.getSearchPost({
-//       key: search.searchVal,
-//       start: refresh ? 0 : search.seart_index,
-//       limit: MAX_SPEND_TIME_PAGE_TATOL,
-//     })
-//     if (Api.isSuccess(fetchPost)){
-//       console.log(fetchPost)
-//       result.resultListOfPost = fetchPost.data?.data || []
-//       result.seart_index = fetchPost.data?.seart_index
-//     }
-//   } catch (error) {
-//     console.error(error)
-//   }
-//   dispatch(setPostLoading(false))
-//   dispatch(setSearchPost(result))
-
-// }
 
 export const Search = createSlice({
   name: 'search',
@@ -280,12 +242,7 @@ export const Search = createSlice({
     setSearchPost: (state, action) => {
       const { resultListOfPost, fetchDisplay, seart_index, refresh } =
         action.payload;
-      // state.resultListOfPost = resultListOfPost
-      // console.log(seart_index, 'seart_index')
       state.seart_index = seart_index;
-      // if (fetchDisplay) {
-      //   state.displayResultListOfPost = resultListOfPost
-      // }
       resultListOfPost.forEach(item => {
         state.searchPostMap = {
           ...state.searchPostMap,
@@ -304,10 +261,6 @@ export const Search = createSlice({
         state.searchPostaddListNum = state.resultListOfPost.length - length;
       }
 
-      // console.log(state.resultListOfPost, 'state.resultListOfPost');
-      // state.lastList =
-      //   articleList.length >= per_page || page > 1 ? articleList : [];
-      // state.page = articleList.length >= per_page ? page + 1 : page;
     },
   },
   extraReducers: builder => {

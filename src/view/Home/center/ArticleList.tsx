@@ -87,8 +87,6 @@ const ArticleComponents = (props, ref) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    console.log(newItem, 'qqqqq');
-
     if (
       type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
