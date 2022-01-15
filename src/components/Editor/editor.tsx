@@ -13,7 +13,7 @@ import {
 } from 'slate';
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
-import { debounce } from 'lodash';
+import { debounce, cloneDeep } from 'lodash';
 import { Loading } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
@@ -46,7 +46,7 @@ import { getPostBLen } from 'utils';
 
 import escapeHtml from 'escape-html';
 import { ARTICLE_POST_MAX_LEN, ARTICLE_COMMENTS_MAX_LEN } from 'config';
-import { isApp } from 'utils/client';
+import client from 'utils/client';
 
 type Iprops = {
   type: any;
@@ -379,6 +379,23 @@ export const Editor = (props: Iprops) => {
         sendArticle();
         return;
       }
+
+      // XXX: 解决火狐输入崩溃问题 后期待优化 现在解决方案不完美
+      setValue(prep => {
+        const fristDom: any = prep?.[0];
+        if (
+          fristDom?.type === 'paragraph' &&
+          fristDom?.children?.[0]?.text === '' &&
+          event.keyCode !== 8 &&
+          client.isFirefox
+        ) {
+          const clonePrep = cloneDeep(prep);
+          (clonePrep[0] as any).children[0].text = ' ';
+          editor.insertText(' ');
+          return clonePrep;
+        }
+        return prep;
+      });
       if (target) {
         switch (event.key) {
           case 'ArrowDown':
@@ -416,7 +433,7 @@ export const Editor = (props: Iprops) => {
         }
       }
     },
-    [index, search, target, userList, sendArticle],
+    [index, search, target, editor, userList, sendArticle, setValue],
   );
 
   return (
