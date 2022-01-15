@@ -200,7 +200,7 @@ const NftAvatar: React.FC<{
     }
   }, [codeList.length, nftId, getLastSubmitStatus]);
 
-  // 点击无聊猴画板
+  // 点击虚拟猿画板
   const handleGenCode = useCallback(
     async (info: any, index) => {
       setActiveInfo(info);
