@@ -20,6 +20,7 @@ type IProp = {
   replyType: string;
   commentId?: string;
   postId?: any;
+  firstCommentId?: number;
   onSuccess?: () => void;
   onClose: () => void;
 };
@@ -36,16 +37,11 @@ export const ReplyModal = React.memo((props: IProp) => {
     replyType,
     commentId = '',
     postId = '',
+    firstCommentId,
   } = props;
 
   // 评论
-  const sendArticle = (
-    res,
-    imags_list,
-    remind_user,
-    reset,
-    first_comment_id,
-  ) => {
+  const sendArticle = (res, imags_list, remind_user, reset) => {
     if (!res) return;
     if (replyType === 'comment') {
       // 针对评论
@@ -54,7 +50,7 @@ export const ReplyModal = React.memo((props: IProp) => {
         comment_id: commentId,
         comment: res,
         remind_user,
-        first_comment_id: '0',
+        first_comment_id: firstCommentId,
       }).then(res => {
         if (Api.isSuccess(res)) {
           reset && reset();

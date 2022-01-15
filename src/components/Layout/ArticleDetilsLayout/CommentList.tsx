@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { concat } from 'lodash';
 import {
   Avatar,
   Icon,
@@ -10,7 +11,7 @@ import {
   PopupWrap,
   MoreOperatorEnum,
 } from 'components';
-import { Flex, Text, Box } from 'uikit';
+import { Flex, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { relativeTime } from 'utils';
@@ -78,6 +79,13 @@ const ChildrenCommentContent = styled(Flex)`
   }
 `;
 
+const CommentMore = styled(Button)`
+  i {
+    margin-left: 11px !important;
+    transform: rotate(90deg);
+  }
+`;
+
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { itemData, nonce, setNonce } = props;
@@ -135,6 +143,27 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         setRefresh(false);
       }
     });
+  };
+
+  // 获取二级评论
+  const getSubCommentList = async (params: Api.Comment.queryList) => {
+    try {
+      const res = await Api.CommentApi.getSubCommentList(params);
+      const subComment = listData.map(row => {
+        if (params.first_comment_id === row.id) {
+          let comment_list_resp = {
+            ...row.comment_list_resp,
+            page: params.page,
+            list: concat(row?.comment_list_resp?.list, res.data?.list),
+          };
+          return { ...row, comment_list_resp: comment_list_resp };
+        }
+        return row;
+      });
+      setListData(subComment);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // 更新列表
@@ -230,22 +259,14 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                 </Box>
                 <div style={{ flex: 1, marginLeft: '14px' }}>
                   <CommentHeader justifyContent='space-between' mb='15px'>
-                    <Flex>
-                      <div>
-                        <UserNmae fontSize='18px' bold ellipsis>
-                          {item.user_name}
-                        </UserNmae>
-                        <div className='relative-time'>
-                          {relativeTime(item.add_time)}
-                        </div>
-                      </div>
-                      {item.comment_user_name && (
-                        <div className='reply'>
-                          {t('reply')}
-                          <span>@{item.comment_user_name}</span>
-                        </div>
-                      )}
-                    </Flex>
+                    <Box>
+                      <UserNmae fontSize='18px' bold ellipsis>
+                        {item.user_name}
+                      </UserNmae>
+                      <Text color='textgrey' mt='5px'>
+                        {relativeTime(item.add_time)}
+                      </Text>
+                    </Box>
                     <Flex>
                       <PopupWrap
                         ref={popupRefs}
@@ -286,19 +307,55 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     content: item.comment,
                   },
                 }}
+                firstCommentId={item.id}
                 postId={item.pid}
                 commentId={item.id}
               />
-              <ChildrenComment>
-                {(item?.comment_list_resp?.list ?? []).map(row => (
-                  <ChildrenCommentContent>
-                    <Commnet data={row} key={row.id} />
-                  </ChildrenCommentContent>
-                ))}
-                <Box>
-                  <Text>共5条回复</Text>
-                </Box>
-              </ChildrenComment>
+              {item?.comment_list_resp?.list?.length > 0 && (
+                <ChildrenComment>
+                  {(item?.comment_list_resp?.list ?? []).map(row => (
+                    <ChildrenCommentContent>
+                      <Commnet
+                        data={row}
+                        key={row.id}
+                        firstCommentId={item.id}
+                      />
+                    </ChildrenCommentContent>
+                  ))}
+                  {item?.comment_list_resp?.total_num >
+                    item?.comment_list_resp?.list?.length && (
+                    <Box>
+                      <CommentMore
+                        variant='text'
+                        onClick={() =>
+                          getSubCommentList({
+                            pid: itemData.id,
+                            first_comment_id: item.id,
+                            prepage: MAX_SPEND_TIME_PAGE_TATOL,
+                            page: item?.comment_list_resp?.page
+                              ? item?.comment_list_resp?.page + 1
+                              : 2,
+                            sort_add_time: sortTime,
+                            sort_like: sortLike,
+                          })
+                        }
+                      >
+                        <Text color='textPrimary'>
+                          共
+                          {item?.comment_list_resp?.total_num -
+                            item?.comment_list_resp?.list?.length}
+                          条回复
+                        </Text>
+                        <Icon
+                          name='icon-shangjiantou'
+                          color='textPrimary'
+                          size={12}
+                        />
+                      </CommentMore>
+                    </Box>
+                  )}
+                </ChildrenComment>
+              )}
             </CommentItem>
           ))}
         </List>

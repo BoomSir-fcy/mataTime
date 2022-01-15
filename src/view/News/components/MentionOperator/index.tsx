@@ -26,6 +26,7 @@ type IProps = {
   commentId?: string;
   postId?: string;
   paddingLeft?: number;
+  firstCommentId?: number;
 };
 
 const MentionOperator: React.FC<IProps> = ({
@@ -41,6 +42,7 @@ const MentionOperator: React.FC<IProps> = ({
   commentId = '',
   postId = '',
   paddingLeft,
+  firstCommentId,
 }) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
@@ -206,6 +208,7 @@ const MentionOperator: React.FC<IProps> = ({
         commentId={commentId}
         postId={postId}
         itemData={itemData}
+        firstCommentId={firstCommentId}
         onSuccess={async () => {
           let callBackData = {};
           // 评论
