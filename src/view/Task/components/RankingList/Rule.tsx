@@ -30,6 +30,9 @@ const Rule: React.FC = React.memo(() => {
           {t('Relevant rules:')}
         </Text>
         <Text small mt='30px'>
+          {t('RankingRule0')}
+        </Text>
+        <Text small mt='30px'>
           {t('RankingRule1')}
         </Text>
         <Text small mt='20px'>
