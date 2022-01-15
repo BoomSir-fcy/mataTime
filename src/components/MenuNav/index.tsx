@@ -73,7 +73,7 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
               {!isApp() && (
                 <UserBox
                   as={Link}
-                  to={`/me/profile/${currentUid.uid}`}
+                  to={`/me/profile/${currentUid?.uid}`}
                   onClick={() => setIsPushed(pre => (pre ? false : pre))}
                 >
                   <ProfileMenu />

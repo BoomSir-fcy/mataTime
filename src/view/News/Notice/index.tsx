@@ -107,6 +107,17 @@ const NoticeItem: React.FC<{
                   'latformReviewRules',
                 )}</a>`,
               })}
+            {(type === 9 ||
+              type === 10 ||
+              type === 11 ||
+              type === 12 ||
+              type === 13 ||
+              type === 14) &&
+              getHTML('settingNotificationText3', {
+                value: `<a href="${ruleUrl}" target="_blank">${t(
+                  'latformReviewRules',
+                )}</a>`,
+              })}
           </Text>
         </Content>
       </Flex>
