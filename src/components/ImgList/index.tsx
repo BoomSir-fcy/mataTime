@@ -56,10 +56,22 @@ export const ImgList = (props: Iprops) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [previewImgList, setPreviewImgList] = useState([]);
   const [photoIndex, setPhotoIndex] = useState(0);
-  const preViewImg = index => {
-    setPreviewImgList([...list.slice(index), ...list.slice(0, index)]);
-    setModalIsOpen(true);
-  };
+  // const preViewImg = index => {
+  //   const preList = [...list.slice(index), ...list.slice(0, index)];
+  //   setPreviewImgList(preList);
+  //   setPhotoIndex(index % preList.length);
+  //   setModalIsOpen(true);
+  // };
+
+  const preViewImg = useCallback(
+    index => {
+      const preList = [...list.slice(index), ...list.slice(0, index)];
+      setPreviewImgList(preList);
+      setPhotoIndex(0);
+      setModalIsOpen(true);
+    },
+    [list, setPreviewImgList, setPreviewImgList, setModalIsOpen],
+  );
 
   const imgRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -88,7 +100,8 @@ export const ImgList = (props: Iprops) => {
         }
         // 高大于宽的图片
         if (imgDom.naturalHeight > imgDom.naturalWidth) {
-          imgDom.style.width = '50%';
+          imgDom.parentElement.style.width = '50%';
+          imgDom.style.width = '100%';
           imgDom.style.maxHeight = '540px';
         }
       });
@@ -142,7 +155,7 @@ export const ImgList = (props: Iprops) => {
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
             style={{ maxHeight: '300px', paddingBottom: '0' }}
-            onClick={() => preViewImg(0)}
+            onClick={() => preViewImg(1)}
             src={list[1]}
             alt=''
           />

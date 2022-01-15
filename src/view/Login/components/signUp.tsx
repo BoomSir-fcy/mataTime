@@ -270,7 +270,7 @@ export const SignUp: React.FC<{
       {singUpStep === 2 && <SignUpSetName status={isStakeNft} />}
       {/* {singUpStep === 2 && <SignUpSetName />} */}
       {singUpStep === 3 && (
-        <Box paddingTop='30px' width='100%'>
+        <Box pb='5px' paddingTop='30px' width='100%'>
           {/* <Text
             fontSize="34px"
             marginBottom="24px"

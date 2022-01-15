@@ -295,16 +295,7 @@ const NftAvatar: React.FC<{
                         {item?.id === activeInfo?.id && (
                           <Loading visible={submitLoading} />
                         )}
-                        <ActiveImg
-                          className={
-                            (index >= 1 && codeList[index - 1].status < 2) ||
-                            checkTransferNft(item)
-                              ? 'disable'
-                              : 'active'
-                          }
-                          disableFollow
-                          src={require('assets/images/task/monkey.jpg').default}
-                          scale='ld'
+                        <Box
                           onClick={() => {
                             // 若上一个邀请码已提交合约，则可点击下一个
                             if (
@@ -315,13 +306,27 @@ const NftAvatar: React.FC<{
                             }
                             handleGenCode(item, index);
                           }}
-                        />
-                        <Icon
-                          className='icon'
-                          name={'icon-fenxiang'}
-                          color='textPrimary'
-                          size={18}
-                        />
+                        >
+                          <ActiveImg
+                            className={
+                              (index >= 1 && codeList[index - 1].status < 2) ||
+                              checkTransferNft(item)
+                                ? 'disable'
+                                : 'active'
+                            }
+                            disableFollow
+                            src={
+                              require('assets/images/task/monkey.jpg').default
+                            }
+                            scale='ld'
+                          />
+                          <Icon
+                            className='icon'
+                            name={'icon-fenxiang'}
+                            color='textPrimary'
+                            size={18}
+                          />
+                        </Box>
                       </>
                     )}
                   </AvatarBox>
