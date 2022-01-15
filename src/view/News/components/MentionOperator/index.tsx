@@ -25,6 +25,7 @@ type IProps = {
   replyType?: string;
   commentId?: string;
   postId?: string;
+  paddingLeft?: number;
 };
 
 const MentionOperator: React.FC<IProps> = ({
@@ -39,6 +40,7 @@ const MentionOperator: React.FC<IProps> = ({
   replyType = 'comment',
   commentId = '',
   postId = '',
+  paddingLeft,
 }) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
@@ -149,7 +151,7 @@ const MentionOperator: React.FC<IProps> = ({
   }, [itemData.is_like]);
 
   return (
-    <MentionOperatorWrapper>
+    <MentionOperatorWrapper paddingLeft={paddingLeft}>
       <Flex justifyContent='space-between' className='mention-operator'>
         <Flex>
           <Box onClick={() => setReplyVisible(true)} className='operator-item'>
@@ -160,7 +162,7 @@ const MentionOperator: React.FC<IProps> = ({
               color='textTips'
               title={t('editorComment')}
             />
-            {itemData.comment_num || 0}
+            {itemData.comment_list_resp?.total_num || itemData.comment_num || 0}
           </Box>
           {/* <Box className="operator-item">
             <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />

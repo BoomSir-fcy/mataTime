@@ -31,6 +31,7 @@ import {
   CommentListFooter,
 } from './style';
 import { SortIcon } from './SortIcon';
+import { Commnet } from './components';
 
 type Iprops = {
   itemData: any;
@@ -60,6 +61,20 @@ const UserNmae = styled(Text)`
   }
   ${({ theme }) => theme.mediaQueries.sm} {
     max-width: max-content;
+  }
+`;
+
+const ChildrenComment = styled(Box)`
+  border-left: solid 1px ${({ theme }) => theme.colors.borderColor};
+  padding-left: 25px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-left: 64px;
+  }
+`;
+
+const ChildrenCommentContent = styled(Flex)`
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 14px 25px 0 0;
   }
 `;
 
@@ -274,6 +289,16 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                 postId={item.pid}
                 commentId={item.id}
               />
+              <ChildrenComment>
+                {(item?.comment_list_resp?.list ?? []).map(row => (
+                  <ChildrenCommentContent>
+                    <Commnet data={row} key={row.id} />
+                  </ChildrenCommentContent>
+                ))}
+                <Box>
+                  <Text>共5条回复</Text>
+                </Box>
+              </ChildrenComment>
             </CommentItem>
           ))}
         </List>

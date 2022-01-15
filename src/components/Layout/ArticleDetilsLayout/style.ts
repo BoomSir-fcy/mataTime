@@ -43,10 +43,12 @@ export const CommentListBox = styled(Card)`
   margin-bottom: 50px;
 `;
 export const CommentTitle = styled(Flex)`
-  padding: 0 10px;
+  /* padding: 0 10px; */
   height: 54px;
   font-size: 18px;
   font-weight: bold;
+  border-top: solid 1px ${({ theme }) => theme.colors.borderColor};
+  border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};
   ${({ theme }) => theme.mediaQueries.sm} {
     padding-left: 29px;
     padding-right: 17px;
@@ -62,26 +64,27 @@ export const CommentTitle = styled(Flex)`
     }
   }
 `;
-export const CommentItem = styled.div`
+export const CommentItem = styled(Box)`
+  border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};
+  padding: 8px 8px 0 12px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 18px 18px 0 28px;
+  }
   :hover {
     /* background-color: #1F2534; */
     background-color: ${({ theme }) => theme.colors.backgroundCard};
     transition: all 0.3s;
   }
-  padding: 8px 8px 0 12px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 18px 18px 0 28px;
-  }
   .mention-operator {
     padding-bottom: 20px;
-    border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};
+    /* border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor}; */
   }
 `;
 export const CommentHeader = styled(Flex)`
   .relative-time {
-    margin-top: 8px;
+    margin-top: 5px;
     font-size: 14px;
-    color: ${({ theme }) => theme.colors.textgrey };
+    color: ${({ theme }) => theme.colors.textgrey};
   }
   .topic {
     display: flex;
@@ -98,7 +101,7 @@ export const CommentHeader = styled(Flex)`
     margin-left: 18px;
     font-size: 16px;
     font-weight: 400;
-    color: ${({ theme }) => theme.colors.textgrey };
+    color: ${({ theme }) => theme.colors.textgrey};
     line-height: 35px;
     div {
       line-height: initial;
@@ -117,7 +120,7 @@ export const CommentFooter = styled(Flex)`
   padding-left: 100px;
   align-items: center;
   height: 60px;
-  color: ${({ theme }) => theme.colors.textgrey };
+  color: ${({ theme }) => theme.colors.textgrey};
   border-bottom: solid 1px ${({ theme }) => theme.colors.commentBorder};
   & div {
     padding: 10px;
@@ -129,5 +132,5 @@ export const CommentListFooter = styled.div`
   line-height: 60px;
   font-size: 14px;
   font-weight: 400;
-  color: ${({ theme }) => theme.colors.textgrey };
+  color: ${({ theme }) => theme.colors.textgrey};
 `;
