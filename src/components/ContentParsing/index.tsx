@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import reactStringReplace from 'react-string-replace';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { Text } from 'uikit';
 import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -39,6 +40,7 @@ const ParagraphItem = styled.div`
   min-height: 1.1875em;
   font-family: Arial;
   line-height: 1.1875;
+  user-select: text;
   p {
     font-size: 18px;
     font-family: Arial;
@@ -202,9 +204,13 @@ export const ContentParsing = (props: IProps) => {
         })}
       {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
         <ExpandWrapper>
-          <span
+          <a
+            href={`javascript:void(${
+              expand ? t('homePutAway') : t('homeOpen')
+            })`}
             onClick={(e: any) => {
               e.stopPropagation();
+              e.preventDefault();
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
               if (callback) {
                 callback(MoreOperatorEnum.EXPAND);
@@ -212,8 +218,10 @@ export const ContentParsing = (props: IProps) => {
               setExpand(!expand);
             }}
           >
-            {expand ? t('homePutAway') : t('homeOpen')}
-          </span>
+            <Text color='textPrimary' fontSize='12px'>
+              {expand ? t('homePutAway') : t('homeOpen')}
+            </Text>
+          </a>
         </ExpandWrapper>
       ) : null}
     </ContentParsingWrapper>

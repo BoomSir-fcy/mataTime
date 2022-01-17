@@ -156,7 +156,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 padding='0'
                 title={t('popupShieldUser')}
               >
-                <Icon color='textAssist' name='icon-pingbi2' />
+                <Icon color='white_black' name='icon-pingbi2' />
               </Button>
             )}
             <a
