@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled, { useTheme, css } from 'styled-components';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-import { concat } from 'lodash';
 import {
   Avatar,
   Icon,
@@ -39,7 +38,6 @@ const PopupButton = styled(Flex)`
   align-items: center;
   cursor: pointer;
 `;
-
 const CommentStyle = styled(CommentListBox)`
   overflow-x: auto;
   overflow-y: hidden;
@@ -47,7 +45,6 @@ const CommentStyle = styled(CommentListBox)`
     overflow: visible;
   }
 `;
-
 const CommentRows = styled(Flex)`
   padding: 8px 8px 0 12px;
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -58,7 +55,6 @@ const CommentRows = styled(Flex)`
     transition: all 0.3s;
   }
 `;
-
 const ChildrenComment = styled(Box)`
   border-left: solid 1px ${({ theme }) => theme.colors.borderColor};
   margin-left: 74px;
@@ -66,11 +62,25 @@ const ChildrenComment = styled(Box)`
     margin-left: 92px;
   }
 `;
-const ChildrenCommentContent = styled(Flex)`
+const ChildrenCommentContent = styled(Flex)<{ active: boolean }>`
   padding: 8px 8px 0 12px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 14px 18px 0 25px;
   }
+  ${props =>
+    props.active &&
+    css`
+      transition: all 0.3s;
+      animation: fadeIt 4s ease;
+      @keyframes fadeIt {
+        0% {
+          background-color: ${({ theme }) => theme.colors.backgroundCard};
+        }
+        100% {
+          background-color: ${({ theme }) => theme.colors.backgroundCard};
+        }
+      }
+    `}
   :hover {
     background-color: ${({ theme }) => theme.colors.backgroundCard};
     transition: all 0.3s;
@@ -134,7 +144,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       page: current || page,
       sort_add_time: sortTime,
       sort_like: sortLike,
-      comment_id: parsedQs.comment_id,
+      comment_id: (current || page) === 1 ? parsedQs.comment_id : 0,
     }).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
@@ -164,7 +174,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             list:
               params.page === 1
                 ? res.data?.list
-                : concat(row?.comment_list_resp?.list, res.data?.list),
+                : _.concat(row?.comment_list_resp?.list, res.data?.list),
           };
           return { ...row, comment_list_resp: comment_list_resp };
         }
@@ -236,7 +246,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     setListData([...arr]);
   };
 
-  console.log(commentRef);
+  React.useEffect(() => {
+    if (listData.length > 0) {
+      commentRef?.current?.scrollIntoView();
+    }
+  }, [listData]);
 
   return (
     <CommentStyle>
@@ -340,38 +354,43 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   />
                 </Box>
               </CommentRows>
-              <div ref={commentRef} key={index}>
-                111
-              </div>
+
               {/* 二级评论 */}
               {item?.comment_list_resp?.list?.length > 0 && (
                 <ChildrenComment>
                   {(item?.comment_list_resp?.list ?? []).map(row => (
-                    <ChildrenCommentContent>
-                      <Commnet
-                        data={row}
-                        key={row.id}
-                        firstCommentId={item.id}
-                        firstUid={item.user_id}
-                        delSubCommentCallback={data =>
-                          delSubComment({
-                            commentId: data.id,
-                            firstCommentId: item.id,
-                            firstComment: item,
-                          })
-                        }
-                        callback={() =>
-                          getSubCommentList({
-                            pid: itemData.id,
-                            first_comment_id: item.id,
-                            prepage: 2,
-                            page: 1,
-                            sort_add_time: sortTime,
-                            sort_like: sortLike,
-                          })
-                        }
-                      />
-                    </ChildrenCommentContent>
+                    <React.Fragment>
+                      {Number(parsedQs.comment_id) === row.id && (
+                        <div ref={commentRef} key={row.id}></div>
+                      )}
+                      <ChildrenCommentContent
+                        active={Number(parsedQs.comment_id) === row.id}
+                      >
+                        <Commnet
+                          data={row}
+                          key={row.id}
+                          firstCommentId={item.id}
+                          firstUid={item.user_id}
+                          delSubCommentCallback={data =>
+                            delSubComment({
+                              commentId: data.id,
+                              firstCommentId: item.id,
+                              firstComment: item,
+                            })
+                          }
+                          callback={() =>
+                            getSubCommentList({
+                              pid: itemData.id,
+                              first_comment_id: item.id,
+                              prepage: 2,
+                              page: 1,
+                              sort_add_time: sortTime,
+                              sort_like: sortLike,
+                            })
+                          }
+                        />
+                      </ChildrenCommentContent>
+                    </React.Fragment>
                   ))}
                   {item?.comment_list_resp?.total_num >
                     item?.comment_list_resp?.list?.length && (
