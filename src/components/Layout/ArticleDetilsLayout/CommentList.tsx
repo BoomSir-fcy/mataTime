@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
+import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { concat } from 'lodash';
 import {
@@ -11,6 +12,7 @@ import {
   PopupWrap,
   MoreOperatorEnum,
 } from 'components';
+import { useToast } from 'hooks';
 import { Flex, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
@@ -21,16 +23,9 @@ import { ReadType } from 'hooks/imHooks/types';
 
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-import { MAX_SPEND_TIME_PAGE_TATOL, DEFAULT_FIRST_COMMENT_PAGE } from 'config';
-import {
-  CommentListBox,
-  CommentTitle,
-  CommentItem,
-  CommentHeader,
-  CommentContent,
-  // CommentFooter,
-  CommentListFooter,
-} from './style';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { CommentListBox, CommentTitle, CommentItem } from './style';
 import { SortIcon } from './SortIcon';
 import { Commnet } from './components';
 
@@ -52,34 +47,37 @@ const CommentStyle = styled(CommentListBox)`
     overflow: visible;
   }
 `;
-const WidthBox = styled(Box)`
-  /* min-width: 370px; */
-`;
-const UserNmae = styled(Text)`
-  max-width: 210px;
-  ${({ theme }) => theme.mediaQueries.xs} {
-    max-width: 350px;
-  }
+
+const CommentRows = styled(Flex)`
+  padding: 8px 8px 0 12px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    max-width: max-content;
+    padding: 18px 18px 0 28px;
+  }
+  :hover {
+    background-color: ${({ theme }) => theme.colors.backgroundCard};
+    transition: all 0.3s;
   }
 `;
 
 const ChildrenComment = styled(Box)`
   border-left: solid 1px ${({ theme }) => theme.colors.borderColor};
-  padding-left: 25px;
+  margin-left: 74px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 64px;
+    margin-left: 92px;
   }
 `;
-
 const ChildrenCommentContent = styled(Flex)`
+  padding: 8px 8px 0 12px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 14px 25px 0 0;
+    padding: 14px 18px 0 25px;
+  }
+  :hover {
+    background-color: ${({ theme }) => theme.colors.backgroundCard};
+    transition: all 0.3s;
   }
 `;
-
 const CommentMore = styled(Button)`
+  padding-left: 25px;
   i {
     margin-left: 11px !important;
     transform: rotate(90deg);
@@ -88,6 +86,7 @@ const CommentMore = styled(Button)`
 
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
+  const { toastSuccess } = useToast();
   const { itemData, nonce, setNonce } = props;
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -99,7 +98,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [refresh, setRefresh] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
+  const commentRef = React.useRef<HTMLDivElement>(null);
   const theme = useTheme();
+  const parsedQs = useParsedQueryString();
 
   useEffect(() => {
     refresh && getList(1);
@@ -133,12 +134,12 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       page: current || page,
       sort_add_time: sortTime,
       sort_like: sortLike,
+      comment_id: parsedQs.comment_id,
     }).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
         setPage((current || page) + 1);
         setListData([...listData, ...(res.data.list || [])]);
-        // setListData([...listData, ...(res.data.list.map(item=>({...item,post:item,post_id:item.pid})))])
         setTotalPage(res.data.total_page);
         setRefresh(false);
       }
@@ -151,10 +152,19 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       const res = await Api.CommentApi.getSubCommentList(params);
       const subComment = listData.map(row => {
         if (params.first_comment_id === row.id) {
+          // const subCommentList = concat(
+          //   row?.comment_list_resp?.list,
+          //   res.data?.list,
+          // );
+          // console.log(_.uniqWith(subCommentList, _.isEqual));
           let comment_list_resp = {
             ...row.comment_list_resp,
             page: params.page,
-            list: concat(row?.comment_list_resp?.list, res.data?.list),
+            total_num: res.data.total_num,
+            list:
+              params.page === 1
+                ? res.data?.list
+                : concat(row?.comment_list_resp?.list, res.data?.list),
           };
           return { ...row, comment_list_resp: comment_list_resp };
         }
@@ -164,6 +174,24 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  // 二级评论删除
+  const delSubComment = async data => {
+    console.log(data);
+    Api.MeApi.removeContentDetail(data?.commentId).then(res => {
+      if (Api.isSuccess(res)) {
+        getSubCommentList({
+          pid: itemData.id,
+          first_comment_id: data.firstCommentId,
+          prepage: 2,
+          page: 1,
+          sort_add_time: sortTime,
+          sort_like: sortLike,
+        });
+        toastSuccess(t('moreDeleteSuccess'));
+      }
+    });
   };
 
   // 更新列表
@@ -208,9 +236,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     setListData([...arr]);
   };
 
+  console.log(commentRef);
+
   return (
     <CommentStyle>
-      <WidthBox>
+      <Box>
         <CommentTitle justifyContent='space-between' alignItems='center'>
           <span>{t('newsCommentMenuTitle')}</span>
           <div className='sort-box'>
@@ -245,7 +275,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   />
                 )
               }
-              <Flex>
+              <CommentRows>
                 <Box
                   minWidth='50px'
                   as={Link}
@@ -257,17 +287,17 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     scale='md'
                   />
                 </Box>
-                <div style={{ flex: 1, marginLeft: '14px' }}>
-                  <CommentHeader justifyContent='space-between' mb='15px'>
+                <Box ml='14px' width='100%'>
+                  <Flex mb='12px' justifyContent='space-between'>
                     <Box>
-                      <UserNmae fontSize='18px' bold ellipsis>
+                      <Text bold ellipsis>
                         {item.user_name}
-                      </UserNmae>
-                      <Text color='textgrey' mt='5px'>
+                      </Text>
+                      <Text color='textgrey'>
                         {relativeTime(item.add_time)}
                       </Text>
                     </Box>
-                    <Flex>
+                    <Box>
                       <PopupWrap
                         ref={popupRefs}
                         trigger={
@@ -290,27 +320,30 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           callback={initList}
                         />
                       </PopupWrap>
-                      {/* <MorePopup data={new Object()}> */}
-                      {/* </MorePopup> */}
-                    </Flex>
-                  </CommentHeader>
+                    </Box>
+                  </Flex>
                   <ContentParsing disableParseSquare content={item.comment} />
-                </div>
-              </Flex>
-              <MentionOperator
-                type='Comment'
-                callback={(data, type) => updateList(data, type)}
-                itemData={{
-                  ...item,
-                  comment: {
-                    ...item,
-                    content: item.comment,
-                  },
-                }}
-                firstCommentId={item.id}
-                postId={item.pid}
-                commentId={item.id}
-              />
+                  <MentionOperator
+                    type='Comment'
+                    callback={(data, type) => updateList(data, type)}
+                    itemData={{
+                      ...item,
+                      comment: {
+                        ...item,
+                        content: item.comment,
+                      },
+                    }}
+                    firstCommentId={item.id}
+                    postId={item.pid}
+                    commentId={item.id}
+                    paddingLeft={0}
+                  />
+                </Box>
+              </CommentRows>
+              <div ref={commentRef} key={index}>
+                111
+              </div>
+              {/* 二级评论 */}
               {item?.comment_list_resp?.list?.length > 0 && (
                 <ChildrenComment>
                   {(item?.comment_list_resp?.list ?? []).map(row => (
@@ -319,6 +352,24 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                         data={row}
                         key={row.id}
                         firstCommentId={item.id}
+                        firstUid={item.user_id}
+                        delSubCommentCallback={data =>
+                          delSubComment({
+                            commentId: data.id,
+                            firstCommentId: item.id,
+                            firstComment: item,
+                          })
+                        }
+                        callback={() =>
+                          getSubCommentList({
+                            pid: itemData.id,
+                            first_comment_id: item.id,
+                            prepage: 2,
+                            page: 1,
+                            sort_add_time: sortTime,
+                            sort_like: sortLike,
+                          })
+                        }
                       />
                     </ChildrenCommentContent>
                   ))}
@@ -341,10 +392,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                         }
                       >
                         <Text color='textPrimary'>
-                          共
-                          {item?.comment_list_resp?.total_num -
-                            item?.comment_list_resp?.list?.length}
-                          条回复
+                          {t('A total of 1 replies', {
+                            value:
+                              item?.comment_list_resp?.total_num -
+                              item?.comment_list_resp?.list?.length,
+                          })}
                         </Text>
                         <Icon
                           name='icon-shangjiantou'
@@ -360,7 +412,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
           ))}
         </List>
         {/* <CommentListFooter>没有更多内容了</CommentListFooter> */}
-      </WidthBox>
+      </Box>
     </CommentStyle>
   );
 };

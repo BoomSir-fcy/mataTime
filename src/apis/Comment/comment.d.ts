@@ -9,6 +9,7 @@ declare namespace Api {
       // 1:多到少2:少到多,默认1
       sort_like: number;
       first_comment_id?: number;
+      comment_id?: string;
     }
     type likeParams = {
       post_id: string | number;
