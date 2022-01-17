@@ -91,9 +91,9 @@ const ArticleComponents = (props, ref) => {
       type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
       type === MoreOperatorEnum.SETTOP ||
-      type === MoreOperatorEnum.CANCEL_SETTOP ||
+      type === MoreOperatorEnum.CANCEL_SETTOP
       // type === MoreOperatorEnum.COMMONT ||
-      type === MoreOperatorEnum.BLOCKUSER
+      // type === MoreOperatorEnum.BLOCKUSER
     ) {
       setIsEnd(false);
       Getlist(1);
@@ -115,6 +115,11 @@ const ArticleComponents = (props, ref) => {
       }
       if (item.id === newItem.id && handleChangeList) {
         // 屏蔽、删除
+      } else if (
+        item.user_id === newItem.user_id &&
+        type === MoreOperatorEnum.BLOCKUSER
+      ) {
+        // 屏蔽用户
       } else {
         arr.push(obj);
       }
