@@ -56,7 +56,7 @@ const PaginateStyle = styled(Flex)`
     &:hover {
       /* border: 1px solid  ${({ theme }) => theme.colors.primaryDark}; */
       background-color: ${({ theme }) => theme.colors.white_black};
-      color: ${({ theme }) => theme.colors.white};
+      color: ${({ theme }) => theme.colors.background};
     }
     &.disabled {
       cursor: no-drop;
