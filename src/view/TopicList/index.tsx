@@ -85,7 +85,7 @@ const TopicList = props => {
     let arr = [];
 
     if (
-      type === FOLLOW ||
+      // type === FOLLOW ||
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
@@ -103,6 +103,13 @@ const TopicList = props => {
 
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
+      }
+      if (
+        (item.id === newItem.id || item.user_id === newItem.user_id) &&
+        type === MoreOperatorEnum.FOLLOW
+      ) {
+        // 关注更新状态
+        obj = { ...item, is_attention: newItem.is_attention };
       }
       if (item.id === newItem.id && handleChangeList) {
         // 屏蔽、删除
