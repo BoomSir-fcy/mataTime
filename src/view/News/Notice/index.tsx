@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { Flex, Card, Box, Text } from 'uikit';
@@ -11,6 +11,8 @@ import {
   NoticeItemWrapper,
   NoticeContentWrapper,
 } from './style';
+import { MessageType } from './type';
+import { Link } from 'react-router-dom';
 
 const SystemAvatar = styled(Box)`
   width: 60px;
@@ -71,6 +73,64 @@ const NoticeItem: React.FC<{
   const { type } = itemData;
 
   const ruleUrl = `${window.location.origin}/content-rules/index.html`;
+
+  const noticeContent = useMemo(() => {
+    if (type === MessageType.MessageSystemRechargeSuccess) {
+      const content = JSON.parse(itemData.msg_content);
+      return (
+        <>
+          {t('Deposit Successfully')}
+          <Text color='textTips'>
+            {t('DepositSuccessfullyDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: dayjs(itemData.add_time).format(t('YYYY-MM-DD HH:mm:ss')),
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemRewardSuccess) {
+      const content = JSON.parse(itemData.msg_content);
+      return (
+        <>
+          {t('Tip Successfully')}
+          <Text color='textTips'>
+            {t('TipSuccessfullyDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: dayjs(itemData.add_time).format(t('YYYY-MM-DD HH:mm:ss')),
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemWithdrawalSuccess) {
+      const content = JSON.parse(itemData.msg_content);
+      return (
+        <>
+          {t('Withdraw Successfully')}
+          <Text color='textTips'>
+            {t('WithdrawSuccessfullyDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: dayjs(itemData.add_time).format(t('YYYY-MM-DD HH:mm:ss')),
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemAddTag) {
+      return t('AddUserTag', { value: JSON.parse(itemData.msg_content) });
+    }
+    if (type === MessageType.MessageSystemUpdateTag) {
+      const content = JSON.parse(itemData.msg_content);
+      return t('EditUserTag', {
+        beforeValue: content?.before_name,
+        afterValue: content?.after_name,
+      });
+    }
+    if (type === MessageType.MessageSystemDeleteTag) {
+      return t('DeleteUserTag', { value: JSON.parse(itemData.msg_content) });
+    }
+  }, [type]);
   return (
     <NoticeItemWrapper>
       <Flex justifyContent='space-between' padding='0 20px 25px 30px'>
@@ -89,29 +149,30 @@ const NoticeItem: React.FC<{
             {dayjs(itemData.add_time).format(t('MM-DD HH:mm'))}
           </Text>
           <Text color='textTips'>
-            {type === 6 &&
+            {type === MessageType.MessageSystemMute &&
               getHTML('settingNotificationText1', {
                 value: `<a href="${ruleUrl}" target="_blank">${t(
                   'latformReviewRules',
                 )}</a>`,
               })}
-            {type === 7 &&
+            {type === MessageType.MessageSystemUnMute &&
               getHTML('settingNotificationText2', {
                 value: `<a href="${ruleUrl}" target="_blank">${t(
                   'latformReviewRules',
                 )}</a>`,
               })}
-            {type === 8 &&
+            {type === MessageType.MessageSystemShieldPost &&
               getHTML('settingNotificationText3', {
                 value: `<a href="${ruleUrl}" target="_blank">${t(
                   'latformReviewRules',
                 )}</a>`,
               })}
+            {noticeContent}
           </Text>
         </Content>
       </Flex>
       {itemData?.post?.user_address && (
-        <PostContent>
+        <PostContent as={Link} to={`/articleDetils/${itemData.post?.post_id}`}>
           <AvatarCard
             userName={itemData?.post?.nick_name}
             avatar={itemData?.post?.nft_image}

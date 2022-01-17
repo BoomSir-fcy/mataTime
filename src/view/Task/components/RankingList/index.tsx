@@ -84,6 +84,7 @@ const ContentCard = styled(Box)`
   ${({ theme }) => theme.mediaQueries.md} {
     margin-top: 0px;
   }
+  z-index: 1;
 `;
 const Table = styled(Flex)`
   flex-direction: column;
@@ -137,7 +138,7 @@ const RankingList: React.FC = React.memo(() => {
     event => {
       setPageNum(event.selected + 1);
     },
-    [setPageNum],
+    [pageNum],
   );
 
   const getTotalPage = totalNum => {

@@ -267,8 +267,8 @@ export const useFetchInviteRankingList = () => {
         // setTotal(temp?.total_count || 1);
         // 默认只显示排行榜的前20名
         setTotal(temp?.total_count > 20 ? 20 : temp?.total_count);
-        setPageNum(temp?.page || 1);
-        setPageSize(temp?.page_size || 10);
+        // setPageNum(temp?.page || 1);
+        // setPageSize(temp?.page_size || 10);
       }
     }).catch(() => {
       setList([]);
