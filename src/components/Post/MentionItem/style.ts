@@ -158,7 +158,7 @@ export const MentionItemUserWrapper = styled.div`
         }
       }
     }
-    &:hover {
+    &:hover, &:focus {
       .icon-shield {
         opacity: 1;
       }

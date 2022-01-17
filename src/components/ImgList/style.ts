@@ -8,26 +8,44 @@ overflow: hidden;
 border: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 border-radius: 10px;
 
-img{
-  object-fit: cover;
-  object-position: top;
+a{
+  /* object-fit: cover;
+  object-position: top; */
   width:50%;
   display: block;
-  cursor: pointer;
+  cursor: zoom-in;
   max-height: 150px;
   padding-bottom: 1px;
   &:nth-child(2n + 1) {
     padding-right: 1px;
   }
 }
+img{
+  object-fit: cover;
+  object-position: top;
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* width:50%;
+  cursor: zoom-in;
+  max-height: 150px;
+  padding-bottom: 1px;
+  &:nth-child(2n + 1) {
+    padding-right: 1px;
+  } */
+}
 .imgListRightBox{
   flex:50%;
   display:flex;
   flex-direction: column;
-  img{
+  a{
     width:100%;
     max-height: 150px;
   }
+  /* img{
+    width:100%;
+    max-height: 150px;
+  } */
 }
 `
 // export const  ImgItem = styled.img`

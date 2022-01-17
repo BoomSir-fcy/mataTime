@@ -12,7 +12,6 @@ import {
   // FollowPopupD,
   ContentParsing,
   MorePostPopup,
-  ShiledUserModal,
 } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
@@ -51,8 +50,6 @@ const MentionItem: React.FC<MentionItemProps> = ({
   setIsShileUser,
 }) => {
   const mentionRef: any = useRef();
-  const { push } = useHistory();
-  const { pathname } = useLocation();
 
   return (
     <MentionItemWrapper ref={mentionRef}>
@@ -163,7 +160,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
               </Button>
             )}
             <a
-              href='#'
+              href='javascript: void(0)'
               onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -174,7 +171,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 ref={popupRef}
                 trigger={
                   <PopupButton>
-                    <img src={moreIcon} alt='more' />
+                    <Icon name='icon-gengduo' size={20} color='white_black' />
                   </PopupButton>
                 }
                 nested
