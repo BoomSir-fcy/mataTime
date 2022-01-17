@@ -40,13 +40,13 @@ enum TabTypes {
 
 const tabDatas = [
   {
-    lable: '综合',
-    tLable: '综合',
+    lable: 'Top ',
+    tLable: 'Top ',
     type: TabTypes.TOTAL,
   },
   {
-    lable: '最新',
-    tLable: '最新',
+    lable: 'Latest',
+    tLable: 'Latest',
     type: TabTypes.POST,
   },
   {

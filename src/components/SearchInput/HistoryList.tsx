@@ -183,7 +183,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
       ) : (
         <Box padding='8px 18px'>
           <Text fontSize='14px' color='textTips'>
-            {t('Search for people,topics')}
+            {t('Search for people,topics or keywords')}
           </Text>
         </Box>
       )}
