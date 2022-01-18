@@ -219,7 +219,7 @@ const RankingList: React.FC = React.memo(() => {
                   list.map(item => (
                     <Row key={item.superior_uid} className='LinkRow'>
                       <ItemText>{renderRanking(item.rank)}</ItemText>
-                      <ItemText small ellipsis>
+                      <ItemText width='100%' textAlign='center' small ellipsis>
                         {item.superior_nickname}
                       </ItemText>
                       <ItemText small ellipsis>
