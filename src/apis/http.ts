@@ -4,6 +4,10 @@ import { storage } from 'config';
 import eventBus from '../utils/eventBus';
 import dispatchHttpErrorEvent from './httpErrorEvent';
 
+interface AxiosRequestConfigCustom extends AxiosRequestConfig {
+  hideHttpError?: boolean
+}
+
 const baseURL = process.env.REACT_APP_API_HOST;
 
 axios.defaults.timeout = 30 * 1000;
@@ -22,12 +26,16 @@ axios.interceptors.response.use(
     return Promise.reject(response);
   },
   error => {
+    console.log(error.toJSON(), Object.keys(error), Object.values(error))
+    if (error.isAxiosError && !error.response && !error.config.hideHttpError) {
+      eventBus.dispatchEvent(new Event('networkerror'));
+    }
     return Promise.reject(error.response);
   },
 );
 
 export class Http {
-  async request(configs: AxiosRequestConfig) {
+  async request(configs: AxiosRequestConfigCustom) {
     let response;
     let token = localStorage.getItem(storage.Token);
 
@@ -46,22 +54,24 @@ export class Http {
     }
   }
 
-  async get(url: string, params?) {
-    const config: AxiosRequestConfig = {
+  async get(url: string, params?, option: AxiosRequestConfigCustom = {}) {
+    const config: AxiosRequestConfigCustom = {
       method: 'GET',
       url,
       baseURL,
       params,
+      ...option,
     };
     return this.request(config);
   }
 
-  async post(url: string, data?) {
-    const config: AxiosRequestConfig = {
+  async post(url: string, data?, option: AxiosRequestConfigCustom = {}) {
+    const config: AxiosRequestConfigCustom = {
       method: 'POST',
       url,
       data,
       baseURL,
+      ...option,
     };
     return this.request(config);
   }

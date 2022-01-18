@@ -14,7 +14,7 @@ export class CommonApi extends Http {
 
   // 获取websocket的token
   async getWsUrl() {
-    const res: Api.Response<Api.Common.WebSocketToken> = await this.get('/v1/getws');
+    const res: Api.Response<Api.Common.WebSocketToken> = await this.get('/v1/getws', undefined, { hideHttpError: true });
     if (Http.checkSuccess(res)) {
       return res.data
     }

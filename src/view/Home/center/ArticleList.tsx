@@ -91,6 +91,10 @@ const ArticleComponents = (props, ref) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    if (type) {
+      console.log(type);
+      return;
+    }
     if (
       // type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
@@ -161,8 +165,9 @@ const ArticleComponents = (props, ref) => {
   }, [list, blockUsersIds, unFollowUsersIds, isFollowing]);
 
   const getList = useCallback(() => {
+    // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
     Getlist();
-  }, [Getlist]);
+  }, [Getlist, renderList.length]);
 
   return (
     <ArticleListBox>

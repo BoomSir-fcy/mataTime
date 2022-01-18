@@ -8,6 +8,8 @@ import MentionItem from './MentionItem';
 import MentionOperator from './MentionOperator';
 import styled from 'styled-components';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
+import { useDispatch } from 'react-redux';
+import { fetchPostDetailAsync } from 'store/mapModule/reducer';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -34,6 +36,7 @@ const PostList: React.FC<PostListPorps> = ({
 }) => {
   const [PostItemData, setPostItemData] = useState();
   const [isShileUser, setIsShileUser] = React.useState(false);
+  const dispatch = useDispatch();
 
   const currentUid = useStore(p => p.loginReducer.userInfo);
   // 阅读文章扣费
@@ -47,6 +50,8 @@ const PostList: React.FC<PostListPorps> = ({
       setNonce(prep => prep + 1);
       return;
     }
+    dispatch(fetchPostDetailAsync(newItem.id));
+
     updateList(newItem.id, type);
     return;
   };
@@ -88,6 +93,7 @@ const PostList: React.FC<PostListPorps> = ({
                   post: {
                     ...item,
                     post_id: item.id,
+                    ...map[item.id],
                   },
                   ...map[item.id],
                 }}
@@ -104,6 +110,7 @@ const PostList: React.FC<PostListPorps> = ({
                   post: {
                     ...item,
                     post_id: item.id,
+                    ...map[item.id],
                   },
                   ...map[item.id],
                 }}

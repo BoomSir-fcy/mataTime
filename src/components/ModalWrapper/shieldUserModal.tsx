@@ -48,7 +48,7 @@ export const ShiledUserModal: React.FC<{
   const shield = async () => {
     try {
       const res = await Api.MeApi.shieldUser(userinfo.user_id);
-      dispatch(fetchPostDetailAsync(userinfo.post_id));
+      // dispatch(fetchPostDetailAsync(userinfo.post_id));
       if (Api.isSuccess(res)) {
         dispatch(addBlockUserId(userinfo.user_id));
         onClose();

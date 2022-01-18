@@ -621,6 +621,7 @@
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",
+  "http-error-network": "Network error. Please try again later",
   "http-error-30000001": "invalid parameter",
   "http-error-30001001": "Server error",
   "http-error-30001002": "Failed to find ",

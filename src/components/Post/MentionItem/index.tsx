@@ -170,7 +170,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
               <Popup
                 ref={popupRef}
                 trigger={
-                  <PopupButton>
+                  <PopupButton title={t('popupMore')}>
                     <Icon name='icon-gengduo' size={20} color='white_black' />
                   </PopupButton>
                 }

@@ -29,3 +29,15 @@ export default function useHttpError() {
   
   return httpErrorToast
 }
+
+export function useNetworkError() {
+  const { toastError } = useToast();
+  const { t } = useTranslation();
+
+  const networkErrorToast = useCallback(() => {
+    toastError(t('http-error-network'));
+  }, [t, toastError])
+  
+  return networkErrorToast
+}
+
