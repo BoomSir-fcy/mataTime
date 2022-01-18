@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { useTheme, css } from 'styled-components';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import {
   Avatar,
@@ -15,7 +16,6 @@ import { useToast } from 'hooks';
 import { Flex, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
-import { relativeTime } from 'utils';
 
 import { Api } from 'apis';
 import { ReadType } from 'hooks/imHooks/types';
@@ -314,7 +314,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                         {item.user_name}
                       </Text>
                       <Text color='textgrey'>
-                        {relativeTime(item.add_time)}
+                        {dayjs(item.add_time).format('YYYY-MM-DD HH:mm')}
                       </Text>
                     </Box>
                     <Box>
@@ -376,7 +376,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           data={row}
                           key={row.id}
                           firstCommentId={item.id}
-                          firstUid={item.user_id}
+                          postUid={itemData.user_id}
                           delSubCommentCallback={data =>
                             delSubComment({
                               commentId: data.id,
@@ -384,16 +384,39 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                               firstComment: item,
                             })
                           }
-                          callback={() =>
-                            getSubCommentList({
-                              pid: itemData.id,
-                              first_comment_id: item.id,
-                              prepage: 2,
-                              page: 1,
-                              sort_add_time: sortTime,
-                              sort_like: sortLike,
-                            })
-                          }
+                          callback={(data, type) => {
+                            if (type === 'LIKE') {
+                              const comment = listData.map(rows => {
+                                if (item.id === rows.id) {
+                                  const subCommentList =
+                                    rows.comment_list_resp?.list?.map(it => {
+                                      if (it.id === data.id) {
+                                        return data;
+                                      }
+                                      return it;
+                                    });
+                                  return {
+                                    ...rows,
+                                    comment_list_resp: {
+                                      ...rows.comment_list_resp,
+                                      list: subCommentList,
+                                    },
+                                  };
+                                }
+                                return rows;
+                              });
+                              setListData(comment);
+                            } else {
+                              getSubCommentList({
+                                pid: itemData.id,
+                                first_comment_id: item.id,
+                                prepage: 2,
+                                page: 1,
+                                sort_add_time: sortTime,
+                                sort_like: sortLike,
+                              });
+                            }
+                          }}
                         />
                       </ChildrenCommentContent>
                     </React.Fragment>

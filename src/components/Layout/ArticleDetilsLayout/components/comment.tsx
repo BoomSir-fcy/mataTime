@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import { Avatar, ContentParsing } from 'components';
 import { Flex, Box, Text } from 'uikit';
-import { relativeTime } from 'utils';
 import { useTranslation } from 'contexts/Localization';
 
 import MentionOperator from 'view/News/components/MentionOperator';
@@ -23,17 +23,17 @@ const CommentCol = styled(Flex)`
 
 export const Commnet: React.FC<{
   firstCommentId: number;
-  firstUid: number;
+  postUid: number;
   data: any;
   delSubCommentCallback: (item: any) => void;
-  callback: (item?: any) => void;
+  callback: (item?: any, type?: string) => void;
 }> = React.memo(
-  ({ firstCommentId, firstUid, data, delSubCommentCallback, callback }) => {
+  ({ firstCommentId, postUid, data, delSubCommentCallback, callback }) => {
     const { t } = useTranslation();
 
     return (
       <CommentCol width='100%'>
-        <Box as={Link} to={`/me/profile/${data?.user_id}`}>
+        <Box minWidth='40px' as={Link} to={`/me/profile/${data?.user_id}`}>
           <Avatar uid={data?.user_id} src={data?.user_avator_url} scale='sm' />
         </Box>
         <Box ml='18px' width='100%'>
@@ -42,7 +42,9 @@ export const Commnet: React.FC<{
               <Text bold ellipsis>
                 {data?.user_name}
               </Text>
-              <Text color='textgrey'>{relativeTime(data?.add_time)}</Text>
+              <Text color='textgrey'>
+                {dayjs(data?.add_time).format('YYYY-MM-DD HH:mm')}
+              </Text>
               {firstCommentId !== data.comment_id && data.comment_user_name && (
                 <Flex>
                   <Text color='textgrey'>{t('reply')}</Text>
@@ -54,7 +56,7 @@ export const Commnet: React.FC<{
             </Box>
             <Box className='aciton'>
               <SubCommentAction
-                firstUid={firstUid}
+                postUid={postUid}
                 user_id={data?.user_id}
                 comment_id={data?.id}
                 delCallback={() => delSubCommentCallback(data)}
@@ -64,7 +66,7 @@ export const Commnet: React.FC<{
           <ContentParsing disableParseSquare content={data.comment} />
           <MentionOperator
             type='Comment'
-            callback={data => callback(data)}
+            callback={(data, type) => callback(data, type)}
             itemData={{
               ...data,
               comment: {
