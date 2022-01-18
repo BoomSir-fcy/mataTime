@@ -617,6 +617,7 @@
   "allow_watch_attention": "Whether to allow others to view my follow",
   "allow_watch_fans": "Whether to allow others to watch my followers",
   "noRecommendations": "No recommendations",
+  "A total of 1 replies": "%value% total replies",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",

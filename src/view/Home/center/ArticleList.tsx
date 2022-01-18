@@ -92,7 +92,7 @@ const ArticleComponents = (props, ref) => {
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     if (
-      type === MoreOperatorEnum.FOLLOW ||
+      // type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
       type === MoreOperatorEnum.SETTOP ||
       type === MoreOperatorEnum.CANCEL_SETTOP
@@ -117,8 +117,20 @@ const ArticleComponents = (props, ref) => {
       if (item.id === newItem.id) {
         obj = { ...newItem.post };
       }
+      if (
+        (item.id === newItem.id || item.user_id === newItem.user_id) &&
+        type === MoreOperatorEnum.FOLLOW
+      ) {
+        // 关注更新状态
+        obj = { ...item, is_attention: newItem.is_attention };
+      }
       if (item.id === newItem.id && handleChangeList) {
         // 屏蔽、删除
+      } else if (
+        item.user_id === newItem.user_id &&
+        type === MoreOperatorEnum.BLOCKUSER
+      ) {
+        // 屏蔽用户
       } else {
         arr.push(obj);
       }

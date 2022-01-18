@@ -73,7 +73,7 @@ const Nav: React.FC<NavProps> = ({}) => {
       }
       return { ...item };
     });
-  }, [currentUid.uid]);
+  }, [currentUid?.uid]);
 
   const menu = renderConfig.filter(row => row.lable);
 
