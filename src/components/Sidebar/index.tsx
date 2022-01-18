@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
 import Search from '../SearchInput';
@@ -21,18 +21,22 @@ const SidebarStyled = styled(Box)`
   }
 `;
 
+enum Direction {
+  UP,
+  DOWN,
+  UNKNOW,
+}
+
 const Sidebar = props => {
   const ref = React.useRef<HTMLDivElement | null>();
-  const [state, setState] = useImmer({
-    scroll: 10,
-    top: '',
-  });
+  const [positionTop, setPositionTop] = useState(0);
   const { pathname } = useLocation();
 
   const HandleScroll = React.useCallback(
     event => {
       const evt = event || window.event;
-      const top = ref.current.clientHeight - window.innerHeight;
+      const maxTop = ref.current.clientHeight - window.innerHeight;
+      const minTop = 0;
       if (evt.stopPropagation) {
         evt.stopPropagation();
       } else {
@@ -40,17 +44,14 @@ const Sidebar = props => {
       }
       let e = event.originalEvent || event;
       let deltaY = e.deltaY || e.detail;
-      if (deltaY < 0 && state.scroll <= 10) return;
-      if (top <= state.scroll) return;
-      setState(p => {
-        p.scroll = state.scroll <= window.scrollY ? window.scrollY : 0;
-        p.top =
-          state.scroll <= window.scrollY
-            ? `-${ref.current.clientHeight - window.innerHeight}px`
-            : '0';
-      });
+      console.log(e, deltaY, '==minTop');
+      let top = positionTop + deltaY;
+      top = top > maxTop ? maxTop : top;
+      top = top < minTop ? minTop : top;
+      console.log(top);
+      setPositionTop(top);
     },
-    [state.scroll],
+    [positionTop, setPositionTop],
   );
 
   React.useEffect(() => {
@@ -60,10 +61,10 @@ const Sidebar = props => {
       document.removeEventListener('mousewheel', HandleScroll);
       document.removeEventListener('DOMMouseScroll', HandleScroll);
     };
-  }, [state.scroll]);
+  }, [HandleScroll]);
 
   return (
-    <SidebarStyled {...props} style={{ top: state.top }} ref={ref}>
+    <SidebarStyled {...props} style={{ top: `-${positionTop}px` }} ref={ref}>
       {pathname === '/search' ? (
         <SearchFilter mt='15px' mb='15px' />
       ) : (
