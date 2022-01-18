@@ -106,6 +106,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [sortTime, setSortTime] = useState(0);
   const [sortLike, setSortLike] = useState(2);
   const [refresh, setRefresh] = useState(false);
+  const [flag, setFlag] = useState(true);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   const popupRefs = React.useRef();
   const commentRef = React.useRef<HTMLDivElement>(null);
@@ -247,7 +248,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   };
 
   React.useEffect(() => {
-    if (listData.length > 0) {
+    if (listData.length > 0 && flag) {
+      setFlag(false);
       commentRef?.current?.scrollIntoView();
     }
   }, [listData]);
@@ -256,17 +258,21 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     <CommentStyle>
       <Box>
         <CommentTitle justifyContent='space-between' alignItems='center'>
-          <span>{t('newsCommentMenuTitle')}</span>
-          <div className='sort-box'>
-            <div>
-              {t('detailHeat')}
-              <SortIcon changeSort={changeSortLike} flag={sortLike} />
-            </div>
-            <div>
-              {t('detailTime')}
-              <SortIcon changeSort={changeSortTime} flag={sortTime} />
-            </div>
-          </div>
+          <Text fontWeight='bold' fontSize='18px'>
+            {t('newsCommentMenuTitle')}
+          </Text>
+          <Flex>
+            <SortIcon
+              text={t('detailHeat')}
+              changeSort={changeSortLike}
+              flag={sortLike}
+            />
+            <SortIcon
+              text={t('detailTime')}
+              changeSort={changeSortTime}
+              flag={sortTime}
+            />
+          </Flex>
         </CommentTitle>
         <List
           renderList={() => {

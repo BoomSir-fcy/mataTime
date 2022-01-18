@@ -53,7 +53,7 @@ export const CommentTitle = styled(Flex)`
     padding-left: 29px;
     padding-right: 17px;
   }
-  .sort-box {
+  /* .sort-box {
     display: flex;
     & > div {
       display: flex;
@@ -62,7 +62,7 @@ export const CommentTitle = styled(Flex)`
         margin-left: 25px;
       }
     }
-  }
+  } */
 `;
 export const CommentItem = styled(Box)`
   border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};
