@@ -13,6 +13,8 @@ export enum MessageType {
   MessageSystemAddTag = 12, // 添加用户标签
   MessageSystemUpdateTag = 13, // 修改用户标签
   MessageSystemDeleteTag = 14, // 删除用户标签
+  MessageSystemReceivedReward = 15, // 获得的打赏
+  MessageSystemWithdrawalFail = 16, // 提取失败
 }
 
 
