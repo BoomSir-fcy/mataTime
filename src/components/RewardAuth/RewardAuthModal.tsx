@@ -261,7 +261,11 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
                     width='100%'
                   >
                     <AvatarCard
-                      userName={currentPost.user_name || currentPost.send_name}
+                      userName={
+                        currentPost.user_name ||
+                        currentPost.send_name ||
+                        (currentPost as any).nick_name
+                      }
                       avatar={avatar}
                       address={currentPost.user_address}
                     />

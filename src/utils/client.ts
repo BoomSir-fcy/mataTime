@@ -22,6 +22,11 @@ export function isiOS() {
 }
 
 //原生iOS
+export function isFirefox() {
+  return /Firefox/.test(_ua);
+}
+
+//原生iOS
 export function isNativeiOS() {
   return /Native_iOS/.test(_ua);
 }
@@ -67,6 +72,7 @@ const client = {
   version: nativeVersion(),
   isNativeAppAndroid: isNativeAppAndroid(),
   isNativeAppiOS: isNativeAppiOS(),
+  isFirefox: isFirefox(),
 }
 
 export default client;

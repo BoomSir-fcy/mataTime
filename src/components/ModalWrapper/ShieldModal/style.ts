@@ -13,6 +13,8 @@ export const ModalOperatorQueryWrapper = styled(Button)`
   width: 100px;
   height: 35px;
   background: ${({ theme }) => theme.colors.greyBackground};
+  color: ${({ theme }) => theme.colors.white_black};
+  border-color: ${({ theme }) => theme.colors.white_black};
   border-radius: 10px;
 `;
 export const ModalOperatorCancerWrapper = styled(Button)`

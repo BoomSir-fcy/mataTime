@@ -215,5 +215,8 @@
   "resolutions": {
     "styled-components": "^5"
   },
-  "proxy": ""
+  "proxy": "",
+  "devDependencies": {
+    "images": "^3.2.3"
+  }
 }

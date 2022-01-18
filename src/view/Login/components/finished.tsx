@@ -61,7 +61,7 @@ export const SignFinished: React.FC = ({}) => {
   return (
     <Box width='100%'>
       {singUpStep === 3 && (
-        <Box paddingTop='30px' width='100%'>
+        <Box pb='5px' paddingTop='30px' width='100%'>
           <WalletAddress address={account} />
           <Flex
             flexDirection='column'

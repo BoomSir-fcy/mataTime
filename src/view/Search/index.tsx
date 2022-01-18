@@ -20,6 +20,17 @@ const UserBox = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
+const FlexShowMd = styled(Flex)`
+  display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: flex;
+  }
+`;
+
+const BoxStyled = styled(Box)`
+  ${({ theme }) => theme.mediaQueriesSize.paddingxs};
+`;
+
 enum TabTypes {
   TOTAL = 'total',
   POST = 'post',
@@ -29,13 +40,13 @@ enum TabTypes {
 
 const tabDatas = [
   {
-    lable: '综合',
-    tLable: '综合',
+    lable: 'Top ',
+    tLable: 'Top ',
     type: TabTypes.TOTAL,
   },
   {
-    lable: '最新',
-    tLable: '最新',
+    lable: 'Latest',
+    tLable: 'Latest',
     type: TabTypes.POST,
   },
   {
@@ -84,31 +95,10 @@ const Search = () => {
   }, [filterUser, displayResultListOfPeoples]);
 
   useEffect(() => {
-    // console.log(historyList, 'historyList');
     if (historyList[0]?.text) {
       dispatch(fetchThunk.fetchSearchPostAsync(true));
     }
   }, [historyList[0], dispatch]);
-
-  // const search = useDebounce(searchVal, 300)
-
-  // useEffect(() => {
-  //   if (getDecodeValue(parsedQs.q) !== searchVal || !resultListOfPost.length) {
-  //     console.log(
-  //       searchVal,
-  //       getDecodeValue(parsedQs.q),
-  //       resultListOfPost.length,
-  //       'searchVal',
-  //     );
-  //     dispatch(fetchThunk.fetchSearchPostAsync(true));
-  //     // replace(
-  //     //   getSearchPath({
-  //     //     ...parsedQs,
-  //     //     q: searchVal,
-  //     //   }),
-  //     // );
-  //   }
-  // }, [searchVal, replace, dispatch, parsedQs.q, resultListOfPost.length]);
 
   return (
     <Box>
@@ -120,13 +110,14 @@ const Search = () => {
         callBack={() => {}}
         title={t('Search')}
       >
-        <Flex alignItems='center' flex='1'>
+        <FlexShowMd alignItems='center' flex='1'>
           <SearchInput ml='44px' width='100%' />
-          {/* <Box width="100%">
-          </Box> */}
-        </Flex>
+        </FlexShowMd>
       </Crumbs>
       <Box>
+        <BoxStyled className='hide-media-md' mt='16px'>
+          <SearchInput width='100%' />
+        </BoxStyled>
         <Tabs
           pl='16px'
           pb='8px'

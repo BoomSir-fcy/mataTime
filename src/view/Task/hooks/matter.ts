@@ -154,7 +154,6 @@ export const getCodeViewList = async (codeHashs: string[]) => {
 
   try {
     const infoList = await multicall(invitationAbi, calls);
-    // console.log(codeHashs, '----------infoList----------', infoList);
 
     const codeViewList = infoList.map(item => {
       return {

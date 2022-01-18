@@ -81,7 +81,7 @@ const Collect = props => {
       type === CANCEL_FOLLOW ||
       type === SETTOP ||
       type === CANCEL_SETTOP ||
-      type === COMMONT ||
+      // type === COMMONT ||
       type === BLOCKUSER
     ) {
       init(1);

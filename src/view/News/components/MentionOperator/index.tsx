@@ -25,6 +25,8 @@ type IProps = {
   replyType?: string;
   commentId?: string;
   postId?: string;
+  paddingLeft?: number;
+  firstCommentId?: number;
 };
 
 const MentionOperator: React.FC<IProps> = ({
@@ -39,6 +41,8 @@ const MentionOperator: React.FC<IProps> = ({
   replyType = 'comment',
   commentId = '',
   postId = '',
+  paddingLeft,
+  firstCommentId,
 }) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
@@ -128,12 +132,28 @@ const MentionOperator: React.FC<IProps> = ({
     }
   };
 
+  const getCommentInfo = async id => {
+    try {
+      const detailRes = await Api.HomeApi.articleFindById({
+        id: `${id}`,
+      });
+      if (Api.isSuccess(detailRes)) {
+        return detailRes.data;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     setIsLike(itemData.is_like);
   }, [itemData.is_like]);
 
   return (
-    <MentionOperatorWrapper>
+    <MentionOperatorWrapper paddingLeft={paddingLeft}>
       <Flex justifyContent='space-between' className='mention-operator'>
         <Flex>
           <Box onClick={() => setReplyVisible(true)} className='operator-item'>
@@ -144,7 +164,7 @@ const MentionOperator: React.FC<IProps> = ({
               color='textTips'
               title={t('editorComment')}
             />
-            {itemData.comment_num || 0}
+            {itemData.comment_list_resp?.total_num || itemData.comment_num || 0}
           </Box>
           {/* <Box className="operator-item">
             <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />
@@ -188,9 +208,38 @@ const MentionOperator: React.FC<IProps> = ({
         commentId={commentId}
         postId={postId}
         itemData={itemData}
-        onSuccess={() => {
+        firstCommentId={firstCommentId}
+        onSuccess={async () => {
+          let callBackData = {};
+          // 评论
+          if (itemData?.comment) {
+            callback(itemData, MoreOperatorEnum.COMMONT);
+          } else if (itemData?.post) {
+            // 帖子
+            const CommentInfo = await getCommentInfo(postId);
+            if (CommentInfo) {
+              callBackData = {
+                ...itemData,
+                comment_num: CommentInfo.comment_num,
+                post: {
+                  ...itemData.post,
+                  comment_num: CommentInfo.comment_num,
+                },
+              };
+              callback(callBackData, MoreOperatorEnum.COMMONT);
+            } else {
+              callBackData = {
+                ...itemData,
+                comment_num: itemData.post.comment_num + 1,
+                post: {
+                  ...itemData.post,
+                  comment_num: itemData.post.comment_num + 1,
+                },
+              };
+              callback(callBackData, MoreOperatorEnum.COMMONT);
+            }
+          }
           setReplyVisible(false);
-          callback(itemData, MoreOperatorEnum.COMMONT);
         }}
         onClose={() => {
           setReplyVisible(false);

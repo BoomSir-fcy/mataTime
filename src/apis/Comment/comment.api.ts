@@ -6,6 +6,13 @@ export class CommentApi extends Http {
     const res = await this.get('/v1/comment/list', params);
     return res;
   }
+
+  // 二级评论列表
+  async getSubCommentList(params: Api.Comment.queryList) {
+    const res = await this.get('/v1/subcomment/list', params);
+    return res;
+  }
+
   // 文章点赞
   async clickLike(params: Api.Comment.likeParams) {
     const res = await this.get('/v1/like/agree', params);

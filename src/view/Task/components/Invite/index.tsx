@@ -227,7 +227,7 @@ const Invite: React.FC = () => {
         <ContentBox flexDirection='column'>
           <Flex justifyContent='space-between'>
             <Text mb='25px' fontSize='18px' bold>
-              Invitation Overview
+              {t('Invitation Overview')}
             </Text>
             <Button as={Link} to='/task/friendsList'>
               {t('InvitationRecord')}

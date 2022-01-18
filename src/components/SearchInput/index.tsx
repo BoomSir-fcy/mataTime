@@ -100,7 +100,7 @@ interface SearchInputProps extends BoxProps {}
 
 const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   const { t } = useTranslation();
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
   const [focus, setFocus] = useState(false);
   const [toFocus, setToFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -220,7 +220,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
         }}
         onSubmit={event => {
           event.preventDefault();
-          handleSubmit(`${value}`.trim());
+          if (!value) return;
+          handleSubmit(value.trim());
           if (inputRef.current) {
             inputRef.current.blur();
           }

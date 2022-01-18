@@ -47,9 +47,14 @@ import StateModal from '../pop/state';
 import { useCountdownTime } from 'view/PickNft/hooks/DownTime';
 import SetNickName from './setName';
 import { fetchCodeInfo } from 'store/picknft/fetchUserAllowance';
-import { formatDisplayApr, getFullDisplayBalance } from 'utils/formatBalance';
+import {
+  formatDisplayApr,
+  getBalanceNumber,
+  getFullDisplayBalance,
+} from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useGetBnbBalance } from 'hooks/useTokenBalance';
 
 dayjs.extend(duration);
 interface ColorRgba {
@@ -168,10 +173,11 @@ const CreateShowCard: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const { account } = useWeb3React();
-  const { toastSuccess, toastError } = useToast();
+  const { toastSuccess, toastError, toastWarning } = useToast();
   const dispatch = useDispatch();
   const { onExchange } = useExchangeAndBuyPhoto();
   const { onApprove } = useNftApproveExPhoto();
+  const { balance: currencyBalance } = useGetBnbBalance();
   // const [LeftTime, setLeftTime] = useState(0);
   const { codes, selectData, codeInfo, inviteInfo, inviteLoading, buyInfo } =
     usePickNftState();
@@ -204,6 +210,10 @@ const CreateShowCard: React.FC = () => {
 
   const onMintHandle = useCallback(async () => {
     try {
+      if (currencyBalance.isLessThan(buyInfo.price)) {
+        toastWarning(t('rewardAutherTransferAmountExceedsBlanceError'));
+        return;
+      }
       setpending(true);
       const sortData = orderBy(selectData, stuff => stuff.index, 'asc');
       const status = await onExchange(
@@ -242,12 +252,18 @@ const CreateShowCard: React.FC = () => {
     account,
     colorHex,
     colorAlpha,
+    currencyBalance,
     buyInfo.price,
   ]);
 
   const handleColorChange = useCallback(color => {
     setColorRgba(color.rgb);
   }, []);
+
+  const totalAmount = useMemo(() => {
+    return getBalanceNumber(new BigNumber(buyInfo.price).times(1));
+  }, [buyInfo.price]);
+
   return (
     <PageContainer>
       <CardStyled>
@@ -305,11 +321,7 @@ const CreateShowCard: React.FC = () => {
               <Dots>{t('Minting')}</Dots>
             ) : (
               t('Mint METAYC (%price% %symbol%)', {
-                price: getFullDisplayBalance(
-                  new BigNumber(buyInfo.price),
-                  undefined,
-                  1,
-                ),
+                price: totalAmount,
                 symbol: 'BNB',
               })
             )}

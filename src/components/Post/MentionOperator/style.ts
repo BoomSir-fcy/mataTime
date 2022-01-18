@@ -4,9 +4,9 @@ export const MentionOperatorWrapper = styled.div`
   width: 100%;
   .mention-operator {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
     ${({ theme }) => theme.mediaQueries.sm} {
-      padding-left: 73px;
+      padding-left: 64px;
     }
     .operator-item {
       min-width: 90px;

@@ -24,7 +24,6 @@ export const useExchangePhoto = () => {
       const exists = await masterContract.checkTokenID(tx.toJSON());
       if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 物件个数用完了
 
-      // console.log(nickname, code, tx.toJSON().hex, color);
       const receipt = await exchangeToPhtot(
         masterContract,
         nickname,
