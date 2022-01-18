@@ -103,11 +103,11 @@ const MoneyModal: React.FC<init> = ({
         setpending(false);
         return;
       }
-      if (Number(val) <= 0) {
+      if (new BigNumber(val).isLessThanOrEqualTo(0)) {
         setpending(false);
         return;
       }
-      const addPrecisionNum = new BigNumber(Number(val))
+      const addPrecisionNum = new BigNumber(val)
         .times(BIG_TEN.pow(18))
         .toString();
       try {
@@ -126,13 +126,13 @@ const MoneyModal: React.FC<init> = ({
         setpending(false);
         return;
       }
-      let num;
-      if (val.indexOf('.') !== -1) {
-        num = val.split('.')[0];
-      } else {
-        num = val;
-      }
-      if (Number(num) < Number(TokenWithDrawMinNum)) {
+      // let num;
+      // if (val.indexOf('.') !== -1) {
+      //   num = val.split('.')[0];
+      // } else {
+      //   num = val;
+      // }
+      if (new BigNumber(val).isLessThan(TokenWithDrawMinNum)) {
         toast.error(
           t('Account Minimum withdrawal amount %amount%', {
             amount: TokenWithDrawMinNum,

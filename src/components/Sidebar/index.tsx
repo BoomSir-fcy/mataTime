@@ -25,9 +25,9 @@ const Sidebar = props => {
   const ref = React.useRef<HTMLDivElement | null>();
   const [state, setState] = useImmer({
     scroll: 10,
-    top: ''
+    top: '',
   });
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
   const HandleScroll = React.useCallback(
     event => {
@@ -50,25 +50,25 @@ const Sidebar = props => {
             : '0';
       });
     },
-    [state.scroll]
+    [state.scroll],
   );
 
   React.useEffect(() => {
     document.addEventListener('mousewheel', HandleScroll);
+    document.addEventListener('DOMMouseScroll', HandleScroll);
     return () => {
       document.removeEventListener('mousewheel', HandleScroll);
+      document.removeEventListener('DOMMouseScroll', HandleScroll);
     };
   }, [state.scroll]);
 
   return (
     <SidebarStyled {...props} style={{ top: state.top }} ref={ref}>
-      {
-        pathname === '/search'
-          ?
-          <SearchFilter mt="15px" mb="15px" />
-          :
-          <Search mt="15px" mb="15px" />
-      }
+      {pathname === '/search' ? (
+        <SearchFilter mt='15px' mb='15px' />
+      ) : (
+        <Search mt='15px' mb='15px' />
+      )}
       {/* 代办,从这监听搜索,然后参数传给ArticleList,进行搜索 */}
       <Swap />
       <RecommendPeople />

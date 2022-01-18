@@ -60,8 +60,6 @@ const Praise = React.memo(props => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum) => {
-    console.log(newItem, 'rrrrr');
-
     const {
       FOLLOW,
       CANCEL_FOLLOW,

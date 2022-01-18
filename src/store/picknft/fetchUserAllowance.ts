@@ -46,7 +46,6 @@ export const fetchCodeInfo = async (codes: InviteCodes) => {
     ];
 
     const [hashRes, Lockres] = await multicall(invitationAbi, calls);
-    // console.log(hashRes, Lockres, 'as', Lockres.lockedAt.toNumber() * 1000);
     return {
       generator: hashRes.generator,
       lockUser: Lockres.lockUser,
