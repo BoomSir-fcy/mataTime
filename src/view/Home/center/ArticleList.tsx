@@ -34,7 +34,8 @@ const ArticleComponents = (props, ref) => {
   // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
   const { list, lastList, page, addListNum, loading } = article;
-  const { postMap, blockUsersIds, unFollowUsersIds } = useMapModule();
+  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
+    useMapModule();
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
@@ -154,17 +155,24 @@ const ArticleComponents = (props, ref) => {
   }));
 
   const renderList = useMemo(() => {
+    console.log(isFollowing, 'isFollowing');
+    console.log(unFollowUsersIds, 'unFollowUsersIds');
     const resPost = list.filter(item => {
-      if (!isFollowing) return !blockUsersIds.includes(item.user_id);
+      if (!isFollowing)
+        return (
+          !blockUsersIds.includes(item.user_id) &&
+          !deletePostIds.includes(item.id)
+        );
       return (
         !blockUsersIds.includes(item.user_id) &&
-        !unFollowUsersIds.includes(item.user_id)
+        !unFollowUsersIds.includes(item.user_id) &&
+        !deletePostIds.includes(item.id)
       );
     });
     // if (!isFollowing) return filterBlockUserPost
     // return filterBlockUserPost.filter(item => !blockUsersIds.includes(item.user_id))
     return resPost;
-  }, [list, blockUsersIds, unFollowUsersIds, isFollowing]);
+  }, [list, blockUsersIds, unFollowUsersIds, isFollowing, deletePostIds]);
 
   const getList = useCallback(() => {
     // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);

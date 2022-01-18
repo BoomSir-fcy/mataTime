@@ -9,6 +9,8 @@ import {
   addBlockUserIds,
   removeBlockUserId,
   removeBlockUserIds,
+
+  addDeletePostId,
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
@@ -22,6 +24,7 @@ const initialState: MapModuleState = {
   userStatusMap: {},
   unFollowUsersIds: [],
   blockUsersIds: [],
+  deletePostIds: [],
   status: []
 };
 
@@ -51,7 +54,7 @@ export const fetchUserInfoAsync =
       const res = await Api.UserApi.getUserInfoByUID(id);
       if (Api.isSuccess(res)) {
         dispatch(
-          setPostDetail({
+          setUserInfo({
             id,
             userInfo: res.data,
           }),
@@ -118,9 +121,12 @@ export const Post = createSlice({
       .addCase(removeBlockUserIds, (state, { payload }) => {
         state.blockUsersIds = state.blockUsersIds.filter(item => !payload.includes(item))
       })
+      .addCase(addDeletePostId, (state, { payload }) => {
+        state.deletePostIds = [...state.deletePostIds, payload]
+      })
   },
 });
 
-export const { setPostDetail } = Post.actions;
+export const { setPostDetail, setUserInfo } = Post.actions;
 
 export default Post.reducer;

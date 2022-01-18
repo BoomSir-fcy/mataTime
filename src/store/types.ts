@@ -128,6 +128,7 @@ export interface MapModuleState {
     [userId: string]: MapModuleStatus
   },
   unFollowUsersIds: number[],
+  deletePostIds: number[],
   blockUsersIds: number[],
   status: MapModuleStatus[]
 }
