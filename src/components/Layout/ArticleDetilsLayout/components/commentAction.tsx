@@ -9,11 +9,11 @@ import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 
 export const SubCommentAction: React.FC<{
-  firstUid: number;
+  postUid: number;
   user_id: number;
   comment_id: number;
   delCallback: () => void;
-}> = ({ firstUid, user_id, comment_id, delCallback }) => {
+}> = ({ postUid, user_id, comment_id, delCallback }) => {
   const userInof = useStore(p => p.loginReducer.userInfo);
   const { t } = useTranslation();
   const { uid } = userInof;
@@ -38,7 +38,7 @@ export const SubCommentAction: React.FC<{
   return (
     <React.Fragment>
       <Box>
-        {uid === user_id || uid === firstUid ? (
+        {uid === user_id || uid === postUid ? (
           <Icon
             color='textgrey'
             current
@@ -69,7 +69,7 @@ export const SubCommentAction: React.FC<{
         type='deleteComment'
         onClose={() =>
           setState(p => {
-            p.delCommentVisible = true;
+            p.delCommentVisible = false;
           })
         }
         onQuery={() => delComment()}
