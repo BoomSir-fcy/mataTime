@@ -83,6 +83,7 @@ export const ContentParsing = (props: IProps) => {
         for (let i = 0; i < els.length; i++) {
           els[i].onclick = e => {
             e.stopPropagation();
+            e.preventDefault();
           };
         }
       }
@@ -103,7 +104,10 @@ export const ContentParsing = (props: IProps) => {
       <a
         key={match + i}
         target='_blank'
-        onClick={event => event.stopPropagation()}
+        onClick={event => {
+          event.stopPropagation();
+          event.preventDefault();
+        }}
         href={match}
         title={match}
         rel='noreferrer'
@@ -142,6 +146,7 @@ export const ContentParsing = (props: IProps) => {
         (match, i) => (
           <Link
             onClick={event => {
+              event.preventDefault();
               event.stopPropagation();
             }}
             to={() =>
@@ -171,7 +176,10 @@ export const ContentParsing = (props: IProps) => {
       case 'topic':
         return (
           <Link
-            onClick={e => e.stopPropagation()}
+            onClick={e => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
             to={`/topicList/empty/${children?.map((n, index) =>
               serialize2(n, 'topic', index),
             )}`}

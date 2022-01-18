@@ -145,6 +145,8 @@ const ArticleComponents = (props, ref) => {
     }
   };
 
+  // handleUpdateList = useCallback(() =>)
+
   React.useImperativeHandle(ref, () => ({
     reload(page: number) {
       return Getlist(page);
@@ -234,7 +236,7 @@ const ArticleComponents = (props, ref) => {
         loading={loading}
         isEnd={isEnd}
         getList={getList}
-        updateList={updateList}
+        updateList={() => {}}
       />
     </ArticleListBox>
   );

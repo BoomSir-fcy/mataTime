@@ -26,7 +26,6 @@ axios.interceptors.response.use(
     return Promise.reject(response);
   },
   error => {
-    console.log(error.toJSON(), Object.keys(error), Object.values(error))
     if (error.isAxiosError && !error.response && !error.config.hideHttpError) {
       eventBus.dispatchEvent(new Event('networkerror'));
     }
