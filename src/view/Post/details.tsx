@@ -83,8 +83,9 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   }, []);
 
   const updateDetails = React.useCallback(() => {
+    console.log('收到');
     getArticleDetail();
-  }, []);
+  }, [itemData]);
 
   useEffect(() => {
     eventBus.addEventListener('updateDetails', updateDetails);
