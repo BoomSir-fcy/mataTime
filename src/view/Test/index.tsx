@@ -63,7 +63,7 @@ const Test = () => {
       vvv[1] = vvv[1] + 1;
       return vvv;
     });
-  }, [value, setValue]);
+  }, [setValue]);
 
   const hanldeRead = useCallback(() => {
     console.debug(value);

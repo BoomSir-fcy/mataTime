@@ -41,7 +41,7 @@ export default function HttpUpdater() {
     error => {
       httpErrorToast(error.data);
     },
-    [setVisible],
+    [httpErrorToast],
   );
 
   useEffect(() => {

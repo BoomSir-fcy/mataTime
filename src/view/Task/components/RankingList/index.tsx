@@ -142,7 +142,7 @@ const RankingList: React.FC = React.memo(() => {
   );
 
   const getTotalPage = totalNum => {
-    if (pageSize != 0 && totalNum % pageSize == 0) {
+    if (pageSize !== 0 && totalNum % pageSize == 0) {
       return parseInt(String(totalNum / pageSize));
     }
     if (pageSize != 0 && totalNum % pageSize != 0) {

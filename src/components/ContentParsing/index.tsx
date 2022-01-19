@@ -106,7 +106,7 @@ export const ContentParsing = (props: IProps) => {
         target='_blank'
         onClick={event => {
           event.stopPropagation();
-          event.preventDefault();
+          // event.preventDefault();
         }}
         href={match}
         title={match}
@@ -146,7 +146,7 @@ export const ContentParsing = (props: IProps) => {
         (match, i) => (
           <Link
             onClick={event => {
-              event.preventDefault();
+              // event.preventDefault();
               event.stopPropagation();
             }}
             to={() =>
@@ -190,7 +190,14 @@ export const ContentParsing = (props: IProps) => {
       case 'mention':
         return (
           <FollowPopup uid={node?.attrs?.userid || 0} key={index}>
-            <a>{node.character}</a>
+            <a
+              onClick={event => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+            >
+              {node.character}
+            </a>
           </FollowPopup>
         );
       default:
