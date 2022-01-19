@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
 import { Icon, CommonInquiryModal, ReportModal } from 'components';
@@ -72,7 +73,7 @@ export const SubCommentAction: React.FC<{
             p.delCommentVisible = false;
           })
         }
-        onQuery={() => delComment()}
+        onQuery={debounce(() => delComment(), 1000)}
       />
       {/* 举报 */}
       <ReportModal

@@ -191,20 +191,15 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   // 二级评论删除
   const delSubComment = async data => {
-    Api.MeApi.removeContentDetail(data?.commentId).then(res => {
-      if (Api.isSuccess(res)) {
-        getSubCommentList({
-          pid: itemData.id,
-          first_comment_id: data.firstCommentId,
-          prepage: 2,
-          page: 1,
-          sort_add_time: sortTime,
-          sort_like: sortLike,
-        });
-        eventBus.dispatchEvent(new MessageEvent('updateDetails'));
-        toastSuccess(t('moreDeleteSuccess'));
-      }
+    getSubCommentList({
+      pid: itemData.id,
+      first_comment_id: data.firstCommentId,
+      prepage: 2,
+      page: 1,
+      sort_add_time: sortTime,
+      sort_like: sortLike,
     });
+    eventBus.dispatchEvent(new MessageEvent('updateDetails'));
   };
 
   // 更新列表

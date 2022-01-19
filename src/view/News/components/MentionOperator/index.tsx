@@ -166,6 +166,8 @@ const MentionOperator: React.FC<IProps> = ({
             />
             {type === 'Comment'
               ? itemData.comment_list_resp?.total_num
+                ? itemData.comment_list_resp?.total_num
+                : itemData.comment_num
               : itemData.comment_num || 0}
           </Box>
           {/* <Box className="operator-item">
