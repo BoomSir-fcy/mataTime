@@ -14,7 +14,7 @@ export default function AccountUpdater() {
   const { account } = useWeb3React();
   const { pathname } = useLocation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
-  const { im } = useIm()
+  const { im } = useIm();
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
@@ -23,9 +23,9 @@ export default function AccountUpdater() {
     dispatch(storeAction.resetLoginState());
     history.replace('/login');
     if (im) {
-      im.close(true)
+      im.close(true);
     }
-  }, [dispatch, history]);
+  }, [dispatch, im, history]);
 
   useEffect(() => {
     // 如果钱包地址不一样退出
@@ -36,7 +36,7 @@ export default function AccountUpdater() {
     ) {
       handleReSetAccount();
     }
-  }, [account, userInfo]);
+  }, [account, userInfo, handleReSetAccount]);
 
   useEffect(() => {
     if (account && !accountFlag) {

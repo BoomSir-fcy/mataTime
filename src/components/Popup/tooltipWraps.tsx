@@ -62,7 +62,10 @@ const FollowPopup: React.FC<{
   return (
     <PopupWrapper onClick={evnet => evnet.stopPropagation}>
       <FollowContentWrapper>
-        <Link className='content' to={`/me/profile/${userInfo.uid}`}>
+        <Link
+          className='content'
+          to={userInfo.uid ? `/me/profile/${userInfo.uid}` : undefined}
+        >
           <div className='left-box'>
             <div className='img-box'>
               <Avatar

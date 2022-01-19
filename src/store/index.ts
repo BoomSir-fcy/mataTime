@@ -6,6 +6,7 @@ import { loginReducer, loginAction, Login, fetchUserInfoAsync } from './login';
 import coinsReduce from './coins/reducer';
 import * as coinsAction from './coins/actions';
 import walletReduce from './wallet/reducer';
+import mapModuleReduce from './mapModule/reducer';
 import poolsReduce from './pools';
 import taskReduce from './task/reducer';
 import type { CoinsState } from './coins/reducer';
@@ -24,7 +25,7 @@ import {
 import { SearchState } from './search/types';
 
 import { TaskState } from './task/type';
-import { PickNftState } from './types';
+import { MapModuleState, PickNftState } from './types';
 export interface Store {
   appReducer: App;
   loginReducer: Login;
@@ -35,6 +36,7 @@ export interface Store {
   post: Post;
   pickNft: PickNftState;
   search: SearchState;
+  mapModule: MapModuleState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -51,6 +53,7 @@ export const store = configureStore({
     post: postReducer,
     pickNft: picknftReducer,
     search: searchReducer,
+    mapModule: mapModuleReduce,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -18,6 +18,7 @@ const initialState = {
   user_tags2: [],
   addListNum: -1,
   loading: false,
+  isEnd: false,
   userTags: [],
 };
 
@@ -55,6 +56,9 @@ export const Post = createSlice({
   reducers: {
     setLoading: (state, { payload }) => {
       state.loading = payload;
+    },
+    setIsEnd: (state, { payload }) => {
+      state.isEnd = payload;
     },
   },
   extraReducers: builder => {
@@ -99,6 +103,6 @@ export const Post = createSlice({
   },
 });
 
-export const { setLoading } = Post.actions;
+export const { setLoading, setIsEnd } = Post.actions;
 
 export default Post.reducer;

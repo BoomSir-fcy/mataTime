@@ -1,5 +1,6 @@
 import { ARTICLE_IMAGE_CLASS_NAME } from 'config';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import styled from 'styled-components';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import { Image } from 'uikit';
@@ -7,6 +8,9 @@ import { ImgListBox } from './style';
 type Iprops = {
   list: string[];
 };
+const BlockLink = styled.a`
+  display: block;
+`;
 // export const UploadList = (props: Iprops) => {
 //   const { list = [] } = props
 //   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -90,18 +94,24 @@ export const ImgList = (props: Iprops) => {
       imgDom.addEventListener('load', () => {
         // 正方形图片
         if (imgDom.naturalHeight === imgDom.naturalWidth) {
-          imgDom.parentElement.style.maxWidth = '300px';
+          imgDom.parentElement.parentElement.style.width = '300px';
+          imgDom.parentElement.style.width = '300px';
+          imgDom.parentElement.style.maxHeight = '300px';
           imgDom.style.width = '300px';
           imgDom.style.maxHeight = '300px';
         }
         // 宽大于高的图片
         if (imgDom.naturalWidth > imgDom.naturalHeight) {
+          imgDom.parentElement.style.width = '100%';
+          imgDom.parentElement.style.maxHeight = '540px';
           imgDom.style.width = '100%';
           imgDom.style.maxHeight = '540px';
         }
         // 高大于宽的图片
         if (imgDom.naturalHeight > imgDom.naturalWidth) {
-          imgDom.parentElement.style.width = '50%';
+          imgDom.parentElement.parentElement.style.width = '50%';
+          imgDom.parentElement.style.width = '100%';
+          imgDom.parentElement.style.maxHeight = '540px';
           imgDom.style.width = '100%';
           imgDom.style.maxHeight = '540px';
         }
@@ -110,7 +120,13 @@ export const ImgList = (props: Iprops) => {
   }, [imgRef, list]);
 
   return list.length > 0 ? (
-    <ImgListBox ref={imgRef} onClick={e => e.stopPropagation()}>
+    <ImgListBox
+      ref={imgRef}
+      onClick={e => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+    >
       {modalIsOpen && (
         <Lightbox
           mainSrc={previewImgList[photoIndex]}
@@ -132,7 +148,7 @@ export const ImgList = (props: Iprops) => {
         />
       )}
       {list.length === 1 && (
-        <>
+        <BlockLink href='javascript: void(open popup image)'>
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
             style={{
@@ -143,71 +159,92 @@ export const ImgList = (props: Iprops) => {
             src={list[0]}
             alt=''
           />
-        </>
+        </BlockLink>
       )}
       {list.length === 2 && (
         <>
-          <img
-            className={ARTICLE_IMAGE_CLASS_NAME}
+          <BlockLink
             style={{ maxHeight: '300px', paddingBottom: '0' }}
-            onClick={() => preViewImg(0)}
-            src={list[0]}
-            alt=''
-          />
-          <img
-            className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{ maxHeight: '300px', paddingBottom: '0' }}
-            onClick={() => preViewImg(1)}
-            src={list[1]}
-            alt=''
-          />
-        </>
-      )}
-      {list.length === 3 && (
-        <>
-          <img
-            className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{
-              maxHeight: '300px',
-              paddingBottom: '0',
-            }}
-            onClick={() => preViewImg(0)}
-            src={list[0]}
-            alt=''
-          />
-          <div className='imgListRightBox'>
+            href='javascript: void(open popup image)'
+          >
             <img
               className={ARTICLE_IMAGE_CLASS_NAME}
-              style={{ paddingRight: '0' }}
+              onClick={() => preViewImg(0)}
+              src={list[0]}
+              alt=''
+            />
+          </BlockLink>
+          <BlockLink
+            style={{ maxHeight: '300px', paddingBottom: '0' }}
+            href='javascript: void(open popup image)'
+          >
+            <img
+              className={ARTICLE_IMAGE_CLASS_NAME}
               onClick={() => preViewImg(1)}
               src={list[1]}
               alt=''
             />
+          </BlockLink>
+        </>
+      )}
+      {list.length === 3 && (
+        <>
+          <BlockLink
+            style={{ maxHeight: '300px', paddingBottom: '0' }}
+            href='javascript: void(open popup image)'
+          >
             <img
               className={ARTICLE_IMAGE_CLASS_NAME}
-              style={{ paddingBottom: '0' }}
-              onClick={() => preViewImg(2)}
-              src={list[2]}
+              onClick={() => preViewImg(0)}
+              src={list[0]}
               alt=''
             />
+          </BlockLink>
+          <div className='imgListRightBox'>
+            <BlockLink
+              style={{ paddingRight: '0' }}
+              href='javascript: void(open popup image)'
+            >
+              <img
+                className={ARTICLE_IMAGE_CLASS_NAME}
+                onClick={() => preViewImg(1)}
+                src={list[1]}
+                alt=''
+              />
+            </BlockLink>
+            <BlockLink
+              style={{ paddingBottom: '0' }}
+              href='javascript: void(open popup image)'
+            >
+              <img
+                className={ARTICLE_IMAGE_CLASS_NAME}
+                onClick={() => preViewImg(2)}
+                src={list[2]}
+                alt=''
+              />
+            </BlockLink>
           </div>
         </>
       )}
       {list.length > 3 &&
         list.map((item, index) => (
-          <img
-            className={ARTICLE_IMAGE_CLASS_NAME}
+          <a
+            key={item}
             style={{
               paddingBottom:
                 index === list.length - 2 || index === list.length - 1
                   ? '0'
                   : '1px',
             }}
-            onClick={() => preViewImg(index)}
-            src={item}
-            key={index}
-            alt=''
-          />
+            href='javascript: void(open popup image)'
+          >
+            <img
+              className={ARTICLE_IMAGE_CLASS_NAME}
+              onClick={() => preViewImg(index)}
+              src={item}
+              alt=''
+            />
+          </a>
         ))}
     </ImgListBox>
   ) : null;

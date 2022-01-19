@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { List, MoreOperatorEnum } from 'components';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { fetchThunk, storeAction, useStore } from 'store';
 import { MeItemWrapper, NewsMeWrapper } from 'view/News/Me/style';
-import MentionItem from 'view/News/components/MentionItem';
-import MentionOperator from 'view/News/components/MentionOperator';
+import MentionItem from 'components/Post/MentionItem';
+import MentionOperator from 'components/Post/MentionOperator';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useMapModule } from 'store/mapModule/hooks';
+import PostList from 'components/Post/PostList';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -32,9 +34,12 @@ const ArticleComponents = (props, ref) => {
   // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
   const { list, lastList, page, addListNum, loading } = article;
+  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
+    useMapModule();
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
 
   const {
+    isFollowing,
     nonce,
     setNonce = () => {
       console.error('setNonce is null or undefined, and not refresh ');
@@ -87,6 +92,10 @@ const ArticleComponents = (props, ref) => {
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
+    if (type) {
+      console.log(type);
+      return;
+    }
     if (
       // type === MoreOperatorEnum.FOLLOW ||
       type === MoreOperatorEnum.CANCEL_FOLLOW ||
@@ -137,15 +146,40 @@ const ArticleComponents = (props, ref) => {
     }
   };
 
+  // handleUpdateList = useCallback(() =>)
+
   React.useImperativeHandle(ref, () => ({
     reload(page: number) {
       return Getlist(page);
     },
   }));
 
+  const renderList = useMemo(() => {
+    const resPost = list.filter(item => {
+      if (!isFollowing)
+        return (
+          !blockUsersIds.includes(item.user_id) &&
+          !deletePostIds.includes(item.id)
+        );
+      return (
+        !blockUsersIds.includes(item.user_id) &&
+        !unFollowUsersIds.includes(item.user_id) &&
+        !deletePostIds.includes(item.id)
+      );
+    });
+    // if (!isFollowing) return filterBlockUserPost
+    // return filterBlockUserPost.filter(item => !blockUsersIds.includes(item.user_id))
+    return resPost;
+  }, [list, blockUsersIds, unFollowUsersIds, isFollowing, deletePostIds]);
+
+  const getList = useCallback(() => {
+    // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
+    Getlist();
+  }, [Getlist, renderList.length]);
+
   return (
     <ArticleListBox>
-      <List
+      {/* <List
         loading={loading}
         renderList={type => {
           if (type === 1 && list?.length !== 0) {
@@ -154,7 +188,7 @@ const ArticleComponents = (props, ref) => {
           Getlist();
         }}
       >
-        {(list ?? []).map(item => (
+        {(renderList ?? []).map(item => (
           <MeItemWrapper key={`${item.id}`}>
             {
               // 浏览自己的不扣费
@@ -176,6 +210,7 @@ const ArticleComponents = (props, ref) => {
                   ...item,
                   post_id: item.id,
                 },
+                ...postMap[item.id],
               }}
               callback={(item: any, type: MoreOperatorEnum) => {
                 updateList(item, type);
@@ -192,6 +227,7 @@ const ArticleComponents = (props, ref) => {
                   ...item,
                   post_id: item.id,
                 },
+                ...postMap[item.id],
               }}
               callback={(item: any, type?: MoreOperatorEnum) => {
                 updateList(item, type);
@@ -199,7 +235,15 @@ const ArticleComponents = (props, ref) => {
             />
           </MeItemWrapper>
         ))}
-      </List>
+      </List> */}
+      <PostList
+        map={postMap}
+        list={renderList}
+        loading={loading}
+        isEnd={isEnd}
+        getList={getList}
+        updateList={() => {}}
+      />
     </ArticleListBox>
   );
 };

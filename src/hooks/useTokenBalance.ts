@@ -74,6 +74,7 @@ export const useTotalSupply = (tokenAddress: string) => {
 export const useGetBnbBalance = () => {
   const [fetchStatus, setFetchStatus] = useState(FetchStatus.NOT_FETCHED)
   const [balance, setBalance] = useState(BIG_ZERO)
+  const { fastRefresh } = useRefresh();
   const { account } = useWeb3React()
   const { lastUpdated, setLastUpdated } = useLastUpdated()
 
@@ -91,7 +92,7 @@ export const useGetBnbBalance = () => {
     if (account) {
       fetchBalance()
     }
-  }, [account, lastUpdated, setBalance, setFetchStatus])
+  }, [account, fastRefresh, lastUpdated, setBalance, setFetchStatus])
 
   return { balance, fetchStatus, refresh: setLastUpdated }
 }
