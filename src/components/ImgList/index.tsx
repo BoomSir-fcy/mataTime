@@ -90,7 +90,7 @@ export const ImgList = (props: Iprops) => {
       imgDom.addEventListener('load', () => {
         // 正方形图片
         if (imgDom.naturalHeight === imgDom.naturalWidth) {
-          imgDom.parentElement.style.width = '300px';
+          imgDom.parentElement.style.maxWidth = '300px';
           imgDom.style.width = '300px';
           imgDom.style.maxHeight = '300px';
         }
@@ -137,6 +137,7 @@ export const ImgList = (props: Iprops) => {
             className={ARTICLE_IMAGE_CLASS_NAME}
             style={{
               paddingBottom: 0,
+              paddingRight: 0,
             }}
             onClick={() => preViewImg(0)}
             src={list[0]}

@@ -16,7 +16,7 @@ img{
   cursor: pointer;
   max-height: 150px;
   padding-bottom: 1px;
-  &:nth-child(2n + 1) {
+  &:nth-child(2n - 1) {
     padding-right: 1px;
   }
 }
