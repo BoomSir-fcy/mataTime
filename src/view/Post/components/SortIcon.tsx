@@ -24,7 +24,7 @@ const SortBox = styled(Flex)<{ flag: number }>`
   }
   ${({ flag }) =>
     Boolean(flag) &&
-    flag === 1 &&
+    flag === 2 &&
     css`
       i:first-child {
         border-bottom: 6px solid ${({ theme }) => theme.colors.textTips};
@@ -37,7 +37,7 @@ const SortBox = styled(Flex)<{ flag: number }>`
 
   ${({ flag }) =>
     Boolean(flag) &&
-    flag === 2 &&
+    flag === 1 &&
     css`
       i:first-child {
         border-bottom: 6px solid ${({ theme }) => theme.colors.ThemeText};

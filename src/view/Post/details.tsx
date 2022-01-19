@@ -7,6 +7,7 @@ import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 import { ReadType } from 'hooks/imHooks/types';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
+import eventBus from 'utils/eventBus';
 
 import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
@@ -20,7 +21,7 @@ import { Spinner, Empty } from 'uikit';
 type Iprops = {
   [name: string]: any;
 };
-export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
+export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { toastSuccess } = useToast();
   const [itemData, setItemData] = useState<any>({
@@ -49,6 +50,10 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
     }).then(res => {
       if (Api.isSuccess(res)) {
         reset && reset();
+        setItemData({
+          ...itemData,
+          comment_num: itemData.comment_num + 1,
+        });
         toastSuccess(t('comment success'));
         setRefresh(refresh === 1 ? 2 : 1);
       }
@@ -75,6 +80,17 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
 
   useEffect(() => {
     getArticleDetail();
+  }, []);
+
+  const updateDetails = React.useCallback(() => {
+    getArticleDetail();
+  }, []);
+
+  useEffect(() => {
+    eventBus.addEventListener('updateDetails', updateDetails);
+    return () => {
+      eventBus.removeEventListener('updateDetails', updateDetails);
+    };
   }, []);
 
   return (
@@ -122,7 +138,6 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
               callback={data => setItemData(data)}
             />
           </MeItemWrapper>
-          {/* <ArticleList data={[{}]} {...props} style={{marginBottom:'15px'}}></ArticleList> */}
           <Editor type='comment' sendArticle={sendArticle} />
           <CommentList
             nonce={nonce}
@@ -139,4 +154,4 @@ export const ArticleDetilsLayout: React.FC<Iprops> = (props: Iprops) => {
     </PageStyle>
   );
 };
-export default ArticleDetilsLayout;
+export default PostDetails;

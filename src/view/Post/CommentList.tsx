@@ -15,18 +15,19 @@ import {
 import { useToast } from 'hooks';
 import { Flex, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { useStore } from 'store';
-
 import { Api } from 'apis';
+
 import { ReadType } from 'hooks/imHooks/types';
+import { Commnet, SortIcon } from './components';
+import eventBus from 'utils/eventBus';
 
 import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+
 import { CommentListBox, CommentTitle, CommentItem } from './style';
-import { SortIcon } from './SortIcon';
-import { Commnet } from './components';
 
 type Iprops = {
   itemData: any;
@@ -102,9 +103,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
-  // 1是降序 2是升序
+  // todo 1是降序从高到低 2是升序从低到高 fix:time 20220119
   const [sortTime, setSortTime] = useState(0);
-  const [sortLike, setSortLike] = useState(2);
+  const [sortLike, setSortLike] = useState(1);
   const [refresh, setRefresh] = useState(false);
   const [flag, setFlag] = useState(true);
   const currentUid = useStore(p => p.loginReducer.userInfo);
@@ -122,17 +123,18 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     setPage(1);
     setTotalPage(2);
     setRefresh(!refresh);
+    eventBus.dispatchEvent(new MessageEvent('updateDetails'));
   };
 
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
-    setSortTime(sortTime === 2 ? 1 : 2);
+    setSortTime(sortTime === 1 ? 2 : 1);
     setSortLike(0);
     initList();
   };
   const changeSortLike = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
-    setSortLike(sortLike === 2 ? 1 : 2);
+    setSortLike(sortLike === 1 ? 2 : 1);
     setSortTime(0);
     initList();
   };
@@ -189,7 +191,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   // 二级评论删除
   const delSubComment = async data => {
-    console.log(data);
     Api.MeApi.removeContentDetail(data?.commentId).then(res => {
       if (Api.isSuccess(res)) {
         getSubCommentList({
@@ -200,6 +201,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
           sort_add_time: sortTime,
           sort_like: sortLike,
         });
+        eventBus.dispatchEvent(new MessageEvent('updateDetails'));
         toastSuccess(t('moreDeleteSuccess'));
       }
     });
@@ -297,9 +299,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               }
               <CommentRows>
                 <Box
-                  minWidth='50px'
                   as={Link}
                   to={`/me/profile/${item.user_id}`}
+                  style={{ minWidth: '50px' }}
                 >
                   <Avatar
                     uid={item.user_id}
@@ -470,7 +472,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
             </CommentItem>
           ))}
         </List>
-        {/* <CommentListFooter>没有更多内容了</CommentListFooter> */}
       </Box>
     </CommentStyle>
   );

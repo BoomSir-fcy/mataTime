@@ -55,9 +55,9 @@ dayjs.extend(updateLocale);
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
-const ArticleDetilsLayout = React.lazy(
-  () => import('./components/Layout/ArticleDetilsLayout'),
-);
+// const ArticleDetilsLayout = React.lazy(
+//   () => import('./components/Layout/ArticleDetilsLayout'),
+// );
 const TopicList = React.lazy(() => import('./view/TopicList'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
@@ -70,6 +70,7 @@ const PickNft = React.lazy(() => import('./view/PickNft'));
 const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
 const Post = React.lazy(() => import('./view/Post'));
+const PostDetails = React.lazy(() => import('./view/Post/details'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -145,10 +146,7 @@ function App() {
                     />
                   )}
                 />
-                <Route
-                  path='/articleDetils/:id'
-                  render={props => <ArticleDetilsLayout {...props} />}
-                />
+                <Route path='/articleDetils/:id' component={PostDetails} />
                 <Route path='/task' component={Task} />
                 <Route
                   path='/notification'
