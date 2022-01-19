@@ -165,7 +165,7 @@ const Home: React.FC = (props: any) => {
               nonce={nonce}
               topicName={match.params.name}
               filterValObj={filterVal}
-              isFollowing={filterVal.attention === 2}
+              isFollowing={Number(filterVal.attention) === 2}
               {...props}
             />
           )}

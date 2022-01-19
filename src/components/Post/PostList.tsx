@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { HoverLink, List, MoreOperatorEnum, ShiledUserModal } from 'components';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
@@ -15,6 +15,7 @@ import {
   addDeletePostId,
   addUnFollowUserId,
   removeBlockUserId,
+  removeUnFollowUserId,
 } from 'store/mapModule/actions';
 
 import { MeItemWrapper } from './styled';
@@ -57,29 +58,32 @@ const PostList: React.FC<PostListPorps> = ({
   useReadArticle(nonce);
 
   // 更新列表
-  const handleUpdateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    // 折叠
-    if (type === MoreOperatorEnum.EXPAND) {
-      setNonce(prep => prep + 1);
-      return;
-    }
-    if (type === MoreOperatorEnum.DELPOST) {
-      dispatch(addDeletePostId(newItem.id)); // FIXME: 有的时候可能用的不是id
-      return;
-    }
-    if (type === MoreOperatorEnum.CANCEL_FOLLOW) {
-      dispatch(addUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
-      dispatch(fetchUserInfoAsync(newItem.user_id));
-    }
-    if (type === MoreOperatorEnum.FOLLOW) {
-      dispatch(removeBlockUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
-      dispatch(fetchUserInfoAsync(newItem.user_id));
-    }
-    dispatch(fetchPostDetailAsync(newItem.id)); // FIXME: 有的时候可能用的不是id
+  const handleUpdateList = useCallback(
+    (newItem: any, type: MoreOperatorEnum = null) => {
+      // 折叠
+      if (type === MoreOperatorEnum.EXPAND) {
+        setNonce(prep => prep + 1);
+        return;
+      }
+      if (type === MoreOperatorEnum.DELPOST) {
+        dispatch(addDeletePostId(newItem.id)); // FIXME: 有的时候可能用的不是id
+        return;
+      }
+      if (type === MoreOperatorEnum.CANCEL_FOLLOW) {
+        dispatch(addUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
+        dispatch(fetchUserInfoAsync(newItem.user_id));
+      }
+      if (type === MoreOperatorEnum.FOLLOW) {
+        dispatch(removeUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
+        dispatch(fetchUserInfoAsync(newItem.user_id));
+      }
+      dispatch(fetchPostDetailAsync(newItem.id)); // FIXME: 有的时候可能用的不是id
 
-    updateList(newItem.id, type);
-    return;
-  };
+      updateList(newItem.id, type);
+      return;
+    },
+    [dispatch, setNonce, updateList],
+  );
 
   return (
     <ArticleListBox>
