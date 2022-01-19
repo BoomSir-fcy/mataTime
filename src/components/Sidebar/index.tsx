@@ -44,11 +44,10 @@ const Sidebar = props => {
       }
       let e = event.originalEvent || event;
       let deltaY = e.deltaY || e.detail;
-      console.log(e, deltaY, '==minTop');
-      let top = positionTop + deltaY;
-      top = top > maxTop ? maxTop : top;
-      top = top < minTop ? minTop : top;
-      console.log(top);
+      // let top = positionTop + deltaY;
+      // top = top > maxTop ? maxTop : top;
+      // top = top < minTop ? minTop : top;
+      const top = deltaY > 0 ? maxTop : minTop;
       setPositionTop(top);
     },
     [positionTop, setPositionTop],

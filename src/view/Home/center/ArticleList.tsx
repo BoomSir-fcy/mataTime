@@ -155,8 +155,6 @@ const ArticleComponents = (props, ref) => {
   }));
 
   const renderList = useMemo(() => {
-    console.log(isFollowing, 'isFollowing');
-    console.log(unFollowUsersIds, 'unFollowUsersIds');
     const resPost = list.filter(item => {
       if (!isFollowing)
         return (
