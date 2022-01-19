@@ -164,7 +164,9 @@ const MentionOperator: React.FC<IProps> = ({
               color='textTips'
               title={t('editorComment')}
             />
-            {itemData.comment_list_resp?.total_num || itemData.comment_num || 0}
+            {type === 'Comment'
+              ? itemData.comment_list_resp?.total_num
+              : itemData.comment_num || 0}
           </Box>
           {/* <Box className="operator-item">
             <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />

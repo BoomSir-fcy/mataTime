@@ -369,6 +369,17 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       {Number(parsedQs.comment_id) === row.id && (
                         <div ref={commentRef} key={row.id}></div>
                       )}
+                      {
+                        // 浏览自己的不扣费
+                        currentUid?.uid !== row.user_id && (
+                          <SpendTimeViewWithArticle
+                            nonce={nonce}
+                            setNonce={setNonce}
+                            readType={ReadType.COMMENT}
+                            articleId={row.id}
+                          />
+                        )
+                      }
                       <ChildrenCommentContent
                         active={Number(parsedQs.comment_id) === row.id}
                       >
