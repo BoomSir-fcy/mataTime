@@ -622,7 +622,7 @@
   "allow_watch_attention": "是否允许别人查看我的关注",
   "allow_watch_fans": "是否允许别人查看我的粉丝",
   "noRecommendations": "暂无推荐，请刷新页面",
-  "A total of 1 replies": "共%value%条回复",
+  "A total of 1 replies": "展开%value%条回复",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",
