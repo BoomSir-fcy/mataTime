@@ -52,19 +52,28 @@ export const fetchMetaycInfo = async () => {
         address: exPhotoNftAddress,
         name: 'switch_buy_nft',
       },
+      {
+        address: exPhotoNftAddress,
+        name: 'getCreatedLimit',
+      },
     ];
 
-    const [value, switch_buy] = await multicall(invitationAbi, calls);
+    const [value, switch_buy, createdLimit] = await multicall(invitationAbi, calls);
     return {
       // 基本信息
       enableBuy: switch_buy[0],
       price: value[0].toJSON().hex,
+      count: createdLimit.buy_count.toNumber(),
+      limit: createdLimit.buy_max.toNumber(),
     };
   } catch (error) {
+    console.error(error)
     return {
       // 基本信息
       enableBuy: false,
       price: '0',
+      count: 0,
+      limit: 0,
     };
   }
 };

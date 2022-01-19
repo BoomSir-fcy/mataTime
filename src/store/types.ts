@@ -95,6 +95,8 @@ export interface PickNftState {
     enableBuy: boolean
     price: string
     loading: boolean
+    count: number
+    limit: number
   },
   codeInfo: {
     lockUser: string;

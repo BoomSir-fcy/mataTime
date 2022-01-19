@@ -11,6 +11,7 @@ import {
   Button,
   light,
   Spinner,
+  Skeleton,
 } from 'uikit';
 import { useStore, storeAction } from 'store';
 import styled from 'styled-components';
@@ -264,6 +265,10 @@ const CreateShowCard: React.FC = () => {
     return getBalanceNumber(new BigNumber(buyInfo.price).times(1));
   }, [buyInfo.price]);
 
+  const remaining = useMemo(() => {
+    return Number(buyInfo?.limit) - Number(buyInfo?.count) || 0;
+  }, [buyInfo?.limit, buyInfo?.count]);
+
   return (
     <PageContainer>
       <CardStyled>
@@ -315,7 +320,7 @@ const CreateShowCard: React.FC = () => {
             isLoading={buyInfo.loading}
             scale='ld'
             onClick={onMintHandle}
-            disabled={pending || !buyInfo.enableBuy}
+            disabled={pending || !buyInfo.enableBuy || remaining <= 0}
           >
             {pending ? (
               <Dots>{t('Minting')}</Dots>
@@ -328,6 +333,13 @@ const CreateShowCard: React.FC = () => {
           </Submit>
         </BtnBox>
       </BoxPaddingStyled>
+      {!buyInfo.loading ? (
+        <Text fontSize='14px' color='orange'>
+          {remaining}/{buyInfo.limit} {t('Remaining')}
+        </Text>
+      ) : (
+        <Skeleton width={80} height={18} />
+      )}
     </PageContainer>
   );
 };
