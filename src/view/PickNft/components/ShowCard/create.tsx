@@ -35,6 +35,7 @@ import {
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
 import {
   fetchCodeInfoAsync,
+  fetchMetaycInfoAsync,
   fetchNftApprovalAsync,
   fetchStuffAllLimitsAsync,
 } from 'store/picknft';
@@ -234,6 +235,7 @@ const CreateShowCard: React.FC = () => {
         );
       }
       // dispatch(fetchStuffAllLimitsAsync());
+      dispatch(fetchMetaycInfoAsync());
     } catch (error) {
       console.error(error);
       const errTip = `${t('Error')}! ${t(
@@ -266,7 +268,7 @@ const CreateShowCard: React.FC = () => {
   }, [buyInfo.price]);
 
   const remaining = useMemo(() => {
-    return Number(buyInfo?.limit) - Number(buyInfo?.count) || 0;
+    return buyInfo?.limit - buyInfo?.count || 0;
   }, [buyInfo?.limit, buyInfo?.count]);
 
   return (
