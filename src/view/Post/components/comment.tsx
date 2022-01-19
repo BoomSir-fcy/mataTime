@@ -33,7 +33,11 @@ export const Commnet: React.FC<{
 
     return (
       <CommentCol width='100%'>
-        <Box minWidth='40px' as={Link} to={`/me/profile/${data?.user_id}`}>
+        <Box
+          as={Link}
+          to={`/me/profile/${data?.user_id}`}
+          style={{ minWidth: '40px' }}
+        >
           <Avatar uid={data?.user_id} src={data?.user_avator_url} scale='sm' />
         </Box>
         <Box ml='18px' width='100%'>
