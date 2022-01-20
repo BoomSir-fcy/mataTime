@@ -7,6 +7,12 @@ export class CommentApi extends Http {
     return res;
   }
 
+  // 新版本评论列表
+  async getV2CommentList(params: Api.Comment.queryList) {
+    const res = await this.get('/v2/comment/list', params);
+    return res;
+  }
+
   // 二级评论列表
   async getSubCommentList(params: Api.Comment.queryList) {
     const res = await this.get('/v1/subcomment/list', params);
