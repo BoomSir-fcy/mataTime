@@ -25,10 +25,22 @@ const TabButton = styled(Button)<{ active: boolean }>`
   position: relative;
   width: 50px;
   height: 50px;
+  font-weight: 400;
   ${({ theme, active }) =>
     active && {
       background: theme.colors.tabsCurrentBackground,
     }}
+`;
+
+const ImageStyled = styled(Image)`
+  /* box-shadow: ${({ theme }) => theme.shadows.focus}; */
+  border: 1px solid ${({ theme }) => theme.colors.white_black};
+`;
+
+const BadgeStyled = styled(Badge)`
+  top: 2px;
+  right: -3px;
+  font-size: 12px;
 `;
 
 export const Navigation = React.memo(() => {
@@ -66,9 +78,13 @@ export const Navigation = React.memo(() => {
             location.pathname === row.path ? top() : goRoute(row.path)
           }
         >
-          <Icon name={row.icon} color={tabsColor} size={25} />
-          {row.badgeName && notification && (
-            <Badge count={unReadMsg.mineTotalMsgNum} />
+          <Icon
+            name={location.pathname === row.path ? row.activeIcon : row.icon}
+            color={tabsColor}
+            size={25}
+          />
+          {row.badgeName && notification && unReadMsg.mineTotalMsgNum && (
+            <BadgeStyled count={unReadMsg.mineTotalMsgNum} />
           )}
         </TabButton>
       ))}
@@ -77,7 +93,7 @@ export const Navigation = React.memo(() => {
         style={{ padding: 0 }}
         onClick={() => goRoute(`/me/profile/${userInfo?.uid}`)}
       >
-        <Image
+        <ImageStyled
           width={38}
           height={38}
           style={{ borderRadius: '50%', overflow: 'hidden' }}

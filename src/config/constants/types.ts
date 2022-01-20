@@ -42,6 +42,7 @@ export interface MenuNavLink extends MenuNavBase {
 
 export interface TbasMenuConfig {
   path: string;
+  activeIcon?: string;
   icon: string;
   badgeName?: boolean; // 微标明
 }

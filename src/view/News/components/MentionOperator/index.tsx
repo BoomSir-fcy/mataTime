@@ -181,7 +181,7 @@ const MentionOperator: React.FC<IProps> = ({
                   size={18}
                   name='icon-aixin1'
                   margin='0 10px 0 0'
-                  color='#EC612B'
+                  color='failure'
                   title={t('editorLike')}
                 />
               ) : (
