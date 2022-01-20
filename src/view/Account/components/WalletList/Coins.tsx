@@ -189,7 +189,7 @@ const Coins: React.FC<init> = ({
                               <Text fontSize='14px'>
                                 {t(
                                   'Account Over %num% can be withdrawn to the wallet on the chain',
-                                  { num: TokenWithDrawMinNum },
+                                  { num: WithDrawSetting.meta_minimum },
                                 )}
                               </Text>
                             </>

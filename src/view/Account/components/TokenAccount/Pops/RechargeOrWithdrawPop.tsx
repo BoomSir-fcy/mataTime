@@ -316,7 +316,7 @@ const MoneyModal: React.FC<init> = ({
       <InputBox mb='10px'>
         <MyInput
           color={
-            new BigNumber(val).isLessThan(TokenWithDrawMinNum)
+            new BigNumber(val).isLessThan(TokenWithDrawMinNum) && type === 2
               ? 'textOrigin'
               : ''
           }
