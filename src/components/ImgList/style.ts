@@ -16,7 +16,7 @@ a{
   cursor: zoom-in;
   max-height: 150px;
   padding-bottom: 1px;
-  &:nth-child(2n + 1) {
+  &:nth-child(2n - 1) {
     padding-right: 1px;
   }
 }
@@ -30,7 +30,7 @@ img{
   cursor: zoom-in;
   max-height: 150px;
   padding-bottom: 1px;
-  &:nth-child(2n + 1) {
+  &:nth-child(2n - 1) {
     padding-right: 1px;
   } */
 }

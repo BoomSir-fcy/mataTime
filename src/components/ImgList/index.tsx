@@ -94,10 +94,9 @@ export const ImgList = (props: Iprops) => {
       imgDom.addEventListener('load', () => {
         // 正方形图片
         if (imgDom.naturalHeight === imgDom.naturalWidth) {
-          imgDom.parentElement.parentElement.style.width = '300px';
-          imgDom.parentElement.style.width = '300px';
+          imgDom.parentElement.parentElement.style.maxWidth = '300px';
+          imgDom.parentElement.style.width = '100%';
           imgDom.parentElement.style.maxHeight = '300px';
-          imgDom.style.width = '300px';
           imgDom.style.maxHeight = '300px';
         }
         // 宽大于高的图片
@@ -148,12 +147,15 @@ export const ImgList = (props: Iprops) => {
         />
       )}
       {list.length === 1 && (
-        <BlockLink href='javascript: void(open popup image)'>
+        <BlockLink
+          style={{
+            paddingBottom: 0,
+            paddingRight: 0,
+          }}
+          href='javascript: void(open popup image)'
+        >
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
-            style={{
-              paddingBottom: 0,
-            }}
             onClick={() => preViewImg(0)}
             src={list[0]}
             alt=''
