@@ -9,6 +9,7 @@ import { shortenAddress } from 'utils/contract';
 import styled from 'styled-components';
 import { useFetchInviteRankingList } from 'view/Task/hooks/matter';
 import Rule from './Rule';
+import { Api } from 'apis';
 
 const RankingFlex = styled(Flex)`
   flex-direction: column;
@@ -74,6 +75,11 @@ const BgBox = styled(Box)`
     }
   }
 `;
+const MyInviteesNum = styled(Text)`
+  position: absolute;
+  top: 10px;
+  right: 14px;
+`;
 const ContentCard = styled(Box)`
   width: 100%;
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -130,9 +136,25 @@ const ItemText = styled(Text)`
 
 const RankingList: React.FC = React.memo(() => {
   const { t } = useTranslation();
-
   const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteRankingList();
+  const [myInvites, setMyInvites] = useState<number>(0);
+
+  useEffect(() => {
+    getMyInvites();
+  }, []);
+
+  const getMyInvites = useCallback(() => {
+    Api.TaskApi.getMyInvites()
+      .then((res: any) => {
+        if (Api.isSuccess(res)) {
+          setMyInvites(res.data?.my_valid_invite || 0);
+        }
+      })
+      .catch(() => {
+        setMyInvites(0);
+      });
+  }, [setMyInvites]);
 
   const handlePageClick = useCallback(
     event => {
@@ -205,6 +227,10 @@ const RankingList: React.FC = React.memo(() => {
             src={require('assets/images/task/goldCoinRight.png').default}
             alt=''
           />
+          <MyInviteesNum>
+            {t('my invites')}
+            {myInvites}
+          </MyInviteesNum>
           <ContentCard>
             <Flex width='100%' flexDirection='column' justifyContent='flex-end'>
               <Table>
