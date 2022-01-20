@@ -169,7 +169,7 @@ const ArticleComponents = (props, ref) => {
   const getList = useCallback(() => {
     // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
     Getlist();
-  }, [Getlist, renderList.length]);
+  }, [Getlist]);
 
   return (
     <ArticleListBox>
