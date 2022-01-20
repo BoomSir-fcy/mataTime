@@ -39,7 +39,8 @@ const SureBtn = styled(Button)`
   padding: 6px 30px;
   width: 60%;
 `;
-const MyInput = styled(Input)`
+const MyInput = styled(Input)<{ color: string }>`
+  color: ${({ theme, color }) => (color ? theme.colors.textOrigin : '')};
   border-radius: 10px;
   padding: 12px 50px 12px 16px;
   height: 50px;
@@ -314,6 +315,11 @@ const MoneyModal: React.FC<init> = ({
       </Flex>
       <InputBox mb='10px'>
         <MyInput
+          color={
+            new BigNumber(val).isLessThan(TokenWithDrawMinNum)
+              ? 'textOrigin'
+              : ''
+          }
           disabled={approvedNum === 0}
           noShadow
           pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
