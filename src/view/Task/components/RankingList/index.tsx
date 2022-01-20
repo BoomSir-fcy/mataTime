@@ -228,7 +228,7 @@ const RankingList: React.FC = React.memo(() => {
             alt=''
           />
           <MyInviteesNum>
-            {t('my invites')}
+            {t('My invites')}
             {myInvites}
           </MyInviteesNum>
           <ContentCard>
