@@ -97,6 +97,32 @@ const withTopics = editor => {
   return tempEditor;
 };
 
+const withImages = editor => {
+  const { insertData, isVoid } = editor;
+  const tempEditor = editor;
+  tempEditor.isVoid = element => {
+    return element.type === 'image' ? true : isVoid(element);
+  };
+
+  tempEditor.insertData = data => {
+    const { files } = data;
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const reader = new FileReader();
+        const [mime] = file.type.split('/');
+        if (mime === 'image') {
+          reader.addEventListener('load', () => {
+            console.log(reader.result);
+          });
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
+  return tempEditor;
+};
+
 const insertMention = (editor, { character, uid }) => {
   const mention: MentionElement = {
     type: 'mention',
@@ -222,7 +248,10 @@ export const Editor = (props: Iprops) => {
   }, []);
 
   const editor = useMemo(
-    () => withTopics(withMentions(withReact(withHistory(createEditor())))),
+    () =>
+      withImages(
+        withTopics(withMentions(withReact(withHistory(createEditor())))),
+      ),
     [],
   );
 

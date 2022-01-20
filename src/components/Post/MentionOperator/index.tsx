@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Image } from 'uikit';
+import { Box, Flex } from 'uikit';
 import { useToast } from 'hooks';
 import { Icon, ReplyModal, MoreOperatorEnum, TimeGain } from 'components';
 import { MentionOperatorWrapper } from './style';
