@@ -1,19 +1,22 @@
 /* eslint-disable */
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-import { Flex, Box, Text, Button, InputPanel, Input } from 'uikit';
+import { Flex, Box, Text, Button, InputPanel, Input, Image } from 'uikit';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import { BIG_TEN } from 'utils/bigNumber';
 import { formatDisplayApr } from 'utils/formatBalance';
-import { getFullDisplayBalance } from 'utils/formatBalance';
-import { useDpWd } from '../../../hooks/walletInfo';
+import { formatDisplayBalanceWithSymbol } from 'utils/formatBalance';
+import { getToken, useDpWd } from '../../../hooks/walletInfo';
 import Dots from 'components/Loader/Dots';
-import { useStore } from 'store';
+import { storeAction, useStore } from 'store';
 import { fetchApproveNumAsync, fetchWalletAsync } from 'store/wallet/reducer';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'contexts/Localization';
+import { DropDown, Icon } from 'components';
+import { info } from '../../WalletList';
+import QuestionHelper from 'components/QuestionHelper';
 
 const CountBox = styled(Box)`
   width: 88vw;
@@ -45,54 +48,86 @@ const MyInput = styled(Input)`
     color: ${({ theme }) => theme.colors.textTips};
   }
 `;
-const NumberBox = styled(Flex)`
-  width: 45%;
-  height: 35px;
-  background: ${({ theme }) => theme.colors.input};
-  box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.35);
-  border-radius: 10px;
+const IconToken = styled(Image)`
+  margin-right: 12px;
+  min-width: 25px;
+`;
+const ArrowIcon = styled(Icon)<{ open: boolean }>`
+  transition: all 0.3s;
+  transform: ${({ open }) => (open ? 'rotateZ(270deg)' : 'rotateZ(90deg)')};
+  transform-origin: center;
+`;
+const RowsToken = styled(Flex)`
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  margin-top: 16px;
-  justify-content: center;
+  padding: 10px;
+`;
+const TipsBox = styled(Flex)`
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+`;
+const TipsText = styled(Text)`
+  font-size: 14px;
 `;
 
 // type 1 充值 2 提币
 interface init {
+  BalanceList: info[];
   type: number;
+  setChosenType: (type) => void;
   balance: string;
-  token: string;
-  TokenAddr: string;
+  // tokenType: number;
+  // token: string;
+  // TokenAddr: string;
   onClose: () => void;
-  withdrawalBalance: string;
+  // withdrawalBalance: string;
   decimals?: number;
   TokenWithDrawMinNum: string;
   TokenWithDrawFee: string;
+  WithDrawFeeType: number;
+  BnbAvailableBalance: string;
 }
 
 const MoneyModal: React.FC<init> = ({
+  BalanceList,
   type,
   balance,
-  token,
-  TokenAddr,
+  setChosenType,
+  // tokenType,
+  // token,
+  // TokenAddr,
   onClose,
-  withdrawalBalance,
+  // withdrawalBalance,
   decimals = 18,
   TokenWithDrawMinNum,
   TokenWithDrawFee,
+  WithDrawFeeType,
+  BnbAvailableBalance,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const [val, setVal] = useState('');
+  const [ActiveTokenInfo, setActiveTokenInfo] = useState<info>();
+  const [withdrawalBalance, setwithdrawalBalance] = useState('0');
+  const [Token, setToken] = useState('');
+  const [approvedNum, setapprovedNum] = useState(0);
   const { drawCallback, Recharge, onApprove } = useDpWd();
   const [pending, setpending] = useState(false);
-  const approvedNum = useStore(p =>
-    token === 'TIME' ? p.wallet.ApproveNum.time : p.wallet.ApproveNum.matter,
+  const [open, setOpen] = useState(false);
+  const { time: TimeApprovedNum, matter: MatterApprovedNum } = useStore(
+    p => p.wallet.ApproveNum,
   );
+  const ChoiceToken = useStore(p => p.wallet.choiceToken);
+  const activeToken = useStore(p => p.wallet.activeToken);
 
-  const numberList = ['10000', '20000', '50000', '100000'];
+  const Balance_after_withdraw = useMemo(() => {
+    let InputVal = val ? val : 0;
+    const overBalance = new BigNumber(withdrawalBalance)
+      .minus(InputVal)
+      .toString();
+    return overBalance;
+  }, [val, withdrawalBalance]);
 
   // 充值/提现
   const handSure = useCallback(async () => {
@@ -111,27 +146,42 @@ const MoneyModal: React.FC<init> = ({
         .times(BIG_TEN.pow(18))
         .toString();
       try {
-        await Recharge(TokenAddr, addPrecisionNum);
+        let isChainToken = false;
+        if (Token === 'BNB') {
+          isChainToken = true;
+        }
+        await Recharge(
+          ActiveTokenInfo.tokenAddress,
+          addPrecisionNum,
+          isChainToken,
+        );
         toast.success(t('Account The transaction is successful!'));
         onClose();
       } catch (e) {
         console.error(e);
-        toast.error(t('Account Recharge failed!'));
+        toast.error(t('Account Deposit failed!'));
       } finally {
         setpending(false);
       }
     } else {
       // 提现
+      // 判断手续费是否够
+      if (WithDrawFeeType === 1) {
+        if (new BigNumber(BnbAvailableBalance).isLessThan(TokenWithDrawFee)) {
+          toast.error(t('Insufficient withdrawal fee!'));
+          setpending(false);
+          return;
+        }
+      }
+
       if (Number(withdrawalBalance) === 0) {
         setpending(false);
         return;
       }
-      // let num;
-      // if (val.indexOf('.') !== -1) {
-      //   num = val.split('.')[0];
-      // } else {
-      //   num = val;
-      // }
+      if (new BigNumber(val).isLessThanOrEqualTo(0)) {
+        setpending(false);
+        return;
+      }
       if (new BigNumber(val).isLessThan(TokenWithDrawMinNum)) {
         toast.error(
           t('Account Minimum withdrawal amount %amount%', {
@@ -142,7 +192,11 @@ const MoneyModal: React.FC<init> = ({
         return;
       }
       try {
-        await drawCallback(val, TokenAddr, token === 'TIME' ? 1 : 2);
+        await drawCallback(
+          val,
+          ActiveTokenInfo.tokenAddress,
+          ActiveTokenInfo.token_type,
+        );
         toast.success(t('Account The transaction is successful!'));
         onClose();
       } catch (e) {
@@ -153,12 +207,12 @@ const MoneyModal: React.FC<init> = ({
       }
     }
     dispatch(fetchWalletAsync());
-  }, [Recharge, type, balance, withdrawalBalance, TokenAddr, token, val]);
+  }, [Recharge, type, balance, withdrawalBalance, ActiveTokenInfo, Token, val]);
   // 授权
   const handleApprove = useCallback(async () => {
     setpending(true);
     try {
-      await onApprove(token);
+      await onApprove(Token);
       toast.success(t('setNftAuthorizationSuccess'));
     } catch (e) {
       console.error(e);
@@ -167,7 +221,7 @@ const MoneyModal: React.FC<init> = ({
       setpending(false);
       dispatch(fetchApproveNumAsync(account));
     }
-  }, [onApprove, account]);
+  }, [onApprove, account, Token]);
   // 输入框输入限制
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
@@ -188,41 +242,65 @@ const MoneyModal: React.FC<init> = ({
     },
     [setVal, balance, withdrawalBalance],
   );
+  // 切换币种
+  const changeCoinChecked = async (token: number) => {
+    dispatch(storeAction.changeChoiceToken({ choiceToken: token }));
+  };
 
+  useEffect(() => {
+    const TokenInfo = BalanceList.filter(item => {
+      return item.token_type === ChoiceToken;
+    });
+    const obj = TokenInfo[0];
+    setActiveTokenInfo(obj);
+    if (obj.token_type === 1) {
+      setapprovedNum(TimeApprovedNum);
+    } else if (obj.token_type === 2) {
+      setapprovedNum(MatterApprovedNum);
+    } else {
+      setapprovedNum(1);
+    }
+    setwithdrawalBalance(obj.available_balance);
+    const token = getToken(obj.token_type);
+    setToken(String(token));
+    setVal('');
+  }, [ChoiceToken, BalanceList]);
   return (
     <CountBox>
-      {type === 1 && (
-        <Flex
-          mb='20px'
-          alignItems='center'
-          justifyContent='space-between'
-          flexWrap='wrap'
-        >
-          {numberList.map((item, index) => (
-            <NumberBox
-              style={
-                type === 1 && approvedNum === 0 ? { cursor: 'no-drop' } : {}
-              }
-              key={item}
-              onClick={() => {
-                if (approvedNum === 0) return;
-                const Num = new BigNumber(item).isGreaterThan(balance)
-                  ? balance
-                  : item;
-                setVal(Num.toString());
-              }}
-            >
-              <Text fontWeight='bold' fontSize='16px'>
-                {item}
-              </Text>
-            </NumberBox>
-          ))}
-        </Flex>
-      )}
-      <Flex justifyContent='end' mb='12px'>
+      <Flex justifyContent='space-between' alignItems='center' mb='12px'>
+        <Box width='130px'>
+          <Flex
+            alignItems='center'
+            style={{ cursor: 'pointer' }}
+            onClick={e => {
+              e.stopPropagation();
+              setOpen(!open);
+            }}
+            width='130px'
+          >
+            <CoinItem token={Token} />
+            <ArrowIcon
+              open={open}
+              size={12}
+              color='white_black'
+              current={1}
+              name='icon-shangjiantou'
+            />
+          </Flex>
+          <DropDown fillWidth isOpen={open} scale='ld' setIsOpen={setOpen}>
+            {BalanceList.map((item, index) => (
+              <RowsToken
+                key={index}
+                onClick={() => changeCoinChecked(item.token_type)}
+              >
+                <CoinItem token={getToken(item.token_type)} />
+              </RowsToken>
+            ))}
+          </DropDown>
+        </Box>
         <Text fontSize='14px' color='textTips'>
           {t('Account Available Balance')}:{' '}
-          {getFullDisplayBalance(
+          {formatDisplayBalanceWithSymbol(
             type === 1
               ? new BigNumber(balance)
               : new BigNumber(withdrawalBalance),
@@ -258,19 +336,72 @@ const MoneyModal: React.FC<init> = ({
           MAX
         </Max>
       </InputBox>
-      {type === 2 && (
-        <Flex mb='10px'>
-          <Text color='textTips'>
-            {t('Account Minimum withdrawal amount %amount%', {
-              amount: TokenWithDrawMinNum,
-            })}
-          </Text>
-          <Text ml='20px' color='textTips'>
-            {t('Account Fee withdrawal amount %amount%', {
-              amount: formatDisplayApr(Number(TokenWithDrawFee)),
-            })}
-          </Text>
-        </Flex>
+      {type === 2 ? (
+        <>
+          <TipsBox>
+            <Flex alignItems='center'>
+              <TipsText color='textTips'>
+                {t('Account Withdrawal Fee')}
+              </TipsText>
+              <QuestionHelper
+                text={
+                  <>
+                    <Text fontSize='14px'>
+                      {t('Estimated value, based on the chain')}
+                    </Text>
+                  </>
+                }
+                iconWidth='14px'
+                ml='4px'
+                placement='top-start'
+                style={{ cursor: 'pointer' }}
+              />
+            </Flex>
+            <TipsText color='white_black'>
+              {TokenWithDrawFee}&nbsp;
+              {WithDrawFeeType === 1 && `BNB`}
+            </TipsText>
+          </TipsBox>
+          <TipsBox>
+            <TipsText color='textTips'>{t('Balance after withdraw')}</TipsText>
+            <TipsText color='white_black'>
+              {Balance_after_withdraw}&nbsp;
+              {Token}
+            </TipsText>
+          </TipsBox>
+          {WithDrawFeeType === 1 &&
+            new BigNumber(BnbAvailableBalance).isLessThan(TokenWithDrawFee) && (
+              <Flex mb='14px' paddingTop='10px' alignItems='center'>
+                <Text fontSize='14px' color='textOrigin'>
+                  {t('Don_t have enough BNB, please')}
+                </Text>
+                &nbsp;
+                <Text
+                  style={{ cursor: 'pointer' }}
+                  fontSize='14px'
+                  color='textPrimary'
+                  onClick={() => {
+                    if (activeToken) {
+                      dispatch(
+                        storeAction.changeActiveToken({ activeToken: 'BNB' }),
+                      );
+                    }
+                    setChosenType(1);
+                    changeCoinChecked(3);
+                  }}
+                >
+                  {t('AccountRecharge')}
+                  {`>`}
+                </Text>
+              </Flex>
+            )}
+        </>
+      ) : (
+        <TipsText mb='14px' color='textTips'>
+          {t(
+            'Deposit BNB as withdrawal fee，you can withdraw it  at any time.',
+          )}
+        </TipsText>
       )}
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
@@ -315,5 +446,19 @@ const MoneyModal: React.FC<init> = ({
     </CountBox>
   );
 };
-
+const CoinItem = ({ token }) => {
+  return (
+    <>
+      <IconToken
+        src={`/images/tokens/${token}.svg`}
+        width={25}
+        height={25}
+        alt=''
+      />
+      <Text bold fontSize='18px' mr='14px'>
+        {token}
+      </Text>
+    </>
+  );
+};
 export default MoneyModal;

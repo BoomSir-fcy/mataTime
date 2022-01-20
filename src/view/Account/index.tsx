@@ -51,9 +51,14 @@ const Account = props => {
   const { isMobile } = useMenuNav();
   const CurrentRound = useStore(p => p.wallet.CurrentRound);
   const { pathname } = useLocation();
+  const activeToken = useStore(p => p.wallet.activeToken);
 
   const getHeadTitle = () => {
-    if (pathname === '/account') return t('Account My Wallet');
+    if (pathname === '/account') {
+      if (!Boolean(activeToken)) {
+        return t('Account My Wallet');
+      }
+    }
     if (pathname === '/account/time') return t('TIME');
     if (pathname === '/account/faq') return t('FAQ');
     if (pathname === '/account/stake') return t('TIME Stake');
@@ -63,7 +68,7 @@ const Account = props => {
   return (
     <Box width='100%'>
       <CenterCard>
-        <Crumbs title={getHeadTitle()}>
+        <Crumbs title={getHeadTitle()} back={Boolean(activeToken)}>
           {!isMobile && (
             <HeaderTips isMobile={isMobile} t={t} CurrentRound={CurrentRound} />
           )}

@@ -121,7 +121,7 @@ const Recharge: React.FC<init> = ({
       setVal('');
     } catch (e) {
       console.error(e);
-      toast.error(t('Account Recharge failed!'));
+      toast.error(t('Account Deposit failed!'));
     } finally {
       setpending(false);
     }
@@ -284,7 +284,7 @@ const Recharge: React.FC<init> = ({
             <CloseLineIcon width={16} color="primary"></CloseLineIcon>
           </Button>
         </PopHeard> */}
-        <HistoryModal token={Token} type={ActiveHistory} />
+        {/* <HistoryModal token={Token} type={ActiveHistory} /> */}
       </ModalWrapper>
     </Content>
   );
