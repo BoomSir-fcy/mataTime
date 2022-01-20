@@ -22,16 +22,10 @@ const ArticleListBox = styled.div`
  * props 未声明类型
  */
 const ArticleComponents = (props, ref) => {
-  // const [size, setSize] = useState(20)
-  const currentUid = useStore(p => p.loginReducer.userInfo);
   const article = useStore(p => p.post);
   const dispatch = useDispatch();
   const userTag = useStore(p => p.post);
   const { user_tags1, user_tags2 } = userTag;
-  // const [page, setPage] = useState(1);
-  // const [loading, setLoading] = useState(false);
-  // const [listData, setListData] = useState([]);
-  // const [totalPage, setTotalPage] = useState(2);
   const [isEnd, setIsEnd] = useState(false);
   const { list, lastList, page, addListNum, loading } = article;
   const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =

@@ -30,7 +30,12 @@ export const TimeGain: React.FC<{
   const Popref = React.useRef(null);
   const { t } = useTranslation();
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    <PopupContent>
+    <PopupContent
+      onClick={event => {
+        event.stopPropagation();
+        event.preventDefault();
+      }}
+    >
       <Text color='textTips' style={{ flex: 1, minWidth: 80 }}>
         Time {t('Time Rewards')}
       </Text>
