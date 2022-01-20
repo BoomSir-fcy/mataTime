@@ -333,6 +333,8 @@ const TokenAccount: React.FC = () => {
 
   useEffect(() => {
     BalanceList.length > 1 && getMyBalance();
+    const Tk = getToken(activeToken);
+    setActiveToken(Number(Tk));
     return () => {
       setWalletInfo(info);
     };

@@ -245,6 +245,10 @@ const MoneyModal: React.FC<init> = ({
   // 切换币种
   const changeCoinChecked = async (token: number) => {
     dispatch(storeAction.changeChoiceToken({ choiceToken: token }));
+    if (activeToken) {
+      const Tk = getToken(token);
+      dispatch(storeAction.changeActiveToken({ activeToken: String(Tk) }));
+    }
   };
 
   useEffect(() => {
