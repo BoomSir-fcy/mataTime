@@ -56,7 +56,6 @@ const WalletList: React.FC<init> = ({
   WithDrawFeeType,
   BnbAvailableBalance,
 }) => {
-  const { t } = useTranslation();
   return (
     <ContentBox>
       <Head />

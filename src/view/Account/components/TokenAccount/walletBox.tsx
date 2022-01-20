@@ -30,14 +30,12 @@ const Content = styled(Flex)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 const TopInfo = styled(Flex)`
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
   ${({ theme }) => theme.mediaQueries.lg} {
     margin-bottom: 0;
     align-items: end;
     flex-direction: column;
-    justify-content: flex-end;
   }
   height: 100%;
 `;
@@ -143,7 +141,7 @@ const WalletBox: React.FC<Wallet> = ({
   return (
     <Content {...props}>
       {isMobile && (
-        <TopInfo>
+        <TopInfo justifyContent='space-between'>
           <LogoCom Token={Token} />
           {/* <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
             <Icon
@@ -225,7 +223,11 @@ const WalletBox: React.FC<Wallet> = ({
           </LeftBox>
         </Flex>
         {!isMobile && (
-          <TopInfo>
+          <TopInfo
+            justifyContent={
+              BalanceInfo.token_type === 1 ? 'space-between' : 'flex-end'
+            }
+          >
             {/* <ChangeTokenBtn alignItems='center' onClick={onChangeToken}>
               <Icon
                 size={size}

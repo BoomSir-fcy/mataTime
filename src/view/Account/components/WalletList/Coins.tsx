@@ -8,7 +8,7 @@ import { storeAction, useStore } from 'store';
 import history from 'routerHistory';
 import { HeadBox, info } from '.';
 import { getToken } from 'view/Account/hooks/walletInfo';
-import { ModalWrapper } from 'components';
+import { ConnectWalletButton, ModalWrapper } from 'components';
 import RechargeOrWithdrawPop from '../TokenAccount/Pops/RechargeOrWithdrawPop';
 import HistoryModal from '../TokenAccount/Pops/HistoryModal';
 import useMenuNav from 'hooks/useMenuNav';
@@ -48,6 +48,10 @@ const Helper = styled(QuestionHelper)`
   width: 100%;
 `;
 
+const ConnectWalletBtnStyle = styled(ConnectWalletButton)`
+  width: 100%;
+`;
+
 interface init {
   BalanceList: info[];
   TokenInfo: info;
@@ -68,6 +72,7 @@ const Coins: React.FC<init> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { account } = useWeb3React();
   const [ModalTitle, setModalTitle] = useState('');
   const [visible, setVisible] = useState(false);
   const [visibleHistory, setVisibleHistory] = useState(false);
@@ -112,110 +117,114 @@ const Coins: React.FC<init> = ({
             <Text fontSize='14px' paddingRight='10px' ellipsis>
               {TokenInfo.available_balance}
             </Text>
-            <Flex flexWrap='wrap' justifyContent='center'>
-              <BtnBox>
-                <TextBtn
-                  variant='text'
-                  onClick={e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    openModaal(1);
-                  }}
-                >
-                  {t('AccountRecharge')}
-                </TextBtn>
-                {TokenInfo.token_type !== 3 && (
+            {account ? (
+              <Flex flexWrap='wrap' justifyContent='center'>
+                <BtnBox>
                   <TextBtn
                     variant='text'
-                    disabled={TokenInfo.token_type === 2}
                     onClick={e => {
                       e.preventDefault();
                       e.stopPropagation();
-                      if (TokenInfo.token_type === 1) {
-                        history.push('/account/time');
-                      }
+                      openModaal(1);
                     }}
                   >
-                    {t('Time Exchange')}
-                    {TokenInfo.token_type === 2 && (
-                      <Helper
-                        text={
-                          <>
-                            <Text fontSize='14px'>{t('Not yet open')}</Text>
-                          </>
-                        }
-                        onClick={e => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        iconWidth='80px'
-                        iconHeight='30px'
-                        placement='top-end'
-                        color='transparent'
-                      />
-                    )}
+                    {t('AccountRecharge')}
                   </TextBtn>
-                )}
-              </BtnBox>
-              <BtnBox>
-                <TextBtn
-                  variant='text'
-                  disabled={
-                    Token === 'MATTER' &&
-                    new BigNumber(TokenInfo.available_balance).isLessThan(
-                      WithDrawSetting.meta_minimum,
-                    )
-                  }
-                  onClick={e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    openModaal(2);
-                  }}
-                >
-                  {t('Accountwithdraw')}
-                  {Token === 'MATTER' &&
-                    new BigNumber(TokenInfo.available_balance).isLessThan(
-                      WithDrawSetting.meta_minimum,
-                    ) && (
-                      <Helper
-                        text={
-                          <>
-                            <Text fontSize='14px'>
-                              {t(
-                                'Account Over %num% can be withdrawn to the wallet on the chain',
-                                { num: TokenWithDrawMinNum },
-                              )}
-                            </Text>
-                          </>
+                  {TokenInfo.token_type !== 3 && (
+                    <TextBtn
+                      variant='text'
+                      disabled={TokenInfo.token_type === 2}
+                      onClick={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (TokenInfo.token_type === 1) {
+                          history.push('/account/time');
                         }
-                        onClick={e => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        iconWidth='80px'
-                        iconHeight='30px'
-                        placement='top-end'
-                        color='transparent'
-                      />
-                    )}
-                </TextBtn>
-                <TextBtn
-                  variant='text'
-                  onClick={e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dispatch(
-                      storeAction.changeChoiceToken({
-                        choiceToken: TokenInfo.token_type,
-                      }),
-                    );
-                    setVisibleHistory(true);
-                  }}
-                >
-                  {t('Account history record')}
-                </TextBtn>
-              </BtnBox>
-            </Flex>
+                      }}
+                    >
+                      {t('Time Exchange')}
+                      {TokenInfo.token_type === 2 && (
+                        <Helper
+                          text={
+                            <>
+                              <Text fontSize='14px'>{t('Not yet open')}</Text>
+                            </>
+                          }
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          iconWidth='80px'
+                          iconHeight='30px'
+                          placement='top-end'
+                          color='transparent'
+                        />
+                      )}
+                    </TextBtn>
+                  )}
+                </BtnBox>
+                <BtnBox>
+                  <TextBtn
+                    variant='text'
+                    disabled={
+                      Token === 'MATTER' &&
+                      new BigNumber(TokenInfo.available_balance).isLessThan(
+                        WithDrawSetting.meta_minimum,
+                      )
+                    }
+                    onClick={e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openModaal(2);
+                    }}
+                  >
+                    {t('Accountwithdraw')}
+                    {Token === 'MATTER' &&
+                      new BigNumber(TokenInfo.available_balance).isLessThan(
+                        WithDrawSetting.meta_minimum,
+                      ) && (
+                        <Helper
+                          text={
+                            <>
+                              <Text fontSize='14px'>
+                                {t(
+                                  'Account Over %num% can be withdrawn to the wallet on the chain',
+                                  { num: TokenWithDrawMinNum },
+                                )}
+                              </Text>
+                            </>
+                          }
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          iconWidth='80px'
+                          iconHeight='30px'
+                          placement='top-end'
+                          color='transparent'
+                        />
+                      )}
+                  </TextBtn>
+                  <TextBtn
+                    variant='text'
+                    onClick={e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      dispatch(
+                        storeAction.changeChoiceToken({
+                          choiceToken: TokenInfo.token_type,
+                        }),
+                      );
+                      setVisibleHistory(true);
+                    }}
+                  >
+                    {t('Account history record')}
+                  </TextBtn>
+                </BtnBox>
+              </Flex>
+            ) : (
+              <ConnectWalletBtnStyle />
+            )}
           </>
         ) : (
           <Box style={{ textAlign: 'right' }}>
