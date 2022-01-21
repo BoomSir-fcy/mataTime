@@ -6,6 +6,7 @@ import { Login } from './login';
 import { WalletState } from './wallet/type';
 import { TaskState } from './task/type';
 import { StuffElement } from 'config/constants/stuffImages';
+import { FetchStatus } from 'config/types';
 
 export interface State {
   pools: PoolsState;
@@ -94,6 +95,8 @@ export interface PickNftState {
     enableBuy: boolean
     price: string
     loading: boolean
+    count: number
+    limit: number
   },
   codeInfo: {
     lockUser: string;
@@ -102,6 +105,36 @@ export interface PickNftState {
     state: number;
   }
 }
+
+export enum MapModuleType {
+  POST,
+  USER,
+  UNKNOWN,
+}
+export interface MapModuleStatus {
+  fetchStatus: FetchStatus
+  type: MapModuleType
+  ids: string|number
+}
+export interface MapModuleState {
+  postMap: {
+    [postId: string]: Api.Home.post
+  },
+  userMap: {
+    [userId: string]: any
+  },
+  postStatusMap: {
+    [postId: string]: MapModuleStatus
+  },
+  userStatusMap: {
+    [userId: string]: MapModuleStatus
+  },
+  unFollowUsersIds: number[],
+  deletePostIds: number[],
+  blockUsersIds: number[],
+  status: MapModuleStatus[]
+}
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   State,

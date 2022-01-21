@@ -242,7 +242,14 @@ const RewardAuthModal: React.FC<RewardAuthModalProps> = ({
   }, []);
 
   return (
-    <RewardAuthModalStyled right={offsetLeft} bottom={offsetTop}>
+    <RewardAuthModalStyled
+      onClick={event => {
+        event.stopPropagation();
+        event.preventDefault();
+      }}
+      right={offsetLeft}
+      bottom={offsetTop}
+    >
       {/* 无人打赏你的帖子 */}
       {userInfo.uid === currentPost.user_id ? (
         <RewardIncome data={reward} postInfo={reward_post} />

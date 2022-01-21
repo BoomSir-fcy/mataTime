@@ -32,7 +32,7 @@ export const ProfileMenu = React.memo(() => {
   const userInfo = useStore(p => p.loginReducer.userInfo);
   return (
     <React.Fragment>
-      {userInfo.uid ? (
+      {userInfo?.uid ? (
         <Flex alignItems='center' width='100%' style={{ minWidth: 0 }}>
           <Avatar disableFollow src={userInfo?.nft_image} scale='sm' />
           <Content>

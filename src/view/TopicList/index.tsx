@@ -20,16 +20,15 @@ const TopicList = props => {
   const { id } = props.match.params;
   let { name } = props.match.params;
   try {
-    name = decodeURIComponent(name)    
-  } catch (error) {
-  }
+    name = decodeURIComponent(name);
+  } catch (error) {}
   const { toastError } = useToast();
   const [state, setState] = useImmer({
     tagName: '',
     loading: false,
     page: 1,
     totalPage: 1,
-    listData: []
+    listData: [],
   });
 
   // 阅读文章扣费
@@ -48,7 +47,7 @@ const TopicList = props => {
         page: current || page,
         per_page: MAX_SPEND_TIME_PAGE_TATOL,
         topic_id: id === 'empty' ? null : id,
-        topic_name: name
+        topic_name: name,
       });
       if (Api.isSuccess(res)) {
         setState(p => {
@@ -66,6 +65,64 @@ const TopicList = props => {
     }
   };
 
+  // 更新列表
+  const updateList = (newItem: any, type: MoreOperatorEnum) => {
+    const {
+      FOLLOW,
+      CANCEL_FOLLOW,
+      SETTOP,
+      CANCEL_SETTOP,
+      COMMONT,
+      EXPAND,
+      SHIELD,
+      DELPOST,
+      LIKE,
+      BLOCKUSER,
+    } = MoreOperatorEnum;
+    const handleChangeList = type === SHIELD || type === DELPOST;
+    let arr = [];
+
+    if (
+      // type === FOLLOW ||
+      type === CANCEL_FOLLOW ||
+      type === SETTOP ||
+      type === CANCEL_SETTOP ||
+      // type === COMMONT ||
+      type === BLOCKUSER
+    ) {
+      getList(1);
+      return;
+    }
+
+    // 折叠
+    if (type === EXPAND) return setNonce(prep => prep + 1);
+    state.listData.forEach((item: any) => {
+      let obj = item;
+
+      if (item.id === newItem.id) {
+        obj = { ...newItem.post };
+      }
+      if (
+        (item.id === newItem.id || item.user_id === newItem.user_id) &&
+        type === MoreOperatorEnum.FOLLOW
+      ) {
+        // 关注更新状态
+        obj = { ...item, is_attention: newItem.is_attention };
+      }
+      if (item.id === newItem.id && handleChangeList) {
+        // 屏蔽、删除
+      } else {
+        arr.push(obj);
+      }
+    });
+    setState(p => {
+      p.listData = [...arr];
+    });
+
+    if (handleChangeList) {
+      setNonce(prep => prep + 1);
+    }
+  };
   return (
     <Box key={props.location.key}>
       <Crumbs back centerTitle={`#${name}`} zIndex={1005} />
@@ -101,35 +158,37 @@ const TopicList = props => {
                 add_time: item.add_time_desc,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(data, _type) => {
-                if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1);
-                  return;
-                }
-                getList(1);
+                // if (_type === MoreOperatorEnum.EXPAND) {
+                //   setNonce(prep => prep + 1);
+                //   return;
+                // }
+                // getList(1);
+                updateList(data, _type);
               }}
             />
             <MentionOperator
               {...props}
-              replyType="twitter"
+              replyType='twitter'
               postId={item.id}
               itemData={{
                 ...item,
                 post_id: item.id,
                 post: {
                   ...item,
-                  post_id: item.id
-                }
+                  post_id: item.id,
+                },
               }}
               callback={(data, _type) => {
-                if (_type === MoreOperatorEnum.EXPAND) {
-                  setNonce(prep => prep + 1);
-                  return;
-                }
-                getList(1);
+                // if (_type === MoreOperatorEnum.EXPAND) {
+                //   setNonce(prep => prep + 1);
+                //   return;
+                // }
+                // getList(1);
+                updateList(data, _type);
               }}
             />
           </MeItemWrapper>

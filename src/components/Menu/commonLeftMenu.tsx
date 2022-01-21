@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Box, Flex, Card, Text } from 'uikit';
 import { useSelector } from 'react-redux';
 import { Logo, Icon, ProfileMenu } from 'components';
-import { useTranslation } from 'contexts/Localization'
+import { useTranslation } from 'contexts/Localization';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
 
@@ -66,7 +66,7 @@ const MenuIcon = styled(Box)`
     position: absolute;
     width: 21px;
     height: 13px;
-    background: #ec612b;
+    background: ${({ theme }) => theme.colors.failure};
     border-radius: 5px;
     font-size: 11px;
     font-family: Alibaba PuHuiTi;
@@ -97,17 +97,23 @@ type IProps = {
 };
 
 export const CommonLeftMenu = React.memo((props: IProps) => {
-  const { t } = useTranslation()
-  const isDark = useSelector((state: any) => state.appReducer.systemCustom.isDark);
-  const notification = useSelector((state: any) => state.appReducer.systemCustom.notification);
+  const { t } = useTranslation();
+  const isDark = useSelector(
+    (state: any) => state.appReducer.systemCustom.isDark,
+  );
+  const notification = useSelector(
+    (state: any) => state.appReducer.systemCustom.notification,
+  );
   const { pathname } = props.route;
   const [msgNum, setMsgNum] = useState<any>({});
 
   useEffect(() => {
     getMsgNumRequest();
-    const currentMenuItemKey = (props.menu.find(item => item.link === pathname) || {}).alias
+    const currentMenuItemKey = (
+      props.menu.find(item => item.link === pathname) || {}
+    ).alias;
     if (currentMenuItemKey) {
-      getMsgReadRequest(currentMenuItemKey)
+      getMsgReadRequest(currentMenuItemKey);
     }
   }, []);
 
@@ -145,14 +151,24 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
   return (
     <MenuWarpper>
       <LogoWarpper>
-        <Logo url="/" src={require(isDark ? 'assets/images/logo.svg' : 'assets/images/light_logo.svg').default} />
+        <Logo
+          url='/'
+          src={
+            require(isDark
+              ? 'assets/images/logo.svg'
+              : 'assets/images/light_logo.svg').default
+          }
+        />
       </LogoWarpper>
       <BackWarpper
         onClick={() => {
           props.history.push('/');
         }}
       >
-        <Icon color={isDark ? '#ffffff' : '#4168ED'} name={'icon-fanhui'}></Icon>
+        <Icon
+          color={isDark ? '#ffffff' : '#4168ED'}
+          name={'icon-fanhui'}
+        ></Icon>
         <span>{t('newsBack')}</span>
       </BackWarpper>
       <MenuBody>
@@ -168,8 +184,13 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
               }}
             >
               <MenuIcon>
-                <Icon color={isDark ? '#ffffff' : '#7A83A0'} name={item.icon}></Icon>
-                {msgNum[item.alias] && notification ? <span>{msgNum[item.alias]}</span> : null}
+                <Icon
+                  color={isDark ? '#ffffff' : '#7A83A0'}
+                  name={item.icon}
+                ></Icon>
+                {msgNum[item.alias] && notification ? (
+                  <span>{msgNum[item.alias]}</span>
+                ) : null}
               </MenuIcon>
               {/* <MenuText>{item.name}</MenuText> */}
               <MenuText>{t(item.transaltion)}</MenuText>
@@ -177,7 +198,7 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
           );
         })}
       </MenuBody>
-      <User as={Link} to="/me">
+      <User as={Link} to='/me'>
         <ProfileMenu />
       </User>
     </MenuWarpper>

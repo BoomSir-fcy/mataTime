@@ -11,7 +11,7 @@ import useAuth from 'hooks/useAuth';
 import { MAX_PER_SPEND_TIME, storage } from 'config';
 import InsufficientBalanceModal from './InsufficientBalanceModal';
 import { usePlatformTimeBalance } from 'store/wallet/hooks';
-import useHttpError from 'hooks/useHttpError';
+import useHttpError, { useNetworkError } from 'hooks/useHttpError';
 
 export default function HttpUpdater() {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ export default function HttpUpdater() {
   const [visible, setVisible] = useState(false);
   const { availableBalance } = usePlatformTimeBalance();
   const httpErrorToast = useHttpError();
+  const networkErrorToast = useNetworkError();
 
   // 重置用户信息
   const handleReSetAccount = useCallback(() => {
@@ -40,7 +41,7 @@ export default function HttpUpdater() {
     error => {
       httpErrorToast(error.data);
     },
-    [setVisible],
+    [httpErrorToast],
   );
 
   useEffect(() => {
@@ -63,6 +64,13 @@ export default function HttpUpdater() {
       eventBus.removeEventListener('httpError', handleHttpError);
     };
   }, [handleHttpError]);
+
+  useEffect(() => {
+    eventBus.addEventListener('networkerror', networkErrorToast);
+    return () => {
+      eventBus.removeEventListener('networkerror', networkErrorToast);
+    };
+  }, [networkErrorToast]);
 
   useEffect(() => {
     if (availableBalance.isGreaterThanOrEqualTo(MAX_PER_SPEND_TIME)) {

@@ -12,6 +12,7 @@ import { Api } from 'apis';
 
 import { shortenAddress } from 'utils/contract';
 import { useTranslation } from 'contexts/Localization';
+import { removeBlockUserId } from 'store/mapModule/actions';
 
 const Content = styled(Card)`
   min-height: 500px;
@@ -111,6 +112,7 @@ const Shield = React.memo(() => {
       const res = await Api.MeApi.unShieldUser(uid);
       if (Api.isSuccess(res)) {
         getList(1);
+        dispatch(removeBlockUserId(uid)); // 移除屏蔽列表 作用于首页显示
         toastSuccess(t('shieldUserUnSuccess'));
       } else {
         toastError(t(`http-error-${res.code}`));
@@ -120,19 +122,19 @@ const Shield = React.memo(() => {
     }
   };
 
-  React.useEffect(() => {
-    return () => {
-      dispatch(
-        fetchThunk.fetchPostAsync({
-          attention: postParams.attention,
-          page: 1,
-          per_page: pageSize,
-          user_tags1: postParams.user_tags1,
-          user_tags2: postParams.user_tags2,
-        }),
-      );
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   return () => {
+  //     dispatch(
+  //       fetchThunk.fetchPostAsync({
+  //         attention: postParams.attention,
+  //         page: 1,
+  //         per_page: pageSize,
+  //         user_tags1: postParams.user_tags1,
+  //         user_tags2: postParams.user_tags2,
+  //       }),
+  //     );
+  //   };
+  // }, []);
 
   return (
     <Box>

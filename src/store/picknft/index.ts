@@ -44,6 +44,8 @@ const initialState: PickNftState = {
     enableBuy: true,
     price: '0',
     loading: false,
+    count: 0,
+    limit: 0,
   },
   inviteLoading: true,
   codeInfo: {

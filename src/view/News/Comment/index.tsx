@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Text, Flex } from 'uikit';
 import dayjs from 'dayjs';
-import MentionItem, { MentionItemUser } from '../components/MentionItem';
-import MentionOperator from '../components/MentionOperator';
+import { Box, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import {
-  List,
-  ContentParsing,
-  MoreOperatorEnum,
-  FollowPopup,
-  Icon
-} from 'components';
+import { List, ContentParsing, MoreOperatorEnum } from 'components';
 import { Api } from 'apis';
 import { NewsCommentWrapper, CommentItemWrapper } from './style';
 import MessageCard from '../components/MessageCard';
@@ -88,7 +80,7 @@ const NewsComment: React.FC<any> = props => {
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}
-              href={`/articleDetils/${item.post?.post_id}`}
+              href={`/articleDetils/${item.post?.post_id}?comment_id=${item.comment.comment_id}`}
             >
               <Box>
                 {/* <FollowPopup uid={item.send_uid}>

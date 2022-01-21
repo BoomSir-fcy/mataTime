@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import reactStringReplace from 'react-string-replace';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { Text } from 'uikit';
 import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -39,6 +40,8 @@ const ParagraphItem = styled.div`
   min-height: 1.1875em;
   font-family: Arial;
   line-height: 1.1875;
+  user-select: text;
+  cursor: text;
   p {
     font-size: 18px;
     font-family: Arial;
@@ -81,6 +84,7 @@ export const ContentParsing = (props: IProps) => {
         for (let i = 0; i < els.length; i++) {
           els[i].onclick = e => {
             e.stopPropagation();
+            e.preventDefault();
           };
         }
       }
@@ -101,7 +105,10 @@ export const ContentParsing = (props: IProps) => {
       <a
         key={match + i}
         target='_blank'
-        onClick={event => event.stopPropagation()}
+        onClick={event => {
+          event.stopPropagation();
+          // event.preventDefault();
+        }}
         href={match}
         title={match}
         rel='noreferrer'
@@ -140,6 +147,7 @@ export const ContentParsing = (props: IProps) => {
         (match, i) => (
           <Link
             onClick={event => {
+              // event.preventDefault();
               event.stopPropagation();
             }}
             to={() =>
@@ -169,7 +177,10 @@ export const ContentParsing = (props: IProps) => {
       case 'topic':
         return (
           <Link
-            onClick={e => e.stopPropagation()}
+            onClick={e => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
             to={`/topicList/empty/${children?.map((n, index) =>
               serialize2(n, 'topic', index),
             )}`}
@@ -180,7 +191,14 @@ export const ContentParsing = (props: IProps) => {
       case 'mention':
         return (
           <FollowPopup uid={node?.attrs?.userid || 0} key={index}>
-            <a>{node.character}</a>
+            <a
+              onClick={event => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+            >
+              {node.character}
+            </a>
           </FollowPopup>
         );
       default:
@@ -202,9 +220,13 @@ export const ContentParsing = (props: IProps) => {
         })}
       {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
         <ExpandWrapper>
-          <span
+          <a
+            href={`javascript:void(${
+              expand ? t('homePutAway') : t('homeOpen')
+            })`}
             onClick={(e: any) => {
               e.stopPropagation();
+              e.preventDefault();
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
               if (callback) {
                 callback(MoreOperatorEnum.EXPAND);
@@ -212,8 +234,10 @@ export const ContentParsing = (props: IProps) => {
               setExpand(!expand);
             }}
           >
-            {expand ? t('homePutAway') : t('homeOpen')}
-          </span>
+            <Text color='textPrimary' fontSize='12px'>
+              {expand ? t('homePutAway') : t('homeOpen')}
+            </Text>
+          </a>
         </ExpandWrapper>
       ) : null}
     </ContentParsingWrapper>

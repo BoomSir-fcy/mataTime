@@ -50,7 +50,7 @@ const Home: React.FC = (props: any) => {
   const tabsRefs = React.useRef(null);
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
 
   const sendArticle = async (
     content: string,
@@ -165,6 +165,7 @@ const Home: React.FC = (props: any) => {
               nonce={nonce}
               topicName={match.params.name}
               filterValObj={filterVal}
+              isFollowing={Number(filterVal.attention) === 2}
               {...props}
             />
           )}

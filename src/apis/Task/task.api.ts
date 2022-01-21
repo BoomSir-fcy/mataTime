@@ -44,4 +44,10 @@ export class TaskApi extends Http {
     const res = await this.get('/v1/activity/invite-leaderboard', { page, pageSize });
     return res;
   }
+  
+  // 我的邀请人数
+  async getMyInvites() {
+    const res = await this.get('/v1/activity/my-valid-invite');
+    return res;
+  }
 }
