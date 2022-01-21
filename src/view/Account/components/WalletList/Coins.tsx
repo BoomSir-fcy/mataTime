@@ -79,6 +79,7 @@ const Coins: React.FC<init> = ({
   const [ChosenType, setChosenType] = useState(1);
   const { isMobile } = useMenuNav();
   const WithDrawSetting = useStore(p => p.wallet.WithDrawSetting);
+  const ChoiceToken = useStore(p => p.wallet.choiceToken);
 
   const openModaal = title => {
     dispatch(
@@ -94,9 +95,9 @@ const Coins: React.FC<init> = ({
   useEffect(() => {
     const titleText =
       ChosenType === 1 ? t('AccountRecharge') : t('Accountwithdraw');
-    setModalTitle(`${titleText} ${Token}`);
-  }, [ChosenType, Token]);
-
+    const tokenText = getToken(ChoiceToken);
+    setModalTitle(`${titleText} ${tokenText}`);
+  }, [ChosenType, Token, ChoiceToken]);
   return (
     <ContentBox>
       <HeadBox

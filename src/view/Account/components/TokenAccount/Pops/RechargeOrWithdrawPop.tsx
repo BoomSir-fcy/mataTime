@@ -251,7 +251,9 @@ const MoneyModal: React.FC<init> = ({
       dispatch(storeAction.changeActiveToken({ activeToken: String(Tk) }));
     }
   };
-
+  useEffect(() => {
+    setVal('');
+  }, [ChoiceToken]);
   useEffect(() => {
     const TokenInfo = BalanceList.filter(item => {
       return item.token_type === ChoiceToken;
@@ -268,7 +270,6 @@ const MoneyModal: React.FC<init> = ({
     setwithdrawalBalance(obj.available_balance);
     const token = getToken(obj.token_type);
     setToken(String(token));
-    setVal('');
   }, [ChoiceToken, BalanceList]);
   return (
     <CountBox>
