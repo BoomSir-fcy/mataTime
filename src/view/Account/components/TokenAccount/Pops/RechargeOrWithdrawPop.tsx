@@ -456,7 +456,7 @@ const MoneyModal: React.FC<init> = ({
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
           mb='10px'
-          disable={pending}
+          disabled={pending}
           onClick={() => {
             if (approvedNum > 0) {
               // 充值、提现
