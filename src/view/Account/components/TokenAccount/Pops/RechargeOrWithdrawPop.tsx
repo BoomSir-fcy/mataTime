@@ -386,7 +386,9 @@ const MoneyModal: React.FC<init> = ({
                 text={
                   <>
                     <Text fontSize='14px'>
-                      {t('Estimated value, based on the chain')}
+                      {t(
+                        'Estimated value (actual gas fee is based on on-chain data)',
+                      )}
                     </Text>
                   </>
                 }
