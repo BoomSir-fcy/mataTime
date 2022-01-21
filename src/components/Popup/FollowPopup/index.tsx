@@ -14,6 +14,9 @@ import { FollowBtn } from 'view/News/components/MentionItem/style';
 
 import { Api } from 'apis';
 import client from 'utils/client';
+import { useUserInfoById } from 'store/mapModule/hooks';
+import { useDispatch } from 'react-redux';
+import { fetchUserInfoAsync } from 'store/mapModule/reducer';
 
 type Iprops = {
   children: React.ReactElement;
@@ -26,24 +29,24 @@ export const FollowPopup = React.memo((props: Iprops) => {
   const myself = useStore(p => p.loginReducer.userInfo);
   const { children, uid, callback = () => {} } = props;
   const [visible, setVisible] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<any>({});
+  // const [userInfo, setUserInfo] = useState<any>({});
   const { theme } = useTheme();
 
-  // 获取个人信息
-  const getUserInfo = async () => {
-    const res = await Api.UserApi.getUserInfoByUID(uid);
-    if (Api.isSuccess(res)) {
-      setUserInfo(res.data);
-    }
-  };
+  const userInfo = useUserInfoById(uid);
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(fetchUserInfoAsync(uid));
+  }, [uid, dispatch]);
 
   // 关注用户
   const onAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.onAttentionFocus(uid);
     if (Api.isSuccess(res)) {
       toast.success(t('commonMsgFollowSuccess') || res.data);
-      getUserInfo();
-      callback(MoreOperatorEnum.CANCEL_FOLLOW);
+      // getUserInfo();
+      dispatch(fetchUserInfoAsync(uid));
+      callback(MoreOperatorEnum.FOLLOW);
     } else {
       toast.error(res.data);
     }
@@ -54,7 +57,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
     const res = await Api.AttentionApi.cancelAttentionFocus(uid);
     if (Api.isSuccess(res)) {
       toast.success(t('commonMsgUnFollowSuccess') || res.data);
-      getUserInfo();
+      dispatch(fetchUserInfoAsync(uid));
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
     } else {
       toast.error(res.data);
@@ -66,22 +69,25 @@ export const FollowPopup = React.memo((props: Iprops) => {
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <PopupContentWrapper>
-      <Link className='content' to={`/me/profile/${userInfo.uid}`}>
+      <Link
+        className='content'
+        to={userInfo?.uid ? `/me/profile/${userInfo?.uid}` : undefined}
+      >
         <div className='left-box'>
           <div className='img-box'>
             <Avatar
               disableFollow
               className='avatar'
-              src={userInfo.nft_image || userInfo.NftImage || '  '}
+              src={userInfo?.nft_image || userInfo?.NftImage || '  '}
               scale='md'
             />
           </div>
         </div>
         <div className='right-box'>
           <Text className='name' ellipsis>
-            {userInfo.NickName || userInfo.nick_name || '  '}
+            {userInfo?.NickName || userInfo?.nick_name || '  '}
           </Text>
-          <div className='des'>{shortenAddress(userInfo.address)}</div>
+          <div className='des'>{shortenAddress(userInfo?.address)}</div>
           <div className='number'>
             <Flex className='cloums'>
               {t('followFans')}
@@ -92,7 +98,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
                 // maxWidth='30px'
                 // ellipsis
               >
-                {userInfo.fans_num || 0}
+                {userInfo?.fans_num || 0}
               </Text>
             </Flex>
             <Flex className='cloums'>
@@ -104,7 +110,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
                 // maxWidth='30px'
                 // ellipsis
               >
-                {userInfo.attention_num || 0}
+                {userInfo?.attention_num || 0}
               </Text>
             </Flex>
           </div>
@@ -116,12 +122,12 @@ export const FollowPopup = React.memo((props: Iprops) => {
             onClick={(e: any) => {
               e.stopPropagation();
               e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-              userInfo.is_attention === 1
+              userInfo?.is_attention === 1
                 ? cancelAttentionFocusRequest()
                 : onAttentionFocusRequest();
             }}
           >
-            {userInfo.is_attention === 1
+            {userInfo?.is_attention === 1
               ? t('followCancelText')
               : '+' + t('followText')}
           </FollowBtn>
@@ -139,99 +145,15 @@ export const FollowPopup = React.memo((props: Iprops) => {
   );
 
   useEffect(() => {
-    if (uid) {
-      tooltipVisible && getUserInfo();
+    if (uid && tooltipVisible) {
+      dispatch(fetchUserInfoAsync(uid));
     }
   }, [tooltipVisible, uid]);
 
   return (
-    <PopupWrapper
-      onClick={e => e.stopPropagation()}
-      // onMouseOver={(e: any) => {
-      //   if (timer) {
-      //     clearTimeout(timer);
-      //   }
-      //   e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-      //   setVisible(true);
-      // }}
-      // onMouseLeave={(e: any) => {
-      //   e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-      //   timer = setTimeout(() => {
-      //     setVisible(false);
-      //   }, 300);
-      // }}
-    >
-      {/* {children} */}
+    <PopupWrapper onClick={e => e.stopPropagation()}>
       {tooltipVisible && tooltip}
-      <span ref={targetRef}>
-        {/* <Text>test</Text> */}
-        {children}
-      </span>
-      {/* {visible ? (
-        <PopupContentWrapper>
-          <Link className='content' to={`/me/profile/${userInfo.uid}`}>
-            <div className='left-box'>
-              <div className='img-box'>
-                <Avatar
-                  disableFollow
-                  className='avatar'
-                  src={userInfo.nft_image || userInfo.NftImage || '  '}
-                  scale='md'
-                />
-              </div>
-            </div>
-            <div className='right-box'>
-              <Text className='name' ellipsis>
-                {userInfo.NickName || userInfo.nick_name || '  '}
-              </Text>
-              <div className='des'>{shortenAddress(userInfo.address)}</div>
-              <div className='number'>
-                <Flex className='cloums'>
-                  {t('followFans')}
-                  <Text
-                    fontWeight='bold'
-                    color='white'
-                    ml='10px'
-                    maxWidth='30px'
-                    ellipsis
-                  >
-                    {userInfo.fans_num || 0}
-                  </Text>
-                </Flex>
-                <Flex className='cloums'>
-                  {t('followText')}
-                  <Text
-                    fontWeight='bold'
-                    color='white'
-                    ml='10px'
-                    maxWidth='30px'
-                    ellipsis
-                  >
-                    {userInfo.attention_num || 0}
-                  </Text>
-                </Flex>
-              </div>
-            </div>
-          </Link>
-          {myself.uid !== uid && (
-            <div className='btn'>
-              <FollowBtn
-                onClick={(e: any) => {
-                  e.stopPropagation();
-                  e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-                  userInfo.is_attention === 1
-                    ? cancelAttentionFocusRequest()
-                    : onAttentionFocusRequest();
-                }}
-              >
-                {userInfo.is_attention === 1
-                  ? t('followCancelText')
-                  : '+' + t('followText')}
-              </FollowBtn>
-            </div>
-          )}
-        </PopupContentWrapper>
-      ) : null} */}
+      <span ref={targetRef}>{children}</span>
     </PopupWrapper>
   );
 });
