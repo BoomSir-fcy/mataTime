@@ -1,88 +1,104 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
-import useIm from "hooks/imHooks/useIm";
-import debounce from 'lodash/debounce'
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
+import useIm from 'hooks/imHooks/useIm';
+import debounce from 'lodash/debounce';
 import { ReadType } from 'hooks/imHooks/types';
-import { Text, Button } from "uikit";
-import observerOptions from "./options";
-import styled from "styled-components";
-import { ARTICLE_IMAGE_CLASS_NAME } from "config";
-import useDebounce from "hooks/useDebounce";
+import { Text, Button } from 'uikit';
+import observerOptions from './options';
+import styled from 'styled-components';
+import { ARTICLE_IMAGE_CLASS_NAME } from 'config';
+import useDebounce from 'hooks/useDebounce';
 
 interface SpendTimeViewWithArticleProps {
-  articleId: number
-  readType: ReadType
-  nonce?: number // 有导致高度变化的操作更改这个值进行刷新高度操作
-  setNonce?: React.Dispatch<React.SetStateAction<number>>
-  index?: number // 帖子显示序号 TODO: 后期优化操作, 当index 小于 
-  nonceIndex?: number // 更改时变化的帖子的index
+  articleId: number;
+  readType: ReadType;
+  nonce?: number; // 有导致高度变化的操作更改这个值进行刷新高度操作
+  setNonce?: React.Dispatch<React.SetStateAction<number>>;
+  index?: number; // 帖子显示序号 TODO: 后期优化操作, 当index 小于
+  nonceIndex?: number; // 更改时变化的帖子的index
 }
 
 // 浏览扣费组件
-const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> = React.memo(({ articleId, readType, nonce, setNonce }) => {
+const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
+  React.memo(({ articleId, readType, nonce, setNonce }) => {
+    const imgRef = useRef<HTMLDivElement>(null);
+    const { setArticlePositions, rendered, setRendered } = useIm();
 
-  const imgRef = useRef<HTMLDivElement>(null);
-  const { setArticlePositions, rendered, setRendered } = useIm()
+    const [flag, setFlag] = useState(0);
 
-  const [flag, setFlag] = useState(0)
+    const debouncedOnChange = useMemo(
+      () => debounce(() => setFlag(prep => prep + 1), 300),
+      [setFlag],
+    );
 
-  const debouncedOnChange = useMemo(
-    () => debounce(() => setFlag(prep => prep + 1), 300),
-    [setFlag],
-  )
+    // 解决图片加载后文章高度改变
+    const handleListenImageLoad = useCallback(
+      (dom: HTMLElement) => {
+        const images = dom?.getElementsByClassName(ARTICLE_IMAGE_CLASS_NAME);
+        if (images.length > 0) {
+          (Array.from(images) as HTMLImageElement[]).forEach(item => {
+            item.addEventListener('load', debouncedOnChange);
+          });
+        }
+      },
+      [debouncedOnChange],
+    );
 
-  // 解决图片加载后文章高度改变
-  const handleListenImageLoad = useCallback((dom: HTMLElement) => {
-    const images = dom?.getElementsByClassName(ARTICLE_IMAGE_CLASS_NAME)
-    if (images.length > 0) {
-      (Array.from(images) as HTMLImageElement[]).forEach((item) => {
-        item.addEventListener('load', debouncedOnChange)
-      })
-    }
-  }, [debouncedOnChange])
+    useEffect(() => {
+      if (flag) {
+        setNonce(prep => prep + 1);
+      }
+    }, [flag]);
 
+    // const flagDebounce = useDebounce(nonce, 500)
 
-  useEffect(() => {
-    if (flag) {
-      setNonce(prep => prep + 1)
-    }
-  }, [flag])
+    useEffect(() => {
+      if (imgRef.current) {
+        handleListenImageLoad(imgRef.current?.parentElement);
+        const offsetHeight = imgRef.current?.parentElement?.offsetHeight;
+        const offsetTop = imgRef.current?.parentElement?.offsetTop;
+        // const { offsetTop } = imgRef.current
+        setArticlePositions(prep => {
+          // eslint-disable-next-line no-param-reassign
+          prep[`${articleId}_${readType}`] = {
+            articleId,
+            readType,
+            offsetTop,
+            offsetBottom: offsetTop + offsetHeight,
+          };
+          return prep;
+          // return {
+          //   ...prep,
+          //   [`${articleId}_${readType}`]: { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight },
+          // }
+        });
+        setNonce(prep => {
+          if (prep < 2) return prep + 1;
+          return prep;
+        });
+        if (!rendered) setRendered(true);
+      }
+      return () => {
+        setArticlePositions(prep => {
+          // const newArticlePositions = {
+          //   ...prep
+          // }
+          // eslint-disable-next-line no-param-reassign
+          delete prep[`${articleId}_${readType}`];
+          return prep;
+        });
+      };
+    }, [articleId, readType, rendered, setRendered, setArticlePositions]);
 
-  // const flagDebounce = useDebounce(nonce, 500)
+    return <div ref={imgRef} />;
+    // return <div ref={imgRef}>
+    //   <Text>articleId: {articleId}</Text>
+    // </div>
+  });
 
-  useEffect(() => {
-    if (imgRef.current) {
-      handleListenImageLoad(imgRef.current?.parentElement)
-      const offsetHeight = imgRef.current?.parentElement?.offsetHeight
-      const offsetTop = imgRef.current?.parentElement?.offsetTop
-      // const { offsetTop } = imgRef.current
-      setArticlePositions(prep => {
-        // eslint-disable-next-line no-param-reassign
-        prep[`${articleId}_${readType}`] = { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight }
-        return prep
-        // return {
-        //   ...prep,
-        //   [`${articleId}_${readType}`]: { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight },
-        // }
-      })
-      if (!rendered) setRendered(true)
-    }
-    return () => {
-      setArticlePositions(prep => {
-        // const newArticlePositions = {
-        //   ...prep
-        // }
-        // eslint-disable-next-line no-param-reassign
-        delete prep[`${articleId}_${readType}`]
-        return prep
-      })
-    }
-  }, [articleId, readType, rendered, nonce, setRendered, setArticlePositions]);
-
-
-  return <div ref={imgRef} />
-  // return <div ref={imgRef}>
-  //   <Text>articleId: {articleId}</Text>
-  // </div>
-})
-
-export default SpendTimeViewWithArticle
+export default SpendTimeViewWithArticle;

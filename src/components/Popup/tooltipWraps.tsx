@@ -14,6 +14,13 @@ import { useTranslation } from 'contexts/Localization';
 import { PopupWrapper, FollowContentWrapper } from './FollowPopup/style';
 
 import { FollowBtn } from 'view/News/components/MentionItem/style';
+import { useUserInfoById } from 'store/mapModule/hooks';
+import { useDispatch } from 'react-redux';
+import { fetchUserInfoAsync } from 'store/mapModule/reducer';
+import {
+  addUnFollowUserId,
+  removeUnFollowUserId,
+} from 'store/mapModule/actions';
 
 const FollowPopup: React.FC<{
   uid?: number;
@@ -22,27 +29,23 @@ const FollowPopup: React.FC<{
 }> = React.memo(({ uid, callback }) => {
   const { t } = useTranslation();
   const { toastError, toastSuccess } = useToast();
-  const [userInfo, setUserInfo] = React.useState<any>({});
+  // const [userInfo, setUserInfo] = React.useState<any>({});
   const myself = useStore(p => p.loginReducer.userInfo);
 
-  React.useEffect(() => {
-    getUserInfo();
-  }, [uid]);
+  const userInfo = useUserInfoById(uid);
 
-  // 获取个人信息
-  const getUserInfo = async () => {
-    const res = await Api.UserApi.getUserInfoByUID(uid);
-    if (Api.isSuccess(res)) {
-      setUserInfo(res.data);
-    }
-  };
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(fetchUserInfoAsync(uid));
+  }, [uid, dispatch]);
 
   // 关注用户
   const onAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.onAttentionFocus(uid);
     if (Api.isSuccess(res)) {
-      getUserInfo();
+      dispatch(fetchUserInfoAsync(uid));
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
+      dispatch(removeUnFollowUserId(uid));
     } else {
       toastError(res.data);
     }
@@ -52,8 +55,9 @@ const FollowPopup: React.FC<{
   const cancelAttentionFocusRequest = async () => {
     const res = await Api.AttentionApi.cancelAttentionFocus(uid);
     if (Api.isSuccess(res)) {
-      getUserInfo();
+      dispatch(fetchUserInfoAsync(uid));
       callback(MoreOperatorEnum.CANCEL_FOLLOW);
+      dispatch(addUnFollowUserId(uid));
     } else {
       toastError(res.data);
     }
@@ -64,23 +68,23 @@ const FollowPopup: React.FC<{
       <FollowContentWrapper>
         <Link
           className='content'
-          to={userInfo.uid ? `/me/profile/${userInfo.uid}` : undefined}
+          to={userInfo?.uid ? `/me/profile/${userInfo?.uid}` : undefined}
         >
           <div className='left-box'>
             <div className='img-box'>
               <Avatar
                 disableFollow
                 className='avatar'
-                src={userInfo.nft_image || userInfo.NftImage || '  '}
+                src={userInfo?.nft_image || userInfo?.NftImage || '  '}
                 scale='md'
               />
             </div>
           </div>
           <div className='right-box'>
             <Text className='name' ellipsis>
-              {userInfo.NickName || userInfo.nick_name || '  '}
+              {userInfo?.NickName || userInfo?.nick_name || '  '}
             </Text>
-            <div className='des'>{shortenAddress(userInfo.address)}</div>
+            <div className='des'>{shortenAddress(userInfo?.address)}</div>
             <div className='number'>
               <Flex className='cloums'>
                 {t('followFans')}
@@ -91,7 +95,7 @@ const FollowPopup: React.FC<{
                   // maxWidth='30px'
                   // ellipsis
                 >
-                  {userInfo.fans_num || 0}
+                  {userInfo?.fans_num || 0}
                 </Text>
               </Flex>
               <Flex className='cloums'>
@@ -103,7 +107,7 @@ const FollowPopup: React.FC<{
                   // maxWidth='30px'
                   // ellipsis
                 >
-                  {userInfo.attention_num || 0}
+                  {userInfo?.attention_num || 0}
                 </Text>
               </Flex>
             </div>
@@ -115,12 +119,12 @@ const FollowPopup: React.FC<{
               onClick={(e: any) => {
                 e.stopPropagation();
                 e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-                userInfo.is_attention === 1
+                userInfo?.is_attention === 1
                   ? cancelAttentionFocusRequest()
                   : onAttentionFocusRequest();
               }}
             >
-              {userInfo.is_attention === 1
+              {userInfo?.is_attention === 1
                 ? t('followCancelText')
                 : '+' + t('followText')}
             </FollowBtn>
