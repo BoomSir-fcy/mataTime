@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Icon, Avatar } from 'components';
 import { SearchPopBox } from './style';
 import { Flex } from 'uikit';
-import { UserTitle, UserDesc } from 'view/Home/right/recommendPeople';
+import { UserTitle, UserDesc } from 'components/Sidebar/recommendPeople';
 import { Api } from 'apis';
 
 import { useTranslation } from 'contexts/Localization';

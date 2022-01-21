@@ -65,15 +65,21 @@ const PostList: React.FC<PostListPorps> = ({
         setNonce(prep => prep + 1);
         return;
       }
+      if (type === MoreOperatorEnum.BLOCKUSER) {
+        setNonce(prep => prep + 1);
+      }
       if (type === MoreOperatorEnum.DELPOST) {
+        setNonce(prep => prep + 1);
         dispatch(addDeletePostId(newItem.id)); // FIXME: 有的时候可能用的不是id
         return;
       }
       if (type === MoreOperatorEnum.CANCEL_FOLLOW) {
+        setNonce(prep => prep + 1);
         dispatch(addUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
         dispatch(fetchUserInfoAsync(newItem.user_id));
       }
       if (type === MoreOperatorEnum.FOLLOW) {
+        setNonce(prep => prep + 1);
         dispatch(removeUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
         dispatch(fetchUserInfoAsync(newItem.user_id));
       }

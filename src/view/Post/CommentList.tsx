@@ -184,6 +184,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         return row;
       });
       setListData(subComment);
+      setNonce(prep => prep + 1);
     } catch (error) {
       console.log(error);
     }

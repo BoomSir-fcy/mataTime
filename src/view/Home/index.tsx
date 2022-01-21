@@ -10,12 +10,10 @@ import { Api } from 'apis';
 
 import { useTag } from './hook';
 
-import useIm from 'hooks/imHooks/useIm';
-import useReadArticle from 'hooks/imHooks/useReadArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTranslation } from 'contexts/Localization';
 
-import { Header, Tabs, ArticleList } from './center';
+import { Tabs, ArticleList } from './center';
 
 const PageContainer = styled(Box)`
   position: relative;
