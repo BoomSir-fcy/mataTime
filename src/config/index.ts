@@ -47,3 +47,5 @@ export const ARTICLE_POST_MAX_ROW = 12;
 export const SEARCH_MAX_HISTORY_LEN = 14;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
+
+export const BICONOMY_DAPP_API_KEY = 'dtODElTa5.9b65c044-c8aa-46ef-a7cf-e0ba4f6fdaf9'
