@@ -386,7 +386,9 @@ const MoneyModal: React.FC<init> = ({
                 text={
                   <>
                     <Text fontSize='14px'>
-                      {t('Estimated value, based on the chain')}
+                      {t(
+                        'Estimated value (actual gas fee is based on on-chain data)',
+                      )}
                     </Text>
                   </>
                 }
@@ -456,7 +458,7 @@ const MoneyModal: React.FC<init> = ({
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
           mb='10px'
-          disable={pending}
+          disabled={pending}
           onClick={() => {
             if (approvedNum > 0) {
               // 充值、提现
