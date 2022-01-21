@@ -21,7 +21,7 @@ export const HeadBox = styled.div`
   display: none;
   ${({ theme }) => theme.mediaQueries.lg} {
     display: grid;
-    grid-template-columns: 19% 21% 21% 21% 18%;
+    grid-template-columns: 18% 19% 19% 19% 25%;
   }
 `;
 const HeadText = styled(Text)`

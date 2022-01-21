@@ -151,7 +151,7 @@ const MoneyModal: React.FC<init> = ({
         setpending(false);
         return;
       }
-      if (new BigNumber(val).isLessThanOrEqualTo(0)) {
+      if (new BigNumber(val).isLessThanOrEqualTo(0) || !val) {
         setpending(false);
         return;
       }
@@ -186,7 +186,10 @@ const MoneyModal: React.FC<init> = ({
           return;
         }
       }
-      if (new BigNumber(receivedAmount).isLessThanOrEqualTo(0)) {
+      if (
+        new BigNumber(receivedAmount).isLessThanOrEqualTo(0) &&
+        ActiveTokenInfo.token_type === 3
+      ) {
         toast.error(t('Estimated payment amount is 0'));
         setpending(false);
         return;
@@ -195,7 +198,7 @@ const MoneyModal: React.FC<init> = ({
         setpending(false);
         return;
       }
-      if (new BigNumber(val).isLessThanOrEqualTo(0)) {
+      if (new BigNumber(val).isLessThanOrEqualTo(0) || !val) {
         setpending(false);
         return;
       }
@@ -224,7 +227,16 @@ const MoneyModal: React.FC<init> = ({
       }
     }
     dispatch(fetchWalletAsync());
-  }, [Recharge, type, balance, withdrawalBalance, ActiveTokenInfo, Token, val]);
+  }, [
+    Recharge,
+    type,
+    balance,
+    withdrawalBalance,
+    ActiveTokenInfo,
+    receivedAmount,
+    Token,
+    val,
+  ]);
   // 授权
   const handleApprove = useCallback(async () => {
     setpending(true);
@@ -477,9 +489,9 @@ const MoneyModal: React.FC<init> = ({
             t('Account Approve')
           )}
         </SureBtn>
-        <Text fontSize='14px' color='textTips'>
+        {/* <Text fontSize='14px' color='textTips'>
           {t('Account Please confirm the transaction in Token')}
-        </Text>
+        </Text> */}
       </Flex>
     </CountBox>
   );
