@@ -130,6 +130,18 @@ const MoneyModal: React.FC<init> = ({
     return overBalance;
   }, [val, withdrawalBalance]);
 
+  const receivedAmount = useMemo(() => {
+    let InputVal = val ? val : 0;
+    const overBalance = new BigNumber(InputVal)
+      .minus(TokenWithDrawFee)
+      .toString();
+    if (new BigNumber(overBalance).isLessThanOrEqualTo(0)) {
+      return 0;
+    } else {
+      return overBalance;
+    }
+  }, [val, TokenWithDrawFee]);
+
   // 充值/提现
   const handSure = useCallback(async () => {
     setpending(true);
@@ -174,7 +186,11 @@ const MoneyModal: React.FC<init> = ({
           return;
         }
       }
-
+      if (new BigNumber(receivedAmount).isLessThanOrEqualTo(0)) {
+        toast.error(t('Estimated payment amount is 0'));
+        setpending(false);
+        return;
+      }
       if (Number(withdrawalBalance) === 0) {
         setpending(false);
         return;
@@ -380,6 +396,17 @@ const MoneyModal: React.FC<init> = ({
               {Token}
             </TipsText>
           </TipsBox>
+          {ActiveTokenInfo?.token_type === 3 && (
+            <TipsBox>
+              <TipsText color='textTips'>
+                {t('Estimated amount to be received')}
+              </TipsText>
+              <TipsText color='white_black'>
+                {receivedAmount}&nbsp;
+                {Token}
+              </TipsText>
+            </TipsBox>
+          )}
           {WithDrawFeeType === 1 &&
             new BigNumber(BnbAvailableBalance).isLessThan(TokenWithDrawFee) && (
               <Flex mb='14px' paddingTop='10px' alignItems='center'>
