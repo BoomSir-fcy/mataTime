@@ -362,7 +362,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               {item?.comment_list_resp?.list?.length > 0 && (
                 <ChildrenComment>
                   {(item?.comment_list_resp?.list ?? []).map(row => (
-                    <React.Fragment>
+                    <React.Fragment key={row.id}>
                       {Number(parsedQs.comment_id) === row.id && (
                         <div ref={commentRef} key={row.id}></div>
                       )}

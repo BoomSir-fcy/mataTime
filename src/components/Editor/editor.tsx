@@ -112,7 +112,8 @@ const withImages = editor => {
         const [mime] = file.type.split('/');
         if (mime === 'image') {
           reader.addEventListener('load', () => {
-            console.log(reader.result);
+            const imgUrl = reader.result;
+            console.log(imgUrl);
           });
         }
         reader.readAsDataURL(file);
