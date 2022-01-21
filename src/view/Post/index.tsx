@@ -51,7 +51,7 @@ const Post = () => {
 
   return (
     <Box>
-      <Crumbs title='发帖' back />
+      <Crumbs back />
       <Editor type='post' sendArticle={sendArticle} />
     </Box>
   );

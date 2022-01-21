@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { useDispatch } from 'react-redux';
 import { useToast } from 'hooks';
 import { Flex, Box, Text, Button } from 'uikit';
 import { ModalWrapper, MoreOperatorEnum } from 'components';
@@ -9,6 +10,8 @@ import { useTranslation } from 'contexts/Localization';
 import { Api } from 'apis';
 
 import useTheme from 'hooks/useTheme';
+import { fetchPostDetailAsync } from 'store/mapModule/reducer';
+import { addBlockUserId } from 'store/mapModule/actions';
 
 const Content = styled(Box)`
   width: 100%;
@@ -40,10 +43,14 @@ export const ShiledUserModal: React.FC<{
   const { theme } = useTheme();
   const { toastError, toastSuccess } = useToast();
 
+  const dispatch = useDispatch();
+
   const shield = async () => {
     try {
       const res = await Api.MeApi.shieldUser(userinfo.user_id);
+      // dispatch(fetchPostDetailAsync(userinfo.post_id));
       if (Api.isSuccess(res)) {
+        dispatch(addBlockUserId(userinfo.user_id));
         onClose();
         callback(userinfo, MoreOperatorEnum.BLOCKUSER);
         toastSuccess(t('shieldUserSuccess'));

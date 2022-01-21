@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
-import { Box } from 'uikit';
+import { Flex, Text } from 'uikit';
 
-const SortBox = styled(Box)<{ flag: number }>`
-  display: flex;
-  flex-direction: column;
+const SortBox = styled(Flex)<{ flag: number }>`
+  align-content: center;
   justify-content: center;
   padding: 0 10px;
   cursor: pointer;
@@ -25,7 +24,7 @@ const SortBox = styled(Box)<{ flag: number }>`
   }
   ${({ flag }) =>
     Boolean(flag) &&
-    flag === 1 &&
+    flag === 2 &&
     css`
       i:first-child {
         border-bottom: 6px solid ${({ theme }) => theme.colors.textTips};
@@ -38,7 +37,7 @@ const SortBox = styled(Box)<{ flag: number }>`
 
   ${({ flag }) =>
     Boolean(flag) &&
-    flag === 2 &&
+    flag === 1 &&
     css`
       i:first-child {
         border-bottom: 6px solid ${({ theme }) => theme.colors.ThemeText};
@@ -53,11 +52,15 @@ const SortBox = styled(Box)<{ flag: number }>`
 export const SortIcon: React.FC<{
   changeSort: () => void;
   flag: number;
-}> = ({ flag, changeSort }) => {
+  text: string;
+}> = ({ flag, text, changeSort }) => {
   return (
     <SortBox flag={flag} onClick={changeSort}>
-      <i></i>
-      <i></i>
+      <Text>{text}</Text>
+      <Flex ml='5px' flexDirection='column'>
+        <i></i>
+        <i></i>
+      </Flex>
     </SortBox>
   );
 };

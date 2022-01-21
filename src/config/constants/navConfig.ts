@@ -261,15 +261,18 @@ export const menuNavConfig: MenuNavConfig[] = [
 export const tbasNavConfig: TbasMenuConfig[] = [
   {
     icon: 'icon-shouye',
+    activeIcon: 'icon-shouye1',
     path: '/',
   },
   {
     icon: 'icon-tixing',
+    activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
     badgeName: true,
   },
   {
     icon: 'icon-qianbao2',
+    activeIcon: 'icon-a-qianbao1',
     path: '/account',
   },
 ];

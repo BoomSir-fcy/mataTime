@@ -1,5 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Text } from 'uikit';
+
+const BadgeStyled = styled(Text)`
+  position: absolute;
+  right: 0;
+  padding: 0 6px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${({ theme }) => theme.colors.failure};
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 12px;
+`;
 
 export const Badge: React.FC<{
   count: number | string;
@@ -9,23 +24,8 @@ export const Badge: React.FC<{
     count = '+99';
   }
   return (
-    <Text
-      color='white'
-      style={{
-        position: 'absolute',
-        right: '0',
-        padding: '0 6px',
-        height: '15px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: '#EC612B',
-        borderRadius: '5px',
-        fontWeight: 400,
-        fontSize: '12px',
-      }}
-    >
+    <BadgeStyled color='white' {...props}>
       {count}
-    </Text>
+    </BadgeStyled>
   );
 };

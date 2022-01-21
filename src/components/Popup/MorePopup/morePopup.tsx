@@ -200,7 +200,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
         setState(p => {
           p.cancelFollow = false;
         });
-        callback({ ...data, is_attention: 0 }, MoreOperatorEnum.FOLLOW);
+        callback({ ...data, is_attention: 0 }, MoreOperatorEnum.CANCEL_FOLLOW);
       }
     };
 

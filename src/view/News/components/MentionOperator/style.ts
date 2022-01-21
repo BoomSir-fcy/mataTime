@@ -1,12 +1,14 @@
 import styled from 'styled-components';
+import { Box } from 'uikit';
 
-export const MentionOperatorWrapper = styled.div`
+export const MentionOperatorWrapper = styled(Box)<{ paddingLeft?: number }>`
   width: 100%;
   .mention-operator {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
     ${({ theme }) => theme.mediaQueries.sm} {
-      padding-left: 73px;
+      padding-left: ${({ paddingLeft }) =>
+        paddingLeft === 0 ? paddingLeft : '64px'};
     }
     .operator-item {
       min-width: 90px;

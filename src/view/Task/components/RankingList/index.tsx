@@ -9,6 +9,7 @@ import { shortenAddress } from 'utils/contract';
 import styled from 'styled-components';
 import { useFetchInviteRankingList } from 'view/Task/hooks/matter';
 import Rule from './Rule';
+import { Api } from 'apis';
 
 const RankingFlex = styled(Flex)`
   flex-direction: column;
@@ -74,6 +75,11 @@ const BgBox = styled(Box)`
     }
   }
 `;
+const MyInviteesNum = styled(Text)`
+  position: absolute;
+  top: 10px;
+  right: 14px;
+`;
 const ContentCard = styled(Box)`
   width: 100%;
   background: ${({ theme }) => theme.colors.backgroundThemeCard};
@@ -84,6 +90,7 @@ const ContentCard = styled(Box)`
   ${({ theme }) => theme.mediaQueries.md} {
     margin-top: 0px;
   }
+  z-index: 1;
 `;
 const Table = styled(Flex)`
   flex-direction: column;
@@ -129,19 +136,35 @@ const ItemText = styled(Text)`
 
 const RankingList: React.FC = React.memo(() => {
   const { t } = useTranslation();
-
   const { list, pageNum, pageSize, setPageNum, loading, total } =
     useFetchInviteRankingList();
+  const [myInvites, setMyInvites] = useState<number>(0);
+
+  useEffect(() => {
+    getMyInvites();
+  }, []);
+
+  const getMyInvites = useCallback(() => {
+    Api.TaskApi.getMyInvites()
+      .then((res: any) => {
+        if (Api.isSuccess(res)) {
+          setMyInvites(res.data?.my_valid_invite || 0);
+        }
+      })
+      .catch(() => {
+        setMyInvites(0);
+      });
+  }, [setMyInvites]);
 
   const handlePageClick = useCallback(
     event => {
       setPageNum(event.selected + 1);
     },
-    [setPageNum],
+    [pageNum],
   );
 
   const getTotalPage = totalNum => {
-    if (pageSize != 0 && totalNum % pageSize == 0) {
+    if (pageSize !== 0 && totalNum % pageSize == 0) {
       return parseInt(String(totalNum / pageSize));
     }
     if (pageSize != 0 && totalNum % pageSize != 0) {
@@ -204,6 +227,10 @@ const RankingList: React.FC = React.memo(() => {
             src={require('assets/images/task/goldCoinRight.png').default}
             alt=''
           />
+          <MyInviteesNum>
+            {t('My invites')}
+            {myInvites}
+          </MyInviteesNum>
           <ContentCard>
             <Flex width='100%' flexDirection='column' justifyContent='flex-end'>
               <Table>
@@ -218,7 +245,7 @@ const RankingList: React.FC = React.memo(() => {
                   list.map(item => (
                     <Row key={item.superior_uid} className='LinkRow'>
                       <ItemText>{renderRanking(item.rank)}</ItemText>
-                      <ItemText small ellipsis>
+                      <ItemText width='100%' textAlign='center' small ellipsis>
                         {item.superior_nickname}
                       </ItemText>
                       <ItemText small ellipsis>

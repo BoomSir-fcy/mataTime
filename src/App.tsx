@@ -28,7 +28,22 @@ import ScrollBarApdater from './view/Updater/ScrollBarApdater';
 import TimeLeftUpdater from './view/Updater/TimeLeftUpdater';
 import Gotop from 'components/GoTop';
 
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime, {
+  thresholds: [
+    { l: 's', r: 1 },
+    { l: 'm', r: 1 },
+    { l: 'mm', r: 59, d: 'minute' },
+    { l: 'h', r: 1 },
+    { l: 'hh', r: 23, d: 'hour' },
+    { l: 'd', r: 1 },
+    { l: 'dd', r: 29, d: 'day' },
+    { l: 'M', r: 1 },
+    { l: 'MM', r: 11, d: 'month' },
+    { l: 'y' },
+    { l: 'yy', d: 'year' },
+  ],
+  rounding: Math.floor,
+});
 dayjs.extend(updateLocale);
 
 // dayjs.updateLocale('en', {
@@ -40,9 +55,9 @@ dayjs.extend(updateLocale);
 
 // 路由加载
 const Home = React.lazy(() => import('./view/Home'));
-const ArticleDetilsLayout = React.lazy(
-  () => import('./components/Layout/ArticleDetilsLayout'),
-);
+// const ArticleDetilsLayout = React.lazy(
+//   () => import('./components/Layout/ArticleDetilsLayout'),
+// );
 const TopicList = React.lazy(() => import('./view/TopicList'));
 const Me = React.lazy(() => import('./view/Me'));
 const Login = React.lazy(() => import('./view/Login'));
@@ -55,6 +70,7 @@ const PickNft = React.lazy(() => import('./view/PickNft'));
 const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
 const Post = React.lazy(() => import('./view/Post'));
+const PostDetails = React.lazy(() => import('./view/Post/details'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -130,10 +146,7 @@ function App() {
                     />
                   )}
                 />
-                <Route
-                  path='/articleDetils/:id'
-                  render={props => <ArticleDetilsLayout {...props} />}
-                />
+                <Route path='/articleDetils/:id' component={PostDetails} />
                 <Route path='/task' component={Task} />
                 <Route
                   path='/notification'

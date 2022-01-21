@@ -128,6 +128,31 @@
 			{
 				"indexed": true,
 				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "nfs",
+				"type": "uint256"
+			}
+		],
+		"name": "MintMKDABNFT",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
 				"name": "previousOwner",
 				"type": "address"
 			},
@@ -140,6 +165,32 @@
 		],
 		"name": "OwnershipTransferred",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "METAYC_ADB",
+		"outputs": [
+			{
+				"internalType": "contract IDsgNft",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_MEYAYC_ADB_FragmentToken",
+		"outputs": [
+			{
+				"internalType": "contract IBurnableERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -168,6 +219,19 @@
 				"internalType": "contract IDsgNft",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buy_adb_count",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -368,7 +432,46 @@
 	},
 	{
 		"inputs": [],
+		"name": "limit_buy_adb",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "m_price",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "maxGenCodeCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "max_create_nfts",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -579,6 +682,16 @@
 			{
 				"internalType": "address",
 				"name": "userProfile_",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "metaYCBoard",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "metaYCBoardFragment",
 				"type": "address"
 			}
 		],
@@ -854,6 +967,34 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getCreatedLimit",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "limit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "created",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "buy_count",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "buy_max",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
@@ -968,6 +1109,101 @@
 	{
 		"inputs": [],
 		"name": "WithdrawValue",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "set_price",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "set_max_created_number",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "set_max_buy_count",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "limit",
+				"type": "uint256"
+			}
+		],
+		"name": "set_buy_limit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "nft_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "created",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "bg_color",
+				"type": "uint256"
+			}
+		],
+		"name": "Exhcange_METAYC_ADB",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "buyMKDADBNFT",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buy_MKDAB",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"

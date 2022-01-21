@@ -11,6 +11,7 @@ import {
   Button,
   light,
   Spinner,
+  Skeleton,
 } from 'uikit';
 import { useStore, storeAction } from 'store';
 import styled from 'styled-components';
@@ -34,6 +35,7 @@ import {
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
 import {
   fetchCodeInfoAsync,
+  fetchMetaycInfoAsync,
   fetchNftApprovalAsync,
   fetchStuffAllLimitsAsync,
 } from 'store/picknft';
@@ -233,6 +235,7 @@ const CreateShowCard: React.FC = () => {
         );
       }
       // dispatch(fetchStuffAllLimitsAsync());
+      dispatch(fetchMetaycInfoAsync());
     } catch (error) {
       console.error(error);
       const errTip = `${t('Error')}! ${t(
@@ -263,6 +266,10 @@ const CreateShowCard: React.FC = () => {
   const totalAmount = useMemo(() => {
     return getBalanceNumber(new BigNumber(buyInfo.price).times(1));
   }, [buyInfo.price]);
+
+  const remaining = useMemo(() => {
+    return buyInfo?.limit - buyInfo?.count || 0;
+  }, [buyInfo?.limit, buyInfo?.count]);
 
   return (
     <PageContainer>
@@ -315,7 +322,7 @@ const CreateShowCard: React.FC = () => {
             isLoading={buyInfo.loading}
             scale='ld'
             onClick={onMintHandle}
-            disabled={pending || !buyInfo.enableBuy}
+            disabled={pending || !buyInfo.enableBuy || remaining <= 0}
           >
             {pending ? (
               <Dots>{t('Minting')}</Dots>
@@ -328,6 +335,13 @@ const CreateShowCard: React.FC = () => {
           </Submit>
         </BtnBox>
       </BoxPaddingStyled>
+      {!buyInfo.loading ? (
+        <Text fontSize='14px' color='orange'>
+          {remaining}/{buyInfo.limit} {t('Remaining')}
+        </Text>
+      ) : (
+        <Skeleton width={80} height={18} />
+      )}
     </PageContainer>
   );
 };

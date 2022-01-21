@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { Flex, Card, Box, Text } from 'uikit';
@@ -11,6 +11,9 @@ import {
   NoticeItemWrapper,
   NoticeContentWrapper,
 } from './style';
+import { MessageType } from './type';
+import { Link } from 'react-router-dom';
+import { displayTime, formatUTC } from 'utils';
 
 const SystemAvatar = styled(Box)`
   width: 60px;
@@ -71,6 +74,102 @@ const NoticeItem: React.FC<{
   const { type } = itemData;
 
   const ruleUrl = `${window.location.origin}/content-rules/index.html`;
+
+  const showUTCTime = useMemo(
+    () => formatUTC(itemData.add_time, 'YYYY-MM-DD HH:mm:ss'),
+    [itemData.add_time],
+  );
+  const showTime = useMemo(
+    () => displayTime(itemData.add_time),
+    [itemData.add_time],
+  );
+
+  const noticeContent = useCallback(() => {
+    let content = itemData.msg_content;
+    try {
+      content = JSON.parse(itemData.msg_content);
+    } catch (error) {}
+    if (type === MessageType.MessageSystemRechargeSuccess) {
+      return (
+        <>
+          {t('Deposit Successfully')}
+          <Text color='textTips'>
+            {t('DepositSuccessfullyDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: showUTCTime,
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemRewardSuccess) {
+      return (
+        <>
+          {t('Tip Successfully')}
+          <Text color='textTips'>
+            {t('TipSuccessfullyDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: showUTCTime,
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemReceivedReward) {
+      return (
+        <>
+          {t('Tip Jar')}
+          <Text color='textTips'>
+            {getHTML('TipJarDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: showUTCTime,
+              people: `<a href="/me/profile/${content?.from_uid}">@${content?.from_nick_name}</a>`,
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemWithdrawalSuccess) {
+      return (
+        <>
+          {t('Withdraw Successfully')}
+          <Text color='textTips'>
+            {t('WithdrawSuccessfullyDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: showUTCTime,
+            })}
+          </Text>
+        </>
+      );
+    }
+
+    if (type === MessageType.MessageSystemWithdrawalFail) {
+      return (
+        <>
+          {t('Withdrawal Failed')}
+          <Text color='textTips'>
+            {t('WithdrawFailedDetail', {
+              value: `${content?.amount} ${content?.coin_type?.toUpperCase()}`,
+              time: showUTCTime,
+            })}
+          </Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageSystemAddTag) {
+      return t('AddUserTag', { value: content });
+    }
+    if (type === MessageType.MessageSystemUpdateTag) {
+      return t('EditUserTag', {
+        beforeValue: content?.before_name,
+        afterValue: content?.after_name,
+      });
+    }
+    if (type === MessageType.MessageSystemDeleteTag) {
+      return t('DeleteUserTag', { value: content });
+    }
+  }, [itemData, type, t]);
+
   return (
     <NoticeItemWrapper>
       <Flex justifyContent='space-between' padding='0 20px 25px 30px'>
@@ -86,32 +185,33 @@ const NoticeItem: React.FC<{
             {t('systemInformation')}
           </Text>
           <Text color='textTips' fontSize='14px' mt='10px' mb='15px'>
-            {dayjs(itemData.add_time).format(t('MM-DD HH:mm'))}
+            {showTime}
           </Text>
           <Text color='textTips'>
-            {type === 6 &&
+            {type === MessageType.MessageSystemMute &&
               getHTML('settingNotificationText1', {
                 value: `<a href="${ruleUrl}" target="_blank">${t(
                   'latformReviewRules',
                 )}</a>`,
               })}
-            {type === 7 &&
+            {type === MessageType.MessageSystemUnMute &&
               getHTML('settingNotificationText2', {
                 value: `<a href="${ruleUrl}" target="_blank">${t(
                   'latformReviewRules',
                 )}</a>`,
               })}
-            {type === 8 &&
+            {type === MessageType.MessageSystemShieldPost &&
               getHTML('settingNotificationText3', {
                 value: `<a href="${ruleUrl}" target="_blank">${t(
                   'latformReviewRules',
                 )}</a>`,
               })}
+            {noticeContent()}
           </Text>
         </Content>
       </Flex>
       {itemData?.post?.user_address && (
-        <PostContent>
+        <PostContent as={Link} to={`/articleDetils/${itemData.post?.post_id}`}>
           <AvatarCard
             userName={itemData?.post?.nick_name}
             avatar={itemData?.post?.nft_image}
