@@ -30,9 +30,13 @@ export interface WalletState {
   WithDrawSetting: {
     meta_minimum: string;
     time_minimum: string;
+    bnb_minimum: string;
     withdraw_time_fee: string;
     withdraw_meta_fee: string;
+    withdraw_bnb_fee: string;
   };
+  WithDrawFeeType: number;
+  choiceToken: number;
 }
 export interface TimeInfo {
   long_time: number;

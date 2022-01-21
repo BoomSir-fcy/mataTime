@@ -261,15 +261,18 @@ export const menuNavConfig: MenuNavConfig[] = [
 export const tbasNavConfig: TbasMenuConfig[] = [
   {
     icon: 'icon-shouye',
+    activeIcon: 'icon-shouye1',
     path: '/',
   },
   {
     icon: 'icon-tixing',
+    activeIcon: 'icon-tixing1',
     path: pathConfig.messageAtMePath,
     badgeName: true,
   },
   {
     icon: 'icon-qianbao2',
+    activeIcon: 'icon-a-qianbao1',
     path: '/account',
   },
 ];
@@ -295,7 +298,11 @@ export const hideLeftNavPath = (() => {
 })();
 
 export const hideSidebarPath = (() => {
-  return getHidePath(['/task/invite', '/task/invites', '/task/friendsList', '/task/rankingList'], menuNavConfig, 'hideRight');
+  return getHidePath(
+    ['/task/invite', '/task/invites', '/task/friendsList', '/task/rankingList'],
+    menuNavConfig,
+    'hideRight',
+  );
 })();
 
 export default menuNavConfig;

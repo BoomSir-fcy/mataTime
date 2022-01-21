@@ -10,12 +10,10 @@ import { Api } from 'apis';
 
 import { useTag } from './hook';
 
-import useIm from 'hooks/imHooks/useIm';
-import useReadArticle from 'hooks/imHooks/useReadArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTranslation } from 'contexts/Localization';
 
-import { Header, Tabs, ArticleList } from './center';
+import { Tabs, ArticleList } from './center';
 
 const PageContainer = styled(Box)`
   position: relative;
@@ -50,7 +48,7 @@ const Home: React.FC = (props: any) => {
   const tabsRefs = React.useRef(null);
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
 
   const sendArticle = async (
     content: string,

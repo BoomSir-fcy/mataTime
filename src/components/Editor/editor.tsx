@@ -512,6 +512,13 @@ export const Editor = (props: Iprops) => {
         <div
           className='text-box'
           ref={ref}
+          onClick={() => {
+            try {
+              ReactEditor.focus(editor);
+            } catch (error) {
+              console.error(error);
+            }
+          }}
           style={{
             borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
             borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px',

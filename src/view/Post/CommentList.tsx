@@ -141,7 +141,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
 
   const getList = (current?: number) => {
     if (!itemData.id) return;
-    Api.CommentApi.getCommentList({
+    Api.CommentApi.getV2CommentList({
       pid: itemData.id,
       prepage: MAX_SPEND_TIME_PAGE_TATOL,
       page: current || page,

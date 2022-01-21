@@ -21,7 +21,11 @@ export const ConnectWalletButton: React.FC<{
     <Box>
       <WalletButton
         disabled={Boolean(loading)}
-        onClick={onConnectWallet}
+        onClick={e => {
+          e.preventDefault();
+          e.stopPropagation();
+          onConnectWallet();
+        }}
         {...props}
       >
         {Boolean(loading) ? (
