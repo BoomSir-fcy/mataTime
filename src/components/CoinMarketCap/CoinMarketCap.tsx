@@ -109,7 +109,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
       return value.toNumber();
     }
     return 0;
-  }, [currentCoin]);
+  }, [currentCoin, MatterSupply, TimeSupply]);
 
   const totalSupplyValue = useMemo(() => {
     if (!marketCap) return '--';
