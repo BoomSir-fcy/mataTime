@@ -25,7 +25,7 @@ export const useFetchCoinInfo = (coinId) => {
     if (coinId) {
       dispatch(fetchCoinInfoAsync(coinId))
     }
-  }, [coinId])
+  }, [coinId, dispatch])
 }
 
 

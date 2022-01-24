@@ -19,6 +19,7 @@ import {
   getInvitationAddress,
   getExPhotoAddress,
   getTicketNftAddress,
+  getDsgAddress,
 } from 'utils/addressHelpers';
 
 // ABI
@@ -56,6 +57,12 @@ export const getMulticallContract = (
   signer?: ethers.Signer | ethers.providers.Provider,
 ) => {
   return getContract(MultiCallAbi, getMulticallAddress(), signer);
+};
+
+export const getDsgContract = (
+  signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+  return getContract(bep20Abi, getDsgAddress(), signer);
 };
 
 export const getDsgNftContract = (
