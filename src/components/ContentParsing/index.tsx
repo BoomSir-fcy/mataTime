@@ -41,7 +41,7 @@ const ParagraphItem = styled.div`
   font-family: Arial;
   line-height: 1.1875;
   user-select: text;
-  cursor: text;
+  cursor: pointer;
   p {
     font-size: 18px;
     font-family: Arial;
