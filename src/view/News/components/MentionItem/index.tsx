@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled, { useTheme } from 'styled-components';
 import Popup from 'reactjs-popup';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -16,7 +16,7 @@ import {
 } from 'components';
 import { Box, Flex, Text, Button } from 'uikit';
 import { shortenAddress } from 'utils/contract';
-import { relativeTime } from 'utils';
+import { displayTime } from 'utils';
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -24,6 +24,7 @@ import { MentionItemWrapper, MentionItemUserWrapper } from './style';
 
 import moreIcon from 'assets/images/social/more.png';
 import { useStore } from 'store';
+import dayjs from 'dayjs';
 
 const PopupButton = styled(Flex)`
   align-items: center;
@@ -144,10 +145,18 @@ export const MentionItemUser: React.FC<UserProps> = ({
 }) => {
   const popupRef = React.useRef(null);
   const theme = useTheme();
+  const { pathname } = useLocation();
   const uid = useStore(p => p.loginReducer.userInfo.uid);
   const { t } = useTranslation();
   const [isShileUser, setIsShileUser] = React.useState(false);
 
+  const relativeTime = useCallback(() => {
+    const time = itemData.add_time || itemData.post_time;
+    if (pathname.includes('articleDetils')) {
+      return dayjs(time).format('YY-MM-DD HH:mm');
+    }
+    return displayTime(time);
+  }, [itemData, pathname]);
   return (
     <MentionItemUserWrapper>
       <div className={`user-wrapper ${size}-user`}>
@@ -178,7 +187,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
               </Text>
               <Text color='textTips' className='time'>
                 <span>@{shortenAddress(itemData.user_address)}</span>
-                {relativeTime(itemData.add_time || itemData.post_time)}
+                {relativeTime()}
               </Text>
             </div>
           </div>
