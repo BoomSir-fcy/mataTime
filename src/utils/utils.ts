@@ -10,3 +10,11 @@ export const getPostBLen = (str): number => {
   return `${str}`.length;
   // return str.replace(/[^\x00-\xff]/g, '01').length;
 };
+
+export const isImageUrl = url => {
+  if (!url) return false;
+  // if (!isUrl(url)) return false
+  // const ext = new URL(url).pathname.split('.').pop();
+  // console.log(ext);
+  // return imageExtensions.includes(ext)
+};

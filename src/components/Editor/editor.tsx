@@ -43,8 +43,8 @@ import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
 import { getPostBLen } from 'utils';
+import imageCompression, { cutDownImg } from 'utils/imageCompression';
 
-import escapeHtml from 'escape-html';
 import { ARTICLE_POST_MAX_LEN, ARTICLE_COMMENTS_MAX_LEN } from 'config';
 import client from 'utils/client';
 
@@ -113,14 +113,18 @@ const withImages = editor => {
         const [mime] = file.type.split('/');
         if (mime === 'image') {
           reader.addEventListener('load', () => {
-            const imgUrl = reader.result;
-            console.log(imgUrl);
+            const url: any = reader.result;
+            const text = { text: '' };
+            const image: ImageElement = {
+              type: 'image',
+              url,
+              children: [text],
+            };
+            Transforms.insertNodes(tempEditor, image);
           });
         }
         reader.readAsDataURL(file);
       }
-    } else if (text) {
-      // insertImage(editor, text);
     } else {
       insertData(data);
     }
@@ -478,9 +482,17 @@ export const Editor = (props: Iprops) => {
         editor={editor}
         value={value}
         onChange={value => {
-          setValue(value);
+          const editorContent: Descendant[] = value.filter(
+            (rows: any) => rows.type !== 'image',
+          );
+          const imgaesContent = value.map((row: any) => {
+            if (row.type === 'image') {
+              return row.url;
+            }
+          });
 
-          const { content } = deepContent(value);
+          setValue(editorContent);
+          const { content } = deepContent(editorContent);
           const { selection } = editor;
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
