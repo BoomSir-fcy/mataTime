@@ -80,7 +80,7 @@ const NewsComment: React.FC<any> = props => {
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}
-              href={`/articleDetils/${item.post?.post_id}?comment_id=${item.comment.comment_id}`}
+              href={`/articledetils/${item.post?.post_id}?comment_id=${item.comment.comment_id}`}
             >
               <Box>
                 {/* <FollowPopup uid={item.send_uid}>

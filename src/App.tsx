@@ -138,7 +138,7 @@ function App() {
                 <Route path='/' exact render={props => <Home {...props} />} />
                 <Route path='/login' exact component={Login} />
                 <Route
-                  path='/topicList/:id/:name'
+                  path='/topiclist/:id/:name'
                   render={props => (
                     <TopicList
                       key={props.location.pathname + props.location.search}
@@ -146,7 +146,7 @@ function App() {
                     />
                   )}
                 />
-                <Route path='/articleDetils/:id' component={PostDetails} />
+                <Route path='/articledetils/:id' component={PostDetails} />
                 <Route path='/task' component={Task} />
                 <Route
                   path='/notification'

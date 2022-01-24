@@ -1,4 +1,4 @@
-// `/topicList/${id}/${encodeURI(encodeURIComponent(name))}`
+// `/topiclist/${id}/${encodeURI(encodeURIComponent(name))}`
 
 export const getEncodeValue = (query) => {
   try {

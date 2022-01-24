@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 
 const homepath = '/';
-const listenPaths = ['/topicList'];
+const listenPaths = ['/topiclist'];
 
 export default function ScrollBarApdater() {
   const { pathname } = useLocation();
