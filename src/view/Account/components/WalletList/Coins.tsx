@@ -27,10 +27,14 @@ const BtnBox = styled(Box)`
   width: 50%;
 `;
 
+const Row = styled(Flex)``;
+
 const TextBtn = styled(Button)`
+  min-width: 76px;
+  text-align: left;
   color: ${({ theme }) => theme.colors.textPrimary};
   display: block;
-  padding-left: 0;
+  padding: 0;
   position: relative;
   &:hover {
     text-decoration: underline;
@@ -109,18 +113,18 @@ const Coins: React.FC<init> = ({
         <LogoCom Token={Token} />
         {!isMobile ? (
           <>
-            <Text fontSize='14px' paddingRight='10px' ellipsis>
+            <Text fontSize='14px' paddingRight='20px' ellipsis>
               {TokenInfo.total_balance}
             </Text>
-            <Text fontSize='14px' paddingRight='10px' ellipsis>
+            <Text fontSize='14px' paddingRight='20px' ellipsis>
               {TokenInfo.freeze_balance}
             </Text>
-            <Text fontSize='14px' paddingRight='10px' ellipsis>
+            <Text fontSize='14px' paddingRight='20px' ellipsis>
               {TokenInfo.available_balance}
             </Text>
             {account ? (
-              <Flex flexWrap='wrap' justifyContent='center'>
-                <BtnBox>
+              <Box>
+                <Row>
                   <TextBtn
                     variant='text'
                     onClick={e => {
@@ -131,40 +135,6 @@ const Coins: React.FC<init> = ({
                   >
                     {t('AccountRecharge')}
                   </TextBtn>
-                  {TokenInfo.token_type !== 3 && (
-                    <TextBtn
-                      variant='text'
-                      disabled={TokenInfo.token_type === 2}
-                      onClick={e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        if (TokenInfo.token_type === 1) {
-                          history.push('/account/time');
-                        }
-                      }}
-                    >
-                      {t('Time Exchange')}
-                      {TokenInfo.token_type === 2 && (
-                        <Helper
-                          text={
-                            <>
-                              <Text fontSize='14px'>{t('Not yet open')}</Text>
-                            </>
-                          }
-                          onClick={e => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
-                          iconWidth='80px'
-                          iconHeight='30px'
-                          placement='top-end'
-                          color='transparent'
-                        />
-                      )}
-                    </TextBtn>
-                  )}
-                </BtnBox>
-                <BtnBox>
                   <TextBtn
                     variant='text'
                     disabled={
@@ -221,8 +191,64 @@ const Coins: React.FC<init> = ({
                   >
                     {t('Account history record')}
                   </TextBtn>
-                </BtnBox>
-              </Flex>
+                </Row>
+                {TokenInfo.token_type !== 3 && (
+                  <>
+                    {TokenInfo.token_type === 1 ? (
+                      <Row>
+                        <TextBtn
+                          variant='text'
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            history.push('/swap');
+                          }}
+                        >
+                          {t('Buy')}
+                        </TextBtn>
+                        <TextBtn
+                          variant='text'
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            history.push('/account/time');
+                          }}
+                        >
+                          {t('Time Exchange')}
+                        </TextBtn>
+                      </Row>
+                    ) : (
+                      <Row>
+                        <TextBtn
+                          variant='text'
+                          disabled
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                        >
+                          {t('Time Exchange')}
+                          <Helper
+                            text={
+                              <>
+                                <Text fontSize='14px'>{t('Not yet open')}</Text>
+                              </>
+                            }
+                            onClick={e => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                            iconWidth='80px'
+                            iconHeight='30px'
+                            placement='top-end'
+                            color='transparent'
+                          />
+                        </TextBtn>
+                      </Row>
+                    )}
+                  </>
+                )}
+              </Box>
             ) : (
               <ConnectWalletBtnStyle />
             )}

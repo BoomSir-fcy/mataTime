@@ -70,6 +70,26 @@ const WithdrawBtn = styled(Button)`
     background: ${({ theme }) => theme.colors.backgroundDisabled};
   }
 `;
+const ExchangeBtn = styled(WithdrawBtn)`
+  margin: 0;
+`;
+const ExchangeBox = styled(Box)`
+  position: relative;
+  .Discount {
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    padding: 0 4px;
+    background: ${({ theme }) => theme.colors.textOrigin};
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .rightBtn {
+    left: auto;
+    right: -20px;
+  }
+`;
+
 const ChangeTokenBtn = styled(Flex)`
   cursor: pointer;
 `;
@@ -242,7 +262,31 @@ const WalletBox: React.FC<Wallet> = ({
               </NumText>
             </ChangeTokenBtn> */}
             {BalanceInfo.token_type === 1 && (
-              <>
+              <Flex
+                width='100%'
+                justifyContent='space-between'
+                alignItems='center'
+              >
+                <ExchangeBox mr='10px'>
+                  <ExchangeBtn
+                    variant='success'
+                    onClick={() => {
+                      history.push('/account/time');
+                    }}
+                  >
+                    {t('Time Exchange')} TIME
+                  </ExchangeBtn>
+                  {/* <Flex
+                    className='Discount'
+                    justifyContent='space-around'
+                    alignItems='center'
+                  >
+                    <Icon size={18} color='white' name='icon-dazhe' />
+                    <Text ml='2px' fontSize='10px'>
+                      40%
+                    </Text>
+                  </Flex> */}
+                </ExchangeBox>
                 <Flex alignItems='baseline'>
                   <Text fontSize='14px' color='textTips' mr='16px'>
                     {t('Account Estimated use of')}
@@ -253,7 +297,7 @@ const WalletBox: React.FC<Wallet> = ({
                       : 0}
                   </NumText>
                 </Flex>
-              </>
+              </Flex>
             )}
             <BtnCom
               t={t}
@@ -263,6 +307,7 @@ const WalletBox: React.FC<Wallet> = ({
               BalanceInfo={BalanceInfo}
               TokenWithDrawMinNum={TokenWithDrawMinNum}
               setVisibleHistory={setVisibleHistory}
+              isMobile={isMobile}
             />
           </TopInfo>
         )}
@@ -276,6 +321,7 @@ const WalletBox: React.FC<Wallet> = ({
           BalanceInfo={BalanceInfo}
           TokenWithDrawMinNum={TokenWithDrawMinNum}
           setVisibleHistory={setVisibleHistory}
+          isMobile={isMobile}
         />
       )}
       {/* 输入框弹窗 */}
@@ -336,9 +382,10 @@ const BtnCom = ({
   BalanceInfo,
   TokenWithDrawMinNum,
   setVisibleHistory,
+  isMobile,
 }) => {
   return (
-    <Flex alignItems='center'>
+    <Flex alignItems='center' flexWrap='wrap' width='100%'>
       {account ? (
         <>
           {Token === 'TIME' && (
@@ -364,7 +411,7 @@ const BtnCom = ({
           >
             {t('Accountwithdraw')}
           </WithdrawBtn>
-          <Box mt='20px' width='max-content'>
+          <Box mt='20px' mr={isMobile ? '10px' : ''} width='max-content'>
             <Icon
               size={21}
               color='textPrimary'
@@ -373,6 +420,28 @@ const BtnCom = ({
               name='icon-lishi'
             />
           </Box>
+          {isMobile && (
+            <ExchangeBox mt='20px'>
+              <ExchangeBtn
+                variant='success'
+                onClick={() => {
+                  history.push('/account/time');
+                }}
+              >
+                {t('Time Exchange')} TIME
+              </ExchangeBtn>
+              {/* <Flex
+                className='Discount rightBtn'
+                justifyContent='space-around'
+                alignItems='center'
+              >
+                <Icon size={18} color='white' name='icon-dazhe' />
+                <Text ml='2px' fontSize='10px'>
+                  40%
+                </Text>
+              </Flex> */}
+            </ExchangeBox>
+          )}
         </>
       ) : (
         <ConnectWalletButton />

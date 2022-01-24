@@ -130,6 +130,18 @@ const MoneyModal: React.FC<init> = ({
     return overBalance;
   }, [val, withdrawalBalance]);
 
+  const receivedAmount = useMemo(() => {
+    let InputVal = val ? val : 0;
+    const overBalance = new BigNumber(InputVal)
+      .minus(TokenWithDrawFee)
+      .toString();
+    if (new BigNumber(overBalance).isLessThanOrEqualTo(0)) {
+      return 0;
+    } else {
+      return overBalance;
+    }
+  }, [val, TokenWithDrawFee]);
+
   // 充值/提现
   const handSure = useCallback(async () => {
     setpending(true);
@@ -139,7 +151,7 @@ const MoneyModal: React.FC<init> = ({
         setpending(false);
         return;
       }
-      if (new BigNumber(val).isLessThanOrEqualTo(0)) {
+      if (new BigNumber(val).isLessThanOrEqualTo(0) || !val) {
         setpending(false);
         return;
       }
@@ -174,12 +186,19 @@ const MoneyModal: React.FC<init> = ({
           return;
         }
       }
-
+      if (
+        new BigNumber(receivedAmount).isLessThanOrEqualTo(0) &&
+        ActiveTokenInfo.token_type === 3
+      ) {
+        toast.error(t('Estimated payment amount is 0'));
+        setpending(false);
+        return;
+      }
       if (Number(withdrawalBalance) === 0) {
         setpending(false);
         return;
       }
-      if (new BigNumber(val).isLessThanOrEqualTo(0)) {
+      if (new BigNumber(val).isLessThanOrEqualTo(0) || !val) {
         setpending(false);
         return;
       }
@@ -208,7 +227,16 @@ const MoneyModal: React.FC<init> = ({
       }
     }
     dispatch(fetchWalletAsync());
-  }, [Recharge, type, balance, withdrawalBalance, ActiveTokenInfo, Token, val]);
+  }, [
+    Recharge,
+    type,
+    balance,
+    withdrawalBalance,
+    ActiveTokenInfo,
+    receivedAmount,
+    Token,
+    val,
+  ]);
   // 授权
   const handleApprove = useCallback(async () => {
     setpending(true);
@@ -358,7 +386,9 @@ const MoneyModal: React.FC<init> = ({
                 text={
                   <>
                     <Text fontSize='14px'>
-                      {t('Estimated value, based on the chain')}
+                      {t(
+                        'Estimated value (actual gas fee is based on on-chain data)',
+                      )}
                     </Text>
                   </>
                 }
@@ -380,6 +410,17 @@ const MoneyModal: React.FC<init> = ({
               {Token}
             </TipsText>
           </TipsBox>
+          {ActiveTokenInfo?.token_type === 3 && (
+            <TipsBox>
+              <TipsText color='textTips'>
+                {t('Estimated amount to be received')}
+              </TipsText>
+              <TipsText color='white_black'>
+                {receivedAmount}&nbsp;
+                {Token}
+              </TipsText>
+            </TipsBox>
+          )}
           {WithDrawFeeType === 1 &&
             new BigNumber(BnbAvailableBalance).isLessThan(TokenWithDrawFee) && (
               <Flex mb='14px' paddingTop='10px' alignItems='center'>
@@ -417,7 +458,7 @@ const MoneyModal: React.FC<init> = ({
       <Flex flexDirection='column' justifyContent='center' alignItems='center'>
         <SureBtn
           mb='10px'
-          disable={pending}
+          disabled={pending}
           onClick={() => {
             if (approvedNum > 0) {
               // 充值、提现
@@ -450,9 +491,9 @@ const MoneyModal: React.FC<init> = ({
             t('Account Approve')
           )}
         </SureBtn>
-        <Text fontSize='14px' color='textTips'>
+        {/* <Text fontSize='14px' color='textTips'>
           {t('Account Please confirm the transaction in Token')}
-        </Text>
+        </Text> */}
       </Flex>
     </CountBox>
   );

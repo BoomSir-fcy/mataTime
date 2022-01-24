@@ -116,7 +116,7 @@ export const TableList: React.FC<{
                   className='matterStyle'
                   key={`${item.add_time}_${index}`}
                   as={Link}
-                  to={`/articleDetils/${item.post_id}`}
+                  to={`/articledetils/${item.post_id}`}
                 >
                   <ItemText ellipsis>
                     <Flex alignItems='center'>
