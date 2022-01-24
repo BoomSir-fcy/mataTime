@@ -14,6 +14,7 @@ import {
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce, cloneDeep } from 'lodash';
+import { useToast } from 'hooks';
 import { Loading } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
@@ -45,7 +46,11 @@ import { useTranslation } from 'contexts/Localization';
 import { getPostBLen } from 'utils';
 import imageCompression, { cutDownImg } from 'utils/imageCompression';
 
-import { ARTICLE_POST_MAX_LEN, ARTICLE_COMMENTS_MAX_LEN } from 'config';
+import {
+  ARTICLE_POST_MAX_LEN,
+  ARTICLE_COMMENTS_MAX_LEN,
+  POST_UPLOAD_IMG,
+} from 'config';
 import client from 'utils/client';
 
 type Iprops = {
@@ -94,42 +99,6 @@ const withTopics = editor => {
   tempEditor.isInline = element => {
     return element.type === 'topic' ? true : isInline(element);
   };
-  return tempEditor;
-};
-
-const withImages = editor => {
-  const { insertData, isVoid } = editor;
-  const tempEditor = editor;
-  tempEditor.isVoid = element => {
-    return element.type === 'image' ? true : isVoid(element);
-  };
-
-  tempEditor.insertData = data => {
-    const text = data.getData('text/plain');
-    const { files } = data;
-    if (files && files.length > 0) {
-      for (const file of files) {
-        const reader = new FileReader();
-        const [mime] = file.type.split('/');
-        if (mime === 'image') {
-          reader.addEventListener('load', () => {
-            const url: any = reader.result;
-            const text = { text: '' };
-            const image: ImageElement = {
-              type: 'image',
-              url,
-              children: [text],
-            };
-            Transforms.insertNodes(tempEditor, image);
-          });
-        }
-        reader.readAsDataURL(file);
-      }
-    } else {
-      insertData(data);
-    }
-  };
-
   return tempEditor;
 };
 
@@ -223,6 +192,7 @@ const removeEmptyLine = value => {
 export const Editor = (props: Iprops) => {
   const { initValue = null, cancelSendArticle = () => {}, type } = props;
   const { t } = useTranslation();
+  const { toastError } = useToast();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
@@ -257,11 +227,36 @@ export const Editor = (props: Iprops) => {
     }
   }, []);
 
+  const withImages = editor => {
+    const { insertData, isVoid } = editor;
+    const tempEditor = editor;
+    let fileList: any[] = [];
+    tempEditor.isVoid = element => {
+      return element.type === 'image' ? true : isVoid(element);
+    };
+
+    tempEditor.insertData = async data => {
+      const { files } = data;
+      if (files && files.length > 0) {
+        fileList = [];
+        for (const file of files) {
+          const [mime] = file.type.split('/');
+          if (mime === 'image') {
+            const compressImage = await cutDownImg(file);
+            fileList.push(compressImage);
+          }
+        }
+        uploadImg(fileList);
+      } else {
+        insertData(data);
+      }
+    };
+
+    return tempEditor;
+  };
+
   const editor = useMemo(
-    () =>
-      withImages(
-        withTopics(withMentions(withReact(withHistory(createEditor())))),
-      ),
+    () => withTopics(withMentions(withReact(withHistory(createEditor())))),
     [],
   );
 
@@ -280,6 +275,23 @@ export const Editor = (props: Iprops) => {
       }
     }, 1000),
     [],
+  );
+
+  const uploadImg = useCallback(
+    async (files: string[]) => {
+      if (imgList.length + files.length > POST_UPLOAD_IMG)
+        return toastError(t('uploadImgMaxMsg'));
+      setIsLoading(true);
+      const res = await Api.CommonApi.uploadImgList({
+        base64: files,
+        dir_name: 'common',
+      });
+      setIsLoading(false);
+      if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
+      const imgUploadList = (res.data ?? []).map(item => item.full_path);
+      setImgList([...imgList, ...imgUploadList]);
+    },
+    [imgList],
   );
 
   useEffect(() => {
@@ -304,6 +316,7 @@ export const Editor = (props: Iprops) => {
   //     el.removeEventListener('click', eventFn);
   //   };
   // },[])
+
   useEffect(() => {
     setIsDisabledSend(imgList.length < 1);
   }, [imgList]);
@@ -482,17 +495,8 @@ export const Editor = (props: Iprops) => {
         editor={editor}
         value={value}
         onChange={value => {
-          const editorContent: Descendant[] = value.filter(
-            (rows: any) => rows.type !== 'image',
-          );
-          const imgaesContent = value.map((row: any) => {
-            if (row.type === 'image') {
-              return row.url;
-            }
-          });
-
-          setValue(editorContent);
-          const { content } = deepContent(editorContent);
+          setValue(value);
+          const { content } = deepContent(value);
           const { selection } = editor;
           if (selection && Range.isCollapsed(selection)) {
             const [start] = Range.edges(selection);
@@ -545,6 +549,22 @@ export const Editor = (props: Iprops) => {
             autoFocus
             renderElement={renderElement}
             onKeyDown={onKeyDown}
+            onPaste={async event => {
+              const data = event.clipboardData;
+              const { files } = data;
+              let fileList: any[] = [];
+              if (files && files.length > 0) {
+                //@ts-ignore
+                for (const file of files) {
+                  const [mime] = file.type.split('/');
+                  if (mime === 'image') {
+                    const compressImage = await cutDownImg(file);
+                    fileList.push(compressImage);
+                  }
+                }
+                uploadImg(fileList);
+              }
+            }}
             placeholder={
               type === 'comment'
                 ? t('newsCommentReply')
