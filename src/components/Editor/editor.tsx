@@ -105,6 +105,7 @@ const withImages = editor => {
   };
 
   tempEditor.insertData = data => {
+    const text = data.getData('text/plain');
     const { files } = data;
     if (files && files.length > 0) {
       for (const file of files) {
@@ -118,6 +119,10 @@ const withImages = editor => {
         }
         reader.readAsDataURL(file);
       }
+    } else if (text) {
+      // insertImage(editor, text);
+    } else {
+      insertData(data);
     }
   };
 
