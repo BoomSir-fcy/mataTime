@@ -151,7 +151,7 @@ export const ContentParsing = (props: IProps) => {
               event.stopPropagation();
             }}
             to={() =>
-              `/topicList/empty/${encodeURI(
+              `/topiclist/empty/${encodeURI(
                 encodeURIComponent(match.slice(1, match.length)),
               )}`
             }
@@ -181,7 +181,7 @@ export const ContentParsing = (props: IProps) => {
               e.stopPropagation();
               e.preventDefault();
             }}
-            to={`/topicList/empty/${children?.map((n, index) =>
+            to={`/topiclist/empty/${children?.map((n, index) =>
               serialize2(n, 'topic', index),
             )}`}
           >

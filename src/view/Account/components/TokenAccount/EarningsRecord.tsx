@@ -246,7 +246,7 @@ const EarningsRecord: React.FC<init> = ({ type, info, readType }) => {
                   className='LinkRow'
                   key={`${item.read.post_id}${index}`}
                   as={Link}
-                  to={`/articleDetils/${
+                  to={`/articledetils/${
                     readType === 1 ? item.read.post_id : item.cinfo?.pid
                   }`}
                 >

@@ -83,7 +83,7 @@ const MentionItem: React.FC<IProps> = props => {
   const goDetils = () => {
     // XXX: 总感觉这样写有问题
     if (pathname.includes('articleDetils')) return;
-    push(`/articleDetils/${itemData.post_id || itemData.id}`);
+    push(`/articledetils/${itemData.post_id || itemData.id}`);
   };
 
   return (

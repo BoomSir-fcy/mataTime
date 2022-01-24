@@ -104,7 +104,7 @@ const NewsPraise: React.FC = props => {
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}
-              href={`/articleDetils/${item.post?.post_id}`}
+              href={`/articledetils/${item.post?.post_id}`}
             >
               <Flex flexWrap='nowrap'>
                 <FollowPopup uid={item.send_uid}>
