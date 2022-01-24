@@ -26,8 +26,8 @@ export const menuNavConfig: MenuNavConfig[] = [
   {
     icon: 'icon-xingqiu',
     activeIcon: 'icon-xingqiu1',
-    path: '/star',
-    coming: true,
+    path: '/tribe',
+    coming: false,
     lable: 'homeMenuStar',
   },
   {

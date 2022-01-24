@@ -71,6 +71,7 @@ const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
 const Post = React.lazy(() => import('./view/Post'));
 const PostDetails = React.lazy(() => import('./view/Post/details'));
+const Tribe = React.lazy(() => import('./view/Tribe'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -160,6 +161,7 @@ function App() {
                 <Route path='/search' component={Search} />
                 <Route path='/post' component={Post} />
                 <Route path='/swap' component={Swap} />
+                <Route path='/tribe' component={Tribe} />
                 {process.env.NODE_ENV === 'development' && (
                   <>
                     <Route path='/faucet-smart' component={FaucetSmart} />
