@@ -150,13 +150,13 @@ const WalletBox: React.FC<Wallet> = ({
     } else {
       dispatch(storeAction.changeActiveToken({ activeToken: 'TIME' }));
     }
-  }, [Token]);
+  }, [Token, dispatch]);
 
   useEffect(() => {
     const titleText =
       ChosenType === 1 ? t('AccountRecharge') : t('Accountwithdraw');
     setModalTitle(`${titleText} ${Token}`);
-  }, [ChosenType, Token]);
+  }, [ChosenType, Token, t]);
 
   return (
     <Content {...props}>

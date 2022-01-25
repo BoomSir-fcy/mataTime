@@ -208,15 +208,7 @@ const ShowCard: React.FC = () => {
       dispatch(fetchStuffAllLimitsAsync());
       return res;
     },
-    [
-      selectData,
-      dispatch,
-      onExchange,
-      codes.code,
-      account,
-      colorHex,
-      colorAlpha,
-    ],
+    [selectData, dispatch, onExchange, codes.code, colorHex, colorAlpha],
   );
 
   const handleColorChange = useCallback(color => {
@@ -229,17 +221,15 @@ const ShowCard: React.FC = () => {
       dispatch(fetchCodeInfoAsync(codes));
       setVisible(false);
     },
-    [onLockCode],
+    [onLockCode, dispatch, codes],
   );
 
   const onClose = useCallback(() => {
     setVisible(false);
-    // dispatch(fetchCodeInfoAsync(codes))
-  }, [setVisible, dispatch, codes]);
+  }, [setVisible]);
 
   const onOpen = useCallback(() => {
     setVisible(true);
-    // dispatch(fetchCodeInfoAsync(codes))
   }, [setVisible]);
 
   return (

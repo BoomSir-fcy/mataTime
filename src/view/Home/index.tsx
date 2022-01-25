@@ -99,21 +99,20 @@ const Home: React.FC = (props: any) => {
     setRefresh(!refresh);
   };
 
-  const getTags = async () => {
-    try {
-      const res = await getUserTag();
-      // setUserTags(res);
-      dispatch(storeAction.postSetUserTags(res));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setGetTab(false);
-    }
-  };
-
   React.useEffect(() => {
+    const getTags = async () => {
+      try {
+        const res = await getUserTag();
+        // setUserTags(res);
+        dispatch(storeAction.postSetUserTags(res));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setGetTab(false);
+      }
+    };
     getTags();
-  }, []);
+  }, [dispatch, getUserTag, setGetTab]);
 
   const toTop = () => {
     articleRefs?.current?.reload(1);

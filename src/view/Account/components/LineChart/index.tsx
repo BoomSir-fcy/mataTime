@@ -43,10 +43,10 @@ const HoverUpdater = ({ locale, payload }) => {
 
 const CustomTooltip = ({ locale, payload }) => {
   const { t } = useTranslation();
-  useEffect(() => {
-    if (payload && payload.length) {
-    }
-  }, [locale, payload[0], payload[0]]);
+  // useEffect(() => {
+  //   if (payload && payload.length) {
+  //   }
+  // }, [locale, payload[0], payload[0]]);
   if (payload && payload.length) {
     return (
       <TooltipBox>
