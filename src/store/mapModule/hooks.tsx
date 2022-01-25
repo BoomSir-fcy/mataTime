@@ -16,3 +16,11 @@ export const useUserInfoById = id => {
     return userMap[id];
   }, [userMap, id]);
 };
+
+export const usePostDetailById = id => {
+  const { postMap } = useMapModule();
+
+  return useMemo(() => {
+    return postMap[id];
+  }, [postMap, id]);
+};

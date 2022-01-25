@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Box } from 'uikit';
 import Search from '../SearchInput';
@@ -10,12 +10,14 @@ import styled from 'styled-components';
 import { REFRESH_TIME_BURN_PER_CIRCLE } from 'config';
 import SearchFilter from 'components/SearchInput/SearchFilter';
 import { useLocation } from 'react-router-dom';
+import { debounce, throttle } from 'lodash';
 
 const SidebarStyled = styled(Box)`
   position: sticky;
   transition: all 0.2s ease-out;
   top: 0;
   display: none;
+  padding-bottom: 50px;
   ${({ theme }) => theme.mediaQueries.md} {
     display: block;
   }
@@ -29,41 +31,35 @@ enum Direction {
 
 const Sidebar = props => {
   const ref = React.useRef<HTMLDivElement | null>();
-  const [positionTop, setPositionTop] = useState(0);
   const { pathname } = useLocation();
 
-  const HandleScroll = React.useCallback(
-    event => {
-      const evt = event || window.event;
-      const maxTop = ref.current.clientHeight - window.innerHeight;
-      const minTop = 0;
-      if (evt.stopPropagation) {
-        evt.stopPropagation();
-      } else {
-        evt.returnValue = false;
-      }
-      let e = event.originalEvent || event;
-      let deltaY = e.deltaY || e.detail;
-      // let top = positionTop + deltaY;
-      // top = top > maxTop ? maxTop : top;
-      // top = top < minTop ? minTop : top;
-      const top = deltaY > 0 ? maxTop : minTop;
-      setPositionTop(top);
-    },
-    [positionTop, setPositionTop],
-  );
+  const [scrollTop, setScrollTop] = useState(0);
+  const [position, setPosition] = useState('top');
+  const [maxPositionValue, setMaxPositionValue] = useState(0);
+  const handleScroll = useCallback(() => {
+    const maxTop = ref.current.clientHeight - window.innerHeight;
+    if (scrollTop > window.scrollY) {
+      setPosition('bottom');
+    } else {
+      setPosition('top');
+    }
+    setScrollTop(window.scrollY);
+    setMaxPositionValue(maxTop);
+  }, [scrollTop, ref.current]);
 
-  React.useEffect(() => {
-    document.addEventListener('mousewheel', HandleScroll);
-    document.addEventListener('DOMMouseScroll', HandleScroll);
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll);
     return () => {
-      document.removeEventListener('mousewheel', HandleScroll);
-      document.removeEventListener('DOMMouseScroll', HandleScroll);
+      document.removeEventListener('scroll', handleScroll);
     };
-  }, [HandleScroll]);
+  }, [handleScroll]);
 
   return (
-    <SidebarStyled {...props} style={{ top: `-${positionTop}px` }} ref={ref}>
+    <SidebarStyled
+      {...props}
+      style={{ [`${position}`]: `-${maxPositionValue}px` }}
+      ref={ref}
+    >
       {pathname === '/search' ? (
         <SearchFilter mt='15px' mb='15px' />
       ) : (

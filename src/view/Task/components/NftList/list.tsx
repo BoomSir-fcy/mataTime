@@ -112,26 +112,26 @@ const NftAvatar: React.FC<{
   const [codeList, setCodeList] = useState<CodeInfo[]>(defaultCodeList);
 
   useEffect(() => {
-    getLastReceivedStatus();
-  }, [defaultCodeList[0]?.code_hash]);
-
-  // 获取邀请码是否被使用的最新状态
-  const getLastReceivedStatus = useCallback(async () => {
-    try {
-      if (defaultCodeList[0]?.code_hash) {
-        const lastStatusList = await getCodeViewList(
-          defaultCodeList.map(v => `0x${v.code_hash}`),
-        );
-        setCodeList(pre => {
-          return pre.map((item, i) => {
-            return {
-              ...item,
-              status: lastStatusList[i].status === 2 ? 4 : item.status,
-            };
+    // 获取邀请码是否被使用的最新状态
+    const getLastReceivedStatus = async () => {
+      try {
+        if (defaultCodeList[0]?.code_hash) {
+          const lastStatusList = await getCodeViewList(
+            defaultCodeList.map(v => `0x${v.code_hash}`),
+          );
+          setCodeList(pre => {
+            return pre.map((item, i) => {
+              return {
+                ...item,
+                status: lastStatusList[i].status === 2 ? 4 : item.status,
+              };
+            });
           });
-        });
-      }
-    } catch (error) {}
+        }
+      } catch (error) {}
+    };
+
+    getLastReceivedStatus();
   }, [defaultCodeList]);
 
   // 生成邀请码
@@ -169,7 +169,7 @@ const NftAvatar: React.FC<{
         return codeList;
       }
     },
-    [codeList, nftToken, nftId],
+    [codeList, maxGendCodeCount],
   );
 
   // 获取邀请码提交到合约的最新状态
@@ -201,38 +201,35 @@ const NftAvatar: React.FC<{
   }, [codeList.length, nftId, getLastSubmitStatus]);
 
   // 点击虚拟猿画板
-  const handleGenCode = useCallback(
-    async (info: any, index) => {
-      setActiveInfo(info);
-      setSubmitLoading(true);
-      let tempList = codeList;
-      try {
-        // 未生成邀请码
-        if (info.status === 0) {
-          tempList = await genInviteCode(nftToken, nftId);
-        }
-        // 未提交合约
-        if (info.status < 2) {
-          const codeHash = tempList[index]?.code_hash;
-          await onGenCodes(nftId, [`0x${codeHash}`]);
-        }
-      } catch (err: any) {
-        if (err?.data?.code === 3) {
-          toastError(t('exceeds the maximum number that can be generated'));
-        }
-        setSubmitLoading(false);
-        return false;
+  const handleGenCode = async (info: any, index) => {
+    setActiveInfo(info);
+    setSubmitLoading(true);
+    let tempList = codeList;
+    try {
+      // 未生成邀请码
+      if (info.status === 0) {
+        tempList = await genInviteCode(nftToken, nftId);
       }
-
-      // 获取最新状态
-      await getLastSubmitStatus(nftId);
-      if (!info?.code_hash)
-        setActiveInfo(tempList.filter(v => v.id === info.id)[0]);
-      setVisible(true);
+      // 未提交合约
+      if (info.status < 2) {
+        const codeHash = tempList[index]?.code_hash;
+        await onGenCodes(nftId, [`0x${codeHash}`]);
+      }
+    } catch (err: any) {
+      if (err?.data?.code === 3) {
+        toastError(t('exceeds the maximum number that can be generated'));
+      }
       setSubmitLoading(false);
-    },
-    [codeList, nftToken, nftId],
-  );
+      return false;
+    }
+
+    // 获取最新状态
+    await getLastSubmitStatus(nftId);
+    if (!info?.code_hash)
+      setActiveInfo(tempList.filter(v => v.id === info.id)[0]);
+    setVisible(true);
+    setSubmitLoading(false);
+  };
 
   // 复制链接
   const onCopyLink = useCallback(() => {
@@ -240,16 +237,16 @@ const NftAvatar: React.FC<{
     copyContent(copyUrl);
     toastSuccess(t('CopyLinkSuccess'));
     setVisible(false);
-  }, [activeInfo]);
+  }, [activeInfo, t, toastSuccess]);
 
   // 剩余分享次数
   const getTimes = useMemo(() => {
     return codeList.filter(v => v.status < 2).length;
   }, [codeList]);
 
-  const checkTransferNft = useCallback((item?: CodeInfo) => {
+  const checkTransferNft = (item?: CodeInfo) => {
     return item?.code === '';
-  }, []);
+  };
 
   return (
     <ContentBox>

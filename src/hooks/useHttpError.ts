@@ -6,7 +6,7 @@ import translations from 'config/localization/translations.json'
 
 const httpErrorCodes = (() => {
   const codes = []
-  Object.keys(translations).filter(item => {
+  Object.keys(translations).forEach(item => {
     if (item.includes('http-error-')) {
       codes.push(Number(item.split('http-error-')[1]))
     }

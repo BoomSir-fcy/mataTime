@@ -168,7 +168,7 @@ const NoticeItem: React.FC<{
     if (type === MessageType.MessageSystemDeleteTag) {
       return t('DeleteUserTag', { value: content });
     }
-  }, [itemData, type, t]);
+  }, [itemData, getHTML, showUTCTime, type, t]);
 
   return (
     <NoticeItemWrapper>
@@ -211,7 +211,7 @@ const NoticeItem: React.FC<{
         </Content>
       </Flex>
       {itemData?.post?.user_address && (
-        <PostContent as={Link} to={`/articleDetils/${itemData.post?.post_id}`}>
+        <PostContent as={Link} to={`/articledetils/${itemData.post?.post_id}`}>
           <AvatarCard
             userName={itemData?.post?.nick_name}
             avatar={itemData?.post?.nft_image}

@@ -116,7 +116,7 @@ export const MorePopup = React.memo((props: Iprops) => {
     }
 
     const text = render(context).join('');
-    const url = `${window.location.origin}/articleDetils/${data.post.post_id}`;
+    const url = `${window.location.origin}/articledetils/${data.post.post_id}`;
     window.open(
       `https://twitter.com/intent/tweet?text=${text.replace(
         /#/g,
@@ -261,7 +261,7 @@ export const MorePopup = React.memo((props: Iprops) => {
               onClick={() => {
                 copyContent(
                   process.env.REACT_APP_WEB_URL +
-                    '/articleDetils/' +
+                    '/articledetils/' +
                     data.post.post_id || '',
                 );
               }}

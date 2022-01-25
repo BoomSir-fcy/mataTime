@@ -143,15 +143,14 @@ const TokenAccount: React.FC = () => {
   const { account } = useWeb3React();
   const dispatch = useDispatch();
   const { isMobile } = useMenuNav();
-  const info = {
+  const [WalletInfo, setWalletInfo] = useState({
     address: '',
     available_balance: '0',
     freeze_balance: '0',
     token_type: 1,
     total_balance: '0',
     uid: 0,
-  };
-  const [WalletInfo, setWalletInfo] = useState(info);
+  });
   const [TokenInfo, setTokenInfo] = useState([
     {
       address: '',
@@ -211,16 +210,16 @@ const TokenAccount: React.FC = () => {
   }, [TimeIncometoday, MatterIncometoday, ActiveToken]);
 
   const ChartList = useMemo(() => {
-    let data;
+    let list;
     if (ActiveToken === 1) {
-      data = TimeIncometoday.data;
+      list = TimeIncometoday.data;
     } else {
-      data = MatterIncometoday.data;
+      list = MatterIncometoday.data;
     }
-    if (!data) {
-      data = [];
+    if (!list) {
+      list = [];
     }
-    return data;
+    return list;
   }, [TimeIncometoday, MatterIncometoday, ActiveToken]);
 
   const LoadStatus = useMemo(() => {
@@ -232,29 +231,6 @@ const TokenAccount: React.FC = () => {
     }
     return Status;
   }, [TimeIncometoday, MatterIncometoday, ActiveToken]);
-
-  const getMyBalance = async () => {
-    // 显示币种详情
-    let List = [];
-    for (let i = 0; i < BalanceList.length; i++) {
-      if (BalanceList[i].token_type === 1) {
-        List[i] = { ...BalanceList[i], tokenAddress: timeAddress };
-        setTokenInfo(List);
-        if (activeToken === 'TIME') setWalletInfo(BalanceList[i]);
-      }
-      if (BalanceList[i].token_type === 2) {
-        List[i] = { ...BalanceList[i], tokenAddress: MatterAddress };
-        setTokenInfo(List);
-        if (activeToken === 'MATTER') setWalletInfo(BalanceList[i]);
-      }
-      if (BalanceList[i].token_type === 3) {
-        List[i] = { ...BalanceList[i] };
-        setTokenInfo(List);
-        if (activeToken === 'BNB') setWalletInfo(BalanceList[i]);
-        setBnbAvailableBalance(BalanceList[i].available_balance);
-      }
-    }
-  };
 
   useEffect(() => {
     // 最小提币数量和手续费
@@ -302,7 +278,7 @@ const TokenAccount: React.FC = () => {
       }
     };
     getTokenType();
-  }, [search]);
+  }, [search, dispatch]);
 
   useEffect(() => {
     // 获取代币余额
@@ -322,6 +298,7 @@ const TokenAccount: React.FC = () => {
       setwalletBalance('0');
     };
   }, [
+    bnbBalance,
     account,
     matterBalance,
     timeBalance,
@@ -332,13 +309,50 @@ const TokenAccount: React.FC = () => {
   ]);
 
   useEffect(() => {
+    const getMyBalance = async () => {
+      // 显示币种详情
+      let List = [];
+      for (let i = 0; i < BalanceList.length; i++) {
+        if (BalanceList[i].token_type === 1) {
+          List[i] = { ...BalanceList[i], tokenAddress: timeAddress };
+          setTokenInfo(List);
+          if (activeToken === 'TIME') setWalletInfo(BalanceList[i]);
+        }
+        if (BalanceList[i].token_type === 2) {
+          List[i] = { ...BalanceList[i], tokenAddress: MatterAddress };
+          setTokenInfo(List);
+          if (activeToken === 'MATTER') setWalletInfo(BalanceList[i]);
+        }
+        if (BalanceList[i].token_type === 3) {
+          List[i] = { ...BalanceList[i] };
+          setTokenInfo(List);
+          if (activeToken === 'BNB') setWalletInfo(BalanceList[i]);
+          setBnbAvailableBalance(BalanceList[i].available_balance);
+        }
+      }
+    };
     BalanceList.length > 1 && getMyBalance();
     const Tk = getToken(activeToken);
     setActiveToken(Number(Tk));
     return () => {
-      setWalletInfo(info);
+      setWalletInfo({
+        address: '',
+        available_balance: '0',
+        freeze_balance: '0',
+        token_type: 1,
+        total_balance: '0',
+        uid: 0,
+      });
     };
-  }, [BalanceList, account, activeToken]);
+  }, [
+    BalanceList,
+    account,
+    timeAddress,
+    MatterAddress,
+    setTokenInfo,
+    setWalletInfo,
+    activeToken,
+  ]);
 
   useEffect(() => {
     if (ActiveToken === 1) {
@@ -348,7 +362,7 @@ const TokenAccount: React.FC = () => {
       dispatch(fetchMatterIncometoday({ day }));
       dispatch(fetchMatterIncomeList({ page: 1, pageSize }));
     }
-  }, [ActiveToken]);
+  }, [ActiveToken, day, dispatch, pageSize, readType]);
 
   return (
     <NoPdBottom>

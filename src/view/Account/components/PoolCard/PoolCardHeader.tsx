@@ -38,7 +38,7 @@ const TextTipsStyled = styled(Text)`
 `;
 
 type address = string;
-interface PoolCardHeader {
+interface PoolCardHeaderPop {
   depositToken: address;
   rewardToken0: address;
   rewardToken1: address;
@@ -48,7 +48,7 @@ interface PoolCardHeader {
   poolAddress: string;
 }
 
-const PoolCardHeader: React.FC<PoolCardHeader> = ({
+const PoolCardHeader: React.FC<PoolCardHeaderPop> = ({
   depositToken,
   rewardToken0,
   rewardToken1,
