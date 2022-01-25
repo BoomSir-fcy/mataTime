@@ -30,7 +30,7 @@ type IProps = {
   match?: any;
   replyType?: string;
   commentId?: string;
-  postId?: string;
+  postId?: number;
 };
 
 const MentionOperator: React.FC<IProps> = ({
@@ -44,7 +44,7 @@ const MentionOperator: React.FC<IProps> = ({
   callback,
   replyType = 'comment',
   commentId = '',
-  postId = '',
+  postId = 0,
 }) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();

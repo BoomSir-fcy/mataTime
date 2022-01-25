@@ -42,9 +42,12 @@ const PostResult: React.FC<PostResultProps> = ({
     dispatch(fetchThunk.fetchSearchPostAsync());
   }, [dispatch]);
 
-  const updateList = useCallback(id => {
-    dispatch(fetchSearchPostDetailAsync(id));
-  }, []);
+  const updateList = useCallback(
+    id => {
+      dispatch(fetchSearchPostDetailAsync(id));
+    },
+    [dispatch],
+  );
 
   return (
     <Box>

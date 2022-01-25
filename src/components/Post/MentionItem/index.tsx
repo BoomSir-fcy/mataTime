@@ -15,7 +15,7 @@ import {
 } from 'components';
 import { Box, Button, Flex, Text } from 'uikit';
 import { shortenAddress } from 'utils/contract';
-import { relativeTime } from 'utils';
+import { displayTime } from 'utils';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { MentionItemWrapper, MentionItemUserWrapper } from './style';
@@ -136,7 +136,7 @@ export const MentionItemUser: React.FC<UserProps> = ({
               </Text>
               <Text color='textTips' className='time'>
                 <span>@{shortenAddress(itemData.user_address)}</span>
-                {relativeTime(itemData.add_time || itemData.post_time)}
+                {displayTime(itemData.add_time || itemData.post_time)}
               </Text>
             </div>
           </div>

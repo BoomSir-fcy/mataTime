@@ -58,7 +58,17 @@ const ArticleComponents = (props, ref) => {
       // setLoading(false);
       setNonce(prep => prep + 1);
     },
-    [article, isEnd],
+    [
+      isEnd,
+      dispatch,
+      loading,
+      page,
+      pageSize,
+      props.filterValObj,
+      setNonce,
+      user_tags1,
+      user_tags2,
+    ],
   );
 
   React.useEffect(() => {
@@ -69,25 +79,24 @@ const ArticleComponents = (props, ref) => {
         setIsEnd(false);
       }
     }
-  }, [loading, lastList]);
+  }, [loading, page, lastList, pageSize]);
 
   useEffect(() => {
     if (addListNum === 0) {
       Getlist();
     }
-  }, [addListNum]);
+  }, [addListNum, Getlist]);
 
   React.useEffect(() => {
     if (Number(props.filterValObj.attention) === 3) {
       setIsEnd(false);
       Getlist(1);
     }
-  }, [user_tags1, user_tags2]);
+  }, [user_tags1, user_tags2, Getlist, props.filterValObj.attention]);
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
     if (type) {
-      console.log(type);
       return;
     }
     if (

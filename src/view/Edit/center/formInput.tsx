@@ -117,7 +117,7 @@ const FormInput = React.forwardRef((props, ref) => {
       p.background_image = profile.background_image;
       p.location = profile.location;
     });
-  }, [profile]);
+  }, [profile, setState]);
 
   useImperativeHandle(ref, () => ({
     getFrom() {

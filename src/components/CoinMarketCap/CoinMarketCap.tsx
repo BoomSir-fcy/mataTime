@@ -30,7 +30,7 @@ import {
 import CoinItem from './CoinItem';
 import { DropDown } from '../DropDown';
 import { getTimeAddress, getMatterAddress } from 'utils/addressHelpers';
-import { useTotalSupply } from 'hooks/useTokenBalance';
+import { useDsgTotalSupply, useTotalSupply } from 'hooks/useTokenBalance';
 import { useTimeShopBalance } from 'hooks/useTimeShopBalance';
 
 const StyledPage = styled(Card)`
@@ -55,7 +55,11 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   useFetchCoinsList();
   const { loaded } = useCoinsState();
   const coinsList = useCoinsList();
-  const [currentCoin, setCurrentCoin] = useState(coinsList[0]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentCoin = useMemo(() => {
+    return coinsList[currentIndex];
+  }, [currentIndex, coinsList]);
+  // const [currentCoin, setCurrentCoin] = useState(coinsList[0]);
   useFetchCoinInfo(currentCoin?.coin_id);
 
   const coins = useStore(p => p.coins.clickCoins);
@@ -64,9 +68,10 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
   const MatterAddress = getMatterAddress();
 
   // 获取time Matter 的 totalSupply
-  const TimeSupply = useTotalSupply(timeAddress);
-  const MatterSupply = useTotalSupply(MatterAddress);
-  const TimeShopBalance = useTimeShopBalance();
+  const timeSupply = useTotalSupply(timeAddress);
+  const matterSupply = useTotalSupply(MatterAddress);
+  const dsgSupply = useDsgTotalSupply();
+  const timeShopBalance = useTimeShopBalance();
 
   useEffect(() => {
     if (coins?.symbol) {
@@ -76,11 +81,17 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
 
   useEffect(() => {
     if (coinSymbol) {
-      const activeCoin = coinsList.find(
-        item => item.coin_symbol === coinSymbol,
-      );
+      let activeIndex = 0;
+      const activeCoin = coinsList.find((item, index) => {
+        if (item.coin_symbol === coinSymbol) {
+          activeIndex = index;
+          return true;
+        }
+        return false;
+      });
       if (activeCoin) {
-        setCurrentCoin(activeCoin);
+        // setCurrentCoin(activeCoin);
+        setCurrentIndex(activeIndex);
         setCoinSymbol('');
       }
     }
@@ -88,28 +99,30 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
 
   useEffect(() => {
     if (coinsList.length && !currentCoin) {
-      setCurrentCoin(coinsList[0]);
+      // setCurrentCoin(coinsList[0]);
+      setCurrentIndex(0);
     }
   }, [currentCoin, coinsList]);
 
   const marketCap = useMemo(() => {
     let value;
-    const Symbol = currentCoin?.coin_symbol;
-    if (Symbol === 'MATTER' || Symbol === 'TIME') {
-      const supply = getBalanceNumber(
-        Symbol === 'MATTER' ? MatterSupply : TimeSupply?.minus(TimeShopBalance),
-      );
-      value = new BigNumber(supply).times(currentCoin?.current_price);
+    let supply;
+    const { coin_symbol } = currentCoin || {};
+    if (coin_symbol === 'MATTER') {
+      supply = getBalanceNumber(matterSupply);
+    } else if (coin_symbol === 'TIME') {
+      supply = getBalanceNumber(timeSupply?.minus(timeShopBalance));
+    } else if (coin_symbol === 'DSG') {
+      supply = getBalanceNumber(dsgSupply);
     } else {
-      value = new BigNumber(currentCoin?.circulating_supply).times(
-        currentCoin?.current_price,
-      );
+      supply = currentCoin?.circulating_supply;
     }
+    value = new BigNumber(supply).times(currentCoin?.current_price);
     if (value.isFinite()) {
       return value.toNumber();
     }
     return 0;
-  }, [currentCoin]);
+  }, [currentCoin, matterSupply, timeSupply, dsgSupply]);
 
   const totalSupplyValue = useMemo(() => {
     if (!marketCap) return '--';
@@ -121,7 +134,7 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
     return `$ ${formatLocalisedCompactNumber(
       Number(currentCoin?.total_volume),
     )}`;
-  }, [currentCoin?.total_volume]);
+  }, [currentCoin?.total_volume, coinsList]);
 
   return (
     <StyledPage {...props}>
@@ -155,14 +168,15 @@ export const CoinMarketCap: React.FC<BoxProps> = ({ ...props }) => {
                 maxHeight='300px'
               >
                 <StyledPageItem>
-                  {coinsList.map(item => (
+                  {coinsList.map((item, index) => (
                     <CoinItem
                       key={item.coin_id}
                       fillClickArea
                       isActive={item.coin_id === currentCoin?.coin_id}
                       onClick={coin => {
                         setIsOpen(!isOpen);
-                        setCurrentCoin(coin);
+                        setCurrentIndex(index);
+                        // setCurrentCoin(coin);
                       }}
                       coinInfo={item}
                     />

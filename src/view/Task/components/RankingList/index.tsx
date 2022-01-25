@@ -141,37 +141,35 @@ const RankingList: React.FC = React.memo(() => {
   const [myInvites, setMyInvites] = useState<number>(0);
 
   useEffect(() => {
-    getMyInvites();
+    const getMyInvitess = () => {
+      Api.TaskApi.getMyInvites()
+        .then((res: any) => {
+          if (Api.isSuccess(res)) {
+            setMyInvites(res.data?.my_valid_invite || 0);
+          }
+        })
+        .catch(() => {
+          setMyInvites(0);
+        });
+    };
+    getMyInvitess();
   }, []);
-
-  const getMyInvites = useCallback(() => {
-    Api.TaskApi.getMyInvites()
-      .then((res: any) => {
-        if (Api.isSuccess(res)) {
-          setMyInvites(res.data?.my_valid_invite || 0);
-        }
-      })
-      .catch(() => {
-        setMyInvites(0);
-      });
-  }, [setMyInvites]);
 
   const handlePageClick = useCallback(
     event => {
       setPageNum(event.selected + 1);
     },
-    [pageNum],
+    [setPageNum],
   );
 
-  const getTotalPage = totalNum => {
-    if (pageSize !== 0 && totalNum % pageSize == 0) {
-      return parseInt(String(totalNum / pageSize));
+  const getTotalPage = useCallback(() => {
+    if (pageSize !== 0 && total % pageSize === 0) {
+      return parseInt(String(total / pageSize));
     }
-    if (pageSize != 0 && totalNum % pageSize != 0) {
-      return parseInt(String(totalNum / pageSize)) + 1;
+    if (pageSize !== 0 && total % pageSize !== 0) {
+      return parseInt(String(total / pageSize)) + 1;
     }
-  };
-  const totalPage = useMemo(() => getTotalPage(total), [total]);
+  }, [total, pageSize]);
   const renderRanking = useCallback(number => {
     if (number === 1) {
       return (
@@ -271,7 +269,7 @@ const RankingList: React.FC = React.memo(() => {
 
               <PaginateStyle alignItems='center' justifyContent='flex-end'>
                 <Text mr='16px' fontSize='14px' color='textTips'>
-                  {t('Account Total %page% page', { page: totalPage })}
+                  {t('Account Total %page% page', { page: getTotalPage() })}
                 </Text>
                 <ReactPaginate
                   breakLabel='...'
@@ -281,7 +279,7 @@ const RankingList: React.FC = React.memo(() => {
                   onPageChange={handlePageClick}
                   pageRangeDisplayed={4}
                   marginPagesDisplayed={1}
-                  pageCount={totalPage}
+                  pageCount={getTotalPage()}
                   previousLabel='<'
                   renderOnZeroPageCount={null}
                 />

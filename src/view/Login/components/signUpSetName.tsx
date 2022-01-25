@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
@@ -102,18 +103,6 @@ export const SignUpSetName: React.FC<{
   const loading = useStore(p => p.loginReducer.signinLoading);
   let timer: any = 0;
 
-  // 轮询查找用户是否注册
-  const verify = () => {
-    timer = setInterval(async () => {
-      toastWarning(t('loginSigninSearch'));
-      const res = await siginInVerify(account.toLowerCase());
-      if (Boolean(res)) {
-        timer && clearInterval(timer);
-        signIn();
-      }
-    }, 6000);
-  };
-
   const signIn = async () => {
     timer && clearInterval(timer);
     const res = await loginCallback(2);
@@ -133,6 +122,18 @@ export const SignUpSetName: React.FC<{
   };
 
   const submitProfile = React.useCallback(async () => {
+    // 轮询查找用户是否注册
+    const verify = () => {
+      timer = setInterval(async () => {
+        toastWarning(t('loginSigninSearch'));
+        const res = await siginInVerify(account.toLowerCase());
+        if (Boolean(res)) {
+          timer && clearInterval(timer);
+          signIn();
+        }
+      }, 6000);
+    };
+
     if (!state.nickName) {
       sethaveNickName(false);
       return;
@@ -166,7 +167,19 @@ export const SignUpSetName: React.FC<{
       dispatch(storeAction.setSigninLoading(false));
       toastError(t('loginSetNickNameRepeat'));
     }
-  }, [state, nft, inviteinfo]);
+  }, [
+    state,
+    nft,
+    timer,
+    inviteinfo,
+    siginInVerify,
+    toastWarning,
+    checkNickname,
+    createUser,
+    dispatch,
+    t,
+    toastError,
+  ]);
 
   const getAddresQualifications = account => {
     const getIsActive = async addr => {
@@ -194,26 +207,16 @@ export const SignUpSetName: React.FC<{
   };
 
   // 邀请地址验证
-  const handleChange = React.useCallback(e => {
-    if (e.currentTarget.validity.valid) {
-      // 是否为正确地址
-      const addr = e.currentTarget.value;
-      getAddresQualifications(addr);
-      // if (isAddress(e.currentTarget.value)) {
-      //   setinviteinfo(p => {
-      //     p.inviteAddr = addr;
-      //     p.isRightAdd = true;
-      //     p.isActive = true
-      //   })
-      // } else {
-      //   setinviteinfo(p => {
-      //     p.inviteAddr = addr;
-      //     p.isRightAdd = addr === '' ? true : false;
-      //     p.isActive = true
-      //   })
-      // }
-    }
-  }, []);
+  const handleChange = React.useCallback(
+    e => {
+      if (e.currentTarget.validity.valid) {
+        // 是否为正确地址
+        const addr = e.currentTarget.value;
+        getAddresQualifications(addr);
+      }
+    },
+    [getAddresQualifications],
+  );
 
   React.useEffect(() => {
     const InviteAddress = localStorage.getItem('InviteAddress');
@@ -223,7 +226,7 @@ export const SignUpSetName: React.FC<{
     return () => {
       timer && clearInterval(timer);
     };
-  }, []);
+  }, [timer, getAddresQualifications]);
 
   return (
     <Box>

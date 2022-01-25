@@ -15,7 +15,7 @@ export const  displayTime = (time: string | number) => {
   const diffHour = current.diff(dayTime, 'hour');
   
   if (currentYear !== dayTime.year()) {
-    return dayTime.format('YY-MM-DD HH:mm:ss');
+    return dayTime.format('YY-MM-DD HH:mm');
   }
   if (diffHour < 24) {
     return dayTime.fromNow();

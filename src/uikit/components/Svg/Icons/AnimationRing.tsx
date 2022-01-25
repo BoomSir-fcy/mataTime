@@ -436,7 +436,7 @@ const BgBox = styled(Flex)<{ bgColor?: string }>`
   }
 `;
 
-interface IconAnimation extends SvgProps {
+interface IconAnimationProps extends SvgProps {
   active1?: boolean; // 边框是实线
   active2?: boolean; // 内边框实线
   active3?: boolean; // 内圈蓝色边
@@ -448,7 +448,7 @@ interface IconAnimation extends SvgProps {
   color?: string; // 内边框实线
 }
 
-const IconAnimation: React.FC<IconAnimation> = ({
+const IconAnimation: React.FC<IconAnimationProps> = ({
   color = 'white',
   children,
   isRotate,

@@ -13,6 +13,7 @@ import {
 } from 'components';
 import { NewsPraiseWrapper, PraiseItemWrapper } from './style';
 import MessageCard from '../components/MessageCard';
+import { displayTime } from 'utils';
 
 const NewsPraise: React.FC = props => {
   const { t } = useTranslation();
@@ -99,7 +100,7 @@ const NewsPraise: React.FC = props => {
               uid={item.send_uid}
               avatar={item.send_image}
               title={item.send_name}
-              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              date={displayTime(item.add_time)}
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}

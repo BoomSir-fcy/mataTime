@@ -49,3 +49,9 @@ export const SEARCH_MAX_HISTORY_LEN = 14;
 export const POST_UPLOAD_IMG = 4;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
+
+// setTotalSupply []
+export const EXCEPT_TOTALSUPPPPLY_ADDRESS = [
+  '0x718da2e74fff28b0a0d62aeb4f2afa8f7b521154',
+  '0xe32c5352d3ba108374701d5333daa3db35345cf0',
+];

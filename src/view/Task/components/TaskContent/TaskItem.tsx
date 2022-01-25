@@ -201,7 +201,7 @@ const TaskItem: React.FC<{
             }}
             scale={isMobile ? 'sm' : 'md'}
           >
-            {getBtnText()}
+            <span>{getBtnText()}</span>
           </ReceiveButton>
         ) : (
           <Button
