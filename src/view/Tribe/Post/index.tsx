@@ -1,10 +1,13 @@
+import { Crumbs } from 'components';
 import React from 'react';
 import { Box, Text } from 'uikit';
+import SubHeader from '../components/SubHeader';
 
 const Post = () => {
   return (
     <Box>
-      <Text>发帖</Text>
+      <Crumbs back />
+      <SubHeader title='帖子信息' />
     </Box>
   );
 };

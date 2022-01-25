@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Api } from 'apis';
 import { useStore } from 'store';
-import { Box, Flex } from 'uikit';
+import { Box, Flex, Text } from 'uikit';
 import config from 'config/constants/navConfig';
 import { useTranslation } from 'contexts/Localization';
 import { Icon } from 'components';
@@ -41,7 +41,7 @@ const Nav: React.FC<NavProps> = ({}) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const [displayChildren, setDisplayChildren] = useState([]);
-  const dispatch = useDispatch();
+  const [displaySubChildren, setDisplaySubChildren] = useState([]);
   const unReadMsg = useSelector((state: any) => state.loginReducer.unReadMsg);
   const notification = useSelector(
     (state: any) => state.appReducer.systemCustom.notification,
@@ -61,6 +61,12 @@ const Nav: React.FC<NavProps> = ({}) => {
                 path: `${subItem.path}/profile/${currentUid.uid}`,
               };
             }
+            if (subItem.customName === 'backMe') {
+              return {
+                ...subItem,
+                backPath: `${subItem.backPath}/profile/${currentUid.uid}`,
+              };
+            }
             return { ...subItem };
           }),
         };
@@ -69,6 +75,12 @@ const Nav: React.FC<NavProps> = ({}) => {
         return {
           ...item,
           path: `${item.path}/profile/${currentUid.uid}`,
+        };
+      }
+      if (item.customName === 'backMe') {
+        return {
+          ...item,
+          backPath: `${item.backPath}/profile/${currentUid.uid}`,
         };
       }
       return { ...item };
@@ -87,15 +99,45 @@ const Nav: React.FC<NavProps> = ({}) => {
     return null;
   }, [pathname]);
 
+  const activeSubConfig = useMemo(() => {
+    if (activeChildren) {
+      return activeChildren.find(item =>
+        item?.children?.some(subItem => subItem.path === pathname),
+      );
+    }
+    return null;
+  }, [pathname, activeChildren]);
+
+  const activeSubChildren = useMemo(() => {
+    if (activeSubConfig?.children) {
+      return activeSubConfig.children;
+    }
+    return null;
+  }, [activeSubConfig]);
+
   useEffect(() => {
     if (activeChildren) {
       setDisplayChildren(activeChildren);
     }
   }, [activeChildren]);
 
+  useEffect(() => {
+    if (activeSubChildren) {
+      setDisplaySubChildren(activeSubChildren);
+    }
+  }, [activeSubChildren]);
+
+  const index = useMemo(() => {
+    if (activeSubChildren) return 2;
+    if (activeChildren) return 1;
+    return 0;
+  }, [activeSubChildren, activeChildren]);
+
   return (
     <NavStyled mt='16px'>
-      <NavShowBox translateX={activeChildren ? '-100%' : '0'}>
+      <NavShowBox translateX={`${index * -100}%`}>
+        {/* translateX={`${(index - 1) * 100}%`} */}
+        {/* translateX={activeChildren ? '-100%' : '0'} */}
         {menu.map(item => {
           return (
             <NavItem
@@ -118,11 +160,40 @@ const Nav: React.FC<NavProps> = ({}) => {
           );
         })}
       </NavShowBox>
-      <NavShowBox translateX={activeChildren ? '0' : '100%'}>
+      <NavShowBox translateX={`${(index - 1) * -100}%`}>
+        {/* translateX={activeSubChildren ? '0' : '100%'} */}
         {displayChildren && (
           <Box>
             <NavGoback />
             {displayChildren.map(item => {
+              return (
+                <NavItem
+                  key={item.path}
+                  icon={item.icon}
+                  activeIcon={item.activeIcon || item.icon}
+                  coming={item.coming}
+                  lable={item.lable}
+                  hide={item.hide}
+                  childrenLen={item.children?.length ?? 0}
+                  markPath={item.markPath}
+                  badge={
+                    item.badgeName && notification && unReadMsg[item.badgeName]
+                      ? unReadMsg[item.badgeName]
+                      : null
+                  }
+                  path={item.path}
+                  pathname={pathname}
+                />
+              );
+            })}
+          </Box>
+        )}
+      </NavShowBox>
+      <NavShowBox translateX={`${(index - 2) * -100}%`}>
+        {displaySubChildren && (
+          <Box>
+            <NavGoback path={activeSubConfig?.backPath} />
+            {displaySubChildren.map(item => {
               return (
                 <NavItem
                   key={item.path}

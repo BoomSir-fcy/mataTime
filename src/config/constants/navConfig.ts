@@ -171,6 +171,28 @@ export const menuNavConfig: MenuNavConfig[] = [
         icon: 'icon-e31guanzhu',
         activeIcon: 'icon-e31guanzhuxuanzhong',
         lable: 'meMenuFollow',
+        path: '/me/tribe',
+        customName: 'backMe',
+        backPath: '/me',
+        children: [
+          {
+            icon: 'icon-e31guanzhu',
+            activeIcon: 'icon-e31guanzhuxuanzhong',
+            lable: 'meMenuFollow',
+            path: '/me/tribe/info',
+          },
+          {
+            icon: 'icon-e31guanzhu',
+            activeIcon: 'icon-e31guanzhuxuanzhong',
+            lable: 'meMenuFollow',
+            path: '/me/tribe/rates',
+          },
+        ]
+      },
+      {
+        icon: 'icon-e31guanzhu',
+        activeIcon: 'icon-e31guanzhuxuanzhong',
+        lable: 'meMenuFollow',
         path: '/me/follow',
       },
       {

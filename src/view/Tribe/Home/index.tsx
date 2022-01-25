@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts';
 import Crumbs from 'components/Layout/crumbs';
 import Tabs from 'components/Tabs';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import TradeCard from '../components/TradeCard';
 
 // lable?: string
 // tLable?: string
@@ -59,18 +60,15 @@ const Home = () => {
           </Link>
         </Flex>
       </Tabs>
-      <Flex>
+      <Flex flexWrap='wrap'>
         <Link to={`${path}/detail`}>
-          <Card>
-            <Box width='280px'>
-              <Image
-                src='https://api.dsgmetaverse.com/gphoto/gen/9A520885.png'
-                height={280}
-                width={280}
-              />
-            </Box>
-            <Text>1111</Text>
-          </Card>
+          <TradeCard />
+        </Link>
+        <Link to={`${path}/detail`}>
+          <TradeCard />
+        </Link>
+        <Link to={`${path}/detail`}>
+          <TradeCard />
         </Link>
       </Flex>
     </Box>

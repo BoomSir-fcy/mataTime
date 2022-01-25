@@ -22,6 +22,7 @@ export interface MenuNavBase {
   icon?: string;
   lable?: string;
   activeIcon?: string;
+  backPath?: string; // 三级导航栏返回跳转路径
   coming?: boolean; // 是否弹窗敬请期待
   hide?: boolean; // 隐藏导航栏lable及图标
   hideLeft?: boolean; // 隐藏左侧导航栏

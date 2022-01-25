@@ -14,6 +14,7 @@ export * from "./components/Overlay";
 export * from "./components/Link";
 export * from "./components/InputPanel";
 export * from "./components/Skeleton";
+export * from "./components/Divider";
 export * from "./widgets/Menu";
 export * from "./theme";
 export * from "./components/Progress";

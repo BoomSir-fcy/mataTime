@@ -17,7 +17,7 @@ interface TabProps {
 
 export interface TabsProps extends BoxProps {
   keys: string;
-  active?: string | number;
+  active: string | number;
   datas: TabProps[];
   onChange: (tab: TabProps) => void;
   itemWidth?: string;
