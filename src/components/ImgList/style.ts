@@ -1,16 +1,14 @@
 import styled from 'styled-components';
-import {Flex} from 'uikit'
-export const  ImgListBox = styled(Flex)`
-margin-top:10px;
-width:100%;
-flex-wrap: wrap;
-overflow: hidden;
-border: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
-border-radius: 10px;
+import { Flex } from 'uikit';
+export const ImgListBox = styled(Flex)`
+  margin-top: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+  overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  border-radius: 10px;
 
-a{
-  /* object-fit: cover;
-  object-position: top; */
+  /* a{
   width:50%;
   display: block;
   cursor: zoom-in;
@@ -19,35 +17,35 @@ a{
   &:nth-child(2n - 1) {
     padding-right: 1px;
   }
-}
-img{
-  object-fit: cover;
-  object-position: top;
-  width: 100%;
-  height: 100%;
-  display: block;
-  /* width:50%;
-  cursor: zoom-in;
-  max-height: 150px;
-  padding-bottom: 1px;
-  &:nth-child(2n - 1) {
-    padding-right: 1px;
-  } */
-}
-.imgListRightBox{
-  flex:50%;
-  display:flex;
-  flex-direction: column;
-  a{
-    width:100%;
+} */
+  img {
+    object-fit: cover;
+    object-position: top;
+    width: 100%;
+    height: auto;
+    display: block;
+    width: 50%;
+    cursor: zoom-in;
     max-height: 150px;
+    padding-bottom: 1px;
+    &:nth-child(2n - 1) {
+      padding-right: 1px;
+    }
   }
-  /* img{
+  .imgListRightBox {
+    flex: 50%;
+    display: flex;
+    flex-direction: column;
+    /* a{
     width:100%;
     max-height: 150px;
   } */
-}
-`
+    img {
+      width: 100%;
+      max-height: 150px;
+    }
+  }
+`;
 // export const  ImgItem = styled.img`
 // width: 164px;
 // height: 164px;
