@@ -717,5 +717,15 @@
   "http-error-30001011": "can not block users repeatedly",
   "http-error-30008004": "User does not allow others to view his watchlist",
   "http-error-30008005": "User does not allow others to view his followers list",
-  "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
+  "*************HTTP-ERROR end******": "*************HTTP-ERROR end******",
+  "Tribe": "Tribe",
+  "Tribal Info": "Tribal Info",
+  "Fee Setting": "Fee Setting",
+  "Topics Setting": "Topics Setting",
+  "Tribal Docs": "Tribal Docs",
+  "Master NFT": "Master NFT",
+  "Invitation Setting": "Invitation Setting",
+  "Member Management": "Member Management",
+  "translationLast": "translationLast",
+  "translationEnd": "translationEnd"
 }

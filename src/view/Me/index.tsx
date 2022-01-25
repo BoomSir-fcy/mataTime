@@ -10,6 +10,7 @@ const Fans = React.lazy(() => import('./fans'));
 const Praise = React.lazy(() => import('./praise'));
 const Shield = React.lazy(() => import('./shield'));
 const Collect = React.lazy(() => import('./collect'));
+const Tribe = React.lazy(() => import('./Tribe'));
 const Invite = React.lazy(() => import('view/Task/components/Invite'));
 
 const Me = props => {
@@ -44,6 +45,7 @@ const Me = props => {
             <Route path={`${props.match.path}/collect`} component={Collect} />
             <Route path={`${props.match.path}/invite`} component={Invite} />
             <Route path={`${props.match.path}/shield`} component={Shield} />
+            <Route path={`${props.match.path}/tribe`} component={Tribe} />
           </Container>
         )}
       />

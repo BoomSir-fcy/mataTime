@@ -96,6 +96,15 @@ const Nav: React.FC<NavProps> = ({}) => {
       item?.children?.some(subItem => subItem.path === pathname),
     );
     if (activeConfig) return activeConfig.children;
+
+    const activeChildrenConfig = renderConfig.find(item =>
+      item?.children?.some(subItem => {
+        return subItem?.children?.some(
+          subChildrenItem => subChildrenItem.path === pathname,
+        );
+      }),
+    );
+    if (activeChildrenConfig) return activeChildrenConfig.children;
     return null;
   }, [pathname]);
 
@@ -107,6 +116,17 @@ const Nav: React.FC<NavProps> = ({}) => {
     }
     return null;
   }, [pathname, activeChildren]);
+
+  // const activeSubConfig = useMemo(() => {
+  //   return renderConfig.find(item =>
+  //     item?.children?.some(subItem => {
+  //       console.log(subItem?.children);
+  //       return subItem?.children?.some(
+  //         subChildrenItem => subChildrenItem.path === pathname,
+  //       );
+  //     }),
+  //   );
+  // }, [pathname, activeChildren]);
 
   const activeSubChildren = useMemo(() => {
     if (activeSubConfig?.children) {
@@ -192,7 +212,9 @@ const Nav: React.FC<NavProps> = ({}) => {
       <NavShowBox translateX={`${(index - 2) * -100}%`}>
         {displaySubChildren && (
           <Box>
-            <NavGoback path={activeSubConfig?.backPath} />
+            <NavGoback
+              path={activeSubConfig?.backPath || activeSubConfig?.path}
+            />
             {displaySubChildren.map(item => {
               return (
                 <NavItem

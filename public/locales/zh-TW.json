@@ -719,5 +719,15 @@
   "http-error-30001011": "不能重複屏蔽用戶",
   "http-error-30008004": "用户不允许其他人查看他的关注列表",
   "http-error-30008005": "用户不允许其他人查看他的粉丝列表",
-  "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
+  "*************HTTP-ERROR end******": "*************HTTP-ERROR end******",
+  "Tribe": "部落",
+  "Tribal Info": "部落信息",
+  "Fee Setting": "費用設定",
+  "Topics Setting": "主題設定",
+  "Tribal Docs": "部落文件",
+  "Master NFT": "部落主NFT",
+  "Invitation Setting": "邀請設定",
+  "Member Management": "成員管理",
+  "translationLast": "translationLast",
+  "translationEnd": "translationEnd"
 }
