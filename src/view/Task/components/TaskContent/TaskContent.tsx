@@ -55,12 +55,12 @@ const TaskContent: React.FC<TaskContentProps> = React.memo(
             <RewardsText fontSize='18px' bold>
               {t('Task Rewards')}
             </RewardsText>
+            {/* 解决控制台报错：collapse={collapse ? 1 : 0} 原因：React对boolean类型的attribute的识别方式问题 */}
             <CollapseIcon
               name='icon-fanhui1'
-              collapse={collapse}
+              collapse={collapse ? 1 : 0}
               size={18}
               color='white_black'
-              // src={require('assets/images/task/back.png').default}
             />
           </Flex>
         </TaskTitle>

@@ -103,7 +103,10 @@ const PostList: React.FC<PostListPorps> = ({
         }}
       >
         {(list ?? []).map(item => (
-          <HoverLink to={`/articledetils/${item.post_id || item.id}`}>
+          <HoverLink
+            key={item.id}
+            to={`/articledetils/${item.post_id || item.id}`}
+          >
             <MeItemWrapper key={`${item.id || item.post_id}`}>
               {
                 // 浏览自己的不扣费

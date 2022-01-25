@@ -1,46 +1,44 @@
-import BigNumber from 'bignumber.js'
-import useRefresh from 'hooks/useRefresh'
-import { useRef, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, AppState } from '../index'
-import { fetchCoinInfoAsync, fetchCoinsListAsync } from './reducer'
+import BigNumber from 'bignumber.js';
+import useRefresh from 'hooks/useRefresh';
+import { useRef, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, AppState } from '../index';
+import { fetchCoinInfoAsync, fetchCoinsListAsync } from './reducer';
 
-const REFRESH_INTERVAL = 5 * 60 * 1000
-
+const REFRESH_INTERVAL = 5 * 60 * 1000;
 
 export const useFetchCoinsList = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { slowRefresh } = useRefresh()
+  const { slowRefresh } = useRefresh();
 
   useEffect(() => {
-    dispatch(fetchCoinsListAsync())
-  }, [slowRefresh])
-}
+    dispatch(fetchCoinsListAsync());
+  }, [slowRefresh, dispatch]);
+};
 
-export const useFetchCoinInfo = (coinId) => {
-  const dispatch = useDispatch<AppDispatch>()
+export const useFetchCoinInfo = coinId => {
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (coinId) {
-      dispatch(fetchCoinInfoAsync(coinId))
+      dispatch(fetchCoinInfoAsync(coinId));
     }
-  }, [coinId, dispatch])
-}
-
+  }, [coinId, dispatch]);
+};
 
 export function useCoinsState(): AppState['coins'] {
-  return useSelector<AppState, AppState['coins']>((state) => state.coins)
+  return useSelector<AppState, AppState['coins']>(state => state.coins);
 }
 
 export function useCoinsMap(): {
-  [coinId: string]: Api.Coins.CoinInfo
+  [coinId: string]: Api.Coins.CoinInfo;
 } {
-  const { data } = useCoinsState()
-  return data
+  const { data } = useCoinsState();
+  return data;
 }
 
 export function useCoinsList(): Api.Coins.CoinInfo[] {
-  const { data } = useCoinsState()
-  return Object.values(data)
+  const { data } = useCoinsState();
+  return Object.values(data);
 }

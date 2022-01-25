@@ -363,9 +363,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               {item?.comment_list_resp?.list?.length > 0 && (
                 <ChildrenComment>
                   {(item?.comment_list_resp?.list ?? []).map(row => (
-                    <React.Fragment>
+                    <div key={row.id}>
                       {Number(parsedQs.comment_id) === row.id && (
-                        <div ref={commentRef} key={row.id}></div>
+                        <div ref={commentRef}></div>
                       )}
                       {
                         // 浏览自己的不扣费
@@ -428,7 +428,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           }}
                         />
                       </ChildrenCommentContent>
-                    </React.Fragment>
+                    </div>
                   ))}
                   {item?.comment_list_resp?.total_num >
                     item?.comment_list_resp?.list?.length && (
