@@ -83,9 +83,9 @@ export const Navigation = React.memo(() => {
             color={tabsColor}
             size={25}
           />
-          {row.badgeName && notification && unReadMsg.mineTotalMsgNum && (
-            <BadgeStyled count={unReadMsg.mineTotalMsgNum} />
-          )}
+          {Boolean(
+            row.badgeName && notification && unReadMsg.mineTotalMsgNum,
+          ) && <BadgeStyled count={unReadMsg.mineTotalMsgNum} />}
         </TabButton>
       ))}
       <TabButton

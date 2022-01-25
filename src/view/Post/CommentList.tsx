@@ -186,7 +186,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       setListData(subComment);
       setNonce(prep => prep + 1);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -250,7 +250,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       setFlag(false);
       commentRef?.current?.scrollIntoView();
     }
-  }, [listData]);
+  }, [listData, flag]);
 
   return (
     <CommentStyle>

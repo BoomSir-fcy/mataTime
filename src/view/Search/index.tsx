@@ -98,7 +98,7 @@ const Search = () => {
     if (historyList[0]?.text) {
       dispatch(fetchThunk.fetchSearchPostAsync(true));
     }
-  }, [historyList[0], dispatch]);
+  }, [historyList, dispatch]);
 
   return (
     <Box>
