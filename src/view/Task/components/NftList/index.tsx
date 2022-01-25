@@ -12,25 +12,24 @@ export const StakeNFT: React.FC<{
   const [nftCodeList, setNftCodeList] = useState([]);
 
   useEffect(() => {
+    const getDefaultExistCodeList = async () => {
+      const nftIds = nftList.map(v => v.token_id).join(',');
+      const codeObjs = await getExistCodeList(nftList[0].token, nftIds);
+      const newList = nftList.map(item => {
+        return {
+          ...item,
+          defaultCodeList: defaultCodeList.map((v, index) => {
+            const nftCode = codeObjs[item.token_id] || {};
+            return { ...v, ...nftCode[index] };
+          }),
+        };
+      });
+      setNftCodeList(newList);
+    };
     if (nftList.length) {
       getDefaultExistCodeList();
     }
-  }, [nftList]);
-
-  const getDefaultExistCodeList = useCallback(async () => {
-    const nftIds = nftList.map(v => v.token_id).join(',');
-    const codeObjs = await getExistCodeList(nftList[0].token, nftIds);
-    const newList = nftList.map(item => {
-      return {
-        ...item,
-        defaultCodeList: defaultCodeList.map((v, index) => {
-          const nftCode = codeObjs[item.token_id] || {};
-          return { ...v, ...nftCode[index] };
-        }),
-      };
-    });
-    setNftCodeList(newList);
-  }, [nftList]);
+  }, [nftList, defaultCodeList]);
 
   return (
     <>

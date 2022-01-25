@@ -75,7 +75,7 @@ const SafeSet = () => {
         userInfo.allow_watch_attention === 1 ? true : false;
       p.allow_watch_fans = userInfo.allow_watch_fans === 1 ? true : false;
     });
-  }, [userInfo]);
+  }, [userInfo, setState]);
 
   return (
     <SafeSetBox isBoxShadow>

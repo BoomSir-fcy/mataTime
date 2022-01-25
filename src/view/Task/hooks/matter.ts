@@ -36,21 +36,22 @@ export const useNftBaseView = () => {
   });
 
   useEffect(() => {
-    getNftView();
-  }, []);
-
-  const getNftView = useCallback(async () => {
-    const nftInfo = await getView();
-    const codeList = [];
-    for (let i = 0; i < nftInfo.maxGendCodeCount; i++) {
-      codeList.push({ id: i + 1, status: 0 });
+    const getNftView = async () => {
+      const nftInfo = await getView();
+      const codeList = [];
+      for (let i = 0; i < nftInfo.maxGendCodeCount; i++) {
+        codeList.push({ id: i + 1, status: 0 });
+      }
+      setState(p => {
+        p.tokenAddress = nftInfo.nftAddress;
+        p.defaultCodeList = codeList;
+        p.maxGendCodeCount = nftInfo.maxGendCodeCount;
+      });
     }
-    setState(p => {
-      p.tokenAddress = nftInfo.nftAddress;
-      p.defaultCodeList = codeList;
-      p.maxGendCodeCount = nftInfo.maxGendCodeCount;
-    });
-  }, []);
+
+    getNftView();
+  }, [setState]);
+
   return {
     tokenAddress: state.tokenAddress,
     defaultCodeList: state.defaultCodeList,
@@ -191,24 +192,26 @@ export const useInviteCount = () => {
   });
 
   useEffect(() => {
-    getInviteCount();
-  }, []);
-
-  const getInviteCount = async () => {
-    try {
-      const res = await Api.TaskApi.getInviteInfo();
-      if (Api.isSuccess(res)) {
-        setInviteInfo(p => {
-          p.invite_num = res.data?.invite_num || 0;
-          p.proportion = `${res.data?.proportion}` || '0';
-          p.total_meta = res.data?.total_meta || '0';
-          p.total_rebate = res.data?.total_rebate || '0';
-        });
+    const getInviteCount = async () => {
+      try {
+        const res = await Api.TaskApi.getInviteInfo();
+        if (Api.isSuccess(res)) {
+          setInviteInfo(p => {
+            p.invite_num = res.data?.invite_num || 0;
+            p.proportion = `${res.data?.proportion}` || '0';
+            p.total_meta = res.data?.total_meta || '0';
+            p.total_rebate = res.data?.total_rebate || '0';
+          });
+        }
+      } catch (error) {
+        throw new Error('SignIn Error');
       }
-    } catch (error) {
-      throw new Error('SignIn Error');
-    }
-  };
+    };
+
+    getInviteCount();
+  }, [setInviteInfo]);
+
+  
 
   return { inviteInfo };
 };
@@ -222,27 +225,29 @@ export const useFetchInviteFriendsList = () => {
   const [total, setTotal] = useState(1);
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
+    const getList = () => {
+      setLoading(true);
+      Api.TaskApi.getInviteList(pageNum, pageSize)
+        .then((res: any) => {
+          if (Api.isSuccess(res)) {
+            const temp = res.data;
+            setList(temp?.Users);
+            setTotal(temp?.total_size || 1);
+            setPageNum(temp?.now_page || 1);
+            setPageSize(temp?.page_size || 10);
+          }
+        })
+        .catch(() => {
+          setList([]);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
     getList();
-  }, [pageNum]);
-  const getList = () => {
-    setLoading(true);
-    Api.TaskApi.getInviteList(pageNum, pageSize)
-      .then((res: any) => {
-        if (Api.isSuccess(res)) {
-          const temp = res.data;
-          setList(temp?.Users);
-          setTotal(temp?.total_size || 1);
-          setPageNum(temp?.now_page || 1);
-          setPageSize(temp?.page_size || 10);
-        }
-      })
-      .catch(() => {
-        setList([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+  }, [pageNum, pageSize]);
+  
   return { list, pageNum, pageSize, total, setPageNum, loading };
 };
 
@@ -255,26 +260,27 @@ export const useFetchInviteRankingList = () => {
   const [total, setTotal] = useState(1)
   const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
+    const getList = () => {
+      setLoading(true);
+      Api.TaskApi.getRankingList(pageNum, pageSize).then((res: any) => {
+        if (Api.isSuccess(res)) {
+          const temp = res.data;
+          setList(temp?.list);
+          // setTotal(temp?.total_count || 1);
+          // 默认只显示排行榜的前20名
+          setTotal(temp?.total_count > 20 ? 20 : temp?.total_count);
+          // setPageNum(temp?.page || 1);
+          // setPageSize(temp?.page_size || 10);
+        }
+      }).catch(() => {
+        setList([]);
+      }).finally(() => {
+        setLoading(false);
+      })
+    }
     getList()
-  }, [pageNum])
-  const getList = () => {
-    setLoading(true);
-    Api.TaskApi.getRankingList(pageNum, pageSize).then((res: any) => {
-      if (Api.isSuccess(res)) {
-        const temp = res.data;
-        setList(temp?.list);
-        // setTotal(temp?.total_count || 1);
-        // 默认只显示排行榜的前20名
-        setTotal(temp?.total_count > 20 ? 20 : temp?.total_count);
-        // setPageNum(temp?.page || 1);
-        // setPageSize(temp?.page_size || 10);
-      }
-    }).catch(() => {
-      setList([]);
-    }).finally(() => {
-      setLoading(false);
-    })
-  }
+  }, [pageNum, pageSize])
+  
 
   return { list, pageNum, pageSize, total, setPageNum, loading }
 }
