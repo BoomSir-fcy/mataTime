@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Flex } from 'uikit';
 import { useToast } from 'hooks';
-import { Icon, ReplyModal, MoreOperatorEnum, TimeGain } from 'components';
+import {
+  Icon,
+  ReplyModal,
+  MoreOperatorEnum,
+  TimeGain,
+  Forward,
+} from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
 import RewardAuthTag from 'components/RewardAuth/RewardAuthTag';
@@ -152,8 +158,18 @@ const MentionOperator: React.FC<IProps> = ({
             />
             {itemData.comment_num || 0}
           </Box>
-          {/* <Box className="operator-item">
-            <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />
+          <Box
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              setReplyVisible(true);
+            }}
+            className='operator-item'
+          >
+            <Forward total={itemData.share_num || 0} />
+          </Box>
+          {/* <Box className='operator-item'>
+            <Icon name='icon-retweet' margin='0 10px 0 0' color='textTips' />
             {itemData.share_num || 0}
           </Box> */}
           {hasLike && (
