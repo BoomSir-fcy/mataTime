@@ -92,7 +92,7 @@ const ArticleComponents = (props, ref) => {
       setIsEnd(false);
       Getlist(1);
     }
-  }, [user_tags1, user_tags2, Getlist, props.filterValObj.attention]);
+  }, [user_tags1, user_tags2, props.filterValObj.attention]);
 
   // 更新列表
   const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
