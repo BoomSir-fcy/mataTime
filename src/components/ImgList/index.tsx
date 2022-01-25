@@ -74,7 +74,7 @@ export const ImgList = (props: Iprops) => {
       setPhotoIndex(0);
       setModalIsOpen(true);
     },
-    [list, setPreviewImgList, setPreviewImgList, setModalIsOpen],
+    [list, setPreviewImgList, setModalIsOpen],
   );
 
   const imgRef = useRef<HTMLDivElement>(null);

@@ -146,7 +146,7 @@ const PostList: React.FC<PostListPorps> = ({
               />
               <MentionOperator
                 replyType='twitter'
-                postId={`${item.id}`}
+                postId={item.id}
                 itemData={{
                   ...item,
                   post_id: item.id,

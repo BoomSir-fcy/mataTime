@@ -80,7 +80,7 @@ const NoticeSet = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [state.msg_remind]);
+  }, [state.msg_remind, setState]);
 
   return (
     <NoticeSetBox isBoxShadow>

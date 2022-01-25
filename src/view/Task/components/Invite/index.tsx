@@ -139,38 +139,37 @@ const Invite: React.FC = () => {
   const userInfo: any = useStore(p => p.loginReducer.userInfo);
 
   useEffect(() => {
+    // 获取可邀请的nft列表，当前已注册的nft默认可以邀请
+    const getNftList = async () => {
+      const nftList = NftList.filter(
+        v => tokenAddress.toString().indexOf(v.properties.token) !== -1,
+      ).map(item => {
+        return {
+          name: 'DSGAV',
+          image: item.image,
+          token: item.properties.token,
+          token_id: item.properties.token_id,
+        };
+      });
+
+      if (tokenAddress.toString().indexOf(userInfo.nft_address) !== -1) {
+        nftList.unshift({
+          name: 'DSGAV',
+          image: userInfo.nft_image,
+          token: userInfo.nft_address,
+          token_id: userInfo.nft_id,
+        });
+      }
+      setInvitableNftList(nftList);
+    };
     if (tokenAddress && tokenAddress?.length) {
       getNftList();
     }
-  }, [NftList, tokenAddress]);
-
-  // 获取可邀请的nft列表，当前已注册的nft默认可以邀请
-  const getNftList = useCallback(async () => {
-    const nftList = NftList.filter(
-      v => tokenAddress.toString().indexOf(v.properties.token) !== -1,
-    ).map(item => {
-      return {
-        name: 'DSGAV',
-        image: item.image,
-        token: item.properties.token,
-        token_id: item.properties.token_id,
-      };
-    });
-
-    if (tokenAddress.toString().indexOf(userInfo.nft_address) !== -1) {
-      nftList.unshift({
-        name: 'DSGAV',
-        image: userInfo.nft_image,
-        token: userInfo.nft_address,
-        token_id: userInfo.nft_id,
-      });
-    }
-    setInvitableNftList(nftList);
   }, [NftList, userInfo, tokenAddress]);
 
   useEffect(() => {
     dispatch(fetchTaskListAsync({ isSignIn: false }));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (data.length) {
@@ -402,7 +401,7 @@ const InviteHeader: React.FC<{ tag: Variant; isMobile: boolean }> = React.memo(
           </Button>
         </Flex>
       );
-    }, [source, isMobile]);
+    }, [source, isMobile, t, tag]);
     return (
       <>
         {source === 'TASK' ? (

@@ -1,21 +1,21 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 import { Box, BoxProps } from '../Box';
 import { Text } from '../Text';
 
-interface InputPanelStyled extends BoxProps {
-  isWarning?: boolean
-  background?: string
-  warning?: React.ReactNode
+interface InputPanelStyledProps extends BoxProps {
+  isWarning?: boolean;
+  background?: string;
+  warning?: React.ReactNode;
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
   if (isWarning) {
-    return theme.shadows.warning
+    return theme.shadows.warning;
   }
 
-  return theme.colors.inpuShadows
-}
+  return theme.colors.inpuShadows;
+};
 
 const StyledErrorMessage = styled(Text)`
   position: absolute;
@@ -23,26 +23,30 @@ const StyledErrorMessage = styled(Text)`
   a {
     display: inline;
   }
-`
-const InputPanelStyled = styled(Box) <InputPanelStyled>`
+`;
+const InputPanelStyled = styled(Box)<InputPanelStyledProps>`
   border-radius: 16px;
-  background-color: ${({ theme, background }) => theme.colors[background] || theme.colors.backgroundTextArea};
+  background-color: ${({ theme, background }) =>
+    theme.colors[background] || theme.colors.backgroundTextArea};
   /* box-shadow: ${getBoxShadow}; */
   position: relative;
   padding: 8px 20px;
-`
+`;
 
-export default function InputPanel({ children, isWarning, warning, ...props }: InputPanelStyled) {
+export default function InputPanel({
+  children,
+  isWarning,
+  warning,
+  ...props
+}: InputPanelStyledProps) {
   return (
     <InputPanelStyled isWarning={isWarning} {...props}>
       {children}
-      {
-        isWarning && (
-          <StyledErrorMessage fontSize="14px" color="failure">
-            {warning}
-          </StyledErrorMessage>
-        )
-      }
+      {isWarning && (
+        <StyledErrorMessage fontSize='14px' color='failure'>
+          {warning}
+        </StyledErrorMessage>
+      )}
     </InputPanelStyled>
-  )
+  );
 }

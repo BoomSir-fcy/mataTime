@@ -85,16 +85,15 @@ const FriendsList: React.FC<init> = React.memo(({ showTitle = true }) => {
     [setPageNum],
   );
 
-  const getTotalPage = totalNum => {
-    if (pageSize != 0 && totalNum % pageSize == 0) {
-      return parseInt(String(totalNum / pageSize));
+  const getTotalPage = useCallback(() => {
+    if (pageSize !== 0 && total % pageSize === 0) {
+      return parseInt(String(total / pageSize));
     }
-    if (pageSize != 0 && totalNum % pageSize != 0) {
-      return parseInt(String(totalNum / pageSize)) + 1;
+    if (pageSize !== 0 && total % pageSize !== 0) {
+      return parseInt(String(total / pageSize)) + 1;
     }
-  };
+  }, [total, pageSize]);
 
-  const totalPage = useMemo(() => getTotalPage(total), [total]);
   return (
     <>
       {showTitle && (
@@ -154,7 +153,7 @@ const FriendsList: React.FC<init> = React.memo(({ showTitle = true }) => {
 
           <PaginateStyle alignItems='center' justifyContent='flex-end'>
             <Text mr='16px' fontSize='14px' color='textTips'>
-              {t('Account Total %page% page', { page: totalPage })}
+              {t('Account Total %page% page', { page: getTotalPage() })}
             </Text>
             <ReactPaginate
               breakLabel='...'
@@ -164,7 +163,7 @@ const FriendsList: React.FC<init> = React.memo(({ showTitle = true }) => {
               onPageChange={handlePageClick}
               pageRangeDisplayed={4}
               marginPagesDisplayed={1}
-              pageCount={totalPage}
+              pageCount={getTotalPage()}
               previousLabel='<'
               renderOnZeroPageCount={null}
             />
