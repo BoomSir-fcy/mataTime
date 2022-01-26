@@ -1,5 +1,5 @@
-import { Crumbs } from 'components';
 import React from 'react';
+import { Crumbs } from 'components';
 import { Box, Text, Button } from 'uikit';
 
 const MyTribeInfo = () => {
