@@ -16,6 +16,12 @@ declare namespace Api {
     interface articleFindById {
       id: string;
     }
+
+    interface PostTranslateParams {
+      pids: number;
+      target: string;
+      source?: string;
+    }
     type queryHotTopic = {
       page: number;
     };

@@ -1,3 +1,4 @@
+import { FetchStatus } from 'config/types';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { MapModuleState } from '../types';
@@ -23,4 +24,17 @@ export const usePostDetailById = id => {
   return useMemo(() => {
     return postMap[id];
   }, [postMap, id]);
+};
+
+export const usePostTranslateMap = (translate, id) => {
+  const { postTranslateMap } = useMapModule();
+
+  return useMemo(() => {
+    return (
+      postTranslateMap[id] || {
+        status: FetchStatus.NOT_FETCHED,
+        content: '',
+      }
+    );
+  }, [postTranslateMap, id]);
 };

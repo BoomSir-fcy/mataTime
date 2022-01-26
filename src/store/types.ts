@@ -126,6 +126,12 @@ export interface MapModuleState {
   postStatusMap: {
     [postId: string]: MapModuleStatus
   },
+  postTranslateMap: {
+    [postId: string]: {
+      content: string;
+      status: FetchStatus;
+    }
+  },
   userStatusMap: {
     [userId: string]: MapModuleStatus
   },

@@ -20,6 +20,7 @@ import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
 import { MentionItemWrapper, MentionItemUserWrapper } from './style';
 import moreIcon from 'assets/images/social/more.png';
+import { usePostTranslateMap } from 'store/mapModule/hooks';
 
 const PopupButton = styled(Flex)`
   align-items: center;
@@ -50,6 +51,7 @@ const MentionItem: React.FC<MentionItemProps> = ({
   setIsShileUser,
 }) => {
   const mentionRef: any = useRef();
+  const translateData = usePostTranslateMap(true, itemData.id);
 
   return (
     <MentionItemWrapper ref={mentionRef}>
@@ -68,7 +70,7 @@ const MentionItem: React.FC<MentionItemProps> = ({
       />
       <Box className='mention-content'>
         <ContentParsing
-          content={itemData.content}
+          content={translateData.content || itemData.content}
           callback={(type: MoreOperatorEnum) => {
             callback(itemData, type);
           }}

@@ -9,6 +9,7 @@ import useReadArticle from 'hooks/imHooks/useReadArticle';
 import { useDispatch } from 'react-redux';
 import {
   fetchPostDetailAsync,
+  fetchPostTranslateAsync,
   fetchUserInfoAsync,
 } from 'store/mapModule/reducer';
 import {
@@ -91,6 +92,13 @@ const PostList: React.FC<PostListPorps> = ({
     [dispatch, setNonce, updateList],
   );
 
+  const handleTranslate = useCallback(
+    id => {
+      dispatch(fetchPostTranslateAsync(id));
+    },
+    [dispatch],
+  );
+
   return (
     <ArticleListBox>
       <List
@@ -145,6 +153,7 @@ const PostList: React.FC<PostListPorps> = ({
                 }}
                 callback={(item: any, type: MoreOperatorEnum) => {
                   handleUpdateList(item, type);
+                  handleTranslate(item.id);
                 }}
               />
               <MentionOperator
@@ -161,6 +170,7 @@ const PostList: React.FC<PostListPorps> = ({
                   ...map[item.id],
                 }}
                 callback={(item: any, type?: MoreOperatorEnum) => {
+                  handleTranslate(item.id);
                   handleUpdateList(item, type);
                 }}
               />

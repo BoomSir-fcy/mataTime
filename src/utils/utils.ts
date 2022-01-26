@@ -10,3 +10,9 @@ export const getPostBLen = (str): number => {
   return `${str}`.length;
   // return str.replace(/[^\x00-\xff]/g, '01').length;
 };
+
+export const isEnglishContent = (content) => {
+  const bLen = getBLen(content)
+  const len = getPostBLen(content)
+  return len / bLen > 0.8
+}

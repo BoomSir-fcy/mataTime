@@ -16,12 +16,14 @@ import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { stat } from 'fs';
 import { MapModuleState } from 'store/types';
+import { FetchStatus } from 'config/types';
 
 const initialState: MapModuleState = {
   postMap: {},
   userMap: {},
   postStatusMap: {},
   userStatusMap: {},
+  postTranslateMap: {},
   unFollowUsersIds: [],
   blockUsersIds: [],
   deletePostIds: [],
@@ -65,6 +67,50 @@ export const fetchUserInfoAsync =
     }
   };
 
+export const fetchPostTranslateAsync =
+  (id: number) => async (dispatch, getState) => {
+    dispatch(
+      setUserInfo({
+        id,
+        content: '',
+        status: FetchStatus.SUCCESS
+      }),
+    );
+    try {
+      const res = await Api.HomeApi.getPostTranslateById({
+        pids: id,
+        target: 'zh',
+        source: '',
+      });
+      if (Api.isSuccess(res)) {
+        dispatch(
+          setUserInfo({
+            id,
+            data: res.data,
+            status: FetchStatus.SUCCESS
+          }),
+        );
+      } else {
+        dispatch(
+          setUserInfo({
+            id,
+            data: {},
+            status: FetchStatus.FAILED
+          }),
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(
+        setUserInfo({
+          id,
+          data: {},
+          status: FetchStatus.FAILED
+        }),
+      );
+    }
+  };
+
 
 export const Post = createSlice({
   name: 'post',
@@ -85,6 +131,17 @@ export const Post = createSlice({
         ...state.userMap,
         [id]: {
           ...userInfo,
+        },
+      };
+    },
+    setPostTranslate: (state, { payload }) => {
+      const { id, data, ...info } = payload;
+      state.userMap = {
+        ...state.userMap,
+        [id]: {
+          content: data[id],
+          ...info,
+          ...state.userMap[id],
         },
       };
     },
