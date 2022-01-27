@@ -4,7 +4,7 @@ import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Flex, Input } from 'uikit';
 import { useImmer } from 'use-immer';
-import { FormFlex, FormItem, Label } from './style';
+import { FormFlex, FormItem, InputPanelStyle, Label } from './style';
 
 type InfoParams = {
   name: string;
@@ -36,17 +36,22 @@ const TribeInfo = React.forwardRef((props, ref) => {
       <FormItem>
         <Label required>{t('部落名称')}</Label>
         <Flex flexDirection='column'>
-          <Input
-            value={state.name}
-            maxLength={15}
-            // isWarning={!/[0-9a-zA-Z\u4e00-\u9fa5]{4,15}/.test(state.name)}
-            pattern='[0-9a-zA-Z\u4e00-\u9fa5]{4,15}'
-            onChange={e =>
-              setState(p => {
-                p.name = e.target.value;
-              })
-            }
-          />
+          <InputPanelStyle>
+            <Input
+              noShadow
+              required
+              scale='sm'
+              maxLength={15}
+              pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{4,15}$'
+              value={state.name}
+              onChange={e => {
+                const val = e.target.value;
+                setState(p => {
+                  p.name = val;
+                });
+              }}
+            />
+          </InputPanelStyle>
           <Text mt='10px' small color='textTips'>
             {t('4~15个字符，支持中英文、数字')}
           </Text>
@@ -63,6 +68,7 @@ const TribeInfo = React.forwardRef((props, ref) => {
       <FormItem>
         <Label required>{t('部落简介')}</Label>
         <textarea
+          required
           value={state.introduction}
           placeholder={t('请填写部落的简介介绍')}
           maxLength={140}

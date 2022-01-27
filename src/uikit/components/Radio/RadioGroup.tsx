@@ -18,6 +18,7 @@ interface RadioItemProps extends RadioProps {
 }
 
 export const RadioItem: React.FC<RadioItemProps> = ({
+  scale = 'sm',
   value,
   label,
   checked,
@@ -25,16 +26,16 @@ export const RadioItem: React.FC<RadioItemProps> = ({
 }) => {
   const radioId = `radio_${value}_${Date.now()}`;
   return (
-    <Flex mr='20px'>
+    <Flex mr='20px' alignItems='center'>
       <Radio
-        scale='sm'
+        scale={scale}
         type='radio'
         id={radioId}
         checked={checked}
         onChange={onChange}
         value={value}
       />
-      <label htmlFor={radioId}>
+      <label htmlFor={radioId} style={{ minWidth: '50px', flex: 1 }}>
         <Text ml='12px'>{label}</Text>
       </label>
     </Flex>

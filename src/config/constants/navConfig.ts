@@ -223,7 +223,7 @@ export const menuNavConfig: MenuNavConfig[] = [
             path: '/me/tribe/member-management',
             hideRight: true,
           },
-        ]
+        ],
       },
       {
         icon: 'icon-e31guanzhu',
@@ -357,7 +357,13 @@ export const hideLeftNavPath = (() => {
 
 export const hideSidebarPath = (() => {
   return getHidePath(
-    ['/task/invite', '/task/invites', '/task/friendsList', '/task/rankingList'],
+    [
+      '/task/invite',
+      '/task/invites',
+      '/task/friendsList',
+      '/task/rankingList',
+      '/tribe/create',
+    ],
     menuNavConfig,
     'hideRight',
   );

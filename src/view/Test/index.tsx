@@ -4,7 +4,7 @@ import { Button, Box, Text, Toggle, Card, Flex, Input } from 'uikit';
 import { IM } from 'utils';
 import { languagesOptions } from 'config/localization';
 import { useTranslation } from 'contexts/Localization';
-import { Select } from 'components';
+import { ModalWrapper, Select } from 'components';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { toast } from 'react-toastify';
 import { Http } from 'apis/http';
@@ -24,12 +24,12 @@ const CardStyled1 = styled(Card)`
 const CardStyled2 = styled(Card)`
   background: ${({ theme }) => theme.colors.backgroundLight};
 `;
-
 const Test = () => {
   const { t } = useTranslation();
   const [languange, setUseLanguage] = useLanguange();
   const [isDark, toggleThemeHandle] = useThemeManager();
   const [inputVal, setInputVal] = useState<string>('');
+  const [visible, setVisible] = useState(false);
 
   const handleRecharge = async () => {
     try {
@@ -71,6 +71,28 @@ const Test = () => {
 
   return (
     <StyledNotFound>
+      <Box>
+        <Button
+          onClick={() => {
+            setVisible(true);
+          }}
+        >
+          点击出现结果页
+        </Button>
+        <ModalWrapper
+          creactOnUse
+          customizeTitle
+          shouldCloseOnOverlayClick={false}
+          visible={visible}
+          setVisible={() => {
+            setVisible(false);
+          }}
+        >
+          <Flex justifyContent='center'>
+            <Text>哈哈哈哈哈哈哈</Text>
+          </Flex>
+        </ModalWrapper>
+      </Box>
       <Flex>
         <Card padding='50px'>1</Card>
         <CardStyled1 margin='0 20px' padding='50px'>
