@@ -636,6 +636,7 @@
   "verify":"验证",
   "submit": "提交",
   "verifyError":"验证码错误",
+  "verifyText":"你的发帖过于频繁，请输入验证码。",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",

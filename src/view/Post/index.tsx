@@ -7,8 +7,10 @@ import { useToast } from 'hooks';
 import { fetchThunk, useStore } from 'store';
 import { Api } from 'apis';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { useTranslation } from 'contexts/Localization';
 
 const Post = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const history = useHistory();
   const postParams = useStore(p => p.post);
@@ -60,7 +62,7 @@ const Post = () => {
           },
         });
       } else if (res.code === 30004020) {
-        toastError('验证码错误');
+        toastError(t('verifyError'));
         verifyRef.current?.reload();
       }
     } catch (error) {
