@@ -41,7 +41,7 @@ export const Forward: React.FC<{
         <Text color='textTips'>{t('Repost')}</Text>
       </Rows>
       <Rows>
-        <Icon name='icon-retweet' margin='0 5px 0 0' color='textTips' />
+        <Icon name='icon-bianji' margin='0 5px 0 0' color='textTips' />
         <Text color='textTips'>{t('Quote Post')}</Text>
       </Rows>
     </PopupContent>,
