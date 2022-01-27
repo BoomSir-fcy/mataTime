@@ -60,6 +60,7 @@ export const useFetchAutoPostTranslate = () => {
           ids: needTranslatePostIds,
           data: {},
           status: FetchStatus.NOT_FETCHED,
+          showTranslate: false,
         }),
       );
     }

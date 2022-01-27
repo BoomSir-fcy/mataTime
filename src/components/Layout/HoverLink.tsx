@@ -19,18 +19,11 @@ export const HoverLink: React.FC<LinkProps> = ({ children, ...props }) => {
   return (
     <HoverLinkStyled
       onDragStart={event => {
-        // console.log('onDragStart');
         setDraging(true);
         event.preventDefault();
       }}
-      // onDragOver={}
-      // onDragOver={() => {
-      //   console.log('onDragOver');
-      //   setDraging(false);
-      // }}
       {...props}
       onClick={event => {
-        // console.log(draging, 'draging');
         if (draging) {
           setDraging(false);
           event.preventDefault();

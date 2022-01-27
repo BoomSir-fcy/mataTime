@@ -42,7 +42,6 @@ export const fetchPostAsync = createAsyncThunk(
     // dispatch(setLoading(false));
     if (Api.isSuccess(response)) {
       const ids = checkTranslateIds(response.data.List || [])
-      console.log(ids)
       dispatch(addTranslateIds(ids))
       return {
         list: response.data.List,

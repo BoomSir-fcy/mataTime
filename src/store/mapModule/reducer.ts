@@ -21,6 +21,7 @@ import { MapModuleState } from 'store/types';
 import { FetchStatus } from 'config/types';
 import { getLanguageCodeFromLS } from 'contexts/Localization/helpers';
 import { EN } from 'config/localization';
+import checkTranslateIds from 'utils/checkTranslateIds';
 
 const initialState: MapModuleState = {
   postMap: {},
@@ -49,6 +50,8 @@ export const fetchPostDetailAsync =
             post: detailRes.data,
           }),
         );
+        const ids = checkTranslateIds([detailRes.data])
+        dispatch(addTranslateIds(ids))
       }
     } catch (error) {
       console.error(error);

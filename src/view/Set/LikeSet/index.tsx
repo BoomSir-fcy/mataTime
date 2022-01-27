@@ -72,7 +72,6 @@ const LikeSet: React.FC = () => {
   };
 
   React.useEffect(() => {
-    console.log(userInfo, 'userInfo');
     // 1允许，2不允许
     setState(p => {
       p.translation = userInfo.translation === 1 ? true : false;

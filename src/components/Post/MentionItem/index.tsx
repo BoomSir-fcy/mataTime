@@ -27,7 +27,10 @@ import moreIcon from 'assets/images/social/more.png';
 import { usePostTranslateMap } from 'store/mapModule/hooks';
 import { FetchStatus } from 'config/types';
 import { useDispatch } from 'react-redux';
-import { changePostTranslateState } from 'store/mapModule/reducer';
+import {
+  changePostTranslateState,
+  fetchPostTranslateAsync,
+} from 'store/mapModule/reducer';
 
 const PopupButton = styled(Flex)`
   align-items: center;
@@ -75,7 +78,11 @@ const MentionItem: React.FC<MentionItemProps> = ({
         size={size}
         itemData={itemData}
         postUid={postUid}
-        showTranslateIcon={!showTranslate && !!translateData}
+        showTranslateIcon={
+          !showTranslate &&
+          translateData &&
+          translateData?.status !== FetchStatus.NOT_FETCHED
+        }
         showTranslate={translateData?.showTranslate}
         callback={(data: any, type: MoreOperatorEnum) => {
           callback(data, type);
@@ -127,6 +134,9 @@ const MentionItem: React.FC<MentionItemProps> = ({
                 onClick={e => {
                   e.stopPropagation();
                   e.preventDefault();
+                  if (translateData.status === FetchStatus.NOT_FETCHED) {
+                    dispatch(fetchPostTranslateAsync([itemData.id]));
+                  }
                   dispatch(
                     changePostTranslateState({
                       id: itemData.id,

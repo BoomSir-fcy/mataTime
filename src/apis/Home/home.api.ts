@@ -62,7 +62,6 @@ export class HomeApi extends Http {
       },
       { arrayFormat: 'repeat' },
     );
-    console.log(paramsStr)
     const res = await this.get(`/v1/post/translation?${paramsStr}`);
     return res;
   }

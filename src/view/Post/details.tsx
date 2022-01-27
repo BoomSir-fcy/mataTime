@@ -19,7 +19,10 @@ import MentionItem from 'components/Post/MentionItem';
 import MentionOperator from 'components/Post/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { Spinner, Empty } from 'uikit';
-import { usePostDetailById } from 'store/mapModule/hooks';
+import {
+  useFetchAutoPostTranslate,
+  usePostDetailById,
+} from 'store/mapModule/hooks';
 import { useDispatch } from 'react-redux';
 import {
   fetchPostDetailAsync,
@@ -39,6 +42,7 @@ type Iprops = {
 export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { toastSuccess } = useToast();
+  useFetchAutoPostTranslate();
   // const [itemData, setItemData] = useState<any>({
   //   id: 0,
   // });
