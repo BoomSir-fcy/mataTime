@@ -22,6 +22,9 @@ const dispatchHttpErrorEvent = (data: Api.Error) => {
   }
   // 任务签到
   if (data?.code === ResponseCode.TASK_SIGN_IN) return;
+  // 弹出验证码
+  if (data?.code === ResponseCode.ADD_POST_VERIFY) return;
+  if (data?.code === ResponseCode.ADD_POST_VERIFY_ERROR) return;
   // 注册查询
   if (data?.code === ResponseCode.SIGININVERIFY) return;
   if (data?.code !== 1) {

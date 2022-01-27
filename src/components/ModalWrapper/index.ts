@@ -8,3 +8,4 @@ export * from './CancelAttentionModal';
 export * from './CommonInquiryModal';
 export * from './CommentModal';
 export * from './shieldUserModal';
+export * from './verifyCodeModal';

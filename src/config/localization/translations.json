@@ -644,6 +644,9 @@
   "allow_watch_fans": "Whether to allow others to watch my followers",
   "noRecommendations": "No recommendations",
   "A total of 1 replies": "%value% total replies",
+  "verify":"Verify",
+  "submit": "Submit",
+  "verifyError":"Verification code error",
   "******end*****@kksam 2021-12-29********": "翻译结束",
   "*************HTTP-ERROR start******": "*************HTTP-ERROR start******",
   "fanyi": "fanyi",
@@ -717,5 +720,7 @@
   "http-error-30001011": "can not block users repeatedly",
   "http-error-30008004": "User does not allow others to view his watchlist",
   "http-error-30008005": "User does not allow others to view his followers list",
+  "http-error-30004019": "The interval between posts is too fast, please enter the verification code",
+  "http-error-30004020": "Verification code error",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }
