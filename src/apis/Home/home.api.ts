@@ -36,6 +36,18 @@ export class HomeApi extends Http {
     return res;
   }
 
+  // 文章列表
+  async createV2Article(params: Api.Home.createArticle) {
+    const res = await this.post('/v2/post/create', params);
+    return res;
+  }
+
+  // 获取验证码
+  async getVerifyCode() {
+    const res = await this.get('/v1/post/get_captcha');
+    return res;
+  }
+
   // 文章详情
   async articleFindById(params: Api.Home.articleFindById) {
     const res = await this.get('/v1/post/info', params);
