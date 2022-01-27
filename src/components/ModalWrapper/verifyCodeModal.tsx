@@ -47,7 +47,7 @@ export const VerifyCodeComponent = (
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

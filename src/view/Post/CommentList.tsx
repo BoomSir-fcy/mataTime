@@ -169,7 +169,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
           //   row?.comment_list_resp?.list,
           //   res.data?.list,
           // );
-          // console.log(_.uniqWith(subCommentList, _.isEqual));
           let comment_list_resp = {
             ...row.comment_list_resp,
             page: params.page,

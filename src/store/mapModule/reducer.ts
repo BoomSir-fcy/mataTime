@@ -81,7 +81,7 @@ export const fetchPostTranslateAsync =
     try {
       const res = await Api.HomeApi.getPostTranslateById({
         pids: ids,
-        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh',
+        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
         source: '',
       });
       if (Api.isSuccess(res)) {
