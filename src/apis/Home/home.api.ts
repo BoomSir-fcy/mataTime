@@ -44,7 +44,14 @@ export class HomeApi extends Http {
 
   // 翻译文章
   async getPostTranslateById(params: Api.Home.PostTranslateParams) {
-    const res = await this.get('/v1/post/translation', params);
+    const paramsStr = qs.stringify(
+      {
+        ...params,
+      },
+      { arrayFormat: 'repeat' },
+    );
+    console.log(paramsStr)
+    const res = await this.get(`/v1/post/translation?${paramsStr}`);
     return res;
   }
 

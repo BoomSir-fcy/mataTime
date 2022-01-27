@@ -1,7 +1,11 @@
+import { HomeApi } from 'apis/Home';
 import { FetchStatus } from 'config/types';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { MapModuleState } from '../types';
+import { removeTranslateIds } from './actions';
+import { fetchPostTranslateAsync, setPostTranslate } from './reducer';
+import { loginReducer, loginAction, Login, fetchUserInfoAsync } from '../login';
 
 export const useMapModule = () => {
   const mapModule = useSelector(
@@ -26,15 +30,38 @@ export const usePostDetailById = id => {
   }, [postMap, id]);
 };
 
-export const usePostTranslateMap = (translate, id) => {
+export const usePostTranslateMap = id => {
   const { postTranslateMap } = useMapModule();
 
   return useMemo(() => {
-    return (
-      postTranslateMap[id] || {
-        status: FetchStatus.NOT_FETCHED,
-        content: '',
-      }
-    );
+    return postTranslateMap[id] || null;
   }, [postTranslateMap, id]);
+};
+
+export const useFetchAutoPostTranslate = () => {
+  const { postMap, needTranslatePostIds } = useMapModule();
+  const userInfo = useSelector(
+    (state: { loginReducer: Login }) => state.loginReducer.userInfo,
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (userInfo.translation === 1 && needTranslatePostIds.length) {
+      const fetchIds = [];
+      needTranslatePostIds.forEach(id => {
+        if (!postMap[id]) {
+          fetchIds.push(id);
+        }
+      });
+      dispatch(removeTranslateIds(needTranslatePostIds));
+      dispatch(fetchPostTranslateAsync(fetchIds));
+    } else if (needTranslatePostIds.length) {
+      dispatch(
+        setPostTranslate({
+          ids: needTranslatePostIds,
+          data: {},
+          status: FetchStatus.NOT_FETCHED,
+        }),
+      );
+    }
+  }, [needTranslatePostIds, dispatch, postMap, userInfo.translation]);
 };

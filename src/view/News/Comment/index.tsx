@@ -84,20 +84,6 @@ const NewsComment: React.FC<any> = props => {
               href={`/articledetils/${item.post?.post_id}?comment_id=${item.comment.comment_id}`}
             >
               <Box>
-                {/* <FollowPopup uid={item.send_uid}>
-                  <Text
-                    as='span'
-                    maxWidth='100px'
-                    ellipsis
-                    color='textPrimary'
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {item.send_name}&nbsp;
-                  </Text>
-                </FollowPopup>
-                <Text as='span' ellipsis mr='0.5em'>
-                  {t('commented: ')}
-                </Text> */}
                 <NoneEventsText as='span' ellipsis maxLine={2}>
                   <ContentParsing content={item.comment.comment} />
                 </NoneEventsText>
@@ -105,61 +91,6 @@ const NewsComment: React.FC<any> = props => {
             </MessageCard>
           );
         })}
-        {/* {listData.map(item => {
-          if (item?.post?.content_status === 1) {
-            return (
-              <CommentItemWrapper key={item.id}>
-                <MentionItemUser
-                  more={false}
-                  itemData={{
-                    ...item,
-                    ...item.post,
-                    ...item.comment,
-                    user_name: item.send_name,
-                    user_avator_url: item.send_image,
-                    uid: item.send_uid,
-                    user_address: item.send_address
-                  }}
-                  callback={data => {
-                    updateList(data);
-                  }}
-                />
-
-                {item.comment.comment_user_name ? (
-                  <div className="reply-wrapper">
-                    {t('newsCommentReply')}
-                    <a>@{item.comment.comment_user_name}</a>
-                    <div>
-                      <ContentParsing
-                        content={item.comment.comment}
-                      ></ContentParsing>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="reply-wrapper">
-                    <ContentParsing
-                      content={item.comment.comment}
-                    ></ContentParsing>
-                  </div>
-                )}
-                <div className="comment-content">
-                  <MentionItem
-                    itemData={{
-                      ...item.comment,
-                      ...item.post,
-                      add_time: item.post.add_time_desc,
-                      user_name: item.post.nick_name,
-                      user_avator_url: item.post.nft_image
-                    }}
-                    {...props}
-                    more={false}
-                    size={'small'}
-                  />
-                </div>
-              </CommentItemWrapper>
-            );
-          }
-        })} */}
       </List>
     </NewsCommentWrapper>
   );

@@ -13,7 +13,8 @@ import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
 import { PageStyle } from './style';
 
-import MentionItem from 'view/News/components/MentionItem';
+// import MentionItem from 'view/News/components/MentionItem';
+import MentionItem from 'components/Post/MentionItem';
 // import MentionOperator from 'view/News/components/MentionOperator';
 import MentionOperator from 'components/Post/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
@@ -103,8 +104,11 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   // 更新列表
   const handleUpdateList = useCallback(
     (newItem: any, type: MoreOperatorEnum = null) => {
-      // 折叠
-      if (type === MoreOperatorEnum.EXPAND) {
+      // 折叠和翻译
+      if (
+        type === MoreOperatorEnum.EXPAND ||
+        type === MoreOperatorEnum.TRANSLATE
+      ) {
         setNonce(prep => prep + 1);
         return;
       }
@@ -160,6 +164,7 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
               }}
               callback={handleUpdateList}
               more={true}
+              showTranslate
             />
             <MentionOperator
               replyType='twitter'

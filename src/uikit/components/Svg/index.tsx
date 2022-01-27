@@ -86,6 +86,7 @@ export { default as SearchIcon } from './Icons/Search';
 export { default as SmallDotIcon } from './Icons/SmallDot';
 export { default as StarFillIcon } from './Icons/StarFill';
 export { default as StarLineIcon } from './Icons/StarLine';
+export { default as TranslateIcon } from './Icons/TranslateIcon';
 export { default as SwapIcon } from './Icons/Swap';
 export { default as SwapVertIcon } from './Icons/SwapVert';
 export { default as SyncAltIcon } from './Icons/SyncAlt';

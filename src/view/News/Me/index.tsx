@@ -96,42 +96,6 @@ const NewsMe: React.FC<any> = props => {
             </MessageCard>
           );
         })}
-        {/* {listData.map(item => {
-          if (item?.post?.content_status === 1) {
-            return (
-              <MeItemWrapper key={item.id}>
-                <MentionItem
-                  more={false}
-                  itemData={{
-                    ...item,
-                    ...item.comment,
-                    ...item.post,
-                    user_name: item.send_name,
-                    user_avator_url: item.send_image,
-                    uid: item.send_uid
-                  }}
-                  {...props}
-                  callback={(data, type: MoreOperatorEnum) => {
-                    updateList(data, type);
-                  }}
-                />
-                <MentionOperator
-                  replyType={'twitter'}
-                  hasLike={false}
-                  postId={item.post.post_id}
-                  itemData={{
-                    ...item,
-                    ...item.post,
-                    user_avator_url: item.post.nft_image
-                  }}
-                  callback={(item: any, type?: MoreOperatorEnum) => {
-                    updateList(item, type);
-                  }}
-                />
-              </MeItemWrapper>
-            );
-          }
-        })} */}
       </List>
     </NewsMeWrapper>
   );

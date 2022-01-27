@@ -11,12 +11,16 @@ import {
   removeBlockUserIds,
 
   addDeletePostId,
+  addTranslateIds,
+  removeTranslateIds,
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { stat } from 'fs';
 import { MapModuleState } from 'store/types';
 import { FetchStatus } from 'config/types';
+import { getLanguageCodeFromLS } from 'contexts/Localization/helpers';
+import { EN } from 'config/localization';
 
 const initialState: MapModuleState = {
   postMap: {},
@@ -24,6 +28,7 @@ const initialState: MapModuleState = {
   postStatusMap: {},
   userStatusMap: {},
   postTranslateMap: {},
+  needTranslatePostIds: [],
   unFollowUsersIds: [],
   blockUsersIds: [],
   deletePostIds: [],
@@ -68,32 +73,26 @@ export const fetchUserInfoAsync =
   };
 
 export const fetchPostTranslateAsync =
-  (id: number) => async (dispatch, getState) => {
-    dispatch(
-      setUserInfo({
-        id,
-        content: '',
-        status: FetchStatus.SUCCESS
-      }),
-    );
+  (ids: number[]) => async (dispatch, getState) => {
+    dispatch(setPostTranslate({ ids, data: {}, status: FetchStatus.LOADING, showTranslate: true  }))
     try {
       const res = await Api.HomeApi.getPostTranslateById({
-        pids: id,
-        target: 'zh',
+        pids: ids,
+        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh',
         source: '',
       });
       if (Api.isSuccess(res)) {
         dispatch(
-          setUserInfo({
-            id,
+          setPostTranslate({
+            ids,
             data: res.data,
             status: FetchStatus.SUCCESS
           }),
         );
       } else {
         dispatch(
-          setUserInfo({
-            id,
+          setPostTranslate({
+            ids,
             data: {},
             status: FetchStatus.FAILED
           }),
@@ -102,8 +101,8 @@ export const fetchPostTranslateAsync =
     } catch (error) {
       console.error(error);
       dispatch(
-        setUserInfo({
-          id,
+        setPostTranslate({
+          ids,
           data: {},
           status: FetchStatus.FAILED
         }),
@@ -135,14 +134,28 @@ export const Post = createSlice({
       };
     },
     setPostTranslate: (state, { payload }) => {
-      const { id, data, ...info } = payload;
-      state.userMap = {
-        ...state.userMap,
-        [id]: {
+      const { ids, data, ...info } = payload;
+      const datas = {}
+      ids.forEach(id => {
+        datas[id] = {
+          ...state.postTranslateMap[id],
           content: data[id],
           ...info,
-          ...state.userMap[id],
-        },
+        }
+      })
+      state.postTranslateMap = {
+        ...state.postTranslateMap,
+        ...datas,
+      };
+    },
+    changePostTranslateState: (state, { payload }) => {
+      const { id, showTranslate } = payload
+      state.postTranslateMap = {
+        ...state.postTranslateMap,
+        [id]: {
+          ...state.postTranslateMap[id],
+          showTranslate, // 是否显示翻译
+        }
       };
     },
   },
@@ -181,9 +194,15 @@ export const Post = createSlice({
       .addCase(addDeletePostId, (state, { payload }) => {
         state.deletePostIds = [...state.deletePostIds, payload]
       })
+      .addCase(addTranslateIds, (state, { payload }) => {
+        state.needTranslatePostIds = [...state.needTranslatePostIds, ...payload]
+      })
+      .addCase(removeTranslateIds, (state, { payload }) => {
+        state.needTranslatePostIds = state.needTranslatePostIds.filter(item => !payload.includes(item))
+      })
   },
 });
 
-export const { setPostDetail, setUserInfo } = Post.actions;
+export const { setPostDetail, setUserInfo, setPostTranslate, changePostTranslateState } = Post.actions;
 
 export default Post.reducer;

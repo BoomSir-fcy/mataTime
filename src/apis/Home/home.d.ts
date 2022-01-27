@@ -18,7 +18,7 @@ declare namespace Api {
     }
 
     interface PostTranslateParams {
-      pids: number;
+      pids: number[];
       target: string;
       source?: string;
     }

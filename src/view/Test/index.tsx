@@ -93,7 +93,7 @@ const Test = () => {
       <Input onChange={handleInputChange} value={inputVal} />
       <Box>
         {/* <Text>isChinese: {inputVal && String(isChinese(inputVal))}</Text> */}
-        <Text>isEnglish: {inputVal && String(isEnglishContent(inputVal))}</Text>
+        <Text>isEnglish: {inputVal && String(isEnglish(inputVal))}</Text>
       </Box>
       <Box>
         <Text>{t('Example: This is a passage')}</Text>

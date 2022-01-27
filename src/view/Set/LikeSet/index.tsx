@@ -10,6 +10,9 @@ import {
 } from 'store/app/hooks';
 import { Flex, Box, Text, Card, Toggle } from 'uikit';
 import { Select } from 'components';
+import { Api } from 'apis';
+import { Dispatch, storeAction, useStore } from 'store';
+import { useDispatch } from 'react-redux';
 
 const NoticeSetBox = styled(Card)`
   /* height: 700px; */
@@ -35,22 +38,46 @@ const Column = styled(Flex)`
 const LikeSet: React.FC = () => {
   const [isDark, toggleThemeHandle] = useThemeManager();
   const [notification, setNotification] = useNotification();
+  const dispatch = useDispatch();
+  const userInfo = useStore(p => p.loginReducer.userInfo);
   // const [languange, setUseLanguage] = useLanguange();
   // const { setLanguage, currentLanguage } = useTranslation();
 
   const [state, setState] = useImmer({
     isDeep: true,
     isRemind: true,
-    isTranslation: false,
+    translation: false,
   });
   const { t, currentLanguage, setLanguage } = useTranslation();
 
-  // 自动翻译
-  const setTranslation = () => {
-    setState(p => {
-      p.isTranslation = !p.isTranslation;
-    });
+  const updateAllowStatus = async (filed: string) => {
+    try {
+      const res = await Api.UserApi.updateUserInfo({
+        ...userInfo,
+        [filed]: state[filed] ? 2 : 1,
+      });
+      if (Api.isSuccess(res)) {
+        setState(p => {
+          p[filed] = state[filed] ? false : true;
+        });
+        dispatch(
+          storeAction.changeUpdateProfile({
+            ...res.data,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  React.useEffect(() => {
+    console.log(userInfo, 'userInfo');
+    // 1允许，2不允许
+    setState(p => {
+      p.translation = userInfo.translation === 1 ? true : false;
+    });
+  }, [userInfo?.translation, setState]);
 
   return (
     <NoticeSetBox isBoxShadow>
@@ -79,22 +106,6 @@ const LikeSet: React.FC = () => {
             {t('settingLanguageText')}
           </Text>
         </Rows>
-        {/* <Select
-          options={[
-            {
-              id: 1,
-              label: 'English（EN）',
-              value: languages['en-US'],
-            },
-            {
-              id: 2,
-              label: '繁體中文（CN）',
-              value: languages['zh-TW'],
-            },
-          ]}
-          defaultId={languange.id} // XXX: 屏蔽中文
-          onChange={(val: any) => setLanguage(val)}
-        /> */}
         <Select
           options={languagesOptions}
           defaultId={currentLanguage.code}
@@ -102,15 +113,20 @@ const LikeSet: React.FC = () => {
           onChange={(val: any) => setLanguage(val.value)}
         />
       </Column>
-      {/* <Column>
+      <Column>
         <Rows>
-          <Title>信息自动翻译</Title>
-          <Text color="textTips" mt="11px">
-            浏览其他人的内容时，自动翻译成你选择的默认显示语言{' '}
+          <Title>{t('Automatic content translation')}</Title>
+          <Text color='textTips' mt='11px'>
+            {t(
+              "Automatically translate into the default display language of your choice when browsing other people's content",
+            )}
           </Text>
         </Rows>
-        <Toggle checked={state.isTranslation} onClick={setTranslation} />
-      </Column> */}
+        <Toggle
+          checked={state.translation}
+          onClick={() => updateAllowStatus('translation')}
+        />
+      </Column>
     </NoticeSetBox>
   );
 };

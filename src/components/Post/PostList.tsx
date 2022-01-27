@@ -22,7 +22,7 @@ import {
 import { MeItemWrapper } from './styled';
 import MentionItem from './MentionItem';
 import MentionOperator from './MentionOperator';
-import { useMapModule } from 'store/mapModule/hooks';
+import { useFetchAutoPostTranslate, useMapModule } from 'store/mapModule/hooks';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -57,12 +57,16 @@ const PostList: React.FC<PostListPorps> = ({
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
+  useFetchAutoPostTranslate();
 
   // 更新列表
   const handleUpdateList = useCallback(
     (newItem: any, type: MoreOperatorEnum = null) => {
-      // 折叠
-      if (type === MoreOperatorEnum.EXPAND) {
+      // 折叠和翻译
+      if (
+        type === MoreOperatorEnum.EXPAND ||
+        type === MoreOperatorEnum.TRANSLATE
+      ) {
         setNonce(prep => prep + 1);
         return;
       }
@@ -94,7 +98,7 @@ const PostList: React.FC<PostListPorps> = ({
 
   const handleTranslate = useCallback(
     id => {
-      dispatch(fetchPostTranslateAsync(id));
+      dispatch(fetchPostTranslateAsync([id]));
     },
     [dispatch],
   );
@@ -153,7 +157,6 @@ const PostList: React.FC<PostListPorps> = ({
                 }}
                 callback={(item: any, type: MoreOperatorEnum) => {
                   handleUpdateList(item, type);
-                  handleTranslate(item.id);
                 }}
               />
               <MentionOperator
@@ -171,7 +174,6 @@ const PostList: React.FC<PostListPorps> = ({
                 }}
                 callback={(item: any, type?: MoreOperatorEnum) => {
                   handleTranslate(item.id);
-                  handleUpdateList(item, type);
                 }}
               />
             </MeItemWrapper>

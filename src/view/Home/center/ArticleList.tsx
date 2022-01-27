@@ -94,63 +94,6 @@ const ArticleComponents = (props, ref) => {
     }
   }, [user_tags1, user_tags2, props.filterValObj.attention]);
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    if (type) {
-      return;
-    }
-    if (
-      // type === MoreOperatorEnum.FOLLOW ||
-      type === MoreOperatorEnum.CANCEL_FOLLOW ||
-      type === MoreOperatorEnum.SETTOP ||
-      type === MoreOperatorEnum.CANCEL_SETTOP
-      // type === MoreOperatorEnum.COMMONT ||
-      // type === MoreOperatorEnum.BLOCKUSER
-    ) {
-      setIsEnd(false);
-      Getlist(1);
-      return;
-    }
-    // 折叠
-    if (type === MoreOperatorEnum.EXPAND) {
-      setNonce(prep => prep + 1);
-      return;
-    }
-
-    const handleChangeList =
-      type === MoreOperatorEnum.SHIELD || type === MoreOperatorEnum.DELPOST;
-    let arr = [];
-    list.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
-      }
-      if (
-        (item.id === newItem.id || item.user_id === newItem.user_id) &&
-        type === MoreOperatorEnum.FOLLOW
-      ) {
-        // 关注更新状态
-        obj = { ...item, is_attention: newItem.is_attention };
-      }
-      if (item.id === newItem.id && handleChangeList) {
-        // 屏蔽、删除
-      } else if (
-        item.user_id === newItem.user_id &&
-        type === MoreOperatorEnum.BLOCKUSER
-      ) {
-        // 屏蔽用户
-      } else {
-        arr.push(obj);
-      }
-    });
-    dispatch(storeAction.postUpdateArticle([...arr]));
-    if (handleChangeList) {
-      setNonce(prep => prep + 1);
-    }
-  };
-
-  // handleUpdateList = useCallback(() =>)
-
   React.useImperativeHandle(ref, () => ({
     reload(page: number) {
       return Getlist(page);
@@ -182,63 +125,6 @@ const ArticleComponents = (props, ref) => {
 
   return (
     <ArticleListBox>
-      {/* <List
-        loading={loading}
-        renderList={type => {
-          if (type === 1 && list?.length !== 0) {
-            return;
-          }
-          Getlist();
-        }}
-      >
-        {(renderList ?? []).map(item => (
-          <MeItemWrapper key={`${item.id}`}>
-            {
-              // 浏览自己的不扣费
-              currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle
-                  nonce={nonce}
-                  setNonce={setNonce}
-                  readType={ReadType.ARTICLE}
-                  articleId={item.id}
-                />
-              )
-            }
-            <MentionItem
-              {...props}
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
-                  ...item,
-                  post_id: item.id,
-                },
-                ...postMap[item.id],
-              }}
-              callback={(item: any, type: MoreOperatorEnum) => {
-                updateList(item, type);
-              }}
-            />
-            <MentionOperator
-              {...props}
-              replyType='twitter'
-              postId={item.id}
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
-                  ...item,
-                  post_id: item.id,
-                },
-                ...postMap[item.id],
-              }}
-              callback={(item: any, type?: MoreOperatorEnum) => {
-                updateList(item, type);
-              }}
-            />
-          </MeItemWrapper>
-        ))}
-      </List> */}
       <PostList
         map={postMap}
         list={renderList}
