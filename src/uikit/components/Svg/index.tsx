@@ -139,6 +139,7 @@ export { default as AnimationRingIcon } from './Icons/AnimationRing';
 export { default as bgCricle } from './Icons/bgCricle';
 export { default as centerCricle } from './Icons/centerCricle';
 export { BgSvg } from './Icons/RingPoint';
+export { default as FeaturedIcon } from './Icons/Featured';
 
 export { default as Svg } from './Svg';
 export type { SvgProps } from './types';

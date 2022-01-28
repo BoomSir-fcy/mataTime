@@ -21,6 +21,8 @@ const UserTitle = styled(Flex)`
   font-size: 18px;
   color: ${({ theme }) => theme.colors.white_black};
   .name {
+    font-size: 18px;
+    font-weight: bold;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -28,7 +30,9 @@ const UserTitle = styled(Flex)`
   }
 `;
 
-export const ProfileMenu = React.memo(() => {
+export const ProfileMenu: React.FC<{
+  ShowIcon?: boolean;
+}> = React.memo(({ ShowIcon = true }) => {
   const userInfo = useStore(p => p.loginReducer.userInfo);
   return (
     <React.Fragment>
@@ -38,7 +42,9 @@ export const ProfileMenu = React.memo(() => {
           <Content>
             <UserTitle>
               <Text className='name'>{userInfo.nick_name}</Text>
-              <Icon size={14} color='white_black' name='icon-shangjiantou' />
+              {ShowIcon && (
+                <Icon size={14} color='white_black' name='icon-shangjiantou' />
+              )}
             </UserTitle>
             <Text color='textTips'>@{shortenAddress(userInfo.address, 1)}</Text>
           </Content>

@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation, Link, useRouteMatch } from 'react-router-dom';
 import { Box, Text, Button, Flex, Card, Image } from 'uikit';
+import styled from 'styled-components';
 import { useTranslation } from 'contexts';
 import Crumbs from 'components/Layout/crumbs';
 import Tabs from 'components/Tabs';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import TradeCard from '../components/TradeCard';
+import FlexAutoWarpper from 'components/Layout/FlexAutoWarpper';
 
 // lable?: string
 // tLable?: string
 // value?: string | number
 // width?: string
 // [key: string]: any
+
+const PaddingFlex = styled(Flex)`
+  padding: 16px 10px;
+`;
+
 const tabDatas = [
   {
     tLable: 'Joined',
@@ -60,17 +67,19 @@ const Home = () => {
           </Link>
         </Flex>
       </Tabs>
-      <Flex flexWrap='wrap'>
-        <Link to={`${path}/detail`}>
-          <TradeCard />
-        </Link>
-        <Link to={`${path}/detail`}>
-          <TradeCard />
-        </Link>
-        <Link to={`${path}/detail`}>
-          <TradeCard />
-        </Link>
-      </Flex>
+      <PaddingFlex justifyContent='space-around' flexWrap='wrap'>
+        <FlexAutoWarpper lineMax={2}>
+          <Link to={`${path}/detail`}>
+            <TradeCard />
+          </Link>
+          <Link to={`${path}/detail`}>
+            <TradeCard />
+          </Link>
+          <Link to={`${path}/detail`}>
+            <TradeCard />
+          </Link>
+        </FlexAutoWarpper>
+      </PaddingFlex>
     </Box>
   );
 };
