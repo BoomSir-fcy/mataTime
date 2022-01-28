@@ -1,17 +1,16 @@
 import { getLanguageCodeFromLS } from "contexts/Localization/helpers";
 import { EN, ZHTW } from 'config/localization';
-import { isEnglishContent, isChineseContent } from "./utils";
+import { isEnglishContent, isChineseContent, getLanguageContent } from "./utils";
   
 const checkTranslateIds = (posts: Api.Home.post[], postIdKey = 'id') => {
   const codeFromStorage = getLanguageCodeFromLS();
   const ids = []
   posts.forEach(item => {
-    // console.log('isEnglishContent: ', isEnglishContent(item.content), item.content)
-    // console.log('isChineseContent: ', isChineseContent(item.content), item.content)
-    if (isEnglishContent(item.content) && codeFromStorage !== EN.locale) {
+    const { isChinese, isEnglish, isChineseRate, isEnglishRate } = getLanguageContent(item.content)
+    if (isEnglish && codeFromStorage !== EN.locale) {
       ids.push(item[postIdKey])
     }
-    if (isChineseContent(item.content) && codeFromStorage !== ZHTW.locale) {
+    if (isChinese && codeFromStorage !== ZHTW.locale) {
       ids.push(item[postIdKey])
     }
   })

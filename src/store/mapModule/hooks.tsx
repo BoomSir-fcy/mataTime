@@ -45,6 +45,7 @@ export const useFetchAutoPostTranslate = () => {
   );
   const dispatch = useDispatch();
   useEffect(() => {
+    // console.log(needTranslatePostIds, 'needTranslatePostIds');
     if (userInfo.translation === 1 && needTranslatePostIds.length) {
       const fetchIds = [];
       needTranslatePostIds.forEach(id => {

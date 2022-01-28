@@ -51,6 +51,7 @@ export const fetchPostDetailAsync =
           }),
         );
         const ids = checkTranslateIds([detailRes.data])
+        // console.log(ids, 'ids')
         dispatch(addTranslateIds(ids))
       }
     } catch (error) {

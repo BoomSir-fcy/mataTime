@@ -224,7 +224,7 @@ const Profile: React.FC<any> = props => {
   const dispatch = useDispatch();
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
 
   const { isMobile } = useMenuNav();
 

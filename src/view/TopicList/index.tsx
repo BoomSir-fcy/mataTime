@@ -16,6 +16,9 @@ import { ReadType } from 'hooks/imHooks/types';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import PostList from 'components/Post/PostList';
 import { useMapModule } from 'store/mapModule/hooks';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { addTranslateIds } from 'store/mapModule/actions';
+import { useDispatch } from 'react-redux';
 
 const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
@@ -35,8 +38,9 @@ const TopicList = props => {
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const dispatch = useDispatch();
 
   const { loading, page, totalPage, listData } = state;
 
@@ -61,6 +65,8 @@ const TopicList = props => {
             ? [...(res.data?.List || [])]
             : [...listData, ...(res.data?.List || [])];
         });
+        const ids = checkTranslateIds(res.data?.List || []);
+        dispatch(addTranslateIds(ids));
       }
     } catch (error) {
       console.error(error);

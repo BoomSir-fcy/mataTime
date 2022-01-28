@@ -39,7 +39,7 @@ const Collect = props => {
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
   const dispatch = useDispatch();
