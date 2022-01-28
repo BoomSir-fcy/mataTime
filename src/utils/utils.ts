@@ -14,16 +14,39 @@ export const getPostBLen = (str): number => {
 };
 
 export const isEnglishContent = (content) => {
+  // getLanguageContent(content)
   const sameContent = content.replace(CONTENT_KEYWORD_REGEXP, '')
   const filterEnglishWordContent = sameContent.replace(LETTER_ENGLISH_REGEXP, '')
   const sLen = getPostBLen(sameContent)
   const flen = getPostBLen(filterEnglishWordContent)
-  return flen / sLen < 0.5
+  // console.log('isEnglishContent', flen / sLen, content)
+  return flen / sLen < 0.8
 }
 export const isChineseContent = (content) => {
   const sameContent = content.replace(CONTENT_KEYWORD_REGEXP, '')
   const filterEnglishWordContent = sameContent.replace(CHINESE_WORD_REGEXP, '')
   const sLen = getPostBLen(sameContent)
   const flen = getPostBLen(filterEnglishWordContent)
-  return flen / sLen < 0.5
+  // console.log('isChineseContent', flen / sLen, content)
+  return flen / sLen < 0.9
+
 }
+
+// const getAllTextWithContent = (data, initVal) => {
+//   if (data.chi)
+// }
+
+export const getLanguageContent = (content) => {
+  try {
+    let arr = Array.isArray(JSON.parse(content))
+    ? JSON.parse(content)
+    : [];
+    console.log(arr)
+  } catch (error) {
+    
+  }
+}
+
+// let arr = Array.isArray(JSON.parse(props.content))
+// ? JSON.parse(props.content)
+// : [];

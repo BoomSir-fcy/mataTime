@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
@@ -14,6 +14,8 @@ import MentionOperator from 'view/News/components/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import PostList from 'components/Post/PostList';
+import { useMapModule } from 'store/mapModule/hooks';
 
 const TopicList = props => {
   const listRef: any = React.useRef<HTMLDivElement | null>();
@@ -123,10 +125,36 @@ const TopicList = props => {
       setNonce(prep => prep + 1);
     }
   };
+
+  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
+    useMapModule();
+
+  const renderList = useMemo(() => {
+    const resPost = listData.filter(item => {
+      return !deletePostIds.includes(item.id);
+    });
+    return resPost;
+  }, [listData, deletePostIds]);
+
   return (
     <Box key={props.location.key}>
       <Crumbs back centerTitle={`#${name}`} zIndex={1005} />
-      <List
+      <PostList
+        list={renderList}
+        map={postMap}
+        loading={loading}
+        isEnd={false}
+        getList={() => {
+          if (loading || page > totalPage) return;
+          Boolean(state.tagName) && state.tagName === name
+            ? getList()
+            : getList(1);
+        }}
+        updateList={() => {
+          console.debug('updateList');
+        }}
+      />
+      {/* <List
         ref={listRef}
         marginTop={0}
         loading={loading}
@@ -193,7 +221,7 @@ const TopicList = props => {
             />
           </MeItemWrapper>
         ))}
-      </List>
+      </List> */}
     </Box>
   );
 };

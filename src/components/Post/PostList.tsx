@@ -37,6 +37,7 @@ interface PostListPorps {
   isEnd: boolean;
   getList: (type?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
+  postIdKey?: string;
 }
 
 const PostList: React.FC<PostListPorps> = ({
@@ -46,6 +47,7 @@ const PostList: React.FC<PostListPorps> = ({
   isEnd,
   getList,
   updateList,
+  postIdKey = 'id',
 }) => {
   const [PostItemData, setPostItemData] = useState();
   const [isShileUser, setIsShileUser] = React.useState(false);
@@ -116,10 +118,10 @@ const PostList: React.FC<PostListPorps> = ({
       >
         {(list ?? []).map(item => (
           <HoverLink
-            key={item.id}
-            to={`/articledetils/${item.post_id || item.id}`}
+            key={item[postIdKey]}
+            to={`/articledetils/${item[postIdKey]}`}
           >
-            <MeItemWrapper key={`${item.id || item.post_id}`}>
+            <MeItemWrapper key={`${item[postIdKey]}`}>
               {
                 // 浏览自己的不扣费
                 currentUid?.uid !== item.user_id && (
@@ -127,7 +129,7 @@ const PostList: React.FC<PostListPorps> = ({
                     nonce={nonce}
                     setNonce={setNonce}
                     readType={ReadType.ARTICLE}
-                    articleId={item.id || item.post_id}
+                    articleId={item[postIdKey]}
                   />
                 )
               }
@@ -139,21 +141,53 @@ const PostList: React.FC<PostListPorps> = ({
                 }}
                 itemData={{
                   ...item,
-                  post_id: item.id,
                   post: {
                     ...item,
-                    post_id: item.id,
-                    ...map[item.id],
+                    ...map[item[postIdKey]],
+                    post_id: item[postIdKey],
+                    id: item[postIdKey],
+                    postId: item[postIdKey],
+                    is_like:
+                      map[item[postIdKey]]?.is_like ??
+                      item.is_like ??
+                      (item as any).like_status,
+                    user_id:
+                      map[item[postIdKey]]?.user_id ??
+                      item.user_id ??
+                      (item as any).uid,
+                    user_avator_url:
+                      map[item[postIdKey]]?.user_avator_url ??
+                      item.user_avator_url ??
+                      (item as any).nft_image,
                     is_attention:
                       userMap?.[item.user_id]?.is_attention ??
-                      map?.[item.id]?.is_attention ??
+                      map?.[item[postIdKey]]?.is_attention ??
                       item.is_attention,
                   },
-                  ...map[item.id],
+                  ...map[item[postIdKey]],
+                  post_id: item[postIdKey],
+                  postId: item[postIdKey],
+                  id: item[postIdKey],
                   is_attention:
                     userMap?.[item.user_id]?.is_attention ??
-                    map?.[item.id]?.is_attention ??
+                    map?.[item[postIdKey]]?.is_attention ??
                     item.is_attention,
+                  is_like:
+                    map[item[postIdKey]]?.is_like ??
+                    item.is_like ??
+                    (item as any).like_status,
+                  user_id:
+                    map[item[postIdKey]]?.user_id ??
+                    item.user_id ??
+                    (item as any).uid,
+                  user_avator_url:
+                    map[item[postIdKey]]?.user_avator_url ??
+                    item.user_avator_url ??
+                    (item as any).nft_image,
+                  add_time:
+                    map[item[postIdKey]]?.add_time ??
+                    item.add_time ??
+                    (item as any).add_time_desc,
                 }}
                 callback={(item: any, type: MoreOperatorEnum) => {
                   handleUpdateList(item, type);
@@ -161,19 +195,56 @@ const PostList: React.FC<PostListPorps> = ({
               />
               <MentionOperator
                 replyType='twitter'
-                postId={item.id}
+                postId={item[postIdKey]}
                 itemData={{
                   ...item,
-                  post_id: item.id,
                   post: {
                     ...item,
-                    post_id: item.id,
-                    ...map[item.id],
+                    ...map[item[postIdKey]],
+                    post_id: item[postIdKey],
+                    postId: item[postIdKey],
+                    id: item[postIdKey],
+                    is_like:
+                      map[item[postIdKey]]?.is_like ??
+                      item.is_like ??
+                      (item as any).like_status,
+                    user_id:
+                      map[item[postIdKey]]?.user_id ??
+                      item.user_id ??
+                      (item as any).uid,
+                    user_avator_url:
+                      map[item[postIdKey]]?.user_avator_url ??
+                      item.user_avator_url ??
+                      (item as any).nft_image,
+                    add_time:
+                      map[item[postIdKey]]?.add_time ??
+                      item.add_time ??
+                      (item as any).add_time_desc,
                   },
-                  ...map[item.id],
+                  ...map[item[postIdKey]],
+                  post_id: item[postIdKey],
+                  postId: item[postIdKey],
+                  id: item[postIdKey],
+                  is_like:
+                    map[item[postIdKey]]?.is_like ??
+                    item.is_like ??
+                    (item as any).like_status,
+                  user_id:
+                    map[item[postIdKey]]?.user_id ??
+                    item.user_id ??
+                    (item as any).uid,
+                  user_avator_url:
+                    map[item[postIdKey]]?.user_avator_url ??
+                    item.user_avator_url ??
+                    (item as any).nft_image,
+                  add_time:
+                    map[item[postIdKey]]?.add_time ??
+                    item.add_time ??
+                    (item as any).add_time_desc,
                 }}
                 callback={(item: any, type?: MoreOperatorEnum) => {
-                  handleTranslate(item.id);
+                  // handleTranslate(item.id);
+                  handleUpdateList(item, type);
                 }}
               />
             </MeItemWrapper>

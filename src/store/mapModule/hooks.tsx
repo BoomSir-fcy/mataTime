@@ -53,7 +53,9 @@ export const useFetchAutoPostTranslate = () => {
         }
       });
       dispatch(removeTranslateIds(needTranslatePostIds));
-      dispatch(fetchPostTranslateAsync(fetchIds));
+      if (fetchIds.length) {
+        dispatch(fetchPostTranslateAsync(fetchIds));
+      }
     } else if (needTranslatePostIds.length) {
       dispatch(
         setPostTranslate({
