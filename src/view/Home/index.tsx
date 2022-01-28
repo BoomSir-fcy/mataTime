@@ -60,6 +60,7 @@ const Home: React.FC = (props: any) => {
       content: '',
       image_urls: [],
       remind_user: '',
+      interval: 0,
     } as any,
   });
 
@@ -100,7 +101,7 @@ const Home: React.FC = (props: any) => {
           },
         });
       } else if (res.code === 30004020) {
-        toastError('验证码错误');
+        toastError(t('verifyError'));
         verifyRef.current?.reload();
       }
     } catch (error) {

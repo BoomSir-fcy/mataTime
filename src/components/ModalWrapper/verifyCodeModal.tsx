@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { ModalWrapper } from 'components';
-import { Flex, Box, Input, Button } from 'uikit';
+import { Flex, Box, Input, Button, Text } from 'uikit';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
 
@@ -67,7 +67,7 @@ export const VerifyCodeComponent = (
       visible={props.visible}
       setVisible={props.onClose}
     >
-      <Box padding='20px'>
+      <Box padding='20px' width='350px'>
         <Rows>
           <Input
             maxLength={4}
@@ -79,6 +79,9 @@ export const VerifyCodeComponent = (
           />
           <VerifyImg onClick={getVerifyCode} src={state.img} alt='' />
         </Rows>
+        <Box>
+          <Text color='textTips'>{t('verifyText')}</Text>
+        </Box>
         <Flex justifyContent='flex-end'>
           <Button
             mt='10px'
