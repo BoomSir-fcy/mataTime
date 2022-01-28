@@ -13,13 +13,24 @@ import {
   ContentParsing,
   MorePostPopup,
 } from 'components';
-import { Box, Button, Flex, Text } from 'uikit';
+import { Box, Button, Flex, Text, Link as ExLink, TranslateIcon } from 'uikit';
 import { shortenAddress } from 'utils/contract';
 import { displayTime } from 'utils';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
-import { MentionItemWrapper, MentionItemUserWrapper } from './style';
+import {
+  MentionItemWrapper,
+  MentionItemUserWrapper,
+  TranslateWrapper,
+} from './style';
 import moreIcon from 'assets/images/social/more.png';
+import { usePostTranslateMap } from 'store/mapModule/hooks';
+import { FetchStatus } from 'config/types';
+import { useDispatch } from 'react-redux';
+import {
+  changePostTranslateState,
+  fetchPostTranslateAsync,
+} from 'store/mapModule/reducer';
 
 const PopupButton = styled(Flex)`
   align-items: center;
@@ -27,6 +38,7 @@ const PopupButton = styled(Flex)`
 `;
 
 type MentionItemProps = {
+  showTranslate?: boolean;
   more?: boolean;
   size?: string;
   dontShowPic?: boolean;
@@ -40,6 +52,7 @@ type MentionItemProps = {
 
 const MentionItem: React.FC<MentionItemProps> = ({
   children,
+  showTranslate,
   dontShowPic,
   postUid,
   more,
@@ -50,6 +63,9 @@ const MentionItem: React.FC<MentionItemProps> = ({
   setIsShileUser,
 }) => {
   const mentionRef: any = useRef();
+  const translateData = usePostTranslateMap(itemData.id);
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   return (
     <MentionItemWrapper ref={mentionRef}>
@@ -62,17 +78,112 @@ const MentionItem: React.FC<MentionItemProps> = ({
         size={size}
         itemData={itemData}
         postUid={postUid}
+        showTranslateIcon={
+          !showTranslate &&
+          translateData &&
+          translateData?.status !== FetchStatus.NOT_FETCHED
+        }
+        showTranslate={translateData?.showTranslate}
         callback={(data: any, type: MoreOperatorEnum) => {
           callback(data, type);
         }}
       />
       <Box className='mention-content'>
         <ContentParsing
-          content={itemData.content}
+          content={
+            showTranslate
+              ? itemData.content
+              : translateData?.showTranslate
+              ? translateData?.content || itemData.content
+              : itemData.content
+          }
           callback={(type: MoreOperatorEnum) => {
             callback(itemData, type);
           }}
         />
+        {showTranslate && !!translateData && (
+          <>
+            <Flex alignItems='center'>
+              {/* <Text>由</Text>
+              <ExLink
+                margin='0 0.2em'
+                external
+                href='https://translate.google.com/'
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+              >
+                Google
+              </ExLink>
+              <Button
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+                padding='0'
+                variant='text'
+              >
+                <Text color='textPrimary'>
+                  {translateData.status === FetchStatus.LOADING &&
+                    t('Translate')}
+                  {translateData.status === FetchStatus.SUCCESS &&
+                    t('Translated')}
+                </Text>
+              </Button> */}
+              <Button
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  if (translateData.status === FetchStatus.NOT_FETCHED) {
+                    dispatch(fetchPostTranslateAsync([itemData.id]));
+                  }
+                  dispatch(
+                    changePostTranslateState({
+                      id: itemData.id,
+                      showTranslate: !translateData?.showTranslate,
+                    }),
+                  );
+                  callback(
+                    {
+                      ...itemData,
+                    },
+                    MoreOperatorEnum.TRANSLATE,
+                  );
+                }}
+                padding='0'
+                variant='text'
+              >
+                <TranslateIcon />
+              </Button>
+              {translateData?.showTranslate && (
+                <Text fontSize='12px' color='textPrimary' ml='1em'>
+                  <Link to='/set/preference'>
+                    {t('Translate setting')}
+                    <Text
+                      color='textPrimary'
+                      fontSize='12px'
+                      style={{
+                        display: 'inline-block',
+                        transform: 'rotateY(45deg)',
+                      }}
+                      as='span'
+                    >
+                      &gt;
+                    </Text>
+                  </Link>
+                </Text>
+              )}
+            </Flex>
+            {translateData?.showTranslate && (
+              <ContentParsing
+                content={translateData?.content}
+                callback={(type: MoreOperatorEnum) => {
+                  callback(itemData, type);
+                }}
+              />
+            )}
+          </>
+        )}
         {!dontShowPic && (
           <ImgList list={itemData.image_list || itemData.image_url_list} />
         )}
@@ -83,6 +194,8 @@ const MentionItem: React.FC<MentionItemProps> = ({
 };
 
 type UserProps = {
+  showTranslateIcon?: boolean;
+  showTranslate?: boolean;
   more?: boolean;
   size?: string;
   postUid?: string;
@@ -94,6 +207,8 @@ type UserProps = {
 
 export const MentionItemUser: React.FC<UserProps> = ({
   more = true,
+  showTranslateIcon,
+  showTranslate,
   size = 'nomal',
   postUid,
   itemData = {},
@@ -105,6 +220,8 @@ export const MentionItemUser: React.FC<UserProps> = ({
   const theme = useTheme();
   const { t } = useTranslation();
   const uid = useStore(p => p.loginReducer.userInfo.uid);
+
+  const dispatch = useDispatch();
 
   return (
     <MentionItemUserWrapper>
@@ -157,6 +274,33 @@ export const MentionItemUser: React.FC<UserProps> = ({
                 title={t('popupShieldUser')}
               >
                 <Icon color='white_black' name='icon-pingbi2' />
+              </Button>
+            )}
+            {showTranslateIcon && (
+              <Button
+                onClick={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  callback(
+                    {
+                      ...itemData,
+                    },
+                    MoreOperatorEnum.TRANSLATE,
+                  );
+                  dispatch(
+                    changePostTranslateState({
+                      id: itemData.id,
+                      showTranslate: !showTranslate,
+                    }),
+                  );
+                }}
+                variant='text'
+                className={showTranslate ? '' : 'icon-shield'}
+                mr='18px'
+                padding='0'
+                title={t('Translate')}
+              >
+                <TranslateIcon />
               </Button>
             )}
             <a

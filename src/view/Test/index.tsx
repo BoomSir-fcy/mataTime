@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Button, Box, Text, Toggle, Card, Flex, Input } from 'uikit';
-import { IM } from 'utils';
+import { IM, isEnglishContent } from 'utils';
 import { languagesOptions } from 'config/localization';
 import { useTranslation } from 'contexts/Localization';
 import { Select } from 'components';
 import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { toast } from 'react-toastify';
 import { Http } from 'apis/http';
+
+import isEnglish from 'is-english';
+import isChinese from 'is-chinese';
+// const isEnglish = require('is-english');
 
 const StyledNotFound = styled.div`
   align-items: center;
@@ -29,7 +33,7 @@ const Test = () => {
   const { t } = useTranslation();
   const [languange, setUseLanguage] = useLanguange();
   const [isDark, toggleThemeHandle] = useThemeManager();
-  const [inputVal, setInputVal] = useState<string>('');
+  const [inputVal, setInputVal] = useState<string>('asa');
 
   const handleRecharge = async () => {
     try {
@@ -49,10 +53,10 @@ const Test = () => {
 
   const handleInputChange = (e: any) => {
     const inputVal = e.target.value;
-    if (!inputVal || !/^[0-9]*[.]?[0-9]{0,18}$/.test(inputVal)) {
-      toast.error('输入格式不正确！');
-      return false;
-    }
+    // if (!inputVal || !/^[0-9]*[.]?[0-9]{0,18}$/.test(inputVal)) {
+    //   toast.error('输入格式不正确！');
+    //   return false;
+    // }
     setInputVal(inputVal);
   };
 
@@ -69,6 +73,10 @@ const Test = () => {
     console.debug(value);
   }, [value]);
 
+  // const [chinese, english] = useMemo(() => {
+  //   return [isEnglish(inputVal), isEnglish(inputVal)];
+  // }, [inputVal]);
+
   return (
     <StyledNotFound>
       <Flex>
@@ -81,6 +89,11 @@ const Test = () => {
       <Box>
         <Button onClick={hanldeChange}>change{value[1]}</Button>
         <Button onClick={hanldeRead}>read {value[1]}</Button>
+      </Box>
+      <Input onChange={handleInputChange} value={inputVal} />
+      <Box>
+        {/* <Text>isChinese: {inputVal && String(isChinese(inputVal))}</Text> */}
+        <Text>isEnglish: {inputVal && String(isEnglish(inputVal))}</Text>
       </Box>
       <Box>
         <Text>{t('Example: This is a passage')}</Text>

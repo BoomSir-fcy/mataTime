@@ -132,57 +132,6 @@ const NewsPraise: React.FC = props => {
             </MessageCard>
           );
         })}
-        {/* {listData.map(item => {
-          if (item?.post?.content_status === 1) {
-            return (
-              <PraiseItemWrapper key={item.id}>
-                <Box padding="25px 25px 0">
-                  <MentionItemUser
-                    more={false}
-                    itemData={{
-                      ...item,
-                      ...item.post,
-                      ...item.comment,
-                      user_name: item.send_name,
-                      user_avator_url: item.send_image,
-                      uid: item.send_uid,
-                      user_address: item.send_address
-                    }}
-                    callback={data => {
-                      updateList(data);
-                    }}
-                  />
-                  <div className="reply-wrapper">
-                    <Icon name={'icon-aixin1'} color={'#EC612B'}></Icon>{' '}
-                    <span className={'reply-tip'}>
-                      {t('newsPraiseContent')}
-                    </span>
-                    <ContentParsing
-                      content={item.comment.comment}
-                      callback={(type: MoreOperatorEnum) => {
-                        updateList(item, type);
-                      }}
-                    ></ContentParsing>
-                  </div>
-                </Box>
-                <div className="comment-content">
-                  <MentionItem
-                    itemData={{
-                      ...item.comment,
-                      ...item.post,
-                      add_time: item.post.add_time_desc,
-                      user_name: item.post.nick_name,
-                      user_avator_url: item.post.nft_image
-                    }}
-                    {...props}
-                    more={false}
-                    size={'small'}
-                  />
-                </div>
-              </PraiseItemWrapper>
-            );
-          }
-        })} */}
       </List>
     </NewsPraiseWrapper>
   );

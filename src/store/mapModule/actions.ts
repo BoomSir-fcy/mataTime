@@ -11,3 +11,6 @@ export const removeBlockUserId = createAction<number>('mapModule/removeBlockUser
 export const removeBlockUserIds = createAction<number[]>('mapModule/removeBlockUserIds');
 
 export const addDeletePostId = createAction<number>('mapModule/addDeletePostId');
+
+export const addTranslateIds = createAction<number[]>('mapModule/addTranslateIds');
+export const removeTranslateIds = createAction<number[]>('mapModule/removeTranslateIds');

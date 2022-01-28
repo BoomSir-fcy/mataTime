@@ -54,6 +54,18 @@ export class HomeApi extends Http {
     return res;
   }
 
+  // 翻译文章
+  async getPostTranslateById(params: Api.Home.PostTranslateParams) {
+    const paramsStr = qs.stringify(
+      {
+        ...params,
+      },
+      { arrayFormat: 'repeat' },
+    );
+    const res = await this.get(`/v1/post/translation?${paramsStr}`);
+    return res;
+  }
+
   // 热门话题
   async queryHotTopic(params: Api.Home.queryHotTopic) {
     const res = await this.get('/v1/post/hot', params);

@@ -5,6 +5,7 @@ declare namespace Api {
       address?: string;
       nick_name?: string;
       display_format?: number;
+      translate?: number;
       introduction?: string;
       location?: string;
       nft_image?: string;

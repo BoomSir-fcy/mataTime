@@ -20,6 +20,7 @@ export enum MoreOperatorEnum {
   LIKE = 'LIKE', // 点赞
   BOOKMARK = 'BOOKMARK', // 收藏
   BLOCKUSER = 'BLOCKUSER', // 屏蔽用户
+  TRANSLATE = 'TRANSLATE', // 翻译
 }
 
 type Iprops = {
