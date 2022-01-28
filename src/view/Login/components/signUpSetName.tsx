@@ -170,7 +170,6 @@ export const SignUpSetName: React.FC<{
   }, [
     state,
     nft,
-    timer,
     inviteinfo,
     siginInVerify,
     toastWarning,
@@ -207,16 +206,13 @@ export const SignUpSetName: React.FC<{
   };
 
   // 邀请地址验证
-  const handleChange = React.useCallback(
-    e => {
-      if (e.currentTarget.validity.valid) {
-        // 是否为正确地址
-        const addr = e.currentTarget.value;
-        getAddresQualifications(addr);
-      }
-    },
-    [getAddresQualifications],
-  );
+  const handleChange = React.useCallback(e => {
+    if (e.currentTarget.validity.valid) {
+      // 是否为正确地址
+      const addr = e.currentTarget.value;
+      getAddresQualifications(addr);
+    }
+  }, []);
 
   React.useEffect(() => {
     const InviteAddress = localStorage.getItem('InviteAddress');
@@ -226,7 +222,7 @@ export const SignUpSetName: React.FC<{
     return () => {
       timer && clearInterval(timer);
     };
-  }, [timer, getAddresQualifications]);
+  }, []);
 
   return (
     <Box>
