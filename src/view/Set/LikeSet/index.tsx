@@ -13,6 +13,7 @@ import { Select } from 'components';
 import { Api } from 'apis';
 import { Dispatch, storeAction, useStore } from 'store';
 import { useDispatch } from 'react-redux';
+import { fetchAllPostTranslateAsync } from 'store/mapModule/reducer';
 
 const NoticeSetBox = styled(Card)`
   /* height: 700px; */
@@ -65,6 +66,9 @@ const LikeSet: React.FC = () => {
             ...res.data,
           }),
         );
+        if (!state[filed]) {
+          dispatch(fetchAllPostTranslateAsync());
+        }
       }
     } catch (error) {
       console.error(error);

@@ -51,7 +51,6 @@ export const fetchPostDetailAsync =
           }),
         );
         const ids = checkTranslateIds([detailRes.data])
-        // console.log(ids, 'ids')
         dispatch(addTranslateIds(ids))
       }
     } catch (error) {
@@ -75,6 +74,19 @@ export const fetchUserInfoAsync =
       console.error(error);
     }
   };
+
+export const fetchAllPostTranslateAsync = () => (dispatch, getState) => {
+  const { mapModule: { postTranslateMap } } = getState() as { mapModule: MapModuleState }
+  const noFetchIds: number[] = []
+  Object.keys(postTranslateMap).forEach(key => {
+    if (postTranslateMap[key].status === FetchStatus.NOT_FETCHED) {
+      noFetchIds.push(Number(key))
+    }
+  })
+  if (noFetchIds.length) {
+    dispatch(fetchPostTranslateAsync(noFetchIds))
+  }
+}
 
 export const fetchPostTranslateAsync =
   (ids: number[]) => async (dispatch, getState) => {

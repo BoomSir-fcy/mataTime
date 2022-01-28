@@ -67,8 +67,6 @@ const MentionItem: React.FC<MentionItemProps> = ({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  // console.log(showTranslate, translateData);
-
   return (
     <MentionItemWrapper ref={mentionRef}>
       <MentionItemUser

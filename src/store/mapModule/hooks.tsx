@@ -39,17 +39,16 @@ export const usePostTranslateMap = id => {
 };
 
 export const useFetchAutoPostTranslate = () => {
-  const { postMap, needTranslatePostIds } = useMapModule();
+  const { postTranslateMap, needTranslatePostIds } = useMapModule();
   const userInfo = useSelector(
     (state: { loginReducer: Login }) => state.loginReducer.userInfo,
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    // console.log(needTranslatePostIds, 'needTranslatePostIds');
     if (userInfo.translation === 1 && needTranslatePostIds.length) {
       const fetchIds = [];
       needTranslatePostIds.forEach(id => {
-        if (!postMap[id]) {
+        if (!postTranslateMap[id]) {
           fetchIds.push(id);
         }
       });
@@ -58,6 +57,7 @@ export const useFetchAutoPostTranslate = () => {
         dispatch(fetchPostTranslateAsync(fetchIds));
       }
     } else if (needTranslatePostIds.length) {
+      dispatch(removeTranslateIds(needTranslatePostIds));
       dispatch(
         setPostTranslate({
           ids: needTranslatePostIds,
@@ -67,5 +67,5 @@ export const useFetchAutoPostTranslate = () => {
         }),
       );
     }
-  }, [needTranslatePostIds, dispatch, postMap, userInfo.translation]);
+  }, [needTranslatePostIds, dispatch, postTranslateMap, userInfo.translation]);
 };
