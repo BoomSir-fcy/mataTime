@@ -46,6 +46,8 @@ export const ARTICLE_POST_MAX_ROW = 12;
 
 export const SEARCH_MAX_HISTORY_LEN = 14;
 
+export const POST_UPLOAD_IMG = 4;
+
 export const BASE_USER_PROFILE_URL = '/me/profile/';
 
 // setTotalSupply []

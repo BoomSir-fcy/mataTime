@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import Popup from 'reactjs-popup';
+import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Flex, Box, Image, useTooltip } from 'uikit';
 import { useStore, storeAction } from 'store';
+import { isApp } from 'utils/client';
 
 import { Api } from 'apis';
 
@@ -45,6 +47,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   postType,
 }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const reward: reward[] = data.reward_stats || [];
   const postList = useStore(p => p.post.list);
   const { t } = useTranslation();
@@ -99,7 +102,10 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
       }}
     />,
     {
-      placement: 'top-end',
+      placement:
+        isApp() && location.pathname.indexOf('articleDetils') > -1
+          ? 'auto-end'
+          : 'top-end',
       trigger: 'click',
       stylePadding: '0',
       hideArrow: true,
