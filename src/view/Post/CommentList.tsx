@@ -449,9 +449,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       >
                         <Text color='textPrimary'>
                           {t('A total of 1 replies', {
-                            value:
-                              item?.comment_list_resp?.total_num -
-                              item?.comment_list_resp?.list?.length,
+                            value: item?.comment_list_resp?.total_num,
                           })}
                         </Text>
                         <Icon
