@@ -83,7 +83,8 @@ export const fetchAllPostTranslateAsync = () => (dispatch, getState) => {
       noFetchIds.push(Number(key))
     }
   })
-  if (noFetchIds.length) {
+  // 最大价值20条数据
+  if (noFetchIds.length && noFetchIds.length < 20) {
     dispatch(fetchPostTranslateAsync(noFetchIds))
   }
 }
