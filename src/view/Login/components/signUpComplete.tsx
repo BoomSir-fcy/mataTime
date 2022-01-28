@@ -127,10 +127,10 @@ export const SignUpcomplete = React.memo(() => {
         </Column>
         <Column>
           <Rows>
-            <Title>{t('Automatic content translation')}</Title>
+            <Title>{t('Automatic translation of content')}</Title>
             <Text color='textTips' mt='11px'>
               {t(
-                "Automatically translate into the default display language of your choice when browsing other people's content",
+                "Other users' content will be automatically translated into the default display language of your choice",
               )}
             </Text>
           </Rows>
