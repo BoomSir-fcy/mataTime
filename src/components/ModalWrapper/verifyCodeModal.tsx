@@ -13,10 +13,8 @@ const Rows = styled(Flex)`
 
 const VerifyImg = styled.img`
   cursor: pointer;
-  position: absolute;
-  right: 10px;
-  width: 120px;
-  height: 30px;
+  width: 310px;
+  height: 60px;
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 
@@ -68,6 +66,9 @@ export const VerifyCodeComponent = (
       setVisible={props.onClose}
     >
       <Box padding='20px' width='350px'>
+        <Rows mb='10px'>
+          <VerifyImg onClick={getVerifyCode} src={state.img} alt='' />
+        </Rows>
         <Rows>
           <Input
             maxLength={4}
@@ -77,7 +78,6 @@ export const VerifyCodeComponent = (
               })
             }
           />
-          <VerifyImg onClick={getVerifyCode} src={state.img} alt='' />
         </Rows>
         <Flex justifyContent='flex-end'>
           <Button
