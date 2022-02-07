@@ -38,6 +38,14 @@ export const usePostTranslateMap = id => {
   }, [postTranslateMap, id]);
 };
 
+export const useCommentTranslateMap = id => {
+  const { commentTranslateMap } = useMapModule();
+
+  return useMemo(() => {
+    return commentTranslateMap[id] || null;
+  }, [commentTranslateMap, id]);
+};
+
 export const useFetchAutoPostTranslate = () => {
   const { postTranslateMap, needTranslatePostIds } = useMapModule();
   const userInfo = useSelector(
@@ -68,4 +76,41 @@ export const useFetchAutoPostTranslate = () => {
       );
     }
   }, [needTranslatePostIds, dispatch, postTranslateMap, userInfo.translation]);
+};
+
+export const useFetchAutoCommentTranslate = () => {
+  const { commentTranslateMap, needTranslateCommentIds } = useMapModule();
+  const userInfo = useSelector(
+    (state: { loginReducer: Login }) => state.loginReducer.userInfo,
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (userInfo.translation === 1 && needTranslateCommentIds.length) {
+      const fetchIds = [];
+      needTranslateCommentIds.forEach(id => {
+        if (!commentTranslateMap[id]) {
+          fetchIds.push(id);
+        }
+      });
+      dispatch(removeTranslateIds(needTranslateCommentIds));
+      if (fetchIds.length) {
+        dispatch(fetchPostTranslateAsync(fetchIds));
+      }
+    } else if (needTranslateCommentIds.length) {
+      dispatch(removeTranslateIds(needTranslateCommentIds));
+      dispatch(
+        setPostTranslate({
+          ids: needTranslateCommentIds,
+          data: {},
+          status: FetchStatus.NOT_FETCHED,
+          showTranslate: false,
+        }),
+      );
+    }
+  }, [
+    needTranslateCommentIds,
+    dispatch,
+    commentTranslateMap,
+    userInfo.translation,
+  ]);
 };

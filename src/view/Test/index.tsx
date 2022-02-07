@@ -9,10 +9,6 @@ import { useLanguange, useThemeManager } from 'store/app/hooks';
 import { toast } from 'react-toastify';
 import { Http } from 'apis/http';
 
-import isEnglish from 'is-english';
-import isChinese from 'is-chinese';
-// const isEnglish = require('is-english');
-
 const StyledNotFound = styled.div`
   align-items: center;
   display: flex;
@@ -91,10 +87,6 @@ const Test = () => {
         <Button onClick={hanldeRead}>read {value[1]}</Button>
       </Box>
       <Input onChange={handleInputChange} value={inputVal} />
-      <Box>
-        {/* <Text>isChinese: {inputVal && String(isChinese(inputVal))}</Text> */}
-        <Text>isEnglish: {inputVal && String(isEnglish(inputVal))}</Text>
-      </Box>
       <Box>
         <Text>{t('Example: This is a passage')}</Text>
         <Text>
