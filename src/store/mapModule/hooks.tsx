@@ -3,8 +3,13 @@ import { FetchStatus } from 'config/types';
 import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MapModuleState } from '../types';
-import { removeTranslateIds } from './actions';
-import { fetchPostTranslateAsync, setPostTranslate } from './reducer';
+import { removeCommentTranslateIds, removeTranslateIds } from './actions';
+import {
+  fetchCommentTranslateAsync,
+  fetchPostTranslateAsync,
+  setCommentTranslate,
+  setPostTranslate,
+} from './reducer';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from '../login';
 
 export const useMapModule = () => {
@@ -92,14 +97,14 @@ export const useFetchAutoCommentTranslate = () => {
           fetchIds.push(id);
         }
       });
-      dispatch(removeTranslateIds(needTranslateCommentIds));
+      dispatch(removeCommentTranslateIds(needTranslateCommentIds));
       if (fetchIds.length) {
-        dispatch(fetchPostTranslateAsync(fetchIds));
+        dispatch(fetchCommentTranslateAsync(fetchIds));
       }
     } else if (needTranslateCommentIds.length) {
-      dispatch(removeTranslateIds(needTranslateCommentIds));
+      dispatch(removeCommentTranslateIds(needTranslateCommentIds));
       dispatch(
-        setPostTranslate({
+        setCommentTranslate({
           ids: needTranslateCommentIds,
           data: {},
           status: FetchStatus.NOT_FETCHED,
