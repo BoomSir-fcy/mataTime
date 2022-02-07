@@ -157,7 +157,7 @@ const TabsComponent = (props, ref) => {
         }),
       );
     }
-  }, [tags, currentLeftIndex]);
+  }, [tags, dispatch, currentLeftIndex]);
 
   return (
     <React.Fragment>
@@ -247,7 +247,13 @@ const TabsComponent = (props, ref) => {
                     user_tags2.indexOf(item.id) > -1 ? 'primary' : 'text'
                   }
                 >
-                  {item.name}
+                  <Text
+                    color={
+                      user_tags2.indexOf(item.id) > -1 ? 'primary' : 'text'
+                    }
+                  >
+                    {item.name}
+                  </Text>
                 </ExploreRadioButton>
               ))}
             </Flex>

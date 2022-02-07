@@ -16,13 +16,13 @@ export const useProfileContract = () => {
         {
           address: SocialAddress,
           name: 'nicknames',
-          params: [nickname]
+          params: [nickname],
         },
         {
           address: SocialAddress,
           name: 'checkNickname',
-          params: [nickname]
-        }
+          params: [nickname],
+        },
       ];
       try {
         const isCheck = await multicall(nftSocialAbi, calls);
@@ -32,7 +32,7 @@ export const useProfileContract = () => {
         return [false, false];
       }
     },
-    [masterChefContract]
+    [SocialAddress],
   );
 
   // 修改用户
@@ -45,7 +45,7 @@ export const useProfileContract = () => {
         return error?.code || false;
       }
     },
-    [masterChefContract]
+    [masterChefContract],
   );
 
   return { checkNickname, updateProfileNickname };

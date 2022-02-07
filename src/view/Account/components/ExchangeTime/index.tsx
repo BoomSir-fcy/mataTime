@@ -53,27 +53,28 @@ const Exchange: React.FC = () => {
     total_dsg: 0,
   });
   const TimeInfo = useStore(p => p.wallet.TimeInfo);
-  const getTimeShopInfo = async () => {
-    for (let i = 0; i < TimeInfo.length; i++) {
-      if (i === TimeInfo.length - 1) {
-        setTimeShopInfo(TimeInfo[i]);
-      } else {
-        if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
-          setTimeShopInfo(TimeInfo[i]);
-          if (i + 1 < TimeInfo.length) {
-            setTimeNext(TimeInfo[i + 1]);
-          }
-          break;
-        }
-      }
-    }
-  };
+
   // const showFaq = useCallback(() => setToFaq(true), [setToFaq])
   useEffect(() => {
+    const getTimeShopInfo = async () => {
+      for (let i = 0; i < TimeInfo.length; i++) {
+        if (i === TimeInfo.length - 1) {
+          setTimeShopInfo(TimeInfo[i]);
+        } else {
+          if (TimeInfo[i].total_dsg < TimeInfo[i].max_dsg_token) {
+            setTimeShopInfo(TimeInfo[i]);
+            if (i + 1 < TimeInfo.length) {
+              setTimeNext(TimeInfo[i + 1]);
+            }
+            break;
+          }
+        }
+      }
+    };
     if (account && TimeInfo.length > 1) {
       getTimeShopInfo();
     }
-  }, [TimeInfo, account]);
+  }, [TimeInfo, setTimeShopInfo, setTimeNext, account]);
 
   return (
     <>

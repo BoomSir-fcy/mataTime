@@ -30,58 +30,56 @@ const RewardList = () => {
     list: [],
     page: 1,
     total: 0,
-    pageCount: 0
+    pageCount: 0,
   });
   const { t } = useTranslation();
   const { loading, list, page } = state;
 
-  const getAllIncome = async () => {
-    try {
-      const res = await Api.AccountApi.getIncome();
-      if (Api.isSuccess(res)) {
-        setState(p => {
-          p.income = res.data;
-        });
-      }
-    } catch (error) { }
-  };
+  React.useEffect(() => {
+    const getAllIncome = async () => {
+      try {
+        const res = await Api.AccountApi.getIncome();
+        if (Api.isSuccess(res)) {
+          setState(p => {
+            p.income = res.data;
+          });
+        }
+      } catch (error) {}
+    };
+    getAllIncome();
+  }, [setState]);
 
-  const init = async () => {
-    try {
-      const res = await Api.AccountApi.getRewardList({
-        page,
-        target: userInfo.uid
-      });
-      if (Api.isSuccess(res)) {
+  React.useEffect(() => {
+    const init = async () => {
+      try {
+        const res = await Api.AccountApi.getRewardList({
+          page,
+          target: userInfo.uid,
+        });
+        if (Api.isSuccess(res)) {
+          setState(p => {
+            p.loading = false;
+            p.list = res.data.list || [];
+            p.total = res.data.total_num;
+            p.pageCount = res.data.total_page;
+          });
+        }
+      } catch (error) {
         setState(p => {
           p.loading = false;
-          p.list = res.data.list || [];
-          p.total = res.data.total_num;
-          p.pageCount = res.data.total_page;
         });
       }
-    } catch (error) {
-      setState(p => {
-        p.loading = false;
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    getAllIncome();
-  }, []);
-
-  React.useEffect(() => {
+    };
     if (userInfo.uid) {
       init();
     }
-  }, [state.page, userInfo]);
+  }, [page, setState, userInfo]);
 
   return (
-    <Box minHeight="100vh">
+    <Box minHeight='100vh'>
       <Loading visible={loading} />
       <Tabs data={state.income} />
-      <Box height="100%">
+      <Box height='100%'>
         <Title>{t('rewardAutherList')}</Title>
         <TableList
           data={list}

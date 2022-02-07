@@ -50,7 +50,7 @@ export const fetchPostAsync = createAsyncThunk(
   },
 );
 
-export const Post = createSlice({
+export const post = createSlice({
   name: 'post',
   initialState,
   reducers: {
@@ -103,6 +103,6 @@ export const Post = createSlice({
   },
 });
 
-export const { setLoading, setIsEnd } = Post.actions;
+export const { setLoading, setIsEnd } = post.actions;
 
-export default Post.reducer;
+export default post.reducer;

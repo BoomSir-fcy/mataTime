@@ -147,7 +147,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       }
 
       const text = render(context).join('');
-      const url = `${window.location.origin}/articleDetils/${data.post.post_id}`;
+      const url = `${window.location.origin}/articledetils/${data.post.post_id}`;
       window.open(
         `https://twitter.com/intent/tweet?text=${text.replace(
           /#/g,
@@ -281,7 +281,7 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
             textTransform='capitalize'
             onClick={() => {
               copyContent(
-                `${window.location.origin}/articleDetils/${
+                `${window.location.origin}/articledetils/${
                   data.post.post_id || ''
                 }`,
               );

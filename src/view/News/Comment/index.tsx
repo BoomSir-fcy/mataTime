@@ -7,6 +7,7 @@ import { Api } from 'apis';
 import { NewsCommentWrapper, CommentItemWrapper } from './style';
 import MessageCard from '../components/MessageCard';
 import styled from 'styled-components';
+import { displayTime } from 'utils';
 
 const NoneEventsText = styled(Text)`
   pointer-events: none;
@@ -76,11 +77,11 @@ const NewsComment: React.FC<any> = props => {
               uid={item.send_uid}
               avatar={item.send_image}
               title={item.send_name}
-              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              date={displayTime(item.add_time)}
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}
-              href={`/articleDetils/${item.post?.post_id}?comment_id=${item.comment.comment_id}`}
+              href={`/articledetils/${item.post?.post_id}?comment_id=${item.comment.comment_id}`}
             >
               <Box>
                 {/* <FollowPopup uid={item.send_uid}>

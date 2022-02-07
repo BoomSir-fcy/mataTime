@@ -61,7 +61,7 @@ const LikeSet: React.FC = () => {
             {t('settingDarkModText')}
           </Text>
         </Rows>
-        <Toggle checked={isDark} onClick={toggleThemeHandle} />
+        <Toggle checked={isDark} onChange={toggleThemeHandle} />
       </Column>
       <Column>
         <Rows>
@@ -70,7 +70,7 @@ const LikeSet: React.FC = () => {
             {t('settingMsgText')}
           </Text>
         </Rows>
-        <Toggle checked={notification} onClick={setNotification} />
+        <Toggle checked={notification} onChange={setNotification} />
       </Column>
       <Column alignItems='center'>
         <Rows>
@@ -98,7 +98,7 @@ const LikeSet: React.FC = () => {
         <Select
           options={languagesOptions}
           defaultId={currentLanguage.code}
-          idKey="code"
+          idKey='code'
           onChange={(val: any) => setLanguage(val.value)}
         />
       </Column>

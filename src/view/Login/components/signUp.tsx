@@ -288,6 +288,7 @@ export const SignUp: React.FC<{
             <img
               width='230px'
               src={require('../images/login_right_images.png').default}
+              alt=''
             />
             <SignUpText>{t('loginSignupSuccess')}</SignUpText>
             <SignUpSubText>{t('loginSignupSuccessText')}</SignUpSubText>

@@ -85,25 +85,30 @@ const HotTopic: React.FC = () => {
   return (
     <HotTopicBox isBoxShadow isRadius>
       <HeadAction>
-        <Text fontWeight="bold" fontSize="18px">
+        <Text fontWeight='bold' fontSize='18px'>
           {t('HotTopicTitle')}
         </Text>
         <Box>
           <RefreshIcon
-            margin="0"
+            margin='0'
             onClick={() => getList(true)}
             color={theme.colors.white_black}
           />
         </Box>
       </HeadAction>
-      <Flex justifyContent="space-between" flexDirection="column">
+      <Flex justifyContent='space-between' flexDirection='column'>
         {hotTopicList.map((item, index) => (
           <Flex
             key={`${item.tid}_${index}`}
-            mt="20px"
-            justifyContent="space-between"
+            mt='20px'
+            justifyContent='space-between'
           >
-            <Hot as={Link} to={`/topicList/${item.tid}/${encodeURI(encodeURIComponent(item.topic_name))}`}>
+            <Hot
+              as={Link}
+              to={`/topiclist/${item.tid}/${encodeURI(
+                encodeURIComponent(item.topic_name),
+              )}`}
+            >
               #{item.topic_name}
             </Hot>
             <HotCount>

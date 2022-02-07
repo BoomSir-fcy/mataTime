@@ -12,9 +12,17 @@ export const CancelNftStake = async (masterChefContract, toNFT, tokenID) => {
 export const RechargeToken = async (
   masterChefContract,
   tokenAddress,
-  amount
+  amount,
+  ChainToken,
 ) => {
-  const tx = await masterChefContract.chargeToken(tokenAddress, amount);
+  let tx;
+  if (ChainToken) {
+    tx = await masterChefContract.chargeChainToken({
+      value: amount,
+    });
+  } else {
+    tx = await masterChefContract.chargeToken(tokenAddress, amount);
+  }
   const receipt = await tx.wait();
   return receipt.status;
 };
@@ -23,13 +31,13 @@ export const createUserContact = async (
   nickname,
   nftAddress,
   tokenID,
-  InviteAddress
+  InviteAddress,
 ) => {
   const tx = await masterChefContract.createProfile(
     nickname,
     nftAddress,
     tokenID,
-    InviteAddress
+    InviteAddress,
   );
   const receipt = await tx.wait();
   return receipt.status;
@@ -48,7 +56,7 @@ export const RewardAuthorContactReward = async (
   postType,
   postId,
   amount,
-  bool
+  bool,
 ) => {
   const tx = await masterChefContract.reward(
     target,
@@ -57,8 +65,8 @@ export const RewardAuthorContactReward = async (
     postId,
     amount,
     {
-      value: !bool ? '' : amount
-    }
+      value: !bool ? '' : amount,
+    },
   );
   const receipt = await tx.wait();
   return receipt.status;

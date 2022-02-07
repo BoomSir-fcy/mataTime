@@ -184,8 +184,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         return row;
       });
       setListData(subComment);
+      setNonce(prep => prep + 1);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -249,7 +250,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       setFlag(false);
       commentRef?.current?.scrollIntoView();
     }
-  }, [listData]);
+  }, [listData, flag]);
 
   return (
     <CommentStyle>
@@ -362,9 +363,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
               {item?.comment_list_resp?.list?.length > 0 && (
                 <ChildrenComment>
                   {(item?.comment_list_resp?.list ?? []).map(row => (
-                    <React.Fragment>
+                    <div key={row.id}>
                       {Number(parsedQs.comment_id) === row.id && (
-                        <div ref={commentRef} key={row.id}></div>
+                        <div ref={commentRef}></div>
                       )}
                       {
                         // 浏览自己的不扣费
@@ -427,7 +428,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           }}
                         />
                       </ChildrenCommentContent>
-                    </React.Fragment>
+                    </div>
                   ))}
                   {item?.comment_list_resp?.total_num >
                     item?.comment_list_resp?.list?.length && (
@@ -449,9 +450,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       >
                         <Text color='textPrimary'>
                           {t('A total of 1 replies', {
-                            value:
-                              item?.comment_list_resp?.total_num -
-                              item?.comment_list_resp?.list?.length,
+                            value: item?.comment_list_resp?.total_num,
                           })}
                         </Text>
                         <Icon

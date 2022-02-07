@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Api } from 'apis';
-import { changeActiveToken } from './actions';
+import { changeActiveToken, changeChoiceToken } from './actions';
 import {
   FetchMatterIncomeList,
   FetchMatterIncometoday,
@@ -43,9 +43,7 @@ const initialState: WalletState = {
     total_dsg: 0,
   },
   TimeExchangeList: [],
-  activeToken: localStorage.getItem('activeToken')
-    ? localStorage.getItem('activeToken')
-    : 'TIME',
+  activeToken: '',
   rewardNum: 0,
   spendTimeInfo: {
     burnCoinTody: '0',
@@ -79,9 +77,13 @@ const initialState: WalletState = {
   WithDrawSetting: {
     meta_minimum: '0',
     time_minimum: '0',
+    bnb_minimum: '0',
     withdraw_time_fee: '0',
     withdraw_meta_fee: '0',
+    withdraw_bnb_fee: '0',
   },
+  WithDrawFeeType: 1, //提币手续费—— 1 BNB 2对应币种
+  choiceToken: 0, //选择的币种
 };
 
 // Async thunks
@@ -205,7 +207,19 @@ export const wallet = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchWalletAsync.fulfilled, (state, action) => {
-        state.wallet = action.payload;
+        let arr = action.payload;
+        const compare = (obj1, obj2) => {
+          var val1 = obj1.token_type;
+          var val2 = obj2.token_type;
+          if (val1 < val2) {
+            return -1;
+          } else if (val1 > val2) {
+            return 1;
+          } else {
+            return 0;
+          }
+        };
+        state.wallet = arr.sort(compare);
       })
       .addCase(fetchApproveNumAsync.fulfilled, (state, action) => {
         state.ApproveNum.time = action.payload.time;
@@ -229,7 +243,10 @@ export const wallet = createSlice({
       })
       .addCase(changeActiveToken, (state, action) => {
         state.activeToken = action.payload.activeToken;
-        localStorage.setItem('activeToken', action.payload.activeToken);
+        // localStorage.setItem('activeToken', action.payload.activeToken);
+      })
+      .addCase(changeChoiceToken, (state, action) => {
+        state.choiceToken = action.payload.choiceToken;
       })
       .addCase(fetchRewardNumAsync.fulfilled, (state, action) => {
         state.rewardNum = action.payload;

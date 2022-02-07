@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Flex, Box, Text } from 'uikit';
 import styled from 'styled-components';
 import { Container } from 'components';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, useLocation } from 'react-router-dom';
 import WalletBox from './walletBox';
 import Recharge from './Recharge';
 import { getMatterAddress, getTimeAddress } from 'utils/addressHelpers';
@@ -14,7 +14,7 @@ import {
   useFetchMinimum,
 } from 'store/wallet/hooks';
 import { useWeb3React } from '@web3-react/core';
-import { useStore } from 'store';
+import { storeAction, useStore } from 'store';
 import { formatDisplayApr, getBalanceAmount } from 'utils/formatBalance';
 import EarningsRecord from './EarningsRecord';
 import Chart from './Chart';
@@ -27,10 +27,12 @@ import {
   fetchMatterIncomeList,
 } from 'store/wallet/reducer';
 import useMenuNav from 'hooks/useMenuNav';
-import { useTokenBalance } from 'hooks/useTokenBalance';
+import { useGetBnbBalance, useTokenBalance } from 'hooks/useTokenBalance';
 import { useInviteCount } from 'view/Task/hooks/matter';
 import { Icon } from 'components';
 import FriendsList from 'view/Task/components/FriendsList';
+import WalletList from '../WalletList';
+import { getToken } from 'view/Account/hooks/walletInfo';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -132,35 +134,48 @@ const IncomeComp = ({ TodayIncome, TotalIncome, isMobile }) => {
   );
 };
 
-const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
+const TokenAccount: React.FC = () => {
   useFetchWalletInfo();
   useFetchApproveNum();
   useFetchMinimum();
+  const { search } = useLocation();
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
-  const { isPushed, setIsPushed, isMobile } = useMenuNav();
-  const info = {
+  const { isMobile } = useMenuNav();
+  const [WalletInfo, setWalletInfo] = useState({
     address: '',
     available_balance: '0',
     freeze_balance: '0',
     token_type: 1,
     total_balance: '0',
     uid: 0,
-  };
-  const [WalletInfo, setWalletInfo] = useState(info);
+  });
+  const [TokenInfo, setTokenInfo] = useState([
+    {
+      address: '',
+      available_balance: '0',
+      freeze_balance: '0',
+      token_type: 0,
+      total_balance: '0',
+      uid: 0,
+      tokenAddress: '',
+    },
+  ]);
   const [walletBalance, setwalletBalance] = useState('0');
   const [tokenAddress, settokenAddress] = useState('');
-  const [ActiveToken, setActiveToken] = useState(1);
+  const [ActiveToken, setActiveToken] = useState(0);
   const [pageSize, setpageSize] = useState(5);
   const [day, setday] = useState(7);
   const [readType, setreadType] = useState(1);
   const [TokenWithDrawMinNum, setTokenWithDrawMinNum] = useState('0');
   const [TokenWithDrawFee, setTokenWithDrawFee] = useState('0');
+  const [BnbAvailableBalance, setBnbAvailableBalance] = useState('0');
   const timeAddress = getTimeAddress();
   const MatterAddress = getMatterAddress();
   const { balance: timeBalance } = useTokenBalance(timeAddress);
   const { balance: matterBalance } = useTokenBalance(MatterAddress);
+  const { balance: bnbBalance } = useGetBnbBalance();
   const BalanceList = useStore(p => p.wallet.wallet);
   const activeToken = useStore(p => p.wallet.activeToken);
   const TimeIncometoday = useStore(p => p.wallet.TimeIncometoday);
@@ -168,6 +183,8 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   const ContentHistoryInfo = useStore(p => p.wallet.TimeIncomeList);
   const TaskHistoryinfo = useStore(p => p.wallet.MatterIncomeList);
   const WithDrawSetting = useStore(p => p.wallet.WithDrawSetting);
+  const WithDrawFeeType = useStore(p => p.wallet.WithDrawFeeType);
+  const ChoiceToken = useStore(p => p.wallet.choiceToken);
 
   // useFetTimeIncometoday(day);
   // useFetTimeIncomeList(1, pageSize, 1);
@@ -193,16 +210,16 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
   }, [TimeIncometoday, MatterIncometoday, ActiveToken]);
 
   const ChartList = useMemo(() => {
-    let data;
+    let list;
     if (ActiveToken === 1) {
-      data = TimeIncometoday.data;
+      list = TimeIncometoday.data;
     } else {
-      data = MatterIncometoday.data;
+      list = MatterIncometoday.data;
     }
-    if (!data) {
-      data = [];
+    if (!list) {
+      list = [];
     }
-    return data;
+    return list;
   }, [TimeIncometoday, MatterIncometoday, ActiveToken]);
 
   const LoadStatus = useMemo(() => {
@@ -215,179 +232,267 @@ const TokenAccount: React.FC<RouteComponentProps> = React.memo(route => {
     return Status;
   }, [TimeIncometoday, MatterIncometoday, ActiveToken]);
 
-  const getMyBalance = async () => {
-    for (let i = 0; i < BalanceList.length; i++) {
-      if (BalanceList[i].token_type === 1 && activeToken === 'TIME') {
-        setWalletInfo(BalanceList[i]);
+  useEffect(() => {
+    // 最小提币数量和手续费
+    if (activeToken === 'TIME' || ChoiceToken === 1) {
+      setTokenWithDrawMinNum(WithDrawSetting.time_minimum);
+      if (WithDrawFeeType === 1) {
+        setTokenWithDrawFee(WithDrawSetting?.withdraw_bnb_fee);
+      } else {
+        setTokenWithDrawFee(WithDrawSetting?.withdraw_time_fee);
       }
-      if (BalanceList[i].token_type === 2 && activeToken === 'MATTER') {
-        setWalletInfo(BalanceList[i]);
+    } else if (activeToken === 'MATTER' || ChoiceToken === 2) {
+      setTokenWithDrawMinNum(WithDrawSetting.meta_minimum);
+      if (WithDrawFeeType === 1) {
+        setTokenWithDrawFee(WithDrawSetting?.withdraw_bnb_fee);
+      } else {
+        setTokenWithDrawFee(WithDrawSetting?.withdraw_meta_fee);
       }
+    } else if (activeToken === 'BNB' || ChoiceToken === 3) {
+      setTokenWithDrawMinNum(WithDrawSetting.bnb_minimum);
+      setTokenWithDrawFee(WithDrawSetting?.withdraw_bnb_fee);
     }
-  };
+  }, [WithDrawFeeType, WithDrawSetting, activeToken, ChoiceToken]);
 
   useEffect(() => {
-    if (activeToken === 'TIME') {
-      setTokenWithDrawMinNum(WithDrawSetting.time_minimum);
-      setTokenWithDrawFee(WithDrawSetting?.withdraw_time_fee);
-    } else {
-      setTokenWithDrawMinNum(WithDrawSetting.meta_minimum);
-      setTokenWithDrawFee(WithDrawSetting?.withdraw_meta_fee);
-    }
-  }, [WithDrawSetting, activeToken]);
-  useEffect(() => {
+    // 获取路由的token参数
     const getTokenType = () => {
-      // 获取路由的token参数
-      const { search } = route?.location || {};
       const myQuery = search => {
         return new URLSearchParams(search);
       };
       const TokenType = myQuery(search).get('token');
       if (TokenType) {
+        dispatch(
+          storeAction.changeChoiceToken({ choiceToken: Number(TokenType) }),
+        );
         setActiveToken(Number(TokenType));
+        const Tk = getToken(Number(TokenType));
+        dispatch(storeAction.changeActiveToken({ activeToken: String(Tk) }));
+      } else {
+        dispatch(storeAction.changeActiveToken({ activeToken: '' }));
       }
+      // 列表type
       const MyreadType = myQuery(search).get('readType');
       if (MyreadType) {
         setreadType(Number(MyreadType));
       }
     };
     getTokenType();
-  }, []);
+  }, [search, dispatch]);
+
   useEffect(() => {
+    // 获取代币余额
     if (account) {
-      if (activeToken === 'TIME') {
+      if (activeToken === 'TIME' || ChoiceToken === 1) {
         setwalletBalance(getBalanceAmount(timeBalance).toString());
         settokenAddress(timeAddress);
-      } else {
+      } else if (activeToken === 'MATTER' || ChoiceToken === 2) {
         setwalletBalance(getBalanceAmount(matterBalance).toString());
         settokenAddress(MatterAddress);
+      } else if (activeToken === 'BNB' || ChoiceToken === 3) {
+        setwalletBalance(getBalanceAmount(bnbBalance).toString());
+        settokenAddress('');
       }
     }
     return () => {
       setwalletBalance('0');
     };
   }, [
+    bnbBalance,
     account,
     matterBalance,
     timeBalance,
     timeAddress,
     MatterAddress,
     activeToken,
+    ChoiceToken,
   ]);
 
   useEffect(() => {
-    account && BalanceList.length > 1 && getMyBalance();
-    return () => {
-      setWalletInfo(info);
+    const getMyBalance = async () => {
+      // 显示币种详情
+      let List = [];
+      for (let i = 0; i < BalanceList.length; i++) {
+        if (BalanceList[i].token_type === 1) {
+          List[i] = { ...BalanceList[i], tokenAddress: timeAddress };
+          setTokenInfo(List);
+          if (activeToken === 'TIME') setWalletInfo(BalanceList[i]);
+        }
+        if (BalanceList[i].token_type === 2) {
+          List[i] = { ...BalanceList[i], tokenAddress: MatterAddress };
+          setTokenInfo(List);
+          if (activeToken === 'MATTER') setWalletInfo(BalanceList[i]);
+        }
+        if (BalanceList[i].token_type === 3) {
+          List[i] = { ...BalanceList[i] };
+          setTokenInfo(List);
+          if (activeToken === 'BNB') setWalletInfo(BalanceList[i]);
+          setBnbAvailableBalance(BalanceList[i].available_balance);
+        }
+      }
     };
-  }, [BalanceList, account, activeToken]);
+    BalanceList.length > 1 && getMyBalance();
+    const Tk = getToken(activeToken);
+    setActiveToken(Number(Tk));
+    return () => {
+      setWalletInfo({
+        address: '',
+        available_balance: '0',
+        freeze_balance: '0',
+        token_type: 1,
+        total_balance: '0',
+        uid: 0,
+      });
+    };
+  }, [
+    BalanceList,
+    account,
+    timeAddress,
+    MatterAddress,
+    setTokenInfo,
+    setWalletInfo,
+    activeToken,
+  ]);
 
   useEffect(() => {
     if (ActiveToken === 1) {
       dispatch(fetchTimeIncometoday({ day }));
       dispatch(fetchIncomeList({ page: 1, pageSize, readType }));
-    } else {
+    } else if (ActiveToken === 2) {
       dispatch(fetchMatterIncometoday({ day }));
       dispatch(fetchMatterIncomeList({ page: 1, pageSize }));
     }
-  }, [ActiveToken]);
+  }, [ActiveToken, day, dispatch, pageSize, readType]);
 
   return (
     <NoPdBottom>
-      <Flex flexWrap='wrap' justifyContent='space-between'>
-        <BorderWalletBox
-          BalanceInfo={WalletInfo}
-          Token={activeToken}
+      {Boolean(activeToken) ? (
+        <>
+          <Flex flexWrap='wrap' justifyContent='space-between'>
+            <BorderWalletBox
+              BalanceList={TokenInfo}
+              BalanceInfo={WalletInfo}
+              Token={activeToken}
+              Balance={walletBalance}
+              TokenAddr={tokenAddress}
+              TokenWithDrawMinNum={TokenWithDrawMinNum}
+              TokenWithDrawFee={TokenWithDrawFee}
+              WithDrawFeeType={WithDrawFeeType}
+              BnbAvailableBalance={BnbAvailableBalance}
+            />
+            {/* {!isMobile && (
+            <Recharge
+              Token={activeToken}
+              balance={walletBalance}
+              TokenAddr={tokenAddress}
+            />
+          )} */}
+          </Flex>
+          {WalletInfo.token_type !== 3 && (
+            <>
+              {/* token切换 */}
+              <ContentTab>
+                <Text className='active'>
+                  {activeToken} {t('Time Rewards')}
+                </Text>
+                {/* <Flex alignItems='baseline'>
+              <TabText
+                className={ActiveToken === 1 ? 'active' : ''}
+                onClick={() => setActiveToken(1)}
+              >
+                TIME {t('Time Rewards')}
+              </TabText>
+              <TabText
+                className={ActiveToken === 2 ? 'active' : ''}
+                onClick={() => setActiveToken(2)}
+              >
+                MATTER {t('Time Rewards')}
+              </TabText>
+            </Flex> */}
+                {!isMobile && (
+                  <IncomeComp
+                    isMobile={isMobile}
+                    TodayIncome={TodayIncome}
+                    TotalIncome={TotalIncome}
+                  />
+                )}
+              </ContentTab>
+              {isMobile && (
+                <ContentTab>
+                  <IncomeComp
+                    isMobile={isMobile}
+                    TodayIncome={TodayIncome}
+                    TotalIncome={TotalIncome}
+                  />
+                </ContentTab>
+              )}
+              <Chart
+                type={ActiveToken}
+                chartData={ChartList}
+                load={LoadStatus}
+              />
+              {ActiveToken === 1 && (
+                <PostTab>
+                  <Flex alignItems='baseline'>
+                    <TabText
+                      className={readType === 1 ? 'active' : ''}
+                      onClick={() => {
+                        setreadType(1);
+                        dispatch(
+                          fetchIncomeList({ page: 1, pageSize, readType: 1 }),
+                        );
+                      }}
+                    >
+                      {t('walletePost')}
+                    </TabText>
+                    <TabText
+                      className={readType === 2 ? 'active' : ''}
+                      onClick={() => {
+                        setreadType(2);
+                        dispatch(
+                          fetchIncomeList({ page: 1, pageSize, readType: 2 }),
+                        );
+                      }}
+                    >
+                      {t('walleteComment')}
+                    </TabText>
+                    <TabText
+                      className={readType === 3 ? 'active' : ''}
+                      onClick={() => {
+                        setreadType(3);
+                      }}
+                    >
+                      {t('My Rebate')}
+                    </TabText>
+                  </Flex>
+                </PostTab>
+              )}
+              {readType === 3 && ActiveToken === 1 ? (
+                <FriendsList showTitle={false} />
+              ) : (
+                <EarningsRecord
+                  readType={readType}
+                  type={ActiveToken}
+                  info={
+                    ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo
+                  }
+                />
+              )}
+            </>
+          )}
+        </>
+      ) : (
+        <WalletList
+          BalanceList={TokenInfo}
           Balance={walletBalance}
-          TokenAddr={tokenAddress}
           TokenWithDrawMinNum={TokenWithDrawMinNum}
           TokenWithDrawFee={TokenWithDrawFee}
-        />
-        {/* {!isMobile && (
-          <Recharge
-            Token={activeToken}
-            balance={walletBalance}
-            TokenAddr={tokenAddress}
-          />
-        )} */}
-      </Flex>
-      {/* token切换 */}
-      <ContentTab>
-        <Flex alignItems='baseline'>
-          <TabText
-            className={ActiveToken === 1 ? 'active' : ''}
-            onClick={() => setActiveToken(1)}
-          >
-            TIME {t('Time Rewards')}
-          </TabText>
-          <TabText
-            className={ActiveToken === 2 ? 'active' : ''}
-            onClick={() => setActiveToken(2)}
-          >
-            MATTER {t('Time Rewards')}
-          </TabText>
-        </Flex>
-        {!isMobile && (
-          <IncomeComp
-            isMobile={isMobile}
-            TodayIncome={TodayIncome}
-            TotalIncome={TotalIncome}
-          />
-        )}
-      </ContentTab>
-      {isMobile && (
-        <ContentTab>
-          <IncomeComp
-            isMobile={isMobile}
-            TodayIncome={TodayIncome}
-            TotalIncome={TotalIncome}
-          />
-        </ContentTab>
-      )}
-      <Chart type={ActiveToken} chartData={ChartList} load={LoadStatus} />
-      {ActiveToken === 1 && (
-        <PostTab>
-          <Flex alignItems='baseline'>
-            <TabText
-              className={readType === 1 ? 'active' : ''}
-              onClick={() => {
-                setreadType(1);
-                dispatch(fetchIncomeList({ page: 1, pageSize, readType: 1 }));
-              }}
-            >
-              {t('walletePost')}
-            </TabText>
-            <TabText
-              className={readType === 2 ? 'active' : ''}
-              onClick={() => {
-                setreadType(2);
-                dispatch(fetchIncomeList({ page: 1, pageSize, readType: 2 }));
-              }}
-            >
-              {t('walleteComment')}
-            </TabText>
-            <TabText
-              className={readType === 3 ? 'active' : ''}
-              onClick={() => {
-                setreadType(3);
-              }}
-            >
-              {t('My Rebate')}
-            </TabText>
-          </Flex>
-        </PostTab>
-      )}
-      {readType === 3 && ActiveToken === 1 ? (
-        <FriendsList showTitle={false} />
-      ) : (
-        <EarningsRecord
-          readType={readType}
-          type={ActiveToken}
-          info={ActiveToken === 1 ? ContentHistoryInfo : TaskHistoryinfo}
+          WithDrawFeeType={WithDrawFeeType}
+          BnbAvailableBalance={BnbAvailableBalance}
         />
       )}
     </NoPdBottom>
   );
-});
+};
 
 export default TokenAccount;

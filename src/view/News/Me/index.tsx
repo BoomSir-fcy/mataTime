@@ -8,6 +8,7 @@ import MessageCard from '../components/MessageCard';
 import dayjs from 'dayjs';
 import { useTranslation } from 'contexts';
 import { Text, Flex } from 'uikit';
+import { displayTime } from 'utils';
 
 const NewsMe: React.FC<any> = props => {
   const [page, setPage] = useState(1);
@@ -73,11 +74,11 @@ const NewsMe: React.FC<any> = props => {
               uid={item.send_uid}
               avatar={item.send_image}
               title={item.send_name}
-              date={dayjs(item.add_time).format(t('MM-DD HH:mm'))}
+              date={displayTime(item.add_time)}
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}
-              href={`/articleDetils/${item.post?.post_id}`}
+              href={`/articledetils/${item.post?.post_id}`}
             >
               <Flex flexWrap='nowrap'>
                 <FollowPopup uid={item.send_uid}>

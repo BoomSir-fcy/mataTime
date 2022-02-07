@@ -42,13 +42,11 @@ import { SearchHistiryType } from 'store/search/types';
 import SearchFilter from './SearchFilter';
 import SearchPostLen from './SearchPostLen';
 
-const SearchBox = styled(Card)<{ focus?: boolean; result?: boolean }>`
+const SearchBox = styled(Card)<{ focus?: boolean }>`
   position: relative;
   padding: 0 16px;
   height: 50px;
   border-radius: 20px;
-  /* border-radius: ${({ result }) =>
-    result ? '20px 20px 0px 0px' : '20px 20px 20px 20px'}; */
   border: 1px solid
     ${({ focus, theme }) => (focus ? theme.colors.primary : 'transparent')};
   transition: all 0.3s;
@@ -229,7 +227,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
         action=''
       >
         <label htmlFor='search'>
-          <SearchBox focus={focus} isBoxShadow result={!!resultLength}>
+          <SearchBox focus={focus} isBoxShadow>
             <Flex height='100%' alignItems='center'>
               <ButtonStyled focus padding='0' variant='text'>
                 {loading ? (

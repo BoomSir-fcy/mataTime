@@ -8,3 +8,19 @@ export const useMapModule = () => {
   );
   return mapModule;
 };
+
+export const useUserInfoById = id => {
+  const { userMap } = useMapModule();
+
+  return useMemo(() => {
+    return userMap[id];
+  }, [userMap, id]);
+};
+
+export const usePostDetailById = id => {
+  const { postMap } = useMapModule();
+
+  return useMemo(() => {
+    return postMap[id];
+  }, [postMap, id]);
+};

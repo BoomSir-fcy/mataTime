@@ -2,7 +2,7 @@ import { Http } from '../http';
 
 export class AccountApi extends Http {
   async withdraw(params: Api.Account.DrawbalanceSignMessage) {
-    const res = await this.post('/v1/wallet/withdrawbalance', params);
+    const res = await this.post('/v2/wallet/withdrawbalance', params);
     return res;
   }
 

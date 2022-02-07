@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { withRouter, useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Editor, Crumbs, Icon, SendPost } from 'components';
+import { useToast } from 'hooks';
+import { Editor, Crumbs, Icon, SendPost, VerifyCode } from 'components';
 import { Flex, Box, Button } from 'uikit';
 import { isApp } from 'utils/client';
 import { storeAction, useStore } from 'store';
@@ -10,12 +11,10 @@ import { Api } from 'apis';
 
 import { useTag } from './hook';
 
-import useIm from 'hooks/imHooks/useIm';
-import useReadArticle from 'hooks/imHooks/useReadArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTranslation } from 'contexts/Localization';
 
-import { Header, Tabs, ArticleList } from './center';
+import { Tabs, ArticleList } from './center';
 
 const PageContainer = styled(Box)`
   position: relative;
@@ -34,6 +33,7 @@ const Home: React.FC = (props: any) => {
   const { replace } = useHistory();
   const { pathname } = useLocation();
   const { getUserTag } = useTag();
+  const { toastError } = useToast();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const attention = useStore(p => p.post.attention);
@@ -50,25 +50,59 @@ const Home: React.FC = (props: any) => {
   const tabsRefs = React.useRef(null);
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  // useReadArticle(nonce);
+  // 用户输入验证码
+  const verifyRef = React.useRef(null);
+  const [verifyState, setVerifyState] = useState({
+    verifyVisible: false,
+    id: '',
+    verify: '',
+    post: {
+      content: '',
+      image_urls: [],
+      remind_user: '',
+      interval: 0,
+    } as any,
+  });
 
+  // useReadArticle(nonce);
   const sendArticle = async (
-    content: string,
+    content,
     image_urls,
     remind_user,
     reset,
+    id,
+    verify,
   ) => {
     if (!content) return false;
     try {
-      const res = await Api.HomeApi.createArticle({
+      const res = await Api.HomeApi.createV2Article({
         content: content,
         image_urls: image_urls,
         remind_user,
+        id,
+        verify,
       });
       if (Api.isSuccess(res)) {
-        // setRefresh(!refresh)
         reset && reset();
         articleRefs?.current?.reload(1);
+        setVerifyState({
+          ...verifyState,
+          verifyVisible: false,
+        });
+      } else if (res.code === 30004019) {
+        setVerifyState({
+          ...verifyState,
+          verifyVisible: true,
+          post: {
+            content: content,
+            image_urls: image_urls,
+            remind_user,
+            reset,
+          },
+        });
+      } else if (res.code === 30004020) {
+        toastError(t('verifyError'));
+        verifyRef.current?.reload();
       }
     } catch (error) {
       console.error(error);
@@ -101,21 +135,20 @@ const Home: React.FC = (props: any) => {
     setRefresh(!refresh);
   };
 
-  const getTags = async () => {
-    try {
-      const res = await getUserTag();
-      // setUserTags(res);
-      dispatch(storeAction.postSetUserTags(res));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setGetTab(false);
-    }
-  };
-
   React.useEffect(() => {
+    const getTags = async () => {
+      try {
+        const res = await getUserTag();
+        // setUserTags(res);
+        dispatch(storeAction.postSetUserTags(res));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setGetTab(false);
+      }
+    };
     getTags();
-  }, []);
+  }, [dispatch, getUserTag, setGetTab]);
 
   const toTop = () => {
     articleRefs?.current?.reload(1);
@@ -171,6 +204,28 @@ const Home: React.FC = (props: any) => {
           )}
         </CenterCard>
       </Flex>
+      {verifyState.verifyVisible && (
+        <VerifyCode
+          ref={verifyRef}
+          visible={verifyState.verifyVisible}
+          onClose={() =>
+            setVerifyState({
+              ...verifyState,
+              verifyVisible: false,
+            })
+          }
+          onSubmit={data =>
+            sendArticle(
+              verifyState.post.content,
+              verifyState.post.image_urls,
+              verifyState.post.remind_user,
+              verifyState.post.reset,
+              data.id,
+              data.verify,
+            )
+          }
+        />
+      )}
       {isApp() && <SendPost />}
     </PageContainer>
   );

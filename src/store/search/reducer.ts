@@ -256,9 +256,9 @@ export const Search = createSlice({
         state.searchPostaddListNum = -1;
       } else {
         const list = state.resultListOfPost.concat(resultListOfPost);
-        const length = resultListOfPost.length;
+        const len = resultListOfPost.length;
         state.resultListOfPost = uniqBy(list, 'id');
-        state.searchPostaddListNum = state.resultListOfPost.length - length;
+        state.searchPostaddListNum = state.resultListOfPost.length - len;
       }
 
     },
