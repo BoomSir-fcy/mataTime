@@ -124,7 +124,7 @@ const NftAvatar: React.FC<{
               )}
             </Text>
             <Text mb='16px'>
-              {t("Maybe you can join someone else's tribe. Have fun！")}
+              {t("Maybe you can join someone else's tribe.")}
             </Text>
             <Text>{t('Have fun！')}</Text>
           </NodataDom>

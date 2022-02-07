@@ -7,10 +7,11 @@ import { useTranslation } from 'contexts/Localization';
 interface UploadProps extends BoxProps {
   url?: string;
   tips?: string | ReactNode;
+  disabled?: boolean;
   uploadSuccess: (imgSrc: string) => void;
 }
 
-const Container = styled(Flex)`
+const Container = styled(Flex)<{ disabled?: boolean }>`
   position: relative;
   flex-direction: column;
   input {
@@ -25,16 +26,20 @@ const Container = styled(Flex)`
     align-items: center;
     width: 200px;
     height: 200px;
-    cursor: pointer;
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
     color: ${({ theme }) => theme.colors.text};
     background: ${({ theme }) => theme.colors.input};
     border-radius: ${({ theme }) => theme.radii.card};
+  }
+  img {
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   }
 `;
 
 export const UploadSingle: React.FC<UploadProps> = ({
   url,
   tips,
+  disabled,
   uploadSuccess,
 }) => {
   const imageInput = React.useRef<HTMLInputElement>();
@@ -73,23 +78,22 @@ export const UploadSingle: React.FC<UploadProps> = ({
   };
 
   return (
-    <Container>
-      {imgUrl ? (
-        <img src={imgUrl} width='200px' height='200px' alt='' />
-      ) : (
-        <>
-          <label htmlFor='upload-images'>
-            <Text fontSize='61px'>+</Text>
-          </label>
-          <input
-            id='upload-images'
-            ref={imageInput}
-            onChange={() => uploadFile()}
-            type='file'
-            accept='image/*'
-          />
-        </>
-      )}
+    <Container disabled={disabled}>
+      <label htmlFor='upload-images'>
+        {imgUrl ? (
+          <img src={imgUrl} width='200px' height='200px' alt='' />
+        ) : (
+          <Text fontSize='61px'>+</Text>
+        )}
+      </label>
+      <input
+        id='upload-images'
+        ref={imageInput}
+        disabled={disabled}
+        onChange={() => uploadFile()}
+        type='file'
+        accept='image/*'
+      />
 
       {tips && (
         <Text mt='10px' color='textTips' small>

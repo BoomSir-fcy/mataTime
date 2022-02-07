@@ -4,15 +4,23 @@ import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Flex, Input } from 'uikit';
 import { useImmer } from 'use-immer';
-import { FormFlex, FormItem, InputPanelStyle, Label } from './style';
+import {
+  FormFlex,
+  FormItem,
+  InputPanelStyle,
+  Label,
+  TextareaStyled,
+} from './style';
 
 type InfoParams = {
   name: string;
   url: string;
   introduction: string;
 };
-const TribeInfo = React.forwardRef((props, ref) => {
+
+const TribeInfoForward = (props, ref) => {
   const { t } = useTranslation();
+
   const [state, setState] = useImmer<InfoParams>({
     name: '',
     url: '',
@@ -34,10 +42,11 @@ const TribeInfo = React.forwardRef((props, ref) => {
   return (
     <FormFlex>
       <FormItem>
-        <Label required>{t('部落名称')}</Label>
+        <Label required>{t('Tribe name')}</Label>
         <Flex flexDirection='column'>
           <InputPanelStyle>
             <Input
+              disabled={props.disabled}
               noShadow
               required
               scale='sm'
@@ -53,24 +62,26 @@ const TribeInfo = React.forwardRef((props, ref) => {
             />
           </InputPanelStyle>
           <Text mt='10px' small color='textTips'>
-            {t('4~15个字符，支持中英文、数字')}
+            {t('4~15 characters, support Chinese and English, numbers')}
           </Text>
         </Flex>
       </FormItem>
       <FormItem>
-        <Label required>{t('部落LOGO')}</Label>
+        <Label required>{t('Tribal Logo')}</Label>
         <UploadSingle
+          disabled={props.disabled}
           url={state.url}
-          tips={t('建议图片比例1:1')}
+          tips={t('The recommended image ratio is 1:1')}
           uploadSuccess={uploadSuccess}
         />
       </FormItem>
       <FormItem>
-        <Label required>{t('部落简介')}</Label>
-        <textarea
+        <Label required>{t('Tribal Profile')}</Label>
+        <TextareaStyled
           required
+          disabled={props.disabled}
           value={state.introduction}
-          placeholder={t('请填写部落的简介介绍')}
+          placeholder={t('Please fill in the brief introduction of the tribe')}
           maxLength={140}
           rows={5}
           onChange={e =>
@@ -82,6 +93,5 @@ const TribeInfo = React.forwardRef((props, ref) => {
       </FormItem>
     </FormFlex>
   );
-});
-
-export default TribeInfo;
+};
+export const TribeInfo = React.forwardRef(TribeInfoForward);

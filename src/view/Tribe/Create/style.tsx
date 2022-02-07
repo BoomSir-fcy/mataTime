@@ -76,3 +76,7 @@ export const LogoIcon = styled(Flex)`
   border: 1px solid ${({ theme }) => theme.colors.white_black};
   border-radius: 50%;
 `;
+
+export const TextareaStyled = styled.textarea<{ disabled?: boolean }>`
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
+`;

@@ -22,7 +22,7 @@ const PATTERN_ONE_ONEHUNDRED = '^([1-9][0-9]{0,1}|100)$';
 const PATTERN_NUMBER = '^[1-9]d*$';
 const PATTERN_AMOUNT = '^[0-9]*[.,]?[0-9]{0,18}$';
 
-const TribeFee = React.forwardRef((props, ref) => {
+const TribeFeeForward = (props, ref) => {
   const { t } = useTranslation();
   const [tribeType, setTribeType] = useState(2);
   const [tribeFeeType, setTribeFeeType] = useState(2);
@@ -40,8 +40,8 @@ const TribeFee = React.forwardRef((props, ref) => {
     { value: 2, label: t('Pro') },
   ];
   const feeTypeOptions = [
-    { value: 1, label: t('默认') },
-    { value: 2, label: t('自定义') },
+    { value: 1, label: t('Default') },
+    { value: 2, label: t('Customize') },
   ];
   const CoinOptions = [
     { value: 1, label: t('BNB') },
@@ -58,9 +58,10 @@ const TribeFee = React.forwardRef((props, ref) => {
     <FormFlex>
       {/* 部落类型 */}
       <FormItem>
-        <Label required>{t('部落类型')}</Label>
+        <Label required>{t('Tribe Type')}</Label>
         <FormColumnItem flexDirection='column'>
           <RadioGroup
+            disabled={props.disabled}
             value={tribeType}
             options={typeOptions}
             onChange={val => {
@@ -70,14 +71,15 @@ const TribeFee = React.forwardRef((props, ref) => {
           {tribeType === 2 && (
             <TribeCard isRadius>
               <FormItem className='mobile-nowrap' alignItems='center'>
-                <Label>{t('收费设置：')}</Label>
+                <Label>{t('Charge settings')}</Label>
                 <InputPanelStyle>
                   <Flex justifyContent='space-between' alignItems='center'>
                     <Input
+                      disabled={props.disabled}
                       noShadow
                       required
                       scale='sm'
-                      placeholder={t('请输入金额')}
+                      placeholder={t('Please enter the amount')}
                       inputMode='decimal'
                       pattern={PATTERN_AMOUNT}
                       value={state.amount}
@@ -92,6 +94,7 @@ const TribeFee = React.forwardRef((props, ref) => {
                     />
                     <Select
                       scale='xs'
+                      disabled={props.disabled}
                       options={CoinOptions}
                       defaultId={1}
                       onChange={(val: any) => console.log(val)}
@@ -100,13 +103,17 @@ const TribeFee = React.forwardRef((props, ref) => {
                 </InputPanelStyle>
               </FormItem>
               <FormItem className='mobile-nowrap' alignItems='center'>
-                <Label>{t('计时方式：')}</Label>
+                <Label>{t('Timing method')}</Label>
                 <RadioGroup
+                  disabled={props.disabled}
                   value={state.timing}
                   options={[
-                    { value: 1, label: t('永久') },
-                    { value: 2, label: t('以加入部落的时间计时') },
-                    { value: 3, label: t('以创建部落时间计时') },
+                    { value: 1, label: t('permanent') },
+                    {
+                      value: 2,
+                      label: t('Timed by the time of joining the clan'),
+                    },
+                    { value: 3, label: t('Timed by Clan Creation') },
                   ]}
                   onChange={val => {
                     setState(p => {
@@ -116,14 +123,15 @@ const TribeFee = React.forwardRef((props, ref) => {
                 />
               </FormItem>
               <FormItem className='mobile-nowrap' alignItems='center'>
-                <Label>{t('有效时间：')}</Label>
+                <Label>{t('Effective time')}</Label>
                 <InputPanelStyle>
                   <Flex justifyContent='space-between' alignItems='center'>
                     <Input
+                      disabled={props.disabled}
                       noShadow
                       required
                       scale='sm'
-                      placeholder={t('请输入天数')}
+                      placeholder={t('Please enter the number of days')}
                       inputMode='decimal'
                       pattern={PATTERN_NUMBER}
                       value={state.validDate}
@@ -136,7 +144,7 @@ const TribeFee = React.forwardRef((props, ref) => {
                         }
                       }}
                     />
-                    <Text>{t('天')}</Text>
+                    <Text>{t('d')}</Text>
                   </Flex>
                 </InputPanelStyle>
               </FormItem>
@@ -146,9 +154,10 @@ const TribeFee = React.forwardRef((props, ref) => {
       </FormItem>
       {/* 阅读计费 */}
       <FormItem>
-        <Label required>{t('阅读计费')}</Label>
+        <Label required>{t('Read Billing')}</Label>
         <FormColumnItem>
           <RadioGroup
+            disabled={props.disabled}
             value={tribeFeeType}
             options={feeTypeOptions}
             onChange={val => {
@@ -160,12 +169,13 @@ const TribeFee = React.forwardRef((props, ref) => {
               <FormItem justifyContent='space-between'>
                 <Flex flexDirection='column'>
                   <Text mb='10px' color='textTips'>
-                    {t('每秒钟消耗TIME')}
+                    {t('Consumes TIME per second')}
                   </Text>
                   <Flex flexDirection='column' alignItems='flex-end'>
                     <InputPanelStyle>
                       <Flex justifyContent='space-between' alignItems='center'>
                         <Input
+                          disabled={props.disabled}
                           noShadow
                           required
                           scale='sm'
@@ -192,12 +202,13 @@ const TribeFee = React.forwardRef((props, ref) => {
                 </Flex>
                 <Flex flexDirection='column'>
                   <Text mb='10px' color='textTips'>
-                    {t('每条内容最多消耗TIME')}
+                    {t('Each piece of content consumes up to TIME')}
                   </Text>
                   <Flex flexDirection='column' alignItems='flex-end'>
                     <InputPanelStyle>
                       <Flex justifyContent='space-between' alignItems='center'>
                         <Input
+                          disabled={props.disabled}
                           noShadow
                           required
                           scale='sm'
@@ -228,12 +239,13 @@ const TribeFee = React.forwardRef((props, ref) => {
         </FormColumnItem>
       </FormItem>
       <Flex flexDirection='column' width='100%' margin='20px 0'>
-        <Text>{t('*内容生产者TIME奖励分配')}</Text>
+        <Text>* {t('Content Producer TIME Reward Distribution')}</Text>
         <Flex mt='20px'>
           <Flex mr='20px' alignItems='center'>
             <InputPanelStyle>
               <Flex justifyContent='space-between' alignItems='center'>
                 <Input
+                  disabled={props.disabled}
                   noShadow
                   scale='sm'
                   required
@@ -254,13 +266,14 @@ const TribeFee = React.forwardRef((props, ref) => {
               </Flex>
             </InputPanelStyle>
             <Text ml='10px' style={{ whiteSpace: 'nowrap' }}>
-              {t('部落主')}
+              {t('Tribal Lord')}
             </Text>
           </Flex>
           <Flex alignItems='center'>
             <InputPanelStyle>
               <Flex justifyContent='space-between' alignItems='center'>
                 <Input
+                  disabled={props.disabled}
                   noShadow
                   required
                   scale='sm'
@@ -281,18 +294,13 @@ const TribeFee = React.forwardRef((props, ref) => {
               </Flex>
             </InputPanelStyle>
             <Text ml='10px' style={{ whiteSpace: 'nowrap' }}>
-              {t('创作者')}
+              {t('Creator')}
             </Text>
           </Flex>
         </Flex>
-        <Text mt='20px' color='textTips' small>
-          {t(
-            '这是部落类型介绍/计费规则介绍Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus',
-          )}
-        </Text>
       </Flex>
     </FormFlex>
   );
-});
+};
 
-export default TribeFee;
+export const TribeFee = React.forwardRef(TribeFeeForward);

@@ -7,6 +7,7 @@ interface RadioGroupProps extends BoxProps {
   defaultValue?: ValueType;
   value?: ValueType;
   options: Array<RadioItemProps>;
+  disabled?: boolean;
   onChange?: (e: any) => void;
 }
 interface RadioItemProps extends RadioProps {
@@ -22,6 +23,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
   value,
   label,
   checked,
+  disabled,
   onChange,
 }) => {
   const radioId = `radio_${value}_${Date.now()}`;
@@ -32,6 +34,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
         type='radio'
         id={radioId}
         checked={checked}
+        disabled={disabled}
         onChange={onChange}
         value={value}
       />
@@ -46,6 +49,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   defaultValue,
   value,
   options,
+  disabled,
   onChange,
 }) => {
   const [currentValue, setCurrentValue] = useState(value || defaultValue);
@@ -71,6 +75,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
           value={item.value}
           label={item.label}
           checked={currentValue === item.value}
+          disabled={disabled}
           onChange={onRadioChange}
         />
       ))}
