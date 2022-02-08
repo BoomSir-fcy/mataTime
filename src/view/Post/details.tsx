@@ -11,14 +11,14 @@ import eventBus from 'utils/eventBus';
 
 import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
-import { PageStyle } from './style';
+import { PageStyle, PostCount } from './style';
 
 // import MentionItem from 'view/News/components/MentionItem';
 import MentionItem from 'components/Post/MentionItem';
 // import MentionOperator from 'view/News/components/MentionOperator';
 import MentionOperator from 'components/Post/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-import { Spinner, Empty } from 'uikit';
+import { Spinner, Empty, Text } from 'uikit';
 import {
   useFetchAutoPostTranslate,
   usePostDetailById,
@@ -170,6 +170,10 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
               more={true}
               showTranslate
             />
+            <PostCount>
+              <Text mr='15px'>{t('number Reposts', { value: 20 })}</Text>
+              <Text>{t('number Quote Posts', { value: 20 })}</Text>
+            </PostCount>
             <MentionOperator
               replyType='twitter'
               postId={itemData.id}

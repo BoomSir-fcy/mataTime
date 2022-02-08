@@ -31,7 +31,7 @@ export const fetchPostAsync = createAsyncThunk(
   async (params: Api.Home.queryListParams, { dispatch }) => {
     // dispatch()
     dispatch(setLoading(true));
-    const response: Api.Home.postData = await Api.HomeApi.getArticleList({
+    const response: Api.Home.postData = await Api.HomeApi.getV2ArticleList({
       ...params,
       user_tags1:
         Number(params.attention) === 3 ? params.user_tags1.join(',') : [],
@@ -41,8 +41,8 @@ export const fetchPostAsync = createAsyncThunk(
     });
     // dispatch(setLoading(false));
     if (Api.isSuccess(response)) {
-      const ids = checkTranslateIds(response.data.List || [])
-      dispatch(addTranslateIds(ids))
+      const ids = checkTranslateIds(response.data.List || []);
+      dispatch(addTranslateIds(ids));
       return {
         list: response.data.List,
         page: params.page,

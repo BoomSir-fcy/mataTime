@@ -162,11 +162,14 @@ const MentionOperator: React.FC<IProps> = ({
             onClick={e => {
               e.preventDefault();
               e.stopPropagation();
-              setReplyVisible(true);
             }}
             className='operator-item'
           >
-            <Forward total={itemData.share_num || 0} />
+            <Forward
+              type='post'
+              total={itemData.share_num || 0}
+              data={itemData}
+            />
           </Box>
           {/* <Box className='operator-item'>
             <Icon name='icon-retweet' margin='0 10px 0 0' color='textTips' />

@@ -1,7 +1,8 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
-import { Flex, Box, Text, useTooltip } from 'uikit';
-import { Icon } from 'components';
+import { useImmer } from 'use-immer';
+import { Flex, Box, Button, Text, useTooltip } from 'uikit';
+import { Icon, ForwardModal } from 'components';
 import { useTranslation } from 'contexts/Localization';
 
 const PopupButton = styled(Flex)`
@@ -18,29 +19,45 @@ const PopupContent = styled(Flex)`
   border-radius: ${({ theme }) => theme.radii.card};
 `;
 
-const Rows = styled(Flex)`
+const Rows = styled(Button)`
+  display: flex;
+  justify-content: flex-start;
   align-content: center;
+  height: auto;
   padding: 14px 0 14px 9px;
 `;
 
 export const Forward: React.FC<{
+  type: string;
   total: number;
-}> = React.memo(({ total }) => {
+  data: Api.Home.post;
+}> = React.memo(({ type, total, data }) => {
   const theme = useTheme();
   const { t } = useTranslation();
+  const [state, setState] = useImmer({
+    visible: false,
+  });
 
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+  const { targetRef, tooltip, tooltipVisible, close } = useTooltip(
     <PopupContent
       onClick={event => {
         event.stopPropagation();
         event.preventDefault();
       }}
     >
-      <Rows>
+      <Rows variant='text'>
         <Icon name='icon-retweet' margin='0 5px 0 0' color='textTips' />
         <Text color='textTips'>{t('Repost')}</Text>
       </Rows>
-      <Rows>
+      <Rows
+        variant='text'
+        onClick={() => {
+          close();
+          setState(p => {
+            p.visible = true;
+          });
+        }}
+      >
         <Icon name='icon-bianji' margin='0 5px 0 0' color='textTips' />
         <Text color='textTips'>{t('Quote Post')}</Text>
       </Rows>
@@ -62,6 +79,17 @@ export const Forward: React.FC<{
         <Text color='textTips'>{total}</Text>
       </PopupButton>
       {tooltipVisible && tooltip}
+      {/* 转发 */}
+      <ForwardModal
+        visible={state.visible}
+        type={type}
+        data={data}
+        close={() =>
+          setState(p => {
+            p.visible = false;
+          })
+        }
+      />
     </Box>
   );
 });

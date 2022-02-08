@@ -124,3 +124,10 @@ export const CommentListFooter = styled.div`
   font-weight: 400;
   color: ${({ theme }) => theme.colors.textgrey};
 `;
+
+export const PostCount = styled(Flex)`
+  padding: 5px 0 5px 64px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 10px 0 10px 64px;
+  }
+`;

@@ -15,9 +15,32 @@ export class HomeApi extends Http {
     return res;
   }
 
+  // 文章列表v2
+  async getV2ArticleList(params: Api.Home.queryListParams) {
+    const paramsStr = qs.stringify(
+      {
+        user_tags1: params.user_tags1,
+        user_tags2: params.user_tags2,
+      },
+      { arrayFormat: 'repeat' },
+    );
+    const res: Api.Home.postData = await this.get(`/v2/post/list`, params);
+    return res;
+  }
+
   // 获取用户的tag分类列表
   async getUserTag() {
     const res = await this.get('/v1/user/tag/cat-list');
+    return res;
+  }
+
+  // 帖子评论转发
+  async setForward(params: {
+    forward_type: 1 | 2;
+    forward_id: number;
+    forward_content: string;
+  }) {
+    const res = await this.post('/v2/forward/post-forward', params);
     return res;
   }
 

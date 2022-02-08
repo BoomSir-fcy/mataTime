@@ -22,6 +22,7 @@ import {
 import { MeItemWrapper } from './styled';
 import MentionItem from './MentionItem';
 import MentionOperator from './MentionOperator';
+import ForwardContent from './ForwardContent';
 import { useFetchAutoPostTranslate, useMapModule } from 'store/mapModule/hooks';
 
 const ArticleListBox = styled.div`
@@ -193,6 +194,7 @@ const PostList: React.FC<PostListPorps> = ({
                   handleUpdateList(item, type);
                 }}
               />
+              <ForwardContent />
               <MentionOperator
                 replyType='twitter'
                 postId={item[postIdKey]}

@@ -15,7 +15,7 @@ import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce, cloneDeep } from 'lodash';
 import { useToast } from 'hooks';
-import { Loading } from 'components';
+import { Loading, ForwardContent } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
@@ -58,6 +58,8 @@ type Iprops = {
   initValue?: any;
   sendArticle: any;
   cancelSendArticle?: any;
+  forwardContent?: Api.Home.post;
+  ispadding?: boolean;
 };
 
 export const Portal = ({ children }) => {
@@ -190,7 +192,13 @@ const removeEmptyLine = value => {
 };
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const {
+    initValue = null,
+    cancelSendArticle = () => {},
+    type,
+    forwardContent,
+    ispadding = true,
+  } = props;
   const { t } = useTranslation();
   const { toastError } = useToast();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
@@ -489,7 +497,7 @@ export const Editor = (props: Iprops) => {
   );
 
   return (
-    <SlateBox key={refresh}>
+    <SlateBox ispadding={ispadding} key={refresh}>
       <Loading visible={isLoading} />
       <Slate
         editor={editor}
@@ -573,6 +581,9 @@ export const Editor = (props: Iprops) => {
           />
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
+        {type === 'forward' && (
+          <ForwardContent forwardContent={forwardContent} />
+        )}
         <Flex justifyContent='space-between' alignItems='center'>
           <Toolbar
             type={type}
