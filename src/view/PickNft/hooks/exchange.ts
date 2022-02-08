@@ -6,6 +6,7 @@ import {
   exchangeAndBuyToPhtot,
 } from 'utils/myCalls';
 import isZero from 'utils/isZero';
+import { useTestHandle, useTestHandleEip721 } from './example';
 
 export enum ExChangeResult {
   AVATAR_EXISTS,
@@ -74,4 +75,11 @@ export const useLockInviteCode = () => {
   );
 
   return { onLockCode: handleLockCode };
+};
+
+
+export const useTestInvitation = () => {
+  const { handle } = useTestHandle()
+
+  return { onTest: handle };
 };

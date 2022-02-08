@@ -11,6 +11,8 @@ import { providers } from 'ethers';
 const useBiconomyWeb3React = () => {
   const { library, ...web3React } = useActiveWeb3React()
   const refEth = useRef(library)
+  const [ercForwarderClient, setErcForwarderClient] = useState(null)
+  const [permitClient, setPermitClient] = useState(null)
 
   useEffect(() => {
     if (library !== refEth.current) {
@@ -18,13 +20,23 @@ const useBiconomyWeb3React = () => {
     }
   }, [library])
 
-  const ethersProvider = useMemo(() => {
+  const [ethersProvider, biconomy ] = useMemo(() => {
     const biconomy = new Biconomy(refEth.current, {apiKey: BICONOMY_DAPP_API_KEY, debug: true});
     const biconomyProvider = new providers.Web3Provider(biconomy);
-    return biconomyProvider
+    return [biconomyProvider, biconomy]
   }, [refEth.current])
 
-  return { library: ethersProvider, ...web3React }
+  useEffect(() => {
+    biconomy.onEvent(biconomy.READY, () => {
+      // Initialize your dapp here like getting user accounts etc
+      setErcForwarderClient(biconomy.erc20ForwarderClient);
+      setPermitClient(biconomy.permitClient);
+    }).onEvent(biconomy.ERROR, (error, message) => {
+      // Handle error while initializing mexa
+    });
+  }, [])
+
+  return { library: ethersProvider, ercForwarderClient, permitClient, biconomy, ...web3React }
 }
 
 export default useBiconomyWeb3React;

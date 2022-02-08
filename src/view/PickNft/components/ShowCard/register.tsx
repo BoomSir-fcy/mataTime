@@ -26,6 +26,7 @@ import {
   ExChangeResult,
   useExchangePhoto,
   useLockInviteCode,
+  useTestInvitation,
 } from 'view/PickNft/hooks/exchange';
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
 import {
@@ -164,6 +165,7 @@ const ShowCard: React.FC = () => {
     usePickNftState();
 
   const { onLockCode } = useLockInviteCode();
+  const { onTest } = useTestInvitation();
 
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
@@ -218,10 +220,12 @@ const ShowCard: React.FC = () => {
   const handLock = useCallback(
     async val => {
       await onLockCode(val);
+      // await onTest(val);
       dispatch(fetchCodeInfoAsync(codes));
       setVisible(false);
     },
     [onLockCode, dispatch, codes],
+    // [onTest, dispatch, codes],
   );
 
   const onClose = useCallback(() => {
