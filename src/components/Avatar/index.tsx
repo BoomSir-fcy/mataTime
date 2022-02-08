@@ -11,30 +11,30 @@ const scales = {
   MD: 'md',
   SM: 'sm',
   MM: 'mm',
-  XS: 'xs'
+  XS: 'xs',
 } as const;
 
 const scaleVariants = {
   [scales.XL]: {
     width: '160px',
-    height: '160px'
+    height: '160px',
   },
   [scales.LD]: {
     width: '100px',
-    height: '100px'
+    height: '100px',
   },
   [scales.MD]: {
     width: '50px',
-    height: '50px'
+    height: '50px',
   },
   [scales.SM]: {
     width: '40px',
-    height: '40px'
+    height: '40px',
   },
   [scales.MM]: {
     width: '24px',
-    height: '24px'
-  }
+    height: '24px',
+  },
 };
 
 const Img = styled.img`
@@ -42,9 +42,9 @@ const Img = styled.img`
   border-radius: 50%;
   object-fit: cover;
   ${variant({
-  prop: 'scale',
-  variants: scaleVariants
-})}
+    prop: 'scale',
+    variants: scaleVariants,
+  })}
 `;
 
 export const Avatar: React.FC<{
@@ -80,5 +80,5 @@ export const Avatar: React.FC<{
 };
 
 Avatar.defaultProps = {
-  scale: scales.LD
+  scale: scales.LD,
 };
