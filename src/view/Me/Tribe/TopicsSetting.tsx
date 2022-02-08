@@ -3,11 +3,8 @@ import { Crumbs, Icon } from 'components';
 import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Button, Flex, Card, Input } from 'uikit';
+import { ContentBox } from './styled';
 
-const TopicsBox = styled(Box)`
-  margin-top: 20px;
-  ${({ theme }) => theme.mediaQueriesSize.paddingxs}
-`;
 const TopicsCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
@@ -41,7 +38,7 @@ const MeTribeTopicsSetting = () => {
   return (
     <Box>
       <Crumbs title={t('Topics Setting')} />
-      <TopicsBox>
+      <ContentBox>
         <TopicsCard isRadius>
           <Flex flexDirection='column'>
             <TopicsContentFlex>
@@ -87,7 +84,7 @@ const MeTribeTopicsSetting = () => {
             </Flex>
           </Flex>
         </TopicsCard>
-      </TopicsBox>
+      </ContentBox>
     </Box>
   );
 };

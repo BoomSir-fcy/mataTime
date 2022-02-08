@@ -210,6 +210,13 @@ export const menuNavConfig: MenuNavConfig[] = [
             hideRight: true,
           },
           {
+            icon: 'icon-tongyong-chengyuan',
+            activeIcon: 'icon-tongyong-chengyuan1',
+            lable: 'Member NFT',
+            path: '/me/tribe/member-nft',
+            hideRight: true,
+          },
+          {
             icon: 'icon-zhifeiji1',
             activeIcon: 'icon-zhifeiji',
             lable: 'Invitation Setting',

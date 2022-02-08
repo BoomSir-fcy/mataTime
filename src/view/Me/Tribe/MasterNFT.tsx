@@ -1,37 +1,11 @@
 import React, { useState } from 'react';
-import { Avatar, Crumbs, ModalWrapper } from 'components';
+import { Crumbs, ModalWrapper } from 'components';
 import { useTranslation } from 'contexts';
-import { Box, Text, Button, Flex, Image, Input } from 'uikit';
+import { Box, Text, Button, Flex, Input } from 'uikit';
 import styled from 'styled-components';
-import default_avatar from 'assets/images/default_avatar.jpg';
+import { ContentBox } from './styled';
+import { CommonClaimNFT } from './components/CommonClaimNFT';
 
-const MasterNFTBox = styled(Box)`
-  margin-top: 20px;
-  ${({ theme }) => theme.mediaQueriesSize.paddingxs}
-`;
-const NFTImg = styled(Avatar)`
-  border-radius: 10px;
-  &.active {
-    box-shadow: ${({ theme }) =>
-      theme.isDark
-        ? `0px 0px 9px 5px ${theme.colors.white}`
-        : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
-  }
-`;
-const NFTBox = styled(Box)`
-  position: relative;
-  width: 200px;
-  height: 200px;
-  border-radius: 10px;
-  .nft-img {
-    width: 200px;
-    border-radius: 10px;
-    box-shadow: ${({ theme }) =>
-      theme.isDark
-        ? `0px 0px 10px 0px ${theme.colors.white}`
-        : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
-  }
-`;
 const InputStyled = styled(Input)`
   width: 100%;
   border-radius: 10px;
@@ -43,27 +17,11 @@ const MeTribeMasterNFT = () => {
   return (
     <Box>
       <Crumbs title={t('Master NFT')}>
-        <Button onClick={() => setVisible(true)}>转让</Button>
+        <Button onClick={() => setVisible(true)}>{t('Transfer')}</Button>
       </Crumbs>
-      <MasterNFTBox>
-        <Flex flexWrap='wrap' alignItems='center'>
-          <NFTBox mr='80px' mb='20px'>
-            <img className='nft-img' src={default_avatar} alt='' />
-          </NFTBox>
-          <Flex flexDirection='column'>
-            <Text fontSize='18px' bold>
-              {t('认领部落主NFT')}
-            </Text>
-            <Text mt='20px' color='textTips' small>
-              {t('只有认领部落宿主NFT才能享受部落宿主权利。')}
-            </Text>
-            <Text mt='20px' color='textTips' small>
-              {t('Brithday:')} 2022-01-12
-            </Text>
-            <Button mt='40px'>{t('批准')}</Button>
-          </Flex>
-        </Flex>
-      </MasterNFTBox>
+      <ContentBox>
+        <CommonClaimNFT type='master' />
+      </ContentBox>
 
       <ModalWrapper
         creactOnUse

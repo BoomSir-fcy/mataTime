@@ -10,7 +10,8 @@ export const FormItem = styled(Flex)`
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
   }
-  ${({ theme }) => theme.mediaQueriesSize.margint}
+  /* ${({ theme }) => theme.mediaQueriesSize.margint} */
+  margin-top: 20px;
   &:last-child {
     margin-bottom: 20px;
   }
@@ -49,6 +50,7 @@ export const FormColumnItem = styled(Flex)`
 `;
 export const Label = styled.label<{ required?: boolean }>`
   width: 100px;
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.text};
   ${({ required }) =>
     required &&
@@ -61,9 +63,9 @@ export const Label = styled.label<{ required?: boolean }>`
   `}
 `;
 
-export const InputPanelStyle = styled(InputPanel)`
+export const InputPanelStyle = styled(InputPanel)<{ width?: string }>`
   width: 100%;
-  max-width: 400px;
+  max-width: ${({ width }) => width || '400px'};
   border-radius: 10px;
   padding: 4px 20px;
 `;

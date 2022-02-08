@@ -115,7 +115,10 @@ export const Crumbs: React.FC<{
             {!back ? (
               <Text
                 onClick={goTop}
-                style={{ cursor: top ? 'pointer' : 'auto' }}
+                style={{
+                  cursor: top ? 'pointer' : 'auto',
+                  whiteSpace: 'nowrap',
+                }}
                 className='text'
               >
                 {title || '首页'}

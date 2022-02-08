@@ -12,15 +12,16 @@ import {
   InputPanelStyle,
 } from './style';
 import RadioGroup from 'uikit/components/Radio/RadioGroup';
+import {
+  PATTERN_AMOUNT,
+  PATTERN_NUMBER,
+  PATTERN_ONE_ONEHUNDRED,
+} from './utils/pattern';
 
 const TribeCard = styled(Card)`
   margin-top: 20px;
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
-
-const PATTERN_ONE_ONEHUNDRED = '^([1-9][0-9]{0,1}|100)$';
-const PATTERN_NUMBER = '^[1-9]d*$';
-const PATTERN_AMOUNT = '^[0-9]*[.,]?[0-9]{0,18}$';
 
 const TribeFeeForward = (props, ref) => {
   const { t } = useTranslation();
