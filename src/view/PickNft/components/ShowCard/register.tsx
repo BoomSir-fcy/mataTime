@@ -26,7 +26,6 @@ import {
   ExChangeResult,
   useExchangePhoto,
   useLockInviteCode,
-  useTestInvitation,
 } from 'view/PickNft/hooks/exchange';
 import { useNftApproveExPhoto } from 'view/PickNft/hooks/useApprove';
 import {
@@ -165,7 +164,20 @@ const ShowCard: React.FC = () => {
     usePickNftState();
 
   const { onLockCode } = useLockInviteCode();
-  const { onTest } = useTestInvitation();
+
+  /* 
+    1. 使用代付的方式帮助没有手续费的朋友支付gas
+    2. 不影响原有功能
+    3. 判断当前用户余额是否能够支付gas
+        查询用户余额
+        查询当前方法需要的gas
+          查询锁定需要的gas
+          查询注册需要的gas
+    4. 判断是否需要使用代付
+    5. 代付
+
+  
+  */
 
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
@@ -220,12 +232,10 @@ const ShowCard: React.FC = () => {
   const handLock = useCallback(
     async val => {
       await onLockCode(val);
-      // await onTest(val);
       dispatch(fetchCodeInfoAsync(codes));
       setVisible(false);
     },
     [onLockCode, dispatch, codes],
-    // [onTest, dispatch, codes],
   );
 
   const onClose = useCallback(() => {

@@ -4,9 +4,13 @@ import {
   exchangeToPhtot,
   lockInviteCode,
   exchangeAndBuyToPhtot,
+  estimateGas,
 } from 'utils/myCalls';
 import isZero from 'utils/isZero';
-import { useTestHandle, useTestHandleEip721 } from './example';
+import { useBiconomyInvitationExcute } from './useBiconomyInvitationExcute';
+import { FetchStatus, useGetBnbBalance } from 'hooks/useTokenBalance';
+import { getInvitationContract } from 'utils/contractHelpers';
+import { useGasprice } from 'hooks/useGasprice';
 
 export enum ExChangeResult {
   AVATAR_EXISTS,
@@ -16,6 +20,9 @@ export enum ExChangeResult {
 
 export const useExchangePhoto = () => {
   const masterContract = useInvitation();
+  const { executeMetaTransaction } = useBiconomyInvitationExcute()
+  const { balance, fetchStatus } = useGetBnbBalance()
+  const { gasPirce } = useGasprice()
   const handleExchange = useCallback(
     async (ids: number[], nickname: string, code: string, color: string) => {
       // console.debug(ids, nickname);
@@ -25,16 +32,35 @@ export const useExchangePhoto = () => {
       const exists = await masterContract.checkTokenID(tx.toJSON());
       if (!exists) return ExChangeResult.SUFF_NOT_LEFT; // 物件个数用完了
 
-      const receipt = await exchangeToPhtot(
-        masterContract,
+      const gasLimitVal = await estimateGas(masterContract, 'exchange', [
         nickname,
         code,
         tx.toJSON().hex,
         color,
-      );
+      ])
+      const fee = gasPirce.times(gasLimitVal.toString())
+      const noGas = !(fetchStatus === FetchStatus.SUCCESS && balance.isGreaterThanOrEqualTo(fee));
+
+      let receipt = null
+      if (noGas) {
+        receipt = await executeMetaTransaction('exchange', [
+          nickname,
+          code,
+          tx.toJSON().hex,
+          color,
+        ]);
+      } else {
+        receipt = await exchangeToPhtot(
+          masterContract,
+          nickname,
+          code,
+          tx.toJSON().hex,
+          color,
+        );
+      }
       return ExChangeResult.SUCCESS;
     },
-    [masterContract],
+    [masterContract, executeMetaTransaction, balance, gasPirce, fetchStatus],
   );
 
   return { onExchange: handleExchange };
@@ -66,20 +92,28 @@ export const useExchangeAndBuyPhoto = () => {
 
 export const useLockInviteCode = () => {
   const masterContract = useInvitation();
+  
+  const { executeMetaTransaction } = useBiconomyInvitationExcute()
+  const { balance, fetchStatus } = useGetBnbBalance()
+  const { gasPirce } = useGasprice()
+
   const handleLockCode = useCallback(
     async (code: string) => {
-      const receipt = await lockInviteCode(masterContract, code);
+      const haxCode = `0x${code}`
+      const gasLimitVal = await estimateGas(masterContract, 'lockCode', [haxCode])
+      const fee = gasPirce.times(gasLimitVal.toString())
+      const noGas = !(fetchStatus === FetchStatus.SUCCESS && balance.isGreaterThanOrEqualTo(fee));
+
+      let receipt = null;
+      if (noGas) {
+        receipt = await executeMetaTransaction('lockCode', [haxCode]);
+      } else {
+        receipt = await lockInviteCode(masterContract, haxCode);
+      }
       return receipt;
     },
-    [masterContract],
+    [masterContract, executeMetaTransaction, balance, gasPirce, fetchStatus ],
   );
 
   return { onLockCode: handleLockCode };
-};
-
-
-export const useTestInvitation = () => {
-  const { handle } = useTestHandle()
-
-  return { onTest: handle };
 };

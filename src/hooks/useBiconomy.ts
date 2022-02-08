@@ -21,7 +21,7 @@ const useBiconomyWeb3React = () => {
   }, [library])
 
   const [ethersProvider, biconomy ] = useMemo(() => {
-    const biconomy = new Biconomy(refEth.current, {apiKey: BICONOMY_DAPP_API_KEY, debug: true});
+    const biconomy = new Biconomy(refEth.current, {apiKey: BICONOMY_DAPP_API_KEY, debug: process.env.NODE_ENV !== 'production'});
     const biconomyProvider = new providers.Web3Provider(biconomy);
     return [biconomyProvider, biconomy]
   }, [refEth.current])
