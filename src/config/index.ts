@@ -48,7 +48,7 @@ export const SEARCH_MAX_HISTORY_LEN = 14;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
 
-export const BICONOMY_DAPP_API_KEY = 'WNdB8aO10.433bd892-b501-46d1-a678-fd5e7f7acb99'
+export const BICONOMY_DAPP_API_KEY = 'njaxQMHS7.352026d6-de3c-4faf-a0f2-9a64acbbab1c'
 
 // setTotalSupply []
 export const EXCEPT_TOTALSUPPPPLY_ADDRESS = [
