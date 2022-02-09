@@ -1,5 +1,5 @@
-import styled, { DefaultTheme } from "styled-components";
-import { InputProps, scales } from "./types";
+import styled, { DefaultTheme } from 'styled-components';
+import { InputProps, scales } from './types';
 
 interface StyledInputProps extends InputProps {
   theme: DefaultTheme;
@@ -8,11 +8,15 @@ interface StyledInputProps extends InputProps {
 /**
  * Priority: Warning --> Success
  */
-const getBoxShadow = ({ isSuccess = false, isWarning = false, noShadow = false, theme }: StyledInputProps) => {
+const getBoxShadow = ({
+  isSuccess = false,
+  isWarning = false,
+  noShadow = false,
+  theme,
+}: StyledInputProps) => {
   if (isWarning) {
     return theme.shadows.warning;
   }
-
 
   if (noShadow) {
     return 'none';
@@ -22,26 +26,25 @@ const getBoxShadow = ({ isSuccess = false, isWarning = false, noShadow = false, 
     return theme.shadows.success;
   }
 
-
   return theme.shadows.inset;
 };
 
 const getHeight = ({ scale = scales.MD }: StyledInputProps) => {
   switch (scale) {
     case scales.SM:
-      return "32px";
+      return '32px';
     case scales.LG:
-      return "48px";
+      return '48px';
     case scales.MD:
     default:
-      return "40px";
+      return '40px';
   }
 };
 
 const Input = styled.input<InputProps>`
   background-color: ${({ theme }) => theme.colors.input};
   border: 0;
-  border-radius: 16px;
+  border-radius: 10px;
   box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
   display: block;
@@ -51,7 +54,7 @@ const Input = styled.input<InputProps>`
   padding: 0 16px;
   width: 100%;
   border: none;
-  padding-left: ${({ noShadow }) => noShadow ? '0' : '16px'};;
+  padding-left: ${({ noShadow }) => (noShadow ? '0' : '16px')};
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textTips};
@@ -68,7 +71,8 @@ const Input = styled.input<InputProps>`
   }
 
   &:focus:not(:disabled):not(:readonly) {
-    box-shadow: ${({ theme, noShadow }) => noShadow ? 'none' : theme.shadows.focus};
+    box-shadow: ${({ theme, noShadow }) =>
+      noShadow ? 'none' : theme.shadows.focus};
   }
 `;
 

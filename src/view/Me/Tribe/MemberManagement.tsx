@@ -7,7 +7,7 @@ import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import dayjs from 'dayjs';
-import { Crumbs } from 'components';
+import { Crumbs, Icon } from 'components';
 import BtnIcon from 'view/Tribe/components/BtnIcon';
 import { shortenAddress } from 'utils/contract';
 
@@ -61,6 +61,13 @@ const TextBtn = styled(Button)`
   }
 `;
 
+const InputStyled = styled.label`
+  max-width: 300px;
+  padding: 8px 20px;
+  background-color: ${({ theme }) => theme.colors.backgroundTextArea};
+  border-radius: 20px;
+`;
+
 interface init {}
 
 const MeTribeMemberManagement: React.FC<init> = () => {
@@ -96,9 +103,17 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   return (
     <CountBox>
       <Crumbs title='成员管理'>
-        <Box width='180px'>
-          <Input placeholder='搜索' />
-        </Box>
+        <InputStyled htmlFor='search-input'>
+          <Flex justifyContent='space-between' alignItems='center'>
+            <Icon name='icon-sousuo' margin='0 10px' />
+            <Input
+              id='search-input'
+              noShadow
+              scale='sm'
+              placeholder={t('搜索')}
+            />
+          </Flex>
+        </InputStyled>
       </Crumbs>
       <TableBox>
         <Table>

@@ -53,6 +53,8 @@ export type MentionElement = {
 
 export type ParagraphElement = { type: 'paragraph'; children: Descendant[] }
 
+export type CodeElement = { type: 'code'; children: Descendant[] }
+
 export type TableElement = { type: 'table'; children: TableRow[] }
 
 export type TableCellElement = { type: 'table-cell'; children: CustomText[] }
@@ -81,6 +83,7 @@ type CustomElement =
   | TableCellElement
   | TitleElement
   | VideoElement
+  | CodeElement
 
 export type CustomText = {
   bold?: boolean

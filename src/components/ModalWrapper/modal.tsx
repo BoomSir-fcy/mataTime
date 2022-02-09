@@ -74,6 +74,7 @@ interface ModalWrapperProps {
   top?: string;
   padding?: string;
   overflow?: string;
+  shouldCloseOnOverlayClick?: boolean;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -88,6 +89,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     top,
     padding,
     overflow,
+    shouldCloseOnOverlayClick = true,
   }) => {
     var OutCenterBox: HTMLElement = document.querySelector('#OutCenterBox');
     const { theme } = useTheme();
@@ -110,6 +112,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
         onRequestClose={onClose}
         style={customStyles}
         ariaHideApp={false}
+        shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
         contentLabel='Example Modal'
       >
         {!customizeTitle && (
