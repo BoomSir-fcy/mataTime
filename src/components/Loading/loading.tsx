@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex, Box } from 'uikit';
+import { Flex, Box, Overlay } from 'uikit';
 
 const LoadingWraper = styled(Flex)`
   position: absolute;
@@ -96,13 +96,19 @@ const Dot = styled(Box)`
   }
 `;
 
+const OverlayStyled = styled(Overlay)`
+  position: absolute;
+`;
+
 export const Loading: React.FC<{
   visible: boolean;
-}> = React.memo(({ visible }) => {
+  overlay?: boolean;
+}> = React.memo(({ visible, overlay }) => {
   return (
     <React.Fragment>
       {visible && (
         <LoadingWraper>
+          <OverlayStyled show={overlay} />
           <LoadingContent>
             {[...new Array(6)].map((item, index) => (
               <Dot key={`${item}_${index}`} />

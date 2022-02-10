@@ -1,12 +1,23 @@
-import React, { useState, useCallback } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react';
 import styled, { DefaultTheme } from 'styled-components';
-import { Box, BoxProps, Card, Text } from 'uikit';
+import { Box, BoxProps, Button, Card, Text, Divider } from 'uikit';
 import getThemeValue from 'uikit/util/getThemeValue';
 import useTheme from 'hooks/useTheme';
+import { Icon } from 'components';
 
 import { createEditor, Descendant, Transforms, Editor } from 'slate';
 import { Slate, Editable, withReact, DefaultElement } from 'slate-react';
-import { CodeElement } from './RichTextEditorRenderElement';
+import { withHistory } from 'slate-history';
+import { withImages } from '../withEditor';
+import { Element, Leaf } from './RenderElement';
+import Toolbar from './Toolbar';
+import { initialValue } from './testdata';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
@@ -23,29 +34,27 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 }) => {
   const { theme } = useTheme();
 
-  const [editor] = useState(() => withReact(createEditor()));
+  // const [editor] = useState(() => withReact(createEditor()));
+  const editor = useMemo(
+    () => withImages(withHistory(withReact(createEditor()))),
+    [],
+  );
 
-  const [value, setValue] = useState<Descendant[]>([
-    {
-      type: 'paragraph',
-      children: [{ text: 'A line of text in a paragraph.' }],
-    },
-  ]);
+  const renderElement = useCallback(props => <Element {...props} />, []);
+  const renderLeaf = useCallback(props => <Leaf {...props} />, []);
 
-  const renderElement = useCallback(props => {
-    switch (props.element.type) {
-      case 'code':
-        return <CodeElement {...props} />;
-      default:
-        return <DefaultElement {...props} />;
-    }
-  }, []);
+  const [value, setValue] = useState<Descendant[]>(initialValue);
+
+  // useEffect(() => {
+  //   setValue(initialValue);
+  // }, [slateRef.current]);
 
   return (
     <Card isRadius>
       <Box
         width='100%'
         minHeight='455px'
+        padding='0 20px 20px 20px'
         background={getColor(background, theme)}
         {...props}
       >
@@ -54,8 +63,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           value={value}
           onChange={newValue => setValue(newValue)}
         >
+          <Toolbar />
+          <Divider margin='0 -20px' pb='3px' />
+          {/* <Divider margin='0 -20px' />
+          <Divider margin='0 -20px' /> */}
           <Editable
             renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            placeholder='Enter some text...'
             onKeyDown={event => {
               if (event.key === '`' && event.ctrlKey) {
                 console.log(212121);

@@ -118,7 +118,7 @@ const defaultOption = {
 }
 
 
-export const cutDownImg = (file: File, option?: DefaultOption) => new Promise((resolve, reject) => {
+export const cutDownImg = (file: File, option?: DefaultOption): Promise<string> => new Promise((resolve, reject) => {
   if (!file) return;
 
   const options: DefaultOption = {
