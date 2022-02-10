@@ -40,11 +40,18 @@ export class AttentionApi extends Http {
     const res = await this.post('/v1/post/cancel_shield', { pid });
     return res;
   }
+
   // 删除推特(帖子)
   async delPost(pid: number) {
     const res = await this.post('/v1/post/del', { pid });
     return res;
   }
+
+  async delV2Post(pid: number) {
+    const res = await this.post('/v2/post/del', { pid });
+    return res;
+  }
+
   // 举报推特(帖子)
   async complainPost(pid: number, content: string) {
     const res = await this.post('/v1/post/add_complain', { pid, content });

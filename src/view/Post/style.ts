@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Flex, Box, Card } from 'uikit';
+import { Flex, Box, Card, Text } from 'uikit';
 import { mediaQueries, mediaQueriesSize } from 'uikit/theme/base';
 
 export const PageContainer = styled.div`
@@ -126,8 +126,16 @@ export const CommentListFooter = styled.div`
 `;
 
 export const PostCount = styled(Flex)`
-  padding: 5px 0 5px 64px;
+  padding: 5px 0 0 64px;
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 10px 0 10px 64px;
+    padding: 10px 0 0 64px;
+  }
+`;
+
+export const PostCountButton = styled(Text)`
+  cursor: pointer;
+  font-size: 14px;
+  &:hover {
+    text-decoration: underline;
   }
 `;

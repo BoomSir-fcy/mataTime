@@ -60,6 +60,7 @@ type Iprops = {
   cancelSendArticle?: any;
   forwardContent?: Api.Home.post;
   ispadding?: boolean;
+  isRequired?: boolean;
 };
 
 export const Portal = ({ children }) => {
@@ -198,6 +199,7 @@ export const Editor = (props: Iprops) => {
     type,
     forwardContent,
     ispadding = true,
+    isRequired = true,
   } = props;
   const { t } = useTranslation();
   const { toastError } = useToast();
@@ -391,7 +393,7 @@ export const Editor = (props: Iprops) => {
     const newValue2 = removeEmptyLine(newValue1); // 删除空行
 
     let { content } = deepContent(newValue2);
-    if (!content.length && !imgList.length) return;
+    if (isRequired && !content.length && !imgList.length) return;
     //限制用户输入数量
     if (articleLength > maxCreateNum) {
       setTimeId(null);
@@ -616,7 +618,10 @@ export const Editor = (props: Iprops) => {
                 </SendButton>
               </div>
             ) : (
-              <SendButton disabled={isDisabledSend} onClick={sendArticle}>
+              <SendButton
+                disabled={!isRequired ? isRequired : isDisabledSend}
+                onClick={sendArticle}
+              >
                 {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
               </SendButton>
             )}

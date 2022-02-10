@@ -21,6 +21,8 @@ export enum MoreOperatorEnum {
   BOOKMARK = 'BOOKMARK', // 收藏
   BLOCKUSER = 'BLOCKUSER', // 屏蔽用户
   TRANSLATE = 'TRANSLATE', // 翻译
+  FORWARD = 'FORWARD', // 转发
+  UNFORWARD = 'UNFORWARD', // 取消转发
 }
 
 type Iprops = {
@@ -178,7 +180,7 @@ export const MorePopup = React.memo((props: Iprops) => {
 
   // 删除
   const onPostDelRequest = async (pid: number) => {
-    const res = await Api.AttentionApi.delPost(pid);
+    const res = await Api.AttentionApi.delV2Post(pid);
     if (Api.isSuccess(res)) {
       callback(data, MoreOperatorEnum.DELPOST);
       toast.success(t('moreDeleteSuccess'));

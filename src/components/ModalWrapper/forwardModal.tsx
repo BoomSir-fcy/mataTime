@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { Flex, Box } from 'uikit';
 import {
@@ -10,9 +9,7 @@ import {
   AvatarCard,
   ModalWrapper,
 } from 'components';
-import { Api } from 'apis';
 
-import { useTranslation } from 'contexts/Localization';
 import { mediaQueriesSize } from 'uikit/theme/base';
 
 const Container = styled(Flex)`
@@ -49,33 +46,14 @@ const ParseContent = styled(Box)`
 `;
 
 export const ForwardModal: React.FC<{
+  forwardType: number;
   type: string;
   visible: boolean;
   data: Api.Home.post;
+  onSuccess?: (res: string) => void;
   close: () => void;
-}> = React.memo(({ type, visible, data, close }) => {
-  const { t } = useTranslation();
-  const { toastSuccess } = useToast();
+}> = React.memo(({ type, visible, data, onSuccess, close }) => {
   const userInfo = useStore(p => p.loginReducer.userInfo);
-
-  const setForward = async (res, imags_list, remind_user, reset) => {
-    if (!res) return;
-    try {
-      Api.HomeApi.setForward({
-        forward_type: type === 'post' ? 1 : 2,
-        forward_id: data.id,
-        forward_content: res,
-      }).then(res => {
-        if (Api.isSuccess(res)) {
-          reset && reset();
-          close();
-          toastSuccess(t('Repost Successfully'));
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <ModalWrapper creactOnUse visible={visible} setVisible={close} top='35%'>
@@ -83,10 +61,11 @@ export const ForwardModal: React.FC<{
         <Avatar disableFollow src={userInfo.nft_image} scale='sm' />
         <Box margin='0 0 0 17px' style={{ flex: 1 }}>
           <Editor
+            isRequired={false}
             ispadding={false}
             type='forward'
             forwardContent={data}
-            sendArticle={setForward}
+            sendArticle={onSuccess}
           />
         </Box>
       </Container>

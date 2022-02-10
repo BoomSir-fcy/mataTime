@@ -647,12 +647,14 @@
   "allow_watch_fans": "Whether to allow others to watch my followers",
   "noRecommendations": "No recommendations",
   "A total of 1 replies": "%value% total replies",
-  "Repost ": "Repost",
-  "Undo Repost ": "Undo Repost",
+  "Repost": "Repost",
+  "Undo Repost": "Undo Repost",
   "Quote Post": "Quote Post",
   "number Reposts": "%value% Reposts",
   "number Quote Posts": "%value% Quote Posts",
+  "user Quote Posts": "%value% is fast forwarding",
   "Repost Successfully": "Repost Successfully",
+  "unRepost Successfully": "Cancel Successfully",
   "verify":"Verify",
   "submit": "Submit",
   "verifyError": "Verification code error",
@@ -732,5 +734,6 @@
   "http-error-30008005": "User does not allow others to view his followers list",
   "http-error-30004019": "The interval between posts is too fast, please enter the verification code",
   "http-error-30004020": "Verification code error",
+  "http-error-30015004": "Cannot forward the same post",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

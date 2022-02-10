@@ -167,8 +167,9 @@ const MentionOperator: React.FC<IProps> = ({
           >
             <Forward
               type='post'
-              total={itemData.share_num || 0}
+              total={itemData.forward_num || 0}
               data={itemData}
+              onSuccess={type => callback(itemData, MoreOperatorEnum[type])}
             />
           </Box>
           {/* <Box className='operator-item'>

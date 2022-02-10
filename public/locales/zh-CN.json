@@ -635,12 +635,14 @@
   "allow_watch_attention": "是否允许别人查看我的关注",
   "allow_watch_fans": "是否允许别人查看我的粉丝",
   "noRecommendations": "暂无推荐，请刷新页面",
-  "Repost ": "快转",
-  "Undo Repost ": "取消快转",
+  "Repost": "快转",
+  "Undo Repost": "取消快转",
   "Quote Post": "转发",
   "number Reposts": "%value% 转发",
   "number Quote Posts": "%value% 快转",
+  "user Quote Posts": "%value% 快转了",
   "Repost Successfully": "转发成功",
+  "unRepost Successfully": "取消成功",
   "A total of 1 replies": "共%value%条回复",
   "verify": "验证",
   "submit": "提交",
@@ -720,5 +722,6 @@
   "http-error-30008005": "用戶不允許其他人查看他的粉絲列表",
   "http-error-30004019": "发帖间隔过快,请输入验证码",
   "http-error-30004020": "验证码错误",
+  "http-error-30015004": "不能转发同一个帖子",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

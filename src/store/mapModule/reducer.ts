@@ -4,12 +4,10 @@ import {
   addUnFollowUserIds,
   removeUnFollowUserId,
   removeUnFollowUserIds,
-  
   addBlockUserId,
   addBlockUserIds,
   removeBlockUserId,
   removeBlockUserIds,
-
   addDeletePostId,
   addTranslateIds,
   removeTranslateIds,
@@ -33,14 +31,13 @@ const initialState: MapModuleState = {
   unFollowUsersIds: [],
   blockUsersIds: [],
   deletePostIds: [],
-  status: []
+  status: [],
 };
-
 
 export const fetchPostDetailAsync =
   (id: string | number) => async (dispatch, getState) => {
     try {
-      const detailRes = await Api.HomeApi.articleFindById({
+      const detailRes = await Api.HomeApi.articleV2FindById({
         id: `${id}`,
       });
       if (Api.isSuccess(detailRes)) {
@@ -50,8 +47,8 @@ export const fetchPostDetailAsync =
             post: detailRes.data,
           }),
         );
-        const ids = checkTranslateIds([detailRes.data])
-        dispatch(addTranslateIds(ids))
+        const ids = checkTranslateIds([detailRes.data]);
+        dispatch(addTranslateIds(ids));
       }
     } catch (error) {
       console.error(error);
@@ -76,21 +73,30 @@ export const fetchUserInfoAsync =
   };
 
 export const fetchAllPostTranslateAsync = () => (dispatch, getState) => {
-  const { mapModule: { postTranslateMap } } = getState() as { mapModule: MapModuleState }
-  const noFetchIds: number[] = []
+  const {
+    mapModule: { postTranslateMap },
+  } = getState() as { mapModule: MapModuleState };
+  const noFetchIds: number[] = [];
   Object.keys(postTranslateMap).forEach(key => {
     if (postTranslateMap[key].status === FetchStatus.NOT_FETCHED) {
-      noFetchIds.push(Number(key))
+      noFetchIds.push(Number(key));
     }
-  })
+  });
   if (noFetchIds.length) {
-    dispatch(fetchPostTranslateAsync(noFetchIds))
+    dispatch(fetchPostTranslateAsync(noFetchIds));
   }
-}
+};
 
 export const fetchPostTranslateAsync =
   (ids: number[]) => async (dispatch, getState) => {
-    dispatch(setPostTranslate({ ids, data: {}, status: FetchStatus.LOADING, showTranslate: true  }))
+    dispatch(
+      setPostTranslate({
+        ids,
+        data: {},
+        status: FetchStatus.LOADING,
+        showTranslate: true,
+      }),
+    );
     try {
       const res = await Api.HomeApi.getPostTranslateById({
         pids: ids,
@@ -102,7 +108,7 @@ export const fetchPostTranslateAsync =
           setPostTranslate({
             ids,
             data: res.data,
-            status: FetchStatus.SUCCESS
+            status: FetchStatus.SUCCESS,
           }),
         );
       } else {
@@ -110,7 +116,7 @@ export const fetchPostTranslateAsync =
           setPostTranslate({
             ids,
             data: {},
-            status: FetchStatus.FAILED
+            status: FetchStatus.FAILED,
           }),
         );
       }
@@ -120,12 +126,11 @@ export const fetchPostTranslateAsync =
         setPostTranslate({
           ids,
           data: {},
-          status: FetchStatus.FAILED
+          status: FetchStatus.FAILED,
         }),
       );
     }
   };
-
 
 export const Post = createSlice({
   name: 'post',
@@ -151,27 +156,27 @@ export const Post = createSlice({
     },
     setPostTranslate: (state, { payload }) => {
       const { ids, data, ...info } = payload;
-      const datas = {}
+      const datas = {};
       ids.forEach(id => {
         datas[id] = {
           ...state.postTranslateMap[id],
           content: data[id],
           ...info,
-        }
-      })
+        };
+      });
       state.postTranslateMap = {
         ...state.postTranslateMap,
         ...datas,
       };
     },
     changePostTranslateState: (state, { payload }) => {
-      const { id, showTranslate } = payload
+      const { id, showTranslate } = payload;
       state.postTranslateMap = {
         ...state.postTranslateMap,
         [id]: {
           ...state.postTranslateMap[id],
           showTranslate, // 是否显示翻译
-        }
+        },
       };
     },
   },
@@ -179,46 +184,64 @@ export const Post = createSlice({
     builder
       .addCase(addUnFollowUserId, (state, { payload }) => {
         if (!state.unFollowUsersIds.includes(payload)) {
-          state.unFollowUsersIds = [...state.unFollowUsersIds, payload]
+          state.unFollowUsersIds = [...state.unFollowUsersIds, payload];
         }
       })
       .addCase(addUnFollowUserIds, (state, { payload }) => {
         // XXX: 未做去重处理
-        state.unFollowUsersIds = [...state.unFollowUsersIds, ...payload]
+        state.unFollowUsersIds = [...state.unFollowUsersIds, ...payload];
       })
       .addCase(removeUnFollowUserId, (state, { payload }) => {
-        state.unFollowUsersIds = state.unFollowUsersIds.filter(item => item !== payload)
+        state.unFollowUsersIds = state.unFollowUsersIds.filter(
+          item => item !== payload,
+        );
       })
       .addCase(removeUnFollowUserIds, (state, { payload }) => {
-        state.unFollowUsersIds = state.unFollowUsersIds.filter(item => !payload.includes(item))
+        state.unFollowUsersIds = state.unFollowUsersIds.filter(
+          item => !payload.includes(item),
+        );
       })
       .addCase(addBlockUserId, (state, { payload }) => {
         if (!state.blockUsersIds.includes(payload)) {
-          state.blockUsersIds = [...state.blockUsersIds, payload]
+          state.blockUsersIds = [...state.blockUsersIds, payload];
         }
       })
       .addCase(addBlockUserIds, (state, { payload }) => {
         // XXX: 未做去重处理
-        state.blockUsersIds = [...state.blockUsersIds, ...payload]
+        state.blockUsersIds = [...state.blockUsersIds, ...payload];
       })
       .addCase(removeBlockUserId, (state, { payload }) => {
-        state.blockUsersIds = state.blockUsersIds.filter(item => item !== payload)
+        state.blockUsersIds = state.blockUsersIds.filter(
+          item => item !== payload,
+        );
       })
       .addCase(removeBlockUserIds, (state, { payload }) => {
-        state.blockUsersIds = state.blockUsersIds.filter(item => !payload.includes(item))
+        state.blockUsersIds = state.blockUsersIds.filter(
+          item => !payload.includes(item),
+        );
       })
       .addCase(addDeletePostId, (state, { payload }) => {
-        state.deletePostIds = [...state.deletePostIds, payload]
+        state.deletePostIds = [...state.deletePostIds, payload];
       })
       .addCase(addTranslateIds, (state, { payload }) => {
-        state.needTranslatePostIds = [...state.needTranslatePostIds, ...payload]
+        state.needTranslatePostIds = [
+          ...state.needTranslatePostIds,
+          ...payload,
+        ];
       })
       .addCase(removeTranslateIds, (state, { payload }) => {
-        state.needTranslatePostIds = state.needTranslatePostIds.filter(item => !payload.includes(item))
-      })
+        state.needTranslatePostIds = state.needTranslatePostIds.filter(
+          item => !payload.includes(item),
+        );
+      });
   },
 });
 
-export const { setPostDetail, setUserInfo, setPostTranslate, changePostTranslateState } = Post.actions;
+export const {
+  setPostDetail,
+  setUserInfo,
+  setPostTranslate,
+  changePostTranslateState,
+} = Post.actions;
 
 export default Post.reducer;

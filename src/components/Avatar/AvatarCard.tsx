@@ -29,7 +29,9 @@ export const AvatarCard: React.FC<AvatarCardProps> = ({
       <Box ml='8px' style={{ minWidth: 0 }}>
         <Text ellipsis>{userName}</Text>
         <Text color='textTips' className='time'>
-          <span>@{shortenAddress(address)}</span>
+          <span style={{ marginRight: '20px' }}>
+            @{shortenAddress(address)}
+          </span>
           {time}
         </Text>
       </Box>

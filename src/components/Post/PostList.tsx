@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from 'react';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { HoverLink, List, MoreOperatorEnum, ShiledUserModal } from 'components';
-import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
 
-import styled from 'styled-components';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
-import { useDispatch } from 'react-redux';
 import {
   fetchPostDetailAsync,
   fetchPostTranslateAsync,
@@ -18,12 +17,14 @@ import {
   removeBlockUserId,
   removeUnFollowUserId,
 } from 'store/mapModule/actions';
+import { useFetchAutoPostTranslate, useMapModule } from 'store/mapModule/hooks';
 
 import { MeItemWrapper } from './styled';
 import MentionItem from './MentionItem';
 import MentionOperator from './MentionOperator';
 import ForwardContent from './ForwardContent';
-import { useFetchAutoPostTranslate, useMapModule } from 'store/mapModule/hooks';
+import ForwardHead from './ForwardHead';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -91,6 +92,13 @@ const PostList: React.FC<PostListPorps> = ({
         dispatch(removeUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
         dispatch(fetchUserInfoAsync(newItem.user_id));
       }
+      if (
+        type === MoreOperatorEnum.FORWARD ||
+        type === MoreOperatorEnum.UNFORWARD
+      ) {
+        getList(1);
+        return;
+      }
       dispatch(fetchPostDetailAsync(newItem.id)); // FIXME: 有的时候可能用的不是id
 
       updateList(newItem.id, type);
@@ -117,37 +125,75 @@ const PostList: React.FC<PostListPorps> = ({
           getList(type);
         }}
       >
-        {(list ?? []).map(item => (
-          <HoverLink
-            key={item[postIdKey]}
-            to={`/articledetils/${item[postIdKey]}`}
-          >
-            <MeItemWrapper key={`${item[postIdKey]}`}>
-              {
-                // 浏览自己的不扣费
-                currentUid?.uid !== item.user_id && (
-                  <SpendTimeViewWithArticle
-                    nonce={nonce}
-                    setNonce={setNonce}
-                    readType={ReadType.ARTICLE}
-                    articleId={item[postIdKey]}
-                  />
-                )
-              }
-              <MentionItem
-                isShileUser={isShileUser}
-                setIsShileUser={(type, data) => {
-                  setPostItemData(data);
-                  setIsShileUser(type);
-                }}
-                itemData={{
-                  ...item,
-                  post: {
+        {(list ?? []).map(rows => {
+          let item =
+            rows.forward_type === 2
+              ? {
+                  ...rows,
+                  forwardUser: rows.user_name,
+                  forwardUid: rows.user_id,
+                  ...rows.forward,
+                }
+              : rows;
+          return (
+            <HoverLink
+              key={item[postIdKey]}
+              to={`/articledetils/${
+                item.forward_type === 2 ? item.post_id : item[postIdKey]
+              }`}
+            >
+              <MeItemWrapper key={`${item[postIdKey]}`}>
+                {
+                  // 浏览自己的不扣费
+                  currentUid?.uid !== item.user_id && (
+                    <SpendTimeViewWithArticle
+                      nonce={nonce}
+                      setNonce={setNonce}
+                      readType={ReadType.ARTICLE}
+                      articleId={item[postIdKey]}
+                    />
+                  )
+                }
+                {item.forward_type === 2 && <ForwardHead data={item} />}
+                <MentionItem
+                  isShileUser={isShileUser}
+                  setIsShileUser={(type, data) => {
+                    setPostItemData(data);
+                    setIsShileUser(type);
+                  }}
+                  itemData={{
                     ...item,
+                    post: {
+                      ...item,
+                      ...map[item[postIdKey]],
+                      post_id: item[postIdKey],
+                      id: item[postIdKey],
+                      postId: item[postIdKey],
+                      is_like:
+                        map[item[postIdKey]]?.is_like ??
+                        item.is_like ??
+                        (item as any).like_status,
+                      user_id:
+                        map[item[postIdKey]]?.user_id ??
+                        item.user_id ??
+                        (item as any).uid,
+                      user_avator_url:
+                        map[item[postIdKey]]?.user_avator_url ??
+                        item.user_avator_url ??
+                        (item as any).nft_image,
+                      is_attention:
+                        userMap?.[item.user_id]?.is_attention ??
+                        map?.[item[postIdKey]]?.is_attention ??
+                        item.is_attention,
+                    },
                     ...map[item[postIdKey]],
                     post_id: item[postIdKey],
-                    id: item[postIdKey],
                     postId: item[postIdKey],
+                    id: item[postIdKey],
+                    is_attention:
+                      userMap?.[item.user_id]?.is_attention ??
+                      map?.[item[postIdKey]]?.is_attention ??
+                      item.is_attention,
                     is_like:
                       map[item[postIdKey]]?.is_like ??
                       item.is_like ??
@@ -160,48 +206,45 @@ const PostList: React.FC<PostListPorps> = ({
                       map[item[postIdKey]]?.user_avator_url ??
                       item.user_avator_url ??
                       (item as any).nft_image,
-                    is_attention:
-                      userMap?.[item.user_id]?.is_attention ??
-                      map?.[item[postIdKey]]?.is_attention ??
-                      item.is_attention,
-                  },
-                  ...map[item[postIdKey]],
-                  post_id: item[postIdKey],
-                  postId: item[postIdKey],
-                  id: item[postIdKey],
-                  is_attention:
-                    userMap?.[item.user_id]?.is_attention ??
-                    map?.[item[postIdKey]]?.is_attention ??
-                    item.is_attention,
-                  is_like:
-                    map[item[postIdKey]]?.is_like ??
-                    item.is_like ??
-                    (item as any).like_status,
-                  user_id:
-                    map[item[postIdKey]]?.user_id ??
-                    item.user_id ??
-                    (item as any).uid,
-                  user_avator_url:
-                    map[item[postIdKey]]?.user_avator_url ??
-                    item.user_avator_url ??
-                    (item as any).nft_image,
-                  add_time:
-                    map[item[postIdKey]]?.add_time ??
-                    item.add_time ??
-                    (item as any).add_time_desc,
-                }}
-                callback={(item: any, type: MoreOperatorEnum) => {
-                  handleUpdateList(item, type);
-                }}
-              />
-              <ForwardContent />
-              <MentionOperator
-                replyType='twitter'
-                postId={item[postIdKey]}
-                itemData={{
-                  ...item,
-                  post: {
+                    add_time:
+                      map[item[postIdKey]]?.add_time ??
+                      item.add_time ??
+                      (item as any).add_time_desc,
+                  }}
+                  callback={(item: any, type: MoreOperatorEnum) => {
+                    handleUpdateList(item, type);
+                  }}
+                />
+                {/* 转发内容 */}
+                {item.forward_type === 1 && <ForwardContent data={item} />}
+                <MentionOperator
+                  replyType='twitter'
+                  postId={item[postIdKey]}
+                  itemData={{
                     ...item,
+                    post: {
+                      ...item,
+                      ...map[item[postIdKey]],
+                      post_id: item[postIdKey],
+                      postId: item[postIdKey],
+                      id: item[postIdKey],
+                      is_like:
+                        map[item[postIdKey]]?.is_like ??
+                        item.is_like ??
+                        (item as any).like_status,
+                      user_id:
+                        map[item[postIdKey]]?.user_id ??
+                        item.user_id ??
+                        (item as any).uid,
+                      user_avator_url:
+                        map[item[postIdKey]]?.user_avator_url ??
+                        item.user_avator_url ??
+                        (item as any).nft_image,
+                      add_time:
+                        map[item[postIdKey]]?.add_time ??
+                        item.add_time ??
+                        (item as any).add_time_desc,
+                    },
                     ...map[item[postIdKey]],
                     post_id: item[postIdKey],
                     postId: item[postIdKey],
@@ -222,36 +265,16 @@ const PostList: React.FC<PostListPorps> = ({
                       map[item[postIdKey]]?.add_time ??
                       item.add_time ??
                       (item as any).add_time_desc,
-                  },
-                  ...map[item[postIdKey]],
-                  post_id: item[postIdKey],
-                  postId: item[postIdKey],
-                  id: item[postIdKey],
-                  is_like:
-                    map[item[postIdKey]]?.is_like ??
-                    item.is_like ??
-                    (item as any).like_status,
-                  user_id:
-                    map[item[postIdKey]]?.user_id ??
-                    item.user_id ??
-                    (item as any).uid,
-                  user_avator_url:
-                    map[item[postIdKey]]?.user_avator_url ??
-                    item.user_avator_url ??
-                    (item as any).nft_image,
-                  add_time:
-                    map[item[postIdKey]]?.add_time ??
-                    item.add_time ??
-                    (item as any).add_time_desc,
-                }}
-                callback={(item: any, type?: MoreOperatorEnum) => {
-                  // handleTranslate(item.id);
-                  handleUpdateList(item, type);
-                }}
-              />
-            </MeItemWrapper>
-          </HoverLink>
-        ))}
+                  }}
+                  callback={(item: any, type?: MoreOperatorEnum) => {
+                    // handleTranslate(item.id);
+                    handleUpdateList(item, type);
+                  }}
+                />
+              </MeItemWrapper>
+            </HoverLink>
+          );
+        })}
       </List>
       <ShiledUserModal
         userinfo={PostItemData}

@@ -167,7 +167,6 @@ export const fetchSearchPostAsync =
     const { search } = getState() as { search: SearchState };
     if (!search.searchVal) return;
     try {
-
       const fetchPost = await Api.SearchApi.getSearchPost({
         key: search.searchVal,
         start: refresh ? 0 : search.seart_index || 0,
@@ -192,7 +191,7 @@ export const fetchSearchPostAsync =
 export const fetchSearchPostDetailAsync =
   (id: string | number) => async (dispatch, getState) => {
     try {
-      const detailRes = await Api.HomeApi.articleFindById({
+      const detailRes = await Api.HomeApi.articleV2FindById({
         id: `${id}`,
       });
       if (Api.isSuccess(detailRes)) {
@@ -260,7 +259,6 @@ export const Search = createSlice({
         state.resultListOfPost = uniqBy(list, 'id');
         state.searchPostaddListNum = state.resultListOfPost.length - len;
       }
-
     },
   },
   extraReducers: builder => {

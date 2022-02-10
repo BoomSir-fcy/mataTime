@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouteMatch, useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Editor, Crumbs, MoreOperatorEnum, Loading } from 'components';
 import { useToast } from 'hooks';
+import { Spinner, Empty, Text } from 'uikit';
 import { useStore } from 'store';
 import { Api } from 'apis';
 
@@ -9,32 +13,28 @@ import { ReadType } from 'hooks/imHooks/types';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 import eventBus from 'utils/eventBus';
 
+import { PageStyle, PostCount, PostCountButton } from './style';
+
 import { CommentList } from './CommentList';
 import { MeItemWrapper } from 'view/News/Me/style';
-import { PageStyle, PostCount } from './style';
-
-// import MentionItem from 'view/News/components/MentionItem';
 import MentionItem from 'components/Post/MentionItem';
-// import MentionOperator from 'view/News/components/MentionOperator';
 import MentionOperator from 'components/Post/MentionOperator';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
-import { Spinner, Empty, Text } from 'uikit';
+import ForwardContent from 'components/Post/ForwardContent';
+
 import {
   useFetchAutoPostTranslate,
   usePostDetailById,
 } from 'store/mapModule/hooks';
-import { useDispatch } from 'react-redux';
 import {
   fetchPostDetailAsync,
   fetchUserInfoAsync,
 } from 'store/mapModule/reducer';
-import useParsedQueryString from 'hooks/useParsedQueryString';
 import {
   addDeletePostId,
   addUnFollowUserId,
   removeUnFollowUserId,
 } from 'store/mapModule/actions';
-import { useRouteMatch } from 'react-router';
 
 type Iprops = {
   [name: string]: any;
@@ -55,6 +55,8 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   const { params } = useRouteMatch() as { params: { id: string } };
   useReadArticle(nonce);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { state } = location;
 
   const updateDetails = React.useCallback(() => {
     dispatch(fetchPostDetailAsync(params.id));
@@ -170,9 +172,18 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
               more={true}
               showTranslate
             />
+            {Boolean(itemData?.forward?.post_id) && (
+              <Link to={`/articledetils/${itemData?.forward?.post_id}`}>
+                <ForwardContent data={itemData} />
+              </Link>
+            )}
             <PostCount>
-              <Text mr='15px'>{t('number Reposts', { value: 20 })}</Text>
-              <Text>{t('number Quote Posts', { value: 20 })}</Text>
+              <PostCountButton mr='15px' onClick={() => {}}>
+                {t('number Reposts', { value: itemData?.normal_forward_num })}
+              </PostCountButton>
+              <PostCountButton>
+                {t('number Quote Posts', { value: itemData?.fast_forward_num })}
+              </PostCountButton>
             </PostCount>
             <MentionOperator
               replyType='twitter'

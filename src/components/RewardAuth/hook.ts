@@ -130,7 +130,7 @@ export const GetPostRewardAuthor = () => {
 
   const isReward = useCallback(async (id: string) => {
     try {
-      const res = await Api.HomeApi.articleFindById({ id });
+      const res = await Api.HomeApi.articleV2FindById({ id });
       return res;
     } catch (error: any) {
       throw new Error(error);

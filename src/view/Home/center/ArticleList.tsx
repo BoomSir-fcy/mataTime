@@ -118,10 +118,13 @@ const ArticleComponents = (props, ref) => {
     return resPost;
   }, [list, blockUsersIds, unFollowUsersIds, isFollowing, deletePostIds]);
 
-  const getList = useCallback(() => {
-    // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
-    Getlist();
-  }, [Getlist]);
+  const getList = useCallback(
+    (current?: number) => {
+      // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
+      Getlist(current);
+    },
+    [Getlist],
+  );
 
   return (
     <ArticleListBox>

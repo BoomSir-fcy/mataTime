@@ -98,7 +98,7 @@ export const getLanguageContent = content => {
     };
     return res;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return {
       isEnglish: false,
       isChinese: false,

@@ -35,12 +35,24 @@ export class HomeApi extends Http {
   }
 
   // 帖子评论转发
+  // 转发类型 1：普通转发 2：快速转发
+  // 转发内容类型 1：帖子 2：评论
   async setForward(params: {
     forward_type: 1 | 2;
+    forward_content_type: 1 | 2;
     forward_id: number;
     forward_content: string;
   }) {
-    const res = await this.post('/v2/forward/post-forward', params);
+    const res = await this.post('/v2/forward/forward', params);
+    return res;
+  }
+
+  // 取消快转
+  async cancelForward(params: {
+    forward_content_type: 1 | 2;
+    forward_id: number;
+  }) {
+    const res = await this.post('/v2/forward/cancel-forward', params);
     return res;
   }
 
@@ -74,6 +86,11 @@ export class HomeApi extends Http {
   // 文章详情
   async articleFindById(params: Api.Home.articleFindById) {
     const res = await this.get('/v1/post/info', params);
+    return res;
+  }
+
+  async articleV2FindById(params: Api.Home.articleFindById) {
+    const res = await this.get('/v2/post/info', params);
     return res;
   }
 

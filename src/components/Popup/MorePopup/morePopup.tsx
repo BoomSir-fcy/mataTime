@@ -33,6 +33,8 @@ enum MoreOperatorEnum {
   LIKE = 'LIKE', // 点赞
   BOOKMARK = 'BOOKMARK', // 收藏
   BLOCKUSER = 'BLOCKUSER', // 屏蔽用户
+  FORWARD = 'FORWARD', // 转发
+  UNFORWARD = 'UNFORWARD', // 取消转发
 }
 
 const PopupWrapper = styled(Box)`
@@ -206,16 +208,36 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
 
     // 删除
     const onPostDelRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.delPost(pid);
+      const res = await Api.AttentionApi.delV2Post(pid);
       if (Api.isSuccess(res)) {
         callback(data, MoreOperatorEnum.DELPOST);
         toastSuccess(t('moreDeleteSuccess'));
       }
     };
 
+    // 取消快转
+    const cancelForward = async () => {
+      try {
+        const res = await Api.HomeApi.cancelForward({
+          forward_id: data.forward_id,
+          forward_content_type: 1,
+        });
+        if (Api.isSuccess(res)) {
+          callback(data, MoreOperatorEnum.UNFORWARD);
+          toastSuccess(t('unRepost Successfully'));
+        }
+      } catch (error) {}
+    };
+
     return (
       <React.Fragment>
         <PopupWrapper>
+          {/* 取消快转 */}
+          {UID === data.forwardUid && (
+            <Text textTransform='capitalize' onClick={() => cancelForward()}>
+              {t('Undo Repost')}
+            </Text>
+          )}
           {isOwn && (
             <>
               <Text
@@ -243,7 +265,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
               </Text>
             </>
           )}
-
           {/* todo 后端字段没改，所以传入用户id 屏蔽 */}
           {Number(postUid) !== data.post.user_id && (
             <>
@@ -268,7 +289,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
               ) : null}
             </>
           )}
-
           {/* <Text
               textTransform="capitalize"
               onClick={() => {
@@ -291,7 +311,6 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
           >
             {t('moreCopyAddress')}
           </Text>
-
           {!isOwn && (
             <>
               <Text

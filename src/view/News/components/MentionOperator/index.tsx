@@ -140,7 +140,7 @@ const MentionOperator: React.FC<IProps> = ({
 
   const getCommentInfo = async id => {
     try {
-      const detailRes = await Api.HomeApi.articleFindById({
+      const detailRes = await Api.HomeApi.articleV2FindById({
         id: `${id}`,
       });
       if (Api.isSuccess(detailRes)) {
@@ -183,8 +183,9 @@ const MentionOperator: React.FC<IProps> = ({
           <Box className='operator-item'>
             <Forward
               type='comment'
-              total={itemData.share_num || 0}
+              total={itemData.forward_num || 0}
               data={{ ...itemData, content: itemData?.comment?.content }}
+              onSuccess={type => callback(itemData, MoreOperatorEnum[type])}
             />
           </Box>
           {hasLike && (
