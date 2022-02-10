@@ -1,16 +1,16 @@
-import isUrl from 'is-url'
-import imageExtensions from 'image-extensions'
+import isUrl from 'is-url';
+import imageExtensions from 'image-extensions';
 import { ImageElement } from './custom-types';
 import { Transforms, createEditor, Descendant } from 'slate';
 
 /* eslint-disable no-param-reassign */
 
 const isImageUrl = url => {
-  if (!url) return false
-  if (!isUrl(url)) return false
-  const ext = new URL(url).pathname.split('.').pop()
-  return imageExtensions.includes(ext)
-}
+  if (!url) return false;
+  if (!isUrl(url)) return false;
+  const ext = new URL(url).pathname.split('.').pop();
+  return imageExtensions.includes(ext);
+};
 
 const insertImage = (editor, url) => {
   const text = { text: '' };
@@ -44,7 +44,7 @@ export const withImages = editor => {
         }
       }
     } else if (isImageUrl(text)) {
-      insertImage(editor, text)
+      insertImage(editor, text);
     } else {
       insertData(data);
     }

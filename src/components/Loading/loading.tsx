@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Overlay } from 'uikit';
 
-const LoadingWraper = styled(Flex)`
+const LoadingWraper = styled(Flex)<{ zIndex: number }>`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: ${({ zIndex }) => zIndex};
   width: 100%;
   height: 100%;
   margin: auto;
@@ -103,11 +103,12 @@ const OverlayStyled = styled(Overlay)`
 export const Loading: React.FC<{
   visible: boolean;
   overlay?: boolean;
-}> = React.memo(({ visible, overlay }) => {
+  zIndex?: number;
+}> = React.memo(({ visible, overlay, zIndex = 9999 }) => {
   return (
     <React.Fragment>
       {visible && (
-        <LoadingWraper>
+        <LoadingWraper zIndex={zIndex}>
           <OverlayStyled show={overlay} />
           <LoadingContent>
             {[...new Array(6)].map((item, index) => (

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Box, Button } from 'uikit';
 import styled from 'styled-components';
 import { useSlateStatic, ReactEditor } from 'slate-react';
-import { Transforms, createEditor, Descendant } from 'slate';
-import { Loading } from 'components';
+import { Transforms, createEditor, Descendant, Editor } from 'slate';
+import { Loading, Icon } from 'components';
 import { mt } from './styleds';
 
 const ImageStyled = styled.img`
@@ -17,30 +17,53 @@ const BoxStyled = styled(Box)`
   line-height: 0; /* 去除 inline-block 底部间距 */
 `;
 
-const CloseBtn = styled(Button)`
+const CloseBtnBox = styled(Box)`
   position: absolute;
-  right: 0;
-  top: 0;
-  transform: translateX(50%);
-  padding: 0;
-  height: 20px;
+  right: -10px;
+  z-index: 23;
+  top: -10px;
+  background: ${({ theme }) => theme.colors.primaryDark};
+  border-radius: 50%;
+`;
+const CloseBtn = styled(Button)`
+  padding: 5px;
+  height: 24px;
+  width: 24px;
 `;
 
 const Image = ({ attributes, children, element }) => {
   const editor = useSlateStatic();
-  const path = ReactEditor.findPath(editor, element);
+  const removeHandle = useCallback(() => {
+    const path = ReactEditor.findPath(editor, element);
+    const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
+      null,
+      null,
+    ];
+    if (
+      nextEle &&
+      (nextEle as any).type === 'image-empty' &&
+      (nextEle as any).children[0]?.text === ''
+    ) {
+      Transforms.removeNodes(editor, { at: nextPath }); // 图片节点后面或默认更一个空节点
+    }
+    Transforms.removeNodes(editor, { at: path });
+  }, [editor]);
 
   return (
-    <BoxStyled position='relative' display='inline-block' {...attributes}>
-      <Loading overlay visible={element.loading} />
-      {children}
+    <BoxStyled
+      contentEditable={false}
+      position='relative'
+      display='inline-block'
+      {...attributes}
+    >
+      <Loading zIndex={2} overlay visible={element.loading} />
+      {/* {children} */}
       <ImageStyled src={element.url} alt='' />
-      <CloseBtn
-        onClick={() => Transforms.removeNodes(editor, { at: path })}
-        variant='text'
-      >
-        close
-      </CloseBtn>
+      <CloseBtnBox>
+        <CloseBtn onClick={removeHandle} variant='tertiary'>
+          <Icon size={16} name='icon-guanbi' />
+        </CloseBtn>
+      </CloseBtnBox>
     </BoxStyled>
   );
 };

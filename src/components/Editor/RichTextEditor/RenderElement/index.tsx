@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import { Box, BoxProps, Card, Text } from 'uikit';
 import Image from './Image';
-import { DefaultElement } from './styleds'
+import { DefaultElement, Code, Ol, Ul } from './styleds';
 
 const CodeStyled = styled.code`
   /* color: red; */
@@ -22,12 +22,11 @@ export const CodeElement = props => {
 
 export const Element = props => {
   const { attributes, children, element } = props;
-  console.log(props)
   switch (element.type) {
     case 'block-quote':
       return <blockquote {...attributes}>{children}</blockquote>;
     case 'bulleted-list':
-      return <ul {...attributes}>{children}</ul>;
+      return <Ul {...attributes}>{children}</Ul>;
     case 'heading-one':
       return <h1 {...attributes}>{children}</h1>;
     case 'heading-two':
@@ -35,7 +34,7 @@ export const Element = props => {
     case 'list-item':
       return <li {...attributes}>{children}</li>;
     case 'numbered-list':
-      return <ol {...attributes}>{children}</ol>;
+      return <Ol {...attributes}>{children}</Ol>;
     case 'image':
       return <Image {...props} />;
     default:
@@ -44,20 +43,25 @@ export const Element = props => {
 };
 
 export const Leaf = ({ attributes, children, leaf }) => {
+  /* eslint-disable */
   if (leaf.bold) {
-    return <strong {...attributes}>{children}</strong>;
+    children = <strong>{children}</strong>;
   }
 
   if (leaf.code) {
-    return <CodeStyled {...attributes}>{children}</CodeStyled>;
+    children = <Code>{children}</Code>;
   }
 
   if (leaf.italic) {
-    return <em {...attributes}>{children}</em>;
+    children = <em>{children}</em>;
   }
 
   if (leaf.underline) {
-    return <u {...attributes}>{children}</u>;
+    children = <u>{children}</u>;
+  }
+
+  if (leaf.del) {
+    children = <del>{children}</del>;
   }
 
   return <span {...attributes}>{children}</span>;

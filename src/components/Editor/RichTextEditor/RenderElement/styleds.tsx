@@ -4,8 +4,7 @@ import { Flex } from 'uikit';
 
 export const mt = css`
   margin-top: 1em;
-
-`
+`;
 
 export const Blockquote = styled.blockquote`
   font-size: 12px;
@@ -13,12 +12,16 @@ export const Blockquote = styled.blockquote`
 `;
 
 export const Ul = styled.ul`
-
+  ${mt}
+  list-style-type: disc;
 `;
 
 export const Li = styled.li``;
 
-export const Ol = styled.ol``;
+export const Ol = styled.ol`
+  ${mt}
+  list-style-type: decimal;
+`;
 
 export const H1 = styled.h1``;
 
@@ -30,7 +33,14 @@ export const DefaultElement = styled.p`
 
 export const Strong = styled.strong``;
 
-export const Code = styled.code``;
+export const Code = styled.code`
+  font-family: monospace;
+  background: red;
+  /* background: ${({ theme }) => theme.colors.backgroundAlt}; */
+  & > * {
+    font-family: monospace;
+  }
+`;
 
 export const Em = styled.em``;
 

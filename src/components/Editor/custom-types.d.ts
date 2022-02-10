@@ -54,6 +54,8 @@ export type MentionElement = {
 
 export type ParagraphElement = { type: 'paragraph'; children: Descendant[] }
 
+export type ImageEmptyElement = { type: 'image-empty'; children: Descendant[] }
+
 export type CodeElement = { type: 'code'; children: Descendant[] }
 
 export type TableElement = { type: 'table'; children: TableRow[] }
@@ -85,6 +87,7 @@ type CustomElement =
   | TitleElement
   | VideoElement
   | CodeElement
+  | ImageEmptyElement
 
 export type CustomText = {
   bold?: boolean

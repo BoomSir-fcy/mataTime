@@ -7,6 +7,7 @@ import { Icon } from 'components';
 import {
   CustomElement,
   ImageElement,
+  ImageEmptyElement,
   ParagraphElement,
 } from '../../custom-types';
 import { useToast } from 'hooks';
@@ -14,17 +15,24 @@ import { useTranslation } from 'contexts';
 import { cutDownImg } from 'utils/imageCompression';
 import { Api } from 'apis';
 import { HUGE_ARTICLE_IMAGE_MAX_LEN } from 'config';
+import client from 'utils/client';
 
 interface InsertImageFormProps {
   multiple?: boolean;
   maxUploadLength?: number;
+  size?: number;
 }
+
+const text = { text: '' };
+
+const paragraph: ImageEmptyElement = { type: 'image-empty', children: [text] };
 
 const InsertImageForm: React.FC<InsertImageFormProps> = ({
   multiple,
   maxUploadLength = 0,
+  size,
 }) => {
-  const editor = useSlateStatic();
+  const editor = useSlate();
 
   const { toastError } = useToast();
   const { t } = useTranslation();
@@ -35,26 +43,17 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
     loading = false,
   ): {
     image: ImageElement;
-    paragraph: ParagraphElement;
   } => {
-    const text = { text: '' };
     const image: ImageElement = {
       type: 'image',
       url,
       loading,
       children: [text],
     };
-    const paragraph: ParagraphElement = { type: 'paragraph', children: [text] };
+
     Transforms.insertNodes(editor, image);
-    Transforms.insertNodes(editor, paragraph);
-    // setTimeout(() => {
-    //   Transforms.removeNodes(editor, {
-    //     at: ReactEditor.findPath(editor, paragraph),
-    //   });
-    // }, 10000);
     return {
       image,
-      paragraph,
     };
   };
 
@@ -73,26 +72,55 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
         base64.forEach(path => {
           const eles = insertImage(editor, path, true);
           loadingElement.push(eles.image);
-          loadingElement.push(eles.paragraph);
         });
 
         const res = await Api.CommonApi.uploadImgList({
           base64,
           dir_name: 'common',
         });
-        // loadingElement.forEach(element => {
-        //   Transforms.removeNodes(editor, {
-        //     at: ReactEditor.findPath(editor, element),
-        //   });
-        // });
+        loadingElement.reverse().forEach(ele => {
+          const path = ReactEditor.findPath(editor, ele);
+          console.log(path);
+          Transforms.removeNodes(editor, {
+            at: ReactEditor.findPath(editor, ele),
+          });
+        });
         if (!Api.isSuccess(res)) {
           toastError(t('commonUploadBackgroundFail'));
           return;
         }
-        // base64.forEach(path => {
-        //   console.log('insertImage');
-        //   insertImage(editor, path);
-        // });
+        let lastImage = null;
+        base64.forEach((path, index) => {
+          console.log('insertImage');
+          const { image } = insertImage(editor, path);
+          if (index === base64.length - 1) {
+            lastImage = image;
+          }
+        });
+
+        setTimeout(() => {
+          const path = ReactEditor.findPath(editor, lastImage);
+          const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
+            null,
+            null,
+          ];
+          if (!nextEle) {
+            Transforms.insertNodes(editor, paragraph);
+          }
+
+          // const [afterEle, afterPath] = Editor.last(editor, path) || [
+          //   null,
+          //   null,
+          // ];
+
+          // if (
+          //   afterEle &&
+          //   (afterEle as any).type === 'image-empty' &&
+          //   (afterEle as any).children[0]?.text === ''
+          // ) {
+          //   Transforms.removeNodes(editor, { at: afterPath }); // 图片节点后面或默认更一个空节点
+          // }
+        }, 0);
       } catch (error) {
         console.error(error);
       }
@@ -102,14 +130,25 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
 
   return (
     <form action=''>
-      <input
-        onChange={handleChange}
-        type='file'
-        name='editor-image'
-        id='editor-image'
-        multiple={multiple}
-        accept='image/*'
-      />
+      <label htmlFor='upload-images' title={t('editorUploadImg')}>
+        <Icon
+          size={size}
+          color='white_black'
+          current
+          name='icon-bianjiqi_tupianshangchuan745'
+        />
+        <input
+          id='upload-images'
+          name='upload-images'
+          onChange={handleChange}
+          multiple={multiple}
+          type='file'
+          accept='image/*'
+          capture={!client.ios}
+          // capture={true}
+          hidden
+        />
+      </label>
     </form>
   );
 };
