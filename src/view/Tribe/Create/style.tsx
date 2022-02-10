@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Flex, InputPanel } from 'uikit';
+import { Box, Flex, InputPanel } from 'uikit';
 
 export const FormFlex = styled(Flex)`
   flex-direction: column;
@@ -68,6 +68,9 @@ export const InputPanelStyle = styled(InputPanel)<{ width?: string }>`
   max-width: ${({ width }) => width || '400px'};
   border-radius: 10px;
   padding: 4px 20px;
+  input:disabled {
+    background-color: ${({ theme }) => theme.colors.input};
+  }
 `;
 
 export const LogoIcon = styled(Flex)`
@@ -79,6 +82,13 @@ export const LogoIcon = styled(Flex)`
   border-radius: 50%;
 `;
 
-export const TextareaStyled = styled.textarea<{ disabled?: boolean }>`
+export const TextareaStyled = styled(Box)<{ disabled?: boolean }>`
+  position: relative;
+  width: 100%;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
+  .textarea-content-length {
+    position: absolute;
+    right: 24%;
+    bottom: 8%;
+  }
 `;

@@ -4,26 +4,10 @@ import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Button, Flex, Card, Input } from 'uikit';
 import { ContentBox } from './styled';
+import TagList from './components/TagList';
 
 const TopicsCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
-`;
-const TopicsContentFlex = styled(Flex)`
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-  .icon-cancel {
-    cursor: pointer;
-  }
-`;
-const ContentTag = styled(Box)`
-  min-width: 100px;
-  padding: 5px 10px;
-  margin-right: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.ThemeText};
-  border-radius: 10px;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  cursor: default;
 `;
 const InputStyled = styled(Input)`
   width: 100%;
@@ -31,6 +15,9 @@ const InputStyled = styled(Input)`
   border-radius: 10px;
   padding: 4px 20px;
 `;
+
+const TRIBE_TOPICS_MAX = 100;
+
 const MeTribeTopicsSetting = () => {
   const { t } = useTranslation();
   const [list, setList] = useState([]);
@@ -41,24 +28,14 @@ const MeTribeTopicsSetting = () => {
       <ContentBox>
         <TopicsCard isRadius>
           <Flex flexDirection='column'>
-            <TopicsContentFlex>
-              {list.map(item => (
-                <Flex key={item.id} mr='20px' mb='10px' alignItems='center'>
-                  <ContentTag>{item.name}</ContentTag>
-                  <Icon
-                    className='icon-cancel'
-                    name='icon-guanbi2fill'
-                    size={13}
-                    color='#343434'
-                    onClick={() => {
-                      setList(p => {
-                        return p.filter(v => v.id !== item.id);
-                      });
-                    }}
-                  />
-                </Flex>
-              ))}
-            </TopicsContentFlex>
+            <TagList
+              list={list}
+              onDelete={id => {
+                setList(p => {
+                  return p.filter(v => v.id !== id);
+                });
+              }}
+            />
             <Flex alignItems='center'>
               <InputStyled
                 noShadow
@@ -81,6 +58,11 @@ const MeTribeTopicsSetting = () => {
               >
                 {t('Add To')}
               </Button>
+              <Text
+                ml='10px'
+                color='textTips'
+                small
+              >{`${list.length}/${TRIBE_TOPICS_MAX}`}</Text>
             </Flex>
           </Flex>
         </TopicsCard>

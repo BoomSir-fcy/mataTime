@@ -59,7 +59,6 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
       e.stopPropagation();
       const val =
         typeof value === 'number' ? Number(e.target.value) : e.target.value;
-      console.log(val, '=========', currentValue);
       setCurrentValue(val);
       if (onChange && currentValue !== val) {
         onChange(val);

@@ -4,14 +4,14 @@ import React, { useCallback, useState } from 'react';
 import { Box, Text, Divider, Flex } from 'uikit';
 import SubHeader from '../components/SubHeader';
 import { FormFlex, LogoIcon } from './style';
-import { TribeCreateBtn } from './TribeCreateBtn';
 import { TribeFee } from './TribeFee';
 import { TribeInfo } from './TribeInfo';
 import { TribeNFT } from './TribeNft';
 
 const Create = () => {
   const { t } = useTranslation();
-  const form = React.useRef<any>();
+  const infoForm = React.useRef<any>();
+  const feeForm = React.useRef<any>();
   const [visible, setVisible] = useState(false);
 
   return (
@@ -20,16 +20,20 @@ const Create = () => {
       <form
         onSubmit={e => {
           e.preventDefault();
-          console.log('表单提交：', form.current.getInfoFrom());
+          const params = {
+            ...infoForm.current.getInfoFrom(),
+            ...feeForm.current.getFeeFrom(),
+          };
+          console.log('表单提交：', params);
           setVisible(true);
         }}
         action=''
       >
         <SubHeader title={t('Basic Information')} />
-        <TribeInfo ref={form} />
+        <TribeInfo ref={infoForm} />
         <Divider />
         <SubHeader title={t('Type settings')} />
-        <TribeFee ref={form} />
+        <TribeFee ref={feeForm} actionType='save' />
         <FormFlex>
           <Text mb='20px' color='textTips' small>
             {t(
@@ -40,7 +44,6 @@ const Create = () => {
         <Divider />
         <SubHeader title={t('Pay for tickets')} />
         <TribeNFT />
-        <TribeCreateBtn hasNft />
       </form>
 
       <ModalWrapper

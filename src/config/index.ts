@@ -53,3 +53,11 @@ export const EXCEPT_TOTALSUPPPPLY_ADDRESS = [
   '0x718da2e74fff28b0a0d62aeb4f2afa8f7b521154',
   '0xe32c5352d3ba108374701d5333daa3db35345cf0',
 ];
+
+// 部落阅读计费默认值
+
+export const TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME = '1'; // 每秒消耗TIME
+export const TRIBE_FEE_DEFAULT_MAX_CONSUMES_TIME = '60'; // 每条内容最多消耗TIME
+export const TRIBE_FEE_DEFAULT_MASTER_REWARD = '50'; // 部落主TIME奖励分配
+export const TRIBE_FEE_DEFAULT_CREATOR_REWARD = '50'; // 创作者TIME奖励分配
+export const TRIBE_FEE_DEFAULT_MEMBER_REWARD = '0'; // 部落成员TIME奖励分配

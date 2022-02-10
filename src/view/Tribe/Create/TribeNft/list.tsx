@@ -165,6 +165,7 @@ const NftAvatar: React.FC<{
           </>
         )}
       </GetAuthorizeBox>
+      <TribeCreateBtn hasNft />
     </NftBox>
   );
 };

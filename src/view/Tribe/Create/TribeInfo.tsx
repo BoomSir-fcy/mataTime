@@ -11,6 +11,8 @@ import {
   Label,
   TextareaStyled,
 } from './style';
+import { ARTICLE_POST_MAX_LEN } from 'config';
+import TextArea from 'components/TextArea';
 
 type InfoParams = {
   name: string;
@@ -50,8 +52,8 @@ const TribeInfoForward = (props, ref) => {
               noShadow
               required
               scale='sm'
-              maxLength={15}
-              pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{4,15}$'
+              maxLength={30}
+              pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{6,30}$'
               value={state.name}
               onChange={e => {
                 const val = e.target.value;
@@ -62,7 +64,7 @@ const TribeInfoForward = (props, ref) => {
             />
           </InputPanelStyle>
           <Text mt='10px' small color='textTips'>
-            {t('4~15 characters, support Chinese and English, numbers')}
+            {t('6~30 characters (Support English, Chinese, numbers)')}
           </Text>
         </Flex>
       </FormItem>
@@ -71,19 +73,22 @@ const TribeInfoForward = (props, ref) => {
         <UploadSingle
           disabled={props.disabled}
           url={state.url}
-          tips={t('The recommended image ratio is 1:1')}
+          tips={t(
+            'The recommended size is less than 5MB, and the image size is 100x100',
+          )}
           uploadSuccess={uploadSuccess}
         />
       </FormItem>
       <FormItem>
         <Label required>{t('Tribal Profile')}</Label>
-        <TextareaStyled
+        <TextArea
+          showCount
           required
+          rows={5}
           disabled={props.disabled}
           value={state.introduction}
           placeholder={t('Please fill in the brief introduction of the tribe')}
-          maxLength={140}
-          rows={5}
+          maxLength={ARTICLE_POST_MAX_LEN}
           onChange={e =>
             setState(p => {
               p.introduction = e.target.value;
