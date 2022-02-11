@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Avatar } from 'components';
 import { SearchPopBox } from './style';
-import { Flex } from 'uikit';
+import { Flex, FlexProps } from 'uikit';
 import { UserTitle, UserDesc } from 'components/Sidebar/recommendPeople';
 import { Api } from 'apis';
 
 import { useTranslation } from 'contexts/Localization';
 
-type Iprops = {
+interface Iprops extends FlexProps {
   show: boolean;
   callback?: (data, type) => void;
   type: 'user' | 'topic';
-};
+}
 
-export const SearchPop = (props: Iprops) => {
+export const SearchPop: React.FC<Iprops> = ({
+  show,
+  type,
+  callback,
+  ...props
+}) => {
   const { t } = useTranslation();
   const [nicKName, setNickName] = useState('');
   const [nicKNameTimeId, setNicKNameTimeId] = useState(null);
@@ -22,7 +27,7 @@ export const SearchPop = (props: Iprops) => {
   const [topicList, setTopicList] = useState([]);
   const [topicTimeId, setTopicTimeId] = useState(null);
   const [isInit, setIsInit] = useState(true);
-  const { show, type, callback } = props;
+  // const { show, type, callback } = props;
 
   // todo
   useEffect(() => {
@@ -68,7 +73,10 @@ export const SearchPop = (props: Iprops) => {
   }, []);
 
   return show ? (
-    <SearchPopBox onClick={e => e.nativeEvent.stopImmediatePropagation()}>
+    <SearchPopBox
+      {...props}
+      onClick={e => e.nativeEvent.stopImmediatePropagation()}
+    >
       {type === 'user' ? (
         <div className='search-box'>
           <div className='title'>

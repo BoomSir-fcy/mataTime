@@ -47,3 +47,7 @@ export const Em = styled.em``;
 export const U = styled.u``;
 
 export const Span = styled.span``;
+
+export const Highlight = styled.span`
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;

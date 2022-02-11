@@ -1,27 +1,20 @@
 import React, { useState, useCallback } from 'react';
+import reactStringReplace from 'react-string-replace';
 import styled, { DefaultTheme } from 'styled-components';
+import { Mention } from 'components/Editor/elements';
 import { Box, BoxProps, Card, Text } from 'uikit';
+import {
+  SQUARE_REGEXP,
+  HTTP_REGEXP,
+  SYMBOL_REGEXP,
+} from 'config/constants/regexp';
 import Image from './Image';
-import { DefaultElement, Code, Ol, Ul } from './styleds';
-
-const CodeStyled = styled.code`
-  /* color: red; */
-  font-family: monospace;
-  & > * {
-    font-family: monospace;
-  }
-`;
-
-export const CodeElement = props => {
-  return (
-    <pre {...props.attributes}>
-      <CodeStyled>{props.children}</CodeStyled>
-    </pre>
-  );
-};
+// import { Mention } from './Mention';
+import { DefaultElement, Code, Ol, Ul, Highlight } from './styleds';
 
 export const Element = props => {
   const { attributes, children, element } = props;
+
   switch (element.type) {
     case 'block-quote':
       return <blockquote {...attributes}>{children}</blockquote>;
@@ -37,6 +30,8 @@ export const Element = props => {
       return <Ol {...attributes}>{children}</Ol>;
     case 'image':
       return <Image {...props} />;
+    case 'mention':
+      return <Mention {...props} />;
     default:
       return <DefaultElement {...attributes}>{children}</DefaultElement>;
   }
@@ -62,6 +57,10 @@ export const Leaf = ({ attributes, children, leaf }) => {
 
   if (leaf.del) {
     children = <del>{children}</del>;
+  }
+
+  if (leaf.highlight) {
+    children = <Highlight>{children}</Highlight>;
   }
 
   return <span {...attributes}>{children}</span>;

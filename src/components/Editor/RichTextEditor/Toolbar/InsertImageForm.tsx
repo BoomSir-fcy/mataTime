@@ -21,6 +21,7 @@ interface InsertImageFormProps {
   multiple?: boolean;
   maxUploadLength?: number;
   size?: number;
+  color?: string;
 }
 
 const text = { text: '' };
@@ -31,6 +32,7 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
   multiple,
   maxUploadLength = 0,
   size,
+  color,
 }) => {
   const editor = useSlate();
 
@@ -98,29 +100,29 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
           }
         });
 
-        setTimeout(() => {
-          const path = ReactEditor.findPath(editor, lastImage);
-          const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
-            null,
-            null,
-          ];
-          if (!nextEle) {
-            Transforms.insertNodes(editor, paragraph);
-          }
+        // setTimeout(() => {
+        //   const path = ReactEditor.findPath(editor, lastImage);
+        //   const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
+        //     null,
+        //     null,
+        //   ];
+        //   if (!nextEle) {
+        //     Transforms.insertNodes(editor, paragraph);
+        //   }
 
-          // const [afterEle, afterPath] = Editor.last(editor, path) || [
-          //   null,
-          //   null,
-          // ];
+        //   // const [afterEle, afterPath] = Editor.last(editor, path) || [
+        //   //   null,
+        //   //   null,
+        //   // ];
 
-          // if (
-          //   afterEle &&
-          //   (afterEle as any).type === 'image-empty' &&
-          //   (afterEle as any).children[0]?.text === ''
-          // ) {
-          //   Transforms.removeNodes(editor, { at: afterPath }); // 图片节点后面或默认更一个空节点
-          // }
-        }, 0);
+        //   // if (
+        //   //   afterEle &&
+        //   //   (afterEle as any).type === 'image-empty' &&
+        //   //   (afterEle as any).children[0]?.text === ''
+        //   // ) {
+        //   //   Transforms.removeNodes(editor, { at: afterPath }); // 图片节点后面或默认更一个空节点
+        //   // }
+        // }, 0);
       } catch (error) {
         console.error(error);
       }
@@ -133,7 +135,7 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
       <label htmlFor='upload-images' title={t('editorUploadImg')}>
         <Icon
           size={size}
-          color='white_black'
+          color={color}
           current
           name='icon-bianjiqi_tupianshangchuan745'
         />
