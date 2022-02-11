@@ -41,6 +41,9 @@ export const CONNECT_WALLET_BODY_CLASS_NAME =
 export const ARTICLE_POST_MAX_LEN = 600; // 发帖最大数量
 
 export const ARTICLE_COMMENTS_MAX_LEN = 280; // 发帖最大数量
+
+export const HUGE_ARTICLE_IMAGE_MAX_LEN = 20; // 长文发图数量
+
 // 帖子显示折行
 export const ARTICLE_POST_MAX_ROW = 12;
 

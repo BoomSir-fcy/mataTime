@@ -10,11 +10,13 @@ const Tab = styled(Flex)`
   .tabFont {
     color: ${({ theme }) => theme.colors.textTips};
     font-size: 14px;
+    cursor: pointer;
   }
   .active {
     color: ${({ theme }) => theme.colors.white_black};
     font-size: 18px;
     font-weight: bold;
+    cursor: pointer;
   }
 `;
 

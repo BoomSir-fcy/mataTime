@@ -369,6 +369,7 @@ export const hideSidebarPath = (() => {
       '/task/invites',
       '/task/friendsList',
       '/task/rankingList',
+      '/tribe/post',
       '/tribe/create',
     ],
     menuNavConfig,

@@ -35,6 +35,7 @@ export type HeadingTwoElement = { type: 'heading-two'; children: Descendant[] }
 export type ImageElement = {
   type: 'image'
   url: string
+  loading?: boolean
   children: EmptyText[]
 }
 
@@ -52,6 +53,8 @@ export type MentionElement = {
 }
 
 export type ParagraphElement = { type: 'paragraph'; children: Descendant[] }
+
+export type ImageEmptyElement = { type: 'image-empty'; children: Descendant[] }
 
 export type CodeElement = { type: 'code'; children: Descendant[] }
 
@@ -84,6 +87,7 @@ type CustomElement =
   | TitleElement
   | VideoElement
   | CodeElement
+  | ImageEmptyElement
 
 export type CustomText = {
   bold?: boolean

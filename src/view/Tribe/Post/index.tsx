@@ -1,6 +1,6 @@
+import React from 'react';
 import { Crumbs } from 'components';
 import RichTextEditor from 'components/Editor/RichTextEditor';
-import React from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'uikit';
 import SubHeader from '../components/SubHeader';
