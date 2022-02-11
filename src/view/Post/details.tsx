@@ -2,7 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouteMatch, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Editor, Crumbs, MoreOperatorEnum, Loading } from 'components';
+import {
+  Editor,
+  Crumbs,
+  MoreOperatorEnum,
+  ForwardFastModal,
+  Loading,
+} from 'components';
 import { useToast } from 'hooks';
 import { Spinner, Empty, Text } from 'uikit';
 import { useStore } from 'store';
@@ -48,6 +54,7 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   // });
   const [refresh, setRefresh] = useState(1);
   const [loaded, setLoaded] = useState(false);
+  const [visible, setVisible] = useState(false);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
@@ -178,12 +185,16 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
               </Link>
             )}
             <PostCount>
-              <PostCountButton mr='15px' onClick={() => {}}>
+              <PostCountButton
+                as={Link}
+                to={`/forward/${itemData.id}`}
+                mr='15px'
+              >
                 {t('number Reposts', { value: itemData?.normal_forward_num })}
               </PostCountButton>
-              <PostCountButton>
+              {/* <PostCountButton onClick={() => setVisible(true)}>
                 {t('number Quote Posts', { value: itemData?.fast_forward_num })}
-              </PostCountButton>
+              </PostCountButton> */}
             </PostCount>
             <MentionOperator
               replyType='twitter'
@@ -204,6 +215,12 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
             setNonce={setNonce}
             key={refresh}
             itemData={itemData}
+          />
+          {/* 快转弹框 */}
+          <ForwardFastModal
+            visible={visible}
+            pid={itemData.id}
+            onClose={() => setVisible(false)}
           />
         </>
       ) : loaded ? (

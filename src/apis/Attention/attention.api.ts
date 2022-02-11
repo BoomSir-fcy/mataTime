@@ -3,7 +3,7 @@ import qs from 'qs';
 
 export class AttentionApi extends Http {
   // 查询用户状态
-  async getFollowState(uid: string[]) {
+  async getFollowState(uid: string[] | number[]) {
     const params = qs.stringify({ focus_uid: uid }, { arrayFormat: 'repeat' });
     const res = await this.get(`/v1/attention/consider_focus?${params}`);
     return res;
@@ -49,6 +49,26 @@ export class AttentionApi extends Http {
 
   async delV2Post(pid: number) {
     const res = await this.post('/v2/post/del', { pid });
+    return res;
+  }
+
+  // 快转列表
+  async getForwardList(params: {
+    page: number;
+    page_size: number;
+    pid: number;
+  }) {
+    const res = await this.get('/v2/forward/fast-forward-list', params);
+    return res;
+  }
+
+  // 普通转发列表
+  async getNormalForwardList(params: {
+    page: number;
+    page_size: number;
+    pid: number | string;
+  }) {
+    const res = await this.get('/v2/forward/normal-forward-list', params);
     return res;
   }
 

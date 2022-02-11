@@ -233,11 +233,11 @@ export const MorePostPopup: React.FC<Iprops> = React.memo(
       <React.Fragment>
         <PopupWrapper>
           {/* 取消快转 */}
-          {UID === data.forwardUid && (
+          {/* {UID === data.forwardUid && (
             <Text textTransform='capitalize' onClick={() => cancelForward()}>
               {t('Undo Repost')}
             </Text>
-          )}
+          )} */}
           {isOwn && (
             <>
               <Text

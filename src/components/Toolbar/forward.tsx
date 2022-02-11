@@ -16,7 +16,7 @@ const PopupButton = styled(Flex)`
 const PopupContent = styled(Flex)`
   flex-direction: column;
   min-width: 80px;
-  min-height: 80px;
+  /* min-height: 80px; */
   padding: 0 9px 0 0;
   background: ${({ theme }) => theme.colors.greyBackground};
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
@@ -54,12 +54,7 @@ export const Forward: React.FC<{
       const forward_content = Boolean(res) ? JSON.parse(res) : [];
       // todo 优化传值类型
       Api.HomeApi.setForward({
-        forward_type:
-          forward_content.length <= 0
-            ? 2
-            : forward_type
-            ? forward_type
-            : state.forward_type,
+        forward_type: forward_type ? forward_type : state.forward_type,
         forward_content_type: type === 'post' ? 1 : 2,
         forward_id: data.id,
         forward_content: forward_content.length > 0 ? res : '',
@@ -107,7 +102,7 @@ export const Forward: React.FC<{
         event.preventDefault();
       }}
     >
-      {userinfo.uid === data.forwardUid ? (
+      {/* {userinfo.uid === data.forwardUid ? (
         <Rows
           variant='text'
           onClick={() => {
@@ -133,7 +128,7 @@ export const Forward: React.FC<{
             {t('Repost')}
           </Text>
         </Rows>
-      )}
+      )} */}
 
       <Rows
         variant='text'

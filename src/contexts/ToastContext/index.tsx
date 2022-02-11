@@ -24,12 +24,12 @@ export const ToastsProvider: React.FC = ({ children }) => {
   );
 
   const toastWithLink = (title, url, urlText) => (
-    <Link to={url}>
+    <Flex as={Link} to={url}>
       <Text color='rgb(117, 117, 117)'>{title}</Text>
       <Text ml='10px' color='rgb(117, 117, 117)'>
         {urlText}
       </Text>
-    </Link>
+    </Flex>
   );
 
   const toastSuccess = (title: string) => {
