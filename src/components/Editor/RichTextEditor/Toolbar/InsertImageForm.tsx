@@ -71,6 +71,8 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
         });
         const base64 = await Promise.all(compressImage);
         const loadingElement: CustomElement[] = [];
+        // FIXME: 撤销有问题 只能直接更改当前元素
+        // 也不能直接改 直接改撤销还是有问题
         base64.forEach(path => {
           const eles = insertImage(editor, path, true);
           loadingElement.push(eles.image);
@@ -99,30 +101,6 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
             lastImage = image;
           }
         });
-
-        // setTimeout(() => {
-        //   const path = ReactEditor.findPath(editor, lastImage);
-        //   const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
-        //     null,
-        //     null,
-        //   ];
-        //   if (!nextEle) {
-        //     Transforms.insertNodes(editor, paragraph);
-        //   }
-
-        //   // const [afterEle, afterPath] = Editor.last(editor, path) || [
-        //   //   null,
-        //   //   null,
-        //   // ];
-
-        //   // if (
-        //   //   afterEle &&
-        //   //   (afterEle as any).type === 'image-empty' &&
-        //   //   (afterEle as any).children[0]?.text === ''
-        //   // ) {
-        //   //   Transforms.removeNodes(editor, { at: afterPath }); // 图片节点后面或默认更一个空节点
-        //   // }
-        // }, 0);
       } catch (error) {
         console.error(error);
       }
