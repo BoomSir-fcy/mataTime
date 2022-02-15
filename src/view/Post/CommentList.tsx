@@ -214,6 +214,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       SHIELD,
       DELPOST,
       BLOCKUSER,
+      FORWARD,
     } = MoreOperatorEnum;
     const handleChangeList = type === SHIELD || type === DELPOST;
     let arr = [];
@@ -224,7 +225,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       type === SETTOP ||
       type === CANCEL_SETTOP ||
       type === COMMONT ||
-      type === BLOCKUSER
+      type === BLOCKUSER ||
+      type === FORWARD
     ) {
       initList();
       return;

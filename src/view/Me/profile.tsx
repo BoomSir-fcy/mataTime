@@ -249,7 +249,7 @@ const Profile: React.FC<any> = props => {
       });
       const [profile, tweet] = await Promise.all([
         Api.MeApi.getProfile(uid),
-        Api.MeApi.getProfileMsg({ page: offset || page, perpage, uid }),
+        Api.MeApi.getProfileV2Msg({ page: offset || page, perpage, uid }),
       ]);
       if (Api.isSuccess(profile)) {
         setState(p => {

@@ -114,6 +114,12 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
     };
   }, [updateDetails]);
 
+  useEffect(() => {
+    return () => {
+      setRefresh(refresh === 1 ? 2 : 1);
+    };
+  }, []);
+
   // 更新列表
   const handleUpdateList = useCallback(
     (newItem: any, type: MoreOperatorEnum = null) => {
@@ -179,8 +185,17 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
               more={true}
               showTranslate
             />
-            {Boolean(itemData?.forward?.post_id) && (
-              <Link to={`/articledetils/${itemData?.forward?.post_id}`}>
+            {(Boolean(itemData?.forward?.post_id) ||
+              itemData?.forward?.is_forward_del === 1) && (
+              <Link
+                to={
+                  itemData?.forward?.is_forward_del === 1
+                    ? {}
+                    : itemData?.forward?.forward_type === 2
+                    ? `/articledetils/${itemData?.forward?.forward_parent_id}?comment_id=${itemData?.forward?.forward_comment_id}`
+                    : `/articledetils/${itemData?.forward?.post_id}`
+                }
+              >
                 <ForwardContent data={itemData} />
               </Link>
             )}
@@ -190,7 +205,7 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
                 to={`/forward/${itemData.id}`}
                 mr='15px'
               >
-                {t('number Reposts', { value: itemData?.normal_forward_num })}
+                {t('number Reposts', { value: itemData.forward_num || 0 })}
               </PostCountButton>
               {/* <PostCountButton onClick={() => setVisible(true)}>
                 {t('number Quote Posts', { value: itemData?.fast_forward_num })}

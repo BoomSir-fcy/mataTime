@@ -9,7 +9,7 @@ import { NewsMeWrapper } from './style';
 
 import MessageCard from '../components/MessageCard';
 
-const NewsMe: React.FC<any> = props => {
+const MessageRepost = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
@@ -22,7 +22,7 @@ const NewsMe: React.FC<any> = props => {
       return false;
     }
     setLoading(true);
-    Api.NewsApi.getMessageList(1, current || page, 50).then(res => {
+    Api.NewsApi.getMessageList(30, current || page, 50).then(res => {
       setLoading(false);
       if (Api.isSuccess(res)) {
         setTotalPage(res.data.total_page);
@@ -78,4 +78,4 @@ const NewsMe: React.FC<any> = props => {
   );
 };
 
-export default NewsMe;
+export default MessageRepost;

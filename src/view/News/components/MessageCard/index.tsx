@@ -27,6 +27,7 @@ const ContentBox = styled(Box)`
 `;
 const ContentInnerBox = styled(Box)`
   pointer-events: none;
+  height: calc(100% - 28px);
   padding: 14px 8px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 14px 8px 0;

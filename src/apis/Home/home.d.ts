@@ -89,6 +89,9 @@ declare namespace Api {
       user_name?: string;
       add_time?: string;
       is_forward_del?: number;
+      forward_comment_id?: number;
+      forward_parent_id?: number;
+      forward_type?: number;
     }
 
     interface postData extends Api.Error {
