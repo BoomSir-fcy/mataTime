@@ -10,7 +10,7 @@ import {
 const decorate = ([node, path]) => {
   const ranges = [];
 
-  const pushRange = (text, search) => {
+  const pushRange = (text, search, key) => {
     const parts = text.split(search);
     let offset = 0;
 
@@ -20,6 +20,7 @@ const decorate = ([node, path]) => {
           anchor: { path, offset: offset - search.length },
           focus: { path, offset },
           highlight: true,
+          [key]: true
         });
       }
 
@@ -30,15 +31,15 @@ const decorate = ([node, path]) => {
   if (Text.isText(node)) {
     const { text } = node;
     reactStringReplace(text, HTTP_REGEXP, (match, i) => {
-      pushRange(text, match)
+      pushRange(text, match, 'http')
       return ''
     });
     reactStringReplace(text, SYMBOL_REGEXP, (match, i) => {
-      pushRange(text, match)
+      pushRange(text, match, 'symbol')
       return ''
     });
     reactStringReplace(text, SQUARE_REGEXP, (match, i) => {
-      pushRange(text, match)
+      pushRange(text, match, 'topic')
       return ''
     });
   }

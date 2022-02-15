@@ -143,6 +143,8 @@ export type Colors = {
   editorBoxBg: string;
   searchTopicHoverBg: string;
   commentBorder: string;
+
+  codebg: string;
 };
 
 export type Filters = {

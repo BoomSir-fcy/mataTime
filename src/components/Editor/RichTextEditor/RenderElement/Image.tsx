@@ -6,15 +6,16 @@ import { Transforms, createEditor, Descendant, Editor } from 'slate';
 import { Loading, Icon } from 'components';
 import { mt } from './styleds';
 
-const ImageStyled = styled.img`
+export const ImageStyled = styled.img`
   max-width: 100%;
   max-height: 20em;
 `;
 
-const BoxStyled = styled(Box)`
+export const BoxStyled = styled(Box)<{ align?: string }>`
   ${mt};
   display: inline-block;
   line-height: 0; /* 去除 inline-block 底部间距 */
+  text-align: ${({ align }) => align || 'right'};
 `;
 
 const CloseBtnBox = styled(Box)`

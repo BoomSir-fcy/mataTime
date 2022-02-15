@@ -5,6 +5,7 @@ import { useSlate, useSlateStatic, ReactEditor } from 'slate-react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { Icon } from 'components';
 import {
+  CustomEditor,
   CustomElement,
   ImageElement,
   ImageEmptyElement,
@@ -16,6 +17,7 @@ import { cutDownImg } from 'utils/imageCompression';
 import { Api } from 'apis';
 import { HUGE_ARTICLE_IMAGE_MAX_LEN } from 'config';
 import client from 'utils/client';
+import { HistoryEditor } from 'slate-history';
 
 interface InsertImageFormProps {
   multiple?: boolean;
@@ -40,7 +42,7 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
   const { t } = useTranslation();
 
   const insertImage = (
-    editor,
+    editor: CustomEditor,
     url,
     loading = false,
   ): {
@@ -48,12 +50,14 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
   } => {
     const image: ImageElement = {
       type: 'image',
+      align: 'right',
       url,
       loading,
       children: [text],
     };
-
-    Transforms.insertNodes(editor, image);
+    HistoryEditor.withoutMerging(editor, () => {
+      Transforms.insertNodes(editor, image);
+    });
     return {
       image,
     };
@@ -85,18 +89,25 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
         loadingElement.reverse().forEach(ele => {
           const path = ReactEditor.findPath(editor, ele);
           console.log(path);
-          Transforms.removeNodes(editor, {
-            at: ReactEditor.findPath(editor, ele),
+          HistoryEditor.withoutMerging(editor, () => {
+            // Transforms.insertNodes(editor, image);
+            Transforms.removeNodes(editor, {
+              at: ReactEditor.findPath(editor, ele),
+            });
           });
+          // Transforms.removeNodes(editor, {
+          //   at: ReactEditor.findPath(editor, ele),
+          // });
         });
         if (!Api.isSuccess(res)) {
           toastError(t('commonUploadBackgroundFail'));
           return;
         }
         let lastImage = null;
+        console.log(res, 'res');
         base64.forEach((path, index) => {
           console.log('insertImage');
-          const { image } = insertImage(editor, path);
+          const { image } = insertImage(editor, res.data[index]?.full_path);
           if (index === base64.length - 1) {
             lastImage = image;
           }

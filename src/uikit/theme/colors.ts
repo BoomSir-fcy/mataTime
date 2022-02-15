@@ -95,6 +95,7 @@ export const lightColors: Colors = {
   searchTopicHoverBg: '#F5F5F5',
   commentBorder: '#ccc',
   hoverList: '#F5F5F5',
+  codebg: '#f8f8f8',
 };
 
 export const darkColors: Colors = {
@@ -163,4 +164,5 @@ export const darkColors: Colors = {
   searchTopicTxt: '#fff',
   commentBorder: '#ccc',
   hoverList: '#1f1f1f',
+  codebg: '#f8f8f8',
 };
