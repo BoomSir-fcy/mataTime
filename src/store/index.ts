@@ -26,6 +26,8 @@ import { SearchState } from './search/types';
 
 import { TaskState } from './task/type';
 import { MapModuleState, PickNftState } from './types';
+import { TribeState } from './tribe/type';
+import tribeReducer from './tribe';
 export interface Store {
   appReducer: App;
   loginReducer: Login;
@@ -37,6 +39,7 @@ export interface Store {
   pickNft: PickNftState;
   search: SearchState;
   mapModule: MapModuleState;
+  tribe: TribeState;
 }
 
 // const rootReducer = combineReducers({ appReducer, loginReducer });
@@ -54,6 +57,7 @@ export const store = configureStore({
     pickNft: picknftReducer,
     search: searchReducer,
     mapModule: mapModuleReduce,
+    tribe: tribeReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

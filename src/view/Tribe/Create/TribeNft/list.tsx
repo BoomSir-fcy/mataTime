@@ -12,7 +12,6 @@ import { useWeb3React } from '@web3-react/core';
 import { storeAction } from 'store';
 import { GET_DSG_NFT_URL } from 'config';
 import { useToast } from 'hooks';
-import { TribeCreateBtn } from '../TribeCreateBtn';
 
 const Column = styled(Flex)`
   flex-direction: column;
@@ -97,21 +96,19 @@ const NftItem = {
 };
 
 interface Nft {
-  address: string;
-  needApprove: boolean;
+  name?: string;
+  image?: string;
+  nftToken?: string;
+  nftId?: number;
 }
 const NftAvatar: React.FC<{
   NftInfo?: Nft;
   Nodata: boolean;
-  status?: number;
-}> = ({ NftInfo, Nodata, status }) => {
+}> = ({ NftInfo, Nodata }) => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { t } = useTranslation();
-  const [ActiveAvInfo, setActiveAvInfo] = useState(NftItem);
-  const NftList = useStore(p => p.loginReducer.nftList);
-  const nft = useStore(p => p.loginReducer.nft);
-  const { toastWarning, toastError } = useToast();
+  const [activeNft, setActiveNft] = useState<Nft>({});
 
   return (
     <NftBox>
@@ -131,41 +128,26 @@ const NftAvatar: React.FC<{
         ) : (
           <>
             <GetAuthorize>
-              {NftList.map((item, index) =>
-                NftInfo.address === item.properties.token ? (
-                  <Column key={`${index}_${item.properties.token_id}`}>
-                    <AvatarBox
-                      className={
-                        nft.properties?.token_id === item.properties.token_id &&
-                        'active'
-                      }
-                    >
-                      <ActiveImg
-                        disableFollow
-                        src={item.image}
-                        scale='ld'
-                        onClick={() => {
-                          if (!NftInfo.needApprove) {
-                            dispatch(
-                              storeAction.setUserNftStake({ isStakeNft: true }),
-                            );
-                            dispatch(storeAction.setUserNft(item));
-                          } else {
-                            toastWarning(t('You should approve first!'));
-                          }
-                        }}
-                      />
-                    </AvatarBox>
-                  </Column>
-                ) : (
-                  <></>
-                ),
-              )}
+              <Column>
+                <AvatarBox
+                  className={
+                    activeNft?.nftToken === NftInfo.nftToken ? 'active' : ''
+                  }
+                >
+                  <ActiveImg
+                    disableFollow
+                    src={NftInfo.image}
+                    scale='ld'
+                    onClick={() => {
+                      setActiveNft(NftInfo);
+                    }}
+                  />
+                </AvatarBox>
+              </Column>
             </GetAuthorize>
           </>
         )}
       </GetAuthorizeBox>
-      <TribeCreateBtn hasNft />
     </NftBox>
   );
 };

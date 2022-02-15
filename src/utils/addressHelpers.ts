@@ -77,3 +77,12 @@ export const getExPhotoAddress = () => {
 export const getDsgafAddress = () => {
   return getAddress(addresses.dsgaf);
 };
+export const getTribeAddress = () => {
+  return getAddress(addresses.tribe);
+};
+export const getTribeNFTAddress = () => {
+  return getAddress(addresses.tribeNFT);
+};
+export const getTribeTicketsNFTAddress = () => {
+  return getAddress(addresses.tribeTicketsNFT);
+};

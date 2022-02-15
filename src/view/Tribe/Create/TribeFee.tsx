@@ -1,4 +1,10 @@
-import React, { useCallback, useImperativeHandle, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react';
 import { Select, UploadSingle } from 'components';
 import { useTranslation } from 'contexts';
 import styled from 'styled-components';
@@ -9,6 +15,7 @@ import {
   FormItem,
   FormColumnItem,
   Label,
+  LabelFlex,
   InputPanelStyle,
 } from './style';
 import RadioGroup from 'uikit/components/Radio/RadioGroup';
@@ -25,6 +32,10 @@ import {
   TRIBE_FEE_DEFAULT_MEMBER_REWARD,
   TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME,
 } from 'config';
+import QuestionHelper from 'components/QuestionHelper';
+import { parseInt } from 'lodash';
+import { useTribeState } from 'store/tribe/hooks';
+import { FeeType, TribeType } from 'store/tribe/type';
 
 const TribeCard = styled(Card)`
   margin-top: 20px;
@@ -40,35 +51,37 @@ type ActionType = typeof actionTypes[keyof typeof actionTypes];
 
 const TribeFeeForward = (props, ref) => {
   const { t } = useTranslation();
+  const { feeCoinList } = useTribeState();
   const { disabled, actionType } = props;
-  const [tribeType, setTribeType] = useState(2);
-  const [tribeFeeType, setTribeFeeType] = useState(2);
+  const [tribeType, setTribeType] = useState(1);
+  const [tribeFeeType, setTribeFeeType] = useState(1);
+  const [feeToken, setFeeToken] = useState(feeCoinList[0]?.tokenAddress);
   const [state, setState] = useImmer({
-    amount: '',
+    feeAmount: '',
     timing: 1,
     validDate: '',
-    secondConsumesTime: TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME,
-    maxConsumesTime: TRIBE_FEE_DEFAULT_MAX_CONSUMES_TIME,
-    tribalMasterReward: TRIBE_FEE_DEFAULT_MASTER_REWARD,
-    creatorReward: TRIBE_FEE_DEFAULT_CREATOR_REWARD,
-    memberReward: TRIBE_FEE_DEFAULT_MEMBER_REWARD,
+    perTime: TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME,
+    ownerPercent: TRIBE_FEE_DEFAULT_MASTER_REWARD,
+    authorPercent: TRIBE_FEE_DEFAULT_CREATOR_REWARD,
+    memberPercent: TRIBE_FEE_DEFAULT_MEMBER_REWARD,
   });
   const typeOptions = [
-    { value: 1, label: t('Basic') },
-    { value: 2, label: t('Pro') },
+    { value: TribeType.BASIC, label: t('Basic') },
+    { value: TribeType.PRO, label: t('Pro') },
   ];
   const feeTypeOptions = [
-    { value: 1, label: t('Default') },
-    { value: 2, label: t('Customize') },
+    { value: FeeType.DEFAULT, label: t('Default') },
+    { value: FeeType.CUSTOMIZE, label: t('Customize') },
   ];
-  const CoinOptions = [
-    { value: 1, label: t('BNB') },
-    { value: 2, label: t('USDT') },
-  ];
+  const CoinOptions = useMemo(() => {
+    return feeCoinList.map(item => {
+      return { value: item.tokenAddress, label: item.symbol };
+    });
+  }, [feeCoinList]);
 
   useImperativeHandle(ref, () => ({
     getFeeFrom() {
-      return state;
+      return { tribeType, feeToken, ...state };
     },
   }));
 
@@ -76,7 +89,30 @@ const TribeFeeForward = (props, ref) => {
     <FormFlex>
       {/* 部落类型 */}
       <FormItem>
-        <Label required>{t('Tribe Type')}</Label>
+        <LabelHelper
+          required
+          label={t('Tribe Type')}
+          helper={
+            <>
+              <Text small>
+                {t(
+                  'Basic Tribe cannot set the fee feeAmount and validity days;',
+                )}
+              </Text>
+              <Text small>
+                {t(
+                  'Pro Tribe can set the fee feeAmount and validity days, the joining fee belongs to the tribe host.',
+                )}
+              </Text>
+              <Flex>
+                <Text small color='warning'>
+                  {t('Note:')}
+                </Text>
+                <Text small>{t('The tribe type cannot be changed.')}</Text>
+              </Flex>
+            </>
+          }
+        />
         <FormColumnItem flexDirection='column'>
           <RadioGroup
             disabled={actionType === actionTypes.EDIT}
@@ -89,7 +125,17 @@ const TribeFeeForward = (props, ref) => {
           {tribeType === 2 && (
             <TribeCard isRadius>
               <FormItem className='mobile-nowrap' alignItems='center'>
-                <Label>{t('Charge settings')}</Label>
+                <LabelHelper
+                  colon
+                  label={t('Charge settings')}
+                  helper={
+                    <Text small>
+                      {t(
+                        'The fee all belongs to the tribe host; can be changed.',
+                      )}
+                    </Text>
+                  }
+                />
                 <InputPanelStyle>
                   <Flex justifyContent='space-between' alignItems='center'>
                     <Input
@@ -100,12 +146,12 @@ const TribeFeeForward = (props, ref) => {
                       placeholder={t('Please enter the amount')}
                       inputMode='decimal'
                       pattern={PATTERN_AMOUNT}
-                      value={state.amount}
+                      value={state.feeAmount}
                       onChange={e => {
                         const val = e.target.value;
                         if (e.currentTarget.validity.valid) {
                           setState(p => {
-                            p.amount = val;
+                            p.feeAmount = val;
                           });
                         }
                       }}
@@ -114,14 +160,22 @@ const TribeFeeForward = (props, ref) => {
                       scale='xs'
                       disabled={actionType === actionTypes.EDIT && disabled}
                       options={CoinOptions}
-                      defaultId={1}
-                      onChange={(val: any) => console.log(val)}
+                      defaultId={feeToken}
+                      onChange={(val: any) => setFeeToken(val.value)}
                     />
                   </Flex>
                 </InputPanelStyle>
               </FormItem>
               <FormItem className='mobile-nowrap' alignItems='center'>
-                <Label>{t('Timing method')}</Label>
+                <LabelHelper
+                  colon
+                  label={t('Timing method')}
+                  helper={
+                    <Text small>
+                      {t('Pro Tribe validity days can be changed')}
+                    </Text>
+                  }
+                />
                 <RadioGroup
                   disabled={actionType === actionTypes.EDIT && disabled}
                   value={state.timing}
@@ -140,21 +194,24 @@ const TribeFeeForward = (props, ref) => {
                 />
               </FormItem>
               <FormItem className='mobile-nowrap' alignItems='center'>
-                <Label>{t('Effective time')}</Label>
+                <Label>{t('Effective time')}：</Label>
                 <InputPanelStyle>
                   <Flex justifyContent='space-between' alignItems='center'>
                     <Input
-                      disabled={actionType === actionTypes.EDIT && disabled}
+                      disabled={
+                        state.timing === 1 ||
+                        (actionType === actionTypes.EDIT && disabled)
+                      }
                       noShadow
                       required
                       scale='sm'
                       placeholder={t('Please enter the number of days')}
                       inputMode='decimal'
                       pattern={PATTERN_NUMBER}
-                      value={state.validDate}
+                      value={state.timing === 1 ? 0 : state.validDate}
                       onChange={e => {
                         const val = e.target.value;
-                        if (e.currentTarget.validity.valid) {
+                        if (val === '' || e.currentTarget.validity.valid) {
                           setState(p => {
                             p.validDate = val;
                           });
@@ -171,7 +228,27 @@ const TribeFeeForward = (props, ref) => {
       </FormItem>
       {/* 阅读计费 */}
       <FormItem>
-        <Label required>{t('Read Billing')}</Label>
+        <LabelHelper
+          required
+          label={t('Read Billing')}
+          helper={
+            <>
+              <Text small>
+                {t(
+                  'Reading billing rules can be set for both Basic/Pro Tribes.',
+                )}
+              </Text>
+              <Flex>
+                <Text small color='warning'>
+                  {t('Note:')}
+                </Text>
+                <Text small>
+                  {t('Reading billing rules cannot be changed.')}
+                </Text>
+              </Flex>
+            </>
+          }
+        />
         <FormColumnItem>
           <RadioGroup
             disabled={actionType === actionTypes.EDIT}
@@ -181,11 +258,10 @@ const TribeFeeForward = (props, ref) => {
               setTribeFeeType(val);
               if (val === 1) {
                 setState(p => {
-                  p.secondConsumesTime = TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME;
-                  p.maxConsumesTime = TRIBE_FEE_DEFAULT_MAX_CONSUMES_TIME;
-                  p.tribalMasterReward = TRIBE_FEE_DEFAULT_MASTER_REWARD;
-                  p.creatorReward = TRIBE_FEE_DEFAULT_CREATOR_REWARD;
-                  p.memberReward = TRIBE_FEE_DEFAULT_MEMBER_REWARD;
+                  p.perTime = TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME;
+                  p.ownerPercent = TRIBE_FEE_DEFAULT_MASTER_REWARD;
+                  p.authorPercent = TRIBE_FEE_DEFAULT_CREATOR_REWARD;
+                  p.memberPercent = TRIBE_FEE_DEFAULT_MEMBER_REWARD;
                 });
               }
             }}
@@ -193,9 +269,16 @@ const TribeFeeForward = (props, ref) => {
           <TribeCard isRadius>
             <FormItem justifyContent='space-between'>
               <Flex flexDirection='column'>
-                <Text mb='10px' color='textTips'>
-                  {t('Consumes TIME per second')}
-                </Text>
+                <LabelHelper
+                  label={t('Consumes TIME per second')}
+                  helper={
+                    <Text small>
+                      {t(
+                        'The rules for burning TIME when browsing for reading in this tribe; cannot be changed.',
+                      )}
+                    </Text>
+                  }
+                />
                 <Flex flexDirection='column' alignItems='flex-end'>
                   <InputPanelStyle>
                     <Flex justifyContent='space-between' alignItems='center'>
@@ -209,12 +292,12 @@ const TribeFeeForward = (props, ref) => {
                         placeholder='1~100'
                         inputMode='decimal'
                         pattern={PATTERN_ONE_ONEHUNDRED}
-                        value={state.secondConsumesTime}
+                        value={state.perTime}
                         onChange={e => {
                           const val = e.target.value;
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
-                              p.secondConsumesTime = val;
+                              p.perTime = val;
                             });
                           }
                         }}
@@ -228,31 +311,21 @@ const TribeFeeForward = (props, ref) => {
                 </Flex>
               </Flex>
               <Flex flexDirection='column'>
-                <Text mb='10px' color='textTips'>
+                <Text mb='10px'>
                   {t('Each piece of content consumes up to TIME')}
                 </Text>
                 <Flex flexDirection='column' alignItems='flex-end'>
                   <InputPanelStyle>
                     <Flex justifyContent='space-between' alignItems='center'>
                       <Input
-                        disabled={
-                          tribeFeeType === 1 || actionType === actionTypes.EDIT
-                        }
+                        disabled
                         noShadow
                         required
                         scale='sm'
                         placeholder='60s'
                         inputMode='decimal'
                         pattern={PATTERN_NUMBER}
-                        value={state.maxConsumesTime}
-                        onChange={e => {
-                          const val = e.target.value;
-                          if (val === '' || e.currentTarget.validity.valid) {
-                            setState(p => {
-                              p.maxConsumesTime = val;
-                            });
-                          }
-                        }}
+                        value={parseInt(state.perTime) * 60}
                       />
                       <Text>TIME</Text>
                     </Flex>
@@ -264,7 +337,17 @@ const TribeFeeForward = (props, ref) => {
               </Flex>
             </FormItem>
             <Flex flexDirection='column' width='100%' margin='20px 0'>
-              <Text>* {t('Content Producer TIME Reward Distribution')}</Text>
+              <LabelHelper
+                required
+                label={t('Content Producer TIME Reward Distribution')}
+                helper={
+                  <Text small>
+                    {t(
+                      'TIME rewards earned by this tribe, which can be distributed independently; cannot be changed.',
+                    )}
+                  </Text>
+                }
+              />
               <Flex flexWrap='wrap' mt='20px'>
                 <Flex mb='10px' mr='20px' alignItems='center'>
                   <InputPanelStyle width='120px'>
@@ -278,12 +361,12 @@ const TribeFeeForward = (props, ref) => {
                         required
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
-                        value={state.tribalMasterReward}
+                        value={state.ownerPercent}
                         onChange={e => {
                           const val = e.target.value;
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
-                              p.tribalMasterReward = val;
+                              p.ownerPercent = val;
                             });
                           }
                         }}
@@ -307,12 +390,12 @@ const TribeFeeForward = (props, ref) => {
                         scale='sm'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
-                        value={state.creatorReward}
+                        value={state.authorPercent}
                         onChange={e => {
                           const val = e.target.value;
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
-                              p.creatorReward = val;
+                              p.authorPercent = val;
                             });
                           }
                         }}
@@ -336,12 +419,12 @@ const TribeFeeForward = (props, ref) => {
                         scale='sm'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
-                        value={state.memberReward}
+                        value={state.memberPercent}
                         onChange={e => {
                           const val = e.target.value;
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
-                              p.memberReward = val;
+                              p.memberPercent = val;
                             });
                           }
                         }}
@@ -350,7 +433,7 @@ const TribeFeeForward = (props, ref) => {
                     </Flex>
                   </InputPanelStyle>
                   <Text ml='10px' style={{ whiteSpace: 'nowrap' }}>
-                    {t('部落成员')}
+                    {t('Tribe members')}
                   </Text>
                 </Flex>
               </Flex>
@@ -359,6 +442,27 @@ const TribeFeeForward = (props, ref) => {
         </FormColumnItem>
       </FormItem>
     </FormFlex>
+  );
+};
+
+const LabelHelper: React.FC<{
+  required?: boolean;
+  colon?: boolean;
+  label?: string;
+  helper?: ReactNode;
+}> = ({ required, colon = false, label, helper }) => {
+  return (
+    <LabelFlex>
+      <Label required={required}>{label}</Label>
+      <QuestionHelper
+        ml='8px'
+        mt='4px'
+        color='white_black'
+        text={helper}
+        placement='auto'
+      />
+      {colon && <Text ml='4px'>：</Text>}
+    </LabelFlex>
   );
 };
 

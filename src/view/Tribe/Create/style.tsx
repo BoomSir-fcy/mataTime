@@ -48,9 +48,16 @@ export const FormColumnItem = styled(Flex)`
     width: 80%;
   }
 `;
+export const LabelFlex = styled(Flex)`
+  min-width: 110px;
+  margin-bottom: 10px;
+  label {
+    width: max-content;
+  }
+`;
 export const Label = styled.label<{ required?: boolean }>`
   width: 100px;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   color: ${({ theme }) => theme.colors.text};
   ${({ required }) =>
     required &&

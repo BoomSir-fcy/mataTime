@@ -8,64 +8,41 @@ import { useFetchSupportNFT } from 'view/Login/hook';
 
 import NftAvatar from './list';
 
-export const TribeNFT: React.FC = React.memo(() => {
-  useFetchSupportNFT();
-
-  const dispatch = useDispatch();
-  const { account } = useWeb3React();
-  // 是否授权
-  const [isAllApprove, setisAllApprove] = useState([]);
-  // 自己的Nft列表
-  const NftList = useStore(p => p.loginReducer.nftList);
-  // Nft地址  可用列表
-  const NftAddrList = useStore(p => p.loginReducer.nftAddr);
-  const signUpFail = useStore(p => p.loginReducer.signUpFail);
-  const isStakeNft = useStore(p => p.loginReducer.isStakeNft);
-
-  const getIsAllApprove = list => {
-    let myList = [];
-    for (let i = 0; i < list.length; i++) {
-      // 当前NFT地址 是否授权
-      for (let j = 0; j < NftAddrList.length; j++) {
-        if (
-          list[i].properties.token.toLowerCase() ===
-          NftAddrList[j].toLowerCase()
-        ) {
-          if (!list[i].isApprovedMarket) {
-            myList[j] = {
-              address: list[i].properties.token.toLowerCase(),
-              needApprove: true,
-            };
-          } else if (list[i].isApprovedMarket) {
-            myList[j] = {
-              address: list[i].properties.token.toLowerCase(),
-              needApprove: false,
-            };
-          }
-        }
-      }
-    }
-    setisAllApprove(myList);
-  };
+export const TribeNFT: React.FC<{
+  nftList?: any[];
+  nftTokenAddress?: string[];
+}> = React.memo(({ nftList, nftTokenAddress }) => {
+  const [nftTicketList, setNftTicketList] = useState([]);
 
   useEffect(() => {
-    // if (!NftList.length && !isStakeNft) {
-    //   dispatch(storeAction.changeSignUpFail({ signUpFail: true }));
-    // } else {
-    //   NftAddrList.length && getIsAllApprove(NftList)
-    //   dispatch(storeAction.changeSignUpFail({ signUpFail: false }));
-    // }
-    if (NftList.length && NftAddrList.length) {
-      getIsAllApprove(NftList);
+    // 获取可用的nft列表
+    const getNftList = async () => {
+      const list = nftList
+        .filter(
+          v => nftTokenAddress.toString().indexOf(v.properties.token) !== -1,
+        )
+        .map(item => {
+          return {
+            name: item.name,
+            image: item.image,
+            nftToken: item.properties.token,
+            nftId: item.properties.token_id,
+          };
+        });
+      setNftTicketList(list);
+    };
+    if (nftTokenAddress && nftTokenAddress?.length) {
+      getNftList();
     }
-  }, [NftList]);
+    console.log(nftList);
+  }, [nftList, nftTokenAddress]);
 
   return (
     <React.Fragment>
-      {isAllApprove.map((item, index) => {
+      {nftTicketList.map((item, index) => {
         return <NftAvatar key={index} NftInfo={item} Nodata={false} />;
       })}
-      {!isAllApprove.length && <NftAvatar Nodata={true} />}
+      {!nftTicketList.length && <NftAvatar Nodata={true} />}
     </React.Fragment>
   );
 });

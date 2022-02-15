@@ -16,7 +16,7 @@ import TextArea from 'components/TextArea';
 
 type InfoParams = {
   name: string;
-  url: string;
+  logo: string;
   introduction: string;
 };
 
@@ -25,7 +25,7 @@ const TribeInfoForward = (props, ref) => {
 
   const [state, setState] = useImmer<InfoParams>({
     name: '',
-    url: '',
+    logo: '',
     introduction: '',
   });
 
@@ -38,7 +38,7 @@ const TribeInfoForward = (props, ref) => {
   const uploadSuccess = useCallback(url => {
     console.log('上传成功=======》', url);
     setState(p => {
-      p.url = url;
+      p.logo = url;
     });
   }, []);
   return (
@@ -72,7 +72,7 @@ const TribeInfoForward = (props, ref) => {
         <Label required>{t('Tribal Logo')}</Label>
         <UploadSingle
           disabled={props.disabled}
-          url={state.url}
+          url={state.logo}
           tips={t(
             'The recommended size is less than 5MB, and the image size is 100x100',
           )}
