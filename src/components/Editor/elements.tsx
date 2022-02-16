@@ -5,7 +5,7 @@ import {
   withReact,
   useSelected,
   useFocused,
-  useSlate
+  useSlate,
 } from 'slate-react';
 import { FollowPopup } from 'components';
 import { MentionBox } from './style';
@@ -20,10 +20,11 @@ export const Mention = ({ attributes, children, element }) => {
       contentEditable={false}
       data-cy={`mention-${element.character.replace(' ', '-')}`}
       style={{
-        margin: '0 8px',
+        margin: '0 4px',
         verticalAlign: 'baseline',
         display: 'inline-block',
-        fontSize: '0.9em'
+        boxShadow: selected && focused ? '0 0 0 2px #B4D5FF' : 'none',
+        fontSize: '0.9em',
       }}
     >
       {element.character}

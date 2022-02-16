@@ -2,6 +2,7 @@ export enum FormatType {
   MARK,
   BLOCK,
   HISTORY,
+  EMOJI,
 }
 
 export const markFormats = [
