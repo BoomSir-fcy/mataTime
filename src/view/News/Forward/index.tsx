@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { List, FollowPopup } from 'components';
+import { List, FollowPopup, ContentParsing } from 'components';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts';
 import { Text, Flex } from 'uikit';
 import { displayTime } from 'utils';
 
-import { NewsMeWrapper } from './style';
+import { NewsMeWrapper, ContentEllipsis } from './style';
 
 import MessageCard from '../components/MessageCard';
 
@@ -54,21 +54,18 @@ const MessageRepost = () => {
               date={displayTime(item.add_time)}
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
-              content={item.post?.content}
-              href={`/articledetils/${item.post?.post_id}`}
+              content={
+                item.comment?.comment_id
+                  ? item?.comment?.comment
+                  : item.post?.content
+              }
+              current_href={`/articledetils/${item.forward_id}`}
+              href={`/articledetils/${item.post?.post_id}?comment_id=${item.comment?.comment_id}`}
             >
               <Flex flexWrap='nowrap'>
-                <FollowPopup uid={item.send_uid}>
-                  <Text
-                    maxWidth='100px'
-                    ellipsis
-                    color='textPrimary'
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {item.send_name}&nbsp;
-                  </Text>
-                </FollowPopup>
-                <Text ellipsis>{t('mentioned you')}</Text>
+                <ContentEllipsis mt='5px'>
+                  <ContentParsing content={item.msg_content} />
+                </ContentEllipsis>
               </Flex>
             </MessageCard>
           );

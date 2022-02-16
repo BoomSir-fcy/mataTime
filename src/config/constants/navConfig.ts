@@ -76,7 +76,7 @@ export const menuNavConfig: MenuNavConfig[] = [
         icon: 'icon-retweet',
         activeIcon: 'icon-retweet',
         path: pathConfig.messageRepostPath,
-        badgeName: 'message_repost',
+        badgeName: 'message_forward',
         lable: 'newsRepostMenuTitle',
       },
       {

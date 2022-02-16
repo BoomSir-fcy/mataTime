@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Box, Text } from 'uikit';
 import { ContentParsing, AvatarCard } from 'components';
 import { displayTime } from 'utils';
+import { ARTICLE_POST_FORWARD_ROW } from 'config';
 
 import { useTranslation } from 'contexts/Localization';
 
@@ -47,7 +48,10 @@ const ForwardContent: React.FC<{
             scale='sm'
           />
           <ParseContent>
-            <ContentParsing content={data.forward.content} />
+            <ContentParsing
+              rows={ARTICLE_POST_FORWARD_ROW}
+              content={data.forward.content}
+            />
           </ParseContent>
         </React.Fragment>
       )}

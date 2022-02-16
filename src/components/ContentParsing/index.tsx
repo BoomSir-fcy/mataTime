@@ -19,6 +19,7 @@ import history from 'routerHistory';
 type IProps = {
   content: string;
   callback?: Function;
+  rows?: number; // 显示
   disableParseSquare?: boolean; // 评论不生成话题
 };
 
@@ -66,7 +67,7 @@ export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
-  const { callback, disableParseSquare } = props;
+  const { callback, disableParseSquare, rows } = props;
 
   useEffect(() => {
     try {
@@ -213,12 +214,14 @@ export const ContentParsing = (props: IProps) => {
         parsingResult.map((item: any, index) => {
           if (!expand) {
             return (
-              index < ARTICLE_POST_MAX_ROW && serialize2(item, null, index)
+              index < (rows || ARTICLE_POST_MAX_ROW) &&
+              serialize2(item, null, index)
             );
           }
           return serialize2(item, null, index);
         })}
-      {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
+      {parsingResult &&
+      parsingResult.length > (rows || ARTICLE_POST_MAX_ROW) ? (
         <ExpandWrapper>
           <a
             href={`javascript:void(${

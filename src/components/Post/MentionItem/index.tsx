@@ -18,6 +18,9 @@ import { shortenAddress } from 'utils/contract';
 import { displayTime } from 'utils';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
+
+import { ARTICLE_POST_FORWARD_ROW, ARTICLE_POST_MAX_ROW } from 'config';
+
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -90,6 +93,11 @@ const MentionItem: React.FC<MentionItemProps> = ({
       />
       <Box className='mention-content'>
         <ContentParsing
+          rows={
+            itemData?.forward_type === 1
+              ? ARTICLE_POST_FORWARD_ROW
+              : ARTICLE_POST_MAX_ROW
+          }
           content={
             showTranslate
               ? itemData.content

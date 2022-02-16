@@ -43,6 +43,7 @@ export const ARTICLE_POST_MAX_LEN = 600; // 发帖最大数量
 export const ARTICLE_COMMENTS_MAX_LEN = 280; // 发帖最大数量
 // 帖子显示折行
 export const ARTICLE_POST_MAX_ROW = 12;
+export const ARTICLE_POST_FORWARD_ROW = 6;
 
 export const SEARCH_MAX_HISTORY_LEN = 14;
 
