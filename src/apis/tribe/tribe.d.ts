@@ -11,5 +11,34 @@ declare namespace Api {
     interface tribePostInfoParams {
       id: number;
     }
+
+    interface PostCreatepParams {
+      content: string
+      topic?: number[]
+      tribe_id: number
+      title: string
+    }
+
+    interface TopicInfo {
+      ID: number;
+      TribeID: number;
+      Topic: string;
+      CreateTime: number;
+      Status: number
+    }
+
+    interface TopicCreateParams {
+      tribe_id: number
+      topics: string[]
+    }
+
+    interface TopicDelParams {
+      tribe_id: number
+      topics: string[]
+    }
+
+    interface TopicListParams {
+      tribe_id: number
+    }
   }
 }
