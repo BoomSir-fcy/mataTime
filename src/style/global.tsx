@@ -167,6 +167,9 @@ const GlobalStyle = createGlobalStyle`
       width: 100%;
       height: 100%;
     }
+  .cursor-p {
+    /* cursor: pointer; */
+  }
   .show-media-lg {
     display: none;
     ${mediaQueries.lg} {
