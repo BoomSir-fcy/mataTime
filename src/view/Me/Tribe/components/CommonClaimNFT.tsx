@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ModalWrapper } from 'components';
 import { useTranslation } from 'contexts';
 import { Box, Text, Button, Flex, LinkExternal, Input } from 'uikit';
 import styled from 'styled-components';
 import default_avatar from 'assets/images/default_avatar.jpg';
+import { useDispatch } from 'react-redux';
+import { fetchTribeNftInfo } from 'store/tribe';
+import { useStore } from 'store';
+import { BASE_IMAGE_URL } from 'config';
 
 const NFTBox = styled(Box)`
   position: relative;
@@ -32,25 +36,47 @@ const nftType = {
 type NFTType = typeof nftType[keyof typeof nftType];
 
 export const CommonClaimNFT: React.FC<{ type: NFTType }> = React.memo(
-  ({ type = 'MASTER' }) => {
+  ({ type }) => {
     const { t } = useTranslation();
     const [visible, setVisible] = useState(false);
+    const dispatch = useDispatch();
+    const tribeId = useStore(p => p.tribe.tribeId);
+    const tribesNftInfo = useStore(p => p.tribe.tribesNftInfo);
+
+    useEffect(() => {
+      dispatch(fetchTribeNftInfo({ tribeId }));
+    }, [tribeId]);
+
+    const nftInfo = useMemo(() => {
+      if (type === nftType.MASTER) {
+        return {
+          name: tribesNftInfo.ownerNFTName,
+          image: `${BASE_IMAGE_URL}${tribesNftInfo.ownerNFTImage}`,
+          introduction: tribesNftInfo.ownerNFTIntroduction,
+        };
+      }
+      if (type === nftType.MEMBER) {
+        return {
+          name: tribesNftInfo.memberNFTName,
+          image: `${BASE_IMAGE_URL}${tribesNftInfo.memberNFTImage}`,
+          introduction: tribesNftInfo.memberNFTIntroduction,
+        };
+      }
+    }, [type, tribesNftInfo]);
     return (
       <>
         <Flex flexWrap='wrap' alignItems='center'>
           <NFTBox mr='80px' mb='20px'>
-            <img className='nft-img' src={default_avatar} alt='' />
+            <img className='nft-img' src={nftInfo.image} alt='' />
           </NFTBox>
           <Flex flex='auto' flexDirection='column'>
             <Text fontSize='18px' bold>
-              {t('Claim Tribe Lord NFT')}
+              {t(`${nftInfo.name}`)}
             </Text>
             <Text mt='20px' color='textTips' small>
-              {t(
-                'Only by claiming the tribal host NFT can enjoy the tribal host rights.',
-              )}
+              {t(`${nftInfo.introduction}`)}
             </Text>
-            <Text mt='20px' color='textTips' small>
+            {/* <Text mt='20px' color='textTips' small>
               {t('Brithday:')} 2022-01-12
             </Text>
             <Flex>
@@ -60,28 +86,16 @@ export const CommonClaimNFT: React.FC<{ type: NFTType }> = React.memo(
               <Text ml='10px' small>
                 马斯克
               </Text>
-            </Flex>
-            <Flex
-              flexWrap='wrap'
-              justifyContent='space-between'
-              alignItems='flex-end'
+            </Flex> */}
+            <LinkExternal
+              mt='20px'
+              color='textPrimary'
+              height='24px'
+              fontSize='16px'
+              href='#'
             >
-              <LinkExternal
-                mt='20px'
-                color='textPrimary'
-                height='24px'
-                fontSize='16px'
-                href='#'
-              >
-                View on BSCscan
-              </LinkExternal>
-              <Flex>
-                <Button mr='20px'>{t('取消质押')}</Button>
-                <Button onClick={() => setVisible(true)}>
-                  {t('Transfer')}
-                </Button>
-              </Flex>
-            </Flex>
+              View on BSCscan
+            </LinkExternal>
           </Flex>
         </Flex>
 

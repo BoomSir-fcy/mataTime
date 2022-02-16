@@ -26,6 +26,7 @@ import {
 // ABI
 import bep20Abi from 'config/abi/erc20.json';
 import erc721Abi from 'config/abi/erc721.json';
+import erc721NewAbi from 'config/abi/erc721New.json';
 import MultiCallAbi from 'config/abi/Multicall.json';
 import CashierDeskAbi from 'config/abi/CashierDesk.json';
 import InvitationAbi from 'config/abi/Invitation.json';
@@ -54,7 +55,12 @@ export const getErc721Contract = (
 ) => {
   return getContract(erc721Abi, address, signer);
 };
-
+export const getErc721NewContract = (
+  address: string,
+  signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+  return getContract(erc721NewAbi, address, signer);
+};
 export const getMulticallContract = (
   signer?: ethers.Signer | ethers.providers.Provider,
 ) => {

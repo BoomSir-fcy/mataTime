@@ -16,6 +16,7 @@ export enum Timing {
 export interface TribeBaseInfo {
   name?: string;
   logo?: string;
+  intruction?: string;
   feeToken?: string;
   feeAmount?: string;
   validDate?: number;
@@ -28,19 +29,26 @@ export interface TribeBaseInfo {
 }
 
 export interface TribesNFTInfo {
+  claimOnwerNFT?: boolean;
   ownerNFTName?: string;
   ownerNFTIntroduction?: string;
   ownerNFTImage?: string;
   memberNFTName?: string;
   memberNFTIntroduction?: string;
   memberNFTImage?: string;
+  initMemberNFT?: boolean;
 }
 
 export interface FeeCoin {
   tokenAddress?: string;
   symbol?: string;
 }
-
+export interface NftInfo {
+  name?: string;
+  image?: string;
+  nftToken?: string;
+  nftId?: number;
+}
 export interface TribeState {
   tribeId?: number;
   ownerNFTId?: number;
@@ -48,4 +56,7 @@ export interface TribeState {
   tribeBaseInfo?: TribeBaseInfo;
   tribesNftInfo?: TribesNFTInfo;
   feeCoinList?: FeeCoin[];
+  ticketNftList?: NftInfo[];
+  loading?: boolean;
+  activeNftInfo?: NftInfo;
 }

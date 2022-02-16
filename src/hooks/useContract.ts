@@ -15,6 +15,7 @@ import {
   getExPhotoContract,
   getTicketNftContract,
   getTribeContract,
+  getErc721NewContract,
 } from 'utils/contractHelpers';
 import { getContract } from 'utils/contract';
 
@@ -41,6 +42,14 @@ export const useERC721 = (address: string) => {
   const { library } = useActiveWeb3React();
   return useMemo(
     () => getErc721Contract(address, library.getSigner()),
+    [address, library],
+  );
+};
+
+export const useERC721New = (address: string) => {
+  const { library } = useActiveWeb3React();
+  return useMemo(
+    () => getErc721NewContract(address, library.getSigner()),
     [address, library],
   );
 };

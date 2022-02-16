@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { useERC721 } from 'hooks/useContract';
+import { useERC721New, useTribeContract } from 'hooks/useContract';
 import { useCallback, useEffect, useState } from 'react';
 import { TribeBaseInfo } from 'store/tribe/type';
 import {
@@ -10,39 +10,42 @@ import { getTribeContract } from 'utils/contractHelpers';
 import multicall from 'utils/multicall';
 
 // 授权部落门票nft
-export const ApproveTribeTicketsNFT = async (tokenId: number) => {
+export const useApproveTribeTicketsNFT = () => {
+  const { account } = useWeb3React();
   const tribeTicketsNFTAddress = getTribeTicketsNFTAddress();
   const tribeAddress = getTribeAddress();
-  const { getErc721Contract } = useERC721(tribeTicketsNFTAddress);
-  try {
-    const tx = await getErc721Contract.approve(tribeAddress, tokenId);
-    const receipt = await tx.wait();
-    return receipt.status;
-  } catch (error) {
-    throw error;
-  }
+  const erc721Contract = useERC721New(tribeTicketsNFTAddress);
+
+  const isApproveAll = useCallback(async () => {
+    try {
+      const isApprove = await erc721Contract.isApprovedForAll(
+        account,
+        tribeAddress,
+      );
+      console.log(isApprove);
+      return isApprove;
+    } catch (e) {
+      throw e;
+    }
+  }, [erc721Contract, tribeAddress, account]);
+
+  const handleApproveAll = useCallback(async () => {
+    try {
+      const tx = await erc721Contract.setApprovalForAll(tribeAddress, true);
+      const receipt = await tx.wait();
+      return receipt.status;
+    } catch (e) {
+      throw e;
+    }
+  }, [erc721Contract, tribeAddress]);
+
+  return { onApproveTicketsNFT: handleApproveAll, isApproveAll };
 };
 
 export const useTribe = () => {
-  const tribeContract = getTribeContract();
+  const tribeContract = useTribeContract();
   const { account } = useWeb3React();
-  const [nftTokenList, setNftTokenList] = useState([]);
-
-  useEffect(() => {
-    if (account) {
-      getNftTokenList();
-    }
-  }, [account]);
-
-  const getNftTokenList = useCallback(async () => {
-    try {
-      // const tokenList = await tribeContract.listViewNFTToken();
-      // setNftTokenList(tokenList);
-      setNftTokenList(['0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625']);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [tribeContract]);
+  const [status, setStatus] = useState('start');
 
   const CheckUniqueName = useCallback(async (name: string) => {
     try {
@@ -53,19 +56,40 @@ export const useTribe = () => {
     }
   }, []);
 
-  const CreateTribe = useCallback(async (tribeInfo: TribeBaseInfo) => {
-    try {
-      const rs = await tribeContract.createTribe(tribeInfo);
-      console.log('创建部落返回值----》', rs);
-      return rs;
-    } catch (error) {
-      throw error;
-    }
-  }, []);
+  const CreateTribe = useCallback(
+    async (tribeInfo: TribeBaseInfo) => {
+      try {
+        console.log('部落信息----》', tribeInfo);
+
+        const tx = await tribeContract.createTribe(
+          tribeInfo.name,
+          tribeInfo.logo,
+          tribeInfo.feeToken,
+          tribeInfo.feeAmount,
+          tribeInfo.validDate,
+          tribeInfo.perTime,
+          tribeInfo.ownerPercent,
+          tribeInfo.authorPercent,
+          tribeInfo.memberPercent,
+          tribeInfo.nftAddress,
+          tribeInfo.nftid,
+          {},
+        );
+        setStatus('waiting');
+        const receipt = await tx.wait();
+        setStatus('success');
+        return receipt.status;
+      } catch (error) {
+        setStatus('start');
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
 
   return {
+    createStatus: status,
     onCheckUniqueName: CheckUniqueName,
     onCreateTribe: CreateTribe,
-    nftTokenAddress: nftTokenList,
   };
 };

@@ -1,40 +1,49 @@
 import { Crumbs, Icon, ModalWrapper } from 'components';
 import { useTranslation } from 'contexts';
 import React, { useCallback, useState } from 'react';
-import { Box, Text, Divider, Flex, Button } from 'uikit';
+import { Box, Text, Divider, Flex } from 'uikit';
 import SubHeader from '../components/SubHeader';
 import { FormFlex, LogoIcon } from './style';
 import { TribeFee } from './TribeFee';
 import { TribeInfo } from './TribeInfo';
 import { TribeNFT } from './TribeNft';
 import { TribeCreateBtn } from './TribeCreateBtn';
-import { ApproveTribeTicketsNFT, useTribe } from './hooks';
+import { useTribe } from './hooks';
 import { useToast } from 'hooks';
-import Dots from 'components/Loader/Dots';
 import { Timing, TribeType } from 'store/tribe/type';
 import { getValidDate } from 'store/tribe/utils';
 import { getMatterAddress } from 'utils/addressHelpers';
-import { useFeeTokenList, useTribeState } from 'store/tribe/hooks';
+import {
+  useFeeTokenList,
+  useTicketNftList,
+  useTribeState,
+} from 'store/tribe/hooks';
 import { parseInt, sum } from 'lodash';
-import { useStore } from 'store';
-import { useFetchNftList } from 'view/Login/hook';
+import { useImmer } from 'use-immer';
+import { useHistory } from 'react-router';
 
 const Create = () => {
-  useFetchNftList();
+  useTicketNftList();
   useFeeTokenList();
   const { t } = useTranslation();
   const { toastError } = useToast();
+  const history = useHistory();
   const infoForm = React.useRef<any>();
   const feeForm = React.useRef<any>();
-  const [visible, setVisible] = useState(false);
-  const [pending, setPending] = useState(false);
+  const [state, setState] = useImmer({
+    visible: false,
+  });
 
-  const { onCheckUniqueName, onCreateTribe, nftTokenAddress } = useTribe();
-  const nftList = useStore(p => p.loginReducer.nftList);
+  const { createStatus, onCheckUniqueName, onCreateTribe } = useTribe();
+  const { ticketNftList, activeNftInfo } = useTribeState();
 
   const isOneHundredBySum = useCallback((numArr: number[]) => {
     return sum(numArr) === 100;
   }, []);
+
+  const gotoMaterNft = () => {
+    history.push('/me/tribe/master-nft');
+  };
 
   const PayAndCreate = async () => {
     const infoParams = infoForm.current.getInfoFrom();
@@ -72,12 +81,21 @@ const Create = () => {
         ownerPercent: ownerPercent,
         authorPercent: authorPercent,
         memberPercent: memberPercent,
-        nftAddress: '0x9fcaca63afd8da8fc3e00a4d0ef4a54ac0aae625',
-        nftid: 1014,
+        nftAddress: activeNftInfo.nftToken,
+        nftid: activeNftInfo.nftId,
       };
-      // await onCreateTribe(params);
-      console.log('提交参数------》', params);
-    } catch (error) {}
+      setState(p => {
+        p.visible = true;
+      });
+      await onCreateTribe(params);
+      gotoMaterNft();
+    } catch (error) {
+      console.log(error);
+
+      setState(p => {
+        p.visible = false;
+      });
+    }
   };
 
   return (
@@ -87,7 +105,6 @@ const Create = () => {
         onSubmit={e => {
           e.preventDefault();
           PayAndCreate();
-          // setVisible(true);
         }}
         action=''
       >
@@ -105,30 +122,44 @@ const Create = () => {
         </FormFlex>
         <Divider />
         <SubHeader title={t('Pay for tickets')} />
-        <TribeNFT nftList={nftList} nftTokenAddress={nftTokenAddress} />
-        <TribeCreateBtn hasNft={nftList.length > 0} />
+        <TribeNFT ticketNftList={ticketNftList} />
+        <Flex mb='20px' justifyContent='center'>
+          <TribeCreateBtn
+            hasNft={ticketNftList.length > 0}
+            activeNftInfo={activeNftInfo}
+          />
+        </Flex>
       </form>
 
       <ModalWrapper
         creactOnUse
         customizeTitle
         shouldCloseOnOverlayClick={false}
-        visible={visible}
+        visible={state.visible}
       >
         <Flex
           flexDirection='column'
           justifyContent='center'
           alignItems='center'
         >
-          <LogoIcon>
-            <Icon name='icon-LOGO3' size={80} color='white_black' />
-          </LogoIcon>
-          <Text mt='30px'>{t('Waiting For Confirmation')}</Text>
-          <Text mt='10px' small color='textTips'>
-            {t('To cancel this transaction, please reject it in your wallet')}
-          </Text>
-          {/* <Icon name='icon-complete' size={160} color='#2BEC93' />
-          <Text mt='30px'>{t('Create Successfully')}</Text> */}
+          {createStatus === 'success' ? (
+            <>
+              <Icon name='icon-complete' size={160} color='#2BEC93' />
+              <Text mt='30px'>{t('Create Successfully')}</Text>
+            </>
+          ) : (
+            <>
+              <LogoIcon>
+                <Icon name='icon-LOGO3' size={80} color='white_black' />
+              </LogoIcon>
+              <Text mt='30px'>{t('Waiting For Confirmation')}</Text>
+              <Text mt='10px' small color='textTips'>
+                {t(
+                  'To cancel this transaction, please reject it in your wallet',
+                )}
+              </Text>
+            </>
+          )}
         </Flex>
       </ModalWrapper>
     </Box>
