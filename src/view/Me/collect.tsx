@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Flex, Text, Card } from 'uikit';
 import { List, MoreOperatorEnum, TopicEmpty } from 'components';
 import { useTranslation } from 'contexts/Localization';
@@ -16,6 +16,11 @@ import useReadArticle from 'hooks/imHooks/useReadArticle';
 
 import { Api } from 'apis';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { useMapModule } from 'store/mapModule/hooks';
+import PostList from 'components/Post/PostList';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { addTranslateIds } from 'store/mapModule/actions';
+import { useDispatch } from 'react-redux';
 
 // enum MoreOperatorEnum {
 //   SHIELD = 'SHIELD', // 屏蔽
@@ -34,8 +39,10 @@ const Collect = props => {
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
+
+  const dispatch = useDispatch();
 
   const init = async (current?: number) => {
     setLoading(true);
@@ -51,6 +58,8 @@ const Collect = props => {
             ? [...(res.data?.list || [])]
             : [...listData, ...(res.data?.list || [])],
         );
+        const ids = checkTranslateIds(res.data?.list || [], 'post_id');
+        dispatch(addTranslateIds(ids));
       }
     } catch (error) {
     } finally {
@@ -106,6 +115,16 @@ const Collect = props => {
     }
   };
 
+  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
+    useMapModule();
+
+  const renderList = useMemo(() => {
+    const resPost = listData.filter(item => {
+      return !deletePostIds.includes(item.id);
+    });
+    return resPost;
+  }, [listData, deletePostIds]);
+
   return (
     <Box>
       <Crumbs title={t('meHome')}>
@@ -118,7 +137,22 @@ const Collect = props => {
           </Text>
         </Flex>
       </Crumbs>
-      <List
+      <Box mt='14px'>
+        <PostList
+          list={renderList}
+          map={postMap}
+          postIdKey='post_id'
+          loading={loading}
+          isEnd={page > totalPage}
+          getList={() => {
+            init();
+          }}
+          updateList={() => {
+            console.debug('updateList');
+          }}
+        />
+      </Box>
+      {/* <List
         marginTop={14}
         loading={loading}
         renderList={() => {
@@ -185,7 +219,7 @@ const Collect = props => {
             </MeItemWrapper>
           );
         })}
-      </List>
+      </List> */}
     </Box>
   );
 };

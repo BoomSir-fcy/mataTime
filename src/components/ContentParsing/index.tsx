@@ -32,7 +32,7 @@ type IProps = {
   value?: Descendant[];
   paragraphMt?: string;
   callback?: Function;
-  disableParseSquare?: boolean;
+  disableParseSquare?: boolean; // 评论不生成话题
 };
 
 const ContentParsingWrapper = styled.div``;

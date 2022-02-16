@@ -111,13 +111,6 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
     'root',
   );
 
-  // const close = () => {
-  //   console.log(targetRef);
-  //   if (popupRef.current) {
-  //     popupRef?.current?.close();
-  //   }
-  // };
-
   return (
     <React.Fragment>
       {postType === 1 ? (

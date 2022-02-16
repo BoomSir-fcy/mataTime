@@ -8,6 +8,8 @@ import {
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { stat } from 'fs';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { addTranslateIds } from 'store/mapModule/actions';
 
 const initialState = {
   list: [],
@@ -39,6 +41,8 @@ export const fetchPostAsync = createAsyncThunk(
     });
     // dispatch(setLoading(false));
     if (Api.isSuccess(response)) {
+      const ids = checkTranslateIds(response.data.List || [])
+      dispatch(addTranslateIds(ids))
       return {
         list: response.data.List,
         page: params.page,

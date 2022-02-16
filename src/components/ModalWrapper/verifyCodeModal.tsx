@@ -45,7 +45,7 @@ export const VerifyCodeComponent = (
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -79,9 +79,6 @@ export const VerifyCodeComponent = (
             }
           />
         </Rows>
-        <Box>
-          <Text color='textTips'>{t('verifyText')}</Text>
-        </Box>
         <Flex justifyContent='flex-end'>
           <Button
             mt='10px'
@@ -95,6 +92,11 @@ export const VerifyCodeComponent = (
             {t('submit')}
           </Button>
         </Flex>
+        <Box mt='16px'>
+          <Text fontSize='14px' color='textTips'>
+            *{t('verifyText')}
+          </Text>
+        </Box>
       </Box>
     </ModalWrapper>
   );

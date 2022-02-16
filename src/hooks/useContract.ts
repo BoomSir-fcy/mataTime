@@ -21,6 +21,7 @@ import { getContract } from 'utils/contract';
 // Imports below migrated from Exchange useContract.ts
 import { Contract } from '@ethersproject/contracts';
 import ERC20_ABI from '../config/abi/erc20.json';
+import useBiconomyWeb3React from './useBiconomy';
 
 /**
  * Helper hooks to get specific contracts (by ABI)
@@ -131,6 +132,12 @@ export const useInvitation = () => {
   const { library } = useActiveWeb3React();
   return useMemo(() => getInvitationContract(library.getSigner()), [library]);
 };
+
+export const useBiconomyInvitation = () => {
+  const { library } = useBiconomyWeb3React();
+  return useMemo(() => getInvitationContract(library.getSigner()), [library]);
+};
+
 export const useExPhotoContract = () => {
   const { library } = useActiveWeb3React();
   return useMemo(() => getExPhotoContract(library.getSigner()), [library]);

@@ -13,7 +13,7 @@ import {
   MoreOperatorEnum,
 } from 'components';
 import { useToast } from 'hooks';
-import { Flex, Text, Box, Button } from 'uikit';
+import { Flex, Text, Box, Button, TranslateIcon } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { useStore } from 'store';
@@ -28,6 +28,14 @@ import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 
 import { CommentListBox, CommentTitle, CommentItem } from './style';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { addCommentTranslateIds } from 'store/mapModule/actions';
+import { useDispatch } from 'react-redux';
+import {
+  useFetchAutoCommentTranslate,
+  useMapModule,
+} from 'store/mapModule/hooks';
+import { changeCommentTranslateState } from 'store/mapModule/reducer';
 
 type Iprops = {
   itemData: any;
@@ -54,6 +62,13 @@ const CommentRows = styled(Flex)`
   :hover {
     background-color: ${({ theme }) => theme.colors.backgroundCard};
     transition: all 0.3s;
+    .icon-shield {
+      opacity: 1;
+    }
+  }
+  .icon-shield {
+    transition: all 0.3s;
+    opacity: 0;
   }
 `;
 const ChildrenComment = styled(Box)`
@@ -114,6 +129,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const theme = useTheme();
   const parsedQs = useParsedQueryString();
 
+  const [commentIdsMap, setCommentIdsMap] = useState({});
+
   useEffect(() => {
     refresh && getList(1);
   }, [refresh]);
@@ -139,6 +156,31 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     initList();
   };
 
+  const dispatch = useDispatch();
+  const { commentTranslateMap } = useMapModule();
+
+  useFetchAutoCommentTranslate();
+  /* 
+    1. 评论翻译
+    2. 翻译一级评论
+        判断是否开启自动翻译 如果未开启 则 不操作
+        所以 在获取列表的时候可以直接判断是否需要自动翻译
+        然后再判断当前评论是否需要翻译
+    3. 翻译二级评论
+        翻译由一级评论控制
+        所以当判断出二级评论也需要翻译时 需要在一级评论上显示翻译
+        二级评论没有直接翻译的按钮
+    4. 控制及显示 评论翻译
+        当一级或者二级有一个的时候 都需要在一级右侧显示翻译按钮
+        翻译按钮可以控制二级的翻译
+        所以现在的按钮和帖子的逻辑不一样 区别就是需要把二级评论的翻译状态同时更改
+    5. 
+  */
+
+  const userAutoTranslate = React.useMemo(() => {
+    return currentUid.translation === 1;
+  }, [currentUid.translation]);
+
   const getList = (current?: number) => {
     if (!itemData.id) return;
     Api.CommentApi.getV2CommentList({
@@ -155,7 +197,58 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         setListData([...listData, ...(res.data.list || [])]);
         setTotalPage(res.data.total_page);
         setRefresh(false);
+        // 需要自动翻译才判断评论是否需要翻译
+        if (userAutoTranslate) {
+          const ids = checkTranslateIds(res.data?.list || [], 'id', 'comment');
+          dispatch(addCommentTranslateIds(ids));
+          // 二级评论的判断翻译内容
+          (res.data?.list || []).map(item => {
+            if (item.comment_list_resp.list) {
+              const subIds = checkTranslateIds(
+                item.comment_list_resp.list,
+                'id',
+                'comment',
+              );
+              dispatch(addCommentTranslateIds(subIds));
+              // 更新二级评论需要翻译的id
+              setCommentIdsMap(prep => {
+                return {
+                  ...prep,
+                  [item.id]: prep[item.id]
+                    ? [...prep[item.id], ...subIds]
+                    : subIds,
+                };
+              });
+            }
+          });
+        }
       }
+    });
+  };
+
+  const handleChangeTranslate = id => {
+    // 获取当前id一级评论翻译状态
+    // 获取不到就选二级的状态
+    // 然后取反
+    const showTranslate = !(
+      commentTranslateMap[id]?.showTranslate ??
+      commentTranslateMap[commentIdsMap[id]?.[0]]?.showTranslate
+    );
+    // 一级评论更改状态
+    dispatch(
+      changeCommentTranslateState({
+        id,
+        showTranslate,
+      }),
+    );
+    // 二级评论更改状态
+    commentIdsMap[id]?.forEach(item => {
+      dispatch(
+        changeCommentTranslateState({
+          id: item,
+          showTranslate,
+        }),
+      );
     });
   };
 
@@ -169,7 +262,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
           //   row?.comment_list_resp?.list,
           //   res.data?.list,
           // );
-          // console.log(_.uniqWith(subCommentList, _.isEqual));
           let comment_list_resp = {
             ...row.comment_list_resp,
             page: params.page,
@@ -185,8 +277,22 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       });
       setListData(subComment);
       setNonce(prep => prep + 1);
+      // 需要自动翻译才判断评论是否需要翻译
+      if (userAutoTranslate) {
+        const ids = checkTranslateIds(res.data?.list || [], 'id', 'comment');
+        dispatch(addCommentTranslateIds(ids));
+        // 更新二级评论需要翻译的id
+        setCommentIdsMap(prep => {
+          return {
+            ...prep,
+            [params.first_comment_id]: prep[params.first_comment_id]
+              ? [...prep[params.first_comment_id], ...ids]
+              : ids,
+          };
+        });
+      }
     } catch (error) {
-      // console.log(error);
+      console.error(error);
     }
   };
 
@@ -315,7 +421,46 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                         {dayjs(item.add_time).format('YYYY-MM-DD HH:mm')}
                       </Text>
                     </Box>
-                    <Box>
+                    <Flex alignItems='center'>
+                      {userAutoTranslate &&
+                        (commentTranslateMap[item.id] ||
+                          commentIdsMap[item.id]) && (
+                          <Box
+                            className={
+                              commentTranslateMap[item.id]?.showTranslate ??
+                              commentTranslateMap[commentIdsMap[item.id]?.[0]]
+                                ?.showTranslate
+                                ? ''
+                                : 'icon-shield'
+                            }
+                          >
+                            <Button
+                              onClick={e => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleChangeTranslate(item.id);
+                                // callback(
+                                //   {
+                                //     ...itemData,
+                                //   },
+                                //   MoreOperatorEnum.TRANSLATE,
+                                // );
+                                // dispatch(
+                                //   changePostTranslateState({
+                                //     id: itemData.id,
+                                //     showTranslate: !showTranslate,
+                                //   }),
+                                // );
+                              }}
+                              variant='text'
+                              mr='18px'
+                              padding='0'
+                              title={t('Translate')}
+                            >
+                              <TranslateIcon />
+                            </Button>
+                          </Box>
+                        )}
                       <PopupWrap
                         ref={popupRefs}
                         trigger={
@@ -338,9 +483,19 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           callback={initList}
                         />
                       </PopupWrap>
-                    </Box>
+                    </Flex>
                   </Flex>
-                  <ContentParsing disableParseSquare content={item.comment} />
+                  <ContentParsing
+                    disableParseSquare
+                    content={
+                      userAutoTranslate &&
+                      commentTranslateMap[item.id] &&
+                      commentTranslateMap[item.id].content &&
+                      commentTranslateMap[item.id].showTranslate
+                        ? commentTranslateMap[item.id].content
+                        : item.comment
+                    }
+                  />
                   <MentionOperator
                     type='Comment'
                     callback={(data, type) => updateList(data, type)}
@@ -348,7 +503,13 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                       ...item,
                       comment: {
                         ...item,
-                        content: item.comment,
+                        content:
+                          userAutoTranslate &&
+                          commentTranslateMap[item.id] &&
+                          commentTranslateMap[item.id].content &&
+                          commentTranslateMap[item.id].showTranslate
+                            ? commentTranslateMap[item.id].content
+                            : item.comment,
                       },
                     }}
                     firstCommentId={item.id}
@@ -382,7 +543,16 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                         active={Number(parsedQs.comment_id) === row.id}
                       >
                         <Commnet
-                          data={row}
+                          data={{
+                            ...row,
+                            comment:
+                              userAutoTranslate &&
+                              commentTranslateMap[row.id] &&
+                              commentTranslateMap[row.id].content &&
+                              commentTranslateMap[row.id].showTranslate
+                                ? commentTranslateMap[row.id].content
+                                : row.comment,
+                          }}
                           key={row.id}
                           firstCommentId={item.id}
                           postUid={itemData.user_id}
