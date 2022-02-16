@@ -19,7 +19,7 @@ export const HoverLink: React.FC<LinkProps> = ({ children, ...props }) => {
   return (
     <HoverLinkStyled
       onDragStart={event => {
-        console.log('onDragStart');
+        // console.log('onDragStart');
         setDraging(true);
         event.preventDefault();
       }}
@@ -30,7 +30,7 @@ export const HoverLink: React.FC<LinkProps> = ({ children, ...props }) => {
       // }}
       {...props}
       onClick={event => {
-        console.log(draging, 'draging');
+        // console.log(draging, 'draging');
         if (draging) {
           setDraging(false);
           event.preventDefault();

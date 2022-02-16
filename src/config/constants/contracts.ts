@@ -1,6 +1,6 @@
 import { ChainId } from '../wallet/config';
 
-export default {
+const contracts = {
   test: {
     [ChainId.BSC_MAINNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
     [ChainId.BSC_TESTNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
@@ -86,3 +86,4 @@ export default {
     97: '0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625',
   },
 };
+export default contracts;

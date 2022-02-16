@@ -40,28 +40,28 @@ export const useFetchHistoryList = (coin_type: number) => {
   const [end, setEnd] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
+    const getList = async () => {
+      setLoading(true); // 设为请求状态
+      try {
+        const res = await Api.AccountApi.history({ coin_type, page, pageSize });
+        if (Api.isSuccess(res)) {
+          const temp = res.data.event_list;
+          const nowList = page === 1 ? temp : [...list, ...temp];
+          if (page * pageSize >= res.data.totalCount) {
+            setEnd(true);
+          }
+          setList(nowList);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false); // 请求完毕置为false
+      }
+    };
     if (account) {
       getList();
     }
-  }, [page, account]);
-  const getList = async () => {
-    setLoading(true); // 设为请求状态
-    try {
-      const res = await Api.AccountApi.history({ coin_type, page, pageSize });
-      if (Api.isSuccess(res)) {
-        const temp = res.data.event_list;
-        const nowList = page === 1 ? temp : [...list, ...temp];
-        if (page * pageSize >= res.data.totalCount) {
-          setEnd(true);
-        }
-        setList(nowList);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false); // 请求完毕置为false
-    }
-  };
+  }, [page, coin_type, pageSize, account, list, setLoading, setEnd, setList]);
 
   return { list, page, end, setPageNum, loading };
 };
@@ -105,7 +105,7 @@ export function useDpWd() {
         throw e;
       }
     },
-    [TimeContract, CashierDeskAddr],
+    [TimeContract, MatterContract, CashierDeskAddr],
   );
   // 提现
   const drawCallback = useCallback(

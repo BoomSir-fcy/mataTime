@@ -246,13 +246,15 @@ const CreateShowCard: React.FC = () => {
       setpending(false);
     }
   }, [
+    t,
+    toastError,
+    toastSuccess,
+    toastWarning,
     selectData,
     setpending,
     dispatch,
     onExchange,
     replace,
-    codes.code,
-    account,
     colorHex,
     colorAlpha,
     currencyBalance,

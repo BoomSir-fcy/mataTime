@@ -11,61 +11,11 @@ type Iprops = {
 const BlockLink = styled.a`
   display: block;
 `;
-// export const UploadList = (props: Iprops) => {
-//   const { list = [] } = props
-//   const [modalIsOpen, setModalIsOpen] = useState(false)
-//   const [isMore, setIsore] = useState(false)
-//   const [previewImgList, setPreviewImgList] = useState([])
-//   const clickMore = (e) => {
-//     e.stopPropagation()
-//     setIsore(true)
-//   }
-//   const preViewImg = (index) => {
-//     setPreviewImgList([...list.slice(index), ...list.slice(0, index)].map(item => ({ source: item })))
-//     setModalIsOpen(true)
-//   }
-//   return (
-//     list.length > 0 ?
-//         <ImgListBox style={{ overflowX: isMore ? 'auto' : 'hidden' }} onClick={(e) => e.stopPropagation()}>
-//         {
-//           modalIsOpen ?
-//             <ModalGateway >
-//               <Modal onClose={() => setModalIsOpen(false)}>
-//                 <Carousel views={previewImgList} />
-//               </Modal>
-//             </ModalGateway>
-//             : null
-//         }
-//           {
-//             Array(isMore ? list.length : list.length > 3 ? 3 : list.length).fill(null).map((item, index) => (
-//               <ImgItem src={list[index]} key={index} onClick={() => preViewImg(index)}>
-//               </ImgItem>
-//             ))
-//           }
-//           {
-//             !isMore && list.length > 3 ?
-//               <MoreImg onClick={clickMore}>
-//                 +
-//                 <br />
-//                 3
-//               </MoreImg>
-//               : null
-//           }
-//         </ImgListBox>
-//       : null
-//   )
-// }
 export const ImgList = (props: Iprops) => {
   const { list = [] } = props;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [previewImgList, setPreviewImgList] = useState([]);
   const [photoIndex, setPhotoIndex] = useState(0);
-  // const preViewImg = index => {
-  //   const preList = [...list.slice(index), ...list.slice(0, index)];
-  //   setPreviewImgList(preList);
-  //   setPhotoIndex(index % preList.length);
-  //   setModalIsOpen(true);
-  // };
 
   const preViewImg = useCallback(
     index => {
@@ -94,23 +44,18 @@ export const ImgList = (props: Iprops) => {
       imgDom.addEventListener('load', () => {
         // 正方形图片
         if (imgDom.naturalHeight === imgDom.naturalWidth) {
-          imgDom.parentElement.parentElement.style.maxWidth = '300px';
-          imgDom.parentElement.style.width = '100%';
-          imgDom.parentElement.style.maxHeight = '300px';
+          imgDom.parentElement.style.maxWidth = '300px';
+          imgDom.style.width = '100%';
           imgDom.style.maxHeight = '300px';
         }
         // 宽大于高的图片
         if (imgDom.naturalWidth > imgDom.naturalHeight) {
-          imgDom.parentElement.style.width = '100%';
-          imgDom.parentElement.style.maxHeight = '540px';
           imgDom.style.width = '100%';
           imgDom.style.maxHeight = '540px';
         }
         // 高大于宽的图片
         if (imgDom.naturalHeight > imgDom.naturalWidth) {
-          imgDom.parentElement.parentElement.style.width = '50%';
-          imgDom.parentElement.style.width = '100%';
-          imgDom.parentElement.style.maxHeight = '540px';
+          imgDom.parentElement.style.width = '50%';
           imgDom.style.width = '100%';
           imgDom.style.maxHeight = '540px';
         }
@@ -147,105 +92,77 @@ export const ImgList = (props: Iprops) => {
         />
       )}
       {list.length === 1 && (
-        <BlockLink
+        <img
+          className={ARTICLE_IMAGE_CLASS_NAME}
+          onClick={() => preViewImg(0)}
+          src={list[0]}
+          alt=''
           style={{
             paddingBottom: 0,
             paddingRight: 0,
           }}
-          href='javascript: void(open popup image)'
-        >
+        />
+      )}
+      {list.length === 2 && (
+        <>
           <img
             className={ARTICLE_IMAGE_CLASS_NAME}
             onClick={() => preViewImg(0)}
             src={list[0]}
             alt=''
+            style={{ maxHeight: '300px', paddingBottom: '0' }}
           />
-        </BlockLink>
+          <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            onClick={() => preViewImg(1)}
+            src={list[1]}
+            alt=''
+            style={{ maxHeight: '300px', paddingBottom: '0' }}
+          />
+        </>
       )}
-      {list.length === 2 && (
+      {list.length === 3 && (
         <>
-          <BlockLink
+          <img
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            onClick={() => preViewImg(0)}
+            src={list[0]}
+            alt=''
             style={{ maxHeight: '300px', paddingBottom: '0' }}
-            href='javascript: void(open popup image)'
-          >
-            <img
-              className={ARTICLE_IMAGE_CLASS_NAME}
-              onClick={() => preViewImg(0)}
-              src={list[0]}
-              alt=''
-            />
-          </BlockLink>
-          <BlockLink
-            style={{ maxHeight: '300px', paddingBottom: '0' }}
-            href='javascript: void(open popup image)'
-          >
+          />
+          <div className='imgListRightBox'>
             <img
               className={ARTICLE_IMAGE_CLASS_NAME}
               onClick={() => preViewImg(1)}
               src={list[1]}
               alt=''
+              style={{ paddingRight: '0' }}
             />
-          </BlockLink>
-        </>
-      )}
-      {list.length === 3 && (
-        <>
-          <BlockLink
-            style={{ maxHeight: '300px', paddingBottom: '0' }}
-            href='javascript: void(open popup image)'
-          >
             <img
               className={ARTICLE_IMAGE_CLASS_NAME}
-              onClick={() => preViewImg(0)}
-              src={list[0]}
+              onClick={() => preViewImg(2)}
+              src={list[2]}
               alt=''
-            />
-          </BlockLink>
-          <div className='imgListRightBox'>
-            <BlockLink
-              style={{ paddingRight: '0' }}
-              href='javascript: void(open popup image)'
-            >
-              <img
-                className={ARTICLE_IMAGE_CLASS_NAME}
-                onClick={() => preViewImg(1)}
-                src={list[1]}
-                alt=''
-              />
-            </BlockLink>
-            <BlockLink
               style={{ paddingBottom: '0' }}
-              href='javascript: void(open popup image)'
-            >
-              <img
-                className={ARTICLE_IMAGE_CLASS_NAME}
-                onClick={() => preViewImg(2)}
-                src={list[2]}
-                alt=''
-              />
-            </BlockLink>
+            />
           </div>
         </>
       )}
       {list.length > 3 &&
         list.map((item, index) => (
-          <a
+          <img
             key={item}
+            className={ARTICLE_IMAGE_CLASS_NAME}
+            onClick={() => preViewImg(index)}
+            src={item}
+            alt=''
             style={{
               paddingBottom:
                 index === list.length - 2 || index === list.length - 1
                   ? '0'
                   : '1px',
             }}
-            href='javascript: void(open popup image)'
-          >
-            <img
-              className={ARTICLE_IMAGE_CLASS_NAME}
-              onClick={() => preViewImg(index)}
-              src={item}
-              alt=''
-            />
-          </a>
+          />
         ))}
     </ImgListBox>
   ) : null;

@@ -35,9 +35,9 @@ export const FollowPopup = React.memo((props: Iprops) => {
   const userInfo = useUserInfoById(uid);
 
   const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(fetchUserInfoAsync(uid));
-  }, [uid, dispatch]);
+  // React.useEffect(() => {
+  //   dispatch(fetchUserInfoAsync(uid));
+  // }, [uid, dispatch]);
 
   // 关注用户
   const onAttentionFocusRequest = async () => {
@@ -148,7 +148,7 @@ export const FollowPopup = React.memo((props: Iprops) => {
     if (uid && tooltipVisible) {
       dispatch(fetchUserInfoAsync(uid));
     }
-  }, [tooltipVisible, uid]);
+  }, [dispatch, tooltipVisible, uid]);
 
   return (
     <PopupWrapper onClick={e => e.stopPropagation()}>

@@ -126,7 +126,7 @@ function App() {
     if (account) {
       getTokensToCache();
     }
-  }, [token, account]);
+  }, [token, account, getTokensToCache]);
 
   return (
     <Router history={history}>

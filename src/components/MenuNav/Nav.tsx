@@ -37,7 +37,7 @@ const NavShowBox = styled(Box)<{ translateX?: string }>`
   transform: ${({ translateX }) => `translateX(${translateX})`};
 `;
 
-const Nav: React.FC<NavProps> = ({}) => {
+const Nav: React.FC<NavProps> = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const [displayChildren, setDisplayChildren] = useState([]);
@@ -106,7 +106,7 @@ const Nav: React.FC<NavProps> = ({}) => {
     );
     if (activeChildrenConfig) return activeChildrenConfig.children;
     return null;
-  }, [pathname]);
+  }, [pathname, renderConfig]);
 
   const activeSubConfig = useMemo(() => {
     if (activeChildren) {

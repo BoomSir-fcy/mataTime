@@ -157,7 +157,7 @@ const TabsComponent = (props, ref) => {
         }),
       );
     }
-  }, [tags, currentLeftIndex]);
+  }, [tags, dispatch, currentLeftIndex]);
 
   return (
     <React.Fragment>

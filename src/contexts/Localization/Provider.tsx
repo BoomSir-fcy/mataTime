@@ -31,7 +31,7 @@ export const LanguageProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     dayjs.locale(currentLanguage?.dayjsCode || 'en');
-  }, [currentLanguage.code]);
+  }, [currentLanguage?.dayjsCode]);
 
   useEffect(() => {
     const fetchInitialLocales = async () => {

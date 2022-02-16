@@ -8,14 +8,19 @@ import LineChart from '../LineChart';
 import dayjs from 'dayjs';
 
 const ChartsBox = styled(Box)`
-  ${({ theme }) => theme.mediaQueriesSize.padding}
-  width:'100%'
+  ${({ theme }) => theme.mediaQueriesSize.padding};
+  width: '100%';
 `;
 
+interface chartDataInfo {
+  date: string;
+  income: string;
+  uid: number;
+}
 interface Init {
   type?: number;
   token?: number;
-  chartData: any;
+  chartData: chartDataInfo[];
   load: number;
 }
 const Chart: React.FC<Init> = ({ type, token, chartData, load }) => {
@@ -35,7 +40,7 @@ const Chart: React.FC<Init> = ({ type, token, chartData, load }) => {
         return data;
       }
     }
-  }, [chartData]);
+  }, [chartData, type]);
 
   return (
     <ChartsBox>

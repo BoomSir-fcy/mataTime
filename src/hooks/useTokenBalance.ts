@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { getBep20Contract, getDsgContract } from 'utils/contractHelpers';
 import useRefresh from 'hooks/useRefresh';
-import { simpleRpcProvider } from 'utils/providers'
+import { simpleRpcProvider } from 'utils/providers';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { BIG_ZERO } from 'utils/bigNumber';
-import useLastUpdated from './useLastUpdated'
+import useLastUpdated from './useLastUpdated';
 import { EXCEPT_TOTALSUPPPPLY_ADDRESS } from 'config';
 import { getDsgAddress } from 'utils/addressHelpers';
 
@@ -67,92 +67,90 @@ export const useTotalSupply = (tokenAddress: string) => {
     }
 
     fetchTotalSupply();
-  }, [slowRefresh]);
+  }, [slowRefresh, tokenAddress]);
 
   return totalSupply;
 };
 
 export const useExceptTotalBalance = () => {
-  const dsgAddress = getDsgAddress()
-  const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
+  const dsgAddress = getDsgAddress();
+  const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus;
   const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({
     balance: BIG_ZERO,
     fetchStatus: NOT_FETCHED,
-  })
-  const { fastRefresh } = useRefresh()
+  });
+  const { fastRefresh } = useRefresh();
 
   useEffect(() => {
     const fetchBalance = async () => {
-      const contract = getBep20Contract(dsgAddress)
+      const contract = getBep20Contract(dsgAddress);
       try {
         const fetchArr = EXCEPT_TOTALSUPPPPLY_ADDRESS.map(address => {
-          return contract.balanceOf(address)
-        })
-        const balances = await Promise.all(fetchArr)
-        let totalBalance = new BigNumber(0)
+          return contract.balanceOf(address);
+        });
+        const balances = await Promise.all(fetchArr);
+        let totalBalance = new BigNumber(0);
         balances.forEach(item => {
-          totalBalance = totalBalance.plus(item.toString())
-        })
-        setBalanceState({ balance: totalBalance, fetchStatus: SUCCESS })
+          totalBalance = totalBalance.plus(item.toString());
+        });
+        setBalanceState({ balance: totalBalance, fetchStatus: SUCCESS });
       } catch (e) {
-        console.error(e)
-        setBalanceState((prev) => ({
+        console.error(e);
+        setBalanceState(prev => ({
           ...prev,
           fetchStatus: FAILED,
-        }))
+        }));
       }
-    }
+    };
 
-    fetchBalance()
-  }, [fastRefresh, SUCCESS, FAILED, dsgAddress])
+    fetchBalance();
+  }, [fastRefresh, SUCCESS, FAILED, dsgAddress]);
 
-  return balanceState
-}
+  return balanceState;
+};
 
 export const useDsgTotalSupply = () => {
-  const { slowRefresh } = useRefresh()
-  const [totalSupply, setTotalSupply] = useState<BigNumber>()
-  const { balance, fetchStatus } = useExceptTotalBalance()
+  const { slowRefresh } = useRefresh();
+  const [totalSupply, setTotalSupply] = useState<BigNumber>();
+  const { balance, fetchStatus } = useExceptTotalBalance();
 
   useEffect(() => {
     async function fetchTotalSupply() {
-      const cakeContract = getDsgContract()
-      const supply = await cakeContract.totalSupply()
+      const cakeContract = getDsgContract();
+      const supply = await cakeContract.totalSupply();
       if (fetchStatus === FetchStatus.SUCCESS) {
-        setTotalSupply(new BigNumber(supply.toString()).minus(balance))
+        setTotalSupply(new BigNumber(supply.toString()).minus(balance));
       }
     }
 
-    fetchTotalSupply()
-  }, [slowRefresh, fetchStatus, balance])
+    fetchTotalSupply();
+  }, [slowRefresh, fetchStatus, balance]);
 
-  return totalSupply
-}
-
+  return totalSupply;
+};
 
 export const useGetBnbBalance = () => {
-  const [fetchStatus, setFetchStatus] = useState(FetchStatus.NOT_FETCHED)
-  const [balance, setBalance] = useState(BIG_ZERO)
+  const [fetchStatus, setFetchStatus] = useState(FetchStatus.NOT_FETCHED);
+  const [balance, setBalance] = useState(BIG_ZERO);
   const { fastRefresh } = useRefresh();
-  const { account } = useWeb3React()
-  const { lastUpdated, setLastUpdated } = useLastUpdated()
+  const { account } = useWeb3React();
+  const { lastUpdated, setLastUpdated } = useLastUpdated();
 
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const walletBalance = await simpleRpcProvider.getBalance(account)
-        setBalance(new BigNumber(walletBalance.toString()))
-        setFetchStatus(FetchStatus.SUCCESS)
+        const walletBalance = await simpleRpcProvider.getBalance(account);
+        setBalance(new BigNumber(walletBalance.toString()));
+        setFetchStatus(FetchStatus.SUCCESS);
       } catch {
-        setFetchStatus(FetchStatus.FAILED)
+        setFetchStatus(FetchStatus.FAILED);
       }
-    }
+    };
 
     if (account) {
-      fetchBalance()
+      fetchBalance();
     }
-  }, [account, fastRefresh, lastUpdated, setBalance, setFetchStatus])
+  }, [account, fastRefresh, lastUpdated, setBalance, setFetchStatus]);
 
-  return { balance, fetchStatus, refresh: setLastUpdated }
-}
-
+  return { balance, fetchStatus, refresh: setLastUpdated };
+};
