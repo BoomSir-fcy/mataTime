@@ -35,6 +35,7 @@ export type HeadingTwoElement = { type: 'heading-two'; children: Descendant[] }
 export type ImageElement = {
   type: 'image'
   url: string
+  align?: 'left'|'right'|'center'
   loading?: boolean
   children: EmptyText[]
 }
@@ -48,7 +49,7 @@ export type ListItemElement = { type: 'list-item'; children: Descendant[] }
 export type MentionElement = {
   type: 'mention'
   character: string,
-  attrs: any,
+  attrs?: any,
   children: CustomText[]
 }
 

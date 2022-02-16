@@ -6,15 +6,16 @@ import { Transforms, createEditor, Descendant, Editor } from 'slate';
 import { Loading, Icon } from 'components';
 import { mt } from './styleds';
 
-const ImageStyled = styled.img`
+export const ImageStyled = styled.img`
   max-width: 100%;
   max-height: 20em;
 `;
 
-const BoxStyled = styled(Box)`
+export const BoxStyled = styled(Box)<{ align?: string }>`
   ${mt};
   display: inline-block;
   line-height: 0; /* 去除 inline-block 底部间距 */
+  text-align: ${({ align }) => align || 'right'};
 `;
 
 const CloseBtnBox = styled(Box)`
@@ -34,37 +35,39 @@ const CloseBtn = styled(Button)`
 const Image = ({ attributes, children, element }) => {
   const editor = useSlateStatic();
   const removeHandle = useCallback(() => {
-    const path = ReactEditor.findPath(editor, element);
-    const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
-      null,
-      null,
-    ];
-    if (
-      nextEle &&
-      (nextEle as any).type === 'image-empty' &&
-      (nextEle as any).children[0]?.text === ''
-    ) {
-      Transforms.removeNodes(editor, { at: nextPath }); // 图片节点后面或默认更一个空节点
+    try {
+      const path = ReactEditor.findPath(editor, element);
+      const [nextEle, nextPath] = Editor.next(editor, { at: path }) || [
+        null,
+        null,
+      ];
+      if (
+        nextEle &&
+        (nextEle as any).type === 'image-empty' &&
+        (nextEle as any).children[0]?.text === ''
+      ) {
+        Transforms.removeNodes(editor, { at: nextPath }); // 图片节点后面或默认更一个空节点
+      }
+      Transforms.removeNodes(editor, { at: path });
+    } catch (error) {
+      console.error(error);
     }
-    Transforms.removeNodes(editor, { at: path });
   }, [editor]);
 
   return (
-    <BoxStyled
-      contentEditable={false}
-      position='relative'
-      display='inline-block'
-      {...attributes}
-    >
-      <Loading zIndex={2} overlay visible={element.loading} />
-      {/* {children} */}
-      <ImageStyled src={element.url} alt='' />
-      <CloseBtnBox>
-        <CloseBtn onClick={removeHandle} variant='tertiary'>
-          <Icon size={16} name='icon-guanbi' />
-        </CloseBtn>
-      </CloseBtnBox>
-    </BoxStyled>
+    <Box contentEditable={false} {...attributes}>
+      {children}
+      <BoxStyled position='relative' display='inline-block'>
+        <Loading zIndex={2} overlay visible={element.loading} />
+        {/* {children} */}
+        <ImageStyled src={element.url} alt='' />
+        <CloseBtnBox>
+          <CloseBtn onClick={removeHandle} variant='tertiary'>
+            <Icon size={16} name='icon-guanbi' />
+          </CloseBtn>
+        </CloseBtnBox>
+      </BoxStyled>
+    </Box>
   );
 };
 

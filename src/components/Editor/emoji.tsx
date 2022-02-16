@@ -13,7 +13,8 @@ const EmojiWarpper = styled(Box)`
 
 export const Emoji: React.FC<{
   onChange: (e: string) => void;
-}> = ({ onChange }) => {
+  color?: string;
+}> = ({ onChange, color = 'white_black' }) => {
   const { t } = useTranslation();
   const [state, setState] = useImmer({
     visible: false,
@@ -57,7 +58,7 @@ export const Emoji: React.FC<{
       <span ref={targetRef}>
         <Icon
           size={20}
-          color='white_black'
+          color={color}
           current={1}
           name='icon-xiaolian'
           onClick={e => {

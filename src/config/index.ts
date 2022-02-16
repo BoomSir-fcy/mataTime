@@ -38,11 +38,13 @@ export const ARTICLE_IMAGE_CLASS_NAME = 'article-image-display_with_load';
 export const CONNECT_WALLET_BODY_CLASS_NAME =
   'connect-wallet-modal__Body--open';
 
-export const ARTICLE_POST_MAX_LEN = 600; // 发帖最大数量
+export const ARTICLE_POST_MAX_LEN = 600; // 发帖最大字数
 
-export const ARTICLE_COMMENTS_MAX_LEN = 280; // 发帖最大数量
+export const ARTICLE_COMMENTS_MAX_LEN = 280; // 评论最大字数
 
 export const HUGE_ARTICLE_IMAGE_MAX_LEN = 20; // 长文发图数量
+
+export const HUGE_ARTICLE_POST_MAX_LEN = 40000; // 长文最大字数
 
 // 帖子显示折行
 export const ARTICLE_POST_MAX_ROW = 12;

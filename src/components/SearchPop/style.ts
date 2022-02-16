@@ -5,8 +5,8 @@ export const SearchPopBox = styled(Flex)`
   justify-content: space-between;
   position: absolute;
   z-index: 1004;
-  top: 180px;
-  left: 15px;
+  top: ${({ top }) => top || '180px'};
+  left: ${({ left }) => left || '15px'};
   color: ${({ theme }) => theme.colors.searchTopicTxt};
   .search-box {
     .title {

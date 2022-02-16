@@ -55,12 +55,14 @@ export const withImages = editor => {
 
 export const withMentions = editor => {
   const { isInline, isVoid } = editor;
-  const tempEditor = editor;
-  tempEditor.isInline = element => {
+
+  editor.isInline = element => {
     return element.type === 'mention' ? true : isInline(element);
   };
-  tempEditor.isVoid = element => {
+
+  editor.isVoid = element => {
     return element.type === 'mention' ? true : isVoid(element);
   };
-  return tempEditor;
+
+  return editor;
 };
