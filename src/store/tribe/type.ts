@@ -49,6 +49,26 @@ export interface NftInfo {
   nftToken?: string;
   nftId?: number;
 }
+export interface TribeList {
+  id: number;
+  name: string;
+  logo: string;
+  type: number;
+  nick_name: string;
+  address: string;
+  nft_image: string;
+}
+
+export interface TribeInfo {
+  tribe: {
+    name: string;
+    logo: string;
+    type: number;
+  };
+  selected_count: string;
+  post_count: string;
+  member_count: string;
+}
 export interface TribeState {
   tribeId?: number;
   ownerNFTId?: number;
@@ -59,4 +79,6 @@ export interface TribeState {
   ticketNftList?: NftInfo[];
   loading?: boolean;
   activeNftInfo?: NftInfo;
+  tribeList: TribeList[];
+  tribeInfo: TribeInfo;
 }

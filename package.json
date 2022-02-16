@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@biconomy/mexa": "^2.0.25",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@popperjs/core": "^2.10.2",
@@ -38,6 +39,7 @@
     "browser-image-compression": "^1.0.17",
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
+    "chardet": "^1.4.0",
     "cids": "^1.1.9",
     "classnames": "^2.3.1",
     "css-loader": "4.3.0",
@@ -75,6 +77,7 @@
     "jest-circus": "26.6.0",
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
+    "langcheck": "^2.3.2",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "0.11.3",
     "numeral": "^2.0.6",

@@ -101,7 +101,7 @@ const Coins: React.FC<init> = ({
       ChosenType === 1 ? t('AccountRecharge') : t('Accountwithdraw');
     const tokenText = getToken(ChoiceToken);
     setModalTitle(`${titleText} ${tokenText}`);
-  }, [ChosenType, Token, ChoiceToken]);
+  }, [ChosenType, t, Token, ChoiceToken]);
   return (
     <ContentBox>
       <HeadBox

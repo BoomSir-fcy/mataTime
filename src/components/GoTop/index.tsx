@@ -80,7 +80,6 @@ const Gotop = () => {
     // let Y = moveEndY - startY;
     // if (Math.abs(Y) > Math.abs(X) && Y > 0) {
     //   scrollTop = Y;
-    //   console.log(scrollTop - topValue);
     //   if (scrollTop < topValue - 10) {
     //     setIsShow(false);
     //   } else {

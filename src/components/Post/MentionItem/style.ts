@@ -19,6 +19,12 @@ export const MentionItemWrapper = styled.div`
     }
   }
 `;
+export const TranslateWrapper = styled.div`
+  padding: 0 0 0 64px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 0 0 0 64px;
+  }
+`;
 export const MentionItemUserWrapper = styled.div`
   .user-wrapper {
     display: flex;

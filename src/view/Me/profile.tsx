@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
@@ -41,6 +42,12 @@ import CommonCircle from 'components/Cirde/CommonCircle';
 import useAuth from 'hooks/useAuth';
 import useMenuNav from 'hooks/useMenuNav';
 import eventBus from 'utils/eventBus';
+
+import { useMapModule } from 'store/mapModule/hooks';
+import PostList from 'components/Post/PostList';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { useDispatch } from 'react-redux';
+import { addTranslateIds } from 'store/mapModule/actions';
 
 const Center = styled(Box)`
   width: 100%;
@@ -214,9 +221,10 @@ const Profile: React.FC<any> = props => {
   const [isEnd, setIsEnd] = useState(false);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
+  const dispatch = useDispatch();
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
 
   const { isMobile } = useMenuNav();
 
@@ -256,6 +264,8 @@ const Profile: React.FC<any> = props => {
           p.page = (offset || page) + 1;
           p.totalPage = tweet.data.total_page;
         });
+        const ids = checkTranslateIds(tweet?.data?.list || []);
+        dispatch(addTranslateIds(ids));
         if (tweet?.data?.list?.length < perpage) {
           setIsEnd(true);
         } else {
@@ -363,6 +373,16 @@ const Profile: React.FC<any> = props => {
       ? defaultCountry?.LocationEn
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
+
+  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
+    useMapModule();
+
+  const renderList = useMemo(() => {
+    const resPost = list.filter(item => {
+      return !deletePostIds.includes(item.id);
+    });
+    return resPost;
+  }, [list, deletePostIds]);
 
   return (
     <Center>
@@ -490,7 +510,19 @@ const Profile: React.FC<any> = props => {
         </ProfileInfo>
       </ProfileCard>
       <Tabs />
-      <List
+      <PostList
+        list={renderList}
+        map={postMap}
+        loading={loading}
+        isEnd={isEnd}
+        getList={() => {
+          init();
+        }}
+        updateList={() => {
+          console.debug('updateList');
+        }}
+      />
+      {/* <List
         marginTop={13}
         loading={loading}
         renderList={() => {
@@ -554,7 +586,7 @@ const Profile: React.FC<any> = props => {
             />
           </MeItemWrapper>
         ))}
-      </List>
+      </List> */}
       <CancelAttentionModal
         title={t('meUnsubscribeTips')}
         show={FollowState.cancelFollow}

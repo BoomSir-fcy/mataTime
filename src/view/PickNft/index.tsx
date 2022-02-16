@@ -93,7 +93,7 @@ const PickNft: React.FC = () => {
         }),
       );
     }
-  }, [parsedQs]);
+  }, [parsedQs, dispatch]);
 
   useFetchCodeInfo();
   useFetchInviteInfo();

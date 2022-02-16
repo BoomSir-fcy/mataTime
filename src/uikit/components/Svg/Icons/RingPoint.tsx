@@ -10,32 +10,32 @@ const Icon: React.FC<SvgProps> = props => {
       <path
         d='M237 3H737'
         stroke='url(#paint0_linear_318_2277)'
-        stroke-width='5'
-        stroke-dasharray='2 50'
+        strokeWidth='5'
+        strokeDasharray='2 50'
       />
       <path
         d='M62.5 161H906.5'
         stroke='url(#paint1_linear_318_2277)'
-        stroke-width='5'
-        stroke-dasharray='2 50'
+        strokeWidth='5'
+        strokeDasharray='2 50'
       />
       <path
         d='M0 265H1000'
         stroke='url(#paint2_linear_318_2277)'
-        stroke-width='5'
-        stroke-dasharray='2 50'
+        strokeWidth='5'
+        strokeDasharray='2 50'
       />
       <path
         d='M62.5 363H906.5'
         stroke='url(#paint3_linear_318_2277)'
-        stroke-width='5'
-        stroke-dasharray='2 50'
+        strokeWidth='5'
+        strokeDasharray='2 50'
       />
       <path
         d='M237 536H737'
         stroke='url(#paint4_linear_318_2277)'
-        stroke-width='5'
-        stroke-dasharray='2 50'
+        strokeWidth='5'
+        strokeDasharray='2 50'
       />
       <defs>
         <linearGradient
@@ -46,14 +46,14 @@ const Icon: React.FC<SvgProps> = props => {
           y2='4'
           gradientUnits='userSpaceOnUse'
         >
-          <stop className='stop' stop-color='white' />
+          <stop className='stop' stopColor='white' />
           <stop
             className='stop'
             offset='0.46875'
-            stop-color='white'
-            stop-opacity='0'
+            stopColor='white'
+            stopOpacity='0'
           />
-          <stop className='stop' offset='1' stop-color='white' />
+          <stop className='stop' offset='1' stopColor='white' />
         </linearGradient>
         <linearGradient
           id='paint1_linear_318_2277'
@@ -63,14 +63,14 @@ const Icon: React.FC<SvgProps> = props => {
           y2='162'
           gradientUnits='userSpaceOnUse'
         >
-          <stop className='stop' stop-color='white' />
+          <stop className='stop' stopColor='white' />
           <stop
             className='stop'
             offset='0.46875'
-            stop-color='white'
-            stop-opacity='0'
+            stopColor='white'
+            stopOpacity='0'
           />
-          <stop className='stop' offset='1' stop-color='white' />
+          <stop className='stop' offset='1' stopColor='white' />
         </linearGradient>
         <linearGradient
           id='paint2_linear_318_2277'
@@ -80,14 +80,14 @@ const Icon: React.FC<SvgProps> = props => {
           y2='266'
           gradientUnits='userSpaceOnUse'
         >
-          <stop className='stop' stop-color='white' />
+          <stop className='stop' stopColor='white' />
           <stop
             className='stop'
             offset='0.46875'
-            stop-color='white'
-            stop-opacity='0'
+            stopColor='white'
+            stopOpacity='0'
           />
-          <stop className='stop' offset='1' stop-color='white' />
+          <stop className='stop' offset='1' stopColor='white' />
         </linearGradient>
         <linearGradient
           id='paint3_linear_318_2277'
@@ -97,14 +97,14 @@ const Icon: React.FC<SvgProps> = props => {
           y2='364'
           gradientUnits='userSpaceOnUse'
         >
-          <stop className='stop' stop-color='white' />
+          <stop className='stop' stopColor='white' />
           <stop
             className='stop'
             offset='0.46875'
-            stop-color='white'
-            stop-opacity='0'
+            stopColor='white'
+            stopOpacity='0'
           />
-          <stop className='stop' offset='1' stop-color='white' />
+          <stop className='stop' offset='1' stopColor='white' />
         </linearGradient>
         <linearGradient
           id='paint4_linear_318_2277'
@@ -114,14 +114,14 @@ const Icon: React.FC<SvgProps> = props => {
           y2='537'
           gradientUnits='userSpaceOnUse'
         >
-          <stop className='stop' stop-color='white' />
+          <stop className='stop' stopColor='white' />
           <stop
             className='stop'
             offset='0.46875'
-            stop-color='white'
-            stop-opacity='0'
+            stopColor='white'
+            stopOpacity='0'
           />
-          <stop className='stop' offset='1' stop-color='white' />
+          <stop className='stop' offset='1' stopColor='white' />
         </linearGradient>
       </defs>
     </Svg>
@@ -132,7 +132,7 @@ export default Icon;
 
 export const BgSvg = styled(Icon)`
   .stop {
-    stop-color: ${({ theme, color }) =>
+    stopcolor: ${({ theme, color }) =>
       getThemeValue(`colors.${color}`, color)(theme)};
   }
 `;

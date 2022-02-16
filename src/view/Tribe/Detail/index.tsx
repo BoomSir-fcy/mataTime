@@ -1,14 +1,18 @@
+import React, { useEffect } from 'react';
 import { Crumbs, List } from 'components';
-import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Box, Text, Button } from 'uikit';
 import DetailHeader from './Header';
 import DetailTitle from './Title';
 import PostItem from './postItem';
 import { useStore } from 'store';
+import { useDispatch } from 'react-redux';
+import { fetchTribeInfoAsync } from 'store/tribe';
 
-const Detail = () => {
+const Detail: React.FC<RouteComponentProps> = React.memo(route => {
+  const dispatch = useDispatch();
+
   const {
     displayResultListOfPeoples,
     displayResultListOfTopic,
@@ -21,11 +25,23 @@ const Detail = () => {
     searchPostMap,
     historyList,
   } = useStore(p => p.search);
+  const TribeInfo = useStore(p => p.tribe.tribeInfo);
+
+  useEffect(() => {
+    const search = route.location.search;
+    const myQuery = search => {
+      return new URLSearchParams(search);
+    };
+    const tribe_id = myQuery(search).get('id');
+    if (tribe_id) {
+      dispatch(fetchTribeInfoAsync({ tribe_id }));
+    }
+  }, [route]);
 
   return (
     <Box>
       <Crumbs back />
-      <DetailHeader />
+      <DetailHeader TribeInfo={TribeInfo} />
       <DetailTitle />
       <List
         loading={postLoading}
@@ -46,6 +62,6 @@ const Detail = () => {
       </List>
     </Box>
   );
-};
+});
 
 export default Detail;

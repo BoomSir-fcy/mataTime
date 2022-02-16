@@ -34,7 +34,7 @@ export const lockInviteCode = async (
   masterChefContract,
   code,
 ) => {
-  const tx = await masterChefContract.lockCode(`0x${code}`);
+  const tx = await masterChefContract.lockCode(code);
   const receipt = await tx.wait();
   return receipt.status;
 };

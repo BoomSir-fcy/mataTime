@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Crumbs, Icon } from 'components';
 import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Button, Flex, Card, Input } from 'uikit';
 import { ContentBox } from './styled';
 import TagList from './components/TagList';
+import { Api } from 'apis';
 
 const TopicsCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -22,6 +23,19 @@ const MeTribeTopicsSetting = () => {
   const { t } = useTranslation();
   const [list, setList] = useState([]);
   const [inputVal, setInputVal] = useState('');
+
+  const handleAddTopic = useCallback(async () => {
+    const res = await Api.TribeApi.tribeTopicCreate({
+      tribe_id: 1415926535,
+      topics: [inputVal],
+    });
+    if (Api.isSuccess(res)) {
+      // TODO: getTopicList
+      // setList(prev => prev.concat({}));
+      // arr.push({ id: arr.length + 1, name: inputVal });
+    }
+  }, [inputVal]);
+
   return (
     <Box>
       <Crumbs title={t('Topics Setting')} />
@@ -49,10 +63,11 @@ const MeTribeTopicsSetting = () => {
                 ml='20px'
                 onClick={() => {
                   if (inputVal.trim()) {
-                    const arr = [...list];
-                    arr.push({ id: arr.length + 1, name: inputVal });
-                    setList(arr);
-                    setInputVal('');
+                    handleAddTopic();
+                    // const arr = [...list];
+                    // arr.push({ id: arr.length + 1, name: inputVal });
+                    // setList(arr);
+                    // setInputVal('');
                   }
                 }}
               >

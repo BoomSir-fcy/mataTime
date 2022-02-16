@@ -116,6 +116,7 @@ export interface MapModuleStatus {
   type: MapModuleType
   ids: string|number
 }
+
 export interface MapModuleState {
   postMap: {
     [postId: string]: Api.Home.post
@@ -126,13 +127,29 @@ export interface MapModuleState {
   postStatusMap: {
     [postId: string]: MapModuleStatus
   },
+  postTranslateMap: {
+    [postId: string]: {
+      content: string;
+      status: FetchStatus;
+      showTranslate: boolean; // 是否显示翻译
+    }
+  },
+  commentTranslateMap: {
+    [postId: string]: {
+      content: string;
+      status: FetchStatus;
+      showTranslate: boolean; // 是否显示翻译
+    }
+  },
+  needTranslatePostIds: number[],
+  needTranslateCommentIds: number[],
   userStatusMap: {
     [userId: string]: MapModuleStatus
   },
   unFollowUsersIds: number[],
   deletePostIds: number[],
   blockUsersIds: number[],
-  status: MapModuleStatus[]
+  status: MapModuleStatus[],
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

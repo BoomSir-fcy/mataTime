@@ -1,6 +1,6 @@
 import { ChainId } from '../wallet/config';
 
-export default {
+const contracts = {
   test: {
     [ChainId.BSC_MAINNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
     [ChainId.BSC_TESTNET]: '0x675e77aeb7F50CAbCE65B9d7114aeB402557679f',
@@ -54,6 +54,7 @@ export default {
     97: '0x094616F0BdFB0b526bD735Bf66Eca0Ad254ca81F',
   },
   Invitation: {
+    42: '0xE8A93dbaC1F08cd2fb8A8ef14460149c53Ea1544',
     56: '0xA04E157251042C56D260228267C4f3a721F46033',
     97: '0xB21be63855EdD60b72Fc90D11aCda0429799Cc2C',
   },
@@ -86,3 +87,4 @@ export default {
     97: '0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625',
   },
 };
+export default contracts;

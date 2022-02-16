@@ -35,6 +35,8 @@ import { PARAGRAPH_MT } from './RenderElement/styleds';
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
   background?: string;
+  value: Descendant[];
+  setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
 }
 
 const getColor = (color: string, theme: DefaultTheme) => {
@@ -43,6 +45,8 @@ const getColor = (color: string, theme: DefaultTheme) => {
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
   background = 'input',
+  value,
+  setValue,
   ...props
 }) => {
   const { theme } = useTheme();
@@ -57,14 +61,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
 
-  const [value, setValue] = useState<Descendant[]>(initialValue);
+  // const [value, setValue] = useState<Descendant[]>(initialValue);
   const ref = useRef<HTMLDivElement | null>();
   const { onKeyDown, onChangeHandle, target, userList, onItemClick, index } =
     useMentions(editor, ref);
 
   useEffect(() => {
-    console.log(value, 'value');
-    sessionStorage.setItem('asdasads', JSON.stringify(value));
+    // console.log(value, 'value');
+    // sessionStorage.setItem('asdasads', JSON.stringify(value));
   }, [value]);
 
   const serialize = useMemo(() => {

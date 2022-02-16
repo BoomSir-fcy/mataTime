@@ -168,7 +168,7 @@ const NoticeItem: React.FC<{
     if (type === MessageType.MessageSystemDeleteTag) {
       return t('DeleteUserTag', { value: content });
     }
-  }, [itemData, type, t]);
+  }, [itemData, getHTML, showUTCTime, type, t]);
 
   return (
     <NoticeItemWrapper>

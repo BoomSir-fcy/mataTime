@@ -1,5 +1,5 @@
-import { SignInApi } from "./SignIn";
-import { UserApi } from "./User";
+import { SignInApi } from './SignIn';
+import { UserApi } from './User';
 import { NewsApi } from './News';
 import { ContentApi } from './Content';
 import { HomeApi } from './Home';
@@ -12,6 +12,7 @@ import { AttentionApi } from './Attention';
 import { AccountApi } from './Account';
 import { TaskApi } from './Task';
 import { SearchApi } from './Search';
+import { TribeApi } from './tribe';
 
 const isSuccess = (res: Api.Error) => {
   return res && res.code === 1;
@@ -32,5 +33,6 @@ export const Api = {
   AttentionApi: new AttentionApi(),
   AccountApi: new AccountApi(),
   SearchApi: new SearchApi(),
-  TaskApi: new TaskApi()
+  TaskApi: new TaskApi(),
+  TribeApi: new TribeApi(),
 };

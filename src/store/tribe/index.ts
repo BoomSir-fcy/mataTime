@@ -6,6 +6,7 @@ import {
   getTribeNftInfo,
 } from './fetchTribe';
 import { getNftsList } from 'apis/DsgRequest';
+import { Api } from 'apis';
 
 const initialState: TribeState = {
   tribeId: 1415926538,
@@ -39,6 +40,27 @@ const initialState: TribeState = {
   ticketNftList: [],
   loading: true,
   activeNftInfo: {},
+  tribeList: [
+    {
+      id: null,
+      name: '',
+      logo: '',
+      type: null,
+      nick_name: '',
+      address: '',
+      nft_image: '',
+    },
+  ],
+  tribeInfo: {
+    tribe: {
+      name: '',
+      logo: '',
+      type: null,
+    },
+    selected_count: '',
+    post_count: '',
+    member_count: '',
+  },
 };
 export const fetchSetTribeBaseInfo = createAsyncThunk(
   'tribe/fetchSetTribeBaseInfo',
@@ -93,6 +115,21 @@ export const fetchTicketNftListAsync = createAsyncThunk<
     });
   return list;
 });
+export const fetchTribeListAsync = createAsyncThunk<any, any>(
+  'tribe/fetchTribeListAsync',
+  async ({ page = 1, psge_size = 10, tab = 1 }) => {
+    const list = await Api.TribeApi.tribeList({ page, psge_size, tab });
+    return list.data;
+  },
+);
+
+export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
+  'tribe/fetchTribeInfoAsync',
+  async ({ tribe_id }) => {
+    const list = await Api.TribeApi.tribeInfo({ tribe_id });
+    return list.data;
+  },
+);
 
 export const tribe = createSlice({
   name: 'tribe',
@@ -121,6 +158,12 @@ export const tribe = createSlice({
       .addCase(fetchTicketNftListAsync.fulfilled, (state, { payload }) => {
         state.ticketNftList = payload;
         state.loading = false;
+      })
+      .addCase(fetchTribeListAsync.fulfilled, (state, action) => {
+        state.tribeList = action.payload;
+      })
+      .addCase(fetchTribeInfoAsync.fulfilled, (state, action) => {
+        state.tribeInfo = action.payload;
       });
   },
 });

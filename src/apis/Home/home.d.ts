@@ -12,9 +12,17 @@ declare namespace Api {
       content: string;
       image_urls: string[];
       remind_user: string;
+      id?: string;
+      verify?: string;
     }
     interface articleFindById {
       id: string;
+    }
+
+    interface PostTranslateParams {
+      pids: number[];
+      target: string;
+      source?: string;
     }
     type queryHotTopic = {
       page: number;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { List, MoreOperatorEnum, TopicEmpty } from 'components';
@@ -17,6 +17,11 @@ import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { useMapModule } from 'store/mapModule/hooks';
+import PostList from 'components/Post/PostList';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { addTranslateIds } from 'store/mapModule/actions';
+import { useDispatch } from 'react-redux';
 
 const Praise = React.memo(props => {
   const { t } = useTranslation();
@@ -24,7 +29,7 @@ const Praise = React.memo(props => {
 
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
+  // useReadArticle(nonce);
   const perpage = MAX_SPEND_TIME_PAGE_TATOL;
 
   const [state, setState] = useImmer({
@@ -35,6 +40,7 @@ const Praise = React.memo(props => {
   });
   const { loading, page, totalPage, list } = state;
 
+  const dispatch = useDispatch();
   const init = async (offset?: number) => {
     setState(p => {
       p.loading = true;
@@ -53,6 +59,8 @@ const Praise = React.memo(props => {
               ? [...(res.data.list || [])]
               : [...list, ...(res.data.list || [])];
           });
+          const ids = checkTranslateIds(res.data.list || [], 'post_id');
+          dispatch(addTranslateIds(ids));
         }
       }
     } catch (error) {}
@@ -111,6 +119,16 @@ const Praise = React.memo(props => {
     }
   };
 
+  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
+    useMapModule();
+
+  const renderList = useMemo(() => {
+    const resPost = list.filter(item => {
+      return !deletePostIds.includes(item.id);
+    });
+    return resPost;
+  }, [list, deletePostIds]);
+
   return (
     <Box>
       {/* <CrumbsHead>
@@ -120,7 +138,22 @@ const Praise = React.memo(props => {
         </Box>
       </CrumbsHead> */}
       <Crumbs title={t('meHome')} />
-      <List
+      <Box mt='13px'>
+        <PostList
+          list={renderList}
+          map={postMap}
+          loading={loading}
+          postIdKey='post_id'
+          isEnd={page > totalPage}
+          getList={() => {
+            init();
+          }}
+          updateList={() => {
+            console.debug('updateList');
+          }}
+        />
+      </Box>
+      {/* <List
         marginTop={13}
         loading={loading}
         renderList={() => {
@@ -183,7 +216,7 @@ const Praise = React.memo(props => {
             )}
           </MeItemWrapper>
         ))}
-      </List>
+      </List> */}
     </Box>
   );
 });

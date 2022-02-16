@@ -16,7 +16,7 @@ export const useThemeManager = (): [boolean, () => void] => {
 
   const toggleThemeHandle = useCallback(() => {
     dispatch(toggleTheme());
-  }, [dispatch, setting]);
+  }, [dispatch]);
 
   return [isDark, toggleThemeHandle];
 };
@@ -51,7 +51,7 @@ export const useLanguange = (): [languange, (val: languange) => void] => {
       setLanguage(val.value);
       dispatch(setSystemCustom(systemSetting));
     },
-    [dispatch, setting],
+    [dispatch, setting, setLanguage],
   );
 
   return [setting.languange, setUseLanguage];

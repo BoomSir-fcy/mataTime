@@ -165,6 +165,20 @@ const ShowCard: React.FC = () => {
 
   const { onLockCode } = useLockInviteCode();
 
+  /* 
+    1. 使用代付的方式帮助没有手续费的朋友支付gas
+    2. 不影响原有功能
+    3. 判断当前用户余额是否能够支付gas
+        查询用户余额
+        查询当前方法需要的gas
+          查询锁定需要的gas
+          查询注册需要的gas
+    4. 判断是否需要使用代付
+    5. 代付
+
+  
+  */
+
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
       return inviteInfo.codeLockDuration_ + codeInfo.lockedAt;
@@ -208,15 +222,7 @@ const ShowCard: React.FC = () => {
       dispatch(fetchStuffAllLimitsAsync());
       return res;
     },
-    [
-      selectData,
-      dispatch,
-      onExchange,
-      codes.code,
-      account,
-      colorHex,
-      colorAlpha,
-    ],
+    [selectData, dispatch, onExchange, codes.code, colorHex, colorAlpha],
   );
 
   const handleColorChange = useCallback(color => {
@@ -229,17 +235,15 @@ const ShowCard: React.FC = () => {
       dispatch(fetchCodeInfoAsync(codes));
       setVisible(false);
     },
-    [onLockCode],
+    [onLockCode, dispatch, codes],
   );
 
   const onClose = useCallback(() => {
     setVisible(false);
-    // dispatch(fetchCodeInfoAsync(codes))
-  }, [setVisible, dispatch, codes]);
+  }, [setVisible]);
 
   const onOpen = useCallback(() => {
     setVisible(true);
-    // dispatch(fetchCodeInfoAsync(codes))
   }, [setVisible]);
 
   return (
