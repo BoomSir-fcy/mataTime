@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import TradeLogo from '../components/TradeCard/TradeLogo';
 import BtnIcon from '../components/BtnIcon';
 import { useTranslation } from 'contexts/Localization';
+import { TribeInfo } from 'store/tribe/type';
 
 const InfoFlex = styled(Flex)`
   padding: 26px 14px 26px 26px;
@@ -26,32 +27,32 @@ const NumberFlex = styled(Flex)`
 `;
 
 interface HeaderProps {
-  Avatar?: string;
+  TribeInfo: TribeInfo;
 }
-const DetailHeader: React.FC<HeaderProps> = ({ Avatar }) => {
+const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
   const { t } = useTranslation();
 
   return (
     <InfoFlex>
-      <TradeLogo />
+      <TradeLogo logo={TribeInfo.tribe.logo} />
       <RightFlex flex='1' flexDirection='column' justifyContent='space-between'>
         <Box>
-          <Heading scale='lg'>时光机</Heading>
+          <Heading scale='lg'>{TribeInfo.tribe.name}</Heading>
           <NumberFlex mt='28px' justifyContent='space-between'>
             <Box>
-              <Text bold>2560</Text>
+              <Text bold>{TribeInfo.member_count}</Text>
               <Text fontSize='14px' color='textTips'>
                 成员
               </Text>
             </Box>
             <Box>
-              <Text bold>2560</Text>
+              <Text bold>{TribeInfo.post_count}</Text>
               <Text fontSize='14px' color='textTips'>
                 帖子
               </Text>
             </Box>
             <Box>
-              <Text bold>2560</Text>
+              <Text bold>{TribeInfo.selected_count}</Text>
               <Text fontSize='14px' color='textTips'>
                 精选
               </Text>
@@ -60,7 +61,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ Avatar }) => {
         </Box>
         <Flex justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
-            <TradeLogo scales='ld' round logo={Avatar} />
+            <TradeLogo scales='ld' round logo={TribeInfo.tribe.logo} />
             <Text ml='10px' bold>
               Oline
             </Text>

@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, Box, Image, Text } from 'uikit';
 import styled from 'styled-components';
 import TradeLogo from './TradeLogo';
-import { ProfileMenu } from 'components/MenuNav/ProfileMenu';
+import { TribeList } from 'store/tribe/type';
+import { TribeProfileMenu } from '../ProfileMenu';
 
 const CardStyle = styled(Card)`
   max-width: max-content;
@@ -13,26 +14,21 @@ const PaddingBox = styled(Box)`
 `;
 
 interface TradeCardProps {
-  logo?: string;
-  title?: string;
-  id?: number;
-  uId?: number;
-  user_address?: string;
-  user_avator_url?: string;
-  user_name?: string;
+  info?: TribeList;
 }
-const TradeCard: React.FC<TradeCardProps> = ({}) => {
+const TradeCard: React.FC<TradeCardProps> = ({ info }) => {
   return (
     <CardStyle isRadius mb='16px'>
       <PaddingBox>
-        <TradeLogo
-          scales='lg'
-          logo='https://api.dsgmetaverse.com/gphoto/mngen/4411022.png'
-        />
+        <TradeLogo scales='lg' logo={info.logo} />
         <Text padding='14px 0' bold fontSize='18px'>
-          1111
+          {info.name}
         </Text>
-        <ProfileMenu ShowIcon={false} />
+        <TribeProfileMenu
+          nick_name={info.nick_name}
+          address={info.address}
+          nft_image={info.nft_image}
+        />
       </PaddingBox>
     </CardStyle>
   );

@@ -40,6 +40,16 @@ const initialState: TribeState = {
       nft_image: '',
     },
   ],
+  tribeInfo: {
+    tribe: {
+      name: '',
+      logo: '',
+      type: null,
+    },
+    selected_count: '',
+    post_count: '',
+    member_count: '',
+  },
 };
 
 export const fetchTribeInfo = createAsyncThunk(
@@ -57,9 +67,17 @@ export const fetchFeeTokenListAsync = createAsyncThunk(
 
 export const fetchTribeListAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeListAsync',
-  async ({ page, psge_size, tab }) => {
+  async ({ page = 1, psge_size = 10, tab = 1 }) => {
     const list = await Api.TribeApi.tribeList({ page, psge_size, tab });
-    return list;
+    return list.data;
+  },
+);
+
+export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
+  'tribe/fetchTribeInfoAsync',
+  async ({ tribe_id }) => {
+    const list = await Api.TribeApi.tribeInfo({ tribe_id });
+    return list.data;
   },
 );
 
@@ -81,6 +99,9 @@ export const tribe = createSlice({
       })
       .addCase(fetchTribeListAsync.fulfilled, (state, action) => {
         state.tribeList = action.payload;
+      })
+      .addCase(fetchTribeInfoAsync.fulfilled, (state, action) => {
+        state.tribeInfo = action.payload;
       });
   },
 });
