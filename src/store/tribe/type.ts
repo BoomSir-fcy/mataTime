@@ -49,6 +49,17 @@ export interface TribeList {
   address: string;
   nft_image: string;
 }
+
+export interface TribeInfo {
+  tribe: {
+    name: string;
+    logo: string;
+    type: number;
+  };
+  selected_count: string;
+  post_count: string;
+  member_count: string;
+}
 export interface TribeState {
   tribeId?: number;
   ownerNFTId?: number;
@@ -57,4 +68,5 @@ export interface TribeState {
   tribesNftInfo?: TribesNFTInfo;
   feeCoinList?: FeeCoin[];
   tribeList: TribeList[];
+  tribeInfo: TribeInfo;
 }

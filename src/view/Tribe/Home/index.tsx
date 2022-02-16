@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation, Link, useRouteMatch } from 'react-router-dom';
-import { Box, Text, Button, Flex, Card, Image } from 'uikit';
+import { Box, Text, Button, Flex, Card, Image, Spinner } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts';
 import Crumbs from 'components/Layout/crumbs';
@@ -8,6 +8,8 @@ import Tabs from 'components/Tabs';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import TradeCard from '../components/TradeCard';
 import FlexAutoWarpper from 'components/Layout/FlexAutoWarpper';
+import { storeAction, useStore } from 'store';
+import { useTribeList } from 'store/tribe/hooks';
 
 // lable?: string
 // tLable?: string
@@ -42,10 +44,14 @@ const Home = () => {
   const { replace } = useHistory();
   const { path } = useRouteMatch();
   const { pathname } = useLocation();
-
+  const [page, setPage] = useState(1);
+  const [page_size, setPage_size] = useState(10);
   const [avtiveTab, setAvtiveTab] = useState(
     qsValue[TAB_QUERY_KEY] || tabDatas[0].value,
   );
+  useTribeList(page, page_size, 2);
+
+  const TribeList = useStore(p => p.tribe.tribeList);
 
   return (
     <Box>
@@ -56,7 +62,6 @@ const Home = () => {
         active={avtiveTab}
         datas={tabDatas}
         onChange={tab => {
-          console.log(tab);
           setAvtiveTab(tab.value);
           replace(`${pathname}?${TAB_QUERY_KEY}=${tab.value}`);
         }}
@@ -69,15 +74,17 @@ const Home = () => {
       </Tabs>
       <PaddingFlex justifyContent='space-around' flexWrap='wrap'>
         <FlexAutoWarpper lineMax={2}>
-          <Link to={`${path}/detail`}>
-            <TradeCard />
-          </Link>
-          <Link to={`${path}/detail`}>
-            <TradeCard />
-          </Link>
-          <Link to={`${path}/detail`}>
-            <TradeCard />
-          </Link>
+          {TribeList.length ? (
+            <>
+              {TribeList.map((item, index) => (
+                <Link key={item.id} to={`${path}/detail?id=${item.id}`}>
+                  <TradeCard info={item} />
+                </Link>
+              ))}
+            </>
+          ) : (
+            <Spinner />
+          )}
         </FlexAutoWarpper>
       </PaddingFlex>
     </Box>

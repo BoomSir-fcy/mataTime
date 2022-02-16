@@ -2,7 +2,11 @@ import { useEffect, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { TribeState } from './type';
-import { fetchFeeTokenListAsync } from '.';
+import {
+  fetchFeeTokenListAsync,
+  fetchTribeInfoAsync,
+  fetchTribeListAsync,
+} from '.';
 
 export const useTribeState = () => {
   const tribe = useSelector((p: { tribe: TribeState }) => p.tribe);
@@ -16,6 +20,28 @@ export const useFeeTokenList = () => {
   useEffect(() => {
     if (account) {
       dispatch(fetchFeeTokenListAsync());
+    }
+  }, [account]);
+};
+
+export const useTribeList = (page: number, psge_size: number, tab: number) => {
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchTribeListAsync({ page, psge_size, tab }));
+    }
+  }, [account]);
+};
+
+export const useTribeInfo = (tribe_id: number) => {
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchTribeInfoAsync({ tribe_id }));
     }
   }, [account]);
 };
