@@ -10,26 +10,28 @@ import {
 } from 'config/constants/regexp';
 import Image from './Image';
 // import { Mention } from './Mention';
-import { DefaultElement, Code, Ol, Ul, Highlight } from './styleds';
+import { DefaultElement, Code, Ol, Ul, Highlight, Blockquote } from './styleds';
+import { useSlateStatic } from 'slate-react';
 
 export const Element = props => {
   const { attributes, children, element } = props;
+  const editor = useSlateStatic();
 
   switch (element.type) {
     case 'block-quote':
-      return <blockquote {...attributes}>{children}</blockquote>;
+      return <Blockquote {...attributes}>{children}</Blockquote>;
     case 'bulleted-list':
       return <Ul {...attributes}>{children}</Ul>;
-    case 'heading-one':
-      return <h1 {...attributes}>{children}</h1>;
-    case 'heading-two':
-      return <h2 {...attributes}>{children}</h2>;
+    // case 'heading-one':
+    //   return <h1 {...attributes}>{children}</h1>;
+    // case 'heading-two':
+    //   return <h2 {...attributes}>{children}</h2>;
     case 'list-item':
       return <li {...attributes}>{children}</li>;
     case 'numbered-list':
       return <Ol {...attributes}>{children}</Ol>;
     case 'image':
-      return <Image {...props} />;
+      return <Image {...props} editor={editor} />;
     case 'mention':
       return <Mention {...props} />;
     default:

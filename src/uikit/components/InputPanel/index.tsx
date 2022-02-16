@@ -1,1 +1,1 @@
-export { default as InputPanel } from "./InputPanel";
+export { default as InputPanel } from './InputPanel';

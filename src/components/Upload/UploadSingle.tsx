@@ -49,7 +49,7 @@ export const UploadSingle: React.FC<UploadProps> = ({
   const uploadFile = async () => {
     const file: any = new FileReader();
     const imageFile = imageInput.current.files;
-    const imgMaxSize = 1024 * 1024 * 2;
+    const imgMaxSize = 1024 * 1024 * 5;
 
     if (imageFile.length > 0) {
       for (let i = 0; i < imageFile.length; i++) {
@@ -65,14 +65,16 @@ export const UploadSingle: React.FC<UploadProps> = ({
         //     dir_name: 'common',
         //   });
         //   if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
-        //   // const full_path = res?.data?.full_path;
+        //   const full_path = res?.data?.full_path;
+        //   const path = res?.data?.path;
         //   setImgUrl(full_path);
-        //   uploadSuccess(full_path);
+        //   uploadSuccess(path);
         // };
         const full_path =
-          'https://static.social.qgx.io/common/634e35c1-e073-4df7-8bec-eefb99afd7a7.jpg';
+          'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
+        const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
         setImgUrl(full_path);
-        uploadSuccess(full_path);
+        uploadSuccess(path);
       }
     }
   };

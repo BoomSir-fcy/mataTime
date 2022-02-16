@@ -41,7 +41,7 @@ const MeTribeFeeSetting = () => {
             </Button>
           )}
         </Crumbs>
-        <TribeFee ref={form} disabled={!isEdit} />
+        <TribeFee ref={form} disabled={!isEdit} actionType='edit' />
       </form>
     </Box>
   );

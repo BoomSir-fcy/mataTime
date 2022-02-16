@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import reactStringReplace from 'react-string-replace';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { Text } from 'uikit';
+import { Text, Box } from 'uikit';
 import { FollowPopup, MoreOperatorEnum } from 'components';
 import { storeAction } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -15,9 +15,22 @@ import {
 } from 'config/constants/regexp';
 
 import history from 'routerHistory';
+import { Descendant } from 'slate';
+import { Leaf } from 'components/Editor/RichTextEditor/RenderElement';
+import {
+  ImageStyled,
+  BoxStyled,
+} from 'components/Editor/RichTextEditor/RenderElement/Image';
+import {
+  Ul,
+  Ol,
+  Blockquote,
+} from 'components/Editor/RichTextEditor/RenderElement/styleds';
 
 type IProps = {
   content: string;
+  value?: Descendant[];
+  paragraphMt?: string;
   callback?: Function;
   disableParseSquare?: boolean;
 };
@@ -33,7 +46,7 @@ const ExpandWrapper = styled.div`
     font-size: 12px;
   }
 `;
-const ParagraphItem = styled.div`
+const ParagraphItem = styled(Box)`
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
@@ -66,7 +79,7 @@ export const ContentParsing = (props: IProps) => {
   const { t } = useTranslation();
   const [parsingResult, setParsingResult] = useState([]);
   const [expand, setExpand] = useState<boolean>(false);
-  const { callback, disableParseSquare } = props;
+  const { callback, disableParseSquare, paragraphMt = '0' } = props;
 
   useEffect(() => {
     try {
@@ -97,7 +110,7 @@ export const ContentParsing = (props: IProps) => {
   };
 
   // 解析内容
-  const parseText2 = (text = '') => {
+  const parseText2 = ({ text = '', bold, del, underline, code, italic }) => {
     // const re = /(http[s]?:\/\/([\w-]+.)+([:\d+])?(\/[\w-\.\/\?%&=]*)?)/gi;
     let replacedText: any;
     // Match url
@@ -162,15 +175,69 @@ export const ContentParsing = (props: IProps) => {
         ),
       );
     }
-    return replacedText;
+    return (
+      <Leaf
+        leaf={{ bold, del, underline, code, italic }}
+        attributes={undefined}
+      >
+        {replacedText}
+      </Leaf>
+    );
   };
 
   const serialize2 = (node, type = null, index?: number) => {
+    console.log(node, '====node');
     const { children } = node;
+    // switch (element.type) {
+    // case 'block-quote':
+    //   return <blockquote {...attributes}>{children}</blockquote>;
+    // case 'bulleted-list':
+    //   return <Ul {...attributes}>{children}</Ul>;
+    // case 'heading-one':
+    //   return <h1 {...attributes}>{children}</h1>;
+    // case 'heading-two':
+    //   return <h2 {...attributes}>{children}</h2>;
+    // case 'list-item':
+    //   return <li {...attributes}>{children}</li>;
+    // case 'numbered-list':
+    //   return <Ol {...attributes}>{children}</Ol>;
+    // case 'image':
+    //   return <Image {...props} />;
+    // case 'mention':
+    //   return <Mention {...props} />;
+    // default:
+    //   return <DefaultElement {...attributes}>{children}</DefaultElement>;
     switch (node.type) {
+      case 'image':
+        console.log(node);
+        return (
+          <Box mt={paragraphMt}>
+            <BoxStyled>
+              <ImageStyled src={node.url} />
+            </BoxStyled>
+          </Box>
+        );
+      case 'numbered-list':
+        return (
+          <Ol>{children?.map((n, index) => serialize2(n, null, index))}</Ol>
+        );
+      case 'list-item':
+        return (
+          <li>{children?.map((n, index) => serialize2(n, null, index))}</li>
+        );
+      case 'bulleted-list':
+        return (
+          <Ul>{children?.map((n, index) => serialize2(n, null, index))}</Ul>
+        );
+      case 'block-quote':
+        return (
+          <Blockquote>
+            {children?.map((n, index) => serialize2(n, null, index))}
+          </Blockquote>
+        );
       case 'paragraph':
         return (
-          <ParagraphItem key={index}>
+          <ParagraphItem mt={paragraphMt} key={index}>
             {children?.map((n, index) => serialize2(n, null, index))}
           </ParagraphItem>
         );
@@ -202,7 +269,7 @@ export const ContentParsing = (props: IProps) => {
           </FollowPopup>
         );
       default:
-        return parseText2(node.text);
+        return parseText2(node);
     }
   };
 

@@ -73,4 +73,16 @@ export default {
     56: '0xE3D5FDFBb8DafA41E0222F508a0470d21c115404',
     97: '0x43338D14CbcBa94605d738a6ba5A2AAD253A5E35',
   },
+  tribe: {
+    56: '',
+    97: '0x517E9985da7aA2888e60DD81d0B210100Fec2d25',
+  },
+  tribeNFT: {
+    56: '',
+    97: '0x4609854c1c9489d2b289B5e7480869BcCAb3D1DD ',
+  },
+  tribeTicketsNFT: {
+    56: '',
+    97: '0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625',
+  },
 };

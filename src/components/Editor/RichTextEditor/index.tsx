@@ -9,7 +9,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { Box, BoxProps, Button, Card, Text, Divider } from 'uikit';
 import getThemeValue from 'uikit/util/getThemeValue';
 import useTheme from 'hooks/useTheme';
-import { Icon } from 'components';
+import { ContentParsing, Icon } from 'components';
 import {
   createEditor,
   Text as SlateText,
@@ -29,6 +29,8 @@ import { useMentions, insertMention } from './Mentions/hooks';
 import decorate from './tools/decorate';
 import { onHotkeyDown } from './tools/hotkey';
 import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
+import ParseContent from './ParseContent';
+import { PARAGRAPH_MT } from './RenderElement/styleds';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
@@ -50,6 +52,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     () => withMentions(withImages(withHistory(withReact(createEditor())))),
     [],
   );
+  console.log(editor, 'editor');
 
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
@@ -60,7 +63,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     useMentions(editor, ref);
 
   useEffect(() => {
-    console.log(value);
+    console.log(value, 'value');
+    sessionStorage.setItem('asdasads', JSON.stringify(value));
   }, [value]);
 
   const serialize = useMemo(() => {
@@ -130,6 +134,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           </Text>
         </Box>
       </Box>
+      {/* <Box mt='80px'>
+        <ContentParsing
+          paragraphMt={PARAGRAPH_MT}
+          content={JSON.stringify(value)}
+        />
+      </Box> */}
     </Card>
   );
 };

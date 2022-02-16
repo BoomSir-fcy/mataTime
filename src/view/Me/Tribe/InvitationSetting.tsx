@@ -8,7 +8,7 @@ import RadioGroup from 'uikit/components/Radio/RadioGroup';
 import {
   PATTERN_AMOUNT,
   PATTERN_NUMBER,
-  PATTERN_ONE_ONEHUNDRED,
+  PATTERN_ZERO_ONEHUNDRED,
 } from 'view/Tribe/Create/utils/pattern';
 import { useImmer } from 'use-immer';
 
@@ -19,7 +19,7 @@ const MeTribeInvitationSetting = () => {
     amount: '',
     timing: 2,
     validDate: '',
-    chargeRatio: '',
+    chargeRatio: '50',
   });
   const CoinOptions = [
     { value: 1, label: t('BNB') },
@@ -135,7 +135,12 @@ const MeTribeInvitationSetting = () => {
           </InputPanelStyle>
         </FormItem>
         <Flex flexDirection='column' width='100%' margin='40px 0'>
-          <Text>* {t('成员成功邀请将获得当前收费比例')}</Text>
+          <Text>
+            *{' '}
+            {t(
+              'Members who are successfully invited will receive the current fee rate',
+            )}
+          </Text>
           <Flex mt='20px'>
             <InputPanelStyle width='120px'>
               <Flex justifyContent='space-between' alignItems='center'>
@@ -144,13 +149,12 @@ const MeTribeInvitationSetting = () => {
                   noShadow
                   scale='sm'
                   required
-                  placeholder='50'
                   inputMode='decimal'
-                  pattern={PATTERN_ONE_ONEHUNDRED}
+                  pattern={PATTERN_ZERO_ONEHUNDRED}
                   value={state.chargeRatio}
                   onChange={e => {
                     const val = e.target.value;
-                    if (e.currentTarget.validity.valid) {
+                    if (val === '' || e.currentTarget.validity.valid) {
                       setState(p => {
                         p.chargeRatio = val;
                       });

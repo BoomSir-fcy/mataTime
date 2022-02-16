@@ -74,7 +74,8 @@ const toggleBlock = (editor, format) => {
 const toggleHistory = (editor, format) => {
   if (format === 'redo' || format === 'undo') {
     HistoryEditor[format](editor);
-    // ReactEditor.focus(editor);
+    console.log(editor.history.undos, 'editor.history?.undo');
+    // HistoryEditor.undo(editor);
 
     // TODO: 获取焦点
   }
@@ -86,10 +87,18 @@ const insertEmoji = (editor, data) => {
 };
 
 const ButtonStyled = props => (
-  <Button variant='text' padding='0' mr='16px' {...props} />
+  <Button
+    style={{ fontWeight: '400' }}
+    variant='text'
+    padding='0'
+    mr='16px'
+    {...props}
+  />
 );
 
-const FormatButton = ({ format, icon, editor, type }) => {
+const FormatButton = ({ format, icon, type }) => {
+  const editor = useSlateStatic();
+
   const [flag, setFlag] = useState(0); // 更新数据 重新渲染
 
   const active = () => {
@@ -164,7 +173,7 @@ const Toolbar = () => {
           <FormatButton
             type={item.type}
             icon={item.icon}
-            editor={editor}
+            // editor={editor}
             format={item.format}
           />
         ))}
@@ -200,7 +209,7 @@ const Toolbar = () => {
           <FormatButton
             type={item.type}
             icon={item.icon}
-            editor={editor}
+            // editor={editor}
             format={item.format}
           />
         ))}
