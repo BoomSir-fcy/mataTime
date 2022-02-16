@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Api } from 'apis';
 import { TribeState } from './type';
 import { getFeeTokenList } from './fetchTribe';
 
@@ -28,6 +29,17 @@ const initialState: TribeState = {
     memberNFTImage: '',
   },
   feeCoinList: [],
+  tribeList: [
+    {
+      id: null,
+      name: '',
+      logo: '',
+      type: null,
+      nick_name: '',
+      address: '',
+      nft_image: '',
+    },
+  ],
 };
 
 export const fetchTribeInfo = createAsyncThunk(
@@ -43,21 +55,33 @@ export const fetchFeeTokenListAsync = createAsyncThunk(
   },
 );
 
+export const fetchTribeListAsync = createAsyncThunk<any, any>(
+  'tribe/fetchTribeListAsync',
+  async ({ page, psge_size, tab }) => {
+    const list = await Api.TribeApi.tribeList({ page, psge_size, tab });
+    return list;
+  },
+);
+
 export const tribe = createSlice({
   name: 'tribe',
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(fetchFeeTokenListAsync.fulfilled, (state, action) => {
-      const tokenMap = {
-        '0x0000000000000000000000000000000000000001': 'BNB',
-        '0x865746A11eC78819c0067a031e9dd8D69F0B319d': 'USDT',
-      };
-      const coinList = action.payload.map(item => {
-        return { tokenAddress: item, symbol: tokenMap[item] };
+    builder
+      .addCase(fetchFeeTokenListAsync.fulfilled, (state, action) => {
+        const tokenMap = {
+          '0x0000000000000000000000000000000000000001': 'BNB',
+          '0x865746A11eC78819c0067a031e9dd8D69F0B319d': 'USDT',
+        };
+        const coinList = action.payload.map(item => {
+          return { tokenAddress: item, symbol: tokenMap[item] };
+        });
+        state.feeCoinList = [...coinList];
+      })
+      .addCase(fetchTribeListAsync.fulfilled, (state, action) => {
+        state.tribeList = action.payload;
       });
-      state.feeCoinList = [...coinList];
-    });
   },
 });
 
