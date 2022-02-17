@@ -165,6 +165,20 @@ const ShowCard: React.FC = () => {
 
   const { onLockCode } = useLockInviteCode();
 
+  /* 
+    1. 使用代付的方式帮助没有手续费的朋友支付gas
+    2. 不影响原有功能
+    3. 判断当前用户余额是否能够支付gas
+        查询用户余额
+        查询当前方法需要的gas
+          查询锁定需要的gas
+          查询注册需要的gas
+    4. 判断是否需要使用代付
+    5. 代付
+
+  
+  */
+
   const LeftTime = useMemo(() => {
     if (inviteInfo.codeLockDuration_ && codeInfo.lockedAt) {
       return inviteInfo.codeLockDuration_ + codeInfo.lockedAt;

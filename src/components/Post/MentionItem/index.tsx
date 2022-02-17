@@ -163,22 +163,24 @@ const MentionItem: React.FC<MentionItemProps> = ({
               >
                 <TranslateIcon />
               </Button>
-              <Text fontSize='12px' color='textPrimary' ml='1em'>
-                <Link to='/set/preference'>
-                  {t('Translate setting')}
-                  <Text
-                    color='textPrimary'
-                    fontSize='12px'
-                    style={{
-                      display: 'inline-block',
-                      transform: 'rotateY(45deg)',
-                    }}
-                    as='span'
-                  >
-                    &gt;
-                  </Text>
-                </Link>
-              </Text>
+              {translateData?.showTranslate && (
+                <Text fontSize='12px' color='textPrimary' ml='1em'>
+                  <Link to='/set/preference'>
+                    {t('Translate setting')}
+                    <Text
+                      color='textPrimary'
+                      fontSize='12px'
+                      style={{
+                        display: 'inline-block',
+                        transform: 'rotateY(45deg)',
+                      }}
+                      as='span'
+                    >
+                      &gt;
+                    </Text>
+                  </Link>
+                </Text>
+              )}
             </Flex>
             {translateData?.showTranslate && (
               <ContentParsing

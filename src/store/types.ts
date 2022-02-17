@@ -134,7 +134,15 @@ export interface MapModuleState {
       showTranslate: boolean; // 是否显示翻译
     }
   },
+  commentTranslateMap: {
+    [postId: string]: {
+      content: string;
+      status: FetchStatus;
+      showTranslate: boolean; // 是否显示翻译
+    }
+  },
   needTranslatePostIds: number[],
+  needTranslateCommentIds: number[],
   userStatusMap: {
     [userId: string]: MapModuleStatus
   },

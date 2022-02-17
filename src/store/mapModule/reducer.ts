@@ -11,6 +11,8 @@ import {
   addDeletePostId,
   addTranslateIds,
   removeTranslateIds,
+  addCommentTranslateIds,
+  removeCommentTranslateIds,
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
@@ -27,7 +29,9 @@ const initialState: MapModuleState = {
   postStatusMap: {},
   userStatusMap: {},
   postTranslateMap: {},
+  commentTranslateMap: {},
   needTranslatePostIds: [],
+  needTranslateCommentIds: [],
   unFollowUsersIds: [],
   blockUsersIds: [],
   deletePostIds: [],
@@ -82,11 +86,65 @@ export const fetchAllPostTranslateAsync = () => (dispatch, getState) => {
       noFetchIds.push(Number(key));
     }
   });
-  if (noFetchIds.length) {
+  // 最大价值20条数据
+  if (noFetchIds.length && noFetchIds.length < 20) {
     dispatch(fetchPostTranslateAsync(noFetchIds));
   }
 };
 
+export const fetchAllCommentTranslateAsync = () => (dispatch, getState) => {
+  const {
+    mapModule: { commentTranslateMap },
+  } = getState() as { mapModule: MapModuleState };
+  const noFetchIds: number[] = [];
+  Object.keys(commentTranslateMap).forEach(key => {
+    if (commentTranslateMap[key].status === FetchStatus.NOT_FETCHED) {
+      noFetchIds.push(Number(key));
+    }
+  });
+  // 最大价值20条数据
+  if (noFetchIds.length && noFetchIds.length < 20) {
+    dispatch(fetchPostTranslateAsync(noFetchIds));
+  }
+};
+
+export const fetchTranslateAsync = async (ids: number[], type = 'post') => {
+  let res = null;
+  try {
+    if (type === 'post') {
+      res = await Api.HomeApi.getPostTranslateById({
+        pids: ids,
+        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
+        source: '',
+      });
+    } else {
+      res = await Api.HomeApi.getCommentTranslateById({
+        pids: ids,
+        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
+        source: '',
+      });
+    }
+
+    if (Api.isSuccess(res)) {
+      return {
+        ids,
+        data: res.data,
+        status: FetchStatus.SUCCESS,
+      };
+    }
+    return {
+      ids,
+      data: {},
+      status: FetchStatus.FAILED,
+    };
+  } catch (error) {
+    return {
+      ids,
+      data: {},
+      status: FetchStatus.FAILED,
+    };
+  }
+};
 export const fetchPostTranslateAsync =
   (ids: number[]) => async (dispatch, getState) => {
     dispatch(
@@ -97,39 +155,24 @@ export const fetchPostTranslateAsync =
         showTranslate: true,
       }),
     );
-    try {
-      const res = await Api.HomeApi.getPostTranslateById({
-        pids: ids,
-        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
-        source: '',
-      });
-      if (Api.isSuccess(res)) {
-        dispatch(
-          setPostTranslate({
-            ids,
-            data: res.data,
-            status: FetchStatus.SUCCESS,
-          }),
-        );
-      } else {
-        dispatch(
-          setPostTranslate({
-            ids,
-            data: {},
-            status: FetchStatus.FAILED,
-          }),
-        );
-      }
-    } catch (error) {
-      console.error(error);
-      dispatch(
-        setPostTranslate({
-          ids,
-          data: {},
-          status: FetchStatus.FAILED,
-        }),
-      );
-    }
+    const res = await fetchTranslateAsync(ids);
+    console.log(res);
+    dispatch(setPostTranslate(res));
+  };
+
+export const fetchCommentTranslateAsync =
+  (ids: number[]) => async (dispatch, getState) => {
+    dispatch(
+      setCommentTranslate({
+        ids,
+        data: {},
+        status: FetchStatus.LOADING,
+        showTranslate: true,
+      }),
+    );
+    const res = await fetchTranslateAsync(ids, 'comment');
+    console.log(res);
+    dispatch(setCommentTranslate(res));
   };
 
 export const Post = createSlice({
@@ -175,6 +218,31 @@ export const Post = createSlice({
         ...state.postTranslateMap,
         [id]: {
           ...state.postTranslateMap[id],
+          showTranslate, // 是否显示翻译
+        },
+      };
+    },
+    setCommentTranslate: (state, { payload }) => {
+      const { ids, data, ...info } = payload;
+      const datas = {};
+      ids.forEach(id => {
+        datas[id] = {
+          ...state.commentTranslateMap[id],
+          content: data[id],
+          ...info,
+        };
+      });
+      state.commentTranslateMap = {
+        ...state.commentTranslateMap,
+        ...datas,
+      };
+    },
+    changeCommentTranslateState: (state, { payload }) => {
+      const { id, showTranslate } = payload;
+      state.commentTranslateMap = {
+        ...state.commentTranslateMap,
+        [id]: {
+          ...state.commentTranslateMap[id],
           showTranslate, // 是否显示翻译
         },
       };
@@ -233,6 +301,17 @@ export const Post = createSlice({
         state.needTranslatePostIds = state.needTranslatePostIds.filter(
           item => !payload.includes(item),
         );
+      })
+      .addCase(addCommentTranslateIds, (state, { payload }) => {
+        state.needTranslateCommentIds = [
+          ...state.needTranslateCommentIds,
+          ...payload,
+        ];
+      })
+      .addCase(removeCommentTranslateIds, (state, { payload }) => {
+        state.needTranslateCommentIds = state.needTranslateCommentIds.filter(
+          item => !payload.includes(item),
+        );
       });
   },
 });
@@ -242,6 +321,8 @@ export const {
   setUserInfo,
   setPostTranslate,
   changePostTranslateState,
+  setCommentTranslate,
+  changeCommentTranslateState,
 } = Post.actions;
 
 export default Post.reducer;
