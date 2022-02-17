@@ -1,11 +1,18 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Crumbs } from 'components';
 import RichTextEditor from 'components/Editor/RichTextEditor';
 import styled, { css } from 'styled-components';
 import { Box, Flex, Input, Text, Divider, Card } from 'uikit';
 import SubHeader from '../components/SubHeader';
 import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
-import { tags } from './mock';
+import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
+import { FetchStatus } from 'config/types';
 
 const TagBoxStyled = styled(Card)<{ isOpen?: boolean }>`
   background-color: ${({ theme }) => theme.colors.input};
@@ -61,15 +68,23 @@ const TagInput = styled.input`
 
 interface InputTagProps {
   onChange: (value: any[]) => void;
+  tribe_id: number;
 }
 
-const InputTag: React.FC<InputTagProps> = ({ onChange }) => {
-  const [tagsList, setTagsList] = useState(tags);
-  const [selectTags, setSelectTags] = useState([]);
+const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
+  const [tagsList, setTagsList] = useState<Api.Tribe.TopicInfo[]>([]);
+  const [selectTags, setSelectTags] = useState<Api.Tribe.TopicInfo[]>([]);
   const [focus, setFocus] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [toFocus, setToFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { data: topicData } = useFetchTribeTopicList(tribe_id);
+  useEffect(() => {
+    if (topicData.fetchStatus === FetchStatus.SUCCESS) {
+      setTagsList(topicData.list);
+    }
+  }, [topicData.fetchStatus, topicData.list]);
 
   const handleAddTag = useCallback(
     item => {
@@ -83,7 +98,7 @@ const InputTag: React.FC<InputTagProps> = ({ onChange }) => {
     item => {
       if (item) {
         // setTagsList(prep => prep.concat(item));
-        setSelectTags(prep => prep.filter(i => i.id !== item.id));
+        setSelectTags(prep => prep.filter(i => i.ID !== item.ID));
       }
     },
     [setSelectTags, setTagsList],
@@ -91,8 +106,8 @@ const InputTag: React.FC<InputTagProps> = ({ onChange }) => {
 
   const renderTagsList = useMemo(() => {
     return tagsList.filter(item => {
-      const flag1 = !selectTags.some(subItem => subItem.id === item.id);
-      const flag2 = item.name.indexOf(inputValue) !== -1;
+      const flag1 = !selectTags.some(subItem => subItem.ID === item.ID);
+      const flag2 = item.Topic.indexOf(inputValue) !== -1;
       return flag1 && flag2;
     });
   }, [tagsList, selectTags, inputValue]);
@@ -110,8 +125,8 @@ const InputTag: React.FC<InputTagProps> = ({ onChange }) => {
           pb='0'
         >
           {selectTags.map(item => (
-            <Tag mr='2px' key={item.id}>
-              <TagText>{item.name}</TagText>
+            <Tag mr='2px' key={item.ID}>
+              <TagText>{item.Topic}</TagText>
               <CancleIcon
                 onClick={() => {
                   handleRemoveTag(item);
@@ -165,9 +180,9 @@ const InputTag: React.FC<InputTagProps> = ({ onChange }) => {
                 console.log(2121221);
               }}
               cursor='pointer'
-              key={item.id}
+              key={item.ID}
             >
-              <TagText>{item.name}</TagText>
+              <TagText>{item.Topic}</TagText>
             </Tag>
           ))}
         </Flex>

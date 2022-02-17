@@ -34,11 +34,17 @@ declare namespace Api {
 
     interface TopicDelParams {
       tribe_id: number
-      topics: string[]
+      ids: number[]
     }
 
-    interface TopicListParams {
+    interface TopicParamsForId {
       tribe_id: number
+    }
+
+    interface PostDraftInfo {
+      title: string;
+      topics: number[];
+      content: string;
     }
   }
 }

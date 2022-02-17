@@ -45,22 +45,24 @@ export const TagText: React.FC<TextProps> = props => (
   <Text className='text' {...props} />
 );
 
-const TagList: React.FC<{ list?: TagItem[]; onDelete?: (id: number) => void }> =
-  React.memo(({ list, onDelete }) => {
-    return (
-      <TopicsContentFlex>
-        {list.map(item => (
-          <Tag key={item.id}>
-            <TagText>{item.name}</TagText>
-            <CancleIcon
-              onClick={() => {
-                onDelete(item.id);
-              }}
-            />
-          </Tag>
-        ))}
-      </TopicsContentFlex>
-    );
-  });
+const TagList: React.FC<{
+  list?: Api.Tribe.TopicInfo[];
+  onDelete?: (id: number) => void;
+}> = React.memo(({ list, onDelete }) => {
+  return (
+    <TopicsContentFlex>
+      {list.map(item => (
+        <Tag key={item.ID}>
+          <TagText>{item.Topic}</TagText>
+          <CancleIcon
+            onClick={() => {
+              onDelete(item.ID);
+            }}
+          />
+        </Tag>
+      ))}
+    </TopicsContentFlex>
+  );
+});
 
 export default TagList;

@@ -36,6 +36,7 @@ interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
   background?: string;
   value: Descendant[];
+  draft?: Descendant[]; // 草稿箱
   setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
 }
 
@@ -47,6 +48,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   background = 'input',
   value,
   setValue,
+  draft,
   ...props
 }) => {
   const { theme } = useTheme();
@@ -56,7 +58,32 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     () => withMentions(withImages(withHistory(withReact(createEditor())))),
     [],
   );
-  console.log(editor, 'editor');
+
+  const [refresh, setRefresh] = useState(0);
+
+  useEffect(() => {
+    if (draft) {
+      // TODO: 草稿箱保存
+      // console.log(21122121);
+      // value.map(n => {
+      // const path = ReactEditor.findPath(editor, n);
+      // Transforms.removeNodes(editor, { at: path });
+      // });
+      // const point = { path: [0, 0], offset: 0 };
+      // Transforms.removeNodes(editor, { at: point });
+      // Transforms.insertNodes(editor, draft);
+      // setValue(draft);
+      // setRefresh(prev => prev + 1);
+      // const children = [...editor.children];
+      // children.forEach(node =>
+      //   editor.apply({ type: 'remove_node', path: [0], node }),
+      // );
+      // const point = Editor.end(editor, []);
+      // if (point) {
+      //   Transforms.select(editor, point);
+      // }
+    }
+  }, [draft, editor]);
 
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
@@ -86,6 +113,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           ReactEditor.focus(editor);
         }}
         position='relative'
+        key={refresh}
         {...props}
       >
         <Slate

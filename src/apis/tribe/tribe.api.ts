@@ -43,9 +43,17 @@ export class TribeApi extends Http {
   }
 
   // 部落获取话题
-  async getTribeTopicList(params: Api.Response<{
-    data: Api.Tribe.TopicInfo[]
-  }>) {
+  async getTribeTopicList(params: Api.Tribe.TopicParamsForId): Promise<Api.Response<Api.Tribe.TopicInfo[]>> {
     return this.get('/v1/tribe/topic/list', params);
   }
+
+  // 部落帖子保存草稿
+  async tribePostCreateDraft(params: Api.Tribe.PostCreatepParams) {
+    return this.post('/v1/tribe/post/create_draft', params);
+  }
+
+  async getTribePostDraft(params: Api.Tribe.TopicParamsForId):Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
+    return this.post('v1/tribe/post/get_draft', params);
+  }
+
 }
