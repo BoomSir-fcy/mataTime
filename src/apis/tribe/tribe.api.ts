@@ -17,7 +17,7 @@ export class TribeApi extends Http {
     return res;
   }
   // 部落帖子列表
-  async tribePostList(params: Api.Tribe.tribeInfoParams) {
+  async tribePostList(params: Api.Tribe.tribePostListParams) {
     const res = await this.get('/v1/tribe/post/list', params);
     return res;
   }
@@ -43,9 +43,11 @@ export class TribeApi extends Http {
   }
 
   // 部落获取话题
-  async getTribeTopicList(params: Api.Response<{
-    data: Api.Tribe.TopicInfo[]
-  }>) {
+  async getTribeTopicList(
+    params: Api.Response<{
+      data: Api.Tribe.TopicInfo[];
+    }>,
+  ) {
     return this.get('/v1/tribe/topic/list', params);
   }
 }
