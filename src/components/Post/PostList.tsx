@@ -154,7 +154,7 @@ const PostList: React.FC<PostListPorps> = ({
                     />
                   )
                 }
-                {item.forward_type === 2 && <ForwardHead data={item} />}
+                {/* {item.forward_type === 2 && <ForwardHead data={item} />} */}
                 <MentionItem
                   isShileUser={isShileUser}
                   setIsShileUser={(type, data) => {
