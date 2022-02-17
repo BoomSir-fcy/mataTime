@@ -80,18 +80,17 @@ declare namespace Api {
     }
 
     interface TopicDelParams {
+      tribe_id: number
+      ids: number[]
+    }
+
+    interface TopicParamsForId {
       tribe_id: number;
-      topics: string[];
     }
 
     interface TopicListParams {
       tribe_id: number;
     }
-
-    interface TopicParamsForId {
-      tribe_id: number
-    }
-
 
     interface PostDraftInfo {
       title: string;
