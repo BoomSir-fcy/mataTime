@@ -7,6 +7,7 @@ import {
 } from './fetchTribe';
 import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
+import uniqBy from 'lodash/uniqBy';
 
 const initialState: TribeState = {
   tribeId: 1415926538,
@@ -60,6 +61,17 @@ const initialState: TribeState = {
     selected_count: '',
     post_count: '',
     member_count: '',
+  },
+  postList: {
+    list: [],
+    lastList: [],
+    page: 1,
+    selected: 0,
+    top: 0,
+    addListNum: -1,
+    loading: false,
+    isEnd: false,
+    userTags: [],
   },
 };
 export const fetchSetTribeBaseInfo = createAsyncThunk(
@@ -131,6 +143,25 @@ export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
   },
 );
 
+export const fetchTribePostAsync = createAsyncThunk(
+  'tribe/fetchTribePostAsync',
+  async (params: Api.Tribe.tribePostListParams, { dispatch }) => {
+    // dispatch()
+    dispatch(setLoading(true));
+    const response = await Api.TribeApi.tribePostList({
+      ...params,
+    });
+    if (Api.isSuccess(response)) {
+      return {
+        list: response.data.List,
+        page: params.page,
+        per_page: params.per_page,
+        selected: params.selected,
+      };
+    }
+    return {};
+  },
+);
 export const tribe = createSlice({
   name: 'tribe',
   initialState,
@@ -140,6 +171,12 @@ export const tribe = createSlice({
     },
     setTribeNftInfo: (state, { payload }) => {
       state.tribesNftInfo = payload;
+    },
+    setLoading: (state, { payload }) => {
+      state.postList.loading = payload;
+    },
+    setIsEnd: (state, { payload }) => {
+      state.postList.isEnd = payload;
     },
   },
   extraReducers: builder => {
@@ -164,11 +201,33 @@ export const tribe = createSlice({
       })
       .addCase(fetchTribeInfoAsync.fulfilled, (state, action) => {
         state.tribeInfo = action.payload;
+      })
+      .addCase(fetchTribePostAsync.fulfilled, (state, action) => {
+        const { list, page, per_page, selected } = action.payload;
+        let articleList = list ?? [];
+        const { length } = state.postList.list;
+        if (page === 1) {
+          state.postList.list = articleList;
+          state.postList.addListNum = -1;
+        } else {
+          const list = state.postList.list.concat(articleList);
+          state.postList.list = uniqBy(list, 'id');
+          state.postList.addListNum = state.postList.list.length - length;
+        }
+        state.postList.lastList =
+          articleList.length >= per_page || page > 1 ? articleList : [];
+        state.postList.page = articleList.length >= per_page ? page + 1 : page;
+        state.postList.selected = Number(selected);
+        state.postList.loading = false;
+      })
+      .addCase(fetchTribePostAsync.rejected, (state, action) => {
+        state.postList.loading = false;
       });
   },
 });
 
 // Actions
-export const { setActiveNftInfo, setTribeNftInfo } = tribe.actions;
+export const { setActiveNftInfo, setTribeNftInfo, setLoading, setIsEnd } =
+  tribe.actions;
 
 export default tribe.reducer;

@@ -17,7 +17,7 @@ export class TribeApi extends Http {
     return res;
   }
   // 部落帖子列表
-  async tribePostList(params: Api.Tribe.tribeInfoParams) {
+  async tribePostList(params: Api.Tribe.tribePostListParams) {
     const res = await this.get('/v1/tribe/post/list', params);
     return res;
   }

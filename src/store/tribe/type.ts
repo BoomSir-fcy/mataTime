@@ -69,6 +69,18 @@ export interface TribeInfo {
   post_count: string;
   member_count: string;
 }
+export interface PostList {
+  list: any[];
+  lastList: any[];
+  page: number;
+  selected: number;
+  top: number;
+  addListNum: number;
+  loading: boolean;
+  isEnd: boolean;
+  userTags: any[];
+}
+
 export interface TribeState {
   tribeId?: number;
   ownerNFTId?: number;
@@ -81,4 +93,5 @@ export interface TribeState {
   activeNftInfo?: NftInfo;
   tribeList: TribeList[];
   tribeInfo: TribeInfo;
+  postList: PostList;
 }
