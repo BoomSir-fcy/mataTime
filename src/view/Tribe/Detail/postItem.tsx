@@ -8,6 +8,7 @@ import {
   MoreOperatorEnum,
   MorePostPopup,
   PopupWrap,
+  ContentParsing,
 } from 'components';
 import SendUser from '../components/post/sendUser';
 import HotBtn from '../components/post/HotBtn';
@@ -172,12 +173,7 @@ const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
           </a>
         </Flex>
       </Top>
-      <ContentText color='textTips'>
-        这是一段部落的介绍The PhantaBear project was jointly launched by Jay
-        Chou's PHANTACi and Ezek. PhantaBear is a collection of 10,000
-        algorithmically generated digital collectibles that double as membership
-        cards for the Ezek Club. Each
-      </ContentText>
+      <ContentParsing mode='preview' content={info.content} />
       <Flex justifyContent='space-between' alignItems='center'>
         <SendUser
           time={new Date(info.add_time).getTime()}

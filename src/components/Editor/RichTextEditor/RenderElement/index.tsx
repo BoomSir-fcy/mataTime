@@ -39,6 +39,16 @@ export const Element = props => {
   }
 };
 
+export const ContentTextStyled = styled(Text)`
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  min-height: 1.1875em;
+  font-family: Arial;
+  line-height: 1.1875;
+  user-select: text;
+`;
+
 export const Leaf = ({ attributes, children, leaf }) => {
   /* eslint-disable */
   if (leaf.bold) {
@@ -65,5 +75,5 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <Highlight>{children}</Highlight>;
   }
 
-  return <span {...attributes}>{children}</span>;
+  return <ContentTextStyled {...attributes}>{children}</ContentTextStyled>;
 };
