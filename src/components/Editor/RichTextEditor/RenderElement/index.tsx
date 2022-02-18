@@ -34,6 +34,8 @@ export const Element = props => {
       return <Image {...props} editor={editor} />;
     case 'mention':
       return <Mention {...props} />;
+    case 'code':
+      return <Code {...props} />;
     default:
       return <DefaultElement {...attributes}>{children}</DefaultElement>;
   }
@@ -47,6 +49,7 @@ export const ContentTextStyled = styled(Text)`
   font-family: Arial;
   line-height: 1.1875;
   user-select: text;
+  display: inline;
 `;
 
 export const Leaf = ({ attributes, children, leaf }) => {
@@ -55,9 +58,13 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <strong>{children}</strong>;
   }
 
-  if (leaf.code) {
-    children = <Code>{children}</Code>;
-  }
+  // if (leaf.code) {
+  //   children = (
+  //     <Code>
+  //       <code>{children}</code>
+  //     </Code>
+  //   );
+  // }
 
   if (leaf.italic) {
     children = <em>{children}</em>;
