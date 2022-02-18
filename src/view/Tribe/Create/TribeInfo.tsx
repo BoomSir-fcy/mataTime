@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle } from 'react';
 import { UploadSingle } from 'components';
 import { useTranslation } from 'contexts';
 import styled from 'styled-components';
@@ -13,6 +13,7 @@ import {
 } from './style';
 import { ARTICLE_POST_MAX_LEN } from 'config';
 import TextArea from 'components/TextArea';
+import { actionTypes } from './type';
 
 type InfoParams = {
   name: string;
@@ -22,12 +23,25 @@ type InfoParams = {
 
 const TribeInfoForward = (props, ref) => {
   const { t } = useTranslation();
+  const { info, actionType } = props;
 
   const [state, setState] = useImmer<InfoParams>({
     name: '',
     logo: '',
     introduction: '',
   });
+
+  useEffect(() => {
+    console.log('----->', props.info);
+
+    if (info?.name) {
+      setState(p => {
+        p.name = info.name;
+        p.logo = info.logo;
+        p.introduction = info.introduction;
+      });
+    }
+  }, [props.info]);
 
   useImperativeHandle(ref, () => ({
     getInfoFrom() {
@@ -36,7 +50,6 @@ const TribeInfoForward = (props, ref) => {
   }));
 
   const uploadSuccess = useCallback(url => {
-    console.log('上传成功=======》', url);
     setState(p => {
       p.logo = url;
     });
@@ -48,7 +61,7 @@ const TribeInfoForward = (props, ref) => {
         <Flex flexDirection='column'>
           <InputPanelStyle>
             <Input
-              disabled={props.disabled}
+              disabled={actionType === actionTypes.EDIT}
               noShadow
               required
               scale='sm'
@@ -71,7 +84,7 @@ const TribeInfoForward = (props, ref) => {
       <FormItem>
         <Label required>{t('Tribal Logo')}</Label>
         <UploadSingle
-          disabled={props.disabled}
+          disabled={actionType === actionTypes.EDIT}
           url={state.logo}
           tips={t(
             'The recommended size is less than 5MB, and the image size is 100x100',

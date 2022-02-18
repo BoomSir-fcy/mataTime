@@ -27,6 +27,17 @@ export class TribeApi extends Http {
     return res;
   }
 
+  // 我的部落列表
+  async MyTribeList(params?: Api.Tribe.MyTribeListParams) {
+    const res = await this.get('/v1/tribe/create/info', params);
+    return res;
+  }
+  // 我加入的部落列表
+  async MyJoinedTribeList(params?: Api.Tribe.MyJoinedTribeListParams) {
+    const res = await this.get('/v1/tribe/user/nft', params);
+    return res;
+  }
+
   // 部落创建帖子
   async tribePostCreate(params: Api.Tribe.PostCreatepParams) {
     return this.post('/v1/tribe/post/create', params);

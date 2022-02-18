@@ -21,9 +21,7 @@ const MeTribe = () => {
 
   return (
     <Box>
-      {!isMobile && (
-        <Crumbs title={pathname === path ? '我的部落' : '部落名字'} />
-      )}
+      {!isMobile && (pathname !== path ? <Crumbs title={'部落名字'} /> : null)}
       <Switch>
         <Route path={path} exact component={MyTribe} />
         <Route path={`${path}/info`} component={Info} />
