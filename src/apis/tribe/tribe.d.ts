@@ -61,9 +61,12 @@ declare namespace Api {
 
     interface PostCreatepParams {
       content: string;
-      topic?: number[];
       tribe_id: number;
       title: string;
+      topic?: number[];
+      remind_user?: string;
+      id?: string
+      verify?: string
     }
 
     interface TopicInfo {

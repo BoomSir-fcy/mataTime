@@ -45,13 +45,16 @@ const getColor = (color: string, theme: DefaultTheme) => {
   return getThemeValue(`colors.${color}`, color)(theme);
 };
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({
-  background = 'input',
-  value,
-  setValue,
-  draft,
-  ...props
-}) => {
+const RichTextEditor = (
+  {
+    background = 'input',
+    value,
+    setValue,
+    draft,
+    ...props
+  }: RichTextEditorProps,
+  ref,
+) => {
   const { theme } = useTheme();
 
   // const [editor] = useState(() => withReact(createEditor()));
@@ -62,44 +65,39 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   const [refresh, setRefresh] = useState(0);
 
-  useEffect(() => {
-    if (draft) {
-      // 草稿箱保存回显
-      reSetEditor(editor);
-      Transforms.insertNodes(editor, draft);
-    }
-  }, [draft, editor]);
+  // useEffect(() => {
+  //   if (draft) {
+  //     // 草稿箱保存回显
+  //     reSetEditor();
+  //     Transforms.insertNodes(editor, draft);
+  //   }
+  // }, [draft, editor]);
 
-  const reSetEditor = useCallback(editor => {
-    const children = [...editor.children];
-    children.forEach(node =>
-      editor.apply({ type: 'remove_node', path: [0], node }),
-    );
-    ReactEditor.focus(editor);
-  }, []);
+  const reSetEditor = useCallback(
+    (newNode?: Descendant[]) => {
+      const children = [...editor.children];
+      children.forEach(node =>
+        editor.apply({ type: 'remove_node', path: [0], node }),
+      );
+      ReactEditor.focus(editor);
+      Transforms.insertNodes(editor, newNode || defaultValue);
+    },
+    [editor],
+  );
 
-  const resetNodes = editor => {
-    const children = [...editor.children];
-    children.forEach(node =>
-      editor.apply({ type: 'remove_node', path: [0], node }),
-    );
-    // const point = Editor.end(editor, []);
-    Transforms.insertNodes(editor, defaultValue);
-    // const point = { path: [0, 0], offset: 0 };
-    // if (point) {
-    //   Transforms.select(editor, point);
-    // }
-    ReactEditor.focus(editor);
-    // setRefresh(prev => prev + 1);
-  };
+  React.useImperativeHandle(ref, () => ({
+    reSetEditor(node?: Descendant[]) {
+      return reSetEditor(node);
+    },
+  }));
 
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
 
   // const [value, setValue] = useState<Descendant[]>(initialValue);
-  const ref = useRef<HTMLDivElement | null>();
+  const mentionsRef = useRef<HTMLDivElement | null>();
   const { onKeyDown, onChangeHandle, target, userList, onItemClick, index } =
-    useMentions(editor, ref);
+    useMentions(editor, mentionsRef);
 
   useEffect(() => {
     // console.log(value, 'value');
@@ -184,4 +182,4 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 };
 
-export default React.memo(RichTextEditor);
+export default React.forwardRef(RichTextEditor);
