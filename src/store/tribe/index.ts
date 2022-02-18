@@ -58,6 +58,7 @@ const initialState: TribeState = {
       logo: '',
       type: null,
     },
+    tribe_id: null,
     selected_count: '',
     post_count: '',
     member_count: '',
@@ -139,7 +140,10 @@ export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeInfoAsync',
   async ({ tribe_id }) => {
     const list = await Api.TribeApi.tribeInfo({ tribe_id });
-    return list.data;
+    return {
+      ...list.data,
+      tribe_id
+    };
   },
 );
 

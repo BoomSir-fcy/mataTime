@@ -6,6 +6,7 @@ import TradeLogo from '../components/TradeCard/TradeLogo';
 import BtnIcon from '../components/BtnIcon';
 import { useTranslation } from 'contexts/Localization';
 import { TribeInfo } from 'store/tribe/type';
+import { getEncodeValue } from 'utils/urlQueryPath';
 
 const InfoFlex = styled(Flex)`
   padding: 26px 14px 26px 26px;
@@ -66,7 +67,11 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
               Oline
             </Text>
           </Flex>
-          <Link to='/tribe/post'>
+          <Link
+            to={`/tribe/post?i=${TribeInfo.tribe_id}&n=${getEncodeValue(
+              TribeInfo.tribe.name,
+            )}`}
+          >
             <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
           </Link>
           {/* <Button>加入部落</Button> */}

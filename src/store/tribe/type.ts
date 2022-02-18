@@ -65,6 +65,7 @@ export interface TribeInfo {
     logo: string;
     type: number;
   };
+  tribe_id: number;
   selected_count: string;
   post_count: string;
   member_count: string;

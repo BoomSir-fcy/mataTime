@@ -23,6 +23,7 @@ import Dots from 'components/Loader/Dots';
 import DraftTips from './DraftTips';
 import { FetchStatus } from 'config/types';
 import { useSendPostOrDraft } from './hooks';
+import { getDecodeValue } from 'utils/urlQueryPath';
 
 const BoxStyled = styled(Box)`
   padding: ${({ theme }) => theme.mediaQueriesSize.padding};
@@ -52,8 +53,9 @@ const Post = () => {
   const { t } = useTranslation();
   const [selectTags, setSelectTags] = useState<Api.Tribe.TopicInfo[]>([]);
 
-  const { i } = useParsedQueryString();
+  const { i, n } = useParsedQueryString();
   const tribe_id = Number(i);
+  const tribeName = getDecodeValue(n);
 
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [title, setTitle] = useState('');
@@ -86,7 +88,7 @@ const Post = () => {
               noShadow
               pl='0'
               readOnly
-              value='部落名TODO'
+              value={tribeName}
             />
           </Box>
         </Flex>

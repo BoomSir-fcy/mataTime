@@ -64,33 +64,19 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   useEffect(() => {
     if (draft) {
-      // TODO: 草稿箱保存
-      // console.log(21122121);
-      // value.map(n => {
-      // const path = ReactEditor.findPath(editor, n);
-      // Transforms.removeNodes(editor, { at: path });
-      // });
-      // const point = { path: [0, 0], offset: 0 };
-      // Transforms.removeNodes(editor, { at: point });
-      // Transforms.insertNodes(editor, draft);
-      // setValue(draft);
-      // setRefresh(prev => prev + 1);
-      // const children = [...editor.children];
-      // children.forEach(node =>
-      //   editor.apply({ type: 'remove_node', path: [0], node }),
-      // );
-      // const point = Editor.end(editor, []);
-      // if (point) {
-      //   Transforms.select(editor, point);
-      // }
-      const children = [...editor.children];
-      children.forEach(node =>
-        editor.apply({ type: 'remove_node', path: [0], node }),
-      );
-      ReactEditor.focus(editor);
+      // 草稿箱保存回显
+      reSetEditor(editor);
       Transforms.insertNodes(editor, draft);
     }
   }, [draft, editor]);
+
+  const reSetEditor = useCallback(editor => {
+    const children = [...editor.children];
+    children.forEach(node =>
+      editor.apply({ type: 'remove_node', path: [0], node }),
+    );
+    ReactEditor.focus(editor);
+  }, []);
 
   const resetNodes = editor => {
     const children = [...editor.children];
@@ -194,7 +180,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           content={JSON.stringify(value)}
         />
       </Box> */}
-      <Button onClick={() => resetNodes(editor)}>reset</Button>
     </Card>
   );
 };
