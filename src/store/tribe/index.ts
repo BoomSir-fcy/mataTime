@@ -69,6 +69,8 @@ const initialState: TribeState = {
     page: 1,
     selected: 0,
     top: 0,
+    newest_sort: 0,
+    tophot_sort: 0,
     addListNum: -1,
     loading: false,
     isEnd: false,
@@ -130,8 +132,8 @@ export const fetchTicketNftListAsync = createAsyncThunk<
 });
 export const fetchTribeListAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeListAsync',
-  async ({ page = 1, psge_size = 10, tab = 1 }) => {
-    const list = await Api.TribeApi.tribeList({ page, psge_size, tab });
+  async ({ page = 1, page_size = 10, tab = 1 }) => {
+    const list = await Api.TribeApi.tribeList({ page, page_size, tab });
     return list.data;
   },
 );
@@ -142,7 +144,7 @@ export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
     const list = await Api.TribeApi.tribeInfo({ tribe_id });
     return {
       ...list.data,
-      tribe_id
+      tribe_id,
     };
   },
 );

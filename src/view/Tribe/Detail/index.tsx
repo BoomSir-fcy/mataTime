@@ -45,15 +45,16 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   useEffect(() => {
     if (TribeId) {
       dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
-      dispatch(
-        fetchTribePostAsync({
-          selected: TribePost.selected,
-          page: page,
-          per_page: page_size,
-          top: TribePost.top,
-          tribe_id: TribeId,
-        }),
-      );
+      // dispatch(
+      //   fetchTribePostAsync({
+      //     selected: TribePost.selected,
+      //     page: page,
+      //     per_page: page_size,
+      //     top: TribePost.top,
+      //     tribe_id: TribeId,
+      //     newest_sort: 1,
+      //   }),
+      // );
     }
     return () => {};
   }, [TribeId]);
@@ -62,7 +63,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     <Box>
       <Crumbs back />
       <DetailHeader TribeInfo={TribeInfo} />
-      <DetailTitle />
+      <DetailTitle TribeId={TribeId} page_size={page_size} />
       <List
         loading={postLoading}
         renderList={type => {

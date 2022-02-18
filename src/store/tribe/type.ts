@@ -76,6 +76,8 @@ export interface PostList {
   page: number;
   selected: number;
   top: number;
+  newest_sort: number;
+  tophot_sort: number;
   addListNum: number;
   loading: boolean;
   isEnd: boolean;

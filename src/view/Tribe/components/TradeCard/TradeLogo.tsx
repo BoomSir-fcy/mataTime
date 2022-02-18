@@ -1,12 +1,31 @@
 import React from 'react';
-import { Card, Box, Image, Text } from 'uikit';
+import { Card, Box, Image, Text, ProTribeIcon } from 'uikit';
 import styled from 'styled-components';
+import { Icon } from 'components';
 
 const BoxStyled = styled(Box)<{ scale: Scales }>`
   width: 20vw;
   height: 20vw;
   min-width: ${({ scale }) => `${style[scale].minWidth}px`};
   min-height: ${({ scale }) => `${style[scale].minHeight}px`};
+  position: relative;
+`;
+
+const ProBox = styled(Box)`
+  background: ${({ theme }) => theme.colors.background};
+  width: 35%;
+  min-width: 90px;
+  text-align: center;
+  position: absolute;
+  left: -23px;
+  top: 10px;
+  transform: rotate(-45deg);
+  z-index: 1;
+`;
+
+const Crown = styled(ProTribeIcon)`
+  width: 22px;
+  height: 22px;
 `;
 
 export const scales = {
@@ -49,8 +68,9 @@ interface TradeLogoProps {
   logo?: string;
   scales?: Scales;
   round?: boolean;
+  pro?: boolean;
 }
-const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo }) => {
+const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo, pro }) => {
   return (
     <Card isRadius={!round} style={round ? { borderRadius: '50%' } : {}}>
       <BoxStyled
@@ -63,6 +83,11 @@ const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo }) => {
           height={style[scales].height}
           width={style[scales].width}
         />
+        {pro && (
+          <ProBox>
+            <Crown />
+          </ProBox>
+        )}
       </BoxStyled>
     </Card>
   );

@@ -35,7 +35,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
 
   return (
     <InfoFlex>
-      <TradeLogo logo={TribeInfo.tribe.logo} />
+      <TradeLogo logo={TribeInfo.tribe.logo} pro={TribeInfo.tribe.type === 2} />
       <RightFlex flex='1' flexDirection='column' justifyContent='space-between'>
         <Box>
           <Heading scale='lg'>{TribeInfo.tribe.name}</Heading>

@@ -39,7 +39,7 @@ declare namespace Api {
     }
     interface tribeListParams {
       page?: number;
-      psge_size?: number;
+      page_size?: number;
       tab?: number;
     }
     interface tribeInfoParams {
@@ -80,8 +80,8 @@ declare namespace Api {
     }
 
     interface TopicDelParams {
-      tribe_id: number
-      ids: number[]
+      tribe_id: number;
+      ids: number[];
     }
 
     interface TopicParamsForId {

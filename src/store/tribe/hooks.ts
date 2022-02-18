@@ -25,13 +25,13 @@ export const useFeeTokenList = () => {
   }, [account]);
 };
 
-export const useTribeList = (page: number, psge_size: number, tab: number) => {
+export const useTribeList = (page: number, page_size: number, tab: number) => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
 
   useEffect(() => {
     if (account) {
-      dispatch(fetchTribeListAsync({ page, psge_size, tab }));
+      dispatch(fetchTribeListAsync({ page, page_size, tab }));
     }
   }, [account]);
 };
