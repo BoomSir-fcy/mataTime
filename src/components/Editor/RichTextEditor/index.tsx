@@ -24,6 +24,7 @@ import { withImages, withMentions } from '../withEditor';
 import { Element, Leaf } from './RenderElement';
 import Toolbar from './Toolbar';
 import { initialValue } from './testdata';
+import defaultValue from './defaultValue';
 import MentionPortal from './Mentions/MentionPortal';
 import { useMentions, insertMention } from './Mentions/hooks';
 import decorate from './tools/decorate';
@@ -82,8 +83,29 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       // if (point) {
       //   Transforms.select(editor, point);
       // }
+      const children = [...editor.children];
+      children.forEach(node =>
+        editor.apply({ type: 'remove_node', path: [0], node }),
+      );
+      ReactEditor.focus(editor);
+      Transforms.insertNodes(editor, draft);
     }
   }, [draft, editor]);
+
+  const resetNodes = editor => {
+    const children = [...editor.children];
+    children.forEach(node =>
+      editor.apply({ type: 'remove_node', path: [0], node }),
+    );
+    // const point = Editor.end(editor, []);
+    Transforms.insertNodes(editor, defaultValue);
+    // const point = { path: [0, 0], offset: 0 };
+    // if (point) {
+    //   Transforms.select(editor, point);
+    // }
+    ReactEditor.focus(editor);
+    // setRefresh(prev => prev + 1);
+  };
 
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
@@ -172,6 +194,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           content={JSON.stringify(value)}
         />
       </Box> */}
+      <Button onClick={() => resetNodes(editor)}>reset</Button>
     </Card>
   );
 };
