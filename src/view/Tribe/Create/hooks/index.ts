@@ -56,10 +56,46 @@ export const useTribe = () => {
     }
   }, []);
 
+  const setTribeBaseInfo = useCallback(
+    async (tribeId: number, tribeInfo: TribeBaseInfo) => {
+      try {
+        const tx = await tribeContract.setTribeExtraInfo(
+          tribeId,
+          tribeInfo.introduction,
+          {},
+        );
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
+
+  const setTribeFeeInfo = useCallback(
+    async (tribeId: number, tribeInfo: TribeBaseInfo) => {
+      try {
+        const tx = await tribeContract.updateTribeFeeSetting(
+          tribeId,
+          tribeInfo.feeToken,
+          tribeInfo.feeAmount,
+          tribeInfo.validDate,
+          {},
+        );
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
+
   const CreateTribe = useCallback(
     async (tribeInfo: TribeBaseInfo) => {
       try {
-        console.log('部落信息----》', tribeInfo);
+        console.log('部落信息', tribeInfo);
 
         const tx = await tribeContract.createTribe(
           tribeInfo.name,
@@ -91,5 +127,7 @@ export const useTribe = () => {
     createStatus: status,
     onCheckUniqueName: CheckUniqueName,
     onCreateTribe: CreateTribe,
+    onSetTribeBaseInfo: setTribeBaseInfo,
+    onSetTribeFeeInfo: setTribeFeeInfo,
   };
 };

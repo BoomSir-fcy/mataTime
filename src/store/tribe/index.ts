@@ -3,19 +3,20 @@ import { NftInfo, TribeBaseInfo, TribeState } from './type';
 import {
   getFeeTokenList,
   getTicketNftTokenList,
+  getTribeBaseInfo,
   getTribeNftInfo,
 } from './fetchTribe';
 import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
+import { getIsApproveStakeNft } from './fetchStakeNFT';
 
 const initialState: TribeState = {
-  tribeId: 1415926538,
-  ownerNFTId: null,
-  memberNFTId: null,
+  tribeId: 1415926539,
+  isApproveStakeNft: false,
   tribeBaseInfo: {
     name: '',
     logo: '',
-    intruction: '',
+    introduction: '',
     feeToken: '',
     feeAmount: '',
     validDate: null,
@@ -62,12 +63,23 @@ const initialState: TribeState = {
     member_count: '',
   },
 };
-export const fetchSetTribeBaseInfo = createAsyncThunk(
-  'tribe/fetchSetTribeBaseInfo',
-  async (tribeBaseInfo: TribeBaseInfo, { dispatch }) => {
-    // todo: 修改部落基本信息
+
+export const fetchIsApproveStakeNft = createAsyncThunk<any, any>(
+  'tribe/fetchIsApproveStakeNft',
+  async ({ account }, { dispatch }) => {
+    const isApprove = await getIsApproveStakeNft(account);
+    return isApprove;
   },
 );
+
+export const fetchGetTribeBaseInfo = createAsyncThunk<any, any>(
+  'tribe/fetchGetTribeBaseInfo',
+  async ({ tribeId }, { dispatch }) => {
+    const info = await getTribeBaseInfo(tribeId);
+    dispatch(setTribeBaseInfo(info));
+  },
+);
+
 export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
   'tribe/fetchTribeNftInfo',
   async ({ tribeId }, { dispatch }) => {
@@ -75,6 +87,7 @@ export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
     dispatch(setTribeNftInfo(info));
   },
 );
+
 export const fetchActiveNftInfo = createAsyncThunk<any, { info: NftInfo }>(
   'tribe/fetchActiveNftInfo',
   async ({ info }, { dispatch }) => {
@@ -115,6 +128,7 @@ export const fetchTicketNftListAsync = createAsyncThunk<
     });
   return list;
 });
+
 export const fetchTribeListAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeListAsync',
   async ({ page = 1, psge_size = 10, tab = 1 }) => {
@@ -141,9 +155,15 @@ export const tribe = createSlice({
     setTribeNftInfo: (state, { payload }) => {
       state.tribesNftInfo = payload;
     },
+    setTribeBaseInfo: (state, { payload }) => {
+      state.tribeBaseInfo = payload;
+    },
   },
   extraReducers: builder => {
     builder
+      .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
+        state.isApproveStakeNft = action.payload;
+      })
       .addCase(fetchFeeTokenListAsync.fulfilled, (state, action) => {
         // todo: 根据token获取代币symbol值
         const tokenMap = {
@@ -169,6 +189,7 @@ export const tribe = createSlice({
 });
 
 // Actions
-export const { setActiveNftInfo, setTribeNftInfo } = tribe.actions;
+export const { setActiveNftInfo, setTribeNftInfo, setTribeBaseInfo } =
+  tribe.actions;
 
 export default tribe.reducer;

@@ -1,9 +1,10 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { BoxProps, Flex, Image, Text } from 'uikit';
 import { Api } from 'apis';
 import { useTranslation } from 'contexts/Localization';
+import { BASE_IMAGE_URL } from 'config';
 interface UploadProps extends BoxProps {
   url?: string;
   tips?: string | ReactNode;
@@ -44,7 +45,7 @@ export const UploadSingle: React.FC<UploadProps> = ({
 }) => {
   const imageInput = React.useRef<HTMLInputElement>();
   const { t } = useTranslation();
-  const [imgUrl, setImgUrl] = useState(url);
+  const [imgUrl, setImgUrl] = useState('');
   // 上传图片
   const uploadFile = async () => {
     const file: any = new FileReader();
@@ -65,25 +66,34 @@ export const UploadSingle: React.FC<UploadProps> = ({
         //     dir_name: 'common',
         //   });
         //   if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
-        //   const full_path = res?.data?.full_path;
         //   const path = res?.data?.path;
-        //   setImgUrl(full_path);
+        //   setImgUrl(path);
         //   uploadSuccess(path);
         // };
         const full_path =
           'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
         const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
-        setImgUrl(full_path);
+        setImgUrl(path);
         uploadSuccess(path);
       }
     }
   };
 
+  useEffect(() => {
+    if (url) {
+      setImgUrl(url);
+    }
+  }, [url]);
   return (
     <Container disabled={disabled}>
       <label htmlFor='upload-images'>
         {imgUrl ? (
-          <img src={imgUrl} width='200px' height='200px' alt='' />
+          <img
+            src={`${BASE_IMAGE_URL}${imgUrl}`}
+            width='200px'
+            height='200px'
+            alt=''
+          />
         ) : (
           <Text fontSize='61px'>+</Text>
         )}

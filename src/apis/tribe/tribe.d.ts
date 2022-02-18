@@ -12,11 +12,23 @@ declare namespace Api {
       id: number;
     }
 
+    interface PaginateParams {
+      page?: number;
+      page_size?: number;
+    }
+    interface MyTribeListParams extends PaginateParams {
+      name?: string;
+    }
+    interface MyJoinedTribeListParams extends PaginateParams {
+      type?: number;
+      name?: string;
+    }
+
     interface PostCreatepParams {
-      content: string
-      topic?: number[]
-      tribe_id: number
-      title: string
+      content: string;
+      topic?: number[];
+      tribe_id: number;
+      title: string;
     }
 
     interface TopicInfo {
@@ -24,21 +36,21 @@ declare namespace Api {
       TribeID: number;
       Topic: string;
       CreateTime: number;
-      Status: number
+      Status: number;
     }
 
     interface TopicCreateParams {
-      tribe_id: number
-      topics: string[]
+      tribe_id: number;
+      topics: string[];
     }
 
     interface TopicDelParams {
-      tribe_id: number
-      topics: string[]
+      tribe_id: number;
+      topics: string[];
     }
 
     interface TopicListParams {
-      tribe_id: number
+      tribe_id: number;
     }
   }
 }

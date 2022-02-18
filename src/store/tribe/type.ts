@@ -13,10 +13,18 @@ export enum Timing {
   JOIN_TRIBE = 2, // 以加入部落的时间计时
 }
 
+// 1 未领取 2已领取 3 取消质押 4 已质押 5已过期
+export enum NftStatus {
+  UnReceive = 1,
+  Received = 2,
+  UnStake = 3,
+  Staked = 4,
+  Expired = 5,
+}
 export interface TribeBaseInfo {
   name?: string;
   logo?: string;
-  intruction?: string;
+  introduction?: string;
   feeToken?: string;
   feeAmount?: string;
   validDate?: number;
@@ -71,8 +79,7 @@ export interface TribeInfo {
 }
 export interface TribeState {
   tribeId?: number;
-  ownerNFTId?: number;
-  memberNFTId?: number;
+  isApproveStakeNft?: boolean;
   tribeBaseInfo?: TribeBaseInfo;
   tribesNftInfo?: TribesNFTInfo;
   feeCoinList?: FeeCoin[];

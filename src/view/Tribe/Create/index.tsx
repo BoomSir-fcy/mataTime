@@ -10,9 +10,6 @@ import { TribeNFT } from './TribeNft';
 import { TribeCreateBtn } from './TribeCreateBtn';
 import { useTribe } from './hooks';
 import { useToast } from 'hooks';
-import { Timing, TribeType } from 'store/tribe/type';
-import { getValidDate } from 'store/tribe/utils';
-import { getMatterAddress } from 'utils/addressHelpers';
 import {
   useFeeTokenList,
   useTicketNftList,
@@ -54,13 +51,11 @@ const Create = () => {
         toastError(t('名称已存在'));
         return false;
       }
-      const { tribeType, timing, ownerPercent, authorPercent, memberPercent } =
-        feeParams;
       if (
         !isOneHundredBySum([
-          parseInt(ownerPercent),
-          parseInt(authorPercent),
-          parseInt(memberPercent),
+          parseInt(feeParams.ownerPercent),
+          parseInt(feeParams.authorPercent),
+          parseInt(feeParams.memberPercent),
         ])
       ) {
         toastError(t('TIME獎勵分配总和必须为100%'));
@@ -68,19 +63,8 @@ const Create = () => {
       }
 
       const params = {
-        name: infoParams.name,
-        logo: infoParams.logo,
-        feeToken:
-          tribeType === TribeType.BASIC
-            ? getMatterAddress()
-            : feeParams.feeToken,
-        feeAmount: tribeType === TribeType.BASIC ? 0 : feeParams.feeAmount,
-        validDate:
-          timing !== Timing.FOREVER ? getValidDate(feeParams.validDate) : 0,
-        perTime: feeParams.perTime,
-        ownerPercent: ownerPercent,
-        authorPercent: authorPercent,
-        memberPercent: memberPercent,
+        ...infoParams,
+        ...feeParams,
         nftAddress: activeNftInfo.nftToken,
         nftid: activeNftInfo.nftId,
       };
