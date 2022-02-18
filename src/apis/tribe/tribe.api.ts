@@ -22,7 +22,7 @@ export class TribeApi extends Http {
     return res;
   }
   // 部落帖子详情
-  async tribePostInfo(params: Api.Tribe.tribePostInfoParams) {
+  async getTribePostInfo(params: Api.Tribe.tribePostInfoParams) {
     const res = await this.get('/v1/tribe/post/info', params);
     return res;
   }

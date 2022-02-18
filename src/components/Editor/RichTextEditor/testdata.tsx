@@ -11,7 +11,7 @@ export const initialValue: Descendant[] = [
   },
   {
     type: 'image',
-    url: 'https://source.unsplash.com/kFrdX5IeQzI',
+    url: 'https://static.social.qgx.io/common/84c9e02b-c59e-49e1-8126-87dc3465196a.jpg',
     children: [{ text: '' }],
   },
   {

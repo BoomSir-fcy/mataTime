@@ -83,3 +83,45 @@ export const useFetchTribePostDraft = (tribe_id) => {
 
   return { data, updateList: fetchData }
 }
+
+interface PostDataInfoRes {
+  data: Api.Tribe.PostDataInfo;
+  fetchStatus: FetchStatus
+}
+
+export const useFetchTribePostInfo = (tribe_id) => {
+  const [data, setData] = useState<PostDataInfoRes>({
+    data: null,
+    fetchStatus: FetchStatus.NOT_FETCHED
+  })
+
+  const fetchData = useCallback(async (id) => {
+    try {
+      const res = await Api.TribeApi.getTribePostInfo({ id })
+      if (Api.isSuccess(res)) {
+        console.log(res)
+        setData({
+          data: res.data,
+          fetchStatus: FetchStatus.SUCCESS,
+        })
+        return;
+      }
+      throw new Error('')
+    } catch (error) {
+      console.error(error)
+      setData(prev => ({
+        ...prev,
+        fetchStatus: FetchStatus.FAILED,
+      }))
+    }
+  }, [])
+
+  useEffect(() => {
+    
+    if (tribe_id) {
+      fetchData(tribe_id)
+    }
+  }, [tribe_id, fetchData])
+
+  return { data, updateData: fetchData }
+}

@@ -100,5 +100,40 @@ declare namespace Api {
       topics: number[];
       content: string;
     }
+
+    interface PostDataInfo {
+      id: number;
+      content: string;
+      user_name: string;
+      user_id: number;
+      user_avator_url: string;
+      user_address: string;
+      comment_num: number;
+      share_num: number;
+      like_num: number;
+      image_urls: string;
+      video_url: string;
+      cid: number;
+      lid: number;
+      aid: number;
+      fid: number;
+      status: number;
+      is_share: number;
+      top: number;
+      add_time: string;
+      add_time_desc: string;
+      image_list: string [];
+      is_comment: number;
+      is_like: number;
+      is_attention: number;
+      is_fav: number;
+      is_top: number;
+      reward_stats: null;
+      total_receive_time: string;
+      topics: string [];
+      tribe_name: string;
+      title: string;
+      selected: number;
+    }
   }
 }

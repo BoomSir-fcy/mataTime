@@ -127,6 +127,9 @@ export interface MapModuleState {
   postStatusMap: {
     [postId: string]: MapModuleStatus
   },
+  tribePostMap: {
+    [postId: string]: Api.Tribe.PostDataInfo;
+  },
   postTranslateMap: {
     [postId: string]: {
       content: string;

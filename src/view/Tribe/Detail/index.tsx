@@ -80,7 +80,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
         {PostList.length ? (
           <>
             {PostList.map((item, index) => (
-              <HoverLink key={item.id} to={`/tribe/postdetail/${item.id}`}>
+              <HoverLink key={item.id} to={`/tribe/postdetail?i=${item.id}`}>
                 <PostItem info={item} />
               </HoverLink>
             ))}

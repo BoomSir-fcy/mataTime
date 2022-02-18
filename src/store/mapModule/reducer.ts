@@ -30,6 +30,7 @@ import checkTranslateIds from 'utils/checkTranslateIds';
 const initialState: MapModuleState = {
   postMap: {},
   userMap: {},
+  tribePostMap: {},
   postStatusMap: {},
   userStatusMap: {},
   postTranslateMap: {},
@@ -58,6 +59,27 @@ export const fetchPostDetailAsync =
         );
         const ids = checkTranslateIds([detailRes.data])
         dispatch(addTranslateIds(ids))
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+export const fetchTribePostDetailAsync =
+  (id:  number) => async (dispatch, getState) => {
+    try {
+      const detailRes = await Api.TribeApi.getTribePostInfo({
+        id,
+      });
+      if (Api.isSuccess(detailRes)) {
+        dispatch(
+          setTribePostDetail({
+            id,
+            post: detailRes.data,
+          }),
+        );
+        // const ids = checkTranslateIds([detailRes.data])
+        // dispatch(addTranslateIds(ids))
       }
     } catch (error) {
       console.error(error);
@@ -181,6 +203,15 @@ export const Post = createSlice({
         },
       };
     },
+    setTribePostDetail: (state, { payload }) => {
+      const { id, post } = payload;
+      state.tribePostMap = {
+        ...state.tribePostMap,
+        [id]: {
+          ...post,
+        },
+      };
+    },
     setUserInfo: (state, { payload }) => {
       const { id, userInfo } = payload;
       state.userMap = {
@@ -291,6 +322,6 @@ export const Post = createSlice({
   },
 });
 
-export const { setPostDetail, setUserInfo, setPostTranslate, changePostTranslateState, setCommentTranslate, changeCommentTranslateState } = Post.actions;
+export const { setPostDetail, setUserInfo, setPostTranslate, changePostTranslateState, setCommentTranslate, changeCommentTranslateState, setTribePostDetail } = Post.actions;
 
 export default Post.reducer;
