@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Crumbs } from 'components';
+import { Crumbs, VerifyCode } from 'components';
 import RichTextEditor from 'components/Editor/RichTextEditor';
 import { initialValue } from 'components/Editor/RichTextEditor/testdata';
 import defaultValue from 'components/Editor/RichTextEditor/defaultValue';
@@ -70,10 +70,40 @@ const Post = () => {
     }
   }, [data.data, data.fetchStatus]);
 
-  const { handle: handleSendPost, loading: loadingSend } =
+  // 用户输入验证码
+  const verifyRef = React.useRef(null);
+  const editorRef = React.useRef(null);
+  const [verifyVisible, setVerifyVisible] = useState(false);
+  const { handle: handleSendPostAsync, loading: loadingSend } =
     useSendPostOrDraft('tribePostCreate');
   const { handle: handleCreateDraft, loading: loadingDraft } =
     useSendPostOrDraft('tribePostCreateDraft');
+
+  const handleSendPost = useCallback(
+    async (verify?: any) => {
+      const status = await handleSendPostAsync(
+        {
+          value,
+          title,
+          selectTags,
+          tribe_id,
+        },
+        verify,
+      );
+      if (status === FetchStatus.VERIFY) {
+        setVerifyVisible(true);
+      }
+      if (status === FetchStatus.VERIFY_ERROR) {
+        verifyRef.current?.reload();
+        return;
+      }
+      if (status === FetchStatus.SUCCESS) {
+        editorRef.current?.reSetEditor();
+        setVerifyVisible(false);
+      }
+    },
+    [value, title, selectTags, tribe_id],
+  );
 
   return (
     <Box>
@@ -129,7 +159,12 @@ const Post = () => {
           />
         </Flex>
         <LableBoxStyled mb='22px'>* 正文</LableBoxStyled>
-        <RichTextEditor draft={draft} value={value} setValue={setValue} />
+        <RichTextEditor
+          ref={editorRef}
+          draft={draft}
+          value={value}
+          setValue={setValue}
+        />
         <Flex mt='44px' justifyContent='flex-end'>
           <Box position='relative'>
             {driftTipsVisible && (
@@ -142,7 +177,8 @@ const Post = () => {
                 }}
                 onConfirm={() => {
                   console.log(data.data);
-                  setDraft(JSON.parse(data.data.content));
+                  // setDraft(JSON.parse(data.data.content));
+                  editorRef.current?.reSetEditor(JSON.parse(data.data.content));
                   setTitle(data.data.title);
                   setDriftTipsVisible(false);
                 }}
@@ -150,22 +186,26 @@ const Post = () => {
             )}
             <Button
               onClick={() =>
-                handleCreateDraft(value, title, selectTags, tribe_id)
+                handleCreateDraft({ value, title, selectTags, tribe_id })
               }
               variant='secondary'
             >
               {loadingDraft ? <Dots>保存草稿</Dots> : '保存草稿'}
             </Button>
           </Box>
-          <Button
-            onClick={() => handleSendPost(value, title, selectTags, tribe_id)}
-            ml='35px'
-            width='260px'
-          >
+          <Button onClick={() => handleSendPost()} ml='35px' width='260px'>
             {loadingSend ? <Dots>POST</Dots> : 'POST'}
           </Button>
         </Flex>
       </BoxStyled>
+      {verifyVisible && (
+        <VerifyCode
+          ref={verifyRef}
+          visible={verifyVisible}
+          onClose={() => setVerifyVisible(false)}
+          onSubmit={data => handleSendPost(data)}
+        />
+      )}
     </Box>
   );
 };
