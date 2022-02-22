@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import Draggable from 'react-draggable';
 import styled from "styled-components";
-import { Box } from "uikit";
+import { Box, Flex } from "uikit";
 
 const WIDTH_SIZE = 105;
 const GRID_SIZE = 2;
@@ -9,7 +9,9 @@ const BoxStyled = styled(Box)`
   cursor: pointer;
   width: ${WIDTH_SIZE}px;
   height: ${WIDTH_SIZE}px;
-  background: #666;
+  /* background: #666; */
+  padding: 1px;
+  box-sizing: border-box;
 `
 
 
@@ -17,8 +19,8 @@ const DraggableImages = () => {
 
   const [layout, setLayout] = useState([
     { src: '', defaultX: 0, defaultY: 0, x: 0, y: 0, },
-    { src: '', defaultX: 0, defaultY: 0, x: 105, y: -105, },
-    { src: '', defaultX: 0, defaultY: 0, x: 210, y: -210, },
+    { src: '', defaultX: 0, defaultY: 0, x: 0, y: 0, },
+    { src: '', defaultX: 0, defaultY: 0, x: 0, y: 0, },
   ])
 
   const handleStart = useCallback(() => {
@@ -55,7 +57,7 @@ const DraggableImages = () => {
   }, [])
 
   return (
-    <Box margin='1px' width='100%' height='100%' background='pink' position='relative'>
+    <Flex margin='1px' width='100%' height='100%' background='pink' position='relative'>
       {
         layout.map((item, index) => (
           <Draggable
@@ -68,13 +70,16 @@ const DraggableImages = () => {
             bounds="parent"
             onStop={(e, ui) => handleStop(ui, index)}>
             <BoxStyled className="handle">
-              <div>Drag from here</div>
-              <div>x: {item.x}; y: {item.y}</div>
+              <Box overflow='hidden' width='100%' height='100%'>
+                {/* <div>Drag from here</div>
+                <div>x: {item.x}; y: {item.y}</div> */}
+                <img src="https://static.social.qgx.io/common/84c9e02b-c59e-49e1-8126-87dc3465196a.jpg" alt="" />
+              </Box>
             </BoxStyled>
           </Draggable>
         ))
       }
-    </Box>
+    </Flex>
   )
 }
 
