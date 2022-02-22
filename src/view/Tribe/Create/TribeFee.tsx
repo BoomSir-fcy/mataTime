@@ -1,11 +1,11 @@
 import React, {
   ReactNode,
-  useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState,
 } from 'react';
-import { Select, UploadSingle } from 'components';
+import { Select } from 'components';
 import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Flex, Card, Input } from 'uikit';
@@ -28,34 +28,29 @@ import {
 import {
   TRIBE_FEE_DEFAULT_CREATOR_REWARD,
   TRIBE_FEE_DEFAULT_MASTER_REWARD,
-  TRIBE_FEE_DEFAULT_MAX_CONSUMES_TIME,
   TRIBE_FEE_DEFAULT_MEMBER_REWARD,
   TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME,
 } from 'config';
 import QuestionHelper from 'components/QuestionHelper';
 import { parseInt } from 'lodash';
 import { useTribeState } from 'store/tribe/hooks';
-import { FeeType, TribeType } from 'store/tribe/type';
+import { FeeType, Timing, TribeType } from 'store/tribe/type';
+import { actionTypes } from './type';
+import { getMatterAddress } from 'utils/addressHelpers';
+import { getValidDateSecond, getValidDateDay } from 'store/tribe/utils';
 
 const TribeCard = styled(Card)`
   margin-top: 20px;
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 
-const actionTypes = {
-  SAVE: 'save',
-  EDIT: 'edit',
-} as const;
-
-type ActionType = typeof actionTypes[keyof typeof actionTypes];
-
 const TribeFeeForward = (props, ref) => {
   const { t } = useTranslation();
   const { feeCoinList } = useTribeState();
-  const { disabled, actionType } = props;
+  const { info, disabled, actionType } = props;
   const [tribeType, setTribeType] = useState(1);
   const [tribeFeeType, setTribeFeeType] = useState(1);
-  const [feeToken, setFeeToken] = useState(feeCoinList[0]?.tokenAddress);
+  const [feeToken, setFeeToken] = useState('');
   const [state, setState] = useImmer({
     feeAmount: '',
     timing: 1,
@@ -73,6 +68,39 @@ const TribeFeeForward = (props, ref) => {
     { value: FeeType.DEFAULT, label: t('Default') },
     { value: FeeType.CUSTOMIZE, label: t('Customize') },
   ];
+  const timingOptions = [
+    { value: Timing.FOREVER, label: t('permanent') },
+    {
+      value: Timing.JOIN_TRIBE,
+      label: t('Timed by the time of joining the clan'),
+    },
+  ];
+
+  useEffect(() => {
+    setFeeToken(feeCoinList[0]?.tokenAddress);
+  }, [feeCoinList[0]?.tokenAddress]);
+
+  useEffect(() => {
+    if (info?.feeToken) {
+      setState(p => {
+        p.feeAmount = info.feeAmount;
+        p.timing =
+          Number(info.validDate) === 0 ? Timing.FOREVER : Timing.JOIN_TRIBE;
+        p.validDate = getValidDateDay(info.validDate).toString();
+        p.perTime = info.perTime;
+        p.ownerPercent = info.ownerPercent;
+        p.authorPercent = info.authorPercent;
+        p.memberPercent = info.memberPercent;
+      });
+      setTribeType(
+        getMatterAddress().indexOf(info.feeToken) !== -1
+          ? TribeType.BASIC
+          : TribeType.PRO,
+      );
+      setFeeToken(info.feeToken);
+    }
+  }, [info]);
+
   const CoinOptions = useMemo(() => {
     return feeCoinList.map(item => {
       return { value: item.tokenAddress, label: item.symbol };
@@ -81,7 +109,16 @@ const TribeFeeForward = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getFeeFrom() {
-      return { tribeType, feeToken, ...state };
+      const params = {
+        tribeType,
+        feeToken: tribeType === TribeType.BASIC ? getMatterAddress() : feeToken,
+        feeAmount: tribeType === TribeType.BASIC ? 0 : state.feeAmount,
+        validDate:
+          state.timing !== Timing.FOREVER
+            ? getValidDateSecond(state.validDate)
+            : 0,
+      };
+      return { ...state, ...params };
     },
   }));
 
@@ -179,13 +216,7 @@ const TribeFeeForward = (props, ref) => {
                 <RadioGroup
                   disabled={actionType === actionTypes.EDIT && disabled}
                   value={state.timing}
-                  options={[
-                    { value: 1, label: t('permanent') },
-                    {
-                      value: 2,
-                      label: t('Timed by the time of joining the clan'),
-                    },
-                  ]}
+                  options={timingOptions}
                   onChange={val => {
                     setState(p => {
                       p.timing = val;

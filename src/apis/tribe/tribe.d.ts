@@ -59,6 +59,18 @@ declare namespace Api {
       id: number;
     }
 
+    interface PaginateParams {
+      page?: number;
+      page_size?: number;
+    }
+    interface MyTribeListParams extends PaginateParams {
+      name?: string;
+    }
+    interface MyJoinedTribeListParams extends PaginateParams {
+      type?: number;
+      name?: string;
+    }
+
     interface PostCreatepParams {
       content: string;
       tribe_id: number;

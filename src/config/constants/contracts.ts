@@ -80,7 +80,7 @@ const contracts = {
   },
   tribeNFT: {
     56: '',
-    97: '0x4609854c1c9489d2b289B5e7480869BcCAb3D1DD ',
+    97: '0x4609854c1c9489d2b289B5e7480869BcCAb3D1DD',
   },
   tribeTicketsNFT: {
     56: '',

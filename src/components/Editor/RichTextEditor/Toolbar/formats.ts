@@ -26,14 +26,14 @@ export const markFormats = [
     icon: 'icon-707bianjiqi_shanchuxian',
     type: FormatType.MARK,
   },
-  {
-    format: 'code',
-    icon: 'icon-754bianjiqi_daima',
-    type: FormatType.MARK,
-  },
 ]
 
 export const blockFormats = [
+  {
+    format: 'code',
+    icon: 'icon-754bianjiqi_daima',
+    type: FormatType.BLOCK,
+  },
   {
     format: 'block-quote',
     icon: 'icon-713bianjiqi_yinyong',
