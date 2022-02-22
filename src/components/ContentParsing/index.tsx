@@ -290,7 +290,7 @@ export const ContentParsing = React.memo(
     return (
       <ContentParsingWrapper>
         {mode === 'preview' ? (
-          <ContentTextStyled ellipsis maxLine={2}>
+          <ContentTextStyled color='textTips' ellipsis maxLine={2}>
             {preValue}
           </ContentTextStyled>
         ) : (

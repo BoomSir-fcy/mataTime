@@ -65,7 +65,12 @@ const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
           {info.top !== 0 && (
             <Icon size={20} color='textOrigin' name='icon-jiantou' />
           )}
-          <Text ml='10px' fontSize='18px' bold ellipsis>
+          <Text
+            ml={info.selected !== 0 || info.top !== 0 ? '10px' : ''}
+            fontSize='18px'
+            bold
+            ellipsis
+          >
             {info.title}
           </Text>
         </Flex>
@@ -173,7 +178,9 @@ const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
           </a>
         </Flex>
       </Top>
-      <ContentParsing mode='preview' content={info.content} />
+      <Box padding='15px 0'>
+        <ContentParsing mode='preview' content={info.content} />
+      </Box>
       <Flex justifyContent='space-between' alignItems='center'>
         <SendUser
           time={new Date(info.add_time).getTime()}
