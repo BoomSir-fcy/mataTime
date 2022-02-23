@@ -67,11 +67,13 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
 
   const updateDetails = React.useCallback(() => {
     dispatch(fetchPostDetailAsync(params.id));
+    setRefresh(refresh === 1 ? 2 : 1);
   }, [dispatch, params.id]);
 
   useEffect(() => {
     updateDetails();
   }, [updateDetails]);
+
   const itemData = usePostDetailById(params.id) || ({} as any);
 
   useEffect(() => {
@@ -113,12 +115,6 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
       eventBus.removeEventListener('updateDetails', updateDetails);
     };
   }, [updateDetails]);
-
-  useEffect(() => {
-    return () => {
-      setRefresh(refresh === 1 ? 2 : 1);
-    };
-  }, []);
 
   // 更新列表
   const handleUpdateList = useCallback(

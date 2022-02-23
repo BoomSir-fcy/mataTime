@@ -112,7 +112,6 @@ const CommentMore = styled(Button)`
 
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
-  const { toastSuccess } = useToast();
   const { itemData, nonce, setNonce } = props;
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -130,7 +129,6 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const parsedQs = useParsedQueryString();
 
   const [commentIdsMap, setCommentIdsMap] = useState({});
-
   useEffect(() => {
     refresh && getList(1);
   }, [refresh]);
