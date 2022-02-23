@@ -32,6 +32,7 @@ import { onHotkeyDown } from './tools/hotkey';
 import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
 import ParseContent from './ParseContent';
 import { PARAGRAPH_MT } from './RenderElement/styleds';
+import DraggableImages from './Toolbar/DraggableImages';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
@@ -110,6 +111,10 @@ const RichTextEditor = (
 
   return (
     <Card isRadius>
+      <Box width='700px' height='400px' position='relative'>
+        <DraggableImages />
+      </Box>
+
       <Box
         width='100%'
         minHeight='455px'
