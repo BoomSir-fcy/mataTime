@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { List, MoreOperatorEnum } from 'components';
+import { List, LoadType, MoreOperatorEnum } from 'components';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
@@ -119,11 +119,15 @@ const ArticleComponents = (props, ref) => {
   }, [list, blockUsersIds, unFollowUsersIds, isFollowing, deletePostIds]);
 
   const getList = useCallback(
-    (current?: number) => {
+    (type?: LoadType) => {
       // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
-      Getlist(current);
+      if (type === LoadType.REFRESH || type === LoadType.INIT) {
+        Getlist(1);
+        return
+      }
+      Getlist(page);
     },
-    [Getlist],
+    [Getlist, page],
   );
 
   return (
@@ -134,7 +138,7 @@ const ArticleComponents = (props, ref) => {
         loading={loading}
         isEnd={isEnd}
         getList={getList}
-        updateList={() => {}}
+        updateList={() => { }}
       />
     </ArticleListBox>
   );

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { HoverLink, List, MoreOperatorEnum, ShiledUserModal } from 'components';
+import { HoverLink, List, LoadType, MoreOperatorEnum, ShiledUserModal } from 'components';
 import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
 
@@ -37,7 +37,7 @@ interface PostListPorps {
   };
   loading: boolean;
   isEnd: boolean;
-  getList: (type?: number) => void;
+  getList: (LoadType?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
   postIdKey?: string;
 }
@@ -96,7 +96,7 @@ const PostList: React.FC<PostListPorps> = ({
         type === MoreOperatorEnum.FORWARD ||
         type === MoreOperatorEnum.UNFORWARD
       ) {
-        getList(1);
+        getList(LoadType.REFRESH);
         return;
       }
       dispatch(fetchPostDetailAsync(newItem.id)); // FIXME: 有的时候可能用的不是id
@@ -119,7 +119,7 @@ const PostList: React.FC<PostListPorps> = ({
       <List
         loading={loading}
         renderList={type => {
-          if ((type === 1 && list?.length !== 0) || loading || isEnd) {
+          if ((type === LoadType.INIT && list?.length !== 0) || loading || isEnd) {
             return;
           }
           getList(type);
@@ -129,18 +129,17 @@ const PostList: React.FC<PostListPorps> = ({
           let item =
             rows.forward_type === 2
               ? {
-                  ...rows,
-                  forwardUser: rows.user_name,
-                  forwardUid: rows.user_id,
-                  ...rows.forward,
-                }
+                ...rows,
+                forwardUser: rows.user_name,
+                forwardUid: rows.user_id,
+                ...rows.forward,
+              }
               : rows;
           return (
             <HoverLink
               key={item[postIdKey]}
-              to={`/articledetils/${
-                item.forward_type === 2 ? item.post_id : item[postIdKey]
-              }`}
+              to={`/articledetils/${item.forward_type === 2 ? item.post_id : item[postIdKey]
+                }`}
             >
               <MeItemWrapper key={`${item[postIdKey]}`}>
                 {

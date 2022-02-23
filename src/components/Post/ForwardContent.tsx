@@ -10,6 +10,7 @@ import useReadArticle from 'hooks/imHooks/useReadArticle';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 
 import { useTranslation } from 'contexts/Localization';
+import { usePostTranslateMap } from 'store/mapModule/hooks';
 
 const Content = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.absmargin}
@@ -40,6 +41,9 @@ const ForwardContent: React.FC<{
   // 阅读文章扣费
   const [nonce, setNonce] = React.useState(0);
   // useReadArticle(nonce);
+
+  const translateData = usePostTranslateMap(data.id);
+  const translateForwardData = usePostTranslateMap(data.forward.post_id);
 
   return (
     <Content>
@@ -77,7 +81,7 @@ const ForwardContent: React.FC<{
           <ParseContent>
             <ContentParsing
               rows={ARTICLE_POST_FORWARD_ROW}
-              content={data.forward.content}
+              content={translateData?.showTranslate ? (translateForwardData?.content || data.forward.content) : data.forward.content}
             />
           </ParseContent>
         </React.Fragment>
