@@ -5,6 +5,10 @@ import { ContentParsing, AvatarCard } from 'components';
 import { displayTime } from 'utils';
 import { ARTICLE_POST_FORWARD_ROW } from 'config';
 
+import { ReadType } from 'hooks/imHooks/types';
+import useReadArticle from 'hooks/imHooks/useReadArticle';
+import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
+
 import { useTranslation } from 'contexts/Localization';
 
 const Content = styled(Box)`
@@ -29,9 +33,13 @@ const ParseContent = styled(Box)`
 `;
 
 const ForwardContent: React.FC<{
+  currentUid?: number;
   data: Api.Home.post;
-}> = ({ data }) => {
+}> = ({ currentUid, data }) => {
   const { t } = useTranslation();
+  // 阅读文章扣费
+  const [nonce, setNonce] = React.useState(0);
+  // useReadArticle(nonce);
 
   return (
     <Content>
@@ -39,6 +47,25 @@ const ForwardContent: React.FC<{
         <Text>{t('The post has been deleted')}</Text>
       ) : (
         <React.Fragment>
+          {
+            // 浏览自己的不扣费
+            currentUid !== data?.forward?.user_id && (
+              <SpendTimeViewWithArticle
+                nonce={nonce}
+                setNonce={setNonce}
+                readType={
+                  data?.forward?.forward_type === 1
+                    ? ReadType.ARTICLE
+                    : ReadType.COMMENT
+                }
+                articleId={
+                  data?.forward?.forward_type === 1
+                    ? data?.forward?.post_id
+                    : data?.forward?.forward_comment_id
+                }
+              />
+            )
+          }
           <AvatarCard
             uid={data.forward.user_id}
             address={data.forward.user_address}
