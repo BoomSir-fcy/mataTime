@@ -158,7 +158,7 @@ export const Forward: React.FC<{
   );
   return (
     <Box>
-      <PopupButton ref={targetRef} title={t('editorTime')}>
+      <PopupButton ref={targetRef} title={t('Quote Post')}>
         <Icon name='icon-retweet' margin='0 10px 0 0' color='textTips' />
         <Text color='textTips'>{total}</Text>
       </PopupButton>

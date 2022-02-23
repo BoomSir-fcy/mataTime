@@ -216,7 +216,9 @@ const PostList: React.FC<PostListPorps> = ({
                   }}
                 />
                 {/* 转发内容 */}
-                {item.forward_type === 1 && <ForwardContent data={item} />}
+                {item.forward_type === 1 && (
+                  <ForwardContent currentUid={currentUid?.uid} data={item} />
+                )}
                 <MentionOperator
                   replyType='twitter'
                   postId={item[postIdKey]}
