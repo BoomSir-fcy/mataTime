@@ -6,6 +6,7 @@ import { displayTime } from 'utils';
 import { ARTICLE_POST_FORWARD_ROW } from 'config';
 
 import { useTranslation } from 'contexts/Localization';
+import { usePostTranslateMap } from 'store/mapModule/hooks';
 
 const Content = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.absmargin}
@@ -33,6 +34,9 @@ const ForwardContent: React.FC<{
 }> = ({ data }) => {
   const { t } = useTranslation();
 
+  const translateData = usePostTranslateMap(data.id);
+  const translateForwardData = usePostTranslateMap(data.forward.post_id);
+
   return (
     <Content>
       {data?.forward?.is_forward_del === 1 ? (
@@ -50,7 +54,7 @@ const ForwardContent: React.FC<{
           <ParseContent>
             <ContentParsing
               rows={ARTICLE_POST_FORWARD_ROW}
-              content={data.forward.content}
+              content={translateData?.showTranslate ? (translateForwardData?.content || data.forward.content) : data.forward.content}
             />
           </ParseContent>
         </React.Fragment>
