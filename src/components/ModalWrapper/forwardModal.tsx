@@ -59,7 +59,7 @@ export const ForwardModal: React.FC<{
     <ModalWrapper creactOnUse visible={visible} setVisible={close} top='35%'>
       <Container>
         <Avatar disableFollow src={userInfo.nft_image} scale='sm' />
-        <Box margin='0 0 0 17px' style={{ flex: 1 }}>
+        <Box margin='0 0 0 17px' style={{ flex: 1, overflow: 'hidden' }}>
           <Editor
             isRequired={false}
             ispadding={false}

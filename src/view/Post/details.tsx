@@ -196,7 +196,7 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
                     : `/articledetils/${itemData?.forward?.post_id}`
                 }
               >
-                <ForwardContent data={itemData} />
+                <ForwardContent currentUid={currentUid?.uid} data={itemData} />
               </Link>
             )}
             <PostCount>
