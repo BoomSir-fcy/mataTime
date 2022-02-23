@@ -111,10 +111,6 @@ const RichTextEditor = (
 
   return (
     <Card isRadius>
-      <Box width='700px' height='400px' position='relative'>
-        <DraggableImages />
-      </Box>
-
       <Box
         width='100%'
         minHeight='455px'
