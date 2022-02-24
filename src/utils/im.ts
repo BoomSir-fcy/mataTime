@@ -8,12 +8,12 @@ enum MessageProtocol {
   WSProtocol_ERROR = 0,
   // 时间消耗
   WSProtocol_Spend_Time = 1,
-  // v2转发时间消耗
-  WSProtocol_Spend_TimeV2 = 4,
   // 系统通知
   WSProtocol_SYSTEM_NOTIFY,
   // 未读通知
   WSProtocol_UNREAD_NOTIFY,
+  // v2转发时间消耗
+  WSProtocol_Spend_TimeV2,
   // 心跳检测
   WSProtocol_HEART_Jump_Jump = 97,
 }
