@@ -75,7 +75,7 @@ export const Forward: React.FC<{
         }
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -91,7 +91,7 @@ export const Forward: React.FC<{
         toastSuccess(t('unRepost Successfully'));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

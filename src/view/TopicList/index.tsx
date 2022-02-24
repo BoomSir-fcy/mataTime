@@ -17,7 +17,7 @@ import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import PostList from 'components/Post/PostList';
 import { useMapModule } from 'store/mapModule/hooks';
 import checkTranslateIds from 'utils/checkTranslateIds';
-import { addTranslateIds } from 'store/mapModule/actions';
+import { addCommentTranslateIds, addTranslateIds } from 'store/mapModule/actions';
 import { useDispatch } from 'react-redux';
 
 const TopicList = props => {
@@ -26,7 +26,7 @@ const TopicList = props => {
   let { name } = props.match.params;
   try {
     name = decodeURIComponent(name);
-  } catch (error) {}
+  } catch (error) { }
   const { toastError } = useToast();
   const [state, setState] = useImmer({
     tagName: '',
@@ -65,8 +65,11 @@ const TopicList = props => {
             ? [...(res.data?.List || [])]
             : [...listData, ...(res.data?.List || [])];
         });
-        const ids = checkTranslateIds(res.data?.List || []);
-        dispatch(addTranslateIds(ids));
+        // const ids = checkTranslateIds(res.data?.List || []);
+        // dispatch(addTranslateIds(ids));
+        const { postIds, commentIds } = checkTranslateIds(res.data?.List || [], 'post_id');
+        dispatch(addTranslateIds(postIds));
+        dispatch(addCommentTranslateIds(commentIds));
       }
     } catch (error) {
       console.error(error);

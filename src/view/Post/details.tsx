@@ -49,6 +49,7 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
   const { toastSuccess } = useToast();
   useFetchAutoPostTranslate();
+
   // const [itemData, setItemData] = useState<any>({
   //   id: 0,
   // });
@@ -161,16 +162,16 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
               currentUid?.uid === itemData.user_id &&
               itemData.forward_type === 0
             ) &&
-              itemData?.id && (
-                <SpendTimeViewWithArticle
-                  readType={ReadType.ARTICLE}
-                  articleId={itemData?.id}
-                  setNonce={setNonce}
-                  nonce={nonce}
-                  forwardType={itemData.forward?.forward_type}
-                  forward={itemData?.forward}
-                />
-              )
+            itemData?.id && (
+              <SpendTimeViewWithArticle
+                readType={ReadType.ARTICLE}
+                articleId={itemData?.id}
+                setNonce={setNonce}
+                nonce={nonce}
+                forwardType={itemData.forward?.forward_type}
+                forward={itemData?.forward}
+              />
+            )
           }
           <MeItemWrapper>
             <MentionItem
@@ -189,18 +190,18 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
             />
             {(Boolean(itemData?.forward?.post_id) ||
               itemData?.forward?.is_forward_del === 1) && (
-              <Link
-                to={
-                  itemData?.forward?.is_forward_del === 1
-                    ? {}
-                    : itemData?.forward?.forward_type === 2
-                    ? `/articledetils/${itemData?.forward?.forward_parent_id}?comment_id=${itemData?.forward?.forward_comment_id}`
-                    : `/articledetils/${itemData?.forward?.post_id}`
-                }
-              >
-                <ForwardContent currentUid={currentUid?.uid} data={itemData} />
-              </Link>
-            )}
+                <Link
+                  to={
+                    itemData?.forward?.is_forward_del === 1
+                      ? {}
+                      : itemData?.forward?.forward_type === 2
+                        ? `/articledetils/${itemData?.forward?.forward_parent_id}?comment_id=${itemData?.forward?.forward_comment_id}`
+                        : `/articledetils/${itemData?.forward?.post_id}`
+                  }
+                >
+                  <ForwardContent currentUid={currentUid?.uid} data={itemData} />
+                </Link>
+              )}
             <PostCount>
               <PostCountButton
                 as={Link}

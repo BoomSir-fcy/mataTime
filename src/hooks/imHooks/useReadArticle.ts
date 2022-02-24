@@ -22,8 +22,6 @@ const useReadArticle = (nonce?: number | boolean) => {
   const timeStep = 1; // 推送时间间隔
   const isBrowserTabActiveRef = useIsBrowserTabActive();
 
-  console.log(articleIds);
-
   const fetchHandle = useCallback(() => {
     if (!isBrowserTabActiveRef.current) return;
     Object.keys(articleIds).forEach(type => {
@@ -41,7 +39,6 @@ const useReadArticle = (nonce?: number | boolean) => {
           );
         } else {
           // 拼接转发内容
-          console.log(articlePositions);
           const readInfo = Object.keys(articlePositions).reduce(
             (prev, curr) => {
               const { forwardReadInfo } = articlePositions[curr];

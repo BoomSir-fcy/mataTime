@@ -9,7 +9,6 @@ import { StyledTooltip, Arrow } from "./StyledTooltip";
 import { TooltipOptions, TooltipRefs } from "./types";
 
 const invertTheme = (currentTheme: DefaultTheme, { light, dark }) => {
-  console.log(currentTheme, light, dark)
   if (currentTheme.isDark) {
     return light;
   }

@@ -16,6 +16,7 @@ import {
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
+import uniq from 'lodash/uniq';
 import { stat } from 'fs';
 import { MapModuleState } from 'store/types';
 import { FetchStatus } from 'config/types';
@@ -51,8 +52,9 @@ export const fetchPostDetailAsync =
             post: detailRes.data,
           }),
         );
-        const ids = checkTranslateIds([detailRes.data]);
-        dispatch(addTranslateIds(ids));
+        const { postIds, commentIds } = checkTranslateIds([detailRes.data]);
+        dispatch(addTranslateIds(postIds));
+        dispatch(addCommentTranslateIds(commentIds));
       }
     } catch (error) {
       console.error(error);
@@ -156,7 +158,6 @@ export const fetchPostTranslateAsync =
       }),
     );
     const res = await fetchTranslateAsync(ids);
-    console.log(res);
     dispatch(setPostTranslate(res));
   };
 
@@ -171,7 +172,6 @@ export const fetchCommentTranslateAsync =
       }),
     );
     const res = await fetchTranslateAsync(ids, 'comment');
-    console.log(res);
     dispatch(setCommentTranslate(res));
   };
 
@@ -252,12 +252,11 @@ export const Post = createSlice({
     builder
       .addCase(addUnFollowUserId, (state, { payload }) => {
         if (!state.unFollowUsersIds.includes(payload)) {
-          state.unFollowUsersIds = [...state.unFollowUsersIds, payload];
+          state.unFollowUsersIds = uniq([...state.unFollowUsersIds, payload]);
         }
       })
       .addCase(addUnFollowUserIds, (state, { payload }) => {
-        // XXX: 未做去重处理
-        state.unFollowUsersIds = [...state.unFollowUsersIds, ...payload];
+        state.unFollowUsersIds = uniq([...state.unFollowUsersIds, ...payload]);
       })
       .addCase(removeUnFollowUserId, (state, { payload }) => {
         state.unFollowUsersIds = state.unFollowUsersIds.filter(
@@ -275,8 +274,7 @@ export const Post = createSlice({
         }
       })
       .addCase(addBlockUserIds, (state, { payload }) => {
-        // XXX: 未做去重处理
-        state.blockUsersIds = [...state.blockUsersIds, ...payload];
+        state.blockUsersIds = uniq([...state.blockUsersIds, ...payload]);
       })
       .addCase(removeBlockUserId, (state, { payload }) => {
         state.blockUsersIds = state.blockUsersIds.filter(
@@ -289,13 +287,13 @@ export const Post = createSlice({
         );
       })
       .addCase(addDeletePostId, (state, { payload }) => {
-        state.deletePostIds = [...state.deletePostIds, payload];
+        state.deletePostIds = uniq([...state.deletePostIds, payload]);
       })
       .addCase(addTranslateIds, (state, { payload }) => {
-        state.needTranslatePostIds = [
+        state.needTranslatePostIds = uniq([
           ...state.needTranslatePostIds,
           ...payload,
-        ];
+        ]);
       })
       .addCase(removeTranslateIds, (state, { payload }) => {
         state.needTranslatePostIds = state.needTranslatePostIds.filter(
@@ -303,10 +301,10 @@ export const Post = createSlice({
         );
       })
       .addCase(addCommentTranslateIds, (state, { payload }) => {
-        state.needTranslateCommentIds = [
+        state.needTranslateCommentIds = uniq([
           ...state.needTranslateCommentIds,
           ...payload,
-        ];
+        ]);
       })
       .addCase(removeCommentTranslateIds, (state, { payload }) => {
         state.needTranslateCommentIds = state.needTranslateCommentIds.filter(

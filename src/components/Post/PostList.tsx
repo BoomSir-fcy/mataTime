@@ -23,7 +23,7 @@ import {
   removeBlockUserId,
   removeUnFollowUserId,
 } from 'store/mapModule/actions';
-import { useFetchAutoPostTranslate, useMapModule } from 'store/mapModule/hooks';
+import { useFetchAutoPostTranslate, useFetchAutoCommentTranslate, useMapModule } from 'store/mapModule/hooks';
 
 import { MeItemWrapper } from './styled';
 import MentionItem from './MentionItem';
@@ -68,6 +68,7 @@ const PostList: React.FC<PostListPorps> = ({
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);
   useFetchAutoPostTranslate();
+  useFetchAutoCommentTranslate();
 
   // 更新列表
   const handleUpdateList = useCallback(
@@ -139,18 +140,17 @@ const PostList: React.FC<PostListPorps> = ({
           let item =
             rows.forward_type === 2
               ? {
-                  ...rows,
-                  forwardUser: rows.user_name,
-                  forwardUid: rows.user_id,
-                  ...rows.forward,
-                }
+                ...rows,
+                forwardUser: rows.user_name,
+                forwardUid: rows.user_id,
+                ...rows.forward,
+              }
               : rows;
           return (
             <HoverLink
               key={item[postIdKey]}
-              to={`/articledetils/${
-                item.forward_type === 2 ? item.post_id : item[postIdKey]
-              }`}
+              to={`/articledetils/${item.forward_type === 2 ? item.post_id : item[postIdKey]
+                }`}
             >
               <MeItemWrapper key={`${item[postIdKey]}`}>
                 {
