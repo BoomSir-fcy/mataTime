@@ -9,11 +9,11 @@ enum MessageProtocol {
   // 时间消耗
   WSProtocol_Spend_Time = 1,
   // 系统通知
-  WSProtocol_SYSTEM_NOTIFY,
+  WSProtocol_SYSTEM_NOTIFY = 2,
   // 未读通知
-  WSProtocol_UNREAD_NOTIFY,
+  WSProtocol_UNREAD_NOTIFY = 3,
   // v2转发时间消耗
-  WSProtocol_Spend_TimeV2,
+  WSProtocol_Spend_TimeV2 = 4,
   // 心跳检测
   WSProtocol_HEART_Jump_Jump = 97,
 }
