@@ -24,6 +24,7 @@ import { withImages, withMentions } from '../withEditor';
 import { Element, Leaf } from './RenderElement';
 import Toolbar from './Toolbar';
 import { initialValue } from './testdata';
+import defaultValue from './defaultValue';
 import MentionPortal from './Mentions/MentionPortal';
 import { useMentions, insertMention } from './Mentions/hooks';
 import decorate from './tools/decorate';
@@ -31,11 +32,13 @@ import { onHotkeyDown } from './tools/hotkey';
 import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
 import ParseContent from './ParseContent';
 import { PARAGRAPH_MT } from './RenderElement/styleds';
+import DraggableImages from './Toolbar/DraggableImages';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
   background?: string;
   value: Descendant[];
+  draft?: Descendant[]; // 草稿箱
   setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
 }
 
@@ -43,12 +46,16 @@ const getColor = (color: string, theme: DefaultTheme) => {
   return getThemeValue(`colors.${color}`, color)(theme);
 };
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({
-  background = 'input',
-  value,
-  setValue,
-  ...props
-}) => {
+const RichTextEditor = (
+  {
+    background = 'input',
+    value,
+    setValue,
+    draft,
+    ...props
+  }: RichTextEditorProps,
+  ref,
+) => {
   const { theme } = useTheme();
 
   // const [editor] = useState(() => withReact(createEditor()));
@@ -56,15 +63,42 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     () => withMentions(withImages(withHistory(withReact(createEditor())))),
     [],
   );
-  console.log(editor, 'editor');
+
+  const [refresh, setRefresh] = useState(0);
+
+  // useEffect(() => {
+  //   if (draft) {
+  //     // 草稿箱保存回显
+  //     reSetEditor();
+  //     Transforms.insertNodes(editor, draft);
+  //   }
+  // }, [draft, editor]);
+
+  const reSetEditor = useCallback(
+    (newNode?: Descendant[]) => {
+      const children = [...editor.children];
+      children.forEach(node =>
+        editor.apply({ type: 'remove_node', path: [0], node }),
+      );
+      ReactEditor.focus(editor);
+      Transforms.insertNodes(editor, newNode || defaultValue);
+    },
+    [editor],
+  );
+
+  React.useImperativeHandle(ref, () => ({
+    reSetEditor(node?: Descendant[]) {
+      return reSetEditor(node);
+    },
+  }));
 
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
 
   // const [value, setValue] = useState<Descendant[]>(initialValue);
-  const ref = useRef<HTMLDivElement | null>();
+  const mentionsRef = useRef<HTMLDivElement | null>();
   const { onKeyDown, onChangeHandle, target, userList, onItemClick, index } =
-    useMentions(editor, ref);
+    useMentions(editor, mentionsRef);
 
   useEffect(() => {
     // console.log(value, 'value');
@@ -86,6 +120,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           ReactEditor.focus(editor);
         }}
         position='relative'
+        key={refresh}
         {...props}
       >
         <Slate
@@ -148,4 +183,4 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 };
 
-export default React.memo(RichTextEditor);
+export default React.forwardRef(RichTextEditor);

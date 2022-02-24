@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation, Link, useRouteMatch } from 'react-router-dom';
-import { Box, Text, Button, Flex, Card, Image, Spinner } from 'uikit';
+import { Box, Text, Button, Flex, Card, Image, Spinner, Empty } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts';
 import Crumbs from 'components/Layout/crumbs';
@@ -10,6 +10,9 @@ import TradeCard from '../components/TradeCard';
 import FlexAutoWarpper from 'components/Layout/FlexAutoWarpper';
 import { storeAction, useStore } from 'store';
 import { useTribeList } from 'store/tribe/hooks';
+import { useDispatch } from 'react-redux';
+import { fetchTribeListAsync } from 'store/tribe';
+import useBlockNumber from 'libs/mini-swap/state/application/hooks';
 
 // lable?: string
 // tLable?: string
@@ -24,15 +27,15 @@ const PaddingFlex = styled(Flex)`
 const tabDatas = [
   {
     tLable: 'Joined',
-    value: 'joined',
+    value: 1,
   },
   {
     tLable: 'Explore',
-    value: 'explore',
+    value: 2,
   },
   {
     tLable: 'All',
-    value: 'all',
+    value: 3,
   },
 ];
 
@@ -40,6 +43,7 @@ const TAB_QUERY_KEY = 't';
 
 const Home = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const qsValue = useParsedQueryString();
   const { replace } = useHistory();
   const { path } = useRouteMatch();
@@ -47,10 +51,9 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [page_size, setPage_size] = useState(10);
   const [avtiveTab, setAvtiveTab] = useState(
-    qsValue[TAB_QUERY_KEY] || tabDatas[0].value,
+    Number(qsValue[TAB_QUERY_KEY]) || tabDatas[0].value,
   );
-  useTribeList(page, page_size, 2);
-
+  useTribeList(page, page_size, avtiveTab);
   const TribeList = useStore(p => p.tribe.tribeList);
 
   return (
@@ -62,8 +65,9 @@ const Home = () => {
         active={avtiveTab}
         datas={tabDatas}
         onChange={tab => {
-          setAvtiveTab(tab.value);
+          setAvtiveTab(Number(tab.value));
           replace(`${pathname}?${TAB_QUERY_KEY}=${tab.value}`);
+          dispatch(fetchTribeListAsync({ page, page_size, tab: tab.value }));
         }}
       >
         <Flex flex='1' justifyContent='flex-end'>
@@ -78,12 +82,12 @@ const Home = () => {
             <>
               {TribeList.map((item, index) => (
                 <Link key={item.id} to={`${path}/detail?id=${item.id}`}>
-                  <TradeCard info={item} />
+                  {item.id && <TradeCard info={item} />}
                 </Link>
               ))}
             </>
           ) : (
-            <Spinner />
+            <Empty />
           )}
         </FlexAutoWarpper>
       </PaddingFlex>

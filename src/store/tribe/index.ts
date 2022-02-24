@@ -3,19 +3,21 @@ import { NftInfo, TribeBaseInfo, TribeState } from './type';
 import {
   getFeeTokenList,
   getTicketNftTokenList,
+  getTribeBaseInfo,
   getTribeNftInfo,
 } from './fetchTribe';
 import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
+import uniqBy from 'lodash/uniqBy';
+import { getIsApproveStakeNft } from './fetchStakeNFT';
 
 const initialState: TribeState = {
-  tribeId: 1415926538,
-  ownerNFTId: null,
-  memberNFTId: null,
+  tribeId: 1415926539,
+  isApproveStakeNft: false,
   tribeBaseInfo: {
     name: '',
     logo: '',
-    intruction: '',
+    introduction: '',
     feeToken: '',
     feeAmount: '',
     validDate: null,
@@ -57,17 +59,42 @@ const initialState: TribeState = {
       logo: '',
       type: null,
     },
+    tribe_id: null,
     selected_count: '',
     post_count: '',
     member_count: '',
   },
+  postList: {
+    list: [],
+    lastList: [],
+    page: 1,
+    selected: 0,
+    top: 0,
+    newest_sort: 0,
+    tophot_sort: 0,
+    addListNum: -1,
+    loading: false,
+    isEnd: false,
+    userTags: [],
+  },
 };
-export const fetchSetTribeBaseInfo = createAsyncThunk(
-  'tribe/fetchSetTribeBaseInfo',
-  async (tribeBaseInfo: TribeBaseInfo, { dispatch }) => {
-    // todo: 修改部落基本信息
+
+export const fetchIsApproveStakeNft = createAsyncThunk<any, any>(
+  'tribe/fetchIsApproveStakeNft',
+  async ({ account }, { dispatch }) => {
+    const isApprove = await getIsApproveStakeNft(account);
+    return isApprove;
   },
 );
+
+export const fetchGetTribeBaseInfo = createAsyncThunk<any, any>(
+  'tribe/fetchGetTribeBaseInfo',
+  async ({ tribeId }, { dispatch }) => {
+    const info = await getTribeBaseInfo(tribeId);
+    dispatch(setTribeBaseInfo(info));
+  },
+);
+
 export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
   'tribe/fetchTribeNftInfo',
   async ({ tribeId }, { dispatch }) => {
@@ -75,6 +102,7 @@ export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
     dispatch(setTribeNftInfo(info));
   },
 );
+
 export const fetchActiveNftInfo = createAsyncThunk<any, { info: NftInfo }>(
   'tribe/fetchActiveNftInfo',
   async ({ info }, { dispatch }) => {
@@ -115,10 +143,11 @@ export const fetchTicketNftListAsync = createAsyncThunk<
     });
   return list;
 });
+
 export const fetchTribeListAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeListAsync',
-  async ({ page = 1, psge_size = 10, tab = 1 }) => {
-    const list = await Api.TribeApi.tribeList({ page, psge_size, tab });
+  async ({ page = 1, page_size = 10, tab = 1 }) => {
+    const list = await Api.TribeApi.tribeList({ page, page_size, tab });
     return list.data;
   },
 );
@@ -127,10 +156,32 @@ export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeInfoAsync',
   async ({ tribe_id }) => {
     const list = await Api.TribeApi.tribeInfo({ tribe_id });
-    return list.data;
+    return {
+      ...list.data,
+      tribe_id,
+    };
   },
 );
 
+export const fetchTribePostAsync = createAsyncThunk(
+  'tribe/fetchTribePostAsync',
+  async (params: Api.Tribe.tribePostListParams, { dispatch }) => {
+    // dispatch()
+    dispatch(setLoading(true));
+    const response = await Api.TribeApi.tribePostList({
+      ...params,
+    });
+    if (Api.isSuccess(response)) {
+      return {
+        list: response.data.List,
+        page: params.page,
+        per_page: params.per_page,
+        selected: params.selected,
+      };
+    }
+    return {};
+  },
+);
 export const tribe = createSlice({
   name: 'tribe',
   initialState,
@@ -141,9 +192,21 @@ export const tribe = createSlice({
     setTribeNftInfo: (state, { payload }) => {
       state.tribesNftInfo = payload;
     },
+    setLoading: (state, { payload }) => {
+      state.postList.loading = payload;
+    },
+    setIsEnd: (state, { payload }) => {
+      state.postList.isEnd = payload;
+    },
+    setTribeBaseInfo: (state, { payload }) => {
+      state.tribeBaseInfo = payload;
+    },
   },
   extraReducers: builder => {
     builder
+      .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
+        state.isApproveStakeNft = action.payload;
+      })
       .addCase(fetchFeeTokenListAsync.fulfilled, (state, action) => {
         // todo: 根据token获取代币symbol值
         const tokenMap = {
@@ -164,11 +227,33 @@ export const tribe = createSlice({
       })
       .addCase(fetchTribeInfoAsync.fulfilled, (state, action) => {
         state.tribeInfo = action.payload;
+      })
+      .addCase(fetchTribePostAsync.fulfilled, (state, action) => {
+        const { list, page, per_page, selected } = action.payload;
+        let articleList = list ?? [];
+        const { length } = state.postList.list;
+        if (page === 1) {
+          state.postList.list = articleList;
+          state.postList.addListNum = -1;
+        } else {
+          const list = state.postList.list.concat(articleList);
+          state.postList.list = uniqBy(list, 'id');
+          state.postList.addListNum = state.postList.list.length - length;
+        }
+        state.postList.lastList =
+          articleList.length >= per_page || page > 1 ? articleList : [];
+        state.postList.page = articleList.length >= per_page ? page + 1 : page;
+        state.postList.selected = Number(selected);
+        state.postList.loading = false;
+      })
+      .addCase(fetchTribePostAsync.rejected, (state, action) => {
+        state.postList.loading = false;
       });
   },
 });
 
 // Actions
-export const { setActiveNftInfo, setTribeNftInfo } = tribe.actions;
+export const { setActiveNftInfo, setTribeNftInfo, setTribeBaseInfo, setLoading, setIsEnd } =
+  tribe.actions;
 
 export default tribe.reducer;

@@ -4,5 +4,7 @@ export enum FetchStatus {
   FAILED = 'failed',
   LOADING = 'loading',
   DATA_END = 'dataEnd',
-  REFRESH = 'refresh'
+  REFRESH = 'refresh',
+  VERIFY_ERROR = 'verifyError',
+  VERIFY = 'verify',
 }

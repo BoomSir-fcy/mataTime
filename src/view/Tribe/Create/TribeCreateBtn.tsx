@@ -59,9 +59,9 @@ export const TribeCreateBtn: React.FC<{
   }
   if (!hasNft) {
     return (
-      <StyledButton as={Link} to='/account'>
+      <Button width='250px' as={Link} to='/account'>
         {t('Get Tribe Tickets')}
-      </StyledButton>
+      </Button>
     );
   }
 

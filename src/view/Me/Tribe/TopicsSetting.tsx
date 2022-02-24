@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Crumbs, Icon } from 'components';
 import { useTranslation } from 'contexts';
 import styled from 'styled-components';
@@ -6,6 +6,10 @@ import { Box, Text, Button, Flex, Card, Input } from 'uikit';
 import { ContentBox } from './styled';
 import TagList from './components/TagList';
 import { Api } from 'apis';
+import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { FetchStatus } from 'config/types';
+import { AppDispatch } from 'libs/mini-swap/state';
 
 const TopicsCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -21,20 +25,38 @@ const TRIBE_TOPICS_MAX = 100;
 
 const MeTribeTopicsSetting = () => {
   const { t } = useTranslation();
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<Api.Tribe.TopicInfo[]>([]);
   const [inputVal, setInputVal] = useState('');
+  const { i } = useParsedQueryString();
+  const tribe_id = Number(i);
+
+  const { data: topicData, updateList } = useFetchTribeTopicList(tribe_id);
+
+  useEffect(() => {
+    if (topicData.fetchStatus === FetchStatus.SUCCESS) {
+      setList(topicData.list);
+    }
+  }, [topicData.fetchStatus, topicData.list]);
 
   const handleAddTopic = useCallback(async () => {
     const res = await Api.TribeApi.tribeTopicCreate({
-      tribe_id: 1415926535,
+      tribe_id,
       topics: [inputVal],
     });
     if (Api.isSuccess(res)) {
-      // TODO: getTopicList
-      // setList(prev => prev.concat({}));
-      // arr.push({ id: arr.length + 1, name: inputVal });
+      updateList(tribe_id);
     }
-  }, [inputVal]);
+  }, [tribe_id, inputVal, updateList]);
+
+  const handleDelTopic = useCallback(
+    async id => {
+      const res = await Api.TribeApi.tribeTopicDel({ tribe_id, ids: [id] });
+      if (Api.isSuccess(res)) {
+        updateList(tribe_id);
+      }
+    },
+    [tribe_id, updateList],
+  );
 
   return (
     <Box>
@@ -45,9 +67,7 @@ const MeTribeTopicsSetting = () => {
             <TagList
               list={list}
               onDelete={id => {
-                setList(p => {
-                  return p.filter(v => v.id !== id);
-                });
+                handleDelTopic(id);
               }}
             />
             <Flex alignItems='center'>
@@ -67,7 +87,7 @@ const MeTribeTopicsSetting = () => {
                     // const arr = [...list];
                     // arr.push({ id: arr.length + 1, name: inputVal });
                     // setList(arr);
-                    // setInputVal('');
+                    setInputVal('');
                   }
                 }}
               >

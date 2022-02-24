@@ -34,10 +34,23 @@ export const Element = props => {
       return <Image {...props} editor={editor} />;
     case 'mention':
       return <Mention {...props} />;
+    case 'code':
+      return <Code {...props} />;
     default:
       return <DefaultElement {...attributes}>{children}</DefaultElement>;
   }
 };
+
+export const ContentTextStyled = styled(Text)`
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  min-height: 1.1875em;
+  font-family: Arial;
+  line-height: 1.1875;
+  user-select: text;
+  display: inline;
+`;
 
 export const Leaf = ({ attributes, children, leaf }) => {
   /* eslint-disable */
@@ -45,9 +58,13 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <strong>{children}</strong>;
   }
 
-  if (leaf.code) {
-    children = <Code>{children}</Code>;
-  }
+  // if (leaf.code) {
+  //   children = (
+  //     <Code>
+  //       <code>{children}</code>
+  //     </Code>
+  //   );
+  // }
 
   if (leaf.italic) {
     children = <em>{children}</em>;
@@ -65,5 +82,5 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <Highlight>{children}</Highlight>;
   }
 
-  return <span {...attributes}>{children}</span>;
+  return <ContentTextStyled {...attributes}>{children}</ContentTextStyled>;
 };

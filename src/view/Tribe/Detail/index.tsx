@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Crumbs, HoverLink, List } from 'components';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Crumbs, List } from 'components';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Flex, Box, Text, Button } from 'uikit';
+import { Flex, Box, Text, Button, Empty } from 'uikit';
 import DetailHeader from './Header';
 import DetailTitle from './Title';
 import PostItem from './postItem';
 import { useStore } from 'store';
-import { fetchTribeInfoAsync } from 'store/tribe';
+import { fetchTribeInfoAsync, fetchTribePostAsync } from 'store/tribe';
 
 import { TribeSidebar } from '../components/Sidebar';
 
@@ -30,7 +30,9 @@ const Sidebar = styled(Box)`
 
 const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   const dispatch = useDispatch();
-
+  const [TribeId, setTribeId] = useState(0);
+  const [page, setPage] = useState(1);
+  const [page_size, setPage_size] = useState(10);
   const {
     displayResultListOfPeoples,
     displayResultListOfTopic,
@@ -44,6 +46,8 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     historyList,
   } = useStore(p => p.search);
   const TribeInfo = useStore(p => p.tribe.tribeInfo);
+  const TribePost = useStore(p => p.tribe.postList);
+  const PostList = useStore(p => p.tribe.postList.list);
 
   useEffect(() => {
     const { search } = route.location;
@@ -52,16 +56,33 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     };
     const tribe_id = myQuery(search).get('id');
     if (tribe_id) {
-      dispatch(fetchTribeInfoAsync({ tribe_id }));
+      setTribeId(Number(tribe_id));
     }
   }, [route]);
+
+  useEffect(() => {
+    if (TribeId) {
+      dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
+      // dispatch(
+      //   fetchTribePostAsync({
+      //     selected: TribePost.selected,
+      //     page: page,
+      //     per_page: page_size,
+      //     top: TribePost.top,
+      //     tribe_id: TribeId,
+      //     newest_sort: 1,
+      //   }),
+      // );
+    }
+    return () => {};
+  }, [TribeId]);
 
   return (
     <Flex>
       <TribeBox>
         <Crumbs back />
         <DetailHeader TribeInfo={TribeInfo} />
-        <DetailTitle />
+        <DetailTitle TribeId={TribeId} page_size={page_size} />
         <List
           loading={postLoading}
           renderList={type => {
@@ -75,9 +96,17 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
             // getList(type);
           }}
         >
-          {/* <Link to='/tribe/postdetail/1'>
-        </Link> */}
-          <PostItem />
+          {PostList.length ? (
+            <>
+              {PostList.map((item, index) => (
+                <HoverLink key={item.id} to={`/tribe/postdetail?i=${item.id}`}>
+                  <PostItem info={item} />
+                </HoverLink>
+              ))}
+            </>
+          ) : (
+            <Empty />
+          )}
         </List>
       </TribeBox>
       <Sidebar>

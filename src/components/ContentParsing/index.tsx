@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import styled from 'styled-components';
 import reactStringReplace from 'react-string-replace';
 import { useDispatch } from 'react-redux';
@@ -13,10 +13,12 @@ import {
   HTTP_REGEXP,
   SYMBOL_REGEXP,
 } from 'config/constants/regexp';
-
 import history from 'routerHistory';
-import { Descendant } from 'slate';
-import { Leaf } from 'components/Editor/RichTextEditor/RenderElement';
+import { Descendant, Node } from 'slate';
+import {
+  ContentTextStyled,
+  Leaf,
+} from 'components/Editor/RichTextEditor/RenderElement';
 import {
   ImageStyled,
   BoxStyled,
@@ -25,6 +27,7 @@ import {
   Ul,
   Ol,
   Blockquote,
+  PARAGRAPH_MT,
 } from 'components/Editor/RichTextEditor/RenderElement/styleds';
 
 type IProps = {
@@ -33,6 +36,7 @@ type IProps = {
   paragraphMt?: string;
   callback?: Function;
   disableParseSquare?: boolean; // 评论不生成话题
+  mode?: 'preview' | 'detail';
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -75,13 +79,17 @@ const ParagraphItem = styled(Box)`
 
 export const ContentParsing = React.memo(
   (props: IProps) => {
-    console.log('12');
     const ref: any = useRef();
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const [parsingResult, setParsingResult] = useState([]);
     const [expand, setExpand] = useState<boolean>(false);
-    const { callback, disableParseSquare, paragraphMt = '0' } = props;
+    const {
+      callback,
+      disableParseSquare,
+      paragraphMt = '0',
+      mode = 'detail',
+    } = props;
 
     useEffect(() => {
       try {
@@ -91,6 +99,12 @@ export const ContentParsing = React.memo(
         setParsingResult(arr);
       } catch (err: any) {}
     }, [props.content]);
+
+    const preValue = useMemo(() => {
+      if (mode === 'preview') {
+        return parsingResult.map(n => Node.string(n)).join(' ');
+      }
+    }, [mode, parsingResult]);
 
     useEffect(() => {
       setTimeout(() => {
@@ -275,38 +289,47 @@ export const ContentParsing = React.memo(
 
     return (
       <ContentParsingWrapper>
-        {parsingResult &&
-          parsingResult.length > 0 &&
-          parsingResult.map((item: any, index) => {
-            if (!expand) {
-              return (
-                index < ARTICLE_POST_MAX_ROW && serialize2(item, null, index)
-              );
-            }
-            return serialize2(item, null, index);
-          })}
-        {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
-          <ExpandWrapper>
-            <a
-              href={`javascript:void(${
-                expand ? t('homePutAway') : t('homeOpen')
-              })`}
-              onClick={(e: any) => {
-                e.stopPropagation();
-                e.preventDefault();
-                e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
-                if (callback) {
-                  callback(MoreOperatorEnum.EXPAND);
+        {mode === 'preview' ? (
+          <ContentTextStyled color='textTips' ellipsis maxLine={2}>
+            {preValue}
+          </ContentTextStyled>
+        ) : (
+          <>
+            {parsingResult &&
+              parsingResult.length > 0 &&
+              parsingResult.map((item: any, index) => {
+                if (!expand) {
+                  return (
+                    index < ARTICLE_POST_MAX_ROW &&
+                    serialize2(item, null, index)
+                  );
                 }
-                setExpand(!expand);
-              }}
-            >
-              <Text color='textPrimary' fontSize='12px'>
-                {expand ? t('homePutAway') : t('homeOpen')}
-              </Text>
-            </a>
-          </ExpandWrapper>
-        ) : null}
+                return serialize2(item, null, index);
+              })}
+            {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
+              <ExpandWrapper>
+                <a
+                  href={`javascript:void(${
+                    expand ? t('homePutAway') : t('homeOpen')
+                  })`}
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    e.nativeEvent.stopImmediatePropagation(); //阻止冒泡
+                    if (callback) {
+                      callback(MoreOperatorEnum.EXPAND);
+                    }
+                    setExpand(!expand);
+                  }}
+                >
+                  <Text color='textPrimary' fontSize='12px'>
+                    {expand ? t('homePutAway') : t('homeOpen')}
+                  </Text>
+                </a>
+              </ExpandWrapper>
+            ) : null}
+          </>
+        )}
       </ContentParsingWrapper>
     );
   },

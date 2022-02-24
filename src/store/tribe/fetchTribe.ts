@@ -1,7 +1,8 @@
+import BigNumber from 'bignumber.js';
 import tribeAbi from 'config/abi/tribe.json';
 import { getTribeAddress } from 'utils/addressHelpers';
 import multicall from 'utils/multicall';
-import { TribesNFTInfo } from './type';
+import { TribeBaseInfo, TribesNFTInfo } from './type';
 
 // 收费代币token
 export const getFeeTokenList = async () => {
@@ -39,6 +40,73 @@ export const getTicketNftTokenList = async () => {
   } catch (error) {
     console.error(error);
     return [];
+  }
+};
+export const setTribeBaseInfo = async (
+  tribeId: number,
+  info?: TribeBaseInfo,
+) => {
+  const address = getTribeAddress();
+  const calls = [
+    {
+      address,
+      name: 'setTribeExtraInfo',
+      params: [tribeId, info.introduction],
+    },
+  ];
+  try {
+    const tx = await multicall(tribeAbi, calls);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getTribeBaseInfo = async (tribeId: number) => {
+  const address = getTribeAddress();
+  const calls = [
+    {
+      address,
+      name: 'tribesInfo',
+      params: [tribeId],
+    },
+    {
+      address,
+      name: 'extraTribesInfo',
+      params: [tribeId],
+    },
+  ];
+  try {
+    const [info, extraInfo] = await multicall(tribeAbi, calls);
+    return {
+      name: info.name,
+      logo: info.logo,
+      introduction: extraInfo.introduction,
+      feeToken: info.feeToken,
+      feeAmount: new BigNumber(info.feeAmount.toJSON().hex).toNumber(),
+      validDate: new BigNumber(info.validDate.toJSON().hex).toNumber(),
+      perTime: new BigNumber(info.perTime.toJSON().hex).toNumber(),
+      ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
+      authorPercent: new BigNumber(info.authorPercent.toJSON().hex).toNumber(),
+      memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
+      nftAddress: '',
+      nftid: null,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      name: '',
+      logo: '',
+      introduction: '',
+      feeToken: '',
+      feeAmount: '',
+      validDate: null,
+      perTime: null,
+      ownerPercent: null,
+      authorPercent: null,
+      memberPercent: null,
+      nftAddress: '',
+      nftid: null,
+    };
   }
 };
 

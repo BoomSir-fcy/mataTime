@@ -35,6 +35,14 @@ export const usePostDetailById = id => {
   }, [postMap, id]);
 };
 
+export const useTribePostDetailById = id => {
+  const { tribePostMap } = useMapModule();
+
+  return useMemo(() => {
+    return tribePostMap[id];
+  }, [tribePostMap, id]);
+};
+
 export const usePostTranslateMap = id => {
   const { postTranslateMap } = useMapModule();
 

@@ -17,13 +17,24 @@ export class TribeApi extends Http {
     return res;
   }
   // 部落帖子列表
-  async tribePostList(params: Api.Tribe.tribeInfoParams) {
+  async tribePostList(params: Api.Tribe.tribePostListParams) {
     const res = await this.get('/v1/tribe/post/list', params);
     return res;
   }
   // 部落帖子详情
-  async tribePostInfo(params: Api.Tribe.tribePostInfoParams) {
+  async getTribePostInfo(params: Api.Tribe.tribePostInfoParams) {
     const res = await this.get('/v1/tribe/post/info', params);
+    return res;
+  }
+
+  // 我的部落列表
+  async MyTribeList(params?: Api.Tribe.MyTribeListParams) {
+    const res = await this.get('/v1/tribe/create/info', params);
+    return res;
+  }
+  // 我加入的部落列表
+  async MyJoinedTribeList(params?: Api.Tribe.MyJoinedTribeListParams) {
+    const res = await this.get('/v1/tribe/user/nft', params);
     return res;
   }
 
@@ -43,9 +54,17 @@ export class TribeApi extends Http {
   }
 
   // 部落获取话题
-  async getTribeTopicList(params: Api.Response<{
-    data: Api.Tribe.TopicInfo[]
-  }>) {
+  async getTribeTopicList(params: Api.Tribe.TopicParamsForId): Promise<Api.Response<Api.Tribe.TopicInfo[]>> {
     return this.get('/v1/tribe/topic/list', params);
   }
+
+  // 部落帖子保存草稿
+  async tribePostCreateDraft(params: Api.Tribe.PostCreatepParams) {
+    return this.post('/v1/tribe/post/create_draft', params);
+  }
+
+  async getTribePostDraft(params: Api.Tribe.TopicParamsForId):Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
+    return this.post('v1/tribe/post/get_draft', params);
+  }
+
 }

@@ -21,7 +21,7 @@ const HotBtn: React.FC<{
 }> = ({ list }) => {
   return (
     <Flex paddingTop='20px' alignItems='center'>
-      {list.length && (
+      {list?.length && (
         <>
           {list.map((item, index) => (
             <Btn key={`${item}${index}`}>

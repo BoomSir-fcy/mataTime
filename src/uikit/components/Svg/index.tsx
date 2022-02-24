@@ -146,6 +146,7 @@ export { default as FileExcel } from './Icons/FileExcel';
 export { default as FilePPT } from './Icons/FilePPT';
 export { default as FilePDF } from './Icons/FilePDF';
 export { default as FileOther } from './Icons/FileOther';
+export { default as ProTribeIcon } from './Icons/ProTribe';
 
 export { default as Svg } from './Svg';
 export type { SvgProps } from './types';

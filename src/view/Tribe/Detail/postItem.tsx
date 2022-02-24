@@ -8,6 +8,7 @@ import {
   MoreOperatorEnum,
   MorePostPopup,
   PopupWrap,
+  ContentParsing,
 } from 'components';
 import SendUser from '../components/post/sendUser';
 import HotBtn from '../components/post/HotBtn';
@@ -48,141 +49,143 @@ const PopupButton = styled(Flex)`
   cursor: pointer;
 `;
 
-const PostItem = () => {
+interface PostInfoPorps {
+  info: Api.Tribe.TribePost;
+}
+
+const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
   const { t } = useTranslation();
   const popupRef = React.useRef();
   const theme = useTheme();
-  const data = {
-    add_time: '2022-01-28T01:25:04Z',
-    add_time_desc: '2022-01-28T01:25:04Z',
-    comment_num: 0,
-    content:
-      '[{"type":"paragraph","children":[{"text":"#Welcome 话题带中文 #广东富豪梵蒂冈 中文话题 "},{"type":"mention","character":"@上海幸运 黑8","attrs":{"userid":182278046},"children":null},{"text":"昵称带中文"}]}]',
-    id: 694,
-    image_list: [],
-    is_attention: 1,
-    is_comment: 0,
-    is_fav: 0,
-    is_like: 0,
-    is_share: 0,
-    is_top: 0,
-    like_num: 0,
-    post: {
-      tid: 1,
-      id: 694,
-      content:
-        '[{"type":"paragraph","children":[{"text":"#Welcome…":182278046},"children":null},{"text":"昵称带中文"}]}]',
-      user_name: 'chill for life gun for fight2',
-      user_id: 179637355,
-    },
-    post_id: 694,
-    reward_stats: null,
-    share_num: 0,
-    tid: 1,
-    total_receive_time: '224',
-    user_address: '0xbf454362ffd10007e337f57703eac30185b31b48',
-    user_avator_url: 'https://api.dsgmetaverse.com/gphoto/gen/C6919461.png',
-    user_id: 179637355,
-    user_name: 'chill for life gun for fight2',
-    video_url: '',
-  };
   return (
     <PostBox>
       <Top>
-        <Flex alignItems='center'>
-          <Featured />
-          {/* <Icon size={20} color='textOrigin' name='icon-jiantou' /> */}
-          <Text ml='10px' fontSize='18px' bold ellipsis>
-            这是最新置顶的帖子 一共可以置顶3篇
+        <Flex width='80%' alignItems='center'>
+          {info.selected !== 0 && <Featured />}
+          {info.top !== 0 && (
+            <Icon size={20} color='textOrigin' name='icon-jiantou' />
+          )}
+          <Text
+            ml={info.selected !== 0 || info.top !== 0 ? '10px' : ''}
+            fontSize='18px'
+            bold
+            ellipsis
+          >
+            {info.title}
           </Text>
         </Flex>
         <Flex alignItems='center'>
-          <Popup
-            ref={popupRef}
-            trigger={
-              <PopupButton mr='30px' title={t('设置')}>
-                <Icon name='icon-shezhi' size={20} color='textTips' />
-              </PopupButton>
-            }
-            nested
-            position='bottom right'
-            closeOnDocumentClick
-            contentStyle={{
-              width: '150px',
-              height: 'auto',
-              borderRadius: '10px',
-              padding: 0,
-              border: '0',
-              backgroundColor: 'transparent',
-              zIndex: 99,
-            }}
-            overlayStyle={{
-              zIndex: 98,
-            }}
-            arrowStyle={{
-              color: theme.colors.tertiary,
-              stroke: theme.colors.tertiary,
+          <a
+            href='javascript: void(0)'
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
             }}
           >
-            <SetTribePopup
-              postUid={'1'}
-              data={data}
-              callback={(data: any, type) => {}}
-            />
-          </Popup>
-          <Popup
-            ref={popupRef}
-            trigger={
-              <PopupButton title={t('popupMore')}>
-                <Icon name='icon-gengduo' size={20} color='textTips' />
-              </PopupButton>
-            }
-            nested
-            position='bottom right'
-            closeOnDocumentClick
-            contentStyle={{
-              width: '150px',
-              height: 'auto',
-              borderRadius: '10px',
-              padding: 0,
-              border: '0',
-              backgroundColor: 'transparent',
-              zIndex: 99,
-            }}
-            overlayStyle={{
-              zIndex: 98,
-            }}
-            arrowStyle={{
-              color: theme.colors.tertiary,
-              stroke: theme.colors.tertiary,
-            }}
-          >
-            <MoreTribePopup
-              postUid={'1'}
-              data={data}
-              callback={(data: any, type) => {
-                // if (type === MoreOperatorEnum.BLOCKUSER) {
-                //   setIsShileUser(!isShileUser, itemData);
-                //   return;
-                // }
-                // popupRef?.current?.close();
-                // callback(data, type);
+            <Popup
+              ref={popupRef}
+              trigger={
+                <PopupButton mr='30px' title={t('设置')}>
+                  <Icon name='icon-shezhi' size={20} color='textTips' />
+                </PopupButton>
+              }
+              nested
+              position='bottom right'
+              closeOnDocumentClick
+              contentStyle={{
+                width: '150px',
+                height: 'auto',
+                borderRadius: '10px',
+                padding: 0,
+                border: '0',
+                backgroundColor: 'transparent',
+                zIndex: 99,
               }}
-            />
-          </Popup>
+              overlayStyle={{
+                zIndex: 98,
+              }}
+              arrowStyle={{
+                color: theme.colors.tertiary,
+                stroke: theme.colors.tertiary,
+              }}
+            >
+              <SetTribePopup
+                postUid={'1'}
+                data={{
+                  ...info,
+                  post: {
+                    ...info,
+                  },
+                }}
+                callback={(data: any, type) => {}}
+              />
+            </Popup>
+          </a>
+          <a
+            href='javascript: void(0)'
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }}
+          >
+            <Popup
+              ref={popupRef}
+              trigger={
+                <PopupButton title={t('popupMore')}>
+                  <Icon name='icon-gengduo' size={20} color='textTips' />
+                </PopupButton>
+              }
+              nested
+              position='bottom right'
+              closeOnDocumentClick
+              contentStyle={{
+                width: '150px',
+                height: 'auto',
+                borderRadius: '10px',
+                padding: 0,
+                border: '0',
+                backgroundColor: 'transparent',
+                zIndex: 99,
+              }}
+              overlayStyle={{
+                zIndex: 98,
+              }}
+              arrowStyle={{
+                color: theme.colors.tertiary,
+                stroke: theme.colors.tertiary,
+              }}
+            >
+              <MoreTribePopup
+                postUid={'1'}
+                data={{
+                  ...info,
+                  post: {
+                    ...info,
+                  },
+                }}
+                callback={(data: any, type) => {
+                  // if (type === MoreOperatorEnum.BLOCKUSER) {
+                  //   setIsShileUser(!isShileUser, itemData);
+                  //   return;
+                  // }
+                  // popupRef?.current?.close();
+                  // callback(data, type);
+                }}
+              />
+            </Popup>
+          </a>
         </Flex>
       </Top>
-      <ContentText color='textTips'>
-        这是一段部落的介绍The PhantaBear project was jointly launched by Jay
-        Chou's PHANTACi and Ezek. PhantaBear is a collection of 10,000
-        algorithmically generated digital collectibles that double as membership
-        cards for the Ezek Club. Each
-      </ContentText>
+      <Box padding='15px 0'>
+        <ContentParsing mode='preview' content={info.content} />
+      </Box>
       <Flex justifyContent='space-between' alignItems='center'>
         <SendUser
-          time={new Date().getTime()}
-          name='sad的分公司的'
-          Avatar='https://api.dsgmetaverse.com/gphoto/mngen/4411022.png'
+          time={new Date(info.add_time).getTime()}
+          name={info.user_name}
+          Avatar={info.user_avator_url}
         />
         <Box width='50%'>
           <MentionOperator
@@ -190,11 +193,11 @@ const PostItem = () => {
             postId={1}
             hasReward={false}
             itemData={{
-              ...data,
-              post_id: data.id,
+              ...info,
+              post_id: info.id,
               post: {
-                ...data,
-                post_id: data.id,
+                ...info,
+                post_id: info.id,
               },
             }}
             callback={(item: any, type?: MoreOperatorEnum) => {
@@ -203,7 +206,7 @@ const PostItem = () => {
           />
         </Box>
       </Flex>
-      <HotBtn list={['Web3.0', '555555555']} />
+      <HotBtn list={info.topics} />
     </PostBox>
   );
 };
