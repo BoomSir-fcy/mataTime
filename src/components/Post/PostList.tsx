@@ -1,7 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { HoverLink, List, LoadType, MoreOperatorEnum, ShiledUserModal } from 'components';
+import {
+  HoverLink,
+  List,
+  LoadType,
+  MoreOperatorEnum,
+  ShiledUserModal,
+} from 'components';
 import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
 
@@ -119,7 +125,11 @@ const PostList: React.FC<PostListPorps> = ({
       <List
         loading={loading}
         renderList={type => {
-          if ((type === LoadType.INIT && list?.length !== 0) || loading || isEnd) {
+          if (
+            (type === LoadType.INIT && list?.length !== 0) ||
+            loading ||
+            isEnd
+          ) {
             return;
           }
           getList(type);
@@ -129,31 +139,35 @@ const PostList: React.FC<PostListPorps> = ({
           let item =
             rows.forward_type === 2
               ? {
-                ...rows,
-                forwardUser: rows.user_name,
-                forwardUid: rows.user_id,
-                ...rows.forward,
-              }
+                  ...rows,
+                  forwardUser: rows.user_name,
+                  forwardUid: rows.user_id,
+                  ...rows.forward,
+                }
               : rows;
           return (
             <HoverLink
               key={item[postIdKey]}
-              to={`/articledetils/${item.forward_type === 2 ? item.post_id : item[postIdKey]
-                }`}
+              to={`/articledetils/${
+                item.forward_type === 2 ? item.post_id : item[postIdKey]
+              }`}
             >
               <MeItemWrapper key={`${item[postIdKey]}`}>
                 {
-                  // 浏览自己的不扣费
-                  currentUid?.uid !== item.user_id && (
+                  // 普通帖子浏览自己的不扣费
+                  !(
+                    currentUid?.uid === item.user_id && item.forward_type === 0
+                  ) && (
                     <SpendTimeViewWithArticle
                       nonce={nonce}
                       setNonce={setNonce}
                       readType={ReadType.ARTICLE}
                       articleId={item[postIdKey]}
+                      forwardType={item.forward?.forward_type}
+                      forward={item.forward}
                     />
                   )
                 }
-                {/* {item.forward_type === 2 && <ForwardHead data={item} />} */}
                 <MentionItem
                   isShileUser={isShileUser}
                   setIsShileUser={(type, data) => {

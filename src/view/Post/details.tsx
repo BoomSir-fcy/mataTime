@@ -157,14 +157,20 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
         <>
           {
             // 浏览自己的不扣费
-            currentUid?.uid !== itemData?.user_id && itemData?.id && (
-              <SpendTimeViewWithArticle
-                readType={ReadType.ARTICLE}
-                articleId={itemData?.id}
-                setNonce={setNonce}
-                nonce={nonce}
-              />
-            )
+            !(
+              currentUid?.uid === itemData.user_id &&
+              itemData.forward_type === 0
+            ) &&
+              itemData?.id && (
+                <SpendTimeViewWithArticle
+                  readType={ReadType.ARTICLE}
+                  articleId={itemData?.id}
+                  setNonce={setNonce}
+                  nonce={nonce}
+                  forwardType={itemData.forward?.forward_type}
+                  forward={itemData?.forward}
+                />
+              )
           }
           <MeItemWrapper>
             <MentionItem

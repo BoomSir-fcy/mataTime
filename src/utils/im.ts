@@ -228,6 +228,16 @@ export class IM extends EventTarget {
           }),
         );
         break;
+      case IM.MessageProtocol.WSProtocol_Spend_TimeV2:
+        this.dispatchEvent(
+          new MessageEvent(ImEventType.SPEND_TIME, {
+            data,
+            origin: event.origin,
+            lastEventId: event.lastEventId,
+            source: event.source,
+          }),
+        );
+        break;
       case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
         this.dispatchEvent(
           new MessageEvent(ImEventType.UNREAD_NOTIFY, {

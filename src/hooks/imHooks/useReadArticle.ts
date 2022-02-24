@@ -5,6 +5,8 @@ import useIsBrowserTabActive from 'hooks/useIsBrowserTabActive';
 import useIm from './useIm';
 import useInterval from '../useInterval';
 
+import { ReadType } from 'hooks/imHooks/types';
+
 // 视图范围优化
 const VIEW_PADDING = {
   top: 100, // 忽略顶部100px的内容
@@ -20,20 +22,49 @@ const useReadArticle = (nonce?: number | boolean) => {
   const timeStep = 1; // 推送时间间隔
   const isBrowserTabActiveRef = useIsBrowserTabActive();
 
+  console.log(articleIds);
+
   const fetchHandle = useCallback(() => {
     if (!isBrowserTabActiveRef.current) return;
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
-        im?.send(
-          im.messageProtocol.WSProtocol_Spend_Time,
-          {
-            commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
-            read_type: Number(type), // 文章阅读
-            read_uid: articleIds[type], // id数组 推文或者评论的
-            time_step: timeStep, // 推送时间间隔
-          },
-          true,
-        );
+        if (Number(type) === ReadType.COMMENT) {
+          im?.send(
+            im.messageProtocol.WSProtocol_Spend_Time,
+            {
+              commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
+              read_type: Number(type), // 文章阅读
+              read_uid: articleIds[type], // id数组 推文或者评论的
+              time_step: timeStep, // 推送时间间隔
+            },
+            true,
+          );
+        } else {
+          // 拼接转发内容
+          console.log(articlePositions);
+          const readInfo = Object.keys(articlePositions).reduce(
+            (prev, curr) => {
+              const { forwardReadInfo } = articlePositions[curr];
+              if (forwardReadInfo.post_id) {
+                prev.push(forwardReadInfo);
+              }
+              return prev;
+            },
+            [],
+          );
+
+          if (readInfo.length) {
+            im?.send(
+              im.messageProtocol.WSProtocol_Spend_TimeV2,
+              {
+                commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
+                time_step: timeStep, // 推送时间间隔
+                read_info: readInfo, // 转发内容
+              },
+              true,
+            );
+          }
+        }
       }
     });
   }, [articleIds, isBrowserTabActiveRef, im]);
