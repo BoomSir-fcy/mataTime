@@ -19,13 +19,14 @@ const ForwardList = () => {
     list: [],
     page: 1,
     page_size: 10,
-    total: 0,
+    total: 1,
     loading: false,
     isEnd: false,
   });
-  const { loading, page, page_size, isEnd, list } = state;
+  const { loading, page, page_size, isEnd, list, total } = state;
 
   const Getlist = async (current = 0) => {
+    if (list?.length >= total) return;
     try {
       const res = await Api.AttentionApi.getNormalForwardList({
         page: current || page,
@@ -36,7 +37,11 @@ const ForwardList = () => {
         setState(p => {
           p.page = page + 1;
           p.total = res.data.total_count;
-          p.list = page > 1 ? [...res.data.list, ...list] : res.data.list;
+          p.list = page > 1 ? [...list, ...res.data.list] : res.data.list;
+          p.isEnd =
+            [...list, ...res.data.list].length >= res.data.total_count
+              ? true
+              : false;
         });
       }
     } catch (error) {}
