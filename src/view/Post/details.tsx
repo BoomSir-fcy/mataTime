@@ -242,7 +242,7 @@ export const PostDetails: React.FC<Iprops> = (props: Iprops) => {
           />
         </>
       ) : loaded ? (
-        <Empty title={t('http-error-30001001')} />
+        <Empty scale='md' title={t('articledetilsgetError')} />
       ) : (
         <Spinner />
       )}
