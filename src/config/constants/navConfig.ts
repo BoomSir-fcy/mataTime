@@ -378,4 +378,8 @@ export const hideSidebarPath = (() => {
   );
 })();
 
+export const hideSidebarLine = (() => {
+  return getHidePath(['/tribe/detail'], menuNavConfig, 'hideRightLine');
+})();
+
 export default menuNavConfig;
