@@ -736,5 +736,6 @@
   "http-error-30004019": "The interval between posts is too fast, please enter the verification code",
   "http-error-30004020": "Verification code error",
   "http-error-30015004": "Cannot forward the same post",
+  "http-error-30015006": "Cannot forward the same comment",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******"
 }

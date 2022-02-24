@@ -27,6 +27,8 @@ const Container = styled(Flex)`
 `;
 
 const Content = styled(Box)`
+  max-height: 200px;
+  overflow-y: auto;
   ${mediaQueriesSize.padding}
   margin-top: 19px;
   background: ${({ theme }) => theme.colors.backgroundTextArea};
