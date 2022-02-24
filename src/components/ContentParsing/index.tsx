@@ -20,7 +20,7 @@ import {
   Leaf,
 } from 'components/Editor/RichTextEditor/RenderElement';
 import {
-  ImageStyled,
+  ImageStyledRender,
   BoxStyled,
 } from 'components/Editor/RichTextEditor/RenderElement/Image';
 import {
@@ -97,7 +97,7 @@ export const ContentParsing = React.memo(
           ? JSON.parse(props.content)
           : [];
         setParsingResult(arr);
-      } catch (err: any) {}
+      } catch (err: any) { }
     }, [props.content]);
 
     const preValue = useMemo(() => {
@@ -227,7 +227,7 @@ export const ContentParsing = React.memo(
           return (
             <Box mt={paragraphMt}>
               <BoxStyled>
-                <ImageStyled src={node.url} />
+                <ImageStyledRender src={node.url} />
               </BoxStyled>
             </Box>
           );
@@ -309,9 +309,8 @@ export const ContentParsing = React.memo(
             {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
               <ExpandWrapper>
                 <a
-                  href={`javascript:void(${
-                    expand ? t('homePutAway') : t('homeOpen')
-                  })`}
+                  href={`javascript:void(${expand ? t('homePutAway') : t('homeOpen')
+                    })`}
                   onClick={(e: any) => {
                     e.stopPropagation();
                     e.preventDefault();

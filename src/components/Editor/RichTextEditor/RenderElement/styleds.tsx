@@ -41,11 +41,17 @@ export const DefaultElement = styled.p`
 
 export const Strong = styled.strong``;
 
-export const Code = styled.code`
+export const Code = styled.pre`
   font-family: monospace;
-  /* background: red; */
   background: ${({ theme }) => theme.colors.codebg};
-  & > * {
+  padding: 0.45em 0.88889em;
+  &:not(pre + pre) {
+    ${mt}
+  }
+  &:last-of-type{
+    padding-bottom: 0.88889em;
+  }
+  & * {
     font-family: monospace;
   }
 `;

@@ -164,5 +164,5 @@ export const darkColors: Colors = {
   searchTopicTxt: '#fff',
   commentBorder: '#ccc',
   hoverList: '#1f1f1f',
-  codebg: '#f8f8f8',
+  codebg: '#555',
 };

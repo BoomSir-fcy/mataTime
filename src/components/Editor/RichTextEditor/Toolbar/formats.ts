@@ -26,14 +26,14 @@ export const markFormats = [
     icon: 'icon-707bianjiqi_shanchuxian',
     type: FormatType.MARK,
   },
-  {
-    format: 'code',
-    icon: 'icon-754bianjiqi_daima',
-    type: FormatType.MARK,
-  },
 ]
 
 export const blockFormats = [
+  {
+    format: 'code',
+    icon: 'icon-754bianjiqi_daima',
+    type: FormatType.BLOCK,
+  },
   {
     format: 'block-quote',
     icon: 'icon-713bianjiqi_yinyong',
@@ -54,12 +54,12 @@ export const blockFormats = [
 export const hisoryFormats = [
   {
     format: 'undo',
-    icon: 'icon-701bianjiqi_chexiao',
+    icon: 'icon-z701bianjiqi_chexiao',
     type: FormatType.HISTORY,
   },
   {
     format: 'redo',
-    icon: 'icon-702bianjiqi_zhongzuo',
+    icon: 'icon-z702bianjiqi_zhongzuo',
     type: FormatType.HISTORY,
   },
 ]
