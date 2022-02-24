@@ -17,6 +17,7 @@ import {
 import { insertMention } from '../Mentions/hooks';
 import { isMarkActive, toggleMark } from '../tools/toggleMark';
 import { useTranslation } from 'contexts';
+import LinkInsert from './LinkInsert';
 
 const isBlockActive = (editor, format) => {
   const { selection } = editor;
@@ -248,19 +249,7 @@ const Toolbar = () => {
         visible={visible}
         setVisible={setVisible}
       >
-        <Box padding='5px 0' width='350px' maxWidth='80vw'>
-          <Box mt='8px'>
-            <Input value='' placeholder='请输入链接文本' />
-          </Box>
-          <Box mt='16px'>
-            <Input value='' placeholder='请输入链接地址' />
-          </Box>
-          <Flex mt='24px' justifyContent='space-around'>
-            <Button>取消</Button>
-            <Button disabled>确定</Button>
-          </Flex>
-        </Box>
-
+        <LinkInsert />
       </ModalWrapper>
       <Box position='relative' width='100%' height='0'>
         {(searcTopic || searchUser) && (
