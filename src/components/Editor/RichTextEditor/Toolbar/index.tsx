@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Flex, Button, Box, Text } from 'uikit';
+import { Flex, Button, Box, Text, Input } from 'uikit';
 import styled, { DefaultTheme } from 'styled-components';
 import { useSlate, useSlateStatic, ReactEditor } from 'slate-react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { HistoryEditor, History } from 'slate-history';
-import { Icon, SearchPop } from 'components';
+import { Icon, ModalWrapper, SearchPop } from 'components';
 import { ImageElement, ParagraphElement } from '../../custom-types';
 import { Emoji } from '../../emoji';
 import InsertImageForm from './InsertImageForm';
@@ -16,6 +16,7 @@ import {
 } from './formats';
 import { insertMention } from '../Mentions/hooks';
 import { isMarkActive, toggleMark } from '../tools/toggleMark';
+import { useTranslation } from 'contexts';
 
 const isBlockActive = (editor, format) => {
   const { selection } = editor;
@@ -146,6 +147,7 @@ const Toolbar = () => {
 
   const [searchUser, setSearchUser] = useState(false);
   const [searcTopic, setSearcTopic] = useState(false);
+  const { t } = useTranslation();
 
   const searchSelect = (data, type) => {
     setSearcTopic(false);
@@ -158,6 +160,8 @@ const Toolbar = () => {
       Transforms.insertText(editor, `#${data.topic_name} `);
     }
   };
+
+  const [visible, setVisible] = useState(false)
 
   return (
     <Box
@@ -202,6 +206,14 @@ const Toolbar = () => {
             // title={t('editorTopic')}
             />
           </ButtonStyled>
+          <ButtonStyled>
+            <Icon
+              color='textTips'
+              name='icon-bianjiqi_chaolianjie738'
+              onClick={() => setVisible(true)}
+            // title={t('editorTopic')}
+            />
+          </ButtonStyled>
           {blockFormats.map(item => (
             <FormatButton
               type={item.type}
@@ -230,6 +242,26 @@ const Toolbar = () => {
           </ButtonStyled>
         </Flex>
       </Flex>
+      <ModalWrapper
+        title={t('插入链接')}
+        creactOnUse
+        visible={visible}
+        setVisible={setVisible}
+      >
+        <Box padding='5px 0' width='350px' maxWidth='80vw'>
+          <Box mt='8px'>
+            <Input value='' placeholder='请输入链接文本' />
+          </Box>
+          <Box mt='16px'>
+            <Input value='' placeholder='请输入链接地址' />
+          </Box>
+          <Flex mt='24px' justifyContent='space-around'>
+            <Button>取消</Button>
+            <Button disabled>确定</Button>
+          </Flex>
+        </Box>
+
+      </ModalWrapper>
       <Box position='relative' width='100%' height='0'>
         {(searcTopic || searchUser) && (
           <SearchPop
