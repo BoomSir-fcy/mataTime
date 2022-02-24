@@ -42,6 +42,8 @@ export class HomeApi extends Http {
     forward_content_type: 1 | 2;
     forward_id: number;
     forward_content: string;
+    id?: string;
+    verify?: string;
   }) {
     const res = await this.post('/v2/forward/forward', params);
     return res;

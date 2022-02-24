@@ -3,7 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import { useImmer } from 'use-immer';
 import { useToast } from 'hooks';
 import { Flex, Box, Button, Text, useTooltip } from 'uikit';
-import { Icon, ForwardModal } from 'components';
+import { Icon, ForwardModal, VerifyCode } from 'components';
 import { Api } from 'apis';
 
 import { useTranslation } from 'contexts/Localization';
@@ -34,6 +34,15 @@ const Rows = styled(Button)`
   }
 `;
 
+interface forwardProps {
+  forward_type: 1 | 2;
+  forward_content_type: 1 | 2;
+  forward_id: number;
+  forward_content: string;
+  id?: string;
+  verify?: string;
+}
+
 export const Forward: React.FC<{
   type: string;
   total: number;
@@ -42,26 +51,39 @@ export const Forward: React.FC<{
 }> = React.memo(({ type, total, data, onSuccess }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { toastSuccess, toastLink } = useToast();
+  const { toastSuccess, toastError, toastLink } = useToast();
   const [state, setState] = useImmer({
     visible: false,
     forward_type: 1 as 1 | 2,
+    verifyState: {
+      visible: false,
+      post: {} as any,
+    },
   });
-  const userinfo = useStore(p => p.loginReducer.userInfo);
-
-  const submitForward = async (res?: string, forward_type?: 1 | 2) => {
+  // 用户输入验证码
+  const verifyRef = React.useRef(null);
+  // const userinfo = useStore(p => p.loginReducer.userInfo);
+  const submitForward = async (
+    res?: string,
+    forward_type?: 1 | 2,
+    verifyData?: { id: string; verify: string },
+  ) => {
     try {
       const forward_content = Boolean(res) ? JSON.parse(res) : [];
-      // todo 优化传值类型
-      Api.HomeApi.setForward({
+      let paramsObj: forwardProps = {
         forward_type: forward_type ? forward_type : state.forward_type,
         forward_content_type: type === 'post' ? 1 : 2,
         forward_id: data.id,
         forward_content: forward_content.length > 0 ? res : '',
-      }).then(res => {
+        id: verifyData?.id,
+        verify: verifyData?.verify,
+      };
+      // todo 优化传值类型
+      Api.HomeApi.setForward(paramsObj).then(res => {
         if (Api.isSuccess(res)) {
           setState(p => {
             p.visible = false;
+            p.verifyState.visible = false;
           });
           onSuccess('FORWARD');
           // 跳转url参数
@@ -72,12 +94,27 @@ export const Forward: React.FC<{
           forward_type
             ? toastSuccess(t('Repost Successfully'))
             : toastLink(t('Repost Successfully'), params, t('View'));
+        } else if (res.code === 30004019) {
+          setState(p => {
+            p.verifyState.visible = true;
+            p.verifyState.post = paramsObj;
+          });
+        } else if (res.code === 30004020) {
+          toastError(t('verifyError'));
+          verifyRef.current?.reload();
         }
       });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const submitVerify = verifyData =>
+    submitForward(
+      state.verifyState.post.forward_content,
+      state.verifyState.post.forward_type,
+      verifyData,
+    );
 
   // 取消快转
   const cancelForward = async () => {
@@ -176,6 +213,19 @@ export const Forward: React.FC<{
           })
         }
       />
+
+      {state.verifyState.visible && (
+        <VerifyCode
+          ref={verifyRef}
+          visible={state.verifyState.visible}
+          onClose={() =>
+            setState(p => {
+              p.verifyState.visible = false;
+            })
+          }
+          onSubmit={data => submitVerify(data)}
+        />
+      )}
     </Box>
   );
 });
