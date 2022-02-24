@@ -76,8 +76,8 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
                 forwardType === 0
                   ? 0
                   : forwardType === 1
-                  ? forward?.post_id
-                  : forward?.forward_comment_id,
+                    ? forward?.post_id
+                    : forward?.forward_comment_id,
               forward_type: forward?.is_forward_del === 1 ? 0 : forwardType,
             };
           }
@@ -97,6 +97,14 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
             //   ...prep,
             //   [`${articleId}_${readType}`]: { articleId, readType, offsetTop, offsetBottom: offsetTop + offsetHeight },
             // }
+          });
+          /* 
+              初始化时触发刷新数据 websocket推送 这个不能删哦
+                ———— by @longxiaoai
+          */
+          setNonce(prep => {
+            if (prep < 2) return prep + 1;
+            return prep;
           });
           if (!rendered) setRendered(true);
         }
