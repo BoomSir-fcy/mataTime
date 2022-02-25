@@ -82,7 +82,7 @@ const NavFooter: React.FC<NavFooterProps> = ({ }) => {
           dispatch(fetchWalletBurncointoday());
         }} style={{
           cursor: 'pointer',
-        }} title='点击刷新' alignItems='center'>
+        }} title={t('Refresh ')} alignItems='center'>
           <Box position='relative' width='33px' height='33px'>
             <Circle
               percent={percent}
