@@ -355,7 +355,6 @@ const TokenAccount: React.FC = () => {
   ]);
 
   useEffect(() => {
-    console.log(ActiveToken, readType);
     if (ActiveToken === 1 && readType !== 3) {
       dispatch(fetchTimeIncometoday({ day }));
       dispatch(fetchIncomeList({ page: 1, pageSize, readType }));
