@@ -13,6 +13,8 @@ import { useTranslation } from 'contexts/Localization';
 import { ProfileMenu } from './ProfileMenu';
 import Shalou from './Shalou';
 import useTheme from 'hooks/useTheme';
+import { fetchWalletBurncointoday } from 'store/wallet/reducer';
+import { useDispatch } from 'react-redux';
 
 export interface NavFooterProps {
   // seconds?: number
@@ -48,9 +50,11 @@ const DownTimeBox = styled(Box)`
 
 const PERCENT_MAX = 100;
 
-const NavFooter: React.FC<NavFooterProps> = ({}) => {
+const NavFooter: React.FC<NavFooterProps> = ({ }) => {
   const { t } = useTranslation();
   const { isDark } = useTheme();
+
+  const dispatch = useDispatch();
 
   const [percent, setPercent] = useState(0);
   const [temp, setTemp] = useState(0);
@@ -74,7 +78,11 @@ const NavFooter: React.FC<NavFooterProps> = ({}) => {
   return (
     <Box mb='32px' padding='0 8px'>
       <TimeInfoBox flexDirection='column' justifyContent='center'>
-        <Flex alignItems='center'>
+        <Flex onClick={() => {
+          dispatch(fetchWalletBurncointoday());
+        }} style={{
+          cursor: 'pointer',
+        }} title='点击刷新' alignItems='center'>
           <Box position='relative' width='33px' height='33px'>
             <Circle
               percent={percent}
