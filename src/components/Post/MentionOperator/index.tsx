@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Image } from 'uikit';
+import { Box, Flex, Text } from 'uikit';
 import { useToast } from 'hooks';
-import { Icon, ReplyModal, MoreOperatorEnum, TimeGain } from 'components';
+import {
+  Icon,
+  ReplyModal,
+  MoreOperatorEnum,
+  TimeGain,
+  Forward,
+} from 'components';
 import { MentionOperatorWrapper } from './style';
 import { Api } from 'apis';
 import RewardAuthTag from 'components/RewardAuth/RewardAuthTag';
@@ -150,12 +156,24 @@ const MentionOperator: React.FC<IProps> = ({
               size={18}
               color='textTips'
             />
-            {itemData.comment_num || 0}
+            <Text ellipsis color='textTips'>
+              {itemData.comment_num || 0}
+            </Text>
           </Box>
-          {/* <Box className="operator-item">
-            <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />
-            {itemData.share_num || 0}
-          </Box> */}
+          <Box
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className='operator-item'
+          >
+            <Forward
+              type='post'
+              total={itemData.forward_num || 0}
+              data={itemData}
+              onSuccess={type => callback(itemData, MoreOperatorEnum[type])}
+            />
+          </Box>
           {hasLike && (
             <Box
               className='operator-item'
@@ -180,7 +198,9 @@ const MentionOperator: React.FC<IProps> = ({
                   color='textTips'
                 />
               )}
-              {itemData.like_num || 0}
+              <Text ellipsis color='textTips'>
+                {itemData.like_num || 0}
+              </Text>
             </Box>
           )}
           {hasTime && <TimeGain total={itemData.total_receive_time} />}

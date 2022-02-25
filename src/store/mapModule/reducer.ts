@@ -4,18 +4,19 @@ import {
   addUnFollowUserIds,
   removeUnFollowUserId,
   removeUnFollowUserIds,
-  
   addBlockUserId,
   addBlockUserIds,
   removeBlockUserId,
   removeBlockUserIds,
-
   addDeletePostId,
   addTranslateIds,
   removeTranslateIds,
+  addCommentTranslateIds,
+  removeCommentTranslateIds,
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
+import uniq from 'lodash/uniq';
 import { stat } from 'fs';
 import { MapModuleState } from 'store/types';
 import { FetchStatus } from 'config/types';
@@ -29,18 +30,19 @@ const initialState: MapModuleState = {
   postStatusMap: {},
   userStatusMap: {},
   postTranslateMap: {},
+  commentTranslateMap: {},
   needTranslatePostIds: [],
+  needTranslateCommentIds: [],
   unFollowUsersIds: [],
   blockUsersIds: [],
   deletePostIds: [],
-  status: []
+  status: [],
 };
-
 
 export const fetchPostDetailAsync =
   (id: string | number) => async (dispatch, getState) => {
     try {
-      const detailRes = await Api.HomeApi.articleFindById({
+      const detailRes = await Api.HomeApi.articleV2FindById({
         id: `${id}`,
       });
       if (Api.isSuccess(detailRes)) {
@@ -50,8 +52,9 @@ export const fetchPostDetailAsync =
             post: detailRes.data,
           }),
         );
-        const ids = checkTranslateIds([detailRes.data])
-        dispatch(addTranslateIds(ids))
+        const { postIds, commentIds } = checkTranslateIds([detailRes.data]);
+        dispatch(addTranslateIds(postIds));
+        dispatch(addCommentTranslateIds(commentIds));
       }
     } catch (error) {
       console.error(error);
@@ -76,57 +79,101 @@ export const fetchUserInfoAsync =
   };
 
 export const fetchAllPostTranslateAsync = () => (dispatch, getState) => {
-  const { mapModule: { postTranslateMap } } = getState() as { mapModule: MapModuleState }
-  const noFetchIds: number[] = []
+  const {
+    mapModule: { postTranslateMap },
+  } = getState() as { mapModule: MapModuleState };
+  const noFetchIds: number[] = [];
   Object.keys(postTranslateMap).forEach(key => {
     if (postTranslateMap[key].status === FetchStatus.NOT_FETCHED) {
-      noFetchIds.push(Number(key))
+      noFetchIds.push(Number(key));
     }
-  })
+  });
   // 最大价值20条数据
   if (noFetchIds.length && noFetchIds.length < 20) {
-    dispatch(fetchPostTranslateAsync(noFetchIds))
+    dispatch(fetchPostTranslateAsync(noFetchIds));
   }
-}
+};
 
-export const fetchPostTranslateAsync =
-  (ids: number[]) => async (dispatch, getState) => {
-    dispatch(setPostTranslate({ ids, data: {}, status: FetchStatus.LOADING, showTranslate: true  }))
-    try {
-      const res = await Api.HomeApi.getPostTranslateById({
+export const fetchAllCommentTranslateAsync = () => (dispatch, getState) => {
+  const {
+    mapModule: { commentTranslateMap },
+  } = getState() as { mapModule: MapModuleState };
+  const noFetchIds: number[] = [];
+  Object.keys(commentTranslateMap).forEach(key => {
+    if (commentTranslateMap[key].status === FetchStatus.NOT_FETCHED) {
+      noFetchIds.push(Number(key));
+    }
+  });
+  // 最大价值20条数据
+  if (noFetchIds.length && noFetchIds.length < 20) {
+    dispatch(fetchPostTranslateAsync(noFetchIds));
+  }
+};
+
+export const fetchTranslateAsync = async (ids: number[], type = 'post') => {
+  let res = null;
+  try {
+    if (type === 'post') {
+      res = await Api.HomeApi.getPostTranslateById({
         pids: ids,
         target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
         source: '',
       });
-      if (Api.isSuccess(res)) {
-        dispatch(
-          setPostTranslate({
-            ids,
-            data: res.data,
-            status: FetchStatus.SUCCESS
-          }),
-        );
-      } else {
-        dispatch(
-          setPostTranslate({
-            ids,
-            data: {},
-            status: FetchStatus.FAILED
-          }),
-        );
-      }
-    } catch (error) {
-      console.error(error);
-      dispatch(
-        setPostTranslate({
-          ids,
-          data: {},
-          status: FetchStatus.FAILED
-        }),
-      );
+    } else {
+      res = await Api.HomeApi.getCommentTranslateById({
+        pids: ids,
+        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
+        source: '',
+      });
     }
+
+    if (Api.isSuccess(res)) {
+      return {
+        ids,
+        data: res.data,
+        status: FetchStatus.SUCCESS,
+      };
+    }
+    return {
+      ids,
+      data: {},
+      status: FetchStatus.FAILED,
+    };
+  } catch (error) {
+    return {
+      ids,
+      data: {},
+      status: FetchStatus.FAILED,
+    };
+  }
+};
+export const fetchPostTranslateAsync =
+  (ids: number[]) => async (dispatch, getState) => {
+    dispatch(
+      setPostTranslate({
+        ids,
+        data: {},
+        status: FetchStatus.LOADING,
+        showTranslate: true,
+      }),
+    );
+    const res = await fetchTranslateAsync(ids);
+    dispatch(setPostTranslate(res));
   };
 
+export const fetchCommentTranslateAsync =
+  (ids: number[]) => async (dispatch, getState) => {
+    dispatch(
+      setCommentTranslate({
+        ids,
+        data: {},
+        status: FetchStatus.LOADING,
+        showTranslate: true,
+      }),
+    );
+    const res = await fetchTranslateAsync(ids, 'comment');
+    dispatch(setCommentTranslate(res));
+  };
 
 export const Post = createSlice({
   name: 'post',
@@ -152,27 +199,52 @@ export const Post = createSlice({
     },
     setPostTranslate: (state, { payload }) => {
       const { ids, data, ...info } = payload;
-      const datas = {}
+      const datas = {};
       ids.forEach(id => {
         datas[id] = {
           ...state.postTranslateMap[id],
           content: data[id],
           ...info,
-        }
-      })
+        };
+      });
       state.postTranslateMap = {
         ...state.postTranslateMap,
         ...datas,
       };
     },
     changePostTranslateState: (state, { payload }) => {
-      const { id, showTranslate } = payload
+      const { id, showTranslate } = payload;
       state.postTranslateMap = {
         ...state.postTranslateMap,
         [id]: {
           ...state.postTranslateMap[id],
           showTranslate, // 是否显示翻译
-        }
+        },
+      };
+    },
+    setCommentTranslate: (state, { payload }) => {
+      const { ids, data, ...info } = payload;
+      const datas = {};
+      ids.forEach(id => {
+        datas[id] = {
+          ...state.commentTranslateMap[id],
+          content: data[id],
+          ...info,
+        };
+      });
+      state.commentTranslateMap = {
+        ...state.commentTranslateMap,
+        ...datas,
+      };
+    },
+    changeCommentTranslateState: (state, { payload }) => {
+      const { id, showTranslate } = payload;
+      state.commentTranslateMap = {
+        ...state.commentTranslateMap,
+        [id]: {
+          ...state.commentTranslateMap[id],
+          showTranslate, // 是否显示翻译
+        },
       };
     },
   },
@@ -180,46 +252,75 @@ export const Post = createSlice({
     builder
       .addCase(addUnFollowUserId, (state, { payload }) => {
         if (!state.unFollowUsersIds.includes(payload)) {
-          state.unFollowUsersIds = [...state.unFollowUsersIds, payload]
+          state.unFollowUsersIds = uniq([...state.unFollowUsersIds, payload]);
         }
       })
       .addCase(addUnFollowUserIds, (state, { payload }) => {
-        // XXX: 未做去重处理
-        state.unFollowUsersIds = [...state.unFollowUsersIds, ...payload]
+        state.unFollowUsersIds = uniq([...state.unFollowUsersIds, ...payload]);
       })
       .addCase(removeUnFollowUserId, (state, { payload }) => {
-        state.unFollowUsersIds = state.unFollowUsersIds.filter(item => item !== payload)
+        state.unFollowUsersIds = state.unFollowUsersIds.filter(
+          item => item !== payload,
+        );
       })
       .addCase(removeUnFollowUserIds, (state, { payload }) => {
-        state.unFollowUsersIds = state.unFollowUsersIds.filter(item => !payload.includes(item))
+        state.unFollowUsersIds = state.unFollowUsersIds.filter(
+          item => !payload.includes(item),
+        );
       })
       .addCase(addBlockUserId, (state, { payload }) => {
         if (!state.blockUsersIds.includes(payload)) {
-          state.blockUsersIds = [...state.blockUsersIds, payload]
+          state.blockUsersIds = [...state.blockUsersIds, payload];
         }
       })
       .addCase(addBlockUserIds, (state, { payload }) => {
-        // XXX: 未做去重处理
-        state.blockUsersIds = [...state.blockUsersIds, ...payload]
+        state.blockUsersIds = uniq([...state.blockUsersIds, ...payload]);
       })
       .addCase(removeBlockUserId, (state, { payload }) => {
-        state.blockUsersIds = state.blockUsersIds.filter(item => item !== payload)
+        state.blockUsersIds = state.blockUsersIds.filter(
+          item => item !== payload,
+        );
       })
       .addCase(removeBlockUserIds, (state, { payload }) => {
-        state.blockUsersIds = state.blockUsersIds.filter(item => !payload.includes(item))
+        state.blockUsersIds = state.blockUsersIds.filter(
+          item => !payload.includes(item),
+        );
       })
       .addCase(addDeletePostId, (state, { payload }) => {
-        state.deletePostIds = [...state.deletePostIds, payload]
+        state.deletePostIds = uniq([...state.deletePostIds, payload]);
       })
       .addCase(addTranslateIds, (state, { payload }) => {
-        state.needTranslatePostIds = [...state.needTranslatePostIds, ...payload]
+        state.needTranslatePostIds = uniq([
+          ...state.needTranslatePostIds,
+          ...payload,
+        ]);
       })
       .addCase(removeTranslateIds, (state, { payload }) => {
-        state.needTranslatePostIds = state.needTranslatePostIds.filter(item => !payload.includes(item))
+        state.needTranslatePostIds = state.needTranslatePostIds.filter(
+          item => !payload.includes(item),
+        );
       })
+      .addCase(addCommentTranslateIds, (state, { payload }) => {
+        state.needTranslateCommentIds = uniq([
+          ...state.needTranslateCommentIds,
+          ...payload,
+        ]);
+      })
+      .addCase(removeCommentTranslateIds, (state, { payload }) => {
+        state.needTranslateCommentIds = state.needTranslateCommentIds.filter(
+          item => !payload.includes(item),
+        );
+      });
   },
 });
 
-export const { setPostDetail, setUserInfo, setPostTranslate, changePostTranslateState } = Post.actions;
+export const {
+  setPostDetail,
+  setUserInfo,
+  setPostTranslate,
+  changePostTranslateState,
+  setCommentTranslate,
+  changeCommentTranslateState,
+} = Post.actions;
 
 export default Post.reducer;

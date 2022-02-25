@@ -47,7 +47,7 @@ import { useMapModule } from 'store/mapModule/hooks';
 import PostList from 'components/Post/PostList';
 import checkTranslateIds from 'utils/checkTranslateIds';
 import { useDispatch } from 'react-redux';
-import { addTranslateIds } from 'store/mapModule/actions';
+import { addCommentTranslateIds, addTranslateIds } from 'store/mapModule/actions';
 
 const Center = styled(Box)`
   width: 100%;
@@ -249,7 +249,7 @@ const Profile: React.FC<any> = props => {
       });
       const [profile, tweet] = await Promise.all([
         Api.MeApi.getProfile(uid),
-        Api.MeApi.getProfileMsg({ page: offset || page, perpage, uid }),
+        Api.MeApi.getProfileV2Msg({ page: offset || page, perpage, uid }),
       ]);
       if (Api.isSuccess(profile)) {
         setState(p => {
@@ -264,8 +264,11 @@ const Profile: React.FC<any> = props => {
           p.page = (offset || page) + 1;
           p.totalPage = tweet.data.total_page;
         });
-        const ids = checkTranslateIds(tweet?.data?.list || []);
-        dispatch(addTranslateIds(ids));
+        // const ids = checkTranslateIds(tweet?.data?.list || []);
+        // dispatch(addTranslateIds(ids));
+        const { postIds, commentIds } = checkTranslateIds(tweet?.data?.list || [], 'post_id');
+        dispatch(addTranslateIds(postIds));
+        dispatch(addCommentTranslateIds(commentIds));
         if (tweet?.data?.list?.length < perpage) {
           setIsEnd(true);
         } else {

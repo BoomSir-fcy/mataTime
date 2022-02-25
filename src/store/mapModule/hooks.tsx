@@ -3,8 +3,13 @@ import { FetchStatus } from 'config/types';
 import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MapModuleState } from '../types';
-import { removeTranslateIds } from './actions';
-import { fetchPostTranslateAsync, setPostTranslate } from './reducer';
+import { removeCommentTranslateIds, removeTranslateIds } from './actions';
+import {
+  fetchCommentTranslateAsync,
+  fetchPostTranslateAsync,
+  setCommentTranslate,
+  setPostTranslate,
+} from './reducer';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from '../login';
 
 export const useMapModule = () => {
@@ -38,6 +43,14 @@ export const usePostTranslateMap = id => {
   }, [postTranslateMap, id]);
 };
 
+export const useCommentTranslateMap = id => {
+  const { commentTranslateMap } = useMapModule();
+
+  return useMemo(() => {
+    return commentTranslateMap[id] || null;
+  }, [commentTranslateMap, id]);
+};
+
 export const useFetchAutoPostTranslate = () => {
   const { postTranslateMap, needTranslatePostIds } = useMapModule();
   const userInfo = useSelector(
@@ -68,4 +81,41 @@ export const useFetchAutoPostTranslate = () => {
       );
     }
   }, [needTranslatePostIds, dispatch, postTranslateMap, userInfo.translation]);
+};
+
+export const useFetchAutoCommentTranslate = () => {
+  const { commentTranslateMap, needTranslateCommentIds } = useMapModule();
+  const userInfo = useSelector(
+    (state: { loginReducer: Login }) => state.loginReducer.userInfo,
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (userInfo.translation === 1 && needTranslateCommentIds.length) {
+      const fetchIds = [];
+      needTranslateCommentIds.forEach(id => {
+        if (!commentTranslateMap[id]) {
+          fetchIds.push(id);
+        }
+      });
+      dispatch(removeCommentTranslateIds(needTranslateCommentIds));
+      if (fetchIds.length) {
+        dispatch(fetchCommentTranslateAsync(fetchIds));
+      }
+    } else if (needTranslateCommentIds.length) {
+      dispatch(removeCommentTranslateIds(needTranslateCommentIds));
+      dispatch(
+        setCommentTranslate({
+          ids: needTranslateCommentIds,
+          data: {},
+          status: FetchStatus.NOT_FETCHED,
+          showTranslate: false,
+        }),
+      );
+    }
+  }, [
+    needTranslateCommentIds,
+    dispatch,
+    commentTranslateMap,
+    userInfo.translation,
+  ]);
 };
