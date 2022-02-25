@@ -167,7 +167,7 @@ export const fetchSearchPostAsync =
     const { search } = getState() as { search: SearchState };
     if (!search.searchVal) return;
     try {
-      const fetchPost = await Api.SearchApi.getSearchPost({
+      const fetchPost = await Api.SearchApi.getSearchV2Post({
         key: search.searchVal,
         start: refresh ? 0 : search.seart_index || 0,
         limit: MAX_SPEND_TIME_PAGE_TATOL,
