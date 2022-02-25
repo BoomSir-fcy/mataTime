@@ -126,8 +126,6 @@ export const getTribeNftInfo = async (tribeId: string | number) => {
     },
   ];
   try {
-    console.log(tribeId);
-
     const [extraTribeInfo, extraNftInfo] = await multicall(tribeAbi, calls);
     return {
       ownerNFTName: extraNftInfo.ownerNFTName,

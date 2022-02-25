@@ -88,14 +88,3 @@ export const LogoIcon = styled(Flex)`
   border: 1px solid ${({ theme }) => theme.colors.white_black};
   border-radius: 50%;
 `;
-
-export const TextareaStyled = styled(Box)<{ disabled?: boolean }>`
-  position: relative;
-  width: 100%;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
-  .textarea-content-length {
-    position: absolute;
-    right: 24%;
-    bottom: 8%;
-  }
-`;

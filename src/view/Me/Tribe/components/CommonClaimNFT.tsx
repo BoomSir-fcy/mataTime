@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { fetchTribeNftInfo } from 'store/tribe';
 import { useStore } from 'store';
 import { BASE_IMAGE_URL } from 'config';
+import { getBscScanLink } from 'utils/contract';
 
 const NFTBox = styled(Box)`
   position: relative;
@@ -35,17 +36,11 @@ const nftType = {
 } as const;
 type NFTType = typeof nftType[keyof typeof nftType];
 
-export const CommonClaimNFT: React.FC<{ type: NFTType }> = React.memo(
-  ({ type }) => {
+export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
+  React.memo(({ type, tribeId }) => {
     const { t } = useTranslation();
     const [visible, setVisible] = useState(false);
-    const dispatch = useDispatch();
-    const tribeId = useStore(p => p.tribe.tribeId);
     const tribesNftInfo = useStore(p => p.tribe.tribesNftInfo);
-
-    useEffect(() => {
-      dispatch(fetchTribeNftInfo({ tribeId }));
-    }, [tribeId]);
 
     const nftInfo = useMemo(() => {
       if (type === nftType.MASTER) {
@@ -92,6 +87,7 @@ export const CommonClaimNFT: React.FC<{ type: NFTType }> = React.memo(
               color='textPrimary'
               height='24px'
               fontSize='16px'
+              // href={getBscScanLink()}
               href='#'
             >
               View on BSCscan
@@ -128,5 +124,4 @@ export const CommonClaimNFT: React.FC<{ type: NFTType }> = React.memo(
         </ModalWrapper>
       </>
     );
-  },
-);
+  });

@@ -9,3 +9,5 @@ export * from './CommonInquiryModal';
 export * from './CommentModal';
 export * from './shieldUserModal';
 export * from './verifyCodeModal';
+export * from './WaitWalletConfirmModal';
+export * from './WaitWalletConfirmModal/SuccessfullyModal';

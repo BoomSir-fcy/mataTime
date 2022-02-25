@@ -12,7 +12,7 @@ import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
 
 const initialState: TribeState = {
-  tribeId: 1415926539,
+  tribeId: 1415926538,
   isApproveStakeNft: false,
   tribeBaseInfo: {
     name: '',
@@ -253,7 +253,12 @@ export const tribe = createSlice({
 });
 
 // Actions
-export const { setActiveNftInfo, setTribeNftInfo, setTribeBaseInfo, setLoading, setIsEnd } =
-  tribe.actions;
+export const {
+  setActiveNftInfo,
+  setTribeNftInfo,
+  setTribeBaseInfo,
+  setLoading,
+  setIsEnd,
+} = tribe.actions;
 
 export default tribe.reducer;

@@ -84,8 +84,6 @@ export const TribeCreateBtn: React.FC<{
             });
             try {
               await onApproveTicketsNFT();
-              console.log('22222222222');
-
               setState(p => {
                 p.isApprove = true;
               });

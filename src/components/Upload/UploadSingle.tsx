@@ -1,10 +1,10 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
-import { BoxProps, Flex, Image, Text } from 'uikit';
-import { Api } from 'apis';
+import { BoxProps, Flex, Text, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { BASE_IMAGE_URL } from 'config';
+import { Loading } from 'components';
 interface UploadProps extends BoxProps {
   url?: string;
   tips?: string | ReactNode;
@@ -13,7 +13,6 @@ interface UploadProps extends BoxProps {
 }
 
 const Container = styled(Flex)<{ disabled?: boolean }>`
-  position: relative;
   flex-direction: column;
   input {
     position: absolute;
@@ -22,6 +21,7 @@ const Container = styled(Flex)<{ disabled?: boolean }>`
     opacity: 0;
   }
   label {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,6 +46,8 @@ export const UploadSingle: React.FC<UploadProps> = ({
   const imageInput = React.useRef<HTMLInputElement>();
   const { t } = useTranslation();
   const [imgUrl, setImgUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+
   // 上传图片
   const uploadFile = async () => {
     const file: any = new FileReader();
@@ -70,11 +72,15 @@ export const UploadSingle: React.FC<UploadProps> = ({
         //   setImgUrl(path);
         //   uploadSuccess(path);
         // };
-        const full_path =
-          'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
-        const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
-        setImgUrl(path);
-        uploadSuccess(path);
+        setLoading(true);
+        setTimeout(() => {
+          const full_path =
+            'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
+          const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
+          setImgUrl(path);
+          uploadSuccess(path);
+          setLoading(false);
+        }, 2000);
       }
     }
   };
@@ -87,6 +93,11 @@ export const UploadSingle: React.FC<UploadProps> = ({
   return (
     <Container disabled={disabled}>
       <label htmlFor='upload-images'>
+        {loading && (
+          <Box>
+            <Loading visible={loading} />
+          </Box>
+        )}
         {imgUrl ? (
           <img
             src={`${BASE_IMAGE_URL}${imgUrl}`}

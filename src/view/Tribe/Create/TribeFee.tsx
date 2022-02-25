@@ -486,8 +486,7 @@ const LabelHelper: React.FC<{
     <LabelFlex>
       <Label required={required}>{label}</Label>
       <QuestionHelper
-        ml='8px'
-        mt='4px'
+        margin='2px 8px'
         color='white_black'
         text={helper}
         placement='auto'

@@ -4,13 +4,7 @@ import { useTranslation } from 'contexts';
 import styled from 'styled-components';
 import { Box, Text, Flex, Input } from 'uikit';
 import { useImmer } from 'use-immer';
-import {
-  FormFlex,
-  FormItem,
-  InputPanelStyle,
-  Label,
-  TextareaStyled,
-} from './style';
+import { FormFlex, FormItem, InputPanelStyle, Label } from './style';
 import { ARTICLE_POST_MAX_LEN } from 'config';
 import TextArea from 'components/TextArea';
 import { actionTypes } from './type';
@@ -32,8 +26,6 @@ const TribeInfoForward = (props, ref) => {
   });
 
   useEffect(() => {
-    console.log('----->', props.info);
-
     if (info?.name) {
       setState(p => {
         p.name = info.name;
