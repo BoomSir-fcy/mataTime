@@ -65,3 +65,9 @@ export const Span = styled.span``;
 export const Highlight = styled.span`
   color: ${({ theme }) => theme.colors.textPrimary};
 `;
+export const HighlightFull = styled.span`
+  color: ${({ theme }) => theme.colors.textPrimary};
+  & * {
+    color: ${({ theme }) => theme.colors.textPrimary};
+  }
+`;

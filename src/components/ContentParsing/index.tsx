@@ -269,6 +269,21 @@ export const ContentParsing = React.memo(
               {children?.map((n, index) => serialize2(n, null, index))}
             </Link>
           );
+        case 'link':
+          return (
+            <a
+              target='_blank'
+              onClick={event => {
+                event.stopPropagation();
+                // event.preventDefault();
+              }}
+              href={node?.url}
+              title={node?.url}
+              rel='noreferrer'
+            >
+              {node?.character}
+            </a>
+          );
         case 'mention':
           return (
             <FollowPopup uid={node?.attrs?.userid || 0} key={index}>

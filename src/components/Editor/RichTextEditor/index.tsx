@@ -20,7 +20,7 @@ import {
 } from 'slate';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
-import { withImages, withMentions } from '../withEditor';
+import { withImages, withMentions, withLink } from '../withEditor';
 import { Element, Leaf } from './RenderElement';
 import Toolbar from './Toolbar';
 import { initialValue } from './testdata';
@@ -60,7 +60,7 @@ const RichTextEditor = (
 
   // const [editor] = useState(() => withReact(createEditor()));
   const editor = useMemo(
-    () => withMentions(withImages(withHistory(withReact(createEditor())))),
+    () => withLink(withMentions(withImages(withHistory(withReact(createEditor()))))),
     [],
   );
 

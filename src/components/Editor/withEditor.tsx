@@ -66,3 +66,16 @@ export const withMentions = editor => {
 
   return editor;
 };
+
+export const withLink = editor => {
+  const { isInline, isVoid } = editor;
+
+  editor.isInline = element => {
+    return element.type === 'link' ? true : isInline(element);
+  };
+
+  editor.isVoid = element => {
+    return element.type === 'link' ? true : isVoid(element);
+  };
+  return editor;
+};

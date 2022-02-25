@@ -86,12 +86,13 @@ const insertEmoji = (editor, data) => {
 };
 
 export const insertLink = (editor, { url, text }) => {
-  const mention: LinkElement = {
+  const link: LinkElement = {
     type: 'link',
     url,
-    children: [{ text: text || url }],
+    character: text || url,
+    children: [{ text: '' }],
   };
-  Transforms.insertNodes(editor, mention);
+  Transforms.insertNodes(editor, link);
   Transforms.move(editor);
 };
 

@@ -40,7 +40,7 @@ export type ImageElement = {
   children: EmptyText[]
 }
 
-export type LinkElement = { type: 'link'; url: string; children: Descendant[] }
+export type LinkElement = { type: 'link'; url: string; character: string; children: Descendant[] }
 
 export type ButtonElement = { type: 'button'; character: string; children: Descendant[] }
 
