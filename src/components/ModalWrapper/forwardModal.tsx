@@ -9,6 +9,7 @@ import {
   AvatarCard,
   ModalWrapper,
 } from 'components';
+import { displayTime } from 'utils';
 
 import { mediaQueriesSize } from 'uikit/theme/base';
 
@@ -85,6 +86,7 @@ export const ForwardContent: React.FC<{
         address={items.user_address}
         userName={items.user_name}
         avatar={items.user_avator_url}
+        time={displayTime(items.add_time)}
         scale='sm'
       />
       <ParseContent>
