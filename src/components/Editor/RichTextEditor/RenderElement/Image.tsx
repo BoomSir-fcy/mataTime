@@ -101,10 +101,10 @@ const Image = ({ attributes, children, element, isEditor }) => {
   const focused = useFocused()
 
   return (
-    <Box contentEditable={false} {...attributes}>
+    <Box {...attributes}>
       {children}
       <BoxStyledWrapper align={element?.align}>
-        <BoxStyled selected={isEditor && selected && focused} position='relative' display='inline-block'>
+        <BoxStyled contentEditable={false} selected={isEditor && selected && focused} position='relative' display='inline-block'>
           <Loading zIndex={2} overlay visible={element.loading} />
           {/* <ImageStyled src={element.url} alt='' /> */}
           {

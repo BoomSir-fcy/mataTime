@@ -9,6 +9,8 @@ import {
 } from 'slate-react';
 import { FollowPopup } from 'components';
 import { MentionBox } from './style';
+import styled from 'styled-components';
+import { Highlight } from './RichTextEditor/RenderElement/styleds';
 
 export const Mention = ({ attributes, children, element }) => {
   const selected = useSelected();
@@ -52,3 +54,27 @@ export const TopicElement = ({ attributes, children, element }) => {
     </>
   );
 };
+
+const LinkStyled = styled.a`
+  text-decoration: underline;
+`
+
+export const LinkWithText = ({ attributes, children, element }) => {
+  return (
+    <LinkStyled
+      {...attributes}
+      target='_blank'
+      onClick={event => {
+        event.stopPropagation();
+        // event.preventDefault();
+      }}
+      href={element.href}
+      title={element.href}
+      rel='noreferrer'
+    >
+      <Highlight>
+        {children}
+      </Highlight>
+    </LinkStyled>
+  )
+}

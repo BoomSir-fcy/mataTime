@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import reactStringReplace from 'react-string-replace';
 import styled, { DefaultTheme } from 'styled-components';
-import { Mention } from 'components/Editor/elements';
+import { Mention, LinkWithText } from 'components/Editor/elements';
 import { Box, BoxProps, Card, Text } from 'uikit';
 import {
   SQUARE_REGEXP,
@@ -36,6 +36,8 @@ export const Element = props => {
       return <Code {...props} />;
     case 'mention':
       return <Mention {...props} />;
+    case 'link':
+      return <LinkWithText {...props} />;
     default:
       return <DefaultElement {...attributes}>{children}</DefaultElement>;
   }

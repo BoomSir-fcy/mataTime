@@ -5,7 +5,7 @@ import { useSlate, useSlateStatic, ReactEditor } from 'slate-react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { HistoryEditor, History } from 'slate-history';
 import { Icon, ModalWrapper, SearchPop } from 'components';
-import { ImageElement, ParagraphElement } from '../../custom-types';
+import { ImageElement, LinkElement, ParagraphElement } from '../../custom-types';
 import { Emoji } from '../../emoji';
 import InsertImageForm from './InsertImageForm';
 import {
@@ -84,6 +84,17 @@ const insertEmoji = (editor, data) => {
   ReactEditor.focus(editor);
   editor.insertText(data);
 };
+
+export const insertLink = (editor, { url, text }) => {
+  const mention: LinkElement = {
+    type: 'link',
+    url,
+    children: [{ text: text || url }],
+  };
+  Transforms.insertNodes(editor, mention);
+  Transforms.move(editor);
+};
+
 
 const ButtonStyled = props => (
   <Button
@@ -249,7 +260,10 @@ const Toolbar = () => {
         visible={visible}
         setVisible={setVisible}
       >
-        <LinkInsert />
+        <LinkInsert onCancle={() => setVisible(false)} onConfirm={(values) => {
+          setVisible(false)
+          insertLink(editor, { url: values.url, text: values.text })
+        }} />
       </ModalWrapper>
       <Box position='relative' width='100%' height='0'>
         {(searcTopic || searchUser) && (

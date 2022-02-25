@@ -5,14 +5,18 @@ import { Box, Button, Flex, Input } from "uikit"
 
 interface LinkInsertProps {
   onCancle: () => void;
-  onConfirm: () => void;
+  onConfirm: (values: {
+    text: string;
+    url: string;
+  }) => void;
 }
-const LinkInsert = () => {
+const LinkInsert: React.FC<LinkInsertProps> = ({ onCancle, onConfirm }) => {
 
   const [values, setValues] = useState({
     text: '',
     url: '',
   })
+  const [disabled, setDisable] = useState(false)
 
   const handleChange = useCallback((event, key: 'text' | 'url') => {
     console.log(event, key)
@@ -22,6 +26,9 @@ const LinkInsert = () => {
         [key]: event.target.value,
       }
     });
+    if (key === 'url') {
+      setDisable(!HTTP_REGEXP.test(event.target.value))
+    }
   }, [setValues])
 
   return (
@@ -32,9 +39,10 @@ const LinkInsert = () => {
       <Box mt='16px'>
         <Input value={values.url} onChange={(event) => { handleChange(event, 'url') }} placeholder='请输入链接地址' />
       </Box>
+      {HTTP_REGEXP.test(values.url) ? 1 : 2}
       <Flex mt='24px' justifyContent='space-around'>
-        <Button>取消</Button>
-        <Button disabled={!HTTP_REGEXP.test(values.url)}>确定</Button>
+        <Button onClick={onCancle}>取消</Button>
+        <Button onClick={() => onConfirm(values)} disabled={disabled}>确定</Button>
       </Flex>
     </Box>
   )
