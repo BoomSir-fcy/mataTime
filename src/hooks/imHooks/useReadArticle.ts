@@ -6,6 +6,7 @@ import useIm from './useIm';
 import useInterval from '../useInterval';
 
 import { ReadType } from 'hooks/imHooks/types';
+import { ArticlePosition } from 'contexts/ImContext';
 
 // 视图范围优化
 const VIEW_PADDING = {
@@ -13,12 +14,19 @@ const VIEW_PADDING = {
   bottom: 100, // 忽略底部100px的内容
 };
 
+
+interface ArticleIds {
+  [readType: string]: ArticlePosition[];
+}
+
 /**
  * @dev useReadArticle websocket向后端传当前阅读的评论或者id
  *
  */
 const useReadArticle = (nonce?: number | boolean) => {
-  const { im, articleIds, articlePositions, setArticleIds } = useIm();
+  const { im, articlePositions } = useIm();
+  // const { im, articleIds, articlePositions, setArticleIds } = useIm();
+  const [articleIds, setArticleIds] = useState<ArticleIds>({})
   const timeStep = 1; // 推送时间间隔
   const isBrowserTabActiveRef = useIsBrowserTabActive();
 
@@ -32,16 +40,16 @@ const useReadArticle = (nonce?: number | boolean) => {
             {
               commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
               read_type: Number(type), // 文章阅读
-              read_uid: articleIds[type], // id数组 推文或者评论的
+              read_uid: articleIds[type]?.map(item => item.articleId) || [], // id数组 推文或者评论的
               time_step: timeStep, // 推送时间间隔
             },
             true,
           );
         } else {
           // 拼接转发内容
-          const readInfo = Object.keys(articlePositions).reduce(
+          const readInfo = articleIds[type]?.reduce(
             (prev, curr) => {
-              const { forwardReadInfo } = articlePositions[curr];
+              const { forwardReadInfo } = curr;
               if (forwardReadInfo.post_id) {
                 prev.push(forwardReadInfo);
               }
@@ -102,13 +110,9 @@ const useReadArticle = (nonce?: number | boolean) => {
         (offsetBottom >= top && bottom >= offsetBottom)
       ) {
         // if (topViews[readType]); topViews[readType] = []; topViews[readType].push
-        (topViews[readType] || (topViews[readType] = [])).push(
-          Number(articleId),
-        );
+        (topViews[readType] || (topViews[readType] = [])).push(articlePositionsVal[item]);
       } else if (top >= offsetTop && offsetBottom >= top) {
-        (topViews[readType] || (topViews[readType] = [])).push(
-          Number(articleId),
-        );
+        (topViews[readType] || (topViews[readType] = [])).push(articlePositionsVal[item]);
       }
     });
     setArticleIds(topViews);

@@ -3,16 +3,19 @@ import { useStore } from 'store';
 import { IM } from 'utils';
 import { ReadType } from 'hooks/imHooks/types';
 
-interface ArticlePositions {
+
+
+export interface ArticlePosition {
+  offsetTop: number;
+  offsetBottom: number;
+  articleId: number;
+  readType: ReadType;
+  forwardType?: number;
+  forwardReadInfo?: ForwardStrcut;
+}
+export interface ArticlePositions {
   // [number, number] =  [top, bottom], 当前文章边界
-  [articleId_readType: string]: {
-    offsetTop: number;
-    offsetBottom: number;
-    articleId: number;
-    readType: ReadType;
-    forwardType?: number;
-    forwardReadInfo?: ForwardStrcut;
-  };
+  [articleId_readType: string]: ArticlePosition;
 }
 
 interface ForwardStrcut {
