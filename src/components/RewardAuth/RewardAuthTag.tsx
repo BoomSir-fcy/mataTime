@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Popup from 'reactjs-popup';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Flex, Box, Image, useTooltip } from 'uikit';
+import { Flex, Box, Image, Text, useTooltip } from 'uikit';
 import { useStore, storeAction } from 'store';
 import { isApp } from 'utils/client';
 
@@ -39,6 +39,14 @@ const PopupButton = styled(Flex)`
     background: -webkit-linear-gradient(180deg, #ffd700, #e29d24);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent !important;
+  }
+`;
+
+const Container = styled(Box)`
+  max-width: 75px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    max-width: auto;
+    flex: 1;
   }
 `;
 
@@ -118,20 +126,28 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
   );
 
   return (
-    <React.Fragment>
+    <Container>
       {postType === 1 ? (
         <></>
       ) : (
         <React.Fragment>
           <PopupButton ref={targetRef} title={t('editorReward')}>
-            <Box width='18px' mr='10px'>
+            <Box
+              width='18px'
+              mr='10px'
+              style={{
+                flexShrink: 0,
+              }}
+            >
               <Image
                 src={require('assets/images/reward.svg').default}
                 width={18}
                 height={18}
               />
             </Box>
-            {total || 0}
+            <Text color='textTips' ellipsis>
+              {total || 0}
+            </Text>
           </PopupButton>
           {tooltipVisible && tooltip}
         </React.Fragment>
@@ -179,7 +195,7 @@ export const RewardAuthTag: React.FC<RewardAuthProps> = ({
         //   </StyledPopup>
         // </RewardAuthTagStyled>
       )}
-    </React.Fragment>
+    </Container>
   );
 };
 

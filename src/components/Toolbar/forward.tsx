@@ -194,10 +194,12 @@ export const Forward: React.FC<{
     },
   );
   return (
-    <Box>
+    <Box width='100%'>
       <PopupButton ref={targetRef} title={t('Quote Post')}>
         <Icon name='icon-retweet' margin='0 10px 0 0' color='textTips' />
-        <Text color='textTips'>{total}</Text>
+        <Text color='textTips' ellipsis>
+          {total}
+        </Text>
       </PopupButton>
       {tooltipVisible && tooltip}
       {/* 转发 */}
