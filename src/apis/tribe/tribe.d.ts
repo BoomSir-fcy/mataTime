@@ -77,8 +77,8 @@ declare namespace Api {
       title: string;
       topic?: number[];
       remind_user?: string;
-      id?: string
-      verify?: string
+      id?: string;
+      verify?: string;
     }
 
     interface TopicInfo {
