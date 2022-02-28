@@ -1,6 +1,10 @@
+import React from 'react';
 import BigNumber from 'bignumber.js';
 import tribeAbi from 'config/abi/tribe.json';
-import { getTribeAddress } from 'utils/addressHelpers';
+import erc20Abi from 'config/abi/erc20.json';
+import { ethers } from 'ethers';
+import { getTribeAddress, getBnbAddress } from 'utils/addressHelpers';
+import { useERC20 } from 'hooks/useContract';
 import multicall from 'utils/multicall';
 import { TribeBaseInfo, TribesNFTInfo } from './type';
 
@@ -151,5 +155,89 @@ export const getTribeNftInfo = async (tribeId: string | number) => {
       memberNFTImage: '',
       initMemberNFT: false,
     };
+  }
+};
+
+// 查询basic手续费
+export const getBasicFee = async () => {
+  const address = getTribeAddress();
+  const calls = [
+    {
+      address,
+      name: '_join_matter',
+      params: [],
+    },
+  ];
+  try {
+    const tx = await multicall(tribeAbi, calls);
+    return tx[0][0];
+  } catch (error) {
+    return 0;
+  }
+};
+
+// 查询token是否需要授权
+export const getTokenTribeApprove = async (
+  account: string,
+  address: string,
+) => {
+  const tribeAddress = getTribeAddress();
+  const bnbAddreess = getBnbAddress();
+  const calls = [
+    {
+      address,
+      name: 'allowance',
+      params: [account, tribeAddress],
+    },
+  ];
+
+  try {
+    const matterApprove = await multicall(erc20Abi, calls);
+    return matterApprove[0][0].toString();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+// 授权代币
+export const ApproveToken = address => {
+  const coinContract = useERC20(address);
+  const tribeAddress = getTribeAddress();
+
+  const onApprove = React.useCallback(async () => {
+    try {
+      const tx = await coinContract.approve(
+        tribeAddress,
+        ethers.constants.MaxUint256,
+      );
+      const receipt = await tx.wait();
+      console.log('receipt', receipt);
+      return receipt.status;
+    } catch (e) {
+      return false;
+    }
+  }, [coinContract]);
+
+  return { handleApprove: onApprove };
+};
+
+// 加入部落
+export const JoinTribe = async tribe_id => {
+  const tribeAddress = getTribeAddress();
+  const bnbAddress = getBnbAddress();
+  const calls = [
+    {
+      address: tribeAddress,
+      name: 'joinTribe',
+      params: [tribe_id],
+    },
+  ];
+  try {
+    const tx = await multicall(tribeAbi, calls);
+    return tx[0][0];
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 };

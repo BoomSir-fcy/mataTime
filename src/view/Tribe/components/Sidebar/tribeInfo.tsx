@@ -1,19 +1,28 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import { useDispatch } from 'react-redux';
 import { Icon, Avatar } from 'components';
 import { Card, Flex, Text } from 'uikit';
+import { useStore } from 'store';
 
 const TribeInfo = ({ ...props }) => {
+  const dispatch = useDispatch();
+  const tribeInfo = useStore(p => p.tribe.tribeInfo);
+  const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
+
   return (
     <Card padding='16px' isRadius {...props}>
       <Flex justifyContent='space-between' alignItems='flex-end' mb='17px'>
         <Text fontSize='24px' fontWeight='bold'>
-          时光机
+          {tribeInfo?.tribe?.name}
         </Text>
         <Text color='textPrimary'>管理</Text>
       </Flex>
       <Flex alignItems='center' mb='13px'>
         <Text color='textTips'>创建</Text>
-        <Text margin='0 13px'>1029天</Text>
+        <Text margin='0 13px'>
+          {dayjs().diff(dayjs(tribeInfo?.tribe?.create_time * 1000), 'days')}天
+        </Text>
         <Icon name='icon-fenxiang' color='textPrimary' size={18} />
       </Flex>
       <Flex alignItems='center' mb='19px'>
@@ -22,12 +31,7 @@ const TribeInfo = ({ ...props }) => {
           bigmama
         </Text>
       </Flex>
-      <Text>
-        这是一段部落的介绍The PhantaBear project was jointly launched by Jay
-        Chou's PHANTACi and Ezek. PhantaBear is a collection of 10,000
-        algorithmically generated digital collectibles that double as membership
-        cards for the Ezek Club. Each
-      </Text>
+      <Text>{tribeBaseInfo?.introduction}</Text>
     </Card>
   );
 };

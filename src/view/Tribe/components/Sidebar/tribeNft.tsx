@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
-import { Box, Card, Flex, Image, Text, LinkExternal } from 'uikit';
+import { Box, Card, Flex, Image, Text, Button, LinkExternal } from 'uikit';
 import { JoinTribeModal } from 'components';
 import { useStore } from 'store';
+import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 
 const AvatarNft = styled(Image)`
   width: 65px;
@@ -20,13 +22,15 @@ const RowsEllipsis = styled(Flex)`
 `;
 
 const TribeNft = ({ ...props }) => {
-  const tribeInfo = useStore(p => p.tribe.tribeBaseInfo);
+  const dispatch = useDispatch();
+  const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
+  const tribeInfo = useStore(p => p.tribe.tribeInfo);
 
   const [state, setState] = useImmer({
     visible: false,
   });
 
-  // console.log(tribeInfo);
+  console.log(tribeBaseInfo);
 
   return (
     <React.Fragment>
@@ -53,18 +57,38 @@ const TribeNft = ({ ...props }) => {
             </Text>
           </Box>
         </Flex>
-        <Flex mb='12px'>
-          <Text color='textTips'>#00001</Text>
-          <Text ml='30px' color='textTips'>
-            Brithday:2022-01-12
-          </Text>
-        </Flex>
-        <LinkExternal color='textPrimary' height='24px' href='#'>
-          View on BSCscan
-        </LinkExternal>
+        {tribeInfo?.status === 0 && (
+          <Flex mb='12px' justifyContent='center'>
+            <Button
+              onClick={() => {
+                dispatch(fetchTribeJoinBasicServiceAsync());
+                setState(p => {
+                  p.visible = true;
+                });
+              }}
+            >
+              加入部落
+            </Button>
+          </Flex>
+        )}
+        {tribeInfo?.status === 1 && (
+          <React.Fragment>
+            <Flex mb='12px'>
+              <Text color='textTips'>#00001</Text>
+              <Text ml='30px' color='textTips'>
+                Brithday:2022-01-12
+              </Text>
+            </Flex>
+            <LinkExternal color='textPrimary' height='24px' href='#'>
+              View on BSCscan
+            </LinkExternal>
+          </React.Fragment>
+        )}
       </Card>
       <JoinTribeModal
-        visible={true}
+        visible={state.visible}
+        tribeInfo={tribeInfo}
+        tribeBaseInfo={tribeBaseInfo}
         onClose={() =>
           setState(p => {
             p.visible = false;

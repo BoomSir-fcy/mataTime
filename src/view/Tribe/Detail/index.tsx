@@ -11,8 +11,12 @@ import { useStore } from 'store';
 import {
   fetchTribeInfoAsync,
   fetchTribePostAsync,
+  fetchTribeDetailAsync,
   fetchGetTribeBaseInfo,
+  fetchisApprove,
 } from 'store/tribe';
+
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import { TribeSidebar } from '../components/Sidebar';
 
@@ -51,7 +55,9 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   } = useStore(p => p.search);
   const TribeInfo = useStore(p => p.tribe.tribeInfo);
   const TribePost = useStore(p => p.tribe.postList);
+  const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
   const PostList = useStore(p => p.tribe.postList.list);
+  const { account } = useActiveWeb3React();
 
   useEffect(() => {
     const { search } = route.location;
@@ -65,9 +71,21 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   }, [route]);
 
   useEffect(() => {
+    if (account && tribeBaseInfo.feeToken) {
+      dispatch(
+        fetchisApprove({
+          account,
+          address: tribeBaseInfo.feeToken,
+        }),
+      );
+    }
+  }, [account, tribeBaseInfo.feeToken]);
+
+  useEffect(() => {
     if (TribeId) {
       dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
-      dispatch(fetchGetTribeBaseInfo({ TribeId }));
+      dispatch(fetchGetTribeBaseInfo({ tribeId: TribeId }));
+      dispatch(fetchTribeDetailAsync({ tribe_id: TribeId }));
       // dispatch(
       //   fetchTribePostAsync({
       //     selected: TribePost.selected,
