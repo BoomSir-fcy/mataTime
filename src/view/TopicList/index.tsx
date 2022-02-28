@@ -67,7 +67,7 @@ const TopicList = props => {
         });
         // const ids = checkTranslateIds(res.data?.List || []);
         // dispatch(addTranslateIds(ids));
-        const { postIds, commentIds } = checkTranslateIds(res.data?.List || [], 'post_id');
+        const { postIds, commentIds } = checkTranslateIds(res.data?.List || []);
         dispatch(addTranslateIds(postIds));
         dispatch(addCommentTranslateIds(commentIds));
       }
