@@ -8,7 +8,11 @@ import DetailHeader from './Header';
 import DetailTitle from './Title';
 import PostItem from './postItem';
 import { useStore } from 'store';
-import { fetchTribeInfoAsync, fetchTribePostAsync } from 'store/tribe';
+import {
+  fetchTribeInfoAsync,
+  fetchTribePostAsync,
+  fetchGetTribeBaseInfo,
+} from 'store/tribe';
 
 import { TribeSidebar } from '../components/Sidebar';
 

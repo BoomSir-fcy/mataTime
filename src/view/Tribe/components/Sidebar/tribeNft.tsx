@@ -26,7 +26,7 @@ const TribeNft = ({ ...props }) => {
     visible: false,
   });
 
-  console.log(tribeInfo);
+  // console.log(tribeInfo);
 
   return (
     <React.Fragment>
