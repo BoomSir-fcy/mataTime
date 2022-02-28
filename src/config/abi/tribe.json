@@ -63,6 +63,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "rate",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "timestamp",
         "type": "uint256"
       }
@@ -95,6 +101,11 @@
           {
             "internalType": "string",
             "name": "logo",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "introduction",
             "type": "string"
           },
           {
@@ -331,6 +342,11 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "introduction",
+            "type": "string"
+          },
+          {
             "internalType": "address",
             "name": "feeToken",
             "type": "address"
@@ -482,11 +498,6 @@
     "name": "extraTribesInfo",
     "outputs": [
       {
-        "internalType": "string",
-        "name": "introduction",
-        "type": "string"
-      },
-      {
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -494,6 +505,11 @@
       {
         "internalType": "uint256",
         "name": "owner_nft_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "invitationRate",
         "type": "uint256"
       },
       {
@@ -733,6 +749,11 @@
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "introduction",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "feeToken",
         "type": "address"
@@ -920,6 +941,16 @@
         "internalType": "address[]",
         "name": "sup",
         "type": "address[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "names",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "decimals",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -1012,6 +1043,11 @@
       {
         "internalType": "string",
         "name": "logo",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "information",
         "type": "string"
       },
       {
@@ -1161,6 +1197,11 @@
         "internalType": "uint256",
         "name": "tribe_id",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "invaiteAddress",
+        "type": "address"
       }
     ],
     "name": "ClaimMemberNFT",

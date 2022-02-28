@@ -1,5 +1,6 @@
 import React, {
   ReactNode,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -38,9 +39,9 @@ import { FeeType, Timing, TribeType } from 'store/tribe/type';
 import { actionTypes } from './type';
 import { getMatterAddress } from 'utils/addressHelpers';
 import { getValidDateSecond, getValidDateDay } from 'store/tribe/utils';
+import { getDecimalAmount } from './hooks';
 
 const TribeCard = styled(Card)`
-  margin-top: 20px;
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 
@@ -92,6 +93,7 @@ const TribeFeeForward = (props, ref) => {
         p.authorPercent = info.authorPercent;
         p.memberPercent = info.memberPercent;
       });
+
       setTribeType(
         getMatterAddress().indexOf(info.feeToken) !== -1
           ? TribeType.BASIC
@@ -103,20 +105,31 @@ const TribeFeeForward = (props, ref) => {
 
   const CoinOptions = useMemo(() => {
     return feeCoinList.map(item => {
-      return { value: item.tokenAddress, label: item.symbol };
+      return {
+        id: item.tokenAddress,
+        value: item.tokenAddress,
+        label: item.name,
+      };
     });
   }, [feeCoinList]);
+
+  const getFeeDecimal = () => {
+    return feeCoinList.find(item => item.tokenAddress === feeToken)[0]?.decimal;
+  };
 
   useImperativeHandle(ref, () => ({
     getFeeFrom() {
       const params = {
         tribeType,
         feeToken: tribeType === TribeType.BASIC ? getMatterAddress() : feeToken,
-        feeAmount: tribeType === TribeType.BASIC ? 0 : state.feeAmount,
+        feeAmount:
+          tribeType === TribeType.BASIC
+            ? 0
+            : getDecimalAmount(state.feeAmount, getFeeDecimal()),
         validDate:
-          state.timing !== Timing.FOREVER
-            ? getValidDateSecond(state.validDate)
-            : 0,
+          tribeType === TribeType.BASIC || state.timing === Timing.FOREVER
+            ? 0
+            : getValidDateSecond(state.validDate),
       };
       return { ...state, ...params };
     },
@@ -152,6 +165,7 @@ const TribeFeeForward = (props, ref) => {
         />
         <FormColumnItem flexDirection='column'>
           <RadioGroup
+            mb='20px'
             disabled={actionType === actionTypes.EDIT}
             value={tribeType}
             options={typeOptions}
@@ -186,7 +200,7 @@ const TribeFeeForward = (props, ref) => {
                       value={state.feeAmount}
                       onChange={e => {
                         const val = e.target.value;
-                        if (e.currentTarget.validity.valid) {
+                        if (val === '' || e.currentTarget.validity.valid) {
                           setState(p => {
                             p.feeAmount = val;
                           });
@@ -281,22 +295,25 @@ const TribeFeeForward = (props, ref) => {
           }
         />
         <FormColumnItem>
-          <RadioGroup
-            disabled={actionType === actionTypes.EDIT}
-            value={tribeFeeType}
-            options={feeTypeOptions}
-            onChange={val => {
-              setTribeFeeType(val);
-              if (val === 1) {
-                setState(p => {
-                  p.perTime = TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME;
-                  p.ownerPercent = TRIBE_FEE_DEFAULT_MASTER_REWARD;
-                  p.authorPercent = TRIBE_FEE_DEFAULT_CREATOR_REWARD;
-                  p.memberPercent = TRIBE_FEE_DEFAULT_MEMBER_REWARD;
-                });
-              }
-            }}
-          />
+          {actionType !== actionTypes.EDIT && (
+            <RadioGroup
+              mb='20px'
+              disabled={actionType === actionTypes.EDIT}
+              value={tribeFeeType}
+              options={feeTypeOptions}
+              onChange={val => {
+                setTribeFeeType(val);
+                if (val === 1) {
+                  setState(p => {
+                    p.perTime = TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME;
+                    p.ownerPercent = TRIBE_FEE_DEFAULT_MASTER_REWARD;
+                    p.authorPercent = TRIBE_FEE_DEFAULT_CREATOR_REWARD;
+                    p.memberPercent = TRIBE_FEE_DEFAULT_MEMBER_REWARD;
+                  });
+                }
+              }}
+            />
+          )}
           <TribeCard isRadius>
             <FormItem justifyContent='space-between'>
               <Flex flexDirection='column'>

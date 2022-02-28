@@ -292,29 +292,19 @@ const MemberNftTribe = React.memo(() => {
   const getMyMemberTribeList = useCallback(async () => {
     try {
       setLoading(true);
-      // const res = await Api.TribeApi.MyJoinedTribeList({
-      //   page,
-      //   page_size: pageSize,
-      // });
-      // if (Api.isSuccess(res)) {
-      //   setMemberNftList(res.data?.list);
-      //   setTotal(res.data?.total_count);
-      // }
-      setMemberNftList([
-        {
-          name: '叮咚叮咚反复',
-          nft_id: 1000,
-          tribe_id: 1415926538,
-          add_time: 1645601040,
-          nft_type: 2,
-          status: 2,
-        },
-      ]);
-      setTotal(1);
+      const res = await Api.TribeApi.MyJoinedTribeList({
+        page,
+        page_size: pageSize,
+      });
+      if (Api.isSuccess(res)) {
+        setMemberNftList(res.data?.list);
+        setTotal(res.data?.total_count || 1);
+      }
       setLoading(false);
     } catch (error) {
-      setLoading(false);
       setMemberNftList([]);
+    } finally {
+      setLoading(false);
     }
   }, [page, pageSize]);
 

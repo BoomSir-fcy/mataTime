@@ -208,15 +208,7 @@ export const tribe = createSlice({
         state.isApproveStakeNft = action.payload;
       })
       .addCase(fetchFeeTokenListAsync.fulfilled, (state, action) => {
-        // todo: 根据token获取代币symbol值
-        const tokenMap = {
-          '0x0000000000000000000000000000000000000001': 'BNB',
-          '0x865746A11eC78819c0067a031e9dd8D69F0B319d': 'USDT',
-        };
-        const coinList = action.payload.map(item => {
-          return { tokenAddress: item, symbol: tokenMap[item] };
-        });
-        state.feeCoinList = [...coinList];
+        state.feeCoinList = action.payload;
       })
       .addCase(fetchTicketNftListAsync.fulfilled, (state, { payload }) => {
         state.ticketNftList = payload;

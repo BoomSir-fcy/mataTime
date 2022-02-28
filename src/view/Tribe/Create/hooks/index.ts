@@ -1,4 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
+import BigNumber from 'bignumber.js';
+import { DEFAULT_TOKEN_DECIMAL } from 'config';
 import { useERC721New, useTribeContract } from 'hooks/useContract';
 import { useCallback, useEffect, useState } from 'react';
 import { TribeBaseInfo } from 'store/tribe/type';
@@ -6,8 +8,15 @@ import {
   getTribeAddress,
   getTribeTicketsNFTAddress,
 } from 'utils/addressHelpers';
+import { BIG_TEN } from 'utils/bigNumber';
 import { getTribeContract } from 'utils/contractHelpers';
 import multicall from 'utils/multicall';
+
+export const getDecimalAmount = (amount: string | number, decimal?: string) => {
+  const tokenDecimal = new BigNumber(amount).times(BIG_TEN.pow(decimal));
+  if (tokenDecimal.isFinite()) return tokenDecimal.toString();
+  return DEFAULT_TOKEN_DECIMAL.toString();
+};
 
 // 授权部落门票nft
 export const useApproveTribeTicketsNFT = () => {
@@ -47,14 +56,17 @@ export const useTribe = () => {
   const { account } = useWeb3React();
   const [status, setStatus] = useState('start');
 
-  const CheckUniqueName = useCallback(async (name: string) => {
-    try {
-      const unique = await tribeContract.unique_name(name);
-      return unique;
-    } catch (error) {
-      return true;
-    }
-  }, []);
+  const CheckUniqueName = useCallback(
+    async (name: string) => {
+      try {
+        const unique = await tribeContract.unique_name(name);
+        return unique;
+      } catch (error) {
+        return true;
+      }
+    },
+    [tribeContract],
+  );
 
   const setTribeBaseInfo = useCallback(
     async (tribeId: number, tribeInfo: TribeBaseInfo) => {
@@ -95,11 +107,10 @@ export const useTribe = () => {
   const CreateTribe = useCallback(
     async (tribeInfo: TribeBaseInfo) => {
       try {
-        console.log('部落信息', tribeInfo);
-
         const tx = await tribeContract.createTribe(
           tribeInfo.name,
           tribeInfo.logo,
+          tribeInfo.introduction,
           tribeInfo.feeToken,
           tribeInfo.feeAmount,
           tribeInfo.validDate,

@@ -4,17 +4,18 @@ import { useTranslation } from 'contexts';
 import { Box, Text, Button, Flex } from 'uikit';
 import { TribeFee } from 'view/Tribe/Create/TribeFee';
 import { fetchGetTribeBaseInfo } from 'store/tribe';
-import { useTribeState } from 'store/tribe/hooks';
+import { useFeeTokenList, useTribeState } from 'store/tribe/hooks';
 import { useTribe } from 'view/Tribe/Create/hooks';
 import { useDispatch } from 'react-redux';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const MeTribeFeeSetting = () => {
+  useFeeTokenList();
   const { t } = useTranslation();
   const form = React.useRef<any>();
   const dispatch = useDispatch();
   const parseQs = useParsedQueryString();
-  const { tribeId, tribeBaseInfo } = useTribeState();
+  const { tribeBaseInfo } = useTribeState();
   const { onSetTribeFeeInfo } = useTribe();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [info, setInfo] = useState({});
@@ -31,9 +32,9 @@ const MeTribeFeeSetting = () => {
       <form
         onSubmit={async e => {
           e.preventDefault();
-          const params = form.current.getInfoFrom();
+          const params = form.current.getFeeFrom();
           console.log('表单提交：', params);
-          await onSetTribeFeeInfo(tribeId, params);
+          await onSetTribeFeeInfo(parseQs.i, params);
           setInfo(params);
           setIsEdit(false);
         }}

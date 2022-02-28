@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { BoxProps, Flex, Radio, RadioProps, Text } from 'uikit';
 
 type ValueType = string | number;
@@ -51,8 +51,13 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   options,
   disabled,
   onChange,
+  ...props
 }) => {
-  const [currentValue, setCurrentValue] = useState(value || defaultValue);
+  const [currentValue, setCurrentValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
 
   const onRadioChange = useCallback(
     e => {
@@ -67,7 +72,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
     [currentValue],
   );
   return (
-    <Flex>
+    <Flex {...props}>
       {options.map(item => (
         <RadioItem
           key={item.value}

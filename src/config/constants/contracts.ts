@@ -76,7 +76,7 @@ const contracts = {
   },
   tribe: {
     56: '',
-    97: '0x517E9985da7aA2888e60DD81d0B210100Fec2d25',
+    97: '0xCD41E8dfEcF5CEA0A1adF8B76AAb8C89adDF2B35',
   },
   tribeNFT: {
     56: '',

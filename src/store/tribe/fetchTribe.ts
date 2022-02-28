@@ -1,8 +1,10 @@
 import BigNumber from 'bignumber.js';
+import { DEFAULT_TOKEN_DECIMAL } from 'config';
 import tribeAbi from 'config/abi/tribe.json';
 import { getTribeAddress } from 'utils/addressHelpers';
+import { getBalanceNumber } from 'utils/formatBalance';
 import multicall from 'utils/multicall';
-import { TribeBaseInfo, TribesNFTInfo } from './type';
+import { FeeCoin, TribeBaseInfo, TribesNFTInfo } from './type';
 
 // 收费代币token
 export const getFeeTokenList = async () => {
@@ -15,8 +17,14 @@ export const getFeeTokenList = async () => {
     },
   ];
   try {
-    const tokens = await multicall(tribeAbi, calls);
-    return tokens[0][0];
+    const [tokens] = await multicall(tribeAbi, calls);
+    return tokens.sup?.map((item, i) => {
+      return {
+        tokenAddress: item,
+        name: tokens.names[i],
+        decimal: new BigNumber(tokens.decimals[i]?.toJSON().hex).toNumber(),
+      } as FeeCoin;
+    });
   } catch (error) {
     console.error(error);
     return [];
@@ -69,20 +77,15 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       name: 'tribesInfo',
       params: [tribeId],
     },
-    {
-      address,
-      name: 'extraTribesInfo',
-      params: [tribeId],
-    },
   ];
   try {
     const [info, extraInfo] = await multicall(tribeAbi, calls);
     return {
       name: info.name,
       logo: info.logo,
-      introduction: extraInfo.introduction,
+      introduction: info.introduction,
       feeToken: info.feeToken,
-      feeAmount: new BigNumber(info.feeAmount.toJSON().hex).toNumber(),
+      feeAmount: getBalanceNumber(new BigNumber(info.feeAmount.toJSON().hex)),
       validDate: new BigNumber(info.validDate.toJSON().hex).toNumber(),
       perTime: new BigNumber(info.perTime.toJSON().hex).toNumber(),
       ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
