@@ -43,6 +43,11 @@ export class TribeApi extends Http {
     return this.post('/v1/tribe/post/create', params);
   }
 
+  // 根据部落名搜索部落
+  async tribeSearchByName(params: Api.Tribe.TopicSearchByNameParams) {
+    return this.get('/v1/tribe/search', params);
+  }
+
   // 部落添加话题
   async tribeTopicCreate(params: Api.Tribe.TopicCreateParams) {
     return this.post('/v1/tribe/topic/create', params);
@@ -63,7 +68,7 @@ export class TribeApi extends Http {
     return this.post('/v1/tribe/post/create_draft', params);
   }
 
-  async getTribePostDraft(params: Api.Tribe.TopicParamsForId):Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
+  async getTribePostDraft(params: Api.Tribe.TopicParamsForId): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
     return this.post('v1/tribe/post/get_draft', params);
   }
 

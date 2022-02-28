@@ -24,6 +24,7 @@ const initialState: SearchState = {
   resultListOfPeoples: [],
   resultListOfTopic: [],
   resultListOfPost: [],
+  resultListOfTribe: [],
   resultListOfPostLen: 0,
   loading: false,
   dispalyLoading: false,
@@ -38,6 +39,12 @@ const initialState: SearchState = {
   displayResultListOfPeoples: [],
   displayResultListOfTopic: [],
   displayResultListOfPost: [],
+  displayResultListOfTribe: [],
+  tribe: {
+    page: 1, //
+    loading: false,
+    loadEnd: false,
+  },
   filterUser: 1,
   searchPostMap: {},
 };
@@ -79,6 +86,7 @@ export const fetchSearchAsync = createAsyncThunk<
       resultListOfPeoples: [],
       resultListOfTopic: [],
       resultListOfPost: [],
+      resultListOfTribe: [],
       resultListOfPostLen: 0,
     };
     if (!search || !`${search}`.trim()) {
@@ -90,18 +98,22 @@ export const fetchSearchAsync = createAsyncThunk<
     let disablePeople = false;
     let disableTopic = false;
     let disableTotal = false;
+    // let disableTribe = false;
     let searchVal = search;
     if (search?.[0] === '#') {
       disablePeople = true;
       disableTotal = true;
+      // disableTribe = true;
       searchVal = searchVal.slice(1);
     } else if (search?.[0] === '@') {
       disableTopic = true;
       disableTotal = true;
+      // disableTribe = true;
       searchVal = searchVal.slice(1);
     } else {
       disableTopic = true;
       disablePeople = true;
+      // disableTribe = true;
     }
     // let disablePost = true;
     // if (searchPost) {
@@ -127,6 +139,7 @@ export const fetchSearchAsync = createAsyncThunk<
       disableTopic ? null : fetchTopic,
       disablePeople ? null : fetchPeople,
       disableTotal ? null : fetchTotal,
+      // disableTribe ? null : fetchTribe,
       // disablePost ? null : fetchPost,
     ]);
     dispatch(setLoading(false));
@@ -188,6 +201,44 @@ export const fetchSearchPostAsync =
     dispatch(setSearchPost(result));
   };
 
+export const fetchSearchTribeAsync =
+  (refresh?: boolean) => async (dispatch, getState) => {
+    dispatch(setTribeLoading(true));
+    dispatch(setTribeLoadEnd(false));
+
+    const { search } = getState() as { search: SearchState };
+
+    if (!search.searchVal) return;
+    const result = {
+      refresh,
+      fetchDisplay: true,
+      data: [],
+      page: search.tribe.page,
+      page_size: 20,
+    };
+    try {
+
+      const fetchTribe = await Api.TribeApi.tribeSearchByName({
+        keyword: search.searchVal,
+        page_size: result.page_size,
+        page: refresh ? 1 : search.tribe.page,
+      });
+      if (Api.isSuccess(fetchTribe)) {
+        if (!Boolean(fetchTribe.data)) {
+          dispatch(setPostEnd(true));
+        } else {
+          dispatch(setPostEnd(false));
+        }
+        result.data = fetchTribe.data || [];
+        result.page = search.tribe.page + 1;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    dispatch(setTribeLoading(false));
+    dispatch(setSearchTribe(result));
+  };
+
 export const fetchSearchPostDetailAsync =
   (id: string | number) => async (dispatch, getState) => {
     try {
@@ -219,6 +270,12 @@ export const Search = createSlice({
     },
     setPostLoading: (state, { payload }) => {
       state.postLoading = payload;
+    },
+    setTribeLoading: (state, { payload }) => {
+      state.tribe.loading = payload;
+    },
+    setTribeLoadEnd: (state, { payload }) => {
+      state.tribe.loadEnd = payload;
     },
     setPostEnd: (state, { payload }) => {
       state.postIsEnd = payload;
@@ -258,6 +315,20 @@ export const Search = createSlice({
         const len = resultListOfPost.length;
         state.resultListOfPost = uniqBy(list, 'id');
         state.searchPostaddListNum = state.resultListOfPost.length - len;
+      }
+    },
+    setSearchTribe: (state, action) => {
+      const { data, fetchDisplay, page, refresh, page_size } =
+        action.payload;
+      state.tribe.page = page
+      if (refresh) {
+        state.resultListOfTribe = data;
+      } else {
+        const list = state.resultListOfTribe.concat(data);
+        state.resultListOfTribe = uniqBy(list, 'id');
+      }
+      if (data.length < page_size) {
+        state.tribe.loadEnd = true
       }
     },
   },
@@ -377,9 +448,12 @@ export const {
   setErrorMsg,
   setDispalyLoading,
   setPostLoading,
+  setTribeLoading,
+  setTribeLoadEnd,
   setPostEnd,
   setSearchVal,
   setSearchPost,
+  setSearchTribe,
   setPostDetail,
 } = Search.actions;
 
