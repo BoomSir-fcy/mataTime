@@ -50,8 +50,11 @@ export const HUGE_ARTICLE_TITLE_MAX_LEN = 50; // 长文标题最大字数
 
 // 帖子显示折行
 export const ARTICLE_POST_MAX_ROW = 12;
+export const ARTICLE_POST_FORWARD_ROW = 6;
 
 export const SEARCH_MAX_HISTORY_LEN = 14;
+
+export const POST_UPLOAD_IMG = 4;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
 

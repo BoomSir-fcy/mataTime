@@ -1,77 +1,371 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Crumbs } from 'components';
+import { useTranslation } from 'contexts';
 import { Link } from 'react-router-dom';
-import { Box, Divider, Text, Button, Flex, Heading } from 'uikit';
+import {
+  Box,
+  Divider,
+  Text,
+  Button,
+  Flex,
+  Heading,
+  Empty,
+  Spinner,
+} from 'uikit';
 import styled from 'styled-components';
 import TradeLogo from 'view/Tribe/components/TradeCard/TradeLogo';
-import dayjs from 'dayjs';
+import {
+  HeadText,
+  ItemText,
+  LoadingAnimation,
+  Row,
+  StyledButton,
+  Table,
+  TableBox,
+} from './styled';
+import ReactPaginate from 'react-paginate';
+import PaginateStyle from 'style/Paginate';
+import { Api } from 'apis';
+import { formatTime } from 'utils/timeFormat';
+import { NftStatus } from 'store/tribe/type';
+import { useTribeNft } from './hooks';
+import {
+  StakeButton,
+  UnStakeButton,
+  TransferButton,
+} from './components/actionNft';
+import { fetchIsApproveStakeNft } from 'store/tribe';
+import { useDispatch } from 'react-redux';
+import { useWeb3React } from '@web3-react/core';
 
+const InfoBox = styled(Box)`
+  ${({ theme }) => theme.mediaQueriesSize.paddingxs}
+`;
 const InfoFlex = styled(Flex)`
-  padding: 26px 14px 26px 26px;
+  padding: 16px 0;
   flex-wrap: wrap;
 `;
-
-const RightFlex = styled(Flex)`
-  /* min-height: 100px; */
+const TabText = styled(Text).attrs({ small: true })`
+  color: ${({ theme }) => theme.colors.textTips};
+  cursor: pointer;
+  &.active {
+    font-size: 18px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.white};
+  }
+`;
+const CenterFlex = styled(Flex)`
   margin-left: 18px;
   ${({ theme }) => theme.mediaQueries.md} {
     margin-left: 32px;
   }
 `;
-
 const NumberFlex = styled(Flex)`
   ${({ theme }) => theme.mediaQueries.md} {
     width: 70%;
   }
 `;
+const NumberItemFlex = styled(Flex)`
+  flex-direction: column;
+  align-items: center;
+`;
 
 const MyTribe = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+  const [activeType, setActiveType] = useState(1);
+
+  useEffect(() => {
+    dispatch(fetchIsApproveStakeNft({ account }));
+  }, [account]);
+
   return (
     <Box>
-      <Box>
-        <InfoFlex>
-          <TradeLogo scales='sm' />
-          <RightFlex
-            flex='1'
-            flexDirection='column'
-            justifyContent='space-between'
+      <Crumbs title=' '>
+        <Flex width='100%' alignItems='center'>
+          <TabText
+            mr='30px'
+            className={activeType === 1 ? 'active' : ''}
+            onClick={() => {
+              setActiveType(1);
+            }}
           >
-            <Flex justifyContent='space-between' alignItems='center'>
-              <Heading scale='md'>时光机</Heading>
-              <Flex justifyContent='space-between' alignItems='center'>
-                <Text mr='20px' fontSize='14px' color='textTips'>
-                  {dayjs(new Date().getTime()).format('YYYY-MM-DD HH:mm')}
-                </Text>
-                <Link to='/me/tribe/info'>
-                  <Button>管理</Button>
-                </Link>
-              </Flex>
-            </Flex>
-            <NumberFlex justifyContent='space-between'>
-              <Box>
-                <Text bold>2560</Text>
-                <Text fontSize='14px' color='textTips'>
-                  成员
-                </Text>
-              </Box>
-              <Box>
-                <Text bold>2560</Text>
-                <Text fontSize='14px' color='textTips'>
-                  帖子
-                </Text>
-              </Box>
-              <Box>
-                <Text bold>2560</Text>
-                <Text fontSize='14px' color='textTips'>
-                  精选
-                </Text>
-              </Box>
-            </NumberFlex>
-          </RightFlex>
-        </InfoFlex>
-        <Divider />
-      </Box>
+            {t('我的部落')}
+          </TabText>
+          <TabText
+            className={activeType === 2 ? 'active' : ''}
+            onClick={() => {
+              setActiveType(2);
+            }}
+          >
+            {t('成员NFT')}
+          </TabText>
+        </Flex>
+      </Crumbs>
+      {activeType === 1 && <MyMasterNftTribe />}
+      {activeType === 2 && <MemberNftTribe />}
     </Box>
   );
 };
 
+const MyMasterNftTribe = React.memo(() => {
+  const { t } = useTranslation();
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { onClaimOwnerNft } = useTribeNft();
+
+  // 1 未领取 2已领取 3 取消质押 4 已质押 5已过期
+  const getMyTribeList = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await Api.TribeApi.MyTribeList();
+      if (Api.isSuccess(res)) {
+        setList(res.data?.list);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setList([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    getMyTribeList();
+  }, []);
+
+  const updateTribeList = useCallback((info: any) => {
+    setList(p => {
+      return p.map(item => {
+        return item.tribe_id === info?.tribe_id ? info : item;
+      });
+    });
+  }, []);
+
+  // 领取
+  const handleClaimOwnerNft = useCallback(async (info: any) => {
+    try {
+      await onClaimOwnerNft(info.tribeId);
+      updateTribeList({ ...info, status: NftStatus.Received });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  return (
+    <>
+      {loading ? (
+        <LoadingAnimation>
+          <Spinner />
+        </LoadingAnimation>
+      ) : !list.length ? (
+        <Empty />
+      ) : (
+        list.map(item => (
+          <Box key={item?.tribe_id}>
+            <InfoBox>
+              <InfoFlex>
+                <TradeLogo logo={item?.tribe_info?.tribe?.logo} scales='sm' />
+                <CenterFlex
+                  flex='1'
+                  flexDirection='column'
+                  justifyContent='space-between'
+                >
+                  <Flex
+                    mt='8px'
+                    justifyContent='space-between'
+                    alignItems='center'
+                  >
+                    <Heading ellipsis scale='md'>
+                      {item?.name}
+                    </Heading>
+                    <Flex justifyContent='space-between' alignItems='center'>
+                      <Text mr='20px' fontSize='14px' color='textTips'>
+                        {formatTime(
+                          item?.tribe_info?.tribe?.create_time,
+                          'YYYY-MM-DD HH:mm',
+                        )}
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  <NumberFlex justifyContent='space-between'>
+                    <NumberItemFlex>
+                      <Text bold>{item?.tribe_info?.member_count}</Text>
+                      <Text fontSize='14px' color='textTips'>
+                        成员
+                      </Text>
+                    </NumberItemFlex>
+                    <NumberItemFlex>
+                      <Text bold>{item?.tribe_info?.post_count}</Text>
+                      <Text fontSize='14px' color='textTips'>
+                        帖子
+                      </Text>
+                    </NumberItemFlex>
+                    <NumberItemFlex>
+                      <Text bold>{item?.tribe_info?.selected_count}</Text>
+                      <Text fontSize='14px' color='textTips'>
+                        精选
+                      </Text>
+                    </NumberItemFlex>
+                  </NumberFlex>
+                </CenterFlex>
+                <Flex flexDirection='column' justifyContent='space-between'>
+                  {/* 1 未领取 2已领取 3 取消质押 4 已质押 5已过期 */}
+                  {item?.status === NftStatus.UnReceive && (
+                    <StyledButton onClick={() => handleClaimOwnerNft(item)}>
+                      {t('领取')}
+                    </StyledButton>
+                  )}
+                  {item?.status === NftStatus.Received ||
+                  item?.status === NftStatus.UnStake ? (
+                    <>
+                      <StakeButton
+                        tribeId={item.tribe_id}
+                        nftId={item.nft_id}
+                        nftType={1}
+                        callback={() => {
+                          updateTribeList({
+                            ...item,
+                            status: NftStatus.Staked,
+                          });
+                        }}
+                      />
+                      <TransferButton
+                        nftId={item.nft_id}
+                        callback={() => {
+                          setList(p => {
+                            return p.filter(v => v.tribe_id !== item?.tribe_id);
+                          });
+                        }}
+                      />
+                    </>
+                  ) : null}
+                  {item?.status === NftStatus.Staked && (
+                    <>
+                      <UnStakeButton
+                        tribeId={item.tribe_id}
+                        nftType={1}
+                        callback={() => {
+                          updateTribeList({
+                            ...item,
+                            status: NftStatus.UnStake,
+                          });
+                        }}
+                      />
+                      <Button as={Link} to='/me/tribe/info'>
+                        {t('管理')}
+                      </Button>
+                    </>
+                  )}
+                </Flex>
+              </InfoFlex>
+            </InfoBox>
+            <Divider />
+          </Box>
+        ))
+      )}
+    </>
+  );
+});
+
+const MemberNftTribe = React.memo(() => {
+  const { t } = useTranslation();
+  const [pageSize, setpageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [memberNftList, setMemberNftList] = useState([]);
+
+  const getMyMemberTribeList = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await Api.TribeApi.MyJoinedTribeList({
+        page,
+        page_size: pageSize,
+      });
+      if (Api.isSuccess(res)) {
+        setMemberNftList(res.data?.list);
+        setTotal(res.data?.total_count);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setMemberNftList([]);
+    }
+  }, [page, pageSize]);
+
+  useEffect(() => {
+    getMyMemberTribeList();
+  }, []);
+
+  const handlePageClick = useCallback(
+    event => {
+      setPage(event.selected + 1);
+    },
+    [setPage],
+  );
+
+  const getTotalPage = useCallback(() => {
+    if (pageSize !== 0 && total % pageSize === 0) {
+      return parseInt(String(total / pageSize));
+    }
+    if (pageSize !== 0 && total % pageSize !== 0) {
+      return parseInt(String(total / pageSize)) + 1;
+    }
+  }, [total, pageSize]);
+  return (
+    <>
+      <TableBox>
+        <Table>
+          <Row className='head'>
+            <HeadText>{t('成员NFT')}</HeadText>
+            <HeadText>{t('所属部落')}</HeadText>
+            <HeadText>{t('加入时间')}</HeadText>
+            <HeadText>{t('管理')}</HeadText>
+          </Row>
+          {loading ? (
+            <LoadingAnimation>
+              <Spinner />
+            </LoadingAnimation>
+          ) : !memberNftList.length ? (
+            <Empty />
+          ) : (
+            memberNftList.map(item => (
+              <Row key={item.tribe_id}>
+                <Flex>
+                  <TradeLogo scales='sm' />
+                  <ItemText>{item?.nft_id}</ItemText>
+                </Flex>
+                <ItemText>{item?.name}</ItemText>
+                <ItemText>{item?.add_time}</ItemText>
+                <Flex>
+                  <Button scale='xs'>{t('质押')}</Button>
+                  <Button scale='xs'>{t('转让')}</Button>
+                </Flex>
+              </Row>
+            ))
+          )}
+        </Table>
+      </TableBox>
+
+      <PaginateStyle alignItems='center' justifyContent='end'>
+        <Text className='totalPage' fontSize='14px' color='textTips'>
+          {t('Account Total %page% page', { page: getTotalPage() })}
+        </Text>
+        <ReactPaginate
+          breakLabel='...'
+          nextLabel='>'
+          forcePage={page - 1}
+          disableInitialCallback={true}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={1}
+          pageCount={getTotalPage()}
+          previousLabel='<'
+          renderOnZeroPageCount={null}
+        />
+      </PaginateStyle>
+    </>
+  );
+});
 export default MyTribe;

@@ -54,6 +54,10 @@ export const Code = styled.pre`
   & * {
     font-family: monospace;
   }
+  & + pre {
+    /* padding: 0 0.88889em; */
+    margin-top: 0em;
+  }
 `;
 
 export const Em = styled.em``;

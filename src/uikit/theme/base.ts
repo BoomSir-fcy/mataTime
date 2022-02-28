@@ -196,6 +196,27 @@ const mediaQueriesPadding = `
   }
 `;
 
+const mediaQueriesAbsMargin = `
+  ${mediaQueries.xxs} {
+    margin: 0 -4px;
+  }
+  ${mediaQueries.xs} {
+    margin: 0 -15px;
+  }
+
+  ${mediaQueries.sm} {
+    margin: 0 -15px;
+  }
+
+  ${mediaQueries.lg} {
+    margin: 0 -14px;
+  }
+
+  ${mediaQueries.xl} {
+    margin: 0 -25px;
+  }
+`;
+
 const mediaPaddingSM = `
   ${mediaQueries.sm} {
     padding: 15px 12px;
@@ -235,6 +256,7 @@ export const mediaQueriesSize: MediaQueriesSize = {
   padding: mediaQueriesPadding,
   paddingsm: mediaPaddingSM,
   paddingxs: mediaPaddingXs,
+  absmargin: mediaQueriesAbsMargin,
 };
 
 export const shadows = {

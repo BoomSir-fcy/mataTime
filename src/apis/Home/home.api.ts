@@ -15,9 +15,46 @@ export class HomeApi extends Http {
     return res;
   }
 
+  // 文章列表v2
+  async getV2ArticleList(params: Api.Home.queryListParams) {
+    const paramsStr = qs.stringify(
+      {
+        user_tags1: params.user_tags1,
+        user_tags2: params.user_tags2,
+      },
+      { arrayFormat: 'repeat' },
+    );
+    const res: Api.Home.postData = await this.get(`/v2/post/list`, params);
+    return res;
+  }
+
   // 获取用户的tag分类列表
   async getUserTag() {
     const res = await this.get('/v1/user/tag/cat-list');
+    return res;
+  }
+
+  // 帖子评论转发
+  // 转发类型 1：普通转发 2：快速转发
+  // 转发内容类型 1：帖子 2：评论
+  async setForward(params: {
+    forward_type: 1 | 2;
+    forward_content_type: 1 | 2;
+    forward_id: number;
+    forward_content: string;
+    id?: string;
+    verify?: string;
+  }) {
+    const res = await this.post('/v2/forward/forward', params);
+    return res;
+  }
+
+  // 取消快转
+  async cancelForward(params: {
+    forward_content_type: 1 | 2;
+    forward_id: number;
+  }) {
+    const res = await this.post('/v2/forward/cancel-forward', params);
     return res;
   }
 
@@ -51,6 +88,11 @@ export class HomeApi extends Http {
   // 文章详情
   async articleFindById(params: Api.Home.articleFindById) {
     const res = await this.get('/v1/post/info', params);
+    return res;
+  }
+
+  async articleV2FindById(params: Api.Home.articleFindById) {
+    const res = await this.get('/v2/post/info', params);
     return res;
   }
 

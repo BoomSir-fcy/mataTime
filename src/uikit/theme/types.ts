@@ -25,6 +25,7 @@ export type MediaQueriesSize = {
   padding: string;
   paddingsm: string;
   paddingxs: string;
+  absmargin: string;
 };
 
 export type BreakpointMap = {

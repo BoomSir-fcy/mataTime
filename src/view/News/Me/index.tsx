@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import MentionItem from '../components/MentionItem';
-import MentionOperator from '../components/MentionOperator';
-import { List, MoreOperatorEnum, FollowPopup } from 'components';
+import { List, FollowPopup } from 'components';
 import { Api } from 'apis';
-import { NewsMeWrapper, MeItemWrapper } from './style';
-import MessageCard from '../components/MessageCard';
-import dayjs from 'dayjs';
 import { useTranslation } from 'contexts';
 import { Text, Flex } from 'uikit';
 import { displayTime } from 'utils';
+
+import { NewsMeWrapper } from './style';
+
+import MessageCard from '../components/MessageCard';
 
 const NewsMe: React.FC<any> = props => {
   const [page, setPage] = useState(1);
@@ -36,28 +35,6 @@ const NewsMe: React.FC<any> = props => {
         }
       }
     });
-  };
-
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum = null) => {
-    if (type === MoreOperatorEnum.COMMONT) {
-      setPage(1);
-      getList(1);
-      return;
-    }
-    let arr = [];
-    listData.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj.post = { ...newItem.post };
-      }
-      if (type === MoreOperatorEnum.SHIELD) {
-        // 屏蔽
-      } else {
-        arr.push(obj);
-      }
-    });
-    setListData([...arr]);
   };
 
   return (

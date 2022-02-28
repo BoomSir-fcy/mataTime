@@ -18,6 +18,9 @@ import { shortenAddress } from 'utils/contract';
 import { displayTime } from 'utils';
 import { useTranslation } from 'contexts/Localization';
 import { useStore } from 'store';
+
+import { ARTICLE_POST_FORWARD_ROW, ARTICLE_POST_MAX_ROW } from 'config';
+
 import {
   MentionItemWrapper,
   MentionItemUserWrapper,
@@ -58,12 +61,14 @@ const MentionItem: React.FC<MentionItemProps> = ({
   more,
   size = 'nomal',
   itemData = {},
-  callback = () => {},
+  callback = () => { },
   isShileUser,
   setIsShileUser,
 }) => {
   const mentionRef: any = useRef();
   const translateData = usePostTranslateMap(itemData.id);
+  const translateForwardData = usePostTranslateMap(itemData?.forward?.post_id);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -90,12 +95,18 @@ const MentionItem: React.FC<MentionItemProps> = ({
       />
       <Box className='mention-content'>
         <ContentParsing
+          rows={
+            itemData?.forward_type === 1
+              ? ARTICLE_POST_FORWARD_ROW
+              : ARTICLE_POST_MAX_ROW
+          }
           content={
+            // 原文和译文一起显示
             showTranslate
-              ? itemData.content
-              : translateData?.showTranslate
-              ? translateData?.content || itemData.content
-              : itemData.content
+              ? itemData.content // 显示原文
+              : (translateData?.showTranslate
+                ? translateData?.content || itemData.content
+                : itemData.content)
           }
           callback={(type: MoreOperatorEnum) => {
             callback(itemData, type);
@@ -104,38 +115,15 @@ const MentionItem: React.FC<MentionItemProps> = ({
         {showTranslate && !!translateData && (
           <>
             <Flex alignItems='center'>
-              {/* <Text>由</Text>
-              <ExLink
-                margin='0 0.2em'
-                external
-                href='https://translate.google.com/'
-                onClick={e => {
-                  e.stopPropagation();
-                }}
-              >
-                Google
-              </ExLink>
-              <Button
-                onClick={e => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
-                padding='0'
-                variant='text'
-              >
-                <Text color='textPrimary'>
-                  {translateData.status === FetchStatus.LOADING &&
-                    t('Translate')}
-                  {translateData.status === FetchStatus.SUCCESS &&
-                    t('Translated')}
-                </Text>
-              </Button> */}
               <Button
                 onClick={e => {
                   e.stopPropagation();
                   e.preventDefault();
                   if (translateData.status === FetchStatus.NOT_FETCHED) {
                     dispatch(fetchPostTranslateAsync([itemData.id]));
+                  }
+                  if (translateForwardData?.status === FetchStatus.NOT_FETCHED) {
+                    dispatch(fetchPostTranslateAsync([itemData?.forward?.post_id]));
                   }
                   dispatch(
                     changePostTranslateState({

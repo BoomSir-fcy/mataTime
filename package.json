@@ -5,7 +5,7 @@
   "dependencies": {
     "@asany/sortable": "^0.1.30",
     "@babel/core": "7.12.3",
-    "@biconomy/mexa": "^2.0.25",
+    "@biconomy/mexa": "^2.0.27",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@popperjs/core": "^2.10.2",

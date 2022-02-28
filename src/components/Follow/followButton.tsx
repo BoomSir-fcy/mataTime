@@ -4,11 +4,11 @@ import { useTranslation } from 'contexts/Localization';
 import { useImmer } from 'use-immer';
 
 interface followProps {
-  address: string;
-  attention_status: number;
-  display_format: number;
+  address?: string;
+  attention_status?: number;
+  display_format?: number;
   introduction: string;
-  location: string;
+  location?: string;
   nft_image: string;
   nick_name: string;
   uid: number;

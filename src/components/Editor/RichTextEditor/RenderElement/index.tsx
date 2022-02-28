@@ -38,6 +38,8 @@ export const Element = props => {
       return <Mention {...props} />;
     case 'link':
       return <LinkWithText {...props} />;
+    case 'code':
+      return <Code {...props} />;
     default:
       return <DefaultElement {...attributes}>{children}</DefaultElement>;
   }
@@ -62,6 +64,11 @@ export const Leaf = ({ attributes, children, leaf }) => {
 
   // if (leaf.code) {
   //   children = <Code>{children}</Code>;
+  //   children = (
+  //     <Code>
+  //       <code>{children}</code>
+  //     </Code>
+  //   );
   // }
 
   if (leaf.italic) {

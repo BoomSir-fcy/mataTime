@@ -78,8 +78,8 @@ const ExploreRadioButton = styled(Button)`
   min-width: 76px;
   height: 27px;
   font-weight: bold;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  margin: 0 10px 20px;
+  /* margin-bottom: 20px; */
   padding: 0 5px;
   border-radius: 14px;
 `;
@@ -201,63 +201,65 @@ const TabsComponent = (props, ref) => {
       {((params === 'explore' && Number(currentLeftIndex) === 3) ||
         Number(currentLeftIndex) === 3) && (
         <ExploreContent>
-          {(tags?.[0] ?? []).map((item, key) => (
-            <ExploreButton
-              key={`${item.name}_${key}`}
-              onClick={() => {
-                let tag = [...user_tags1];
-                const index = tag.findIndex(it => it === item.id);
-                index !== -1 ? tag.splice(index, 1) : (tag = [...tag, item.id]);
-                dispatch(
-                  storeAction.postSetParamsTag({
-                    user_tags1: tag,
-                    user_tags2,
-                  }),
-                );
-              }}
-              variant={
-                user_tags1.indexOf(item.id) > -1 ? 'primary' : 'tertiary'
-              }
-            >
-              {item.name}
-            </ExploreButton>
-          ))}
-          <ExploreCol>
-            <Text color='textTips' width='60px'>
-              {t('tagsFilter')}
-            </Text>
-            <Flex font-size='14px' flexWrap='wrap'>
-              {(tags?.[1] ?? []).map((item, keys) => (
-                <ExploreRadioButton
-                  key={`${item.name}_${keys}`}
-                  onClick={() => {
-                    let tag = [...user_tags2];
-                    const index = tag.findIndex(it => it === item.id);
-                    index !== -1
-                      ? tag.splice(index, 1)
-                      : (tag = [...tag, item.id]);
-                    dispatch(
-                      storeAction.postSetParamsTag({
-                        user_tags1,
-                        user_tags2: tag,
-                      }),
-                    );
-                  }}
-                  variant={
-                    user_tags2.indexOf(item.id) > -1 ? 'primary' : 'text'
-                  }
-                >
-                  <Text
-                    color={
+          <Box>
+            {(tags?.[0] ?? []).map((item, key) => (
+              <ExploreButton
+                key={`${item.name}_${key}`}
+                onClick={() => {
+                  let tag = [...user_tags1];
+                  const index = tag.findIndex(it => it === item.id);
+                  index !== -1
+                    ? tag.splice(index, 1)
+                    : (tag = [...tag, item.id]);
+                  dispatch(
+                    storeAction.postSetParamsTag({
+                      user_tags1: tag,
+                      user_tags2,
+                    }),
+                  );
+                }}
+                variant={
+                  user_tags1.indexOf(item.id) > -1 ? 'primary' : 'tertiary'
+                }
+              >
+                {item.name}
+              </ExploreButton>
+            ))}
+            <ExploreCol justifyContent='space-between'>
+              <Text color='textTips'>{t('tagsFilter')}</Text>
+              <Flex font-size='14px' flexWrap='wrap'>
+                {(tags?.[1] ?? []).map((item, keys) => (
+                  <ExploreRadioButton
+                    key={`${item.name}_${keys}`}
+                    onClick={() => {
+                      let tag = [...user_tags2];
+                      const index = tag.findIndex(it => it === item.id);
+                      index !== -1
+                        ? tag.splice(index, 1)
+                        : (tag = [...tag, item.id]);
+                      dispatch(
+                        storeAction.postSetParamsTag({
+                          user_tags1,
+                          user_tags2: tag,
+                        }),
+                      );
+                    }}
+                    variant={
                       user_tags2.indexOf(item.id) > -1 ? 'primary' : 'text'
                     }
                   >
-                    {item.name}
-                  </Text>
-                </ExploreRadioButton>
-              ))}
-            </Flex>
-          </ExploreCol>
+                    <Text
+                      color={
+                        user_tags2.indexOf(item.id) > -1 ? 'primary' : 'text'
+                      }
+                    >
+                      {item.name}
+                    </Text>
+                  </ExploreRadioButton>
+                ))}
+              </Flex>
+            </ExploreCol>
+          </Box>
         </ExploreContent>
       )}
     </React.Fragment>

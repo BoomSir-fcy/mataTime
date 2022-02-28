@@ -14,7 +14,8 @@ import {
 import ReactDOM from 'react-dom';
 import { useImmer } from 'use-immer';
 import { debounce, cloneDeep } from 'lodash';
-import { Loading } from 'components';
+import { useToast } from 'hooks';
+import { Loading, ForwardContent } from 'components';
 import { Flex, Box, Text } from 'uikit';
 import { withHistory } from 'slate-history';
 import { Toolbar } from './toolbar';
@@ -43,9 +44,13 @@ import { SearchPop, FollowPopup } from 'components';
 import { Mention, TopicElement } from './elements';
 import { useTranslation } from 'contexts/Localization';
 import { getPostBLen } from 'utils';
+import imageCompression, { cutDownImg } from 'utils/imageCompression';
 
-import escapeHtml from 'escape-html';
-import { ARTICLE_POST_MAX_LEN, ARTICLE_COMMENTS_MAX_LEN } from 'config';
+import {
+  ARTICLE_POST_MAX_LEN,
+  ARTICLE_COMMENTS_MAX_LEN,
+  POST_UPLOAD_IMG,
+} from 'config';
 import client from 'utils/client';
 
 type Iprops = {
@@ -53,6 +58,9 @@ type Iprops = {
   initValue?: any;
   sendArticle: any;
   cancelSendArticle?: any;
+  forwardContent?: Api.Home.post;
+  ispadding?: boolean;
+  isRequired?: boolean;
 };
 
 export const Portal = ({ children }) => {
@@ -185,8 +193,16 @@ const removeEmptyLine = value => {
 };
 
 export const Editor = (props: Iprops) => {
-  const { initValue = null, cancelSendArticle = () => {}, type } = props;
+  const {
+    initValue = null,
+    cancelSendArticle = () => {},
+    type,
+    forwardContent,
+    ispadding = true,
+    isRequired = true,
+  } = props;
   const { t } = useTranslation();
+  const { toastError } = useToast();
   const [isDisabledSend, setIsDisabledSend] = useState(false);
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const [imgList, setImgList] = useState([]);
@@ -221,6 +237,34 @@ export const Editor = (props: Iprops) => {
     }
   }, []);
 
+  const withImages = editor => {
+    const { insertData, isVoid } = editor;
+    const tempEditor = editor;
+    let fileList: any[] = [];
+    tempEditor.isVoid = element => {
+      return element.type === 'image' ? true : isVoid(element);
+    };
+
+    tempEditor.insertData = async data => {
+      const { files } = data;
+      if (files && files.length > 0) {
+        fileList = [];
+        for (const file of files) {
+          const [mime] = file.type.split('/');
+          if (mime === 'image') {
+            const compressImage = await cutDownImg(file);
+            fileList.push(compressImage);
+          }
+        }
+        uploadImg(fileList);
+      } else {
+        insertData(data);
+      }
+    };
+
+    return tempEditor;
+  };
+
   const editor = useMemo(
     () => withTopics(withMentions(withReact(withHistory(createEditor())))),
     [],
@@ -241,6 +285,23 @@ export const Editor = (props: Iprops) => {
       }
     }, 1000),
     [],
+  );
+
+  const uploadImg = useCallback(
+    async (files: string[]) => {
+      if (imgList.length + files.length > POST_UPLOAD_IMG)
+        return toastError(t('uploadImgMaxMsg'));
+      setIsLoading(true);
+      const res = await Api.CommonApi.uploadImgList({
+        base64: files,
+        dir_name: 'common',
+      });
+      setIsLoading(false);
+      if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
+      const imgUploadList = (res.data ?? []).map(item => item.full_path);
+      setImgList([...imgList, ...imgUploadList]);
+    },
+    [imgList],
   );
 
   useEffect(() => {
@@ -265,6 +326,7 @@ export const Editor = (props: Iprops) => {
   //     el.removeEventListener('click', eventFn);
   //   };
   // },[])
+
   useEffect(() => {
     setIsDisabledSend(imgList.length < 1);
   }, [imgList]);
@@ -331,7 +393,7 @@ export const Editor = (props: Iprops) => {
     const newValue2 = removeEmptyLine(newValue1); // 删除空行
 
     let { content } = deepContent(newValue2);
-    if (!content.length && !imgList.length) return;
+    if (isRequired && !content.length && !imgList.length) return;
     //限制用户输入数量
     if (articleLength > maxCreateNum) {
       setTimeId(null);
@@ -437,14 +499,13 @@ export const Editor = (props: Iprops) => {
   );
 
   return (
-    <SlateBox key={refresh}>
+    <SlateBox ispadding={ispadding} key={refresh}>
       <Loading visible={isLoading} />
       <Slate
         editor={editor}
         value={value}
         onChange={value => {
           setValue(value);
-
           const { content } = deepContent(value);
           const { selection } = editor;
           if (selection && Range.isCollapsed(selection)) {
@@ -498,6 +559,22 @@ export const Editor = (props: Iprops) => {
             autoFocus
             renderElement={renderElement}
             onKeyDown={onKeyDown}
+            onPaste={async event => {
+              const data = event.clipboardData;
+              const { files } = data;
+              let fileList: any[] = [];
+              if (files && files.length > 0) {
+                //@ts-ignore
+                for (const file of files) {
+                  const [mime] = file.type.split('/');
+                  if (mime === 'image') {
+                    const compressImage = await cutDownImg(file);
+                    fileList.push(compressImage);
+                  }
+                }
+                uploadImg(fileList);
+              }
+            }}
             placeholder={
               type === 'comment'
                 ? t('newsCommentReply')
@@ -506,6 +583,9 @@ export const Editor = (props: Iprops) => {
           />
         </div>
         <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
+        {type === 'forward' && (
+          <ForwardContent forwardContent={forwardContent} />
+        )}
         <Flex justifyContent='space-between' alignItems='center'>
           <Toolbar
             type={type}
@@ -538,7 +618,10 @@ export const Editor = (props: Iprops) => {
                 </SendButton>
               </div>
             ) : (
-              <SendButton disabled={isDisabledSend} onClick={sendArticle}>
+              <SendButton
+                disabled={!isRequired ? isRequired : isDisabledSend}
+                onClick={sendArticle}
+              >
                 {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
               </SendButton>
             )}
