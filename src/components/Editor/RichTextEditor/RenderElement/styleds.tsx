@@ -44,11 +44,13 @@ export const Strong = styled.strong``;
 export const Code = styled.pre`
   font-family: monospace;
   background: ${({ theme }) => theme.colors.codebg};
-  display: block;
-  font-size: 0.9em;
-  margin-top: 1.4em;
-  white-space: pre;
-  padding: 0.88889em;
+  padding: 0.45em 0.88889em;
+  &:not(pre + pre) {
+    ${mt}
+  }
+  &:last-of-type{
+    padding-bottom: 0.88889em;
+  }
   & * {
     font-family: monospace;
   }
@@ -66,4 +68,10 @@ export const Span = styled.span``;
 
 export const Highlight = styled.span`
   color: ${({ theme }) => theme.colors.textPrimary};
+`;
+export const HighlightFull = styled.span`
+  color: ${({ theme }) => theme.colors.textPrimary};
+  & * {
+    color: ${({ theme }) => theme.colors.textPrimary};
+  }
 `;

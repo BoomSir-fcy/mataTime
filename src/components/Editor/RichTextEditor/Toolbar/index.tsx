@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Flex, Button, Box, Text } from 'uikit';
+import { Flex, Button, Box, Text, Input } from 'uikit';
 import styled, { DefaultTheme } from 'styled-components';
 import { useSlate, useSlateStatic, ReactEditor } from 'slate-react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { HistoryEditor, History } from 'slate-history';
-import { Icon, SearchPop } from 'components';
-import { ImageElement, ParagraphElement } from '../../custom-types';
+import { Icon, ModalWrapper, SearchPop } from 'components';
+import { ImageElement, LinkElement, ParagraphElement } from '../../custom-types';
 import { Emoji } from '../../emoji';
 import InsertImageForm from './InsertImageForm';
 import {
@@ -16,21 +16,8 @@ import {
 } from './formats';
 import { insertMention } from '../Mentions/hooks';
 import { isMarkActive, toggleMark } from '../tools/toggleMark';
-
-// const isMarkActive = (editor, format) => {
-//   const marks = Editor.marks(editor);
-//   return marks ? marks[format] === true : false;
-// };
-
-// const toggleMark = (editor, format) => {
-//   const isActive = isMarkActive(editor, format);
-
-//   if (isActive) {
-//     Editor.removeMark(editor, format);
-//   } else {
-//     Editor.addMark(editor, format, true);
-//   }
-// };
+import { useTranslation } from 'contexts';
+import LinkInsert from './LinkInsert';
 
 const isBlockActive = (editor, format) => {
   const { selection } = editor;
@@ -71,13 +58,25 @@ const toggleBlock = (editor, format) => {
   }
 };
 
+const toggleClearFormat = (editor) => {
+  const { selection } = editor;
+  if (!selection) return;
+  markFormats.forEach(item => {
+    Editor.removeMark(editor, item.format);
+    // if (isMarkActive(editor, item.format)) {
+    //   toggleMark(editor, item.format)
+    // }
+  })
+  blockFormats.forEach(item => {
+    if (isBlockActive(editor, item.format)) {
+      toggleBlock(editor, item.format)
+    }
+  })
+}
+
 const toggleHistory = (editor, format) => {
   if (format === 'redo' || format === 'undo') {
     HistoryEditor[format](editor);
-    console.log(editor.history.undos, 'editor.history?.undo');
-    // HistoryEditor.undo(editor);
-
-    // TODO: 获取焦点
   }
 };
 
@@ -85,6 +84,18 @@ const insertEmoji = (editor, data) => {
   ReactEditor.focus(editor);
   editor.insertText(data);
 };
+
+export const insertLink = (editor, { url, text }) => {
+  const link: LinkElement = {
+    type: 'link',
+    url,
+    character: text || url,
+    children: [{ text: '' }],
+  };
+  Transforms.insertNodes(editor, link);
+  Transforms.move(editor);
+};
+
 
 const ButtonStyled = props => (
   <Button
@@ -109,10 +120,10 @@ const FormatButton = ({ format, icon, type }) => {
       return isBlockActive(editor, format);
     }
     if (type === FormatType.HISTORY && format === 'redo') {
-      return editor.history?.redos?.length;
+      return !!editor.history?.redos?.length;
     }
     if (type === FormatType.HISTORY && format === 'undo') {
-      return editor.history?.undos?.length;
+      return !!editor.history?.undos?.length;
     }
     return false;
   };
@@ -138,7 +149,7 @@ const FormatButton = ({ format, icon, type }) => {
         }
       }}
     >
-      <Icon color={active() ? 'text' : 'textTips'} name={icon} />
+      <Icon bold={active()} color={active() ? 'text' : 'textTips'} name={icon} />
       {/* {!flag && null} */}
     </ButtonStyled>
   );
@@ -149,6 +160,7 @@ const Toolbar = () => {
 
   const [searchUser, setSearchUser] = useState(false);
   const [searcTopic, setSearcTopic] = useState(false);
+  const { t } = useTranslation();
 
   const searchSelect = (data, type) => {
     setSearcTopic(false);
@@ -162,80 +174,98 @@ const Toolbar = () => {
     }
   };
 
+  const [visible, setVisible] = useState(false)
+
   return (
     <Box
       onClick={e => {
         e.stopPropagation();
       }}
     >
-      <Flex padding='8px 0' justifyContent='flex-start' alignItems='center'>
-        {markFormats.map(item => (
-          <FormatButton
-            type={item.type}
-            icon={item.icon}
-            // editor={editor}
-            format={item.format}
-          />
-        ))}
-        <ButtonStyled>
-          <Emoji
-            color='textTips'
-            onChange={function (e: string): void {
-              insertEmoji(editor, e);
-            }}
-          />
-        </ButtonStyled>
-        <ButtonStyled>
-          <InsertImageForm color='textTips' multiple />
-        </ButtonStyled>
-        <ButtonStyled>
-          <Icon
-            color='textTips'
-            name='icon-aite'
-            onClick={() => setSearchUser(!searchUser)}
+      <Flex padding='8px 0' justifyContent='space-between' alignItems='center'>
+        <Flex alignItems='center'>
+          {markFormats.map(item => (
+            <FormatButton
+              type={item.type}
+              icon={item.icon}
+              // editor={editor}
+              format={item.format}
+            />
+          ))}
+          <ButtonStyled>
+            <Emoji
+              color='textTips'
+              onChange={function (e: string): void {
+                insertEmoji(editor, e);
+              }}
+            />
+          </ButtonStyled>
+          <ButtonStyled>
+            <InsertImageForm color='textTips' multiple />
+          </ButtonStyled>
+          <ButtonStyled>
+            <Icon
+              color='textTips'
+              name='icon-aite'
+              onClick={() => setSearchUser(!searchUser)}
             // title={t('editorUser')}
-          />
-        </ButtonStyled>
-        <ButtonStyled>
-          <Icon
-            color='textTips'
-            name='icon-a-xiaoxi1'
-            onClick={() => setSearcTopic(!searcTopic)}
+            />
+          </ButtonStyled>
+          <ButtonStyled>
+            <Icon
+              color='textTips'
+              name='icon-a-xiaoxi1'
+              onClick={() => setSearcTopic(!searcTopic)}
             // title={t('editorTopic')}
-          />
-        </ButtonStyled>
-
-        {blockFormats.concat(hisoryFormats).map(item => (
-          <FormatButton
-            type={item.type}
-            icon={item.icon}
-            // editor={editor}
-            format={item.format}
-          />
-        ))}
-        {/* {markFormats.map(item => {
-          return (
+            />
+          </ButtonStyled>
+          <ButtonStyled>
+            <Icon
+              color='textTips'
+              name='icon-bianjiqi_chaolianjie738'
+              onClick={() => setVisible(true)}
+            // title={t('editorTopic')}
+            />
+          </ButtonStyled>
+          {blockFormats.map(item => (
             <FormatButton
               type={item.type}
               icon={item.icon}
-              editor={editor}
-              active={isMarkActive(editor, item.format)}
+              // editor={editor}
               format={item.format}
             />
-          );
-        })}
-        {blockFormats.map(item => {
-          return (
+          ))}
+        </Flex>
+        <Flex alignItems='center'>
+          {hisoryFormats.map(item => (
             <FormatButton
-              editor={editor}
               type={item.type}
               icon={item.icon}
-              active={isBlockActive(editor, item.format)}
+              // editor={editor}
               format={item.format}
             />
-          );
-        })} */}
+          ))}
+          <ButtonStyled>
+            <Icon
+              color='textTips'
+              name='icon-bianjiqi_qingchugeshi710'
+              onClick={() => toggleClearFormat(editor)}
+            // title={t('editorTopic')}
+            />
+          </ButtonStyled>
+        </Flex>
       </Flex>
+      <ModalWrapper
+        title={t('插入链接')}
+        creactOnUse
+        visible={visible}
+        setVisible={setVisible}
+      >
+        <LinkInsert onCancle={() => setVisible(false)} onConfirm={(values) => {
+          setVisible(false)
+          insertLink(editor, { url: values.url, text: values.text })
+        }} />
+      </ModalWrapper>
       <Box position='relative' width='100%' height='0'>
         {(searcTopic || searchUser) && (
           <SearchPop

@@ -20,7 +20,7 @@ import {
   Leaf,
 } from 'components/Editor/RichTextEditor/RenderElement';
 import {
-  ImageStyled,
+  ImageStyledRender,
   BoxStyled,
 } from 'components/Editor/RichTextEditor/RenderElement/Image';
 import {
@@ -229,7 +229,7 @@ export const ContentParsing = React.memo(
           return (
             <Box mt={paragraphMt}>
               <BoxStyled>
-                <ImageStyled src={node.url} />
+                <ImageStyledRender src={node.url} />
               </BoxStyled>
             </Box>
           );
@@ -270,6 +270,21 @@ export const ContentParsing = React.memo(
             >
               {children?.map((n, index) => serialize2(n, null, index))}
             </Link>
+          );
+        case 'link':
+          return (
+            <a
+              target='_blank'
+              onClick={event => {
+                event.stopPropagation();
+                // event.preventDefault();
+              }}
+              href={node?.url}
+              title={node?.url}
+              rel='noreferrer'
+            >
+              {node?.character}
+            </a>
           );
         case 'mention':
           return (
