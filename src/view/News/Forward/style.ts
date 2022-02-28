@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Card } from 'uikit';
+import { Card, Box } from 'uikit';
 
 export const NewsMeWrapper = styled.div`
   width: 100%;
@@ -26,4 +26,15 @@ export const MeItemWrapper = styled(Card)`
   .icon-shield {
     opacity: 0;
   }
+`;
+
+export const ContentEllipsis = styled(Box)`
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: nowrap;
+  color: ${({ theme }) => theme.colors.white_black};
 `;

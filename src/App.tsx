@@ -72,6 +72,7 @@ const Search = React.lazy(() => import('./view/Search'));
 const Post = React.lazy(() => import('./view/Post'));
 const PostDetails = React.lazy(() => import('./view/Post/details'));
 const Tribe = React.lazy(() => import('./view/Tribe'));
+const ForwardList = React.lazy(() => import('./view/Post/forward'));
 
 const Container = styled(Box)`
   /* background-color: ${({ theme }) => theme.colors.background}; */
@@ -148,6 +149,7 @@ function App() {
                   )}
                 />
                 <Route path='/articledetils/:id' component={PostDetails} />
+                <Route path='/forward/:id' component={ForwardList} />
                 <Route path='/task' component={Task} />
                 <Route
                   path='/notification'

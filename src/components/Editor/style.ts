@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { mediaQueriesSize } from 'uikit/theme/base';
 import { Box, Flex, Button, Svg } from 'uikit';
 import { style } from 'styled-system';
@@ -36,15 +36,19 @@ export const CancelButton = styled(Button)`
   margin-right: 20px;
 `;
 
-export const SlateBox = styled.div`
+export const SlateBox = styled(Box)<{ ispadding?: boolean }>`
   position: relative;
   background: ${({ theme }) => theme.colors.editorBoxBg};
   border-radius: ${({ theme }) => theme.radii.card};
   /* padding-left: 4px; */
-  padding: 15px 0 20px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 15px 15px 30px;
-  }
+  ${({ ispadding }) =>
+    ispadding &&
+    css`
+      padding: 15px 0 20px;
+      ${({ theme }) => theme.mediaQueries.sm} {
+        padding: 15px 15px 30px;
+      }
+    `}
   max-width: calc(100vw - 20px);
   margin: 0 auto;
   z-index: 1004;
