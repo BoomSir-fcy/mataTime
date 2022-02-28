@@ -155,7 +155,7 @@ const FormatButton = ({ format, icon, type }) => {
   );
 };
 
-const Toolbar = () => {
+const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
   const editor = useSlateStatic();
 
   const [searchUser, setSearchUser] = useState(false);
@@ -272,6 +272,7 @@ const Toolbar = () => {
             type={searchUser ? 'user' : 'topic'}
             show={searcTopic || searchUser}
             callback={searchSelect}
+            tribeId={tribeId}
             top='10px'
           />
         )}

@@ -36,7 +36,7 @@ const LableBoxStyled = styled(Text)`
   margin-right: 8px;
 `;
 
-const InputStyled = styled(Input)<{
+const InputStyled = styled(Input) <{
   background?: string;
   pl?: string;
   pr?: string;
@@ -163,6 +163,7 @@ const Post = () => {
           ref={editorRef}
           draft={draft}
           value={value}
+          tribeId={tribe_id}
           setValue={setValue}
         />
         <Flex mt='44px' justifyContent='flex-end'>

@@ -30,7 +30,6 @@ import { useMentions, insertMention } from './Mentions/hooks';
 import decorate from './tools/decorate';
 import { onHotkeyDown } from './tools/hotkey';
 import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
-import ParseContent from './ParseContent';
 import { PARAGRAPH_MT } from './RenderElement/styleds';
 import DraggableImages from './Toolbar/DraggableImages';
 
@@ -39,6 +38,7 @@ interface RichTextEditorProps extends BoxProps {
   background?: string;
   value: Descendant[];
   draft?: Descendant[]; // 草稿箱
+  tribeId?: number; // 部落带一个部落id 用于@用户是搜索使用
   setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
 }
 
@@ -52,6 +52,7 @@ const RichTextEditor = (
     value,
     setValue,
     draft,
+    tribeId,
     ...props
   }: RichTextEditorProps,
   ref,
@@ -98,7 +99,7 @@ const RichTextEditor = (
   // const [value, setValue] = useState<Descendant[]>(initialValue);
   const mentionsRef = useRef<HTMLDivElement | null>();
   const { onKeyDown, onChangeHandle, target, userList, onItemClick, index } =
-    useMentions(editor, mentionsRef);
+    useMentions(editor, mentionsRef, tribeId);
 
   useEffect(() => {
     // console.log(value, 'value');
@@ -132,7 +133,7 @@ const RichTextEditor = (
             onChangeHandle(selection);
           }}
         >
-          <Toolbar />
+          <Toolbar tribeId={tribeId} />
           <Divider margin='0 -20px' pb='3px' />
           <Editable
             renderElement={renderElement}

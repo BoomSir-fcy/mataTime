@@ -43,6 +43,11 @@ export class TribeApi extends Http {
     return this.post('/v1/tribe/post/create', params);
   }
 
+  // 部落搜索用户(根据部落id和用户名)
+  async tribeUserSearchByName(params: Api.Tribe.TopicSearchUserParams) {
+    return this.get('/v1/tribe/user/search_by_name', params);
+  }
+
   // 根据部落名搜索部落
   async tribeSearchByName(params: Api.Tribe.TopicSearchByNameParams) {
     return this.get('/v1/tribe/search', params);

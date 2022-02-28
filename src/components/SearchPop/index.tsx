@@ -10,6 +10,7 @@ import { useTranslation } from 'contexts/Localization';
 interface Iprops extends FlexProps {
   show: boolean;
   callback?: (data, type) => void;
+  tribeId?: number
   type: 'user' | 'topic';
 }
 
@@ -17,6 +18,7 @@ export const SearchPop: React.FC<Iprops> = ({
   show,
   type,
   callback,
+  tribeId,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -36,12 +38,24 @@ export const SearchPop: React.FC<Iprops> = ({
       clearTimeout(nicKNameTimeId);
     }
     setNicKNameTimeId(
-      setTimeout(() => {
-        Api.UserApi.searchUser(nicKName).then(res => {
-          if (Api.isSuccess(res)) {
-            res.data && setUserList(res.data);
-          }
-        });
+      setTimeout(async () => {
+        let res = null
+        if (tribeId) {
+          res = await Api.TribeApi.tribeUserSearchByName({
+            name: nicKName,
+            tribe_id: tribeId
+          });
+        } else {
+          res = await Api.UserApi.searchUser(nicKName);
+        }
+        if (Api.isSuccess(res)) {
+          res.data && setUserList(res.data);
+        }
+        // Api.UserApi.searchUser(nicKName).then(res => {
+        //   if (Api.isSuccess(res)) {
+        //     res.data && setUserList(res.data);
+        //   }
+        // });
       }, 400),
     );
   }, [nicKName]);
@@ -126,8 +140,8 @@ export const SearchPop: React.FC<Iprops> = ({
                   <UserDesc title={item.address}>
                     {item.address &&
                       (item.address || '').slice(0, 3) +
-                        '...' +
-                        (item.address || '').slice(35)}
+                      '...' +
+                      (item.address || '').slice(35)}
                   </UserDesc>
                 </div>
               </Flex>
