@@ -111,41 +111,44 @@ export const fetchAllCommentTranslateAsync = () => (dispatch, getState) => {
 };
 
 export const fetchTranslateAsync = async (ids: number[], type = 'post') => {
-  let res = null;
-  try {
-    if (type === 'post') {
-      res = await Api.HomeApi.getPostTranslateById({
-        pids: ids,
-        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
-        source: '',
-      });
-    } else {
-      res = await Api.HomeApi.getCommentTranslateById({
-        pids: ids,
-        target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
-        source: '',
-      });
-    }
+  if (ids.length) {
+    let res = null;
+    try {
+      if (type === 'post') {
+        res = await Api.HomeApi.getPostTranslateById({
+          pids: ids,
+          target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
+          source: '',
+        });
+      } else {
+        res = await Api.HomeApi.getCommentTranslateById({
+          pids: ids,
+          target: getLanguageCodeFromLS() === EN.locale ? 'en' : 'zh-TW', // TODO: 后面语言增加需要更改
+          source: '',
+        });
+      }
 
-    if (Api.isSuccess(res)) {
+      if (Api.isSuccess(res)) {
+        return {
+          ids,
+          data: res.data,
+          status: FetchStatus.SUCCESS,
+        };
+      }
       return {
         ids,
-        data: res.data,
-        status: FetchStatus.SUCCESS,
+        data: {},
+        status: FetchStatus.FAILED,
+      };
+    } catch (error) {
+      return {
+        ids,
+        data: {},
+        status: FetchStatus.FAILED,
       };
     }
-    return {
-      ids,
-      data: {},
-      status: FetchStatus.FAILED,
-    };
-  } catch (error) {
-    return {
-      ids,
-      data: {},
-      status: FetchStatus.FAILED,
-    };
   }
+
 };
 export const fetchPostTranslateAsync =
   (ids: number[]) => async (dispatch, getState) => {
