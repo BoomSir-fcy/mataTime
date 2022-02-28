@@ -266,7 +266,8 @@ const Profile: React.FC<any> = props => {
         });
         // const ids = checkTranslateIds(tweet?.data?.list || []);
         // dispatch(addTranslateIds(ids));
-        const { postIds, commentIds } = checkTranslateIds(tweet?.data?.list || [], 'post_id');
+        const { postIds, commentIds } = checkTranslateIds(tweet?.data?.list || []);
+
         dispatch(addTranslateIds(postIds));
         dispatch(addCommentTranslateIds(commentIds));
         if (tweet?.data?.list?.length < perpage) {
