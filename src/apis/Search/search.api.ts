@@ -1,10 +1,10 @@
-import { MAX_SPEND_TIME_PAGE_TATOL } from "config";
-import { Http } from "../http";
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import { Http } from '../http';
 
 interface SearchPostParams {
-  limit?: number
-  start?: number
-  key: string
+  limit?: number;
+  start?: number;
+  key: string;
 }
 export class SearchApi extends Http {
   // 搜索所有
@@ -19,4 +19,8 @@ export class SearchApi extends Http {
     return res;
   }
 
+  async getSearchV2Post({ limit, start, key }: SearchPostParams) {
+    const res = await this.get('/v2/search/post', { key, limit, start });
+    return res;
+  }
 }

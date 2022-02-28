@@ -87,6 +87,11 @@ export class MeApi extends Http {
     return res;
   }
 
+  async removeV2ContentDetail(id: number) {
+    const res = await this.post('/v2/comment/del', { id: id });
+    return res;
+  }
+
   // 举报评论
   async reportComment(comment_id: number, content: string) {
     const res = await this.post('/v1/comment/add_complain', {
@@ -113,6 +118,19 @@ export class MeApi extends Http {
     uid?: number;
   }) {
     const res = await this.get('/v1/user/home_msg', { page, perpage, uid });
+    return res;
+  }
+
+  async getProfileV2Msg({
+    page,
+    perpage,
+    uid,
+  }: {
+    page: number;
+    perpage: number;
+    uid?: number;
+  }) {
+    const res = await this.get('/v2/user/home_msg', { page, perpage, uid });
     return res;
   }
 

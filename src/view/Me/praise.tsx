@@ -20,7 +20,7 @@ import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { useMapModule } from 'store/mapModule/hooks';
 import PostList from 'components/Post/PostList';
 import checkTranslateIds from 'utils/checkTranslateIds';
-import { addTranslateIds } from 'store/mapModule/actions';
+import { addCommentTranslateIds, addTranslateIds } from 'store/mapModule/actions';
 import { useDispatch } from 'react-redux';
 
 const Praise = React.memo(props => {
@@ -59,11 +59,14 @@ const Praise = React.memo(props => {
               ? [...(res.data.list || [])]
               : [...list, ...(res.data.list || [])];
           });
-          const ids = checkTranslateIds(res.data.list || [], 'post_id');
-          dispatch(addTranslateIds(ids));
+          // const ids = checkTranslateIds(res.data.list || [], 'post_id');
+          // dispatch(addTranslateIds(ids));
+          const { postIds, commentIds } = checkTranslateIds(res.data.list || [], 'post_id');
+          dispatch(addTranslateIds(postIds));
+          dispatch(addCommentTranslateIds(commentIds));
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // 更新列表

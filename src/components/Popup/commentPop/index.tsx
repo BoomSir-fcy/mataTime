@@ -60,7 +60,7 @@ export const CommentPop = React.memo((props: Iprops) => {
   };
 
   const delComment = () => {
-    Api.MeApi.removeContentDetail(data.id).then(res => {
+    Api.MeApi.removeV2ContentDetail(data.id).then(res => {
       if (Api.isSuccess(res)) {
         callback();
         toast.success(t('moreDeleteSuccess'));

@@ -141,6 +141,9 @@ export const CommonLeftMenu = React.memo((props: IProps) => {
       case 'message_system':
         type = 5;
         break;
+      case 'message_forward':
+        type = 30;
+        break;
     }
     const res = await Api.NewsApi.getMessageRead(type);
     if (Api.isSuccess(res)) {

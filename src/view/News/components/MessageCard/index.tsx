@@ -27,6 +27,7 @@ const ContentBox = styled(Box)`
 `;
 const ContentInnerBox = styled(Box)`
   pointer-events: none;
+  height: calc(100% - 28px);
   padding: 14px 8px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 14px 8px 0;
@@ -50,6 +51,7 @@ interface MessageCardProps {
   date?: string;
   content?: string;
   href?: string;
+  current_href?: string;
   content_status?: number;
   image_list?: string[];
 }
@@ -62,6 +64,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
   image_list,
   content,
   href,
+  current_href,
   content_status,
   children,
 }) => {
@@ -69,7 +72,12 @@ const MessageCard: React.FC<MessageCardProps> = ({
 
   return (
     <BoxStyled>
-      <Flex flex='1' padding='16px'>
+      <Flex
+        flex='1'
+        padding='16px'
+        as={current_href ? Link : undefined}
+        to={current_href}
+      >
         <Avatar uid={uid} src={avatar} scale='md' />
         <Flex flexDirection='column' ml='16px' flex='1'>
           <Flex alignItems='baseline'>

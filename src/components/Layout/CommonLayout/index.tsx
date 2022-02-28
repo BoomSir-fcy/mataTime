@@ -8,6 +8,7 @@ import NewsMe from 'view/News/Me';
 import NewsComment from 'view/News/Comment';
 import NewsPraise from 'view/News/Praise';
 import NewsNotice from 'view/News/Notice';
+import NewsRepost from 'view/News/Forward';
 import { Crumbs } from 'components';
 
 export const CommonLayout: React.FC<any> = (props: any) => {
@@ -41,6 +42,7 @@ export const CommonLayout: React.FC<any> = (props: any) => {
         }}
       />
       <Route path={'/notification/praise'} component={NewsPraise} />
+      <Route path={'/notification/repost'} component={NewsRepost} />
       <Route path={'/notification/notice'} component={NewsNotice} />
     </LayoutMiddleWrapper>
   );

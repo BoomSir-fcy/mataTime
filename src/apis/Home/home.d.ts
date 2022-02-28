@@ -42,37 +42,58 @@ declare namespace Api {
     };
 
     interface post {
-      add_time: '2021-12-06T03:32:03Z';
-      add_time_desc: '';
-      aid: 0;
-      cid: 0;
-      comment_num: 0;
-      content: '';
-      fid: 0;
-      id: 0;
+      add_time: string;
+      add_time_desc: string;
+      aid: number;
+      cid: number;
+      comment_num: number;
+      content: string;
+      fid: number;
+      id: number;
       image_list: [];
-      image_urls: '[]';
-      is_attention: 0;
-      is_comment: 0;
-      is_fav: 0;
-      is_like: 0;
-      is_share: 0;
-      is_top: 0;
-      lid: 0;
-      like_num: 0;
+      image_urls: string;
+      is_attention: number;
+      is_comment: number;
+      is_fav: number;
+      is_like: number;
+      is_share: number;
+      is_top: number;
+      lid: number;
+      like_num: number;
       reward_stats: [];
-      share_num: 0;
+      share_num: number;
       status: 1;
-      top: 0;
-      user_address: '0x1da407adfcf72665855db1fe074778cf31a885f4';
-      user_avator_url: 'https://api.dsgmetaverse.com/gphoto/gen/96348CE3.png';
-      user_id: 560640573;
-      user_name: '0x1da407adfcf7266585';
-      video_url: '';
+      top: number;
+      user_address: string;
+      user_avator_url: string;
+      user_id: number;
+      user_name: string;
+      video_url: string;
       send_name?: string;
-      post_id?: 0;
-      reward_id?: 0;
+      post_id?: number;
+      reward_id?: number;
+      is_forward?: false;
+      forward_type: number;
+      forward?: forward;
+      forward_id?: number;
+      forwardUser?: string;
+      forwardUid?: number;
     }
+
+    interface forward {
+      content?: string;
+      post_id?: number;
+      user_address?: string;
+      user_avator_url?: string;
+      user_id?: number;
+      user_name?: string;
+      add_time?: string;
+      is_forward_del?: number;
+      forward_comment_id?: number;
+      forward_parent_id?: number;
+      forward_type?: number;
+    }
+
     interface postData extends Api.Error {
       data: {
         List: post[];
