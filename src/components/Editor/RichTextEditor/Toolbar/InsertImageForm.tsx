@@ -51,7 +51,7 @@ const UpdateBtnSmall = styled(Box)`
 
 const text = { text: '' };
 
-const paragraph: ImageEmptyElement = { type: 'image-empty', children: [text] };
+const paragraph: ParagraphElement = { type: 'paragraph', children: [text] };
 
 const InsertImageForm: React.FC<InsertImageFormProps> = ({
   multiple,
