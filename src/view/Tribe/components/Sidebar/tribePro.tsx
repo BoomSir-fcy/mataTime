@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Box, Text } from 'uikit';
+import { useStore } from 'store';
 
 const Group = styled(Box)``;
 const GroupRows = styled(Flex)`
@@ -10,6 +11,8 @@ const GroupRows = styled(Flex)`
 `;
 
 const TribePro = ({ ...props }) => {
+  const tribeDetails = useStore(p => p.tribe.tribeDetails);
+
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
@@ -18,7 +21,9 @@ const TribePro = ({ ...props }) => {
       <Group>
         <GroupRows>
           <Text color='textTips'>Fees to join this tribe</Text>
-          <Text>5.0 BNB</Text>
+          <Text>
+            {tribeDetails.charge} {tribeDetails.symbol}
+          </Text>
         </GroupRows>
         <GroupRows>
           <Text color='textTips'>Timing Method</Text>
@@ -28,11 +33,11 @@ const TribePro = ({ ...props }) => {
       <Group>
         <GroupRows>
           <Text color='textTips'>Validity Days</Text>
-          <Text>365 days</Text>
+          <Text>{tribeDetails.valid_time} days</Text>
         </GroupRows>
         <GroupRows>
           <Text color='textTips'>TIME Burned</Text>
-          <Text>10 TIME/s</Text>
+          <Text>{tribeDetails.spend_time} TIME/s</Text>
         </GroupRows>
         <GroupRows>
           <Text color='textTips'>
@@ -40,9 +45,9 @@ const TribePro = ({ ...props }) => {
           </Text>
         </GroupRows>
       </Group>
-      <Text>Tribe Host: 50% </Text>
-      <Text>Poster: 30% </Text>
-      <Text>Members: 20%</Text>
+      <Text>Tribe Host: {tribeDetails.reward_master}%</Text>
+      <Text>Poster: {tribeDetails.reward_author}%</Text>
+      <Text>Members: {tribeDetails.reward_member}%</Text>
     </Card>
   );
 };

@@ -102,7 +102,24 @@ export interface JoinTribe {
   basicServiceCharge: Number;
 }
 
-export interface TribeDetails {}
+export interface TribeDetails {
+  charge: string;
+  create_time: number;
+  name: string;
+  nick_name: string;
+  reward_author: number;
+  reward_master: number;
+  reward_member: number;
+  spend_max_time: number;
+  spend_time: number;
+  summary: string;
+  symbol: string;
+  timing_method: number;
+  tribe_id: number;
+  type: number;
+  valid_time: number;
+  nft_image: string;
+}
 export interface TribeState {
   tribeId?: number;
   isApproveStakeNft?: boolean;

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Text } from 'uikit';
+import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
 
 const Btn = styled(Flex)`
   width: max-content;
@@ -17,11 +18,11 @@ const Btn = styled(Flex)`
 `;
 
 const Tags: React.FC<{
-  list: string[];
+  list: any[];
 }> = ({ list }) => {
   return (
     <Flex alignItems='center' flexWrap='wrap'>
-      {list.length && (
+      {list.length > 0 && (
         <>
           {list.map((item, index) => (
             <Btn key={`${item}${index}`}>
@@ -36,13 +37,18 @@ const Tags: React.FC<{
   );
 };
 
-const TribeTags = ({ ...props }) => {
+const TribeTags: React.FC<{
+  tribe_id: number;
+  mb: string;
+}> = ({ ...props }) => {
+  const { data: topicData } = useFetchTribeTopicList(props.tribe_id);
+
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
         部落主题热点
       </Text>
-      <Tags list={['Web3.0', '555555555', '2', '333', '1']} />
+      <Tags list={topicData?.list} />
     </Card>
   );
 };

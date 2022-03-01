@@ -6,9 +6,9 @@ import { Card, Flex, Text } from 'uikit';
 import { useStore } from 'store';
 
 const TribeInfo = ({ ...props }) => {
-  const dispatch = useDispatch();
   const tribeInfo = useStore(p => p.tribe.tribeInfo);
   const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
+  const tribeDetails = useStore(p => p.tribe.tribeDetails);
 
   return (
     <Card padding='16px' isRadius {...props}>
@@ -26,9 +26,9 @@ const TribeInfo = ({ ...props }) => {
         <Icon name='icon-fenxiang' color='textPrimary' size={18} />
       </Flex>
       <Flex alignItems='center' mb='19px'>
-        <Avatar scale='sm' />
+        <Avatar scale='sm' src={tribeDetails.nft_image} />
         <Text fontSize='18px' fontWeight='bold' ml='16px'>
-          bigmama
+          {tribeDetails.nick_name}
         </Text>
       </Flex>
       <Text>{tribeBaseInfo?.introduction}</Text>

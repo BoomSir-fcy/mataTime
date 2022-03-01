@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { Box } from 'uikit';
+import { useStore } from 'store';
 
 import Search from 'components/SearchInput';
 import TribeInfo from './tribeInfo';
@@ -28,6 +29,7 @@ export const TribeSidebar = () => {
   const [scrollTop, setScrollTop] = React.useState(0);
   const [position, setPosition] = React.useState('top');
   const [maxPositionValue, setMaxPositionValue] = React.useState(0);
+  const tribeId = useStore(p => p.tribe.tribeId);
   const handleScroll = React.useCallback(() => {
     const maxTop = ref.current.clientHeight - window.innerHeight;
     if (scrollTop > window.scrollY) {
@@ -55,7 +57,7 @@ export const TribeSidebar = () => {
       <TribeInfo mb='15px' />
       <TribeNft mb='15px' />
       <TribePro mb='15px' />
-      <TribeTags mb='15px' />
+      <TribeTags tribe_id={tribeId} mb='15px' />
       <TribeFiles mb='15px' />
     </SidebarStyled>
   );

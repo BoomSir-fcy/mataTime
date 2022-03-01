@@ -16,6 +16,7 @@ import {
   fetchisApprove,
 } from 'store/tribe';
 
+import { getBnbAddress } from 'utils/addressHelpers';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import { TribeSidebar } from '../components/Sidebar';
@@ -71,6 +72,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   }, [route]);
 
   useEffect(() => {
+    console.log(tribeBaseInfo.feeToken, getBnbAddress());
     if (account && tribeBaseInfo.feeToken) {
       dispatch(
         fetchisApprove({

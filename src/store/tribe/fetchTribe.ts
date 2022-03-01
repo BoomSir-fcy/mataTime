@@ -196,6 +196,7 @@ export const getTokenTribeApprove = async (
 
   try {
     const matterApprove = await multicall(erc20Abi, calls);
+    console.log(matterApprove);
     return matterApprove[0][0].toString();
   } catch (error) {
     console.error(error);

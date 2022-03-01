@@ -81,7 +81,24 @@ const initialState: TribeState = {
     isEnd: false,
     userTags: [],
   },
-  tribeDetails: {},
+  tribeDetails: {
+    charge: '0',
+    create_time: 0,
+    name: '',
+    nick_name: '',
+    reward_author: 0,
+    reward_master: 0,
+    reward_member: 0,
+    spend_max_time: 0,
+    spend_time: 0,
+    summary: '',
+    symbol: '',
+    timing_method: 0,
+    tribe_id: 0,
+    type: 0,
+    valid_time: 0,
+    nft_image: '',
+  },
   joinTribe: {
     loading: false,
     approveLimit: 0,
@@ -221,7 +238,6 @@ export const fetchisApprove = createAsyncThunk(
       params.account,
       params.address,
     );
-    console.log(isApprove);
     dispatch(setTokenIsApprove(isApprove));
   },
 );
