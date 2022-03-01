@@ -51,9 +51,10 @@ const PopupButton = styled(Flex)`
 
 interface PostInfoPorps {
   info: Api.Tribe.TribePost;
+  isTribeOnwer: boolean;
 }
 
-const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
+const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
   const { t } = useTranslation();
   const popupRef = React.useRef();
   const theme = useTheme();
@@ -75,42 +76,17 @@ const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
           </Text>
         </Flex>
         <Flex alignItems='center'>
-          <a
-            href='javascript: void(0)'
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              return false;
-            }}
-          >
-            <Popup
-              ref={popupRef}
-              trigger={
-                <PopupButton mr='30px' title={t('设置')}>
-                  <Icon name='icon-shezhi' size={20} color='textTips' />
-                </PopupButton>
-              }
-              nested
-              position='bottom right'
-              closeOnDocumentClick
-              contentStyle={{
-                width: '150px',
-                height: 'auto',
-                borderRadius: '10px',
-                padding: 0,
-                border: '0',
-                backgroundColor: 'transparent',
-                zIndex: 99,
-              }}
-              overlayStyle={{
-                zIndex: 98,
-              }}
-              arrowStyle={{
-                color: theme.colors.tertiary,
-                stroke: theme.colors.tertiary,
+          {isTribeOnwer && (
+            <a
+              href='javascript: void(0)'
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
               }}
             >
               <SetTribePopup
+                ref={popupRef}
                 postUid={'1'}
                 data={{
                   ...info,
@@ -120,8 +96,8 @@ const PostItem: React.FC<PostInfoPorps> = ({ info }) => {
                 }}
                 callback={(data: any, type) => {}}
               />
-            </Popup>
-          </a>
+            </a>
+          )}
           <a
             href='javascript: void(0)'
             onClick={e => {
