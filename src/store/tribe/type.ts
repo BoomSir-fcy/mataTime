@@ -49,7 +49,8 @@ export interface TribesNFTInfo {
 
 export interface FeeCoin {
   tokenAddress?: string;
-  symbol?: string;
+  name?: string;
+  decimal?: number;
 }
 export interface NftInfo {
   name?: string;

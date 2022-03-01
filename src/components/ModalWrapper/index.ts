@@ -12,3 +12,5 @@ export * from './verifyCodeModal';
 export * from './Tribe';
 export * from './forwardModal';
 export * from './forwardFastModal';
+export * from './WaitWalletConfirmModal';
+export * from './WaitWalletConfirmModal/SuccessfullyModal';

@@ -98,9 +98,58 @@ export const useTribeNft = () => {
     },
     [tribeContract],
   );
+
+  const setTribeMembeNFT = useCallback(
+    async (memberNftInfo: any) => {
+      try {
+        const tx = await tribeContract.setTribeMembeNFT(
+          memberNftInfo.tribeId,
+          memberNftInfo.logo,
+          memberNftInfo.name,
+          memberNftInfo.introduction,
+          {},
+        );
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
+
+  const handleStakeNft = useCallback(
+    async (tribeId: number, nftId: number) => {
+      try {
+        const tx = await tribeContract.stakeNFT(tribeId, nftId, {});
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
+
+  const handleUnStakeNft = useCallback(
+    async (tribeId: number) => {
+      try {
+        const tx = await tribeContract.unStakeNFT(tribeId, {});
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
+
   return {
     onClaimOwnerNft: handleClaimOwnerNft,
     onStakeOwnerNft: handleStakeOwnerNft,
     onUnStakeOwnerNft: handleUnStakeOwnerNft,
+    onSetTribeMembeNFT: setTribeMembeNFT,
+    onStakeNft: handleStakeNft,
+    onUnStakeNft: handleUnStakeNft,
   };
 };

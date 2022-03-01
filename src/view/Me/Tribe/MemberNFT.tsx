@@ -1,40 +1,72 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Crumbs, UploadSingle } from 'components';
 import { useTranslation } from 'contexts';
 import { Box, Text, Button, Flex, Image, Input, LinkExternal } from 'uikit';
 import { ContentBox } from './styled';
 import { CommonClaimNFT } from './components/CommonClaimNFT';
-import {
-  FormItem,
-  InputPanelStyle,
-  Label,
-  TextareaStyled,
-} from 'view/Tribe/Create/style';
+import { FormItem, InputPanelStyle, Label } from 'view/Tribe/Create/style';
 import { useImmer } from 'use-immer';
 import TextArea from 'components/TextArea';
 import { ARTICLE_POST_MAX_LEN } from 'config';
+import { useTribeNft } from './hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useStore, storeAction } from 'store';
+import { useToast } from 'hooks';
+import { useDispatch } from 'react-redux';
+import { fetchTribeNftInfo } from 'store/tribe';
 
 const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
-  const [showNFTInfo, setShowNFTInfo] = useState(false);
+  const { toastError } = useToast();
+  const dispatch = useDispatch();
+  const parseQs = useParsedQueryString();
+  const { onSetTribeMembeNFT } = useTribeNft();
+  const [pending, setPending] = useState(false);
   const [state, setState] = useImmer({
     name: '',
-    url: '',
+    logo: '',
     introduction: '',
   });
 
+  const isInitMemberNft = useStore(p => p.tribe.tribesNftInfo.initMemberNFT);
+
+  useEffect(() => {
+    if (parseQs.i) dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
+  }, [parseQs]);
+
+  const handleCreateMemberNft = useCallback(async () => {
+    if (!state.logo) {
+      toastError(t('上传图片'));
+      return false;
+    }
+    try {
+      setPending(true);
+      await onSetTribeMembeNFT({ tribeId: parseQs.i, ...state });
+      dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPending(false);
+    }
+  }, [parseQs, state]);
+
   const uploadSuccess = useCallback(url => {
-    console.log('上传成功=======》', url);
     setState(p => {
-      p.url = url;
+      p.logo = url;
     });
   }, []);
   return (
     <Box>
       <Crumbs title={t('Member NFT')} />
       <ContentBox>
-        {!showNFTInfo ? (
-          <>
+        {!isInitMemberNft ? (
+          <form
+            onSubmit={async e => {
+              e.preventDefault();
+              handleCreateMemberNft();
+            }}
+            action=''
+          >
             <FormItem>
               <Label required>{t('Member name')}</Label>
               <Flex flexDirection='column'>
@@ -45,7 +77,7 @@ const MeTribeMemberNFT = () => {
                     scale='sm'
                     placeholder={t('Please enter the member NFT name')}
                     maxLength={15}
-                    pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{4,15}$'
+                    pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{6,30}$'
                     value={state.name}
                     onChange={e => {
                       const val = e.target.value;
@@ -63,7 +95,7 @@ const MeTribeMemberNFT = () => {
             <FormItem>
               <Label required>{t('NFT')}</Label>
               <UploadSingle
-                url={state.url}
+                url={state.logo}
                 tips={t(
                   'The recommended size is less than 5MB, and the image size is 100x100',
                 )}
@@ -89,19 +121,13 @@ const MeTribeMemberNFT = () => {
               />
             </FormItem>
             <Flex mt='20px' justifyContent='center'>
-              <Button
-                width='250px'
-                scale='md'
-                onClick={() => {
-                  setShowNFTInfo(true);
-                }}
-              >
+              <Button width='250px' scale='md' type='submit' disabled={pending}>
                 {t('Create')}
               </Button>
             </Flex>
-          </>
+          </form>
         ) : (
-          <CommonClaimNFT type='member' />
+          <CommonClaimNFT type='member' tribeId={parseQs.i} />
         )}
       </ContentBox>
     </Box>

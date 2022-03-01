@@ -7,19 +7,21 @@ import { useTribeState } from 'store/tribe/hooks';
 import { useDispatch } from 'react-redux';
 import { fetchGetTribeBaseInfo } from 'store/tribe';
 import { useTribe } from 'view/Tribe/Create/hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const MyTribeInfo = () => {
   const { t } = useTranslation();
   const form = React.useRef<any>();
   const dispatch = useDispatch();
-  const { tribeId, tribeBaseInfo } = useTribeState();
+  const parseQs = useParsedQueryString();
+  const { tribeBaseInfo } = useTribeState();
   const { onSetTribeBaseInfo } = useTribe();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [info, setInfo] = useState({});
 
   useEffect(() => {
-    if (tribeId) dispatch(fetchGetTribeBaseInfo({ tribeId }));
-  }, [tribeId]);
+    if (parseQs.i) dispatch(fetchGetTribeBaseInfo({ tribeId: parseQs.i }));
+  }, [parseQs]);
 
   useEffect(() => {
     if (tribeBaseInfo.name) setInfo(tribeBaseInfo);
@@ -31,7 +33,7 @@ const MyTribeInfo = () => {
           e.preventDefault();
           const params = form.current.getInfoFrom();
           console.log('表单提交：', params);
-          await onSetTribeBaseInfo(tribeId, params);
+          await onSetTribeBaseInfo(parseQs.i, params);
           setInfo(params);
           setIsEdit(false);
         }}

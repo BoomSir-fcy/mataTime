@@ -14,34 +14,37 @@ export const StakeButton: React.FC<{
   nftId: number;
   nftType: number;
   callback?: () => void;
-}> = ({ tribeId, nftId, nftType, callback }) => {
+  [key: string]: any;
+}> = ({ tribeId, nftId, nftType, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { toastSuccess } = useToast();
   const [pending, setPending] = useState(false);
   const { onApproveTribeNFT } = useApproveTribeStakeNFT();
-  const { onStakeOwnerNft } = useTribeNft();
+  const { onStakeOwnerNft, onStakeNft } = useTribeNft();
 
   const isApproved = useStore(p => p.tribe.isApproveStakeNft);
 
   // 质押nft
   const handleStakeNft = useCallback(async () => {
     try {
+      setPending(true);
       // 部落主
       if (nftType === 1) {
         await onStakeOwnerNft(tribeId, nftId);
-        toastSuccess(t('质押部落主nft成功！'));
       }
-
       // 成员
       if (nftType === 2) {
-        // await onStakeOwnerNft(tribeId, nftId);
+        await onStakeNft(tribeId, nftId);
       }
+      toastSuccess(t('Stake succeeded'));
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastSuccess(t('质押nft失败！'));
+      toastSuccess(t('Stake failed'));
+    } finally {
+      setPending(false);
     }
   }, [tribeId, nftId, nftType]);
 
@@ -49,14 +52,17 @@ export const StakeButton: React.FC<{
     <>
       {isApproved ? (
         <StyledButton
+          {...props}
+          disabled={pending}
           onClick={() => {
             handleStakeNft();
           }}
         >
-          {t('质押')}
+          {pending ? <Dots>{t('NftStaking')}</Dots> : t('NftStake')}
         </StyledButton>
       ) : (
         <StyledButton
+          {...props}
           disabled={pending}
           onClick={async e => {
             e.stopPropagation();
@@ -64,11 +70,11 @@ export const StakeButton: React.FC<{
             setPending(true);
             try {
               await onApproveTribeNFT();
-              toastSuccess(t('授权成功！'));
+              toastSuccess(t('Approve succeeded'));
               dispatch(fetchIsApproveStakeNft({ account }));
             } catch (error) {
-              toastSuccess(t('授权失败！'));
               console.log(error);
+              toastSuccess(t('Approve failed'));
             } finally {
               setPending(false);
             }

@@ -1,6 +1,6 @@
-import { Crumbs, Icon, ModalWrapper } from 'components';
-import { useTranslation } from 'contexts';
 import React, { useCallback, useState } from 'react';
+import { Crumbs, WaitConfirmModal, SuccessfullyModal } from 'components';
+import { useTranslation } from 'contexts';
 import { Box, Text, Divider, Flex } from 'uikit';
 import SubHeader from '../components/SubHeader';
 import { FormFlex, LogoIcon } from './style';
@@ -39,7 +39,7 @@ const Create = () => {
   }, []);
 
   const gotoMaterNft = () => {
-    history.push('/me/tribe/master-nft');
+    history.push('/me/tribe');
   };
 
   const PayAndCreate = async () => {
@@ -49,6 +49,10 @@ const Create = () => {
       const isNotUnique = await onCheckUniqueName(infoParams.name);
       if (isNotUnique) {
         toastError(t('名称已存在'));
+        return false;
+      }
+      if (!infoParams.logo) {
+        toastError(t('上传图片'));
         return false;
       }
       if (
@@ -61,7 +65,10 @@ const Create = () => {
         toastError(t('TIME獎勵分配总和必须为100%'));
         return false;
       }
-
+      if (!activeNftInfo.nftId) {
+        toastError(t('请选择头像'));
+        return false;
+      }
       const params = {
         ...infoParams,
         ...feeParams,
@@ -72,7 +79,13 @@ const Create = () => {
         p.visible = true;
       });
       await onCreateTribe(params);
-      gotoMaterNft();
+      // 2秒后自动跳转
+      setTimeout(() => {
+        setState(p => {
+          p.visible = false;
+        });
+        gotoMaterNft();
+      }, 2000);
     } catch (error) {
       console.log(error);
 
@@ -115,37 +128,15 @@ const Create = () => {
         </Flex>
       </form>
 
-      <ModalWrapper
-        creactOnUse
-        customizeTitle
-        shouldCloseOnOverlayClick={false}
-        visible={state.visible}
-      >
-        <Flex
-          flexDirection='column'
-          justifyContent='center'
-          alignItems='center'
-        >
-          {createStatus === 'success' ? (
-            <>
-              <Icon name='icon-complete' size={160} color='#2BEC93' />
-              <Text mt='30px'>{t('Create Successfully')}</Text>
-            </>
-          ) : (
-            <>
-              <LogoIcon>
-                <Icon name='icon-LOGO3' size={80} color='white_black' />
-              </LogoIcon>
-              <Text mt='30px'>{t('Waiting For Confirmation')}</Text>
-              <Text mt='10px' small color='textTips'>
-                {t(
-                  'To cancel this transaction, please reject it in your wallet',
-                )}
-              </Text>
-            </>
-          )}
-        </Flex>
-      </ModalWrapper>
+      {(createStatus === 'start' || createStatus === 'waiting') && (
+        <WaitConfirmModal visible={state.visible} />
+      )}
+      {createStatus === 'success' && (
+        <SuccessfullyModal
+          visible={state.visible}
+          text={t('Create Successfully')}
+        />
+      )}
     </Box>
   );
 };
