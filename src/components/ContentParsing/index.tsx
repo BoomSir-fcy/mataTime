@@ -20,7 +20,7 @@ import {
   Leaf,
 } from 'components/Editor/RichTextEditor/RenderElement';
 import {
-  ImageStyled,
+  ImageStyledRender,
   BoxStyled,
 } from 'components/Editor/RichTextEditor/RenderElement/Image';
 import {
@@ -35,6 +35,7 @@ type IProps = {
   value?: Descendant[];
   paragraphMt?: string;
   callback?: Function;
+  rows?: number; // 显示
   disableParseSquare?: boolean; // 评论不生成话题
   mode?: 'preview' | 'detail';
 };
@@ -89,6 +90,7 @@ export const ContentParsing = React.memo(
       disableParseSquare,
       paragraphMt = '0',
       mode = 'detail',
+      rows
     } = props;
 
     useEffect(() => {
@@ -97,7 +99,7 @@ export const ContentParsing = React.memo(
           ? JSON.parse(props.content)
           : [];
         setParsingResult(arr);
-      } catch (err: any) {}
+      } catch (err: any) { }
     }, [props.content]);
 
     const preValue = useMemo(() => {
@@ -227,7 +229,7 @@ export const ContentParsing = React.memo(
           return (
             <Box mt={paragraphMt}>
               <BoxStyled>
-                <ImageStyled src={node.url} />
+                <ImageStyledRender src={node.url} />
               </BoxStyled>
             </Box>
           );
@@ -269,6 +271,21 @@ export const ContentParsing = React.memo(
               {children?.map((n, index) => serialize2(n, null, index))}
             </Link>
           );
+        case 'link':
+          return (
+            <a
+              target='_blank'
+              onClick={event => {
+                event.stopPropagation();
+                // event.preventDefault();
+              }}
+              href={node?.url}
+              title={node?.url}
+              rel='noreferrer'
+            >
+              {node?.character}
+            </a>
+          );
         case 'mention':
           return (
             <FollowPopup uid={node?.attrs?.userid || 0} key={index}>
@@ -300,18 +317,17 @@ export const ContentParsing = React.memo(
               parsingResult.map((item: any, index) => {
                 if (!expand) {
                   return (
-                    index < ARTICLE_POST_MAX_ROW &&
+                    index < (rows || ARTICLE_POST_MAX_ROW) &&
                     serialize2(item, null, index)
                   );
                 }
                 return serialize2(item, null, index);
               })}
-            {parsingResult && parsingResult.length > ARTICLE_POST_MAX_ROW ? (
+            {parsingResult && parsingResult.length > (rows || ARTICLE_POST_MAX_ROW) ? (
               <ExpandWrapper>
                 <a
-                  href={`javascript:void(${
-                    expand ? t('homePutAway') : t('homeOpen')
-                  })`}
+                  href={`javascript:void(${expand ? t('homePutAway') : t('homeOpen')
+                    })`}
                   onClick={(e: any) => {
                     e.stopPropagation();
                     e.preventDefault();

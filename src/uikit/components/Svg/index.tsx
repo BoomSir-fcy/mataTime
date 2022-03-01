@@ -141,6 +141,11 @@ export { default as bgCricle } from './Icons/bgCricle';
 export { default as centerCricle } from './Icons/centerCricle';
 export { BgSvg } from './Icons/RingPoint';
 export { default as FeaturedIcon } from './Icons/Featured';
+export { default as FileWord } from './Icons/FileWord';
+export { default as FileExcel } from './Icons/FileExcel';
+export { default as FilePPT } from './Icons/FilePPT';
+export { default as FilePDF } from './Icons/FilePDF';
+export { default as FileOther } from './Icons/FileOther';
 export { default as ProTribeIcon } from './Icons/ProTribe';
 
 export { default as Svg } from './Svg';

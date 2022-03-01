@@ -25,7 +25,7 @@ export const SubCommentAction: React.FC<{
   });
 
   const delComment = () => {
-    Api.MeApi.removeContentDetail(comment_id).then(res => {
+    Api.MeApi.removeV2ContentDetail(comment_id).then(res => {
       if (Api.isSuccess(res)) {
         setState(p => {
           p.delCommentVisible = false;

@@ -20,8 +20,14 @@ export const NoDataWrapper = styled(Box)`
   color: ${({ theme }) => theme.colors.textTips};
 `;
 
+
+
 // 加载类型 1: 初始化加载, 2: 滚动加载, 3: TODO: 下拉刷新
-type LoadType = 1 | 2 | 3
+export enum LoadType {
+  INIT = 1,
+  LOADMORE = 2,
+  REFRESH = 3
+}
 
 interface Iprops {
   renderList: (type?: LoadType) => void;
@@ -56,7 +62,7 @@ class ListComponents extends React.Component<Iprops> {
         isDark: systemCustom.isDark
       },
       () => {
-        this.loadList(1);
+        this.loadList(LoadType.INIT);
       }
     );
     // this.props?.onRef(this.props);
@@ -73,7 +79,7 @@ class ListComponents extends React.Component<Iprops> {
       window.pageYOffset + window.innerHeight + 300 >=
       this.listBox.current.offsetHeight + this.listBox.current.offsetTop
     ) {
-      this.loadList(2);
+      this.loadList(LoadType.LOADMORE);
     }
   }
 

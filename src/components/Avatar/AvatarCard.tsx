@@ -24,12 +24,14 @@ export const AvatarCard: React.FC<AvatarCardProps> = ({
   time,
 }) => {
   return (
-    <Flex style={{ flex: 1, minWidth: 0 }}>
+    <Flex alignItems='center' style={{ flex: 1, minWidth: 0 }}>
       <Avatar disableFollow uid={uid} src={avatar} scale={scale} />
       <Box ml='8px' style={{ minWidth: 0 }}>
         <Text ellipsis>{userName}</Text>
         <Text color='textTips' className='time'>
-          <span>@{shortenAddress(address)}</span>
+          <span style={{ marginRight: '20px' }}>
+            @{shortenAddress(address)}
+          </span>
           {time}
         </Text>
       </Box>

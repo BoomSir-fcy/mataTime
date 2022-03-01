@@ -73,7 +73,7 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
     const images = urls.map(url => {
       const image: ImageElement = {
         type: 'image',
-        align: 'right',
+        full: false,
         url,
         loading: false,
         children: [text],

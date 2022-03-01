@@ -6,7 +6,11 @@ import { useTranslation } from 'contexts/Localization';
 import MenuNav from 'components/MenuNav';
 import Sidebar from 'components/Sidebar';
 import Container from 'components/Layout/Container';
-import { hideLeftNavPath, hideSidebarPath } from 'config/constants/navConfig';
+import {
+  hideLeftNavPath,
+  hideSidebarPath,
+  hideSidebarLine,
+} from 'config/constants/navConfig';
 import Crumbs from './crumbs';
 import client from 'utils/client';
 
@@ -86,6 +90,10 @@ const PageContainer: React.FC = ({ children }) => {
     return !hideLeftNavPath.includes(pathname);
   }, [pathname]);
 
+  const showLine = useMemo(() => {
+    return !hideSidebarLine.includes(pathname);
+  }, [pathname]);
+
   const fillPage = useMemo(() => {
     return !showMenuNav && !showSidebar;
   }, [showMenuNav, showSidebar]);
@@ -118,7 +126,7 @@ const PageContainer: React.FC = ({ children }) => {
                 {children}
               </CennerBox>
             </InnerBox>
-            <LineStyled mr='14px' />
+            {showLine && <LineStyled mr='14px' />}
             {showSidebar && (
               <Sidebar className='mini-swap-Modal__Body--open-sidebar' />
             )}

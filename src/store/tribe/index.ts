@@ -5,6 +5,8 @@ import {
   getTicketNftTokenList,
   getTribeBaseInfo,
   getTribeNftInfo,
+  getBasicFee,
+  getTokenTribeApprove,
 } from './fetchTribe';
 import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
@@ -58,7 +60,9 @@ const initialState: TribeState = {
       name: '',
       logo: '',
       type: null,
+      create_time: 0,
     },
+    status: 0,
     tribe_id: null,
     selected_count: '',
     post_count: '',
@@ -76,6 +80,12 @@ const initialState: TribeState = {
     loading: false,
     isEnd: false,
     userTags: [],
+  },
+  tribeDetails: {},
+  joinTribe: {
+    loading: false,
+    approveLimit: 0,
+    basicServiceCharge: 0,
   },
 };
 
@@ -163,6 +173,17 @@ export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
   },
 );
 
+export const fetchTribeDetailAsync = createAsyncThunk<any, any>(
+  'tribe/fetchTribeDetailAsync',
+  async ({ tribe_id }) => {
+    const res = await Api.TribeApi.tribeDetail({ tribe_id });
+    return {
+      ...res.data,
+      tribe_id,
+    };
+  },
+);
+
 export const fetchTribePostAsync = createAsyncThunk(
   'tribe/fetchTribePostAsync',
   async (params: Api.Tribe.tribePostListParams, { dispatch }) => {
@@ -182,6 +203,29 @@ export const fetchTribePostAsync = createAsyncThunk(
     return {};
   },
 );
+
+// 查询加入basic类型部落的matter手续费
+export const fetchTribeJoinBasicServiceAsync = createAsyncThunk(
+  'tribe/fetchTribeJoinBasicService',
+  async (parmas, { dispatch }) => {
+    dispatch(setJoinLoading(true));
+    const info = await getBasicFee();
+    dispatch(setJoinBasicServiceCharge(info.toString()));
+  },
+);
+
+export const fetchisApprove = createAsyncThunk(
+  'tribe/fetchTisApprove',
+  async (params: { account: string; address: string }, { dispatch }) => {
+    const isApprove = await getTokenTribeApprove(
+      params.account,
+      params.address,
+    );
+    console.log(isApprove);
+    dispatch(setTokenIsApprove(isApprove));
+  },
+);
+
 export const tribe = createSlice({
   name: 'tribe',
   initialState,
@@ -201,6 +245,16 @@ export const tribe = createSlice({
     setTribeBaseInfo: (state, { payload }) => {
       state.tribeBaseInfo = payload;
     },
+    setJoinLoading: (state, { payload }) => {
+      state.joinTribe.loading = payload;
+    },
+    setJoinBasicServiceCharge: (state, { payload }) => {
+      state.joinTribe.basicServiceCharge = payload;
+      state.joinTribe.loading = false;
+    },
+    setTokenIsApprove: (state, { payload }) => {
+      state.joinTribe.approveLimit = payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -219,6 +273,9 @@ export const tribe = createSlice({
       })
       .addCase(fetchTribeInfoAsync.fulfilled, (state, action) => {
         state.tribeInfo = action.payload;
+      })
+      .addCase(fetchTribeDetailAsync.fulfilled, (state, action) => {
+        state.tribeDetails = action.payload;
       })
       .addCase(fetchTribePostAsync.fulfilled, (state, action) => {
         const { list, page, per_page, selected } = action.payload;
@@ -251,6 +308,9 @@ export const {
   setTribeBaseInfo,
   setLoading,
   setIsEnd,
+  setJoinLoading,
+  setJoinBasicServiceCharge,
+  setTokenIsApprove,
 } = tribe.actions;
 
 export default tribe.reducer;

@@ -54,12 +54,12 @@ export const blockFormats = [
 export const hisoryFormats = [
   {
     format: 'undo',
-    icon: 'icon-701bianjiqi_chexiao',
+    icon: 'icon-z701bianjiqi_chexiao',
     type: FormatType.HISTORY,
   },
   {
     format: 'redo',
-    icon: 'icon-702bianjiqi_zhongzuo',
+    icon: 'icon-z702bianjiqi_zhongzuo',
     type: FormatType.HISTORY,
   },
 ]

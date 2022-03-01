@@ -9,18 +9,20 @@ enum MessageProtocol {
   // 时间消耗
   WSProtocol_Spend_Time = 1,
   // 系统通知
-  WSProtocol_SYSTEM_NOTIFY,
+  WSProtocol_SYSTEM_NOTIFY = 2,
   // 未读通知
-  WSProtocol_UNREAD_NOTIFY,
+  WSProtocol_UNREAD_NOTIFY = 3,
+  // v2转发时间消耗
+  WSProtocol_Spend_TimeV2 = 4,
   // 心跳检测
-  WSProtocol_HEART_Jump_Jump = 97
+  WSProtocol_HEART_Jump_Jump = 97,
 }
 
 enum WSReadyState {
   CONNECTING = 0,
   OPEN,
   CLOSING,
-  CLOSED
+  CLOSED,
 }
 
 interface SendMessageData {
@@ -36,7 +38,7 @@ enum ImEventType {
   OPEN = 'open',
   SYSTEM_MSG = 'systemMsg',
   SPEND_TIME = 'spendTime',
-  UNREAD_NOTIFY = 'unreadNotify'
+  UNREAD_NOTIFY = 'unreadNotify',
 }
 
 interface ResponseMessageData {
@@ -128,7 +130,7 @@ export class IM extends EventTarget {
     const sendData = {
       ptl,
       data,
-      nonce: this.nonce
+      nonce: this.nonce,
     };
     if (readyState === WSReadyState.OPEN) {
       this.connection.send(JSON.stringify(sendData));
@@ -167,7 +169,7 @@ export class IM extends EventTarget {
     this.addEventListener(event, handle);
     this.handleEvents.push({
       event,
-      handle
+      handle,
     });
   }
 
@@ -181,7 +183,7 @@ export class IM extends EventTarget {
     this.removeEventListener(event, handle);
     this.handleEvents.push({
       event,
-      handle
+      handle,
     });
   }
 
@@ -212,8 +214,8 @@ export class IM extends EventTarget {
             data,
             origin: event.origin,
             lastEventId: event.lastEventId,
-            source: event.source
-          })
+            source: event.source,
+          }),
         );
         break;
       case IM.MessageProtocol.WSProtocol_Spend_Time:
@@ -222,8 +224,18 @@ export class IM extends EventTarget {
             data,
             origin: event.origin,
             lastEventId: event.lastEventId,
-            source: event.source
-          })
+            source: event.source,
+          }),
+        );
+        break;
+      case IM.MessageProtocol.WSProtocol_Spend_TimeV2:
+        this.dispatchEvent(
+          new MessageEvent(ImEventType.SPEND_TIME, {
+            data,
+            origin: event.origin,
+            lastEventId: event.lastEventId,
+            source: event.source,
+          }),
         );
         break;
       case IM.MessageProtocol.WSProtocol_UNREAD_NOTIFY:
@@ -232,8 +244,8 @@ export class IM extends EventTarget {
             data,
             origin: event.origin,
             lastEventId: event.lastEventId,
-            source: event.source
-          })
+            source: event.source,
+          }),
         );
         break;
       case IM.MessageProtocol.WSProtocol_HEART_Jump_Jump:
@@ -250,8 +262,8 @@ export class IM extends EventTarget {
       case ResponseCode.INSUFFICIENT_BALANCE:
         eventBus.dispatchEvent(
           new MessageEvent('insufficient', {
-            data
-          })
+            data,
+          }),
         );
         this.addSuspendTpl(this.messageProtocol.WSProtocol_Spend_Time);
         return false;
@@ -274,11 +286,11 @@ export class IM extends EventTarget {
         data: event.data,
         origin: event.origin,
         lastEventId: event.lastEventId,
-        source: event.source
-      })
+        source: event.source,
+      }),
     );
     this.waitMessageList = this.waitMessageList.filter(
-      item => item.nonce !== event.data.nonce
+      item => item.nonce !== event.data.nonce,
     );
     this.parseMessage(event);
   }
@@ -290,7 +302,7 @@ export class IM extends EventTarget {
 
   private oncloseHandle(event: CloseEvent) {
     this.dispatchEvent(new CloseEvent(ImEventType.CLOSE, event));
-    this.reConnectionWs()
+    this.reConnectionWs();
   }
 
   private reConnectionWs() {
@@ -309,7 +321,7 @@ export class IM extends EventTarget {
         this.loading = false;
         this.reConnectionWs();
         return;
-      };
+      }
       if (this.connection) {
         delete this.connection;
       }
@@ -319,7 +331,7 @@ export class IM extends EventTarget {
 
       this.connection.addEventListener(
         'message',
-        this.onmessageHandle.bind(this)
+        this.onmessageHandle.bind(this),
       );
 
       this.connection.addEventListener('error', this.onerrorHandle.bind(this));

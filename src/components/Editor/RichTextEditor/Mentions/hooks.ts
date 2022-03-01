@@ -26,7 +26,7 @@ export const insertMention = (editor, { character, uid }) => {
 };
 
 
-export const useMentions = (editor, ref) => {
+export const useMentions = (editor, ref, tribeId?: number) => {
   const [target, setTarget] = useState<Range | undefined>()
   const [index, setIndex] = useState(0)
   const [search, setSearch] = useState('')
@@ -38,20 +38,28 @@ export const useMentions = (editor, ref) => {
     ).slice(0, 10)
   }, [search])
 
-    // 模糊查询用户
-    const onSearchUser = useCallback(
-      debounce(async (nickName: string) => {
-        try {
-          const res = await Api.UserApi.searchUser(nickName);
-          if (Api.isSuccess(res)) {
-            setUserList(res.data || [])
-          }
-        } catch (error) {
-          console.error(error);
+  // 模糊查询用户
+  const onSearchUser = useCallback(
+    debounce(async (nickName: string) => {
+      try {
+        let res = null
+        if (tribeId) {
+          res = await Api.TribeApi.tribeUserSearchByName({
+            name: nickName,
+            tribe_id: tribeId
+          });
+        } else {
+          res = await Api.UserApi.searchUser(nickName);
         }
-      }, 1000),
-      [setUserList],
-    );
+        if (Api.isSuccess(res)) {
+          setUserList(res.data || [])
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }, 1000),
+    [setUserList, tribeId],
+  );
 
   const onKeyDown = useCallback(
     event => {

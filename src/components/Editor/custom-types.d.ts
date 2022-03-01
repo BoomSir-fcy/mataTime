@@ -35,12 +35,12 @@ export type HeadingTwoElement = { type: 'heading-two'; children: Descendant[] }
 export type ImageElement = {
   type: 'image'
   url: string
-  align?: 'left'|'right'|'center'
+  full?: boolean
   loading?: boolean
   children: EmptyText[]
 }
 
-export type LinkElement = { type: 'link'; url: string; children: Descendant[] }
+export type LinkElement = { type: 'link'; url: string; character: string; children: Descendant[] }
 
 export type ButtonElement = { type: 'button'; character: string; children: Descendant[] }
 

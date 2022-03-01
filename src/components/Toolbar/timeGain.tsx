@@ -6,8 +6,9 @@ import { PopupWrap, Icon } from 'components';
 import { formatDisplayApr } from 'utils/formatBalance';
 import { useTranslation } from 'contexts/Localization';
 
-const TimeIcon = styled(Image)``;
 const PopupButton = styled(Flex)`
+  width: 100%;
+  justify-content: flex-start;
   align-items: center;
   cursor: pointer;
 `;
@@ -55,12 +56,18 @@ export const TimeGain: React.FC<{
     },
   );
   return (
-    <Box>
+    <Box className='operator-item'>
       <PopupButton ref={targetRef} title={t('editorTime')}>
-        <Box width='18px' mr='10px'>
-          <TimeIcon width={18} height={18} src='/images/tokens/TIME.svg' />
+        <Box
+          width='18px'
+          mr='10px'
+          style={{
+            flexShrink: 0,
+          }}
+        >
+          <Image width={18} height={18} src='/images/tokens/TIME.svg' />
         </Box>
-        <Text color='textTips'>
+        <Text color='textTips' ellipsis style={{ minWidth: 0 }}>
           {formatDisplayApr(parseFloat(new BigNumber(total).toFixed(2)))}
         </Text>
       </PopupButton>

@@ -39,6 +39,8 @@ export interface SearchState {
   resultListOfTopic: SearchTopicInfo[],
   displayResultListOfTopic: SearchTopicInfo[],
   resultListOfPost: Api.Home.post[],
+  resultListOfTribe: any[]; // TODO: TYPE
+  displayResultListOfTribe: any[],
   resultListOfPostLen: number,
   displayResultListOfPost: Api.Home.post[],
   loading: boolean,
@@ -51,7 +53,12 @@ export interface SearchState {
   searchVal: string,
   historyList: SearchHistoryList[],
   placeHolderSearch: string,
-  filterUser: number // 1 所有人 2 仅关注
+  filterUser: number, // 1 所有人 2 仅关注
+  tribe: {
+    page: number, //
+    loading: boolean
+    loadEnd: boolean
+  }
   searchPostMap: {
     [id: string]: Api.Home.post
   }

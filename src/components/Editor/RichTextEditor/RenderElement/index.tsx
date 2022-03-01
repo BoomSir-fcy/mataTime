@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import reactStringReplace from 'react-string-replace';
 import styled, { DefaultTheme } from 'styled-components';
-import { Mention } from 'components/Editor/elements';
+import { Mention, LinkWithText } from 'components/Editor/elements';
 import { Box, BoxProps, Card, Text } from 'uikit';
 import {
   SQUARE_REGEXP,
@@ -31,9 +31,13 @@ export const Element = props => {
     case 'numbered-list':
       return <Ol {...attributes}>{children}</Ol>;
     case 'image':
-      return <Image {...props} editor={editor} />;
+      return <Image {...props} isEditor editor={editor} />;
+    case 'code':
+      return <Code {...props} />;
     case 'mention':
       return <Mention {...props} />;
+    case 'link':
+      return <LinkWithText {...props} />;
     case 'code':
       return <Code {...props} />;
     default:
@@ -59,6 +63,7 @@ export const Leaf = ({ attributes, children, leaf }) => {
   }
 
   // if (leaf.code) {
+  //   children = <Code>{children}</Code>;
   //   children = (
   //     <Code>
   //       <code>{children}</code>

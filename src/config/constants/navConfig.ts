@@ -4,6 +4,7 @@ export const pathConfig = {
   messageAtMePath: '/notification/me',
   messageCommentPath: '/notification/comment',
   messageLikePath: '/notification/praise',
+  messageRepostPath: '/notification/repost',
   messageNoticePath: '/notification/notice',
 };
 
@@ -70,6 +71,13 @@ export const menuNavConfig: MenuNavConfig[] = [
         path: pathConfig.messageLikePath,
         badgeName: 'message_like',
         lable: 'newsPraiseMenuTitle',
+      },
+      {
+        icon: 'icon-retweet',
+        activeIcon: 'icon-retweet',
+        path: pathConfig.messageRepostPath,
+        badgeName: 'message_forward',
+        lable: 'newsRepostMenuTitle',
       },
       {
         icon: 'icon-tixing',
@@ -371,10 +379,15 @@ export const hideSidebarPath = (() => {
       '/task/rankingList',
       '/tribe/post',
       '/tribe/create',
+      '/tribe/detail',
     ],
     menuNavConfig,
     'hideRight',
   );
+})();
+
+export const hideSidebarLine = (() => {
+  return getHidePath(['/tribe/detail'], menuNavConfig, 'hideRightLine');
 })();
 
 export default menuNavConfig;

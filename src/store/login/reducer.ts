@@ -14,7 +14,7 @@ import {
   resetLoginState,
   setSigninLoading,
   setUserToken,
-  setUserUnreadMsgNum
+  setUserUnreadMsgNum,
 } from './actions';
 import { storage } from 'config';
 import { Api } from 'apis';
@@ -45,8 +45,9 @@ const initialState = {
     message_like: 0,
     message_secret: 0,
     message_system: 0,
-    mineTotalMsgNum: 0
-  }
+    message_forward: 0,
+    mineTotalMsgNum: 0,
+  },
 };
 
 export type Login = typeof initialState;
@@ -61,19 +62,19 @@ export const fetchUserInfoAsync = createAsyncThunk(
     // response.data.NftImage = response.data.nft_image = NftImg.image
     window.localStorage.setItem(
       storage.UserInfo,
-      JSON.stringify(response.data)
+      JSON.stringify(response.data),
     );
     return response;
-  }
+  },
 );
 // Async thunks
 export const fetchUserNftInfoAsync = createAsyncThunk<any, string>(
   'fetch/getNftInfo',
   async (account, { dispatch }) => {
-    dispatch(setNftLoading(true))
+    dispatch(setNftLoading(true));
     const info = await FetchNftsList(account);
     return info;
-  }
+  },
 );
 
 export const login = createSlice({
@@ -151,19 +152,20 @@ export const login = createSlice({
           if (action.payload) {
             const unreadMsg = {
               ...state.unReadMsg,
-              ...action.payload
+              ...action.payload,
             };
             const mineTotalMsgNum =
               unreadMsg.message_at_me +
               unreadMsg.message_like +
               unreadMsg.message_comment +
+              unreadMsg.message_forward +
               unreadMsg.message_system;
             state.unReadMsg = {
               ...unreadMsg,
-              mineTotalMsgNum
+              mineTotalMsgNum,
             };
           }
-        }
+        },
       )
       .addCase(resetLoginState, state => {
         Object.keys(state).forEach(key => {
@@ -172,11 +174,9 @@ export const login = createSlice({
           localStorage.removeItem(storage.Token); // 移除token
         });
       });
-  }
+  },
 });
 
-export const {
-  setNftLoading
-} = login.actions
+export const { setNftLoading } = login.actions;
 
 export default login.reducer;
