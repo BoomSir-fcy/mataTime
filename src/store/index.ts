@@ -28,6 +28,7 @@ import { TaskState } from './task/type';
 import { MapModuleState, PickNftState } from './types';
 import { TribeState } from './tribe/type';
 import tribeReducer from './tribe';
+import * as tribeAction from './tribe/actions';
 export interface Store {
   appReducer: App;
   loginReducer: Login;
@@ -74,6 +75,7 @@ export const storeAction = {
   ...walletAction,
   ...postAction,
   ...searchAction,
+  ...tribeAction,
 };
 export const fetchThunk = {
   fetchUserInfoAsync,

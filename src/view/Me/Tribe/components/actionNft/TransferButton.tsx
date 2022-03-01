@@ -23,7 +23,7 @@ export const TransferButton: React.FC<{
 }> = ({ nftId, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const [visible, setVisible] = useState(false);
   const [inputAddress, setInputAddress] = useState('');
   const { onTranferNft } = useTranferNft();
@@ -38,7 +38,7 @@ export const TransferButton: React.FC<{
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastSuccess(t('Transfer failed'));
+      toastError(t('Transfer failed'));
     }
   }, [inputAddress, nftId]);
 

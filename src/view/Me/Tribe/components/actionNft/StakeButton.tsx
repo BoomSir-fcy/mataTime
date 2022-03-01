@@ -19,7 +19,7 @@ export const StakeButton: React.FC<{
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const [pending, setPending] = useState(false);
   const { onApproveTribeNFT } = useApproveTribeStakeNFT();
   const { onStakeOwnerNft, onStakeNft } = useTribeNft();
@@ -42,7 +42,7 @@ export const StakeButton: React.FC<{
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastSuccess(t('Stake failed'));
+      toastError(t('Stake failed'));
     } finally {
       setPending(false);
     }

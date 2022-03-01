@@ -61,10 +61,23 @@ export const useTranferNft = () => {
 export const useTribeNft = () => {
   const tribeContract = useTribeContract();
 
+  const handleSettingInvitation = useCallback(
+    async (tribeId: number, rate: string | number) => {
+      try {
+        const tx = await tribeContract.settinginvitaion(tribeId, rate);
+        const receipt = await tx.wait();
+        return receipt.status;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [tribeContract],
+  );
+
   const handleClaimOwnerNft = useCallback(
     async (tribeId: number) => {
       try {
-        const tx = await tribeContract.claimOnwerNFT(tribeId, {});
+        const tx = await tribeContract.claimOnwerNFT(tribeId);
         const receipt = await tx.wait();
         return receipt.status;
       } catch (error) {
@@ -145,6 +158,7 @@ export const useTribeNft = () => {
   );
 
   return {
+    onSettingInvitation: handleSettingInvitation,
     onClaimOwnerNft: handleClaimOwnerNft,
     onStakeOwnerNft: handleStakeOwnerNft,
     onUnStakeOwnerNft: handleUnStakeOwnerNft,

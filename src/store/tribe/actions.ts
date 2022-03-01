@@ -19,3 +19,5 @@ export const postResetArticleParams = createAction<{
 }>('post/reset/article/params');
 
 export const postSetUserTags = createAction<any[]>('post/postSetUserTags');
+
+export const setTribeId = createAction<number>('tribe/setTribeId');
