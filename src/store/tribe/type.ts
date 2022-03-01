@@ -72,11 +72,15 @@ export interface TribeInfo {
     name: string;
     logo: string;
     type: number;
+    owner_address: string;
+    nick_name: string;
+    nft_image: string;
   };
   tribe_id: number;
   selected_count: string;
   post_count: string;
   member_count: string;
+  status: number;
 }
 export interface PostList {
   list: any[];

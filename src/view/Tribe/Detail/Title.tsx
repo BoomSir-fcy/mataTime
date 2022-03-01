@@ -26,8 +26,13 @@ const Tab = styled(Flex)`
 interface DetailTitlePorps {
   TribeId: number;
   page_size: number;
+  upDateList: (props) => void;
 }
-const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, page_size }) => {
+const DetailTitle: React.FC<DetailTitlePorps> = ({
+  TribeId,
+  page_size,
+  upDateList,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [ActiveTitle, setActiveTitle] = useState(0);
@@ -35,19 +40,19 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, page_size }) => {
   const [sortLike, setSortLike] = useState(0);
   const { top } = useStore(p => p.tribe.postList);
 
-  const upDateList = () => {
-    dispatch(
-      fetchTribePostAsync({
-        selected: ActiveTitle,
-        page: 1,
-        per_page: page_size,
-        top: top,
-        tribe_id: TribeId,
-        newest_sort: sortTime,
-        hot_sort: sortLike,
-      }),
-    );
-  };
+  // const upDateList = () => {
+  //   dispatch(
+  //     fetchTribePostAsync({
+  //       selected: ActiveTitle,
+  //       page: 1,
+  //       per_page: page_size,
+  //       top: top,
+  //       tribe_id: TribeId,
+  //       newest_sort: sortTime,
+  //       hot_sort: sortLike,
+  //     }),
+  //   );
+  // };
 
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
@@ -63,17 +68,19 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, page_size }) => {
   };
 
   useEffect(() => {
-    dispatch(
-      fetchTribePostAsync({
-        selected: ActiveTitle,
-        page: 1,
-        per_page: page_size,
-        top: top,
-        tribe_id: TribeId,
-        newest_sort: sortTime,
-        hot_sort: sortLike,
-      }),
-    );
+    if (TribeId) {
+      dispatch(
+        fetchTribePostAsync({
+          selected: ActiveTitle,
+          page: 1,
+          per_page: page_size,
+          top: top,
+          tribe_id: TribeId,
+          newest_sort: sortTime,
+          hot_sort: sortLike,
+        }),
+      );
+    }
   }, [dispatch, TribeId, page_size, ActiveTitle, sortTime, sortLike, top]);
 
   return (

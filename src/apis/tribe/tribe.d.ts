@@ -37,6 +37,13 @@ declare namespace Api {
       title?: '';
       selected?: 0;
     }
+    interface PostSetTopParams {
+      pid: number;
+    }
+    interface PostMuteParams {
+      uid: number;
+      tribe_id: number;
+    }
     interface tribeListParams {
       page?: number;
       page_size?: number;
@@ -77,8 +84,8 @@ declare namespace Api {
       title: string;
       topic?: number[];
       remind_user?: string;
-      id?: string
-      verify?: string
+      id?: string;
+      verify?: string;
     }
 
     interface TopicInfo {
@@ -134,7 +141,7 @@ declare namespace Api {
       top: number;
       add_time: string;
       add_time_desc: string;
-      image_list: string [];
+      image_list: string[];
       is_comment: number;
       is_like: number;
       is_attention: number;
@@ -142,7 +149,7 @@ declare namespace Api {
       is_top: number;
       reward_stats: null;
       total_receive_time: string;
-      topics: string [];
+      topics: string[];
       tribe_name: string;
       title: string;
       selected: number;

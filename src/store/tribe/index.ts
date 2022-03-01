@@ -58,11 +58,15 @@ const initialState: TribeState = {
       name: '',
       logo: '',
       type: null,
+      owner_address: '',
+      nick_name: '',
+      nft_image: '',
     },
     tribe_id: null,
     selected_count: '',
     post_count: '',
     member_count: '',
+    status: null,
   },
   postList: {
     list: [],
@@ -253,7 +257,12 @@ export const tribe = createSlice({
 });
 
 // Actions
-export const { setActiveNftInfo, setTribeNftInfo, setTribeBaseInfo, setLoading, setIsEnd } =
-  tribe.actions;
+export const {
+  setActiveNftInfo,
+  setTribeNftInfo,
+  setTribeBaseInfo,
+  setLoading,
+  setIsEnd,
+} = tribe.actions;
 
 export default tribe.reducer;
