@@ -379,10 +379,15 @@ export const hideSidebarPath = (() => {
       '/task/rankingList',
       '/tribe/post',
       '/tribe/create',
+      '/tribe/detail',
     ],
     menuNavConfig,
     'hideRight',
   );
+})();
+
+export const hideSidebarLine = (() => {
+  return getHidePath(['/tribe/detail'], menuNavConfig, 'hideRightLine');
 })();
 
 export default menuNavConfig;

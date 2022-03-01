@@ -155,7 +155,7 @@ const FormatButton = ({ format, icon, type }) => {
   );
 };
 
-const Toolbar = () => {
+const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
   const editor = useSlateStatic();
 
   const [searchUser, setSearchUser] = useState(false);
@@ -182,59 +182,63 @@ const Toolbar = () => {
         e.stopPropagation();
       }}
     >
-      <Flex padding='8px 0' justifyContent='space-between' alignItems='center'>
-        <Flex alignItems='center'>
-          {markFormats.map(item => (
-            <FormatButton
-              type={item.type}
-              icon={item.icon}
-              // editor={editor}
-              format={item.format}
-            />
-          ))}
-          <ButtonStyled>
-            <Emoji
-              color='textTips'
-              onChange={function (e: string): void {
-                insertEmoji(editor, e);
-              }}
-            />
-          </ButtonStyled>
-          <ButtonStyled>
-            <InsertImageForm color='textTips' multiple />
-          </ButtonStyled>
-          <ButtonStyled>
-            <Icon
-              color='textTips'
-              name='icon-aite'
-              onClick={() => setSearchUser(!searchUser)}
-            // title={t('editorUser')}
-            />
-          </ButtonStyled>
-          <ButtonStyled>
-            <Icon
-              color='textTips'
-              name='icon-a-xiaoxi1'
-              onClick={() => setSearcTopic(!searcTopic)}
-            // title={t('editorTopic')}
-            />
-          </ButtonStyled>
-          <ButtonStyled>
-            <Icon
-              color='textTips'
-              name='icon-bianjiqi_chaolianjie738'
-              onClick={() => setVisible(true)}
-            // title={t('editorTopic')}
-            />
-          </ButtonStyled>
-          {blockFormats.map(item => (
-            <FormatButton
-              type={item.type}
-              icon={item.icon}
-              // editor={editor}
-              format={item.format}
-            />
-          ))}
+      <Flex padding='8px 0' flexWrap='wrap' justifyContent='space-between' alignItems='center'>
+        <Flex flexWrap='wrap' alignItems='center'>
+          <Flex>
+            {markFormats.map(item => (
+              <FormatButton
+                type={item.type}
+                icon={item.icon}
+                // editor={editor}
+                format={item.format}
+              />
+            ))}
+            <ButtonStyled>
+              <Emoji
+                color='textTips'
+                onChange={function (e: string): void {
+                  insertEmoji(editor, e);
+                }}
+              />
+            </ButtonStyled>
+            <ButtonStyled>
+              <InsertImageForm color='textTips' multiple />
+            </ButtonStyled>
+            <ButtonStyled>
+              <Icon
+                color='textTips'
+                name='icon-aite'
+                onClick={() => setSearchUser(!searchUser)}
+              // title={t('editorUser')}
+              />
+            </ButtonStyled>
+            <ButtonStyled>
+              <Icon
+                color='textTips'
+                name='icon-a-xiaoxi1'
+                onClick={() => setSearcTopic(!searcTopic)}
+              // title={t('editorTopic')}
+              />
+            </ButtonStyled>
+          </Flex>
+          <Flex>
+            <ButtonStyled>
+              <Icon
+                color='textTips'
+                name='icon-bianjiqi_chaolianjie738'
+                onClick={() => setVisible(true)}
+              // title={t('editorTopic')}
+              />
+            </ButtonStyled>
+            {blockFormats.map(item => (
+              <FormatButton
+                type={item.type}
+                icon={item.icon}
+                // editor={editor}
+                format={item.format}
+              />
+            ))}
+          </Flex>
         </Flex>
         <Flex alignItems='center'>
           {hisoryFormats.map(item => (
@@ -272,6 +276,7 @@ const Toolbar = () => {
             type={searchUser ? 'user' : 'topic'}
             show={searcTopic || searchUser}
             callback={searchSelect}
+            tribeId={tribeId}
             top='10px'
           />
         )}

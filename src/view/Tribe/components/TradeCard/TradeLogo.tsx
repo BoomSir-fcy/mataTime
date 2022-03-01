@@ -30,6 +30,7 @@ const Crown = styled(ProTribeIcon)`
 
 export const scales = {
   LD: 'ld',
+  XS: 'xs',
   SM: 'sm',
   MD: 'md',
   LG: 'lg',
@@ -43,6 +44,12 @@ const style = {
     width: 24,
     minWidth: 24,
     minHeight: 24,
+  },
+  [scales.XS]: {
+    height: 50,
+    width: 50,
+    minWidth: 50,
+    minHeight: 50,
   },
   [scales.SM]: {
     height: 100,

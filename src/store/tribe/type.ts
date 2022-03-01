@@ -49,7 +49,8 @@ export interface TribesNFTInfo {
 
 export interface FeeCoin {
   tokenAddress?: string;
-  symbol?: string;
+  name?: string;
+  decimal?: number;
 }
 export interface NftInfo {
   name?: string;
@@ -75,12 +76,14 @@ export interface TribeInfo {
     owner_address: string;
     nick_name: string;
     nft_image: string;
+    create_time: number;
   };
+  // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期
+  status: 0 | 1 | 2 | 3 | 4 | 5;
   tribe_id: number;
   selected_count: string;
   post_count: string;
   member_count: string;
-  status: number;
 }
 export interface PostList {
   list: any[];
@@ -96,6 +99,13 @@ export interface PostList {
   userTags: any[];
 }
 
+export interface JoinTribe {
+  loading: boolean;
+  approveLimit: Number;
+  basicServiceCharge: Number;
+}
+
+export interface TribeDetails {}
 export interface TribeState {
   tribeId?: number;
   isApproveStakeNft?: boolean;
@@ -108,4 +118,6 @@ export interface TribeState {
   tribeList: TribeList[];
   tribeInfo: TribeInfo;
   postList: PostList;
+  joinTribe: JoinTribe;
+  tribeDetails: TribeDetails;
 }

@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import { getDecodeValue, getSearchPath } from 'utils/urlQueryPath';
 import PostResult from './PostResult';
 import useDebounce from 'hooks/useDebounce';
+import TribeResult from './TribeResult';
 
 const UserBox = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -34,6 +35,7 @@ const BoxStyled = styled(Box)`
 enum TabTypes {
   TOTAL = 'total',
   POST = 'post',
+  TRIBE = 'tribe',
   USER = 'user',
   TOPIC = 'topic',
 }
@@ -55,6 +57,11 @@ const tabDatas = [
     type: TabTypes.USER,
   },
   {
+    lable: 'Tribe',
+    tLable: 'Tribe',
+    type: TabTypes.TRIBE,
+  },
+  {
     lable: 'Topic',
     tLable: 'Topic',
     type: TabTypes.TOPIC,
@@ -71,6 +78,8 @@ const Search = () => {
     displayResultListOfPeoples,
     displayResultListOfTopic,
     resultListOfPost,
+    resultListOfTribe,
+    tribe,
     dispalyLoading,
     postLoading,
     postIsEnd,
@@ -107,7 +116,7 @@ const Search = () => {
         // back
         zIndex={1005}
         hideBorder={false}
-        callBack={() => {}}
+        callBack={() => { }}
         title={t('Search')}
       >
         <FlexShowMd alignItems='center' flex='1'>
@@ -245,6 +254,14 @@ const Search = () => {
               {activeType === TabTypes.USER && userList.length === 0 && (
                 <Empty />
               )}
+            </Box>
+            <Box>
+              {activeType === TabTypes.TRIBE && (
+                <TribeResult
+                  list={resultListOfTribe}
+                  loading={tribe.loading}
+                  isEnd={tribe.loadEnd}
+                />)}
             </Box>
             <Box>
               {activeType === TabTypes.TOPIC &&

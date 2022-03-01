@@ -19,7 +19,8 @@ const InputStyled = styled(Input)`
 export const TransferButton: React.FC<{
   nftId: number;
   callback?: () => void;
-}> = ({ nftId, callback }) => {
+  [key: string]: any;
+}> = ({ nftId, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toastSuccess } = useToast();
@@ -32,23 +33,24 @@ export const TransferButton: React.FC<{
     try {
       if (!inputAddress) return false;
       await onTranferNft(inputAddress, nftId);
-      toastSuccess(t('转让nft成功！'));
+      toastSuccess(t('Transfer succeeded'));
       setVisible(false);
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastSuccess(t('转让nft失败！'));
+      toastSuccess(t('Transfer failed'));
     }
   }, [inputAddress, nftId]);
 
   return (
     <>
       <StyledButton
+        {...props}
         onClick={() => {
           setVisible(true);
         }}
       >
-        {t('转让')}
+        {t('Transfer')}
       </StyledButton>
 
       <ModalWrapper

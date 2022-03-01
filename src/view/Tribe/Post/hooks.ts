@@ -41,17 +41,17 @@ import { Api } from "apis";
 import { FetchStatus } from "config/types";
 
 const verifyValue = (title, value) => {
-    if (!title) {
-      return '请输入标题';
-    }
-    const { length } = value.map(n => Node.string(n)).join('');
-    if (!length) {
-      return '请输入帖子内容';
-    }
-    if (length > HUGE_ARTICLE_POST_MAX_LEN) {
-      return '帖子内容过长';
-    }
-    return ''
+  if (!title) {
+    return '请输入标题';
+  }
+  const { length } = value.map(n => Node.string(n)).join('');
+  if (!length) {
+    return '请输入帖子内容';
+  }
+  if (length > HUGE_ARTICLE_POST_MAX_LEN) {
+    return '帖子内容过长';
+  }
+  return ''
 }
 
 
@@ -59,7 +59,7 @@ const verifyValue = (title, value) => {
 export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateDraft') => {
   const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
-  
+
   const [loading, setLoading] = useState(false)
 
   const handle = useCallback(async (params: {
@@ -80,6 +80,7 @@ export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateD
     setLoading(true)
     const content = JSON.stringify(params.value);
     const topic = params.selectTags.map(item => item.ID);
+    console.log(params, topic)
     const remind_user = null;
     const res = await Api.TribeApi[method]({
       content,

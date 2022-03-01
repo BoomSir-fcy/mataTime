@@ -23,7 +23,7 @@ export const Table = styled(Flex)`
 export const Row = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 30% 20% 20% 20%;
+  grid-template-columns: 20% 30% 25% 25%;
   align-items: center;
   ${({ theme }) => theme.mediaQueriesSize.padding}
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -38,6 +38,9 @@ export const HeadText = styled(Text)`
 export const ItemText = styled(Text)`
   color: ${({ theme }) => theme.colors.white_black};
   font-size: 14px;
+  &:last-child {
+    text-align: right;
+  }
 `;
 
 export const LoadingAnimation = styled(Box)`

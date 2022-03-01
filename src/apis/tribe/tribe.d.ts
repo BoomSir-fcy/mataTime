@@ -101,6 +101,12 @@ declare namespace Api {
       topics: string[];
     }
 
+    interface TopicSearchByNameParams {
+      page: number;
+      page_size: number;
+      keyword: string;
+    }
+
     interface TopicDelParams {
       tribe_id: number;
       ids: number[];
@@ -108,6 +114,11 @@ declare namespace Api {
 
     interface TopicParamsForId {
       tribe_id: number;
+    }
+
+    interface TopicSearchUserParams {
+      name: string;
+      tribe_id: number
     }
 
     interface TopicListParams {
