@@ -1,14 +1,16 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
-import { DEFAULT_TOKEN_DECIMAL } from 'config';
 import tribeAbi from 'config/abi/tribe.json';
 import erc20Abi from 'config/abi/erc20.json';
+import { getBalanceNumber } from 'utils/formatBalance';
 import { ethers } from 'ethers';
 import { getTribeAddress, getBnbAddress } from 'utils/addressHelpers';
 import { useERC20 } from 'hooks/useContract';
-import { getBalanceNumber } from 'utils/formatBalance';
+
 import multicall from 'utils/multicall';
 import { FeeCoin, TribeBaseInfo, TribesNFTInfo } from './type';
+
+import { DEFAULT_TOKEN_DECIMAL } from 'config';
 
 // 收费代币token
 export const getFeeTokenList = async () => {
