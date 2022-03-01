@@ -1387,10 +1387,10 @@
   resolved "https://registry.npm.taobao.org/@bcoe/v8-coverage/download/@bcoe/v8-coverage-0.2.3.tgz"
   integrity "sha1-daLotRy3WKdVPWgEpZMteqznXDk= sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw=="
 
-"@biconomy/mexa@^2.0.25":
-  version "2.0.27"
-  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.27.tgz#7a8875adc6384bd37343de735c3a64596707468b"
-  integrity sha512-6Dns+KafwApxf0emfqs7IJG9FUa8paHcS6CPoQLbBBdIHUvdIcte+a9cjU4USNpJBsv+2XGBHSkS/zKR2+zJHw==
+"@biconomy/mexa@^2.0.27":
+  version "2.0.28"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.28.tgz#f1d50ac7429fa1b47756f6778fd7ce5057d3fdc9"
+  integrity sha512-gqq10xsXE4UGFJV2TmZehdK5DMt1rs3vRNM7oPi0z9qf3rh2BeGXE0AFZdJzjATGA289zxSZGsWYQLBwp/b//Q==
   dependencies:
     "@babel/core" "^7.12.13"
     "@babel/runtime" "^7.12.13"
