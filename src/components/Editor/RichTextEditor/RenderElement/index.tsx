@@ -18,29 +18,28 @@ export const Element = props => {
   const editor = useSlateStatic();
 
   switch (element.type) {
-    case 'block-quote':
+    case 'block-quote': // 引用
       return <Blockquote {...attributes}>{children}</Blockquote>;
-    case 'bulleted-list':
+    case 'bulleted-list': // 列表
       return <Ul {...attributes}>{children}</Ul>;
     // case 'heading-one':
     //   return <h1 {...attributes}>{children}</h1>;
     // case 'heading-two':
     //   return <h2 {...attributes}>{children}</h2>;
-    case 'list-item':
+    case 'list-item': // 无需列表
       return <li {...attributes}>{children}</li>;
-    case 'numbered-list':
+    case 'numbered-list': // 有序列表
       return <Ol {...attributes}>{children}</Ol>;
-    case 'image':
+    case 'image': // 图片
       return <Image {...props} isEditor editor={editor} />;
-    case 'code':
+    case 'code': // 代码块
       return <Code {...props} />;
-    case 'mention':
+    case 'mention': // @用户
       return <Mention {...props} />;
-    case 'link':
+    case 'link': // 链接
       return <LinkWithText {...props} />;
-    case 'code':
-      return <Code {...props} />;
     default:
+      // 普通文本
       return <DefaultElement {...attributes}>{children}</DefaultElement>;
   }
 };
@@ -53,7 +52,7 @@ export const ContentTextStyled = styled(Text)`
   font-family: Arial;
   line-height: 1.1875;
   user-select: text;
-  display: inline;
+  display: ${({ display }) => display || 'inline'};
 `;
 
 export const Leaf = ({ attributes, children, leaf }) => {

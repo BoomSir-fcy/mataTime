@@ -1,8 +1,9 @@
 import { Crumbs } from 'components';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'uikit';
-import { Switch, Route, useRouteMatch, useLocation } from 'react-router-dom';
+import { Switch, Route, useRouteMatch, useLocation, useHistory } from 'react-router-dom';
 import useMenuNav from 'hooks/useMenuNav';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const FeeSetting = React.lazy(() => import('./FeeSetting'));
 const Info = React.lazy(() => import('./Info'));
@@ -16,12 +17,25 @@ const MemberManagement = React.lazy(() => import('./MemberManagement'));
 
 const MeTribe = () => {
   const { path } = useRouteMatch();
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { replace } = useHistory()
   const { isMobile } = useMenuNav();
+
+  const parseQs = useParsedQueryString();
+  const [tribeId, setTribeId] = useState(null)
+
+  useEffect(() => {
+    if (parseQs.i) {
+      setTribeId(Number(parseQs.i))
+    } else if (tribeId) {
+      console.log(111)
+      replace({ ...location, search: location.search ? `${location}&i=${tribeId}` : `?i=${tribeId}` })
+    }
+  }, [parseQs.i, tribeId, location])
 
   return (
     <Box>
-      {!isMobile && (pathname !== path ? <Crumbs title={'部落名字'} /> : null)}
+      {!isMobile && (location.pathname !== path ? <Crumbs title={'部落名字'} /> : null)}
       <Switch>
         <Route path={path} exact component={MyTribe} />
         <Route path={`${path}/info`} component={Info} />

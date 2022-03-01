@@ -228,9 +228,7 @@ export const ContentParsing = React.memo(
         case 'image':
           return (
             <Box mt={paragraphMt}>
-              <BoxStyled>
-                <ImageStyledRender src={node.url} />
-              </BoxStyled>
+              <ImageStyledRender full={!node.full} src={node.url} />
             </Box>
           );
         case 'numbered-list':
@@ -307,7 +305,7 @@ export const ContentParsing = React.memo(
     return (
       <ContentParsingWrapper>
         {mode === 'preview' ? (
-          <ContentTextStyled color='textTips' ellipsis maxLine={2}>
+          <ContentTextStyled display='-webkit-box' color='textTips' ellipsis maxLine={2}>
             {preValue}
           </ContentTextStyled>
         ) : (

@@ -57,7 +57,7 @@ const Post = () => {
   const tribe_id = Number(i);
   const tribeName = getDecodeValue(n);
 
-  const [value, setValue] = useState<Descendant[]>(initialValue);
+  const [value, setValue] = useState<Descendant[]>(defaultValue);
   const [title, setTitle] = useState('');
 
   const [draft, setDraft] = useState(null);
@@ -81,6 +81,7 @@ const Post = () => {
 
   const handleSendPost = useCallback(
     async (verify?: any) => {
+      console.log(selectTags)
       const status = await handleSendPostAsync(
         {
           value,
@@ -155,7 +156,10 @@ const Post = () => {
           <LableBoxStyled>* 标签</LableBoxStyled>
           <InputTag
             tribe_id={tribe_id}
-            onChange={value => setSelectTags(value)}
+            onChange={value => {
+              console.log(value)
+              setSelectTags(value)
+            }}
           />
         </Flex>
         <LableBoxStyled mb='22px'>* 正文</LableBoxStyled>

@@ -60,9 +60,11 @@ interface ImageStyledRenderProps extends BoxProps {
 export const ImageStyledRender: React.FC<ImageStyledRenderProps> = ({ full, src, ...props }) => {
   return (
     <BoxStyledWrapper {...props}>
-      {
-        full ? <ImageStyledFull src={src} /> : <ImageStyled src={src} alt='' />
-      }
+      <BoxStyled>
+        {
+          full ? <ImageStyledFull src={src} /> : <ImageStyled src={src} alt='' />
+        }
+      </BoxStyled>
     </BoxStyledWrapper>
   )
 }

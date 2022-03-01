@@ -110,6 +110,15 @@ const RichTextEditor = (
     return value.map(n => Node.string(n)).join('\n');
   }, [value]);
 
+
+  /* 
+    TODO:
+    1.顶部 工具栏 使用粘性布局
+    2.添加图片后没法加文字
+    3.粘贴的图片上传处理
+    4.没想好
+  */
+
   return (
     <Card isRadius>
       <Box
