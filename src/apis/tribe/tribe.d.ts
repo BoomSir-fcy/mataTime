@@ -37,6 +37,13 @@ declare namespace Api {
       title?: '';
       selected?: 0;
     }
+    interface PostSetTopParams {
+      pid: number;
+    }
+    interface PostMuteParams {
+      uid: number;
+      tribe_id: number;
+    }
     interface tribeListParams {
       page?: number;
       page_size?: number;

@@ -240,7 +240,7 @@ const MyMasterNftTribe = React.memo(() => {
                     </StyledButton>
                   )}
                   {item?.status === NftStatus.Received ||
-                  item?.status === NftStatus.UnStake ? (
+                    item?.status === NftStatus.UnStake ? (
                     <>
                       <StakeButton
                         tribeId={item.tribe_id}
@@ -277,7 +277,7 @@ const MyMasterNftTribe = React.memo(() => {
                       />
                       <Button
                         onClick={() => {
-                          history.push(`/me/tribe/info`);
+                          history.push(`/me/tribe/info?i=${item.tribe_id}`);
                           dispatch(storeAction.setTribeId(item.id));
                         }}
                       >
@@ -392,7 +392,7 @@ const MemberNftTribe = React.memo(() => {
                 </ItemText>
                 <Flex justifyContent='flex-end' alignItems='center'>
                   {item?.status === NftStatus.Received ||
-                  item?.status === NftStatus.UnStake ? (
+                    item?.status === NftStatus.UnStake ? (
                     <>
                       <StakeButton
                         scale='sm'

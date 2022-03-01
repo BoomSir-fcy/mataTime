@@ -1,6 +1,36 @@
 import { Http } from '../http';
 
 export class TribeApi extends Http {
+  // 部落帖子置顶
+  async tribePostSetTop(params: Api.Tribe.PostSetTopParams) {
+    return this.post('/v1/tribe/post/set_top', params);
+  }
+  // 部落帖子取消置顶
+  async tribePostSetNotTop(params: Api.Tribe.PostSetTopParams) {
+    return this.post('/v1/tribe/post/set_not_top', params);
+  }
+  // 部落帖子删除
+  async tribePostDelete(params: Api.Tribe.PostSetTopParams) {
+    return this.post('/v1/tribe/post/del', params);
+  }
+  // 部落帖子精选
+  async tribePostSetSelected(params: Api.Tribe.PostSetTopParams) {
+    return this.post('/v1/tribe/post/set_selected', params);
+  }
+  // 部落帖子取消精选
+  async tribePostSetNotSelected(params: Api.Tribe.PostSetTopParams) {
+    return this.post('/v1/tribe/post/set_not_selected', params);
+  }
+  // 部落帖子禁言
+  async tribePostMute(params: Api.Tribe.PostMuteParams) {
+    const res = this.get('/v1/tribe/member/mute', params);
+    return res;
+  }
+  // 部落帖子取消禁言
+  async tribePostNotMute(params: Api.Tribe.PostMuteParams) {
+    const res = this.get('/v1/tribe/member/not_mute', params);
+    return res;
+  }
   // 部落列表
   async tribeList(params: Api.Tribe.tribeListParams) {
     const res = await this.get('/v1/tribe/list', params);
@@ -64,7 +94,9 @@ export class TribeApi extends Http {
   }
 
   // 部落获取话题
-  async getTribeTopicList(params: Api.Tribe.TopicParamsForId): Promise<Api.Response<Api.Tribe.TopicInfo[]>> {
+  async getTribeTopicList(
+    params: Api.Tribe.TopicParamsForId,
+  ): Promise<Api.Response<Api.Tribe.TopicInfo[]>> {
     return this.get('/v1/tribe/topic/list', params);
   }
 
@@ -73,8 +105,9 @@ export class TribeApi extends Http {
     return this.post('/v1/tribe/post/create_draft', params);
   }
 
-  async getTribePostDraft(params: Api.Tribe.TopicParamsForId): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
+  async getTribePostDraft(
+    params: Api.Tribe.TopicParamsForId,
+  ): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
     return this.post('v1/tribe/post/get_draft', params);
   }
-
 }

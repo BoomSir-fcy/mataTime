@@ -19,6 +19,9 @@ import {
   Node,
 } from 'slate';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
+import { useToast } from 'hooks';
+import { HUGE_ARTICLE_IMAGE_MAX_LEN } from 'config';
+import { useTranslation } from 'contexts/Localization';
 import { withHistory } from 'slate-history';
 import { withImages, withMentions, withLink } from '../withEditor';
 import { Element, Leaf } from './RenderElement';
@@ -32,6 +35,9 @@ import { onHotkeyDown } from './tools/hotkey';
 import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
 import { PARAGRAPH_MT } from './RenderElement/styleds';
 import DraggableImages from './Toolbar/DraggableImages';
+import { ParagraphElement } from '../custom-types';
+import { Api } from 'apis';
+import { cutDownImg } from 'utils/imageCompression';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
@@ -42,9 +48,27 @@ interface RichTextEditorProps extends BoxProps {
   setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
 }
 
+const CardStyled = styled(Card)`
+  position: sticky;
+  top: 0;
+  overflow: unset;
+`
+
+const ToolbarStyled = styled(Box)`
+  position: sticky;
+  top: 60px;
+  background-color: inherit;
+  z-index: 20;
+  margin: 0 -2px;
+`
+
 const getColor = (color: string, theme: DefaultTheme) => {
   return getThemeValue(`colors.${color}`, color)(theme);
 };
+
+const text = { text: '' };
+
+const paragraph: ParagraphElement = { type: 'paragraph', children: [text] };
 
 const RichTextEditor = (
   {
@@ -110,12 +134,45 @@ const RichTextEditor = (
     return value.map(n => Node.string(n)).join('\n');
   }, [value]);
 
+  const { toastError } = useToast();
+  const { t } = useTranslation();
+  const [imgList, setImgList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const uploadImg = useCallback(
+    async (files: string[]) => {
+      if (imgList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
+        return toastError(t('uploadImgMaxMsg'));
+      setIsLoading(true);
+      const res = await Api.CommonApi.uploadImgList({
+        base64: files,
+        dir_name: 'common',
+      });
+      setIsLoading(false);
+      if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
+      const imgUploadList = (res.data ?? []).map(item => item.full_path);
+      setImgList([...imgList, ...imgUploadList]);
+    },
+    [imgList],
+  );
+
+
+  /* 
+    TODO:
+    // 1.顶部 工具栏 使用粘性布局
+    // 2.添加图片后没法加文字
+    3.粘贴的图片上传处理
+    4.草稿箱移动端优化
+    5.将img添加到imglist
+    6.没想好
+  */
+
   return (
-    <Card isRadius>
+    <CardStyled isRadius>
       <Box
         width='100%'
         minHeight='455px'
         padding='0 20px 56px 20px'
+        borderRadius='10px'
         background={getColor(background, theme)}
         onClick={() => {
           ReactEditor.focus(editor);
@@ -133,8 +190,10 @@ const RichTextEditor = (
             onChangeHandle(selection);
           }}
         >
-          <Toolbar tribeId={tribeId} />
-          <Divider margin='0 -20px' pb='3px' />
+          <ToolbarStyled>
+            <Toolbar tribeId={tribeId} />
+            <Divider margin='0 -18px' pb='3px' />
+          </ToolbarStyled>
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
@@ -143,6 +202,22 @@ const RichTextEditor = (
             onKeyDown={event => {
               onKeyDown(event);
               onHotkeyDown(editor, event);
+            }}
+            onPaste={async event => {
+              const data = event.clipboardData;
+              const { files } = data;
+              let fileList: any[] = [];
+              if (files && files.length > 0) {
+                //@ts-ignore
+                for (const file of files) {
+                  const [mime] = file.type.split('/');
+                  if (mime === 'image') {
+                    const compressImage = await cutDownImg(file);
+                    fileList.push(compressImage);
+                  }
+                }
+                uploadImg(fileList);
+              }
             }}
           />
           {target && userList.length > 0 && (
@@ -154,8 +229,18 @@ const RichTextEditor = (
             />
           )}
         </Slate>
+        <Box onClick={e => {
+          // Transforms.insertNodes(editor, paragraph);
+          ReactEditor.focus(editor);
+          editor.insertText(' ');
+          // editor.deleteForward(1);
+          // console.log(editor)
+          e.stopPropagation();
+        }} position='absolute' style={{ cursor: 'pointer' }} right='0' bottom='0' height='56px' width='100%' />
         <Box
           onClick={e => {
+            ReactEditor.focus(editor);
+            Transforms.insertNodes(editor, paragraph);
             e.stopPropagation();
           }}
           height='16px'
@@ -180,7 +265,7 @@ const RichTextEditor = (
           content={JSON.stringify(value)}
         />
       </Box> */}
-    </Card>
+    </CardStyled>
   );
 };
 

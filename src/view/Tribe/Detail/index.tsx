@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Crumbs, HoverLink, List } from 'components';
+import { Crumbs, HoverLink, List, LoadType } from 'components';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -8,6 +8,7 @@ import DetailHeader from './Header';
 import DetailTitle from './Title';
 import PostItem from './postItem';
 import { useStore } from 'store';
+import { useWeb3React } from '@web3-react/core';
 import {
   fetchTribeInfoAsync,
   fetchTribePostAsync,
@@ -41,6 +42,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   const [TribeId, setTribeId] = useState(0);
   const [page, setPage] = useState(1);
   const [page_size, setPage_size] = useState(10);
+  const [isEnd, setIsEnd] = useState(false);
   const {
     displayResultListOfPeoples,
     displayResultListOfTopic,
@@ -58,6 +60,38 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
   const PostList = useStore(p => p.tribe.postList.list);
   const { account } = useActiveWeb3React();
+
+  const Getlist = React.useCallback(
+    (current = 0) => {
+      if ((postLoading || isEnd) && !current) return false;
+      // setLoading(true);
+
+      setIsEnd(true);
+      // setNonce(prep => prep + 1);
+    },
+    [isEnd, dispatch, postLoading, page, page_size],
+  );
+  const upDateList = React.useCallback(props => {
+    dispatch(
+      fetchTribePostAsync({
+        selected: props.ActiveTitle,
+        page: 1,
+        per_page: page_size,
+        top: props.top,
+        tribe_id: TribeId,
+        newest_sort: props.sortTime,
+        hot_sort: props.sortLike,
+      }),
+    );
+  }, []);
+  const getList = (type?: LoadType) => {
+    // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
+    if (type === LoadType.REFRESH || type === LoadType.INIT) {
+      Getlist(1);
+      return;
+    }
+    Getlist(page);
+  };
 
   useEffect(() => {
     const { search } = route.location;
@@ -105,7 +139,11 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       <TribeBox>
         <Crumbs back />
         <DetailHeader TribeInfo={TribeInfo} />
-        <DetailTitle TribeId={TribeId} page_size={page_size} />
+        <DetailTitle
+          upDateList={upDateList}
+          TribeId={TribeId}
+          page_size={page_size}
+        />
         <List
           loading={postLoading}
           renderList={type => {
@@ -116,14 +154,17 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
             ) {
               return;
             }
-            // getList(type);
+            getList(type);
           }}
         >
           {PostList.length ? (
             <>
               {PostList.map((item, index) => (
                 <HoverLink key={item.id} to={`/tribe/postdetail?i=${item.id}`}>
-                  <PostItem info={item} />
+                  <PostItem
+                    isTribeOnwer={TribeInfo.tribe.owner_address === account}
+                    info={item}
+                  />
                 </HoverLink>
               ))}
             </>
