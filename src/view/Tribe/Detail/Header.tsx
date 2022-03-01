@@ -72,9 +72,12 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
               TribeInfo.tribe.name,
             )}`}
           >
-            <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+            {TribeInfo.status !== 4 ? (
+              <BtnIcon name='icon-wodebula' text={t('加入部落')} />
+            ) : (
+              <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+            )}
           </Link>
-          {/* <Button>加入部落</Button> */}
         </Flex>
       </RightFlex>
     </InfoFlex>

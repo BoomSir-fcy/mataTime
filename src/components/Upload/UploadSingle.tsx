@@ -5,6 +5,7 @@ import { BoxProps, Flex, Text, Box } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { BASE_IMAGE_URL } from 'config';
 import { Loading } from 'components';
+import { Api } from 'apis';
 interface UploadProps extends BoxProps {
   url?: string;
   tips?: string | ReactNode;
@@ -37,6 +38,12 @@ const Container = styled(Flex)<{ disabled?: boolean }>`
   }
 `;
 
+const StyledImg = styled.img`
+  width: 200px;
+  height: 200px;
+  border-radius: ${({ theme }) => theme.radii.card};
+`;
+
 export const UploadSingle: React.FC<UploadProps> = ({
   url,
   tips,
@@ -60,27 +67,29 @@ export const UploadSingle: React.FC<UploadProps> = ({
         if (imageFile[i].size > imgMaxSize)
           return toast.error(t('commonUploadMaxSize'));
         // 读取文件
-        // file.readAsDataURL(imageFile[i]);
-        // file.onload = async () => {
-        //   imageInput.current.value = '';
-        //   const res = await Api.CommonApi.uploadImg({
-        //     base64: file.result,
-        //     dir_name: 'common',
-        //   });
-        //   if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
-        //   const path = res?.data?.path;
-        //   setImgUrl(path);
-        //   uploadSuccess(path);
-        // };
         setLoading(true);
-        setTimeout(() => {
-          const full_path =
-            'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
-          const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
+        file.readAsDataURL(imageFile[i]);
+        file.onload = async () => {
+          imageInput.current.value = '';
+          const res = await Api.CommonApi.uploadImg({
+            base64: file.result,
+            dir_name: 'common',
+          });
+          if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
+          const path = res?.data?.path;
           setImgUrl(path);
           uploadSuccess(path);
-          setLoading(false);
-        }, 2000);
+        };
+        setLoading(false);
+        // setLoading(true);
+        // setTimeout(() => {
+        //   const full_path =
+        //     'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
+        //   const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
+        //   setImgUrl(path);
+        //   uploadSuccess(path);
+        //   setLoading(false);
+        // }, 2000);
       }
     }
   };
@@ -99,12 +108,7 @@ export const UploadSingle: React.FC<UploadProps> = ({
           </Box>
         )}
         {imgUrl ? (
-          <img
-            src={`${BASE_IMAGE_URL}${imgUrl}`}
-            width='200px'
-            height='200px'
-            alt=''
-          />
+          <StyledImg src={`${BASE_IMAGE_URL}${imgUrl}`} alt='' />
         ) : (
           <Text fontSize='61px'>+</Text>
         )}

@@ -1098,7 +1098,7 @@
 
 "@biconomy/mexa@^2.0.27":
   version "2.0.28"
-  resolved "https://registry.npmmirror.com/@biconomy/mexa/-/mexa-2.0.28.tgz#f1d50ac7429fa1b47756f6778fd7ce5057d3fdc9"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.28.tgz#f1d50ac7429fa1b47756f6778fd7ce5057d3fdc9"
   integrity sha512-gqq10xsXE4UGFJV2TmZehdK5DMt1rs3vRNM7oPi0z9qf3rh2BeGXE0AFZdJzjATGA289zxSZGsWYQLBwp/b//Q==
   dependencies:
     "@babel/core" "^7.12.13"

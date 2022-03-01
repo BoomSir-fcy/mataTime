@@ -73,6 +73,9 @@ export interface TribeInfo {
     name: string;
     logo: string;
     type: number;
+    owner_address: string;
+    nick_name: string;
+    nft_image: string;
     create_time: number;
   };
   // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期

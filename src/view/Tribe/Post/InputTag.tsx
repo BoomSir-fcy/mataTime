@@ -14,7 +14,7 @@ import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
 import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
 import { FetchStatus } from 'config/types';
 
-const TagBoxStyled = styled(Card)<{ isOpen?: boolean }>`
+const TagBoxStyled = styled(Card) <{ isOpen?: boolean }>`
   background-color: ${({ theme }) => theme.colors.input};
   flex: 1;
   position: relative;
@@ -28,7 +28,7 @@ const TagBoxStyled = styled(Card)<{ isOpen?: boolean }>`
         `${theme.radii.card} ${theme.radii.card} 0 0`};
     `}
 `;
-const TagOptionBoxStyled = styled(Card)<{ isOpen?: boolean }>`
+const TagOptionBoxStyled = styled(Card) <{ isOpen?: boolean }>`
   width: 100%;
   min-height: 80px;
   max-height: 430px;
@@ -111,6 +111,10 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
       return flag1 && flag2;
     });
   }, [tagsList, selectTags, inputValue]);
+
+  useEffect(() => {
+    onChange(selectTags)
+  }, [selectTags])
 
   return (
     <TagBoxStyled isOpen={focus} isRadius>

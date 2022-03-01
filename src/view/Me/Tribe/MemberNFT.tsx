@@ -9,7 +9,6 @@ import { useImmer } from 'use-immer';
 import TextArea from 'components/TextArea';
 import { ARTICLE_POST_MAX_LEN } from 'config';
 import { useTribeNft } from './hooks';
-import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useStore, storeAction } from 'store';
 import { useToast } from 'hooks';
 import { useDispatch } from 'react-redux';
@@ -19,7 +18,6 @@ const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
   const { toastError } = useToast();
   const dispatch = useDispatch();
-  const parseQs = useParsedQueryString();
   const { onSetTribeMembeNFT } = useTribeNft();
   const [pending, setPending] = useState(false);
   const [state, setState] = useImmer({
@@ -29,10 +27,11 @@ const MeTribeMemberNFT = () => {
   });
 
   const isInitMemberNft = useStore(p => p.tribe.tribesNftInfo.initMemberNFT);
+  const tribeId = useStore(p => p.tribe.tribeId);
 
   useEffect(() => {
-    if (parseQs.i) dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
-  }, [parseQs]);
+    if (tribeId) dispatch(fetchTribeNftInfo({ tribeId }));
+  }, [tribeId]);
 
   const handleCreateMemberNft = useCallback(async () => {
     if (!state.logo) {
@@ -41,14 +40,14 @@ const MeTribeMemberNFT = () => {
     }
     try {
       setPending(true);
-      await onSetTribeMembeNFT({ tribeId: parseQs.i, ...state });
-      dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
+      await onSetTribeMembeNFT({ tribeId, ...state });
+      dispatch(fetchTribeNftInfo({ tribeId }));
     } catch (error) {
       console.log(error);
     } finally {
       setPending(false);
     }
-  }, [parseQs, state]);
+  }, [tribeId, state]);
 
   const uploadSuccess = useCallback(url => {
     setState(p => {
@@ -127,7 +126,7 @@ const MeTribeMemberNFT = () => {
             </Flex>
           </form>
         ) : (
-          <CommonClaimNFT type='member' tribeId={parseQs.i} />
+          <CommonClaimNFT type='member' tribeId={tribeId} />
         )}
       </ContentBox>
     </Box>

@@ -12,9 +12,14 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
+import { setTribeId } from './actions';
+
+const LOCAL_STORAGE_TRIBE_KEY = 'tribe_id';
+
+const tribeIdStore = localStorage.getItem(LOCAL_STORAGE_TRIBE_KEY);
 
 const initialState: TribeState = {
-  tribeId: 1415926538,
+  tribeId: tribeIdStore ? JSON.parse(tribeIdStore) : null,
   isApproveStakeNft: false,
   tribeBaseInfo: {
     name: '',
@@ -60,6 +65,9 @@ const initialState: TribeState = {
       name: '',
       logo: '',
       type: null,
+      owner_address: '',
+      nick_name: '',
+      nft_image: '',
       create_time: 0,
     },
     status: 0,
@@ -274,6 +282,13 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(setTribeId, (state, action) => {
+        state.tribeId = action.payload;
+        localStorage.setItem(
+          LOCAL_STORAGE_TRIBE_KEY,
+          JSON.stringify(action.payload),
+        );
+      })
       .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
         state.isApproveStakeNft = action.payload;
       })

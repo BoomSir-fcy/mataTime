@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Box, Text } from 'uikit';
-import {
-  ReportModal,
-  EditTwitterModal,
-  CommonInquiryModal,
-  CancelAttentionModal,
-} from 'components';
+import styled, { useTheme } from 'styled-components';
+import { Box, Flex, Text } from 'uikit';
+import { Icon, CommonInquiryModal } from 'components';
 import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts/Localization';
@@ -15,10 +10,12 @@ import { Api } from 'apis';
 import { copyContent } from 'utils/copy';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
+import Popup from 'reactjs-popup';
 
 type Iprops = {
   data: any;
   postUid?: string;
+  ref?: any;
   callback?: (event: any, type?: string) => void;
 };
 
@@ -53,16 +50,22 @@ const PopupWrapper = styled(Box)`
   }
 `;
 
+const PopupButton = styled(Flex)`
+  align-items: center;
+  cursor: pointer;
+`;
+
 export const SetTribePopup: React.FC<Iprops> = React.memo(
-  ({ data, postUid, callback }) => {
+  ({ data, postUid, ref, callback }) => {
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const [reportShow, setReportShow] = useState<boolean>(false);
     const [editShow, setEditShow] = useState<boolean>(false);
     const [isOwn, setIsOwn] = useState<boolean>(false);
     const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
-    const [inqueryType, setInqueryType] = useState<string>('shield');
+    const [inqueryType, setInqueryType] = useState<string>('topping');
     const UID = useStore(p => p.loginReducer.userInfo.uid);
+    const theme = useTheme();
 
     const [state, setState] = useImmer({
       cancelFollow: false,
@@ -78,97 +81,11 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       setIsOwn(true);
     };
 
-    // 收藏
-    const onFavAgreeRequest = async (post_id: number) => {
-      const res = await Api.ContentApi.onFavAgree(post_id);
-      if (Api.isSuccess(res)) {
-        callback(
-          {
-            ...data,
-            post: {
-              ...data.post,
-              is_fav: 1,
-            },
-          },
-          TribeMoreOperatorEnum.BOOKMARK,
-        );
-        toastSuccess(t('moreCollectionSuccess'));
-      }
-    };
-
-    // 取消收藏
-    const onFavCancelRequest = async (post_id: number) => {
-      const res = await Api.ContentApi.onFavCancel(post_id);
-      if (Api.isSuccess(res)) {
-        callback(
-          {
-            ...data,
-            post: {
-              ...data.post,
-              is_fav: 0,
-            },
-          },
-          TribeMoreOperatorEnum.BOOKMARK,
-        );
-        toastSuccess(t('moreCancelCollectionSuccess'));
-      }
-    };
-
-    const parseComments = value => {
-      let topic = '';
-      value.replace(/[#＃][^#＃]+[#＃]/g, word => {
-        topic = word.slice(1).slice(0, -1);
-      });
-      return topic;
-    };
-
-    let arr = [];
-    const render = newarr => {
-      let len = newarr.length;
-      for (let i = 0; i < len; i++) {
-        if (newarr[i].text) {
-          arr.push(newarr[i].text);
-        }
-        if (newarr[i].children?.length > 0) {
-          render(newarr[i].children);
-        }
-      }
-      return arr;
-    };
-
-    // 分享到Twitter
-    const onShareTwitterClick = () => {
-      let context = [];
-      try {
-        context = Array.isArray(JSON.parse(data.content))
-          ? JSON.parse(data.content)
-          : [];
-      } catch (err) {
-        console.error(err);
-      }
-
-      const text = render(context).join('');
-      const url = `${window.location.origin}/articledetils/${data.post.post_id}`;
-      window.open(
-        `https://twitter.com/intent/tweet?text=${text.replace(
-          /#/g,
-          '',
-        )}&hashtags=${parseComments(text)}&url=${url}`,
-      );
-    };
-
-    // 屏蔽
-    const onShieldRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.addShield(pid);
-      if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.SHIELD);
-        toastSuccess(t('shieldModalShieldSuccess'));
-      }
-    };
-
     // 置顶
     const onTopPostRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.setTopPost(pid);
+      console.log(pid);
+
+      const res = await Api.TribeApi.tribePostSetTop({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.SETTOP);
         toastSuccess(t('moreTopSuccess'));
@@ -177,40 +94,52 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
 
     // 取消置顶
     const onCancelTopPostRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.cancelTopPost(pid);
+      const res = await Api.TribeApi.tribePostSetNotTop({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.CANCEL_SETTOP);
         toastSuccess(t('moreCancelTopSuccess'));
       }
     };
 
-    // 关注用户
-    const onAttentionFocusRequest = async (focus_uid: number) => {
-      const res = await Api.AttentionApi.onAttentionFocus(focus_uid);
+    // 精选
+    const onPostSelected = async (pid: number) => {
+      const res = await Api.TribeApi.tribePostSetSelected({ pid });
       if (Api.isSuccess(res)) {
-        // toastSuccess(t('commonMsgFollowSuccess'));
-        callback({ ...data, is_attention: 1 }, TribeMoreOperatorEnum.FOLLOW);
+        callback(data, TribeMoreOperatorEnum.DELPOST);
+        toastSuccess(t('moreDeleteSuccess'));
       }
     };
 
-    // 取消关注
-    const onAttentionCancelRequest = async (focus_uid: number) => {
-      const res = await Api.AttentionApi.cancelAttentionFocus(focus_uid);
+    // 取消精选
+    const onPostNotSelected = async (pid: number) => {
+      const res = await Api.TribeApi.tribePostSetNotSelected({ pid });
       if (Api.isSuccess(res)) {
-        // toastSuccess(t('commonMsgUnFollowSuccess'));
-        setState(p => {
-          p.cancelFollow = false;
-        });
-        callback(
-          { ...data, is_attention: 0 },
-          TribeMoreOperatorEnum.CANCEL_FOLLOW,
-        );
+        callback(data, TribeMoreOperatorEnum.DELPOST);
+        toastSuccess(t('moreDeleteSuccess'));
+      }
+    };
+
+    // 帖子禁言
+    const onPostMute = async (tribe_id: number, uid: number) => {
+      const res = await Api.TribeApi.tribePostMute({ tribe_id, uid });
+      if (Api.isSuccess(res)) {
+        callback(data, TribeMoreOperatorEnum.DELPOST);
+        toastSuccess(t('moreDeleteSuccess'));
+      }
+    };
+
+    // 帖子取消禁言
+    const onPostNotMute = async (tribe_id: number, uid: number) => {
+      const res = await Api.TribeApi.tribePostNotMute({ tribe_id, uid });
+      if (Api.isSuccess(res)) {
+        callback(data, TribeMoreOperatorEnum.DELPOST);
+        toastSuccess(t('moreDeleteSuccess'));
       }
     };
 
     // 删除
     const onPostDelRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.delPost(pid);
+      const res = await Api.TribeApi.tribePostDelete({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.DELPOST);
         toastSuccess(t('moreDeleteSuccess'));
@@ -219,161 +148,83 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
 
     return (
       <React.Fragment>
-        <PopupWrapper>
-          {isOwn && (
-            <>
-              <Text
-                textTransform='capitalize'
-                onClick={() => {
-                  setInqueryType('delete');
-                  setCommonInqueryShow(true);
-                }}
-              >
-                {t('moreDelete')}
-              </Text>
-              <Text
-                textTransform='capitalize'
-                onClick={() => {
-                  if (data.post.is_top === 1) {
-                    setInqueryType('cancelTopping');
-                    setCommonInqueryShow(true);
-                  } else {
-                    setInqueryType('topping');
-                    setCommonInqueryShow(true);
-                  }
-                }}
-              >
-                {data.post.is_top === 1 ? t('moreCancelTop') : t('moreTop')}
-              </Text>
-            </>
-          )}
-
-          {/* todo 后端字段没改，所以传入用户id 屏蔽 */}
-          {Number(postUid) !== data.post.user_id && (
-            <>
-              {!isOwn && data.is_attention === 0 ? (
-                <Text
-                  textTransform='capitalize'
-                  onClick={() => onAttentionFocusRequest(data.user_id)}
-                >
-                  {t('followText')}
-                </Text>
-              ) : !isOwn && data.is_attention === 1 ? (
-                <Text
-                  textTransform='capitalize'
-                  onClick={() => {
-                    setState(p => {
-                      p.cancelFollow = true;
-                    });
-                  }}
-                >
-                  {t('followCancelText')}
-                </Text>
-              ) : null}
-            </>
-          )}
-
-          {/* <Text
-              textTransform="capitalize"
+        <Popup
+          ref={ref}
+          trigger={
+            <PopupButton mr='30px' title={t('设置')}>
+              <Icon name='icon-shezhi' size={20} color='textTips' />
+            </PopupButton>
+          }
+          nested
+          position='bottom right'
+          closeOnDocumentClick
+          contentStyle={{
+            width: '150px',
+            height: 'auto',
+            borderRadius: '10px',
+            padding: 0,
+            border: '0',
+            backgroundColor: 'transparent',
+            zIndex: 99,
+          }}
+          overlayStyle={{
+            zIndex: 98,
+          }}
+          arrowStyle={{
+            color: theme.colors.tertiary,
+            stroke: theme.colors.tertiary,
+          }}
+        >
+          <PopupWrapper>
+            <Text
+              textTransform='capitalize'
               onClick={() => {
-                onShareTwitterClick();
+                setInqueryType('delete');
+                setCommonInqueryShow(true);
               }}
             >
-              {t('moreShareTwitter')}
-            </Text> */}
-          <Text
-            textTransform='capitalize'
-            onClick={() => {
-              // copyContent(
-              //   `${window.location.origin}/articledetils/${
-              //     data.post.post_id || ''
-              //   }`,
-              // );
-              // toastSuccess(t('copySuccess'));
-              // callback({ ...data });
-            }}
-          >
-            {t('精选')}
-          </Text>
-          <Text textTransform='capitalize' onClick={() => {}}>
-            {t('禁言')}
-          </Text>
-          {!isOwn && (
-            <>
-              <Text
-                style={{ whiteSpace: 'nowrap' }}
-                textTransform='capitalize'
-                onClick={() => {
-                  data.post.is_fav === 1
-                    ? onFavCancelRequest(data.post.post_id)
-                    : onFavAgreeRequest(data.post.post_id);
-                  callback(data);
-                }}
-              >
-                {data.post.is_fav === 1
-                  ? t('moreCancelCollection')
-                  : t('moreCollection')}
-              </Text>
-              <Text
-                textTransform='capitalize'
-                onClick={() => {
-                  setReportShow(true);
-                }}
-              >
-                {t('moreReport')}
-              </Text>
-              {/* <Text
-                textTransform='capitalize'
-                onClick={() => {
-                  setInqueryType('shield');
+              {t('moreDelete')}
+            </Text>
+            <Text
+              textTransform='capitalize'
+              onClick={() => {
+                if (data.is_top === 1) {
+                  setInqueryType('cancelTopping');
                   setCommonInqueryShow(true);
-                }}
-              >
-                {t('moreShield')}
-              </Text> */}
-              <Text
-                textTransform='capitalize'
-                onClick={() => {
-                  // setInqueryType('shield');
-                  // setCommonInqueryShow(true);
-
-                  callback(data, TribeMoreOperatorEnum.BLOCKUSER);
-                }}
-              >
-                {t('popupShieldUser')}
-              </Text>
-            </>
-          )}
-        </PopupWrapper>
-
-        <CancelAttentionModal
-          title={t('meUnsubscribeTips')}
-          show={state.cancelFollow}
-          params={{
-            uid: data.user_id,
-            address: data.user_address,
-            nft_image: data.user_avator_url,
-          }}
-          confirm={debounce(() => onAttentionCancelRequest(data.user_id), 1000)}
-          onClose={() => {
-            setState(p => {
-              p.cancelFollow = false;
-            });
-          }}
-        />
-
-        {/* 举报 */}
-        <ReportModal
-          show={reportShow}
-          pid={data.post.post_id}
-          onClose={() => {
-            setReportShow(false);
-          }}
-          onQuery={() => {
-            setReportShow(false);
-            callback(data);
-          }}
-        />
+                } else {
+                  setInqueryType('topping');
+                  setCommonInqueryShow(true);
+                }
+              }}
+            >
+              {data.is_top === 1 ? t('moreCancelTop') : t('moreTop')}
+            </Text>
+            <Text
+              textTransform='capitalize'
+              onClick={() => {
+                if (data.selected) {
+                  onPostNotSelected(data.id);
+                } else {
+                  onPostSelected(data.id);
+                }
+              }}
+            >
+              {data.selected === 0 ? t('精选') : t('取消精选')}
+            </Text>
+            <Text
+              textTransform='capitalize'
+              onClick={() => {
+                if (data.is_mute === 0) {
+                  onPostMute(data.tribe_id, data.user_id);
+                } else {
+                  onPostNotMute(data.tribe_id, data.user_id);
+                }
+              }}
+            >
+              {data.is_mute === 0 ? t('禁言') : t('取消禁言')}
+            </Text>
+          </PopupWrapper>
+        </Popup>
 
         {/* 统一询问框 */}
         <CommonInquiryModal
@@ -383,28 +234,16 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
             setCommonInqueryShow(false);
           }}
           onQuery={() => {
-            if (inqueryType === 'shield') {
-              onShieldRequest(data.post.post_id);
-            }
             if (inqueryType === 'topping') {
-              onTopPostRequest(data.post.post_id);
+              onTopPostRequest(data.id);
             }
             if (inqueryType === 'cancelTopping') {
-              onCancelTopPostRequest(data.post.post_id);
+              onCancelTopPostRequest(data.id);
             }
             if (inqueryType === 'delete') {
-              onPostDelRequest(data.post.post_id);
+              onPostDelRequest(data.id);
             }
             setCommonInqueryShow(false);
-          }}
-        />
-
-        {/* 编辑twitter */}
-        <EditTwitterModal
-          show={editShow}
-          content={data.post.content}
-          onClose={() => {
-            setEditShow(false);
           }}
         />
       </React.Fragment>

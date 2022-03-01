@@ -15,7 +15,7 @@ export const UnStakeButton: React.FC<{
 }> = ({ tribeId, nftType, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const { onUnStakeOwnerNft, onUnStakeNft } = useTribeNft();
 
   // 取消质押nft
@@ -33,7 +33,7 @@ export const UnStakeButton: React.FC<{
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastSuccess(t('UnStake failed'));
+      toastError(t('UnStake failed'));
     }
   }, [tribeId, nftType]);
 
