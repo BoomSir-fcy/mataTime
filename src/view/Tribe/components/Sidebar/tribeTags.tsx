@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Text } from 'uikit';
+import { useTranslation } from 'contexts';
 import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
 
 const Btn = styled(Flex)`
@@ -42,11 +43,11 @@ const TribeTags: React.FC<{
   mb: string;
 }> = ({ ...props }) => {
   const { data: topicData } = useFetchTribeTopicList(props.tribe_id);
-
+  const { t } = useTranslation();
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
-        部落主题热点
+        {t('TribeTagsTitle')}
       </Text>
       <Tags list={topicData?.list} />
     </Card>

@@ -34,6 +34,9 @@ const initialState: TribeState = {
     memberPercent: null,
     nftAddress: '',
     nftid: null,
+    memberNFTImage: '',
+    memberNFTIntroduction: '',
+    memberNFTName: '',
   },
   tribesNftInfo: {
     claimOnwerNFT: false,
@@ -242,6 +245,10 @@ export const fetchTribeJoinBasicServiceAsync = createAsyncThunk(
 export const fetchisApprove = createAsyncThunk(
   'tribe/fetchTisApprove',
   async (params: { account: string; address: string }, { dispatch }) => {
+    if (params.address === '0x0000000000000000000000000000000000000001') {
+      dispatch(setTokenIsApprove(1));
+      return;
+    }
     const isApprove = await getTokenTribeApprove(
       params.account,
       params.address,

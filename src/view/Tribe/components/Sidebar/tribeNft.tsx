@@ -1,11 +1,16 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
 import { Box, Card, Flex, Image, Text, Button, LinkExternal } from 'uikit';
 import { JoinTribeModal } from 'components';
+import { useTranslation } from 'contexts';
 import { useStore } from 'store';
-import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
+import {
+  fetchTribeJoinBasicServiceAsync,
+  fetchTribeInfoAsync,
+} from 'store/tribe';
 
 const AvatarNft = styled(Image)`
   width: 65px;
@@ -23,14 +28,15 @@ const RowsEllipsis = styled(Flex)`
 
 const TribeNft = ({ ...props }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const tribeId = useStore(p => p.tribe.tribeId);
   const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
   const tribeInfo = useStore(p => p.tribe.tribeInfo);
+  const tribeDetails = useStore(p => p.tribe.tribeDetails);
 
   const [state, setState] = useImmer({
     visible: false,
   });
-
-  console.log(tribeBaseInfo);
 
   return (
     <React.Fragment>
@@ -40,20 +46,20 @@ const TribeNft = ({ ...props }) => {
             <AvatarNft
               width={65}
               height={65}
-              src='https://picsum.photos/200/200'
+              src={tribeBaseInfo?.memberNFTImage}
             />
           </Box>
           <Box style={{ width: 'calc(100% - 80px)' }}>
             <RowsEllipsis>
               <Text fontWeight='bold' ellipsis>
-                213213213熊熊之火
+                {tribeBaseInfo.memberNFTName}
               </Text>
               <Text ml='6px' color='textTips' ellipsis>
                 -Tribe Host NFT
               </Text>
             </RowsEllipsis>
             <Text maxLine={2} color='textTips' style={{ lineHeight: 1.4 }}>
-              成员NFT的描述成员NFT的描 NFT的描述成员NFT的描述
+              {tribeBaseInfo?.memberNFTIntroduction}
             </Text>
           </Box>
         </Flex>
@@ -61,22 +67,25 @@ const TribeNft = ({ ...props }) => {
           <Flex mb='12px' justifyContent='center'>
             <Button
               onClick={() => {
-                dispatch(fetchTribeJoinBasicServiceAsync());
+                if (tribeDetails.type === 1) {
+                  dispatch(fetchTribeJoinBasicServiceAsync());
+                }
                 setState(p => {
                   p.visible = true;
                 });
               }}
             >
-              加入部落
+              {t('tribeJoin')}
             </Button>
           </Flex>
         )}
-        {tribeInfo?.status === 1 && (
+        {tribeInfo?.status !== 0 && (
           <React.Fragment>
             <Flex mb='12px'>
               <Text color='textTips'>#00001</Text>
               <Text ml='30px' color='textTips'>
-                Brithday:2022-01-12
+                Brithday:{' '}
+                {dayjs(tribeDetails.create_time * 1000).format('YYYY-MM-DD')}
               </Text>
             </Flex>
             <LinkExternal color='textPrimary' height='24px' href='#'>
@@ -89,11 +98,14 @@ const TribeNft = ({ ...props }) => {
         visible={state.visible}
         tribeInfo={tribeInfo}
         tribeBaseInfo={tribeBaseInfo}
-        onClose={() =>
+        onClose={event => {
           setState(p => {
             p.visible = false;
-          })
-        }
+          });
+          if (event) {
+            dispatch(fetchTribeInfoAsync({ tribe_id: tribeId }));
+          }
+        }}
       />
     </React.Fragment>
   );
