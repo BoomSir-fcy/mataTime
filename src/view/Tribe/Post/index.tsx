@@ -1,11 +1,18 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Crumbs, VerifyCode } from 'components';
 import RichTextEditor from 'components/Editor/RichTextEditor';
 import { initialValue } from 'components/Editor/RichTextEditor/testdata';
 import defaultValue from 'components/Editor/RichTextEditor/defaultValue';
 import { useToast } from 'hooks';
+import throttle from 'lodash/throttle';
 import styled, { ThemeConsumer } from 'styled-components';
-import { Box, Flex, Input, Text, Divider, Button } from 'uikit';
+import { Box, Flex, Input, Text, Divider, Button, useTooltip } from 'uikit';
 import SubHeader from '../components/SubHeader';
 import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
 import { tags } from './mock';
@@ -36,7 +43,7 @@ const LableBoxStyled = styled(Text)`
   margin-right: 8px;
 `;
 
-const InputStyled = styled(Input) <{
+const InputStyled = styled(Input)<{
   background?: string;
   pl?: string;
   pr?: string;
@@ -48,6 +55,35 @@ const InputStyled = styled(Input) <{
     background || theme.colors.input};
 `;
 
+const TRIBE_POST_LOCAL_STORAGE_KEY = 'tribePostLocalStorage';
+
+const getStorageData = () => {
+  const storageDataStr = localStorage.getItem(TRIBE_POST_LOCAL_STORAGE_KEY);
+  const storageData = storageDataStr ? JSON.parse(storageDataStr) : {};
+  return storageData;
+};
+const storageData = getStorageData();
+const setStorageData = (id, value) => {
+  // if (value?.length > 1 || value.map(n => Node.string(n)).join('\n') > 1) {
+  //   const data = getStorageData();
+  //   localStorage.setItem(
+  //     TRIBE_POST_LOCAL_STORAGE_KEY,
+  //     JSON.stringify({
+  //       ...data,
+  //       [id]: value,
+  //     }),
+  //   );
+  // }
+  const data = getStorageData();
+  localStorage.setItem(
+    TRIBE_POST_LOCAL_STORAGE_KEY,
+    JSON.stringify({
+      ...data,
+      [id]: value,
+    }),
+  );
+};
+
 const Post = () => {
   const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
@@ -57,7 +93,22 @@ const Post = () => {
   const tribe_id = Number(i);
   const tribeName = getDecodeValue(n);
 
-  const [value, setValue] = useState<Descendant[]>(defaultValue);
+  const [value, setValue] = useState<Descendant[]>(
+    storageData[i] || defaultValue,
+  );
+
+  const handleSaveStorage = useCallback(
+    throttle((id, value) => setStorageData(id, value), 1000 * 5),
+    [],
+  );
+  useEffect(() => {
+    if (value && i) {
+      handleSaveStorage(i, value);
+      // throttle(setStorageData, 1000 * 5)
+      // setStorageData()
+    }
+  }, [i, value, handleSaveStorage]);
+
   const [title, setTitle] = useState('');
 
   const [draft, setDraft] = useState(null);
@@ -65,7 +116,10 @@ const Post = () => {
   const { data, updateList } = useFetchTribePostDraft(tribe_id);
 
   useEffect(() => {
-    if (data.fetchStatus === FetchStatus.SUCCESS && data.data) {
+    if (
+      data.fetchStatus === FetchStatus.SUCCESS &&
+      (data.data?.content || data.data?.title || data.data?.topics)
+    ) {
       setDriftTipsVisible(true);
     }
   }, [data.data, data.fetchStatus]);
@@ -81,7 +135,6 @@ const Post = () => {
 
   const handleSendPost = useCallback(
     async (verify?: any) => {
-      console.log(selectTags)
       const status = await handleSendPostAsync(
         {
           value,
@@ -101,9 +154,32 @@ const Post = () => {
       if (status === FetchStatus.SUCCESS) {
         editorRef.current?.reSetEditor();
         setVerifyVisible(false);
+        setStorageData(tribe_id, '');
       }
     },
     [value, title, selectTags, tribe_id],
+  );
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    <DraftTips
+      onCancle={() => {
+        setDriftTipsVisible(false);
+      }}
+      onConfirm={() => {
+        console.log(data.data);
+        // setDraft(JSON.parse(data.data.content));
+        editorRef.current?.reSetEditor(JSON.parse(data.data.content));
+        setTitle(data.data.title);
+        setDriftTipsVisible(false);
+      }}
+    />,
+    {
+      placement: 'auto',
+      trigger: 'click',
+      stylePadding: '0',
+      hideArrow: true,
+      tooltipPadding: 0,
+    },
   );
 
   return (
@@ -157,8 +233,8 @@ const Post = () => {
           <InputTag
             tribe_id={tribe_id}
             onChange={value => {
-              console.log(value)
-              setSelectTags(value)
+              console.log(value);
+              setSelectTags(value);
             }}
           />
         </Flex>
@@ -171,8 +247,8 @@ const Post = () => {
           setValue={setValue}
         />
         <Flex mt='44px' justifyContent='flex-end'>
-          <Box position='relative'>
-            {driftTipsVisible && (
+          <Box>
+            {/* {driftTipsVisible && (
               <DraftTips
                 position='absolute'
                 bottom='calc(100% + 8px)'
@@ -188,7 +264,12 @@ const Post = () => {
                   setDriftTipsVisible(false);
                 }}
               />
-            )}
+            )} */}
+            {driftTipsVisible && tooltip}
+            <span
+              style={{ display: 'inline-block', paddingTop: '25px' }}
+              ref={targetRef}
+            ></span>
             <Button
               onClick={() =>
                 handleCreateDraft({ value, title, selectTags, tribe_id })

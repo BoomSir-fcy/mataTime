@@ -14,7 +14,12 @@ const isImageUrl = url => {
 
 const insertImage = (editor, url) => {
   const text = { text: '' };
-  const image: ImageElement = { type: 'image', url, children: [text] };
+  const image: ImageElement = {
+    type: 'image',
+    loading: true,
+    url,
+    children: [text],
+  };
   Transforms.insertNodes(editor, image);
 };
 
@@ -35,12 +40,13 @@ export const withImages = editor => {
         const [mime] = file.type.split('/');
 
         if (mime === 'image') {
-          reader.addEventListener('load', () => {
-            const url = reader.result;
-            insertImage(editor, url);
-          });
-
-          reader.readAsDataURL(file);
+          // reader.addEventListener('load', () => {
+          //   const url = reader.result;
+          //   console.log(url, 'url');
+          //   insertImage(editor, url);
+          //   console.log(file, 'load');
+          // });
+          // reader.readAsDataURL(file);
         }
       }
     } else if (isImageUrl(text)) {
