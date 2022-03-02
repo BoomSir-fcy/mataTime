@@ -21,6 +21,7 @@ import {
   getTicketNftAddress,
   getDsgAddress,
   getTribeAddress,
+  getTribeTicketsAddress,
 } from 'utils/addressHelpers';
 
 // ABI
@@ -33,6 +34,7 @@ import InvitationAbi from 'config/abi/Invitation.json';
 import ExPhotoAbi from 'config/abi/exphoto.json';
 import mysteryBoxAbi from 'config/abi/mysteryBox.json';
 import tribeAbi from 'config/abi/tribe.json';
+import TribeTicketsAbi from 'config/abi/TribeTickets.json';
 
 const getContract = (
   abi: any,
@@ -136,4 +138,10 @@ export const getTribeContract = (
   signer?: ethers.Signer | ethers.providers.Provider,
 ) => {
   return getContract(tribeAbi, getTribeAddress(), signer);
+};
+
+export const getTribeTicketsContract = (
+  signer?: ethers.Signer | ethers.providers.Provider,
+) => {
+  return getContract(TribeTicketsAbi, getTribeTicketsAddress(), signer);
 };

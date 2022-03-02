@@ -30,6 +30,7 @@ import {
   fetchMatterIncomeList,
   fetchMatterIncometoday,
   fetchMinimum,
+  fetchTribeTicketInfoAsync,
 } from './reducer';
 import { ExchangeList } from './type';
 import { State } from '../types';
@@ -462,4 +463,13 @@ export const useEstimatedServiceTime = () => {
   }, [availableBalance, averageBurnTime]);
 
   return leftTime;
+};
+
+// 获取matter兑换门票信息
+export const useFetchTribeTicketInfo = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { account } = useWeb3React();
+  useEffect(() => {
+    dispatch(fetchTribeTicketInfoAsync({ account }));
+  }, [account]);
 };

@@ -15,6 +15,7 @@ import {
   getExPhotoContract,
   getTicketNftContract,
   getTribeContract,
+  getTribeTicketsContract,
   getErc721NewContract,
 } from 'utils/contractHelpers';
 import { getContract } from 'utils/contract';
@@ -158,4 +159,8 @@ export const useTicketNftContract = () => {
 export const useTribeContract = () => {
   const { library } = useActiveWeb3React();
   return useMemo(() => getTribeContract(library.getSigner()), [library]);
+};
+export const useTribeTicketsContract = () => {
+  const { library } = useActiveWeb3React();
+  return useMemo(() => getTribeTicketsContract(library.getSigner()), [library]);
 };
