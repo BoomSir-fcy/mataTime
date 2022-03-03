@@ -192,7 +192,7 @@ const MyMasterNftTribe = React.memo(() => {
             <InfoBox>
               <InfoFlex>
                 <TradeLogo
-                  logo={`${BASE_IMAGE_URL}${item?.tribe_info?.tribe?.logo}`}
+                  logo={item?.tribe_info?.tribe?.logo}
                   scales='sm'
                   pro={item?.tribe_info?.tribe?.type}
                 />
@@ -403,9 +403,9 @@ const MemberNftTribe = React.memo(() => {
       <TableBox>
         <Table>
           <Row className='head'>
-            <HeadText>{t('Member NFT')}</HeadText>
             <HeadText>{t('BelongTribe')}</HeadText>
-            <HeadText>{t('Validity Date')}</HeadText>
+            <HeadText>{t('Member NFT')}</HeadText>
+            <HeadText>{t('Joined Time')}</HeadText>
             <HeadText>{t('Manage')}</HeadText>
           </Row>
           {loading ? (
@@ -416,15 +416,7 @@ const MemberNftTribe = React.memo(() => {
             <Empty />
           ) : (
             memberNftList.map(item => (
-              <Row key={item.tribe_id}>
-                <Flex alignItems='center'>
-                  <TradeLogo
-                    scales='xs'
-                    logo={`${BASE_IMAGE_URL}${item?.tribe_info?.tribe?.logo}`}
-                    pro={item?.tribe_info?.tribe?.type}
-                  />
-                  <ItemText ml='10px'>#{item?.nft_id}</ItemText>
-                </Flex>
+              <Row key={item.nft_id}>
                 <ItemText
                   ellipsis
                   onClick={() => {
@@ -433,11 +425,22 @@ const MemberNftTribe = React.memo(() => {
                 >
                   {item?.name}
                 </ItemText>
+                <Flex alignItems='center'>
+                  <TradeLogo
+                    scales='xs'
+                    logo={item?.image}
+                    pro={item?.tribe_info?.tribe?.type}
+                  />
+                  <ItemText ml='10px'>#{item?.nft_id}</ItemText>
+                </Flex>
                 <ItemText>
-                  {formatTime(item?.add_time, 'YYYY-MM-DD HH:mm')} ~
                   {formatTime(item?.add_time, 'YYYY-MM-DD HH:mm')}
                 </ItemText>
-                <Flex justifyContent='flex-end' alignItems='center'>
+                <Flex
+                  justifyContent='flex-end'
+                  flexWrap='wrap'
+                  alignItems='center'
+                >
                   {!account && (
                     <StyledButton
                       onClick={e => {
@@ -455,7 +458,7 @@ const MemberNftTribe = React.memo(() => {
                     <>
                       <StakeButton
                         scale='sm'
-                        mr='8px'
+                        mb='8px'
                         tribeId={item.tribe_id}
                         nftId={item.nft_id}
                         nftType={2}

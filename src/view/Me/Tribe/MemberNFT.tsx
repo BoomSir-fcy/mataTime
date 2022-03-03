@@ -19,7 +19,7 @@ const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
   const { toastError } = useToast();
   const dispatch = useDispatch();
-  const { onSetTribeMembeNFT } = useTribeNft();
+  const { onSetTribeMemberNFT } = useTribeNft();
   const [pending, setPending] = useState(false);
   const [state, setState] = useImmer({
     name: '',
@@ -41,7 +41,7 @@ const MeTribeMemberNFT = () => {
     }
     try {
       setPending(true);
-      await onSetTribeMembeNFT({ tribeId, ...state });
+      await onSetTribeMemberNFT({ tribeId, ...state });
       dispatch(fetchTribeNftInfo({ tribeId }));
     } catch (error) {
       console.log(error);
