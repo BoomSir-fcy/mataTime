@@ -168,7 +168,10 @@ const PostList: React.FC<PostListPorps> = ({
                   )
                 }
                 <PostItem
-                  isTribeOnwer={TribeInfo.tribe.owner_address === account}
+                  isTribeOnwer={
+                    TribeInfo.tribe.owner_address.toLocaleLowerCase() ===
+                    account.toLocaleLowerCase()
+                  }
                   isShileUser={isShileUser}
                   setIsShileUser={(type, data) => {
                     setPostItemData(data);
@@ -236,6 +239,7 @@ const PostList: React.FC<PostListPorps> = ({
                   />
                   <Box width='50%'>
                     <MentionOperator
+                      joined={TribeInfo.status === 4}
                       replyType='twitter'
                       postId={item[postIdKey]}
                       hasReward={false}

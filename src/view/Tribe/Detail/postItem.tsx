@@ -97,14 +97,16 @@ const PostItem: React.FC<PostInfoPorps> = ({
             >
               <SetTribePopup
                 ref={popupRefSet}
-                postUid={'1'}
                 data={{
                   ...itemData,
                   post: {
                     ...itemData,
                   },
                 }}
-                callback={(data: any, type) => {}}
+                callback={(data: any, type) => {
+                  popupRefSet?.current?.close();
+                  callback(data, type);
+                }}
               />
             </a>
           )}

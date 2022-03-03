@@ -47,6 +47,7 @@ declare namespace Api {
       title: string;
       topic?: number[];
       remind_user?: string;
+      image_urls?: string;
       id?: string;
       verify?: string;
     }
