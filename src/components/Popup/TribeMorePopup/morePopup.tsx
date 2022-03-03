@@ -78,8 +78,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     };
 
     // 收藏
-    const onFavAgreeRequest = async (post_id: number) => {
-      const res = await Api.ContentApi.onFavAgree(post_id, 1);
+    const onFavAgreeRequest = async (post_id: number, tribe_id: number) => {
+      const res = await Api.ContentApi.onFavAgree(post_id, tribe_id);
       if (Api.isSuccess(res)) {
         callback(
           {
@@ -96,8 +96,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     };
 
     // 取消收藏
-    const onFavCancelRequest = async (post_id: number) => {
-      const res = await Api.ContentApi.onFavCancel(post_id, 1);
+    const onFavCancelRequest = async (post_id: number, tribe_id: number) => {
+      const res = await Api.ContentApi.onFavCancel(post_id, tribe_id);
       if (Api.isSuccess(res)) {
         callback(
           {
@@ -165,23 +165,23 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
       }
     };
 
-    // 置顶
-    const onTopPostRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.setTopPost(pid);
-      if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.SETTOP);
-        toastSuccess(t('moreTopSuccess'));
-      }
-    };
+    // // 置顶
+    // const onTopPostRequest = async (pid: number) => {
+    //   const res = await Api.AttentionApi.setTopPost(pid);
+    //   if (Api.isSuccess(res)) {
+    //     callback(data, TribeMoreOperatorEnum.SETTOP);
+    //     toastSuccess(t('moreTopSuccess'));
+    //   }
+    // };
 
-    // 取消置顶
-    const onCancelTopPostRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.cancelTopPost(pid);
-      if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.CANCEL_SETTOP);
-        toastSuccess(t('moreCancelTopSuccess'));
-      }
-    };
+    // // 取消置顶
+    // const onCancelTopPostRequest = async (pid: number) => {
+    //   const res = await Api.AttentionApi.cancelTopPost(pid);
+    //   if (Api.isSuccess(res)) {
+    //     callback(data, TribeMoreOperatorEnum.CANCEL_SETTOP);
+    //     toastSuccess(t('moreCancelTopSuccess'));
+    //   }
+    // };
 
     // 关注用户
     const onAttentionFocusRequest = async (focus_uid: number) => {
@@ -302,8 +302,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
                 textTransform='capitalize'
                 onClick={() => {
                   data.post.is_fav === 1
-                    ? onFavCancelRequest(data.post.post_id)
-                    : onFavAgreeRequest(data.post.post_id);
+                    ? onFavCancelRequest(data.post.post_id, data.tribe_id)
+                    : onFavAgreeRequest(data.post.post_id, data.tribe_id);
                   callback(data);
                 }}
               >
@@ -383,12 +383,12 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
             if (inqueryType === 'shield') {
               onShieldRequest(data.post.post_id);
             }
-            if (inqueryType === 'topping') {
-              onTopPostRequest(data.post.post_id);
-            }
-            if (inqueryType === 'cancelTopping') {
-              onCancelTopPostRequest(data.post.post_id);
-            }
+            // if (inqueryType === 'topping') {
+            //   onTopPostRequest(data.post.post_id);
+            // }
+            // if (inqueryType === 'cancelTopping') {
+            //   onCancelTopPostRequest(data.post.post_id);
+            // }
             if (inqueryType === 'delete') {
               onPostDelRequest(data.post.post_id);
             }

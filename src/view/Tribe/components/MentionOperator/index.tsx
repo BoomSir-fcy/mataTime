@@ -49,7 +49,7 @@ const MentionOperator: React.FC<IProps> = ({
     if (type === 'Article') {
       Api.CommentApi[isLike === 0 ? 'clickLike' : 'cancelLike']({
         post_id: itemData.post_id,
-        tribe: 1,
+        tribe_id: itemData.tribe_id,
       }).then(res => {
         if (Api.isSuccess(res)) {
           callback(

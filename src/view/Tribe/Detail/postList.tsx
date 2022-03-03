@@ -168,7 +168,10 @@ const PostList: React.FC<PostListPorps> = ({
                   )
                 }
                 <PostItem
-                  isTribeOnwer={TribeInfo.tribe.owner_address === account}
+                  isTribeOnwer={
+                    TribeInfo.tribe.owner_address.toLocaleLowerCase() ===
+                    account.toLocaleLowerCase()
+                  }
                   isShileUser={isShileUser}
                   setIsShileUser={(type, data) => {
                     setPostItemData(data);
