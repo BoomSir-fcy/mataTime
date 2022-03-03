@@ -35,7 +35,9 @@ export const WaitConfirmModal: React.FC<WaitConfirmProps> = ({
             src={require('assets/images/waiting.mp4').default}
           />
         </Box>
-        <Text mt='30px'>{t('Waiting For Confirmation')}</Text>
+        <Text mt='30px' style={{ lineHeight: 'inherit' }}>
+          {t('Waiting For Confirmation')}
+        </Text>
         <Text mt='10px' small color='textTips'>
           {t('To cancel this transaction, please reject it in your wallet')}
         </Text>

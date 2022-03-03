@@ -146,18 +146,17 @@ const MyMasterNftTribe = React.memo(() => {
       });
       if (Api.isSuccess(res)) {
         const list = res.data?.list || [];
-        const tribeIds = list.map(item => item.id);
-        const newlist = await getInitMemberNftList(tribeIds);
-
-        const tribeList = list.map((item, i) => {
-          return {
-            ...item,
-            initMemberNft: newlist[i]?.initMemberNFT,
-          };
-        });
-        console.log(tribeList);
-
-        setList(tribeList);
+        if (list.length) {
+          const tribeIds = list.map(item => item.id);
+          const newlist = await getInitMemberNftList(tribeIds);
+          const tribeList = list.map((item, i) => {
+            return {
+              ...item,
+              initMemberNft: newlist[i]?.initMemberNFT,
+            };
+          });
+          setList(tribeList);
+        }
       }
       setLoading(false);
     } catch (error) {
