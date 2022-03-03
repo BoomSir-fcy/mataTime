@@ -109,6 +109,7 @@ const initialState: TribeState = {
     type: 0,
     valid_time: 0,
     nft_image: '',
+    nft_id: 0,
   },
   joinTribe: {
     loading: false,

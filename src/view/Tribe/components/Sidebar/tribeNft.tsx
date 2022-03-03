@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useImmer } from 'use-immer';
-import { Box, Card, Flex, Image, Text, Button, LinkExternal } from 'uikit';
+import { Box, Card, Flex, Image, Text, Button } from 'uikit';
 import { JoinTribeModal } from 'components';
 import { useTranslation } from 'contexts';
 import { BASE_IMAGE_URL } from 'config';
@@ -12,6 +12,13 @@ import {
   fetchTribeJoinBasicServiceAsync,
   fetchTribeInfoAsync,
 } from 'store/tribe';
+import { TribeType } from 'store/tribe/type';
+
+import {
+  StakeButton,
+  UnStakeButton,
+  ClaimButton,
+} from 'view/Me/Tribe/components/actionNft';
 
 const AvatarNft = styled(Image)`
   width: 65px;
@@ -42,7 +49,7 @@ const TribeNft = ({ ...props }) => {
   return (
     <React.Fragment>
       <Card padding='16px' isRadius {...props}>
-        <Flex mb='20px' justifyContent='flex-start'>
+        <Flex mb='12px' justifyContent='flex-start'>
           <Box width='65px' height='65px' mr='16px'>
             <AvatarNft
               width={65}
@@ -68,7 +75,7 @@ const TribeNft = ({ ...props }) => {
           <Flex mb='12px' justifyContent='center'>
             <Button
               onClick={() => {
-                if (tribeDetails.type === 1) {
+                if (tribeDetails.type === TribeType.BASIC) {
                   dispatch(fetchTribeJoinBasicServiceAsync());
                 }
                 setState(p => {
@@ -83,16 +90,25 @@ const TribeNft = ({ ...props }) => {
         {tribeInfo?.status !== 0 && (
           <React.Fragment>
             <Flex mb='12px'>
-              <Text color='textTips'>#00001</Text>
+              <Text color='textTips'>#{tribeDetails.nft_id}</Text>
               <Text ml='30px' color='textTips'>
-                Brithday:{' '}
+                Validity Date:{' '}
                 {dayjs(tribeDetails.create_time * 1000).format('YYYY-MM-DD')}
               </Text>
             </Flex>
-            <LinkExternal color='textPrimary' height='24px' href='#'>
-              View on BSCscan
-            </LinkExternal>
           </React.Fragment>
+        )}
+        {tribeInfo?.status === 2 && (
+          <Flex mb='12px' justifyContent='center'>
+            <StakeButton
+              tribeId={tribeId}
+              nftId={tribeDetails.nft_id}
+              nftType={2}
+              callback={() => {
+                console.log(22323);
+              }}
+            />
+          </Flex>
         )}
       </Card>
       <JoinTribeModal

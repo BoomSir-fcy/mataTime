@@ -125,6 +125,7 @@ export interface TribeDetails {
   type: number;
   valid_time: number;
   nft_image: string;
+  nft_id: number;
 }
 export interface TribeState {
   tribeId?: number;
