@@ -1,3 +1,4 @@
+import { Icon } from 'components';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
 import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from './config';
@@ -41,6 +42,16 @@ export const Badge = styled(Text)`
   text-align: center;
 `;
 
+export const BadgeIcon = styled(Icon)`
+  position: absolute;
+  /* background-color: ${({ theme }) => theme.colors.white};
+  height: 16px;
+  width: 16px;
+  border-radius: 50%; */
+  top: -6px;
+  right: -8px;
+  display: block;
+`;
 const StyledPanel = styled.div<{
   isPushed: boolean;
   showMenu: boolean;

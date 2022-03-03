@@ -2,6 +2,8 @@ import { useWeb3React } from '@web3-react/core';
 import { useERC721New, useTribeContract } from 'hooks/useContract';
 import { useCallback } from 'react';
 import { getTribeAddress, getTribeNFTAddress } from 'utils/addressHelpers';
+import multicall from 'utils/multicall';
+import tribeAbi from 'config/abi/tribe.json';
 
 // 授权质押nft
 export const useApproveTribeStakeNFT = () => {
@@ -35,8 +37,6 @@ export const useTranferNft = () => {
   const handleTranferNft = useCallback(
     async (address: string, tokenId: number) => {
       try {
-        console.log(erc721Contract);
-
         const tx = await erc721Contract.safeTransferFrom(
           account,
           address,
@@ -56,6 +56,21 @@ export const useTranferNft = () => {
   return {
     onTranferNft: handleTranferNft,
   };
+};
+
+// 查询部落是否设置成员nft
+export const getInitMemberNftList = async (tribeIds: number[]) => {
+  const address = getTribeAddress();
+  const calls = tribeIds.map(item => {
+    return { address, name: 'extraTribesInfo', params: [item] };
+  });
+  try {
+    const list = await multicall(tribeAbi, calls);
+    return list;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
 
 export const useTribeNft = () => {

@@ -9,7 +9,16 @@ import {
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useToast } from 'hooks';
-import { Editor, Crumbs, Icon, SendPost, VerifyCode } from 'components';
+import {
+  Editor,
+  Crumbs,
+  Icon,
+  SendPost,
+  VerifyCode,
+  HoverLink,
+  List,
+  LoadType,
+} from 'components';
 import { Flex, Box, Button } from 'uikit';
 import { isApp } from 'utils/client';
 import { storeAction, useStore } from 'store';
@@ -21,6 +30,7 @@ import DetailTitle from './Title';
 import { TribeSidebar } from '../components/Sidebar';
 import DetailHeader from './Header';
 import { TribePostList } from './post';
+import PostItem from './postItem';
 import {
   fetchTribeInfoAsync,
   fetchTribePostAsync,

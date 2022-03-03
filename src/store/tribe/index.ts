@@ -12,7 +12,7 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setTribeId } from './actions';
+import { setInitMemberNft, setTribeId } from './actions';
 
 const LOCAL_STORAGE_TRIBE_KEY = 'tribe_id';
 
@@ -34,6 +34,9 @@ const initialState: TribeState = {
     memberPercent: null,
     nftAddress: '',
     nftid: null,
+    memberNFTImage: '',
+    memberNFTIntroduction: '',
+    memberNFTName: '',
   },
   tribesNftInfo: {
     claimOnwerNFT: false,
@@ -242,6 +245,10 @@ export const fetchTribeJoinBasicServiceAsync = createAsyncThunk(
 export const fetchisApprove = createAsyncThunk(
   'tribe/fetchTisApprove',
   async (params: { account: string; address: string }, { dispatch }) => {
+    if (params.address === '0x0000000000000000000000000000000000000001') {
+      dispatch(setTokenIsApprove(1));
+      return;
+    }
     const isApprove = await getTokenTribeApprove(
       params.account,
       params.address,
@@ -282,6 +289,9 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(setInitMemberNft, (state, action) => {
+        state.tribesNftInfo.initMemberNFT = action.payload;
+      })
       .addCase(setTribeId, (state, action) => {
         state.tribeId = action.payload;
         localStorage.setItem(

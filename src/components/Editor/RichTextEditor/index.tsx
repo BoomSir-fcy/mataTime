@@ -8,6 +8,7 @@ import React, {
 import styled, { DefaultTheme } from 'styled-components';
 import { Box, BoxProps, Button, Card, Text, Divider } from 'uikit';
 import getThemeValue from 'uikit/util/getThemeValue';
+import { HistoryEditor, History } from 'slate-history';
 import useTheme from 'hooks/useTheme';
 import { ContentParsing, Icon } from 'components';
 import {
@@ -20,7 +21,7 @@ import {
 } from 'slate';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { useToast } from 'hooks';
-import { HUGE_ARTICLE_IMAGE_MAX_LEN } from 'config';
+import { BASE_IMAGE_URL, HUGE_ARTICLE_IMAGE_MAX_LEN } from 'config';
 import { useTranslation } from 'contexts/Localization';
 import { withHistory } from 'slate-history';
 import { withImages, withMentions, withLink } from '../withEditor';
@@ -38,6 +39,7 @@ import DraggableImages from './Toolbar/DraggableImages';
 import { ParagraphElement } from '../custom-types';
 import { Api } from 'apis';
 import { cutDownImg } from 'utils/imageCompression';
+import { insertImages } from './Toolbar/InsertImageForm';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
@@ -49,10 +51,10 @@ interface RichTextEditorProps extends BoxProps {
 }
 
 const CardStyled = styled(Card)`
-  position: sticky;
-  top: 0;
+  /* position: sticky;
+  top: 0; */
   overflow: unset;
-`
+`;
 
 const ToolbarStyled = styled(Box)`
   position: sticky;
@@ -60,7 +62,7 @@ const ToolbarStyled = styled(Box)`
   background-color: inherit;
   z-index: 20;
   margin: 0 -2px;
-`
+`;
 
 const getColor = (color: string, theme: DefaultTheme) => {
   return getThemeValue(`colors.${color}`, color)(theme);
@@ -85,7 +87,10 @@ const RichTextEditor = (
 
   // const [editor] = useState(() => withReact(createEditor()));
   const editor = useMemo(
-    () => withLink(withMentions(withImages(withHistory(withReact(createEditor()))))),
+    () =>
+      withLink(
+        withMentions(withImages(withHistory(withReact(createEditor())))),
+      ),
     [],
   );
 
@@ -102,11 +107,24 @@ const RichTextEditor = (
   const reSetEditor = useCallback(
     (newNode?: Descendant[]) => {
       const children = [...editor.children];
-      children.forEach(node =>
-        editor.apply({ type: 'remove_node', path: [0], node }),
-      );
+      children.forEach(node => {
+        console.log(node);
+        editor.apply({ type: 'remove_node', path: [0], node });
+      });
       ReactEditor.focus(editor);
       Transforms.insertNodes(editor, newNode || defaultValue);
+    },
+    [editor],
+  );
+
+  const hidePasteImg = useCallback(
+    (files: FileList) => {
+      const children = [...editor.children];
+      children.forEach(node => {
+        if (node.type === 'image' && !node.url?.includes(BASE_IMAGE_URL)) {
+          editor.apply({ type: 'remove_node', path: [0], node });
+        }
+      });
     },
     [editor],
   );
@@ -139,22 +157,37 @@ const RichTextEditor = (
   const [imgList, setImgList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const uploadImg = useCallback(
-    async (files: string[]) => {
-      if (imgList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
-        return toastError(t('uploadImgMaxMsg'));
-      setIsLoading(true);
-      const res = await Api.CommonApi.uploadImgList({
-        base64: files,
-        dir_name: 'common',
-      });
-      setIsLoading(false);
-      if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
-      const imgUploadList = (res.data ?? []).map(item => item.full_path);
-      setImgList([...imgList, ...imgUploadList]);
+    async (files: FileList) => {
+      if (files && files.length > 0) {
+        const fileList: string[] = [];
+
+        //@ts-ignore
+        for (const file of files) {
+          const [mime] = file.type.split('/');
+          if (mime === 'image') {
+            const compressImage = await cutDownImg(file);
+            fileList.push(compressImage);
+          }
+        }
+
+        if (imgList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
+          return toastError(t('uploadImgMaxMsg'));
+        setIsLoading(true);
+        const res = await Api.CommonApi.uploadImgList({
+          base64: fileList,
+          dir_name: 'common',
+        });
+        setIsLoading(false);
+        if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
+        const imgUploadList = (res.data ?? []).map(item => item.full_path);
+        // setImgList([...imgList, ...imgUploadList]);
+        // console.log(files, 'insertImages');
+        insertImages(editor, imgUploadList);
+        // hidePasteImg(files);
+      }
     },
     [imgList],
   );
-
 
   /* 
     TODO:
@@ -206,18 +239,19 @@ const RichTextEditor = (
             onPaste={async event => {
               const data = event.clipboardData;
               const { files } = data;
-              let fileList: any[] = [];
-              if (files && files.length > 0) {
-                //@ts-ignore
-                for (const file of files) {
-                  const [mime] = file.type.split('/');
-                  if (mime === 'image') {
-                    const compressImage = await cutDownImg(file);
-                    fileList.push(compressImage);
-                  }
-                }
-                uploadImg(fileList);
-              }
+              // let fileList: any[] = [];
+              uploadImg(files);
+              // if (files && files.length > 0) {
+              //   //@ts-ignore
+              //   for (const file of files) {
+              //     const [mime] = file.type.split('/');
+              //     if (mime === 'image') {
+              //       const compressImage = await cutDownImg(file);
+              //       fileList.push(compressImage);
+              //     }
+              //   }
+              //   uploadImg(files);
+              // }
             }}
           />
           {target && userList.length > 0 && (
@@ -229,14 +263,26 @@ const RichTextEditor = (
             />
           )}
         </Slate>
-        <Box onClick={e => {
-          // Transforms.insertNodes(editor, paragraph);
-          ReactEditor.focus(editor);
-          editor.insertText(' ');
-          // editor.deleteForward(1);
-          // console.log(editor)
-          e.stopPropagation();
-        }} position='absolute' style={{ cursor: 'pointer' }} right='0' bottom='0' height='56px' width='100%' />
+        <Box
+          onClick={e => {
+            // Transforms.insertNodes(editor, paragraph);
+            ReactEditor.focus(editor);
+            HistoryEditor.withoutSaving(editor, () => {
+              // Transforms.insertNodes(editor, paragraph);
+              editor.insertText(' wqeeqw wq');
+            });
+            // editor.insertText(' ');
+            // editor.deleteForward(1);
+            // console.log(editor)
+            e.stopPropagation();
+          }}
+          position='absolute'
+          style={{ cursor: 'pointer' }}
+          right='0'
+          bottom='0'
+          height='56px'
+          width='100%'
+        />
         <Box
           onClick={e => {
             ReactEditor.focus(editor);

@@ -38,13 +38,13 @@ export const StakeButton: React.FC<{
       if (nftType === 2) {
         await onStakeNft(tribeId, nftId);
       }
+      setPending(false);
       toastSuccess(t('Stake succeeded'));
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastError(t('Stake failed'));
-    } finally {
       setPending(false);
+      toastError(t('Stake failed'));
     }
   }, [tribeId, nftId, nftType]);
 

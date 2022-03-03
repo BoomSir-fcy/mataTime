@@ -56,24 +56,6 @@ export const getTicketNftTokenList = async () => {
     return [];
   }
 };
-export const setTribeBaseInfo = async (
-  tribeId: number,
-  info?: TribeBaseInfo,
-) => {
-  const address = getTribeAddress();
-  const calls = [
-    {
-      address,
-      name: 'setTribeExtraInfo',
-      params: [tribeId, info.introduction],
-    },
-  ];
-  try {
-    const tx = await multicall(tribeAbi, calls);
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const getTribeBaseInfo = async (tribeId: number) => {
   const address = getTribeAddress();
@@ -81,6 +63,11 @@ export const getTribeBaseInfo = async (tribeId: number) => {
     {
       address,
       name: 'tribesInfo',
+      params: [tribeId],
+    },
+    {
+      address,
+      name: 'extraTribesNFTInfo',
       params: [tribeId],
     },
   ];
@@ -91,7 +78,7 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       logo: info.logo,
       introduction: info.introduction,
       feeToken: info.feeToken,
-      feeAmount: getBalanceNumber(new BigNumber(info.feeAmount.toJSON().hex)),
+      feeAmount: new BigNumber(info.feeAmount.toJSON().hex).toNumber(),
       validDate: new BigNumber(info.validDate.toJSON().hex).toNumber(),
       perTime: new BigNumber(info.perTime.toJSON().hex).toNumber(),
       ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
@@ -99,6 +86,9 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
       nftAddress: '',
       nftid: null,
+      memberNFTImage: extraInfo.memberNFTImage,
+      memberNFTIntroduction: extraInfo.memberNFTIntroduction,
+      memberNFTName: extraInfo.memberNFTName,
     };
   } catch (error) {
     console.error(error);
@@ -173,7 +163,7 @@ export const getBasicFee = async () => {
   ];
   try {
     const tx = await multicall(tribeAbi, calls);
-    return tx[0][0];
+    return getBalanceNumber(tx[0]);
   } catch (error) {
     return 0;
   }
@@ -185,7 +175,6 @@ export const getTokenTribeApprove = async (
   address: string,
 ) => {
   const tribeAddress = getTribeAddress();
-  const bnbAddreess = getBnbAddress();
   const calls = [
     {
       address,
@@ -196,7 +185,6 @@ export const getTokenTribeApprove = async (
 
   try {
     const matterApprove = await multicall(erc20Abi, calls);
-    console.log(matterApprove);
     return matterApprove[0][0].toString();
   } catch (error) {
     console.error(error);

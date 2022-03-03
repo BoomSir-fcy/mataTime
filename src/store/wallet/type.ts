@@ -35,6 +35,10 @@ export interface WalletState {
     withdraw_meta_fee: string;
     withdraw_bnb_fee: string;
   };
+  TribeTickets: {
+    allowance: string;
+    price: string;
+  };
   WithDrawFeeType: number;
   choiceToken: number;
 }

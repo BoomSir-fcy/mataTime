@@ -66,6 +66,7 @@ const Test = React.lazy(() => import('./view/Test'));
 const Account = React.lazy(() => import('./view/Account'));
 const Task = React.lazy(() => import('./view/Task'));
 const FaucetSmart = React.lazy(() => import('./view/FaucetSmart'));
+const FaucetTickets = React.lazy(() => import('./view/FaucetTickets'));
 const PickNft = React.lazy(() => import('./view/PickNft'));
 const Swap = React.lazy(() => import('./view/Swap'));
 const Search = React.lazy(() => import('./view/Search'));
@@ -166,6 +167,7 @@ function App() {
                 <Route path='/tribe' component={Tribe} />
                 {process.env.NODE_ENV === 'development' && (
                   <>
+                    <Route path='/faucet-tickets' component={FaucetTickets} />
                     <Route path='/faucet-smart' component={FaucetSmart} />
                     <Route path='/test' component={Test} />
                   </>

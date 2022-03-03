@@ -93,7 +93,7 @@ export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateD
     });
     setLoading(false)
     if (Api.isSuccess(res)) {
-      toastSuccess(t('发布成功'));
+      toastSuccess(t( method === 'tribePostCreate' ? '发布成功' : '保存成功'));
       // TODO:
       return FetchStatus.SUCCESS
     }

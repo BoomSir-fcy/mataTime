@@ -6,12 +6,13 @@ import { useToast } from 'hooks';
 import { Box, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import { MenuNavLink } from './type';
-import { NavItemStyled, IconBox, Badge } from './styled';
+import { NavItemStyled, IconBox, Badge, BadgeIcon } from './styled';
 import useMenuNav from 'hooks/useMenuNav';
 
 export interface NavItemProps extends MenuNavLink {
   pathname: string;
   childrenLen?: number;
+  badgeIcon?: string;
 }
 
 const NavItem: React.FC<NavItemProps> = ({
@@ -25,6 +26,7 @@ const NavItem: React.FC<NavItemProps> = ({
   pathname,
   markPath,
   childrenLen,
+  badgeIcon,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -50,6 +52,9 @@ const NavItem: React.FC<NavItemProps> = ({
           <Icon name={icon} color={isActive ? 'white_black' : 'textSubtle'} />
           {typeof badge === 'number' && (
             <Badge color='white'>{badgeDispaly}</Badge>
+          )}
+          {badgeIcon && (
+            <BadgeIcon name={badgeIcon} size={16} color='textOrigin' />
           )}
         </IconBox>
         <Text
@@ -78,6 +83,9 @@ const NavItem: React.FC<NavItemProps> = ({
         />
         {typeof badge === 'number' && (
           <Badge color='white'>{badgeDispaly}</Badge>
+        )}
+        {badgeIcon && (
+          <BadgeIcon name={badgeIcon} size={16} color='textOrigin' />
         )}
       </IconBox>
       <Text

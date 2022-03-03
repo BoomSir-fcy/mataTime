@@ -1,4 +1,6 @@
 import { Api } from 'apis';
+import { getMatterAddress } from 'utils/addressHelpers';
+import { getBep20Contract, getTribeTicketsContract } from 'utils/contractHelpers';
 
 // Matter收益记录
 export const FetchMatterIncomeList = async (page, size) => {
@@ -50,3 +52,31 @@ export const FetchMinimum = async () => {
     throw error;
   }
 };
+
+export const fetchTribeTicketInfo = async (account?: string) => {
+  try {
+    const contract = getTribeTicketsContract()
+    // const erc20 =
+    const matterAddress = getMatterAddress()
+    const metterContract = getBep20Contract(matterAddress)
+    
+    const res = await contract._price();
+
+    let allowance = '0';
+    if (account) {
+      const allowanceRes = await metterContract.allowance(account, contract.address);
+      allowance = allowanceRes.toString();
+    }
+
+    return {
+      allowance,
+      price: res.toString(),
+    }
+
+  } catch (error) {
+    return {
+      price: '0',
+      allowance: '0',
+    }
+  }
+}

@@ -142,6 +142,14 @@ export const menuNavConfig: MenuNavConfig[] = [
       {
         icon: 'icon-NFTkapai1',
         activeIcon: 'icon-NFTkapai',
+        // coming: true,
+        hideRight: true,
+        path: '/account/tribe-ticket',
+        lable: 'Tribe Ticket',
+      },
+      {
+        icon: 'icon-NFTkapai1',
+        activeIcon: 'icon-NFTkapai',
         coming: true,
         path: '/account/safeset',
         lable: 'AccountMenu NFT',
@@ -221,6 +229,7 @@ export const menuNavConfig: MenuNavConfig[] = [
             icon: 'icon-tongyong-chengyuan',
             activeIcon: 'icon-tongyong-chengyuan1',
             lable: 'Member NFT',
+            badgeIconName: 'icon-tishi',
             path: '/me/tribe/member-nft',
             hideRight: true,
           },

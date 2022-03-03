@@ -77,10 +77,10 @@ export const UploadSingle: React.FC<UploadProps> = ({
           });
           if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
           const path = res?.data?.path;
+          setLoading(false);
           setImgUrl(path);
           uploadSuccess(path);
         };
-        setLoading(false);
         // setLoading(true);
         // setTimeout(() => {
         //   const full_path =
