@@ -193,6 +193,63 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tribe_id",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "ownerNFTName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerNFTIntroduction",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerNFTImage",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "memberNFTName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "memberNFTIntroduction",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "memberNFTImage",
+            "type": "string"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct Tribe.TribeNftInfo",
+        "name": "info",
+        "type": "tuple"
+      }
+    ],
+    "name": "InitMemberNFT",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "address",
         "name": "userAddress",
@@ -550,7 +607,7 @@
       },
       {
         "internalType": "bool",
-        "name": "claimOnwerNFT",
+        "name": "claimOwnerNFT",
         "type": "bool"
       },
       {
@@ -1173,7 +1230,7 @@
         "type": "string"
       }
     ],
-    "name": "setTribeMembeNFT",
+    "name": "setTribeMemberNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1186,7 +1243,7 @@
         "type": "uint256"
       }
     ],
-    "name": "claimOnwerNFT",
+    "name": "claimOwnerNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1350,7 +1407,7 @@
         "type": "uint256"
       }
     ],
-    "name": "settinginvitaion",
+    "name": "settingInvitaion",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

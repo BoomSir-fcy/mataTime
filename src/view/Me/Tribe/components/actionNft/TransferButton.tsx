@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { ModalWrapper } from 'components';
+import Dots from 'components/Loader/Dots';
 import { useTranslation } from 'contexts';
 import { useToast } from 'hooks';
 import { useCallback, useState } from 'react';
@@ -25,6 +26,7 @@ export const TransferButton: React.FC<{
   const dispatch = useDispatch();
   const { toastSuccess, toastError } = useToast();
   const [visible, setVisible] = useState(false);
+  const [pending, setPending] = useState(false);
   const [inputAddress, setInputAddress] = useState('');
   const { onTranferNft } = useTranferNft();
 
@@ -32,13 +34,16 @@ export const TransferButton: React.FC<{
   const handleTransferNft = useCallback(async () => {
     try {
       if (!inputAddress) return false;
+      setPending(true);
       await onTranferNft(inputAddress, nftId);
       toastSuccess(t('Transfer succeeded'));
       setVisible(false);
+      setPending(false);
       if (callback) callback();
     } catch (error) {
       console.log(error);
       toastError(t('Transfer failed'));
+      setPending(false);
     }
   }, [inputAddress, nftId]);
 
@@ -77,8 +82,13 @@ export const TransferButton: React.FC<{
             )}
           </Text>
           <Flex justifyContent='center'>
-            <Button width='125px' mt='20px' onClick={handleTransferNft}>
-              {t('confirm')}
+            <Button
+              disabled={pending}
+              width='130px'
+              mt='20px'
+              onClick={handleTransferNft}
+            >
+              {pending ? <Dots>{t('confirming')}</Dots> : t('confirm')}
             </Button>
           </Flex>
         </Flex>

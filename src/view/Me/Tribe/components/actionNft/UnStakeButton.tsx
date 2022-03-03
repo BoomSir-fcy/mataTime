@@ -17,10 +17,12 @@ export const UnStakeButton: React.FC<{
   const dispatch = useDispatch();
   const { toastSuccess, toastError } = useToast();
   const { onUnStakeOwnerNft, onUnStakeNft } = useTribeNft();
+  const [pending, setPending] = useState(false);
 
   // 取消质押nft
   const handleUnStakeNft = useCallback(async () => {
     try {
+      setPending(true);
       // 部落主
       if (nftType === 1) {
         await onUnStakeOwnerNft(tribeId);
@@ -30,21 +32,24 @@ export const UnStakeButton: React.FC<{
         await onUnStakeNft(tribeId);
       }
       toastSuccess(t('UnStake succeeded'));
+      setPending(false);
       if (callback) callback();
     } catch (error) {
       console.log(error);
       toastError(t('UnStake failed'));
+      setPending(false);
     }
   }, [tribeId, nftType]);
 
   return (
     <StyledButton
       {...props}
+      disabled={pending}
       onClick={() => {
         handleUnStakeNft();
       }}
     >
-      {t('UnStake')}
+      {pending ? <Dots>{t('UnStaking')}</Dots> : t('UnStake')}
     </StyledButton>
   );
 };

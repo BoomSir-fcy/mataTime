@@ -57,7 +57,7 @@ export const LabelFlex = styled(Flex)`
 `;
 export const Label = styled.label<{ required?: boolean }>`
   width: 100px;
-  /* margin-bottom: 10px; */
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.text};
   ${({ required }) =>
     required &&

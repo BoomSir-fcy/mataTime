@@ -127,10 +127,10 @@ export const useTribeNft = () => {
     [tribeContract],
   );
 
-  const setTribeMembeNFT = useCallback(
+  const setTribeMemberNFT = useCallback(
     async (memberNftInfo: any) => {
       try {
-        const tx = await tribeContract.setTribeMembeNFT(
+        const tx = await tribeContract.setTribeMemberNFT(
           memberNftInfo.tribeId,
           memberNftInfo.logo,
           memberNftInfo.name,
@@ -177,7 +177,7 @@ export const useTribeNft = () => {
     onClaimOwnerNft: handleClaimOwnerNft,
     onStakeOwnerNft: handleStakeOwnerNft,
     onUnStakeOwnerNft: handleUnStakeOwnerNft,
-    onSetTribeMembeNFT: setTribeMembeNFT,
+    onSetTribeMemberNFT: setTribeMemberNFT,
     onStakeNft: handleStakeNft,
     onUnStakeNft: handleUnStakeNft,
   };
