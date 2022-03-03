@@ -79,7 +79,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
 
     // 收藏
     const onFavAgreeRequest = async (post_id: number) => {
-      const res = await Api.ContentApi.onFavAgree(post_id);
+      const res = await Api.ContentApi.onFavAgree(post_id, 1);
       if (Api.isSuccess(res)) {
         callback(
           {
@@ -97,7 +97,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
 
     // 取消收藏
     const onFavCancelRequest = async (post_id: number) => {
-      const res = await Api.ContentApi.onFavCancel(post_id);
+      const res = await Api.ContentApi.onFavCancel(post_id, 1);
       if (Api.isSuccess(res)) {
         callback(
           {
@@ -219,7 +219,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     return (
       <React.Fragment>
         <PopupWrapper>
-          {isOwn && (
+          {/* {isOwn && (
             <>
               <Text
                 textTransform='capitalize'
@@ -245,7 +245,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
                 {data.post.is_top === 1 ? t('moreCancelTop') : t('moreTop')}
               </Text>
             </>
-          )}
+          )} */}
 
           {/* todo 后端字段没改，所以传入用户id 屏蔽 */}
           {Number(postUid) !== data.post.user_id && (

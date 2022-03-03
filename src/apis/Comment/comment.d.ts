@@ -13,6 +13,7 @@ declare namespace Api {
     }
     type likeParams = {
       post_id: string | number;
+      tribe?: string | number;
     };
     type createComment = {
       comment_id?: string;

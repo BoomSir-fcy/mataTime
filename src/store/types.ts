@@ -62,7 +62,7 @@ export interface StuffElementLimit {
   createdSize: number;
   enable?: boolean;
 }
-export interface StuffElementRender extends StuffElementLimit, StuffElement { }
+export interface StuffElementRender extends StuffElementLimit, StuffElement {}
 
 export interface InviteCodes {
   code: string;
@@ -90,20 +90,20 @@ export interface PickNftState {
     codeLockDuration_: number;
     maxGendCodeCount_: number;
     toToken_: string;
-  },
+  };
   buyInfo: {
-    enableBuy: boolean
-    price: string
-    loading: boolean
-    count: number
-    limit: number
-  },
+    enableBuy: boolean;
+    price: string;
+    loading: boolean;
+    count: number;
+    limit: number;
+  };
   codeInfo: {
     lockUser: string;
     lockedAt: number;
     address: string;
     state: number;
-  }
+  };
 }
 
 export enum MapModuleType {
@@ -112,47 +112,47 @@ export enum MapModuleType {
   UNKNOWN,
 }
 export interface MapModuleStatus {
-  fetchStatus: FetchStatus
-  type: MapModuleType
-  ids: string|number
+  fetchStatus: FetchStatus;
+  type: MapModuleType;
+  ids: string | number;
 }
 
 export interface MapModuleState {
   postMap: {
-    [postId: string]: Api.Home.post
-  },
+    [postId: string]: Api.Home.post;
+  };
   userMap: {
-    [userId: string]: any
-  },
+    [userId: string]: any;
+  };
   postStatusMap: {
-    [postId: string]: MapModuleStatus
-  },
+    [postId: string]: MapModuleStatus;
+  };
   tribePostMap: {
     [postId: string]: Api.Tribe.PostDataInfo;
-  },
+  };
   postTranslateMap: {
     [postId: string]: {
       content: string;
       status: FetchStatus;
       showTranslate: boolean; // 是否显示翻译
-    }
-  },
+    };
+  };
   commentTranslateMap: {
     [postId: string]: {
       content: string;
       status: FetchStatus;
       showTranslate: boolean; // 是否显示翻译
-    }
-  },
-  needTranslatePostIds: number[],
-  needTranslateCommentIds: number[],
+    };
+  };
+  needTranslatePostIds: number[];
+  needTranslateCommentIds: number[];
   userStatusMap: {
-    [userId: string]: MapModuleStatus
-  },
-  unFollowUsersIds: number[],
-  deletePostIds: number[],
-  blockUsersIds: number[],
-  status: MapModuleStatus[],
+    [userId: string]: MapModuleStatus;
+  };
+  unFollowUsersIds: number[];
+  deletePostIds: number[];
+  blockUsersIds: number[];
+  status: MapModuleStatus[];
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

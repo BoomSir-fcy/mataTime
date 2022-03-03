@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Crumbs, HoverLink, List, LoadType } from 'components';
 import styled from 'styled-components';
+import {
+  withRouter,
+  useHistory,
+  useLocation,
+  Link,
+  RouteComponentProps,
+} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { Flex, Box, Text, Button, Empty } from 'uikit';
-import DetailHeader from './Header';
+import { useToast } from 'hooks';
+import { Editor, Crumbs, Icon, SendPost, VerifyCode } from 'components';
+import { Flex, Box, Button } from 'uikit';
+import { isApp } from 'utils/client';
+import { storeAction, useStore } from 'store';
+import { Api } from 'apis';
+
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useTranslation } from 'contexts/Localization';
 import DetailTitle from './Title';
-import PostItem from './postItem';
-import { useStore } from 'store';
-import { useWeb3React } from '@web3-react/core';
+import { TribeSidebar } from '../components/Sidebar';
+import DetailHeader from './Header';
+import { TribePostList } from './post';
 import {
   fetchTribeInfoAsync,
   fetchTribePostAsync,
@@ -16,11 +28,9 @@ import {
   fetchGetTribeBaseInfo,
   fetchisApprove,
 } from 'store/tribe';
-
-import { getBnbAddress } from 'utils/addressHelpers';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
-import { TribeSidebar } from '../components/Sidebar';
+// import { Tabs, ArticleList } from './center';
 
 const TribeBox = styled(Box)`
   width: 100%;
@@ -39,59 +49,28 @@ const Sidebar = styled(Box)`
 `;
 
 const Detail: React.FC<RouteComponentProps> = React.memo(route => {
+  const { account } = useActiveWeb3React();
+  const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
-  const [TribeId, setTribeId] = useState(0);
-  const [page, setPage] = useState(1);
-  const [page_size, setPage_size] = useState(10);
-  const [isEnd, setIsEnd] = useState(false);
-  const {
-    displayResultListOfPeoples,
-    displayResultListOfTopic,
-    resultListOfPost,
-    dispalyLoading,
-    postLoading,
-    postIsEnd,
-    searchVal,
-    filterUser,
-    searchPostMap,
-    historyList,
-  } = useStore(p => p.search);
   const TribeInfo = useStore(p => p.tribe.tribeInfo);
   const TribePost = useStore(p => p.tribe.postList);
   const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
   const PostList = useStore(p => p.tribe.postList.list);
-  const { account } = useActiveWeb3React();
 
-  const Getlist = React.useCallback(
-    (current = 0) => {
-      if ((postLoading || isEnd) && !current) return false;
-      // setLoading(true);
+  const attention = useStore(p => p.post.attention);
+  const [refresh, setRefresh] = useState(false);
+  const [filterVal, setFilterVal] = useState({
+    attention: parsedQs.attention || attention || 2,
+  });
+  const [TribeId, setTribeId] = useState(0);
 
-      setIsEnd(true);
-      // setNonce(prep => prep + 1);
-    },
-    [isEnd, dispatch, postLoading, page, page_size],
-  );
-  const upDateList = React.useCallback(props => {
-    dispatch(
-      fetchTribePostAsync({
-        selected: props.ActiveTitle,
-        page: 1,
-        per_page: page_size,
-        top: props.top,
-        tribe_id: TribeId,
-        newest_sort: props.sortTime,
-        hot_sort: props.sortLike,
-      }),
-    );
-  }, []);
-  const getList = (type?: LoadType) => {
-    // Getlist(Math.floor(renderList.length / MAX_SPEND_TIME_PAGE_TATOL) + 1);
-    if (type === LoadType.REFRESH || type === LoadType.INIT) {
-      Getlist(1);
-      return;
-    }
-    Getlist(page);
+  const articleRefs = React.useRef(null);
+  // 阅读文章扣费
+  const [nonce, setNonce] = useState(0);
+
+  const tabsChange = obj => {
+    setFilterVal(obj);
+    setRefresh(!refresh);
   };
 
   useEffect(() => {
@@ -104,9 +83,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       setTribeId(Number(tribe_id));
     }
   }, [route]);
-
   useEffect(() => {
-    console.log(tribeBaseInfo.feeToken, getBnbAddress());
     if (account && tribeBaseInfo.feeToken) {
       dispatch(
         fetchisApprove({
@@ -116,65 +93,29 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       );
     }
   }, [account, tribeBaseInfo.feeToken]);
-
   useEffect(() => {
     if (TribeId) {
       dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
       dispatch(fetchGetTribeBaseInfo({ tribeId: TribeId }));
       dispatch(fetchTribeDetailAsync({ tribe_id: TribeId }));
-      // dispatch(
-      //   fetchTribePostAsync({
-      //     selected: TribePost.selected,
-      //     page: page,
-      //     per_page: page_size,
-      //     top: TribePost.top,
-      //     tribe_id: TribeId,
-      //     newest_sort: 1,
-      //   }),
-      // );
     }
     return () => {};
   }, [TribeId]);
-
   return (
     <Flex>
       <TribeBox>
         <Crumbs back />
         <DetailHeader TribeInfo={TribeInfo} />
-        <DetailTitle
-          upDateList={upDateList}
+        <DetailTitle TribeId={TribeId} tabsChange={tabsChange} />
+        <TribePostList
           TribeId={TribeId}
-          page_size={page_size}
+          ref={articleRefs}
+          setNonce={setNonce}
+          nonce={nonce}
+          filterValObj={filterVal}
         />
-        <List
-          loading={postLoading}
-          renderList={type => {
-            if (
-              (type === 1 && resultListOfPost?.length !== 0) ||
-              postLoading ||
-              postIsEnd
-            ) {
-              return;
-            }
-            getList(type);
-          }}
-        >
-          {PostList.length ? (
-            <>
-              {PostList.map((item, index) => (
-                <HoverLink key={item.id} to={`/tribe/postdetail?i=${item.id}`}>
-                  <PostItem
-                    isTribeOnwer={TribeInfo.tribe.owner_address === account}
-                    info={item}
-                  />
-                </HoverLink>
-              ))}
-            </>
-          ) : (
-            <Empty />
-          )}
-        </List>
       </TribeBox>
+
       <Sidebar>
         <TribeSidebar />
       </Sidebar>
@@ -182,4 +123,4 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   );
 });
 
-export default Detail;
+export default withRouter(Detail);

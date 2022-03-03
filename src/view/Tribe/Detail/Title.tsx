@@ -25,14 +25,10 @@ const Tab = styled(Flex)`
 
 interface DetailTitlePorps {
   TribeId: number;
-  page_size: number;
-  upDateList: (props) => void;
+  // page_size: number;
+  tabsChange?: (item) => void;
 }
-const DetailTitle: React.FC<DetailTitlePorps> = ({
-  TribeId,
-  page_size,
-  upDateList,
-}) => {
+const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [ActiveTitle, setActiveTitle] = useState(0);
@@ -40,48 +36,25 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({
   const [sortLike, setSortLike] = useState(0);
   const { top } = useStore(p => p.tribe.postList);
 
-  // const upDateList = () => {
-  //   dispatch(
-  //     fetchTribePostAsync({
-  //       selected: ActiveTitle,
-  //       page: 1,
-  //       per_page: page_size,
-  //       top: top,
-  //       tribe_id: TribeId,
-  //       newest_sort: sortTime,
-  //       hot_sort: sortLike,
-  //     }),
-  //   );
-  // };
-
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
     setSortTime(sortTime === 1 ? 2 : 1);
     setSortLike(0);
-    // upDateList();
   };
   const changeSortLike = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
     setSortLike(sortLike === 1 ? 2 : 1);
     setSortTime(0);
-    // upDateList();
   };
 
   useEffect(() => {
-    if (TribeId) {
-      dispatch(
-        fetchTribePostAsync({
-          selected: ActiveTitle,
-          page: 1,
-          per_page: page_size,
-          top: top,
-          tribe_id: TribeId,
-          newest_sort: sortTime,
-          hot_sort: sortLike,
-        }),
-      );
-    }
-  }, [dispatch, TribeId, page_size, ActiveTitle, sortTime, sortLike, top]);
+    tabsChange({
+      ActiveTitle,
+      sortTime,
+      sortLike,
+      top,
+    });
+  }, [ActiveTitle, sortTime, sortLike, top]);
 
   return (
     <CommentTitle justifyContent='space-between' alignItems='center'>
