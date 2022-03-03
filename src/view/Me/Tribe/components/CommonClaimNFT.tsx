@@ -70,7 +70,7 @@ export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
           <NFTBox mr='80px' mb='20px'>
             <StyledImg className='nft-img' src={nftInfo.image} alt='' />
           </NFTBox>
-          <Flex flex='auto' flexDirection='column'>
+          <Flex maxWidth='60%' flex='auto' flexDirection='column'>
             <Text fontSize='18px' bold>
               {t(`${nftInfo.name}`)}
             </Text>

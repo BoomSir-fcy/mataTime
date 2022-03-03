@@ -58,7 +58,8 @@ export const POST_UPLOAD_IMG = 4;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
 
-export const BICONOMY_DAPP_API_KEY = 'WNdB8aO10.433bd892-b501-46d1-a678-fd5e7f7acb99'
+export const BICONOMY_DAPP_API_KEY =
+  'WNdB8aO10.433bd892-b501-46d1-a678-fd5e7f7acb99';
 
 // setTotalSupply []
 export const EXCEPT_TOTALSUPPPPLY_ADDRESS = [
@@ -73,3 +74,4 @@ export const TRIBE_FEE_DEFAULT_MAX_CONSUMES_TIME = '60'; // 每条内容最多�
 export const TRIBE_FEE_DEFAULT_MASTER_REWARD = '50'; // 部落主TIME奖励分配
 export const TRIBE_FEE_DEFAULT_CREATOR_REWARD = '50'; // 创作者TIME奖励分配
 export const TRIBE_FEE_DEFAULT_MEMBER_REWARD = '0'; // 部落成员TIME奖励分配
+export const TRIBE_FEE_BNB_TOKEN = '0x0000000000000000000000000000000000000001'; // BNB token

@@ -122,7 +122,7 @@ const MeTribeMemberNFT = () => {
             </FormItem>
             <Flex mt='20px' justifyContent='center'>
               <Button width='250px' scale='md' type='submit' disabled={pending}>
-                {pending ? <Dots>{t('Creating')}</Dots> : t('Create')}
+                {pending ? <Dots>{t('Create')}</Dots> : t('Create')}
               </Button>
             </Flex>
           </form>

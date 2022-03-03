@@ -88,7 +88,7 @@ export const TransferButton: React.FC<{
               mt='20px'
               onClick={handleTransferNft}
             >
-              {pending ? <Dots>{t('confirming')}</Dots> : t('confirm')}
+              {pending ? <Dots>{t('confirm')}</Dots> : t('confirm')}
             </Button>
           </Flex>
         </Flex>

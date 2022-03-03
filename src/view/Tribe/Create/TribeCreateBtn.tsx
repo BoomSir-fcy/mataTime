@@ -96,7 +96,7 @@ export const TribeCreateBtn: React.FC<{
             }
           }}
         >
-          {state.pending ? <Dots>{t('Approving')}</Dots> : t('Approve')}
+          {state.pending ? <Dots>{t('Approve')}</Dots> : t('Approve')}
         </StyledButton>
       )}
     </>

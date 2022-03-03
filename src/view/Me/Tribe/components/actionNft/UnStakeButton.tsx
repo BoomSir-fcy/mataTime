@@ -49,7 +49,7 @@ export const UnStakeButton: React.FC<{
         handleUnStakeNft();
       }}
     >
-      {pending ? <Dots>{t('UnStaking')}</Dots> : t('UnStake')}
+      {pending ? <Dots>{t('UnStake')}</Dots> : t('UnStake')}
     </StyledButton>
   );
 };
