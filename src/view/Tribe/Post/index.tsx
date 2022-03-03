@@ -31,6 +31,7 @@ import DraftTips from './DraftTips';
 import { FetchStatus } from 'config/types';
 import { useSendPostOrDraft } from './hooks';
 import { getDecodeValue } from 'utils/urlQueryPath';
+import parseContentInfo from 'components/Editor/RichTextEditor/tools/parseContentInfo';
 
 const BoxStyled = styled(Box)`
   padding: ${({ theme }) => theme.mediaQueriesSize.padding};
@@ -43,7 +44,7 @@ const LableBoxStyled = styled(Text)`
   margin-right: 8px;
 `;
 
-const InputStyled = styled(Input)<{
+const InputStyled = styled(Input) <{
   background?: string;
   pl?: string;
   pr?: string;
@@ -135,12 +136,15 @@ const Post = () => {
 
   const handleSendPost = useCallback(
     async (verify?: any) => {
+      const { imageList, userIdList } = parseContentInfo(value)
       const status = await handleSendPostAsync(
         {
           value,
           title,
           selectTags,
           tribe_id,
+          imageList,
+          userIdList,
         },
         verify,
       );

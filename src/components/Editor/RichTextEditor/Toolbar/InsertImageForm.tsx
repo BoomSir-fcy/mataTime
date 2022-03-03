@@ -20,6 +20,7 @@ import client from 'utils/client';
 import { HistoryEditor } from 'slate-history';
 import DraggableImages, { ImgItem } from './DraggableImages';
 import defaultValue from '../defaultValue';
+import parseContentInfo from '../tools/parseContentInfo';
 
 interface InsertImageFormProps {
   multiple?: boolean;
@@ -66,6 +67,8 @@ export const insertImages = (editor: CustomEditor, urls: string[]) => {
     return image;
   });
   Transforms.insertNodes(editor, images);
+  Transforms.insertNodes(editor, defaultValue);
+
 };
 
 const InsertImageForm: React.FC<InsertImageFormProps> = ({
@@ -86,7 +89,8 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
       try {
         const { files } = event.target;
         if (!files.length) return;
-        if (maxUploadLength + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
+        const { imageList } = parseContentInfo(editor.children)
+        if (imageList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
           return toastError(t('uploadImgMaxMsg'));
         const compressImage = Array.from(files).map(file => {
           return cutDownImg(file);
@@ -231,7 +235,6 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
       return prev.filter(item => !insertIds.includes(item.id));
     });
     insertImages(editor, srcs);
-    Transforms.insertNodes(editor, defaultValue);
     setVisible(false);
   }, [imgList, setImgList, setVisible]);
 
