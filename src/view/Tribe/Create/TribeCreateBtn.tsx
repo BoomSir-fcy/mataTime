@@ -59,7 +59,7 @@ export const TribeCreateBtn: React.FC<{
   }
   if (!hasNft) {
     return (
-      <Button width='250px' as={Link} to='/account'>
+      <Button width='250px' as={Link} to='/account/tribe-ticket'>
         {t('Get Tribe Tickets')}
       </Button>
     );
