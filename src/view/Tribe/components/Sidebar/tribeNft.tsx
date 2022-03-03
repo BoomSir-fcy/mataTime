@@ -6,6 +6,7 @@ import { useImmer } from 'use-immer';
 import { Box, Card, Flex, Image, Text, Button, LinkExternal } from 'uikit';
 import { JoinTribeModal } from 'components';
 import { useTranslation } from 'contexts';
+import { BASE_IMAGE_URL } from 'config';
 import { useStore } from 'store';
 import {
   fetchTribeJoinBasicServiceAsync,
@@ -46,7 +47,7 @@ const TribeNft = ({ ...props }) => {
             <AvatarNft
               width={65}
               height={65}
-              src={tribeBaseInfo?.memberNFTImage}
+              src={BASE_IMAGE_URL + tribeBaseInfo?.memberNFTImage}
             />
           </Box>
           <Box style={{ width: 'calc(100% - 80px)' }}>
