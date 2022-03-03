@@ -92,7 +92,7 @@ export const useTribeNft = () => {
   const handleClaimOwnerNft = useCallback(
     async (tribeId: number) => {
       try {
-        const tx = await tribeContract.claimOnwerNFT(tribeId);
+        const tx = await tribeContract.claimOwnerNFT(tribeId);
         const receipt = await tx.wait();
         return receipt.status;
       } catch (error) {

@@ -28,7 +28,7 @@ const Tags: React.FC<{
           {list.map((item, index) => (
             <Btn key={`${item}${index}`}>
               <Text fontSize='14px' color='textPrimary'>
-                {item}
+                {item.Topic}
               </Text>
             </Btn>
           ))}
@@ -44,6 +44,7 @@ const TribeTags: React.FC<{
 }> = ({ ...props }) => {
   const { data: topicData } = useFetchTribeTopicList(props.tribe_id);
   const { t } = useTranslation();
+
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
