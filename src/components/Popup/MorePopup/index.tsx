@@ -23,6 +23,10 @@ export enum MoreOperatorEnum {
   TRANSLATE = 'TRANSLATE', // 翻译
   FORWARD = 'FORWARD', // 转发
   UNFORWARD = 'UNFORWARD', // 取消转发
+  FEATURED = 'FEATURED', // 精选
+  CANCEL_FEATURED = 'CANCEL_FEATURED', // 取消精选
+  MUTE = 'MUTE', // 禁言
+  CANCEL_MUTE = 'CANCEL_MUTE', // 取消禁言
 }
 
 type Iprops = {

@@ -67,17 +67,17 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
               Oline
             </Text>
           </Flex>
-          <Link
-            to={`/tribe/post?i=${TribeInfo.tribe_id}&n=${getEncodeValue(
-              TribeInfo.tribe.name,
-            )}`}
-          >
-            {TribeInfo.status !== 4 ? (
-              <BtnIcon name='icon-wodebula' text={t('加入部落')} />
-            ) : (
+          {TribeInfo.status !== 4 ? (
+            <BtnIcon name='icon-wodebula' text={t('加入部落')} />
+          ) : (
+            <Link
+              to={`/tribe/post?i=${TribeInfo.tribe_id}&n=${getEncodeValue(
+                TribeInfo.tribe.name,
+              )}`}
+            >
               <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
-            )}
-          </Link>
+            </Link>
+          )}
         </Flex>
       </RightFlex>
     </InfoFlex>

@@ -14,7 +14,6 @@ import Popup from 'reactjs-popup';
 
 type Iprops = {
   data: any;
-  postUid?: string;
   ref?: any;
   callback?: (event: any, type?: string) => void;
 };
@@ -30,6 +29,10 @@ enum TribeMoreOperatorEnum {
   LIKE = 'LIKE', // 点赞
   BOOKMARK = 'BOOKMARK', // 收藏
   BLOCKUSER = 'BLOCKUSER', // 屏蔽用户
+  FEATURED = 'FEATURED', // 精选
+  CANCEL_FEATURED = 'CANCEL_FEATURED', // 取消精选
+  MUTE = 'MUTE', // 禁言
+  CANCEL_MUTE = 'CANCEL_MUTE', // 取消禁言
 }
 
 const PopupWrapper = styled(Box)`
@@ -56,12 +59,11 @@ const PopupButton = styled(Flex)`
 `;
 
 export const SetTribePopup: React.FC<Iprops> = React.memo(
-  ({ data, postUid, ref, callback }) => {
+  ({ data, ref, callback }) => {
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
     const [reportShow, setReportShow] = useState<boolean>(false);
     const [editShow, setEditShow] = useState<boolean>(false);
-    const [isOwn, setIsOwn] = useState<boolean>(false);
     const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
     const [inqueryType, setInqueryType] = useState<string>('topping');
     const UID = useStore(p => p.loginReducer.userInfo.uid);
@@ -71,15 +73,12 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       cancelFollow: false,
     });
 
-    useEffect(() => {
-      init();
-    }, [data]);
+    // useEffect(() => {
+    //   init();
+    // }, [data]);
 
-    //  初始化
-    const init = () => {
-      // UID === data.post.user_id ? setIsOwn(true) : setIsOwn(false);
-      setIsOwn(true);
-    };
+    // //  初始化
+    // const init = () => {};
 
     // 置顶
     const onTopPostRequest = async (pid: number) => {
@@ -105,8 +104,8 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const onPostSelected = async (pid: number) => {
       const res = await Api.TribeApi.tribePostSetSelected({ pid });
       if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.DELPOST);
-        toastSuccess(t('moreDeleteSuccess'));
+        callback(data, TribeMoreOperatorEnum.FEATURED);
+        toastSuccess(t('精选成功'));
       }
     };
 
@@ -114,8 +113,8 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const onPostNotSelected = async (pid: number) => {
       const res = await Api.TribeApi.tribePostSetNotSelected({ pid });
       if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.DELPOST);
-        toastSuccess(t('moreDeleteSuccess'));
+        callback(data, TribeMoreOperatorEnum.CANCEL_FEATURED);
+        toastSuccess(t('取消精选成功'));
       }
     };
 
@@ -123,8 +122,8 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const onPostMute = async (tribe_id: number, uid: number) => {
       const res = await Api.TribeApi.tribePostMute({ tribe_id, uid });
       if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.DELPOST);
-        toastSuccess(t('moreDeleteSuccess'));
+        callback(data, TribeMoreOperatorEnum.MUTE);
+        toastSuccess(t('禁言成功'));
       }
     };
 
@@ -132,8 +131,8 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const onPostNotMute = async (tribe_id: number, uid: number) => {
       const res = await Api.TribeApi.tribePostNotMute({ tribe_id, uid });
       if (Api.isSuccess(res)) {
-        callback(data, TribeMoreOperatorEnum.DELPOST);
-        toastSuccess(t('moreDeleteSuccess'));
+        callback(data, TribeMoreOperatorEnum.CANCEL_MUTE);
+        toastSuccess(t('取消禁言成功'));
       }
     };
 

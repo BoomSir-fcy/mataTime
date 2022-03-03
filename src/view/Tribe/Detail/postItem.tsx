@@ -18,8 +18,8 @@ import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
 import MentionOperator from '../components/MentionOperator';
 
 const PostBox = styled(Box)`
-  padding: 16px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  /* padding: 16px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
 `;
 
 const Top = styled(Flex)`
@@ -50,29 +50,39 @@ const PopupButton = styled(Flex)`
 `;
 
 interface PostInfoPorps {
-  info: Api.Tribe.TribePost;
+  itemData: any;
   isTribeOnwer: boolean;
+  callback?: (event: any, type?: any) => void;
+  isShileUser?: boolean;
+  setIsShileUser?: (type, data) => void;
 }
 
-const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
+const PostItem: React.FC<PostInfoPorps> = ({
+  itemData,
+  isTribeOnwer,
+  isShileUser,
+  callback,
+  setIsShileUser,
+}) => {
   const { t } = useTranslation();
-  const popupRef = React.useRef();
+  const popupRefSet = React.useRef(null);
+  const popupRef = React.useRef(null);
   const theme = useTheme();
   return (
     <PostBox>
       <Top>
         <Flex width='80%' alignItems='center'>
-          {info.selected !== 0 && <Featured />}
-          {info.top !== 0 && (
+          {itemData.selected !== 0 && <Featured />}
+          {itemData.top !== 0 && (
             <Icon size={20} color='textOrigin' name='icon-jiantou' />
           )}
           <Text
-            ml={info.selected !== 0 || info.top !== 0 ? '10px' : ''}
+            ml={itemData.selected !== 0 || itemData.top !== 0 ? '10px' : ''}
             fontSize='18px'
             bold
             ellipsis
           >
-            {info.title}
+            {itemData.title}
           </Text>
         </Flex>
         <Flex alignItems='center'>
@@ -86,15 +96,17 @@ const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
               }}
             >
               <SetTribePopup
-                ref={popupRef}
-                postUid={'1'}
+                ref={popupRefSet}
                 data={{
-                  ...info,
+                  ...itemData,
                   post: {
-                    ...info,
+                    ...itemData,
                   },
                 }}
-                callback={(data: any, type) => {}}
+                callback={(data: any, type) => {
+                  popupRefSet?.current?.close();
+                  callback(data, type);
+                }}
               />
             </a>
           )}
@@ -136,18 +148,18 @@ const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
               <MoreTribePopup
                 postUid={'1'}
                 data={{
-                  ...info,
+                  ...itemData,
                   post: {
-                    ...info,
+                    ...itemData,
                   },
                 }}
                 callback={(data: any, type) => {
-                  // if (type === MoreOperatorEnum.BLOCKUSER) {
-                  //   setIsShileUser(!isShileUser, itemData);
-                  //   return;
-                  // }
-                  // popupRef?.current?.close();
-                  // callback(data, type);
+                  if (type === MoreOperatorEnum.BLOCKUSER) {
+                    setIsShileUser(!isShileUser, itemData);
+                    return;
+                  }
+                  popupRef?.current?.close();
+                  callback(data, type);
                 }}
               />
             </Popup>
@@ -155,13 +167,13 @@ const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
         </Flex>
       </Top>
       <Box padding='15px 0'>
-        <ContentParsing mode='preview' content={info.content} />
+        <ContentParsing mode='preview' content={itemData.content} />
       </Box>
-      <Flex justifyContent='space-between' alignItems='center'>
+      {/* <Flex justifyContent='space-between' alignItems='center'>
         <SendUser
-          time={new Date(info.add_time).getTime()}
-          name={info.user_name}
-          Avatar={info.user_avator_url}
+          time={new Date(itemData.add_time).getTime()}
+          name={itemData.user_name}
+          Avatar={itemData.user_avator_url}
         />
         <Box width='50%'>
           <MentionOperator
@@ -169,11 +181,11 @@ const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
             postId={1}
             hasReward={false}
             itemData={{
-              ...info,
-              post_id: info.id,
+              ...itemData,
+              post_id: itemData.id,
               post: {
-                ...info,
-                post_id: info.id,
+                ...itemData,
+                post_id: itemData.id,
               },
             }}
             callback={(item: any, type?: MoreOperatorEnum) => {
@@ -182,7 +194,7 @@ const PostItem: React.FC<PostInfoPorps> = ({ info, isTribeOnwer }) => {
           />
         </Box>
       </Flex>
-      <HotBtn list={info.topics} />
+      <HotBtn list={itemData.topics} /> */}
     </PostBox>
   );
 };
