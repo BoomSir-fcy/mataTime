@@ -5,6 +5,7 @@ import {
   FetchMatterIncomeList,
   FetchMatterIncometoday,
   FetchMinimum,
+  fetchTribeTicketInfo,
 } from './fetch';
 import {
   FetchApproveNum,
@@ -81,6 +82,10 @@ const initialState: WalletState = {
     withdraw_time_fee: '0',
     withdraw_meta_fee: '0',
     withdraw_bnb_fee: '0',
+  },
+  TribeTickets: {
+    allowance: '0',
+    price: '0',
   },
   WithDrawFeeType: 1, //提币手续费—— 1 BNB 2对应币种
   choiceToken: 0, //选择的币种
@@ -200,6 +205,15 @@ export const fetchMinimum = createAsyncThunk<any>(
   },
 );
 
+//  Time Matter最小提币数量
+export const fetchTribeTicketInfoAsync = createAsyncThunk<any, {account?: string}>(
+  'wallet/fetchTribeTicketInfoAsync',
+  async ({ account }) => {
+    const res = await fetchTribeTicketInfo(account);
+    return res;
+  },
+);
+
 export const wallet = createSlice({
   name: 'wallet',
   initialState,
@@ -275,6 +289,12 @@ export const wallet = createSlice({
       })
       .addCase(fetchMinimum.fulfilled, (state, action) => {
         state.WithDrawSetting = action.payload;
+      })
+      .addCase(fetchTribeTicketInfoAsync.fulfilled, (state, action) => {
+        state.TribeTickets = {
+          ...state.TribeTickets,
+          ...action.payload,
+        };
       });
   },
 });

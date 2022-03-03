@@ -43,6 +43,7 @@ const TokenAccount = React.lazy(() => import('./components/TokenAccount'));
 const Exchange = React.lazy(() => import('./components/ExchangeTime'));
 const RewardList = React.lazy(() => import('./components/Reward/list'));
 const FAQ = React.lazy(() => import('./components/Faq'));
+const TribeTicket = React.lazy(() => import('./components/TribeTicket'));
 
 const Account = props => {
   useFetTimeInfo();
@@ -63,6 +64,7 @@ const Account = props => {
     if (pathname === '/account/faq') return t('FAQ');
     if (pathname === '/account/stake') return t('TIME Stake');
     if (pathname === '/account/reward') return t('rewardAutherWallet');
+    if (pathname === '/account/tribe-ticket') return t('Tribe Ticket');
   };
 
   return (
@@ -90,6 +92,10 @@ const Account = props => {
                 />
                 <Route path={`${props.match.path}/time`} component={Exchange} />
                 <Route path={`${props.match.path}/stake`} component={Stake} />
+                <Route
+                  path={`${props.match.path}/tribe-ticket`}
+                  component={TribeTicket}
+                />
                 <Route
                   path={`${props.match.path}/reward`}
                   component={RewardList}

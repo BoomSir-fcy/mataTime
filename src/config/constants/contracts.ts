@@ -90,5 +90,9 @@ const contracts = {
     56: '0xa0788548595EBea676499CDd19e9Cca9a9b8F49a',
     97: '0xa0788548595EBea676499CDd19e9Cca9a9b8F49a',
   },
+  TribeTickets: {
+    56: '',
+    97: '0xff3d9475094701ceF7e13ABb9e6BFBD118233C40',
+  },
 };
 export default contracts;

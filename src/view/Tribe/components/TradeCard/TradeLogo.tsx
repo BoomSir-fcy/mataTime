@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Box, Image, Text, ProTribeIcon } from 'uikit';
 import styled from 'styled-components';
 import { Icon } from 'components';
+import { BASE_IMAGE_URL } from 'config';
 
 const BoxStyled = styled(Box)<{ scale: Scales }>`
   width: 20vw;
@@ -92,6 +93,7 @@ interface TradeLogoProps {
   round?: boolean;
   pro?: boolean;
 }
+
 const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo, pro }) => {
   return (
     <Card isRadius={!round} style={round ? { borderRadius: '50%' } : {}}>
@@ -101,7 +103,7 @@ const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo, pro }) => {
         scale={scales}
       >
         <Image
-          src={logo || 'https://api.dsgmetaverse.com/gphoto/mngen/4411022.png'}
+          src={`${BASE_IMAGE_URL}${logo}`}
           height={style[scales].height}
           width={style[scales].width}
         />

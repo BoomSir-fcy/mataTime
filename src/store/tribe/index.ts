@@ -34,6 +34,9 @@ const initialState: TribeState = {
     memberPercent: null,
     nftAddress: '',
     nftid: null,
+    memberNFTImage: '',
+    memberNFTIntroduction: '',
+    memberNFTName: '',
   },
   tribesNftInfo: {
     claimOnwerNFT: false,
@@ -89,7 +92,24 @@ const initialState: TribeState = {
     isEnd: false,
     userTags: [],
   },
-  tribeDetails: {},
+  tribeDetails: {
+    charge: '0',
+    create_time: 0,
+    name: '',
+    nick_name: '',
+    reward_author: 0,
+    reward_master: 0,
+    reward_member: 0,
+    spend_max_time: 0,
+    spend_time: 0,
+    summary: '',
+    symbol: '',
+    timing_method: 0,
+    tribe_id: 0,
+    type: 0,
+    valid_time: 0,
+    nft_image: '',
+  },
   joinTribe: {
     loading: false,
     approveLimit: 0,
@@ -225,11 +245,14 @@ export const fetchTribeJoinBasicServiceAsync = createAsyncThunk(
 export const fetchisApprove = createAsyncThunk(
   'tribe/fetchTisApprove',
   async (params: { account: string; address: string }, { dispatch }) => {
+    if (params.address === '0x0000000000000000000000000000000000000001') {
+      dispatch(setTokenIsApprove(1));
+      return;
+    }
     const isApprove = await getTokenTribeApprove(
       params.account,
       params.address,
     );
-    console.log(isApprove);
     dispatch(setTokenIsApprove(isApprove));
   },
 );

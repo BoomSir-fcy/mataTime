@@ -1,14 +1,16 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
-import { DEFAULT_TOKEN_DECIMAL } from 'config';
 import tribeAbi from 'config/abi/tribe.json';
-import { getBalanceNumber } from 'utils/formatBalance';
 import erc20Abi from 'config/abi/erc20.json';
+import { getBalanceNumber } from 'utils/formatBalance';
 import { ethers } from 'ethers';
 import { getTribeAddress, getBnbAddress } from 'utils/addressHelpers';
 import { useERC20 } from 'hooks/useContract';
+
 import multicall from 'utils/multicall';
 import { FeeCoin, TribeBaseInfo, TribesNFTInfo } from './type';
+
+import { DEFAULT_TOKEN_DECIMAL } from 'config';
 
 // 收费代币token
 export const getFeeTokenList = async () => {
@@ -63,6 +65,11 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       name: 'tribesInfo',
       params: [tribeId],
     },
+    {
+      address,
+      name: 'extraTribesNFTInfo',
+      params: [tribeId],
+    },
   ];
   try {
     const [info, extraInfo] = await multicall(tribeAbi, calls);
@@ -79,6 +86,9 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
       nftAddress: '',
       nftid: null,
+      memberNFTImage: extraInfo.memberNFTImage,
+      memberNFTIntroduction: extraInfo.memberNFTIntroduction,
+      memberNFTName: extraInfo.memberNFTName,
     };
   } catch (error) {
     console.error(error);
@@ -153,7 +163,7 @@ export const getBasicFee = async () => {
   ];
   try {
     const tx = await multicall(tribeAbi, calls);
-    return tx[0][0];
+    return getBalanceNumber(tx[0]);
   } catch (error) {
     return 0;
   }
@@ -165,7 +175,6 @@ export const getTokenTribeApprove = async (
   address: string,
 ) => {
   const tribeAddress = getTribeAddress();
-  const bnbAddreess = getBnbAddress();
   const calls = [
     {
       address,
