@@ -175,7 +175,7 @@ const RichTextEditor = (
     // 1.顶部 工具栏 使用粘性布局
     // 2.添加图片后没法加文字
     // 3.粘贴的图片上传处理
-    4.草稿箱移动端优化
+    // 4.草稿箱移动端优化
     // 5.将img添加到imglist
     6.没想好
   */
@@ -243,9 +243,9 @@ const RichTextEditor = (
                 if (imageList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
                   return toastError(t('uploadImgMaxMsg'));
                 toast.promise(() => uploadImg(fileList), {
-                  pending: '正在上传图片',
-                  success: '上传成功',
-                  error: '上传失败'
+                  pending: t('Uploading pictures'),
+                  success: t('Upload successful'),
+                  error: t('Upload failed')
                 })
               }
               // if (files && files.length > 0) {

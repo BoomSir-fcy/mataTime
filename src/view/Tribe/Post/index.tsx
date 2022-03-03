@@ -189,10 +189,10 @@ const Post = () => {
   return (
     <Box>
       <Crumbs back />
-      <SubHeader title='帖子信息' />
+      <SubHeader title={t('Post information')} />
       <BoxStyled>
         <Flex mb='22px'>
-          <LableBoxStyled>* 部落</LableBoxStyled>
+          <LableBoxStyled>* {t('Tribe')}</LableBoxStyled>
           <Box>
             <InputStyled
               background='transparent'
@@ -204,7 +204,7 @@ const Post = () => {
           </Box>
         </Flex>
         <Flex mb='22px'>
-          <LableBoxStyled>* 标题</LableBoxStyled>
+          <LableBoxStyled>* {t('Title')}</LableBoxStyled>
           <Flex flex={1} position='relative' alignItems='center'>
             {/* TODO: 移动端边距优化 */}
             <InputStyled
@@ -215,7 +215,7 @@ const Post = () => {
               }}
               noShadow
               value={title}
-              placeholder='请输入帖子标题'
+              placeholder={t('Place enter the post\'s title')}
               pr='100px'
               width='100%'
             />
@@ -233,7 +233,7 @@ const Post = () => {
           </Flex>
         </Flex>
         <Flex mb='22px'>
-          <LableBoxStyled>* 标签</LableBoxStyled>
+          <LableBoxStyled>* {t('Tag')}</LableBoxStyled>
           <InputTag
             tribe_id={tribe_id}
             onChange={value => {
@@ -242,7 +242,7 @@ const Post = () => {
             }}
           />
         </Flex>
-        <LableBoxStyled mb='22px'>* 正文</LableBoxStyled>
+        <LableBoxStyled mb='22px'>* {t('Document')}</LableBoxStyled>
         <RichTextEditor
           ref={editorRef}
           draft={draft}
@@ -280,11 +280,11 @@ const Post = () => {
               }
               variant='secondary'
             >
-              {loadingDraft ? <Dots>保存草稿</Dots> : '保存草稿'}
+              {loadingDraft ? <Dots>{t('Saving')}</Dots> : t('Save draft')}
             </Button>
           </Box>
           <Button onClick={() => handleSendPost()} ml='35px' width='260px'>
-            {loadingSend ? <Dots>POST</Dots> : 'POST'}
+            {loadingSend ? <Dots>{t('POSTING')}</Dots> : t('POST')}
           </Button>
         </Flex>
       </BoxStyled>
