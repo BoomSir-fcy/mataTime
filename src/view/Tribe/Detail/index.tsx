@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Crumbs, HoverLink, List, LoadType } from 'components';
 import styled from 'styled-components';
+import { Crumbs, HoverLink, List, LoadType } from 'components';
 import { useDispatch } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Flex, Box, Text, Button, Empty } from 'uikit';
@@ -8,7 +8,6 @@ import DetailHeader from './Header';
 import DetailTitle from './Title';
 import PostItem from './postItem';
 import { useStore } from 'store';
-import { useWeb3React } from '@web3-react/core';
 import {
   fetchTribeInfoAsync,
   fetchTribePostAsync,
@@ -17,7 +16,6 @@ import {
   fetchisApprove,
 } from 'store/tribe';
 
-import { getBnbAddress } from 'utils/addressHelpers';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import { TribeSidebar } from '../components/Sidebar';
@@ -106,7 +104,6 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   }, [route]);
 
   useEffect(() => {
-    console.log(tribeBaseInfo.feeToken, getBnbAddress());
     if (account && tribeBaseInfo.feeToken) {
       dispatch(
         fetchisApprove({
@@ -136,6 +133,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     return () => {};
   }, [TribeId]);
 
+  console.log(tribeBaseInfo);
   return (
     <Flex>
       <TribeBox>
