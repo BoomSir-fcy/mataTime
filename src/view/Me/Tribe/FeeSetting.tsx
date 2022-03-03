@@ -14,7 +14,6 @@ const MeTribeFeeSetting = () => {
   const { t } = useTranslation();
   const form = React.useRef<any>();
   const dispatch = useDispatch();
-  const parseQs = useParsedQueryString();
   const { tribeBaseInfo, tribeId } = useTribeState();
   const { onSetTribeFeeInfo } = useTribe();
   const [isEdit, setIsEdit] = useState<boolean>(false);

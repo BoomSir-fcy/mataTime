@@ -62,6 +62,12 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "invitationAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "rate",
         "type": "uint256"

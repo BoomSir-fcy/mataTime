@@ -56,24 +56,6 @@ export const getTicketNftTokenList = async () => {
     return [];
   }
 };
-export const setTribeBaseInfo = async (
-  tribeId: number,
-  info?: TribeBaseInfo,
-) => {
-  const address = getTribeAddress();
-  const calls = [
-    {
-      address,
-      name: 'setTribeExtraInfo',
-      params: [tribeId, info.introduction],
-    },
-  ];
-  try {
-    const tx = await multicall(tribeAbi, calls);
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const getTribeBaseInfo = async (tribeId: number) => {
   const address = getTribeAddress();
@@ -96,7 +78,7 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       logo: info.logo,
       introduction: info.introduction,
       feeToken: info.feeToken,
-      feeAmount: getBalanceNumber(new BigNumber(info.feeAmount.toJSON().hex)),
+      feeAmount: new BigNumber(info.feeAmount.toJSON().hex).toNumber(),
       validDate: new BigNumber(info.validDate.toJSON().hex).toNumber(),
       perTime: new BigNumber(info.perTime.toJSON().hex).toNumber(),
       ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),

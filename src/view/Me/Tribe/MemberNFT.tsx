@@ -13,6 +13,7 @@ import { useStore, storeAction } from 'store';
 import { useToast } from 'hooks';
 import { useDispatch } from 'react-redux';
 import { fetchTribeNftInfo } from 'store/tribe';
+import Dots from 'components/Loader/Dots';
 
 const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
@@ -121,7 +122,7 @@ const MeTribeMemberNFT = () => {
             </FormItem>
             <Flex mt='20px' justifyContent='center'>
               <Button width='250px' scale='md' type='submit' disabled={pending}>
-                {t('Create')}
+                {pending ? <Dots>{t('Creating')}</Dots> : t('Create')}
               </Button>
             </Flex>
           </form>

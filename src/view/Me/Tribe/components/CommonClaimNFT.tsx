@@ -9,6 +9,7 @@ import { fetchTribeNftInfo } from 'store/tribe';
 import { useStore } from 'store';
 import { BASE_IMAGE_URL } from 'config';
 import { getBscScanLink } from 'utils/contract';
+import { getTribeAddress } from 'utils/addressHelpers';
 
 const NFTBox = styled(Box)`
   position: relative;
@@ -29,6 +30,10 @@ const InputStyled = styled(Input)`
   border-radius: 10px;
   padding: 4px 20px;
 `;
+const StyledImg = styled.img`
+  width: 200px;
+  height: 200px;
+`;
 
 const nftType = {
   MASTER: 'master',
@@ -39,6 +44,7 @@ type NFTType = typeof nftType[keyof typeof nftType];
 export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
   React.memo(({ type, tribeId }) => {
     const { t } = useTranslation();
+    const tribeAddress = getTribeAddress();
     const [visible, setVisible] = useState(false);
     const tribesNftInfo = useStore(p => p.tribe.tribesNftInfo);
 
@@ -62,7 +68,7 @@ export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
       <>
         <Flex flexWrap='wrap' alignItems='center'>
           <NFTBox mr='80px' mb='20px'>
-            <img className='nft-img' src={nftInfo.image} alt='' />
+            <StyledImg className='nft-img' src={nftInfo.image} alt='' />
           </NFTBox>
           <Flex flex='auto' flexDirection='column'>
             <Text fontSize='18px' bold>
@@ -87,8 +93,7 @@ export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
               color='textPrimary'
               height='24px'
               fontSize='16px'
-              // href={getBscScanLink()}
-              href='#'
+              href={getBscScanLink(tribeAddress, 'token')}
             >
               View on BSCscan
             </LinkExternal>

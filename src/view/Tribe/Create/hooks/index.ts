@@ -12,10 +12,9 @@ import { BIG_TEN } from 'utils/bigNumber';
 import { getTribeContract } from 'utils/contractHelpers';
 import multicall from 'utils/multicall';
 
-export const getDecimalAmount = (amount: string | number, decimal?: string) => {
+export const getDecimalAmount = (amount: string | number, decimal?: number) => {
   const tokenDecimal = new BigNumber(amount).times(BIG_TEN.pow(decimal));
-  if (tokenDecimal.isFinite()) return tokenDecimal.toString();
-  return DEFAULT_TOKEN_DECIMAL.toString();
+  return tokenDecimal.toString();
 };
 
 // 授权部落门票nft
@@ -88,6 +87,8 @@ export const useTribe = () => {
   const setTribeFeeInfo = useCallback(
     async (tribeId: number, tribeInfo: TribeBaseInfo) => {
       try {
+        console.log(tribeInfo);
+
         const tx = await tribeContract.updateTribeFeeSetting(
           tribeId,
           tribeInfo.feeToken,

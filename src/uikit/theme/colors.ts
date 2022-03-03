@@ -24,6 +24,7 @@ export const additionalColors = {
   orange: '#FF780B',
   upPrice: '#287452',
   downPrice: '#ec612b',
+  tipsBg: '#484848',
 };
 
 export const nftTokenColors = {

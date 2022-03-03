@@ -86,6 +86,9 @@ export const getTribeNFTAddress = () => {
 export const getTribeTicketsNFTAddress = () => {
   return getAddress(addresses.tribeTicketsNFT);
 };
+export const getFacuetAddress = () => {
+  return getAddress(addresses.facuet);
+};
 export const getTribeTicketsAddress = () => {
   return getAddress(addresses.TribeTickets);
 };

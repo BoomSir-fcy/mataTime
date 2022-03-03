@@ -48,6 +48,7 @@ const Nav: React.FC<NavProps> = () => {
   );
 
   const currentUid = useStore(p => p.loginReducer.userInfo);
+  const initMemberNFT = useStore(p => p.tribe.tribesNftInfo.initMemberNFT);
 
   const renderConfig = useMemo(() => {
     return config.map(item => {
@@ -176,6 +177,9 @@ const Nav: React.FC<NavProps> = () => {
                   ? unReadMsg[item.badgeName]
                   : null
               }
+              badgeIcon={
+                item.badgeIconName && !initMemberNFT ? item.badgeIconName : null
+              }
             />
           );
         })}
@@ -199,6 +203,11 @@ const Nav: React.FC<NavProps> = () => {
                   badge={
                     item.badgeName && notification && unReadMsg[item.badgeName]
                       ? unReadMsg[item.badgeName]
+                      : null
+                  }
+                  badgeIcon={
+                    item.badgeIconName && !initMemberNFT
+                      ? item.badgeIconName
                       : null
                   }
                   path={item.path}
@@ -229,6 +238,11 @@ const Nav: React.FC<NavProps> = () => {
                   badge={
                     item.badgeName && notification && unReadMsg[item.badgeName]
                       ? unReadMsg[item.badgeName]
+                      : null
+                  }
+                  badgeIcon={
+                    item.badgeIconName && !initMemberNFT
+                      ? item.badgeIconName
                       : null
                   }
                   path={item.path}

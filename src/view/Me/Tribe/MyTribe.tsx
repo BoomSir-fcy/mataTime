@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Crumbs } from 'components';
+import { Crumbs, Icon } from 'components';
 import { useTranslation } from 'contexts';
 import { Link, useHistory } from 'react-router-dom';
 import {
@@ -28,18 +28,20 @@ import PaginateStyle from 'style/Paginate';
 import { Api } from 'apis';
 import { formatTime } from 'utils/timeFormat';
 import { NftStatus } from 'store/tribe/type';
-import { useTribeNft } from './hooks';
+import { getInitMemberNftList, useTribeNft } from './hooks';
 import {
   StakeButton,
   UnStakeButton,
   TransferButton,
+  ClaimButton,
 } from './components/actionNft';
 import { fetchIsApproveStakeNft } from 'store/tribe';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
 import Dots from 'components/Loader/Dots';
 import { BASE_IMAGE_URL } from 'config';
-import { storeAction } from 'store';
+import { storeAction, useStore } from 'store';
+import useConnectWallet from 'hooks/useConnectWallet';
 
 const InfoBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.paddingxs}
@@ -71,6 +73,17 @@ const NumberFlex = styled(Flex)`
 const NumberItemFlex = styled(Flex)`
   flex-direction: column;
   align-items: center;
+`;
+const ManageButton = styled(Box)`
+  position: relative;
+  .tips-flex {
+    position: absolute;
+    top: -10px;
+    left: 76px;
+    padding: 5px 15px;
+    background-color: ${({ theme }) => theme.colors.tipsBg};
+    border-radius: 9px;
+  }
 `;
 
 const MyTribe = () => {
@@ -116,6 +129,8 @@ const MyMasterNftTribe = React.memo(() => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pending, setPending] = useState(false);
@@ -130,7 +145,19 @@ const MyMasterNftTribe = React.memo(() => {
         page_size: 10,
       });
       if (Api.isSuccess(res)) {
-        setList(res.data?.list);
+        const list = res.data?.list || [];
+        const tribeIds = list.map(item => item.id);
+        const newlist = await getInitMemberNftList(tribeIds);
+
+        const tribeList = list.map((item, i) => {
+          return {
+            ...item,
+            initMemberNft: newlist[i]?.initMemberNFT,
+          };
+        });
+        console.log(tribeList);
+
+        setList(tribeList);
       }
       setLoading(false);
     } catch (error) {
@@ -149,17 +176,6 @@ const MyMasterNftTribe = React.memo(() => {
         return item.id === info?.id ? info : item;
       });
     });
-  }, []);
-
-  // 领取
-  const handleClaimOwnerNft = useCallback(async (info: any) => {
-    try {
-      await onClaimOwnerNft(info.id);
-      updateTribeList({ ...info, status: NftStatus.Received });
-      getMyTribeList();
-    } catch (error) {
-      console.log(error);
-    }
   }, []);
 
   return (
@@ -225,25 +241,32 @@ const MyMasterNftTribe = React.memo(() => {
                 </CenterFlex>
                 <Flex flexDirection='column' justifyContent='space-between'>
                   {/* 1 未领取 2已领取 3 取消质押 4 已质押 5已过期 */}
-                  {item?.status <= NftStatus.UnReceive && (
+                  {!account && (
                     <StyledButton
-                      disabled={pending}
-                      onClick={() => {
-                        handleClaimOwnerNft(item);
+                      onClick={e => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        onConnectWallet();
                       }}
                     >
-                      {/* {pending ? (
-                        <Dots>{t('Time Claiming')}</Dots>
-                      ) : ( */}
-                      {t('Time Claim')}
-                      {/* )} */}
+                      {t('Connect Wallet')}
                     </StyledButton>
                   )}
-                  {item?.status === NftStatus.Received ||
-                    item?.status === NftStatus.UnStake ? (
+                  {account && item?.status <= NftStatus.UnReceive && (
+                    <ClaimButton
+                      tribeId={item.id}
+                      nftType={1}
+                      callback={() => {
+                        getMyTribeList();
+                      }}
+                    />
+                  )}
+                  {account &&
+                  (item?.status === NftStatus.Received ||
+                    item?.status === NftStatus.UnStake) ? (
                     <>
                       <StakeButton
-                        tribeId={item.tribe_id}
+                        tribeId={item.id}
                         nftId={item.nft_id}
                         nftType={1}
                         callback={() => {
@@ -257,16 +280,16 @@ const MyMasterNftTribe = React.memo(() => {
                         nftId={item.nft_id}
                         callback={() => {
                           setList(p => {
-                            return p.filter(v => v.tribe_id !== item?.tribe_id);
+                            return p.filter(v => v.id !== item?.id);
                           });
                         }}
                       />
                     </>
                   ) : null}
-                  {item?.status === NftStatus.Staked && (
+                  {account && item?.status === NftStatus.Staked && (
                     <>
                       <UnStakeButton
-                        tribeId={item.tribe_id}
+                        tribeId={item.id}
                         nftType={1}
                         callback={() => {
                           updateTribeList({
@@ -275,14 +298,36 @@ const MyMasterNftTribe = React.memo(() => {
                           });
                         }}
                       />
-                      <Button
-                        onClick={() => {
-                          history.push(`/me/tribe/info?i=${item.tribe_id}`);
-                          dispatch(storeAction.setTribeId(item.id));
-                        }}
-                      >
-                        {t('Manage')}
-                      </Button>
+                      <ManageButton>
+                        <StyledButton
+                          onClick={() => {
+                            history.push(`/me/tribe/info?i=${item.id}`);
+                            dispatch(storeAction.setTribeId(item.id));
+                            dispatch(
+                              storeAction.setInitMemberNft(item.initMemberNft),
+                            );
+                          }}
+                        >
+                          {t('Manage')}
+                        </StyledButton>
+                        {!item.initMemberNft && (
+                          <Flex className='tips-flex' alignItems='center'>
+                            <Icon
+                              name='icon-tishi'
+                              size={16}
+                              color='textOrigin'
+                            />
+                            <Text
+                              ml='5px'
+                              small
+                              color='textTips'
+                              style={{ whiteSpace: 'nowrap' }}
+                            >
+                              {t('请设置成员NFT')}
+                            </Text>
+                          </Flex>
+                        )}
+                      </ManageButton>
                     </>
                   )}
                 </Flex>
@@ -299,6 +344,8 @@ const MyMasterNftTribe = React.memo(() => {
 const MemberNftTribe = React.memo(() => {
   const { t } = useTranslation();
   const history = useHistory();
+  const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const [pageSize, setpageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
@@ -373,7 +420,7 @@ const MemberNftTribe = React.memo(() => {
                 <Flex alignItems='center'>
                   <TradeLogo
                     scales='xs'
-                    logo={item?.image}
+                    logo={`${BASE_IMAGE_URL}${item?.tribe_info?.tribe?.logo}`}
                     pro={item?.tribe_info?.tribe?.type}
                   />
                   <ItemText ml='10px'>#{item?.nft_id}</ItemText>
@@ -391,8 +438,20 @@ const MemberNftTribe = React.memo(() => {
                   {formatTime(item?.add_time, 'YYYY-MM-DD HH:mm')}
                 </ItemText>
                 <Flex justifyContent='flex-end' alignItems='center'>
-                  {item?.status === NftStatus.Received ||
-                    item?.status === NftStatus.UnStake ? (
+                  {!account && (
+                    <StyledButton
+                      onClick={e => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        onConnectWallet();
+                      }}
+                    >
+                      {t('Connect Wallet')}
+                    </StyledButton>
+                  )}
+                  {account &&
+                  (item?.status === NftStatus.Received ||
+                    item?.status === NftStatus.UnStake) ? (
                     <>
                       <StakeButton
                         scale='sm'
@@ -418,7 +477,7 @@ const MemberNftTribe = React.memo(() => {
                       />
                     </>
                   ) : null}
-                  {item?.status === NftStatus.Staked && (
+                  {account && item?.status === NftStatus.Staked && (
                     <UnStakeButton
                       scale='sm'
                       tribeId={item.tribe_id}
