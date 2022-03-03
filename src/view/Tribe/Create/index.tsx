@@ -79,13 +79,13 @@ const Create = () => {
         p.visible = true;
       });
       await onCreateTribe(params);
-      // 2秒后自动跳转
+      // 10秒后自动跳转
       setTimeout(() => {
         setState(p => {
           p.visible = false;
         });
         gotoMaterNft();
-      }, 3000);
+      }, 10000);
     } catch (error) {
       console.log(error);
 

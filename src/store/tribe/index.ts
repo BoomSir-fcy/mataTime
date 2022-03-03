@@ -12,7 +12,7 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setTribeId } from './actions';
+import { setInitMemberNft, setTribeId } from './actions';
 
 const LOCAL_STORAGE_TRIBE_KEY = 'tribe_id';
 
@@ -266,6 +266,9 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(setInitMemberNft, (state, action) => {
+        state.tribesNftInfo.initMemberNFT = action.payload;
+      })
       .addCase(setTribeId, (state, action) => {
         state.tribeId = action.payload;
         localStorage.setItem(

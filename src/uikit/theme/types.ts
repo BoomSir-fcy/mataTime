@@ -146,6 +146,7 @@ export type Colors = {
   commentBorder: string;
 
   codebg: string;
+  tipsBg: string;
 };
 
 export type Filters = {

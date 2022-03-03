@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Crumbs, Select } from 'components';
 import { Box, Text, Button, Flex, Input } from 'uikit';
 import { FormItem, InputPanelStyle, Label } from 'view/Tribe/Create/style';
@@ -13,12 +13,18 @@ import {
 import { useImmer } from 'use-immer';
 import { useStore } from 'store';
 import { Timing } from 'store/tribe/type';
-import { useFeeTokenList } from 'store/tribe/hooks';
+import { useFeeTokenList, useTribeState } from 'store/tribe/hooks';
 import { useTribeNft } from './hooks';
+import { fetchGetTribeBaseInfo } from 'store/tribe';
+import { useDispatch } from 'react-redux';
+import { getValidDateDay } from 'store/tribe/utils';
+import { getBalanceNumber } from 'utils/formatBalance';
+import { BigNumber } from 'bignumber.js';
 
 const MeTribeInvitationSetting = () => {
   useFeeTokenList();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [feeToken, setFeeToken] = useState('');
   const [state, setState] = useImmer({
@@ -27,16 +33,46 @@ const MeTribeInvitationSetting = () => {
     validDate: '',
     rate: '0',
   });
-  const feeCoinList = useStore(p => p.tribe.feeCoinList);
-  const tribeId = useStore(p => p.tribe.tribeId);
+  const { tribeId, feeCoinList, tribeBaseInfo } = useTribeState();
   const { onSettingInvitation } = useTribeNft();
 
   const timingOptions = [
+    { value: Timing.FOREVER, label: t('permanent') },
     {
       value: Timing.JOIN_TRIBE,
       label: t('Timed by the time of joining the clan'),
     },
   ];
+
+  useEffect(() => {
+    if (tribeId) dispatch(fetchGetTribeBaseInfo({ tribeId }));
+  }, [tribeId]);
+
+  useEffect(() => {
+    if (tribeBaseInfo?.feeToken) {
+      setState(p => {
+        p.feeAmount = getBalanceNumber(
+          new BigNumber(tribeBaseInfo.feeAmount),
+          getFeeDecimal(tribeBaseInfo.feeToken),
+        ).toString();
+        p.timing =
+          Number(tribeBaseInfo.validDate) === 0
+            ? Timing.FOREVER
+            : Timing.JOIN_TRIBE;
+        p.validDate = getValidDateDay(tribeBaseInfo.validDate).toString();
+      });
+      setFeeToken(tribeBaseInfo.feeToken);
+    }
+  }, [tribeBaseInfo]);
+
+  const getFeeDecimal = useCallback(
+    (token: string) => {
+      return feeCoinList.find(
+        item => item.tokenAddress.toLowerCase() === token.toLowerCase(),
+      )?.decimal;
+    },
+    [feeCoinList],
+  );
 
   const CoinOptions = useMemo(() => {
     return feeCoinList.map(item => {
@@ -139,7 +175,7 @@ const MeTribeInvitationSetting = () => {
                   placeholder={t('Please enter the number of days')}
                   inputMode='decimal'
                   pattern={PATTERN_NUMBER}
-                  value={state.validDate}
+                  value={state.timing === 1 ? '-' : state.validDate}
                   onChange={e => {
                     const val = e.target.value;
                     if (e.currentTarget.validity.valid) {

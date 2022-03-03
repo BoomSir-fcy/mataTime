@@ -40,6 +40,8 @@ import { actionTypes } from './type';
 import { getMatterAddress } from 'utils/addressHelpers';
 import { getValidDateSecond, getValidDateDay } from 'store/tribe/utils';
 import { getDecimalAmount } from './hooks';
+import { getBalanceNumber } from 'utils/formatBalance';
+import BigNumber from 'bignumber.js';
 
 const TribeCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -84,7 +86,10 @@ const TribeFeeForward = (props, ref) => {
   useEffect(() => {
     if (info?.feeToken) {
       setState(p => {
-        p.feeAmount = info.feeAmount;
+        p.feeAmount = getBalanceNumber(
+          new BigNumber(info.feeAmount),
+          getFeeDecimal(info.feeToken),
+        ).toString();
         p.timing =
           Number(info.validDate) === 0 ? Timing.FOREVER : Timing.JOIN_TRIBE;
         p.validDate = getValidDateDay(info.validDate).toString();
@@ -113,9 +118,14 @@ const TribeFeeForward = (props, ref) => {
     });
   }, [feeCoinList]);
 
-  const getFeeDecimal = () => {
-    return feeCoinList.find(item => item.tokenAddress === feeToken)[0]?.decimal;
-  };
+  const getFeeDecimal = useCallback(
+    (token: string) => {
+      return feeCoinList.find(
+        item => item.tokenAddress.toLowerCase() === token.toLowerCase(),
+      )?.decimal;
+    },
+    [feeCoinList],
+  );
 
   useImperativeHandle(ref, () => ({
     getFeeFrom() {
@@ -125,7 +135,7 @@ const TribeFeeForward = (props, ref) => {
         feeAmount:
           tribeType === TribeType.BASIC
             ? 0
-            : getDecimalAmount(state.feeAmount, getFeeDecimal()),
+            : getDecimalAmount(state.feeAmount, getFeeDecimal(feeToken)),
         validDate:
           tribeType === TribeType.BASIC || state.timing === Timing.FOREVER
             ? 0

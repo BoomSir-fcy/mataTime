@@ -221,6 +221,7 @@ export const menuNavConfig: MenuNavConfig[] = [
             icon: 'icon-tongyong-chengyuan',
             activeIcon: 'icon-tongyong-chengyuan1',
             lable: 'Member NFT',
+            badgeIconName: 'icon-tishi',
             path: '/me/tribe/member-nft',
             hideRight: true,
           },
