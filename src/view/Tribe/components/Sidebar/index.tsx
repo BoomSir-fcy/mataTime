@@ -22,14 +22,14 @@ const SidebarStyled = styled(Box)`
   }
 `;
 
-export const TribeSidebar = () => {
+export const TribeSidebar: React.FC<{
+  tribe_id: number;
+}> = ({ tribe_id }) => {
   const ref = React.useRef<HTMLDivElement | null>();
-  const { pathname } = useLocation();
 
   const [scrollTop, setScrollTop] = React.useState(0);
   const [position, setPosition] = React.useState('top');
   const [maxPositionValue, setMaxPositionValue] = React.useState(0);
-  const tribeId = useStore(p => p.tribe.tribeId);
   const handleScroll = React.useCallback(() => {
     const maxTop = ref.current.clientHeight - window.innerHeight;
     if (scrollTop > window.scrollY) {
@@ -54,10 +54,10 @@ export const TribeSidebar = () => {
       ref={ref}
     >
       <Search mt='15px' mb='15px' />
-      <TribeInfo mb='15px' />
-      <TribeNft mb='15px' />
+      <TribeInfo tribe_id={tribe_id} mb='15px' />
+      <TribeNft tribe_id={tribe_id} mb='15px' />
       <TribePro mb='15px' />
-      <TribeTags tribe_id={tribeId} mb='15px' />
+      <TribeTags tribe_id={tribe_id} mb='15px' />
       <TribeFiles mb='15px' />
     </SidebarStyled>
   );

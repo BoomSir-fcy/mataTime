@@ -107,8 +107,9 @@ const ButtonStyled = props => (
   />
 );
 
-const FormatButton = ({ format, icon, type }) => {
+const FormatButton = ({ format, icon, type, title }) => {
   const editor = useSlateStatic();
+  const { t } = useTranslation();
 
   const [flag, setFlag] = useState(0); // 更新数据 重新渲染
 
@@ -148,6 +149,7 @@ const FormatButton = ({ format, icon, type }) => {
           toggleHistory(editor, format);
         }
       }}
+      title={t(title)}
     >
       <Icon bold={active()} color={active() ? 'text' : 'textTips'} name={icon} />
       {/* {!flag && null} */}
@@ -191,6 +193,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
                 icon={item.icon}
                 // editor={editor}
                 format={item.format}
+                title={item.title}
               />
             ))}
             <ButtonStyled>
@@ -201,10 +204,10 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
                 }}
               />
             </ButtonStyled>
-            <ButtonStyled>
+            <ButtonStyled title={t('Insert pictures')}>
               <InsertImageForm color='textTips' multiple />
             </ButtonStyled>
-            <ButtonStyled>
+            <ButtonStyled title={t('Mention')}>
               <Icon
                 color='textTips'
                 name='icon-aite'
@@ -212,7 +215,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
               // title={t('editorUser')}
               />
             </ButtonStyled>
-            <ButtonStyled>
+            <ButtonStyled title={t('Topic')}>
               <Icon
                 color='textTips'
                 name='icon-a-xiaoxi1'
@@ -222,7 +225,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
             </ButtonStyled>
           </Flex>
           <Flex>
-            <ButtonStyled>
+            <ButtonStyled title={t('Link')}>
               <Icon
                 color='textTips'
                 name='icon-bianjiqi_chaolianjie738'
@@ -236,6 +239,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
                 icon={item.icon}
                 // editor={editor}
                 format={item.format}
+                title={item.title}
               />
             ))}
           </Flex>
@@ -247,6 +251,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
               icon={item.icon}
               // editor={editor}
               format={item.format}
+              title={item.title}
             />
           ))}
           <ButtonStyled>

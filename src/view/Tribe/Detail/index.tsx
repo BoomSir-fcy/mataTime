@@ -44,14 +44,13 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 const TribeBox = styled(Box)`
   width: 100%;
-  margin-right: 14px;
   ${({ theme }) => theme.mediaQueries.md} {
+    margin-right: 14px;
     border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   }
 `;
 
 const Sidebar = styled(Box)`
-  min-width: 300px;
   width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
     width: 300px;
@@ -109,8 +108,9 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       dispatch(fetchGetTribeBaseInfo({ tribeId: TribeId }));
       dispatch(fetchTribeDetailAsync({ tribe_id: TribeId }));
     }
-    return () => {};
+    return () => { };
   }, [TribeId]);
+
   return (
     <Flex>
       <TribeBox>
@@ -127,7 +127,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       </TribeBox>
 
       <Sidebar>
-        <TribeSidebar />
+        <TribeSidebar tribe_id={TribeId} />
       </Sidebar>
     </Flex>
   );

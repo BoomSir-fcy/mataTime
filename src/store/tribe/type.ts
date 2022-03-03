@@ -125,7 +125,23 @@ export interface TribeDetails {
   type: number;
   valid_time: number;
   nft_image: string;
+  nft_id: number;
+  expire_time: number;
+  memberNft: MemberNft;
 }
+
+export interface MemberNft {
+  id: number;
+  member_nft_image: string;
+  member_nft_introduction: string;
+  member_nft_name: string;
+  owner_nft_image: string;
+  owner_nft_introduction: string;
+  owner_nft_name: string;
+  sender: string;
+  tribe_id: number;
+}
+
 export interface TribeState {
   tribeId?: number;
   isApproveStakeNft?: boolean;

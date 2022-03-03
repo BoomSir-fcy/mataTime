@@ -10,12 +10,13 @@ import { Box, Button, Flex, Text, Input } from 'uikit';
 import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { fetchisApprove } from 'store/tribe';
-import { TribeInfo, TribeBaseInfo } from 'store/tribe/type';
+import { TribeType, TribeInfo, TribeBaseInfo } from 'store/tribe/type';
+
 import { ApproveToken } from 'store/tribe/fetchTribe';
-import { useJoinTribe } from './hooks';
 import { getBalanceNumber } from 'utils/formatBalance';
 
 import { useTranslation } from 'contexts';
+import { useJoinTribe } from './hooks';
 
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
@@ -31,12 +32,6 @@ const MaskInfo = styled(Box)`
   background-color: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: ${({ theme }) => theme.radii.card};
   padding: 18px 13px;
-`;
-
-const InputStyle = styled(Input)`
-  flex: 1;
-  border: 1px solid ${({ theme }) => theme.colors.white_black};
-  box-shadow: none;
 `;
 
 export const JoinTribeModal: React.FC<{
@@ -96,7 +91,8 @@ export const JoinTribeModal: React.FC<{
     const inviteAddress = Boolean(state.inviteAddress)
       ? state.inviteAddress
       : '0x0000000000000000000000000000000000000000';
-    const joinServiceFee = tribeDetails.type === 2 ? tribeDetails.charge : '';
+    const joinServiceFee =
+      tribeDetails?.type === TribeType.PRO ? tribeDetails.charge : '';
     try {
       setState(p => {
         p.submitLoading = true;
@@ -108,7 +104,9 @@ export const JoinTribeModal: React.FC<{
       );
       if (res === 1) {
         toastSuccess('Join Successfully');
-        onClose(true);
+        setTimeout(() => {
+          onClose(true);
+        }, 5000);
       } else if (res === 400001) {
         toastError(t('rewardAutherTransferAmountExceedsBlanceError'));
       } else {
@@ -125,7 +123,7 @@ export const JoinTribeModal: React.FC<{
 
   return (
     <ModalWrapper
-      title={`Join "${tribeInfo?.tribe?.name}"`}
+      title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name })}
       visible={visible}
       setVisible={onClose}
     >
@@ -141,30 +139,28 @@ export const JoinTribeModal: React.FC<{
                 mb='18px'
               >
                 <Flex>
-                  <Text color='textTips'>Fees to join a basic tribe</Text>
+                  <Text color='textTips'>{t('TribeJoinModalText')}</Text>
                   <QuestionHelper
                     ml='15px'
                     mt='4px'
                     color='white_black'
-                    text={
-                      'Based on the MATTER circulating supply and METATIME DAU'
-                    }
+                    text={t('TribeJoinModalText1')}
                     placement='auto'
                   />
                 </Flex>
                 <Text fontSize='16px'>
-                  {tribeDetails.type === 1
+                  {tribeDetails?.type === TribeType.BASIC
                     ? joinTribeInfo.basicServiceCharge
-                    : getBalanceNumber(new BigNumber(tribeDetails.charge), 18)}
-                  {tribeDetails.symbol}
+                    : getBalanceNumber(new BigNumber(tribeDetails?.charge), 18)}
+                  {tribeDetails?.symbol}
                 </Text>
               </Flex>
               <Flex justifyContent='space-between' alignItems='center'>
-                <Text color='textTips'>Validity Date</Text>
+                <Text color='textTips'>{t('TribeJoinModalValidityDate')}</Text>
                 <Text fontSize='16px'>
-                  {tribeDetails.valid_time > 0
+                  {tribeDetails?.valid_time > 0
                     ? `${dayjs().format('YYYY-MM-DD')} ~ ${dayjs()
-                        .add(tribeDetails.valid_time / 60 / 60 / 24, 'day')
+                        .add(tribeDetails?.valid_time / 60 / 60 / 24, 'day')
                         .format('YYYY-MM-DD')}`
                     : t('ValidityDaysForver')}
                 </Text>
@@ -177,44 +173,57 @@ export const JoinTribeModal: React.FC<{
                   alignItems='center'
                   mb='18px'
                 >
-                  <Text color='textTips'>TIME Burned</Text>
-                  <Text fontSize='16px'>{tribeDetails.spend_time} TIME/s</Text>
-                </Flex>
-                <Flex justifyContent='space-between' alignItems='center'>
-                  <Text color='textTips'>MAX TIME Burned/Post</Text>
+                  <Text color='textTips'>{t('TIMEBurned')}</Text>
                   <Text fontSize='16px'>
-                    {tribeDetails.spend_max_time} TIME/Post
+                    {t('TIMEBurnedUnit', {
+                      value: tribeDetails?.spend_time || 0,
+                    })}
                   </Text>
                 </Flex>
                 <Flex justifyContent='space-between' alignItems='center'>
-                  <Text color='textTips'>
-                    TIME Reward Distribution for Content Producers
+                  <Text color='textTips'>{t('TIMEMAXBurned/Post')}</Text>
+                  <Text fontSize='16px'>
+                    {t('TIMEMAXBurned/PostUnit', {
+                      value: tribeDetails?.spend_max_time || 0,
+                    })}
                   </Text>
+                </Flex>
+                <Flex justifyContent='space-between' alignItems='center'>
+                  <Text color='textTips'>{t('TribeJoinModalText2')}</Text>
                 </Flex>
                 <Flex flexDirection='column'>
                   <Text fontSize='16px'>
-                    Tribe Host: {tribeDetails.reward_master}%
+                    {t('TIMETribeHost', {
+                      value: tribeDetails?.reward_master || 0,
+                    })}
                   </Text>
                   <Text fontSize='16px'>
-                    Poster: {tribeDetails.reward_author}%
+                    {t('TIMEPoster', {
+                      value: tribeDetails?.reward_author || 0,
+                    })}
                   </Text>
                   <Text fontSize='16px'>
-                    Members: {tribeDetails.reward_member}%
+                    {t('TIMEMembers', {
+                      value: tribeDetails?.reward_member || 0,
+                    })}
                   </Text>
                 </Flex>
               </MaskInfo>
             )}
-            {state.next === 2 && tribeDetails.type === 2 && (
-              <MaskInfo mt='17px'>
-                <Flex alignItems='center'>
-                  <Text mr='10px'>邀请钱包地址</Text>
-                  <InputStyle onChange={handleChange} placeholder='选填' />
-                </Flex>
-              </MaskInfo>
+            {state.next === 2 && tribeDetails?.type === TribeType.PRO && (
+              <Box mt='17px'>
+                <Text mb='10px'>{t('TribeJoinModalInviteText')}</Text>
+                <Input
+                  onChange={handleChange}
+                  placeholder={t('TribeJoinModalInviteValue')}
+                />
+              </Box>
             )}
             {state.next === 1 && (
               <>
-                <Text mt='10px'>* The MATTER will be destroyed</Text>
+                {tribeDetails?.type === TribeType.BASIC && (
+                  <Text mt='10px'>{t('TribeJoinModalText3')}</Text>
+                )}
                 <Flex mt='20px' justifyContent='center'>
                   <Button
                     onClick={() =>
@@ -223,7 +232,7 @@ export const JoinTribeModal: React.FC<{
                       })
                     }
                   >
-                    Confirm
+                    {t('TribeJoinModalConfirm')}
                   </Button>
                 </Flex>
               </>
@@ -232,7 +241,11 @@ export const JoinTribeModal: React.FC<{
               <Flex mt='20px' justifyContent='center'>
                 {joinTribeInfo.approveLimit > 0 ? (
                   <Button onClick={() => handleJoinTribe()}>
-                    {state.submitLoading ? <Dots>Confirm</Dots> : 'Confirm'}
+                    {state.submitLoading ? (
+                      <Dots>{t('TribeJoinModalConfirm')}</Dots>
+                    ) : (
+                      `${t('TribeJoinModalConfirm')}`
+                    )}
                   </Button>
                 ) : (
                   <Button onClick={changeApprove}>

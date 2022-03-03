@@ -6,6 +6,7 @@ import { Transforms, createEditor, Descendant, Editor, Element as SlateElement }
 import { Loading, Icon } from 'components';
 import { mt } from './styleds';
 import { ImageElement } from 'components/Editor/custom-types';
+import { useTranslation } from 'contexts';
 
 export const ImageStyled = styled.img`
   max-width: 100%;
@@ -71,6 +72,8 @@ export const ImageStyledRender: React.FC<ImageStyledRenderProps> = ({ full, src,
 
 const Image = ({ attributes, children, element, isEditor }) => {
   const editor = useSlateStatic();
+  const { t } = useTranslation();
+
   const removeHandle = useCallback(() => {
     try {
       const path = ReactEditor.findPath(editor, element);
@@ -116,7 +119,7 @@ const Image = ({ attributes, children, element, isEditor }) => {
             <Box style={{
               opacity: (isEditor && selected && focused) ? 1 : 1,
             }} background='rgba(0,0,0, 0.8)'>
-              <Button onClick={changeAlignHandle} variant='text'>{element.full ? '切换为居中' : '切换为全屏'}</Button>
+              <Button onClick={changeAlignHandle} variant='text'>{element.full ? t('Switch to center') : t('Switch to full screen')}</Button>
             </Box>
           </Flex>
           {
