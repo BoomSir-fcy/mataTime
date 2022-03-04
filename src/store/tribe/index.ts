@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { NftInfo, TribeBaseInfo, TribeState } from './type';
+import { NftInfo, TribeState } from './type';
 import {
   getFeeTokenList,
   getTicketNftTokenList,
   getTribeBaseInfo,
-  getTribeNftInfo,
   getBasicFee,
   getTokenTribeApprove,
 } from './fetchTribe';
@@ -12,7 +11,7 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setInitMemberNft, updateTribeDetails } from './actions';
+import { updateTribeDetails } from './actions';
 
 import { MemberNft } from './type';
 
@@ -31,9 +30,7 @@ const initialState: TribeState = {
     memberPercent: null,
     nftAddress: '',
     nftid: null,
-    memberNFTImage: '',
-    memberNFTIntroduction: '',
-    memberNFTName: '',
+    invitationRate: 0,
   },
   tribesNftInfo: {
     claimOnwerNFT: false,
@@ -44,8 +41,6 @@ const initialState: TribeState = {
     memberNFTIntroduction: '',
     memberNFTImage: '',
     initMemberNFT: true,
-    create_time: 0,
-    nick_name: '',
   },
   feeCoinList: [],
   ticketNftList: [],
@@ -81,6 +76,7 @@ const initialState: TribeState = {
     detail: null,
     baseInfo: null,
     nftInfo: null,
+    member_nft: null,
   },
   postList: {
     list: [],
@@ -136,31 +132,6 @@ export const fetchGetTribeBaseInfo = createAsyncThunk<any, any>(
   async ({ tribeId }, { dispatch }) => {
     const info = await getTribeBaseInfo(tribeId);
     dispatch(setTribeBaseInfo(info));
-  },
-);
-
-export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
-  'tribe/fetchTribeNftInfo',
-  async ({ tribeId }, { dispatch }) => {
-    const [extraTribeInfo, detail] = await Promise.all([
-      getTribeNftInfo(tribeId),
-      Api.TribeApi.tribeMemberNftDetail({
-        tribe_id: tribeId,
-      }),
-    ]);
-    const nftInfo = {
-      claimOnwerNFT: extraTribeInfo.claimOnwerNFT,
-      initMemberNFT: extraTribeInfo.initMemberNFT,
-      ownerNFTName: detail.data.owner_nft_name,
-      ownerNFTIntroduction: detail.data.owner_nft_introduction,
-      ownerNFTImage: detail.data.owner_nft_image,
-      memberNFTName: detail.data.member_nft_name,
-      memberNFTIntroduction: detail.data.member_nft_introduction,
-      memberNFTImage: detail.data.member_nft_image,
-      create_time: detail.data.create_time,
-      nick_name: detail.data.nick_name,
-    };
-    dispatch(setTribeNftInfo(nftInfo));
   },
 );
 
@@ -317,9 +288,6 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(setInitMemberNft, (state, action) => {
-        state.tribesNftInfo.initMemberNFT = action.payload;
-      })
       .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
         state.isApproveStakeNft = action.payload;
       })

@@ -57,7 +57,6 @@ export const getTicketNftTokenList = async () => {
   }
 };
 
-
 export const getTribeBaseInfoData = async (tribeId: number) => {
   const address = getTribeAddress();
   const calls = [
@@ -78,7 +77,10 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
     },
   ];
   try {
-    const [info, extraTribeInfo, extraNftInfo] = await multicall(tribeAbi, calls);
+    const [info, extraTribeInfo, extraNftInfo] = await multicall(
+      tribeAbi,
+      calls,
+    );
     const baseInfo = {
       name: info.name,
       logo: info.logo,
@@ -92,6 +94,9 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
       nftAddress: '',
       nftid: null,
+      invitationRate: new BigNumber(
+        extraTribeInfo.invitationRate.toJSON().hex,
+      ).toNumber(),
     };
     const nftInfo = {
       ownerNFTName: extraNftInfo.ownerNFTName,
@@ -106,7 +111,7 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
     return {
       baseInfo,
       nftInfo,
-    }
+    };
   } catch (error) {
     console.error(error);
     const baseInfo = {
@@ -122,25 +127,22 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       memberPercent: null,
       nftAddress: '',
       nftid: null,
+      invitationRate: 0,
     };
     const nftInfo = {
-      name: '',
-      logo: '',
-      introduction: '',
-      feeToken: '',
-      feeAmount: '',
-      validDate: null,
-      perTime: null,
-      ownerPercent: null,
-      authorPercent: null,
-      memberPercent: null,
-      nftAddress: '',
-      nftid: null,
+      claimOnwerNFT: false,
+      ownerNFTName: '',
+      ownerNFTIntroduction: '',
+      ownerNFTImage: '',
+      memberNFTName: '',
+      memberNFTIntroduction: '',
+      memberNFTImage: '',
+      initMemberNFT: true,
     };
     return {
       baseInfo,
       nftInfo,
-    }
+    };
   }
 };
 
@@ -190,48 +192,6 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       memberPercent: null,
       nftAddress: '',
       nftid: null,
-    };
-  }
-};
-
-// 部落主nft
-export const getTribeNftInfo = async (tribeId: string | number) => {
-  const address = getTribeAddress();
-  const calls = [
-    {
-      address,
-      name: 'extraTribesInfo',
-      params: [tribeId],
-    },
-    {
-      address,
-      name: 'extraTribesNFTInfo',
-      params: [tribeId],
-    },
-  ];
-  try {
-    const [extraTribeInfo, extraNftInfo] = await multicall(tribeAbi, calls);
-    return {
-      ownerNFTName: extraNftInfo.ownerNFTName,
-      ownerNFTIntroduction: extraNftInfo.ownerNFTIntroduction,
-      ownerNFTImage: extraNftInfo.ownerNFTImage,
-      memberNFTName: extraNftInfo.memberNFTName,
-      memberNFTIntroduction: extraNftInfo.memberNFTIntroduction,
-      memberNFTImage: extraNftInfo.memberNFTImage,
-      claimOnwerNFT: extraTribeInfo.claimOnwerNFT,
-      initMemberNFT: extraTribeInfo.initMemberNFT,
-    } as TribesNFTInfo;
-  } catch (error) {
-    console.error(error);
-    return {
-      claimOnwerNFT: false,
-      ownerNFTName: '',
-      ownerNFTIntroduction: '',
-      ownerNFTImage: '',
-      memberNFTName: '',
-      memberNFTIntroduction: '',
-      memberNFTImage: '',
-      initMemberNFT: false,
     };
   }
 };

@@ -79,7 +79,7 @@ export const useTribeNft = () => {
   const handleSettingInvitation = useCallback(
     async (tribeId: number, rate: string | number) => {
       try {
-        const tx = await tribeContract.settinginvitaion(tribeId, rate);
+        const tx = await tribeContract.settingInvitaion(tribeId, rate);
         const receipt = await tx.wait();
         return receipt.status;
       } catch (error) {

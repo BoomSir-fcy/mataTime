@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import useMenuNav from 'hooks/useMenuNav';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useFetchTribeInfoById } from 'store/mapModule/hooks';
+import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
 
 const FeeSetting = React.lazy(() => import('./FeeSetting'));
 const Info = React.lazy(() => import('./Info'));
@@ -64,10 +64,14 @@ const MeTribe = () => {
   const { updater } = useFetchTribeInfoById(tribeId);
   // updater()
 
+  const tribeInfo = useTribeInfoById(tribeId);
+
   return (
     <Box>
       {!isMobile &&
-        (location.pathname !== path ? <Crumbs title={'部落名字'} /> : null)}
+        (location.pathname !== path ? (
+          <Crumbs title={tribeInfo?.tribe?.name} />
+        ) : null)}
       <Switch>
         <Route path={path} exact component={MyTribe} />
         <Route path={`${path}/info`} component={Info} />
