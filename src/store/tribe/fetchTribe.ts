@@ -171,8 +171,6 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
       authorPercent: new BigNumber(info.authorPercent.toJSON().hex).toNumber(),
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
-      nftAddress: '',
-      nftid: null,
       memberNFTImage: extraInfo.memberNFTImage,
       memberNFTIntroduction: extraInfo.memberNFTIntroduction,
       memberNFTName: extraInfo.memberNFTName,

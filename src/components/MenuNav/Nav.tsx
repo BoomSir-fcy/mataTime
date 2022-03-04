@@ -97,7 +97,6 @@ const Nav: React.FC<NavProps> = () => {
   const parseQs = useParsedQueryString();
 
   const tribeInfo = useTribeInfoById(parseQs.i);
-  console.log(tribeInfo, 'tribeInfo');
 
   // 第二级导航栏
   const activeChildren = useMemo(() => {

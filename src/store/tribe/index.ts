@@ -12,16 +12,11 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setInitMemberNft, setTribeId, updateTribeDetails } from './actions';
+import { setInitMemberNft, updateTribeDetails } from './actions';
 
 import { MemberNft } from './type';
 
-const LOCAL_STORAGE_TRIBE_KEY = 'tribe_id';
-
-const tribeIdStore = localStorage.getItem(LOCAL_STORAGE_TRIBE_KEY);
-
 const initialState: TribeState = {
-  tribeId: tribeIdStore ? JSON.parse(tribeIdStore) : null,
   isApproveStakeNft: false,
   tribeBaseInfo: {
     name: '',
@@ -48,7 +43,9 @@ const initialState: TribeState = {
     memberNFTName: '',
     memberNFTIntroduction: '',
     memberNFTImage: '',
-    initMemberNFT: false,
+    initMemberNFT: true,
+    create_time: 0,
+    nick_name: '',
   },
   feeCoinList: [],
   ticketNftList: [],
@@ -74,6 +71,7 @@ const initialState: TribeState = {
       nick_name: '',
       nft_image: '',
       create_time: 0,
+      nft_id: null,
     },
     status: 0,
     tribe_id: null,
@@ -144,8 +142,25 @@ export const fetchGetTribeBaseInfo = createAsyncThunk<any, any>(
 export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
   'tribe/fetchTribeNftInfo',
   async ({ tribeId }, { dispatch }) => {
-    const info = await getTribeNftInfo(tribeId);
-    dispatch(setTribeNftInfo(info));
+    const [extraTribeInfo, detail] = await Promise.all([
+      getTribeNftInfo(tribeId),
+      Api.TribeApi.tribeMemberNftDetail({
+        tribe_id: tribeId,
+      }),
+    ]);
+    const nftInfo = {
+      claimOnwerNFT: extraTribeInfo.claimOnwerNFT,
+      initMemberNFT: extraTribeInfo.initMemberNFT,
+      ownerNFTName: detail.data.owner_nft_name,
+      ownerNFTIntroduction: detail.data.owner_nft_introduction,
+      ownerNFTImage: detail.data.owner_nft_image,
+      memberNFTName: detail.data.member_nft_name,
+      memberNFTIntroduction: detail.data.member_nft_introduction,
+      memberNFTImage: detail.data.member_nft_image,
+      create_time: detail.data.create_time,
+      nick_name: detail.data.nick_name,
+    };
+    dispatch(setTribeNftInfo(nftInfo));
   },
 );
 
@@ -304,13 +319,6 @@ export const tribe = createSlice({
     builder
       .addCase(setInitMemberNft, (state, action) => {
         state.tribesNftInfo.initMemberNFT = action.payload;
-      })
-      .addCase(setTribeId, (state, action) => {
-        state.tribeId = action.payload;
-        localStorage.setItem(
-          LOCAL_STORAGE_TRIBE_KEY,
-          JSON.stringify(action.payload),
-        );
       })
       .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
         state.isApproveStakeNft = action.payload;
