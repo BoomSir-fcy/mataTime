@@ -117,6 +117,7 @@ const MeTribeTribalDocs: React.FC<init> = () => {
     } else {
       toastError(t('moreDeleteError'));
     }
+    getFileList(page);
     setCommonInqueryShow(false);
   };
 
