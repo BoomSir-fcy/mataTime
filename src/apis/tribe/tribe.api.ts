@@ -1,6 +1,15 @@
 import { Http } from '../http';
 
 export class TribeApi extends Http {
+  // 部落文件列表
+  async tribeFileList(params: Api.Tribe.tribeFileListParams) {
+    const res = await this.get('/v1/tribe/file/list', params);
+    return res;
+  }
+  // 部落文件删除
+  async tribeFileDelete(params: Api.Tribe.tribeFileDeleteParams) {
+    return this.post('/v1/tribe/file/del', params);
+  }
   // 部落成员列表
   async tribeMemberList(params: Api.Tribe.tribeMemberListParams) {
     const res = await this.get('/v1/tribe/member/list', params);

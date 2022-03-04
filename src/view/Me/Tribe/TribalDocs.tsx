@@ -7,8 +7,13 @@ import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import dayjs from 'dayjs';
-import { Crumbs } from 'components';
+import { CommonInquiryModal, Crumbs } from 'components';
 import BtnIcon from 'view/Tribe/components/BtnIcon';
+import { Api } from 'apis';
+import { useToast } from 'hooks';
+import { useTribeState } from 'store/tribe/hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import { getTotalPage } from './MemberManagement';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -66,29 +71,65 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
+  const parseQs = useParsedQueryString();
+
+  const [inqueryType, setInqueryType] = useState<string>('DeleteFile');
+  const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [pageSize, setpageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [Loading, setLoading] = useState(false);
-  const [TribalDocsList, setTribalDocsList] = useState([
-    {
-      id: 1,
-      title: '学习学习学习方式的',
-    },
-    {
-      id: 2,
-      title: '自行车发个广告',
-    },
-    {
-      id: 3,
-      title: '华盛顿发射地球万物',
-    },
-  ]);
+  const [TribalDocsList, setTribalDocsList] = useState([]);
+  const [FileId, setFileId] = useState(null);
+  const { toastSuccess, toastError } = useToast();
 
-  const handlePageClick = event => {
-    // setLoading(true);
+  // 文件列表
+  const getFileList = async page => {
+    try {
+      const res = await Api.TribeApi.tribeFileList({
+        page,
+        page_size: pageSize,
+        tribe_id: parseQs.i,
+      });
+      if (Api.isSuccess(res)) {
+        const Data = res.data;
+        setTribalDocsList(Data.list);
+        setPage(Data.page);
+        setPageCount(getTotalPage(Data.total_count, pageSize));
+      } else {
+        throw new Error('errCode');
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+      throw error;
+    }
+  };
+  // 删除文件
+  const DeleteFile = async () => {
+    const res = await Api.TribeApi.tribeFileDelete({
+      id: FileId,
+      tribe_id: parseQs.i,
+    });
+    if (Api.isSuccess(res)) {
+      toastSuccess(t('moreDeleteSuccess'));
+    } else {
+      toastError(t('moreDeleteError'));
+    }
+    getFileList(page);
+    setCommonInqueryShow(false);
   };
 
+  const handlePageClick = event => {
+    setLoading(true);
+    const changePage = event.selected + 1;
+    getFileList(changePage);
+  };
+
+  useEffect(() => {
+    if (parseQs.i) getFileList(1);
+  }, []);
   return (
     <CountBox>
       <Crumbs title='部落文件'>
@@ -105,9 +146,17 @@ const MeTribeTribalDocs: React.FC<init> = () => {
             ? TribalDocsList.map((item, index) => (
                 <Row key={`${item.id}${index}`}>
                   <ItemText>{item.id}</ItemText>
-                  <ItemText>{item.title}</ItemText>
+                  <ItemText>{item.file_name}</ItemText>
                   <Flex justifyContent='end'>
-                    <TextBtn variant='text'>{t('Delete')}</TextBtn>
+                    <TextBtn
+                      variant='text'
+                      onClick={() => {
+                        setFileId(item.id);
+                        setCommonInqueryShow(true);
+                      }}
+                    >
+                      {t('moreDelete')}
+                    </TextBtn>
                   </Flex>
                 </Row>
               ))
@@ -137,6 +186,17 @@ const MeTribeTribalDocs: React.FC<init> = () => {
           renderOnZeroPageCount={null}
         />
       </PaginateStyle>
+      {/* 统一询问框 */}
+      <CommonInquiryModal
+        show={commonInqueryShow}
+        type={inqueryType}
+        onClose={() => {
+          setCommonInqueryShow(false);
+        }}
+        onQuery={() => {
+          DeleteFile();
+        }}
+      />
     </CountBox>
   );
 };

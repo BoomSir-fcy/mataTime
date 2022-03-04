@@ -18,6 +18,7 @@ import {
   FetchTokenApproveNum,
   useTribeMemberDelete,
 } from './hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -87,6 +88,15 @@ interface Info {
 }
 interface init {}
 
+export const getTotalPage = (totalNum, pageSize) => {
+  if (pageSize != 0 && totalNum % pageSize == 0) {
+    return parseInt(String(totalNum / pageSize));
+  }
+  if (pageSize != 0 && totalNum % pageSize != 0) {
+    return parseInt(String(totalNum / pageSize)) + 1;
+  }
+};
+
 const MeTribeMemberManagement: React.FC<init> = () => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -95,14 +105,13 @@ const MeTribeMemberManagement: React.FC<init> = () => {
 
   const [InputVal, setInputVal] = useState('');
   const [page, setPage] = useState(1);
-  const [pageSize, setpageSize] = useState(2);
+  const [pageSize, setpageSize] = useState(10);
   const [pageCount, setPageCount] = useState(1);
   const [Loading, setLoading] = useState(true);
   const [pending, setpending] = useState(false);
   const [MemberList, setMemberList] = useState([]);
-  const { tribeId } = useTribeState();
+  const parseQs = useParsedQueryString();
   const { toastSuccess, toastError } = useToast();
-  const [inqueryType, setInqueryType] = useState<string>('deleteMember');
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [RefundAmount, setRefundAmount] = useState(null);
   const [ApproveNum, setApproveNum] = useState(null);
@@ -117,18 +126,9 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     uid: null,
   });
 
-  const getTotalPage = totalNum => {
-    if (pageSize != 0 && totalNum % pageSize == 0) {
-      return parseInt(String(totalNum / pageSize));
-    }
-    if (pageSize != 0 && totalNum % pageSize != 0) {
-      return parseInt(String(totalNum / pageSize)) + 1;
-    }
-  };
-
   // 禁言
   const onPostMute = async (uid: number) => {
-    const res = await Api.TribeApi.tribePostMute({ tribe_id: tribeId, uid });
+    const res = await Api.TribeApi.tribePostMute({ tribe_id: parseQs.i, uid });
     if (Api.isSuccess(res)) {
       toastSuccess(t('禁言成功'));
       getMemberList(page);
@@ -137,7 +137,10 @@ const MeTribeMemberManagement: React.FC<init> = () => {
 
   // 取消禁言
   const onPostNotMute = async (uid: number) => {
-    const res = await Api.TribeApi.tribePostNotMute({ tribe_id: tribeId, uid });
+    const res = await Api.TribeApi.tribePostNotMute({
+      tribe_id: parseQs.i,
+      uid,
+    });
     if (Api.isSuccess(res)) {
       toastSuccess(t('取消禁言成功'));
       getMemberList(page);
@@ -150,14 +153,14 @@ const MeTribeMemberManagement: React.FC<init> = () => {
       const res = await Api.TribeApi.tribeMemberList({
         page,
         page_size: pageSize,
-        tribe_id: tribeId,
+        tribe_id: parseQs.i,
         keyword: InputVal,
       });
       if (Api.isSuccess(res)) {
         const Data = res.data;
         setMemberList(Data.list);
         setPage(Data.page);
-        setPageCount(getTotalPage(Data.total_count));
+        setPageCount(getTotalPage(Data.total_count, pageSize));
       } else {
         throw new Error('errCode');
       }
@@ -188,10 +191,10 @@ const MeTribeMemberManagement: React.FC<init> = () => {
       setpending(true);
       try {
         await DeleteNFTFromTribe(nft_id);
-        toastSuccess(t('删除成功'));
+        toastSuccess(t('moreDeleteSuccess'));
       } catch (e) {
         console.error(e);
-        toastError(t('删除失败'));
+        toastError(t('moreDeleteError'));
       } finally {
         setpending(false);
         setCommonInqueryShow(false);
@@ -217,7 +220,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     [setInputVal],
   );
   useEffect(() => {
-    getMemberList(1);
+    if (parseQs.i) getMemberList(1);
   }, [InputVal]);
 
   return (
