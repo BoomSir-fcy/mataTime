@@ -14,14 +14,14 @@ const MyTribeInfo = () => {
   const form = React.useRef<any>();
   const dispatch = useDispatch();
   const parseQs = useParsedQueryString();
-  const { tribeBaseInfo, tribeId } = useTribeState();
+  const { tribeBaseInfo } = useTribeState();
   const { onSetTribeBaseInfo } = useTribe();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [info, setInfo] = useState({});
 
   useEffect(() => {
-    if (tribeId) dispatch(fetchGetTribeBaseInfo({ tribeId }));
-  }, [tribeId]);
+    if (parseQs.i) dispatch(fetchGetTribeBaseInfo({ tribeId: parseQs.i }));
+  }, [parseQs]);
 
   useEffect(() => {
     if (tribeBaseInfo.name) setInfo(tribeBaseInfo);
@@ -33,7 +33,7 @@ const MyTribeInfo = () => {
           e.preventDefault();
           const params = form.current.getInfoFrom();
           console.log('表单提交：', params);
-          await onSetTribeBaseInfo(tribeId, params);
+          await onSetTribeBaseInfo(parseQs.i, params);
           setInfo(params);
           setIsEdit(false);
         }}
