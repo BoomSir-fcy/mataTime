@@ -9,6 +9,7 @@ import useTheme from 'hooks/useTheme';
 const BoxStyle = styled(Box)<{ overflow?: string }>`
   overflow-y: ${({ overflow }) => overflow || 'auto'};
   max-height: calc(80vh - 100px);
+  padding-bottom: 3px;
 `;
 
 const getCustomStyles = (

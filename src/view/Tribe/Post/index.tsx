@@ -44,7 +44,7 @@ const LableBoxStyled = styled(Text)`
   margin-right: 8px;
 `;
 
-const InputStyled = styled(Input) <{
+const InputStyled = styled(Input)<{
   background?: string;
   pl?: string;
   pr?: string;
@@ -136,7 +136,7 @@ const Post = () => {
 
   const handleSendPost = useCallback(
     async (verify?: any) => {
-      const { imageList, userIdList } = parseContentInfo(value)
+      const { imageList, userIdList } = parseContentInfo(value);
       const status = await handleSendPostAsync(
         {
           value,
@@ -215,7 +215,7 @@ const Post = () => {
               }}
               noShadow
               value={title}
-              placeholder={t('Place enter the post\'s title')}
+              placeholder={t("Place enter the post's title")}
               pr='100px'
               width='100%'
             />
@@ -234,13 +234,13 @@ const Post = () => {
         </Flex>
         <Flex mb='22px'>
           <LableBoxStyled>* {t('Tag')}</LableBoxStyled>
-          <InputTag
+          {/* <InputTag
             tribe_id={tribe_id}
             onChange={value => {
               console.log(value);
               setSelectTags(value);
             }}
-          />
+          /> */}
         </Flex>
         <LableBoxStyled mb='22px'>* {t('Document')}</LableBoxStyled>
         <RichTextEditor

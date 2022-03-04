@@ -185,7 +185,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
             <Text
               textTransform='capitalize'
               onClick={() => {
-                if (data.is_top === 1) {
+                if (data.tribe_top === 1) {
                   setInqueryType('cancelTopping');
                   setCommonInqueryShow(true);
                 } else {
@@ -194,7 +194,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
                 }
               }}
             >
-              {data.is_top === 1 ? t('moreCancelTop') : t('moreTop')}
+              {data.tribe_top === 1 ? t('moreCancelTop') : t('moreTop')}
             </Text>
             <Text
               textTransform='capitalize'
@@ -206,7 +206,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
                 }
               }}
             >
-              {data.selected === 0 ? t('精选') : t('取消精选')}
+              {data.selected === 0 ? t('Featured') : t('取消精选')}
             </Text>
             <Text
               textTransform='capitalize'

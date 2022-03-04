@@ -6,8 +6,6 @@ import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { useStore } from 'store';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
-import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const Tab = styled(Flex)`
   align-items: baseline;
@@ -26,18 +24,16 @@ const Tab = styled(Flex)`
 
 interface DetailTitlePorps {
   TribeId: number;
+  // page_size: number;
   tabsChange?: (item) => void;
 }
 const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [ActiveTitle, setActiveTitle] = useState(0);
   const [sortTime, setSortTime] = useState(1);
   const [sortLike, setSortLike] = useState(0);
   const { top } = useStore(p => p.tribe.postList);
-  const { replace } = useHistory();
-  const { pathname } = useLocation();
-  const qsValue = useParsedQueryString();
-  const [ActiveTitle, setActiveTitle] = useState(Number(qsValue.active) || 0);
 
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
@@ -67,7 +63,6 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
           className={ActiveTitle === 0 ? 'active' : 'tabFont'}
           onClick={() => {
             setActiveTitle(0);
-            replace(`${pathname}?id=${TribeId}&active=0`);
           }}
         >
           {t('homeTabAll')}
@@ -76,10 +71,9 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
           className={ActiveTitle === 1 ? 'active' : 'tabFont'}
           onClick={() => {
             setActiveTitle(1);
-            replace(`${pathname}?id=${TribeId}&active=1`);
           }}
         >
-          {t('Featured')}
+          {t('精选')}
         </Text>
       </Tab>
       <Flex>

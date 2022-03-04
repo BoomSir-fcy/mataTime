@@ -5,7 +5,6 @@ import { Box } from 'uikit';
 import { ContentBox } from './styled';
 import { CommonClaimNFT } from './components/CommonClaimNFT';
 import { useDispatch } from 'react-redux';
-import { fetchTribeNftInfo } from 'store/tribe';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 
@@ -14,11 +13,6 @@ const MeTribeMasterNFT = () => {
   const dispatch = useDispatch();
   const parseQs = useParsedQueryString();
   const tribeInfo = useTribeInfoById(parseQs.i);
-
-  useEffect(() => {
-    if (parseQs.i) dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
-  }, [parseQs]);
-
   return (
     <Box>
       <Crumbs title={t('Master NFT')} />
@@ -28,6 +22,7 @@ const MeTribeMasterNFT = () => {
           tribeId={parseQs.i}
           nft_id={tribeInfo?.tribe?.nft_id}
           status={tribeInfo?.status}
+          tribesNftInfo={tribeInfo?.member_nft}
         />
       </ContentBox>
     </Box>

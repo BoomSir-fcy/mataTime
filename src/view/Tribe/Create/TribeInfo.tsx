@@ -79,7 +79,7 @@ const TribeInfoForward = (props, ref) => {
           disabled={actionType === actionTypes.EDIT}
           url={state.logo}
           tips={t(
-            'The recommended size is less than 5MB, and the image size is 100x100',
+            'The recommended size is less than 5MB, and the image size is 1000x1000',
           )}
           uploadSuccess={uploadSuccess}
         />

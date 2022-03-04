@@ -14,6 +14,7 @@ import { useToast } from 'hooks';
 import { useTribeState } from 'store/tribe/hooks';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { getTotalPage } from './MemberManagement';
+import UploadFile from '../components/UploadFile';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -133,7 +134,8 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   return (
     <CountBox>
       <Crumbs title='部落文件'>
-        <BtnIcon name='icon-shangchuan1' text={t('上传文件')} />
+        <UploadFile tribe_id={Number(parseQs.i)} />
+        {/* <BtnIcon name='icon-shangchuan1' text={t('上传文件')} /> */}
       </Crumbs>
       <TableBox>
         <Table>

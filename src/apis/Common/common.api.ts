@@ -11,6 +11,11 @@ export class CommonApi extends Http {
     const res = await this.post('/v1/upload/img_multi', params);
     return res;
   }
+  // 上传文件
+  async uploadFile(params: FormData) {
+    const res = await this.post('/v1/upload/file', params);
+    return res;
+  }
 
   // 获取websocket的token
   async getWsUrl() {

@@ -235,7 +235,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
               scale='sm'
               value={InputVal}
               onChange={handleChange}
-              placeholder={t('搜索')}
+              placeholder={t('SearchPlaceholder')}
             />
           </Flex>
         </InputStyled>
@@ -278,7 +278,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
                         setCommonInqueryShow(true);
                       }}
                     >
-                      {t('Delete')}
+                      {t('moreDelete')}
                     </TextBtn>
                   </Flex>
                 </Row>

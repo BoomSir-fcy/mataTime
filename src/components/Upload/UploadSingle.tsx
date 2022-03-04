@@ -81,15 +81,6 @@ export const UploadSingle: React.FC<UploadProps> = ({
           setImgUrl(path);
           uploadSuccess(path);
         };
-        // setLoading(true);
-        // setTimeout(() => {
-        //   const full_path =
-        //     'https://static.social.qgx.io/common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
-        //   const path = 'common/21c5f7be-7c6f-4e94-b7ec-567514d04e6d.jpg';
-        //   setImgUrl(path);
-        //   uploadSuccess(path);
-        //   setLoading(false);
-        // }, 2000);
       }
     }
   };
