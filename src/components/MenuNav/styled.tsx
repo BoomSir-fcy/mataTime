@@ -3,11 +3,15 @@ import styled from 'styled-components';
 import { Box, Flex, Text } from 'uikit';
 import { SIDEBAR_WIDTH_REDUCED, SIDEBAR_WIDTH_FULL } from './config';
 
-export const NavItemStyled = styled(Flex)<{ isactive?: number }>`
+export const NavItemStyled = styled(Flex)<{
+  isactive?: number;
+  disabled?: boolean;
+}>`
   align-items: center;
   width: max-content;
   /* height: 40px; */
-  cursor: pointer;
+  cursor: ${({ disabled, isactive }) =>
+    disabled && !isactive ? 'not-allowed' : 'pointer'};
   vertical-align: middle;
   transition: background 0.3s;
   background: ${({ isactive, theme }) =>
@@ -16,8 +20,10 @@ export const NavItemStyled = styled(Flex)<{ isactive?: number }>`
   margin-bottom: 20px;
   padding: 7px 30px 7px 14px;
   &:hover {
-    cursor: pointer;
-    background: ${({ theme }) => theme.colors.backgroundThemeCard};
+    cursor: ${({ disabled, isactive }) =>
+      disabled && !isactive ? 'not-allowed' : 'pointer'};
+    background: ${({ theme, disabled }) =>
+      disabled ? 'transparent' : theme.colors.backgroundThemeCard};
   }
 `;
 

@@ -38,6 +38,8 @@ export interface MenuNavConfig extends MenuNavBase {
   children?: MenuNavConfig[];
   customName?: string;
   badgeIconName?: string;
+  disabled?: boolean
+  badgeIcon?: string
 }
 
 export interface MenuNavLink extends MenuNavBase {

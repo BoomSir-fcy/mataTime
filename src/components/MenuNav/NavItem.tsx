@@ -13,6 +13,7 @@ export interface NavItemProps extends MenuNavLink {
   pathname: string;
   childrenLen?: number;
   badgeIcon?: string;
+  disabled?: boolean;
 }
 
 const NavItem: React.FC<NavItemProps> = ({
@@ -27,6 +28,7 @@ const NavItem: React.FC<NavItemProps> = ({
   markPath,
   childrenLen,
   badgeIcon,
+  disabled,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -46,7 +48,14 @@ const NavItem: React.FC<NavItemProps> = ({
   if (hide) return null;
   if (coming) {
     return (
-      <NavItemStyled onClick={() => toastInfo(t('Coming Soon!'))}>
+      <NavItemStyled
+        disabled={disabled}
+        onClick={() => {
+          if (!disabled) {
+            toastInfo(t('Coming Soon!'));
+          }
+        }}
+      >
         <IconBox>
           {/* {icon} */}
           <Icon name={icon} color={isActive ? 'white_black' : 'textSubtle'} />
@@ -70,17 +79,24 @@ const NavItem: React.FC<NavItemProps> = ({
   }
   return (
     <NavItemStyled
+      disabled={disabled}
       isactive={isActive ? 1 : 0}
-      as={Link}
+      as={disabled ? null : Link}
       to={path}
-      onClick={() => setIsPushed(pre => (pre ? false : pre))}
+      onClick={() => {
+        if (!disabled) {
+          setIsPushed(pre => (pre ? false : pre));
+        }
+      }}
     >
       <IconBox>
         {/* {isActive ? (activeIcon || icon) : icon} */}
         {/* textDisabled */}
         <Icon
           name={isActive ? activeIcon || icon : icon}
-          color={isActive ? 'white_black' : 'textSubtle'}
+          color={
+            isActive ? 'white_black' : disabled ? 'textDisabled' : 'textSubtle'
+          }
         />
         {typeof badge === 'number' && (
           <Badge color='white'>{badgeDispaly}</Badge>
@@ -93,7 +109,9 @@ const NavItem: React.FC<NavItemProps> = ({
         ml='20px'
         fontSize='18px'
         bold={isActive}
-        color={isActive ? 'white_black' : 'textSubtle'}
+        color={
+          isActive ? 'white_black' : disabled ? 'textDisabled' : 'textSubtle'
+        }
       >
         {t(lable)}
       </Text>

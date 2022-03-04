@@ -77,11 +77,12 @@ export interface TribeInfo {
   tribe: {
     name: string;
     logo: string;
-    type: number;
+    type: TribeType;
     owner_address: string;
     nick_name: string;
     nft_image: string;
     create_time: number;
+    member_nft_id?: number;
     nft_id: number;
   };
   topics: TopiceList[];
