@@ -27,6 +27,14 @@ const NumberFlex = styled(Flex)`
   }
 `;
 
+const UserImg = styled.img`
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  width: 24px;
+  height: 24px;
+`;
+
 interface HeaderProps {
   TribeInfo: TribeInfo;
 }
@@ -55,16 +63,16 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
             <Box>
               <Text bold>{TribeInfo.selected_count}</Text>
               <Text fontSize='14px' color='textTips'>
-                精选
+                {t('Featured')}
               </Text>
             </Box>
           </NumberFlex>
         </Box>
         <Flex justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
-            <TradeLogo scales='ld' round logo={TribeInfo.tribe.logo} />
+            <UserImg src={TribeInfo.tribe.nft_image} alt='' />
             <Text ml='10px' bold>
-              Oline
+              {TribeInfo.tribe.nick_name}
             </Text>
           </Flex>
           {TribeInfo.status !== 4 ? (
