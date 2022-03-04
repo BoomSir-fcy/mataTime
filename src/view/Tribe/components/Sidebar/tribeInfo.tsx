@@ -14,13 +14,15 @@ const Desc = styled(Text)`
   white-space: pre-wrap;
 `;
 
-const TribeInfo = ({ ...props }) => {
+const TribeInfo: React.FC<{
+  tribe_id: number;
+  mb: string;
+}> = ({ ...props }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const history = useHistory();
   const tribeInfo = useStore(p => p.tribe.tribeInfo);
   const tribeDetails = useStore(p => p.tribe.tribeDetails);
-  const tribeId = useStore(p => p.tribe.tribeId);
   const [visible, setVisible] = React.useState(false);
 
   return (
@@ -33,7 +35,7 @@ const TribeInfo = ({ ...props }) => {
           {account?.toLowerCase() === tribeInfo?.tribe?.owner_address && (
             <Text
               color='textPrimary'
-              onClick={() => history.push(`/me/tribe/info?i=${tribeId}`)}
+              onClick={() => history.push(`/me/tribe/info?i=${props.tribe_id}`)}
               style={{
                 cursor: 'pointer',
               }}
@@ -52,7 +54,7 @@ const TribeInfo = ({ ...props }) => {
               ),
             })}
           </Text>
-          {tribeDetails.type === 2 && (
+          {tribeDetails?.type === 2 && (
             <Icon
               name='icon-fenxiang'
               color='textPrimary'
@@ -63,9 +65,9 @@ const TribeInfo = ({ ...props }) => {
           )}
         </Flex>
         <Flex alignItems='center' mb='19px'>
-          <Avatar scale='sm' src={tribeDetails.nft_image} />
+          <Avatar scale='sm' src={tribeDetails?.nft_image} />
           <Text fontSize='18px' fontWeight='bold' ml='16px'>
-            {tribeDetails.nick_name}
+            {tribeDetails?.nick_name}
           </Text>
         </Flex>
         <Desc>{tribeDetails?.summary}</Desc>

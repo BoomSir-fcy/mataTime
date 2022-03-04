@@ -1,15 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ModalWrapper } from 'components';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'contexts';
-import { Box, Text, Button, Flex, LinkExternal, Input } from 'uikit';
+import { Box, Text, Flex, LinkExternal, Input } from 'uikit';
 import styled from 'styled-components';
-import default_avatar from 'assets/images/default_avatar.jpg';
-import { useDispatch } from 'react-redux';
-import { fetchTribeNftInfo } from 'store/tribe';
 import { useStore } from 'store';
 import { BASE_IMAGE_URL } from 'config';
 import { getBscScanLink } from 'utils/contract';
 import { getTribeAddress } from 'utils/addressHelpers';
+import { formatTime } from 'utils';
+import { StyledButton } from '../styled';
+import { useWeb3React } from '@web3-react/core';
+import useConnectWallet from 'hooks/useConnectWallet';
+import { NftStatus } from 'store/tribe/type';
+import { StakeButton, TransferButton, UnStakeButton } from './actionNft';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
 const NFTBox = styled(Box)`
   position: relative;
@@ -25,11 +30,6 @@ const NFTBox = styled(Box)`
         : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
   }
 `;
-const InputStyled = styled(Input)`
-  width: 100%;
-  border-radius: 10px;
-  padding: 4px 20px;
-`;
 const StyledImg = styled.img`
   width: 200px;
   height: 200px;
@@ -41,53 +41,65 @@ const nftType = {
 } as const;
 type NFTType = typeof nftType[keyof typeof nftType];
 
-export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
-  React.memo(({ type, tribeId }) => {
-    const { t } = useTranslation();
-    const tribeAddress = getTribeAddress();
-    const [visible, setVisible] = useState(false);
-    const tribesNftInfo = useStore(p => p.tribe.tribesNftInfo);
+export const CommonClaimNFT: React.FC<{
+  type: NFTType;
+  tribeId: number;
+  nft_id: number;
+  status?: number;
+}> = React.memo(({ type, tribeId, nft_id, status }) => {
+  const { t } = useTranslation();
+  const tribeAddress = getTribeAddress();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
+  const tribesNftInfo = useStore(p => p.tribe.tribesNftInfo);
 
-    const nftInfo = useMemo(() => {
-      if (type === nftType.MASTER) {
-        return {
-          name: tribesNftInfo.ownerNFTName,
-          image: `${BASE_IMAGE_URL}${tribesNftInfo.ownerNFTImage}`,
-          introduction: tribesNftInfo.ownerNFTIntroduction,
-        };
-      }
-      if (type === nftType.MEMBER) {
-        return {
-          name: tribesNftInfo.memberNFTName,
-          image: `${BASE_IMAGE_URL}${tribesNftInfo.memberNFTImage}`,
-          introduction: tribesNftInfo.memberNFTIntroduction,
-        };
-      }
-    }, [type, tribesNftInfo]);
-    return (
-      <>
-        <Flex flexWrap='wrap' alignItems='center'>
-          <NFTBox mr='80px' mb='20px'>
-            <StyledImg className='nft-img' src={nftInfo.image} alt='' />
-          </NFTBox>
-          <Flex flex='auto' flexDirection='column'>
-            <Text fontSize='18px' bold>
-              {t(`${nftInfo.name}`)}
+  const nftInfo = useMemo(() => {
+    if (type === nftType.MASTER) {
+      return {
+        name: tribesNftInfo.ownerNFTName,
+        image: `${BASE_IMAGE_URL}${tribesNftInfo.ownerNFTImage}`,
+        introduction: tribesNftInfo.ownerNFTIntroduction,
+        create_time: tribesNftInfo.create_time,
+        nick_name: tribesNftInfo.nick_name,
+      };
+    }
+    if (type === nftType.MEMBER) {
+      return {
+        name: tribesNftInfo.memberNFTName,
+        image: `${BASE_IMAGE_URL}${tribesNftInfo.memberNFTImage}`,
+        introduction: tribesNftInfo.memberNFTIntroduction,
+        create_time: tribesNftInfo.create_time,
+        nick_name: tribesNftInfo.nick_name,
+      };
+    }
+  }, [type, tribesNftInfo]);
+  return (
+    <>
+      <Flex flexWrap='wrap' alignItems='center'>
+        <NFTBox mr='80px' mb='20px'>
+          <StyledImg className='nft-img' src={nftInfo.image} alt='' />
+        </NFTBox>
+        <Flex maxWidth='60%' flex='auto' flexDirection='column'>
+          <Text fontSize='18px' bold>
+            {t(`${nftInfo.name}`)}
+          </Text>
+          <Text mt='20px' color='textTips' small>
+            {t(`${nftInfo.introduction}`)}
+          </Text>
+          <Text mt='20px' color='textTips' small>
+            {t('Brithday:')} {formatTime(nftInfo.create_time, 'YYYY-MM-DD')}
+          </Text>
+          <Flex>
+            <Text color='textTips' small>
+              {t('Created by:')}
             </Text>
-            <Text mt='20px' color='textTips' small>
-              {t(`${nftInfo.introduction}`)}
+            <Text ml='10px' small>
+              {nftInfo.nick_name}
             </Text>
-            {/* <Text mt='20px' color='textTips' small>
-              {t('Brithday:')} 2022-01-12
-            </Text>
-            <Flex>
-              <Text color='textTips' small>
-                {t('Created by:')}
-              </Text>
-              <Text ml='10px' small>
-                马斯克
-              </Text>
-            </Flex> */}
+          </Flex>
+          <Flex justifyContent='space-between' alignItems='flex-end'>
             <LinkExternal
               mt='20px'
               color='textPrimary'
@@ -97,36 +109,56 @@ export const CommonClaimNFT: React.FC<{ type: NFTType; tribeId: number }> =
             >
               View on BSCscan
             </LinkExternal>
+            {type === nftType.MASTER && (
+              <Flex>
+                {!account && (
+                  <StyledButton
+                    onClick={e => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      onConnectWallet();
+                    }}
+                  >
+                    {t('Connect Wallet')}
+                  </StyledButton>
+                )}
+                {account &&
+                (status === NftStatus.Received ||
+                  status === NftStatus.UnStake) ? (
+                  <>
+                    <StakeButton
+                      mr='20px'
+                      tribeId={tribeId}
+                      nftId={nft_id}
+                      nftType={1}
+                      callback={() => {
+                        dispatch(fetchTribeInfoAsync(tribeId));
+                      }}
+                    />
+                    <TransferButton
+                      nftId={nft_id}
+                      callback={() => {
+                        history.push('`/me/tribe');
+                      }}
+                    />
+                  </>
+                ) : null}
+                {account && status === NftStatus.Staked && (
+                  <>
+                    <UnStakeButton
+                      tribeId={tribeId}
+                      nftType={1}
+                      callback={() => {
+                        dispatch(fetchTribeInfoAsync(tribeId));
+                      }}
+                    />
+                  </>
+                )}
+              </Flex>
+            )}
           </Flex>
         </Flex>
-
-        <ModalWrapper
-          creactOnUse
-          fillBody
-          title={t('Transfer the Tribe Host NFT')}
-          visible={visible}
-          setVisible={setVisible}
-        >
-          <Flex flexDirection='column' padding='0 20px'>
-            <Text mb='10px' small>
-              {t('Transfer to')}
-            </Text>
-            <InputStyled
-              scale='lg'
-              placeholder={t('Please enter wallet address')}
-            />
-            <Text mt='10px' small>
-              {t(
-                '*Whoever gets the Tribe Host NFT will become the tribe host and has the tribe host rights.',
-              )}
-            </Text>
-            <Flex justifyContent='center'>
-              <Button width='125px' mt='20px'>
-                {t('confirm')}
-              </Button>
-            </Flex>
-          </Flex>
-        </ModalWrapper>
-      </>
-    );
-  });
+      </Flex>
+    </>
+  );
+});

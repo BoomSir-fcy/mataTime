@@ -43,7 +43,7 @@ export const ARTICLE_POST_MAX_LEN = 600; // 发帖最大字数
 
 export const ARTICLE_COMMENTS_MAX_LEN = 280; // 评论最大字数
 
-export const HUGE_ARTICLE_IMAGE_MAX_LEN = 20; // 长文发图数量
+export const HUGE_ARTICLE_IMAGE_MAX_LEN = 5; // 长文发图数量
 
 export const HUGE_ARTICLE_POST_MAX_LEN = 40000; // 长文最大字数
 export const HUGE_ARTICLE_TITLE_MAX_LEN = 50; // 长文标题最大字数
@@ -58,7 +58,8 @@ export const POST_UPLOAD_IMG = 4;
 
 export const BASE_USER_PROFILE_URL = '/me/profile/';
 
-export const BICONOMY_DAPP_API_KEY = 'WNdB8aO10.433bd892-b501-46d1-a678-fd5e7f7acb99'
+export const BICONOMY_DAPP_API_KEY =
+  'WNdB8aO10.433bd892-b501-46d1-a678-fd5e7f7acb99';
 
 // setTotalSupply []
 export const EXCEPT_TOTALSUPPPPLY_ADDRESS = [
@@ -73,3 +74,4 @@ export const TRIBE_FEE_DEFAULT_MAX_CONSUMES_TIME = '60'; // 每条内容最多�
 export const TRIBE_FEE_DEFAULT_MASTER_REWARD = '50'; // 部落主TIME奖励分配
 export const TRIBE_FEE_DEFAULT_CREATOR_REWARD = '50'; // 创作者TIME奖励分配
 export const TRIBE_FEE_DEFAULT_MEMBER_REWARD = '0'; // 部落成员TIME奖励分配
+export const TRIBE_FEE_BNB_TOKEN = '0x0000000000000000000000000000000000000001'; // BNB token

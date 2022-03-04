@@ -20,6 +20,7 @@ import client from 'utils/client';
 import { HistoryEditor } from 'slate-history';
 import DraggableImages, { ImgItem } from './DraggableImages';
 import defaultValue from '../defaultValue';
+import parseContentInfo from '../tools/parseContentInfo';
 
 interface InsertImageFormProps {
   multiple?: boolean;
@@ -66,6 +67,8 @@ export const insertImages = (editor: CustomEditor, urls: string[]) => {
     return image;
   });
   Transforms.insertNodes(editor, images);
+  Transforms.insertNodes(editor, defaultValue);
+
 };
 
 const InsertImageForm: React.FC<InsertImageFormProps> = ({
@@ -86,7 +89,8 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
       try {
         const { files } = event.target;
         if (!files.length) return;
-        if (maxUploadLength + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
+        const { imageList } = parseContentInfo(editor.children)
+        if (imageList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
           return toastError(t('uploadImgMaxMsg'));
         const compressImage = Array.from(files).map(file => {
           return cutDownImg(file);
@@ -231,7 +235,6 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
       return prev.filter(item => !insertIds.includes(item.id));
     });
     insertImages(editor, srcs);
-    Transforms.insertNodes(editor, defaultValue);
     setVisible(false);
   }, [imgList, setImgList, setVisible]);
 
@@ -268,7 +271,7 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
         name='icon-bianjiqi_tupianshangchuan745'
       />
       <ModalWrapper
-        title={t('上传图片')}
+        title={t('Upload pictures')}
         creactOnUse
         visible={visible}
         setVisible={setVisible}
@@ -290,7 +293,7 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
                       current
                       name='icon-bianjiqi_tupianshangchuan745'
                     />
-                    <Text ml='8px'>本地上传</Text>
+                    <Text ml='8px'>{t('Local upload')}</Text>
                   </UpdateBtnSmall>
                   <input
                     id='upload-images'
@@ -309,9 +312,9 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
                 <DraggableImages imgList={imgList} setImgList={setImgList} />
               </Flex>
               <Flex alignItems='center' justifyContent='flex-end'>
-                <Text>已上传 {imgList.length} 张图片，拖拽可调整顺序</Text>
+                <Text>{t('%count% pictures have been uploaded. Drag to adjust the order', { count: imgList.length })} </Text>
                 <Button onClick={handleInsetImgList} ml='16px'>
-                  插入图片
+                  {t('Insert-images')}
                 </Button>
               </Flex>
             </Flex>
@@ -341,9 +344,9 @@ const InsertImageForm: React.FC<InsertImageFormProps> = ({
                     />
                   </label>
                 </form>
-                <Text mt='12px'>上传图片</Text>
+                <Text mt='12px'>{t('Upload pictures')}</Text>
                 <Text fontSize='14px' color='textTips'>
-                  支持 JPG、JPEG、PNG 等格式
+                  {t('Support JPG, JPEG, PNG and other formats')}
                 </Text>
               </Flex>
             </Flex>

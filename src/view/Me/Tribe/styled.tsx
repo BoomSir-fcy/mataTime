@@ -20,14 +20,16 @@ export const Table = styled(Flex)`
     background: ${({ theme }) => theme.colors.backgroundCard};
   }
 `;
-export const Row = styled.div`
+export const Row = styled.div<{ border?: boolean }>`
   width: 100%;
   display: grid;
-  grid-template-columns: 20% 30% 25% 25%;
+  grid-template-columns: 30% 20% 25% 25%;
   align-items: center;
-  ${({ theme }) => theme.mediaQueriesSize.padding}
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
+  ${({ theme }) => theme.mediaQueriesSize.padding};
+  ${({ theme, border }) =>
+    border && `border-bottom: 1px solid ${theme.colors.borderThemeColor}`};
 `;
+
 export const HeadText = styled(Text)`
   color: ${({ theme }) => theme.colors.textTips};
   font-size: 14px;
@@ -38,6 +40,10 @@ export const HeadText = styled(Text)`
 export const ItemText = styled(Text)`
   color: ${({ theme }) => theme.colors.white_black};
   font-size: 14px;
+  &.tribe-name,
+  &.member-nft {
+    cursor: pointer;
+  }
   &:last-child {
     text-align: right;
   }
@@ -48,5 +54,5 @@ export const LoadingAnimation = styled(Box)`
 `;
 
 export const StyledButton = styled(Button)`
-  width: 100px;
+  min-width: 100px;
 `;

@@ -12,14 +12,11 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setInitMemberNft, setTribeId } from './actions';
+import { setInitMemberNft, updateTribeDetails } from './actions';
 
-const LOCAL_STORAGE_TRIBE_KEY = 'tribe_id';
-
-const tribeIdStore = localStorage.getItem(LOCAL_STORAGE_TRIBE_KEY);
+import { MemberNft } from './type';
 
 const initialState: TribeState = {
-  tribeId: tribeIdStore ? JSON.parse(tribeIdStore) : null,
   isApproveStakeNft: false,
   tribeBaseInfo: {
     name: '',
@@ -46,7 +43,9 @@ const initialState: TribeState = {
     memberNFTName: '',
     memberNFTIntroduction: '',
     memberNFTImage: '',
-    initMemberNFT: false,
+    initMemberNFT: true,
+    create_time: 0,
+    nick_name: '',
   },
   feeCoinList: [],
   ticketNftList: [],
@@ -72,12 +71,16 @@ const initialState: TribeState = {
       nick_name: '',
       nft_image: '',
       create_time: 0,
+      nft_id: null,
     },
     status: 0,
     tribe_id: null,
     selected_count: '',
     post_count: '',
     member_count: '',
+    detail: null,
+    baseInfo: null,
+    nftInfo: null,
   },
   postList: {
     list: [],
@@ -109,6 +112,9 @@ const initialState: TribeState = {
     type: 0,
     valid_time: 0,
     nft_image: '',
+    nft_id: 0,
+    expire_time: 0,
+    memberNft: {} as MemberNft,
   },
   joinTribe: {
     loading: false,
@@ -136,8 +142,25 @@ export const fetchGetTribeBaseInfo = createAsyncThunk<any, any>(
 export const fetchTribeNftInfo = createAsyncThunk<any, { tribeId: number }>(
   'tribe/fetchTribeNftInfo',
   async ({ tribeId }, { dispatch }) => {
-    const info = await getTribeNftInfo(tribeId);
-    dispatch(setTribeNftInfo(info));
+    const [extraTribeInfo, detail] = await Promise.all([
+      getTribeNftInfo(tribeId),
+      Api.TribeApi.tribeMemberNftDetail({
+        tribe_id: tribeId,
+      }),
+    ]);
+    const nftInfo = {
+      claimOnwerNFT: extraTribeInfo.claimOnwerNFT,
+      initMemberNFT: extraTribeInfo.initMemberNFT,
+      ownerNFTName: detail.data.owner_nft_name,
+      ownerNFTIntroduction: detail.data.owner_nft_introduction,
+      ownerNFTImage: detail.data.owner_nft_image,
+      memberNFTName: detail.data.member_nft_name,
+      memberNFTIntroduction: detail.data.member_nft_introduction,
+      memberNFTImage: detail.data.member_nft_image,
+      create_time: detail.data.create_time,
+      nick_name: detail.data.nick_name,
+    };
+    dispatch(setTribeNftInfo(nftInfo));
   },
 );
 
@@ -204,9 +227,14 @@ export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
 export const fetchTribeDetailAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeDetailAsync',
   async ({ tribe_id }) => {
-    const res = await Api.TribeApi.tribeDetail({ tribe_id });
+    const [detail, memberNft] = await Promise.all([
+      Api.TribeApi.tribeDetail({ tribe_id }),
+      Api.TribeApi.tribeMemberNftDetail({ tribe_id }),
+    ]);
+
     return {
-      ...res.data,
+      ...detail.data,
+      memberNft: memberNft.data,
       tribe_id,
     };
   },
@@ -292,13 +320,6 @@ export const tribe = createSlice({
       .addCase(setInitMemberNft, (state, action) => {
         state.tribesNftInfo.initMemberNFT = action.payload;
       })
-      .addCase(setTribeId, (state, action) => {
-        state.tribeId = action.payload;
-        localStorage.setItem(
-          LOCAL_STORAGE_TRIBE_KEY,
-          JSON.stringify(action.payload),
-        );
-      })
       .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
         state.isApproveStakeNft = action.payload;
       })
@@ -338,6 +359,9 @@ export const tribe = createSlice({
       })
       .addCase(fetchTribePostAsync.rejected, (state, action) => {
         state.postList.loading = false;
+      })
+      .addCase(updateTribeDetails, (state, { payload }) => {
+        state.tribeInfo = payload;
       });
   },
 });

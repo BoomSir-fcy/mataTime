@@ -19,16 +19,16 @@ const TribePro = ({ ...props }) => {
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
-        {t(`${tribeDetails.type === 1 ? 'FeeInformation' : 'ProInformation'}`)}
+        {t(`${tribeDetails?.type === 1 ? 'FeeInformation' : 'ProInformation'}`)}
       </Text>
       <Group>
         <GroupRows>
           <Text color='textTips'>{t('FeesToJoinThisTribe')}</Text>
           <Text>
-            {new BigNumber(tribeDetails.charge)
+            {new BigNumber(tribeDetails?.charge)
               .dividedBy(new BigNumber(10).pow(18))
               .toString()}{' '}
-            {tribeDetails.symbol}
+            {tribeDetails?.symbol}
           </Text>
         </GroupRows>
         <GroupRows>
@@ -40,16 +40,18 @@ const TribePro = ({ ...props }) => {
         <GroupRows>
           <Text color='textTips'>{t('ValidityDays')}</Text>
           <Text>
-            {tribeDetails.valid_time > 0
+            {tribeDetails?.valid_time > 0
               ? t('ValidityDaysUnit', {
-                  value: tribeDetails.valid_time / 60 / 60 / 24,
+                  value: tribeDetails?.valid_time / 60 / 60 / 24,
                 })
               : t('ValidityDaysForver')}
           </Text>
         </GroupRows>
         <GroupRows>
           <Text color='textTips'>{t('TIMEBurned')}</Text>
-          <Text>{t('TIMEBurnedUnit', { value: tribeDetails.spend_time })}</Text>
+          <Text>
+            {t('TIMEBurnedUnit', { value: tribeDetails?.spend_time || 0 })}
+          </Text>
         </GroupRows>
         <GroupRows>
           <Text color='textTips'>
@@ -57,9 +59,15 @@ const TribePro = ({ ...props }) => {
           </Text>
         </GroupRows>
       </Group>
-      <Text>{t('TIMETribeHost', { value: tribeDetails.reward_master })}</Text>
-      <Text>{t('TIMEPoster', { value: tribeDetails.reward_author })}</Text>
-      <Text>{t('TIMEMembers', { value: tribeDetails.reward_member })}</Text>
+      <Text>
+        {t('TIMETribeHost', { value: tribeDetails?.reward_master || 0 })}
+      </Text>
+      <Text>
+        {t('TIMEPoster', { value: tribeDetails?.reward_author || 0 })}
+      </Text>
+      <Text>
+        {t('TIMEMembers', { value: tribeDetails?.reward_member || 0 })}
+      </Text>
     </Card>
   );
 };

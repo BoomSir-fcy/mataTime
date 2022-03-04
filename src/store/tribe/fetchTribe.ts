@@ -57,6 +57,93 @@ export const getTicketNftTokenList = async () => {
   }
 };
 
+
+export const getTribeBaseInfoData = async (tribeId: number) => {
+  const address = getTribeAddress();
+  const calls = [
+    {
+      address,
+      name: 'tribesInfo',
+      params: [tribeId],
+    },
+    {
+      address,
+      name: 'extraTribesInfo',
+      params: [tribeId],
+    },
+    {
+      address,
+      name: 'extraTribesNFTInfo',
+      params: [tribeId],
+    },
+  ];
+  try {
+    const [info, extraTribeInfo, extraNftInfo] = await multicall(tribeAbi, calls);
+    const baseInfo = {
+      name: info.name,
+      logo: info.logo,
+      introduction: info.introduction,
+      feeToken: info.feeToken,
+      feeAmount: new BigNumber(info.feeAmount.toJSON().hex).toNumber(),
+      validDate: new BigNumber(info.validDate.toJSON().hex).toNumber(),
+      perTime: new BigNumber(info.perTime.toJSON().hex).toNumber(),
+      ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
+      authorPercent: new BigNumber(info.authorPercent.toJSON().hex).toNumber(),
+      memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
+      nftAddress: '',
+      nftid: null,
+    };
+    const nftInfo = {
+      ownerNFTName: extraNftInfo.ownerNFTName,
+      ownerNFTIntroduction: extraNftInfo.ownerNFTIntroduction,
+      ownerNFTImage: extraNftInfo.ownerNFTImage,
+      memberNFTName: extraNftInfo.memberNFTName,
+      memberNFTIntroduction: extraNftInfo.memberNFTIntroduction,
+      memberNFTImage: extraNftInfo.memberNFTImage,
+      claimOnwerNFT: extraTribeInfo.claimOnwerNFT,
+      initMemberNFT: extraTribeInfo.initMemberNFT,
+    } as TribesNFTInfo;
+    return {
+      baseInfo,
+      nftInfo,
+    }
+  } catch (error) {
+    console.error(error);
+    const baseInfo = {
+      name: '',
+      logo: '',
+      introduction: '',
+      feeToken: '',
+      feeAmount: '',
+      validDate: null,
+      perTime: null,
+      ownerPercent: null,
+      authorPercent: null,
+      memberPercent: null,
+      nftAddress: '',
+      nftid: null,
+    };
+    const nftInfo = {
+      name: '',
+      logo: '',
+      introduction: '',
+      feeToken: '',
+      feeAmount: '',
+      validDate: null,
+      perTime: null,
+      ownerPercent: null,
+      authorPercent: null,
+      memberPercent: null,
+      nftAddress: '',
+      nftid: null,
+    };
+    return {
+      baseInfo,
+      nftInfo,
+    }
+  }
+};
+
 export const getTribeBaseInfo = async (tribeId: number) => {
   const address = getTribeAddress();
   const calls = [
@@ -84,8 +171,6 @@ export const getTribeBaseInfo = async (tribeId: number) => {
       ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
       authorPercent: new BigNumber(info.authorPercent.toJSON().hex).toNumber(),
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
-      nftAddress: '',
-      nftid: null,
       memberNFTImage: extraInfo.memberNFTImage,
       memberNFTIntroduction: extraInfo.memberNFTIntroduction,
       memberNFTName: extraInfo.memberNFTName,

@@ -40,7 +40,7 @@ export const ClaimButton: React.FC<{
         handleClaimOwnerNft();
       }}
     >
-      {pending ? <Dots>{t('Time Claiming')}</Dots> : t('Time Claim')}
+      {pending ? <Dots>{t('Time Claim')}</Dots> : t('Time Claim')}
     </StyledButton>
   );
 };

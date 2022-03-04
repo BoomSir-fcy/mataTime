@@ -20,6 +20,7 @@ import {
   Node,
 } from 'slate';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
+import { toast } from 'react-toastify';
 import { useToast } from 'hooks';
 import { BASE_IMAGE_URL, HUGE_ARTICLE_IMAGE_MAX_LEN } from 'config';
 import { useTranslation } from 'contexts/Localization';
@@ -40,6 +41,7 @@ import { ParagraphElement } from '../custom-types';
 import { Api } from 'apis';
 import { cutDownImg } from 'utils/imageCompression';
 import { insertImages } from './Toolbar/InsertImageForm';
+import parseContentInfo from './tools/parseContentInfo';
 
 interface RichTextEditorProps extends BoxProps {
   maxLength?: number;
@@ -143,11 +145,6 @@ const RichTextEditor = (
   const { onKeyDown, onChangeHandle, target, userList, onItemClick, index } =
     useMentions(editor, mentionsRef, tribeId);
 
-  useEffect(() => {
-    // console.log(value, 'value');
-    // sessionStorage.setItem('asdasads', JSON.stringify(value));
-  }, [value]);
-
   const serialize = useMemo(() => {
     return value.map(n => Node.string(n)).join('\n');
   }, [value]);
@@ -157,34 +154,18 @@ const RichTextEditor = (
   const [imgList, setImgList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const uploadImg = useCallback(
-    async (files: FileList) => {
-      if (files && files.length > 0) {
-        const fileList: string[] = [];
-
-        //@ts-ignore
-        for (const file of files) {
-          const [mime] = file.type.split('/');
-          if (mime === 'image') {
-            const compressImage = await cutDownImg(file);
-            fileList.push(compressImage);
-          }
-        }
-
-        if (imgList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
-          return toastError(t('uploadImgMaxMsg'));
-        setIsLoading(true);
-        const res = await Api.CommonApi.uploadImgList({
-          base64: fileList,
-          dir_name: 'common',
-        });
-        setIsLoading(false);
-        if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
-        const imgUploadList = (res.data ?? []).map(item => item.full_path);
-        // setImgList([...imgList, ...imgUploadList]);
-        // console.log(files, 'insertImages');
-        insertImages(editor, imgUploadList);
-        // hidePasteImg(files);
-      }
+    async (files: string[]) => {
+      setIsLoading(true);
+      const res = await Api.CommonApi.uploadImgList({
+        base64: files,
+        dir_name: 'common',
+      });
+      setIsLoading(false);
+      if (!Api.isSuccess(res)) toastError(t('commonUploadBackgroundFail'));
+      const imgUploadList = (res.data ?? []).map(item => item.full_path);
+      setImgList([...imgList, ...imgUploadList]);
+      // console.log(files, 'insertImages');
+      insertImages(editor, imgUploadList);
     },
     [imgList],
   );
@@ -193,9 +174,9 @@ const RichTextEditor = (
     TODO:
     // 1.顶部 工具栏 使用粘性布局
     // 2.添加图片后没法加文字
-    3.粘贴的图片上传处理
-    4.草稿箱移动端优化
-    5.将img添加到imglist
+    // 3.粘贴的图片上传处理
+    // 4.草稿箱移动端优化
+    // 5.将img添加到imglist
     6.没想好
   */
 
@@ -209,6 +190,10 @@ const RichTextEditor = (
         background={getColor(background, theme)}
         onClick={() => {
           ReactEditor.focus(editor);
+          HistoryEditor.withoutSaving(editor, () => {
+            editor.insertText('');
+            // editor.deleteBackward(1);
+          });
         }}
         position='relative'
         key={refresh}
@@ -240,7 +225,29 @@ const RichTextEditor = (
               const data = event.clipboardData;
               const { files } = data;
               // let fileList: any[] = [];
-              uploadImg(files);
+              // uploadImg(files);
+
+              if (files && files.length > 0) {
+                const fileList: string[] = [];
+
+                //@ts-ignore
+                for (const file of files) {
+                  const [mime] = file.type.split('/');
+                  if (mime === 'image') {
+                    const compressImage = await cutDownImg(file);
+                    fileList.push(compressImage);
+                  }
+                }
+
+                const { imageList } = parseContentInfo(value)
+                if (imageList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
+                  return toastError(t('uploadImgMaxMsg'));
+                toast.promise(() => uploadImg(fileList), {
+                  pending: t('Uploading pictures'),
+                  success: t('Upload successful'),
+                  error: t('Upload failed')
+                })
+              }
               // if (files && files.length > 0) {
               //   //@ts-ignore
               //   for (const file of files) {
@@ -265,28 +272,6 @@ const RichTextEditor = (
         </Slate>
         <Box
           onClick={e => {
-            // Transforms.insertNodes(editor, paragraph);
-            ReactEditor.focus(editor);
-            HistoryEditor.withoutSaving(editor, () => {
-              // Transforms.insertNodes(editor, paragraph);
-              editor.insertText(' wqeeqw wq');
-            });
-            // editor.insertText(' ');
-            // editor.deleteForward(1);
-            // console.log(editor)
-            e.stopPropagation();
-          }}
-          position='absolute'
-          style={{ cursor: 'pointer' }}
-          right='0'
-          bottom='0'
-          height='56px'
-          width='100%'
-        />
-        <Box
-          onClick={e => {
-            ReactEditor.focus(editor);
-            Transforms.insertNodes(editor, paragraph);
             e.stopPropagation();
           }}
           height='16px'

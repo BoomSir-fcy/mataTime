@@ -27,6 +27,7 @@ import {
   PATTERN_ZERO_ONEHUNDRED,
 } from './utils/pattern';
 import {
+  TRIBE_FEE_BNB_TOKEN,
   TRIBE_FEE_DEFAULT_CREATOR_REWARD,
   TRIBE_FEE_DEFAULT_MASTER_REWARD,
   TRIBE_FEE_DEFAULT_MEMBER_REWARD,
@@ -80,8 +81,13 @@ const TribeFeeForward = (props, ref) => {
   ];
 
   useEffect(() => {
-    setFeeToken(feeCoinList[0]?.tokenAddress);
-  }, [feeCoinList[0]?.tokenAddress]);
+    if (feeCoinList.length) {
+      setFeeToken(
+        feeCoinList?.find(item => item.tokenAddress === TRIBE_FEE_BNB_TOKEN)
+          ?.tokenAddress,
+      );
+    }
+  }, [feeCoinList]);
 
   useEffect(() => {
     if (info?.feeToken) {

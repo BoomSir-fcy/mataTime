@@ -11,7 +11,6 @@ import {
   PATTERN_ZERO_ONEHUNDRED,
 } from 'view/Tribe/Create/utils/pattern';
 import { useImmer } from 'use-immer';
-import { useStore } from 'store';
 import { Timing } from 'store/tribe/type';
 import { useFeeTokenList, useTribeState } from 'store/tribe/hooks';
 import { useTribeNft } from './hooks';
@@ -20,11 +19,13 @@ import { useDispatch } from 'react-redux';
 import { getValidDateDay } from 'store/tribe/utils';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { BigNumber } from 'bignumber.js';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const MeTribeInvitationSetting = () => {
   useFeeTokenList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const parseQs = useParsedQueryString();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [feeToken, setFeeToken] = useState('');
   const [state, setState] = useImmer({
@@ -33,7 +34,7 @@ const MeTribeInvitationSetting = () => {
     validDate: '',
     rate: '0',
   });
-  const { tribeId, feeCoinList, tribeBaseInfo } = useTribeState();
+  const { feeCoinList, tribeBaseInfo } = useTribeState();
   const { onSettingInvitation } = useTribeNft();
 
   const timingOptions = [
@@ -45,8 +46,8 @@ const MeTribeInvitationSetting = () => {
   ];
 
   useEffect(() => {
-    if (tribeId) dispatch(fetchGetTribeBaseInfo({ tribeId }));
-  }, [tribeId]);
+    if (parseQs.i) dispatch(fetchGetTribeBaseInfo({ tribeId: parseQs.i }));
+  }, [parseQs]);
 
   useEffect(() => {
     if (tribeBaseInfo?.feeToken) {
@@ -89,7 +90,7 @@ const MeTribeInvitationSetting = () => {
       <form
         onSubmit={async e => {
           e.preventDefault();
-          await onSettingInvitation(tribeId, state.rate);
+          await onSettingInvitation(parseQs.i, state.rate);
           setIsEdit(false);
         }}
         action=''

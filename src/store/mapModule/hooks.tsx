@@ -1,12 +1,13 @@
 import { HomeApi } from 'apis/Home';
 import { FetchStatus } from 'config/types';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MapModuleState } from '../types';
 import { removeCommentTranslateIds, removeTranslateIds } from './actions';
 import {
   fetchCommentTranslateAsync,
   fetchPostTranslateAsync,
+  fetchTribeInfoAsync,
   setCommentTranslate,
   setPostTranslate,
 } from './reducer';
@@ -33,6 +34,31 @@ export const usePostDetailById = id => {
   return useMemo(() => {
     return postMap[id];
   }, [postMap, id]);
+};
+
+export const useTribeInfoById = id => {
+  const { tribeInfoMap } = useMapModule();
+
+  return useMemo(() => {
+    return tribeInfoMap[id];
+  }, [tribeInfoMap, id]);
+};
+
+export const useFetchTribeInfoById = id => {
+  const dispatch = useDispatch();
+
+  const fetchInfo = useCallback(() => {
+    if (id) {
+      dispatch(fetchTribeInfoAsync(id));
+    }
+  }, [id, dispatch]);
+  useEffect(() => {
+    fetchInfo();
+  }, [fetchInfo]);
+
+  return {
+    updater: fetchInfo,
+  };
 };
 
 export const useTribePostDetailById = id => {

@@ -58,7 +58,7 @@ export const StakeButton: React.FC<{
             handleStakeNft();
           }}
         >
-          {pending ? <Dots>{t('NftStaking')}</Dots> : t('NftStake')}
+          {pending ? <Dots>{t('NftStake')}</Dots> : t('NftStake')}
         </StyledButton>
       ) : (
         <StyledButton
@@ -80,7 +80,7 @@ export const StakeButton: React.FC<{
             }
           }}
         >
-          {pending ? <Dots>{t('Approving')}</Dots> : t('Approve')}
+          {pending ? <Dots>{t('Approve')}</Dots> : t('Approve')}
         </StyledButton>
       )}
     </>

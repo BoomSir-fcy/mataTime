@@ -67,6 +67,8 @@ export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateD
     title: string;
     selectTags: Api.Tribe.TopicInfo[];
     tribe_id: number;
+    imageList?: string[],
+    userIdList?: string[],
   }, verify?: {
     id: string;
     verify: string;
@@ -81,10 +83,10 @@ export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateD
     const content = JSON.stringify(params.value);
     const topic = params.selectTags.map(item => item.ID);
     console.log(params, topic)
-    const remind_user = null;
     const res = await Api.TribeApi[method]({
       content,
-      remind_user,
+      image_urls: params.imageList?.join(','),
+      remind_user: params.userIdList?.join(','),
       tribe_id: params.tribe_id,
       title: params.title,
       topic,
@@ -93,7 +95,7 @@ export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateD
     });
     setLoading(false)
     if (Api.isSuccess(res)) {
-      toastSuccess(t( method === 'tribePostCreate' ? '发布成功' : '保存成功'));
+      toastSuccess(t(method === 'tribePostCreate' ? '发布成功' : '保存成功'));
       // TODO:
       return FetchStatus.SUCCESS
     }

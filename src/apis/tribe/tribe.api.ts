@@ -51,6 +51,13 @@ export class TribeApi extends Http {
     const res = await this.get('/v1/tribe/detail', params);
     return res;
   }
+
+  // 获取成员NFT详情信息
+  async tribeMemberNftDetail(params: Api.Tribe.tribeInfoParams) {
+    const res = await this.get('/v1/tribe/nft/member', params);
+    return res;
+  }
+
   // 部落帖子列表
   async tribePostList(params: Api.Tribe.tribePostListParams) {
     const res = await this.get('/v1/tribe/post/list', params);
