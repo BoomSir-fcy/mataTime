@@ -78,6 +78,7 @@ const initialState: TribeState = {
     selected_count: '',
     post_count: '',
     member_count: '',
+    detail: null,
   },
   postList: {
     list: [],

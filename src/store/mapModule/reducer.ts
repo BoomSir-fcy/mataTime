@@ -66,13 +66,22 @@ export const fetchPostDetailAsync =
 export const fetchTribeInfoAsync =
   (tribe_id: number) => async (dispatch, getState) => {
     try {
-      const data = await Api.TribeApi.tribeInfo({ tribe_id });
+      const [info, detail] = await Promise.all([Api.TribeApi.tribeInfo({ tribe_id }), Api.TribeApi.tribeDetail({ tribe_id })])
+      // const data = await Api.TribeApi.tribeInfo({ tribe_id });
 
-      if (Api.isSuccess(data)) {
+      if (Api.isSuccess(info)) {
         dispatch(
           setTribeInfo({
             tribe_id,
-            info: data.data,
+            info: info.data,
+          }),
+        );
+      }
+      if (Api.isSuccess(detail)) {
+        dispatch(
+          setTribeInfo({
+            tribe_id,
+            detail: detail.data,
           }),
         );
       }
@@ -251,11 +260,16 @@ export const Post = createSlice({
       };
     },
     setTribeInfo: (state, { payload }) => {
-      const { tribe_id, info } = payload;
+      const { tribe_id, info, detail } = payload;
       state.tribeInfoMap = {
         ...state.tribeInfoMap,
         [tribe_id]: {
+          ...state.tribeInfoMap[tribe_id],
           ...info,
+          detail: {
+            ...state.tribeInfoMap[tribe_id]?.detail,
+            ...detail,
+          },
           tribe_id,
         },
       };

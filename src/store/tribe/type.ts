@@ -90,6 +90,7 @@ export interface TribeInfo {
   selected_count: string;
   post_count: string;
   member_count: string;
+  detail: TribeDetails | null
 }
 export interface PostList {
   list: any[];
