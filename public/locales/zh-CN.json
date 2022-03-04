@@ -71,7 +71,7 @@
   "deleteCommentModalDes": "删除这条评论之后，将不会在列表中显示！",
   "reportCommentModalTitle": "举报这条评论",
   "reportCommentModalDes": "举报这条评论之后，管理员将会审核！",
-  "deleteMemberModalTitle": "从部落删除%value%?",
+  "deleteMemberModalTitle": "从部落删除 %value%?",
   "deleteMemberModalDes": "删除成员后将退回给成员%value%",
   "deleteFileModalTitle": "删除此文件?",
   "deleteFileModalDes": "删除文件之后，将不会在列表中显示！",

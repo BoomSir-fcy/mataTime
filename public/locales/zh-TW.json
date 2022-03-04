@@ -72,7 +72,7 @@
   "deleteCommentModalDes": "刪除這條評論之後，將不會在列表中顯示！",
   "reportCommentModalTitle": "舉報這條評論",
   "reportCommentModalDes": "舉報這條評論之後，管理員將會審核！",
-  "deleteMemberModalTitle": "從部落刪除%value%?",
+  "deleteMemberModalTitle": "從部落刪除 %value%?",
   "deleteMemberModalDes": "刪除成員後將退回給成員%value%",
   "deleteFileModalTitle": "刪除此文件?",
   "deleteFileModalDes": "刪除文件之後，將不會在列表中顯示！",
