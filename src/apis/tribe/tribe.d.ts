@@ -148,6 +148,12 @@ declare namespace Api {
       tribe_top: number;
     }
 
+    interface TribeFileCreateParams {
+      tribe_id: number;
+      url: string;
+      file_name: string;
+    }
+
     interface FileListParams {
       page?: number;
       page_size?: number;

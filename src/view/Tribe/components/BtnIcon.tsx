@@ -1,17 +1,19 @@
 import React from 'react';
 import { Icon } from 'components';
-import { Button } from 'uikit';
+import { Button, ButtonProps } from 'uikit';
 
-const BtnIcon: React.FC<{
+interface BtnIconProps extends ButtonProps {
   name: string;
   text: string;
-}> = ({ name, text }) => {
+}
+const BtnIcon: React.FC<BtnIconProps> = ({ name, text, ...props }) => {
   return (
     <Button
       minWidth='150px'
       startIcon={
         <Icon margin='0 18px 0 0' size={21} color='white' name={name} />
       }
+      {...props}
     >
       {text}
     </Button>

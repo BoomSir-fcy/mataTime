@@ -75,3 +75,5 @@ export const TRIBE_FEE_DEFAULT_MASTER_REWARD = '50'; // 部落主TIME奖励分�
 export const TRIBE_FEE_DEFAULT_CREATOR_REWARD = '50'; // 创作者TIME奖励分配
 export const TRIBE_FEE_DEFAULT_MEMBER_REWARD = '0'; // 部落成员TIME奖励分配
 export const TRIBE_FEE_BNB_TOKEN = '0x0000000000000000000000000000000000000001'; // BNB token
+
+export const TEIBE_FILE_TYPES = ['doc', 'docx', 'xls', 'xlsx', 'pdf', 'txt', 'ppt']
