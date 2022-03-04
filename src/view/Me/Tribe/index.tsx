@@ -47,13 +47,18 @@ const MeTribe = () => {
   1 未领取 2已领取 3 取消质押 4 已质押 5已过期
     1.判断是否是部落主
       TribeInfo.tribe.owner_address === account
+      跳转404
     2.有没有领取部落主NFT
       TribeInfo.status === 1
+      除了[部落主NFT] 其他都不能点
     3.有没有质押部落主NFT
       TribeInfo.status === 2
+      除了[部落主NFT] 其他都不能点
     4.有没有设置成员NFT
       TribeInfo.tribe.type === TribeType.PRO
+      [成员nft]加感叹号
     5.获取部落类型判断显示[邀请设置]
+      禁用[邀请设置]
   */
 
   const { updater } = useFetchTribeInfoById(tribeId);
