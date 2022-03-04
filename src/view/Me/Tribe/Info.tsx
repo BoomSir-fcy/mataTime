@@ -24,8 +24,6 @@ const MyTribeInfo = () => {
   const tribeInfo = useTribeInfoById(tribeId);
 
   useEffect(() => {
-    console.log(tribeInfo);
-
     if (tribeInfo?.tribe?.name) setInfo(baseInfo);
   }, [tribeInfo?.tribe]);
 

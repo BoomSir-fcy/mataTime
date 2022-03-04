@@ -35,7 +35,6 @@ const MeTribe = () => {
     if (parseQs.i) {
       setTribeId(Number(parseQs.i));
     } else if (tribeId) {
-      console.log(111);
       replace({
         ...location,
         search: location.search ? `${location}&i=${tribeId}` : `?i=${tribeId}`,

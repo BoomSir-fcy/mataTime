@@ -33,12 +33,12 @@ const MeTribeMemberNFT = () => {
   const tribeInfo = useTribeInfoById(tribeId);
 
   const isInitMemberNft = useMemo(() => {
-    return tribeInfo.nftInfo.initMemberNFT;
-  }, [tribeInfo.nftInfo.initMemberNFT]);
+    return tribeInfo?.nftInfo?.initMemberNFT;
+  }, [tribeInfo?.nftInfo?.initMemberNFT]);
 
   const handleCreateMemberNft = useCallback(async () => {
     if (!state.logo) {
-      toastError(t('上传图片'));
+      toastError(t('Please upload a picture'));
       return false;
     }
     try {

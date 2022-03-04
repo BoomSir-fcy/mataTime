@@ -49,8 +49,8 @@ export const getTicketNftTokenList = async () => {
   ];
   try {
     const tokens = await multicall(tribeAbi, calls);
-    // return tokens;
-    return ['0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625'];
+    return tokens[0][0];
+    // return ['0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625'];
   } catch (error) {
     console.error(error);
     return [];

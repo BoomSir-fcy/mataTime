@@ -144,7 +144,7 @@ export const CommonClaimNFT: React.FC<{
                     <TransferButton
                       nftId={nft_id}
                       callback={() => {
-                        history.push('`/me/tribe');
+                        history.push('/me/tribe');
                       }}
                     />
                   </>
