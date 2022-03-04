@@ -13,7 +13,6 @@ import { fetchisApprove } from 'store/tribe';
 import { TribeType, TribeInfo, TribeBaseInfo } from 'store/tribe/type';
 
 import { ApproveToken } from 'store/tribe/fetchTribe';
-import { getBalanceNumber } from 'utils/formatBalance';
 
 import { useTranslation } from 'contexts';
 import { useJoinTribe } from './hooks';

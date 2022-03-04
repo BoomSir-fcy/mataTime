@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { NftInfo, TribeBaseInfo, TribeState } from './type';
+import { NftInfo, TribeBaseInfo, TribeState, MemberNft } from './type';
 import {
   getFeeTokenList,
   getTicketNftTokenList,
@@ -12,9 +12,7 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setInitMemberNft, updateTribeDetails } from './actions';
-
-import { MemberNft } from './type';
+import { setInitMemberNft } from './actions';
 
 const initialState: TribeState = {
   isApproveStakeNft: false,
@@ -361,9 +359,6 @@ export const tribe = createSlice({
       })
       .addCase(fetchTribePostAsync.rejected, (state, action) => {
         state.postList.loading = false;
-      })
-      .addCase(updateTribeDetails, (state, { payload }) => {
-        state.tribeInfo = payload;
       });
   },
 });
