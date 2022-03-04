@@ -81,6 +81,8 @@ const initialState: TribeState = {
     post_count: '',
     member_count: '',
     detail: null,
+    baseInfo: null,
+    nftInfo: null,
   },
   postList: {
     list: [],

@@ -10,6 +10,9 @@ export const pathConfig = {
 
 export enum ConfigId {
   TRIBE_ME,
+  TRIBE_ME_MASTER_NFT,
+  TRIBE_ME_MEMBER_NFT,
+  TRIBE_ME_INVITE_SETTING,
 }
 
 export const menuNavConfig: MenuNavConfig[] = [

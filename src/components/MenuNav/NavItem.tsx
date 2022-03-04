@@ -77,6 +77,7 @@ const NavItem: React.FC<NavItemProps> = ({
     >
       <IconBox>
         {/* {isActive ? (activeIcon || icon) : icon} */}
+        {/* textDisabled */}
         <Icon
           name={isActive ? activeIcon || icon : icon}
           color={isActive ? 'white_black' : 'textSubtle'}

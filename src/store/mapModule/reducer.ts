@@ -23,6 +23,7 @@ import { FetchStatus } from 'config/types';
 import { getLanguageCodeFromLS } from 'contexts/Localization/helpers';
 import { EN } from 'config/localization';
 import checkTranslateIds from 'utils/checkTranslateIds';
+import { getTribeBaseInfoData } from 'store/tribe/fetchTribe';
 
 const initialState: MapModuleState = {
   postMap: {},
@@ -63,9 +64,26 @@ export const fetchPostDetailAsync =
     }
   };
 
+export const fetchTribeBaseInfoDataAsync =
+  (tribe_id: number) => async (dispatch, getState) => {
+    try {
+      const { nftInfo, baseInfo } = await getTribeBaseInfoData(tribe_id)
+      dispatch(setTribeInfo({
+        nftInfo,
+        baseInfo,
+        tribe_id,
+      }));
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
 export const fetchTribeInfoAsync =
   (tribe_id: number) => async (dispatch, getState) => {
     try {
+      dispatch(fetchTribeBaseInfoDataAsync(tribe_id))
       const [info, detail] = await Promise.all([Api.TribeApi.tribeInfo({ tribe_id }), Api.TribeApi.tribeDetail({ tribe_id })])
       // const data = await Api.TribeApi.tribeInfo({ tribe_id });
 
@@ -260,7 +278,7 @@ export const Post = createSlice({
       };
     },
     setTribeInfo: (state, { payload }) => {
-      const { tribe_id, info, detail } = payload;
+      const { tribe_id, info, detail, nftInfo, baseInfo } = payload;
       state.tribeInfoMap = {
         ...state.tribeInfoMap,
         [tribe_id]: {
@@ -269,6 +287,14 @@ export const Post = createSlice({
           detail: {
             ...state.tribeInfoMap[tribe_id]?.detail,
             ...detail,
+          },
+          nftInfo: {
+            ...state.tribeInfoMap[tribe_id]?.nftInfo,
+            ...nftInfo,
+          },
+          baseInfo: {
+            ...state.tribeInfoMap[tribe_id]?.baseInfo,
+            ...baseInfo,
           },
           tribe_id,
         },

@@ -88,6 +88,8 @@ export interface TribeInfo {
   post_count: string;
   member_count: string;
   detail: TribeDetails | null
+  baseInfo: TribeBaseInfo | null
+  nftInfo: TribesNFTInfo | null
 }
 export interface PostList {
   list: any[];

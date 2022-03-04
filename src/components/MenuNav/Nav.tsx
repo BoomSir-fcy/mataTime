@@ -138,7 +138,7 @@ const Nav: React.FC<NavProps> = () => {
       return activeSubConfig.children;
     }
     return null;
-  }, [activeSubConfig]);
+  }, [activeSubConfig, tribeInfo]);
 
   useEffect(() => {
     if (activeChildren) {
