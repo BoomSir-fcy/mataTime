@@ -249,9 +249,9 @@ export const ApproveToken = address => {
         ethers.constants.MaxUint256,
       );
       const receipt = await tx.wait();
-      console.log('receipt', receipt);
       return receipt.status;
     } catch (e) {
+      console.error(e);
       return false;
     }
   }, [coinContract]);

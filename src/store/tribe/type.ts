@@ -89,9 +89,9 @@ export interface TribeInfo {
   post_count: string;
   member_count: string;
   detail: TribeDetails | null;
-  member_nft: MemberNft | null;
   baseInfo: TribeBaseInfo | null;
   nftInfo: TribesNFTInfo | null;
+  member_nft: MemberNft | null;
 }
 
 export interface TopiceList {

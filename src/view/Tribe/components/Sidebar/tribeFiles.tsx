@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Flex, Text, FilePDF } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useFetchFileList } from 'store/tribe/helperHooks';
+import { useTribeInfoById } from 'store/mapModule/hooks';
 
 const TribeFiles: React.FC<{
   tribe_id: number;

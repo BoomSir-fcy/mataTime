@@ -77,7 +77,7 @@ const initialState: TribeState = {
     detail: null,
     baseInfo: null,
     nftInfo: null,
-    member_nft: null,
+    member_nft: {} as MemberNft,
   },
   postList: {
     list: [],
