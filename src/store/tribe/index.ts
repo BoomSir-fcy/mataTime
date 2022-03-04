@@ -73,6 +73,7 @@ const initialState: TribeState = {
       create_time: 0,
       nft_id: null,
     },
+    topics: [],
     status: 0,
     tribe_id: null,
     selected_count: '',

@@ -58,7 +58,7 @@ export const TribeSidebar: React.FC<{
       <TribeNft tribe_id={tribe_id} mb='15px' />
       <TribePro mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
-      <TribeFiles mb='15px' />
+      <TribeFiles tribe_id={tribe_id} mb='15px' />
     </SidebarStyled>
   );
 };
