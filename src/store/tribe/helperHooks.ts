@@ -22,10 +22,10 @@ export const useFetchTribeTopicList = tribe_id => {
       const res = await Api.TribeApi.getTribeTopicList({ tribe_id: id });
       if (Api.isSuccess(res)) {
         console.log(res);
-        // setData({
-        //   list: res.data,
-        //   fetchStatus: FetchStatus.SUCCESS,
-        // });
+        setData({
+          list: res.data,
+          fetchStatus: FetchStatus.SUCCESS,
+        });
         return;
       }
       throw new Error('');

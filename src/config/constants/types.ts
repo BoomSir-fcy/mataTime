@@ -1,4 +1,5 @@
 import { ChainId } from '../wallet/config';
+import { ConfigId } from './navConfig';
 
 export interface Address {
   [ChainId.BSC_MAINNET]: string;
@@ -29,6 +30,7 @@ export interface MenuNavBase {
   hideRight?: boolean; // 隐藏右侧swap
   markPath?: string[]; // 子页面标记
   badgeName?: string; // 微标明
+  configId?: ConfigId; // 配置id
 }
 
 export interface MenuNavConfig extends MenuNavBase {

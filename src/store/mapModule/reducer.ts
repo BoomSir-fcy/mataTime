@@ -28,6 +28,7 @@ const initialState: MapModuleState = {
   postMap: {},
   userMap: {},
   tribePostMap: {},
+  tribeInfoMap: {},
   postStatusMap: {},
   userStatusMap: {},
   postTranslateMap: {},
@@ -56,6 +57,24 @@ export const fetchPostDetailAsync =
         const { postIds, commentIds } = checkTranslateIds([detailRes.data]);
         dispatch(addTranslateIds(postIds));
         dispatch(addCommentTranslateIds(commentIds));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+export const fetchTribeInfoAsync =
+  (tribe_id: number) => async (dispatch, getState) => {
+    try {
+      const data = await Api.TribeApi.tribeInfo({ tribe_id });
+
+      if (Api.isSuccess(data)) {
+        dispatch(
+          setTribeInfo({
+            tribe_id,
+            info: data.data,
+          }),
+        );
       }
     } catch (error) {
       console.error(error);
@@ -231,6 +250,16 @@ export const Post = createSlice({
         },
       };
     },
+    setTribeInfo: (state, { payload }) => {
+      const { tribe_id, info } = payload;
+      state.tribeInfoMap = {
+        ...state.tribeInfoMap,
+        [tribe_id]: {
+          ...info,
+          tribe_id,
+        },
+      };
+    },
     setPostTranslate: (state, { payload }) => {
       const { ids, data, ...info } = payload;
       const datas = {};
@@ -352,6 +381,7 @@ export const Post = createSlice({
 export const {
   setPostDetail,
   setUserInfo,
+  setTribeInfo,
   setPostTranslate,
   changePostTranslateState,
   setCommentTranslate,

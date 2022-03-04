@@ -7,6 +7,7 @@ import { WalletState } from './wallet/type';
 import { TaskState } from './task/type';
 import { StuffElement } from 'config/constants/stuffImages';
 import { FetchStatus } from 'config/types';
+import { TribeInfo } from './tribe/type';
 
 export interface State {
   pools: PoolsState;
@@ -129,6 +130,9 @@ export interface MapModuleState {
   };
   tribePostMap: {
     [postId: string]: Api.Tribe.PostDataInfo;
+  };
+  tribeInfoMap: {
+    [postId: string]: TribeInfo;
   };
   postTranslateMap: {
     [postId: string]: {

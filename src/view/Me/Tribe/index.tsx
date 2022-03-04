@@ -1,9 +1,16 @@
 import { Crumbs } from 'components';
 import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'uikit';
-import { Switch, Route, useRouteMatch, useLocation, useHistory } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useLocation,
+  useHistory,
+} from 'react-router-dom';
 import useMenuNav from 'hooks/useMenuNav';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useFetchTribeInfoById } from 'store/mapModule/hooks';
 
 const FeeSetting = React.lazy(() => import('./FeeSetting'));
 const Info = React.lazy(() => import('./Info'));
@@ -18,24 +25,44 @@ const MemberManagement = React.lazy(() => import('./MemberManagement'));
 const MeTribe = () => {
   const { path } = useRouteMatch();
   const location = useLocation();
-  const { replace } = useHistory()
+  const { replace } = useHistory();
   const { isMobile } = useMenuNav();
 
   const parseQs = useParsedQueryString();
-  const [tribeId, setTribeId] = useState(null)
+  const [tribeId, setTribeId] = useState(null);
 
   useEffect(() => {
     if (parseQs.i) {
-      setTribeId(Number(parseQs.i))
+      setTribeId(Number(parseQs.i));
     } else if (tribeId) {
-      console.log(111)
-      replace({ ...location, search: location.search ? `${location}&i=${tribeId}` : `?i=${tribeId}` })
+      console.log(111);
+      replace({
+        ...location,
+        search: location.search ? `${location}&i=${tribeId}` : `?i=${tribeId}`,
+      });
     }
-  }, [parseQs.i, tribeId, location])
+  }, [parseQs.i, tribeId, location]);
+
+  /* 
+  1 未领取 2已领取 3 取消质押 4 已质押 5已过期
+    1.判断是否是部落主
+      TribeInfo.tribe.owner_address === account
+    2.有没有领取部落主NFT
+      TribeInfo.status === 1
+    3.有没有质押部落主NFT
+      TribeInfo.status === 2
+    4.有没有设置成员NFT
+      TribeInfo.tribe.type === TribeType.PRO
+    5.获取部落类型判断显示[邀请设置]
+  */
+
+  const { updater } = useFetchTribeInfoById(tribeId);
+  // updater()
 
   return (
     <Box>
-      {!isMobile && (location.pathname !== path ? <Crumbs title={'部落名字'} /> : null)}
+      {!isMobile &&
+        (location.pathname !== path ? <Crumbs title={'部落名字'} /> : null)}
       <Switch>
         <Route path={path} exact component={MyTribe} />
         <Route path={`${path}/info`} component={Info} />
