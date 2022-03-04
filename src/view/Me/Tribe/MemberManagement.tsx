@@ -7,9 +7,17 @@ import { useTranslation } from 'contexts/Localization';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import dayjs from 'dayjs';
-import { Crumbs, Icon } from 'components';
+import { DeleteMemberModal, Crumbs, Icon } from 'components';
 import BtnIcon from 'view/Tribe/components/BtnIcon';
 import { shortenAddress } from 'utils/contract';
+import { Api } from 'apis';
+import { useTribeState } from 'store/tribe/hooks';
+import { useToast } from 'hooks';
+import {
+  FetchRefundsAmount,
+  FetchTokenApproveNum,
+  useTribeMemberDelete,
+} from './hooks';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -67,38 +75,150 @@ const InputStyled = styled.label`
   background-color: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 20px;
 `;
-
+interface Info {
+  add_time: number;
+  address: string;
+  fee_token: string;
+  is_mute: number;
+  nft_id: number;
+  nick_name: string;
+  symbol: string;
+  uid: number;
+}
 interface init {}
 
 const MeTribeMemberManagement: React.FC<init> = () => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
-  const [pageSize, setpageSize] = useState(5);
+  const { DeleteNFTFromTribe } = useTribeMemberDelete();
+
+  const [InputVal, setInputVal] = useState('');
   const [page, setPage] = useState(1);
+  const [pageSize, setpageSize] = useState(2);
   const [pageCount, setPageCount] = useState(1);
-  const [Loading, setLoading] = useState(false);
-  const [MemberList, setMemberList] = useState([
-    {
-      name: '和关怀和v',
-      address: '0xeda5b21b8E8c306bF5510d1558f89a9CB126120b',
-      joinedTime: 1644217262,
+  const [Loading, setLoading] = useState(true);
+  const [pending, setpending] = useState(false);
+  const [MemberList, setMemberList] = useState([]);
+  const { tribeId } = useTribeState();
+  const { toastSuccess, toastError } = useToast();
+  const [inqueryType, setInqueryType] = useState<string>('deleteMember');
+  const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
+  const [RefundAmount, setRefundAmount] = useState(null);
+  const [ApproveNum, setApproveNum] = useState(null);
+  const [UserInfo, setUserInfo] = useState<Info>({
+    add_time: null,
+    address: '',
+    fee_token: '',
+    is_mute: null,
+    nft_id: null,
+    nick_name: '',
+    symbol: '',
+    uid: null,
+  });
+
+  const getTotalPage = totalNum => {
+    if (pageSize != 0 && totalNum % pageSize == 0) {
+      return parseInt(String(totalNum / pageSize));
+    }
+    if (pageSize != 0 && totalNum % pageSize != 0) {
+      return parseInt(String(totalNum / pageSize)) + 1;
+    }
+  };
+
+  // 禁言
+  const onPostMute = async (uid: number) => {
+    const res = await Api.TribeApi.tribePostMute({ tribe_id: tribeId, uid });
+    if (Api.isSuccess(res)) {
+      toastSuccess(t('禁言成功'));
+      getMemberList(page);
+    }
+  };
+
+  // 取消禁言
+  const onPostNotMute = async (uid: number) => {
+    const res = await Api.TribeApi.tribePostNotMute({ tribe_id: tribeId, uid });
+    if (Api.isSuccess(res)) {
+      toastSuccess(t('取消禁言成功'));
+      getMemberList(page);
+    }
+  };
+
+  // 成员列表
+  const getMemberList = async page => {
+    try {
+      const res = await Api.TribeApi.tribeMemberList({
+        page,
+        page_size: pageSize,
+        tribe_id: tribeId,
+        keyword: InputVal,
+      });
+      if (Api.isSuccess(res)) {
+        const Data = res.data;
+        setMemberList(Data.list);
+        setPage(Data.page);
+        setPageCount(getTotalPage(Data.total_count));
+      } else {
+        throw new Error('errCode');
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+      throw error;
+    }
+  };
+
+  // 获取退回费用
+  const getRefundsAmount = async (nft_id: number) => {
+    setRefundAmount(null);
+    const num = await FetchRefundsAmount(nft_id);
+    setRefundAmount(num);
+  };
+  // 获取授权数量
+  const getApproveNum = async (fee_token: string) => {
+    setApproveNum(null);
+    const num = await FetchTokenApproveNum(account, fee_token);
+    setApproveNum(num);
+  };
+
+  // 删除
+  const DeleteMember = useCallback(
+    async (nft_id: number) => {
+      setpending(true);
+      try {
+        await DeleteNFTFromTribe(nft_id);
+        toastSuccess(t('删除成功'));
+      } catch (e) {
+        console.error(e);
+        toastError(t('删除失败'));
+      } finally {
+        setpending(false);
+        setCommonInqueryShow(false);
+        getMemberList(page);
+      }
     },
-    {
-      name: 'hhccc',
-      address: '0xeda5b21b8E8c306bF5510d1558f89a9CB126120b',
-      joinedTime: 1644217262,
-    },
-    {
-      name: 'bbbbb',
-      address: '0xeda5b21b8E8c306bF5510d1558f89a9CB126120b',
-      joinedTime: 1644217262,
-    },
-  ]);
+    [DeleteNFTFromTribe, page],
+  );
 
   const handlePageClick = event => {
-    // setLoading(true);
+    setLoading(true);
+    const changePage = event.selected + 1;
+    getMemberList(changePage);
   };
+
+  // 输入框搜索
+  const handleChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      if (e.currentTarget.validity.valid) {
+        setInputVal(e.currentTarget.value);
+      }
+    },
+    [setInputVal],
+  );
+  useEffect(() => {
+    getMemberList(1);
+  }, [InputVal]);
 
   return (
     <CountBox>
@@ -110,6 +230,8 @@ const MeTribeMemberManagement: React.FC<init> = () => {
               id='search-input'
               noShadow
               scale='sm'
+              value={InputVal}
+              onChange={handleChange}
               placeholder={t('搜索')}
             />
           </Flex>
@@ -125,15 +247,36 @@ const MeTribeMemberManagement: React.FC<init> = () => {
           </Row>
           {MemberList.length
             ? MemberList.map((item, index) => (
-                <Row key={`${item.name}${index}`}>
-                  <ItemText>{item.name}</ItemText>
+                <Row key={`${item.nick_name}${index}`}>
+                  <ItemText>{item.nick_name}</ItemText>
                   <ItemText>{shortenAddress(item.address)}</ItemText>
                   <ItemText>
-                    {dayjs(item.joinedTime * 1000).format('YY-MM-DD HH:mm')}
+                    {dayjs(item.add_time * 1000).format('YY-MM-DD HH:mm')}
                   </ItemText>
                   <Flex justifyContent='space-between'>
-                    <TextBtn variant='text'>{t('禁言')}</TextBtn>
-                    <TextBtn variant='text'>{t('Delete')}</TextBtn>
+                    <TextBtn
+                      variant='text'
+                      onClick={() => {
+                        if (item.is_mute === 0) {
+                          onPostMute(item.uid);
+                        } else {
+                          onPostNotMute(item.uid);
+                        }
+                      }}
+                    >
+                      {item.is_mute === 0 ? t('禁言') : t('取消禁言')}
+                    </TextBtn>
+                    <TextBtn
+                      variant='text'
+                      onClick={() => {
+                        getApproveNum(item.fee_token);
+                        getRefundsAmount(item.nft_id);
+                        setUserInfo(item);
+                        setCommonInqueryShow(true);
+                      }}
+                    >
+                      {t('Delete')}
+                    </TextBtn>
                   </Flex>
                 </Row>
               ))
@@ -163,6 +306,22 @@ const MeTribeMemberManagement: React.FC<init> = () => {
           renderOnZeroPageCount={null}
         />
       </PaginateStyle>
+
+      {/* 统一询问框 */}
+      <DeleteMemberModal
+        show={commonInqueryShow}
+        UserInfo={UserInfo}
+        RefundAmount={RefundAmount}
+        ApproveNum={ApproveNum}
+        pending={pending}
+        setpending={setpending}
+        onClose={() => {
+          setCommonInqueryShow(false);
+        }}
+        onQuery={() => {
+          DeleteMember(UserInfo.nft_id);
+        }}
+      />
     </CountBox>
   );
 };

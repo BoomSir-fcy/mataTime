@@ -88,7 +88,7 @@ const initialState: TribeState = {
     lastList: [],
     page: 1,
     selected: 0,
-    top: 1,
+    top: 0,
     newest_sort: 0,
     tophot_sort: 0,
     addListNum: -1,

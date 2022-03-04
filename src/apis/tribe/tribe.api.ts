@@ -1,6 +1,11 @@
 import { Http } from '../http';
 
 export class TribeApi extends Http {
+  // 部落成员列表
+  async tribeMemberList(params: Api.Tribe.tribeMemberListParams) {
+    const res = await this.get('/v1/tribe/member/list', params);
+    return res;
+  }
   // 部落帖子置顶
   async tribePostSetTop(params: Api.Tribe.PostSetTopParams) {
     return this.post('/v1/tribe/post/set_top', params);
@@ -23,12 +28,12 @@ export class TribeApi extends Http {
   }
   // 部落帖子禁言
   async tribePostMute(params: Api.Tribe.PostMuteParams) {
-    const res = this.get('/v1/tribe/member/mute', params);
+    const res = await this.get('/v1/tribe/member/mute', params);
     return res;
   }
   // 部落帖子取消禁言
   async tribePostNotMute(params: Api.Tribe.PostMuteParams) {
-    const res = this.get('/v1/tribe/member/not_mute', params);
+    const res = await this.get('/v1/tribe/member/not_mute', params);
     return res;
   }
   // 部落列表

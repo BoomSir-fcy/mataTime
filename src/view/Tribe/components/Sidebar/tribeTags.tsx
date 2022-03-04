@@ -19,13 +19,14 @@ const Btn = styled(Flex)`
 `;
 
 const Tags: React.FC<{
-  list: any[];
+  list: Api.Tribe.TopicInfo[];
 }> = ({ list }) => {
+  console.log(list, 'list');
   return (
     <Flex alignItems='center' flexWrap='wrap'>
-      {list.length > 0 && (
+      {list?.length > 0 && (
         <>
-          {list.map((item, index) => (
+          {list?.map((item, index) => (
             <Btn key={`${item}${index}`}>
               <Text fontSize='14px' color='textPrimary'>
                 {item.topic}
@@ -55,4 +56,7 @@ const TribeTags: React.FC<{
   );
 };
 
-export default TribeTags;
+export default React.memo(
+  TribeTags,
+  (prev, next) => prev.tribe_id === next.tribe_id,
+);
