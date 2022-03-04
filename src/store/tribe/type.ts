@@ -81,12 +81,21 @@ export interface TribeInfo {
     nft_image: string;
     create_time: number;
   };
+  topics: TopiceList[];
   // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期
   status: 0 | 1 | 2 | 3 | 4 | 5;
   tribe_id: number;
   selected_count: string;
   post_count: string;
   member_count: string;
+}
+
+export interface TopiceList {
+  create_time: number;
+  id: number;
+  status: number;
+  topic: string;
+  tribe_id: number;
 }
 export interface PostList {
   list: any[];

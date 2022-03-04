@@ -131,5 +131,13 @@ declare namespace Api {
       selected: number;
       tribe_id: number;
     }
+
+    interface FileListParams {
+      page?: number;
+      page_size?: number;
+      tribe_id: number;
+    }
+
+    interface FileInfo {}
   }
 }

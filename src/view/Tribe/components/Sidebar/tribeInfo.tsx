@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
 import { Icon, Avatar, JoinInviteModal } from 'components';
 import { Card, Flex, Text } from 'uikit';
 import { useStore } from 'store';
@@ -19,10 +18,9 @@ const TribeInfo: React.FC<{
   mb: string;
 }> = ({ ...props }) => {
   const { t } = useTranslation();
-  const { account } = useWeb3React();
   const history = useHistory();
-  const tribeInfo = useStore(p => p.tribe.tribeInfo);
-  const tribeDetails = useStore(p => p.tribe.tribeDetails);
+  const userInfo = useStore(p => p.loginReducer.userInfo);
+  const { tribeInfo, tribeDetails } = useStore(p => p.tribe);
   const [visible, setVisible] = React.useState(false);
 
   return (
@@ -32,7 +30,7 @@ const TribeInfo: React.FC<{
           <Text fontSize='24px' fontWeight='bold'>
             {tribeInfo?.tribe?.name}
           </Text>
-          {account?.toLowerCase() === tribeInfo?.tribe?.owner_address && (
+          {userInfo?.address === tribeInfo?.tribe?.owner_address && (
             <Text
               color='textPrimary'
               onClick={() => history.push(`/me/tribe/info?i=${props.tribe_id}`)}

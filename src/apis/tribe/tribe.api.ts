@@ -117,4 +117,11 @@ export class TribeApi extends Http {
   ): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
     return this.post('v1/tribe/post/get_draft', params);
   }
+
+  // 获取文件列表
+  async getTribeFile(
+    params: Api.Tribe.FileListParams,
+  ): Promise<Api.Response<Api.Tribe.FileInfo[]>> {
+    return this.get('/v1/tribe/file/list', params);
+  }
 }
