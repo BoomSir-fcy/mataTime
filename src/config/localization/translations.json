@@ -74,6 +74,8 @@
   "reportCommentModalDes": "After reporting this comment, the administrator will review it!",
   "deleteMemberModalTitle": "Delete %value% from tribe?",
   "deleteMemberModalDes": "Return to member %value% after deleting a member",
+  "deleteFileModalTitle": "Delete this file?",
+  "deleteFileModalDes": "After deleting a file, it will not be displayed in the list!",
   "modalQuery": "Confirm",
   "modalCancel": "Cancel",
   "ReportModalTitle": "Report Infomation",

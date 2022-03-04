@@ -82,8 +82,6 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
 
     // 置顶
     const onTopPostRequest = async (pid: number) => {
-      console.log(pid);
-
       const res = await Api.TribeApi.tribePostSetTop({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.SETTOP);
