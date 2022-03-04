@@ -64,11 +64,11 @@ const MeTribeInvitationSetting = () => {
         p.validDate = getValidDateDay(
           tribeInfo?.baseInfo?.validDate,
         ).toString();
-        p.rate = tribeInfo?.baseInfo?.invitationRate.toString();
+        p.rate = tribeInfo?.nftInfo?.invitationRate.toString();
       });
       setFeeToken(tribeInfo?.baseInfo?.feeToken);
     }
-  }, [tribeInfo?.baseInfo]);
+  }, [tribeInfo]);
 
   const getFeeDecimal = useCallback(
     (token: string) => {

@@ -34,7 +34,6 @@ export interface TribeBaseInfo {
   memberPercent?: number;
   nftAddress?: string;
   nftid?: number;
-  invitationRate?: number;
 }
 
 export interface TribesNFTInfo {
@@ -46,6 +45,7 @@ export interface TribesNFTInfo {
   memberNFTIntroduction?: string;
   memberNFTImage?: string;
   initMemberNFT?: boolean;
+  invitationRate?: number;
 }
 
 export interface FeeCoin {

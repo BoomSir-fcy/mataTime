@@ -94,9 +94,6 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
       nftAddress: '',
       nftid: null,
-      invitationRate: new BigNumber(
-        extraTribeInfo.invitationRate.toJSON().hex,
-      ).toNumber(),
     };
     const nftInfo = {
       ownerNFTName: extraNftInfo.ownerNFTName,
@@ -107,6 +104,9 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       memberNFTImage: extraNftInfo.memberNFTImage,
       claimOnwerNFT: extraTribeInfo.claimOnwerNFT,
       initMemberNFT: extraTribeInfo.initMemberNFT,
+      invitationRate: new BigNumber(
+        extraTribeInfo.invitationRate.toJSON().hex,
+      ).toNumber(),
     } as TribesNFTInfo;
     return {
       baseInfo,
@@ -127,7 +127,6 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       memberPercent: null,
       nftAddress: '',
       nftid: null,
-      invitationRate: 0,
     };
     const nftInfo = {
       claimOnwerNFT: false,
@@ -138,6 +137,7 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       memberNFTIntroduction: '',
       memberNFTImage: '',
       initMemberNFT: true,
+      invitationRate: 0,
     };
     return {
       baseInfo,
