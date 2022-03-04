@@ -123,7 +123,7 @@ export const JoinTribeModal: React.FC<{
 
   return (
     <ModalWrapper
-      title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name })}
+      title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name || '' })}
       visible={visible}
       setVisible={onClose}
     >

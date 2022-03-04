@@ -1,43 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  withRouter,
-  useHistory,
-  useLocation,
-  Link,
-  RouteComponentProps,
-} from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useToast } from 'hooks';
-import {
-  Editor,
-  Crumbs,
-  Icon,
-  SendPost,
-  VerifyCode,
-  HoverLink,
-  List,
-  LoadType,
-} from 'components';
+import { Crumbs } from 'components';
 import { Flex, Box, Button } from 'uikit';
 import { isApp } from 'utils/client';
 import { storeAction, useStore } from 'store';
-import { Api } from 'apis';
+import { useTranslation } from 'contexts';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useTranslation } from 'contexts/Localization';
-import DetailTitle from './Title';
-import { TribeSidebar } from '../components/Sidebar';
-import DetailHeader from './Header';
+
 import { TribePostList } from './post';
+import DetailTitle from './Title';
+import DetailHeader from './Header';
 import PostItem from './postItem';
+import { TribeSidebar } from '../components/Sidebar';
+
 import {
   fetchTribeInfoAsync,
-  fetchTribePostAsync,
-  fetchTribeDetailAsync,
   fetchGetTribeBaseInfo,
   fetchisApprove,
 } from 'store/tribe';
+import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 // import { Tabs, ArticleList } from './center';
@@ -58,15 +42,15 @@ const Sidebar = styled(Box)`
 `;
 
 const Detail: React.FC<RouteComponentProps> = React.memo(route => {
-  const { account } = useActiveWeb3React();
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
-  const TribeInfo = useStore(p => p.tribe.tribeInfo);
-  const TribePost = useStore(p => p.tribe.postList);
-  const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
+  const { account } = useActiveWeb3React();
+  const { tribeInfo, tribeBaseInfo } = useStore(p => p.tribe);
   const PostList = useStore(p => p.tribe.postList.list);
-
   const attention = useStore(p => p.post.attention);
+  const tribeDetailInfo = useTribeInfoById(parsedQs.id);
+  const { updater } = useFetchTribeInfoById(parsedQs.id);
+
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
     attention: parsedQs.attention || attention || 2,
@@ -106,16 +90,15 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     if (TribeId) {
       dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
       dispatch(fetchGetTribeBaseInfo({ tribeId: TribeId }));
-      dispatch(fetchTribeDetailAsync({ tribe_id: TribeId }));
     }
-    return () => { };
+    return () => {};
   }, [TribeId]);
 
   return (
     <Flex>
       <TribeBox>
         <Crumbs back />
-        <DetailHeader TribeInfo={TribeInfo} />
+        <DetailHeader TribeInfo={tribeInfo} />
         <DetailTitle TribeId={TribeId} tabsChange={tabsChange} />
         <TribePostList
           TribeId={TribeId}
@@ -127,7 +110,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       </TribeBox>
 
       <Sidebar>
-        <TribeSidebar tribe_id={TribeId} />
+        <TribeSidebar tribe_info={tribeDetailInfo} tribe_id={TribeId} />
       </Sidebar>
     </Flex>
   );

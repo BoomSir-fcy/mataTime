@@ -14,6 +14,7 @@ import {
   fetchTribeInfoAsync,
 } from 'store/tribe';
 import { TribeType } from 'store/tribe/type';
+import { useTribeInfoById } from 'store/mapModule/hooks';
 
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
 
@@ -60,7 +61,9 @@ const TribeNft: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
-  const { tribeInfo, tribeBaseInfo, tribeDetails } = useStore(p => p.tribe);
+  const tribeInfo = useTribeInfoById(props.tribe_id);
+  const { tribeBaseInfo } = useStore(p => p.tribe);
+  const { detail } = tribeInfo || {};
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   const [state, setState] = useImmer({
@@ -75,20 +78,20 @@ const TribeNft: React.FC<{
             <AvatarNft
               width={65}
               height={65}
-              src={BASE_IMAGE_URL + tribeDetails?.memberNft?.member_nft_image}
+              src={BASE_IMAGE_URL + detail?.memberNft?.member_nft_image}
             />
           </AvatarBox>
           <Box style={{ width: 'calc(100% - 80px)' }}>
             <RowsEllipsis>
               <Text fontWeight='bold' ellipsis>
-                {tribeDetails?.memberNft?.member_nft_name}
+                {detail?.memberNft?.member_nft_name}
               </Text>
               <Text ml='6px' color='textTips' ellipsis>
                 -Tribe Host NFT
               </Text>
             </RowsEllipsis>
             <Desc maxLine={2} color='textTips'>
-              {tribeDetails?.memberNft?.member_nft_introduction}
+              {detail?.memberNft?.member_nft_introduction}
             </Desc>
           </Box>
         </Flex>
@@ -96,7 +99,7 @@ const TribeNft: React.FC<{
           <Flex mb='12px' justifyContent='center'>
             <Button
               onClick={() => {
-                if (tribeDetails.type === TribeType.BASIC) {
+                if (detail?.type === TribeType.BASIC) {
                   dispatch(fetchTribeJoinBasicServiceAsync());
                 }
                 setState(p => {
@@ -111,11 +114,11 @@ const TribeNft: React.FC<{
         {/* {tribeInfo?.status !== 0 && (
           <React.Fragment>
             <Flex mb='12px'>
-              <Text color='textTips'>#{tribeDetails?.nft_id}</Text>
+              <Text color='textTips'>#{detail?.nft_id}</Text>
               <Text ml='30px' color='textTips'>
                 Validity Date:{' '}
                 {`${dayjs().format('YY-MM-DD')}~${dayjs(
-                  tribeDetails?.expire_time * 1000,
+                  detail?.expire_time * 1000,
                 ).format('YY-MM-DD')}`}
               </Text>
             </Flex>
@@ -128,17 +131,17 @@ const TribeNft: React.FC<{
             <Flex flexDirection='column' mr='15px'>
               <Text>{t('ValidityDays')}:</Text>
               <Text color='textTips'>
-                {tribeDetails?.expire_time > 0
+                {detail?.expire_time > 0
                   ? `${dayjs().format('YY-MM-DD')}~${dayjs(
-                      tribeDetails?.expire_time * 1000,
+                      detail?.expire_time * 1000,
                     ).format('YY-MM-DD')}`
                   : t('ValidityDaysForver')}
               </Text>
             </Flex>
-            {tribeDetails?.nft_id !== 0 && (
+            {detail?.nft_id !== 0 && (
               <StakeButton
                 tribeId={props.tribe_id}
-                nftId={tribeDetails.nft_id}
+                nftId={detail.nft_id}
                 nftType={isOwner}
                 callback={() => {
                   dispatch(
@@ -158,9 +161,9 @@ const TribeNft: React.FC<{
             <Flex flexDirection='column' mr='15px'>
               <Text>{t('ValidityDays')}:</Text>
               <Text color='textTips'>
-                {tribeDetails?.valid_time > 0
+                {detail?.valid_time > 0
                   ? `${dayjs().format('YY-MM-DD')}~${dayjs()
-                      .add(tribeDetails?.valid_time / 60 / 60 / 24, 'day')
+                      .add(detail?.valid_time / 60 / 60 / 24, 'day')
                       .format('YY-MM-DD')}`
                   : t('ValidityDaysForver')}
               </Text>
