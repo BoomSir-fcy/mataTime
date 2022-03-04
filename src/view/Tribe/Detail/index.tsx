@@ -89,7 +89,6 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   useEffect(() => {
     if (TribeId) {
       dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
-      dispatch(fetchGetTribeBaseInfo({ tribeId: TribeId }));
     }
     return () => {};
   }, [TribeId]);

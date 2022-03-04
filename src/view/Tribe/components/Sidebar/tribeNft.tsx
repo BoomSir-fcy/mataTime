@@ -61,11 +61,9 @@ const TribeNft: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
-  const { updater } = useFetchTribeInfoById(props.tribe_id);
-
   const tribeInfo = useTribeInfoById(props.tribe_id);
-  const { tribeBaseInfo } = useStore(p => p.tribe);
-  const { detail, member_nft } = tribeInfo || {};
+  const { updater } = useFetchTribeInfoById(props.tribe_id);
+  const { detail, member_nft, baseInfo } = tribeInfo || {};
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   const [state, setState] = useImmer({
@@ -145,14 +143,7 @@ const TribeNft: React.FC<{
                 tribeId={props.tribe_id}
                 nftId={detail.nft_id}
                 nftType={isOwner}
-                callback={() => {
-                  dispatch(
-                    storeAction.updateTribeDetails({
-                      ...tribeInfo,
-                      status: 4,
-                    }),
-                  );
-                }}
+                callback={() => updater()}
               />
             )}
           </Flex>
@@ -173,32 +164,26 @@ const TribeNft: React.FC<{
             <UnStakeButton
               tribeId={props.tribe_id}
               nftType={isOwner}
-              callback={() => {
-                dispatch(
-                  storeAction.updateTribeDetails({
-                    ...tribeInfo,
-                    status: 3,
-                  }),
-                );
-              }}
+              callback={() => updater()}
             />
           </Flex>
         )}
       </Card>
-      <JoinTribeModal
-        visible={state.visible}
-        tribeInfo={tribeInfo}
-        tribeBaseInfo={tribeBaseInfo}
-        onClose={event => {
-          setState(p => {
-            p.visible = false;
-          });
-          if (event) {
-            dispatch(fetchTribeInfoAsync({ tribe_id: props.tribe_id }));
-            dispatch(fetchTribeDetailAsync({ tribe_id: props.tribe_id }));
-          }
-        }}
-      />
+      {state.visible && (
+        <JoinTribeModal
+          visible={state.visible}
+          tribeInfo={tribeInfo}
+          tribeBaseInfo={baseInfo}
+          onClose={event => {
+            setState(p => {
+              p.visible = false;
+            });
+            if (event) {
+              updater();
+            }
+          }}
+        />
+      )}
     </React.Fragment>
   );
 };

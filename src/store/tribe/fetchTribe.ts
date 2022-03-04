@@ -57,7 +57,6 @@ export const getTicketNftTokenList = async () => {
   }
 };
 
-
 export const getTribeBaseInfoData = async (tribeId: number) => {
   const address = getTribeAddress();
   const calls = [
@@ -78,7 +77,10 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
     },
   ];
   try {
-    const [info, extraTribeInfo, extraNftInfo] = await multicall(tribeAbi, calls);
+    const [info, extraTribeInfo, extraNftInfo] = await multicall(
+      tribeAbi,
+      calls,
+    );
     const baseInfo = {
       name: info.name,
       logo: info.logo,
@@ -106,7 +108,7 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
     return {
       baseInfo,
       nftInfo,
-    }
+    };
   } catch (error) {
     console.error(error);
     const baseInfo = {
@@ -140,7 +142,7 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
     return {
       baseInfo,
       nftInfo,
-    }
+    };
   }
 };
 
@@ -289,9 +291,9 @@ export const ApproveToken = address => {
         ethers.constants.MaxUint256,
       );
       const receipt = await tx.wait();
-      console.log('receipt', receipt);
       return receipt.status;
     } catch (e) {
+      console.error(e);
       return false;
     }
   }, [coinContract]);
