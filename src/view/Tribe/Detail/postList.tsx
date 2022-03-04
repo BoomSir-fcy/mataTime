@@ -20,7 +20,6 @@ import {
 import {
   addDeletePostId,
   addUnFollowUserId,
-  removeBlockUserId,
   removeUnFollowUserId,
 } from 'store/mapModule/actions';
 import {
@@ -31,7 +30,6 @@ import {
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { Card, Box, Flex } from 'uikit';
 import PostItem from './postItem';
-import { TribeInfo } from 'store/tribe/type';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import MentionOperator from '../components/MentionOperator';
 import HotBtn from '../components/post/HotBtn';
@@ -130,13 +128,6 @@ const PostList: React.FC<PostListPorps> = ({
     [dispatch, setNonce, updateList],
   );
 
-  const handleTranslate = useCallback(
-    id => {
-      dispatch(fetchPostTranslateAsync([id]));
-    },
-    [dispatch],
-  );
-
   return (
     <ArticleListBox>
       <List
@@ -169,8 +160,8 @@ const PostList: React.FC<PostListPorps> = ({
                 }
                 <PostItem
                   isTribeOnwer={
-                    TribeInfo.tribe.owner_address.toLocaleLowerCase() ===
-                    account.toLocaleLowerCase()
+                    TribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===
+                    account?.toLocaleLowerCase()
                   }
                   isShileUser={isShileUser}
                   setIsShileUser={(type, data) => {

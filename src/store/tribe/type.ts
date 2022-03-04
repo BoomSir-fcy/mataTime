@@ -73,13 +73,15 @@ export interface TribeInfo {
   tribe: {
     name: string;
     logo: string;
-    type: number;
+    type: TribeType;
     owner_address: string;
     nick_name: string;
     nft_image: string;
     create_time: number;
+    member_nft_id?: number;
     nft_id: number;
   };
+  topics: TopiceList[];
   // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期
   status: 0 | 1 | 2 | 3 | 4 | 5;
   tribe_id: number;
@@ -90,6 +92,14 @@ export interface TribeInfo {
   member_nft: MemberNft | null;
   baseInfo: TribeBaseInfo | null;
   nftInfo: TribesNFTInfo | null;
+}
+
+export interface TopiceList {
+  create_time: number;
+  id: number;
+  status: number;
+  topic: string;
+  tribe_id: number;
 }
 export interface PostList {
   list: any[];

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Text } from 'uikit';
+import { useStore } from 'store';
 import { useTranslation } from 'contexts';
-import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
 
 const Btn = styled(Flex)`
   width: max-content;
@@ -19,16 +19,17 @@ const Btn = styled(Flex)`
 `;
 
 const Tags: React.FC<{
-  list: any[];
+  list: Api.Tribe.TopicInfo[];
 }> = ({ list }) => {
+  console.log(list, 'list');
   return (
     <Flex alignItems='center' flexWrap='wrap'>
-      {list.length > 0 && (
+      {list?.length > 0 && (
         <>
-          {list.map((item, index) => (
+          {list?.map((item, index) => (
             <Btn key={`${item}${index}`}>
               <Text fontSize='14px' color='textPrimary'>
-                {item.Topic}
+                {item.topic}
               </Text>
             </Btn>
           ))}
@@ -42,17 +43,20 @@ const TribeTags: React.FC<{
   tribe_id: number;
   mb: string;
 }> = ({ ...props }) => {
-  const { data: topicData } = useFetchTribeTopicList(props.tribe_id);
   const { t } = useTranslation();
+  const tribeInfo = useStore(p => p.tribe.tribeInfo);
 
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
         {t('TribeTagsTitle')}
       </Text>
-      <Tags list={topicData?.list} />
+      <Tags list={tribeInfo?.topics} />
     </Card>
   );
 };
 
-export default TribeTags;
+export default React.memo(
+  TribeTags,
+  (prev, next) => prev.tribe_id === next.tribe_id,
+);

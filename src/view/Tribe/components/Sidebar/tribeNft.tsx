@@ -59,9 +59,9 @@ const TribeNft: React.FC<{
 }> = ({ ...props }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const tribeBaseInfo = useStore(p => p.tribe.tribeBaseInfo);
-  const tribeInfo = useStore(p => p.tribe.tribeInfo);
-  const tribeDetails = useStore(p => p.tribe.tribeDetails);
+  const userInfo = useStore(p => p.loginReducer.userInfo);
+  const { tribeInfo, tribeBaseInfo, tribeDetails } = useStore(p => p.tribe);
+  const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   const [state, setState] = useImmer({
     visible: false,
@@ -139,7 +139,7 @@ const TribeNft: React.FC<{
               <StakeButton
                 tribeId={props.tribe_id}
                 nftId={tribeDetails.nft_id}
-                nftType={2}
+                nftType={isOwner}
                 callback={() => {
                   dispatch(
                     storeAction.updateTribeDetails({
@@ -167,7 +167,7 @@ const TribeNft: React.FC<{
             </Flex>
             <UnStakeButton
               tribeId={props.tribe_id}
-              nftType={2}
+              nftType={isOwner}
               callback={() => {
                 dispatch(
                   storeAction.updateTribeDetails({

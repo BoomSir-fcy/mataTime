@@ -1,9 +1,17 @@
 import React from 'react';
 import { Card, Flex, Text, FilePDF } from 'uikit';
 import { useTranslation } from 'contexts';
+import { useFetchFileList } from 'store/tribe/helperHooks';
 
-const TribeFiles = ({ ...props }) => {
+const TribeFiles: React.FC<{
+  tribe_id: number;
+  mb: string;
+}> = ({ ...props }) => {
   const { t } = useTranslation();
+  const { data } = useFetchFileList(props.tribe_id);
+
+  // useFetchFileList(props.tribe_id);
+  // console.log(data);
 
   return (
     <Card padding='16px' isRadius {...props}>

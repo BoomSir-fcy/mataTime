@@ -13,6 +13,7 @@ import NavGoback from './NavGoback';
 import { useReadMsg } from './hooks';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { NftStatus, TribeType } from 'store/tribe/type';
 
 export interface NavProps {
   // seconds?: number
@@ -50,7 +51,6 @@ const Nav: React.FC<NavProps> = () => {
   );
 
   const currentUid = useStore(p => p.loginReducer.userInfo);
-  const initMemberNFT = useStore(p => p.tribe.tribesNftInfo.initMemberNFT);
 
   const renderConfig = useMemo(() => {
     return config.map(item => {
@@ -97,7 +97,6 @@ const Nav: React.FC<NavProps> = () => {
   const parseQs = useParsedQueryString();
 
   const tribeInfo = useTribeInfoById(parseQs.i);
-
   // 第二级导航栏
   const activeChildren = useMemo(() => {
     const activeConfig = renderConfig.find(item =>
@@ -127,17 +126,98 @@ const Nav: React.FC<NavProps> = () => {
   }, [pathname, activeChildren]);
 
   // 第三级导航栏
+
+  /* 
+    部落配置:
+    1.判断是否是部落主
+      TribeInfo.tribe.owner_address === account
+      跳转404
+    2.有没有领取部落主NFT
+      TribeInfo.status === 1
+      除了[部落主NFT] 其他都不能点
+    3.有没有质押部落主NFT
+      TribeInfo.status === 2
+      除了[部落主NFT] 其他都不能点
+    4.有没有设置成员NFT
+      TribeInfo.tribe.type === TribeType.PRO
+      [成员nft]加感叹号
+    5.获取部落类型判断显示[邀请设置]
+      禁用[邀请设置]
+  */
+  enum TribeMeStatus {
+    NORMAL,
+    NOT_MASTER,
+    UN_RECEIVE,
+    UN_STAKE,
+    UN_SET_MEMBER_NFT,
+    BASE_TYPE,
+  }
+
+  const tribeMeStatus = useMemo(() => {
+    if (
+      tribeInfo?.tribe?.owner_address?.toLowerCase() !==
+      currentUid?.address?.toLowerCase()
+    ) {
+      return TribeMeStatus.NOT_MASTER;
+    }
+    if (tribeInfo?.status === NftStatus.UnReceive) {
+      return TribeMeStatus.UN_RECEIVE;
+    }
+    if (tribeInfo?.status === NftStatus.UnStake) {
+      return TribeMeStatus.UN_STAKE;
+    }
+    if (!tribeInfo?.tribe?.member_nft_id) {
+      return TribeMeStatus.UN_SET_MEMBER_NFT;
+    }
+    if (tribeInfo?.tribe?.type === TribeType.BASIC) {
+      return TribeMeStatus.BASE_TYPE;
+    }
+    return TribeMeStatus.NORMAL;
+  }, [tribeInfo, currentUid]);
+
   const activeSubChildren = useMemo(() => {
-    console.log(activeSubConfig, 'activeSubConfig');
     // 如果是部落管理 做权限管理
     if (activeSubConfig?.configId === ConfigId.TRIBE_ME) {
+      if (tribeMeStatus === TribeMeStatus.NOT_MASTER) {
+        return [];
+      }
+      if (
+        tribeMeStatus === TribeMeStatus.UN_RECEIVE ||
+        tribeMeStatus === TribeMeStatus.UN_STAKE
+      ) {
+        return activeSubConfig.children.map(item => {
+          return {
+            ...item,
+            disabled: item.configId !== ConfigId.TRIBE_ME_MASTER_NFT,
+          };
+        });
+      }
+      if (tribeMeStatus === TribeMeStatus.UN_SET_MEMBER_NFT) {
+        return activeSubConfig.children.map(item => {
+          return {
+            ...item,
+            badgeIcon:
+              item.configId === ConfigId.TRIBE_ME_MEMBER_NFT
+                ? item.badgeIconName
+                : null,
+          };
+        });
+      }
+      if (tribeMeStatus !== TribeMeStatus.BASE_TYPE) {
+        return activeSubConfig.children.map(item => {
+          return {
+            ...item,
+            hide: false,
+          };
+        });
+      }
       return activeSubConfig.children;
     }
     if (activeSubConfig?.children) {
       return activeSubConfig.children;
     }
     return null;
-  }, [activeSubConfig, tribeInfo]);
+  }, [activeSubConfig, tribeMeStatus]);
 
   useEffect(() => {
     if (activeChildren) {
@@ -180,9 +260,8 @@ const Nav: React.FC<NavProps> = () => {
                   ? unReadMsg[item.badgeName]
                   : null
               }
-              badgeIcon={
-                item.badgeIconName && !initMemberNFT ? item.badgeIconName : null
-              }
+              disabled={item.disabled}
+              badgeIcon={item.badgeIcon}
             />
           );
         })}
@@ -208,12 +287,9 @@ const Nav: React.FC<NavProps> = () => {
                       ? unReadMsg[item.badgeName]
                       : null
                   }
-                  badgeIcon={
-                    item.badgeIconName && !initMemberNFT
-                      ? item.badgeIconName
-                      : null
-                  }
+                  badgeIcon={item.badgeIcon}
                   path={item.path}
+                  disabled={item.disabled}
                   pathname={pathname}
                 />
               );
@@ -244,11 +320,8 @@ const Nav: React.FC<NavProps> = () => {
                       ? unReadMsg[item.badgeName]
                       : null
                   }
-                  badgeIcon={
-                    item.badgeIconName && !initMemberNFT
-                      ? item.badgeIconName
-                      : null
-                  }
+                  badgeIcon={item.badgeIcon}
+                  disabled={item.disabled}
                   path={item.path}
                   pathname={pathname}
                 />

@@ -122,3 +122,33 @@ export const useFetchTribePostInfo = tribe_id => {
 
   return { data, updateData: fetchData };
 };
+
+// 部落文件列表
+export const useFetchFileList = (id: number) => {
+  const [data, setData] = useState({
+    data: [] as Api.Tribe.FileInfo[],
+    fetchStatus: FetchStatus.NOT_FETCHED,
+  });
+  const fetchData = useCallback(async tribe_id => {
+    try {
+      const res = await Api.TribeApi.getTribeFile({ tribe_id });
+      setData({
+        data: res.data,
+        fetchStatus: FetchStatus.SUCCESS,
+      });
+    } catch (error) {
+      setData(prev => ({
+        ...prev,
+        fetchStatus: FetchStatus.FAILED,
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      fetchData(id);
+    }
+  }, [id]);
+
+  return { data, updateData: fetchData };
+};
