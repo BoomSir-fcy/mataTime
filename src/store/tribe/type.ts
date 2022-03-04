@@ -34,9 +34,6 @@ export interface TribeBaseInfo {
   memberPercent?: number;
   nftAddress?: string;
   nftid?: number;
-  memberNFTImage: string;
-  memberNFTIntroduction: string;
-  memberNFTName: string;
 }
 
 export interface TribesNFTInfo {
@@ -48,8 +45,7 @@ export interface TribesNFTInfo {
   memberNFTIntroduction?: string;
   memberNFTImage?: string;
   initMemberNFT?: boolean;
-  create_time?: number;
-  nick_name?: string;
+  invitationRate?: number;
 }
 
 export interface FeeCoin {
@@ -92,9 +88,10 @@ export interface TribeInfo {
   selected_count: string;
   post_count: string;
   member_count: string;
-  detail: TribeDetails | null
-  baseInfo: TribeBaseInfo | null
-  nftInfo: TribesNFTInfo | null
+  detail: TribeDetails | null;
+  baseInfo: TribeBaseInfo | null;
+  nftInfo: TribesNFTInfo | null;
+  member_nft: MemberNft | null;
 }
 
 export interface TopiceList {
@@ -156,6 +153,8 @@ export interface MemberNft {
   owner_nft_name: string;
   sender: string;
   tribe_id: number;
+  create_time?: number;
+  nick_name?: string;
 }
 
 export interface TribeState {

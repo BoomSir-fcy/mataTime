@@ -48,11 +48,11 @@ const Create = () => {
     try {
       const isNotUnique = await onCheckUniqueName(infoParams.name);
       if (isNotUnique) {
-        toastError(t('名称已存在'));
+        toastError(t('Name already exists'));
         return false;
       }
       if (!infoParams.logo) {
-        toastError(t('上传图片'));
+        toastError(t('Please upload a picture'));
         return false;
       }
       if (
@@ -62,11 +62,11 @@ const Create = () => {
           parseInt(feeParams.memberPercent),
         ])
       ) {
-        toastError(t('TIME獎勵分配总和必须为100%'));
+        toastError(t('The sum of the TIME reward distribution must be 100%'));
         return false;
       }
       if (!activeNftInfo.nftId) {
-        toastError(t('请选择头像'));
+        toastError(t('Please select a ticket'));
         return false;
       }
       const params = {

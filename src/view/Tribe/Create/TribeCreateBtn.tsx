@@ -76,7 +76,7 @@ export const TribeCreateBtn: React.FC<{
             e.stopPropagation();
             e.preventDefault();
             if (!activeNftInfo.nftId) {
-              toastError(t('请选择头像'));
+              toastError(t('Please select a ticket'));
               return false;
             }
             setState(p => {

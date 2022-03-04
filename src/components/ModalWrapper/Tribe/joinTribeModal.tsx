@@ -43,11 +43,12 @@ export const JoinTribeModal: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
-  const { handleApprove } = ApproveToken(tribeBaseInfo.feeToken);
+  const { handleApprove } = ApproveToken(tribeBaseInfo?.feeToken);
   const { joinTribe } = useJoinTribe();
   const { account } = useActiveWeb3React();
-  const tribeDetails = useStore(p => p.tribe.tribeDetails);
   const joinTribeInfo = useStore(p => p.tribe.joinTribe);
+  const { detail } = tribeInfo || {};
+
   const [state, setState] = useImmer({
     loading: false,
     submitLoading: false,
@@ -65,7 +66,7 @@ export const JoinTribeModal: React.FC<{
         dispatch(
           fetchisApprove({
             account,
-            address: tribeBaseInfo.feeToken,
+            address: tribeBaseInfo?.feeToken,
           }),
         );
       } else {
@@ -91,14 +92,13 @@ export const JoinTribeModal: React.FC<{
     const inviteAddress = Boolean(state.inviteAddress)
       ? state.inviteAddress
       : '0x0000000000000000000000000000000000000000';
-    const joinServiceFee =
-      tribeDetails?.type === TribeType.PRO ? tribeDetails.charge : '';
+    const joinServiceFee = detail?.type === TribeType.PRO ? detail?.charge : '';
     try {
       setState(p => {
         p.submitLoading = true;
       });
       const res = await joinTribe(
-        tribeDetails.tribe_id,
+        detail.tribe_id,
         inviteAddress,
         joinServiceFee,
       );
@@ -119,11 +119,12 @@ export const JoinTribeModal: React.FC<{
         p.submitLoading = false;
       });
     }
-  }, [state, joinTribe, tribeDetails]);
+  }, [state, joinTribe, detail]);
 
+  console.log(detail);
   return (
     <ModalWrapper
-      title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name })}
+      title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name || '' })}
       visible={visible}
       setVisible={onClose}
     >
@@ -140,27 +141,31 @@ export const JoinTribeModal: React.FC<{
               >
                 <Flex>
                   <Text color='textTips'>{t('TribeJoinModalText')}</Text>
-                  <QuestionHelper
-                    ml='15px'
-                    mt='4px'
-                    color='white_black'
-                    text={t('TribeJoinModalText1')}
-                    placement='auto'
-                  />
+                  {detail?.type === TribeType.BASIC && (
+                    <QuestionHelper
+                      ml='5px'
+                      mt='4px'
+                      color='white_black'
+                      text={t('TribeJoinModalText1')}
+                      placement='auto'
+                    />
+                  )}
                 </Flex>
                 <Text fontSize='16px'>
-                  {tribeDetails?.type === TribeType.BASIC
+                  {detail?.type === TribeType.BASIC
                     ? joinTribeInfo.basicServiceCharge
-                    : getBalanceNumber(new BigNumber(tribeDetails?.charge), 18)}
-                  {tribeDetails?.symbol}
+                    : new BigNumber(detail?.charge)
+                        .dividedBy(new BigNumber(10).pow(18))
+                        .toString()}{' '}
+                  {detail?.symbol}
                 </Text>
               </Flex>
               <Flex justifyContent='space-between' alignItems='center'>
                 <Text color='textTips'>{t('TribeJoinModalValidityDate')}</Text>
                 <Text fontSize='16px'>
-                  {tribeDetails?.valid_time > 0
+                  {detail?.valid_time > 0
                     ? `${dayjs().format('YYYY-MM-DD')} ~ ${dayjs()
-                        .add(tribeDetails?.valid_time / 60 / 60 / 24, 'day')
+                        .add(detail?.valid_time / 60 / 60 / 24, 'day')
                         .format('YYYY-MM-DD')}`
                     : t('ValidityDaysForver')}
                 </Text>
@@ -176,7 +181,7 @@ export const JoinTribeModal: React.FC<{
                   <Text color='textTips'>{t('TIMEBurned')}</Text>
                   <Text fontSize='16px'>
                     {t('TIMEBurnedUnit', {
-                      value: tribeDetails?.spend_time || 0,
+                      value: detail?.spend_time || 0,
                     })}
                   </Text>
                 </Flex>
@@ -184,7 +189,7 @@ export const JoinTribeModal: React.FC<{
                   <Text color='textTips'>{t('TIMEMAXBurned/Post')}</Text>
                   <Text fontSize='16px'>
                     {t('TIMEMAXBurned/PostUnit', {
-                      value: tribeDetails?.spend_max_time || 0,
+                      value: detail?.spend_max_time || 0,
                     })}
                   </Text>
                 </Flex>
@@ -194,23 +199,23 @@ export const JoinTribeModal: React.FC<{
                 <Flex flexDirection='column'>
                   <Text fontSize='16px'>
                     {t('TIMETribeHost', {
-                      value: tribeDetails?.reward_master || 0,
+                      value: detail?.reward_master || 0,
                     })}
                   </Text>
                   <Text fontSize='16px'>
                     {t('TIMEPoster', {
-                      value: tribeDetails?.reward_author || 0,
+                      value: detail?.reward_author || 0,
                     })}
                   </Text>
                   <Text fontSize='16px'>
                     {t('TIMEMembers', {
-                      value: tribeDetails?.reward_member || 0,
+                      value: detail?.reward_member || 0,
                     })}
                   </Text>
                 </Flex>
               </MaskInfo>
             )}
-            {state.next === 2 && tribeDetails?.type === TribeType.PRO && (
+            {state.next === 2 && detail?.type === TribeType.PRO && (
               <Box mt='17px'>
                 <Text mb='10px'>{t('TribeJoinModalInviteText')}</Text>
                 <Input
@@ -221,7 +226,7 @@ export const JoinTribeModal: React.FC<{
             )}
             {state.next === 1 && (
               <>
-                {tribeDetails?.type === TribeType.BASIC && (
+                {detail?.type === TribeType.BASIC && (
                   <Text mt='10px'>{t('TribeJoinModalText3')}</Text>
                 )}
                 <Flex mt='20px' justifyContent='center'>

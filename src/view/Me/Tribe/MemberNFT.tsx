@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Crumbs, UploadSingle } from 'components';
 import { useTranslation } from 'contexts';
 import { Box, Text, Button, Flex, Input } from 'uikit';
@@ -9,18 +9,18 @@ import { useImmer } from 'use-immer';
 import TextArea from 'components/TextArea';
 import { ARTICLE_POST_MAX_LEN } from 'config';
 import { useTribeNft } from './hooks';
-import { useStore } from 'store';
 import { useToast } from 'hooks';
 import { useDispatch } from 'react-redux';
-import { fetchTribeNftInfo } from 'store/tribe';
 import Dots from 'components/Loader/Dots';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTribeInfoById } from 'store/mapModule/hooks';
+import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
 const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
   const { toastError } = useToast();
   const dispatch = useDispatch();
+  const parseQs = useParsedQueryString();
   const { onSetTribeMemberNFT } = useTribeNft();
   const [pending, setPending] = useState(false);
   const [state, setState] = useImmer({
@@ -29,23 +29,22 @@ const MeTribeMemberNFT = () => {
     introduction: '',
   });
 
-  const isInitMemberNft = useStore(p => p.tribe.tribesNftInfo.initMemberNFT);
-  const parseQs = useParsedQueryString();
-  const tribeInfo = useTribeInfoById(parseQs.i);
+  const tribeId = parseQs.i;
+  const tribeInfo = useTribeInfoById(tribeId);
 
-  useEffect(() => {
-    if (parseQs.i) dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
-  }, [parseQs]);
+  const isInitMemberNft = useMemo(() => {
+    return tribeInfo?.nftInfo?.initMemberNFT;
+  }, [tribeInfo?.nftInfo?.initMemberNFT]);
 
   const handleCreateMemberNft = useCallback(async () => {
     if (!state.logo) {
-      toastError(t('上传图片'));
+      toastError(t('Please upload a picture'));
       return false;
     }
     try {
       setPending(true);
-      await onSetTribeMemberNFT({ tribeId: parseQs.i, ...state });
-      dispatch(fetchTribeNftInfo({ tribeId: parseQs.i }));
+      await onSetTribeMemberNFT({ tribeId: tribeId, ...state });
+      dispatch(fetchTribeInfoAsync(tribeId));
     } catch (error) {
       console.log(error);
     } finally {
@@ -100,7 +99,7 @@ const MeTribeMemberNFT = () => {
               <UploadSingle
                 url={state.logo}
                 tips={t(
-                  'The recommended size is less than 5MB, and the image size is 100x100',
+                  'The recommended size is less than 5MB, and the image size is 1000x1000',
                 )}
                 uploadSuccess={uploadSuccess}
               />
@@ -132,9 +131,10 @@ const MeTribeMemberNFT = () => {
         ) : (
           <CommonClaimNFT
             type='member'
-            tribeId={parseQs.i}
+            tribeId={tribeId}
             nft_id={tribeInfo?.tribe?.nft_id}
             status={tribeInfo?.status}
+            tribesNftInfo={tribeInfo?.member_nft}
           />
         )}
       </ContentBox>

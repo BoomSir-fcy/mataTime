@@ -14,12 +14,14 @@ import { useImmer } from 'use-immer';
 import { Timing } from 'store/tribe/type';
 import { useFeeTokenList, useTribeState } from 'store/tribe/hooks';
 import { useTribeNft } from './hooks';
-import { fetchGetTribeBaseInfo } from 'store/tribe';
-import { useDispatch } from 'react-redux';
 import { getValidDateDay } from 'store/tribe/utils';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { BigNumber } from 'bignumber.js';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import Dots from 'components/Loader/Dots';
+import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
+import { useDispatch } from 'react-redux';
 
 const MeTribeInvitationSetting = () => {
   useFeeTokenList();
@@ -27,6 +29,7 @@ const MeTribeInvitationSetting = () => {
   const dispatch = useDispatch();
   const parseQs = useParsedQueryString();
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(false);
   const [feeToken, setFeeToken] = useState('');
   const [state, setState] = useImmer({
     feeAmount: '',
@@ -34,8 +37,10 @@ const MeTribeInvitationSetting = () => {
     validDate: '',
     rate: '0',
   });
-  const { feeCoinList, tribeBaseInfo } = useTribeState();
+  const { feeCoinList } = useTribeState();
   const { onSettingInvitation } = useTribeNft();
+  const tribeId = parseQs.i;
+  const tribeInfo = useTribeInfoById(tribeId);
 
   const timingOptions = [
     { value: Timing.FOREVER, label: t('permanent') },
@@ -46,25 +51,24 @@ const MeTribeInvitationSetting = () => {
   ];
 
   useEffect(() => {
-    if (parseQs.i) dispatch(fetchGetTribeBaseInfo({ tribeId: parseQs.i }));
-  }, [parseQs]);
-
-  useEffect(() => {
-    if (tribeBaseInfo?.feeToken) {
+    if (tribeInfo?.baseInfo?.feeToken) {
       setState(p => {
         p.feeAmount = getBalanceNumber(
-          new BigNumber(tribeBaseInfo.feeAmount),
-          getFeeDecimal(tribeBaseInfo.feeToken),
+          new BigNumber(tribeInfo?.baseInfo?.feeAmount),
+          getFeeDecimal(tribeInfo?.baseInfo?.feeToken),
         ).toString();
         p.timing =
-          Number(tribeBaseInfo.validDate) === 0
+          Number(tribeInfo?.baseInfo?.validDate) === 0
             ? Timing.FOREVER
             : Timing.JOIN_TRIBE;
-        p.validDate = getValidDateDay(tribeBaseInfo.validDate).toString();
+        p.validDate = getValidDateDay(
+          tribeInfo?.baseInfo?.validDate,
+        ).toString();
+        p.rate = tribeInfo?.nftInfo?.invitationRate.toString();
       });
-      setFeeToken(tribeBaseInfo.feeToken);
+      setFeeToken(tribeInfo?.baseInfo?.feeToken);
     }
-  }, [tribeBaseInfo]);
+  }, [tribeInfo]);
 
   const getFeeDecimal = useCallback(
     (token: string) => {
@@ -90,8 +94,16 @@ const MeTribeInvitationSetting = () => {
       <form
         onSubmit={async e => {
           e.preventDefault();
-          await onSettingInvitation(parseQs.i, state.rate);
-          setIsEdit(false);
+          try {
+            setPending(true);
+            await onSettingInvitation(tribeId, state.rate);
+            dispatch(fetchTribeInfoAsync(tribeId));
+            setIsEdit(false);
+            setPending(false);
+          } catch (error) {
+            console.error(error);
+            setPending(false);
+          }
         }}
         action=''
       >
@@ -106,7 +118,9 @@ const MeTribeInvitationSetting = () => {
               >
                 {t('TribeCancel')}
               </Button>
-              <Button type='submit'>{t('TribeSave')}</Button>
+              <Button type='submit'>
+                {pending ? <Dots>{t('TribeSave')}</Dots> : t('TribeSave')}
+              </Button>
             </Flex>
           ) : (
             <Button

@@ -19,7 +19,7 @@ import PaginateStyle from 'style/Paginate';
 import { Api } from 'apis';
 import { formatTime } from 'utils/timeFormat';
 import { NftStatus } from 'store/tribe/type';
-import { getInitMemberNftList, useTribeNft } from './hooks';
+import { getInitMemberNftList } from './hooks';
 import {
   StakeButton,
   UnStakeButton,
@@ -29,7 +29,6 @@ import {
 import { fetchIsApproveStakeNft } from 'store/tribe';
 import { useDispatch } from 'react-redux';
 import { useWeb3React } from '@web3-react/core';
-import { storeAction } from 'store';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { getTribeAddress } from 'utils/addressHelpers';
 import { getBscScanLink } from 'utils/contract';
@@ -84,7 +83,9 @@ const MyTribe = () => {
   const [activeType, setActiveType] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchIsApproveStakeNft({ account }));
+    if (account) {
+      dispatch(fetchIsApproveStakeNft({ account }));
+    }
   }, [account]);
 
   return (
@@ -301,9 +302,6 @@ const MyMasterNftTribe = React.memo(() => {
                             } else {
                               history.push(`/me/tribe/member-nft?i=${item.id}`);
                             }
-                            dispatch(
-                              storeAction.setInitMemberNft(item.initMemberNft),
-                            );
                           }}
                         >
                           {t('Manage')}
