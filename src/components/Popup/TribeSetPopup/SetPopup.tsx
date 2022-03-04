@@ -65,7 +65,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const [reportShow, setReportShow] = useState<boolean>(false);
     const [editShow, setEditShow] = useState<boolean>(false);
     const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
-    const [inqueryType, setInqueryType] = useState<string>('topping');
+    const [inqueryType, setInqueryType] = useState<string>('TribeTopping');
     const UID = useStore(p => p.loginReducer.userInfo.uid);
     const theme = useTheme();
 
@@ -191,7 +191,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
                   setInqueryType('cancelTopping');
                   setCommonInqueryShow(true);
                 } else {
-                  setInqueryType('topping');
+                  setInqueryType('TribeTopping');
                   setCommonInqueryShow(true);
                 }
               }}
@@ -233,7 +233,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
             setCommonInqueryShow(false);
           }}
           onQuery={() => {
-            if (inqueryType === 'topping') {
+            if (inqueryType === 'TribeTopping') {
               onTopPostRequest(data.id);
             }
             if (inqueryType === 'cancelTopping') {

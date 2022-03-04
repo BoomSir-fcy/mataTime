@@ -1,46 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  withRouter,
-  useHistory,
-  useLocation,
-  Link,
-  RouteComponentProps,
-} from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useToast } from 'hooks';
-import {
-  Editor,
-  Crumbs,
-  Icon,
-  SendPost,
-  VerifyCode,
-  HoverLink,
-  List,
-  LoadType,
-} from 'components';
-import { Flex, Box, Button } from 'uikit';
-import { isApp } from 'utils/client';
-import { storeAction, useStore } from 'store';
-import { Api } from 'apis';
+import { Crumbs } from 'components';
+import { Flex, Box } from 'uikit';
+import { useStore } from 'store';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { useTranslation } from 'contexts/Localization';
 import DetailTitle from './Title';
 import { TribeSidebar } from '../components/Sidebar';
 import DetailHeader from './Header';
 import { TribePostList } from './post';
-import PostItem from './postItem';
 import {
   fetchTribeInfoAsync,
-  fetchTribePostAsync,
   fetchTribeDetailAsync,
   fetchGetTribeBaseInfo,
   fetchisApprove,
 } from 'store/tribe';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-
-// import { Tabs, ArticleList } from './center';
 
 const TribeBox = styled(Box)`
   width: 100%;

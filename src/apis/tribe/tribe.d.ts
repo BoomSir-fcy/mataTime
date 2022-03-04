@@ -1,5 +1,11 @@
 declare namespace Api {
   namespace Tribe {
+    interface tribeMemberListParams {
+      page?: number;
+      page_size?: number;
+      tribe_id?: number;
+      keyword?: string;
+    }
     interface PostSetTopParams {
       pid: number;
     }
@@ -129,6 +135,7 @@ declare namespace Api {
       title: string;
       selected: number;
       tribe_id: number;
+      tribe_top: number;
     }
   }
 }

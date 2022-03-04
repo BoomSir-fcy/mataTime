@@ -5,7 +5,6 @@ import { CommentTitle } from 'view/Post/style';
 import { useTranslation } from 'contexts/Localization';
 import styled from 'styled-components';
 import { useStore } from 'store';
-import { fetchTribePostAsync } from 'store/tribe';
 import { useDispatch } from 'react-redux';
 
 const Tab = styled(Flex)`

@@ -67,10 +67,11 @@ type OperatorIprop = {
   onQuery: () => void;
   onClose: () => void;
   queryText?: string;
+  disabled?: boolean;
 };
 export const ModalOperator = React.memo((props: OperatorIprop) => {
   const { t } = useTranslation();
-  const { onQuery, onClose, queryText } = props;
+  const { onQuery, onClose, queryText, disabled } = props;
   return (
     <ModalOperatorWrapper>
       <ModalOperatorQueryWrapper
@@ -81,6 +82,7 @@ export const ModalOperator = React.memo((props: OperatorIprop) => {
         {t('modalCancel')}
       </ModalOperatorQueryWrapper>
       <ModalOperatorCancerWrapper
+        disabled={disabled}
         onClick={() => {
           onQuery();
         }}

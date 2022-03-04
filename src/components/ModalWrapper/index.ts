@@ -14,3 +14,4 @@ export * from './WaitWalletConfirmModal/SuccessfullyModal';
 export * from './Tribe';
 export * from './forwardModal';
 export * from './forwardFastModal';
+export * from './DeleteMemberModal';

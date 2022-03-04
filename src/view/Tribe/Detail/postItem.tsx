@@ -2,25 +2,12 @@ import React, { useState } from 'react';
 import { Flex, Text, Button, Box, FeaturedIcon } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
 import styled, { useTheme } from 'styled-components';
-import {
-  CommentPop,
-  Icon,
-  MoreOperatorEnum,
-  MorePostPopup,
-  PopupWrap,
-  ContentParsing,
-} from 'components';
-import SendUser from '../components/post/sendUser';
-import HotBtn from '../components/post/HotBtn';
+import { Icon, MoreOperatorEnum, ContentParsing } from 'components';
 import Popup from 'reactjs-popup';
 import { MoreTribePopup } from 'components/Popup/TribeMorePopup/morePopup';
 import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
-import MentionOperator from '../components/MentionOperator';
 
-const PostBox = styled(Box)`
-  /* padding: 16px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor}; */
-`;
+const PostBox = styled(Box)``;
 
 const Top = styled(Flex)`
   justify-content: space-between;
@@ -73,7 +60,7 @@ const PostItem: React.FC<PostInfoPorps> = ({
       <Top>
         <Flex width='80%' alignItems='center'>
           {itemData.selected !== 0 && <Featured />}
-          {itemData.top !== 0 && (
+          {itemData.tribe_top !== 0 && (
             <Icon size={20} color='textOrigin' name='icon-jiantou' />
           )}
           <Text
@@ -169,32 +156,6 @@ const PostItem: React.FC<PostInfoPorps> = ({
       <Box padding='15px 0'>
         <ContentParsing mode='preview' content={itemData.content} />
       </Box>
-      {/* <Flex justifyContent='space-between' alignItems='center'>
-        <SendUser
-          time={new Date(itemData.add_time).getTime()}
-          name={itemData.user_name}
-          Avatar={itemData.user_avator_url}
-        />
-        <Box width='50%'>
-          <MentionOperator
-            replyType='twitter'
-            postId={1}
-            hasReward={false}
-            itemData={{
-              ...itemData,
-              post_id: itemData.id,
-              post: {
-                ...itemData,
-                post_id: itemData.id,
-              },
-            }}
-            callback={(item: any, type?: MoreOperatorEnum) => {
-              // handleUpdateList(item, type);
-            }}
-          />
-        </Box>
-      </Flex>
-      <HotBtn list={itemData.topics} /> */}
     </PostBox>
   );
 };
