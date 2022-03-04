@@ -7,6 +7,8 @@ import { Card, Flex, Text } from 'uikit';
 import { useStore } from 'store';
 import { useTranslation } from 'contexts';
 
+import { useTribeInfoById } from 'store/mapModule/hooks';
+
 const Desc = styled(Text)`
   word-wrap: break-word;
   word-break: break-word;
@@ -20,7 +22,8 @@ const TribeInfo: React.FC<{
   const { t } = useTranslation();
   const history = useHistory();
   const userInfo = useStore(p => p.loginReducer.userInfo);
-  const { tribeInfo, tribeDetails } = useStore(p => p.tribe);
+  const tribeInfo = useTribeInfoById(props.tribe_id);
+  const { detail } = tribeInfo || {};
   const [visible, setVisible] = React.useState(false);
 
   return (
@@ -52,7 +55,7 @@ const TribeInfo: React.FC<{
               ),
             })}
           </Text>
-          {tribeDetails?.type === 2 && (
+          {detail?.type === 2 && (
             <Icon
               name='icon-fenxiang'
               color='textPrimary'
@@ -63,15 +66,19 @@ const TribeInfo: React.FC<{
           )}
         </Flex>
         <Flex alignItems='center' mb='19px'>
-          <Avatar scale='sm' src={tribeDetails?.nft_image} />
+          <Avatar scale='sm' src={detail?.nft_image} />
           <Text fontSize='18px' fontWeight='bold' ml='16px'>
-            {tribeDetails?.nick_name}
+            {detail?.nick_name}
           </Text>
         </Flex>
-        <Desc>{tribeDetails?.summary}</Desc>
+        <Desc>{detail?.summary}</Desc>
       </Card>
       {/* 邀请框 */}
-      <JoinInviteModal visible={visible} onClose={() => setVisible(false)} />
+      <JoinInviteModal
+        tribe_id={props.tribe_id}
+        visible={visible}
+        onClose={() => setVisible(false)}
+      />
     </React.Fragment>
   );
 };

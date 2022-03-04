@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useTranslation } from 'contexts';
 import { Box, Text, Flex, LinkExternal, Input } from 'uikit';
 import styled from 'styled-components';
-import { useStore } from 'store';
 import { BASE_IMAGE_URL } from 'config';
 import { getBscScanLink } from 'utils/contract';
 import { getTribeAddress } from 'utils/addressHelpers';
@@ -10,11 +9,12 @@ import { formatTime } from 'utils';
 import { StyledButton } from '../styled';
 import { useWeb3React } from '@web3-react/core';
 import useConnectWallet from 'hooks/useConnectWallet';
-import { NftStatus } from 'store/tribe/type';
+import { MemberNft, NftStatus } from 'store/tribe/type';
 import { StakeButton, TransferButton, UnStakeButton } from './actionNft';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
+import { fetchIsApproveStakeNft } from 'store/tribe';
 
 const NFTBox = styled(Box)`
   position: relative;
@@ -46,30 +46,36 @@ export const CommonClaimNFT: React.FC<{
   tribeId: number;
   nft_id: number;
   status?: number;
-}> = React.memo(({ type, tribeId, nft_id, status }) => {
+  tribesNftInfo?: MemberNft;
+}> = React.memo(({ type, tribeId, nft_id, status, tribesNftInfo = {} }) => {
   const { t } = useTranslation();
   const tribeAddress = getTribeAddress();
   const history = useHistory();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
   const { onConnectWallet } = useConnectWallet();
-  const tribesNftInfo = useStore(p => p.tribe.tribesNftInfo);
+
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchIsApproveStakeNft({ account }));
+    }
+  }, [account]);
 
   const nftInfo = useMemo(() => {
     if (type === nftType.MASTER) {
       return {
-        name: tribesNftInfo.ownerNFTName,
-        image: `${BASE_IMAGE_URL}${tribesNftInfo.ownerNFTImage}`,
-        introduction: tribesNftInfo.ownerNFTIntroduction,
+        name: tribesNftInfo.owner_nft_name,
+        image: `${BASE_IMAGE_URL}${tribesNftInfo.owner_nft_image}`,
+        introduction: tribesNftInfo.owner_nft_introduction,
         create_time: tribesNftInfo.create_time,
         nick_name: tribesNftInfo.nick_name,
       };
     }
     if (type === nftType.MEMBER) {
       return {
-        name: tribesNftInfo.memberNFTName,
-        image: `${BASE_IMAGE_URL}${tribesNftInfo.memberNFTImage}`,
-        introduction: tribesNftInfo.memberNFTIntroduction,
+        name: tribesNftInfo.member_nft_name,
+        image: `${BASE_IMAGE_URL}${tribesNftInfo.member_nft_image}`,
+        introduction: tribesNftInfo.member_nft_introduction,
         create_time: tribesNftInfo.create_time,
         nick_name: tribesNftInfo.nick_name,
       };
@@ -138,7 +144,7 @@ export const CommonClaimNFT: React.FC<{
                     <TransferButton
                       nftId={nft_id}
                       callback={() => {
-                        history.push('`/me/tribe');
+                        history.push('/me/tribe');
                       }}
                     />
                   </>

@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
 import { Box } from 'uikit';
-import { useStore } from 'store';
-
+import { TribeInfo } from 'store/tribe/type';
 import Search from 'components/SearchInput';
-import TribeInfo from './tribeInfo';
+
+import TribeDetail from './tribeInfo';
 import TribeNft from './tribeNft';
 import TribePro from './tribePro';
 import TribeTags from './tribeTags';
@@ -23,10 +22,10 @@ const SidebarStyled = styled(Box)`
 `;
 
 export const TribeSidebar: React.FC<{
+  tribe_info: TribeInfo;
   tribe_id: number;
 }> = ({ tribe_id }) => {
   const ref = React.useRef<HTMLDivElement | null>();
-
   const [scrollTop, setScrollTop] = React.useState(0);
   const [position, setPosition] = React.useState('top');
   const [maxPositionValue, setMaxPositionValue] = React.useState(0);
@@ -54,9 +53,9 @@ export const TribeSidebar: React.FC<{
       ref={ref}
     >
       <Search mt='15px' mb='15px' />
-      <TribeInfo tribe_id={tribe_id} mb='15px' />
+      <TribeDetail tribe_id={tribe_id} mb='15px' />
       <TribeNft tribe_id={tribe_id} mb='15px' />
-      <TribePro mb='15px' />
+      <TribePro tribe_id={tribe_id} mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
       <TribeFiles tribe_id={tribe_id} mb='15px' />
     </SidebarStyled>

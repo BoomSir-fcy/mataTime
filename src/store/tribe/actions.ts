@@ -21,8 +21,6 @@ export const postResetArticleParams = createAction<{
 
 export const postSetUserTags = createAction<any[]>('post/postSetUserTags');
 
-export const setInitMemberNft = createAction<boolean>('tribe/setInitMemberNft');
-
 export const updateTribeDetails = createAction<TribeInfo>(
   'tribe/updateTribeDetails',
 );

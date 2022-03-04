@@ -30,7 +30,6 @@ export const useApproveTribeTicketsNFT = () => {
         account,
         tribeAddress,
       );
-      console.log(isApprove);
       return isApprove;
     } catch (e) {
       throw e;
@@ -87,8 +86,6 @@ export const useTribe = () => {
   const setTribeFeeInfo = useCallback(
     async (tribeId: number, tribeInfo: TribeBaseInfo) => {
       try {
-        console.log(tribeInfo);
-
         const tx = await tribeContract.updateTribeFeeSetting(
           tribeId,
           tribeInfo.feeToken,

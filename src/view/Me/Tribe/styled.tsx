@@ -23,7 +23,7 @@ export const Table = styled(Flex)`
 export const Row = styled.div<{ border?: boolean }>`
   width: 100%;
   display: grid;
-  grid-template-columns: 30% 20% 25% 25%;
+  grid-template-columns: 27% 20% 23% 30%;
   align-items: center;
   ${({ theme }) => theme.mediaQueriesSize.padding};
   ${({ theme, border }) =>
@@ -54,5 +54,5 @@ export const LoadingAnimation = styled(Box)`
 `;
 
 export const StyledButton = styled(Button)`
-  min-width: 100px;
+  min-width: 90px;
 `;
