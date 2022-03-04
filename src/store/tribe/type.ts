@@ -48,6 +48,8 @@ export interface TribesNFTInfo {
   memberNFTIntroduction?: string;
   memberNFTImage?: string;
   initMemberNFT?: boolean;
+  create_time?: number;
+  nick_name?: string;
 }
 
 export interface FeeCoin {
@@ -80,6 +82,7 @@ export interface TribeInfo {
     nick_name: string;
     nft_image: string;
     create_time: number;
+    nft_id: number;
   };
   topics: TopiceList[];
   // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期
@@ -89,6 +92,8 @@ export interface TribeInfo {
   post_count: string;
   member_count: string;
   detail: TribeDetails | null;
+  baseInfo: TribeBaseInfo | null;
+  nftInfo: TribesNFTInfo | null;
 }
 
 export interface TopiceList {

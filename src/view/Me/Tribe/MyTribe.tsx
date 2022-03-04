@@ -124,8 +124,6 @@ const MyMasterNftTribe = React.memo(() => {
   const { onConnectWallet } = useConnectWallet();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [pending, setPending] = useState(false);
-  const { onClaimOwnerNft } = useTribeNft();
 
   // 1 未领取 2已领取 3 取消质押 4 已质押 5已过期
   const getMyTribeList = useCallback(async () => {
@@ -298,8 +296,11 @@ const MyMasterNftTribe = React.memo(() => {
                       <ManageButton>
                         <StyledButton
                           onClick={() => {
-                            history.push(`/me/tribe/info?i=${item.id}`);
-                            dispatch(storeAction.setTribeId(item.id));
+                            if (item.initMemberNft) {
+                              history.push(`/me/tribe/info?i=${item.id}`);
+                            } else {
+                              history.push(`/me/tribe/member-nft?i=${item.id}`);
+                            }
                             dispatch(
                               storeAction.setInitMemberNft(item.initMemberNft),
                             );
