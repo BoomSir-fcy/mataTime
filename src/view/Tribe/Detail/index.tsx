@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Crumbs } from 'components';
-import { Flex, Box, Button } from 'uikit';
+import { Flex, Box } from 'uikit';
 import { isApp } from 'utils/client';
-import { storeAction, useStore } from 'store';
-import { useTranslation } from 'contexts';
+import { useStore } from 'store';
 
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import { TribePostList } from './post';
 import DetailTitle from './Title';
@@ -16,15 +16,8 @@ import DetailHeader from './Header';
 import PostItem from './postItem';
 import { TribeSidebar } from '../components/Sidebar';
 
-import {
-  fetchTribeInfoAsync,
-  fetchGetTribeBaseInfo,
-  fetchisApprove,
-} from 'store/tribe';
+import { fetchTribeInfoAsync, fetchisApprove } from 'store/tribe';
 import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
-import useActiveWeb3React from 'hooks/useActiveWeb3React';
-
-// import { Tabs, ArticleList } from './center';
 
 const TribeBox = styled(Box)`
   width: 100%;

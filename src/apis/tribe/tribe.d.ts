@@ -1,5 +1,20 @@
 declare namespace Api {
   namespace Tribe {
+    interface tribeFileDeleteParams {
+      id: number;
+      tribe_id: number;
+    }
+    interface tribeFileListParams {
+      page?: number;
+      page_size?: number;
+      tribe_id?: number;
+    }
+    interface tribeMemberListParams {
+      page?: number;
+      page_size?: number;
+      tribe_id?: number;
+      keyword?: string;
+    }
     interface PostSetTopParams {
       pid: number;
     }
@@ -130,6 +145,7 @@ declare namespace Api {
       title: string;
       selected: number;
       tribe_id: number;
+      tribe_top: number;
     }
 
     interface FileListParams {

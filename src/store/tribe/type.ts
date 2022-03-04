@@ -77,14 +77,15 @@ export interface TribeInfo {
   tribe: {
     name: string;
     logo: string;
-    type: number;
+    type: TribeType;
     owner_address: string;
     nick_name: string;
     nft_image: string;
     create_time: number;
+    member_nft_id?: number;
     nft_id: number;
   };
-  topics: TopiceList[];
+  topics: Api.Tribe.TopicInfo[];
   // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期
   status: 0 | 1 | 2 | 3 | 4 | 5;
   tribe_id: number;

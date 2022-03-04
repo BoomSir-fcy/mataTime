@@ -232,6 +232,7 @@ export const menuNavConfig: MenuNavConfig[] = [
             lable: 'Master NFT',
             path: '/me/tribe/master-nft',
             hideRight: true,
+            configId: ConfigId.TRIBE_ME_MASTER_NFT,
           },
           {
             icon: 'icon-tongyong-chengyuan',
@@ -240,13 +241,16 @@ export const menuNavConfig: MenuNavConfig[] = [
             badgeIconName: 'icon-tishi',
             path: '/me/tribe/member-nft',
             hideRight: true,
+            configId: ConfigId.TRIBE_ME_MEMBER_NFT,
           },
           {
             icon: 'icon-zhifeiji1',
             activeIcon: 'icon-zhifeiji',
             lable: 'Invitation Setting',
             path: '/me/tribe/invitation-setting',
+            configId: ConfigId.TRIBE_ME_INVITE_SETTING,
             hideRight: true,
+            hide: true,
           },
           {
             icon: 'icon-shezhi',
