@@ -5,12 +5,14 @@ import { useLocation } from 'react-router-dom';
 import { Api } from 'apis';
 import { useStore } from 'store';
 import { Box, Flex, Text } from 'uikit';
-import config from 'config/constants/navConfig';
+import config, { ConfigId } from 'config/constants/navConfig';
 import { useTranslation } from 'contexts/Localization';
 import { Icon } from 'components';
 import NavItem from './NavItem';
 import NavGoback from './NavGoback';
 import { useReadMsg } from './hooks';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 export interface NavProps {
   // seconds?: number
@@ -88,10 +90,16 @@ const Nav: React.FC<NavProps> = () => {
     });
   }, [currentUid?.uid]);
 
-  const menu = renderConfig.filter(row => row.lable);
+  const menu = renderConfig.filter(row => row.lable); // 第一节导航栏
 
+  // 阅读信息微标
   useReadMsg(pathname);
+  const parseQs = useParsedQueryString();
 
+  const tribeInfo = useTribeInfoById(parseQs.i);
+  console.log(tribeInfo, 'tribeInfo');
+
+  // 第二级导航栏
   const activeChildren = useMemo(() => {
     const activeConfig = renderConfig.find(item =>
       item?.children?.some(subItem => subItem.path === pathname),
@@ -109,6 +117,7 @@ const Nav: React.FC<NavProps> = () => {
     return null;
   }, [pathname, renderConfig]);
 
+  // 第三级导航栏配置
   const activeSubConfig = useMemo(() => {
     if (activeChildren) {
       return activeChildren.find(item =>
@@ -118,18 +127,13 @@ const Nav: React.FC<NavProps> = () => {
     return null;
   }, [pathname, activeChildren]);
 
-  // const activeSubConfig = useMemo(() => {
-  //   return renderConfig.find(item =>
-  //     item?.children?.some(subItem => {
-  //       console.log(subItem?.children);
-  //       return subItem?.children?.some(
-  //         subChildrenItem => subChildrenItem.path === pathname,
-  //       );
-  //     }),
-  //   );
-  // }, [pathname, activeChildren]);
-
+  // 第三级导航栏
   const activeSubChildren = useMemo(() => {
+    console.log(activeSubConfig, 'activeSubConfig');
+    // 如果是部落管理 做权限管理
+    if (activeSubConfig?.configId === ConfigId.TRIBE_ME) {
+      return activeSubConfig.children;
+    }
     if (activeSubConfig?.children) {
       return activeSubConfig.children;
     }
@@ -138,16 +142,17 @@ const Nav: React.FC<NavProps> = () => {
 
   useEffect(() => {
     if (activeChildren) {
-      setDisplayChildren(activeChildren);
+      setDisplayChildren(activeChildren); // 显示第二级导航栏
     }
   }, [activeChildren]);
 
   useEffect(() => {
     if (activeSubChildren) {
-      setDisplaySubChildren(activeSubChildren);
+      setDisplaySubChildren(activeSubChildren); // 显示第三级导航栏
     }
   }, [activeSubChildren]);
 
+  // 当前导航栏层级 0是第一级 2是第三级
   const index = useMemo(() => {
     if (activeSubChildren) return 2;
     if (activeChildren) return 1;
@@ -156,9 +161,8 @@ const Nav: React.FC<NavProps> = () => {
 
   return (
     <NavStyled mt='16px'>
+      {/* 第一级导航栏 */}
       <NavShowBox translateX={`${index * -100}%`}>
-        {/* translateX={`${(index - 1) * 100}%`} */}
-        {/* translateX={activeChildren ? '-100%' : '0'} */}
         {menu.map(item => {
           return (
             <NavItem
@@ -184,8 +188,8 @@ const Nav: React.FC<NavProps> = () => {
           );
         })}
       </NavShowBox>
+      {/* 第二级导航栏 */}
       <NavShowBox translateX={`${(index - 1) * -100}%`}>
-        {/* translateX={activeSubChildren ? '0' : '100%'} */}
         {displayChildren && (
           <Box>
             <NavGoback />
@@ -218,6 +222,7 @@ const Nav: React.FC<NavProps> = () => {
           </Box>
         )}
       </NavShowBox>
+      {/* 第三级导航栏 */}
       <NavShowBox translateX={`${(index - 2) * -100}%`}>
         {displaySubChildren && (
           <Box>
