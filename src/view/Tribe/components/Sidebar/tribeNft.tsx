@@ -14,7 +14,7 @@ import {
   fetchTribeInfoAsync,
 } from 'store/tribe';
 import { TribeType } from 'store/tribe/type';
-import { useTribeInfoById } from 'store/mapModule/hooks';
+import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
 
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
 
@@ -61,9 +61,11 @@ const TribeNft: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
+  const { updater } = useFetchTribeInfoById(props.tribe_id);
+
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { tribeBaseInfo } = useStore(p => p.tribe);
-  const { detail } = tribeInfo || {};
+  const { detail, member_nft } = tribeInfo || {};
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   const [state, setState] = useImmer({
@@ -78,20 +80,20 @@ const TribeNft: React.FC<{
             <AvatarNft
               width={65}
               height={65}
-              src={BASE_IMAGE_URL + detail?.memberNft?.member_nft_image}
+              src={BASE_IMAGE_URL + member_nft?.member_nft_image}
             />
           </AvatarBox>
           <Box style={{ width: 'calc(100% - 80px)' }}>
             <RowsEllipsis>
               <Text fontWeight='bold' ellipsis>
-                {detail?.memberNft?.member_nft_name}
+                {member_nft?.member_nft_name}
               </Text>
               <Text ml='6px' color='textTips' ellipsis>
                 -Tribe Host NFT
               </Text>
             </RowsEllipsis>
             <Desc maxLine={2} color='textTips'>
-              {detail?.memberNft?.member_nft_introduction}
+              {member_nft?.member_nft_introduction}
             </Desc>
           </Box>
         </Flex>

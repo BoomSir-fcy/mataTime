@@ -94,6 +94,7 @@ export interface TribeInfo {
   detail: TribeDetails | null;
   baseInfo: TribeBaseInfo | null;
   nftInfo: TribesNFTInfo | null;
+  member_nft: MemberNft | null;
 }
 
 export interface TopiceList {
