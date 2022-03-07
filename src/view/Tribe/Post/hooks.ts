@@ -32,13 +32,13 @@
 //   }
 // }, [value, title, selectTags, tribe_id]);
 
-import { useCallback, useState } from "react"
-import { useTranslation } from "contexts/Localization";
-import { useToast } from "hooks/useToast";
+import { useCallback, useState } from 'react';
+import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'hooks/useToast';
 import { Descendant, Node } from 'slate';
-import { HUGE_ARTICLE_POST_MAX_LEN } from "config";
-import { Api } from "apis";
-import { FetchStatus } from "config/types";
+import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
+import { Api } from 'apis';
+import { FetchStatus } from 'config/types';
 
 const verifyValue = (title, value) => {
   if (!title) {
@@ -51,67 +51,72 @@ const verifyValue = (title, value) => {
   if (length > HUGE_ARTICLE_POST_MAX_LEN) {
     return '帖子内容过长';
   }
-  return ''
-}
+  return '';
+};
 
-
-
-export const useSendPostOrDraft = (method: 'tribePostCreate' | 'tribePostCreateDraft') => {
+export const useSendPostOrDraft = (
+  method: 'tribePostCreate' | 'tribePostCreateDraft',
+) => {
   const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const handle = useCallback(async (params: {
-    value: Descendant[];
-    title: string;
-    selectTags: Api.Tribe.TopicInfo[];
-    tribe_id: number;
-    imageList?: string[],
-    userIdList?: string[],
-  }, verify?: {
-    id: string;
-    verify: string;
-  }) => {
-    if (loading) return
-    const errorMsg = verifyValue(params.title, params.value)
-    if (errorMsg) {
-      toastError(t(errorMsg));
-      return
-    }
-    setLoading(true)
-    const content = JSON.stringify(params.value);
-    const topic = params.selectTags.map(item => item.ID);
-    console.log(params, topic)
-    const res = await Api.TribeApi[method]({
-      content,
-      image_urls: params.imageList?.join(','),
-      remind_user: params.userIdList?.join(','),
-      tribe_id: params.tribe_id,
-      title: params.title,
-      topic,
-      id: verify?.id,
-      verify: verify?.verify,
-    });
-    setLoading(false)
-    if (Api.isSuccess(res)) {
-      toastSuccess(t(method === 'tribePostCreate' ? '发布成功' : '保存成功'));
-      // TODO:
-      return FetchStatus.SUCCESS
-    }
-    if (res.code === 30004019) {
-      return FetchStatus.VERIFY
-
-    }
-    if (res.code === 30004020) {
-      toastError(t('verifyError'));
-      return FetchStatus.VERIFY_ERROR
-    }
-    return FetchStatus.FAILED
-  }, [loading, setLoading, method])
+  const handle = useCallback(
+    async (
+      params: {
+        value: Descendant[];
+        title: string;
+        selectTags: Api.Tribe.TopicInfo[];
+        tribe_id: number;
+        imageList?: string[];
+        userIdList?: string[];
+      },
+      verify?: {
+        id: string;
+        verify: string;
+      },
+    ) => {
+      if (loading) return;
+      const errorMsg = verifyValue(params.title, params.value);
+      if (errorMsg) {
+        toastError(t(errorMsg));
+        return;
+      }
+      setLoading(true);
+      const content = JSON.stringify(params.value);
+      const topic = params.selectTags.map(item => item.id);
+      console.log(params, topic);
+      const res = await Api.TribeApi[method]({
+        content,
+        image_urls: params.imageList?.join(','),
+        remind_user: params.userIdList?.join(','),
+        tribe_id: params.tribe_id,
+        title: params.title,
+        topic,
+        id: verify?.id,
+        verify: verify?.verify,
+      });
+      setLoading(false);
+      if (Api.isSuccess(res)) {
+        toastSuccess(t(method === 'tribePostCreate' ? '发布成功' : '保存成功'));
+        // TODO:
+        return FetchStatus.SUCCESS;
+      }
+      if (res.code === 30004019) {
+        return FetchStatus.VERIFY;
+      }
+      if (res.code === 30004020) {
+        toastError(t('verifyError'));
+        return FetchStatus.VERIFY_ERROR;
+      }
+      return FetchStatus.FAILED;
+    },
+    [loading, setLoading, method],
+  );
 
   return {
     handle,
     loading,
-  }
-}
+  };
+};

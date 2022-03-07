@@ -120,7 +120,6 @@ export const JoinTribeModal: React.FC<{
     }
   }, [state, joinTribe, detail]);
 
-  console.log(detail);
   return (
     <ModalWrapper
       title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name || '' })}

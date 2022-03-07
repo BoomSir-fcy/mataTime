@@ -68,11 +68,11 @@ declare namespace Api {
     }
 
     interface TopicInfo {
-      ID: number;
-      TribeID: number;
-      Topic: string;
-      CreateTime: number;
-      Status: number;
+      id: number;
+      tribe_id: number;
+      topic: string;
+      create_time: number;
+      status: number;
     }
 
     interface TopicCreateParams {

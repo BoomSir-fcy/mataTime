@@ -21,7 +21,6 @@ const Btn = styled(Flex)`
 const Tags: React.FC<{
   list: Api.Tribe.TopicInfo[];
 }> = ({ list }) => {
-  console.log(list, 'list');
   return (
     <Flex alignItems='center' flexWrap='wrap'>
       {list?.length > 0 && (
@@ -29,7 +28,7 @@ const Tags: React.FC<{
           {list?.map((item, index) => (
             <Btn key={`${item}${index}`}>
               <Text fontSize='14px' color='textPrimary'>
-                {item.Topic}
+                {item.topic}
               </Text>
             </Btn>
           ))}

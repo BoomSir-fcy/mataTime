@@ -14,7 +14,7 @@ import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
 import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
 import { FetchStatus } from 'config/types';
 
-const TagBoxStyled = styled(Card) <{ isOpen?: boolean }>`
+const TagBoxStyled = styled(Card)<{ isOpen?: boolean }>`
   background-color: ${({ theme }) => theme.colors.input};
   flex: 1;
   position: relative;
@@ -28,7 +28,7 @@ const TagBoxStyled = styled(Card) <{ isOpen?: boolean }>`
         `${theme.radii.card} ${theme.radii.card} 0 0`};
     `}
 `;
-const TagOptionBoxStyled = styled(Card) <{ isOpen?: boolean }>`
+const TagOptionBoxStyled = styled(Card)<{ isOpen?: boolean }>`
   width: 100%;
   min-height: 80px;
   max-height: 430px;
@@ -98,7 +98,7 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
     item => {
       if (item) {
         // setTagsList(prep => prep.concat(item));
-        setSelectTags(prep => prep.filter(i => i.ID !== item.ID));
+        setSelectTags(prep => prep.filter(i => i.id !== item.id));
       }
     },
     [setSelectTags, setTagsList],
@@ -106,15 +106,15 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
 
   const renderTagsList = useMemo(() => {
     return tagsList.filter(item => {
-      const flag1 = !selectTags.some(subItem => subItem.ID === item.ID);
-      const flag2 = item.Topic.indexOf(inputValue) !== -1;
+      const flag1 = !selectTags.some(subItem => subItem.id === item.id);
+      const flag2 = item.topic.indexOf(inputValue) !== -1;
       return flag1 && flag2;
     });
   }, [tagsList, selectTags, inputValue]);
 
   useEffect(() => {
-    onChange(selectTags)
-  }, [selectTags])
+    onChange(selectTags);
+  }, [selectTags]);
 
   return (
     <TagBoxStyled isOpen={focus} isRadius>
@@ -129,8 +129,8 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
           pb='0'
         >
           {selectTags.map(item => (
-            <Tag mr='2px' key={item.ID}>
-              <TagText>{item.Topic}</TagText>
+            <Tag mr='2px' key={item.id}>
+              <TagText>{item.topic}</TagText>
               <CancleIcon
                 onClick={() => {
                   handleRemoveTag(item);
@@ -184,9 +184,9 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
                 console.log(2121221);
               }}
               cursor='pointer'
-              key={item.ID}
+              key={item.id}
             >
-              <TagText>{item.Topic}</TagText>
+              <TagText>{item.topic}</TagText>
             </Tag>
           ))}
         </Flex>
