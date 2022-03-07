@@ -2,12 +2,13 @@ import React, { useCallback, useState } from 'react';
 import { Box, Flex, Button, Text, Input } from 'uikit';
 import BtnIcon from 'view/Tribe/components/BtnIcon';
 import { useTranslation } from 'contexts/Localization';
-import { ModalWrapper, Icon } from 'components';
+import { ModalWrapper, Icon, Loading } from 'components';
 import styled from 'styled-components';
 import { Api } from 'apis';
 import getFileExt from 'utils/getFileExt';
 import { TEIBE_FILE_TYPES } from 'config';
 import FileIcon from 'components/Icon/FileIcon';
+import Dots from 'components/Loader/Dots';
 
 const UpdateBtnSmall = styled(Flex)`
   cursor: pointer;
@@ -117,7 +118,11 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({ tribe_id }) => {
           <Text mt='16px' mb='16px'>
             * 上传文件
           </Text>
-          <label htmlFor='upload-file' title={t('editorUploadImg')}>
+          <label
+            style={{ position: 'relative' }}
+            htmlFor='upload-file'
+            title={t('editorUploadImg')}
+          >
             <UpdateBtnSmall
               flexDirection='column'
               alignItems='center'
@@ -134,6 +139,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({ tribe_id }) => {
               accept='.doc,.docx, .xls, .xlsx, .pdf, .txt, .ppt'
               hidden
             />
+            <Loading zIndex={2} overlay visible={loading} />
           </label>
           <Flex alignItems='center' height='36px'>
             {fileInfo.name && (
@@ -157,8 +163,9 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({ tribe_id }) => {
               size='md'
               onClick={() => handleSubmit()}
               type='submit'
+              disabled={saveLoading || !fileInfo.full_path || !value}
             >
-              确认
+              {saveLoading ? <Dots>确认</Dots> : '确认'}
             </Button>
           </Flex>
         </form>
