@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Button, Flex, Heading, Text, Box, Image } from 'uikit';
 import styled from 'styled-components';
 import TradeLogo from '../components/TradeCard/TradeLogo';
@@ -7,6 +8,7 @@ import BtnIcon from '../components/BtnIcon';
 import { useTranslation } from 'contexts/Localization';
 import { TribeInfo } from 'store/tribe/type';
 import { getEncodeValue } from 'utils/urlQueryPath';
+import { storeAction } from 'store';
 
 const InfoFlex = styled(Flex)`
   padding: 26px 14px 26px 26px;
@@ -40,6 +42,7 @@ interface HeaderProps {
 }
 const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   return (
     <InfoFlex>
@@ -76,7 +79,13 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
             </Text>
           </Flex>
           {TribeInfo.status !== 4 ? (
-            <BtnIcon name='icon-wodebula' text={t('加入部落')} />
+            <BtnIcon
+              name='icon-wodebula'
+              text={t('加入部落')}
+              onClick={() =>
+                dispatch(storeAction.setJoinTribeVisibleModal(true))
+              }
+            />
           ) : (
             <Link
               to={`/tribe/post?i=${TribeInfo.tribe_id}&n=${getEncodeValue(

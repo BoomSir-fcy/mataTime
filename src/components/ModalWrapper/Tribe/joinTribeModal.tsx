@@ -79,9 +79,9 @@ export const JoinTribeModal: React.FC<{
   }, [handleApprove]);
 
   const handleChange = React.useCallback(e => {
-    if (e.currentTarget.validity.valid) {
+    if (e.currentTarget?.validity?.valid) {
       setState(p => {
-        p.inviteAddress = e.currentTarget.value;
+        p.inviteAddress = e?.currentTarget?.value;
       });
     }
   }, []);

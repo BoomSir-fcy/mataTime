@@ -2,6 +2,7 @@ import React from 'react';
 import { ModalWrapper } from 'components';
 import { Flex, Button, Text } from 'uikit';
 import { useTranslation } from 'contexts';
+import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { shortenAddress } from 'utils/contract';
 import { copyContent } from 'utils/copy';
@@ -15,6 +16,7 @@ export const JoinInviteModal: React.FC<{
   onClose: () => void;
 }> = React.memo(({ tribe_id, visible, onClose }) => {
   const { t } = useTranslation();
+  const { toastSuccess } = useToast();
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const tribeInfo = useTribeInfoById(tribe_id);
 
@@ -41,7 +43,12 @@ export const JoinInviteModal: React.FC<{
           <Text>{shortenAddress(userInfo.address, 4)}</Text>
         </MaskInfo>
         <Flex mt='20px' justifyContent='center'>
-          <Button onClick={() => copyContent(userInfo.address)}>
+          <Button
+            onClick={() => {
+              copyContent(userInfo.address);
+              toastSuccess(t('copySuccess'));
+            }}
+          >
             {t('TribeCopyAddress')}
           </Button>
         </Flex>

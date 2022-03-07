@@ -8,15 +8,12 @@ import { JoinTribeModal } from 'components';
 import { useTranslation } from 'contexts';
 import { BASE_IMAGE_URL } from 'config';
 import { storeAction, useStore } from 'store';
-import {
-  fetchTribeJoinBasicServiceAsync,
-  fetchTribeDetailAsync,
-  fetchTribeInfoAsync,
-} from 'store/tribe';
+import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 import { TribeType } from 'store/tribe/type';
 import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
-
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
+
+import BtnIcon from '../BtnIcon';
 
 const AvatarBox = styled(Box)<{ active?: boolean }>`
   width: 65px;
@@ -66,110 +63,115 @@ const TribeNft: React.FC<{
   const { detail, member_nft, baseInfo } = tribeInfo || {};
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
-  const [state, setState] = useImmer({
-    visible: false,
-  });
-
   return (
     <React.Fragment>
-      <Card padding='16px' isRadius {...props}>
-        <Flex mb='12px' justifyContent='flex-start'>
-          <AvatarBox active={tribeInfo?.status === 4}>
-            <AvatarNft
-              width={65}
-              height={65}
-              src={BASE_IMAGE_URL + member_nft?.member_nft_image}
-            />
-          </AvatarBox>
-          <Box style={{ width: 'calc(100% - 80px)' }}>
-            <RowsEllipsis>
-              <Text fontWeight='bold' ellipsis>
-                {member_nft?.member_nft_name}
-              </Text>
-              <Text ml='6px' color='textTips' ellipsis>
-                -Tribe Host NFT
-              </Text>
-            </RowsEllipsis>
-            <Desc maxLine={2} color='textTips'>
-              {member_nft?.member_nft_introduction}
-            </Desc>
-          </Box>
-        </Flex>
-        {tribeInfo?.status === 0 && (
-          <Flex mb='12px' justifyContent='center'>
-            <Button
-              onClick={() => {
-                if (detail?.type === TribeType.BASIC) {
-                  dispatch(fetchTribeJoinBasicServiceAsync());
+      {member_nft?.sender && (
+        <Card padding='16px' isRadius {...props}>
+          <Flex mb='12px' justifyContent='flex-start'>
+            <AvatarBox active={tribeInfo?.status === 4}>
+              <AvatarNft
+                width={65}
+                height={65}
+                src={
+                  BASE_IMAGE_URL +
+                  (isOwner === 1
+                    ? member_nft?.owner_nft_image
+                    : member_nft?.member_nft_image)
                 }
-                setState(p => {
-                  p.visible = true;
-                });
-              }}
-            >
-              {t('tribeJoin')}
-            </Button>
+              />
+            </AvatarBox>
+            <Box style={{ width: 'calc(100% - 80px)' }}>
+              <RowsEllipsis>
+                <Text fontWeight='bold' ellipsis>
+                  {isOwner === 1
+                    ? member_nft?.owner_nft_name
+                    : member_nft?.member_nft_name}
+                </Text>
+                <Text ml='6px' color='textTips' ellipsis>
+                  -Tribe Host NFT
+                </Text>
+              </RowsEllipsis>
+              <Desc maxLine={2} color='textTips'>
+                {isOwner === 1
+                  ? member_nft?.owner_nft_introduction
+                  : member_nft?.member_nft_introduction}
+              </Desc>
+            </Box>
           </Flex>
-        )}
-        {/* {tribeInfo?.status !== 0 && (
-          <React.Fragment>
-            <Flex mb='12px'>
-              <Text color='textTips'>#{detail?.nft_id}</Text>
-              <Text ml='30px' color='textTips'>
-                Validity Date:{' '}
-                {`${dayjs().format('YY-MM-DD')}~${dayjs(
-                  detail?.expire_time * 1000,
-                ).format('YY-MM-DD')}`}
-              </Text>
+          {tribeInfo?.status === 0 && (
+            <Flex mb='12px' justifyContent='center'>
+              <BtnIcon
+                name='icon-wodebula'
+                text={t('tribeJoin')}
+                onClick={() => {
+                  if (detail?.type === TribeType.BASIC) {
+                    dispatch(fetchTribeJoinBasicServiceAsync());
+                  }
+                  dispatch(storeAction.setJoinTribeVisibleModal(true));
+                }}
+              />
             </Flex>
-          </React.Fragment>
-        )} */}
+          )}
+          {/* {tribeInfo?.status !== 0 && (
+            <React.Fragment>
+              <Flex mb='12px'>
+                <Text color='textTips'>#{detail?.nft_id}</Text>
+                <Text ml='30px' color='textTips'>
+                  Validity Date:{' '}
+                  {`${dayjs().format('YY-MM-DD')}~${dayjs(
+                    detail?.expire_time * 1000,
+                  ).format('YY-MM-DD')}`}
+                </Text>
+              </Flex>
+            </React.Fragment>
+          )} */}
 
-        {/* 质押 */}
-        {(tribeInfo?.status === 2 || tribeInfo?.status === 3) && (
-          <Flex mb='12px' justifyContent='space-between'>
-            <Flex flexDirection='column' mr='15px'>
-              <Text>{t('ValidityDays')}:</Text>
-              <Text color='textTips'>
-                {detail?.expire_time > 0
-                  ? `${dayjs().format('YY-MM-DD')}~${dayjs(
-                      detail?.expire_time * 1000,
-                    ).format('YY-MM-DD')}`
-                  : t('ValidityDaysForver')}
-              </Text>
+          {/* 质押 */}
+          {(tribeInfo?.status === 2 || tribeInfo?.status === 3) && (
+            <Flex mb='12px' justifyContent='space-between'>
+              <Flex flexDirection='column' mr='15px'>
+                <Text>{t('ValidityDays')}:</Text>
+                <Text color='textTips'>
+                  {detail?.valid_time > 0
+                    ? `${dayjs().format('YY-MM-DD')}~${dayjs()
+                        .add(detail?.valid_time / 60 / 60 / 24, 'day')
+                        .format('YY-MM-DD')}`
+                    : t('ValidityDaysForver')}
+                </Text>
+              </Flex>
+              {detail?.nft_id !== 0 && (
+                <StakeButton
+                  tribeId={props.tribe_id}
+                  nftId={detail.nft_id}
+                  nftType={isOwner}
+                  callback={() => updater()}
+                />
+              )}
             </Flex>
-            {detail?.nft_id !== 0 && (
-              <StakeButton
+          )}
+          {/* 取消质押 */}
+          {tribeInfo?.status === 4 && (
+            <Flex mb='12px' justifyContent='space-between'>
+              <Flex flexDirection='column' mr='15px'>
+                <Text>{t('ValidityDays')}:</Text>
+                <Text color='textTips'>
+                  {detail?.expire_time > 0
+                    ? `${dayjs().format('YY-MM-DD')}~${dayjs(
+                        detail?.expire_time * 1000,
+                      ).format('YY-MM-DD')}`
+                    : t('ValidityDaysForver')}
+                </Text>
+              </Flex>
+              <UnStakeButton
                 tribeId={props.tribe_id}
-                nftId={detail.nft_id}
                 nftType={isOwner}
                 callback={() => updater()}
               />
-            )}
-          </Flex>
-        )}
-        {/* 取消质押 */}
-        {tribeInfo?.status === 4 && (
-          <Flex mb='12px' justifyContent='space-between'>
-            <Flex flexDirection='column' mr='15px'>
-              <Text>{t('ValidityDays')}:</Text>
-              <Text color='textTips'>
-                {detail?.valid_time > 0
-                  ? `${dayjs().format('YY-MM-DD')}~${dayjs()
-                      .add(detail?.valid_time / 60 / 60 / 24, 'day')
-                      .format('YY-MM-DD')}`
-                  : t('ValidityDaysForver')}
-              </Text>
             </Flex>
-            <UnStakeButton
-              tribeId={props.tribe_id}
-              nftType={isOwner}
-              callback={() => updater()}
-            />
-          </Flex>
-        )}
-      </Card>
-      {state.visible && (
+          )}
+        </Card>
+      )}
+      {/* {state.visible && (
         <JoinTribeModal
           visible={state.visible}
           tribeInfo={tribeInfo}
@@ -183,7 +185,7 @@ const TribeNft: React.FC<{
             }
           }}
         />
-      )}
+      )} */}
     </React.Fragment>
   );
 };

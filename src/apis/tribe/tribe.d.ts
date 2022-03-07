@@ -160,6 +160,11 @@ declare namespace Api {
       tribe_id: number;
     }
 
-    interface FileInfo {}
+    interface FileInfo {
+      id: number;
+      tribe_id: number;
+      file_name: string;
+      url: string;
+    }
   }
 }
