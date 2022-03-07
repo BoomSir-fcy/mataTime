@@ -97,7 +97,7 @@ export const JoinTribeModal: React.FC<{
         p.submitLoading = true;
       });
       const res = await joinTribe(
-        detail.tribe_id,
+        tribeInfo.tribe_id,
         inviteAddress,
         joinServiceFee,
       );
