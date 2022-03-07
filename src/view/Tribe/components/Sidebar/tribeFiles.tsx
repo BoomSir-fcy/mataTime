@@ -12,7 +12,6 @@ const TribeFiles: React.FC<{
   const { data } = useFetchFileList(props.tribe_id);
 
   // useFetchFileList(props.tribe_id);
-  console.log(data);
 
   return (
     <Card padding='16px' isRadius {...props}>

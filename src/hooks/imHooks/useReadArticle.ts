@@ -34,7 +34,6 @@ const useReadArticle = (nonce?: number | boolean) => {
     if (!isBrowserTabActiveRef.current) return;
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
-        console.log(articleIds)
         if (Number(type) === ReadType.ARTICLE) {
           // 拼接转发内容
           const readInfo = articleIds[type]?.reduce(
@@ -94,7 +93,6 @@ const useReadArticle = (nonce?: number | boolean) => {
     const bottom =
       top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom;
     const topViews = {};
-    console.log(articlePositionsVal)
     Object.keys(articlePositionsVal).forEach(item => {
       const { offsetTop, offsetBottom, readType, articleId } =
         articlePositionsVal[item];
