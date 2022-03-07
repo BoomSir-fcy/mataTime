@@ -15,7 +15,7 @@ export const useTribeTicketExchange = () => {
     const tx = await contract.ExchangeTicketsNFT(value, {});
     const receipt = await tx.wait();
     return receipt.status;
-  }, [])
+  }, [contract])
 
   return { exchangeHandle: handle }
 }
@@ -32,7 +32,7 @@ export const useMatterAllowanceTribeTicket = () => {
     );
     const receipt = await tx.wait();
     return receipt.status;
-  }, [])
+  }, [contract])
 
   return { handleApprove: handle }
 }
@@ -49,7 +49,6 @@ export const useFetchTribeTicketPrice = () => {
     const fetchPrice = async () => {
       const contract = getTribeTicketsContract()
       try {
-        console.log(contract)
         const res = await contract._price();
         setPriceState({
           price: new BigNumber(res.toString()),
