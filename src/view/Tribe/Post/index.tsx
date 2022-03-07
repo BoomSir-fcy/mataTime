@@ -32,6 +32,9 @@ import { FetchStatus } from 'config/types';
 import { useSendPostOrDraft } from './hooks';
 import { getDecodeValue } from 'utils/urlQueryPath';
 import parseContentInfo from 'components/Editor/RichTextEditor/tools/parseContentInfo';
+import { Link, useHistory } from 'react-router-dom';
+import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 const BoxStyled = styled(Box)`
   padding: ${({ theme }) => theme.mediaQueriesSize.padding};
@@ -92,6 +95,11 @@ const Post = () => {
 
   const { i, n } = useParsedQueryString();
   const tribe_id = Number(i);
+
+  useFetchTribeInfoById(tribe_id);
+  const tribeInfo = useTribeInfoById(tribe_id);
+  const { account } = useActiveWeb3React();
+
   const tribeName = getDecodeValue(n);
 
   const [value, setValue] = useState<Descendant[]>(
@@ -233,14 +241,26 @@ const Post = () => {
           </Flex>
         </Flex>
         <Flex mb='22px'>
-          <LableBoxStyled>* {t('Tag')}</LableBoxStyled>
-          {/* <InputTag
+          <LableBoxStyled>
+            *{' '}
+            {tribeInfo?.tribe?.owner_address?.toLowerCase() ===
+            account?.toLowerCase() ? (
+              <Link to=''>
+                <Text as='span' color='textPrimary'>
+                  {t('Tag')}
+                </Text>
+              </Link>
+            ) : (
+              t('Tag')
+            )}
+          </LableBoxStyled>
+          <InputTag
             tribe_id={tribe_id}
             onChange={value => {
               console.log(value);
               setSelectTags(value);
             }}
-          /> */}
+          />
         </Flex>
         <LableBoxStyled mb='22px'>* {t('Document')}</LableBoxStyled>
         <RichTextEditor
