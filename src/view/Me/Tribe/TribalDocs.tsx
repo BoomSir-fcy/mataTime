@@ -134,7 +134,10 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   return (
     <CountBox>
       <Crumbs title='部落文件'>
-        <UploadFile tribe_id={Number(parseQs.i)} />
+        <UploadFile
+          onSuccess={() => getFileList(1)}
+          tribe_id={Number(parseQs.i)}
+        />
         {/* <BtnIcon name='icon-shangchuan1' text={t('上传文件')} /> */}
       </Crumbs>
       <TableBox>

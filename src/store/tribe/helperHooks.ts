@@ -124,29 +124,51 @@ export const useFetchTribePostInfo = tribe_id => {
 };
 
 // 部落文件列表
-export const useFetchFileList = (id: number) => {
+export const useFetchFileList = (id: number, page: number) => {
   const [data, setData] = useState({
-    data: [] as Api.Tribe.FileInfo[],
+    data: {
+      list: [] as Api.Tribe.FileInfo[],
+      page: 0,
+      page_size: 0,
+      total_count: 0,
+    },
+    reserved: [] as Api.Tribe.FileInfo[],
+    loading: false,
     fetchStatus: FetchStatus.NOT_FETCHED,
   });
-  const fetchData = useCallback(async tribe_id => {
-    try {
-      const res = await Api.TribeApi.getTribeFile({ tribe_id });
+
+  const fetchData = useCallback(
+    async (tribe_id, page) => {
       setData({
-        data: res.data,
-        fetchStatus: FetchStatus.SUCCESS,
+        ...data,
+        loading: true,
       });
-    } catch (error) {
-      setData(prev => ({
-        ...prev,
-        fetchStatus: FetchStatus.FAILED,
-      }));
-    }
-  }, []);
+      try {
+        const res: any = await Api.TribeApi.getTribeFile({
+          tribe_id,
+          page,
+          page_size: 5,
+        });
+        setData({
+          reserved: page === 1 ? res.data.list : data.reserved,
+          data: res.data,
+          fetchStatus: FetchStatus.SUCCESS,
+          loading: false,
+        });
+      } catch (error) {
+        setData(prev => ({
+          ...prev,
+          loading: false,
+          fetchStatus: FetchStatus.FAILED,
+        }));
+      }
+    },
+    [data],
+  );
 
   useEffect(() => {
     if (id) {
-      fetchData(id);
+      fetchData(id, page);
     }
   }, [id]);
 

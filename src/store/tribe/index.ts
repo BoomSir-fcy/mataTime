@@ -11,8 +11,12 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { setInitMemberNft, updateTribeDetails } from './actions';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import {
+  setInitMemberNft,
+  updateTribeDetails,
+  setJoinTribeVisibleModal,
+} from './actions';
 
 const initialState: TribeState = {
   isApproveStakeNft: false,
@@ -90,6 +94,7 @@ const initialState: TribeState = {
   },
   joinTribe: {
     loading: false,
+    joinVisible: false,
     approveLimit: 0,
     basicServiceCharge: 0,
   },
@@ -328,6 +333,9 @@ export const tribe = createSlice({
           articleList.length >= limit || start > limit ? articleList : [];
         state.postList.start = articleList.length >= limit ? next : start;
         state.postList.loading = false;
+      })
+      .addCase(setJoinTribeVisibleModal, (state, { payload }) => {
+        state.joinTribe.joinVisible = payload;
       });
   },
 });

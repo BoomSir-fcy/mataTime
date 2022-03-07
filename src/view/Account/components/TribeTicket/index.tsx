@@ -13,6 +13,7 @@ import {
   useMatterAllowanceTribeTicket,
   useTribeTicketExchange,
 } from './hooks';
+import { useToast } from 'hooks';
 import { useStore } from 'store';
 import BigNumber from 'bignumber.js';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -36,9 +37,12 @@ const InputCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.paddingxs}
 `;
 
+const MAX_EXCHANGE_AMOUNT = 99;
+
 const TribeTicket = () => {
   const { account } = useActiveWeb3React();
   const matterAddress = getMatterAddress();
+  const { toastError } = useToast();
 
   useFetchTribeTicketInfo();
   useTicketNftList();
@@ -73,6 +77,11 @@ const TribeTicket = () => {
 
   const dispatch = useDispatch();
 
+  const [userApprove, setUserApprove] = useState(false);
+  const isApprove = useMemo(() => {
+    return tribeTicketsInfo?.allowance?.isGreaterThan(0) || userApprove;
+  }, [userApprove, tribeTicketsInfo.allowance]);
+
   return (
     <Flex flexWrap='wrap' justifyContent='space-around'>
       <CardStyled isRadius mt='65px'>
@@ -100,11 +109,11 @@ const TribeTicket = () => {
         <InputCard mt='6px' isRadius>
           <Flex mt='8px' justifyContent='space-between'>
             <Text>价格</Text>
-            <Flex>
+            <Flex alignItems='center'>
               <Box width='22px' height='22px'>
-                <Image width={22} height={22} src='' />
+                <Image width={22} height={22} src='/images/tokens/MATTER.svg' />
               </Box>
-              <Text>MATTER</Text>
+              <Text ml='4px'>MATTER</Text>
             </Flex>
           </Flex>
           {/* <Input noShadow /> */}
@@ -120,16 +129,13 @@ const TribeTicket = () => {
           </Box>
         </InputCard>
         <Flex padding='16px 0' justifyContent='center'>
-          <Icon name='icon-NFTkapai1' size={20} />
+          <Icon name='icon-arrowTop' size={20} />
         </Flex>
         <InputCard isRadius>
           <Flex mt='10px' justifyContent='space-between'>
             <Text>NFT</Text>
             <Flex>
-              <Box width='22px' height='22px'>
-                <Image width={22} height={22} src='' />
-              </Box>
-              <Text>MATTER</Text>
+              <Text>Ticket</Text>
             </Flex>
           </Flex>
           {/* <Input noShadow /> */}
@@ -144,11 +150,11 @@ const TribeTicket = () => {
           </Box>
         </InputCard>
         <Text fontSize='14px' mt='8px'>
-          Exchangeable Ticket Quantity：2
+          Exchangeable Ticket Quantity: {MAX_EXCHANGE_AMOUNT}
         </Text>
         {!account ? (
           <ConnectWalletButton scale='ld' width='100%' />
-        ) : tribeTicketsInfo.allowance.isGreaterThan(0) ? (
+        ) : isApprove ? (
           <Button
             onClick={onExchange}
             mb='22px'
@@ -165,10 +171,15 @@ const TribeTicket = () => {
               try {
                 setLoading(true);
                 await handleApprove();
+                setUserApprove(true);
                 dispatch(fetchTribeTicketInfoAsync({ account }));
                 setLoading(false);
               } catch (error) {
+                setLoading(false);
                 console.log(error);
+                toastError(
+                  'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+                );
               }
             }}
             disabled={loading}

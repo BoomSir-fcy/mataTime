@@ -118,6 +118,7 @@ export interface PostList {
 
 export interface JoinTribe {
   loading: boolean;
+  joinVisible: boolean;
   approveLimit: Number;
   basicServiceCharge: Number;
 }
