@@ -36,7 +36,7 @@ export const menuNavConfig: MenuNavConfig[] = [
     activeIcon: 'icon-xingqiu1',
     path: '/tribe',
     coming: false,
-    lable: 'homeMenuStar',
+    lable: 'Tribe',
   },
   {
     icon: 'icon-qizi',
