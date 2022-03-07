@@ -237,13 +237,13 @@ const Post = () => {
         </Flex>
         <Flex mb='22px'>
           <LableBoxStyled>* {t('Tag')}</LableBoxStyled>
-          {/* <InputTag
+          <InputTag
             tribe_id={tribe_id}
             onChange={value => {
               console.log(value);
               setSelectTags(value);
             }}
-          /> */}
+          />
         </Flex>
         <LableBoxStyled mb='22px'>* {t('Document')}</LableBoxStyled>
         <RichTextEditor
