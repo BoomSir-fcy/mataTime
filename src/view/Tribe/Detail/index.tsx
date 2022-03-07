@@ -93,7 +93,6 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     };
   }, [TribeId]);
 
-  console.log(baseInfo);
   return (
     <Flex>
       <TribeBox>
