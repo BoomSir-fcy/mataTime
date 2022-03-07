@@ -52,11 +52,11 @@ const TagList: React.FC<{
   return (
     <TopicsContentFlex>
       {list.map(item => (
-        <Tag key={item.ID}>
-          <TagText>{item.Topic}</TagText>
+        <Tag key={item.id}>
+          <TagText>{item.topic}</TagText>
           <CancleIcon
             onClick={() => {
-              onDelete(item.ID);
+              onDelete(item.id);
             }}
           />
         </Tag>
