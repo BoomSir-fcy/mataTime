@@ -79,7 +79,9 @@ const PostListComponents = (props, ref) => {
 
   useEffect(() => {
     setIsEnd(false);
-    Getlist(1);
+    if (filterValObj.sortTime || filterValObj.sortLike) {
+      Getlist(1);
+    }
   }, [filterValObj]);
 
   React.useImperativeHandle(ref, () => ({

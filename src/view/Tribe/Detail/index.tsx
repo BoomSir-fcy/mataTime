@@ -40,13 +40,12 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   const { account } = useActiveWeb3React();
   const { tribeInfo, tribeBaseInfo } = useStore(p => p.tribe);
   const PostList = useStore(p => p.tribe.postList.list);
-  const attention = useStore(p => p.post.attention);
   const tribeDetailInfo = useTribeInfoById(parsedQs.id);
   const { updater } = useFetchTribeInfoById(parsedQs.id);
 
   const [refresh, setRefresh] = useState(false);
   const [filterVal, setFilterVal] = useState({
-    attention: parsedQs.attention || attention || 2,
+    ActiveTitle: parsedQs.active || 0,
   });
   const [TribeId, setTribeId] = useState(0);
 
