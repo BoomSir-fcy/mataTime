@@ -66,7 +66,7 @@ const TribeInfo: React.FC<{
           )}
         </Flex>
         <Flex alignItems='center' mb='19px'>
-          <Avatar scale='sm' src={detail?.nft_image} />
+          <Avatar disableFollow scale='sm' src={detail?.nft_image} />
           <Text fontSize='18px' fontWeight='bold' ml='16px'>
             {detail?.nick_name}
           </Text>

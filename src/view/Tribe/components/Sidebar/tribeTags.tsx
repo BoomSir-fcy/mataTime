@@ -27,7 +27,7 @@ const Tags: React.FC<{
         <>
           {list?.map((item, index) => (
             <Btn key={`${item}${index}`}>
-              <Text fontSize='14px' color='textPrimary'>
+              <Text fontSize='14px' color='textPrimary' ellipsis>
                 {item.topic}
               </Text>
             </Btn>

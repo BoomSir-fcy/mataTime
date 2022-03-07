@@ -7,6 +7,7 @@ import {
   fetchTribeInfoAsync,
   fetchTribeListAsync,
   fetchTicketNftListAsync,
+  fetchIsApproveStakeNft,
 } from '.';
 
 export const useTribeState = () => {
@@ -54,6 +55,18 @@ export const useTicketNftList = () => {
   useEffect(() => {
     if (account) {
       dispatch(fetchTicketNftListAsync({ account }));
+    }
+  }, [account]);
+};
+
+// 授权质押
+export const useAccountStakeApprove = () => {
+  const dispatch = useDispatch();
+  const { account } = useWeb3React();
+
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchIsApproveStakeNft({ account }));
     }
   }, [account]);
 };
