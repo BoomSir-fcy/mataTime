@@ -78,7 +78,7 @@ const ChildrenComment = styled(Box)`
     margin-left: 92px;
   }
 `;
-const ChildrenCommentContent = styled(Flex) <{ active: boolean }>`
+const ChildrenCommentContent = styled(Flex)<{ active: boolean }>`
   padding: 8px 8px 0 12px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 14px 18px 0 25px;
@@ -197,7 +197,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         setRefresh(false);
         // 需要自动翻译才判断评论是否需要翻译
         if (userAutoTranslate) {
-          const { postIds } = checkTranslateIds(res.data?.list || [], 'id', 'comment');
+          const { postIds } = checkTranslateIds(
+            res.data?.list || [],
+            'id',
+            'comment',
+          );
           dispatch(addCommentTranslateIds(postIds));
           // 二级评论的判断翻译内容
           (res.data?.list || []).map(item => {
@@ -277,7 +281,11 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       setNonce(prep => prep + 1);
       // 需要自动翻译才判断评论是否需要翻译
       if (userAutoTranslate) {
-        const { postIds } = checkTranslateIds(res.data?.list || [], 'id', 'comment');
+        const { postIds } = checkTranslateIds(
+          res.data?.list || [],
+          'id',
+          'comment',
+        );
         dispatch(addCommentTranslateIds(postIds));
         // 更新二级评论需要翻译的id
         setCommentIdsMap(prep => {
@@ -428,8 +436,8 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           <Box
                             className={
                               commentTranslateMap[item.id]?.showTranslate ??
-                                commentTranslateMap[commentIdsMap[item.id]?.[0]]
-                                  ?.showTranslate
+                              commentTranslateMap[commentIdsMap[item.id]?.[0]]
+                                ?.showTranslate
                                 ? ''
                                 : 'icon-shield'
                             }
@@ -489,9 +497,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                     disableParseSquare
                     content={
                       userAutoTranslate &&
-                        commentTranslateMap[item.id] &&
-                        commentTranslateMap[item.id].content &&
-                        commentTranslateMap[item.id].showTranslate
+                      commentTranslateMap[item.id] &&
+                      commentTranslateMap[item.id].content &&
+                      commentTranslateMap[item.id].showTranslate
                         ? commentTranslateMap[item.id].content
                         : item.comment
                     }
@@ -505,9 +513,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                         ...item,
                         content:
                           userAutoTranslate &&
-                            commentTranslateMap[item.id] &&
-                            commentTranslateMap[item.id].content &&
-                            commentTranslateMap[item.id].showTranslate
+                          commentTranslateMap[item.id] &&
+                          commentTranslateMap[item.id].content &&
+                          commentTranslateMap[item.id].showTranslate
                             ? commentTranslateMap[item.id].content
                             : item.comment,
                       },
@@ -547,9 +555,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                             ...row,
                             comment:
                               userAutoTranslate &&
-                                commentTranslateMap[row.id] &&
-                                commentTranslateMap[row.id].content &&
-                                commentTranslateMap[row.id].showTranslate
+                              commentTranslateMap[row.id] &&
+                              commentTranslateMap[row.id].content &&
+                              commentTranslateMap[row.id].showTranslate
                                 ? commentTranslateMap[row.id].content
                                 : row.comment,
                           }}
@@ -602,35 +610,35 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   ))}
                   {item?.comment_list_resp?.total_num >
                     item?.comment_list_resp?.list?.length && (
-                      <Box>
-                        <CommentMore
-                          variant='text'
-                          onClick={() =>
-                            getSubCommentList({
-                              pid: itemData.id,
-                              first_comment_id: item.id,
-                              prepage: MAX_SPEND_TIME_PAGE_TATOL,
-                              page: item?.comment_list_resp?.page
-                                ? item?.comment_list_resp?.page + 1
-                                : 2,
-                              sort_add_time: sortTime,
-                              sort_like: sortLike,
-                            })
-                          }
-                        >
-                          <Text color='textPrimary'>
-                            {t('A total of 1 replies', {
-                              value: item?.comment_list_resp?.total_num,
-                            })}
-                          </Text>
-                          <Icon
-                            name='icon-shangjiantou'
-                            color='textPrimary'
-                            size={12}
-                          />
-                        </CommentMore>
-                      </Box>
-                    )}
+                    <Box>
+                      <CommentMore
+                        variant='text'
+                        onClick={() =>
+                          getSubCommentList({
+                            pid: itemData.id,
+                            first_comment_id: item.id,
+                            prepage: MAX_SPEND_TIME_PAGE_TATOL,
+                            page: item?.comment_list_resp?.page
+                              ? item?.comment_list_resp?.page + 1
+                              : 2,
+                            sort_add_time: sortTime,
+                            sort_like: sortLike,
+                          })
+                        }
+                      >
+                        <Text color='textPrimary'>
+                          {t('A total of 1 replies', {
+                            value: item?.comment_list_resp?.total_num,
+                          })}
+                        </Text>
+                        <Icon
+                          name='icon-shangjiantou'
+                          color='textPrimary'
+                          size={12}
+                        />
+                      </CommentMore>
+                    </Box>
+                  )}
                 </ChildrenComment>
               )}
             </CommentItem>

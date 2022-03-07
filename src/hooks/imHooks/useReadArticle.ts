@@ -34,18 +34,8 @@ const useReadArticle = (nonce?: number | boolean) => {
     if (!isBrowserTabActiveRef.current) return;
     Object.keys(articleIds).forEach(type => {
       if (articleIds[type] && articleIds[type].length) {
-        if (Number(type) === ReadType.COMMENT) {
-          im?.send(
-            im.messageProtocol.WSProtocol_Spend_Time,
-            {
-              commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
-              read_type: Number(type), // 文章阅读
-              read_uid: articleIds[type]?.map(item => item.articleId) || [], // id数组 推文或者评论的
-              time_step: timeStep, // 推送时间间隔
-            },
-            true,
-          );
-        } else {
+        console.log(articleIds)
+        if (Number(type) === ReadType.ARTICLE) {
           // 拼接转发内容
           const readInfo = articleIds[type]?.reduce(
             (prev, curr) => {
@@ -69,6 +59,19 @@ const useReadArticle = (nonce?: number | boolean) => {
               true,
             );
           }
+        } else {
+          const tribeId = articleIds[type]?.[0]?.tribeId
+          im?.send(
+            tribeId ? im.messageProtocol.WSProtocol_Spend_Time_TRIBE : im.messageProtocol.WSProtocol_Spend_Time,
+            {
+              commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
+              read_type: tribeId ? Number(type) - 1 : Number(type), // 文章阅读
+              read_uid: articleIds[type]?.map(item => item.articleId) || [], // id数组 推文或者评论的
+              time_step: timeStep, // 推送时间间隔
+              tribe_id: tribeId
+            },
+            true,
+          );
         }
       }
     });
@@ -91,6 +94,7 @@ const useReadArticle = (nonce?: number | boolean) => {
     const bottom =
       top + window.innerHeight - VIEW_PADDING.top - VIEW_PADDING.bottom;
     const topViews = {};
+    console.log(articlePositionsVal)
     Object.keys(articlePositionsVal).forEach(item => {
       const { offsetTop, offsetBottom, readType, articleId } =
         articlePositionsVal[item];

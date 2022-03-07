@@ -120,6 +120,7 @@ const PostListComponents = (props, ref) => {
         isEnd={isEnd}
         getList={getList}
         updateList={() => {}}
+        tribeId={TribeId}
       />
     </ArticleListBox>
   );

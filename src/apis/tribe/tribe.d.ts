@@ -111,6 +111,8 @@ declare namespace Api {
     }
 
     interface PostDataInfo {
+      forward_type?: number;
+      forward?: any;
       id: number;
       content: string;
       user_name: string;
