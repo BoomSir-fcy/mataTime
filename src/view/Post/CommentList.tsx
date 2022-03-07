@@ -571,6 +571,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   <MentionOperator
                     type='Comment'
                     callback={(data, type) => updateList(data, type)}
+                    hasForward={!tribeId}
                     itemData={{
                       ...item,
                       comment: {
@@ -626,6 +627,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                                 ? commentTranslateMap[row.id].content
                                 : row.comment,
                           }}
+                          tribeId={tribeId}
                           key={row.id}
                           firstCommentId={item.id}
                           postUid={itemData.user_id}

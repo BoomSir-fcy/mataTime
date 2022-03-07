@@ -93,6 +93,7 @@ const Post = () => {
   const { t } = useTranslation();
   const [selectTags, setSelectTags] = useState<Api.Tribe.TopicInfo[]>([]);
 
+  const { push } = useHistory();
   const { i, n } = useParsedQueryString();
   const tribe_id = Number(i);
 
@@ -167,6 +168,7 @@ const Post = () => {
         editorRef.current?.reSetEditor();
         setVerifyVisible(false);
         setStorageData(tribe_id, '');
+        push(`/tribe/detail?id=${tribe_id}`);
       }
     },
     [value, title, selectTags, tribe_id],
@@ -245,7 +247,7 @@ const Post = () => {
             *{' '}
             {tribeInfo?.tribe?.owner_address?.toLowerCase() ===
             account?.toLowerCase() ? (
-              <Link to=''>
+              <Link to={`/me/tribe/topics-setting?i=${tribe_id}`}>
                 <Text as='span' color='textPrimary'>
                   {t('Tag')}
                 </Text>

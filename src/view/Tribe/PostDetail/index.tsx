@@ -109,7 +109,8 @@ const PostDetail = () => {
         <Flex mt='24px'>
           <MentionOperator
             replyType='twitter'
-            postId={1}
+            postId={data?.id}
+            joined
             hasReward={false}
             itemData={{
               ...data,
@@ -132,6 +133,7 @@ const PostDetail = () => {
         setNonce={setNonce}
         key={refresh}
         itemData={data || {}}
+        tribeId={data?.tribe_id}
       />
     </Box>
   );
