@@ -136,7 +136,7 @@ export class TribeApi extends Http {
   async triebFileCreate(
     params: Api.Tribe.TribeFileCreateParams,
   ) {
-    return this.post('/v1/tribe/file/create', params);
+    return this.post('/v1/tribe/file/create', params, { timeout:  2 * 60 * 1000 });
   }
 
   // 获取文件列表
