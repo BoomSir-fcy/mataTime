@@ -70,15 +70,15 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     }
   }, [route]);
   useEffect(() => {
-    if (account && tribeBaseInfo.feeToken) {
+    if (account && tribeBaseInfo?.feeToken) {
       dispatch(
         fetchisApprove({
           account,
-          address: tribeBaseInfo.feeToken,
+          address: tribeBaseInfo?.feeToken,
         }),
       );
     }
-  }, [account, tribeBaseInfo.feeToken]);
+  }, [account, tribeBaseInfo?.feeToken]);
   useEffect(() => {
     if (TribeId) {
       dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
