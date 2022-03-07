@@ -216,7 +216,6 @@ const Post = () => {
         <Flex mb='22px'>
           <LableBoxStyled>* {t('Title')}</LableBoxStyled>
           <Flex flex={1} position='relative' alignItems='center'>
-            {/* TODO: 移动端边距优化 */}
             <InputStyled
               onChange={event => {
                 // if (event.target.value.length <= HUGE_ARTICLE_TITLE_MAX_LEN) {
