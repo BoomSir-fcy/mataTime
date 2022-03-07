@@ -90,7 +90,7 @@ export const ContentParsing = React.memo(
       disableParseSquare,
       paragraphMt = '0',
       mode = 'detail',
-      rows
+      rows,
     } = props;
 
     useEffect(() => {
@@ -99,12 +99,14 @@ export const ContentParsing = React.memo(
           ? JSON.parse(props.content)
           : [];
         setParsingResult(arr);
-      } catch (err: any) { }
+      } catch (err: any) {}
     }, [props.content]);
 
     const preValue = useMemo(() => {
       if (mode === 'preview') {
-        return parsingResult.map(n => Node.string(n)).join(' ');
+        return parsingResult
+          .map(n => Node.string(n))
+          .join(`[${t('editorUploadImg')}]`);
       }
     }, [mode, parsingResult]);
 
@@ -305,7 +307,12 @@ export const ContentParsing = React.memo(
     return (
       <ContentParsingWrapper>
         {mode === 'preview' ? (
-          <ContentTextStyled display='-webkit-box' color='textTips' ellipsis maxLine={2}>
+          <ContentTextStyled
+            display='-webkit-box'
+            color='textTips'
+            ellipsis
+            maxLine={2}
+          >
             {preValue}
           </ContentTextStyled>
         ) : (
@@ -321,11 +328,13 @@ export const ContentParsing = React.memo(
                 }
                 return serialize2(item, null, index);
               })}
-            {parsingResult && parsingResult.length > (rows || ARTICLE_POST_MAX_ROW) ? (
+            {parsingResult &&
+            parsingResult.length > (rows || ARTICLE_POST_MAX_ROW) ? (
               <ExpandWrapper>
                 <a
-                  href={`javascript:void(${expand ? t('homePutAway') : t('homeOpen')
-                    })`}
+                  href={`javascript:void(${
+                    expand ? t('homePutAway') : t('homeOpen')
+                  })`}
                   onClick={(e: any) => {
                     e.stopPropagation();
                     e.preventDefault();

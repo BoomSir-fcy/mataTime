@@ -113,6 +113,7 @@ export interface PostList {
   loading: boolean;
   isEnd: boolean;
   userTags: any[];
+  start: number;
 }
 
 export interface JoinTribe {

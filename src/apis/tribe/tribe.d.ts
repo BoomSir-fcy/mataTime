@@ -1,5 +1,13 @@
 declare namespace Api {
   namespace Tribe {
+    interface tribeSearchParams {
+      tribe_id: number;
+      time_sort?: number;
+      start?: number;
+      limit?: number;
+      key: string;
+      type?: number;
+    }
     interface tribeFileDeleteParams {
       id: number;
       tribe_id: number;

@@ -43,25 +43,28 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
 
   return (
     <InfoFlex>
-      <TradeLogo logo={TribeInfo.tribe.logo} pro={TribeInfo.tribe.type === 2} />
+      <TradeLogo
+        logo={TribeInfo?.tribe.logo}
+        pro={TribeInfo?.tribe.type === 2}
+      />
       <RightFlex flex='1' flexDirection='column' justifyContent='space-between'>
         <Box>
-          <Heading scale='lg'>{TribeInfo.tribe.name}</Heading>
+          <Heading scale='lg'>{TribeInfo?.tribe.name}</Heading>
           <NumberFlex mt='28px' justifyContent='space-between'>
             <Box>
-              <Text bold>{TribeInfo.member_count}</Text>
+              <Text bold>{TribeInfo?.member_count}</Text>
               <Text fontSize='14px' color='textTips'>
                 成员
               </Text>
             </Box>
             <Box>
-              <Text bold>{TribeInfo.post_count}</Text>
+              <Text bold>{TribeInfo?.post_count}</Text>
               <Text fontSize='14px' color='textTips'>
                 帖子
               </Text>
             </Box>
             <Box>
-              <Text bold>{TribeInfo.selected_count}</Text>
+              <Text bold>{TribeInfo?.selected_count}</Text>
               <Text fontSize='14px' color='textTips'>
                 {t('Featured')}
               </Text>
@@ -70,17 +73,17 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo }) => {
         </Box>
         <Flex justifyContent='space-between' alignItems='center'>
           <Flex alignItems='center'>
-            <UserImg src={TribeInfo.tribe.nft_image} alt='' />
+            <UserImg src={TribeInfo?.tribe.nft_image} alt='' />
             <Text ml='10px' bold>
-              {TribeInfo.tribe.nick_name}
+              {TribeInfo?.tribe.nick_name}
             </Text>
           </Flex>
-          {TribeInfo.status !== 4 ? (
+          {TribeInfo?.status !== 4 ? (
             <BtnIcon name='icon-wodebula' text={t('加入部落')} />
           ) : (
             <Link
-              to={`/tribe/post?i=${TribeInfo.tribe_id}&n=${getEncodeValue(
-                TribeInfo.tribe.name,
+              to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
+                TribeInfo?.tribe.name,
               )}`}
             >
               <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
