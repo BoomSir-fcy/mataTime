@@ -126,10 +126,23 @@ export class TribeApi extends Http {
     return this.post('/v1/tribe/post/create_draft', params);
   }
 
+  // 获取草稿箱
   async getTribePostDraft(
     params: Api.Tribe.TopicParamsForId,
   ): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
     return this.post('v1/tribe/post/get_draft', params);
+  }
+
+  async getTribeCommentList(
+    params: Api.Comment.queryList,
+  ): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
+    return this.post('v1/tribe/comment/list', params);
+  }
+
+  async getTribeSubCommentList(
+    params: Api.Tribe.TopicParamsForId,
+  ): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
+    return this.post('v1/tribe/subcomment/list', params);
   }
 
   // 获取文件列表

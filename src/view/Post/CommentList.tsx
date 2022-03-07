@@ -40,6 +40,7 @@ import { changeCommentTranslateState } from 'store/mapModule/reducer';
 type Iprops = {
   itemData: any;
   nonce: number;
+  tribeId?: number;
   setNonce: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -112,7 +113,7 @@ const CommentMore = styled(Button)`
 
 export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   const { t } = useTranslation();
-  const { itemData, nonce, setNonce } = props;
+  const { itemData, nonce, setNonce, tribeId } = props;
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
@@ -179,53 +180,111 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
     return currentUid.translation === 1;
   }, [currentUid.translation]);
 
-  const getList = (current?: number) => {
+  const getList = async (current?: number) => {
     if (!itemData.id) return;
-    Api.CommentApi.getV2CommentList({
-      pid: itemData.id,
-      prepage: MAX_SPEND_TIME_PAGE_TATOL,
-      page: current || page,
-      sort_add_time: sortTime,
-      sort_like: sortLike,
-      comment_id: (current || page) === 1 ? parsedQs.comment_id : 0,
-    }).then(res => {
-      setLoading(false);
-      if (Api.isSuccess(res)) {
-        setPage((current || page) + 1);
-        setListData([...listData, ...(res.data.list || [])]);
-        setTotalPage(res.data.total_page);
-        setRefresh(false);
-        // 需要自动翻译才判断评论是否需要翻译
-        if (userAutoTranslate) {
-          const { postIds } = checkTranslateIds(
-            res.data?.list || [],
-            'id',
-            'comment',
-          );
-          dispatch(addCommentTranslateIds(postIds));
-          // 二级评论的判断翻译内容
-          (res.data?.list || []).map(item => {
-            if (item.comment_list_resp.list) {
-              const { postIds: subIds } = checkTranslateIds(
-                item.comment_list_resp.list,
-                'id',
-                'comment',
-              );
-              dispatch(addCommentTranslateIds(subIds));
-              // 更新二级评论需要翻译的id
-              setCommentIdsMap(prep => {
-                return {
-                  ...prep,
-                  [item.id]: prep[item.id]
-                    ? [...prep[item.id], ...subIds]
-                    : subIds,
-                };
-              });
-            }
-          });
-        }
+    const fetchComment = () =>
+      Api.CommentApi.getV2CommentList({
+        pid: itemData.id,
+        prepage: MAX_SPEND_TIME_PAGE_TATOL,
+        page: current || page,
+        sort_add_time: sortTime,
+        sort_like: sortLike,
+        comment_id: (current || page) === 1 ? parsedQs.comment_id : 0,
+      });
+    const fetchTribeComment = () =>
+      Api.CommentApi.getTribeCommentList({
+        pid: itemData.id,
+        prepage: MAX_SPEND_TIME_PAGE_TATOL,
+        page: current || page,
+        sort_add_time: sortTime,
+        sort_like: sortLike,
+        comment_id: (current || page) === 1 ? parsedQs.comment_id : 0,
+        tribeId,
+      });
+    const fetchFunc = tribeId ? fetchTribeComment : fetchComment;
+    const res = await fetchFunc();
+    setLoading(false);
+    if (Api.isSuccess(res)) {
+      setPage((current || page) + 1);
+      setListData([...listData, ...(res.data.list || [])]);
+      setTotalPage(res.data.total_page);
+      setRefresh(false);
+      // 需要自动翻译才判断评论是否需要翻译
+      if (userAutoTranslate) {
+        const { postIds } = checkTranslateIds(
+          res.data?.list || [],
+          'id',
+          'comment',
+        );
+        dispatch(addCommentTranslateIds(postIds));
+        // 二级评论的判断翻译内容
+        (res.data?.list || []).map(item => {
+          if (item.comment_list_resp.list) {
+            const { postIds: subIds } = checkTranslateIds(
+              item.comment_list_resp.list,
+              'id',
+              'comment',
+            );
+            dispatch(addCommentTranslateIds(subIds));
+            // 更新二级评论需要翻译的id
+            setCommentIdsMap(prep => {
+              return {
+                ...prep,
+                [item.id]: prep[item.id]
+                  ? [...prep[item.id], ...subIds]
+                  : subIds,
+              };
+            });
+          }
+        });
       }
-    });
+    }
+    // Api.CommentApi.getTribeCommentList({
+    //   pid: itemData.id,
+    //   prepage: MAX_SPEND_TIME_PAGE_TATOL,
+    //   page: current || page,
+    //   sort_add_time: sortTime,
+    //   sort_like: sortLike,
+    //   comment_id: (current || page) === 1 ? parsedQs.comment_id : 0,
+    //   tribeId,
+    // }).then(res => {
+    //   setLoading(false);
+    //   if (Api.isSuccess(res)) {
+    //     setPage((current || page) + 1);
+    //     setListData([...listData, ...(res.data.list || [])]);
+    //     setTotalPage(res.data.total_page);
+    //     setRefresh(false);
+    //     // 需要自动翻译才判断评论是否需要翻译
+    //     if (userAutoTranslate) {
+    //       const { postIds } = checkTranslateIds(
+    //         res.data?.list || [],
+    //         'id',
+    //         'comment',
+    //       );
+    //       dispatch(addCommentTranslateIds(postIds));
+    //       // 二级评论的判断翻译内容
+    //       (res.data?.list || []).map(item => {
+    //         if (item.comment_list_resp.list) {
+    //           const { postIds: subIds } = checkTranslateIds(
+    //             item.comment_list_resp.list,
+    //             'id',
+    //             'comment',
+    //           );
+    //           dispatch(addCommentTranslateIds(subIds));
+    //           // 更新二级评论需要翻译的id
+    //           setCommentIdsMap(prep => {
+    //             return {
+    //               ...prep,
+    //               [item.id]: prep[item.id]
+    //                 ? [...prep[item.id], ...subIds]
+    //                 : subIds,
+    //             };
+    //           });
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
   };
 
   const handleChangeTranslate = id => {
@@ -257,7 +316,10 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
   // 获取二级评论
   const getSubCommentList = async (params: Api.Comment.queryList) => {
     try {
-      const res = await Api.CommentApi.getSubCommentList(params);
+      const fetchFunc = tribeId
+        ? () => Api.CommentApi.getTribeSubCommentList(params)
+        : () => Api.CommentApi.getSubCommentList(params);
+      const res = await fetchFunc();
       const subComment = listData.map(row => {
         if (params.first_comment_id === row.id) {
           // const subCommentList = concat(
@@ -311,6 +373,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       page: 1,
       sort_add_time: sortTime,
       sort_like: sortLike,
+      tribeId,
     });
     eventBus.dispatchEvent(new MessageEvent('updateDetails'));
   };
@@ -402,8 +465,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                   <SpendTimeViewWithArticle
                     nonce={nonce}
                     setNonce={setNonce}
-                    readType={ReadType.COMMENT}
+                    readType={ReadType.TRIBE_COMMENT}
                     articleId={item.id}
+                    tribeId={tribeId}
                   />
                 )
               }
@@ -542,8 +606,9 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
                           <SpendTimeViewWithArticle
                             nonce={nonce}
                             setNonce={setNonce}
-                            readType={ReadType.COMMENT}
+                            readType={ReadType.TRIBE_COMMENT}
                             articleId={row.id}
+                            tribeId={tribeId}
                           />
                         )
                       }

@@ -128,7 +128,14 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
             return prep;
           });
         };
-      }, [articleId, readType, rendered, setRendered, setArticlePositions]);
+      }, [
+        articleId,
+        readType,
+        rendered,
+        nonce,
+        setRendered,
+        setArticlePositions,
+      ]);
 
       return <div ref={imgRef} />;
       // return <div ref={imgRef}>

@@ -67,7 +67,7 @@ const PostDetail = () => {
   const sendArticle = useCallback(
     (res, image_urls, remind_user, reset, first_comment_id) => {
       Api.CommentApi.createComment({
-        pid: data.id,
+        pid: id,
         comment: res,
         remind_user,
         first_comment_id: 0,
@@ -80,7 +80,7 @@ const PostDetail = () => {
         }
       });
     },
-    [toastSuccess, t, updateDetails],
+    [toastSuccess, t, id, updateDetails],
   );
 
   // console.log(data?.content)
