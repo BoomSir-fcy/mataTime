@@ -22,6 +22,7 @@ import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
 const TribeBox = styled(Box)`
   width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
+    flex: 1;
     margin-right: 14px;
     border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   }
