@@ -171,7 +171,7 @@ const Post = () => {
         push(`/tribe/detail?id=${tribe_id}`);
       }
     },
-    [value, title, selectTags, tribe_id],
+    [value, title, selectTags, push, tribe_id],
   );
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
@@ -299,12 +299,13 @@ const Post = () => {
               onClick={() =>
                 handleCreateDraft({ value, title, selectTags, tribe_id })
               }
+              disabled={loadingDraft}
               variant='secondary'
             >
               {loadingDraft ? <Dots>{t('Saving')}</Dots> : t('Save draft')}
             </Button>
           </Box>
-          <Button onClick={() => handleSendPost()} ml='35px' width='260px'>
+          <Button disabled={loadingSend} onClick={() => handleSendPost()} ml='35px' width='260px'>
             {loadingSend ? <Dots>{t('POSTING')}</Dots> : t('POST')}
           </Button>
         </Flex>

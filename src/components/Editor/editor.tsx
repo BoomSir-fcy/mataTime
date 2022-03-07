@@ -274,11 +274,13 @@ export const Editor = (props: Iprops) => {
   const atSearchUser = useCallback(
     debounce(async (nickName: string) => {
       try {
-        const res = await Api.UserApi.searchUser(nickName);
-        if (Api.isSuccess(res)) {
-          setStateEdit(p => {
-            p.userList = res.data || [];
-          });
+        if (nickName) {
+          const res = await Api.UserApi.searchUser(nickName);
+          if (Api.isSuccess(res)) {
+            setStateEdit(p => {
+              p.userList = res.data || [];
+            });
+          }
         }
       } catch (error) {
         console.error(error);
