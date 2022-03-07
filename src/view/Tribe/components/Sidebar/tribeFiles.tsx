@@ -25,20 +25,22 @@ const TribeFiles: React.FC<{
           <Text fontSize='18px' fontWeight='bold'>
             {t('TribeFileTitle')}
           </Text>
-          <Text
-            color='textPrimary'
-            style={{ cursor: 'pointer' }}
-            onClick={() =>
-              setState(p => {
-                p.visible = true;
-              })
-            }
-          >
-            {t('TribeFileLooks')}
-          </Text>
+          {data.reserved.length > 0 && (
+            <Text
+              color='textPrimary'
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                setState(p => {
+                  p.visible = true;
+                })
+              }
+            >
+              {t('TribeFileLooks')}
+            </Text>
+          )}
         </Flex>
         <Flex justifyContent='flex-start' flexDirection='column'>
-          {(data.data?.list.slice(0, 3) ?? []).map((item, index) => (
+          {(data?.reserved?.slice(0, 3) ?? []).map((item, index) => (
             <Flex
               as='a'
               href={`${item.url}`}

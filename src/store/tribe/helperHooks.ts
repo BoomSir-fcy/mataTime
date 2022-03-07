@@ -127,12 +127,12 @@ export const useFetchTribePostInfo = tribe_id => {
 export const useFetchFileList = (id: number, page: number) => {
   const [data, setData] = useState({
     data: {
-      reserved: [],
       list: [] as Api.Tribe.FileInfo[],
       page: 0,
       page_size: 0,
       total_count: 0,
     },
+    reserved: [] as Api.Tribe.FileInfo[],
     loading: false,
     fetchStatus: FetchStatus.NOT_FETCHED,
   });
@@ -150,6 +150,7 @@ export const useFetchFileList = (id: number, page: number) => {
           page_size: 5,
         });
         setData({
+          reserved: page === 1 ? res.data.list : data.reserved,
           data: res.data,
           fetchStatus: FetchStatus.SUCCESS,
           loading: false,
