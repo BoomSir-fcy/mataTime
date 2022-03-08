@@ -155,7 +155,7 @@ export const TableList: React.FC<{
       {data.length > 0 && (
         <PaginateStyle alignItems='center' justifyContent='end'>
           <Text className='totalPage' fontSize='14px' color='textTips'>
-            总共 {pageCount}页
+            {t('pageTotalpage', { page: pageCount })}
           </Text>
           <ReactPaginate
             breakLabel='...'

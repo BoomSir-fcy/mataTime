@@ -39,10 +39,9 @@ const Sidebar = styled(Box)`
 const Detail: React.FC = React.memo(() => {
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
-  const { account } = useActiveWeb3React();
-  const { tribeBaseInfo, joinTribe } = useStore(p => p.tribe);
-  const PostList = useStore(p => p.tribe.postList.list);
   const tribeDetailInfo = useTribeInfoById(parsedQs.id);
+  const { account } = useActiveWeb3React();
+  const { joinTribe } = useStore(p => p.tribe);
   const { baseInfo } = tribeDetailInfo || {};
   const { updater } = useFetchTribeInfoById(parsedQs.id);
 

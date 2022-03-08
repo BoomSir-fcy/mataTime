@@ -38,8 +38,8 @@ export type Scales = typeof scales[keyof typeof scales];
 
 const style = {
   [scales.MD]: {
-    height: 100,
-    width: 100,
+    height: 120,
+    width: 120,
     iconWidth: 22,
     iconMinWidth: 90,
     iconTop: 10,
