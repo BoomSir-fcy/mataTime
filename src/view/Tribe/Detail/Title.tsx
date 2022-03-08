@@ -82,10 +82,10 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   useEffect(() => {
     if (IsSearch) {
       // setIsSearch(true);
-      setSearchActiveTitle(Number(qsValue.active));
+      setSearchActiveTitle(Number(qsValue.active) || 0);
     } else {
       // setIsSearch(false);
-      setActiveTitle(Number(qsValue.active));
+      setActiveTitle(Number(qsValue.active) || 0);
     }
   }, [IsSearch]);
 
