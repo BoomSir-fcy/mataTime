@@ -38,7 +38,7 @@ const TribeInfoForward = (props, ref) => {
         p.introduction = info.introduction;
       });
     }
-  }, [props.info]);
+  }, [info]);
 
   useImperativeHandle(ref, () => ({
     getInfoFrom() {

@@ -21,6 +21,7 @@ import { useHistory } from 'react-router';
 import useMenuNav from 'hooks/useMenuNav';
 import { useDispatch } from 'react-redux';
 import { storeAction } from 'store';
+import { fetchActiveNftInfo } from 'store/tribe';
 
 const Create = () => {
   useTicketNftList();
@@ -90,7 +91,8 @@ const Create = () => {
         setState(p => {
           p.visible = false;
         });
-        dispatch(storeAction.saveTribeBaseInfo({}));
+        dispatch(fetchActiveNftInfo({ info: {} }));
+        dispatch(storeAction.saveTribeBaseInfo(null));
         gotoMaterNft();
       }, 10000);
     } catch (error) {
