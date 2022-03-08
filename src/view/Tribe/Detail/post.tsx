@@ -43,17 +43,15 @@ const PostListComponents = (props, ref) => {
   } = props || {};
 
   const Getlist = React.useCallback(
-    (current = 0) => {
+    (current = 0, refresh?) => {
       if ((loading || isEnd) && !current) return false;
       if (!TribeId) return false;
-      console.log(filterValObj, 'filterValObj');
-
       if (filterValObj.search) {
         dispatch(
           fetchTribeSearchPostAsync({
             tribe_id: TribeId,
             key: filterValObj.search,
-            start: current ? 0 : start,
+            start: refresh ? 0 : start,
             limit: MAX_SPEND_TIME_PAGE_TATOL,
             type: filterValObj.SearchActiveTitle || 0,
           }),
@@ -96,7 +94,7 @@ const PostListComponents = (props, ref) => {
   useEffect(() => {
     setIsEnd(false);
     if (filterValObj.sortTime || filterValObj.sortLike || filterValObj.search) {
-      Getlist(1);
+      Getlist(1, true);
     }
   }, [filterValObj]);
 
