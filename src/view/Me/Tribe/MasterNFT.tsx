@@ -23,6 +23,7 @@ const MeTribeMasterNFT = () => {
           nft_id={tribeInfo?.tribe?.nft_id}
           status={tribeInfo?.status}
           tribesNftInfo={tribeInfo?.member_nft}
+          tribeName={tribeInfo?.tribe?.name}
         />
       </ContentBox>
     </Box>

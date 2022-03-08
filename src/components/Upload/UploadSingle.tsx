@@ -6,11 +6,12 @@ import { useTranslation } from 'contexts/Localization';
 import { BASE_IMAGE_URL } from 'config';
 import { Loading } from 'components';
 import { Api } from 'apis';
+import { useImmer } from 'use-immer';
 interface UploadProps extends BoxProps {
   url?: string;
   tips?: string | ReactNode;
   disabled?: boolean;
-  uploadSuccess: (imgSrc: string) => void;
+  uploadSuccess: (imgSrc: string, width?: number, height?: number) => void;
 }
 
 const Container = styled(Flex)<{ disabled?: boolean }>`
@@ -52,7 +53,9 @@ export const UploadSingle: React.FC<UploadProps> = ({
 }) => {
   const imageInput = React.useRef<HTMLInputElement>();
   const { t } = useTranslation();
-  const [imgUrl, setImgUrl] = useState('');
+  const [state, setState] = useImmer({
+    imgUrl: '',
+  });
   const [loading, setLoading] = useState(false);
 
   // 上传图片
@@ -66,10 +69,26 @@ export const UploadSingle: React.FC<UploadProps> = ({
         // 限制图片大小
         if (imageFile[i].size > imgMaxSize)
           return toast.error(t('commonUploadMaxSize'));
+        // console.log(imageFile[i]);
+        if (
+          !['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(
+            imageFile[i].type,
+          )
+        )
+          return toast.error(t('commonUploadType'));
         // 读取文件
         setLoading(true);
         file.readAsDataURL(imageFile[i]);
         file.onload = async () => {
+          // 获取图片长宽
+          var image = new Image();
+          image.src = file.result;
+          let width = 0,
+            height = 0;
+          image.onload = function () {
+            width = image.width;
+            height = image.height;
+          };
           imageInput.current.value = '';
           const res = await Api.CommonApi.uploadImg({
             base64: file.result,
@@ -78,8 +97,10 @@ export const UploadSingle: React.FC<UploadProps> = ({
           if (!Api.isSuccess(res)) toast.error(t('commonUploadBackgroundFail'));
           const path = res?.data?.path;
           setLoading(false);
-          setImgUrl(path);
-          uploadSuccess(path);
+          setState(p => {
+            p.imgUrl = path;
+          });
+          uploadSuccess(path, width, height);
         };
       }
     }
@@ -87,7 +108,9 @@ export const UploadSingle: React.FC<UploadProps> = ({
 
   useEffect(() => {
     if (url) {
-      setImgUrl(url);
+      setState(p => {
+        p.imgUrl = url;
+      });
     }
   }, [url]);
   return (
@@ -98,8 +121,8 @@ export const UploadSingle: React.FC<UploadProps> = ({
             <Loading visible={loading} />
           </Box>
         )}
-        {imgUrl ? (
-          <StyledImg src={`${BASE_IMAGE_URL}${imgUrl}`} alt='' />
+        {state.imgUrl ? (
+          <StyledImg src={`${BASE_IMAGE_URL}${state.imgUrl}`} alt='' />
         ) : (
           <Text fontSize='61px'>+</Text>
         )}
@@ -113,11 +136,7 @@ export const UploadSingle: React.FC<UploadProps> = ({
         accept='image/*'
       />
 
-      {tips && (
-        <Text mt='10px' color='textTips' small>
-          {tips}
-        </Text>
-      )}
+      {tips ? tips : null}
     </Container>
   );
 };

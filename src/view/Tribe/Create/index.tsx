@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Crumbs, WaitConfirmModal, SuccessfullyModal } from 'components';
 import { useTranslation } from 'contexts';
 import { Box, Text, Divider, Flex } from 'uikit';
@@ -18,13 +18,20 @@ import {
 import { parseInt, sum } from 'lodash';
 import { useImmer } from 'use-immer';
 import { useHistory } from 'react-router';
+import useMenuNav from 'hooks/useMenuNav';
+import { useDispatch } from 'react-redux';
+import { storeAction } from 'store';
+import { fetchActiveNftInfo } from 'store/tribe';
 
 const Create = () => {
   useTicketNftList();
   useFeeTokenList();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { isMobile } = useMenuNav();
   const { toastError } = useToast();
   const history = useHistory();
+  const form = React.useRef<any>();
   const infoForm = React.useRef<any>();
   const feeForm = React.useRef<any>();
   const [state, setState] = useImmer({
@@ -32,7 +39,7 @@ const Create = () => {
   });
 
   const { createStatus, onCheckUniqueName, onCreateTribe } = useTribe();
-  const { ticketNftList, activeNftInfo } = useTribeState();
+  const { ticketNftList, activeNftInfo, tribeBaseInfo } = useTribeState();
 
   const isOneHundredBySum = useCallback((numArr: number[]) => {
     return sum(numArr) === 100;
@@ -84,6 +91,8 @@ const Create = () => {
         setState(p => {
           p.visible = false;
         });
+        dispatch(fetchActiveNftInfo({ info: {} }));
+        dispatch(storeAction.saveTribeBaseInfo(null));
         gotoMaterNft();
       }, 10000);
     } catch (error) {
@@ -95,21 +104,51 @@ const Create = () => {
     }
   };
 
+  const handleTempBaseInfo = useCallback(info => {
+    dispatch(
+      storeAction.saveTribeBaseInfo({
+        name: info?.name,
+        logo: info?.logo,
+        introduction: info?.introduction,
+      }),
+    );
+  }, []);
+
+  const handleTempFeeInfo = useCallback(info => {
+    dispatch(storeAction.saveTribeBaseInfo(info));
+  }, []);
+
   return (
     <Box>
       <Crumbs back />
       <form
+        ref={form}
         onSubmit={e => {
           e.preventDefault();
           PayAndCreate();
         }}
+        // onInvalid={e => {
+        //   console.log('11111', e);
+        // console.log('11111', e.target.setCustomValidity('请输入杀杀杀'));
+        // const el = form.current.getElementsByClassName('required-input')[0];
+        // console.log(e.target.setCustomValidity('请输入杀杀杀'));
+        // }}
         action=''
       >
         <SubHeader title={t('Basic Information')} />
-        <TribeInfo ref={infoForm} />
+        <TribeInfo
+          ref={infoForm}
+          info={tribeBaseInfo}
+          handleTempInfo={handleTempBaseInfo}
+        />
         <Divider />
         <SubHeader title={t('Type settings')} />
-        <TribeFee ref={feeForm} actionType='save' />
+        <TribeFee
+          ref={feeForm}
+          actionType='save'
+          info={tribeBaseInfo}
+          handleTempInfo={handleTempFeeInfo}
+        />
         <FormFlex>
           <Text mb='20px' color='textTips' small>
             {t(
@@ -121,10 +160,7 @@ const Create = () => {
         <SubHeader title={t('Pay for tickets')} />
         <TribeNFT ticketNftList={ticketNftList} />
         <Flex mb='20px' justifyContent='center'>
-          <TribeCreateBtn
-            hasNft={ticketNftList.length > 0}
-            activeNftInfo={activeNftInfo}
-          />
+          <TribeCreateBtn hasNft={ticketNftList.length > 0} />
         </Flex>
       </form>
 
