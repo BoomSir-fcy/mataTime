@@ -3,13 +3,17 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import { useTribePostDetailById } from 'store/mapModule/hooks';
+import {
+  useTribeInfoById,
+  useTribePostDetailById,
+} from 'store/mapModule/hooks';
 import {
   fetchPostDetailAsync,
   fetchTribePostDetailAsync,
 } from 'store/mapModule/reducer';
 import { useFetchTribePostInfo } from 'store/tribe/helperHooks';
-import styled from 'styled-components';
+import Popup from 'reactjs-popup';
+import styled, { useTheme } from 'styled-components';
 import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
 import { useStore } from 'store';
 import { useToast } from 'hooks';
@@ -19,30 +23,42 @@ import SubHeader from '../components/SubHeader';
 import MentionOperator from '../components/MentionOperator';
 import PostDetailHeader from './Header';
 import HotBtn from '../components/post/HotBtn';
-import { Editor } from 'components';
+import { Editor, Icon } from 'components';
 import { CommentList } from 'view/Post/CommentList';
 import { Api } from 'apis';
 import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
+import { MoreTribePopup } from 'components/Popup/TribeMorePopup/morePopup';
+import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 const ContentBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 
-const PostDetail = () => {
-  // const {
-  //   data: { data, fetchStatus },
-  //   updateData,
-  // } = useFetchTribePostInfo(229);
+const PopupButton = styled(Flex)`
+  align-items: center;
+  cursor: pointer;
+`;
 
-  // console.log(data);
+const PostDetail = () => {
   const dispatch = useDispatch();
-  // const { params } = useRouteMatch() as { params: { id: string } };
   const { i } = useParsedQueryString();
+  const { account } = useActiveWeb3React();
+  const theme = useTheme();
+  const [refresh, setRefresh] = useState(1);
+  const { toastSuccess } = useToast();
+  const { t } = useTranslation();
+
   const id = Number(i);
   const currentUid = useStore(p => p.loginReducer.userInfo);
-  // 阅读文章扣费
+
+  const data = useTribePostDetailById(id);
+  const tribeInfo = useTribeInfoById(data?.tribe_id);
+
+  const [nonce, setNonce] = useState(0);
+  useReadArticle(nonce);
 
   const updateDetails = React.useCallback(() => {
     dispatch(fetchTribePostDetailAsync(id));
@@ -51,14 +67,6 @@ const PostDetail = () => {
   useEffect(() => {
     updateDetails();
   }, [id]);
-
-  const [nonce, setNonce] = useState(0);
-  useReadArticle(nonce);
-  const [refresh, setRefresh] = useState(1);
-
-  const data = useTribePostDetailById(id);
-  const { toastSuccess } = useToast();
-  const { t } = useTranslation();
 
   useEffect(() => {
     setNonce(prev => prev + 1);
@@ -83,7 +91,8 @@ const PostDetail = () => {
     [toastSuccess, t, id, updateDetails],
   );
 
-  // console.log(data?.content)
+  const popupRefSet = React.useRef(null);
+  const popupRef = React.useRef(null);
 
   return (
     <Box>
@@ -124,6 +133,90 @@ const PostDetail = () => {
               // handleUpdateList(item, type);
             }}
           />
+          <Flex alignItems='center'>
+            {tribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===
+              account?.toLocaleLowerCase() && (
+              <a
+                href='javascript: void(0)'
+                onClick={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }}
+              >
+                <SetTribePopup
+                  ref={popupRefSet}
+                  data={{
+                    ...data,
+                    post: {
+                      ...data,
+                    },
+                  }}
+                  callback={(data: any, type) => {
+                    popupRefSet?.current?.close();
+                    // TODO:
+                    // callback(data, type);
+                  }}
+                />
+              </a>
+            )}
+            <a
+              href='javascript: void(0)'
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+              }}
+            >
+              <Popup
+                ref={popupRef}
+                trigger={
+                  <PopupButton title={t('popupMore')}>
+                    <Icon name='icon-gengduo' size={20} color='textTips' />
+                  </PopupButton>
+                }
+                nested
+                position='bottom right'
+                closeOnDocumentClick
+                contentStyle={{
+                  width: '150px',
+                  height: 'auto',
+                  borderRadius: '10px',
+                  padding: 0,
+                  border: '0',
+                  backgroundColor: 'transparent',
+                  zIndex: 99,
+                }}
+                overlayStyle={{
+                  zIndex: 98,
+                }}
+                arrowStyle={{
+                  color: theme.colors.tertiary,
+                  stroke: theme.colors.tertiary,
+                }}
+              >
+                <MoreTribePopup
+                  postUid={'1'}
+                  data={{
+                    ...data,
+                    post: {
+                      ...data,
+                    },
+                  }}
+                  callback={(data: any, type) => {
+                    if (type === MoreOperatorEnum.BLOCKUSER) {
+                      // TODO:
+                      // setIsShileUser(!isShileUser, data);
+                      return;
+                    }
+                    popupRef?.current?.close();
+                    // TODO:
+                    // callback(data, type);
+                  }}
+                />
+              </Popup>
+            </a>
+          </Flex>
         </Flex>
       </ContentBox>
       <Divider />
