@@ -1,6 +1,10 @@
 import { Api } from 'apis';
+import { LoadType, MoreOperatorEnum } from 'components';
 import { FetchStatus } from 'config/types';
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addDeletePostId, addUnFollowUserId, removeUnFollowUserId } from 'store/mapModule/actions';
+import { fetchTribePostDetailAsync, fetchUserInfoAsync } from 'store/mapModule/reducer';
 
 interface TopicDataRes {
   list: Api.Tribe.TopicInfo[];
@@ -174,3 +178,56 @@ export const useFetchFileList = (id: number, page: number) => {
 
   return { data, updateData: fetchData };
 };
+
+export const useUpdateTribePostInfo = (setNonce, getList, updateList) => {
+
+  const dispatch = useDispatch();
+
+  // 更新列表
+  const handleUpdateList = useCallback(
+    (newItem: any, type: MoreOperatorEnum = null) => {
+      // 折叠和翻译
+      if (
+        type === MoreOperatorEnum.EXPAND ||
+        type === MoreOperatorEnum.TRANSLATE
+      ) {
+        setNonce(prep => prep + 1);
+        return;
+      }
+      if (type === MoreOperatorEnum.BLOCKUSER) {
+        setNonce(prep => prep + 1);
+      }
+      if (type === MoreOperatorEnum.DELPOST) {
+        setNonce(prep => prep + 1);
+        dispatch(addDeletePostId(newItem.id)); // FIXME: 有的时候可能用的不是id
+        return;
+      }
+      if (type === MoreOperatorEnum.CANCEL_FOLLOW) {
+        setNonce(prep => prep + 1);
+        dispatch(addUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
+        dispatch(fetchUserInfoAsync(newItem.user_id));
+      }
+      if (type === MoreOperatorEnum.FOLLOW) {
+        setNonce(prep => prep + 1);
+        dispatch(removeUnFollowUserId(newItem.user_id)); // FIXME: 有的时候可能用的不是user_id
+        dispatch(fetchUserInfoAsync(newItem.user_id));
+      }
+      if (
+        type === MoreOperatorEnum.FORWARD ||
+        type === MoreOperatorEnum.UNFORWARD
+      ) {
+        getList(LoadType.REFRESH);
+        return;
+      }
+      dispatch(fetchTribePostDetailAsync(newItem.id)); // FIXME: 有的时候可能用的不是id
+
+      updateList(newItem.id, type);
+      return;
+    },
+    [dispatch, setNonce, getList, updateList],
+  );
+
+  return {
+    handleUpdateList
+  }
+}

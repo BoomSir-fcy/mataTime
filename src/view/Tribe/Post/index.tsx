@@ -243,7 +243,9 @@ const Post = () => {
         </Flex>
         <Flex mb='22px'>
           <LableBoxStyled>
-            *{' '}
+            <Text as='span' color='transparent'>
+              *
+            </Text>{' '}
             {tribeInfo?.tribe?.owner_address?.toLowerCase() ===
             account?.toLowerCase() ? (
               <Link to={`/me/tribe/topics-setting?i=${tribe_id}`}>
