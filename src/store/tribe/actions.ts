@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TribeInfo } from './type';
+import { TribeBaseInfo, TribeInfo } from './type';
 
 export const postGetArticle = createAction('post/get/article');
 export const postUpdateArticle = createAction<Api.Home.post[]>(
@@ -20,6 +20,10 @@ export const postResetArticleParams = createAction<{
 }>('post/reset/article/params');
 
 export const postSetUserTags = createAction<any[]>('post/postSetUserTags');
+
+export const saveTribeBaseInfo = createAction<TribeBaseInfo>(
+  'tribe/saveTribeBaseInfo',
+);
 
 export const setInitMemberNft = createAction<boolean>('tribe/setInitMemberNft');
 export const updateTribeDetails = createAction<TribeInfo>(

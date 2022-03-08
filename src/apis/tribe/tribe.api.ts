@@ -1,6 +1,16 @@
 import { Http } from '../http';
 
 export class TribeApi extends Http {
+  // 部落搜索帖子列表
+  async tribeSearchPostList(params: Api.Tribe.tribeSearchParams) {
+    const res = await this.get('/v1/tribe/search/post', params);
+    return res;
+  }
+  // 部落搜索用户帖子列表
+  async tribeSearchUserList(params: Api.Tribe.tribeSearchParams) {
+    const res = await this.get('/v1/tribe/search/user', params);
+    return res;
+  }
   // 部落文件列表
   async tribeFileList(params: Api.Tribe.tribeFileListParams) {
     const res = await this.get('/v1/tribe/file/list', params);
@@ -146,10 +156,10 @@ export class TribeApi extends Http {
   }
 
   // 获取文件列表
-  async triebFileCreate(
-    params: Api.Tribe.TribeFileCreateParams,
-  ) {
-    return this.post('/v1/tribe/file/create', params, { timeout:  2 * 60 * 1000 });
+  async triebFileCreate(params: Api.Tribe.TribeFileCreateParams) {
+    return this.post('/v1/tribe/file/create', params, {
+      timeout: 2 * 60 * 1000,
+    });
   }
 
   // 获取文件列表
