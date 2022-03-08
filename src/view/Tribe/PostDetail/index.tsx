@@ -39,6 +39,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import ContentParsingOfTranslate from '../Detail/ContentParsingOfTranslate';
 import PostHandleBtns from '../Detail/PostHandleBtns';
 import { FetchStatus } from 'config/types';
+import PrintBtn from './PrintBtn';
 
 const ContentBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -136,7 +137,8 @@ const PostDetail = () => {
           rows={50}
         />
         <HotBtn list={data?.topics} />
-        <Flex mt='24px'>
+        <PrintBtn className='print-hide' />
+        <Flex className='print-hide' mt='24px'>
           <MentionOperator
             replyType='twitter'
             postId={data?.id}
@@ -167,15 +169,17 @@ const PostDetail = () => {
           />
         </Flex>
       </ContentBox>
-      <Divider />
-      <Editor type='comment' sendArticle={sendArticle} />
-      <CommentList
-        nonce={nonce}
-        setNonce={setNonce}
-        key={refresh}
-        itemData={data || {}}
-        tribeId={data?.tribe_id}
-      />
+      <Box className='print-hide'>
+        <Divider />
+        <Editor type='comment' sendArticle={sendArticle} />
+        <CommentList
+          nonce={nonce}
+          setNonce={setNonce}
+          key={refresh}
+          itemData={data || {}}
+          tribeId={data?.tribe_id}
+        />
+      </Box>
     </Box>
   );
 };

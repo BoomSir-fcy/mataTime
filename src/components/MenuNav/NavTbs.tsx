@@ -68,7 +68,7 @@ export const Navigation = React.memo(() => {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer className='print-hide'>
       {tbasNavConfig.map((row, index) => (
         <TabButton
           key={index}

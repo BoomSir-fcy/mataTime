@@ -54,7 +54,7 @@ const MenuNav: React.FC<MenuNavProps> = ({ PickNft, children }) => {
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
   return (
-    <MenuContener PickNft={PickNft} isMobile={isMobile}>
+    <MenuContener className='print-hide' PickNft={PickNft} isMobile={isMobile}>
       <Panel padding={PickNft} isMobile={isMobile} isPushed={isPushed} showMenu>
         {/* <Flex flex='1' flexDirection='column'>
           <Logo />
