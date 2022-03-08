@@ -363,9 +363,8 @@ const MemberNftTribe = React.memo(() => {
       }
       setLoading(false);
     } catch (error) {
-      setMemberNftList([]);
-    } finally {
       setLoading(false);
+      setMemberNftList([]);
     }
   }, [page, pageSize]);
 

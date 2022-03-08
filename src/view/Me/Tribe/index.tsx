@@ -1,5 +1,5 @@
 import { Crumbs } from 'components';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Text } from 'uikit';
 import {
   Switch,
@@ -11,6 +11,9 @@ import {
 import useMenuNav from 'hooks/useMenuNav';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
+import NoPermission from 'components/NoPermission';
+import { useStore } from 'store';
+import { NftStatus, TribeType } from 'store/tribe/type';
 
 const FeeSetting = React.lazy(() => import('./FeeSetting'));
 const Info = React.lazy(() => import('./Info'));
@@ -65,29 +68,118 @@ const MeTribe = () => {
 
   const tribeInfo = useTribeInfoById(tribeId);
 
+  const currentUid = useStore(p => p.loginReducer.userInfo);
+
+  /* 
+    部落配置:
+    1.判断是否是部落主
+      TribeInfo.tribe.owner_address === account
+      跳转404
+    2.有没有领取部落主NFT
+      TribeInfo.status === 1
+      除了[部落主NFT] 其他都不能点
+    3.有没有质押部落主NFT
+      TribeInfo.status === 2
+      除了[部落主NFT] 其他都不能点
+    4.有没有设置成员NFT
+      TribeInfo.tribe.type === TribeType.PRO
+      [成员nft]加感叹号
+    5.获取部落类型判断显示[邀请设置]
+      禁用[邀请设置]
+  */
+  enum TribeMeStatus {
+    NORMAL,
+    NOT_MASTER,
+    UN_RECEIVE,
+    UN_STAKE,
+    UN_SET_MEMBER_NFT,
+    BASE_TYPE,
+  }
+
+  const tribeMeStatus = useMemo(() => {
+    if (
+      tribeInfo?.tribe?.owner_address?.toLowerCase() !==
+      currentUid?.address?.toLowerCase()
+    ) {
+      return TribeMeStatus.NOT_MASTER;
+    }
+    if (tribeInfo?.status === NftStatus.UnReceive) {
+      return TribeMeStatus.UN_RECEIVE;
+    }
+    if (tribeInfo?.status === NftStatus.UnStake) {
+      return TribeMeStatus.UN_STAKE;
+    }
+    if (!tribeInfo?.tribe?.member_nft_id) {
+      return TribeMeStatus.UN_SET_MEMBER_NFT;
+    }
+    if (tribeInfo?.tribe?.type === TribeType.BASIC) {
+      return TribeMeStatus.BASE_TYPE;
+    }
+    return TribeMeStatus.NORMAL;
+  }, [tribeInfo, currentUid]);
+
+  const noPermission = useMemo(() => {
+    if (location.pathname === path) return false;
+    if (
+      tribeMeStatus === TribeMeStatus.NORMAL ||
+      tribeMeStatus === TribeMeStatus.UN_SET_MEMBER_NFT
+    )
+      return false;
+    if (
+      location.pathname === `${path}/member-nft` &&
+      (tribeMeStatus === TribeMeStatus.UN_RECEIVE ||
+        tribeMeStatus === TribeMeStatus.UN_STAKE)
+    )
+      return false;
+    if (
+      location.pathname !== `${path}/invitation-setting` &&
+      tribeMeStatus === TribeMeStatus.BASE_TYPE
+    )
+      return false;
+    return true;
+  }, [tribeMeStatus, location.pathname, path]);
+
+  const [refreshing, setRefreshing] = useState(false);
+  useEffect(() => {
+    setRefreshing(false);
+  }, [tribeInfo]);
   return (
     <Box>
       {!isMobile &&
         (location.pathname !== path ? (
           <Crumbs title={tribeInfo?.tribe?.name} />
         ) : null)}
-      <Switch>
-        <Route path={path} exact component={MyTribe} />
-        <Route path={`${path}/info`} component={Info} />
-        <Route path={`${path}/fee-setting`} component={FeeSetting} />
-        <Route path={`${path}/topics-setting`} component={TopicsSetting} />
-        <Route path={`${path}/tribal-docs`} component={TribalDocs} />
-        <Route path={`${path}/master-nft`} component={MasterNFT} />
-        <Route path={`${path}/member-nft`} component={MemberNFT} />
-        <Route
-          path={`${path}/invitation-setting`}
-          component={InvitationSetting}
+
+      {noPermission ? (
+        <NoPermission
+          refreshing={refreshing}
+          refresh={() => {
+            updater();
+            setRefreshing(true);
+          }}
+          mt='calc(18% + 86px)'
         />
-        <Route
-          path={`${path}/member-management`}
-          component={MemberManagement}
-        />
-      </Switch>
+      ) : (
+        <Box>
+          <Switch>
+            <Route path={path} exact component={MyTribe} />
+            <Route path={`${path}/info`} component={Info} />
+            <Route path={`${path}/fee-setting`} component={FeeSetting} />
+            <Route path={`${path}/topics-setting`} component={TopicsSetting} />
+            <Route path={`${path}/tribal-docs`} component={TribalDocs} />
+            <Route path={`${path}/master-nft`} component={MasterNFT} />
+            <Route path={`${path}/member-nft`} component={MemberNFT} />
+            <Route
+              path={`${path}/invitation-setting`}
+              component={InvitationSetting}
+            />
+            <Route
+              path={`${path}/member-management`}
+              component={MemberManagement}
+            />
+          </Switch>
+        </Box>
+      )}
     </Box>
   );
 };

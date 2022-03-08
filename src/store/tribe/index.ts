@@ -11,19 +11,28 @@ import { getNftsList } from 'apis/DsgRequest';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
-import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import {
+  saveTribeBaseInfo,
   setInitMemberNft,
   updateTribeDetails,
   setJoinTribeVisibleModal,
 } from './actions';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+
+const LOCAL_STORAGE_TRIBE_INFO = 'info';
+
+const tribeStore = sessionStorage.getItem(LOCAL_STORAGE_TRIBE_INFO);
 
 const initialState: TribeState = {
   isApproveStakeNft: false,
+  tribeBaseInfo: tribeStore ? JSON.parse(tribeStore) : {},
   feeCoinList: [],
   ticketNftList: [],
   loading: true,
-  activeNftInfo: {},
+  activeNftInfo: {
+    nftId: tribeStore ? JSON.parse(tribeStore)?.nftid : '',
+    nftToken: tribeStore ? JSON.parse(tribeStore)?.nftAddress : '',
+  },
   tribeList: [
     {
       id: null,
@@ -277,6 +286,16 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(saveTribeBaseInfo, (state, action) => {
+        state.tribeBaseInfo = action.payload
+          ? Object.assign({}, state.tribeBaseInfo, action.payload)
+          : {};
+
+        sessionStorage.setItem(
+          LOCAL_STORAGE_TRIBE_INFO,
+          JSON.stringify(state.tribeBaseInfo),
+        );
+      })
       .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
         state.isApproveStakeNft = action.payload;
       })

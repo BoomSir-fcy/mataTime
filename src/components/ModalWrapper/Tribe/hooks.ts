@@ -17,8 +17,10 @@ export const useJoinTribe = () => {
         });
         const receipt = await tx.wait();
         return receipt.status;
-      } catch (error) {
-        throw error;
+      } catch (error: any) {
+        // const messgae = error?.data?.message;
+        const code = error?.code ?? 0;
+        return code;
       }
     },
     [tribeContract],

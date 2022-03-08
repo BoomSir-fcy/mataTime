@@ -20,13 +20,15 @@ const MeTribeFeeSetting = () => {
   const { onSetTribeFeeInfo } = useTribe();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState(null);
   const tribeId = parseQs.i;
   const tribeInfo = useTribeInfoById(tribeId);
 
   useEffect(() => {
-    if (tribeInfo?.baseInfo?.name) setInfo(tribeInfo?.baseInfo);
-  }, [tribeInfo?.baseInfo]);
+    if (tribeInfo?.baseInfo?.name && !info) {
+      setInfo(tribeInfo?.baseInfo);
+    }
+  }, [info, tribeInfo?.baseInfo]);
   return (
     <Box>
       <form
@@ -36,7 +38,7 @@ const MeTribeFeeSetting = () => {
           try {
             setPending(true);
             await onSetTribeFeeInfo(tribeId, params);
-            dispatch(fetchTribeInfoAsync(tribeId));
+            // dispatch(fetchTribeInfoAsync(tribeId));
             setInfo(params);
             setIsEdit(false);
             setPending(false);

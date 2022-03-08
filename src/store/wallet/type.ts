@@ -38,6 +38,7 @@ export interface WalletState {
   TribeTickets: {
     allowance: string;
     price: string;
+    max_tickets: string
   };
   WithDrawFeeType: number;
   choiceToken: number;

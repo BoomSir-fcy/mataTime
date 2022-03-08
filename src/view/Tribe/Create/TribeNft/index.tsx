@@ -19,8 +19,9 @@ const GetAuthorizeBox = styled(Box)`
 `;
 
 const GetAuthorize = styled(Flex)`
+  flex-wrap: wrap;
   padding-top: 10px;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   /* Scrollbar */
   ::-webkit-scrollbar {
     height: 4px;

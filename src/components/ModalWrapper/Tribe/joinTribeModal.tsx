@@ -22,16 +22,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import QuestionHelper from 'components/QuestionHelper';
 import Dots from 'components/Loader/Dots';
 
-const Container = styled(Box)`
-  width: 410px;
-  padding-bottom: 20px;
-`;
-
-const MaskInfo = styled(Box)`
-  background-color: ${({ theme }) => theme.colors.backgroundTextArea};
-  border-radius: ${({ theme }) => theme.radii.card};
-  padding: 18px 13px;
-`;
+import { Container, MaskInfo } from './styles';
 
 export const JoinTribeModal: React.FC<{
   visible: boolean;
@@ -78,16 +69,9 @@ export const JoinTribeModal: React.FC<{
     }
   }, [handleApprove]);
 
-  const handleChange = React.useCallback(e => {
-    if (e.currentTarget?.validity?.valid) {
-      setState(p => {
-        p.inviteAddress = e?.currentTarget?.value;
-      });
-    }
-  }, []);
-
   // 加入部落
   const handleJoinTribe = React.useCallback(async () => {
+    console.log(state);
     const inviteAddress = Boolean(state.inviteAddress)
       ? state.inviteAddress
       : '0x0000000000000000000000000000000000000000';
@@ -106,8 +90,10 @@ export const JoinTribeModal: React.FC<{
         setTimeout(() => {
           onClose(true);
         }, 5000);
-      } else if (res === 400001) {
-        toastError(t('rewardAutherTransferAmountExceedsBlanceError'));
+      } else if (res === 4001) {
+        toastError(t('contractCode-40001'));
+      } else if (res === -32603) {
+        toastError(t('contractCode-32603'));
       } else {
         toastError('Failed to join');
       }
@@ -118,7 +104,7 @@ export const JoinTribeModal: React.FC<{
         p.submitLoading = false;
       });
     }
-  }, [state, joinTribe, detail]);
+  }, [state, setState, joinTribe, detail]);
 
   return (
     <ModalWrapper
@@ -217,7 +203,11 @@ export const JoinTribeModal: React.FC<{
               <Box mt='17px'>
                 <Text mb='10px'>{t('TribeJoinModalInviteText')}</Text>
                 <Input
-                  onChange={handleChange}
+                  onChange={event =>
+                    setState(p => {
+                      p.inviteAddress = event.target.value;
+                    })
+                  }
                   placeholder={t('TribeJoinModalInviteValue')}
                 />
               </Box>

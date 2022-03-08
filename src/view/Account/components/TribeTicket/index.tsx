@@ -21,8 +21,9 @@ import { useDispatch } from 'react-redux';
 import { fetchTribeTicketInfoAsync } from 'store/wallet/reducer';
 import { useFetchTribeTicketInfo } from 'store/wallet/hooks';
 import { useTicketNftList, useTribeState } from 'store/tribe/hooks';
-import { fetchTicketNftListAsync } from 'store/tribe';
+// import { fetchTicketNftListAsync } from 'store/tribe';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'contexts';
 
 const CardStyled = styled(Card)`
   width: 380px;
@@ -43,9 +44,10 @@ const TribeTicket = () => {
   const { account } = useActiveWeb3React();
   const matterAddress = getMatterAddress();
   const { toastError } = useToast();
+  const { t } = useTranslation();
 
-  useFetchTribeTicketInfo();
-  useTicketNftList();
+  const { handleFetch: handleFetchTicketInfo } = useFetchTribeTicketInfo();
+  const { handleFetch } = useTicketNftList();
 
   const { ticketNftList, activeNftInfo } = useTribeState();
 
@@ -58,6 +60,7 @@ const TribeTicket = () => {
     return {
       price: new BigNumber(tribeTickets.price),
       allowance: new BigNumber(tribeTickets.allowance),
+      max_tickets: new BigNumber(tribeTickets.max_tickets),
     };
   }, [tribeTickets]);
 
@@ -65,19 +68,31 @@ const TribeTicket = () => {
   const { exchangeHandle } = useTribeTicketExchange();
 
   const maxAmount = useMemo(() => {
-    return Math.floor(balance.div(tribeTicketsInfo.price).toNumber()) || 0;
-  }, [tribeTicketsInfo.price, balance]);
+    const balanceMax =
+      Math.floor(balance.div(tribeTicketsInfo.price).toNumber()) || 0;
+
+    return tribeTicketsInfo.max_tickets.isGreaterThan(balanceMax)
+      ? balanceMax
+      : tribeTicketsInfo.max_tickets.toString(10);
+  }, [tribeTicketsInfo.price, tribeTicketsInfo.max_tickets, balance]);
 
   const onExchange = useCallback(async () => {
     try {
       setLoading(true);
       await exchangeHandle(tribeTicketsInfo.price.times(value).toString());
       setLoading(false);
-      dispatch(fetchTicketNftListAsync({ account }));
+      handleFetch();
+      handleFetchTicketInfo();
     } catch (error) {
       setLoading(false);
     }
-  }, [value, tribeTicketsInfo.price, account]);
+  }, [
+    value,
+    tribeTicketsInfo.price,
+    handleFetchTicketInfo,
+    handleFetch,
+    account,
+  ]);
 
   const dispatch = useDispatch();
 
@@ -90,11 +105,12 @@ const TribeTicket = () => {
     <Flex flexWrap='wrap' justifyContent='space-around'>
       <CardStyled isRadius mt='65px'>
         <Text bold fontSize='18px'>
-          Ticket Exchange
+          {t('Ticket Exchange')}
         </Text>
         <Flex mt='14px' justifyContent='space-between'>
           <Text color='textTips' fontSize='14px'>
-            余额: {formatDisplayApr(getBalanceAmount(balance).toNumber())}
+            {t('Balance')}:{' '}
+            {formatDisplayApr(getBalanceAmount(balance).toNumber())}
           </Text>
           <Button
             onClick={() => {
@@ -112,7 +128,7 @@ const TribeTicket = () => {
         </Flex>
         <InputCard mt='6px' isRadius>
           <Flex mt='8px' justifyContent='space-between'>
-            <Text>价格</Text>
+            <Text>{t('Price')}</Text>
             <Flex alignItems='center'>
               <Box width='22px' height='22px'>
                 <Image width={22} height={22} src='/images/tokens/MATTER.svg' />
@@ -154,7 +170,7 @@ const TribeTicket = () => {
           </Box>
         </InputCard>
         <Text fontSize='14px' mt='8px'>
-          Exchangeable Ticket Quantity: {MAX_EXCHANGE_AMOUNT}
+          {t('Exchangeable Ticket Quantity')}: {maxAmount}
         </Text>
         {!account ? (
           <ConnectWalletButton scale='ld' width='100%' />
@@ -167,7 +183,7 @@ const TribeTicket = () => {
             width='100%'
             mt='24px'
           >
-            {loading ? <Dots>{'兑换中'}</Dots> : '兑换'}
+            {loading ? <Dots>{t('Exchanging')}</Dots> : t('Exchang')}
           </Button>
         ) : (
           <Button
@@ -192,28 +208,30 @@ const TribeTicket = () => {
             width='100%'
             mt='24px'
           >
-            {loading ? <Dots>{'授权中'}</Dots> : '授权'}
+            {loading ? <Dots>{t('Enabling')}</Dots> : t('Enable')}
           </Button>
         )}
       </CardStyled>
       <CardStyled isRadius mt='65px'>
         <Text bold fontSize='18px'>
-          Ticket Exchange
+          {t('Ticket Exchange')}
         </Text>
         <Flex mt='19px' justifyContent='center'>
           <Image width={205} height={205} />
         </Flex>
         <Flex mt='18px'>
-          <Text>Tribe Ticket</Text>
-          <Text>数量: {ticketNftList.length}</Text>
+          <Text>{t('Tribe Ticket')}</Text>
+          <Text>
+            {t('Amount')}: {ticketNftList.length}
+          </Text>
         </Flex>
         <Text fontSize='14px' color='textTips' mt='8px'>
-          You can use the ticket to create a tribe.
+          {t('You can use the ticket to create a tribe.')}
         </Text>
         <Box mb='22px'>
           <Link to='/tribe/create'>
             <Button scale='ld' width='100%' mt='18px'>
-              Use
+              {t('Use')}
             </Button>
           </Link>
         </Box>

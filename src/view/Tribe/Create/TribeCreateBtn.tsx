@@ -17,8 +17,7 @@ const StyledButton = styled(Button)`
 
 export const TribeCreateBtn: React.FC<{
   hasNft?: boolean;
-  activeNftInfo?: NftInfo;
-}> = React.memo(({ hasNft, activeNftInfo }) => {
+}> = React.memo(({ hasNft }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { toastError } = useToast();
@@ -75,10 +74,6 @@ export const TribeCreateBtn: React.FC<{
           onClick={async e => {
             e.stopPropagation();
             e.preventDefault();
-            if (!activeNftInfo.nftId) {
-              toastError(t('Please select a ticket'));
-              return false;
-            }
             setState(p => {
               p.pending = true;
             });

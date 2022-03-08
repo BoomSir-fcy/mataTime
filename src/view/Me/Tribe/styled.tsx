@@ -54,5 +54,5 @@ export const LoadingAnimation = styled(Box)`
 `;
 
 export const StyledButton = styled(Button)`
-  min-width: 90px;
+  min-width: 100px;
 `;
