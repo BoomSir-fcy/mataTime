@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { fetchTribeTicketInfoAsync } from 'store/wallet/reducer';
 import { useFetchTribeTicketInfo } from 'store/wallet/hooks';
 import { useTicketNftList, useTribeState } from 'store/tribe/hooks';
-import { fetchTicketNftListAsync } from 'store/tribe';
+// import { fetchTicketNftListAsync } from 'store/tribe';
 import { Link } from 'react-router-dom';
 
 const CardStyled = styled(Card)`
@@ -44,8 +44,8 @@ const TribeTicket = () => {
   const matterAddress = getMatterAddress();
   const { toastError } = useToast();
 
-  useFetchTribeTicketInfo();
-  useTicketNftList();
+  const { handleFetch: handleFetchTicketInfo } = useFetchTribeTicketInfo();
+  const { handleFetch } = useTicketNftList();
 
   const { ticketNftList, activeNftInfo } = useTribeState();
 
@@ -58,6 +58,7 @@ const TribeTicket = () => {
     return {
       price: new BigNumber(tribeTickets.price),
       allowance: new BigNumber(tribeTickets.allowance),
+      max_tickets: new BigNumber(tribeTickets.max_tickets),
     };
   }, [tribeTickets]);
 
@@ -65,19 +66,31 @@ const TribeTicket = () => {
   const { exchangeHandle } = useTribeTicketExchange();
 
   const maxAmount = useMemo(() => {
-    return Math.floor(balance.div(tribeTicketsInfo.price).toNumber()) || 0;
-  }, [tribeTicketsInfo.price, balance]);
+    const balanceMax =
+      Math.floor(balance.div(tribeTicketsInfo.price).toNumber()) || 0;
+
+    return tribeTicketsInfo.max_tickets.isGreaterThan(balanceMax)
+      ? balanceMax
+      : tribeTicketsInfo.max_tickets.toString(10);
+  }, [tribeTicketsInfo.price, tribeTicketsInfo.max_tickets, balance]);
 
   const onExchange = useCallback(async () => {
     try {
       setLoading(true);
       await exchangeHandle(tribeTicketsInfo.price.times(value).toString());
       setLoading(false);
-      dispatch(fetchTicketNftListAsync({ account }));
+      handleFetch();
+      handleFetchTicketInfo();
     } catch (error) {
       setLoading(false);
     }
-  }, [value, tribeTicketsInfo.price, account]);
+  }, [
+    value,
+    tribeTicketsInfo.price,
+    handleFetchTicketInfo,
+    handleFetch,
+    account,
+  ]);
 
   const dispatch = useDispatch();
 
@@ -154,7 +167,8 @@ const TribeTicket = () => {
           </Box>
         </InputCard>
         <Text fontSize='14px' mt='8px'>
-          Exchangeable Ticket Quantity: {MAX_EXCHANGE_AMOUNT}
+          Exchangeable Ticket Quantity:{' '}
+          {tribeTicketsInfo.max_tickets.toNumber()}
         </Text>
         {!account ? (
           <ConnectWalletButton scale='ld' width='100%' />

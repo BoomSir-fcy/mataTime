@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { TribeState } from './type';
@@ -52,11 +52,19 @@ export const useTicketNftList = () => {
   const dispatch = useDispatch();
   const { account } = useWeb3React();
 
-  useEffect(() => {
+  const handleFetch = useCallback(() => {
     if (account) {
       dispatch(fetchTicketNftListAsync({ account }));
     }
-  }, [account]);
+  }, [account, dispatch])
+
+  useEffect(() => {
+    handleFetch()
+  }, [handleFetch]);
+  
+  return {
+    handleFetch
+  }
 };
 
 // 授权质押

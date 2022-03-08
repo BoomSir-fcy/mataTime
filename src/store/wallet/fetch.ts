@@ -1,6 +1,8 @@
 import { Api } from 'apis';
-import { getMatterAddress } from 'utils/addressHelpers';
+import { getMatterAddress, getTribeTicketsAddress } from 'utils/addressHelpers';
 import { getBep20Contract, getTribeTicketsContract } from 'utils/contractHelpers';
+import multicall from 'utils/multicall';
+import TribeTicketsAbi from 'config/abi/TribeTickets.json';
 
 // Matter收益记录
 export const FetchMatterIncomeList = async (page, size) => {
@@ -55,28 +57,41 @@ export const FetchMinimum = async () => {
 
 export const fetchTribeTicketInfo = async (account?: string) => {
   try {
-    const contract = getTribeTicketsContract()
-    // const erc20 =
+    const address = getTribeTicketsAddress();
     const matterAddress = getMatterAddress()
     const metterContract = getBep20Contract(matterAddress)
-    
-    const res = await contract._price();
+
+    const calls = [
+      {
+        address,
+        name: 'max_tickets',
+        params: [],
+      },
+      {
+        address,
+        name: '_price',
+        params: [],
+      },
+    ];
+    const [max_tickets, _price] = await multicall(TribeTicketsAbi, calls);
 
     let allowance = '0';
     if (account) {
-      const allowanceRes = await metterContract.allowance(account, contract.address);
+      const allowanceRes = await metterContract.allowance(account, address);
       allowance = allowanceRes.toString();
     }
-
     return {
+      price: _price[0].toString(),
       allowance,
-      price: res.toString(),
+      max_tickets: max_tickets[0].toString(),
     }
 
   } catch (error) {
+    console.log(error)
     return {
       price: '0',
       allowance: '0',
+      max_tickets: '0',
     }
   }
 }

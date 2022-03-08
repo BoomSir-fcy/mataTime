@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getCashierDeskAddress,
@@ -469,7 +469,16 @@ export const useEstimatedServiceTime = () => {
 export const useFetchTribeTicketInfo = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { account } = useWeb3React();
-  useEffect(() => {
+
+  const handleFetch = useCallback(() => {
     dispatch(fetchTribeTicketInfoAsync({ account }));
-  }, [account]);
+  }, [account, dispatch])
+  
+  useEffect(() => {
+    handleFetch()
+  }, [handleFetch]);
+
+  return {
+    handleFetch,
+  }
 };
