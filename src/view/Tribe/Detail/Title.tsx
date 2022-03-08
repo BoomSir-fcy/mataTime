@@ -41,7 +41,8 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const [SearchActiveTitle, setSearchActiveTitle] = useState(
     Number(qsValue.active) || 0,
   );
-  const [IsSearch, setIsSearch] = useState<boolean>(Boolean(qsValue.search));
+  // const [IsSearch, setIsSearch] = useState<boolean>(Boolean(qsValue.search));
+  const IsSearch = Boolean(qsValue.search);
 
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
@@ -54,22 +55,39 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
     setSortTime(0);
   };
 
-  useEffect(() => {
+  const changeSearchTab = type => {
+    if (SearchActiveTitle === type) return;
+    setSearchActiveTitle(type);
     tabsChange({
-      ActiveTitle,
-      sortTime,
-      sortLike,
-      top,
+      SearchActiveTitle: type,
+      search: qsValue.search,
     });
-  }, [ActiveTitle, sortTime, sortLike, top]);
+    replace(
+      `${pathname}?id=${TribeId}&active=${type}&search=${qsValue.search}`,
+    );
+  };
 
   useEffect(() => {
-    if (qsValue.search) {
-      setIsSearch(true);
-    } else {
-      setIsSearch(false);
+    if (!IsSearch) {
+      tabsChange({
+        ActiveTitle,
+        sortTime,
+        sortLike,
+        top,
+        IsSearch,
+      });
     }
-  }, [qsValue]);
+  }, [ActiveTitle, sortTime, sortLike, top, IsSearch]);
+
+  useEffect(() => {
+    if (IsSearch) {
+      // setIsSearch(true);
+      setSearchActiveTitle(Number(qsValue.active));
+    } else {
+      // setIsSearch(false);
+      setActiveTitle(Number(qsValue.active));
+    }
+  }, [IsSearch]);
 
   return (
     <CommentTitle justifyContent='space-between' alignItems='center'>
@@ -80,14 +98,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
               mr='36px'
               className={SearchActiveTitle === 0 ? 'active' : 'tabFont'}
               onClick={() => {
-                setSearchActiveTitle(0);
-                tabsChange({
-                  IsSearch: IsSearch,
-                  SearchActiveTitle: 0,
-                });
-                replace(
-                  `${pathname}?id=${TribeId}&active=0&search=${qsValue.search}`,
-                );
+                changeSearchTab(0);
               }}
             >
               {t('Post')}
@@ -95,14 +106,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
             <Text
               className={SearchActiveTitle === 1 ? 'active' : 'tabFont'}
               onClick={() => {
-                setSearchActiveTitle(1);
-                tabsChange({
-                  IsSearch: IsSearch,
-                  SearchActiveTitle: 1,
-                });
-                replace(
-                  `${pathname}?id=${TribeId}&active=1&search=${qsValue.search}`,
-                );
+                changeSearchTab(1);
               }}
             >
               {t('People')}

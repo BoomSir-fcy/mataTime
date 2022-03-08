@@ -99,7 +99,7 @@ const Detail: React.FC = React.memo(() => {
       <TribeBox>
         <Crumbs back />
         <DetailHeader TribeInfo={tribeDetailInfo} />
-        <DetailSearch TribeId={TribeId} />
+        <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />
         <DetailTitle TribeId={TribeId} tabsChange={tabsChange} />
         <TribePostList
           TribeId={TribeId}

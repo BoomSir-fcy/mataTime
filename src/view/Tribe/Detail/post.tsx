@@ -46,12 +46,14 @@ const PostListComponents = (props, ref) => {
     (current = 0) => {
       if ((loading || isEnd) && !current) return false;
       if (!TribeId) return false;
-      if (filterValObj.IsSearch) {
+      console.log(filterValObj, 'filterValObj');
+
+      if (filterValObj.search) {
         dispatch(
           fetchTribeSearchPostAsync({
             tribe_id: TribeId,
-            key: parsedQs.search,
-            start: start,
+            key: filterValObj.search,
+            start: current ? 0 : start,
             limit: MAX_SPEND_TIME_PAGE_TATOL,
             type: filterValObj.SearchActiveTitle || 0,
           }),
@@ -59,7 +61,7 @@ const PostListComponents = (props, ref) => {
       } else {
         dispatch(
           fetchTribePostAsync({
-            selected: filterValObj.ActiveTitle,
+            selected: filterValObj.ActiveTitle || 0,
             page: current || page,
             per_page: pageSize,
             top: top,
@@ -74,14 +76,6 @@ const PostListComponents = (props, ref) => {
     },
     [isEnd, dispatch, TribeId, loading, page, pageSize, filterValObj, setNonce],
   );
-
-  useEffect(() => {
-    console.log(filterValObj, parsedQs);
-
-    if (parsedQs?.search && filterValObj?.IsSearch) {
-      Getlist();
-    }
-  }, [dispatch, parsedQs, filterValObj]);
 
   useEffect(() => {
     if (page > 1) {
@@ -101,7 +95,7 @@ const PostListComponents = (props, ref) => {
 
   useEffect(() => {
     setIsEnd(false);
-    if (filterValObj.sortTime || filterValObj.sortLike) {
+    if (filterValObj.sortTime || filterValObj.sortLike || filterValObj.search) {
       Getlist(1);
     }
   }, [filterValObj]);
@@ -124,7 +118,10 @@ const PostListComponents = (props, ref) => {
 
   const getList = useCallback(
     (type?: LoadType) => {
-      if (type === LoadType.REFRESH || type === LoadType.INIT) {
+      if (type === LoadType.INIT) {
+        return;
+      }
+      if (type === LoadType.REFRESH) {
         Getlist(1);
         return;
       }

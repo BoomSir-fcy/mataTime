@@ -49,8 +49,9 @@ const InputStyled = styled(Input)`
 
 interface DetailTitlePorps {
   TribeId: number;
+  tabsChange?: (item) => void;
 }
-const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId }) => {
+const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const parsedQs = useParsedQueryString();
@@ -65,16 +66,18 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId }) => {
 
   const debouncedOnChange = useMemo(
     () =>
-      debounce(
-        e =>
-          replace(
-            `${pathname}?id=${TribeId}&active=${
-              parsedQs.active ? parsedQs.active : 0
-            }&search=${e}`,
-          ),
-        500,
-      ),
-    [dispatch],
+      debounce(e => {
+        tabsChange({
+          search: e,
+          SearchActiveTitle: parsedQs.active,
+        });
+        replace(
+          `${pathname}?id=${TribeId}&active=${
+            parsedQs.active ? parsedQs.active : 0
+          }&search=${e}`,
+        );
+      }, 500),
+    [dispatch, parsedQs, pathname],
   );
 
   const searchChange = useCallback(
@@ -87,14 +90,6 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId }) => {
   const handleSubmit = useCallback(
     search => {
       debouncedOnChange(search);
-      // handleSearchDispaly(search);
-      // dispatch(
-      //   storeAction.addSearchHistoryData({
-      //     text: search,
-      //     searchId: uniqueId('search_'),
-      //     type: SearchHistiryType.TEXT,
-      //   }),
-      // );
     },
     [dispatch, push, replace],
   );
@@ -102,8 +97,6 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId }) => {
   useEffect(() => {
     const search = value ? `${value}`.trim() : value;
     debouncedOnChange(search);
-    // if (search) {
-    // }
   }, [value]);
 
   return (
@@ -135,7 +128,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId }) => {
           <SearchBox focus={focus} isBoxShadow>
             <Flex height='100%' alignItems='center'>
               <ButtonStyled focus padding='0' variant='text'>
-                {loading ? (
+                {loading && value ? (
                   <CircleLoader color='white_black' />
                 ) : (
                   <Icon name='icon-sousuo' size={16} color='white_black'></Icon>
