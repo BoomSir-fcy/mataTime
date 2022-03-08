@@ -74,7 +74,7 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   const dispatch = useDispatch();
   const parseQs = useParsedQueryString();
 
-  const [inqueryType, setInqueryType] = useState<string>('DeleteFile');
+  const [inqueryType, setInqueryType] = useState<string>('deleteFile');
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [pageSize, setpageSize] = useState(5);
   const [page, setPage] = useState(1);
@@ -90,7 +90,7 @@ const MeTribeTribalDocs: React.FC<init> = () => {
       const res = await Api.TribeApi.tribeFileList({
         page,
         page_size: pageSize,
-        tribe_id: parseQs.i,
+        tribe_id: Number(parseQs.i),
       });
       if (Api.isSuccess(res)) {
         const Data = res.data;
@@ -111,7 +111,7 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   const DeleteFile = async () => {
     const res = await Api.TribeApi.tribeFileDelete({
       id: FileId,
-      tribe_id: parseQs.i,
+      tribe_id: Number(parseQs.i),
     });
     if (Api.isSuccess(res)) {
       toastSuccess(t('moreDeleteSuccess'));
@@ -134,7 +134,10 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   return (
     <CountBox>
       <Crumbs title='部落文件'>
-        <UploadFile tribe_id={Number(parseQs.i)} />
+        <UploadFile
+          onSuccess={() => getFileList(1)}
+          tribe_id={Number(parseQs.i)}
+        />
         {/* <BtnIcon name='icon-shangchuan1' text={t('上传文件')} /> */}
       </Crumbs>
       <TableBox>

@@ -10,8 +10,9 @@ import MentionOperator from 'components/Post/MentionOperator';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useMapModule } from 'store/mapModule/hooks';
-import { fetchTribePostAsync } from 'store/tribe';
+import { fetchTribePostAsync, fetchTribeSearchPostAsync } from 'store/tribe';
 import PostList from './postList';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -26,10 +27,11 @@ const PostListComponents = (props, ref) => {
   const article = useStore(p => p.tribe.postList);
   const dispatch = useDispatch();
   const [isEnd, setIsEnd] = useState(false);
-  const { list, lastList, page, addListNum, loading, top } = article;
+  const { list, lastList, page, addListNum, loading, top, start } = article;
   const { tribePostMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
     useMapModule();
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
+  const parsedQs = useParsedQueryString();
 
   const {
     nonce,
@@ -44,22 +46,42 @@ const PostListComponents = (props, ref) => {
     (current = 0) => {
       if ((loading || isEnd) && !current) return false;
       if (!TribeId) return false;
-      dispatch(
-        fetchTribePostAsync({
-          selected: filterValObj.ActiveTitle,
-          page: current || page,
-          per_page: pageSize,
-          top: top,
-          tribe_id: TribeId,
-          newest_sort: filterValObj.sortTime,
-          hot_sort: filterValObj.sortLike,
-        }),
-      );
+      if (filterValObj.IsSearch) {
+        dispatch(
+          fetchTribeSearchPostAsync({
+            tribe_id: TribeId,
+            key: parsedQs.search,
+            start: start,
+            limit: MAX_SPEND_TIME_PAGE_TATOL,
+            type: filterValObj.SearchActiveTitle || 0,
+          }),
+        );
+      } else {
+        dispatch(
+          fetchTribePostAsync({
+            selected: filterValObj.ActiveTitle,
+            page: current || page,
+            per_page: pageSize,
+            top: top,
+            tribe_id: TribeId,
+            newest_sort: filterValObj.sortTime,
+            hot_sort: filterValObj.sortLike,
+          }),
+        );
+      }
       setIsEnd(true);
       setNonce(prep => prep + 1);
     },
     [isEnd, dispatch, TribeId, loading, page, pageSize, filterValObj, setNonce],
   );
+
+  useEffect(() => {
+    console.log(filterValObj, parsedQs);
+
+    if (parsedQs?.search && filterValObj?.IsSearch) {
+      Getlist();
+    }
+  }, [dispatch, parsedQs, filterValObj]);
 
   useEffect(() => {
     if (page > 1) {
@@ -79,7 +101,9 @@ const PostListComponents = (props, ref) => {
 
   useEffect(() => {
     setIsEnd(false);
-    Getlist(1);
+    if (filterValObj.sortTime || filterValObj.sortLike) {
+      Getlist(1);
+    }
   }, [filterValObj]);
 
   React.useImperativeHandle(ref, () => ({
@@ -118,6 +142,7 @@ const PostListComponents = (props, ref) => {
         isEnd={isEnd}
         getList={getList}
         updateList={() => {}}
+        tribeId={TribeId}
       />
     </ArticleListBox>
   );

@@ -29,3 +29,7 @@ export const setInitMemberNft = createAction<boolean>('tribe/setInitMemberNft');
 export const updateTribeDetails = createAction<TribeInfo>(
   'tribe/updateTribeDetails',
 );
+// 加入部落弹框
+export const setJoinTribeVisibleModal = createAction<boolean>(
+  'tribe/setJoinTribeVisibleModal',
+);

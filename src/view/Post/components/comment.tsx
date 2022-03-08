@@ -25,10 +25,18 @@ export const Commnet: React.FC<{
   firstCommentId: number;
   postUid: number;
   data: any;
+  tribeId?: number;
   delSubCommentCallback: (item: any) => void;
   callback: (item?: any, type?: string) => void;
 }> = React.memo(
-  ({ firstCommentId, postUid, data, delSubCommentCallback, callback }) => {
+  ({
+    firstCommentId,
+    postUid,
+    data,
+    delSubCommentCallback,
+    callback,
+    tribeId,
+  }) => {
     const { t } = useTranslation();
 
     return (
@@ -70,6 +78,7 @@ export const Commnet: React.FC<{
           <ContentParsing disableParseSquare content={data.comment} />
           <MentionOperator
             type='Comment'
+            hasForward={!tribeId}
             callback={(data, type) => callback(data, type)}
             itemData={{
               ...data,

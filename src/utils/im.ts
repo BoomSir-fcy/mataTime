@@ -14,6 +14,8 @@ enum MessageProtocol {
   WSProtocol_UNREAD_NOTIFY = 3,
   // v2转发时间消耗
   WSProtocol_Spend_TimeV2 = 4,
+  // 部落帖子时间消耗
+  WSProtocol_Spend_Time_TRIBE = 5,
   // 心跳检测
   WSProtocol_HEART_Jump_Jump = 97,
 }

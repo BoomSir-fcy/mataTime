@@ -12,6 +12,7 @@ import {
   setPostTranslate,
 } from './reducer';
 import { loginReducer, loginAction, Login, fetchUserInfoAsync } from '../login';
+import useRefresh from 'hooks/useRefresh';
 
 export const useMapModule = () => {
   const mapModule = useSelector(
@@ -46,6 +47,7 @@ export const useTribeInfoById = id => {
 
 export const useFetchTribeInfoById = id => {
   const dispatch = useDispatch();
+  const { fastRefresh } = useRefresh();
 
   const fetchInfo = useCallback(() => {
     if (id) {
@@ -54,7 +56,7 @@ export const useFetchTribeInfoById = id => {
   }, [id, dispatch]);
   useEffect(() => {
     fetchInfo();
-  }, [fetchInfo]);
+  }, [fetchInfo, fastRefresh]);
 
   return {
     updater: fetchInfo,

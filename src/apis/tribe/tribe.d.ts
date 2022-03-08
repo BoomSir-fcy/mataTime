@@ -1,5 +1,13 @@
 declare namespace Api {
   namespace Tribe {
+    interface tribeSearchParams {
+      tribe_id: number;
+      time_sort?: number;
+      start?: number;
+      limit?: number;
+      key: string;
+      type?: number;
+    }
     interface tribeFileDeleteParams {
       id: number;
       tribe_id: number;
@@ -68,11 +76,11 @@ declare namespace Api {
     }
 
     interface TopicInfo {
-      ID: number;
-      TribeID: number;
-      Topic: string;
-      CreateTime: number;
-      Status: number;
+      id: number;
+      tribe_id: number;
+      topic: string;
+      create_time: number;
+      status: number;
     }
 
     interface TopicCreateParams {
@@ -111,6 +119,8 @@ declare namespace Api {
     }
 
     interface PostDataInfo {
+      forward_type?: number;
+      forward?: any;
       id: number;
       content: string;
       user_name: string;
@@ -160,6 +170,11 @@ declare namespace Api {
       tribe_id: number;
     }
 
-    interface FileInfo {}
+    interface FileInfo {
+      id: number;
+      tribe_id: number;
+      file_name: string;
+      url: string;
+    }
   }
 }

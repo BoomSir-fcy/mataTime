@@ -9,6 +9,8 @@ const Manage = React.lazy(() => import('./Manage'));
 const Post = React.lazy(() => import('./Post'));
 const PostDetail = React.lazy(() => import('./PostDetail'));
 
+const AppDetail = React.lazy(() => import('./App/details'));
+
 const Tribe = () => {
   const { pathname } = useLocation();
   const { path } = useRouteMatch();
@@ -21,6 +23,7 @@ const Tribe = () => {
         <Route path={`${path}/manage`} component={Manage} />
         <Route path={`${path}/post`} component={Post} />
         <Route path={`${path}/postdetail`} component={PostDetail} />
+        <Route path={`${path}/app/detail`} component={AppDetail} />
       </Switch>
     </Box>
   );

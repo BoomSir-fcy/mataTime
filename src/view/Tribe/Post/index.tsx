@@ -32,6 +32,9 @@ import { FetchStatus } from 'config/types';
 import { useSendPostOrDraft } from './hooks';
 import { getDecodeValue } from 'utils/urlQueryPath';
 import parseContentInfo from 'components/Editor/RichTextEditor/tools/parseContentInfo';
+import { Link, useHistory } from 'react-router-dom';
+import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 const BoxStyled = styled(Box)`
   padding: ${({ theme }) => theme.mediaQueriesSize.padding};
@@ -90,8 +93,14 @@ const Post = () => {
   const { t } = useTranslation();
   const [selectTags, setSelectTags] = useState<Api.Tribe.TopicInfo[]>([]);
 
+  const { push } = useHistory();
   const { i, n } = useParsedQueryString();
   const tribe_id = Number(i);
+
+  useFetchTribeInfoById(tribe_id);
+  const tribeInfo = useTribeInfoById(tribe_id);
+  const { account } = useActiveWeb3React();
+
   const tribeName = getDecodeValue(n);
 
   const [value, setValue] = useState<Descendant[]>(
@@ -159,9 +168,10 @@ const Post = () => {
         editorRef.current?.reSetEditor();
         setVerifyVisible(false);
         setStorageData(tribe_id, '');
+        push(`/tribe/detail?id=${tribe_id}`);
       }
     },
-    [value, title, selectTags, tribe_id],
+    [value, title, selectTags, push, tribe_id],
   );
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
@@ -206,7 +216,6 @@ const Post = () => {
         <Flex mb='22px'>
           <LableBoxStyled>* {t('Title')}</LableBoxStyled>
           <Flex flex={1} position='relative' alignItems='center'>
-            {/* TODO: 移动端边距优化 */}
             <InputStyled
               onChange={event => {
                 // if (event.target.value.length <= HUGE_ARTICLE_TITLE_MAX_LEN) {
@@ -233,14 +242,26 @@ const Post = () => {
           </Flex>
         </Flex>
         <Flex mb='22px'>
-          <LableBoxStyled>* {t('Tag')}</LableBoxStyled>
-          {/* <InputTag
+          <LableBoxStyled>
+            *{' '}
+            {tribeInfo?.tribe?.owner_address?.toLowerCase() ===
+            account?.toLowerCase() ? (
+              <Link to={`/me/tribe/topics-setting?i=${tribe_id}`}>
+                <Text as='span' color='textPrimary'>
+                  {t('Tag')}
+                </Text>
+              </Link>
+            ) : (
+              t('Tag')
+            )}
+          </LableBoxStyled>
+          <InputTag
             tribe_id={tribe_id}
             onChange={value => {
               console.log(value);
               setSelectTags(value);
             }}
-          /> */}
+          />
         </Flex>
         <LableBoxStyled mb='22px'>* {t('Document')}</LableBoxStyled>
         <RichTextEditor
@@ -278,12 +299,13 @@ const Post = () => {
               onClick={() =>
                 handleCreateDraft({ value, title, selectTags, tribe_id })
               }
+              disabled={loadingDraft}
               variant='secondary'
             >
               {loadingDraft ? <Dots>{t('Saving')}</Dots> : t('Save draft')}
             </Button>
           </Box>
-          <Button onClick={() => handleSendPost()} ml='35px' width='260px'>
+          <Button disabled={loadingSend} onClick={() => handleSendPost()} ml='35px' width='260px'>
             {loadingSend ? <Dots>{t('POSTING')}</Dots> : t('POST')}
           </Button>
         </Flex>

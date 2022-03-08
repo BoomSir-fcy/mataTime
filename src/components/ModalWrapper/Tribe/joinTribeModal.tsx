@@ -79,9 +79,9 @@ export const JoinTribeModal: React.FC<{
   }, [handleApprove]);
 
   const handleChange = React.useCallback(e => {
-    if (e.currentTarget.validity.valid) {
+    if (e.currentTarget?.validity?.valid) {
       setState(p => {
-        p.inviteAddress = e.currentTarget.value;
+        p.inviteAddress = e?.currentTarget?.value;
       });
     }
   }, []);
@@ -97,7 +97,7 @@ export const JoinTribeModal: React.FC<{
         p.submitLoading = true;
       });
       const res = await joinTribe(
-        detail.tribe_id,
+        tribeInfo.tribe_id,
         inviteAddress,
         joinServiceFee,
       );
@@ -120,7 +120,6 @@ export const JoinTribeModal: React.FC<{
     }
   }, [state, joinTribe, detail]);
 
-  console.log(detail);
   return (
     <ModalWrapper
       title={t('TribeJoinModalTitle', { value: tribeInfo?.tribe?.name || '' })}
