@@ -258,7 +258,6 @@ const Post = () => {
           <InputTag
             tribe_id={tribe_id}
             onChange={value => {
-              console.log(value);
               setSelectTags(value);
             }}
           />
@@ -305,7 +304,12 @@ const Post = () => {
               {loadingDraft ? <Dots>{t('Saving')}</Dots> : t('Save draft')}
             </Button>
           </Box>
-          <Button disabled={loadingSend} onClick={() => handleSendPost()} ml='35px' width='260px'>
+          <Button
+            disabled={loadingSend}
+            onClick={() => handleSendPost()}
+            ml='35px'
+            width='260px'
+          >
             {loadingSend ? <Dots>{t('POSTING')}</Dots> : t('POST')}
           </Button>
         </Flex>
