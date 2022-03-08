@@ -97,7 +97,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     <Flex>
       <TribeBox>
         <Crumbs back />
-        <DetailHeader TribeInfo={tribeInfo} />
+        <DetailHeader TribeInfo={tribeDetailInfo} />
         <DetailTitle TribeId={TribeId} tabsChange={tabsChange} />
         <TribePostList
           TribeId={TribeId}
