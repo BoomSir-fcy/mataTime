@@ -11,7 +11,10 @@ import {
   fetchPostDetailAsync,
   fetchTribePostDetailAsync,
 } from 'store/mapModule/reducer';
-import { useFetchTribePostInfo } from 'store/tribe/helperHooks';
+import {
+  useFetchTribePostInfo,
+  useUpdateTribePostInfo,
+} from 'store/tribe/helperHooks';
 import Popup from 'reactjs-popup';
 import styled, { useTheme } from 'styled-components';
 import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
@@ -94,6 +97,12 @@ const PostDetail = () => {
   const popupRefSet = React.useRef(null);
   const popupRef = React.useRef(null);
 
+  const { handleUpdateList } = useUpdateTribePostInfo(
+    setNonce,
+    () => {},
+    () => {},
+  );
+
   return (
     <Box>
       <Crumbs back />
@@ -130,7 +139,8 @@ const PostDetail = () => {
               },
             }}
             callback={(item: any, type?: MoreOperatorEnum) => {
-              // handleUpdateList(item, type);
+              console.log(1);
+              handleUpdateList(item, type);
             }}
           />
           <Flex alignItems='center'>
@@ -152,10 +162,9 @@ const PostDetail = () => {
                       ...data,
                     },
                   }}
-                  callback={(data: any, type) => {
+                  callback={(data: any, type?: any) => {
                     popupRefSet?.current?.close();
-                    // TODO:
-                    // callback(data, type);
+                    handleUpdateList(data, type);
                   }}
                 />
               </a>
@@ -203,15 +212,14 @@ const PostDetail = () => {
                       ...data,
                     },
                   }}
-                  callback={(data: any, type) => {
+                  callback={(data: any, type: any) => {
                     if (type === MoreOperatorEnum.BLOCKUSER) {
                       // TODO:
                       // setIsShileUser(!isShileUser, data);
                       return;
                     }
                     popupRef?.current?.close();
-                    // TODO:
-                    // callback(data, type);
+                    handleUpdateList(data, type);
                   }}
                 />
               </Popup>

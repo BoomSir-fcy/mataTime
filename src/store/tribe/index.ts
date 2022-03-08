@@ -219,7 +219,7 @@ export const fetchTribeSearchPostAsync = createAsyncThunk(
     dispatch(setLoading(true));
     const { type: SearchType, ...param } = params;
     const response = await Api.TribeApi[
-      SearchType === 0 ? 'tribeSearchPostList' : 'tribeSearchUserList'
+      Number(SearchType) === 0 ? 'tribeSearchPostList' : 'tribeSearchUserList'
     ]({
       ...param,
     });
@@ -350,6 +350,7 @@ export const tribe = createSlice({
         }
         state.postList.lastList =
           articleList.length >= limit || start > limit ? articleList : [];
+
         state.postList.start = articleList.length >= limit ? next : start;
         state.postList.loading = false;
       })
