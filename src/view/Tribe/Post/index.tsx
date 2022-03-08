@@ -66,7 +66,6 @@ const getStorageData = () => {
   const storageData = storageDataStr ? JSON.parse(storageDataStr) : {};
   return storageData;
 };
-const storageData = getStorageData();
 const setStorageData = (id, value) => {
   // if (value?.length > 1 || value.map(n => Node.string(n)).join('\n') > 1) {
   //   const data = getStorageData();
@@ -92,6 +91,7 @@ const Post = () => {
   const { toastSuccess, toastError } = useToast();
   const { t } = useTranslation();
   const [selectTags, setSelectTags] = useState<Api.Tribe.TopicInfo[]>([]);
+  const [storageData] = useState(getStorageData());
 
   const { push } = useHistory();
   const { i, n } = useParsedQueryString();
