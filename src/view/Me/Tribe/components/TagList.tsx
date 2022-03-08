@@ -36,7 +36,7 @@ export const CancleIcon: React.FC<Partial<iocnType>> = props => (
     name='icon-guanbi2fill'
     size={13}
     margin='0 0 0 10px'
-    color='#343434'
+    color='textAssist'
     {...props}
   />
 );

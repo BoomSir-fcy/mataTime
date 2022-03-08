@@ -81,38 +81,28 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
   const [toFocus, setToFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // const { data: topicData } = useFetchTribeTopicList(tribe_id);
-
   const tribeInfo = useTribeInfoById(tribe_id);
 
   useEffect(() => {
-    if (isEqual(tribeInfo?.topics, selectTags)) {
+    if (!isEqual(tribeInfo?.topics, selectTags) && tribeInfo?.topics) {
       setTagsList(tribeInfo?.topics);
     }
   }, [selectTags, tribeInfo?.topics]);
 
-  // useEffect(() => {
-  //   if (topicData.fetchStatus === FetchStatus.SUCCESS) {
-  //     setTagsList(topicData.list);
-  //   }
-  // }, [topicData.fetchStatus, topicData.list]);
-
   const handleAddTag = useCallback(
     item => {
       setSelectTags(prep => prep.concat(item));
-      // setTagsList(prep => prep.filter(i => i.id !== item.id));
     },
-    [setSelectTags, setTagsList],
+    [setSelectTags],
   );
 
   const handleRemoveTag = useCallback(
     item => {
       if (item) {
-        // setTagsList(prep => prep.concat(item));
         setSelectTags(prep => prep.filter(i => i.id !== item.id));
       }
     },
-    [setSelectTags, setTagsList],
+    [setSelectTags],
   );
 
   const renderTagsList = useMemo(() => {
@@ -192,7 +182,6 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
               onClick={() => {
                 handleAddTag(item);
                 inputRef.current.focus();
-                console.log(2121221);
               }}
               cursor='pointer'
               key={item.id}
