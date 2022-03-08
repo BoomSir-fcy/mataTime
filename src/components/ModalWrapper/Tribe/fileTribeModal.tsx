@@ -2,6 +2,7 @@ import React from 'react';
 import ReactPaginate from 'react-paginate';
 import { Flex, Box, Text } from 'uikit';
 import { ModalWrapper, Loading } from 'components';
+import { useTranslation } from 'contexts';
 import { Container } from './styles';
 
 import getFileExt from 'utils/getFileExt';
@@ -16,6 +17,8 @@ export const FileTribeModal: React.FC<{
   onClose: () => void;
   onchangePage: (page: number) => void;
 }> = ({ visible, loading, onClose, files, onchangePage }) => {
+  const { t } = useTranslation();
+  const pages = Math.ceil(files?.total_count / files?.page_size);
   const handlePageClick = event => {
     onchangePage(event.selected + 1);
   };
@@ -44,7 +47,7 @@ export const FileTribeModal: React.FC<{
         {files?.list.length > 0 && (
           <PaginateStyle alignItems='center' justifyContent='end'>
             <Text className='totalPage' fontSize='14px' color='textTips'>
-              总共 {files?.total_count / files?.page_size}页
+              {t('pageTotalpage', { page: pages })}
             </Text>
             <ReactPaginate
               breakLabel='...'
@@ -52,7 +55,7 @@ export const FileTribeModal: React.FC<{
               onPageChange={handlePageClick}
               pageRangeDisplayed={3}
               marginPagesDisplayed={1}
-              pageCount={files?.total_count / files?.page_size}
+              pageCount={pages}
               previousLabel='<'
               renderOnZeroPageCount={null}
             />
