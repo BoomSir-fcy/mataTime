@@ -190,10 +190,10 @@ const RichTextEditor = (
         background={getColor(background, theme)}
         onClick={() => {
           ReactEditor.focus(editor);
-          HistoryEditor.withoutSaving(editor, () => {
-            editor.insertText('');
-            // editor.deleteBackward(1);
-          });
+          // HistoryEditor.withoutSaving(editor, () => {
+          // editor.insertText('');
+          // editor.deleteBackward(1);
+          // });
         }}
         position='relative'
         key={refresh}
@@ -239,14 +239,17 @@ const RichTextEditor = (
                   }
                 }
 
-                const { imageList } = parseContentInfo(value)
-                if (imageList.length + files.length > HUGE_ARTICLE_IMAGE_MAX_LEN)
+                const { imageList } = parseContentInfo(value);
+                if (
+                  imageList.length + files.length >
+                  HUGE_ARTICLE_IMAGE_MAX_LEN
+                )
                   return toastError(t('uploadImgMaxMsg'));
                 toast.promise(() => uploadImg(fileList), {
                   pending: t('Uploading pictures'),
                   success: t('Upload successful'),
-                  error: t('Upload failed')
-                })
+                  error: t('Upload failed'),
+                });
               }
               // if (files && files.length > 0) {
               //   //@ts-ignore
