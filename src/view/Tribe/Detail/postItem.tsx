@@ -6,6 +6,10 @@ import { Icon, MoreOperatorEnum, ContentParsing } from 'components';
 import Popup from 'reactjs-popup';
 import { MoreTribePopup } from 'components/Popup/TribeMorePopup/morePopup';
 import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
+import { usePostTranslateMap } from 'store/mapModule/hooks';
+import PostHandleBtns from './PostHandleBtns';
+import { FetchStatus } from 'config/types';
+import ContentParsingOfTranslate from './ContentParsingOfTranslate';
 
 const PostBox = styled(Box)``;
 
@@ -55,6 +59,9 @@ const PostItem: React.FC<PostInfoPorps> = ({
   const popupRefSet = React.useRef(null);
   const popupRef = React.useRef(null);
   const theme = useTheme();
+
+  const translateData = usePostTranslateMap(itemData.id);
+
   return (
     <PostBox>
       <Top>
@@ -72,89 +79,26 @@ const PostItem: React.FC<PostInfoPorps> = ({
             {itemData.title}
           </Text>
         </Flex>
-        <Flex alignItems='center'>
-          {isTribeOnwer && (
-            <a
-              href='javascript: void(0)'
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }}
-            >
-              <SetTribePopup
-                ref={popupRefSet}
-                data={{
-                  ...itemData,
-                  post: {
-                    ...itemData,
-                  },
-                }}
-                callback={(data: any, type) => {
-                  popupRefSet?.current?.close();
-                  callback(data, type);
-                }}
-              />
-            </a>
-          )}
-          <a
-            href='javascript: void(0)'
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              return false;
-            }}
-          >
-            <Popup
-              ref={popupRef}
-              trigger={
-                <PopupButton title={t('popupMore')}>
-                  <Icon name='icon-gengduo' size={20} color='textTips' />
-                </PopupButton>
-              }
-              nested
-              position='bottom right'
-              closeOnDocumentClick
-              contentStyle={{
-                width: '150px',
-                height: 'auto',
-                borderRadius: '10px',
-                padding: 0,
-                border: '0',
-                backgroundColor: 'transparent',
-                zIndex: 99,
-              }}
-              overlayStyle={{
-                zIndex: 98,
-              }}
-              arrowStyle={{
-                color: theme.colors.tertiary,
-                stroke: theme.colors.tertiary,
-              }}
-            >
-              <MoreTribePopup
-                postUid={'1'}
-                data={{
-                  ...itemData,
-                  post: {
-                    ...itemData,
-                  },
-                }}
-                callback={(data: any, type) => {
-                  if (type === MoreOperatorEnum.BLOCKUSER) {
-                    setIsShileUser(!isShileUser, itemData);
-                    return;
-                  }
-                  popupRef?.current?.close();
-                  callback(data, type);
-                }}
-              />
-            </Popup>
-          </a>
-        </Flex>
+        <PostHandleBtns
+          itemData={itemData}
+          isTribeOnwer={isTribeOnwer}
+          callback={callback}
+          isShileUser={isShileUser}
+          showTranslateIcon={
+            translateData && translateData?.status !== FetchStatus.NOT_FETCHED
+          }
+          showTranslate={translateData?.showTranslate}
+          setIsShileUser={setIsShileUser}
+        />
       </Top>
       <Box padding='15px 0'>
-        <ContentParsing mode='preview' content={itemData.content} />
+        <ContentParsingOfTranslate
+          itemData={itemData}
+          mode='preview'
+          callback={callback}
+          translateData={translateData}
+        />
+        {/* <ContentParsing mode='preview' content={itemData.content} /> */}
       </Box>
     </PostBox>
   );

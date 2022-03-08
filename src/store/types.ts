@@ -118,6 +118,12 @@ export interface MapModuleStatus {
   ids: string | number;
 }
 
+export interface TranslateInfo {
+  content: string;
+  status: FetchStatus;
+  showTranslate: boolean; // 是否显示翻译
+}
+
 export interface MapModuleState {
   postMap: {
     [postId: string]: Api.Home.post;
@@ -135,18 +141,10 @@ export interface MapModuleState {
     [postId: string]: TribeInfo;
   };
   postTranslateMap: {
-    [postId: string]: {
-      content: string;
-      status: FetchStatus;
-      showTranslate: boolean; // 是否显示翻译
-    };
+    [postId: string]: TranslateInfo;
   };
   commentTranslateMap: {
-    [postId: string]: {
-      content: string;
-      status: FetchStatus;
-      showTranslate: boolean; // 是否显示翻译
-    };
+    [postId: string]: TranslateInfo;
   };
   needTranslatePostIds: number[];
   needTranslateCommentIds: number[];

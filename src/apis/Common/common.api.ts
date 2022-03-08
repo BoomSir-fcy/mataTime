@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from "axios";
 import { Http } from "../http";
 
 export class CommonApi extends Http {
@@ -12,8 +13,11 @@ export class CommonApi extends Http {
     return res;
   }
   // 上传文件
-  async uploadFile(params: FormData) {
-    const res = await this.post('/v1/upload/file', params);
+  async uploadFile(params: FormData, onUploadProgress?: (any) => void) {
+    const res = await this.post('/v1/upload/file', params, {
+      timeout: 2 * 60 * 1000,
+      onUploadProgress
+    });
     return res;
   }
 

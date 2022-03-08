@@ -106,7 +106,8 @@ export const ContentParsing = React.memo(
       if (mode === 'preview') {
         return parsingResult
           .map(n => Node.string(n))
-          .join(`[${t('editorUploadImg')}]`);
+          .join(` `)
+          .trim();
       }
     }, [mode, parsingResult]);
 

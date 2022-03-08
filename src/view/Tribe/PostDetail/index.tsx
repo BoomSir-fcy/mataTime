@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import {
+  usePostTranslateMap,
   useTribeInfoById,
   useTribePostDetailById,
 } from 'store/mapModule/hooks';
@@ -35,6 +36,9 @@ import useReadArticle from 'hooks/imHooks/useReadArticle';
 import { MoreTribePopup } from 'components/Popup/TribeMorePopup/morePopup';
 import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import ContentParsingOfTranslate from '../Detail/ContentParsingOfTranslate';
+import PostHandleBtns from '../Detail/PostHandleBtns';
+import { FetchStatus } from 'config/types';
 
 const ContentBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -103,6 +107,8 @@ const PostDetail = () => {
     () => {},
   );
 
+  const translateData = usePostTranslateMap(data?.id);
+
   return (
     <Box>
       <Crumbs back />
@@ -122,7 +128,13 @@ const PostDetail = () => {
             />
           )
         }
-        <ContentParsing rows={50} content={data?.content} />
+        <ContentParsingOfTranslate
+          itemData={data}
+          showTranslate
+          callback={handleUpdateList}
+          translateData={translateData}
+          rows={50}
+        />
         <HotBtn list={data?.topics} />
         <Flex mt='24px'>
           <MentionOperator
@@ -143,88 +155,16 @@ const PostDetail = () => {
               handleUpdateList(item, type);
             }}
           />
-          <Flex alignItems='center'>
-            {tribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===
-              account?.toLocaleLowerCase() && (
-              <a
-                href='javascript: void(0)'
-                onClick={e => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  return false;
-                }}
-              >
-                <SetTribePopup
-                  ref={popupRefSet}
-                  data={{
-                    ...data,
-                    post: {
-                      ...data,
-                    },
-                  }}
-                  callback={(data: any, type?: any) => {
-                    popupRefSet?.current?.close();
-                    handleUpdateList(data, type);
-                  }}
-                />
-              </a>
-            )}
-            <a
-              href='javascript: void(0)'
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-              }}
-            >
-              <Popup
-                ref={popupRef}
-                trigger={
-                  <PopupButton title={t('popupMore')}>
-                    <Icon name='icon-gengduo' size={20} color='textTips' />
-                  </PopupButton>
-                }
-                nested
-                position='bottom right'
-                closeOnDocumentClick
-                contentStyle={{
-                  width: '150px',
-                  height: 'auto',
-                  borderRadius: '10px',
-                  padding: 0,
-                  border: '0',
-                  backgroundColor: 'transparent',
-                  zIndex: 99,
-                }}
-                overlayStyle={{
-                  zIndex: 98,
-                }}
-                arrowStyle={{
-                  color: theme.colors.tertiary,
-                  stroke: theme.colors.tertiary,
-                }}
-              >
-                <MoreTribePopup
-                  postUid={'1'}
-                  data={{
-                    ...data,
-                    post: {
-                      ...data,
-                    },
-                  }}
-                  callback={(data: any, type: any) => {
-                    if (type === MoreOperatorEnum.BLOCKUSER) {
-                      // TODO:
-                      // setIsShileUser(!isShileUser, data);
-                      return;
-                    }
-                    popupRef?.current?.close();
-                    handleUpdateList(data, type);
-                  }}
-                />
-              </Popup>
-            </a>
-          </Flex>
+          <PostHandleBtns
+            itemData={data}
+            isTribeOnwer={
+              tribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===
+              account?.toLocaleLowerCase()
+            }
+            callback={handleUpdateList}
+            showTranslateIcon={false}
+            showTranslate={translateData?.showTranslate}
+          />
         </Flex>
       </ContentBox>
       <Divider />

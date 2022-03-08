@@ -18,6 +18,8 @@ import {
   setJoinTribeVisibleModal,
 } from './actions';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+import checkTranslateIds from 'utils/checkTranslateIds';
+import { addTranslateIds } from 'store/mapModule/actions';
 
 const LOCAL_STORAGE_TRIBE_INFO = 'info';
 
@@ -201,7 +203,10 @@ export const fetchTribePostAsync = createAsyncThunk(
     const response = await Api.TribeApi.tribePostList({
       ...params,
     });
+    
     if (Api.isSuccess(response)) {
+      const { postIds } = checkTranslateIds(response.data.List || []);
+      dispatch(addTranslateIds(postIds));
       return {
         list: response.data.List,
         page: params.page,
