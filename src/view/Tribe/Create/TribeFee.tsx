@@ -40,7 +40,7 @@ import { FeeType, Timing, TribeType } from 'store/tribe/type';
 import { actionTypes } from './type';
 import { getMatterAddress } from 'utils/addressHelpers';
 import { getValidDateSecond, getValidDateDay } from 'store/tribe/utils';
-import { getDecimalAmount } from './hooks';
+import { getBalanceAmount, getDecimalAmount } from './hooks';
 import { getBalanceNumber } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 
@@ -54,7 +54,7 @@ const TribeFeeForward = (props, ref) => {
   const { info, disabled, actionType } = props;
   const [tribeType, setTribeType] = useState(1);
   const [tribeFeeType, setTribeFeeType] = useState(1);
-  const [feeToken, setFeeToken] = useState('');
+  const [feeToken, setFeeToken] = useState(TRIBE_FEE_BNB_TOKEN);
   const [state, setState] = useImmer({
     feeAmount: '',
     timing: 1,
@@ -81,23 +81,15 @@ const TribeFeeForward = (props, ref) => {
   ];
 
   useEffect(() => {
-    if (feeCoinList.length) {
-      setFeeToken(
-        feeCoinList?.find(item => item.tokenAddress === TRIBE_FEE_BNB_TOKEN)
-          ?.tokenAddress,
-      );
-    }
-  }, [feeCoinList]);
-
-  useEffect(() => {
     if (info?.feeToken) {
       setState(p => {
-        p.feeAmount = getBalanceNumber(
-          new BigNumber(info.feeAmount),
+        p.feeAmount = getBalanceAmount(
+          info.feeAmount,
           getFeeDecimal(info.feeToken),
-        ).toString();
+        );
         p.timing =
-          Number(info.validDate) === 0 ? Timing.FOREVER : Timing.JOIN_TRIBE;
+          info?.timing ||
+          (Number(info.validDate) === 0 ? Timing.FOREVER : Timing.JOIN_TRIBE);
         p.validDate = getValidDateDay(info.validDate).toString();
         p.perTime = info.perTime;
         p.ownerPercent = info.ownerPercent;
@@ -106,13 +98,15 @@ const TribeFeeForward = (props, ref) => {
       });
 
       setTribeType(
-        getMatterAddress().indexOf(info.feeToken) !== -1
-          ? TribeType.BASIC
-          : TribeType.PRO,
+        info?.tribeType ||
+          (getMatterAddress().indexOf(info.feeToken) !== -1
+            ? TribeType.BASIC
+            : TribeType.PRO),
       );
       setFeeToken(info.feeToken);
+      setTribeFeeType(info?.tribeFeeType || FeeType.DEFAULT);
     }
-  }, [info]);
+  }, [props.info]);
 
   const CoinOptions = useMemo(() => {
     return feeCoinList.map(item => {
@@ -135,9 +129,11 @@ const TribeFeeForward = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     getFeeFrom() {
-      const params = {
+      return {
+        ...state,
+        tribeFeeType,
         tribeType,
-        feeToken: tribeType === TribeType.BASIC ? getMatterAddress() : feeToken,
+        feeToken,
         feeAmount:
           tribeType === TribeType.BASIC
             ? 0
@@ -147,9 +143,16 @@ const TribeFeeForward = (props, ref) => {
             ? 0
             : getValidDateSecond(state.validDate),
       };
-      return { ...state, ...params };
     },
   }));
+
+  const saveTempInfo = useCallback(
+    (info?: any) => {
+      const infos = { ...ref.current.getFeeFrom(), ...info };
+      if (props.handleTempInfo) props.handleTempInfo(infos);
+    },
+    [ref],
+  );
 
   return (
     <FormFlex>
@@ -186,8 +189,12 @@ const TribeFeeForward = (props, ref) => {
             value={tribeType}
             options={typeOptions}
             onChange={val => {
+              console.log(val);
+
               setTribeType(val);
+              saveTempInfo({ tribeType: val });
             }}
+            // onBlur={() => saveTempInfo()}
           />
           {tribeType === 2 && (
             <TribeCard isRadius>
@@ -222,13 +229,17 @@ const TribeFeeForward = (props, ref) => {
                           });
                         }
                       }}
+                      onBlur={() => saveTempInfo()}
                     />
                     <Select
                       scale='xs'
                       disabled={actionType === actionTypes.EDIT && disabled}
                       options={CoinOptions}
                       defaultId={feeToken}
-                      onChange={(val: any) => setFeeToken(val.value)}
+                      onChange={(val: any) => {
+                        setFeeToken(val.value);
+                        saveTempInfo({ feeToken: val.value });
+                      }}
                     />
                   </Flex>
                 </InputPanelStyle>
@@ -251,6 +262,7 @@ const TribeFeeForward = (props, ref) => {
                     setState(p => {
                       p.timing = val;
                     });
+                    saveTempInfo({ timing: val });
                   }}
                 />
               </FormItem>
@@ -278,6 +290,7 @@ const TribeFeeForward = (props, ref) => {
                           });
                         }
                       }}
+                      onBlur={() => saveTempInfo()}
                     />
                     <Text>{t('tribeDays')}</Text>
                   </Flex>
@@ -319,12 +332,20 @@ const TribeFeeForward = (props, ref) => {
               options={feeTypeOptions}
               onChange={val => {
                 setTribeFeeType(val);
+                saveTempInfo({ tribeFeeType: val });
                 if (val === 1) {
                   setState(p => {
                     p.perTime = TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME;
                     p.ownerPercent = TRIBE_FEE_DEFAULT_MASTER_REWARD;
                     p.authorPercent = TRIBE_FEE_DEFAULT_CREATOR_REWARD;
                     p.memberPercent = TRIBE_FEE_DEFAULT_MEMBER_REWARD;
+                  });
+                  saveTempInfo({
+                    tribeFeeType: val,
+                    perTime: TRIBE_FEE_DEFAULT_SECOND_CONSUMES_TIME,
+                    ownerPercent: TRIBE_FEE_DEFAULT_MASTER_REWARD,
+                    authorPercent: TRIBE_FEE_DEFAULT_CREATOR_REWARD,
+                    memberPercent: TRIBE_FEE_DEFAULT_MEMBER_REWARD,
                   });
                 }
               }}
@@ -365,6 +386,7 @@ const TribeFeeForward = (props, ref) => {
                             });
                           }
                         }}
+                        onBlur={() => saveTempInfo()}
                       />
                       <Text>TIME</Text>
                     </Flex>
@@ -389,7 +411,7 @@ const TribeFeeForward = (props, ref) => {
                         placeholder='60s'
                         inputMode='decimal'
                         pattern={PATTERN_NUMBER}
-                        value={parseInt(state.perTime) * 60}
+                        value={parseInt(state.perTime || '0') * 60}
                       />
                       <Text>TIME</Text>
                     </Flex>
@@ -434,6 +456,7 @@ const TribeFeeForward = (props, ref) => {
                             });
                           }
                         }}
+                        onBlur={() => saveTempInfo()}
                       />
                       <Text>%</Text>
                     </Flex>
@@ -463,6 +486,7 @@ const TribeFeeForward = (props, ref) => {
                             });
                           }
                         }}
+                        onBlur={() => saveTempInfo()}
                       />
                       <Text>%</Text>
                     </Flex>
@@ -492,6 +516,7 @@ const TribeFeeForward = (props, ref) => {
                             });
                           }
                         }}
+                        onBlur={() => saveTempInfo()}
                       />
                       <Text>%</Text>
                     </Flex>

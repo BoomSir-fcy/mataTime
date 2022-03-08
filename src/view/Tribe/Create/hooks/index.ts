@@ -12,7 +12,14 @@ import { BIG_TEN } from 'utils/bigNumber';
 import { getTribeContract } from 'utils/contractHelpers';
 import multicall from 'utils/multicall';
 
+export const getBalanceAmount = (amount: string | number, decimal = 18) => {
+  if (!amount) return '';
+  const tokenDecimal = new BigNumber(amount).dividedBy(BIG_TEN.pow(decimal));
+  return tokenDecimal.toString();
+};
+
 export const getDecimalAmount = (amount: string | number, decimal?: number) => {
+  if (!amount) return '';
   const tokenDecimal = new BigNumber(amount).times(BIG_TEN.pow(decimal));
   return tokenDecimal.toString();
 };

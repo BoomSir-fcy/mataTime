@@ -43,8 +43,8 @@ const MyTribeInfo = () => {
           try {
             setPending(true);
             await onSetTribeBaseInfo(tribeId, params);
-            dispatch(fetchTribeInfoAsync(tribeId));
             setInfo(params);
+            // dispatch(fetchTribeInfoAsync(tribeId));
             setIsEdit(false);
             setPending(false);
           } catch (error) {
