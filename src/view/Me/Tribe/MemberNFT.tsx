@@ -15,6 +15,7 @@ import Dots from 'components/Loader/Dots';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
+import { getBLen } from 'utils';
 
 const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
@@ -27,6 +28,8 @@ const MeTribeMemberNFT = () => {
     name: '',
     logo: '',
     introduction: '',
+    width: 0,
+    height: 0,
   });
 
   const tribeId = parseQs.i;
@@ -52,9 +55,11 @@ const MeTribeMemberNFT = () => {
     }
   }, [parseQs, state]);
 
-  const uploadSuccess = useCallback(url => {
+  const uploadSuccess = useCallback((url, width, height) => {
     setState(p => {
       p.logo = url;
+      p.width = width;
+      p.height = height;
     });
   }, []);
   return (
@@ -83,6 +88,7 @@ const MeTribeMemberNFT = () => {
                     value={state.name}
                     onChange={e => {
                       const val = e.target.value;
+                      if (getBLen(val) > 30) return false;
                       setState(p => {
                         p.name = val;
                       });
@@ -92,15 +98,34 @@ const MeTribeMemberNFT = () => {
                 <Text mt='10px' small color='textTips'>
                   {t('6~30 characters (Support English, Chinese, numbers)')}
                 </Text>
+                {state.name && (
+                  <Text
+                    color={getBLen(state.name) > 30 ? 'failure' : 'textTips'}
+                    ellipsis
+                  >
+                    {t('loginCountCharacters', { value: getBLen(state.name) })}
+                  </Text>
+                )}
               </Flex>
             </FormItem>
             <FormItem>
               <Label required>{t('NFT')}</Label>
               <UploadSingle
                 url={state.logo}
-                tips={t(
-                  'The recommended size is less than 5MB, and the image size is 1000x1000',
-                )}
+                tips={
+                  <Flex mt='10px' flexDirection='column'>
+                    {state.width !== state.height && (
+                      <Text color='textOrigin' small>
+                        {t('The recommended image ratio is 1:1')}
+                      </Text>
+                    )}
+                    <Text color='textTips' small>
+                      {t(
+                        'The recommended size is less than 5MB, and the image size is 1000x1000',
+                      )}
+                    </Text>
+                  </Flex>
+                }
                 uploadSuccess={uploadSuccess}
               />
             </FormItem>

@@ -31,13 +31,17 @@ interface DetailTitlePorps {
 const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [sortTime, setSortTime] = useState(1);
-  const [sortLike, setSortLike] = useState(0);
   const { top } = useStore(p => p.tribe.postList);
   const { replace } = useHistory();
   const { pathname } = useLocation();
   const qsValue = useParsedQueryString();
+  const [sortTime, setSortTime] = useState(1);
+  const [sortLike, setSortLike] = useState(0);
   const [ActiveTitle, setActiveTitle] = useState(Number(qsValue.active) || 0);
+  const [SearchActiveTitle, setSearchActiveTitle] = useState(
+    Number(qsValue.active) || 0,
+  );
+  const [IsSearch, setIsSearch] = useState<boolean>(Boolean(qsValue.search));
 
   const changeSortTime = () => {
     document.body.scrollIntoView({ block: 'start', inline: 'nearest' });
@@ -59,41 +63,89 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
     });
   }, [ActiveTitle, sortTime, sortLike, top]);
 
+  useEffect(() => {
+    if (qsValue.search) {
+      setIsSearch(true);
+    } else {
+      setIsSearch(false);
+    }
+  }, [qsValue]);
+
   return (
     <CommentTitle justifyContent='space-between' alignItems='center'>
-      <Tab>
-        <Text
-          mr='36px'
-          className={ActiveTitle === 0 ? 'active' : 'tabFont'}
-          onClick={() => {
-            setActiveTitle(0);
-            replace(`${pathname}?id=${TribeId}&active=0`);
-          }}
-        >
-          {t('homeTabAll')}
-        </Text>
-        <Text
-          className={ActiveTitle === 1 ? 'active' : 'tabFont'}
-          onClick={() => {
-            setActiveTitle(1);
-            replace(`${pathname}?id=${TribeId}&active=1`);
-          }}
-        >
-          {t('Featured')}
-        </Text>
-      </Tab>
-      <Flex>
-        <SortIcon
-          text={t('detailHeat')}
-          changeSort={changeSortLike}
-          flag={sortLike}
-        />
-        <SortIcon
-          text={t('detailTime')}
-          changeSort={changeSortTime}
-          flag={sortTime}
-        />
-      </Flex>
+      {IsSearch ? (
+        <>
+          <Tab>
+            <Text
+              mr='36px'
+              className={SearchActiveTitle === 0 ? 'active' : 'tabFont'}
+              onClick={() => {
+                setSearchActiveTitle(0);
+                tabsChange({
+                  IsSearch: IsSearch,
+                  SearchActiveTitle: 0,
+                });
+                replace(
+                  `${pathname}?id=${TribeId}&active=0&search=${qsValue.search}`,
+                );
+              }}
+            >
+              {t('Post')}
+            </Text>
+            <Text
+              className={SearchActiveTitle === 1 ? 'active' : 'tabFont'}
+              onClick={() => {
+                setSearchActiveTitle(1);
+                tabsChange({
+                  IsSearch: IsSearch,
+                  SearchActiveTitle: 1,
+                });
+                replace(
+                  `${pathname}?id=${TribeId}&active=1&search=${qsValue.search}`,
+                );
+              }}
+            >
+              {t('People')}
+            </Text>
+          </Tab>
+        </>
+      ) : (
+        <>
+          <Tab>
+            <Text
+              mr='36px'
+              className={ActiveTitle === 0 ? 'active' : 'tabFont'}
+              onClick={() => {
+                setActiveTitle(0);
+                replace(`${pathname}?id=${TribeId}&active=0`);
+              }}
+            >
+              {t('homeTabAll')}
+            </Text>
+            <Text
+              className={ActiveTitle === 1 ? 'active' : 'tabFont'}
+              onClick={() => {
+                setActiveTitle(1);
+                replace(`${pathname}?id=${TribeId}&active=1`);
+              }}
+            >
+              {t('Featured')}
+            </Text>
+          </Tab>
+          <Flex>
+            <SortIcon
+              text={t('detailHeat')}
+              changeSort={changeSortLike}
+              flag={sortLike}
+            />
+            <SortIcon
+              text={t('detailTime')}
+              changeSort={changeSortTime}
+              flag={sortTime}
+            />
+          </Flex>
+        </>
+      )}
     </CommentTitle>
   );
 };

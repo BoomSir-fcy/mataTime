@@ -12,17 +12,27 @@ import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
 import { getIsApproveStakeNft } from './fetchStakeNFT';
 import {
+  saveTribeBaseInfo,
   setInitMemberNft,
   updateTribeDetails,
   setJoinTribeVisibleModal,
 } from './actions';
+import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
+
+const LOCAL_STORAGE_TRIBE_INFO = 'info';
+
+const tribeStore = sessionStorage.getItem(LOCAL_STORAGE_TRIBE_INFO);
 
 const initialState: TribeState = {
   isApproveStakeNft: false,
+  tribeBaseInfo: tribeStore ? JSON.parse(tribeStore) : {},
   feeCoinList: [],
   ticketNftList: [],
   loading: true,
-  activeNftInfo: {},
+  activeNftInfo: {
+    nftId: tribeStore ? JSON.parse(tribeStore)?.nftid : '',
+    nftToken: tribeStore ? JSON.parse(tribeStore)?.nftAddress : '',
+  },
   tribeList: [
     {
       id: null,
@@ -68,6 +78,7 @@ const initialState: TribeState = {
     loading: false,
     isEnd: false,
     userTags: [],
+    start: 0,
   },
   tribeDetails: {
     charge: '0',
@@ -202,6 +213,28 @@ export const fetchTribePostAsync = createAsyncThunk(
   },
 );
 
+export const fetchTribeSearchPostAsync = createAsyncThunk(
+  'tribe/fetchTribeSearchPostAsync',
+  async (params: Api.Tribe.tribeSearchParams, { dispatch }) => {
+    dispatch(setLoading(true));
+    const { type: SearchType, ...param } = params;
+    const response = await Api.TribeApi[
+      SearchType === 0 ? 'tribeSearchPostList' : 'tribeSearchUserList'
+    ]({
+      ...param,
+    });
+    if (Api.isSuccess(response)) {
+      return {
+        list: response.data.data,
+        start: param.start,
+        next: response.data.start,
+        limit: param.limit,
+      };
+    }
+    return {};
+  },
+);
+
 // 查询加入basic类型部落的matter手续费
 export const fetchTribeJoinBasicServiceAsync = createAsyncThunk(
   'tribe/fetchTribeJoinBasicService',
@@ -253,6 +286,16 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(saveTribeBaseInfo, (state, action) => {
+        state.tribeBaseInfo = action.payload
+          ? Object.assign({}, state.tribeBaseInfo, action.payload)
+          : {};
+
+        sessionStorage.setItem(
+          LOCAL_STORAGE_TRIBE_INFO,
+          JSON.stringify(state.tribeBaseInfo),
+        );
+      })
       .addCase(fetchIsApproveStakeNft.fulfilled, (state, action) => {
         state.isApproveStakeNft = action.payload;
       })
@@ -291,6 +334,23 @@ export const tribe = createSlice({
         state.postList.loading = false;
       })
       .addCase(fetchTribePostAsync.rejected, (state, action) => {
+        state.postList.loading = false;
+      })
+      .addCase(fetchTribeSearchPostAsync.fulfilled, (state, action) => {
+        const { list, start, limit, next } = action.payload;
+        let articleList = list ?? [];
+        const { length } = state.postList.list;
+        if (start === 0) {
+          state.postList.list = articleList;
+          state.postList.addListNum = -1;
+        } else {
+          const list = state.postList.list.concat(articleList);
+          state.postList.list = uniqBy(list, 'id');
+          state.postList.addListNum = state.postList.list.length - length;
+        }
+        state.postList.lastList =
+          articleList.length >= limit || start > limit ? articleList : [];
+        state.postList.start = articleList.length >= limit ? next : start;
         state.postList.loading = false;
       })
       .addCase(setJoinTribeVisibleModal, (state, { payload }) => {

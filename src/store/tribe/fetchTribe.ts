@@ -24,6 +24,7 @@ export const getFeeTokenList = async () => {
   ];
   try {
     const [tokens] = await multicall(tribeAbi, calls);
+
     return tokens.sup?.map((item, i) => {
       return {
         tokenAddress: item,

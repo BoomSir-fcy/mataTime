@@ -14,6 +14,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { TribePostList } from './post';
 import DetailTitle from './Title';
 import DetailHeader from './Header';
+import DetailSearch from './search';
 import { TribeSidebar } from '../components/Sidebar';
 
 import { fetchTribeInfoAsync, fetchisApprove } from 'store/tribe';
@@ -35,11 +36,11 @@ const Sidebar = styled(Box)`
   }
 `;
 
-const Detail: React.FC<RouteComponentProps> = React.memo(route => {
+const Detail: React.FC = React.memo(() => {
   const parsedQs = useParsedQueryString();
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
-  const { tribeInfo, joinTribe } = useStore(p => p.tribe);
+  const { tribeBaseInfo, joinTribe } = useStore(p => p.tribe);
   const PostList = useStore(p => p.tribe.postList.list);
   const tribeDetailInfo = useTribeInfoById(parsedQs.id);
   const { baseInfo } = tribeDetailInfo || {};
@@ -49,7 +50,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
   const [filterVal, setFilterVal] = useState({
     ActiveTitle: parsedQs.active || 0,
   });
-  const [TribeId, setTribeId] = useState(0);
+  const [TribeId, setTribeId] = useState(Number(parsedQs.id));
 
   const articleRefs = React.useRef(null);
   // 阅读文章扣费
@@ -62,16 +63,16 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
     setRefresh(!refresh);
   };
 
-  useEffect(() => {
-    const { search } = route.location;
-    const myQuery = search => {
-      return new URLSearchParams(search);
-    };
-    const tribe_id = myQuery(search).get('id');
-    if (tribe_id) {
-      setTribeId(Number(tribe_id));
-    }
-  }, [route]);
+  // useEffect(() => {
+  //   const { search } = route.location;
+  //   const myQuery = search => {
+  //     return new URLSearchParams(search);
+  //   };
+  //   const tribe_id = myQuery(search).get('id');
+  //   if (tribe_id) {
+  //     setTribeId(Number(tribe_id));
+  //   }
+  // }, [route]);
 
   useEffect(() => {
     if (account && baseInfo?.feeToken) {
@@ -98,6 +99,7 @@ const Detail: React.FC<RouteComponentProps> = React.memo(route => {
       <TribeBox>
         <Crumbs back />
         <DetailHeader TribeInfo={tribeDetailInfo} />
+        <DetailSearch TribeId={TribeId} />
         <DetailTitle TribeId={TribeId} tabsChange={tabsChange} />
         <TribePostList
           TribeId={TribeId}

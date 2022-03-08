@@ -26,7 +26,7 @@ const Column = styled(Flex)`
     margin-right: 26px;
   }
   &:first-child {
-    margin-left: 17px;
+    /* margin-left: 17px; */
   }
   .active {
     box-shadow: ${({ theme }) =>
@@ -75,6 +75,12 @@ const NftAvatar: React.FC<{
               scale='ld'
               onClick={() => {
                 dispatch(fetchActiveNftInfo({ info: nftInfo }));
+                dispatch(
+                  storeAction.saveTribeBaseInfo({
+                    nftAddress: nftInfo.nftToken,
+                    nftid: nftInfo.nftId,
+                  }),
+                );
               }}
             />
           </AvatarBox>

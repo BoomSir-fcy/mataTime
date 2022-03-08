@@ -39,6 +39,7 @@ export const SearchPop: React.FC<Iprops> = ({
     }
     setNicKNameTimeId(
       setTimeout(async () => {
+        if (!nicKName) return
         let res = null
         if (tribeId) {
           res = await Api.TribeApi.tribeUserSearchByName({

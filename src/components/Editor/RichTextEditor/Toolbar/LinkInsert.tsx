@@ -41,7 +41,6 @@ const LinkInsert: React.FC<LinkInsertProps> = ({ onCancle, onConfirm }) => {
       <Box mt='16px'>
         <Input value={values.url} onChange={(event) => { handleChange(event, 'url') }} placeholder={t('Please enter link url')} />
       </Box>
-      {HTTP_REGEXP.test(values.url) ? 1 : 2}
       <Flex mt='24px' justifyContent='space-around'>
         <Button onClick={onCancle}>{t('Cancel')}</Button>
         <Button onClick={() => onConfirm(values)} disabled={disabled}>{t('Confirm')}</Button>
