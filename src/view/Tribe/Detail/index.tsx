@@ -94,7 +94,6 @@ const Detail: React.FC = React.memo(() => {
     };
   }, [TribeId]);
 
-  console.log(baseInfo);
   return (
     <Flex>
       <TribeBox>

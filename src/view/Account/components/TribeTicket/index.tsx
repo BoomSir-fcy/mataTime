@@ -69,10 +69,14 @@ const TribeTicket = () => {
   }, [tribeTicketsInfo.price, balance]);
 
   const onExchange = useCallback(async () => {
-    setLoading(true);
-    await exchangeHandle(tribeTicketsInfo.price.times(value).toString());
-    setLoading(false);
-    dispatch(fetchTicketNftListAsync({ account }));
+    try {
+      setLoading(true);
+      await exchangeHandle(tribeTicketsInfo.price.times(value).toString());
+      setLoading(false);
+      dispatch(fetchTicketNftListAsync({ account }));
+    } catch (error) {
+      setLoading(false);
+    }
   }, [value, tribeTicketsInfo.price, account]);
 
   const dispatch = useDispatch();

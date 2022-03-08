@@ -58,6 +58,7 @@ interface PostListPorps {
   getList: (LoadType?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
   postIdKey?: string;
+  tribeId: number;
 }
 
 const PostList: React.FC<PostListPorps> = ({
@@ -67,6 +68,7 @@ const PostList: React.FC<PostListPorps> = ({
   isEnd,
   getList,
   updateList,
+  tribeId,
   postIdKey = 'id',
 }) => {
   const [PostItemData, setPostItemData] = useState();
@@ -149,12 +151,17 @@ const PostList: React.FC<PostListPorps> = ({
               <MeItemWrapper key={`${item[postIdKey]}`}>
                 {
                   // 普通帖子浏览自己的不扣费
-                  !(currentUid?.uid === item.user_id) && (
+                  !(
+                    currentUid?.uid === item.user_id && item.forward_type === 0
+                  ) && (
                     <SpendTimeViewWithArticle
                       nonce={nonce}
                       setNonce={setNonce}
-                      readType={ReadType.ARTICLE}
+                      readType={ReadType.TRIBE_ARTICLE}
                       articleId={item[postIdKey]}
+                      forwardType={item.forward?.forward_type}
+                      forward={item.forward}
+                      tribeId={tribeId}
                     />
                   )
                 }

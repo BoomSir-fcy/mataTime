@@ -23,12 +23,21 @@ interface SpendTimeViewWithArticleProps {
   nonceIndex?: number; // 更改时变化的帖子的index
   forwardType?: number; // 转发类型
   forward?: Api.Home.forward;
+  tribeId?: number;
 }
 
 // 浏览扣费组件
 const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
   React.memo(
-    ({ articleId, readType, forwardType, forward, nonce, setNonce }) => {
+    ({
+      articleId,
+      readType,
+      forwardType,
+      forward,
+      nonce,
+      setNonce,
+      tribeId,
+    }) => {
       const imgRef = useRef<HTMLDivElement>(null);
       const { setArticlePositions, rendered, setRendered } = useIm();
 
@@ -76,8 +85,8 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
                 forwardType === 0
                   ? 0
                   : forwardType === 1
-                    ? forward?.post_id
-                    : forward?.forward_comment_id,
+                  ? forward?.post_id
+                  : forward?.forward_comment_id,
               forward_type: forward?.is_forward_del === 1 ? 0 : forwardType,
             };
           }
@@ -91,6 +100,7 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
               forwardReadInfo,
               offsetTop,
               offsetBottom: offsetTop + offsetHeight,
+              tribeId,
             };
             return prep;
             // return {
@@ -118,7 +128,14 @@ const SpendTimeViewWithArticle: React.FC<SpendTimeViewWithArticleProps> =
             return prep;
           });
         };
-      }, [articleId, readType, rendered, setRendered, setArticlePositions]);
+      }, [
+        articleId,
+        readType,
+        rendered,
+        nonce,
+        setRendered,
+        setArticlePositions,
+      ]);
 
       return <div ref={imgRef} />;
       // return <div ref={imgRef}>

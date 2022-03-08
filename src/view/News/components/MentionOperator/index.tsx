@@ -24,6 +24,7 @@ type IProps = {
   hasLike?: boolean;
   hasTime?: boolean;
   hasReward?: boolean;
+  hasForward?: boolean;
   type?: 'Article' | 'Comment';
   callback?: Function;
   history?: any;
@@ -43,6 +44,7 @@ const MentionOperator: React.FC<IProps> = ({
   hasLike = true,
   hasTime = true,
   hasReward = true,
+  hasForward = true,
   callback,
   replyType = 'comment',
   commentId = '',
@@ -54,6 +56,8 @@ const MentionOperator: React.FC<IProps> = ({
   const { toastSuccess, toastError } = useToast();
   const [isLike, setIsLike] = useState<number>(itemData.is_like);
   const [replyVisible, setReplyVisible] = useState<boolean>(false);
+
+  console.log(hasForward, 'hasForward');
 
   const changeLike = () => {
     if (type === 'Article') {
@@ -180,14 +184,16 @@ const MentionOperator: React.FC<IProps> = ({
             <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />
             {itemData.share_num || 0}
           </Box> */}
-          <Box className='operator-item'>
-            <Forward
-              type='comment'
-              total={itemData.forward_num || 0}
-              data={{ ...itemData, content: itemData?.comment?.content }}
-              onSuccess={type => callback(itemData, MoreOperatorEnum[type])}
-            />
-          </Box>
+          {hasForward && (
+            <Box className='operator-item'>
+              <Forward
+                type='comment'
+                total={itemData.forward_num || 0}
+                data={{ ...itemData, content: itemData?.comment?.content }}
+                onSuccess={type => callback(itemData, MoreOperatorEnum[type])}
+              />
+            </Box>
+          )}
           {hasLike && (
             <Box className='operator-item' onClick={changeLike}>
               {isLike === 1 ? (

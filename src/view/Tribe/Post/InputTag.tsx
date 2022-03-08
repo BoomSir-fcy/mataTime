@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import isEqual from 'lodash/isEqual';
 import { Crumbs } from 'components';
 import RichTextEditor from 'components/Editor/RichTextEditor';
 import styled, { css } from 'styled-components';
@@ -13,6 +14,7 @@ import SubHeader from '../components/SubHeader';
 import { Tag, CancleIcon, TagText } from 'view/Me/Tribe/components/TagList';
 import { useFetchTribeTopicList } from 'store/tribe/helperHooks';
 import { FetchStatus } from 'config/types';
+import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
 
 const TagBoxStyled = styled(Card)<{ isOpen?: boolean }>`
   background-color: ${({ theme }) => theme.colors.input};
@@ -79,12 +81,21 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
   const [toFocus, setToFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: topicData } = useFetchTribeTopicList(tribe_id);
+  // const { data: topicData } = useFetchTribeTopicList(tribe_id);
+
+  const tribeInfo = useTribeInfoById(tribe_id);
+
   useEffect(() => {
-    if (topicData.fetchStatus === FetchStatus.SUCCESS) {
-      setTagsList(topicData.list);
+    if (isEqual(tribeInfo?.topics, selectTags)) {
+      setTagsList(tribeInfo?.topics);
     }
-  }, [topicData.fetchStatus, topicData.list]);
+  }, [selectTags, tribeInfo?.topics]);
+
+  // useEffect(() => {
+  //   if (topicData.fetchStatus === FetchStatus.SUCCESS) {
+  //     setTagsList(topicData.list);
+  //   }
+  // }, [topicData.fetchStatus, topicData.list]);
 
   const handleAddTag = useCallback(
     item => {

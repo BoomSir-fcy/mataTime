@@ -3,8 +3,6 @@ import { useStore } from 'store';
 import { IM } from 'utils';
 import { ReadType } from 'hooks/imHooks/types';
 
-
-
 export interface ArticlePosition {
   offsetTop: number;
   offsetBottom: number;
@@ -12,6 +10,7 @@ export interface ArticlePosition {
   readType: ReadType;
   forwardType?: number;
   forwardReadInfo?: ForwardStrcut;
+  tribeId?: number;
 }
 export interface ArticlePositions {
   // [number, number] =  [top, bottom], 当前文章边界

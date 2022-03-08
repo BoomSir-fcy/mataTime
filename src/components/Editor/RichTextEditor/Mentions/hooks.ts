@@ -42,6 +42,7 @@ export const useMentions = (editor, ref, tribeId?: number) => {
   const onSearchUser = useCallback(
     debounce(async (nickName: string) => {
       try {
+        if (!nickName) return
         let res = null
         if (tribeId) {
           res = await Api.TribeApi.tribeUserSearchByName({

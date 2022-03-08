@@ -19,6 +19,18 @@ export class CommentApi extends Http {
     return res;
   }
 
+  // 部落评论列表
+  async getTribeCommentList(params: Api.Comment.queryList) {
+    const res = await this.get('/v2/comment/list', params);
+    return res;
+  }
+
+  // 二级评论列表
+  async getTribeSubCommentList(params: Api.Comment.queryList) {
+    const res = await this.get('/v1/subcomment/list', params);
+    return res;
+  }
+
   // 文章点赞
   async clickLike(params: Api.Comment.likeParams) {
     const res = await this.get('/v1/like/agree', params);

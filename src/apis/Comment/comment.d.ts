@@ -10,6 +10,7 @@ declare namespace Api {
       sort_like: number;
       first_comment_id?: number;
       comment_id?: string;
+      tribeId?: number
     }
     type likeParams = {
       post_id: string | number;
