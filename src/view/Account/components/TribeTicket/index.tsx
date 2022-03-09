@@ -217,7 +217,11 @@ const TribeTicket = () => {
           {t('Ticket Exchange')}
         </Text>
         <Flex mt='19px' justifyContent='center'>
-          <Image width={205} height={205} />
+          <Image
+            src='/images/tokens/tribe-tickets-nft.jpg'
+            width={205}
+            height={205}
+          />
         </Flex>
         <Flex mt='18px'>
           <Text>{t('Tribe Ticket')}</Text>

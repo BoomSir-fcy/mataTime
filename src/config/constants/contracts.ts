@@ -76,15 +76,15 @@ const contracts = {
   },
   tribe: {
     56: '',
-    97: '0x2FC3b4d170766015459B67a919134326d41f7d8e',
+    97: '0x0c7212e96100ef4B19c57881dFcb7F932C4A13d0',
   },
   tribeNFT: {
     56: '',
-    97: '0x4609854c1c9489d2b289B5e7480869BcCAb3D1DD',
+    97: '0x5d04f5aefA1CcB442e0cce51d52E2a869a20efBC',
   },
   tribeTicketsNFT: {
     56: '',
-    97: '0x9fcaCa63afD8DA8Fc3E00A4D0ef4a54ac0AAE625',
+    97: '0xA6D6322A0D5c19A16e211cA03B978aCe6D5b70F3',
   },
   facuet: {
     56: '0xa0788548595EBea676499CDd19e9Cca9a9b8F49a',
@@ -92,7 +92,7 @@ const contracts = {
   },
   TribeTickets: {
     56: '',
-    97: '0xff3d9475094701ceF7e13ABb9e6BFBD118233C40',
+    97: '0x04813A847B8eF1465145566f9E0e3F48ACaA32E5',
   },
 };
 export default contracts;

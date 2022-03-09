@@ -203,7 +203,7 @@ const Post = () => {
       <BoxStyled>
         <Flex mb='22px'>
           <LableBoxStyled>* {t('Tribe')}</LableBoxStyled>
-          <Box>
+          <Flex flex='1'>
             <InputStyled
               background='transparent'
               noShadow
@@ -211,7 +211,7 @@ const Post = () => {
               readOnly
               value={tribeName}
             />
-          </Box>
+          </Flex>
         </Flex>
         <Flex mb='22px'>
           <LableBoxStyled>* {t('Title')}</LableBoxStyled>
