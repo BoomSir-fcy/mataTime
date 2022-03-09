@@ -61,6 +61,7 @@ const TribeTicket = () => {
       price: new BigNumber(tribeTickets.price),
       allowance: new BigNumber(tribeTickets.allowance),
       max_tickets: new BigNumber(tribeTickets.max_tickets),
+      balance: new BigNumber(tribeTickets.balance).toString(10),
     };
   }, [tribeTickets]);
 
@@ -226,7 +227,7 @@ const TribeTicket = () => {
         <Flex mt='18px'>
           <Text>{t('Tribe Ticket')}</Text>
           <Text>
-            {t('Amount')}: {ticketNftList.length}
+            {t('Amount')}: {tribeTicketsInfo.balance}
           </Text>
         </Flex>
         <Text fontSize='14px' color='textTips' mt='8px'>

@@ -87,6 +87,7 @@ const initialState: WalletState = {
     allowance: '0',
     price: '0',
     max_tickets: '0',
+    balance: '0',
   },
   WithDrawFeeType: 1, //提币手续费—— 1 BNB 2对应币种
   choiceToken: 0, //选择的币种

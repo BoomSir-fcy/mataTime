@@ -39,6 +39,7 @@ export interface WalletState {
     allowance: string;
     price: string;
     max_tickets: string
+    balance: string
   };
   WithDrawFeeType: number;
   choiceToken: number;

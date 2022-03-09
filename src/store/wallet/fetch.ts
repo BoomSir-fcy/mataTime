@@ -1,6 +1,6 @@
 import { Api } from 'apis';
-import { getMatterAddress, getTribeTicketsAddress } from 'utils/addressHelpers';
-import { getBep20Contract, getTribeTicketsContract } from 'utils/contractHelpers';
+import { getMatterAddress, getTribeTicketsAddress, getTribeTicketsNFTAddress } from 'utils/addressHelpers';
+import { getBep20Contract, getErc721Contract, getTribeTicketsContract } from 'utils/contractHelpers';
 import multicall from 'utils/multicall';
 import TribeTicketsAbi from 'config/abi/TribeTickets.json';
 
@@ -60,6 +60,8 @@ export const fetchTribeTicketInfo = async (account?: string) => {
     const address = getTribeTicketsAddress();
     const matterAddress = getMatterAddress()
     const metterContract = getBep20Contract(matterAddress)
+    const tribeTicketsNFTAddress = getTribeTicketsNFTAddress()
+    const tribeTicketsNFTContract = getErc721Contract(tribeTicketsNFTAddress)
 
     const calls = [
       {
@@ -76,14 +78,20 @@ export const fetchTribeTicketInfo = async (account?: string) => {
     const [max_tickets, _price] = await multicall(TribeTicketsAbi, calls);
 
     let allowance = '0';
+    let balance = '0';
     if (account) {
       const allowanceRes = await metterContract.allowance(account, address);
+      console.log(tribeTicketsNFTContract, 'tribeTicketsNFTContract')
+      const balanceRes = await tribeTicketsNFTContract.balanceOf(account);
       allowance = allowanceRes.toString();
+      balance = balanceRes.toString();
+      console.log(balance, 'balance')
     }
     return {
       price: _price[0].toString(),
       allowance,
       max_tickets: max_tickets[0].toString(),
+      balance,
     }
 
   } catch (error) {
@@ -92,6 +100,7 @@ export const fetchTribeTicketInfo = async (account?: string) => {
       price: '0',
       allowance: '0',
       max_tickets: '0',
+      balance: '0',
     }
   }
 }
