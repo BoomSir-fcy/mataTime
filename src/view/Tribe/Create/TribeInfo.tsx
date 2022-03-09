@@ -124,6 +124,7 @@ const TribeInfoForward = (props, ref) => {
           showCount
           required
           rows={5}
+          className='required-input'
           disabled={props.disabled}
           value={state.introduction}
           placeholder={t('Please fill in the brief introduction of the tribe')}

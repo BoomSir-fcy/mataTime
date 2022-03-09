@@ -103,10 +103,16 @@ const TribeFeeForward = (props, ref) => {
             ? TribeType.BASIC
             : TribeType.PRO),
       );
-      setFeeToken(info.feeToken);
+      setFeeToken(
+        info?.tribeType
+          ? info?.tribeType === TribeType.BASIC
+            ? feeToken
+            : info.feeToken
+          : info.feeToken,
+      );
       setTribeFeeType(info?.tribeFeeType || FeeType.DEFAULT);
     }
-  }, [props.info]);
+  }, [info]);
 
   const CoinOptions = useMemo(() => {
     return feeCoinList.map(item => {
@@ -127,13 +133,17 @@ const TribeFeeForward = (props, ref) => {
     [feeCoinList],
   );
 
+  const getFeeToken = useCallback((type, token) => {
+    return type === TribeType.BASIC ? getMatterAddress() : token;
+  }, []);
+
   useImperativeHandle(ref, () => ({
     getFeeFrom() {
       return {
         ...state,
         tribeFeeType,
         tribeType,
-        feeToken,
+        feeToken: getFeeToken(tribeType, feeToken),
         feeAmount:
           tribeType === TribeType.BASIC
             ? 0
@@ -164,13 +174,11 @@ const TribeFeeForward = (props, ref) => {
           helper={
             <>
               <Text small>
-                {t(
-                  'Basic Tribe cannot set the fee feeAmount and validity days;',
-                )}
+                {t('Basic Tribe cannot set the fee amount and validity days;')}
               </Text>
               <Text small>
                 {t(
-                  'Pro Tribe can set the fee feeAmount and validity days, the joining fee belongs to the tribe host.',
+                  'Pro Tribe can set the fee amount and validity days, the joining fee belongs to the tribe host.',
                 )}
               </Text>
               <Flex>
@@ -189,12 +197,12 @@ const TribeFeeForward = (props, ref) => {
             value={tribeType}
             options={typeOptions}
             onChange={val => {
-              console.log(val);
-
               setTribeType(val);
-              saveTempInfo({ tribeType: val });
+              saveTempInfo({
+                tribeType: val,
+                feeToken: getFeeToken(val, TRIBE_FEE_BNB_TOKEN),
+              });
             }}
-            // onBlur={() => saveTempInfo()}
           />
           {tribeType === 2 && (
             <TribeCard isRadius>
@@ -217,6 +225,7 @@ const TribeFeeForward = (props, ref) => {
                       noShadow
                       required
                       scale='sm'
+                      className='required-input'
                       placeholder={t('Please enter the amount')}
                       inputMode='decimal'
                       pattern={PATTERN_AMOUNT}
@@ -278,6 +287,7 @@ const TribeFeeForward = (props, ref) => {
                       noShadow
                       required
                       scale='sm'
+                      className='required-input'
                       placeholder={t('Please enter the number of days')}
                       inputMode='decimal'
                       pattern={PATTERN_NUMBER}
@@ -374,6 +384,7 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
+                        className='required-input'
                         placeholder='1~100'
                         inputMode='decimal'
                         pattern={PATTERN_ONE_ONEHUNDRED}
@@ -408,6 +419,7 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
+                        className='required-input'
                         placeholder='60s'
                         inputMode='decimal'
                         pattern={PATTERN_NUMBER}
@@ -445,6 +457,7 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         scale='sm'
                         required
+                        className='required-input'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
                         value={state.ownerPercent}
@@ -475,6 +488,7 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
+                        className='required-input'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
                         value={state.authorPercent}
@@ -505,6 +519,7 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
+                        className='required-input'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
                         value={state.memberPercent}

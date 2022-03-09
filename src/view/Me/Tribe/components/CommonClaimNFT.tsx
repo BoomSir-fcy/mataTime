@@ -10,7 +10,12 @@ import { StyledButton } from '../styled';
 import { useWeb3React } from '@web3-react/core';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { MemberNft, NftStatus } from 'store/tribe/type';
-import { StakeButton, TransferButton, UnStakeButton } from './actionNft';
+import {
+  ClaimButton,
+  StakeButton,
+  TransferButton,
+  UnStakeButton,
+} from './actionNft';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
@@ -135,6 +140,15 @@ export const CommonClaimNFT: React.FC<{
                     >
                       {t('Connect Wallet')}
                     </StyledButton>
+                  )}
+                  {account && status <= NftStatus.UnReceive && (
+                    <ClaimButton
+                      tribeId={tribeId}
+                      nftType={1}
+                      callback={() => {
+                        dispatch(fetchTribeInfoAsync(tribeId));
+                      }}
+                    />
                   )}
                   {account &&
                   (status === NftStatus.Received ||
