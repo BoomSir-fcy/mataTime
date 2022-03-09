@@ -331,7 +331,7 @@ export const ContentParsing = React.memo(
               })}
             {parsingResult &&
             parsingResult.length > (rows || ARTICLE_POST_MAX_ROW) ? (
-              <ExpandWrapper>
+              <ExpandWrapper className='print-hide'>
                 <a
                   href={`javascript:void(${
                     expand ? t('homePutAway') : t('homeOpen')

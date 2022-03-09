@@ -79,12 +79,21 @@ const TribeTicket = () => {
 
   const onExchange = useCallback(async () => {
     try {
+      if (Number(value) > Number(maxAmount)) {
+        toastError(t('Insufficient balance'));
+        return;
+      }
       setLoading(true);
       await exchangeHandle(tribeTicketsInfo.price.times(value).toString());
       setLoading(false);
       handleFetch();
       handleFetchTicketInfo();
     } catch (error) {
+      toastError(
+        t(
+          'Please try again. Confirm the transaction and make sure you are paying enough gas!',
+        ),
+      );
       setLoading(false);
     }
   }, [
@@ -93,6 +102,7 @@ const TribeTicket = () => {
     handleFetchTicketInfo,
     handleFetch,
     account,
+    maxAmount,
   ]);
 
   const dispatch = useDispatch();

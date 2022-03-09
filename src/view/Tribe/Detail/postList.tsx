@@ -227,9 +227,9 @@ const PostList: React.FC<PostListPorps> = ({
                 />
                 <Flex justifyContent='space-between' alignItems='center'>
                   <SendUser
-                    time={new Date(item.add_time).getTime()}
+                    time={new Date(item.add_time || item.post_time).getTime()}
                     name={item.user_name}
-                    Avatar={item.user_avator_url}
+                    Avatar={item.user_avator_url || item.nft_image}
                   />
                   <Box width='50%'>
                     <MentionOperator

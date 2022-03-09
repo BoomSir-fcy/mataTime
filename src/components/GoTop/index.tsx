@@ -113,7 +113,7 @@ const Gotop = () => {
   }, []);
   const size = 20;
   return (
-    <ContentBox>
+    <ContentBox className='print-hide'>
       <TopBox className={IsShow ? 'show' : ''} onClick={Top}>
         <Flex
           height='100%'

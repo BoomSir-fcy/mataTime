@@ -120,17 +120,16 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
   return (
     <TagBoxStyled isOpen={focus} isRadius>
       <Flex width='100%'>
-        <Flex
-          onMouseDown={event => {
-            event.preventDefault();
-            // setToFocus(true);
-          }}
-          minHeight='50px'
-          padding='8px 0 8px 16px'
-          pb='0'
-        >
+        <Flex minHeight='50px' padding='8px 0 8px 16px' pb='0' flexWrap='wrap'>
           {selectTags.map(item => (
-            <Tag mr='2px' key={item.id}>
+            <Tag
+              onMouseDown={event => {
+                event.preventDefault();
+                // setToFocus(true);
+              }}
+              mr='2px'
+              key={item.id}
+            >
               <TagText>{item.topic}</TagText>
               <CancleIcon
                 onClick={() => {
@@ -139,32 +138,34 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
               />
             </Tag>
           ))}
+          <Flex flex={1}>
+            <TagInput
+              ref={inputRef}
+              onFocus={() => {
+                setFocus(true);
+              }}
+              onBlur={e => {
+                if (toFocus) {
+                  setToFocus(false);
+                  e.target.focus();
+                  return;
+                }
+                setFocus(false);
+              }}
+              onChange={event => {
+                setInputValue(event.target.value);
+              }}
+              value={inputValue}
+              onKeyDown={event => {
+                if (event.key === 'Backspace' && inputValue === '') {
+                  console.log(1222222222);
+                  handleRemoveTag(selectTags[selectTags.length - 1]);
+                }
+              }}
+              type='text'
+            />
+          </Flex>
         </Flex>
-        <TagInput
-          ref={inputRef}
-          onFocus={() => {
-            setFocus(true);
-          }}
-          onBlur={e => {
-            if (toFocus) {
-              setToFocus(false);
-              e.target.focus();
-              return;
-            }
-            setFocus(false);
-          }}
-          onChange={event => {
-            setInputValue(event.target.value);
-          }}
-          value={inputValue}
-          onKeyDown={event => {
-            if (event.key === 'Backspace' && inputValue === '') {
-              console.log(1222222222);
-              handleRemoveTag(selectTags[selectTags.length - 1]);
-            }
-          }}
-          type='text'
-        />
       </Flex>
 
       {focus && <Divider color='borderThemeColor' />}

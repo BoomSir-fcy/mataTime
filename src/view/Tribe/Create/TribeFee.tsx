@@ -302,7 +302,8 @@ const TribeFeeForward = (props, ref) => {
                       }}
                       onBlur={() => saveTempInfo()}
                     />
-                    <Text>{t('tribeDays')}</Text>
+                    <Text>秒</Text>
+                    {/* <Text>{t('tribeDays')}</Text> */}
                   </Flex>
                 </InputPanelStyle>
               </FormItem>
