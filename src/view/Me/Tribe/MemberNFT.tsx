@@ -16,11 +16,15 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 import { getBLen } from 'utils';
+import { useWeb3React } from '@web3-react/core';
+import useConnectWallet from 'hooks/useConnectWallet';
 
 const MeTribeMemberNFT = () => {
   const { t } = useTranslation();
   const { toastError } = useToast();
   const dispatch = useDispatch();
+  const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const parseQs = useParsedQueryString();
   const { onSetTribeMemberNFT } = useTribeNft();
   const [pending, setPending] = useState(false);
@@ -42,7 +46,11 @@ const MeTribeMemberNFT = () => {
   const handleCreateMemberNft = useCallback(async () => {
     const len = getBLen(state.name);
     if (len < 6 || len > 30) {
-      toastError(t('6~30 characters (Support English, Chinese, numbers)'));
+      toastError(
+        `${t('Tribe name')} ${t(
+          '6~30 characters (Support English, Chinese, numbers)',
+        )}`,
+      );
       return false;
     }
     if (!state.logo) {
@@ -91,12 +99,27 @@ const MeTribeMemberNFT = () => {
                     maxLength={30}
                     // pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{6,30}$'
                     value={state.name}
-                    onChange={e => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const val = e.target.value;
-                      if (getBLen(val) > 30) return false;
+                      const len = getBLen(val);
+                      if (!e.target.value.trim() || len < 6 || len > 30)
+                        e.target.setCustomValidity(
+                          t(
+                            '6~30 characters (Support English, Chinese, numbers)',
+                          ),
+                        );
+                      else e.target.setCustomValidity('');
+                      if (len > 30) return false;
                       setState(p => {
                         p.name = val;
                       });
+                    }}
+                    onInvalid={(e: React.InvalidEvent<HTMLInputElement>) => {
+                      e.target.setCustomValidity(
+                        t(
+                          '6~30 characters (Support English, Chinese, numbers)',
+                        ),
+                      );
                     }}
                   />
                 </InputPanelStyle>
@@ -145,17 +168,49 @@ const MeTribeMemberNFT = () => {
                   'Provide a detail description of your tribe member NFT',
                 )}
                 maxLength={ARTICLE_POST_MAX_LEN}
-                onChange={e =>
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                  if (!e.target.value.trim()) {
+                    e.target.setCustomValidity(
+                      t(
+                        'Provide a detail description of your tribe member NFT',
+                      ),
+                    );
+                  } else e.target.setCustomValidity('');
                   setState(p => {
                     p.introduction = e.target.value;
-                  })
-                }
+                  });
+                }}
+                onInvalid={(e: React.InvalidEvent<HTMLTextAreaElement>) => {
+                  e.target.setCustomValidity(
+                    t('Provide a detail description of your tribe member NFT'),
+                  );
+                }}
               />
             </FormItem>
             <Flex mt='20px' justifyContent='center'>
-              <Button width='250px' scale='md' type='submit' disabled={pending}>
-                {pending ? <Dots>{t('Create')}</Dots> : t('Create')}
-              </Button>
+              {!account && (
+                <Button
+                  width='250px'
+                  scale='md'
+                  onClick={e => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onConnectWallet();
+                  }}
+                >
+                  {t('Connect Wallet')}
+                </Button>
+              )}
+              {account && (
+                <Button
+                  width='250px'
+                  scale='md'
+                  type='submit'
+                  disabled={pending}
+                >
+                  {pending ? <Dots>{t('Create')}</Dots> : t('Create')}
+                </Button>
+              )}
             </Flex>
           </form>
         ) : (

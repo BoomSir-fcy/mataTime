@@ -222,13 +222,19 @@ const MeTribeInvitationSetting = () => {
                     inputMode='decimal'
                     pattern={PATTERN_ZERO_ONEHUNDRED}
                     value={state.rate}
-                    onChange={e => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const val = e.target.value;
+                      if (!val.trim())
+                        e.target.setCustomValidity(t('Please enter this'));
+                      else e.target.setCustomValidity('');
                       if (val === '' || e.currentTarget.validity.valid) {
                         setState(p => {
                           p.rate = val;
                         });
                       }
+                    }}
+                    onInvalid={(e: React.InvalidEvent<HTMLInputElement>) => {
+                      e.target.setCustomValidity(t('Please enter this'));
                     }}
                   />
                   <Text>%</Text>

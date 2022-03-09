@@ -34,7 +34,6 @@ export const TribeNFT: React.FC<{
   ticketNftList?: any[];
 }> = React.memo(({ ticketNftList }) => {
   const loading = useStore(p => p.tribe.loading);
-
   return (
     <NftBox>
       <GetAuthorizeBox>
