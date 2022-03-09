@@ -19,7 +19,7 @@ export const getBalanceAmount = (amount: string | number, decimal = 18) => {
 };
 
 export const getDecimalAmount = (amount: string | number, decimal?: number) => {
-  if (!amount) return '';
+  if (!amount || Number(amount) === 0) return '0';
   const tokenDecimal = new BigNumber(amount).times(BIG_TEN.pow(decimal));
   return tokenDecimal.toString();
 };

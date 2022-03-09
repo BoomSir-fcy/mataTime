@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Crumbs, WaitConfirmModal, SuccessfullyModal } from 'components';
 import { useTranslation } from 'contexts';
 import { Box, Text, Divider, Flex } from 'uikit';
@@ -22,6 +22,7 @@ import useMenuNav from 'hooks/useMenuNav';
 import { useDispatch } from 'react-redux';
 import { storeAction } from 'store';
 import { fetchActiveNftInfo } from 'store/tribe';
+import { getBLen } from 'utils';
 
 const Create = () => {
   useTicketNftList();
@@ -52,6 +53,11 @@ const Create = () => {
   const PayAndCreate = async () => {
     const infoParams = infoForm.current.getInfoFrom();
     const feeParams = feeForm.current.getFeeFrom();
+    const len = getBLen(infoParams.name);
+    if (len < 6 || len > 30) {
+      toastError(t('6~30 characters (Support English, Chinese, numbers)'));
+      return false;
+    }
     try {
       const isNotUnique = await onCheckUniqueName(infoParams.name);
       if (isNotUnique) {
@@ -127,11 +133,15 @@ const Create = () => {
           e.preventDefault();
           PayAndCreate();
         }}
-        // onInvalid={e => {
+        // onInvalid={(e: FormEvent<HTMLFormElement>) => {
         //   console.log('11111', e);
-        // console.log('11111', e.target.setCustomValidity('请输入杀杀杀'));
-        // const el = form.current.getElementsByClassName('required-input')[0];
-        // console.log(e.target.setCustomValidity('请输入杀杀杀'));
+        //   // console.log('11111', e.target.setCustomValidity('请输入杀杀杀'));
+        //   const el = form.current.getElementsByClassName('required-input')[0];
+        //   // const el = form.current.getElementsByTagName('input');
+        //   // console.log(e.target.setCustomValidity('请输入杀杀杀'));
+        //   // e.target?.validity
+        //   el.setCustomValidity('请输入此项');
+        //   console.log(el);
         // }}
         action=''
       >

@@ -51,6 +51,9 @@ export const FormColumnItem = styled(Flex)`
 export const LabelFlex = styled(Flex)`
   min-width: 110px;
   margin-bottom: 10px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-bottom: 0px;
+  }
   label {
     width: max-content;
   }
@@ -59,6 +62,9 @@ export const Label = styled.label<{ required?: boolean }>`
   width: 100px;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.text};
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-bottom: 0px;
+  }
   ${({ required }) =>
     required &&
     `
