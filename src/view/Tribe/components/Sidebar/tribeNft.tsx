@@ -101,12 +101,10 @@ const TribeNft: React.FC<{
           {tribeInfo?.status === 0 && (
             <Flex mb='12px' justifyContent='center'>
               <BtnIcon
+                disabled={!Boolean(baseInfo?.feeToken)}
                 name='icon-wodebula'
                 text={t('tribeJoin')}
                 onClick={() => {
-                  if (detail?.type === TribeType.BASIC) {
-                    dispatch(fetchTribeJoinBasicServiceAsync());
-                  }
                   dispatch(storeAction.setJoinTribeVisibleModal(true));
                 }}
               />

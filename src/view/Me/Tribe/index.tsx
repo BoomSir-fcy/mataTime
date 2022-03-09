@@ -88,7 +88,7 @@ const MeTribe = () => {
       禁用[邀请设置]
   */
   enum TribeMeStatus {
-    NORMAL,
+    NORMAL = 0,
     NOT_MASTER,
     UN_RECEIVE,
     UN_STAKE,
@@ -103,7 +103,10 @@ const MeTribe = () => {
     ) {
       return TribeMeStatus.NOT_MASTER;
     }
-    if (tribeInfo?.status === NftStatus.UnReceive) {
+    if (
+      tribeInfo?.status === NftStatus.UnReceive ||
+      tribeInfo?.status === NftStatus.INIT
+    ) {
       return TribeMeStatus.UN_RECEIVE;
     }
     if (tribeInfo?.status === NftStatus.UnStake) {
@@ -126,7 +129,7 @@ const MeTribe = () => {
     )
       return false;
     if (
-      location.pathname === `${path}/member-nft` &&
+      location.pathname === `${path}/master-nft` &&
       (tribeMeStatus === TribeMeStatus.UN_RECEIVE ||
         tribeMeStatus === TribeMeStatus.UN_STAKE)
     )

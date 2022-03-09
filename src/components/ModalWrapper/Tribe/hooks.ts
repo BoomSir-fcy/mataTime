@@ -18,9 +18,15 @@ export const useJoinTribe = () => {
         const receipt = await tx.wait();
         return receipt.status;
       } catch (error: any) {
-        // const messgae = error?.data?.message;
-        const code = error?.code ?? 0;
-        return code;
+        const messgae = error?.data?.message;
+        switch (messgae) {
+          case 'execution reverted: ERC20: transfer amount exceeds balance':
+            return 400002;
+          case 'execution reverted: invliad address.':
+            return 400001;
+          default:
+            return error?.code ?? 0;
+        }
       }
     },
     [tribeContract],

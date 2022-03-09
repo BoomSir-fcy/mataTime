@@ -33,6 +33,7 @@ import { Icon } from 'components';
 import FriendsList from 'view/Task/components/FriendsList';
 import WalletList from '../WalletList';
 import { getToken } from 'view/Account/hooks/walletInfo';
+import TribeIncomeList from './TribeIncomeList';
 
 const NoPdBottom = styled(Container)`
   padding: 0;
@@ -457,6 +458,14 @@ const TokenAccount: React.FC = () => {
                       {t('walleteComment')}
                     </TabText>
                     <TabText
+                      className={readType === 4 ? 'active' : ''}
+                      onClick={() => {
+                        setreadType(4);
+                      }}
+                    >
+                      {t('Tribe')}
+                    </TabText>
+                    <TabText
                       className={readType === 3 ? 'active' : ''}
                       onClick={() => {
                         setreadType(3);
@@ -469,6 +478,8 @@ const TokenAccount: React.FC = () => {
               )}
               {readType === 3 && ActiveToken === 1 ? (
                 <FriendsList showTitle={false} />
+              ) : readType === 4 && ActiveToken === 1 ? (
+                <TribeIncomeList />
               ) : (
                 <EarningsRecord
                   readType={readType}

@@ -40,6 +40,11 @@ const MeTribeMemberNFT = () => {
   }, [tribeInfo?.nftInfo?.initMemberNFT]);
 
   const handleCreateMemberNft = useCallback(async () => {
+    const len = getBLen(state.name);
+    if (len < 6 || len > 30) {
+      toastError(t('6~30 characters (Support English, Chinese, numbers)'));
+      return false;
+    }
     if (!state.logo) {
       toastError(t('Please upload a picture'));
       return false;
@@ -83,8 +88,8 @@ const MeTribeMemberNFT = () => {
                     required
                     scale='sm'
                     placeholder={t('Please enter the member NFT name')}
-                    maxLength={15}
-                    pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{6,30}$'
+                    maxLength={30}
+                    // pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{6,30}$'
                     value={state.name}
                     onChange={e => {
                       const val = e.target.value;

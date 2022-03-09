@@ -103,6 +103,12 @@ declare namespace Api {
       tribe_id: number;
     }
 
+    interface TopicParamsUserHome {
+      page: number;
+      perpage: number;
+      uid?: number;
+    }
+
     interface TopicSearchUserParams {
       name: string;
       tribe_id: number;
