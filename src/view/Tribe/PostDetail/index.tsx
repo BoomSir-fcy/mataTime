@@ -70,7 +70,11 @@ const PostDetail = () => {
 
   const updateDetails = React.useCallback(() => {
     dispatch(fetchTribePostDetailAsync(id));
-  }, [dispatch, id]);
+  }, [dispatch, refresh, id]);
+
+  useEffect(() => {
+    setRefresh(prev => (prev === 1 ? 2 : 1));
+  }, [data?.tribe_id]);
 
   useEffect(() => {
     updateDetails();
@@ -117,7 +121,7 @@ const PostDetail = () => {
       <ContentBox>
         {
           // 普通帖子浏览自己的不扣费
-          !(currentUid?.uid === data?.user_id && data?.forward_type === 0) && (
+          !(currentUid?.uid === data?.user_id && !data?.forward_type) && (
             <SpendTimeViewWithArticle
               nonce={nonce}
               setNonce={setNonce}

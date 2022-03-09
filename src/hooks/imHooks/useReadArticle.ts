@@ -59,18 +59,29 @@ const useReadArticle = (nonce?: number | boolean) => {
             );
           }
         } else {
-          const tribeId = articleIds[type]?.[0]?.tribeId
-          im?.send(
-            tribeId ? im.messageProtocol.WSProtocol_Spend_Time_TRIBE : im.messageProtocol.WSProtocol_Spend_Time,
-            {
-              commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
-              read_type: tribeId ? Number(type) - 1 : Number(type), // 文章阅读
-              read_uid: articleIds[type]?.map(item => item.articleId) || [], // id数组 推文或者评论的
-              time_step: timeStep, // 推送时间间隔
-              tribe_id: tribeId
-            },
-            true,
-          );
+          const tribeIdsMap = {}
+          articleIds[type]?.forEach(item => {
+            const key = item.tribeId ? item.tribeId : 0
+            if (tribeIdsMap[key]) {
+              tribeIdsMap[key].push(item)
+            } else {
+              tribeIdsMap[key] = [item]
+            }
+          })
+          Object.keys(tribeIdsMap).forEach(id => {
+            const tribeId = Number(id)
+            im?.send(
+              tribeId ? im.messageProtocol.WSProtocol_Spend_Time_TRIBE : im.messageProtocol.WSProtocol_Spend_Time,
+              {
+                commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
+                read_type: tribeId ? Number(type) - 2 : Number(type), // 文章阅读
+                read_uid: tribeIdsMap[tribeId].map(item => item.articleId) || [], // id数组 推文或者评论的
+                time_step: timeStep, // 推送时间间隔
+                tribe_id: tribeId
+              },
+              true,
+            );
+          })
         }
       }
     });
