@@ -76,9 +76,14 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       name: 'extraTribesNFTInfo',
       params: [tribeId],
     },
+    {
+      address,
+      name: '_join_matter',
+      params: [],
+    },
   ];
   try {
-    const [info, extraTribeInfo, extraNftInfo] = await multicall(
+    const [info, extraTribeInfo, extraNftInfo, serviceCharge] = await multicall(
       tribeAbi,
       calls,
     );
@@ -93,6 +98,7 @@ export const getTribeBaseInfoData = async (tribeId: number) => {
       ownerPercent: new BigNumber(info.ownerPercent.toJSON().hex).toNumber(),
       authorPercent: new BigNumber(info.authorPercent.toJSON().hex).toNumber(),
       memberPercent: new BigNumber(info.memberPercent.toJSON().hex).toNumber(),
+      serviceCharge: getBalanceNumber(serviceCharge),
       nftAddress: '',
       nftid: null,
     };

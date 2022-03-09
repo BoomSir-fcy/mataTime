@@ -33,17 +33,20 @@ const TribeInfo: React.FC<{
           <Text fontSize='24px' fontWeight='bold'>
             {tribeInfo?.tribe?.name}
           </Text>
-          {userInfo?.address === tribeInfo?.tribe?.owner_address && (
-            <Text
-              color='textPrimary'
-              onClick={() => history.push(`/me/tribe/info?i=${props.tribe_id}`)}
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              {t('tribeInfoManager')}
-            </Text>
-          )}
+          {userInfo?.address === tribeInfo?.tribe?.owner_address &&
+            tribeInfo?.status === 4 && (
+              <Text
+                color='textPrimary'
+                onClick={() =>
+                  history.push(`/me/tribe/info?i=${props.tribe_id}`)
+                }
+                style={{
+                  cursor: 'pointer',
+                }}
+              >
+                {t('tribeInfoManager')}
+              </Text>
+            )}
         </Flex>
         <Flex alignItems='center' mb='13px'>
           <Text color='textTips'>{t('tribeInfoCreate')}</Text>
