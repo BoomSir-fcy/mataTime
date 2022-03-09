@@ -19,7 +19,7 @@ import PaginateStyle from 'style/Paginate';
 import { Api } from 'apis';
 import { formatTime } from 'utils/timeFormat';
 import { NftStatus } from 'store/tribe/type';
-import { getInitMemberNftList } from './hooks';
+import { getTribeExtraInfo } from './hooks';
 import {
   StakeButton,
   UnStakeButton,
@@ -138,7 +138,7 @@ const MyMasterNftTribe = React.memo(() => {
         const list = res.data?.list || [];
         if (list.length) {
           const tribeIds = list.map(item => item.id);
-          const newlist = await getInitMemberNftList(tribeIds);
+          const newlist = await getTribeExtraInfo(tribeIds);
           const tribeList = list.map((item, i) => {
             return {
               ...item,
@@ -198,7 +198,7 @@ const MyMasterNftTribe = React.memo(() => {
                     <Heading
                       ellipsis
                       scale='md'
-                      style={{ cursor: 'pointer' }}
+                      style={{ maxWidth: '260px', cursor: 'pointer' }}
                       onClick={() => {
                         history.push(`/tribe/detail?id=${item.id}`);
                       }}

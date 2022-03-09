@@ -63,7 +63,7 @@ export const useTranferNft = () => {
 };
 
 // 查询部落是否设置成员nft
-export const getInitMemberNftList = async (tribeIds: number[]) => {
+export const getTribeExtraInfo = async (tribeIds: number[]) => {
   const address = getTribeAddress();
   const calls = tribeIds.map(item => {
     return { address, name: 'extraTribesInfo', params: [item] };
