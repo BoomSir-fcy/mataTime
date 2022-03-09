@@ -13,14 +13,20 @@ import SpendTimeViewWithArticle from 'components/SpendTimeViewWithArticle';
 import { ReadType } from 'hooks/imHooks/types';
 import { useStore } from 'store';
 import useReadArticle from 'hooks/imHooks/useReadArticle';
+import { Tabs, Popup } from './components';
 
 import { Api } from 'apis';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import { useMapModule } from 'store/mapModule/hooks';
 import PostList from 'components/Post/PostList';
 import checkTranslateIds from 'utils/checkTranslateIds';
-import { addCommentTranslateIds, addTranslateIds } from 'store/mapModule/actions';
+import TribePostList from 'view/Tribe/Detail/postList';
+import {
+  addCommentTranslateIds,
+  addTranslateIds,
+} from 'store/mapModule/actions';
 import { useDispatch } from 'react-redux';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 // enum MoreOperatorEnum {
 //   SHIELD = 'SHIELD', // 屏蔽
@@ -29,11 +35,17 @@ import { useDispatch } from 'react-redux';
 // }
 
 const Collect = props => {
+  const parseQs = useParsedQueryString();
+
   const [page, setPage] = useState(1);
+  const [tribePage, setTribePage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [listData, setListData] = useState([]);
+  const [tribeListData, setTribeListData] = useState([]);
   const [totalPage, setTotalPage] = useState(2);
   const [total, setTotal] = useState(0);
+  const [tribeTotalPage, setTribeTotalPage] = useState(2);
+  const [tribeTotal, setTribeTotal] = useState(0);
   const { t } = useTranslation();
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
@@ -44,23 +56,54 @@ const Collect = props => {
 
   const dispatch = useDispatch();
 
+  const isTribe = useMemo(() => {
+    return parseQs.v === '1';
+  }, [parseQs.v]);
+
+  const collectList = current => {
+    return Api.MeApi.collectList(current || page, perpage);
+  };
+
+  const getTribeFavList = current => {
+    return Api.TribeApi.getTribeFavList({
+      page: current || tribePage,
+      perpage,
+    });
+  };
+
   const init = async (current?: number) => {
     setLoading(true);
     try {
-      const res = await Api.MeApi.collectList(current || page, perpage);
+      const fetch = isTribe ? getTribeFavList : collectList;
+
+      const res = await fetch(current);
       setLoading(false);
       if (Api.isSuccess(res)) {
-        setPage((current || page) + 1);
-        setTotalPage(res.data.total_page);
-        setTotal(res.data.total_num);
-        setListData(
-          current
-            ? [...(res.data?.list || [])]
-            : [...listData, ...(res.data?.list || [])],
-        );
+        if (isTribe) {
+          setTribePage((current || tribePage) + 1);
+          setTribeTotalPage(res.data.total_page);
+          setTribeTotal(res.data.total_num);
+          setTribeListData(
+            current
+              ? [...(res.data?.list || [])]
+              : [...tribeListData, ...(res.data?.list || [])],
+          );
+        } else {
+          setPage((current || page) + 1);
+          setTotalPage(res.data.total_page);
+          setTotal(res.data.total_num);
+          setListData(
+            current
+              ? [...(res.data?.list || [])]
+              : [...listData, ...(res.data?.list || [])],
+          );
+        }
         // const ids = checkTranslateIds(res.data?.list || [], 'post_id');
         // dispatch(addTranslateIds(ids));
-        const { postIds, commentIds } = checkTranslateIds(res.data?.list || [], 'post_id');
+        const { postIds, commentIds } = checkTranslateIds(
+          res.data?.list || [],
+          'post_id',
+        );
         dispatch(addTranslateIds(postIds));
         dispatch(addCommentTranslateIds(commentIds));
       }
@@ -70,56 +113,13 @@ const Collect = props => {
     }
   };
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum) => {
-    const {
-      FOLLOW,
-      CANCEL_FOLLOW,
-      SETTOP,
-      CANCEL_SETTOP,
-      COMMONT,
-      EXPAND,
-      SHIELD,
-      DELPOST,
-      BOOKMARK,
-      BLOCKUSER,
-    } = MoreOperatorEnum;
-    const handleChangeList =
-      type === SHIELD || type === DELPOST || type === BOOKMARK;
-    let arr = [];
-
-    if (
-      type === FOLLOW ||
-      type === CANCEL_FOLLOW ||
-      type === SETTOP ||
-      type === CANCEL_SETTOP ||
-      // type === COMMONT ||
-      type === BLOCKUSER
-    ) {
-      init(1);
-      return;
-    }
-
-    listData.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
-      }
-      if (item.id === newItem.id && handleChangeList) {
-        // 屏蔽、删除、取消收藏
-      } else {
-        arr.push(obj);
-      }
-    });
-    setListData([...arr]);
-    setTotal(arr.length);
-    if (handleChangeList) {
-      setNonce(prep => prep + 1);
-    }
-  };
-
-  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
-    useMapModule();
+  const {
+    postMap,
+    blockUsersIds,
+    tribePostMap,
+    deletePostIds,
+    unFollowUsersIds,
+  } = useMapModule();
 
   const renderList = useMemo(() => {
     const resPost = listData.filter(item => {
@@ -127,6 +127,17 @@ const Collect = props => {
     });
     return resPost;
   }, [listData, deletePostIds]);
+
+  const renderTribeList = useMemo(() => {
+    const resPost = tribeListData.filter(item => {
+      return !deletePostIds.includes(item.id);
+    });
+    return resPost;
+  }, [tribeListData, deletePostIds]);
+
+  React.useEffect(() => {
+    init(1);
+  }, [isTribe]);
 
   return (
     <Box>
@@ -140,8 +151,36 @@ const Collect = props => {
           </Text>
         </Flex>
       </Crumbs>
+      <Tabs />
       <Box mt='14px'>
-        <PostList
+        {isTribe ? (
+          <TribePostList
+            list={renderTribeList}
+            map={tribePostMap}
+            loading={loading}
+            isEnd={tribePage > tribeTotalPage}
+            getList={() => {
+              init();
+            }}
+            updateList={() => {
+              // console.debug('updateList');
+            }}
+          />
+        ) : (
+          <PostList
+            list={renderList}
+            map={postMap}
+            loading={loading}
+            isEnd={page > totalPage}
+            getList={() => {
+              init();
+            }}
+            updateList={() => {
+              console.debug('updateList');
+            }}
+          />
+        )}
+        {/* <PostList
           list={renderList}
           map={postMap}
           postIdKey='post_id'
@@ -153,76 +192,8 @@ const Collect = props => {
           updateList={() => {
             console.debug('updateList');
           }}
-        />
+        /> */}
       </Box>
-      {/* <List
-        marginTop={14}
-        loading={loading}
-        renderList={() => {
-          if (loading || page > totalPage) return false;
-          init();
-        }}
-      >
-        {listData.map((item, index) => {
-          return (
-            <MeItemWrapper key={index}>
-              {item.post_status === 2 ? (
-                <TopicEmpty item={item} callback={() => init(1)} />
-              ) : (
-                <React.Fragment>
-                  {
-                    // 浏览自己的不扣费
-                    currentUid?.uid !== item.user_id && (
-                      <SpendTimeViewWithArticle
-                        nonce={nonce}
-                        setNonce={setNonce}
-                        readType={ReadType.ARTICLE}
-                        articleId={item.post_id}
-                      />
-                    )
-                  }
-                  <MentionItem
-                    {...props}
-                    itemData={{
-                      ...item,
-                      is_like: item.like_status,
-                      user_id: item.uid,
-                      user_avator_url: item.nft_image,
-                      post: {
-                        ...item,
-                        is_fav: 1,
-                        user_id: item.uid,
-                      },
-                    }}
-                    callback={(data, type) => {
-                      updateList(data, type);
-                    }}
-                  />
-                  <MentionOperator
-                    replyType='twitter'
-                    type='Article'
-                    postId={item.post_id}
-                    itemData={{
-                      ...item,
-                      is_like: item.like_status,
-                      user_id: item.uid,
-                      user_avator_url: item.nft_image,
-                      post: {
-                        ...item,
-                        user_id: item.uid,
-                        is_fav: 1,
-                      },
-                    }}
-                    callback={(data, type) => {
-                      updateList(data, type);
-                    }}
-                  />
-                </React.Fragment>
-              )}
-            </MeItemWrapper>
-          );
-        })}
-      </List> */}
     </Box>
   );
 };

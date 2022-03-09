@@ -143,6 +143,27 @@ export class TribeApi extends Http {
     return this.post('v1/tribe/post/get_draft', params);
   }
 
+  // 获取个人中心列表
+  async getTribeUserHomeList(
+    params: Api.Tribe.TopicParamsUserHome,
+  ) {
+    return this.get('v1/tribe/user/home_msg', params);
+  }
+
+  // 获取个人中心收藏列表
+  async getTribeFavList(
+    params: Api.Tribe.TopicParamsUserHome,
+  ) {
+    return this.get('v1/tribe/fav/list', params);
+  }
+
+  // 获取个人中心点赞列表
+  async getTribeLikeList(
+    params: Api.Tribe.TopicParamsUserHome,
+  ) {
+    return this.get('v1/tribe/like/list', params);
+  }
+
   async getTribeCommentList(
     params: Api.Comment.queryList,
   ): Promise<Api.Response<Api.Tribe.PostDraftInfo>> {
