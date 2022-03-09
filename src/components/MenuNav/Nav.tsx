@@ -160,7 +160,10 @@ const Nav: React.FC<NavProps> = () => {
     ) {
       return TribeMeStatus.NOT_MASTER;
     }
-    if (tribeInfo?.status === NftStatus.UnReceive) {
+    if (
+      tribeInfo?.status === NftStatus.UnReceive ||
+      tribeInfo?.status === NftStatus.INIT
+    ) {
       return TribeMeStatus.UN_RECEIVE;
     }
     if (tribeInfo?.status === NftStatus.UnStake) {

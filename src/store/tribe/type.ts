@@ -15,6 +15,7 @@ export enum Timing {
 
 // 1 未领取 2已领取 3 取消质押 4 已质押 5已过期
 export enum NftStatus {
+  INIT = 0,
   UnReceive = 1,
   Received = 2,
   UnStake = 3,
