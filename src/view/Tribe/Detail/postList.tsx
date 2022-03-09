@@ -55,7 +55,7 @@ interface PostListPorps {
   };
   loading: boolean;
   isEnd: boolean;
-  getList: (LoadType?: number) => void;
+  getList: (LoadType?: number, id?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
   postIdKey?: string;
   tribeId: number;
@@ -293,7 +293,12 @@ const PostList: React.FC<PostListPorps> = ({
                     />
                   </Box>
                 </Flex>
-                <HotBtn list={item.topics} />
+                <HotBtn
+                  callBack={id => {
+                    // getList(LoadType.REFRESH, id);
+                  }}
+                  list={item.topics}
+                />
               </MeItemWrapper>
             </HoverLink>
           );

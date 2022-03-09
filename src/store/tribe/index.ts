@@ -203,7 +203,7 @@ export const fetchTribePostAsync = createAsyncThunk(
     const response = await Api.TribeApi.tribePostList({
       ...params,
     });
-    
+
     if (Api.isSuccess(response)) {
       const { postIds } = checkTranslateIds(response.data.List || []);
       dispatch(addTranslateIds(postIds));

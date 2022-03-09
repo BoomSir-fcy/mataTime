@@ -76,7 +76,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({
     setActiveTitle(type);
     let url;
     if (TopicId) {
-      url = `&topic=${TopicId}`;
+      url = `&topic=${TopicId}&topicName=${qsValue.topicName}`;
     }
     replace(`${pathname}?id=${TribeId}&active=${type}${url}`);
   };

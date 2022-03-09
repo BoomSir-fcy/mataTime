@@ -20,7 +20,8 @@ const Btn = styled(Flex)`
 
 const HotBtn: React.FC<{
   list: Api.Tribe.TribeTopicInfo[];
-}> = ({ list }) => {
+  callBack?: (id: number) => void;
+}> = ({ list, callBack }) => {
   const { pathname } = useLocation();
   const qsValue = useParsedQueryString();
   const { replace } = useHistory();
@@ -37,8 +38,9 @@ const HotBtn: React.FC<{
                 e.stopPropagation();
                 if (Number(qsValue?.topic) === item.id) return;
                 replace(
-                  `${pathname}?id=${TribeId}&active=${qsValue.active}&topic=${item.id}`,
+                  `${pathname}?id=${TribeId}&active=${qsValue.active}&topic=${item.id}&topicName=${item.name}`,
                 );
+                callBack(Number(item.id));
               }}
               key={`${item.id}${index}`}
             >
