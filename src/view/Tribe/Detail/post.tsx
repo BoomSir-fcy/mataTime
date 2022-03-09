@@ -65,8 +65,8 @@ const PostListComponents = (props, ref) => {
             per_page: pageSize,
             top: top,
             tribe_id: TribeId,
-            newest_sort: filterValObj.sortTime,
-            hot_sort: filterValObj.sortLike,
+            newest_sort: filterValObj.sortTime || 1,
+            hot_sort: filterValObj.sortLike || 0,
             topic_id: Number(TopicId),
           }),
         );

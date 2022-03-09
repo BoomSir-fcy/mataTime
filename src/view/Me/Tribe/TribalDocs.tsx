@@ -13,8 +13,8 @@ import { Api } from 'apis';
 import { useToast } from 'hooks';
 import { useTribeState } from 'store/tribe/hooks';
 import useParsedQueryString from 'hooks/useParsedQueryString';
-import { getTotalPage } from './MemberManagement';
 import UploadFile from '../components/UploadFile';
+import { getTotalPage } from 'utils/pageHelpers';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */

@@ -48,6 +48,7 @@ export const useTokenBalance = (tokenAddress: string) => {
     };
 
     if (account) {
+      if (!tokenAddress) return;
       fetchBalance();
     }
   }, [account, tokenAddress, fastRefresh, SUCCESS, FAILED]);

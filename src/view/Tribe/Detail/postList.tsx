@@ -235,7 +235,7 @@ const PostList: React.FC<PostListPorps> = ({
                   />
                   <Box width='50%'>
                     <MentionOperator
-                      joined={TribeInfo.status === 4}
+                      joined={TribeInfo?.status === 4}
                       replyType='twitter'
                       postId={item[postIdKey]}
                       hasReward={false}
