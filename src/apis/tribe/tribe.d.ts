@@ -150,14 +150,17 @@ declare namespace Api {
       is_top: number;
       reward_stats: null;
       total_receive_time: string;
-      topics: string[];
+      topics: TribeTopicInfo[];
       tribe_name: string;
       title: string;
       selected: number;
       tribe_id: number;
       tribe_top: number;
     }
-
+    interface TribeTopicInfo {
+      id: number;
+      name: string;
+    }
     interface TribeFileCreateParams {
       tribe_id: number;
       url: string;

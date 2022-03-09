@@ -2,6 +2,8 @@ import React from 'react';
 import { Icon } from 'components';
 import { Box, Flex, Text } from 'uikit';
 import styled from 'styled-components';
+import { useHistory, useLocation } from 'react-router-dom';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const Btn = styled(Flex)`
   width: max-content;
@@ -17,16 +19,31 @@ const Btn = styled(Flex)`
 `;
 
 const HotBtn: React.FC<{
-  list: string[];
+  list: Api.Tribe.TribeTopicInfo[];
 }> = ({ list }) => {
+  const { pathname } = useLocation();
+  const qsValue = useParsedQueryString();
+  const { replace } = useHistory();
+  const TribeId = Number(qsValue.id);
+
   return (
     <Flex paddingTop='20px' alignItems='center'>
       {list?.length && (
         <>
           {list.map((item, index) => (
-            <Btn key={`${item}${index}`}>
+            <Btn
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (Number(qsValue?.topic) === item.id) return;
+                replace(
+                  `${pathname}?id=${TribeId}&active=${qsValue.active}&topic=${item.id}`,
+                );
+              }}
+              key={`${item.id}${index}`}
+            >
               <Text fontSize='14px' color='textPrimary'>
-                {item}
+                {item.name}
               </Text>
             </Btn>
           ))}

@@ -78,7 +78,7 @@ const Home = () => {
       </Tabs>
       <PaddingFlex justifyContent='space-around' flexWrap='wrap'>
         <FlexAutoWarpper lineMax={2}>
-          {TribeList.length ? (
+          {TribeList?.length ? (
             <>
               {TribeList.map((item, index) => (
                 <Link key={item.id} to={`${path}/detail?id=${item.id}`}>

@@ -51,6 +51,7 @@ const Detail: React.FC = React.memo(() => {
     ActiveTitle: parsedQs.active || 0,
   });
   const [TribeId, setTribeId] = useState(Number(parsedQs.id));
+  const [TopicId, setTopicId] = useState(Number(parsedQs.topic) || 0);
 
   const articleRefs = React.useRef(null);
   // 阅读文章扣费
@@ -63,16 +64,9 @@ const Detail: React.FC = React.memo(() => {
     setRefresh(!refresh);
   };
 
-  // useEffect(() => {
-  //   const { search } = route.location;
-  //   const myQuery = search => {
-  //     return new URLSearchParams(search);
-  //   };
-  //   const tribe_id = myQuery(search).get('id');
-  //   if (tribe_id) {
-  //     setTribeId(Number(tribe_id));
-  //   }
-  // }, [route]);
+  useEffect(() => {
+    setTopicId(Number(parsedQs.topic) || 0);
+  }, [parsedQs?.topic]);
 
   useEffect(() => {
     if (account && baseInfo?.feeToken) {
@@ -99,8 +93,12 @@ const Detail: React.FC = React.memo(() => {
       <TribeBox>
         <Crumbs back />
         <DetailHeader TribeInfo={tribeDetailInfo} />
-        <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />
-        <DetailTitle TribeId={TribeId} tabsChange={tabsChange} />
+        {!TopicId && <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />}
+        <DetailTitle
+          TribeId={TribeId}
+          tabsChange={tabsChange}
+          TopicId={TopicId}
+        />
         <TribePostList
           TribeId={TribeId}
           ref={articleRefs}

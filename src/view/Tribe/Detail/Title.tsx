@@ -26,9 +26,14 @@ const Tab = styled(Flex)`
 
 interface DetailTitlePorps {
   TribeId: number;
+  TopicId: number;
   tabsChange?: (item) => void;
 }
-const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
+const DetailTitle: React.FC<DetailTitlePorps> = ({
+  TribeId,
+  TopicId,
+  tabsChange,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { top } = useStore(p => p.tribe.postList);
@@ -67,6 +72,15 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
     );
   };
 
+  const changeTab = type => {
+    setActiveTitle(type);
+    let url;
+    if (TopicId) {
+      url = `&topic=${TopicId}`;
+    }
+    replace(`${pathname}?id=${TribeId}&active=${type}${url}`);
+  };
+
   useEffect(() => {
     if (!IsSearch) {
       tabsChange({
@@ -81,10 +95,8 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
 
   useEffect(() => {
     if (IsSearch) {
-      // setIsSearch(true);
       setSearchActiveTitle(Number(qsValue.active) || 0);
     } else {
-      // setIsSearch(false);
       setActiveTitle(Number(qsValue.active) || 0);
     }
   }, [IsSearch]);
@@ -120,8 +132,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
               mr='36px'
               className={ActiveTitle === 0 ? 'active' : 'tabFont'}
               onClick={() => {
-                setActiveTitle(0);
-                replace(`${pathname}?id=${TribeId}&active=0`);
+                changeTab(0);
               }}
             >
               {t('homeTabAll')}
@@ -129,8 +140,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
             <Text
               className={ActiveTitle === 1 ? 'active' : 'tabFont'}
               onClick={() => {
-                setActiveTitle(1);
-                replace(`${pathname}?id=${TribeId}&active=1`);
+                changeTab(1);
               }}
             >
               {t('Featured')}
