@@ -37,7 +37,7 @@ export const JoinTribeModal: React.FC<{
   const { joinTribe } = useJoinTribe();
   const { account } = useActiveWeb3React();
   const joinTribeInfo = useStore(p => p.tribe.joinTribe);
-  const { detail } = tribeInfo || {};
+  const { detail, baseInfo } = tribeInfo || {};
 
   const [state, setState] = useImmer({
     loading: false,
@@ -90,10 +90,8 @@ export const JoinTribeModal: React.FC<{
         setTimeout(() => {
           onClose(true);
         }, 5000);
-      } else if (res === 4001) {
-        toastError(t('contractCode-40001'));
-      } else if (res === -32603) {
-        toastError(t('contractCode-32603'));
+      } else if (res !== 0) {
+        toastError(t(`contractCode-${res}`));
       } else {
         toastError('Failed to join');
       }
@@ -137,7 +135,7 @@ export const JoinTribeModal: React.FC<{
                 </Flex>
                 <Text fontSize='16px'>
                   {detail?.type === TribeType.BASIC
-                    ? joinTribeInfo.basicServiceCharge
+                    ? baseInfo?.serviceCharge
                     : new BigNumber(detail?.charge)
                         .dividedBy(new BigNumber(10).pow(18))
                         .toString()}{' '}
