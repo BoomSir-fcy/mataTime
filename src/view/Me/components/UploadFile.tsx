@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Box, Flex, Button, Text, Input } from 'uikit';
+import { Box, Flex, Button, Text, Input, Overlay } from 'uikit';
 import BtnIcon from 'view/Tribe/components/BtnIcon';
 import { useTranslation } from 'contexts/Localization';
 import { ModalWrapper, Icon, Loading } from 'components';
@@ -11,6 +11,8 @@ import getFileExt from 'utils/getFileExt';
 import { TEIBE_FILE_TYPES } from 'config';
 import FileIcon from 'components/Icon/FileIcon';
 import Dots from 'components/Loader/Dots';
+import { Circle } from 'rc-progress';
+import useTheme from 'hooks/useTheme';
 
 const UpdateBtnSmall = styled(Flex)`
   cursor: pointer;
@@ -24,6 +26,10 @@ const UpdateBtnSmall = styled(Flex)`
   height: 148px;
   position: relative;
 `;
+
+// const OverlayStyled = styled(Overlay)`
+//   position: absolute;
+// `;
 
 interface UploadFileButtonProps {
   tribe_id: number;
@@ -47,6 +53,14 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
     full_path: '',
     size: 0,
   });
+
+  // const [percent, setPercent] = useState(0);
+
+  // const onUploadProgress = useCallback((progress: ProgressEvent) => {
+  //   setPercent(progress?.loaded / progress?.total);
+  // }, []);
+
+  const { theme } = useTheme();
 
   const handleUpload = useCallback(
     async (file: File) => {
@@ -171,6 +185,25 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
                 hidden
               />
               <Loading zIndex={2} overlay visible={loading} />
+              {/* <OverlayStyled show={loading} />
+              {loading && (
+                <Box
+                  position='absolute'
+                  top='50%'
+                  left='50%'
+                  style={{ transform: 'translate(-50%, -50%)' }}
+                  width='100px'
+                  height='100px'
+                  zIndex={10}
+                >
+                  <Circle
+                    percent={percent}
+                    strokeWidth={10}
+                    trailWidth={2}
+                    strokeColor={theme.colors.textPrimary}
+                  />
+                </Box>
+              )} */}
             </UpdateBtnSmall>
           </label>
           <Flex alignItems='center' height='36px'>

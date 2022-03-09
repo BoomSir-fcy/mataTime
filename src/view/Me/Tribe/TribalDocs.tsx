@@ -103,23 +103,23 @@ const MeTribeTribalDocs: React.FC<init> = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error(error);
-      throw error;
     }
   };
   // 删除文件
   const DeleteFile = async () => {
-    const res = await Api.TribeApi.tribeFileDelete({
-      id: FileId,
-      tribe_id: Number(parseQs.i),
-    });
-    if (Api.isSuccess(res)) {
-      toastSuccess(t('moreDeleteSuccess'));
-    } else {
-      toastError(t('moreDeleteError'));
-    }
-    getFileList(page);
-    setCommonInqueryShow(false);
+    try {
+      const res = await Api.TribeApi.tribeFileDelete({
+        id: FileId,
+        tribe_id: Number(parseQs.i),
+      });
+      if (Api.isSuccess(res)) {
+        toastSuccess(t('moreDeleteSuccess'));
+      } else {
+        toastError(t('moreDeleteError'));
+      }
+      getFileList(page);
+      setCommonInqueryShow(false);
+    } catch (error) {}
   };
 
   const handlePageClick = event => {

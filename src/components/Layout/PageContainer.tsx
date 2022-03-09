@@ -108,7 +108,7 @@ const PageContainer: React.FC = ({ children }) => {
       <ChildrenWrapper>
         <Flex width='100%' alignItems='flex-start' justifyContent='center'>
           {showMenuNav && <MenuNav />}
-          <LineStyled />
+          <LineStyled className='print-hide' />
           <Flex
             width='100%'
             flex='1'
@@ -126,9 +126,9 @@ const PageContainer: React.FC = ({ children }) => {
                 {children}
               </CennerBox>
             </InnerBox>
-            {showLine && <LineStyled mr='14px' />}
+            {showLine && <LineStyled className='print-hide' mr='14px' />}
             {showSidebar && (
-              <Sidebar className='mini-swap-Modal__Body--open-sidebar' />
+              <Sidebar className='mini-swap-Modal__Body--open-sidebar print-hide' />
             )}
           </Flex>
         </Flex>

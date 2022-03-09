@@ -157,9 +157,7 @@ export class TribeApi extends Http {
 
   // 获取文件列表
   async triebFileCreate(params: Api.Tribe.TribeFileCreateParams) {
-    return this.post('/v1/tribe/file/create', params, {
-      timeout: 2 * 60 * 1000,
-    });
+    return this.post('/v1/tribe/file/create', params);
   }
 
   // 获取文件列表

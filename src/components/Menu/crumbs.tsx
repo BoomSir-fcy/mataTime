@@ -92,7 +92,7 @@ export const Crumbs: React.FC<{
     };
 
     return (
-      <CrumbsWraper>
+      <CrumbsWraper className='print-hide'>
         <Card
           hideBorder={hideBorder}
           justifyContent={justifyContent ? justifyContent : 'space-between'}

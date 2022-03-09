@@ -78,24 +78,18 @@ const TribeInfoDetail: React.FC<HeaderProps> = ({ tribeInfo, openInvite }) => {
                   </Text>
                 )}
               </Flex>
-              <Flex mt='10px' justifyContent='space-between'>
+              <Flex margin='10px 0' justifyContent='space-between'>
                 <Box>
                   <Text bold>{tribeInfo?.member_count}</Text>
-                  <Text fontSize='14px' color='textTips'>
-                    成员
-                  </Text>
+                  <Text color='textTips'>{t('Member')}</Text>
                 </Box>
                 <Box>
                   <Text bold>{tribeInfo?.post_count}</Text>
-                  <Text fontSize='14px' color='textTips'>
-                    帖子
-                  </Text>
+                  <Text color='textTips'>{t('Post')}</Text>
                 </Box>
                 <Box>
                   <Text bold>{tribeInfo?.selected_count}</Text>
-                  <Text fontSize='14px' color='textTips'>
-                    {t('Featured')}
-                  </Text>
+                  <Text color='textTips'>{t('Featured')}</Text>
                 </Box>
               </Flex>
             </Box>
