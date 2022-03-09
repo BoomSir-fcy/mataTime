@@ -82,8 +82,8 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
           <Flex>
             <TradeLogo
               scales='sm'
-              logo={TribeInfo?.tribe.logo}
-              pro={TribeInfo?.tribe.type === 2}
+              logo={TribeInfo?.tribe?.logo}
+              pro={TribeInfo?.tribe?.type === 2}
             />
             <RightFlex
               flex='1'

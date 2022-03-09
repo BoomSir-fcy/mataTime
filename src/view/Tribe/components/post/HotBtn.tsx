@@ -14,7 +14,8 @@ const Btn = styled(Flex)`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  margin-right: 18px;
+  margin-right: 15px;
+  margin-top: 15px;
   cursor: pointer;
 `;
 
@@ -28,7 +29,12 @@ const HotBtn: React.FC<{
   const TribeId = Number(qsValue.id);
 
   return (
-    <Flex paddingTop='20px' alignItems='center'>
+    <Flex
+      alignItems='center'
+      style={{
+        flexWrap: 'wrap',
+      }}
+    >
       {list?.length && (
         <>
           {list.map((item, index) => (

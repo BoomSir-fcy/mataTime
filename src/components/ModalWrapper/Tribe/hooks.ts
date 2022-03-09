@@ -25,7 +25,7 @@ export const useJoinTribe = () => {
           case 'execution reverted: invliad address.':
             return 400001;
           default:
-            return error?.code ?? 0;
+            return 0;
         }
       }
     },

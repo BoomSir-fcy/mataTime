@@ -30,8 +30,11 @@ const TribeBox = styled(Box)`
 `;
 
 const Sidebar = styled(Box)`
-  width: 100%;
+  opacity: 0;
+  display: none;
   ${({ theme }) => theme.mediaQueries.md} {
+    opacity: 1;
+    display: block;
     width: 300px;
   }
 `;
@@ -88,7 +91,7 @@ const Detail: React.FC = React.memo(() => {
   }, [TribeId]);
 
   return (
-    <Flex>
+    <Flex width='100%'>
       <TribeBox>
         <Crumbs back>
           <Flex>

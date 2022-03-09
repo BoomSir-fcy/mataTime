@@ -1,16 +1,16 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import styled, { css } from 'styled-components';
-import { useImmer } from 'use-immer';
 import { useDispatch } from 'react-redux';
-import { Box, Card, Flex, Image, Text, Button } from 'uikit';
-import { JoinTribeModal } from 'components';
+import { Box, Card, Flex, Image, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { BASE_IMAGE_URL } from 'config';
 import { storeAction, useStore } from 'store';
 import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
+import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
+
 import { TribeType } from 'store/tribe/type';
-import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
+import { useTribeInfoById } from 'store/mapModule/hooks';
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
 
 import BtnIcon from '../BtnIcon';
@@ -59,8 +59,7 @@ const TribeNft: React.FC<{
   const { t } = useTranslation();
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const tribeInfo = useTribeInfoById(props.tribe_id);
-  const { updater } = useFetchTribeInfoById(props.tribe_id);
-  const { tribe, detail, member_nft, baseInfo } = tribeInfo || {};
+  const { tribe, detail, member_nft } = tribeInfo || {};
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   return (
@@ -142,7 +141,9 @@ const TribeNft: React.FC<{
                   tribeId={props.tribe_id}
                   nftId={detail.nft_id}
                   nftType={isOwner}
-                  callback={() => updater()}
+                  callback={() => {
+                    dispatch(fetchTribeInfoAsync(props.tribe_id));
+                  }}
                 />
               )}
             </Flex>
@@ -163,27 +164,12 @@ const TribeNft: React.FC<{
               <UnStakeButton
                 tribeId={props.tribe_id}
                 nftType={isOwner}
-                callback={() => updater()}
+                callback={() => dispatch(fetchTribeInfoAsync(props.tribe_id))}
               />
             </Flex>
           )}
         </Card>
       )}
-      {/* {state.visible && (
-        <JoinTribeModal
-          visible={state.visible}
-          tribeInfo={tribeInfo}
-          tribeBaseInfo={baseInfo}
-          onClose={event => {
-            setState(p => {
-              p.visible = false;
-            });
-            if (event) {
-              updater();
-            }
-          }}
-        />
-      )} */}
     </React.Fragment>
   );
 };
