@@ -40,7 +40,9 @@ const HotBtn: React.FC<{
                 e.stopPropagation();
                 if (Number(qsValue?.topic) === item.id) return;
                 replace(
-                  `${pathname}?id=${TribeId}&active=${qsValue.active}&topic=${item.id}&topicName=${item.name}`,
+                  `${pathname}?id=${TribeId}&active=${
+                    qsValue.active || 0
+                  }&topic=${item.id}&topicName=${item.name}`,
                 );
                 callBack(Number(item.id));
               }}

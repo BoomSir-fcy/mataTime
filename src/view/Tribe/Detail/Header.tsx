@@ -113,7 +113,9 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
                 list={Topic}
                 onDelete={id => {
                   replace(
-                    `${pathname}?id=${qsValue.id}&active=${qsValue.active}`,
+                    `${pathname}?id=${qsValue.id}&active=${
+                      qsValue.active || 0
+                    }`,
                   );
                 }}
               />
