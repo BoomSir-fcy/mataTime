@@ -21,18 +21,20 @@ const Btn = styled(Flex)`
 const HotBtn: React.FC<{
   list: Api.Tribe.TribeTopicInfo[];
   callBack?: (id: number) => void;
-}> = ({ list, callBack }) => {
+  mb?: string;
+}> = ({ list, callBack, mb }) => {
   const { pathname } = useLocation();
   const qsValue = useParsedQueryString();
   const { replace } = useHistory();
   const TribeId = Number(qsValue.id);
 
   return (
-    <Flex paddingTop='20px' alignItems='center'>
+    <Flex paddingTop='20px' alignItems='center' flexWrap='wrap'>
       {list?.length && (
         <>
           {list.map((item, index) => (
             <Btn
+              mb={mb}
               onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
