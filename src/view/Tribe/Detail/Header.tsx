@@ -50,7 +50,6 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
   const dispatch = useDispatch();
   const { replace } = useHistory();
   const { pathname } = useLocation();
-
   const qsValue = useParsedQueryString();
 
   const Topic = [
@@ -182,20 +181,21 @@ const TribeOwner = ({ TribeInfo }) => {
 };
 
 const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
+  const { userInfo } = useStore(p => p.loginReducer);
+
   return (
     <>
-      {TribeInfo?.status === 0 && (
-        <BtnIcon
-          name='icon-wodebula'
-          text={t('tribeJoin')}
-          onClick={() => {
-            if (TribeInfo?.detail?.type === TribeType.BASIC) {
-              dispatch(fetchTribeJoinBasicServiceAsync());
-            }
-            dispatch(storeAction.setJoinTribeVisibleModal(true));
-          }}
-        />
-      )}
+      {userInfo.address !== TribeInfo?.tribe?.owner_address &&
+        TribeInfo?.status === 0 && (
+          <BtnIcon
+            disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
+            name='icon-wodebula'
+            text={t('tribeJoin')}
+            onClick={() => {
+              dispatch(storeAction.setJoinTribeVisibleModal(true));
+            }}
+          />
+        )}
 
       {TribeInfo?.status === 4 && (
         <Link
