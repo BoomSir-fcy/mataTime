@@ -60,7 +60,7 @@ const TribeNft: React.FC<{
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { updater } = useFetchTribeInfoById(props.tribe_id);
-  const { detail, member_nft, baseInfo } = tribeInfo || {};
+  const { tribe, detail, member_nft, baseInfo } = tribeInfo || {};
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   return (
@@ -83,9 +83,7 @@ const TribeNft: React.FC<{
             <Box style={{ width: 'calc(100% - 80px)' }}>
               <RowsEllipsis>
                 <Text fontWeight='bold' ellipsis>
-                  {isOwner === 1
-                    ? member_nft?.owner_nft_name
-                    : member_nft?.member_nft_name}
+                  {isOwner === 1 ? tribe?.name : member_nft?.member_nft_name}
                 </Text>
                 <Text ml='6px' color='textTips' ellipsis>
                   -Tribe Host NFT
@@ -101,10 +99,12 @@ const TribeNft: React.FC<{
           {tribeInfo?.status === 0 && (
             <Flex mb='12px' justifyContent='center'>
               <BtnIcon
-                disabled={!Boolean(baseInfo?.feeToken)}
                 name='icon-wodebula'
                 text={t('tribeJoin')}
                 onClick={() => {
+                  if (detail?.type === TribeType.BASIC) {
+                    dispatch(fetchTribeJoinBasicServiceAsync());
+                  }
                   dispatch(storeAction.setJoinTribeVisibleModal(true));
                 }}
               />
