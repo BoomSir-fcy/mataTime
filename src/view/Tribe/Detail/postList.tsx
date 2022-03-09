@@ -55,10 +55,9 @@ interface PostListPorps {
   };
   loading: boolean;
   isEnd: boolean;
-  getList: (LoadType?: number) => void;
+  getList: (LoadType?: number, id?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
   postIdKey?: string;
-  tribeId: number;
 }
 
 const PostList: React.FC<PostListPorps> = ({
@@ -68,7 +67,6 @@ const PostList: React.FC<PostListPorps> = ({
   isEnd,
   getList,
   updateList,
-  tribeId,
   postIdKey = 'id',
 }) => {
   const [PostItemData, setPostItemData] = useState();
@@ -151,9 +149,7 @@ const PostList: React.FC<PostListPorps> = ({
               <MeItemWrapper key={`${item[postIdKey]}`}>
                 {
                   // 普通帖子浏览自己的不扣费
-                  !(
-                    currentUid?.uid === item.user_id && item.forward_type === 0
-                  ) && (
+                  !(currentUid?.uid === item.user_id && !item.forward_type) && (
                     <SpendTimeViewWithArticle
                       nonce={nonce}
                       setNonce={setNonce}
@@ -161,7 +157,7 @@ const PostList: React.FC<PostListPorps> = ({
                       articleId={item[postIdKey]}
                       forwardType={item.forward?.forward_type}
                       forward={item.forward}
-                      tribeId={tribeId}
+                      tribeId={item.tribe_id}
                     />
                   )
                 }
@@ -293,7 +289,12 @@ const PostList: React.FC<PostListPorps> = ({
                     />
                   </Box>
                 </Flex>
-                <HotBtn list={item.topics} />
+                <HotBtn
+                  callBack={id => {
+                    // getList(LoadType.REFRESH, id);
+                  }}
+                  list={item.topics}
+                />
               </MeItemWrapper>
             </HoverLink>
           );

@@ -77,10 +77,10 @@ declare namespace Api {
 
     interface TopicInfo {
       id: number;
-      tribe_id: number;
+      tribe_id?: number;
       topic: string;
-      create_time: number;
-      status: number;
+      create_time?: number;
+      status?: number;
     }
 
     interface TopicCreateParams {
@@ -101,6 +101,12 @@ declare namespace Api {
 
     interface TopicParamsForId {
       tribe_id: number;
+    }
+
+    interface TopicParamsUserHome {
+      page: number;
+      perpage: number;
+      uid?: number;
     }
 
     interface TopicSearchUserParams {

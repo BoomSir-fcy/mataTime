@@ -199,7 +199,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
         sort_add_time: sortTime,
         sort_like: sortLike,
         comment_id: (current || page) === 1 ? parsedQs.comment_id : 0,
-        tribeId,
+        tribe_id: tribeId,
       });
     const fetchFunc = tribeId ? fetchTribeComment : fetchComment;
     const res = await fetchFunc();
@@ -373,7 +373,7 @@ export const CommentList: React.FC<Iprops> = (props: Iprops) => {
       page: 1,
       sort_add_time: sortTime,
       sort_like: sortLike,
-      tribeId,
+      tribe_id: tribeId,
     });
     eventBus.dispatchEvent(new MessageEvent('updateDetails'));
   };

@@ -50,7 +50,7 @@ const Detail: React.FC = React.memo(() => {
     ActiveTitle: parsedQs.active || 0,
   });
   const [TribeId, setTribeId] = useState(Number(parsedQs.id));
-  const [TopicId, setTopicId] = useState(Number(parsedQs.topic) || 0);
+  const [TopicId, setTopicId] = useState(Number(parsedQs.topic) || null);
 
   const articleRefs = React.useRef(null);
   // 阅读文章扣费
@@ -64,7 +64,7 @@ const Detail: React.FC = React.memo(() => {
   };
 
   useEffect(() => {
-    setTopicId(Number(parsedQs.topic) || 0);
+    setTopicId(Number(parsedQs.topic) || null);
   }, [parsedQs?.topic]);
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const Detail: React.FC = React.memo(() => {
             </Link>
           </Flex>
         </Crumbs>
-        <DetailHeader TribeInfo={tribeDetailInfo} />
+        <DetailHeader TopicId={TopicId} TribeInfo={tribeDetailInfo} />
         {!TopicId && <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />}
         <DetailTitle
           TribeId={TribeId}
@@ -124,6 +124,7 @@ const Detail: React.FC = React.memo(() => {
           TopicId={TopicId}
         />
         <TribePostList
+          TopicId={TopicId}
           TribeId={TribeId}
           ref={articleRefs}
           setNonce={setNonce}

@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
+import { useHistory, useLocation } from 'react-router-dom';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const TabsBox = styled(Card)`
   display: flex;
@@ -20,6 +22,7 @@ const TabItems = styled(Flex)`
   align-items: center;
   margin-right: 17px;
   color: ${({ theme }) => theme.colors.textgrey};
+  cursor: pointer;
   &.active {
     text-align: center;
     font-size: 18px;
@@ -43,15 +46,29 @@ export const Tabs = React.memo(() => {
   const { t } = useTranslation();
   const menu = [
     {
-      title: t('homeTabAll'),
+      title: t('Posts'),
       value: '0',
     },
+    {
+      title: t('Tribe Posts'),
+      value: '1',
+    },
   ];
+
+  const { replace } = useHistory();
+  const { pathname } = useLocation();
+  const parseQs = useParsedQueryString();
 
   return (
     <TabsBox isBoxShadow>
       {menu.map((row, index: number) => (
-        <TabItems key={index} className='active'>
+        <TabItems
+          onClick={() => {
+            replace(`${pathname}?v=${row.value}`);
+          }}
+          key={index}
+          className={row.value === (parseQs.v || '0') ? 'active' : ''}
+        >
           {row.title}
         </TabItems>
       ))}

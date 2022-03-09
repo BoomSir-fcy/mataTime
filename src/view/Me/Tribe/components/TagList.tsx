@@ -6,11 +6,11 @@ import { Flex, Text, TextProps } from 'uikit';
 const TopicsContentFlex = styled(Flex)`
   flex-wrap: wrap;
 `;
-export const Tag = styled(Flex)<{ cursor?: string; mr?: string }>`
+export const Tag = styled(Flex)<{ cursor?: string; mr?: string; mb?: string }>`
   align-items: center;
   padding: 5px 10px;
   margin-right: ${({ mr }) => mr || '20px'};
-  margin-bottom: 10px;
+  margin-bottom: ${({ mb }) => mb || '20px'};
   border: 1px solid ${({ theme }) => theme.colors.ThemeText};
   border-radius: 10px;
   text-align: center;
@@ -48,11 +48,13 @@ export const TagText: React.FC<TextProps> = props => (
 const TagList: React.FC<{
   list?: Api.Tribe.TopicInfo[];
   onDelete?: (id: number) => void;
-}> = React.memo(({ list, onDelete }) => {
+  mr?: string;
+  mb?: string;
+}> = React.memo(({ list, onDelete, mr, mb }) => {
   return (
     <TopicsContentFlex>
       {list.map(item => (
-        <Tag key={item.id}>
+        <Tag mr={mr} mb={mb} key={item.id}>
           <TagText>{item.topic}</TagText>
           <CancleIcon
             onClick={() => {

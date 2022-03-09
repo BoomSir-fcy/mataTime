@@ -47,7 +47,12 @@ import { useMapModule } from 'store/mapModule/hooks';
 import PostList from 'components/Post/PostList';
 import checkTranslateIds from 'utils/checkTranslateIds';
 import { useDispatch } from 'react-redux';
-import { addCommentTranslateIds, addTranslateIds } from 'store/mapModule/actions';
+import {
+  addCommentTranslateIds,
+  addTranslateIds,
+} from 'store/mapModule/actions';
+import TribePostList from 'view/Tribe/Detail/postList';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const Center = styled(Box)`
   width: 100%;
@@ -189,6 +194,7 @@ const ProfileDesc: React.FC<{
 };
 
 const Profile: React.FC<any> = props => {
+  const parseQs = useParsedQueryString();
   const history = useHistory();
   const [state, setState] = useImmer({
     profile: {
@@ -198,6 +204,9 @@ const Profile: React.FC<any> = props => {
     list: [],
     page: 1,
     totalPage: 0,
+    tribeList: [],
+    tribePage: 1,
+    tribeTotalPage: 0,
   });
   const { t, currentLanguage } = useTranslation();
   const country = useStore(p => p.appReducer.localtion);
@@ -205,7 +214,16 @@ const Profile: React.FC<any> = props => {
   const setting = useStore(p => p.appReducer.systemCustom);
   const uid = props.match?.params?.uid;
   const gray = useTheme().colors.textTips;
-  const { profile, loading, page, totalPage, list } = state;
+  const {
+    profile,
+    loading,
+    page,
+    totalPage,
+    list,
+    tribeList,
+    tribePage,
+    tribeTotalPage,
+  } = state;
   const { signOut } = useAuth();
   const { isDark } = useTheme();
   const defaultImages = isDark ? defaultDarkImages : defaultLightImages;
@@ -242,14 +260,33 @@ const Profile: React.FC<any> = props => {
     return data;
   }, [profile]);
 
+  const getTribeUserHomeList = offset => {
+    return Api.TribeApi.getTribeUserHomeList({
+      page: offset || tribePage,
+      perpage,
+      uid,
+    });
+  };
+
+  const getProfileV2Msg = offset => {
+    return Api.MeApi.getProfileV2Msg({ page: offset || page, perpage, uid });
+  };
+
+  const isTribe = useMemo(() => {
+    return parseQs.v === '1';
+  }, [parseQs.v]);
+
   const init = async (offset?: number) => {
     try {
       setState(p => {
         p.loading = true;
       });
+
+      const fetch = isTribe ? getTribeUserHomeList : getProfileV2Msg;
       const [profile, tweet] = await Promise.all([
         Api.MeApi.getProfile(uid),
-        Api.MeApi.getProfileV2Msg({ page: offset || page, perpage, uid }),
+        // Api.MeApi.getProfileV2Msg({ page: offset || page, perpage, uid }),
+        fetch(offset),
       ]);
       if (Api.isSuccess(profile)) {
         setState(p => {
@@ -257,16 +294,28 @@ const Profile: React.FC<any> = props => {
         });
       }
       if (Api.isSuccess(tweet)) {
-        setState(p => {
-          p.list = offset
-            ? [...(tweet?.data?.list || [])]
-            : [...state.list, ...(tweet?.data?.list || [])];
-          p.page = (offset || page) + 1;
-          p.totalPage = tweet.data.total_page;
-        });
+        if (isTribe) {
+          setState(p => {
+            p.tribeList = offset
+              ? [...(tweet?.data?.list || [])]
+              : [...state.tribeList, ...(tweet?.data?.list || [])];
+            p.tribePage = (offset || tribePage) + 1;
+            p.tribeTotalPage = tweet.data.total_page;
+          });
+        } else {
+          setState(p => {
+            p.list = offset
+              ? [...(tweet?.data?.list || [])]
+              : [...state.list, ...(tweet?.data?.list || [])];
+            p.page = (offset || page) + 1;
+            p.totalPage = tweet.data.total_page;
+          });
+        }
         // const ids = checkTranslateIds(tweet?.data?.list || []);
         // dispatch(addTranslateIds(ids));
-        const { postIds, commentIds } = checkTranslateIds(tweet?.data?.list || []);
+        const { postIds, commentIds } = checkTranslateIds(
+          tweet?.data?.list || [],
+        );
 
         dispatch(addTranslateIds(postIds));
         dispatch(addCommentTranslateIds(commentIds));
@@ -284,55 +333,6 @@ const Profile: React.FC<any> = props => {
     }
   };
 
-  // 更新列表
-  const updateList = (newItem: any, type: MoreOperatorEnum) => {
-    const {
-      FOLLOW,
-      CANCEL_FOLLOW,
-      SETTOP,
-      CANCEL_SETTOP,
-      COMMONT,
-      EXPAND,
-      SHIELD,
-      DELPOST,
-      BLOCKUSER,
-    } = MoreOperatorEnum;
-    const handleChangeList = type === SHIELD || type === DELPOST;
-    let arr = [];
-
-    if (
-      type === FOLLOW ||
-      type === CANCEL_FOLLOW ||
-      type === SETTOP ||
-      type === CANCEL_SETTOP ||
-      // type === COMMONT ||
-      type === BLOCKUSER
-    ) {
-      setIsEnd(false);
-      init(1);
-      return;
-    }
-
-    // 折叠
-    if (type === EXPAND) return setNonce(prep => prep + 1);
-    state.list.forEach((item: any) => {
-      let obj = item;
-      if (item.id === newItem.id) {
-        obj = { ...newItem.post };
-      }
-      if (item.id === newItem.id && handleChangeList) {
-        // 屏蔽、删除
-      } else {
-        arr.push(obj);
-      }
-    });
-    setState(p => {
-      p.list = [...arr];
-    });
-    if (handleChangeList) {
-      setNonce(prep => prep + 1);
-    }
-  };
   const followUser = async (focus_uid: number) => {
     try {
       const res = await Api.MeApi.followUser(focus_uid);
@@ -360,7 +360,7 @@ const Profile: React.FC<any> = props => {
   };
   React.useEffect(() => {
     init(1);
-  }, [uid]);
+  }, [uid, isTribe]);
 
   // 添加事件监听，用于更新状态
   const updateProfile = useCallback(() => init(1), [uid, page, perpage]);
@@ -378,8 +378,13 @@ const Profile: React.FC<any> = props => {
       : defaultCountry?.LocaltionZh;
   }, [country, profile.location]);
 
-  const { postMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
-    useMapModule();
+  const {
+    postMap,
+    blockUsersIds,
+    tribePostMap,
+    deletePostIds,
+    unFollowUsersIds,
+  } = useMapModule();
 
   const renderList = useMemo(() => {
     const resPost = list.filter(item => {
@@ -387,6 +392,13 @@ const Profile: React.FC<any> = props => {
     });
     return resPost;
   }, [list, deletePostIds]);
+
+  const renderTribeList = useMemo(() => {
+    const resPost = tribeList.filter(item => {
+      return !deletePostIds.includes(item.id);
+    });
+    return resPost;
+  }, [tribeList, deletePostIds]);
 
   return (
     <Center>
@@ -514,83 +526,34 @@ const Profile: React.FC<any> = props => {
         </ProfileInfo>
       </ProfileCard>
       <Tabs />
-      <PostList
-        list={renderList}
-        map={postMap}
-        loading={loading}
-        isEnd={isEnd}
-        getList={() => {
-          init();
-        }}
-        updateList={() => {
-          console.debug('updateList');
-        }}
-      />
-      {/* <List
-        marginTop={13}
-        loading={loading}
-        renderList={() => {
-          if (loading || isEnd) return false;
-          init();
-        }}
-      >
-        {list.map((item, index) => (
-          <MeItemWrapper key={`${item.id}+${index}`}>
-            {
-              // 浏览自己的不扣费
-              currentUid?.uid !== item.user_id && (
-                <SpendTimeViewWithArticle
-                  nonce={nonce}
-                  setNonce={setNonce}
-                  readType={ReadType.ARTICLE}
-                  articleId={item.id}
-                />
-              )
-            }
-            <MentionItem
-              {...props}
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
-                  ...item,
-                  post_id: item.id,
-                },
-              }}
-              postUid={uid}
-              callback={(data, type) => {
-                // if (_type === MoreOperatorEnum.EXPAND) {
-                //   setNonce(prep => prep + 1);
-                //   return;
-                // }
-                // init(1);
-                updateList(data, type);
-              }}
-            />
-            <MentionOperator
-              replyType='twitter'
-              type='Article'
-              postId={item.id}
-              itemData={{
-                ...item,
-                post_id: item.id,
-                post: {
-                  ...item,
-                  post_id: item.id,
-                },
-              }}
-              callback={(data, type) => {
-                // if (_type === MoreOperatorEnum.EXPAND) {
-                //   setNonce(prep => prep + 1);
-                //   return;
-                // }
-                // init(1);
-                updateList(data, type);
-              }}
-            />
-          </MeItemWrapper>
-        ))}
-      </List> */}
+      {isTribe ? (
+        <TribePostList
+          list={renderTribeList}
+          map={tribePostMap}
+          loading={loading}
+          isEnd={isEnd}
+          getList={() => {
+            init();
+          }}
+          updateList={() => {
+            // console.debug('updateList');
+          }}
+        />
+      ) : (
+        <PostList
+          list={renderList}
+          map={postMap}
+          loading={loading}
+          isEnd={isEnd}
+          getList={() => {
+            init();
+          }}
+          updateList={() => {
+            console.debug('updateList');
+          }}
+        />
+      )}
+
       <CancelAttentionModal
         title={t('meUnsubscribeTips')}
         show={FollowState.cancelFollow}
