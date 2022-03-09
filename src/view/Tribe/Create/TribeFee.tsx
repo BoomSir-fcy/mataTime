@@ -90,7 +90,9 @@ const TribeFeeForward = (props, ref) => {
         p.timing =
           info?.timing ||
           (Number(info.validDate) === 0 ? Timing.FOREVER : Timing.JOIN_TRIBE);
-        p.validDate = getValidDateDay(info.validDate).toString();
+        p.validDate = info.validDate
+          ? getValidDateDay(info.validDate).toString()
+          : '';
         p.perTime = info.perTime;
         p.ownerPercent = info.ownerPercent;
         p.authorPercent = info.authorPercent;
@@ -159,6 +161,8 @@ const TribeFeeForward = (props, ref) => {
   const saveTempInfo = useCallback(
     (info?: any) => {
       const infos = { ...ref.current.getFeeFrom(), ...info };
+      // console.log(infos);
+
       if (props.handleTempInfo) props.handleTempInfo(infos);
     },
     [ref],
@@ -239,6 +243,17 @@ const TribeFeeForward = (props, ref) => {
                         }
                       }}
                       onBlur={() => saveTempInfo()}
+                      onInvalid={(e: React.InvalidEvent<HTMLInputElement>) => {
+                        const target = e.target;
+                        if (
+                          target.validity.valueMissing ||
+                          !target.value.trim()
+                        )
+                          target.setCustomValidity(
+                            t('Please enter the amount'),
+                          );
+                        else target.setCustomValidity('');
+                      }}
                     />
                     <Select
                       scale='xs'
@@ -268,10 +283,12 @@ const TribeFeeForward = (props, ref) => {
                   value={state.timing}
                   options={timingOptions}
                   onChange={val => {
+                    const date = val === 1 ? '0' : '';
                     setState(p => {
                       p.timing = val;
+                      p.validDate = date;
                     });
-                    saveTempInfo({ timing: val });
+                    saveTempInfo({ timing: val, validDate: date });
                   }}
                 />
               </FormItem>
@@ -291,9 +308,14 @@ const TribeFeeForward = (props, ref) => {
                       placeholder={t('Please enter the number of days')}
                       inputMode='decimal'
                       pattern={PATTERN_NUMBER}
-                      value={state.timing === 1 ? 0 : state.validDate}
+                      value={state.validDate}
                       onChange={e => {
                         const val = e.target.value;
+                        if (!val.trim())
+                          e.target.setCustomValidity(
+                            t('Please enter the number of days'),
+                          );
+                        else e.target.setCustomValidity('');
                         if (val === '' || e.currentTarget.validity.valid) {
                           setState(p => {
                             p.validDate = val;
@@ -301,6 +323,13 @@ const TribeFeeForward = (props, ref) => {
                         }
                       }}
                       onBlur={() => saveTempInfo()}
+                      onInvalidCapture={(
+                        e: React.InvalidEvent<HTMLInputElement>,
+                      ) => {
+                        e.target.setCustomValidity(
+                          t('Please enter the number of days'),
+                        );
+                      }}
                     />
                     <Text>{t('tribeDays')}</Text>
                   </Flex>
@@ -389,8 +418,11 @@ const TribeFeeForward = (props, ref) => {
                         inputMode='decimal'
                         pattern={PATTERN_ONE_ONEHUNDRED}
                         value={state.perTime}
-                        onChange={e => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           const val = e.target.value;
+                          if (!val.trim())
+                            e.target.setCustomValidity(t('Please enter this'));
+                          else e.target.setCustomValidity('');
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
                               p.perTime = val;
@@ -398,6 +430,11 @@ const TribeFeeForward = (props, ref) => {
                           }
                         }}
                         onBlur={() => saveTempInfo()}
+                        onInvalid={(
+                          e: React.InvalidEvent<HTMLInputElement>,
+                        ) => {
+                          e.target.setCustomValidity(t('Please enter this'));
+                        }}
                       />
                       <Text>TIME</Text>
                     </Flex>
@@ -463,6 +500,9 @@ const TribeFeeForward = (props, ref) => {
                         value={state.ownerPercent}
                         onChange={e => {
                           const val = e.target.value;
+                          if (!val.trim())
+                            e.target.setCustomValidity(t('Please enter this'));
+                          else e.target.setCustomValidity('');
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
                               p.ownerPercent = val;
@@ -470,6 +510,11 @@ const TribeFeeForward = (props, ref) => {
                           }
                         }}
                         onBlur={() => saveTempInfo()}
+                        onInvalid={(
+                          e: React.InvalidEvent<HTMLInputElement>,
+                        ) => {
+                          e.target.setCustomValidity(t('Please enter this'));
+                        }}
                       />
                       <Text>%</Text>
                     </Flex>
@@ -494,6 +539,9 @@ const TribeFeeForward = (props, ref) => {
                         value={state.authorPercent}
                         onChange={e => {
                           const val = e.target.value;
+                          if (!val.trim())
+                            e.target.setCustomValidity(t('Please enter this'));
+                          else e.target.setCustomValidity('');
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
                               p.authorPercent = val;
@@ -501,6 +549,11 @@ const TribeFeeForward = (props, ref) => {
                           }
                         }}
                         onBlur={() => saveTempInfo()}
+                        onInvalid={(
+                          e: React.InvalidEvent<HTMLInputElement>,
+                        ) => {
+                          e.target.setCustomValidity(t('Please enter this'));
+                        }}
                       />
                       <Text>%</Text>
                     </Flex>
@@ -525,6 +578,9 @@ const TribeFeeForward = (props, ref) => {
                         value={state.memberPercent}
                         onChange={e => {
                           const val = e.target.value;
+                          if (!val.trim())
+                            e.target.setCustomValidity(t('Please enter this'));
+                          else e.target.setCustomValidity('');
                           if (val === '' || e.currentTarget.validity.valid) {
                             setState(p => {
                               p.memberPercent = val;
@@ -532,6 +588,11 @@ const TribeFeeForward = (props, ref) => {
                           }
                         }}
                         onBlur={() => saveTempInfo()}
+                        onInvalid={(
+                          e: React.InvalidEvent<HTMLInputElement>,
+                        ) => {
+                          e.target.setCustomValidity(t('Please enter this'));
+                        }}
                       />
                       <Text>%</Text>
                     </Flex>
