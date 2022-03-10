@@ -69,7 +69,6 @@ export const UploadSingle: React.FC<UploadProps> = ({
         // 限制图片大小
         if (imageFile[i].size > imgMaxSize)
           return toast.error(t('commonUploadMaxSize'));
-        // console.log(imageFile[i]);
         if (
           !['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(
             imageFile[i].type,
@@ -133,7 +132,7 @@ export const UploadSingle: React.FC<UploadProps> = ({
         disabled={disabled}
         onChange={() => uploadFile()}
         type='file'
-        accept='image/*'
+        accept='.jpeg, .jpg, .png, .gif'
       />
 
       {tips ? tips : null}

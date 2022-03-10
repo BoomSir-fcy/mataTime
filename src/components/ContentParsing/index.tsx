@@ -38,6 +38,7 @@ type IProps = {
   rows?: number; // 显示
   disableParseSquare?: boolean; // 评论不生成话题
   mode?: 'preview' | 'detail';
+  imgList?: string[];
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -91,6 +92,7 @@ export const ContentParsing = React.memo(
       paragraphMt = '0',
       mode = 'detail',
       rows,
+      imgList,
     } = props;
 
     useEffect(() => {
@@ -231,7 +233,12 @@ export const ContentParsing = React.memo(
         case 'image':
           return (
             <Box mt={paragraphMt}>
-              <ImageStyledRender full={!node.full} src={node.url} />
+              <ImageStyledRender
+                list={imgList}
+                index={imgList?.indexOf(node.url)}
+                full={node.full}
+                src={node.url}
+              />
             </Box>
           );
         case 'numbered-list':
@@ -314,7 +321,15 @@ export const ContentParsing = React.memo(
             ellipsis
             maxLine={2}
           >
-            {preValue}
+            {preValue ||
+              (parsingResult &&
+                parsingResult.length > 0 &&
+                parsingResult.map((item: any, index) => {
+                  if (!expand) {
+                    return index < 2 && serialize2(item, null, index);
+                  }
+                  return serialize2(item, null, index);
+                }))}
           </ContentTextStyled>
         ) : (
           <>

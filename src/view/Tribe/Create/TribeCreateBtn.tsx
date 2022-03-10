@@ -11,13 +11,14 @@ import { useImmer } from 'use-immer';
 import { useApproveTribeTicketsNFT } from './hooks';
 import { useToast } from 'hooks';
 
-const StyledButton = styled(Button)`
-  width: 250px;
+const StyledButton = styled(Button)<{ width?: string }>`
+  width: ${({ width }) => width || '250px'};
 `;
 
 export const TribeCreateBtn: React.FC<{
   hasNft?: boolean;
-}> = React.memo(({ hasNft }) => {
+  [key: string]: any;
+}> = React.memo(({ hasNft, ...props }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { toastError } = useToast();
@@ -45,6 +46,7 @@ export const TribeCreateBtn: React.FC<{
   if (!account) {
     return (
       <StyledButton
+        {...props}
         margin='10px 0'
         onClick={e => {
           e.stopPropagation();
@@ -58,7 +60,7 @@ export const TribeCreateBtn: React.FC<{
   }
   if (!hasNft) {
     return (
-      <Button width='250px' as={Link} to='/account/tribe-ticket'>
+      <Button {...props} width='250px' as={Link} to='/account/tribe-ticket'>
         {t('Get Tribe Tickets')}
       </Button>
     );
@@ -67,9 +69,12 @@ export const TribeCreateBtn: React.FC<{
   return (
     <>
       {state.isApprove ? (
-        <StyledButton type='submit'>{t('Pay and Create')}</StyledButton>
+        <StyledButton {...props} type='submit'>
+          {t('Pay and Create')}
+        </StyledButton>
       ) : (
         <StyledButton
+          {...props}
           disabled={state.pending}
           onClick={async e => {
             e.stopPropagation();

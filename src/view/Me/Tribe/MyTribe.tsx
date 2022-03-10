@@ -6,6 +6,7 @@ import { Box, Divider, Text, Flex, Heading, Empty, Spinner, Link } from 'uikit';
 import styled from 'styled-components';
 import TradeLogo from 'view/Tribe/components/TradeCard/TradeLogo';
 import {
+  MyTribeHeaderFlex,
   HeadText,
   ItemText,
   LoadingAnimation,
@@ -13,6 +14,7 @@ import {
   StyledButton,
   Table,
   TableBox,
+  MyTribeActionFlex,
 } from './styled';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
@@ -46,7 +48,7 @@ const TabText = styled(Text).attrs({ small: true })`
   &.active {
     font-size: 18px;
     font-weight: bold;
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.white_black};
   }
 `;
 const CenterFlex = styled(Flex)`
@@ -190,15 +192,11 @@ const MyMasterNftTribe = React.memo(() => {
                   flexDirection='column'
                   justifyContent='space-between'
                 >
-                  <Flex
-                    mt='8px'
-                    justifyContent='space-between'
-                    alignItems='center'
-                  >
+                  <MyTribeHeaderFlex>
                     <Heading
                       ellipsis
                       scale='md'
-                      style={{ maxWidth: '260px', cursor: 'pointer' }}
+                      style={{ maxWidth: '190px', cursor: 'pointer' }}
                       onClick={() => {
                         history.push(`/tribe/detail?id=${item.id}`);
                       }}
@@ -213,7 +211,7 @@ const MyMasterNftTribe = React.memo(() => {
                         )}
                       </Text>
                     </Flex>
-                  </Flex>
+                  </MyTribeHeaderFlex>
                   <NumberFlex justifyContent='space-between'>
                     <NumberItemFlex>
                       <Text bold>{item?.tribe_info?.member_count}</Text>
@@ -235,7 +233,7 @@ const MyMasterNftTribe = React.memo(() => {
                     </NumberItemFlex>
                   </NumberFlex>
                 </CenterFlex>
-                <Flex flexDirection='column' justifyContent='space-between'>
+                <MyTribeActionFlex>
                   {/* 1 未领取 2已领取 3 取消质押 4 已质押 5已过期 */}
                   {!account && (
                     <StyledButton
@@ -253,7 +251,8 @@ const MyMasterNftTribe = React.memo(() => {
                       tribeId={item.id}
                       nftType={1}
                       callback={() => {
-                        getMyTribeList();
+                        // 领取nft成功后，不能从服务器拿到实时数据，有延迟，暂时屏蔽掉刷新方法
+                        // getMyTribeList();
                       }}
                     />
                   )}
@@ -316,17 +315,17 @@ const MyMasterNftTribe = React.memo(() => {
                             <Text
                               ml='5px'
                               small
-                              color='textTips'
+                              color='white'
                               style={{ whiteSpace: 'nowrap' }}
                             >
-                              {t('请设置成员NFT')}
+                              {t('Please set member NFT')}
                             </Text>
                           </Flex>
                         )}
                       </ManageButton>
                     </>
                   )}
-                </Flex>
+                </MyTribeActionFlex>
               </InfoFlex>
             </InfoBox>
             <Divider />

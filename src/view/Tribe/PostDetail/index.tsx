@@ -1,4 +1,9 @@
-import { ContentParsing, Crumbs, MoreOperatorEnum } from 'components';
+import {
+  ContentParsing,
+  Crumbs,
+  MoreOperatorEnum,
+  ShiledUserModal,
+} from 'components';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -115,6 +120,9 @@ const PostDetail = () => {
 
   const translateData = usePostTranslateMap(data?.id);
 
+  const [PostItemData, setPostItemData] = useState();
+  const [isShileUser, setIsShileUser] = React.useState(false);
+
   return (
     <Box>
       <Crumbs back />
@@ -171,6 +179,10 @@ const PostDetail = () => {
             callback={handleUpdateList}
             showTranslateIcon={false}
             showTranslate={translateData?.showTranslate}
+            setIsShileUser={(type, data) => {
+              setPostItemData(data);
+              setIsShileUser(type);
+            }}
           />
         </Flex>
       </ContentBox>
@@ -185,6 +197,16 @@ const PostDetail = () => {
           tribeId={data?.tribe_id}
         />
       </Box>
+      <ShiledUserModal
+        userinfo={PostItemData}
+        visible={isShileUser}
+        callback={(data, type?: MoreOperatorEnum) =>
+          handleUpdateList(data, type)
+        }
+        onClose={() => {
+          setIsShileUser(!isShileUser);
+        }}
+      />
     </Box>
   );
 };

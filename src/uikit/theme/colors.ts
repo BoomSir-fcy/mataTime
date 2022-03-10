@@ -24,7 +24,6 @@ export const additionalColors = {
   orange: '#FF780B',
   upPrice: '#287452',
   downPrice: '#ec612b',
-  tipsBg: '#484848',
 };
 
 export const nftTokenColors = {
@@ -97,6 +96,7 @@ export const lightColors: Colors = {
   commentBorder: '#ccc',
   hoverList: '#F5F5F5',
   codebg: '#f8f8f8',
+  tipsBg: '#484848',
 };
 
 export const darkColors: Colors = {
@@ -166,4 +166,5 @@ export const darkColors: Colors = {
   commentBorder: '#ccc',
   hoverList: '#1f1f1f',
   codebg: '#585858',
+  tipsBg: '#484848',
 };
