@@ -27,7 +27,7 @@ const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
 `;
 const TableBox = styled(Box)`
-  width: 100%;
+  max-width: 100vw;
   overflow: auto;
 `;
 const Table = styled(Flex)`
@@ -74,10 +74,13 @@ const TextBtn = styled(Button)`
 `;
 
 const InputStyled = styled.label`
-  max-width: 300px;
+  max-width: 200px;
   padding: 8px 20px;
   background-color: ${({ theme }) => theme.colors.backgroundTextArea};
   border-radius: 20px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 300px;
+  }
 `;
 interface Info {
   add_time: number;
