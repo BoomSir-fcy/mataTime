@@ -1,24 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation, Link, useRouteMatch } from 'react-router-dom';
 import { Box, Text, Button, Flex, Card, Image, Spinner, Empty } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts';
-import { Crumbs } from 'components';
+import { Crumbs, List, LoadType } from 'components';
 import Tabs from 'components/Tabs';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import TradeCard from '../components/TradeCard';
 import FlexAutoWarpper from 'components/Layout/FlexAutoWarpper';
 import { storeAction, useStore } from 'store';
-import { useTribeList } from 'store/tribe/hooks';
+// import { useTribeList } from 'store/tribe/hooks';
 import { useDispatch } from 'react-redux';
-import { fetchTribeListAsync } from 'store/tribe';
 import useBlockNumber from 'libs/mini-swap/state/application/hooks';
-
-// lable?: string
-// tLable?: string
-// value?: string | number
-// width?: string
-// [key: string]: any
+import { Api } from 'apis';
 
 const PaddingFlex = styled(Flex)`
   padding: 16px 10px;
@@ -54,13 +48,39 @@ const Home = () => {
       value: 3,
     },
   ];
+  const [TribeList, setTribeList] = useState([]);
   const [page, setPage] = useState(1);
   const [page_size, setPage_size] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [IsEnd, setIsEnd] = useState(false);
   const [avtiveTab, setAvtiveTab] = useState(
     Number(qsValue[TAB_QUERY_KEY]) || tabDatas[0].value,
   );
-  useTribeList(page, page_size, avtiveTab);
-  const TribeList = useStore(p => p.tribe.tribeList);
+
+  const getTribeList = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await Api.TribeApi.tribeList({
+        page: page,
+        page_size: page_size,
+        tab: avtiveTab,
+      });
+      if (Api.isSuccess(res)) {
+        const list = page === 1 ? res.data : TribeList.concat(res.data);
+        setIsEnd(res.data.length < page_size);
+        setPage(page + 1);
+        setTribeList(list);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setTribeList([]);
+    }
+  }, [page, page_size, avtiveTab, TribeList]);
+
+  useEffect(() => {
+    getTribeList();
+  }, [avtiveTab]);
 
   return (
     <Box>
@@ -71,9 +91,11 @@ const Home = () => {
         active={avtiveTab}
         datas={tabDatas}
         onChange={tab => {
+          setTribeList([]);
+          setIsEnd(false);
+          setPage(1);
           setAvtiveTab(Number(tab.value));
           replace(`${pathname}?${TAB_QUERY_KEY}=${tab.value}`);
-          dispatch(fetchTribeListAsync({ page, page_size, tab: tab.value }));
         }}
       >
         <Flex flex='1' justifyContent='flex-end'>
@@ -83,23 +105,33 @@ const Home = () => {
         </Flex>
       </Tabs>
       <PaddingFlex justifyContent='space-around' flexWrap='wrap'>
-        <FlexAutoWarpper lineMax={2}>
-          {TribeList?.length ? (
-            <>
-              {TribeList.map((item, index) => (
-                <LinkBox
-                  key={item.id}
-                  as={Link}
-                  to={`${path}/detail?id=${item.id}`}
-                >
-                  {item.id && <TradeCard info={item} />}
-                </LinkBox>
-              ))}
-            </>
-          ) : (
-            <Empty />
-          )}
-        </FlexAutoWarpper>
+        {/* <FlexAutoWarpper lineMax={2}> */}
+        <List
+          loading={loading}
+          renderList={type => {
+            if (
+              (type === LoadType.INIT && TribeList?.length !== 0) ||
+              loading ||
+              IsEnd
+            ) {
+              return;
+            }
+            getTribeList();
+          }}
+        >
+          <Flex flexWrap='wrap' justifyContent='space-around'>
+            {TribeList.map((item, index) => (
+              <LinkBox
+                key={item.id}
+                as={Link}
+                to={`${path}/detail?id=${item.id}`}
+              >
+                {item.id && <TradeCard info={item} />}
+              </LinkBox>
+            ))}
+          </Flex>
+        </List>
+        {/* </FlexAutoWarpper> */}
       </PaddingFlex>
     </Box>
   );

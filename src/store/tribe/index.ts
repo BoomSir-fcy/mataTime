@@ -160,13 +160,13 @@ export const fetchTicketNftListAsync = createAsyncThunk<
   return list;
 });
 
-export const fetchTribeListAsync = createAsyncThunk<any, any>(
-  'tribe/fetchTribeListAsync',
-  async ({ page = 1, page_size = 10, tab = 1 }) => {
-    const list = await Api.TribeApi.tribeList({ page, page_size, tab });
-    return list.data;
-  },
-);
+// export const fetchTribeListAsync = createAsyncThunk<any, any>(
+//   'tribe/fetchTribeListAsync',
+//   async ({ page = 1, page_size = 10, tab = 1 }) => {
+//     const list = await Api.TribeApi.tribeList({ page, page_size, tab });
+//     return list.data;
+//   },
+// );
 
 export const fetchTribeInfoAsync = createAsyncThunk<any, any>(
   'tribe/fetchTribeInfoAsync',
@@ -315,9 +315,9 @@ export const tribe = createSlice({
         state.ticketNftList = payload;
         state.loading = false;
       })
-      .addCase(fetchTribeListAsync.fulfilled, (state, action) => {
-        state.tribeList = action.payload;
-      })
+      // .addCase(fetchTribeListAsync.fulfilled, (state, action) => {
+      //   state.tribeList = action.payload;
+      // })
       .addCase(fetchTribeInfoAsync.fulfilled, (state, action) => {
         state.tribeInfo = action.payload;
       })
