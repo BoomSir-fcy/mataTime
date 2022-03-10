@@ -67,7 +67,7 @@ const TribeTags: React.FC<{
 
   return (
     <>
-      {tribeInfo?.topics.length > 0 && (
+      {tribeInfo?.topics?.length > 0 && (
         <Card padding='16px' isRadius {...props}>
           <Text mb='20px' fontSize='18px' fontWeight='bold'>
             {t('TribeTagsTitle')}

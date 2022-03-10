@@ -6,8 +6,9 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex, Heading, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore, storeAction } from 'store';
-import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 import { TribeInfo, TribeType } from 'store/tribe/type';
+import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
+
 import TradeLogo from '../components/TradeCard/TradeLogo';
 import BtnIcon from '../components/BtnIcon';
 import TopicsIcon from '../components/TopicsIcon';
@@ -16,9 +17,13 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { getEncodeValue } from 'utils/urlQueryPath';
 
+import { StakeButton } from 'view/Me/Tribe/components/actionNft';
+
 const InfoFlex = styled(Flex)`
-  padding: 26px 14px 26px 26px;
-  flex-wrap: wrap;
+  width: 100%;
+  ${({ theme }) => theme.mediaQueriesSize.marginb}
+  ${({ theme }) => theme.mediaQueries.md} {
+  }
 `;
 
 const RightFlex = styled(Flex)`
@@ -30,8 +35,11 @@ const RightFlex = styled(Flex)`
 `;
 
 const NumberFlex = styled(Flex)`
+  width: 100%;
+  margin-top: 10px;
   ${({ theme }) => theme.mediaQueries.md} {
     width: 70%;
+    margin-top: 28px;
   }
 `;
 
@@ -143,7 +151,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
           >
             <Box>
               <Heading scale='lg'>{TribeInfo?.tribe?.name}</Heading>
-              <NumberFlex mt='28px' justifyContent='space-between'>
+              <NumberFlex justifyContent='space-between'>
                 {ShowNumInfo.map(item => (
                   <TribeNumInfo item={item} />
                 ))}
@@ -176,7 +184,7 @@ const TribeOwner = ({ TribeInfo }) => {
     <>
       <Flex alignItems='center'>
         <UserImg src={TribeInfo?.tribe?.nft_image} alt='' />
-        <Text ml='10px' bold>
+        <Text ml='10px' bold ellipsis>
           {TribeInfo?.tribe?.nick_name}
         </Text>
       </Flex>
@@ -204,13 +212,27 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
       ) : (
         <>
           {userInfo.address !== TribeInfo?.tribe?.owner_address &&
-            TribeInfo?.status === 0 && (
+            (TribeInfo?.status === 0 || TribeInfo?.status === 6) && (
               <BtnIcon
                 disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
                 name='icon-wodebula'
                 text={t('tribeJoin')}
                 onClick={() => {
                   dispatch(storeAction.setJoinTribeVisibleModal(true));
+                }}
+              />
+            )}
+
+          {(TribeInfo?.status === 2 || TribeInfo?.status === 3) &&
+            TribeInfo?.detail?.nft_id !== 0 && (
+              <StakeButton
+                tribeId={TribeInfo?.tribe_id}
+                nftId={TribeInfo?.detail?.nft_id}
+                nftType={
+                  userInfo.address === TribeInfo?.tribe?.owner_address ? 1 : 2
+                }
+                callback={() => {
+                  dispatch(fetchTribeInfoAsync(TribeInfo?.tribe_id));
                 }}
               />
             )}

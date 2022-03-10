@@ -5,7 +5,7 @@ import { TribeState } from './type';
 import {
   fetchFeeTokenListAsync,
   fetchTribeInfoAsync,
-  fetchTribeListAsync,
+  // fetchTribeListAsync,
   fetchTicketNftListAsync,
   fetchIsApproveStakeNft,
 } from '.';
@@ -26,16 +26,16 @@ export const useFeeTokenList = () => {
   }, [account]);
 };
 
-export const useTribeList = (page: number, page_size: number, tab: number) => {
-  const dispatch = useDispatch();
-  const { account } = useWeb3React();
+// export const useTribeList = (page: number, page_size: number, tab: number) => {
+//   const dispatch = useDispatch();
+//   const { account } = useWeb3React();
 
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchTribeListAsync({ page, page_size, tab }));
-    }
-  }, [account]);
-};
+//   useEffect(() => {
+//     if (account) {
+//       dispatch(fetchTribeListAsync({ page, page_size, tab }));
+//     }
+//   }, [account]);
+// };
 
 export const useTribeInfo = (tribe_id: number) => {
   const dispatch = useDispatch();
@@ -56,15 +56,15 @@ export const useTicketNftList = () => {
     if (account) {
       dispatch(fetchTicketNftListAsync({ account }));
     }
-  }, [account, dispatch])
+  }, [account, dispatch]);
 
   useEffect(() => {
-    handleFetch()
+    handleFetch();
   }, [handleFetch]);
-  
+
   return {
-    handleFetch
-  }
+    handleFetch,
+  };
 };
 
 // 授权质押

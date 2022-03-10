@@ -69,6 +69,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     });
 
     useEffect(() => {
+      console.log(data);
+
       init();
     }, [data]);
 
@@ -285,7 +287,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
             onClick={() => {
               copyContent(
                 `${window.location.origin}/tribe/postdetail?i=${
-                  data.post.post_id || ''
+                  data.post.id || ''
                 }`,
               );
               toastSuccess(t('copySuccess'));
@@ -302,8 +304,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
                 textTransform='capitalize'
                 onClick={() => {
                   data.post.is_fav === 1
-                    ? onFavCancelRequest(data.post.post_id, data.tribe_id)
-                    : onFavAgreeRequest(data.post.post_id, data.tribe_id);
+                    ? onFavCancelRequest(data.post.id, data.tribe_id)
+                    : onFavAgreeRequest(data.post.id, data.tribe_id);
                   callback(data);
                 }}
               >
@@ -362,7 +364,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
         {/* 举报 */}
         <ReportModal
           show={reportShow}
-          pid={data.post.post_id}
+          pid={data.post.id}
           onClose={() => {
             setReportShow(false);
           }}
@@ -381,7 +383,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
           }}
           onQuery={() => {
             if (inqueryType === 'shield') {
-              onShieldRequest(data.post.post_id);
+              onShieldRequest(data.post.id);
             }
             // if (inqueryType === 'topping') {
             //   onTopPostRequest(data.post.post_id);
@@ -390,7 +392,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
             //   onCancelTopPostRequest(data.post.post_id);
             // }
             if (inqueryType === 'delete') {
-              onPostDelRequest(data.post.post_id);
+              onPostDelRequest(data.post.id);
             }
             setCommonInqueryShow(false);
           }}

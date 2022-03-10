@@ -6,7 +6,8 @@ import { TribeList } from 'store/tribe/type';
 import { TribeProfileMenu } from '../ProfileMenu';
 
 const CardStyle = styled(Card)`
-  max-width: max-content;
+  max-width: 312px;
+  min-width: 184px;
 `;
 
 const PaddingBox = styled(Box)`

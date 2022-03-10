@@ -66,7 +66,7 @@ const TribeInfoForward = (props, ref) => {
         <Flex flexDirection='column'>
           <InputPanelStyle>
             <Input
-              className='required-input'
+              name='required-input-name'
               disabled={actionType === actionTypes.EDIT}
               noShadow
               required
@@ -135,7 +135,6 @@ const TribeInfoForward = (props, ref) => {
           showCount
           required
           rows={5}
-          className='required-input'
           disabled={props.disabled}
           value={state.introduction}
           placeholder={t('Please fill in the brief introduction of the tribe')}

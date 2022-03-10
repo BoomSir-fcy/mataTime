@@ -65,6 +65,7 @@ const TribeNft: React.FC<{
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { tribe, detail, member_nft } = tribeInfo || {};
+  const nowDateUnix = dayjs().unix();
   const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   return (
@@ -115,7 +116,7 @@ const TribeNft: React.FC<{
             </Flex>
           ) : (
             <>
-              {tribeInfo?.status === 0 && (
+              {(tribeInfo?.status === 0 || tribeInfo?.status === 6) && (
                 <Flex mb='12px' justifyContent='center'>
                   <BtnIcon
                     name='icon-wodebula'
@@ -166,16 +167,22 @@ const TribeNft: React.FC<{
                 </Flex>
               )}
               {/* 取消质押 */}
-              {tribeInfo?.status === 4 && (
+              {(tribeInfo?.status === 4 || tribeInfo?.status === 5) && (
                 <Flex mb='12px' justifyContent='space-between'>
                   <Flex flexDirection='column' mr='15px'>
                     <Text>{t('ValidityDays')}:</Text>
                     <Text color='textTips'>
-                      {detail?.expire_time > 0
-                        ? `${dayjs().format('YY-MM-DD')}~${dayjs(
-                            detail?.expire_time * 1000,
-                          ).format('YY-MM-DD')}`
-                        : t('ValidityDaysForver')}
+                      {detail?.expire_time > 0 &&
+                        nowDateUnix >= detail?.expire_time &&
+                        t('TribeValidityDaysExpired')}
+
+                      {detail?.expire_time > 0 &&
+                        nowDateUnix < detail?.expire_time &&
+                        `${dayjs().format('YY-MM-DD')}~${dayjs(
+                          detail?.expire_time * 1000,
+                        ).format('YY-MM-DD')}`}
+
+                      {detail?.expire_time === 0 && t('ValidityDaysForver')}
                     </Text>
                   </Flex>
                   <UnStakeButton
