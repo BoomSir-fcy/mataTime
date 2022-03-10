@@ -843,6 +843,7 @@
   "TribeJoinModalInviteText": "Invite wallet address (optional)",
   "TribeJoinModalInviteValue": "Insert wallet address",
   "TribeJoinModalConfirm": "Confirm",
+  "TribeValidityDaysExpired": "Expired",
   "pageTotalpage": "Total %page% pages",
   "contractCode-4001": "The operation has been cancelled",
   "contractCode-400001": "Invalid invitation address",

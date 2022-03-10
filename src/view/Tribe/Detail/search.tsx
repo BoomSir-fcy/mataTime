@@ -112,7 +112,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   }, [value]);
 
   return (
-    <Box padding='0 16px 22px'>
+    <Box>
       <form
         name='searchForm'
         id='searchForm'

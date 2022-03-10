@@ -846,6 +846,7 @@
   "TribeJoinModalInviteText": "邀请钱包地址（选填）",
   "TribeJoinModalInviteValue": "填写钱包地址",
   "TribeJoinModalConfirm": "確認",
+  "TribeValidityDaysExpired": "已經過期",
   "pageTotalpage": "總共 %page% 頁",
   "contractCode-4001": "已經取消操作",
   "contractCode-400001": "無效邀請地址",

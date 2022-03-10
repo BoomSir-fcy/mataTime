@@ -9,7 +9,6 @@ interface BtnIconProps extends ButtonProps {
 const BtnIcon: React.FC<BtnIconProps> = ({ name, text, ...props }) => {
   return (
     <Button
-      minWidth='150px'
       startIcon={
         <Icon margin='0 18px 0 0' size={21} color='white' name={name} />
       }
