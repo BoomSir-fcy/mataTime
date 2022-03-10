@@ -1,6 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import html2canvas from 'html2canvas';
-import jsPdf from 'jspdf';
 import PrintGlobal from 'style/PrintGlobal';
 import { Box, Text, Button, BoxProps } from 'uikit';
 import { Icon } from 'components';
