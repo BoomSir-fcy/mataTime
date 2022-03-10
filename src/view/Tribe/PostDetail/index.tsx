@@ -39,6 +39,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import ContentParsingOfTranslate from '../Detail/ContentParsingOfTranslate';
 import PostHandleBtns from '../Detail/PostHandleBtns';
 import { FetchStatus } from 'config/types';
+import PrintBtn from '../Detail/PrintBtn';
 
 const ContentBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
