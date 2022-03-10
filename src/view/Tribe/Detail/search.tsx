@@ -71,8 +71,6 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const debouncedOnChange = useMemo(
     () =>
       debounce(e => {
-        console.log(tribeDetailInfo?.status, '-----------------------');
-
         if (tribeDetailInfo?.status === 4) {
           replace(
             `${pathname}?id=${TribeId}&active=${

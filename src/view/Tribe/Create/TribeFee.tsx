@@ -210,7 +210,7 @@ const TribeFeeForward = (props, ref) => {
           />
           {tribeType === 2 && (
             <TribeCard isRadius>
-              <FormItem className='mobile-nowrap' alignItems='center'>
+              <FormItem className='mobile-wrap'>
                 <LabelHelper
                   colon
                   label={t('Charge settings')}
@@ -223,7 +223,7 @@ const TribeFeeForward = (props, ref) => {
                   }
                 />
                 <InputPanelStyle>
-                  <Flex justifyContent='space-between' alignItems='center'>
+                  <Flex justifyContent='space-between'>
                     <Input
                       disabled={actionType === actionTypes.EDIT && disabled}
                       noShadow
@@ -268,7 +268,7 @@ const TribeFeeForward = (props, ref) => {
                   </Flex>
                 </InputPanelStyle>
               </FormItem>
-              <FormItem className='mobile-nowrap' alignItems='center'>
+              <FormItem className='mobile-wrap'>
                 <LabelHelper
                   colon
                   label={t('Timing method')}
@@ -292,7 +292,7 @@ const TribeFeeForward = (props, ref) => {
                   }}
                 />
               </FormItem>
-              <FormItem className='mobile-nowrap' alignItems='center'>
+              <FormItem className='mobile-wrap' alignItems='center'>
                 <Label>{t('Effective time')}：</Label>
                 <InputPanelStyle>
                   <Flex justifyContent='space-between' alignItems='center'>
