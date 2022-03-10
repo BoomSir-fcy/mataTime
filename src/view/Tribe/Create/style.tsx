@@ -10,13 +10,15 @@ export const FormItem = styled(Flex)`
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
   }
-  /* ${({ theme }) => theme.mediaQueriesSize.margint} */
   margin-top: 20px;
   &:last-child {
     margin-bottom: 20px;
   }
-  &.mobile-nowrap {
-    flex-direction: row;
+  &.mobile-wrap {
+    align-items: flex-start;
+    ${({ theme }) => theme.mediaQueries.md} {
+      align-items: center;
+    }
   }
   .select-header {
     height: 44px;
@@ -31,7 +33,7 @@ export const FormItem = styled(Flex)`
   }
   textarea {
     background: ${({ theme }) => theme.colors.backgroundTextArea};
-    width: 80%;
+    width: 100%;
     height: 210px;
     color: ${({ theme }) => theme.colors.textTips};
     padding: 15px;
@@ -39,6 +41,9 @@ export const FormItem = styled(Flex)`
     border: none;
     outline: none;
     resize: none;
+    ${({ theme }) => theme.mediaQueries.md} {
+      width: 80%;
+    }
   }
 `;
 export const FormColumnItem = styled(Flex)`
@@ -49,21 +54,25 @@ export const FormColumnItem = styled(Flex)`
   }
 `;
 export const LabelFlex = styled(Flex)`
-  min-width: 110px;
+  /* min-width: 110px; */
+  /* max-width: 290px; */
+  max-width: 100%;
   margin-bottom: 10px;
   ${({ theme }) => theme.mediaQueries.md} {
-    margin-bottom: 0px;
+    /* margin-bottom: 0px; */
+    max-width: 100%;
   }
   label {
-    width: max-content;
+    width: auto;
   }
 `;
 export const Label = styled.label<{ required?: boolean }>`
-  width: 100px;
+  width: auto;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.text};
   ${({ theme }) => theme.mediaQueries.md} {
     margin-bottom: 0px;
+    width: 120px;
   }
   ${({ required }) =>
     required &&
@@ -78,7 +87,7 @@ export const Label = styled.label<{ required?: boolean }>`
 
 export const InputPanelStyle = styled(InputPanel)<{ width?: string }>`
   width: 100%;
-  max-width: ${({ width }) => width || '400px'};
+  max-width: ${({ width }) => width || '320px'};
   border-radius: 10px;
   padding: 4px 20px;
   input:disabled {

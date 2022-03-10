@@ -20,6 +20,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 import { fetchIsApproveStakeNft } from 'store/tribe';
+import default_avatar from 'assets/images/default_avatar.jpg';
 
 const NFTBox = styled(Box)`
   position: relative;
@@ -72,7 +73,7 @@ export const CommonClaimNFT: React.FC<{
       if (type === nftType.MASTER) {
         return {
           name: tribesNftInfo.owner_nft_name,
-          image: `${BASE_IMAGE_URL}${tribesNftInfo.owner_nft_image}`,
+          image: tribesNftInfo.owner_nft_image,
           introduction: tribesNftInfo.owner_nft_introduction,
           create_time: tribesNftInfo.create_time,
           nick_name: tribesNftInfo.nick_name,
@@ -81,7 +82,7 @@ export const CommonClaimNFT: React.FC<{
       if (type === nftType.MEMBER) {
         return {
           name: tribesNftInfo.member_nft_name,
-          image: `${BASE_IMAGE_URL}${tribesNftInfo.member_nft_image}`,
+          image: tribesNftInfo.member_nft_image,
           introduction: tribesNftInfo.member_nft_introduction,
           create_time: tribesNftInfo.create_time,
           nick_name: tribesNftInfo.nick_name,
@@ -92,7 +93,15 @@ export const CommonClaimNFT: React.FC<{
       <>
         <Flex flexWrap='wrap' alignItems='center'>
           <NFTBox mr='80px' mb='20px'>
-            <StyledImg className='nft-img' src={nftInfo.image} alt='' />
+            <StyledImg
+              className='nft-img'
+              src={
+                nftInfo.image
+                  ? `${BASE_IMAGE_URL}${nftInfo.image}`
+                  : default_avatar
+              }
+              alt=''
+            />
           </NFTBox>
           <Flex maxWidth='60%' flex='auto' flexDirection='column'>
             <Text fontSize='18px' bold>
