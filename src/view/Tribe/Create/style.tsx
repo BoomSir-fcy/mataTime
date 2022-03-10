@@ -7,10 +7,11 @@ export const FormFlex = styled(Flex)`
 `;
 export const FormItem = styled(Flex)`
   flex-direction: column;
+  margin-top: 10px;
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
+    margin-top: 20px;
   }
-  margin-top: 20px;
   &:last-child {
     margin-bottom: 20px;
   }
@@ -102,4 +103,9 @@ export const LogoIcon = styled(Flex)`
   justify-content: center;
   border: 1px solid ${({ theme }) => theme.colors.white_black};
   border-radius: 50%;
+`;
+export const BtnFlex = styled(Flex)`
+  justify-content: space-between;
+  margin-bottom: 20px;
+  ${({ theme }) => theme.mediaQueriesSize.paddingxs}
 `;

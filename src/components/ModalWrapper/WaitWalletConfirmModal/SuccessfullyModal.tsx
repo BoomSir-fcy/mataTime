@@ -3,6 +3,7 @@ import { useTranslation } from 'contexts';
 import { Box, Flex, Text } from 'uikit';
 import { ModalWrapper } from '..';
 import { StyledVideo } from './styled';
+import darkTheme from 'uikit/theme/dark';
 
 interface WaitConfirmProps {
   visible: boolean;
@@ -23,8 +24,14 @@ export const SuccessfullyModal: React.FC<WaitConfirmProps> = ({
       customizeTitle
       shouldCloseOnOverlayClick={false}
       visible={visible}
+      theme={darkTheme}
     >
-      <Flex flexDirection='column' justifyContent='center' alignItems='center'>
+      <Flex
+        theme={darkTheme}
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+      >
         <Box width={width} height={height}>
           <StyledVideo
             autoPlay
@@ -34,7 +41,9 @@ export const SuccessfullyModal: React.FC<WaitConfirmProps> = ({
             src={require('assets/images/success.mp4').default}
           />
         </Box>
-        <Text mt='30px'>{text}</Text>
+        <Text theme={darkTheme} mt='30px'>
+          {text}
+        </Text>
       </Flex>
     </ModalWrapper>
   );

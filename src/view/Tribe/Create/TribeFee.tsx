@@ -210,6 +210,7 @@ const TribeFeeForward = (props, ref) => {
           />
           {tribeType === 2 && (
             <TribeCard isRadius>
+              {/* 收费设置 */}
               <FormItem className='mobile-wrap'>
                 <LabelHelper
                   colon
@@ -229,13 +230,17 @@ const TribeFeeForward = (props, ref) => {
                       noShadow
                       required
                       scale='sm'
-                      className='required-input'
                       placeholder={t('Please enter the amount')}
                       inputMode='decimal'
                       pattern={PATTERN_AMOUNT}
                       value={state.feeAmount}
-                      onChange={e => {
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const val = e.target.value;
+                        if (!e.target.value.trim())
+                          e.target.setCustomValidity(
+                            t('Please enter the amount'),
+                          );
+                        else e.target.setCustomValidity('');
                         if (val === '' || e.currentTarget.validity.valid) {
                           setState(p => {
                             p.feeAmount = val;
@@ -244,15 +249,9 @@ const TribeFeeForward = (props, ref) => {
                       }}
                       onBlur={() => saveTempInfo()}
                       onInvalid={(e: React.InvalidEvent<HTMLInputElement>) => {
-                        const target = e.target;
-                        if (
-                          target.validity.valueMissing ||
-                          !target.value.trim()
-                        )
-                          target.setCustomValidity(
-                            t('Please enter the amount'),
-                          );
-                        else target.setCustomValidity('');
+                        e.target.setCustomValidity(
+                          t('Please enter the amount'),
+                        );
                       }}
                     />
                     <Select
@@ -268,6 +267,7 @@ const TribeFeeForward = (props, ref) => {
                   </Flex>
                 </InputPanelStyle>
               </FormItem>
+              {/* 计时方式 */}
               <FormItem className='mobile-wrap'>
                 <LabelHelper
                   colon
@@ -292,6 +292,7 @@ const TribeFeeForward = (props, ref) => {
                   }}
                 />
               </FormItem>
+              {/* 有效时间 */}
               <FormItem className='mobile-wrap' alignItems='center'>
                 <Label>{t('Effective time')}：</Label>
                 <InputPanelStyle>
@@ -304,12 +305,12 @@ const TribeFeeForward = (props, ref) => {
                       noShadow
                       required
                       scale='sm'
-                      className='required-input'
+                      name='required-input-name'
                       placeholder={t('Please enter the number of days')}
                       inputMode='decimal'
                       pattern={PATTERN_NUMBER}
                       value={state.validDate}
-                      onChange={e => {
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const val = e.target.value;
                         if (!val.trim())
                           e.target.setCustomValidity(
@@ -323,9 +324,7 @@ const TribeFeeForward = (props, ref) => {
                         }
                       }}
                       onBlur={() => saveTempInfo()}
-                      onInvalidCapture={(
-                        e: React.InvalidEvent<HTMLInputElement>,
-                      ) => {
+                      onInvalid={(e: React.InvalidEvent<HTMLInputElement>) => {
                         e.target.setCustomValidity(
                           t('Please enter the number of days'),
                         );
@@ -393,6 +392,7 @@ const TribeFeeForward = (props, ref) => {
           )}
           <TribeCard isRadius>
             <FormItem justifyContent='space-between'>
+              {/* 每秒消耗TIME */}
               <Flex flexDirection='column'>
                 <LabelHelper
                   label={t('Consumes TIME per second')}
@@ -414,7 +414,6 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
-                        className='required-input'
                         placeholder='1~100'
                         inputMode='decimal'
                         pattern={PATTERN_ONE_ONEHUNDRED}
@@ -445,6 +444,7 @@ const TribeFeeForward = (props, ref) => {
                   </Text>
                 </Flex>
               </Flex>
+              {/* 每条内容最多消耗TIME */}
               <Flex flexDirection='column'>
                 <Text mb='10px'>
                   {t('Each piece of content consumes up to TIME')}
@@ -457,7 +457,6 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
-                        className='required-input'
                         placeholder='60s'
                         inputMode='decimal'
                         pattern={PATTERN_NUMBER}
@@ -484,7 +483,8 @@ const TribeFeeForward = (props, ref) => {
                   </Text>
                 }
               />
-              <Flex flexWrap='wrap' mt='20px'>
+              <Flex flexWrap='wrap'>
+                {/* 部落主 */}
                 <Flex mb='10px' mr='20px' alignItems='center'>
                   <InputPanelStyle width='120px'>
                     <Flex justifyContent='space-between' alignItems='center'>
@@ -495,11 +495,10 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         scale='sm'
                         required
-                        className='required-input'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
                         value={state.ownerPercent}
-                        onChange={e => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           const val = e.target.value;
                           if (!val.trim())
                             e.target.setCustomValidity(t('Please enter this'));
@@ -524,6 +523,7 @@ const TribeFeeForward = (props, ref) => {
                     {t('Tribal Lord')}
                   </Text>
                 </Flex>
+                {/* 创作者 */}
                 <Flex mb='10px' mr='20px' alignItems='center'>
                   <InputPanelStyle width='120px'>
                     <Flex justifyContent='space-between' alignItems='center'>
@@ -534,11 +534,10 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
-                        className='required-input'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
                         value={state.authorPercent}
-                        onChange={e => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           const val = e.target.value;
                           if (!val.trim())
                             e.target.setCustomValidity(t('Please enter this'));
@@ -563,6 +562,7 @@ const TribeFeeForward = (props, ref) => {
                     {t('Creator')}
                   </Text>
                 </Flex>
+                {/* 部落成员 */}
                 <Flex mb='10px' alignItems='center'>
                   <InputPanelStyle width='120px'>
                     <Flex justifyContent='space-between' alignItems='center'>
@@ -573,11 +573,10 @@ const TribeFeeForward = (props, ref) => {
                         noShadow
                         required
                         scale='sm'
-                        className='required-input'
                         inputMode='decimal'
                         pattern={PATTERN_ZERO_ONEHUNDRED}
                         value={state.memberPercent}
-                        onChange={e => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           const val = e.target.value;
                           if (!val.trim())
                             e.target.setCustomValidity(t('Please enter this'));

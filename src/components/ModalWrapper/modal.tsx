@@ -43,9 +43,10 @@ const getCustomStyles = (
   },
 });
 
-const ModalHeaderStyled = ({ title, onClose, fillBody }) => {
+const ModalHeaderStyled = ({ title, onClose, fillBody, theme }) => {
   return (
     <Flex
+      theme={theme}
       padding={!fillBody ? '0' : '0 20px'}
       mb='8px'
       justifyContent='space-between'
@@ -76,6 +77,7 @@ interface ModalWrapperProps {
   padding?: string;
   overflow?: string;
   shouldCloseOnOverlayClick?: boolean;
+  theme?: DefaultTheme;
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
@@ -91,16 +93,19 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
     padding,
     overflow,
     shouldCloseOnOverlayClick = true,
+    theme,
   }) => {
     var OutCenterBox: HTMLElement = document.querySelector('#OutCenterBox');
-    const { theme } = useTheme();
+    const { theme: defaultTheme } = useTheme();
     // let left;
     // if (OutCenterBox) {
     //   const rectObject = OutCenterBox.getBoundingClientRect();
     //   left = `${rectObject.left}px`;
     // }
 
-    const customStyles = getCustomStyles(theme, fillBody, top, padding);
+    const themes = theme || defaultTheme;
+
+    const customStyles = getCustomStyles(themes, fillBody, top, padding);
     const onClose = useCallback(() => {
       if (setVisible) {
         setVisible(false);
@@ -121,9 +126,12 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = React.memo(
             fillBody={fillBody}
             onClose={onClose}
             title={title}
+            theme={themes}
           />
         )}
-        <BoxStyle overflow={overflow}>{children}</BoxStyle>
+        <BoxStyle theme={themes} overflow={overflow}>
+          {children}
+        </BoxStyle>
       </Modal>
     );
   },

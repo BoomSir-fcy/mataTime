@@ -1,9 +1,9 @@
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Crumbs, WaitConfirmModal, SuccessfullyModal } from 'components';
 import { useTranslation } from 'contexts';
-import { Box, Text, Divider, Flex } from 'uikit';
+import { Box, Text, Divider, Flex, Button, LinkExternal } from 'uikit';
 import SubHeader from '../components/SubHeader';
-import { FormFlex, LogoIcon } from './style';
+import { BtnFlex, FormFlex } from './style';
 import { TribeFee } from './TribeFee';
 import { TribeInfo } from './TribeInfo';
 import { TribeNFT } from './TribeNft';
@@ -18,18 +18,17 @@ import {
 import { parseInt, sum } from 'lodash';
 import { useImmer } from 'use-immer';
 import { useHistory } from 'react-router';
-import useMenuNav from 'hooks/useMenuNav';
 import { useDispatch } from 'react-redux';
 import { storeAction } from 'store';
 import { fetchActiveNftInfo } from 'store/tribe';
 import { getBLen } from 'utils';
+import { isApp } from 'utils/client';
 
 const Create = () => {
   useTicketNftList();
   useFeeTokenList();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { isMobile } = useMenuNav();
   const { toastError } = useToast();
   const history = useHistory();
   const infoForm = React.useRef<any>();
@@ -38,20 +37,15 @@ const Create = () => {
     visible: false,
   });
 
+  const [step, setStep] = useState(1);
   const { createStatus, onCheckUniqueName, onCreateTribe } = useTribe();
   const { ticketNftList, activeNftInfo, tribeBaseInfo } = useTribeState();
-
-  const isOneHundredBySum = useCallback((numArr: number[]) => {
-    return sum(numArr) === 100;
-  }, []);
 
   const gotoMaterNft = () => {
     history.push('/me/tribe');
   };
 
-  const PayAndCreate = async () => {
-    const infoParams = infoForm.current.getInfoFrom();
-    const feeParams = feeForm.current.getFeeFrom();
+  const validBaseInfo = useCallback(async infoParams => {
     const len = getBLen(infoParams.name);
     if (len < 6 || len > 30) {
       toastError(
@@ -67,24 +61,60 @@ const Create = () => {
         toastError(t('Name already exists'));
         return false;
       }
-      if (!infoParams.logo) {
-        toastError(t('Please upload a picture'));
-        return false;
-      }
-      if (
-        !isOneHundredBySum([
-          parseInt(feeParams.ownerPercent),
-          parseInt(feeParams.authorPercent),
-          parseInt(feeParams.memberPercent),
-        ])
-      ) {
-        toastError(t('The sum of the TIME reward distribution must be 100%'));
-        return false;
-      }
-      if (!activeNftInfo.nftId) {
-        toastError(t('Please select a ticket'));
-        return false;
-      }
+    } catch (error) {
+      toastError(t('Name already exists'));
+      return false;
+    }
+    if (!infoParams.logo) {
+      toastError(t('Please upload a picture'));
+      return false;
+    }
+    return true;
+  }, []);
+
+  const validFeeInfo = useCallback(feeParams => {
+    if (
+      sum([
+        parseInt(feeParams.ownerPercent),
+        parseInt(feeParams.authorPercent),
+        parseInt(feeParams.memberPercent),
+      ]) !== 100
+    ) {
+      toastError(t('The sum of the TIME reward distribution must be 100%'));
+      return false;
+    }
+    return true;
+  }, []);
+
+  const validNftInfo = useCallback(() => {
+    if (!activeNftInfo.nftId) {
+      toastError(t('Please select a ticket'));
+      return false;
+    }
+    return true;
+  }, [activeNftInfo]);
+
+  const handleTempBaseInfo = useCallback(info => {
+    dispatch(
+      storeAction.saveTribeBaseInfo({
+        name: info?.name,
+        logo: info?.logo,
+        introduction: info?.introduction,
+      }),
+    );
+  }, []);
+
+  const handleTempFeeInfo = useCallback(info => {
+    dispatch(storeAction.saveTribeBaseInfo(info));
+  }, []);
+
+  const PayAndCreate = async () => {
+    const infoParams = infoForm.current.getInfoFrom();
+    const feeParams = feeForm.current.getFeeFrom();
+    if (!(await validBaseInfo(infoParams))) return false;
+    if (!validFeeInfo(feeParams)) return false;
+    if (!validNftInfo()) return false;
+    try {
       const params = {
         ...infoParams,
         ...feeParams,
@@ -115,58 +145,184 @@ const Create = () => {
     }
   };
 
-  const handleTempBaseInfo = useCallback(info => {
-    dispatch(
-      storeAction.saveTribeBaseInfo({
-        name: info?.name,
-        logo: info?.logo,
-        introduction: info?.introduction,
-      }),
-    );
-  }, []);
+  const payAndCreateByMobile = useCallback(async () => {
+    try {
+      const params = {
+        ...tribeBaseInfo,
+        nftAddress: activeNftInfo.nftToken,
+        nftid: activeNftInfo.nftId,
+      };
+      setState(p => {
+        p.visible = true;
+      });
+      console.log('表单提交：', params);
+      await onCreateTribe(params);
+      // 10秒后自动跳转
+      setTimeout(() => {
+        setState(p => {
+          p.visible = false;
+        });
+        dispatch(fetchActiveNftInfo({ info: {} }));
+        dispatch(storeAction.saveTribeBaseInfo(null));
+        gotoMaterNft();
+      }, 10000);
+    } catch (error) {
+      console.log(error);
 
-  const handleTempFeeInfo = useCallback(info => {
-    dispatch(storeAction.saveTribeBaseInfo(info));
+      setState(p => {
+        p.visible = false;
+      });
+    }
   }, []);
-
   return (
     <Box>
       <Crumbs back />
-      <form
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
-          PayAndCreate();
-        }}
-        action=''
-      >
-        <SubHeader title={t('Basic Information')} />
-        <TribeInfo
-          ref={infoForm}
-          info={tribeBaseInfo}
-          handleTempInfo={handleTempBaseInfo}
-        />
-        <Divider />
-        <SubHeader title={t('Type settings')} />
-        <TribeFee
-          ref={feeForm}
-          actionType='save'
-          info={tribeBaseInfo}
-          handleTempInfo={handleTempFeeInfo}
-        />
-        <FormFlex>
-          <Text mb='20px' color='textTips' small>
-            {t(
-              '这是部落类型介绍/计费规则介绍Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus',
-            )}
-          </Text>
-        </FormFlex>
-        <Divider />
-        <SubHeader title={t('Pay for tickets')} />
-        <TribeNFT ticketNftList={ticketNftList} />
-        <Flex mb='20px' justifyContent='center'>
-          <TribeCreateBtn hasNft={ticketNftList.length > 0} />
-        </Flex>
-      </form>
+      {/* 移动端布局 */}
+      {isApp() ? (
+        <>
+          {step === 1 && (
+            <form
+              onSubmit={async e => {
+                e.preventDefault();
+                const isNext = await validBaseInfo(
+                  infoForm.current.getInfoFrom(),
+                );
+                if (!isNext) return false;
+                setStep(2);
+              }}
+              onInvalid={e => {
+                if (
+                  (e.target as HTMLInputElement).name === 'required-input-name'
+                ) {
+                  (e.target as HTMLInputElement).scrollIntoView({
+                    block: 'end',
+                  });
+                }
+              }}
+              action=''
+            >
+              <TribeInfo
+                ref={infoForm}
+                info={tribeBaseInfo}
+                handleTempInfo={handleTempBaseInfo}
+              />
+              <BtnFlex>
+                <Button type='submit' width='100%'>
+                  {t('下一步')}
+                </Button>
+              </BtnFlex>
+            </form>
+          )}
+          {step === 2 && (
+            <form
+              onSubmit={async e => {
+                e.preventDefault();
+                if (!validFeeInfo(feeForm.current.getFeeFrom())) return false;
+                setStep(3);
+              }}
+              onInvalid={e => {
+                if (
+                  (e.target as HTMLInputElement).name === 'required-input-name'
+                ) {
+                  (e.target as HTMLInputElement).scrollIntoView({
+                    block: 'end',
+                  });
+                }
+              }}
+              action=''
+            >
+              <TribeFee
+                ref={feeForm}
+                actionType='save'
+                info={tribeBaseInfo}
+                handleTempInfo={handleTempFeeInfo}
+              />
+              <BtnFlex>
+                <Button
+                  width='30%'
+                  color='primaryDark'
+                  onClick={() => setStep(1)}
+                >
+                  {t('上一步')}
+                </Button>
+                <Button width='64%' type='submit'>
+                  {t('支付门票')}
+                </Button>
+              </BtnFlex>
+            </form>
+          )}
+          {step === 3 && (
+            <form
+              onSubmit={async e => {
+                e.preventDefault();
+                if (!validNftInfo()) return false;
+                payAndCreateByMobile();
+              }}
+              action=''
+            >
+              <TribeNFT ticketNftList={ticketNftList} />
+              <BtnFlex>
+                <Button
+                  width='30%'
+                  color='primaryDark'
+                  onClick={() => setStep(2)}
+                >
+                  {t('上一步')}
+                </Button>
+                <TribeCreateBtn width='64%' hasNft={ticketNftList.length > 0} />
+              </BtnFlex>
+            </form>
+          )}
+        </>
+      ) : (
+        <form
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            PayAndCreate();
+          }}
+          onInvalid={e => {
+            if ((e.target as HTMLInputElement).name === 'required-input-name') {
+              (e.target as HTMLInputElement).scrollIntoView({
+                block: 'end',
+              });
+            }
+          }}
+          action=''
+        >
+          <SubHeader title={t('Basic Information')} />
+          <TribeInfo
+            ref={infoForm}
+            info={tribeBaseInfo}
+            handleTempInfo={handleTempBaseInfo}
+          />
+          <Divider />
+          <SubHeader title={t('Type settings')} />
+          <TribeFee
+            ref={feeForm}
+            actionType='save'
+            info={tribeBaseInfo}
+            handleTempInfo={handleTempFeeInfo}
+          />
+          <Flex mr='7%' justifyContent='flex-end'>
+            {/* TODO: 链接未改 */}
+            <LinkExternal
+              mb='20px'
+              height='24px'
+              color='textPrimary'
+              fontSize='18px'
+              href='http://www.google.com'
+            >
+              {t('Detail')}
+            </LinkExternal>
+          </Flex>
+          <Divider />
+          <SubHeader title={t('Pay for tickets')} />
+          <TribeNFT ticketNftList={ticketNftList} />
+          <Flex mb='20px' justifyContent='center'>
+            <TribeCreateBtn hasNft={ticketNftList.length > 0} />
+          </Flex>
+        </form>
+      )}
 
       {(createStatus === 'start' || createStatus === 'waiting') && (
         <WaitConfirmModal visible={state.visible} />
