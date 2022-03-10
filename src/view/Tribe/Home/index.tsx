@@ -31,21 +31,6 @@ const LinkBox = styled(Box)`
   }
 `;
 
-const tabDatas = [
-  {
-    tLable: 'Joined',
-    value: 1,
-  },
-  {
-    tLable: 'Explore',
-    value: 2,
-  },
-  {
-    tLable: 'All',
-    value: 3,
-  },
-];
-
 const TAB_QUERY_KEY = 't';
 
 const Home = () => {
@@ -55,6 +40,20 @@ const Home = () => {
   const { replace } = useHistory();
   const { path } = useRouteMatch();
   const { pathname } = useLocation();
+  const tabDatas = [
+    {
+      tLable: t('Joined'),
+      value: 1,
+    },
+    {
+      tLable: t('homeTabExplore'),
+      value: 2,
+    },
+    {
+      tLable: t('homeTabAll'),
+      value: 3,
+    },
+  ];
   const [page, setPage] = useState(1);
   const [page_size, setPage_size] = useState(10);
   const [avtiveTab, setAvtiveTab] = useState(
@@ -79,7 +78,7 @@ const Home = () => {
       >
         <Flex flex='1' justifyContent='flex-end'>
           <Link to={`${path}/create`}>
-            <Button>创建部落</Button>
+            <Button>{t('Create a tribe')}</Button>
           </Link>
         </Flex>
       </Tabs>

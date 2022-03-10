@@ -46,7 +46,7 @@ const HotBtn: React.FC<{
                 e.preventDefault();
                 e.stopPropagation();
                 if (tribeDetailInfo?.status !== 4) {
-                  toastWarning(t('只有部落成员才能搜索'));
+                  toastWarning(t('Only clan members can search'));
                   return;
                 }
                 if (Number(qsValue?.topic) === item.id) return;

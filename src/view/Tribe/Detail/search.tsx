@@ -86,7 +86,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
           typeof tribeDetailInfo?.status === 'number' &&
           !isNaN(tribeDetailInfo?.status)
         ) {
-          toastWarning(t('只有部落成员才能搜索'));
+          toastWarning(t('Only clan members can search'));
         }
       }, 500),
     [dispatch, toastWarning, parsedQs, tribeDetailInfo?.status, pathname],
