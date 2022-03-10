@@ -105,7 +105,6 @@ const Home = () => {
         </Flex>
       </Tabs>
       <PaddingFlex justifyContent='space-around' flexWrap='wrap'>
-        {/* <FlexAutoWarpper lineMax={2}> */}
         <List
           loading={loading}
           renderList={type => {
@@ -120,18 +119,19 @@ const Home = () => {
           }}
         >
           <Flex flexWrap='wrap' justifyContent='space-around'>
-            {TribeList.map((item, index) => (
-              <LinkBox
-                key={item.id}
-                as={Link}
-                to={`${path}/detail?id=${item.id}`}
-              >
-                {item.id && <TradeCard info={item} />}
-              </LinkBox>
-            ))}
+            <FlexAutoWarpper lineMax={2}>
+              {TribeList.map((item, index) => (
+                <LinkBox
+                  key={item.id}
+                  as={Link}
+                  to={`${path}/detail?id=${item.id}`}
+                >
+                  {item.id && <TradeCard info={item} />}
+                </LinkBox>
+              ))}
+            </FlexAutoWarpper>
           </Flex>
         </List>
-        {/* </FlexAutoWarpper> */}
       </PaddingFlex>
     </Box>
   );
