@@ -71,21 +71,27 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const debouncedOnChange = useMemo(
     () =>
       debounce(e => {
-        replace(
-          `${pathname}?id=${TribeId}&active=${
-            parsedQs.active ? parsedQs.active : 0
-          }&search=${e}`,
-        );
-        tabsChange({
-          search: e,
-          SearchActiveTitle: Number(parsedQs.active),
-        });
-        // if (tribeDetailInfo?.status === 4) {
-        // } else {
-        //   toastWarning(t('只有部落成员才能搜索'));
-        // }
+        console.log(tribeDetailInfo?.status, '-----------------------');
+
+        if (tribeDetailInfo?.status === 4) {
+          replace(
+            `${pathname}?id=${TribeId}&active=${
+              parsedQs.active ? parsedQs.active : 0
+            }&search=${e}`,
+          );
+          tabsChange({
+            search: e,
+            SearchActiveTitle: Number(parsedQs.active),
+          });
+        } else if (
+          e &&
+          typeof tribeDetailInfo?.status === 'number' &&
+          !isNaN(tribeDetailInfo?.status)
+        ) {
+          toastWarning(t('只有部落成员才能搜索'));
+        }
       }, 500),
-    [dispatch, parsedQs, pathname],
+    [dispatch, toastWarning, parsedQs, tribeDetailInfo?.status, pathname],
   );
 
   const searchChange = useCallback(
@@ -105,7 +111,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   useEffect(() => {
     const search = value ? `${value}`.trim() : value;
     debouncedOnChange(search);
-  }, [value, tribeDetailInfo]);
+  }, [value]);
 
   return (
     <Box padding='0 16px 22px'>
