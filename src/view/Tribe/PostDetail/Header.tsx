@@ -1,4 +1,5 @@
 import { Avatar } from 'components';
+import dayjs from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
 import { Box, Divider, Flex, Text } from 'uikit';
@@ -28,8 +29,16 @@ const PostDetailHeader: React.FC<{ data: Api.Tribe.PostDataInfo }> = ({
             <MiddleText ml='16px' fontSize='18px' bold>
               {data?.user_name}
             </MiddleText>
-            <MiddleText color='textTips' ml='18px'>
+            <MiddleText className='print-hide' color='textTips' ml='18px'>
               {displayTime(data?.add_time)}
+            </MiddleText>
+            <MiddleText
+              display='none'
+              className='print-visible'
+              color='textTips'
+              ml='18px'
+            >
+              {dayjs(data?.add_time).format('YY-MM-DD HH:mm')}
             </MiddleText>
           </Flex>
           <Flex mb='8px' alignItems='center'>

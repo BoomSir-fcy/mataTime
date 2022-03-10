@@ -234,7 +234,7 @@ const TribeTicket = () => {
             height={205}
           />
         </Flex>
-        <Flex mt='18px'>
+        <Flex justifyContent='space-between' mt='18px'>
           <Text>{t('Tribe Ticket')}</Text>
           <Text>
             {t('Amount')}: {tribeTicketsInfo.balance}

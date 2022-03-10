@@ -46,7 +46,7 @@ const TabText = styled(Text).attrs({ small: true })`
   &.active {
     font-size: 18px;
     font-weight: bold;
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.white_black};
   }
 `;
 const CenterFlex = styled(Flex)`
@@ -316,10 +316,10 @@ const MyMasterNftTribe = React.memo(() => {
                             <Text
                               ml='5px'
                               small
-                              color='textTips'
+                              color='white'
                               style={{ whiteSpace: 'nowrap' }}
                             >
-                              {t('请设置成员NFT')}
+                              {t('Please set member NFT')}
                             </Text>
                           </Flex>
                         )}
