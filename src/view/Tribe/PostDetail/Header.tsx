@@ -24,7 +24,11 @@ const PostDetailHeader: React.FC<{ data: Api.Tribe.PostDataInfo }> = ({
         </Text>
         <Flex flexWrap='wrap' mt='8px' alignItems='center'>
           <Flex mb='8px' alignItems='center' mr='28px'>
-            <Avatar src={data?.user_avator_url} scale='mm' />
+            <Avatar
+              src={data?.user_avator_url}
+              uid={data?.user_id}
+              scale='mm'
+            />
             <MiddleText ml='16px' fontSize='18px' bold>
               {data?.user_name}
             </MiddleText>
