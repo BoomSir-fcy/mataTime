@@ -164,7 +164,10 @@ const PostList: React.FC<PostListPorps> = ({
       >
         {(list ?? []).map(item => {
           return (
-            <HoverLink key={item.id} to={`/tribe/postdetail?i=${item.id}`}>
+            <HoverLink
+              key={item.id}
+              to={`/tribe/postdetail?i=${item[postIdKey]}`}
+            >
               <MeItemWrapper key={`${item[postIdKey]}`}>
                 {
                   // 普通帖子浏览自己的不扣费

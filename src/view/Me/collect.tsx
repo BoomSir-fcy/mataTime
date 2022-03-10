@@ -159,6 +159,7 @@ const Collect = props => {
             map={tribePostMap}
             loading={loading}
             isEnd={tribePage > tribeTotalPage}
+            postIdKey='post_id'
             getList={() => {
               init();
             }}
@@ -170,6 +171,7 @@ const Collect = props => {
           <PostList
             list={renderList}
             map={postMap}
+            postIdKey='post_id'
             loading={loading}
             isEnd={page > totalPage}
             getList={() => {

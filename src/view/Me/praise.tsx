@@ -167,6 +167,7 @@ const Praise = React.memo(props => {
             getList={() => {
               init();
             }}
+            postIdKey='post_id'
             updateList={() => {
               // console.debug('updateList');
             }}
@@ -176,6 +177,7 @@ const Praise = React.memo(props => {
             list={renderList}
             map={postMap}
             loading={loading}
+            postIdKey='post_id'
             isEnd={page > totalPage}
             getList={() => {
               init();
