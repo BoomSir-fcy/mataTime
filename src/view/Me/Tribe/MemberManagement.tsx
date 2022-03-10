@@ -247,7 +247,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
       <Crumbs title={t('Member Management')}>
         <InputStyled htmlFor='search-input'>
           <Flex justifyContent='space-between' alignItems='center'>
-            <Icon name='icon-sousuo' margin='0 10px' />
+            <Icon color='white_black' name='icon-sousuo' margin='0 10px' />
             <Input
               id='search-input'
               noShadow
