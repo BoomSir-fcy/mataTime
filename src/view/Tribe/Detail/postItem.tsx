@@ -76,7 +76,7 @@ const PostItem: React.FC<PostInfoPorps> = ({
             bold
             ellipsis
           >
-            {itemData.title}
+            {itemData.title ?? itemData?.tribe_data?.title}
           </Text>
         </Flex>
         <PostHandleBtns

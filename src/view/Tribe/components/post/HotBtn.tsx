@@ -14,7 +14,8 @@ const Btn = styled(Flex)`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  margin-right: 18px;
+  margin-right: 15px;
+  margin-top: 15px;
   cursor: pointer;
 `;
 

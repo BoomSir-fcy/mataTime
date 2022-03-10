@@ -1,6 +1,6 @@
 import { Crumbs } from 'components';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Text } from 'uikit';
+import { Box, Text, Spinner } from 'uikit';
 import {
   Switch,
   Route,
@@ -154,14 +154,18 @@ const MeTribe = () => {
         ) : null)}
 
       {noPermission ? (
-        <NoPermission
-          refreshing={refreshing}
-          refresh={() => {
-            updater();
-            setRefreshing(true);
-          }}
-          mt='calc(18% + 86px)'
-        />
+        tribeInfo ? (
+          <NoPermission
+            refreshing={refreshing}
+            refresh={() => {
+              updater();
+              setRefreshing(true);
+            }}
+            mt='calc(18% + 86px)'
+          />
+        ) : (
+          <Spinner />
+        )
       ) : (
         <Box>
           <Switch>

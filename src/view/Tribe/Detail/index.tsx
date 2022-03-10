@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Crumbs, JoinTribeModal } from 'components';
-import { Flex, Box } from 'uikit';
+import { Crumbs, Icon, JoinTribeModal } from 'components';
+import { Flex, Box, Button } from 'uikit';
 import { isApp } from 'utils/client';
 import { storeAction, useStore } from 'store';
 
@@ -30,8 +30,11 @@ const TribeBox = styled(Box)`
 `;
 
 const Sidebar = styled(Box)`
-  width: 100%;
+  opacity: 0;
+  display: none;
   ${({ theme }) => theme.mediaQueries.md} {
+    opacity: 1;
+    display: block;
     width: 300px;
   }
 `;
@@ -88,9 +91,34 @@ const Detail: React.FC = React.memo(() => {
   }, [TribeId]);
 
   return (
-    <Flex>
+    <Flex width='100%'>
       <TribeBox>
-        <Crumbs back />
+        <Crumbs back>
+          <Flex>
+            <Link
+              className='hide-media-md'
+              to={`/tribe/app/detail?id=${parsedQs.id}`}
+            >
+              <Button variant='text'>
+                <Icon
+                  name='icon-bulaguanli'
+                  size={20}
+                  color='white_black'
+                ></Icon>
+              </Button>
+            </Link>
+            <Link className='hide-media-md' to='/search'>
+              <Button variant='text'>
+                <Icon name='icon-sousuo' size={20} color='white_black'></Icon>
+              </Button>
+            </Link>
+            <Link className='hide-media-md' to='/notification/me'>
+              <Button variant='text'>
+                <Icon name='icon-tixing' size={20} color='white_black'></Icon>
+              </Button>
+            </Link>
+          </Flex>
+        </Crumbs>
         <DetailHeader TopicId={TopicId} TribeInfo={tribeDetailInfo} />
         {!TopicId && <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />}
         <DetailTitle

@@ -3,7 +3,7 @@ import { useHistory, useLocation, Link, useRouteMatch } from 'react-router-dom';
 import { Box, Text, Button, Flex, Card, Image, Spinner, Empty } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts';
-import Crumbs from 'components/Layout/crumbs';
+import { Crumbs } from 'components';
 import Tabs from 'components/Tabs';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import TradeCard from '../components/TradeCard';
@@ -22,6 +22,13 @@ import useBlockNumber from 'libs/mini-swap/state/application/hooks';
 
 const PaddingFlex = styled(Flex)`
   padding: 16px 10px;
+`;
+
+const LinkBox = styled(Box)`
+  width: 48%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: auto;
+  }
 `;
 
 const tabDatas = [
@@ -58,7 +65,7 @@ const Home = () => {
 
   return (
     <Box>
-      <Crumbs title={t('Tribe')} />
+      <Crumbs zIndex={1005} title={t('Tribe')} />
       <Tabs
         padding='8px'
         keys={'value'}
@@ -81,9 +88,13 @@ const Home = () => {
           {TribeList?.length ? (
             <>
               {TribeList.map((item, index) => (
-                <Link key={item.id} to={`${path}/detail?id=${item.id}`}>
+                <LinkBox
+                  key={item.id}
+                  as={Link}
+                  to={`${path}/detail?id=${item.id}`}
+                >
                   {item.id && <TradeCard info={item} />}
-                </Link>
+                </LinkBox>
               ))}
             </>
           ) : (

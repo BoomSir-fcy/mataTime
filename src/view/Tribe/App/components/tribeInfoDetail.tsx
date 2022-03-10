@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Button, Flex, Heading, Text, Box, Image } from 'uikit';
+import { Flex, Text, Box } from 'uikit';
 import { Icon } from 'components';
 import { useTranslation } from 'contexts';
 import { useStore } from 'store';
@@ -33,6 +33,12 @@ const UserImg = styled.img`
   object-fit: cover;
   width: 20px;
   height: 20px;
+`;
+
+const Desc = styled(Text)`
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
 `;
 
 interface HeaderProps {
@@ -125,7 +131,7 @@ const TribeInfoDetail: React.FC<HeaderProps> = ({ tribeInfo, openInvite }) => {
         </Flex>
       </Container>
       <Box padding='15px'>
-        <Text>{tribeInfo?.detail?.summary}</Text>
+        <Desc>{tribeInfo?.detail?.summary}</Desc>
       </Box>
     </Box>
   );

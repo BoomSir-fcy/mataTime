@@ -21,7 +21,7 @@ const TradeCard: React.FC<TradeCardProps> = ({ info }) => {
     <CardStyle isRadius mb='16px'>
       <PaddingBox>
         <TradeLogo scales='lg' pro={info.type === 2} logo={info.logo} />
-        <Text padding='14px 0' bold fontSize='18px'>
+        <Text padding='14px 0' bold fontSize='18px' ellipsis>
           {info.name}
         </Text>
         <TribeProfileMenu

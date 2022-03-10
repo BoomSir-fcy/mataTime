@@ -59,7 +59,7 @@ const AppTribeDetails = () => {
   return (
     <>
       <Box>
-        <Crumbs top zIndex={1005} title={t('Tribal Info')} />
+        <Crumbs back />
         <DetailHeader
           tribeInfo={tribInfo}
           openInvite={() => setVisible(true)}

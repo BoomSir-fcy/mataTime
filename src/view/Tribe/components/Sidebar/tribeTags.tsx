@@ -56,12 +56,16 @@ const TribeTags: React.FC<{
   const tribeInfo = useTribeInfoById(props.tribe_id);
 
   return (
-    <Card padding='16px' isRadius {...props}>
-      <Text mb='20px' fontSize='18px' fontWeight='bold'>
-        {t('TribeTagsTitle')}
-      </Text>
-      <Tags list={tribeInfo?.topics ?? []} />
-    </Card>
+    <>
+      {tribeInfo?.topics.length > 0 && (
+        <Card padding='16px' isRadius {...props}>
+          <Text mb='20px' fontSize='18px' fontWeight='bold'>
+            {t('TribeTagsTitle')}
+          </Text>
+          <Tags list={tribeInfo?.topics ?? []} />
+        </Card>
+      )}
+    </>
   );
 };
 
