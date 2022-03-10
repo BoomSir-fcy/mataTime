@@ -1,6 +1,5 @@
 import React from 'react';
-import { Icon } from 'components';
-import { Button, Flex, Text } from 'uikit';
+import { Flex, Text } from 'uikit';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 
@@ -21,12 +20,14 @@ const SendUser: React.FC<{
   return (
     <Flex alignItems='center'>
       <Img src={Avatar} />
-      <Text mr='18px' fontSize='18px' bold>
-        {name}
-      </Text>
-      <Text fontSize='14px' color='textTips'>
-        {dayjs(time).format('MM-DD HH:mm')}
-      </Text>
+      <Flex justifyContent='flex-start' alignItems='baseline'>
+        <Text mr='18px' fontSize='18px' bold>
+          {name}
+        </Text>
+        <Text fontSize='14px' color='textTips'>
+          {dayjs(time).format('MM-DD HH:mm')}
+        </Text>
+      </Flex>
     </Flex>
   );
 };

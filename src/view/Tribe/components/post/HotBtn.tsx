@@ -30,7 +30,7 @@ const HotBtn: React.FC<{
   const TribeId = Number(qsValue.id);
 
   return (
-    <Flex paddingTop='20px' alignItems='center' flexWrap='wrap'>
+    <Flex alignItems='center' flexWrap='wrap'>
       {list?.length && (
         <>
           {list.map((item, index) => (
