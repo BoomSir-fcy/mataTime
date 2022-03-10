@@ -208,7 +208,7 @@ const Create = () => {
               />
               <BtnFlex>
                 <Button type='submit' width='100%'>
-                  {t('下一步')}
+                  {t('Next step')}
                 </Button>
               </BtnFlex>
             </form>
@@ -243,10 +243,10 @@ const Create = () => {
                   color='primaryDark'
                   onClick={() => setStep(1)}
                 >
-                  {t('上一步')}
+                  {t('Previous')}
                 </Button>
                 <Button width='64%' type='submit'>
-                  {t('支付门票')}
+                  {t('Pay for tickets')}
                 </Button>
               </BtnFlex>
             </form>
@@ -267,7 +267,7 @@ const Create = () => {
                   color='primaryDark'
                   onClick={() => setStep(2)}
                 >
-                  {t('上一步')}
+                  {t('Previous')}
                 </Button>
                 <TribeCreateBtn width='64%' hasNft={ticketNftList.length > 0} />
               </BtnFlex>
