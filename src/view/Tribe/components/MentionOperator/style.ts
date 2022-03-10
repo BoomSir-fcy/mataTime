@@ -9,10 +9,12 @@ export const MentionOperatorWrapper = styled.div`
       /* padding-left: 64px; */
     }
     .operator-item {
-      min-width: 100px;
-      /* ${({ theme }) => theme.mediaQueries.sm} {
+      min-width: 75px;
+      max-width: 75px;
+      ${({ theme }) => theme.mediaQueries.sm} {
         min-width: 120px;
-      } */
+        max-width: 120px;
+      }
       color: #b5b5b5;
       display: flex;
       align-items: center;

@@ -27,6 +27,10 @@ const UpdateBtnSmall = styled(Flex)`
   position: relative;
 `;
 
+const FormStyled = styled.form`
+  max-width: calc(100vw - 48px);
+`;
+
 // const OverlayStyled = styled(Overlay)`
 //   position: absolute;
 // `;
@@ -89,8 +93,11 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
         });
       }
       setLoading(false);
+      if (!value) {
+        setValue(file.name);
+      }
     },
-    [toastError],
+    [toastError, value],
   );
 
   const handleChange = useCallback(
@@ -144,7 +151,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
         visible={visible}
         setVisible={setVisible}
       >
-        <form
+        <FormStyled
           action=''
           onSubmit={event => {
             event.preventDefault();
@@ -233,7 +240,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
               {saveLoading ? <Dots>确认</Dots> : '确认'}
             </Button>
           </Flex>
-        </form>
+        </FormStyled>
       </ModalWrapper>
     </>
   );

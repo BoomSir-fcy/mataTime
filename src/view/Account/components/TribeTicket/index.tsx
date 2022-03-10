@@ -194,7 +194,7 @@ const TribeTicket = () => {
             width='100%'
             mt='24px'
           >
-            {loading ? <Dots>{t('Exchanging')}</Dots> : t('Exchang')}
+            {loading ? <Dots>{t('Exchanging')}</Dots> : t('Exchange')}
           </Button>
         ) : (
           <Button

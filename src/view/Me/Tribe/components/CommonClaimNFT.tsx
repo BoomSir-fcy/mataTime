@@ -108,7 +108,7 @@ export const CommonClaimNFT: React.FC<{
               {t(`${nftInfo.introduction}`)}
             </Text>
             <Text mt='20px' color='textTips' small>
-              {t('Brithday:')} {formatTime(nftInfo.create_time, 'YYYY-MM-DD')}
+              {t('Birthday:')} {formatTime(nftInfo.create_time, 'YYYY-MM-DD')}
             </Text>
             <Flex>
               <Text color='textTips' small>

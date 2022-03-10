@@ -28,7 +28,7 @@ const Table = styled(Flex)`
   align-items: center;
   width: 100%;
   min-height: 300px;
-  min-width: 600px;
+  /* min-width: 600px; */
   .head {
     background: ${({ theme }) => theme.colors.backgroundCard};
   }
@@ -151,7 +151,9 @@ const MeTribeTribalDocs: React.FC<init> = () => {
             ? TribalDocsList.map((item, index) => (
                 <Row key={`${item.id}${index}`}>
                   <ItemText>{item.id}</ItemText>
-                  <ItemText>{item.file_name}</ItemText>
+                  <ItemText ellipsis mr='8px'>
+                    {item.file_name}
+                  </ItemText>
                   <Flex justifyContent='end'>
                     <TextBtn
                       variant='text'

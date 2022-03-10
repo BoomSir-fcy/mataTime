@@ -142,8 +142,7 @@ const PostDetail = () => {
           rows={40000}
         />
         <HotBtn mb='10px' list={data?.topics} />
-        <PrintBtn className='print-hide' />
-        <Flex className='print-hide' mt='24px'>
+        <Flex alignItems='center' className='print-hide' mt='24px'>
           <MentionOperator
             replyType='twitter'
             postId={data?.id}
