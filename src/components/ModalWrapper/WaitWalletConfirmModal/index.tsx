@@ -1,6 +1,7 @@
 import { useTranslation } from 'contexts';
 import React from 'react';
 import { Box, Flex, Text } from 'uikit';
+import darkTheme from 'uikit/theme/dark';
 import { ModalWrapper } from '..';
 import { StyledVideo } from './styled';
 
@@ -23,8 +24,14 @@ export const WaitConfirmModal: React.FC<WaitConfirmProps> = ({
       customizeTitle
       shouldCloseOnOverlayClick={false}
       visible={visible}
+      theme={darkTheme}
     >
-      <Flex flexDirection='column' justifyContent='center' alignItems='center'>
+      <Flex
+        theme={darkTheme}
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+      >
         <Box width={width} height={height}>
           <StyledVideo
             autoPlay
@@ -35,10 +42,10 @@ export const WaitConfirmModal: React.FC<WaitConfirmProps> = ({
             src={require('assets/images/waiting.mp4').default}
           />
         </Box>
-        <Text mt='30px' style={{ lineHeight: 'inherit' }}>
+        <Text theme={darkTheme} mt='30px' style={{ lineHeight: 'inherit' }}>
           {t('Waiting For Confirmation')}
         </Text>
-        <Text mt='10px' small color='textTips'>
+        <Text theme={darkTheme} mt='10px' small color='textTips'>
           {t('To cancel this transaction, please reject it in your wallet')}
         </Text>
       </Flex>

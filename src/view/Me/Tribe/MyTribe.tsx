@@ -253,7 +253,8 @@ const MyMasterNftTribe = React.memo(() => {
                       tribeId={item.id}
                       nftType={1}
                       callback={() => {
-                        getMyTribeList();
+                        // 领取nft成功后，不能从服务器拿到实时数据，有延迟，暂时屏蔽掉刷新方法
+                        // getMyTribeList();
                       }}
                     />
                   )}
