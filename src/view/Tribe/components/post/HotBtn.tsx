@@ -4,6 +4,9 @@ import { Box, Flex, Text } from 'uikit';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import { useTranslation } from 'contexts/Localization';
+import { useToast } from 'hooks';
 
 const Btn = styled(Flex)`
   width: max-content;
@@ -24,13 +27,16 @@ const HotBtn: React.FC<{
   callBack?: (id: number) => void;
   mb?: string;
 }> = ({ list, callBack, mb }) => {
+  const { t } = useTranslation();
+  const { toastWarning } = useToast();
   const { pathname } = useLocation();
   const qsValue = useParsedQueryString();
   const { replace } = useHistory();
   const TribeId = Number(qsValue.id);
+  const tribeDetailInfo = useTribeInfoById(qsValue.id);
 
   return (
-    <Flex paddingTop='20px' alignItems='center' flexWrap='wrap'>
+    <Flex alignItems='center' flexWrap='wrap'>
       {list?.length && (
         <>
           {list.map((item, index) => (
@@ -39,6 +45,10 @@ const HotBtn: React.FC<{
               onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (tribeDetailInfo?.status !== 4) {
+                  toastWarning(t('Only clan members can search'));
+                  return;
+                }
                 if (Number(qsValue?.topic) === item.id) return;
                 replace(
                   `${pathname}?id=${TribeId}&active=${

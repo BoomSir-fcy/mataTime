@@ -25,6 +25,11 @@ export class TribeApi extends Http {
     const res = await this.get('/v1/tribe/member/list', params);
     return res;
   }
+  // 部落删除成员退回币种
+  async tribeDeleteMemberSymbol(nft_id: number) {
+    const res = await this.get('/v1/tribe/nft/info', { nft_id });
+    return res;
+  }
   // 部落帖子置顶
   async tribePostSetTop(params: Api.Tribe.PostSetTopParams) {
     return this.post('/v1/tribe/post/set_top', params);
@@ -144,23 +149,17 @@ export class TribeApi extends Http {
   }
 
   // 获取个人中心列表
-  async getTribeUserHomeList(
-    params: Api.Tribe.TopicParamsUserHome,
-  ) {
+  async getTribeUserHomeList(params: Api.Tribe.TopicParamsUserHome) {
     return this.get('v1/tribe/user/home_msg', params);
   }
 
   // 获取个人中心收藏列表
-  async getTribeFavList(
-    params: Api.Tribe.TopicParamsUserHome,
-  ) {
+  async getTribeFavList(params: Api.Tribe.TopicParamsUserHome) {
     return this.get('v1/tribe/fav/list', params);
   }
 
   // 获取个人中心点赞列表
-  async getTribeLikeList(
-    params: Api.Tribe.TopicParamsUserHome,
-  ) {
+  async getTribeLikeList(params: Api.Tribe.TopicParamsUserHome) {
     return this.get('v1/tribe/like/list', params);
   }
 

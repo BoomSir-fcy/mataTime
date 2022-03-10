@@ -220,7 +220,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
                 }
               }}
             >
-              {data.is_mute === 0 ? t('禁言') : t('取消禁言')}
+              {data.is_mute === 0 ? t('Mute') : t('Unmute')}
             </Text>
           </PopupWrapper>
         </Popup>

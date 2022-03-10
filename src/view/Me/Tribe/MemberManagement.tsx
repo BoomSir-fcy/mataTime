@@ -169,6 +169,22 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     }
   };
 
+  // 退回币种
+  const getSymbol = async item => {
+    try {
+      const res = await Api.TribeApi.tribeDeleteMemberSymbol(item.nft_id);
+      if (Api.isSuccess(res)) {
+        const obj = { ...item, symbol: res.data.symbol };
+        setUserInfo(obj);
+      } else {
+        throw new Error('errCode');
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
   // 获取退回费用
   const getRefundsAmount = async (nft_id: number) => {
     setRefundAmount(null);
@@ -277,9 +293,9 @@ const MeTribeMemberManagement: React.FC<init> = () => {
                     <TextBtn
                       variant='text'
                       onClick={() => {
+                        getSymbol(item);
                         getApproveNum(item.fee_token);
                         getRefundsAmount(item.nft_id);
-                        setUserInfo(item);
                         setCommonInqueryShow(true);
                       }}
                     >

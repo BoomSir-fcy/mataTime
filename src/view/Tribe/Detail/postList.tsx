@@ -50,6 +50,23 @@ export const MeItemWrapper = styled(Card)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
 `;
 
+const StatusBar = styled(Flex)`
+  width: 100%;
+  flex-wrap: wrap;
+  ${({ theme }) => theme.mediaQueries.md} {
+    align-items: center;
+  }
+`;
+
+const ToolBar = styled(Flex)`
+  width: 100%;
+  margin-top: 12px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 50%;
+    margin-top: 0;
+  }
+`;
+
 interface PostListPorps {
   list: Api.Tribe.PostDataInfo[];
   map: {
@@ -227,13 +244,13 @@ const PostList: React.FC<PostListPorps> = ({
                     handleUpdateList(item, type);
                   }}
                 />
-                <Flex justifyContent='space-between' alignItems='center'>
+                <StatusBar justifyContent='space-between' alignItems='center'>
                   <SendUser
                     time={new Date(item.add_time || item.post_time).getTime()}
                     name={item.user_name}
                     Avatar={item.user_avator_url || item.nft_image}
                   />
-                  <Box width='50%'>
+                  <ToolBar>
                     <MentionOperator
                       joined={TribeInfo?.status === 4}
                       replyType='twitter'
@@ -289,14 +306,16 @@ const PostList: React.FC<PostListPorps> = ({
                         handleUpdateList(item, type);
                       }}
                     />
-                  </Box>
-                </Flex>
-                <HotBtn
-                  callBack={id => {
-                    // getList(LoadType.REFRESH, id);
-                  }}
-                  list={item?.topics?.slice(0, 3)}
-                />
+                  </ToolBar>
+                </StatusBar>
+                {item?.topics?.length > 0 && (
+                  <HotBtn
+                    callBack={id => {
+                      // getList(LoadType.REFRESH, id);
+                    }}
+                    list={item?.topics?.slice(0, 3)}
+                  />
+                )}
               </MeItemWrapper>
             </HoverLink>
           );

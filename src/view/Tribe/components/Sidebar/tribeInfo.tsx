@@ -58,7 +58,7 @@ const TribeInfo: React.FC<{
               ),
             })}
           </Text>
-          {detail?.type === 2 && (
+          {detail?.type === 2 && tribeInfo?.status !== 0 && (
             <Icon
               name='icon-fenxiang'
               color='textPrimary'

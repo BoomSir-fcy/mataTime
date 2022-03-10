@@ -4,6 +4,8 @@ import { Card, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { useHistory } from 'react-router-dom';
+import { useToast } from 'hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const Btn = styled(Flex)`
   width: max-content;
@@ -23,6 +25,10 @@ const Tags: React.FC<{
   list: Api.Tribe.TopicInfo[];
 }> = ({ list }) => {
   const { replace } = useHistory();
+  const { t } = useTranslation();
+  const { toastWarning } = useToast();
+  const qsValue = useParsedQueryString();
+  const tribeDetailInfo = useTribeInfoById(qsValue.id);
 
   return (
     <Flex alignItems='center' flexWrap='wrap'>
@@ -31,6 +37,10 @@ const Tags: React.FC<{
           {list?.map((item, index) => (
             <Btn
               onClick={() => {
+                if (tribeDetailInfo?.status !== 4) {
+                  toastWarning(t('Only clan members can search'));
+                  return;
+                }
                 replace(
                   `/tribe/detail?id=${item.tribe_id}&topic=${item.id}&topicName=${item.topic}`,
                 );
@@ -62,7 +72,7 @@ const TribeTags: React.FC<{
           <Text mb='20px' fontSize='18px' fontWeight='bold'>
             {t('TribeTagsTitle')}
           </Text>
-          <Tags list={tribeInfo?.topics ?? []} />
+          <Tags list={tribeInfo?.topics?.slice(0, 7) ?? []} />
         </Card>
       )}
     </>
