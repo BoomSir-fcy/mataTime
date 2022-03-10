@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Card, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useTribeInfoById } from 'store/mapModule/hooks';
+import { useHistory } from 'react-router-dom';
 
 const Btn = styled(Flex)`
   width: max-content;
@@ -21,12 +22,21 @@ const Btn = styled(Flex)`
 const Tags: React.FC<{
   list: Api.Tribe.TopicInfo[];
 }> = ({ list }) => {
+  const { replace } = useHistory();
+
   return (
     <Flex alignItems='center' flexWrap='wrap'>
       {list?.length > 0 && (
         <>
           {list?.map((item, index) => (
-            <Btn key={`${item}${index}`}>
+            <Btn
+              onClick={() => {
+                replace(
+                  `/tribe/detail?id=${item.tribe_id}&topic=${item.id}&topicName=${item.topic}`,
+                );
+              }}
+              key={`${item}${index}`}
+            >
               <Text fontSize='14px' color='textPrimary' ellipsis>
                 {item.topic}
               </Text>

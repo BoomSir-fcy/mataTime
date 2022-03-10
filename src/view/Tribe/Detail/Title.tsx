@@ -74,7 +74,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({
 
   const changeTab = type => {
     setActiveTitle(type);
-    let url;
+    let url = '';
     if (TopicId) {
       url = `&topic=${TopicId}&topicName=${qsValue.topicName}`;
     }

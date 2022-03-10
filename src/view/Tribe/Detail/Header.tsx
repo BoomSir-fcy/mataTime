@@ -90,7 +90,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
               flexDirection='column'
               justifyContent='space-between'
             >
-              <Heading scale='lg'>{TribeInfo?.tribe.name}</Heading>
+              <Heading scale='lg'>{TribeInfo?.tribe?.name}</Heading>
               <Box paddingBottom='14px'>
                 <TribeOwner TribeInfo={TribeInfo} />
               </Box>
@@ -113,7 +113,9 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
                 list={Topic}
                 onDelete={id => {
                   replace(
-                    `${pathname}?id=${qsValue.id}&active=${qsValue.active}`,
+                    `${pathname}?id=${qsValue.id}&active=${
+                      qsValue.active || 0
+                    }`,
                   );
                 }}
               />
@@ -129,8 +131,8 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
       ) : (
         <InfoFlex>
           <TradeLogo
-            logo={TribeInfo?.tribe.logo}
-            pro={TribeInfo?.tribe.type === 2}
+            logo={TribeInfo?.tribe?.logo}
+            pro={TribeInfo?.tribe?.type === 2}
           />
           <RightFlex
             flex='1'
@@ -138,7 +140,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
             justifyContent='space-between'
           >
             <Box>
-              <Heading scale='lg'>{TribeInfo?.tribe.name}</Heading>
+              <Heading scale='lg'>{TribeInfo?.tribe?.name}</Heading>
               <NumberFlex mt='28px' justifyContent='space-between'>
                 {ShowNumInfo.map(item => (
                   <TribeNumInfo item={item} />

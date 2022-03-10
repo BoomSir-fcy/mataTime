@@ -72,14 +72,25 @@ const TribeInfoForward = (props, ref) => {
               required
               scale='sm'
               maxLength={30}
-              // pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{6,30}$'
+              // pattern='^[0-9a-zA-Z\u4e00-\u9fa5]{1,30}$'
               value={state.name}
-              onChange={e => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const val = e.target.value;
-                if (getBLen(val) > 30) return false;
+                const len = getBLen(val);
+                if (!e.target.value.trim() || len < 6 || len > 30)
+                  e.target.setCustomValidity(
+                    t('6~30 characters (Support English, Chinese, numbers)'),
+                  );
+                else e.target.setCustomValidity('');
+                if (len > 30) return false;
                 setState(p => {
                   p.name = val;
                 });
+              }}
+              onInvalid={(e: React.InvalidEvent<HTMLInputElement>) => {
+                e.target.setCustomValidity(
+                  t('6~30 characters (Support English, Chinese, numbers)'),
+                );
               }}
             />
           </InputPanelStyle>
@@ -129,11 +140,21 @@ const TribeInfoForward = (props, ref) => {
           value={state.introduction}
           placeholder={t('Please fill in the brief introduction of the tribe')}
           maxLength={ARTICLE_POST_MAX_LEN}
-          onChange={e => {
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             const val = e.target.value;
+            if (!e.target.value.trim()) {
+              e.target.setCustomValidity(
+                t('Please fill in the brief introduction of the tribe'),
+              );
+            } else e.target.setCustomValidity('');
             setState(p => {
               p.introduction = val;
             });
+          }}
+          onInvalid={(e: React.InvalidEvent<HTMLTextAreaElement>) => {
+            e.target.setCustomValidity(
+              t('Please fill in the brief introduction of the tribe'),
+            );
           }}
         />
       </FormItem>

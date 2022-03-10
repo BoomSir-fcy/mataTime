@@ -66,7 +66,7 @@ export const ShieldModal = React.memo((props: IProp) => {
 type OperatorIprop = {
   onQuery: () => void;
   onClose: () => void;
-  queryText?: string;
+  queryText?: any;
   disabled?: boolean;
 };
 export const ModalOperator = React.memo((props: OperatorIprop) => {

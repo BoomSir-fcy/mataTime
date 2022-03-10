@@ -78,8 +78,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     };
 
     // 收藏
-    const onFavAgreeRequest = async (post_id: number, tribe_id: number) => {
-      const res = await Api.ContentApi.onFavAgree(post_id, tribe_id);
+    const onFavAgreeRequest = async (post_id: number, tribe: number) => {
+      const res = await Api.ContentApi.onFavAgree(post_id, tribe);
       if (Api.isSuccess(res)) {
         callback(
           {
@@ -96,8 +96,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     };
 
     // 取消收藏
-    const onFavCancelRequest = async (post_id: number, tribe_id: number) => {
-      const res = await Api.ContentApi.onFavCancel(post_id, tribe_id);
+    const onFavCancelRequest = async (post_id: number, tribe: number) => {
+      const res = await Api.ContentApi.onFavCancel(post_id, tribe);
       if (Api.isSuccess(res)) {
         callback(
           {
@@ -284,7 +284,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
             textTransform='capitalize'
             onClick={() => {
               copyContent(
-                `${window.location.origin}/articledetils/${
+                `${window.location.origin}/tribe/postdetail?i=${
                   data.post.post_id || ''
                 }`,
               );

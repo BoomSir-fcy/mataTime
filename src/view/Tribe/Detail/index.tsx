@@ -82,9 +82,9 @@ const Detail: React.FC = React.memo(() => {
   }, [account, baseInfo?.feeToken]);
 
   useEffect(() => {
-    if (TribeId) {
-      dispatch(fetchTribeInfoAsync({ tribe_id: TribeId }));
-    }
+    // if (TribeId) {
+    //   updater();
+    // }
     return () => {
       dispatch(storeAction.setJoinTribeVisibleModal(false));
     };

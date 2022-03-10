@@ -122,6 +122,8 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.MUTE);
         toastSuccess(t('禁言成功'));
+      } else if (res.code === 30016020) {
+        toastError(t('成员不属于部落'));
       }
     };
 
@@ -148,7 +150,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
         <Popup
           ref={ref}
           trigger={
-            <PopupButton mr='30px' title={t('设置')}>
+            <PopupButton mr='30px' title={t('homeMenuSet')}>
               <Icon name='icon-shezhi' size={20} color='textTips' />
             </PopupButton>
           }

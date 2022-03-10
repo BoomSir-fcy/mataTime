@@ -198,7 +198,7 @@ export const fetchTribeDetailAsync = createAsyncThunk<any, any>(
 export const fetchTribePostAsync = createAsyncThunk(
   'tribe/fetchTribePostAsync',
   async (params: Api.Tribe.tribePostListParams, { dispatch }) => {
-    // dispatch()
+    if (params.page === 1) dispatch(setResetData([]));
     dispatch(setLoading(true));
     const response = await Api.TribeApi.tribePostList({
       ...params,
@@ -221,6 +221,7 @@ export const fetchTribePostAsync = createAsyncThunk(
 export const fetchTribeSearchPostAsync = createAsyncThunk(
   'tribe/fetchTribeSearchPostAsync',
   async (params: Api.Tribe.tribeSearchParams, { dispatch }) => {
+    if (params.start === 0) dispatch(setResetData([]));
     dispatch(setLoading(true));
     const { type: SearchType, ...param } = params;
     const response = await Api.TribeApi[
@@ -269,6 +270,9 @@ export const tribe = createSlice({
   name: 'tribe',
   initialState,
   reducers: {
+    setResetData: (state, { payload }) => {
+      state.postList.list = payload;
+    },
     setActiveNftInfo: (state, { payload }) => {
       state.activeNftInfo = payload;
     },
@@ -373,6 +377,7 @@ export const {
   setJoinLoading,
   setJoinBasicServiceCharge,
   setTokenIsApprove,
+  setResetData,
 } = tribe.actions;
 
 export default tribe.reducer;

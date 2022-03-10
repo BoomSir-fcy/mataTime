@@ -19,6 +19,9 @@ import {
   useTribeMemberDelete,
 } from './hooks';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { TRIBE_FEE_BNB_TOKEN } from 'config';
+import BigNumber from 'bignumber.js';
+import { getTotalPage } from 'utils/pageHelpers';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -88,15 +91,6 @@ interface Info {
 }
 interface init {}
 
-export const getTotalPage = (totalNum, pageSize) => {
-  if (pageSize != 0 && totalNum % pageSize == 0) {
-    return parseInt(String(totalNum / pageSize));
-  }
-  if (pageSize != 0 && totalNum % pageSize != 0) {
-    return parseInt(String(totalNum / pageSize)) + 1;
-  }
-};
-
 const MeTribeMemberManagement: React.FC<init> = () => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
@@ -113,7 +107,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   const parseQs = useParsedQueryString();
   const { toastSuccess, toastError } = useToast();
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
-  const [RefundAmount, setRefundAmount] = useState(null);
+  const [RefundAmount, setRefundAmount] = useState<BigNumber>();
   const [ApproveNum, setApproveNum] = useState(null);
   const [UserInfo, setUserInfo] = useState<Info>({
     add_time: null,
@@ -180,17 +174,23 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   };
   // 获取授权数量
   const getApproveNum = async (fee_token: string) => {
+    if (fee_token.toLocaleLowerCase() === TRIBE_FEE_BNB_TOKEN) {
+      setApproveNum(100);
+      return;
+    }
     setApproveNum(null);
     const num = await FetchTokenApproveNum(account, fee_token);
+    console.log(num);
+
     setApproveNum(num);
   };
 
   // 删除
   const DeleteMember = useCallback(
-    async (nft_id: number) => {
+    async (nft_id: number, Amount?: BigNumber) => {
       setpending(true);
       try {
-        await DeleteNFTFromTribe(nft_id);
+        await DeleteNFTFromTribe(nft_id, Amount);
         toastSuccess(t('moreDeleteSuccess'));
       } catch (e) {
         console.error(e);
@@ -221,7 +221,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   );
   useEffect(() => {
     if (parseQs.i) getMemberList(1);
-  }, [InputVal]);
+  }, [InputVal, parseQs?.i]);
 
   return (
     <CountBox>
@@ -322,7 +322,14 @@ const MeTribeMemberManagement: React.FC<init> = () => {
           setCommonInqueryShow(false);
         }}
         onQuery={() => {
-          DeleteMember(UserInfo.nft_id);
+          if (UserInfo.fee_token.toLocaleLowerCase() === TRIBE_FEE_BNB_TOKEN) {
+            DeleteMember(UserInfo.nft_id, RefundAmount);
+          } else {
+            DeleteMember(UserInfo.nft_id);
+          }
+        }}
+        upDateApproveNum={() => {
+          getApproveNum(UserInfo.fee_token);
         }}
       />
     </CountBox>
