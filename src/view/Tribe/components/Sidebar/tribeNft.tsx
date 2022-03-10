@@ -2,7 +2,8 @@ import React from 'react';
 import dayjs from 'dayjs';
 import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Box, Card, Flex, Image, Text } from 'uikit';
+import { useWeb3React } from '@web3-react/core';
+import { Box, Card, Flex, Image, Button, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { BASE_IMAGE_URL } from 'config';
 import { storeAction, useStore } from 'store';
@@ -12,6 +13,8 @@ import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 import { TribeType } from 'store/tribe/type';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
+
+import useConnectWallet from 'hooks/useConnectWallet';
 
 import BtnIcon from '../BtnIcon';
 
@@ -57,6 +60,8 @@ const TribeNft: React.FC<{
 }> = ({ ...props }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { tribe, detail, member_nft } = tribeInfo || {};
@@ -95,78 +100,94 @@ const TribeNft: React.FC<{
               </Desc>
             </Box>
           </Flex>
-          {tribeInfo?.status === 0 && (
-            <Flex mb='12px' justifyContent='center'>
-              <BtnIcon
-                name='icon-wodebula'
-                text={t('tribeJoin')}
-                onClick={() => {
-                  if (detail?.type === TribeType.BASIC) {
-                    dispatch(fetchTribeJoinBasicServiceAsync());
-                  }
-                  dispatch(storeAction.setJoinTribeVisibleModal(true));
-                }}
-              />
-            </Flex>
-          )}
-          {/* {tribeInfo?.status !== 0 && (
-            <React.Fragment>
-              <Flex mb='12px'>
-                <Text color='textTips'>#{detail?.nft_id}</Text>
-                <Text ml='30px' color='textTips'>
-                  Validity Date:{' '}
-                  {`${dayjs().format('YY-MM-DD')}~${dayjs(
-                    detail?.expire_time * 1000,
-                  ).format('YY-MM-DD')}`}
-                </Text>
-              </Flex>
-            </React.Fragment>
-          )} */}
 
-          {/* 质押 */}
-          {(tribeInfo?.status === 2 || tribeInfo?.status === 3) && (
-            <Flex mb='12px' justifyContent='space-between'>
-              <Flex flexDirection='column' mr='15px'>
-                <Text>{t('ValidityDays')}:</Text>
-                <Text color='textTips'>
-                  {detail?.valid_time > 0
-                    ? `${dayjs().format('YY-MM-DD')}~${dayjs()
-                        .add(detail?.valid_time / 60 / 60 / 24, 'day')
-                        .format('YY-MM-DD')}`
-                    : t('ValidityDaysForver')}
-                </Text>
-              </Flex>
-              {detail?.nft_id !== 0 && (
-                <StakeButton
-                  tribeId={props.tribe_id}
-                  nftId={detail.nft_id}
-                  nftType={isOwner}
-                  callback={() => {
-                    dispatch(fetchTribeInfoAsync(props.tribe_id));
-                  }}
-                />
+          {!account ? (
+            <Flex mb='12px' justifyContent='center'>
+              <Button
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onConnectWallet();
+                }}
+              >
+                {t('Connect Wallet')}
+              </Button>
+            </Flex>
+          ) : (
+            <>
+              {tribeInfo?.status === 0 && (
+                <Flex mb='12px' justifyContent='center'>
+                  <BtnIcon
+                    name='icon-wodebula'
+                    text={t('tribeJoin')}
+                    onClick={() => {
+                      if (detail?.type === TribeType.BASIC) {
+                        dispatch(fetchTribeJoinBasicServiceAsync());
+                      }
+                      dispatch(storeAction.setJoinTribeVisibleModal(true));
+                    }}
+                  />
+                </Flex>
               )}
-            </Flex>
-          )}
-          {/* 取消质押 */}
-          {tribeInfo?.status === 4 && (
-            <Flex mb='12px' justifyContent='space-between'>
-              <Flex flexDirection='column' mr='15px'>
-                <Text>{t('ValidityDays')}:</Text>
-                <Text color='textTips'>
-                  {detail?.expire_time > 0
-                    ? `${dayjs().format('YY-MM-DD')}~${dayjs(
-                        detail?.expire_time * 1000,
-                      ).format('YY-MM-DD')}`
-                    : t('ValidityDaysForver')}
-                </Text>
-              </Flex>
-              <UnStakeButton
-                tribeId={props.tribe_id}
-                nftType={isOwner}
-                callback={() => dispatch(fetchTribeInfoAsync(props.tribe_id))}
-              />
-            </Flex>
+              {/* {tribeInfo?.status !== 0 && (
+                <Flex mb='12px'>
+                  <Text color='textTips'>#{detail?.nft_id}</Text>
+                  <Text ml='30px' color='textTips'>
+                    Validity Date:{' '}
+                    {`${dayjs().format('YY-MM-DD')}~${dayjs(
+                      detail?.expire_time * 1000,
+                    ).format('YY-MM-DD')}`}
+                  </Text>
+                </Flex>
+              )} */}
+              {/* 质押 */}
+              {(tribeInfo?.status === 2 || tribeInfo?.status === 3) && (
+                <Flex mb='12px' justifyContent='space-between'>
+                  <Flex flexDirection='column' mr='15px'>
+                    <Text>{t('ValidityDays')}:</Text>
+                    <Text color='textTips'>
+                      {detail?.valid_time > 0
+                        ? `${dayjs().format('YY-MM-DD')}~${dayjs()
+                            .add(detail?.valid_time / 60 / 60 / 24, 'day')
+                            .format('YY-MM-DD')}`
+                        : t('ValidityDaysForver')}
+                    </Text>
+                  </Flex>
+                  {detail?.nft_id !== 0 && (
+                    <StakeButton
+                      tribeId={props.tribe_id}
+                      nftId={detail.nft_id}
+                      nftType={isOwner}
+                      callback={() => {
+                        dispatch(fetchTribeInfoAsync(props.tribe_id));
+                      }}
+                    />
+                  )}
+                </Flex>
+              )}
+              {/* 取消质押 */}
+              {tribeInfo?.status === 4 && (
+                <Flex mb='12px' justifyContent='space-between'>
+                  <Flex flexDirection='column' mr='15px'>
+                    <Text>{t('ValidityDays')}:</Text>
+                    <Text color='textTips'>
+                      {detail?.expire_time > 0
+                        ? `${dayjs().format('YY-MM-DD')}~${dayjs(
+                            detail?.expire_time * 1000,
+                          ).format('YY-MM-DD')}`
+                        : t('ValidityDaysForver')}
+                    </Text>
+                  </Flex>
+                  <UnStakeButton
+                    tribeId={props.tribe_id}
+                    nftType={isOwner}
+                    callback={() =>
+                      dispatch(fetchTribeInfoAsync(props.tribe_id))
+                    }
+                  />
+                </Flex>
+              )}
+            </>
           )}
         </Card>
       )}

@@ -99,7 +99,7 @@ const Detail: React.FC = React.memo(() => {
               className='hide-media-md'
               to={`/tribe/app/detail?id=${parsedQs.id}`}
             >
-              <Button variant='text'>
+              <Button variant='text' style={{ fontWeight: 400 }}>
                 <Icon
                   name='icon-bulaguanli'
                   size={20}

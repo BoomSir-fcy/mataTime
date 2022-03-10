@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Flex, Heading, Text, Box } from 'uikit';
+import { useWeb3React } from '@web3-react/core';
+import { Flex, Heading, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore, storeAction } from 'store';
 import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
@@ -12,6 +13,7 @@ import BtnIcon from '../components/BtnIcon';
 import TopicsIcon from '../components/TopicsIcon';
 import TagList from 'view/Me/Tribe/components/TagList';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import useConnectWallet from 'hooks/useConnectWallet';
 import { getEncodeValue } from 'utils/urlQueryPath';
 
 const InfoFlex = styled(Flex)`
@@ -183,30 +185,46 @@ const TribeOwner = ({ TribeInfo }) => {
 };
 
 const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
+  const { account } = useWeb3React();
+  const { onConnectWallet } = useConnectWallet();
   const { userInfo } = useStore(p => p.loginReducer);
 
   return (
     <>
-      {userInfo.address !== TribeInfo?.tribe?.owner_address &&
-        TribeInfo?.status === 0 && (
-          <BtnIcon
-            disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
-            name='icon-wodebula'
-            text={t('tribeJoin')}
-            onClick={() => {
-              dispatch(storeAction.setJoinTribeVisibleModal(true));
-            }}
-          />
-        )}
-
-      {TribeInfo?.status === 4 && (
-        <Link
-          to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
-            TribeInfo?.tribe?.name,
-          )}`}
+      {!account ? (
+        <Button
+          onClick={e => {
+            e.stopPropagation();
+            e.preventDefault();
+            onConnectWallet();
+          }}
         >
-          <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
-        </Link>
+          {t('Connect Wallet')}
+        </Button>
+      ) : (
+        <>
+          {userInfo.address !== TribeInfo?.tribe?.owner_address &&
+            TribeInfo?.status === 0 && (
+              <BtnIcon
+                disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
+                name='icon-wodebula'
+                text={t('tribeJoin')}
+                onClick={() => {
+                  dispatch(storeAction.setJoinTribeVisibleModal(true));
+                }}
+              />
+            )}
+
+          {TribeInfo?.status === 4 && (
+            <Link
+              to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
+                TribeInfo?.tribe?.name,
+              )}`}
+            >
+              <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+            </Link>
+          )}
+        </>
       )}
     </>
   );

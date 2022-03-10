@@ -62,7 +62,7 @@ const TribeTags: React.FC<{
           <Text mb='20px' fontSize='18px' fontWeight='bold'>
             {t('TribeTagsTitle')}
           </Text>
-          <Tags list={tribeInfo?.topics ?? []} />
+          <Tags list={tribeInfo?.topics?.slice(0, 7) ?? []} />
         </Card>
       )}
     </>
