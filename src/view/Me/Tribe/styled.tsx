@@ -56,3 +56,24 @@ export const LoadingAnimation = styled(Box)`
 export const StyledButton = styled(Button)`
   min-width: 100px;
 `;
+
+export const MyTribeHeaderFlex = styled(Flex)`
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 8px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+    align-items: center;
+  }
+`;
+
+export const MyTribeActionFlex = styled(Flex)`
+  width: 100%;
+  margin-top: 10px;
+  justify-content: space-between;
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: column;
+    width: auto;
+  }
+`;
