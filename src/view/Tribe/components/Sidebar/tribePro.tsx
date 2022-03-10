@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { Card, Flex, Box, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useTribeInfoById } from 'store/mapModule/hooks';
+import { TribeType } from 'store/tribe/type';
 
 const Group = styled(Box)``;
 const GroupRows = styled(Flex)`
@@ -15,20 +16,28 @@ const GroupRows = styled(Flex)`
 const TribePro = ({ ...props }) => {
   const { t } = useTranslation();
   const tribeInfo = useTribeInfoById(props.tribe_id);
-  const { detail } = tribeInfo || {};
+  const { detail, baseInfo } = tribeInfo || {};
 
   return (
     <Card padding='16px' isRadius {...props}>
       <Text mb='20px' fontSize='18px' fontWeight='bold'>
-        {t(`${detail?.type === 1 ? 'FeeInformation' : 'ProInformation'}`)}
+        {t(
+          `${
+            detail?.type === TribeType.BASIC
+              ? 'FeeInformation'
+              : 'ProInformation'
+          }`,
+        )}
       </Text>
       <Group>
         <GroupRows>
           <Text color='textTips'>{t('FeesToJoinThisTribe')}</Text>
           <Text>
-            {new BigNumber(detail?.charge)
-              .dividedBy(new BigNumber(10).pow(18))
-              .toString()}{' '}
+            {detail?.type === TribeType.PRO
+              ? new BigNumber(detail?.charge)
+                  .dividedBy(new BigNumber(10).pow(18))
+                  .toString()
+              : baseInfo?.serviceCharge ?? 0}{' '}
             {detail?.symbol}
           </Text>
         </GroupRows>

@@ -63,7 +63,7 @@ export const useTranferNft = () => {
 };
 
 // 查询部落是否设置成员nft
-export const getInitMemberNftList = async (tribeIds: number[]) => {
+export const getTribeExtraInfo = async (tribeIds: number[]) => {
   const address = getTribeAddress();
   const calls = tribeIds.map(item => {
     return { address, name: 'extraTribesInfo', params: [item] };
@@ -199,7 +199,7 @@ export const FetchRefundsAmount = async (nftId: number) => {
   ];
   try {
     const RewardNum = await multicall(tribeAbi, calls);
-    return getBalanceNumber(new BigNumber(RewardNum[0][0].toJSON().hex));
+    return new BigNumber(RewardNum[0][0].toJSON().hex);
   } catch (error) {
     throw error;
   }
@@ -255,9 +255,18 @@ export function useTribeMemberDelete() {
 
   // 删除
   const DeleteNFTFromTribe = useCallback(
-    async (nft_id: number) => {
+    async (nft_id: number, amount?: BigNumber) => {
       try {
-        const tx = await tribeContract.rollbackNFTFromTribe(nft_id);
+        let tx;
+        if (amount) {
+          console.log(amount.toString());
+
+          tx = await tribeContract.rollbackNFTFromTribe(nft_id, {
+            value: amount.toString(),
+          });
+        } else {
+          tx = await tribeContract.rollbackNFTFromTribe(nft_id);
+        }
         const receipt = await tx.wait();
         return receipt.status;
       } catch (error) {

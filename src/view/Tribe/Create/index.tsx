@@ -32,7 +32,6 @@ const Create = () => {
   const { isMobile } = useMenuNav();
   const { toastError } = useToast();
   const history = useHistory();
-  const form = React.useRef<any>();
   const infoForm = React.useRef<any>();
   const feeForm = React.useRef<any>();
   const [state, setState] = useImmer({
@@ -55,7 +54,11 @@ const Create = () => {
     const feeParams = feeForm.current.getFeeFrom();
     const len = getBLen(infoParams.name);
     if (len < 6 || len > 30) {
-      toastError(t('6~30 characters (Support English, Chinese, numbers)'));
+      toastError(
+        `${t('Tribe name')} ${t(
+          '6~30 characters (Support English, Chinese, numbers)',
+        )}`,
+      );
       return false;
     }
     try {
@@ -91,6 +94,8 @@ const Create = () => {
       setState(p => {
         p.visible = true;
       });
+      console.log('表单提交：', params);
+
       await onCreateTribe(params);
       // 10秒后自动跳转
       setTimeout(() => {
@@ -128,21 +133,10 @@ const Create = () => {
     <Box>
       <Crumbs back />
       <form
-        ref={form}
-        onSubmit={e => {
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
           PayAndCreate();
         }}
-        // onInvalid={(e: FormEvent<HTMLFormElement>) => {
-        //   console.log('11111', e);
-        //   // console.log('11111', e.target.setCustomValidity('请输入杀杀杀'));
-        //   const el = form.current.getElementsByClassName('required-input')[0];
-        //   // const el = form.current.getElementsByTagName('input');
-        //   // console.log(e.target.setCustomValidity('请输入杀杀杀'));
-        //   // e.target?.validity
-        //   el.setCustomValidity('请输入此项');
-        //   console.log(el);
-        // }}
         action=''
       >
         <SubHeader title={t('Basic Information')} />

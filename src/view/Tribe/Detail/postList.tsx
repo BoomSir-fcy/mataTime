@@ -34,6 +34,8 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import MentionOperator from '../components/MentionOperator';
 import HotBtn from '../components/post/HotBtn';
 import SendUser from '../components/post/sendUser';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import useParsedQueryString from 'hooks/useParsedQueryString';
 
 const ArticleListBox = styled(Box)``;
 
@@ -55,7 +57,7 @@ interface PostListPorps {
   };
   loading: boolean;
   isEnd: boolean;
-  getList: (LoadType?: number) => void;
+  getList: (LoadType?: number, id?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
   postIdKey?: string;
 }
@@ -73,10 +75,10 @@ const PostList: React.FC<PostListPorps> = ({
   const [isShileUser, setIsShileUser] = React.useState(false);
   const dispatch = useDispatch();
   const { account } = useActiveWeb3React();
+  const parsedQs = useParsedQueryString();
 
   const { userMap } = useMapModule();
-
-  const TribeInfo = useStore(p => p.tribe.tribeInfo);
+  const TribeInfo = useTribeInfoById(parsedQs.id);
   const currentUid = useStore(p => p.loginReducer.userInfo);
   // 阅读文章扣费
   const [nonce, setNonce] = useState(0);
@@ -233,7 +235,7 @@ const PostList: React.FC<PostListPorps> = ({
                   />
                   <Box width='50%'>
                     <MentionOperator
-                      joined={TribeInfo.status === 4}
+                      joined={TribeInfo?.status === 4}
                       replyType='twitter'
                       postId={item[postIdKey]}
                       hasReward={false}
@@ -289,7 +291,12 @@ const PostList: React.FC<PostListPorps> = ({
                     />
                   </Box>
                 </Flex>
-                <HotBtn list={item.topics} />
+                <HotBtn
+                  callBack={id => {
+                    // getList(LoadType.REFRESH, id);
+                  }}
+                  list={item?.topics?.slice(0, 3)}
+                />
               </MeItemWrapper>
             </HoverLink>
           );

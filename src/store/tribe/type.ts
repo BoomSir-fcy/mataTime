@@ -35,6 +35,7 @@ export interface TribeBaseInfo {
   memberPercent?: number;
   nftAddress?: string;
   nftid?: number;
+  serviceCharge?: number;
 }
 
 export interface TribesNFTInfo {

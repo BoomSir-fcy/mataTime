@@ -4,7 +4,7 @@ import { useTranslation } from 'contexts';
 import { useToast } from 'hooks';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useTribeNft } from '../../hooks';
+import { getTribeExtraInfo, useTribeNft } from '../../hooks';
 import { StyledButton } from '../../styled';
 
 export const ClaimButton: React.FC<{
@@ -23,6 +23,12 @@ export const ClaimButton: React.FC<{
   const handleClaimOwnerNft = useCallback(async () => {
     try {
       setPending(true);
+      const list = await getTribeExtraInfo([tribeId]);
+      if (list[0]?.claimOwnerNFT) {
+        toastError(t('Confirming service, please refresh manually'));
+        setPending(false);
+        return false;
+      }
       await onClaimOwnerNft(tribeId);
       setPending(false);
       if (callback) callback();

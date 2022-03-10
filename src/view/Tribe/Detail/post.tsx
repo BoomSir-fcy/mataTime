@@ -40,10 +40,11 @@ const PostListComponents = (props, ref) => {
     },
     TribeId,
     filterValObj,
+    TopicId,
   } = props || {};
 
   const Getlist = React.useCallback(
-    (current = 0, refresh?) => {
+    (current = 0, refresh = false, topic_id = null) => {
       if ((loading || isEnd) && !current) return false;
       if (!TribeId) return false;
       if (filterValObj.search) {
@@ -64,16 +65,33 @@ const PostListComponents = (props, ref) => {
             per_page: pageSize,
             top: top,
             tribe_id: TribeId,
-            newest_sort: filterValObj.sortTime,
-            hot_sort: filterValObj.sortLike,
+            newest_sort:
+              filterValObj.sortTime !== undefined ? filterValObj.sortTime : 1,
+            hot_sort:
+              filterValObj.sortLike !== undefined ? filterValObj.sortLike : 0,
+            topic_id: Number(TopicId),
           }),
         );
       }
       setIsEnd(true);
       setNonce(prep => prep + 1);
     },
-    [isEnd, dispatch, TribeId, loading, page, pageSize, filterValObj, setNonce],
+    [
+      isEnd,
+      dispatch,
+      TribeId,
+      loading,
+      page,
+      pageSize,
+      filterValObj,
+      TopicId,
+      setNonce,
+    ],
   );
+
+  useEffect(() => {
+    Getlist(1);
+  }, [TopicId]);
 
   useEffect(() => {
     if (page > 1) {
@@ -115,12 +133,12 @@ const PostListComponents = (props, ref) => {
   }, [list, blockUsersIds, unFollowUsersIds, deletePostIds]);
 
   const getList = useCallback(
-    (type?: LoadType) => {
+    (type?: LoadType, id?) => {
       if (type === LoadType.INIT) {
         return;
       }
       if (type === LoadType.REFRESH) {
-        Getlist(1);
+        Getlist(1, false, id);
         return;
       }
       Getlist(page);

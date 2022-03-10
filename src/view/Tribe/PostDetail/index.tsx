@@ -140,7 +140,8 @@ const PostDetail = () => {
           translateData={translateData}
           rows={40000}
         />
-        <HotBtn list={data?.topics} />
+        <HotBtn mb='10px' list={data?.topics} />
+        <PrintBtn className='print-hide' />
         <Flex className='print-hide' mt='24px'>
           <MentionOperator
             replyType='twitter'

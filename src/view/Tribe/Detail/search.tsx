@@ -67,15 +67,15 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const debouncedOnChange = useMemo(
     () =>
       debounce(e => {
-        tabsChange({
-          search: e,
-          SearchActiveTitle: parsedQs.active,
-        });
         replace(
           `${pathname}?id=${TribeId}&active=${
             parsedQs.active ? parsedQs.active : 0
           }&search=${e}`,
         );
+        tabsChange({
+          search: e,
+          SearchActiveTitle: Number(parsedQs.active),
+        });
       }, 500),
     [dispatch, parsedQs, pathname],
   );
