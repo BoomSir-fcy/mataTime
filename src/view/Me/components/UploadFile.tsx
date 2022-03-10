@@ -69,7 +69,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
   const handleUpload = useCallback(
     async (file: File) => {
       if (!file) {
-        toastError('不支持的文件类型');
+        toastError(t('Unsupported file type'));
         return;
       }
       const ext = getFileExt(file.name);
@@ -97,7 +97,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
         setValue(file.name);
       }
     },
-    [toastError, value],
+    [toastError, value, t],
   );
 
   const handleChange = useCallback(
@@ -131,7 +131,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
     });
 
     if (Api.isSuccess(res)) {
-      toastSuccess('上传成功');
+      toastSuccess(t('Upload successful'));
       setVisible(false);
       if (onSuccess) onSuccess();
     }
@@ -143,10 +143,10 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
       <BtnIcon
         onClick={() => setVisible(true)}
         name='icon-shangchuan1'
-        text={t('上传文件')}
+        text={t('Upload file')}
       />
       <ModalWrapper
-        title={t('上传文件')}
+        title={t('Upload file')}
         creactOnUse
         visible={visible}
         setVisible={setVisible}
@@ -157,7 +157,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
             event.preventDefault();
           }}
         >
-          <Text mb='12px'>* 文件标题</Text>
+          <Text mb='12px'>* {t('F-Title')}</Text>
           <Input
             value={value}
             noShadow
@@ -165,10 +165,10 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
               setValue(event.target.value);
             }}
             style={{ padding: '0 16px' }}
-            placeholder='请输入文件标题'
+            placeholder={t('Please enter the file title')}
           />
           <Text mt='16px' mb='16px'>
-            * 上传文件
+            * {t('Upload file')}
           </Text>
           <label
             style={{ position: 'relative' }}
@@ -182,7 +182,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
               {...getRootProps({ className: 'dropzone' })}
             >
               <Icon size={38} color='white_black' current name='icon-tianjia' />
-              <Text ml='8px'>点击上传或将文件拖到这里</Text>
+              <Text ml='8px'>{t('Click upload or drag the file here')}</Text>
               <input
                 id='upload-file'
                 name='upload-file'
@@ -224,10 +224,13 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
             )}
           </Flex>
           <Text fontSize='14px' color='textTips'>
-            建议上传文档的大小为：100MB以内
+            {t(
+              'It is recommended that the size of the uploaded document is within 100MB',
+            )}
           </Text>
           <Text fontSize='14px' color='textTips'>
-            仅支持文档格式：{TEIBE_FILE_TYPES.join(',')}
+            {t('Only document formats are supported:')}
+            {TEIBE_FILE_TYPES.join(',')}
           </Text>
           <Flex mt='16px' justifyContent='center'>
             <Button
@@ -237,7 +240,7 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
               type='submit'
               disabled={saveLoading || !fileInfo.full_path || !value}
             >
-              {saveLoading ? <Dots>确认</Dots> : '确认'}
+              {saveLoading ? <Dots>{t('Confirming')}</Dots> : t('Confirm')}
             </Button>
           </Flex>
         </FormStyled>

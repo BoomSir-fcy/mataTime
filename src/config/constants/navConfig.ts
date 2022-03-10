@@ -401,6 +401,7 @@ export const hideSidebarPath = (() => {
       '/tribe/post',
       '/tribe/create',
       '/tribe/detail',
+      '/tribe/postdetail',
     ],
     menuNavConfig,
     'hideRight',

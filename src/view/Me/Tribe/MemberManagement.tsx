@@ -228,7 +228,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
 
   return (
     <CountBox>
-      <Crumbs title='成员管理'>
+      <Crumbs title={t('Member Management')}>
         <InputStyled htmlFor='search-input'>
           <Flex justifyContent='space-between' alignItems='center'>
             <Icon name='icon-sousuo' margin='0 10px' />
@@ -246,10 +246,10 @@ const MeTribeMemberManagement: React.FC<init> = () => {
       <TableBox>
         <Table>
           <Row className='head'>
-            <HeadText>{t('昵称')}</HeadText>
-            <HeadText>{t('地址')}</HeadText>
-            <HeadText>{t('加入时间')}</HeadText>
-            <HeadText>{t('管理')}</HeadText>
+            <HeadText>{t('Nickname')}</HeadText>
+            <HeadText>{t('Address')}</HeadText>
+            <HeadText>{t('Joined Time')}</HeadText>
+            <HeadText>{t('Manage')}</HeadText>
           </Row>
           {MemberList.length
             ? MemberList.map((item, index) => (
@@ -270,7 +270,9 @@ const MeTribeMemberManagement: React.FC<init> = () => {
                         }
                       }}
                     >
-                      {item.is_mute === 0 ? t('禁言') : t('取消禁言')}
+                      {item.is_mute === 0
+                        ? t('Banned')
+                        : t('Cancel the prohibition')}
                     </TextBtn>
                     <TextBtn
                       variant='text'

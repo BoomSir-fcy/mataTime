@@ -133,19 +133,18 @@ const MeTribeTribalDocs: React.FC<init> = () => {
   }, []);
   return (
     <CountBox>
-      <Crumbs title='部落文件'>
+      <Crumbs title={t('Tribal Docs')}>
         <UploadFile
           onSuccess={() => getFileList(1)}
           tribe_id={Number(parseQs.i)}
         />
-        {/* <BtnIcon name='icon-shangchuan1' text={t('上传文件')} /> */}
       </Crumbs>
       <TableBox>
         <Table>
           <Row className='head'>
-            <HeadText>{t('文档ID')}</HeadText>
-            <HeadText>{t('文档标题')}</HeadText>
-            <HeadText>{t('管理')}</HeadText>
+            <HeadText>{t('F-ID')}</HeadText>
+            <HeadText>{t('F-Title')}</HeadText>
+            <HeadText>{t('Manage')}</HeadText>
           </Row>
           {TribalDocsList.length
             ? TribalDocsList.map((item, index) => (
