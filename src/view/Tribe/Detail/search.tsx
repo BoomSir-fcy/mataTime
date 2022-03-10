@@ -15,6 +15,8 @@ import CircleLoader from 'components/Loader/CircleLoader';
 import { Icon } from 'components';
 import { useHistory, useLocation } from 'react-router-dom';
 import debounce from 'lodash/debounce';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import { useToast } from 'hooks';
 
 const SearchBox = styled(Card)<{ focus?: boolean }>`
   position: relative;
@@ -63,21 +65,33 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const [value, setValue] = useState(parsedQs.search || '');
   const { loading } = useStore(p => p.tribe.postList);
   const { pathname } = useLocation();
+  const tribeDetailInfo = useTribeInfoById(parsedQs.id);
+  const { toastWarning } = useToast();
 
   const debouncedOnChange = useMemo(
     () =>
       debounce(e => {
-        replace(
-          `${pathname}?id=${TribeId}&active=${
-            parsedQs.active ? parsedQs.active : 0
-          }&search=${e}`,
-        );
-        tabsChange({
-          search: e,
-          SearchActiveTitle: Number(parsedQs.active),
-        });
+        console.log(tribeDetailInfo?.status, '-----------------------');
+
+        if (tribeDetailInfo?.status === 4) {
+          replace(
+            `${pathname}?id=${TribeId}&active=${
+              parsedQs.active ? parsedQs.active : 0
+            }&search=${e}`,
+          );
+          tabsChange({
+            search: e,
+            SearchActiveTitle: Number(parsedQs.active),
+          });
+        } else if (
+          e &&
+          typeof tribeDetailInfo?.status === 'number' &&
+          !isNaN(tribeDetailInfo?.status)
+        ) {
+          toastWarning(t('只有部落成员才能搜索'));
+        }
       }, 500),
-    [dispatch, parsedQs, pathname],
+    [dispatch, toastWarning, parsedQs, tribeDetailInfo?.status, pathname],
   );
 
   const searchChange = useCallback(

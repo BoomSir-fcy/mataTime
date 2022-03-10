@@ -66,9 +66,15 @@ const PostListComponents = (props, ref) => {
             top: top,
             tribe_id: TribeId,
             newest_sort:
-              filterValObj.sortTime !== undefined ? filterValObj.sortTime : 1,
+              typeof filterValObj.sortTime === 'number' &&
+              !isNaN(filterValObj.sortTime)
+                ? filterValObj.sortTime
+                : 1,
             hot_sort:
-              filterValObj.sortLike !== undefined ? filterValObj.sortLike : 0,
+              typeof filterValObj.sortLike === 'number' &&
+              !isNaN(filterValObj.sortLike)
+                ? filterValObj.sortLike
+                : 1,
             topic_id: Number(TopicId),
           }),
         );
