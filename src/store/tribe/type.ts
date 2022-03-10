@@ -84,8 +84,8 @@ export interface TribeInfo {
     nft_id: number;
   };
   topics: Api.Tribe.TopicInfo[];
-  // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期
-  status: 0 | 1 | 2 | 3 | 4 | 5;
+  // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期 6已退出
+  status: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   tribe_id: number;
   selected_count: string;
   post_count: string;

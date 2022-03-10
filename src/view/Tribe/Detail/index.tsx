@@ -29,6 +29,11 @@ const TribeBox = styled(Box)`
   }
 `;
 
+const TribeInfo = styled(Box)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueriesSize.padding}
+`;
+
 const Sidebar = styled(Box)`
   opacity: 0;
   display: none;
@@ -119,8 +124,13 @@ const Detail: React.FC = React.memo(() => {
             </Link>
           </Flex>
         </Crumbs>
-        <DetailHeader TopicId={TopicId} TribeInfo={tribeDetailInfo} />
-        {!TopicId && <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />}
+        <TribeInfo>
+          <DetailHeader TopicId={TopicId} TribeInfo={tribeDetailInfo} />
+          {!TopicId && (
+            <DetailSearch TribeId={TribeId} tabsChange={tabsChange} />
+          )}
+        </TribeInfo>
+
         <DetailTitle
           TribeId={TribeId}
           tabsChange={tabsChange}
