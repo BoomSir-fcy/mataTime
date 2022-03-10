@@ -15,6 +15,8 @@ import CircleLoader from 'components/Loader/CircleLoader';
 import { Icon } from 'components';
 import { useHistory, useLocation } from 'react-router-dom';
 import debounce from 'lodash/debounce';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import { useToast } from 'hooks';
 
 const SearchBox = styled(Card)<{ focus?: boolean }>`
   position: relative;
@@ -63,6 +65,8 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   const [value, setValue] = useState(parsedQs.search || '');
   const { loading } = useStore(p => p.tribe.postList);
   const { pathname } = useLocation();
+  const tribeDetailInfo = useTribeInfoById(parsedQs.id);
+  const { toastWarning } = useToast();
 
   const debouncedOnChange = useMemo(
     () =>
@@ -76,6 +80,10 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
           search: e,
           SearchActiveTitle: Number(parsedQs.active),
         });
+        // if (tribeDetailInfo?.status === 4) {
+        // } else {
+        //   toastWarning(t('只有部落成员才能搜索'));
+        // }
       }, 500),
     [dispatch, parsedQs, pathname],
   );
@@ -97,7 +105,7 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
   useEffect(() => {
     const search = value ? `${value}`.trim() : value;
     debouncedOnChange(search);
-  }, [value]);
+  }, [value, tribeDetailInfo]);
 
   return (
     <Box padding='0 16px 22px'>
