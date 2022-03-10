@@ -101,6 +101,7 @@ export const Crumbs: React.FC<{
           <Flex alignItems='center' style={centerTitle && { width: '100%' }}>
             {!back && (
               <MenuButton
+                type='button'
                 aria-label='Toggle menu'
                 onClick={() => setIsPushed(prep => !prep)}
                 mr='24px'

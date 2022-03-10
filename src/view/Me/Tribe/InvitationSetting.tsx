@@ -133,7 +133,7 @@ const MeTribeInvitationSetting = () => {
           )}
         </Crumbs>
         <ContentBox>
-          <FormItem className='mobile-nowrap' alignItems='center'>
+          <FormItem className='mobile-wrap' alignItems='center'>
             <Label>{t('Charge settings')}</Label>
             <InputPanelStyle>
               <Flex justifyContent='space-between' alignItems='center'>
@@ -165,7 +165,7 @@ const MeTribeInvitationSetting = () => {
               </Flex>
             </InputPanelStyle>
           </FormItem>
-          <FormItem className='mobile-nowrap' alignItems='center'>
+          <FormItem className='mobile-wrap' alignItems='center'>
             <Label>{t('Timing method')}</Label>
             <RadioGroup
               disabled
@@ -178,7 +178,7 @@ const MeTribeInvitationSetting = () => {
               }}
             />
           </FormItem>
-          <FormItem className='mobile-nowrap' alignItems='center'>
+          <FormItem className='mobile-wrap' alignItems='center'>
             <Label>{t('Effective time')}</Label>
             <InputPanelStyle>
               <Flex justifyContent='space-between' alignItems='center'>

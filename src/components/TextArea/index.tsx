@@ -16,10 +16,16 @@ const TextareaStyled = styled(Box)<TextAreaProps>`
   position: relative;
   width: 100%;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'text')};
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: calc(100% - 120px);
+  }
   .textarea-content-length {
     position: absolute;
-    right: 24%;
+    left: calc(100% - 60px);
     bottom: 8%;
+    ${({ theme }) => theme.mediaQueries.md} {
+      left: calc(80% - 60px);
+    }
   }
 `;
 
