@@ -16,6 +16,7 @@ import { getDecodeValue, getSearchPath } from 'utils/urlQueryPath';
 import PostResult from './PostResult';
 import useDebounce from 'hooks/useDebounce';
 import TribeResult from './TribeResult';
+import { fetchSearchTribeAsync } from 'store/search/reducer';
 
 const UserBox = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -106,6 +107,7 @@ const Search = () => {
   useEffect(() => {
     if (historyList[0]?.text) {
       dispatch(fetchThunk.fetchSearchPostAsync(true));
+      dispatch(fetchSearchTribeAsync(true));
     }
   }, [historyList, dispatch]);
 
@@ -116,7 +118,7 @@ const Search = () => {
         // back
         zIndex={1005}
         hideBorder={false}
-        callBack={() => { }}
+        callBack={() => {}}
         title={t('Search')}
       >
         <FlexShowMd alignItems='center' flex='1'>
@@ -261,7 +263,8 @@ const Search = () => {
                   list={resultListOfTribe}
                   loading={tribe.loading}
                   isEnd={tribe.loadEnd}
-                />)}
+                />
+              )}
             </Box>
             <Box>
               {activeType === TabTypes.TOPIC &&

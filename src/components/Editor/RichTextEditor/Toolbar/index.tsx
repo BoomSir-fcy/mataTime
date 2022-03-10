@@ -5,7 +5,11 @@ import { useSlate, useSlateStatic, ReactEditor } from 'slate-react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { HistoryEditor, History } from 'slate-history';
 import { Icon, ModalWrapper, SearchPop } from 'components';
-import { ImageElement, LinkElement, ParagraphElement } from '../../custom-types';
+import {
+  ImageElement,
+  LinkElement,
+  ParagraphElement,
+} from '../../custom-types';
 import { Emoji } from '../../emoji';
 import InsertImageForm from './InsertImageForm';
 import {
@@ -58,7 +62,7 @@ const toggleBlock = (editor, format) => {
   }
 };
 
-const toggleClearFormat = (editor) => {
+const toggleClearFormat = editor => {
   const { selection } = editor;
   if (!selection) return;
   markFormats.forEach(item => {
@@ -66,13 +70,13 @@ const toggleClearFormat = (editor) => {
     // if (isMarkActive(editor, item.format)) {
     //   toggleMark(editor, item.format)
     // }
-  })
+  });
   blockFormats.forEach(item => {
     if (isBlockActive(editor, item.format)) {
-      toggleBlock(editor, item.format)
+      toggleBlock(editor, item.format);
     }
-  })
-}
+  });
+};
 
 const toggleHistory = (editor, format) => {
   if (format === 'redo' || format === 'undo') {
@@ -95,7 +99,6 @@ export const insertLink = (editor, { url, text }) => {
   Transforms.insertNodes(editor, link);
   Transforms.move(editor);
 };
-
 
 const ButtonStyled = props => (
   <Button
@@ -151,7 +154,11 @@ const FormatButton = ({ format, icon, type, title }) => {
       }}
       title={t(title)}
     >
-      <Icon bold={active()} color={active() ? 'text' : 'textTips'} name={icon} />
+      <Icon
+        bold={active()}
+        color={active() ? 'text' : 'textTips'}
+        name={icon}
+      />
       {/* {!flag && null} */}
     </ButtonStyled>
   );
@@ -176,7 +183,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
     }
   };
 
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   return (
     <Box
@@ -184,7 +191,12 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
         e.stopPropagation();
       }}
     >
-      <Flex padding='8px 0' flexWrap='wrap' justifyContent='space-between' alignItems='center'>
+      <Flex
+        padding='8px 0'
+        flexWrap='wrap'
+        justifyContent='space-between'
+        alignItems='center'
+      >
         <Flex flexWrap='wrap' alignItems='center'>
           <Flex>
             {markFormats.map(item => (
@@ -212,17 +224,16 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
                 color='textTips'
                 name='icon-aite'
                 onClick={() => setSearchUser(!searchUser)}
-              // title={t('editorUser')}
+                // title={t('editorUser')}
               />
             </ButtonStyled>
-            <ButtonStyled title={t('Topic')}>
+            {/* <ButtonStyled title={t('Topic')}>
               <Icon
                 color='textTips'
                 name='icon-a-xiaoxi1'
                 onClick={() => setSearcTopic(!searcTopic)}
-              // title={t('editorTopic')}
               />
-            </ButtonStyled>
+            </ButtonStyled> */}
           </Flex>
           <Flex>
             <ButtonStyled title={t('Link')}>
@@ -230,7 +241,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
                 color='textTips'
                 name='icon-bianjiqi_chaolianjie738'
                 onClick={() => setVisible(true)}
-              // title={t('editorTopic')}
+                // title={t('editorTopic')}
               />
             </ButtonStyled>
             {blockFormats.map(item => (
@@ -259,7 +270,7 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
               color='textTips'
               name='icon-bianjiqi_qingchugeshi710'
               onClick={() => toggleClearFormat(editor)}
-            // title={t('editorTopic')}
+              // title={t('editorTopic')}
             />
           </ButtonStyled>
         </Flex>
@@ -270,10 +281,13 @@ const Toolbar: React.FC<{ tribeId?: number }> = ({ tribeId }) => {
         visible={visible}
         setVisible={setVisible}
       >
-        <LinkInsert onCancle={() => setVisible(false)} onConfirm={(values) => {
-          setVisible(false)
-          insertLink(editor, { url: values.url, text: values.text })
-        }} />
+        <LinkInsert
+          onCancle={() => setVisible(false)}
+          onConfirm={values => {
+            setVisible(false);
+            insertLink(editor, { url: values.url, text: values.text });
+          }}
+        />
       </ModalWrapper>
       <Box position='relative' width='100%' height='0'>
         {(searcTopic || searchUser) && (

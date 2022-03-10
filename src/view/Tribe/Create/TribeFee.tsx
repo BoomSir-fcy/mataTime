@@ -331,7 +331,8 @@ const TribeFeeForward = (props, ref) => {
                         );
                       }}
                     />
-                    <Text>{t('tribeDays')}</Text>
+                    <Text>秒</Text>
+                    {/* <Text>{t('tribeDays')}</Text> */}
                   </Flex>
                 </InputPanelStyle>
               </FormItem>

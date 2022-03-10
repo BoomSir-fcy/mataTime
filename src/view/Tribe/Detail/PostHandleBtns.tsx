@@ -8,34 +8,23 @@ import { MoreTribePopup } from 'components/Popup/TribeMorePopup/morePopup';
 import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
 import { changePostTranslateState } from 'store/mapModule/reducer';
 import { useDispatch } from 'react-redux';
-
-const PostBox = styled(Box)``;
-
-const Top = styled(Flex)`
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Featured = styled(FeaturedIcon)`
-  width: 20px;
-  height: 20px;
-`;
-
-const ContentText = styled(Text)`
-  margin: 15px 0;
-  font-size: 14px;
-  text-overflow: -o-ellipsis-lastline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-`;
+import PrintBtn from './PrintBtn';
 
 const PopupButton = styled(Flex)`
   align-items: center;
   cursor: pointer;
+`;
+
+const FlexStyled = styled(Flex)`
+  &:hover,
+  &:focus {
+    .icon-shield {
+      opacity: 1;
+    }
+  }
+  .icon-shield {
+    opacity: 0;
+  }
 `;
 
 interface PostHandleBtnsProps {
@@ -46,6 +35,7 @@ interface PostHandleBtnsProps {
   showTranslate?: boolean;
   showTranslateIcon?: boolean;
   setIsShileUser?: (type, data) => void;
+  print?: boolean;
 }
 
 const PostHandleBtns: React.FC<PostHandleBtnsProps> = ({
@@ -56,6 +46,7 @@ const PostHandleBtns: React.FC<PostHandleBtnsProps> = ({
   showTranslateIcon,
   callback,
   setIsShileUser,
+  print,
 }) => {
   const { t } = useTranslation();
   const popupRefSet = React.useRef(null);
@@ -65,7 +56,8 @@ const PostHandleBtns: React.FC<PostHandleBtnsProps> = ({
   const dispatch = useDispatch();
 
   return (
-    <Flex alignItems='center'>
+    <FlexStyled alignItems='center'>
+      {print && <PrintBtn />}
       {showTranslateIcon && (
         <Button
           onClick={e => {
@@ -171,7 +163,7 @@ const PostHandleBtns: React.FC<PostHandleBtnsProps> = ({
           />
         </Popup>
       </a>
-    </Flex>
+    </FlexStyled>
   );
 };
 

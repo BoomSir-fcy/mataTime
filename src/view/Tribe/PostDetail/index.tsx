@@ -39,10 +39,10 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import ContentParsingOfTranslate from '../Detail/ContentParsingOfTranslate';
 import PostHandleBtns from '../Detail/PostHandleBtns';
 import { FetchStatus } from 'config/types';
-import PrintBtn from './PrintBtn';
 
 const ContentBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
+  padding: 16px;
 `;
 
 const PopupButton = styled(Flex)`
@@ -138,7 +138,7 @@ const PostDetail = () => {
           showTranslate
           callback={handleUpdateList}
           translateData={translateData}
-          rows={50}
+          rows={40000}
         />
         <HotBtn mb='10px' list={data?.topics} />
         <PrintBtn className='print-hide' />
@@ -162,6 +162,7 @@ const PostDetail = () => {
             }}
           />
           <PostHandleBtns
+            print
             itemData={data}
             isTribeOnwer={
               tribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===

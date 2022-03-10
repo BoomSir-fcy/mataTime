@@ -146,6 +146,7 @@ declare namespace Api {
       is_share: number;
       top: number;
       add_time: string;
+      post_time?: string;
       add_time_desc: string;
       image_list: string[];
       is_comment: number;
@@ -162,6 +163,15 @@ declare namespace Api {
       selected: number;
       tribe_id: number;
       tribe_top: number;
+      nft_image?: string;
+      tribe_data?: {
+        id: number;
+        name: string;
+        nft_image: string;
+        nick_name: string;
+        post_id: number;
+        title: string
+      }
     }
     interface TribeTopicInfo {
       id: number;
