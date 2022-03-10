@@ -21,12 +21,14 @@ const SendUser: React.FC<{
   return (
     <Flex alignItems='center'>
       <Img src={Avatar} />
-      <Text mr='18px' fontSize='18px' bold>
-        {name}
-      </Text>
-      <Text fontSize='14px' color='textTips'>
-        {dayjs(time).format('MM-DD HH:mm')}
-      </Text>
+      <Flex alignItems='center' flexWrap='wrap'>
+        <Text mr='18px' fontSize='18px' bold>
+          {name}
+        </Text>
+        <Text fontSize='14px' color='textTips'>
+          {dayjs(time).format('MM-DD HH:mm')}
+        </Text>
+      </Flex>
     </Flex>
   );
 };
