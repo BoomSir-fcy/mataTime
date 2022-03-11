@@ -116,7 +116,8 @@ const TribeNft: React.FC<{
             </Flex>
           ) : (
             <>
-              {(tribeInfo?.status === 0 || tribeInfo?.status === 6) && (
+              {(tribeInfo?.status === NftStatus.INIT ||
+                tribeInfo?.status === NftStatus.Quit) && (
                 <Flex mb='12px' justifyContent='center'>
                   <BtnIcon
                     name='icon-wodebula'
@@ -130,19 +131,10 @@ const TribeNft: React.FC<{
                   />
                 </Flex>
               )}
-              {/* {tribeInfo?.status !== 0 && (
-                <Flex mb='12px'>
-                  <Text color='textTips'>#{detail?.nft_id}</Text>
-                  <Text ml='30px' color='textTips'>
-                    Validity Date:{' '}
-                    {`${dayjs().format('YY-MM-DD')}~${dayjs(
-                      detail?.expire_time * 1000,
-                    ).format('YY-MM-DD')}`}
-                  </Text>
-                </Flex>
-              )} */}
+
               {/* 质押 */}
-              {(tribeInfo?.status === 2 || tribeInfo?.status === 3) && (
+              {(tribeInfo?.status === NftStatus.Received ||
+                tribeInfo?.status === NftStatus.UnStake) && (
                 <Flex mb='12px' justifyContent='space-between'>
                   <Flex flexDirection='column' mr='15px'>
                     <Text>{t('ValidityDays')}:</Text>
@@ -167,7 +159,7 @@ const TribeNft: React.FC<{
                 </Flex>
               )}
               {/* 取消质押 */}
-              {(tribeInfo?.status === 4 ||
+              {(tribeInfo?.status === NftStatus.Staked ||
                 tribeInfo?.expire === TribeNftStatus.expire) && (
                 <Flex mb='12px' justifyContent='space-between'>
                   <Flex flexDirection='column' mr='15px'>
