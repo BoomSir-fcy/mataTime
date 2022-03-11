@@ -62,23 +62,9 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
   ({ data, ref, callback }) => {
     const { t } = useTranslation();
     const { toastSuccess, toastError } = useToast();
-    const [reportShow, setReportShow] = useState<boolean>(false);
-    const [editShow, setEditShow] = useState<boolean>(false);
     const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
     const [inqueryType, setInqueryType] = useState<string>('TribeTopping');
-    const UID = useStore(p => p.loginReducer.userInfo.uid);
     const theme = useTheme();
-
-    const [state, setState] = useImmer({
-      cancelFollow: false,
-    });
-
-    // useEffect(() => {
-    //   init();
-    // }, [data]);
-
-    // //  初始化
-    // const init = () => {};
 
     // 置顶
     const onTopPostRequest = async (pid: number) => {

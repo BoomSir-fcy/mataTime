@@ -13,7 +13,7 @@ export enum Timing {
   JOIN_TRIBE = 2, // 以加入部落的时间计时
 }
 
-// 1 未领取 2已领取 3 取消质押 4 已质押 5已过期
+// 1 未领取 2已领取 3 取消质押 4 已质押 5已过期 6已退出
 export enum NftStatus {
   INIT = 0,
   UnReceive = 1,
@@ -21,6 +21,7 @@ export enum NftStatus {
   UnStake = 3,
   Staked = 4,
   Expired = 5,
+  Quit = 6,
 }
 
 export enum TribeNftStatus {

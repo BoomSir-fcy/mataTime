@@ -4,9 +4,9 @@ import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
 import { Icon, Avatar, JoinInviteModal } from 'components';
 import { Card, Flex, Text } from 'uikit';
-import { useStore } from 'store';
 import { useTranslation } from 'contexts';
-
+import { useStore } from 'store';
+import { TribeType, NftStatus } from 'store/tribe/type';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 
 const Desc = styled(Text)`
@@ -58,7 +58,7 @@ const TribeInfo: React.FC<{
               ),
             })}
           </Text>
-          {detail?.type === 2 && tribeInfo?.status !== 0 && (
+          {detail?.type === TribeType.PRO && tribeInfo?.status !== 0 && (
             <Icon
               name='icon-fenxiang'
               color='textPrimary'

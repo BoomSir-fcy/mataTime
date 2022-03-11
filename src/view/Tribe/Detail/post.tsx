@@ -28,8 +28,7 @@ const PostListComponents = (props, ref) => {
   const dispatch = useDispatch();
   const [isEnd, setIsEnd] = useState(false);
   const { list, lastList, page, addListNum, loading, top, start } = article;
-  const { tribePostMap, blockUsersIds, deletePostIds, unFollowUsersIds } =
-    useMapModule();
+  const { tribePostMap, blockUsersIds, deletePostIds } = useMapModule();
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
   const parsedQs = useParsedQueryString();
 
@@ -135,8 +134,9 @@ const PostListComponents = (props, ref) => {
         !deletePostIds.includes(item.id)
       );
     });
+
     return resPost;
-  }, [list, blockUsersIds, unFollowUsersIds, deletePostIds]);
+  }, [list, blockUsersIds, deletePostIds]);
 
   const getList = useCallback(
     (type?: LoadType, id?) => {
