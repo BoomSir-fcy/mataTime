@@ -69,8 +69,6 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     });
 
     useEffect(() => {
-      console.log(data);
-
       init();
     }, [data]);
 

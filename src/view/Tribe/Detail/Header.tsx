@@ -6,7 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex, Heading, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore, storeAction } from 'store';
-import { TribeInfo, TribeType } from 'store/tribe/type';
+import { TribeInfo, NftStatus, TribeNftStatus } from 'store/tribe/type';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
 import TradeLogo from '../components/TradeCard/TradeLogo';
@@ -257,15 +257,16 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
               />
             )}
 
-          {TribeInfo?.status === 4 && (
-            <Link
-              to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
-                TribeInfo?.tribe?.name,
-              )}`}
-            >
-              <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
-            </Link>
-          )}
+          {TribeInfo?.status === NftStatus.Staked &&
+            TribeInfo?.expire === TribeNftStatus.notExpired && (
+              <Link
+                to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
+                  TribeInfo?.tribe?.name,
+                )}`}
+              >
+                <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+              </Link>
+            )}
         </>
       )}
     </Box>
