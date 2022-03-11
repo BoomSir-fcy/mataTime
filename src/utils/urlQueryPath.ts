@@ -10,6 +10,7 @@ export const getEncodeValue = (query) => {
 }
 
 export const getDecodeValue = (search) => {
+  if (!search) return ''
   try {
     return decodeURIComponent(search)
   } catch (error) {
