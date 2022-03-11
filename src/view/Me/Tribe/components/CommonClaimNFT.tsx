@@ -35,14 +35,16 @@ const StyledImg = styled.img<{ active?: boolean }>`
   ${({ theme, active }) =>
     active &&
     `
-  box-shadow: ${theme.isDark}
-      ? '0px 0px 10px 0px ${theme.colors.white}'
-      : '0px 0px 10px 0px ${theme.colors.backgroundPrimary}';
+  box-shadow: 0px 0px 10px 0px ${
+    theme.isDark ? theme.colors.white : theme.colors.backgroundPrimary
+  }
+      ;
   `}
 `;
 const ContentFlex = styled(Flex)`
   max-width: 100%;
   flex-direction: column;
+  margin-top: 20px;
   ${({ theme }) => theme.mediaQueries.md} {
     max-width: 60%;
   }
@@ -97,8 +99,8 @@ export const CommonClaimNFT: React.FC<{
     }, [type, tribesNftInfo]);
     return (
       <>
-        <Flex flexWrap='wrap' alignItems='center'>
-          <NFTBox mr='80px' mb='20px'>
+        <Flex flexWrap='wrap'>
+          <NFTBox mr='80px'>
             <StyledImg
               className='nft-img'
               active={status === NftStatus.Staked}
@@ -120,7 +122,12 @@ export const CommonClaimNFT: React.FC<{
                 t(`${nftInfo.name}`)
               )}
             </Text>
-            <Text mt='20px' color='textTips' small>
+            <Text
+              mt='20px'
+              color='textTips'
+              small
+              style={{ wordBreak: 'break-all' }}
+            >
               {t(`${nftInfo.introduction}`)}
             </Text>
             <Text mt='20px' color='textTips' small>

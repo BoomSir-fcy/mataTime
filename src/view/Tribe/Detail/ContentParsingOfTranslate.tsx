@@ -128,7 +128,11 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
       ) : (
         <Flex>
           <Text color='textTips'>您未加入/质押当前部落,无法查看当前帖子。</Text>
-          <LinkExternal href={`/tribe/detail?id=${itemData.tribe_id}`} external>
+          <LinkExternal
+            color='textPrimary'
+            href={`/tribe/detail?id=${itemData.tribe_id}`}
+            external
+          >
             去加入/质押
           </LinkExternal>
         </Flex>
