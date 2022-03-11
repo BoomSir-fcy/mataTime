@@ -21,13 +21,15 @@ import { StakeButton } from 'view/Me/Tribe/components/actionNft';
 
 const InfoFlex = styled(Flex)`
   width: 100%;
+  align-items: flex-start;
   ${({ theme }) => theme.mediaQueriesSize.marginb}
   ${({ theme }) => theme.mediaQueries.md} {
+    align-items: normal;
   }
 `;
 
 const RightFlex = styled(Flex)`
-  /* min-height: 100px; */
+  /* min-WminWidth: 100px; */
   margin-left: 18px;
   ${({ theme }) => theme.mediaQueries.md} {
     margin-left: 32px;
@@ -48,7 +50,17 @@ const UserImg = styled.img`
   border-radius: 50%;
   object-fit: cover;
   width: 24px;
-  height: 24px;
+  wminwidth: 24px;
+`;
+
+const TribeUserOwnerContent = styled(Flex)`
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-top: 0;
+  }
 `;
 
 interface HeaderProps {
@@ -157,10 +169,10 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
                 ))}
               </NumberFlex>
             </Box>
-            <Flex justifyContent='space-between' alignItems='center'>
+            <TribeUserOwnerContent>
               <TribeOwner TribeInfo={TribeInfo} />
               <Send_joinBtn TribeInfo={TribeInfo} t={t} dispatch={dispatch} />
-            </Flex>
+            </TribeUserOwnerContent>
           </RightFlex>
         </InfoFlex>
       )}
@@ -181,14 +193,18 @@ const TribeNumInfo = ({ item }) => {
 
 const TribeOwner = ({ TribeInfo }) => {
   return (
-    <>
+    <Box
+      style={{
+        minWidth: '0',
+      }}
+    >
       <Flex alignItems='center'>
         <UserImg src={TribeInfo?.tribe?.nft_image} alt='' />
         <Text ml='10px' bold ellipsis>
           {TribeInfo?.tribe?.nick_name}
         </Text>
       </Flex>
-    </>
+    </Box>
   );
 };
 
@@ -198,7 +214,11 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
   const { userInfo } = useStore(p => p.loginReducer);
 
   return (
-    <>
+    <Box
+      style={{
+        flexShrink: 0,
+      }}
+    >
       {!account ? (
         <Button
           onClick={e => {
@@ -248,7 +268,7 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
           )}
         </>
       )}
-    </>
+    </Box>
   );
 };
 

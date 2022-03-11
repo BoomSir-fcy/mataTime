@@ -22,6 +22,12 @@ export enum NftStatus {
   Staked = 4,
   Expired = 5,
 }
+
+export enum TribeNftStatus {
+  notExpired = 0,
+  expire = 1,
+}
+
 export interface TribeBaseInfo {
   name?: string;
   logo?: string;
@@ -83,6 +89,7 @@ export interface TribeInfo {
     member_nft_id?: number;
     nft_id: number;
   };
+  expire: number;
   topics: Api.Tribe.TopicInfo[];
   // 0未加入 1未领取 2已领取 3取消质押 4已质押 5已过期 6已退出
   status: 0 | 1 | 2 | 3 | 4 | 5 | 6;
