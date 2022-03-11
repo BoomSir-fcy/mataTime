@@ -27,17 +27,18 @@ const NFTBox = styled(Box)`
   width: 200px;
   height: 200px;
   border-radius: 10px;
-  .nft-img {
-    border-radius: 10px;
-    box-shadow: ${({ theme }) =>
-      theme.isDark
-        ? `0px 0px 10px 0px ${theme.colors.white}`
-        : ` 0px 0px 10px 0px ${theme.colors.backgroundPrimary}`};
-  }
 `;
-const StyledImg = styled.img`
+const StyledImg = styled.img<{ active?: boolean }>`
   width: 200px;
   height: 200px;
+  border-radius: 10px;
+  ${({ theme, active }) =>
+    active &&
+    `
+  box-shadow: ${theme.isDark}
+      ? '0px 0px 10px 0px ${theme.colors.white}'
+      : '0px 0px 10px 0px ${theme.colors.backgroundPrimary}';
+  `}
 `;
 const ContentFlex = styled(Flex)`
   max-width: 100%;
@@ -100,6 +101,7 @@ export const CommonClaimNFT: React.FC<{
           <NFTBox mr='80px' mb='20px'>
             <StyledImg
               className='nft-img'
+              active={status === NftStatus.Staked}
               src={
                 nftInfo.image
                   ? `${BASE_IMAGE_URL}${nftInfo.image}`

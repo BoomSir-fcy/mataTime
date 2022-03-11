@@ -52,7 +52,9 @@ export const HeadText = styled(Text)`
 export const ItemText = styled(Text)`
   color: ${({ theme }) => theme.colors.white_black};
   font-size: 14px;
-  &.tribe-name,
+  &.tribe-name {
+    cursor: pointer;
+  }
   &.member-nft {
     margin-left: 0px;
     cursor: pointer;
@@ -87,11 +89,13 @@ export const MyTribeHeaderFlex = styled(Flex)`
 
 export const MyTribeActionFlex = styled(Flex)`
   width: 100%;
-  margin-top: 10px;
+  margin-top: 30px;
+  flex-direction: row;
   justify-content: space-between;
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: column;
     width: auto;
+    margin-top: 0px;
   }
 `;
 

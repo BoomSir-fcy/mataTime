@@ -42,6 +42,7 @@ const InfoBox = styled(Box)`
 const InfoFlex = styled(Flex)`
   padding: 16px 0;
   flex-wrap: wrap;
+  /* align-items: center; */
 `;
 const TabText = styled(Text).attrs({ small: true })`
   color: ${({ theme }) => theme.colors.textTips};
@@ -71,11 +72,15 @@ const ManageButton = styled(Box)`
   position: relative;
   .tips-flex {
     position: absolute;
-    top: -10px;
-    left: 76px;
+    top: -27px;
+    right: 0px;
     padding: 5px 15px;
     background-color: ${({ theme }) => theme.colors.tipsBg};
     border-radius: 9px;
+    ${({ theme }) => theme.mediaQueries.md} {
+      right: -174px;
+      top: -10px;
+    }
   }
 `;
 
@@ -320,7 +325,7 @@ const MyMasterNftTribe = React.memo(() => {
                               <Text
                                 ml='5px'
                                 small
-                                color='textTips'
+                                color='white'
                                 style={{ whiteSpace: 'nowrap' }}
                               >
                                 {t('Please set member NFT')}
@@ -443,7 +448,7 @@ const MemberNftTribe = React.memo(() => {
               <Row border={item.border} key={item.nft_id}>
                 {!item.repeat ? (
                   <ItemText
-                    // className='tribe-name'
+                    className='tribe-name'
                     ellipsis
                     onClick={() => {
                       history.push(`/tribe/detail?id=${item.id}`);
@@ -460,8 +465,12 @@ const MemberNftTribe = React.memo(() => {
                     logo={item?.image}
                     pro={item?.tribe_info?.tribe?.type}
                   />
-                  <ItemText className='member-nft' ml='10px'>
-                    <Link external href={getBscScanLink(tribeAddress, 'token')}>
+                  <ItemText className='member-nft'>
+                    <Link
+                      color='white_black'
+                      external
+                      href={getBscScanLink(tribeAddress, 'token')}
+                    >
                       #{item?.nft_id}
                     </Link>
                   </ItemText>
@@ -529,8 +538,13 @@ const MemberNftTribe = React.memo(() => {
         </Table>
       </TableBox>
 
-      <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text className='totalPage' fontSize='14px' color='textTips'>
+      <PaginateStyle alignItems='center' justifyContent='flex-end'>
+        <Text
+          width='auto'
+          className='totalPage'
+          fontSize='14px'
+          color='textTips'
+        >
           {t('Account Total %page% page', { page: getTotalPage() })}
         </Text>
         <ReactPaginate
