@@ -1,18 +1,21 @@
 import React from 'react';
+import { useImmer } from 'use-immer';
 import { Card, Flex, Text } from 'uikit';
 import { FileTribeModal } from 'components';
 import { useTranslation } from 'contexts';
+import { useTribeInfoById } from 'store/mapModule/hooks';
 import { useFetchFileList } from 'store/tribe/helperHooks';
+import { NftStatus } from 'store/tribe/type';
 import getFileExt from 'utils/getFileExt';
 
 import FileIcon from 'components/Icon/FileIcon';
-import { useImmer } from 'use-immer';
 
 const TribeFiles: React.FC<{
   tribe_id: number;
   mb: string;
 }> = ({ ...props }) => {
   const { t } = useTranslation();
+  const tribeInfo = useTribeInfoById(props.tribe_id);
   const { data, updateData } = useFetchFileList(props.tribe_id, 1);
   const [state, setState] = useImmer({
     visible: false,
@@ -20,7 +23,7 @@ const TribeFiles: React.FC<{
 
   return (
     <>
-      {data?.reserved?.length > 0 && (
+      {data?.reserved?.length > 0 && tribeInfo?.status !== NftStatus.INIT && (
         <Card padding='16px' isRadius {...props}>
           <Flex justifyContent='space-between' alignItems='flex-end' mb='20px'>
             <Text fontSize='18px' fontWeight='bold'>
