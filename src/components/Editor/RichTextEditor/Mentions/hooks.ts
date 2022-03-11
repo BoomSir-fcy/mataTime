@@ -136,10 +136,12 @@ export const useMentions = (editor, ref, tribeId?: number) => {
   useEffect(() => {
     if (target && ref.current && chars.length > 0) {
       const el = ref.current
-      const domRange = ReactEditor.toDOMRange(editor, target)
-      const rect = domRange.getBoundingClientRect()
-      el.style.top = `${rect.top + window.pageYOffset + 24}px`
-      el.style.left = `${rect.left + window.pageXOffset}px`
+      if (el) {
+        const domRange = ReactEditor.toDOMRange(editor, target)
+        const rect = domRange.getBoundingClientRect()
+        el.style.top = `${rect.top + window.pageYOffset + 24}px`
+        el.style.left = `${rect.left + window.pageXOffset}px`
+      }
     }
   }, [chars.length, ref, editor, index, search, target])
 
