@@ -13,7 +13,7 @@ import CircleLoader from 'components/Loader/CircleLoader';
 import { useTribeMemberAction } from 'view/Me/Tribe/hooks';
 import { useToast } from 'hooks/useToast';
 import { useGetBnbBalance, useTokenBalance } from 'hooks/useTokenBalance';
-import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance';
+import { getBalanceAmount } from 'utils/formatBalance';
 import BigNumber from 'bignumber.js';
 import { TRIBE_FEE_BNB_TOKEN } from 'config';
 import Dots from 'components/Loader/Dots';
@@ -100,7 +100,7 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
             </Text>
             <Text padding='0 4px' color='textOrigin'>
               {RefundAmount !== null ? (
-                getBalanceNumber(RefundAmount)
+                getBalanceAmount(RefundAmount).toString()
               ) : (
                 <CircleLoader />
               )}
