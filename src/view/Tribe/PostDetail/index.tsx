@@ -7,13 +7,14 @@ import {
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import {
   useFetchAutoPostTranslate,
   useFetchAutoCommentTranslate,
   usePostTranslateMap,
   useTribeInfoById,
   useTribePostDetailById,
+  useFetchTribeInfoById,
 } from 'store/mapModule/hooks';
 import {
   fetchPostDetailAsync,
@@ -67,10 +68,13 @@ const PostDetail = () => {
   const { toastSuccess } = useToast();
   const { t } = useTranslation();
 
+  const { goBack } = useHistory();
+
   const id = Number(i);
   const currentUid = useStore(p => p.loginReducer.userInfo);
 
   const data = useTribePostDetailById(id);
+  useFetchTribeInfoById(data?.tribe_id);
   const tribeInfo = useTribeInfoById(data?.tribe_id);
 
   useFetchAutoPostTranslate();
@@ -169,9 +173,12 @@ const PostDetail = () => {
                 post_id: data?.id,
               },
             }}
-            callback={(item: any, type?: MoreOperatorEnum) => {
-              console.log(1);
-              handleUpdateList(item, type);
+            callback={(data, type) => {
+              handleUpdateList(data, type);
+              if (type === MoreOperatorEnum.DELPOST) {
+                goBack();
+                return;
+              }
             }}
           />
           <PostHandleBtns
@@ -181,7 +188,13 @@ const PostDetail = () => {
               tribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===
               account?.toLocaleLowerCase()
             }
-            callback={handleUpdateList}
+            callback={(data, type) => {
+              handleUpdateList(data, type);
+              if (type === MoreOperatorEnum.DELPOST) {
+                goBack();
+                return;
+              }
+            }}
             showTranslateIcon={false}
             showTranslate={translateData?.showTranslate}
             setIsShileUser={(type, data) => {

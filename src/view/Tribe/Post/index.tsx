@@ -176,12 +176,11 @@ const Post = () => {
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <DraftTips
+      title={data?.data?.title}
       onCancle={() => {
         setDriftTipsVisible(false);
       }}
       onConfirm={() => {
-        console.log(data.data);
-        // setDraft(JSON.parse(data.data.content));
         editorRef.current?.reSetEditor(JSON.parse(data.data.content));
         setTitle(data.data.title);
         setDriftTipsVisible(false);
