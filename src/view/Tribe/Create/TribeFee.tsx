@@ -174,6 +174,7 @@ const TribeFeeForward = (props, ref) => {
       <FormItem>
         <LabelHelper
           required
+          className='tribe-setting'
           label={t('Tribe Type')}
           helper={
             <>
@@ -343,6 +344,7 @@ const TribeFeeForward = (props, ref) => {
       <FormItem>
         <LabelHelper
           required
+          className='tribe-setting'
           label={t('Read Billing')}
           helper={
             <>
@@ -615,10 +617,13 @@ const LabelHelper: React.FC<{
   colon?: boolean;
   label?: string;
   helper?: ReactNode;
-}> = ({ required, colon = false, label, helper }) => {
+  [key: string]: any;
+}> = ({ required, colon = false, label, helper, ...props }) => {
   return (
     <LabelFlex>
-      <Label required={required}>{label}</Label>
+      <Label {...props} required={required}>
+        {label}
+      </Label>
       <QuestionHelper
         margin='2px 8px'
         color='white_black'

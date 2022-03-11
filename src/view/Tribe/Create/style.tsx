@@ -84,6 +84,13 @@ export const Label = styled.label<{ required?: boolean }>`
       display: inline-block;
     }
   `}
+
+  &.tribe-setting {
+    width: auto;
+    ${({ theme }) => theme.mediaQueries.md} {
+      width: 100px;
+    }
+  }
 `;
 
 export const InputPanelStyle = styled(InputPanel)<{ width?: string }>`

@@ -70,11 +70,11 @@ export const StakeButton: React.FC<{
             setPending(true);
             try {
               await onApproveTribeNFT();
-              toastSuccess(t('Approve succeeded'));
+              toastSuccess(t('Approve Succeeded'));
               dispatch(fetchIsApproveStakeNft({ account }));
             } catch (error) {
               console.log(error);
-              toastSuccess(t('Approve failed'));
+              toastSuccess(t('Approve Failed'));
             } finally {
               setPending(false);
             }
