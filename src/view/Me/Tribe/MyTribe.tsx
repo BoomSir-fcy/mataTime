@@ -322,7 +322,7 @@ const MyMasterNftTribe = React.memo(() => {
                                 color='textTips'
                                 style={{ whiteSpace: 'nowrap' }}
                               >
-                                {t('请设置成员NFT')}
+                                {t('Please set member NFT')}
                               </Text>
                             </Flex>
                           )}
