@@ -145,6 +145,19 @@ const RichTextEditor = (
   const { onKeyDown, onChangeHandle, target, userList, onItemClick, index } =
     useMentions(editor, mentionsRef, tribeId);
 
+  // 计算模糊搜索框位置
+  // useEffect(() => {
+  //   if (target && userList?.length > 0) {
+  //     const el = mentionsRef.current;
+  //     if (el) {
+  //       const domRange = ReactEditor.toDOMRange(editor, target);
+  //       const rect = domRange.getBoundingClientRect();
+  //       el.style.top = `${rect.top + window.pageYOffset + 24}px`;
+  //       el.style.left = `${rect.left + window.pageXOffset}px`;
+  //     }
+  //   }
+  // }, [userList, mentionsRef, editor, index, target]);
+
   const serialize = useMemo(() => {
     return value.map(n => Node.string(n)).join('\n');
   }, [value]);
@@ -267,7 +280,7 @@ const RichTextEditor = (
           {target && userList.length > 0 && (
             <MentionPortal
               onItemClick={onItemClick}
-              pref={ref}
+              pref={mentionsRef}
               chars={userList}
               index={index}
             />

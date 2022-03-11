@@ -134,7 +134,6 @@ export const useMentions = (editor, ref, tribeId?: number) => {
   }, [editor, setTarget, setIndex, setSearch, onSearchUser])
 
   useEffect(() => {
-    console.log(ref)
     if (target && ref.current && chars.length > 0) {
       const el = ref.current
       const domRange = ReactEditor.toDOMRange(editor, target)
