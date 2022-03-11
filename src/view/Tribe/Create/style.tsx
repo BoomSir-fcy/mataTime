@@ -66,6 +66,12 @@ export const LabelFlex = styled(Flex)`
   label {
     width: auto;
   }
+  &.tribe-setting {
+    width: auto;
+    ${({ theme }) => theme.mediaQueries.md} {
+      width: 120px;
+    }
+  }
 `;
 export const Label = styled.label<{ required?: boolean }>`
   width: auto;
@@ -84,13 +90,6 @@ export const Label = styled.label<{ required?: boolean }>`
       display: inline-block;
     }
   `}
-
-  &.tribe-setting {
-    width: auto;
-    ${({ theme }) => theme.mediaQueries.md} {
-      width: 100px;
-    }
-  }
 `;
 
 export const InputPanelStyle = styled(InputPanel)<{ width?: string }>`

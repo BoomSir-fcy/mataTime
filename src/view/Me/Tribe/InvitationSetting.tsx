@@ -22,6 +22,7 @@ import { useTribeInfoById } from 'store/mapModule/hooks';
 import Dots from 'components/Loader/Dots';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 import { useDispatch } from 'react-redux';
+import { getBalanceAmount } from 'view/Tribe/Create/hooks';
 
 const MeTribeInvitationSetting = () => {
   useFeeTokenList();
@@ -53,10 +54,10 @@ const MeTribeInvitationSetting = () => {
   useEffect(() => {
     if (tribeInfo?.baseInfo?.feeToken) {
       setState(p => {
-        p.feeAmount = getBalanceNumber(
-          new BigNumber(tribeInfo?.baseInfo?.feeAmount),
+        p.feeAmount = getBalanceAmount(
+          tribeInfo?.baseInfo?.feeAmount,
           getFeeDecimal(tribeInfo?.baseInfo?.feeToken),
-        ).toString();
+        );
         p.timing =
           Number(tribeInfo?.baseInfo?.validDate) === 0
             ? Timing.FOREVER

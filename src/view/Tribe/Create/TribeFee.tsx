@@ -225,7 +225,7 @@ const TribeFeeForward = (props, ref) => {
                   }
                 />
                 <InputPanelStyle>
-                  <Flex justifyContent='space-between'>
+                  <Flex justifyContent='space-between' alignItems='center'>
                     <Input
                       disabled={actionType === actionTypes.EDIT && disabled}
                       noShadow
@@ -620,10 +620,8 @@ const LabelHelper: React.FC<{
   [key: string]: any;
 }> = ({ required, colon = false, label, helper, ...props }) => {
   return (
-    <LabelFlex>
-      <Label {...props} required={required}>
-        {label}
-      </Label>
+    <LabelFlex {...props}>
+      <Label required={required}>{label}</Label>
       <QuestionHelper
         margin='2px 8px'
         color='white_black'
