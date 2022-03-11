@@ -86,14 +86,14 @@ export const JoinTribeModal: React.FC<{
         joinServiceFee,
       );
       if (res === 1) {
-        toastSuccess('Join Successfully');
+        toastSuccess(t('TribeJoinSuccessfully'));
         setTimeout(() => {
           onClose(true);
         }, 5000);
       } else if (res !== 0) {
         toastError(t(`contractCode-${res}`));
       } else {
-        toastError('Failed to join');
+        toastError(t('TribeJoinFailed'));
       }
     } catch (error) {
       console.error(error);

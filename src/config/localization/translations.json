@@ -859,6 +859,8 @@
   "TribeFileLooks": "Views",
   "TIMEMAXBurned/Post": "Max Burned TIME/Post",
   "TIMEMAXBurned/PostUnit": "%value% TIME/Post",
+  "TribeJoinSuccessfully": "Join successfully",
+  "TribeJoinFailed": "Join failed",
   "TribeJoinModalTitle": "Join '%value%'",
   "TribeJoinModalText": "The cost of joining a basic tribe",
   "TribeJoinModalText1": "Based on MATTER cyclic supply and METATIME DAU",
