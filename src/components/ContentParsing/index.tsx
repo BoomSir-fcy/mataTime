@@ -28,6 +28,7 @@ import {
   Ol,
   Blockquote,
   PARAGRAPH_MT,
+  Code,
 } from 'components/Editor/RichTextEditor/RenderElement/styleds';
 
 type IProps = {
@@ -39,6 +40,7 @@ type IProps = {
   disableParseSquare?: boolean; // 评论不生成话题
   mode?: 'preview' | 'detail';
   imgList?: string[];
+  tribe_id?: number;
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -93,6 +95,7 @@ export const ContentParsing = React.memo(
       mode = 'detail',
       rows,
       imgList,
+      tribe_id,
     } = props;
 
     useEffect(() => {
@@ -186,11 +189,16 @@ export const ContentParsing = React.memo(
                 // event.preventDefault();
                 event.stopPropagation();
               }}
-              to={() =>
-                `/topiclist/empty/${encodeURI(
-                  encodeURIComponent(match.slice(1, match.length)),
-                )}`
-              }
+              to={() => {
+                return tribe_id
+                  ? `/tribe/detail?id=${tribe_id}&active=0&search=#${match.slice(
+                      1,
+                      match.length,
+                    )}`
+                  : `/topiclist/empty/${encodeURI(
+                      encodeURIComponent(match.slice(1, match.length)),
+                    )}`;
+              }}
               key={match + i}
             >
               {match}&nbsp;
@@ -258,6 +266,12 @@ export const ContentParsing = React.memo(
             <Blockquote>
               {children?.map((n, index) => serialize2(n, null, index))}
             </Blockquote>
+          );
+        case 'code':
+          return (
+            <Code>
+              {children?.map((n, index) => serialize2(n, null, index))}
+            </Code>
           );
         case 'paragraph':
           return (
