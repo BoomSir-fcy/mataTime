@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ModalWrapper } from 'components';
 import { Box, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
@@ -66,6 +66,10 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
 
   const { toastError, toastSuccess } = useToast();
 
+  const IsBnb = useMemo(() => {
+    return UserInfo?.fee_token.toLocaleLowerCase() === TRIBE_FEE_BNB_TOKEN;
+  }, [UserInfo, TRIBE_FEE_BNB_TOKEN]);
+
   // 授权
   const handleApprove = useCallback(async () => {
     setpending(true);
@@ -90,7 +94,24 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
     >
       <ReportModalWrapper>
         <Content>
-          <Flex alignItems='baseline'>
+          <Flex justifyContent='start'>
+            <Text mb='10px' fontSize='14px' color='textTips'>
+              {UserInfo.symbol}
+              {t('Balance')}:
+              {IsBnb ? (
+                BNBBalance ? (
+                  getBalanceAmount(BNBBalance).toString()
+                ) : (
+                  <CircleLoader />
+                )
+              ) : TokenBalance ? (
+                getBalanceAmount(TokenBalance).toString()
+              ) : (
+                <CircleLoader />
+              )}
+            </Text>
+          </Flex>
+          <Flex alignItems='baseline' flexWrap='wrap'>
             <Text>
               {getHTML('deleteMemberModalDes', {
                 value: `<span style="color:${
@@ -121,17 +142,10 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
           disabled={pending || ApproveNum === null || RefundAmount === null}
           onClose={() => onClose()}
           onQuery={() => {
-            let Balance = null;
-            if (
-              UserInfo?.fee_token.toLocaleLowerCase() === TRIBE_FEE_BNB_TOKEN
-            ) {
-              Balance = BNBBalance;
-            } else {
-              Balance = TokenBalance;
-            }
+            const Balance = IsBnb ? BNBBalance : TokenBalance;
             if (ApproveNum) {
               if (new BigNumber(Balance).isLessThan(RefundAmount)) {
-                toastError(t('余额不足'));
+                toastError(t('Insufficient balance'));
               } else {
                 onQuery();
               }

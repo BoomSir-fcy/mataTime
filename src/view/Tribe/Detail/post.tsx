@@ -134,7 +134,6 @@ const PostListComponents = (props, ref) => {
     return () => {
       dispatch(clearMuteUserId());
       dispatch(removeMuteUserId(null));
-      console.log(1111);
     };
   }, [dispatch]);
 
