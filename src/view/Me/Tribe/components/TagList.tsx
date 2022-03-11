@@ -50,11 +50,12 @@ const TagList: React.FC<{
   onDelete?: (id: number) => void;
   mr?: string;
   mb?: string;
-}> = React.memo(({ list, onDelete, mr, mb }) => {
+  ml?: string;
+}> = React.memo(({ list, onDelete, mr, mb, ml }) => {
   return (
     <TopicsContentFlex>
       {list.map(item => (
-        <Tag mr={mr} mb={mb} key={item.id}>
+        <Tag ml={ml} mr={mr} mb={mb} key={item.id}>
           <TagText>{item.topic}</TagText>
           <CancleIcon
             onClick={() => {

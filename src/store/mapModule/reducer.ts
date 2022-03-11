@@ -121,8 +121,8 @@ export const fetchTribePostDetailAsync =
             post: detailRes.data,
           }),
         );
-        // const ids = checkTranslateIds([detailRes.data])
-        // dispatch(addTranslateIds(ids))
+        const { postIds } = checkTranslateIds([detailRes.data])
+        dispatch(addTranslateIds(postIds))
       }
     } catch (error) {
       console.error(error);

@@ -50,7 +50,7 @@ const UserImg = styled.img`
   border-radius: 50%;
   object-fit: cover;
   width: 24px;
-  wminwidth: 24px;
+  min-width: 24px;
 `;
 
 const TribeUserOwnerContent = styled(Flex)`
@@ -99,7 +99,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
 
   return (
     <>
-      {TopicId ? (
+      {/* {!TopicId ? (
         <InfoFlex flexDirection='column'>
           <Flex>
             <TradeLogo
@@ -175,6 +175,46 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
             </TribeUserOwnerContent>
           </RightFlex>
         </InfoFlex>
+      )} */}
+      <InfoFlex>
+        <TradeLogo
+          logo={TribeInfo?.tribe?.logo}
+          pro={TribeInfo?.tribe?.type === 2}
+        />
+        <RightFlex
+          flex='1'
+          flexDirection='column'
+          justifyContent='space-between'
+        >
+          <Box>
+            <Heading scale='lg'>{TribeInfo?.tribe?.name}</Heading>
+            <NumberFlex justifyContent='space-between'>
+              {ShowNumInfo.map(item => (
+                <TribeNumInfo item={item} />
+              ))}
+            </NumberFlex>
+          </Box>
+          <TribeUserOwnerContent>
+            <TribeOwner TribeInfo={TribeInfo} />
+            <Send_joinBtn TribeInfo={TribeInfo} t={t} dispatch={dispatch} />
+          </TribeUserOwnerContent>
+        </RightFlex>
+      </InfoFlex>
+      {TopicId && (
+        <Flex alignItems='center' justifyContent='flex-start'>
+          <TopicsIcon />
+          <TagList
+            mr='0'
+            mb='0'
+            ml='16px'
+            list={Topic}
+            onDelete={id => {
+              replace(
+                `${pathname}?id=${qsValue.id}&active=${qsValue.active || 0}`,
+              );
+            }}
+          />
+        </Flex>
       )}
     </>
   );
