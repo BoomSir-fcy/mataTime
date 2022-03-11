@@ -225,7 +225,7 @@ const TabsComponent = (props, ref) => {
                 {item.name}
               </ExploreButton>
             ))}
-            <ExploreCol justifyContent='space-between'>
+            <ExploreCol justifyContent='flex-start'>
               <Text color='textTips'>{t('tagsFilter')}</Text>
               <Flex font-size='14px' flexWrap='wrap'>
                 {(tags?.[1] ?? []).map((item, keys) => (
