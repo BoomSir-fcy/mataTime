@@ -97,17 +97,9 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
           <Flex justifyContent='start'>
             <Text mb='10px' fontSize='14px' color='textTips'>
               {t('Balance')}:
-              {IsBnb ? (
-                BNBBalance ? (
-                  getBalanceAmount(BNBBalance).toString()
-                ) : (
-                  <CircleLoader />
-                )
-              ) : TokenBalance ? (
-                getBalanceAmount(TokenBalance).toString()
-              ) : (
-                <CircleLoader />
-              )}
+              {IsBnb
+                ? getBalanceAmount(BNBBalance).toString()
+                : getBalanceAmount(TokenBalance).toString()}
               &nbsp;
               {UserInfo.symbol}
             </Text>
