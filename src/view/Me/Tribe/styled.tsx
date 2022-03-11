@@ -15,7 +15,7 @@ export const Table = styled(Flex)`
   align-items: center;
   width: 100%;
   min-height: 300px;
-  min-width: 600px;
+  min-width: 320px;
   .head {
     background: ${({ theme }) => theme.colors.backgroundCard};
   }
@@ -25,7 +25,19 @@ export const Row = styled.div<{ border?: boolean }>`
   display: grid;
   grid-template-columns: 27% 20% 23% 30%;
   align-items: center;
-  ${({ theme }) => theme.mediaQueriesSize.padding};
+  /* ${({ theme }) => theme.mediaQueriesSize.paddingxs}; */
+  ${({ theme }) => theme.mediaQueries.xxs} {
+    padding: 8px 8px;
+  }
+  ${({ theme }) => theme.mediaQueries.xs} {
+    padding: 8px 10px;
+  }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 8px 14px;
+  }
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 16px 14px;
+  }
   ${({ theme, border }) =>
     border && `border-bottom: 1px solid ${theme.colors.borderThemeColor}`};
 `;
@@ -42,7 +54,11 @@ export const ItemText = styled(Text)`
   font-size: 14px;
   &.tribe-name,
   &.member-nft {
+    margin-left: 0px;
     cursor: pointer;
+    ${({ theme }) => theme.mediaQueries.md} {
+      margin-left: 10px;
+    }
   }
   &:last-child {
     text-align: right;
@@ -54,7 +70,8 @@ export const LoadingAnimation = styled(Box)`
 `;
 
 export const StyledButton = styled(Button)`
-  min-width: 100px;
+  width: 100px;
+  max-width: 100px;
 `;
 
 export const MyTribeHeaderFlex = styled(Flex)`
@@ -75,5 +92,21 @@ export const MyTribeActionFlex = styled(Flex)`
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: column;
     width: auto;
+  }
+`;
+
+export const MemberActionFlex = styled(Flex)`
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  .stake-button {
+    margin-bottom: 8px;
+    ${({ theme }) => theme.mediaQueries.md} {
+      margin-right: 8px;
+      margin-bottom: 0px;
+    }
+  }
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
   }
 `;

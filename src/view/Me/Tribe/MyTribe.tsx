@@ -15,6 +15,7 @@ import {
   Table,
   TableBox,
   MyTribeActionFlex,
+  MemberActionFlex,
 } from './styled';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
@@ -438,7 +439,7 @@ const MemberNftTribe = React.memo(() => {
               <Row border={item.border} key={item.nft_id}>
                 {!item.repeat ? (
                   <ItemText
-                    className='tribe-name'
+                    // className='tribe-name'
                     ellipsis
                     onClick={() => {
                       history.push(`/tribe/detail?id=${item.id}`);
@@ -449,7 +450,7 @@ const MemberNftTribe = React.memo(() => {
                 ) : (
                   <ItemText />
                 )}
-                <Flex alignItems='center'>
+                <Flex flexWrap='wrap' alignItems='center'>
                   <TradeLogo
                     scales='xs'
                     logo={item?.image}
@@ -464,11 +465,7 @@ const MemberNftTribe = React.memo(() => {
                 <ItemText>
                   {formatTime(item?.claim_time, 'YYYY-MM-DD HH:mm')}
                 </ItemText>
-                <Flex
-                  justifyContent='flex-end'
-                  // flexWrap='wrap'
-                  alignItems='center'
-                >
+                <MemberActionFlex>
                   {!account && (
                     <StyledButton
                       onClick={e => {
@@ -485,8 +482,8 @@ const MemberNftTribe = React.memo(() => {
                     item?.status === NftStatus.UnStake) ? (
                     <>
                       <StakeButton
+                        className='stake-button'
                         scale='sm'
-                        mr='8px'
                         tribeId={item.id}
                         nftId={item.nft_id}
                         nftType={2}
@@ -521,7 +518,7 @@ const MemberNftTribe = React.memo(() => {
                       }}
                     />
                   )}
-                </Flex>
+                </MemberActionFlex>
               </Row>
             ))
           )}
