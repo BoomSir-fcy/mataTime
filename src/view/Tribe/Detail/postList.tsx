@@ -219,6 +219,7 @@ const PostList: React.FC<PostListPorps> = ({
                         item.is_attention,
                     },
                     ...map[item[postIdKey]],
+                    content: map[item[postIdKey]]?.content || item.content,
                     post_id: item[postIdKey],
                     postId: item[postIdKey],
                     id: item[postIdKey],

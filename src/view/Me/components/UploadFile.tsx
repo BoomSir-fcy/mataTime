@@ -21,7 +21,7 @@ const UpdateBtnSmall = styled(Flex)`
   background-color: ${({ theme }) => theme.colors.input};
   width: auto;
   padding: 16px 8px;
-  width: 365px;
+  /* width: 365px; */
   max-width: 100%;
   height: 148px;
   position: relative;
@@ -133,6 +133,14 @@ const UploadFileButton: React.FC<UploadFileButtonProps> = ({
     if (Api.isSuccess(res)) {
       toastSuccess(t('Upload successful'));
       setVisible(false);
+      setValue('');
+      setFileInfo({
+        name: '',
+        ext: '',
+        path: '',
+        full_path: '',
+        size: 0,
+      });
       if (onSuccess) onSuccess();
     }
     setSaveLoading(false);

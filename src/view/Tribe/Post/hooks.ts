@@ -104,16 +104,16 @@ export const useSendPostOrDraft = (
         // TODO:
         return FetchStatus.SUCCESS;
       }
-      if (res.code === ResponseCode.ADD_POST_VERIFY) {
+      if (res?.code === ResponseCode.ADD_POST_VERIFY) {
         return FetchStatus.VERIFY;
       }
-      if (res.code === ResponseCode.ADD_POST_VERIFY_ERROR) {
+      if (res?.code === ResponseCode.ADD_POST_VERIFY_ERROR) {
         toastError(t('verifyError'));
         return FetchStatus.VERIFY_ERROR;
       }
       
-      if (res.code === ResponseCode.TRIBE_FILE_MEMBER_ERROR) {
-        toastError(t(`http-error-${res.code}`));
+      if (res?.code === ResponseCode.TRIBE_FILE_MEMBER_ERROR) {
+        toastError(t(`http-error-${res?.code}`));
       }
       return FetchStatus.FAILED;
     },

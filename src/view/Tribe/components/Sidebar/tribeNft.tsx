@@ -116,76 +116,129 @@ const TribeNft: React.FC<{
             </Flex>
           ) : (
             <>
-              {(tribeInfo?.status === NftStatus.INIT ||
-                tribeInfo?.status === NftStatus.Quit) && (
-                <Flex mb='12px' justifyContent='center'>
-                  <BtnIcon
-                    name='icon-wodebula'
-                    text={t('tribeJoin')}
-                    onClick={() => {
-                      if (detail?.type === TribeType.BASIC) {
-                        dispatch(fetchTribeJoinBasicServiceAsync());
-                      }
-                      dispatch(storeAction.setJoinTribeVisibleModal(true));
-                    }}
-                  />
-                </Flex>
-              )}
-
-              {/* 质押 */}
-              {(tribeInfo?.status === NftStatus.Received ||
-                tribeInfo?.status === NftStatus.UnStake) && (
-                <Flex mb='12px' justifyContent='space-between'>
-                  <Flex flexDirection='column' mr='15px'>
-                    <Text>{t('ValidityDays')}:</Text>
-                    <Text color='textTips'>
-                      {detail?.valid_time > 0
-                        ? `${dayjs().format('YY-MM-DD')}~${dayjs()
-                            .add(detail?.valid_time / 60 / 60 / 24, 'day')
-                            .format('YY-MM-DD')}`
-                        : t('ValidityDaysForver')}
-                    </Text>
-                  </Flex>
-                  {detail?.nft_id !== 0 && (
-                    <StakeButton
-                      tribeId={props.tribe_id}
-                      nftId={detail.nft_id}
-                      nftType={isOwner}
-                      callback={() => {
-                        dispatch(fetchTribeInfoAsync(props.tribe_id));
-                      }}
-                    />
+              {/* 已经过期处理 */}
+              {tribeInfo?.expire === TribeNftStatus.expire ? (
+                <>
+                  {/* 加入部落 */}
+                  {tribeInfo?.status <= NftStatus.UnStake && (
+                    <Flex mb='12px' justifyContent='center'>
+                      <BtnIcon
+                        disabled={!Boolean(tribeInfo?.baseInfo?.feeToken)}
+                        name='icon-wodebula'
+                        text={t('tribeJoin')}
+                        onClick={() => {
+                          if (detail?.type === TribeType.BASIC) {
+                            dispatch(fetchTribeJoinBasicServiceAsync());
+                          }
+                          dispatch(storeAction.setJoinTribeVisibleModal(true));
+                        }}
+                      />
+                    </Flex>
                   )}
-                </Flex>
-              )}
-              {/* 取消质押 */}
-              {(tribeInfo?.status === NftStatus.Staked ||
-                tribeInfo?.expire === TribeNftStatus.expire) && (
-                <Flex mb='12px' justifyContent='space-between'>
-                  <Flex flexDirection='column' mr='15px'>
-                    <Text>{t('ValidityDays')}:</Text>
-                    <Text color='textTips'>
-                      {detail?.expire_time > 0 &&
-                        nowDateUnix >= detail?.expire_time &&
-                        t('TribeValidityDaysExpired')}
+                  {/* 取消质押 */}
+                  {tribeInfo?.status === NftStatus.Staked && (
+                    <Flex mb='12px' justifyContent='space-between'>
+                      <Flex flexDirection='column' mr='15px'>
+                        <Text>{t('ValidityDays')}:</Text>
+                        <Text color='textTips'>
+                          {detail?.expire_time > 0 &&
+                            nowDateUnix >= detail?.expire_time &&
+                            t('TribeValidityDaysExpired')}
 
-                      {detail?.expire_time > 0 &&
-                        nowDateUnix < detail?.expire_time &&
-                        `${dayjs().format('YY-MM-DD')}~${dayjs(
-                          detail?.expire_time * 1000,
-                        ).format('YY-MM-DD')}`}
+                          {detail?.expire_time > 0 &&
+                            nowDateUnix < detail?.expire_time &&
+                            `${dayjs().format('YY-MM-DD')}~${dayjs(
+                              detail?.expire_time * 1000,
+                            ).format('YY-MM-DD')}`}
 
-                      {detail?.expire_time === 0 && t('ValidityDaysForver')}
-                    </Text>
-                  </Flex>
-                  <UnStakeButton
-                    tribeId={props.tribe_id}
-                    nftType={isOwner}
-                    callback={() =>
-                      dispatch(fetchTribeInfoAsync(props.tribe_id))
-                    }
-                  />
-                </Flex>
+                          {detail?.expire_time === 0 && t('ValidityDaysForver')}
+                        </Text>
+                      </Flex>
+                      <UnStakeButton
+                        tribeId={props.tribe_id}
+                        nftType={isOwner}
+                        callback={() =>
+                          dispatch(fetchTribeInfoAsync(props.tribe_id))
+                        }
+                      />
+                    </Flex>
+                  )}
+                </>
+              ) : (
+                <>
+                  {(tribeInfo?.status === NftStatus.INIT ||
+                    tribeInfo?.status === NftStatus.Quit) && (
+                    <Flex mb='12px' justifyContent='center'>
+                      <BtnIcon
+                        disabled={!Boolean(tribeInfo?.baseInfo?.feeToken)}
+                        name='icon-wodebula'
+                        text={t('tribeJoin')}
+                        onClick={() => {
+                          if (detail?.type === TribeType.BASIC) {
+                            dispatch(fetchTribeJoinBasicServiceAsync());
+                          }
+                          dispatch(storeAction.setJoinTribeVisibleModal(true));
+                        }}
+                      />
+                    </Flex>
+                  )}
+
+                  {/* 质押 */}
+                  {(tribeInfo?.status === NftStatus.Received ||
+                    tribeInfo?.status === NftStatus.UnStake) && (
+                    <Flex mb='12px' justifyContent='space-between'>
+                      <Flex flexDirection='column' mr='15px'>
+                        <Text>{t('ValidityDays')}:</Text>
+                        <Text color='textTips'>
+                          {detail?.valid_time > 0
+                            ? `${dayjs().format('YY-MM-DD')}~${dayjs()
+                                .add(detail?.valid_time / 60 / 60 / 24, 'day')
+                                .format('YY-MM-DD')}`
+                            : t('ValidityDaysForver')}
+                        </Text>
+                      </Flex>
+                      {detail?.nft_id !== 0 && (
+                        <StakeButton
+                          tribeId={props.tribe_id}
+                          nftId={detail.nft_id}
+                          nftType={isOwner}
+                          callback={() => {
+                            dispatch(fetchTribeInfoAsync(props.tribe_id));
+                          }}
+                        />
+                      )}
+                    </Flex>
+                  )}
+
+                  {/* 取消质押 */}
+                  {tribeInfo?.status === NftStatus.Staked && (
+                    <Flex mb='12px' justifyContent='space-between'>
+                      <Flex flexDirection='column' mr='15px'>
+                        <Text>{t('ValidityDays')}:</Text>
+                        <Text color='textTips'>
+                          {detail?.expire_time > 0 &&
+                            nowDateUnix >= detail?.expire_time &&
+                            t('TribeValidityDaysExpired')}
+
+                          {detail?.expire_time > 0 &&
+                            nowDateUnix < detail?.expire_time &&
+                            `${dayjs().format('YY-MM-DD')}~${dayjs(
+                              detail?.expire_time * 1000,
+                            ).format('YY-MM-DD')}`}
+
+                          {detail?.expire_time === 0 && t('ValidityDaysForver')}
+                        </Text>
+                      </Flex>
+                      <UnStakeButton
+                        tribeId={props.tribe_id}
+                        nftType={isOwner}
+                        callback={() =>
+                          dispatch(fetchTribeInfoAsync(props.tribe_id))
+                        }
+                      />
+                    </Flex>
+                  )}
+                </>
               )}
             </>
           )}

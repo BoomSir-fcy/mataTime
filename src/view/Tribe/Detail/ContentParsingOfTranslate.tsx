@@ -14,6 +14,7 @@ import {
   fetchPostTranslateAsync,
 } from 'store/mapModule/reducer';
 import { TranslateInfo } from 'store/types';
+import { data } from 'libs/mini-swap/pancake-uikit/components/Table/example/const';
 
 type ContentParsingOfTranslateProps = {
   showTranslate?: boolean;
@@ -45,6 +46,7 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
           <ContentParsing
             mode={mode}
             rows={rows}
+            tribe_id={itemData.tribe_id}
             content={
               // 原文和译文一起显示
               showTranslate
@@ -56,6 +58,7 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
             callback={(type: MoreOperatorEnum) => {
               callback(itemData, type);
             }}
+            imgList={itemData.image_list}
           />
           <Box className='print-hide'>
             {showTranslate && !!translateData && (
@@ -114,6 +117,7 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
                 </Flex>
                 {translateData?.showTranslate && (
                   <ContentParsing
+                    tribe_id={itemData.tribe_id}
                     mode={mode}
                     content={translateData?.content}
                     callback={(type: MoreOperatorEnum) => {
@@ -127,13 +131,17 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
         </>
       ) : (
         <Flex>
-          <Text color='textTips'>您未加入/质押当前部落,无法查看当前帖子。</Text>
+          <Text color='textTips'>
+            {t(
+              "You haven't joined / pledged the current tribe. You can't view the current post.",
+            )}
+          </Text>
           <LinkExternal
             color='textPrimary'
             href={`/tribe/detail?id=${itemData.tribe_id}`}
             external
           >
-            去加入/质押
+            {t('To join / pledge')}
           </LinkExternal>
         </Flex>
       )}

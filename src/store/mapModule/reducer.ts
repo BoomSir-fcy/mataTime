@@ -13,6 +13,9 @@ import {
   removeTranslateIds,
   addCommentTranslateIds,
   removeCommentTranslateIds,
+  addMuteUserId,
+  removeMuteUserId,
+  clearMuteUserId,
 } from './actions';
 import { Api } from 'apis';
 import uniqBy from 'lodash/uniqBy';
@@ -40,6 +43,8 @@ const initialState: MapModuleState = {
   blockUsersIds: [],
   deletePostIds: [],
   status: [],
+  muteUsersIds: [],
+  unMuteId: null,
 };
 
 export const fetchPostDetailAsync =
@@ -67,24 +72,27 @@ export const fetchPostDetailAsync =
 export const fetchTribeBaseInfoDataAsync =
   (tribe_id: number) => async (dispatch, getState) => {
     try {
-      const { nftInfo, baseInfo } = await getTribeBaseInfoData(tribe_id)
-      dispatch(setTribeInfo({
-        nftInfo,
-        baseInfo,
-        tribe_id,
-      }));
-
+      const { nftInfo, baseInfo } = await getTribeBaseInfoData(tribe_id);
+      dispatch(
+        setTribeInfo({
+          nftInfo,
+          baseInfo,
+          tribe_id,
+        }),
+      );
     } catch (error) {
       console.error(error);
     }
   };
 
-
 export const fetchTribeInfoAsync =
   (tribe_id: number) => async (dispatch, getState) => {
     try {
-      dispatch(fetchTribeBaseInfoDataAsync(tribe_id))
-      const [info, detail] = await Promise.all([Api.TribeApi.tribeInfo({ tribe_id }), Api.TribeApi.tribeDetail({ tribe_id })])
+      dispatch(fetchTribeBaseInfoDataAsync(tribe_id));
+      const [info, detail] = await Promise.all([
+        Api.TribeApi.tribeInfo({ tribe_id }),
+        Api.TribeApi.tribeDetail({ tribe_id }),
+      ]);
       // const data = await Api.TribeApi.tribeInfo({ tribe_id });
 
       if (Api.isSuccess(info)) {
@@ -121,8 +129,8 @@ export const fetchTribePostDetailAsync =
             post: detailRes.data,
           }),
         );
-        // const ids = checkTranslateIds([detailRes.data])
-        // dispatch(addTranslateIds(ids))
+        const { postIds } = checkTranslateIds([detailRes.data])
+        dispatch(addTranslateIds(postIds))
       }
     } catch (error) {
       console.error(error);
@@ -216,7 +224,6 @@ export const fetchTranslateAsync = async (ids: number[], type = 'post') => {
       };
     }
   }
-
 };
 export const fetchPostTranslateAsync =
   (ids: number[]) => async (dispatch, getState) => {
@@ -413,6 +420,20 @@ export const Post = createSlice({
         state.needTranslateCommentIds = state.needTranslateCommentIds.filter(
           item => !payload.includes(item),
         );
+      })
+      .addCase(addMuteUserId, (state, { payload }) => {
+        if (!state.muteUsersIds.includes(payload)) {
+          state.muteUsersIds = [...state.muteUsersIds, payload];
+        }
+      })
+      .addCase(clearMuteUserId, state => {
+        state.muteUsersIds = [];
+      })
+      .addCase(removeMuteUserId, (state, { payload }) => {
+        state.unMuteId = payload;
+        state.muteUsersIds = state.muteUsersIds.filter(
+          item => item !== payload,
+        );
       });
   },
 });
@@ -426,7 +447,7 @@ export const {
   changePostTranslateState,
   setCommentTranslate,
   changeCommentTranslateState,
-  setTribePostDetail
+  setTribePostDetail,
 } = Post.actions;
 
 export default Post.reducer;

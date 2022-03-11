@@ -22,6 +22,7 @@ export const Blockquote = styled.blockquote`
 export const Ul = styled.ul`
   ${mt}
   list-style-type: disc;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const Li = styled.li``;
@@ -29,6 +30,7 @@ export const Li = styled.li``;
 export const Ol = styled.ol`
   ${mt}
   list-style-type: decimal;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const H1 = styled.h1``;
@@ -48,7 +50,7 @@ export const Code = styled.pre`
   &:not(pre + pre) {
     ${mt}
   }
-  &:last-of-type{
+  &:last-of-type {
     padding-bottom: 0.88889em;
   }
   & * {

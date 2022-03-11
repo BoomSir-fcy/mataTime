@@ -29,6 +29,8 @@ import TradeCard from 'view/Tribe/components/TradeCard';
 
 const LinkBox = styled(Box)`
   width: 48%;
+  min-width: 184px;
+  overflow: hidden;
   ${({ theme }) => theme.mediaQueries.md} {
     width: auto;
   }
@@ -78,6 +80,7 @@ const TribeResult: React.FC<TribeResultProps> = ({ list, loading, isEnd }) => {
               </LinkBox>
             ))}
           </FlexAutoWarpper>
+          {!list.length && !loading && <Empty />}
         </Flex>
       </List>
     </Box>
