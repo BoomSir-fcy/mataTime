@@ -130,13 +130,13 @@ const PostListComponents = (props, ref) => {
   }));
 
   // 进入页面清除禁言列表和取消禁言的id
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(clearMuteUserId());
-  //     dispatch(removeMuteUserId(null));
-  //     console.log(1111);
-  //   };
-  // }, [dispatch]);
+  useEffect(() => {
+    return () => {
+      dispatch(clearMuteUserId());
+      dispatch(removeMuteUserId(null));
+      console.log(1111);
+    };
+  }, [dispatch]);
 
   const renderList = useMemo(() => {
     const resPost = list.filter(item => {
@@ -158,8 +158,6 @@ const PostListComponents = (props, ref) => {
         return muteObj;
       }
     });
-    console.log(resChangeMutePost);
-
     return resChangeMutePost;
   }, [list, blockUsersIds, deletePostIds, muteUsersIds, unMuteId]);
 
