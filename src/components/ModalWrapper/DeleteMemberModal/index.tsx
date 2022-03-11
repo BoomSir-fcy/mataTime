@@ -96,7 +96,6 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
         <Content>
           <Flex justifyContent='start'>
             <Text mb='10px' fontSize='14px' color='textTips'>
-              {UserInfo.symbol}
               {t('Balance')}:
               {IsBnb ? (
                 BNBBalance ? (
@@ -109,6 +108,8 @@ export const DeleteMemberModal = React.memo((props: IProp) => {
               ) : (
                 <CircleLoader />
               )}
+              &nbsp;
+              {UserInfo.symbol}
             </Text>
           </Flex>
           <Flex alignItems='baseline' flexWrap='wrap'>
