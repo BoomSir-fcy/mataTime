@@ -11,6 +11,8 @@ import { copyContent } from 'utils/copy';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
 import Popup from 'reactjs-popup';
+import { useDispatch } from 'react-redux';
+import { addMuteUserId, removeMuteUserId } from 'store/mapModule/actions';
 
 type Iprops = {
   data: any;
@@ -65,6 +67,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
     const [inqueryType, setInqueryType] = useState<string>('TribeTopping');
     const theme = useTheme();
+    const dispatch = useDispatch();
 
     // 置顶
     const onTopPostRequest = async (pid: number) => {
@@ -106,6 +109,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const onPostMute = async (tribe_id: number, uid: number) => {
       const res = await Api.TribeApi.tribePostMute({ tribe_id, uid });
       if (Api.isSuccess(res)) {
+        dispatch(addMuteUserId(uid));
         callback(data, TribeMoreOperatorEnum.MUTE);
         toastSuccess(t('Mute successfully'));
       } else if (res.code === 30016020) {
@@ -117,8 +121,11 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
     const onPostNotMute = async (tribe_id: number, uid: number) => {
       const res = await Api.TribeApi.tribePostNotMute({ tribe_id, uid });
       if (Api.isSuccess(res)) {
+        dispatch(removeMuteUserId(uid));
         callback(data, TribeMoreOperatorEnum.CANCEL_MUTE);
         toastSuccess(t('Unmuted successfully'));
+      } else if (res.code === 30016020) {
+        toastError(t('Member does not belong to tribe'));
       }
     };
 

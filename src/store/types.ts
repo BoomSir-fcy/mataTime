@@ -155,6 +155,8 @@ export interface MapModuleState {
   deletePostIds: number[];
   blockUsersIds: number[];
   status: MapModuleStatus[];
+  muteUsersIds: number[];
+  unMuteId: number;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

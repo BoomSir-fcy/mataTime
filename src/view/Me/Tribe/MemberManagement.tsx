@@ -22,6 +22,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString';
 import { TRIBE_FEE_BNB_TOKEN } from 'config';
 import BigNumber from 'bignumber.js';
 import { getTotalPage } from 'utils/pageHelpers';
+import { addMuteUserId, removeMuteUserId } from 'store/mapModule/actions';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -127,7 +128,8 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   const onPostMute = async (uid: number) => {
     const res = await Api.TribeApi.tribePostMute({ tribe_id: parseQs.i, uid });
     if (Api.isSuccess(res)) {
-      toastSuccess(t('禁言成功'));
+      dispatch(addMuteUserId(uid));
+      toastSuccess(t('Mute successfully'));
       getMemberList(page);
     }
   };
@@ -139,7 +141,8 @@ const MeTribeMemberManagement: React.FC<init> = () => {
       uid,
     });
     if (Api.isSuccess(res)) {
-      toastSuccess(t('取消禁言成功'));
+      dispatch(removeMuteUserId(uid));
+      toastSuccess(t('Unmuted successfully'));
       getMemberList(page);
     }
   };
