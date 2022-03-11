@@ -45,6 +45,13 @@ const Tags: React.FC<{
                 replace(
                   `/tribe/detail?id=${item.tribe_id}&topic=${item.id}&topicName=${item.topic}`,
                 );
+                setTimeout(() => {
+                  window.scrollTo({
+                    // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
+                    behavior: 'auto',
+                    top: 0,
+                  });
+                }, 0);
               }}
               key={`${item}${index}`}
             >

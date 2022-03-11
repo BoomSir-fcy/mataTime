@@ -55,6 +55,13 @@ const HotBtn: React.FC<{
                     qsValue.active || 0
                   }&topic=${item.id}&topicName=${item.name}`,
                 );
+                setTimeout(() => {
+                  window.scrollTo({
+                    // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
+                    behavior: 'auto',
+                    top: 0,
+                  });
+                }, 0);
                 callBack(Number(item.id));
               }}
               key={`${item.id}${index}`}

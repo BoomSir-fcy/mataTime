@@ -89,6 +89,13 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({
       url = `&topic=${TopicId}&topicName=${qsValue.topicName}`;
     }
     replace(`${pathname}?id=${TribeId}&active=${type}${url}`);
+    setTimeout(() => {
+      window.scrollTo({
+        // behavior: scrollState[pathname]?.y ? 'auto' : 'smooth',
+        behavior: 'auto',
+        top: 0,
+      });
+    }, 0);
   };
 
   useEffect(() => {
