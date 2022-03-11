@@ -6,7 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex, Heading, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore, storeAction } from 'store';
-import { TribeInfo, TribeType } from 'store/tribe/type';
+import { TribeInfo, NftStatus, TribeNftStatus } from 'store/tribe/type';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
 import TradeLogo from '../components/TradeCard/TradeLogo';
@@ -50,7 +50,7 @@ const UserImg = styled.img`
   border-radius: 50%;
   object-fit: cover;
   width: 24px;
-  wminwidth: 24px;
+  min-width: 24px;
 `;
 
 const TribeUserOwnerContent = styled(Flex)`
@@ -99,7 +99,7 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
 
   return (
     <>
-      {TopicId ? (
+      {/* {!TopicId ? (
         <InfoFlex flexDirection='column'>
           <Flex>
             <TradeLogo
@@ -175,6 +175,46 @@ const DetailHeader: React.FC<HeaderProps> = ({ TribeInfo, TopicId }) => {
             </TribeUserOwnerContent>
           </RightFlex>
         </InfoFlex>
+      )} */}
+      <InfoFlex>
+        <TradeLogo
+          logo={TribeInfo?.tribe?.logo}
+          pro={TribeInfo?.tribe?.type === 2}
+        />
+        <RightFlex
+          flex='1'
+          flexDirection='column'
+          justifyContent='space-between'
+        >
+          <Box>
+            <Heading scale='lg'>{TribeInfo?.tribe?.name}</Heading>
+            <NumberFlex justifyContent='space-between'>
+              {ShowNumInfo.map(item => (
+                <TribeNumInfo item={item} />
+              ))}
+            </NumberFlex>
+          </Box>
+          <TribeUserOwnerContent>
+            <TribeOwner TribeInfo={TribeInfo} />
+            <Send_joinBtn TribeInfo={TribeInfo} t={t} dispatch={dispatch} />
+          </TribeUserOwnerContent>
+        </RightFlex>
+      </InfoFlex>
+      {TopicId && (
+        <Flex alignItems='center' justifyContent='flex-start'>
+          <TopicsIcon />
+          <TagList
+            mr='0'
+            mb='0'
+            ml='16px'
+            list={Topic}
+            onDelete={id => {
+              replace(
+                `${pathname}?id=${qsValue.id}&active=${qsValue.active || 0}`,
+              );
+            }}
+          />
+        </Flex>
       )}
     </>
   );
@@ -231,40 +271,59 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
         </Button>
       ) : (
         <>
-          {userInfo.address !== TribeInfo?.tribe?.owner_address &&
-            (TribeInfo?.status === 0 || TribeInfo?.status === 6) && (
-              <BtnIcon
-                disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
-                name='icon-wodebula'
-                text={t('tribeJoin')}
-                onClick={() => {
-                  dispatch(storeAction.setJoinTribeVisibleModal(true));
-                }}
-              />
-            )}
+          {/* 已经过期处理 */}
+          {TribeInfo?.expire === TribeNftStatus.expire ? (
+            <>
+              {TribeInfo?.status <= NftStatus.UnStake && (
+                <BtnIcon
+                  disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
+                  name='icon-wodebula'
+                  text={t('tribeJoin')}
+                  onClick={() => {
+                    dispatch(storeAction.setJoinTribeVisibleModal(true));
+                  }}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              {userInfo.address !== TribeInfo?.tribe?.owner_address &&
+                (TribeInfo?.status === NftStatus.INIT ||
+                  TribeInfo?.status === NftStatus.Quit) && (
+                  <BtnIcon
+                    disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
+                    name='icon-wodebula'
+                    text={t('tribeJoin')}
+                    onClick={() => {
+                      dispatch(storeAction.setJoinTribeVisibleModal(true));
+                    }}
+                  />
+                )}
 
-          {(TribeInfo?.status === 2 || TribeInfo?.status === 3) &&
-            TribeInfo?.detail?.nft_id !== 0 && (
-              <StakeButton
-                tribeId={TribeInfo?.tribe_id}
-                nftId={TribeInfo?.detail?.nft_id}
-                nftType={
-                  userInfo.address === TribeInfo?.tribe?.owner_address ? 1 : 2
-                }
-                callback={() => {
-                  dispatch(fetchTribeInfoAsync(TribeInfo?.tribe_id));
-                }}
-              />
-            )}
+              {(TribeInfo?.status === NftStatus.Received ||
+                TribeInfo?.status === NftStatus.UnStake) && (
+                <StakeButton
+                  tribeId={TribeInfo?.tribe_id}
+                  nftId={TribeInfo?.detail?.nft_id}
+                  nftType={
+                    userInfo.address === TribeInfo?.tribe?.owner_address ? 1 : 2
+                  }
+                  callback={() => {
+                    dispatch(fetchTribeInfoAsync(TribeInfo?.tribe_id));
+                  }}
+                />
+              )}
 
-          {TribeInfo?.status === 4 && (
-            <Link
-              to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
-                TribeInfo?.tribe?.name,
-              )}`}
-            >
-              <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
-            </Link>
+              {TribeInfo?.status === NftStatus.Staked && (
+                <Link
+                  to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
+                    TribeInfo?.tribe?.name,
+                  )}`}
+                >
+                  <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+                </Link>
+              )}
+            </>
           )}
         </>
       )}

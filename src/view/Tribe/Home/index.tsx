@@ -20,6 +20,8 @@ const PaddingFlex = styled(Flex)`
 
 const LinkBox = styled(Box)`
   width: 48%;
+  min-width: 184px;
+  overflow: hidden;
   ${({ theme }) => theme.mediaQueries.md} {
     width: auto;
   }
@@ -130,6 +132,7 @@ const Home = () => {
                 </LinkBox>
               ))}
             </FlexAutoWarpper>
+            {!TribeList.length && !loading && <Empty />}
           </Flex>
         </List>
       </PaddingFlex>

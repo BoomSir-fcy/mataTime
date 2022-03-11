@@ -9,6 +9,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import {
+  useFetchAutoPostTranslate,
+  useFetchAutoCommentTranslate,
   usePostTranslateMap,
   useTribeInfoById,
   useTribePostDetailById,
@@ -70,6 +72,9 @@ const PostDetail = () => {
 
   const data = useTribePostDetailById(id);
   const tribeInfo = useTribeInfoById(data?.tribe_id);
+
+  useFetchAutoPostTranslate();
+  useFetchAutoCommentTranslate();
 
   const [nonce, setNonce] = useState(0);
   useReadArticle(nonce);

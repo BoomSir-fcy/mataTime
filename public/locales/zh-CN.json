@@ -852,6 +852,8 @@
   "TribeFileLooks": "查看",
   "TIMEMAXBurned/Post": "最大销毁TIME/篇",
   "TIMEMAXBurned/PostUnit": "%value% TIME/Post",
+  "TribeJoinSuccessfully": "加入成功",
+  "TribeJoinFailed": "加入失败",
   "TribeJoinModalTitle": "加入 “%value%”",
   "TribeJoinModalText": "加入基本部落的费用",
   "TribeJoinModalText1": "基于 MATTER 循环供应和 METATIME DAU",

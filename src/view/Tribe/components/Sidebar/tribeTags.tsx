@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Card, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useTribeInfoById } from 'store/mapModule/hooks';
+import { NftStatus, TribeNftStatus } from 'store/tribe/type';
 import { useHistory } from 'react-router-dom';
 import { useToast } from 'hooks';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -67,14 +68,16 @@ const TribeTags: React.FC<{
 
   return (
     <>
-      {tribeInfo?.topics?.length > 0 && (
-        <Card padding='16px' isRadius {...props}>
-          <Text mb='20px' fontSize='18px' fontWeight='bold'>
-            {t('TribeTagsTitle')}
-          </Text>
-          <Tags list={tribeInfo?.topics?.slice(0, 7) ?? []} />
-        </Card>
-      )}
+      {tribeInfo?.topics?.length > 0 &&
+        tribeInfo?.status !== NftStatus.INIT &&
+        tribeInfo?.expire !== TribeNftStatus.expire && (
+          <Card padding='16px' isRadius {...props}>
+            <Text mb='20px' fontSize='18px' fontWeight='bold'>
+              {t('TribeTagsTitle')}
+            </Text>
+            <Tags list={tribeInfo?.topics?.slice(0, 7) ?? []} />
+          </Card>
+        )}
     </>
   );
 };

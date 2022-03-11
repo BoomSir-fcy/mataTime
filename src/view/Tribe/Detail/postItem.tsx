@@ -42,12 +42,12 @@ const PostItem: React.FC<PostInfoPorps> = ({
     <PostBox>
       <Top>
         <Flex width='80%' alignItems='center'>
-          {itemData.selected !== 0 && <Featured />}
-          {itemData.tribe_top !== 0 && (
+          {!!itemData.selected && <Featured />}
+          {!!itemData.tribe_top && (
             <Icon size={20} color='textOrigin' name='icon-jiantou' />
           )}
           <Text
-            ml={itemData.selected !== 0 || itemData.top !== 0 ? '10px' : ''}
+            ml={itemData.selected || itemData.top ? '10px' : ''}
             fontSize='18px'
             bold
             ellipsis

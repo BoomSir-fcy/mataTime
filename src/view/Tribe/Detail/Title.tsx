@@ -24,6 +24,13 @@ const Tab = styled(Flex)`
   }
 `;
 
+const TabsContent = styled(CommentTitle)`
+  padding-left: 15px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-left: 0;
+  }
+`;
+
 interface DetailTitlePorps {
   TribeId: number;
   TopicId: number;
