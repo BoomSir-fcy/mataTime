@@ -17,6 +17,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { useToast } from 'hooks';
+import { getDecodeValue, getEncodeValue } from 'utils/urlQueryPath';
 
 const SearchBox = styled(Card)<{ focus?: boolean }>`
   position: relative;
@@ -62,10 +63,11 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
 
   const [focus, setFocus] = useState(false);
   const [toFocus, setToFocus] = useState(false);
-  const [value, setValue] = useState(parsedQs.search || '');
+  const [value, setValue] = useState(getDecodeValue(parsedQs.search) || '');
   const { loading } = useStore(p => p.tribe.postList);
   const { pathname } = useLocation();
   const tribeDetailInfo = useTribeInfoById(parsedQs.id);
+  const [searchFlag, setSearchFlag] = useState(false);
   const { toastWarning } = useToast();
 
   const debouncedOnChange = useMemo(
@@ -75,17 +77,15 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
           replace(
             `${pathname}?id=${TribeId}&active=${
               parsedQs.active ? parsedQs.active : 0
-            }&search=${e}`,
+            }&search=${getEncodeValue(e)}`,
           );
           tabsChange({
             search: e,
             SearchActiveTitle: Number(parsedQs.active),
           });
-        } else if (
-          e &&
-          typeof tribeDetailInfo?.status === 'number' &&
-          !isNaN(tribeDetailInfo?.status)
-        ) {
+        } else if (typeof tribeDetailInfo?.status !== 'number') {
+          setSearchFlag(true);
+        } else if (e && !isNaN(tribeDetailInfo?.status)) {
           toastWarning(t('Only clan members can search'));
         }
       }, 500),
@@ -111,6 +111,12 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({ TribeId, tabsChange }) => {
     debouncedOnChange(search);
   }, [value]);
 
+  useEffect(() => {
+    if (searchFlag) {
+      const search = value ? `${value}`.trim() : value;
+      debouncedOnChange(search);
+    }
+  }, [searchFlag, value, tribeDetailInfo?.status]);
   return (
     <Box>
       <form

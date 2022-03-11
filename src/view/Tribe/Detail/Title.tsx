@@ -8,6 +8,7 @@ import { useStore } from 'store';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { getDecodeValue } from 'utils/urlQueryPath';
 
 const Tab = styled(Flex)`
   align-items: baseline;
@@ -75,7 +76,9 @@ const DetailTitle: React.FC<DetailTitlePorps> = ({
       search: qsValue.search,
     });
     replace(
-      `${pathname}?id=${TribeId}&active=${type}&search=${qsValue.search}`,
+      `${pathname}?id=${TribeId}&active=${type}&search=${getDecodeValue(
+        qsValue.search,
+      )}`,
     );
   };
 

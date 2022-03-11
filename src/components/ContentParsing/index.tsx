@@ -191,9 +191,8 @@ export const ContentParsing = React.memo(
               }}
               to={() => {
                 return tribe_id
-                  ? `/tribe/detail?id=${tribe_id}&active=0&search=#${match.slice(
-                      1,
-                      match.length,
+                  ? `/tribe/detail?id=${tribe_id}&active=0&search=${encodeURI(
+                      encodeURIComponent(`#${match.slice(1, match.length)}`),
                     )}`
                   : `/topiclist/empty/${encodeURI(
                       encodeURIComponent(match.slice(1, match.length)),
