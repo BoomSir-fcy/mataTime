@@ -2,7 +2,14 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Box, Text, Flex, Empty, Spinner } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import { Crumbs, UserFlowItem, HoverLink, List, LoadType } from 'components';
+import {
+  Crumbs,
+  UserFlowItem,
+  HoverLink,
+  List,
+  LoadType,
+  FlexAutoWarpper,
+} from 'components';
 import SearchInput from 'components/SearchInput';
 import SearchTopicItem from 'components/SearchInput/SearchTopicItem';
 import SearchUserItem from 'components/SearchInput/SearchUserItem';
@@ -19,6 +26,13 @@ import {
   fetchSearchTribeAsync,
 } from 'store/search/reducer';
 import TradeCard from 'view/Tribe/components/TradeCard';
+
+const LinkBox = styled(Box)`
+  width: 48%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: auto;
+  }
+`;
 
 interface TribeResultProps {
   list: any[];
@@ -49,11 +63,22 @@ const TribeResult: React.FC<TribeResultProps> = ({ list, loading, isEnd }) => {
           getList();
         }}
       >
-        {list.map((item, index) => (
-          <Link key={item.id} to={`/tribe/detail?id=${item.id}`}>
-            {item.id && <TradeCard info={item} />}
-          </Link>
-        ))}
+        {/* {list.map((item, index) => (
+          
+        ))} */}
+        <Flex flexWrap='wrap' justifyContent='space-around'>
+          <FlexAutoWarpper lineMax={2}>
+            {list.map((item, index) => (
+              <LinkBox
+                key={item.id}
+                as={Link}
+                to={`/tribe/detail?id=${item.id}`}
+              >
+                {item.id && <TradeCard info={item} />}
+              </LinkBox>
+            ))}
+          </FlexAutoWarpper>
+        </Flex>
       </List>
     </Box>
   );
