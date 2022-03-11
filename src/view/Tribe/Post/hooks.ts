@@ -39,6 +39,7 @@ import { Descendant, Node } from 'slate';
 import { HUGE_ARTICLE_POST_MAX_LEN } from 'config';
 import { Api } from 'apis';
 import { FetchStatus } from 'config/types';
+import { ResponseCode } from 'apis/type';
 
 const verifyValue = (title, value) => {
   if (!title) {
@@ -99,16 +100,20 @@ export const useSendPostOrDraft = (
       });
       setLoading(false);
       if (Api.isSuccess(res)) {
-        toastSuccess(t(method === 'tribePostCreate' ? '发布成功' : '保存成功'));
+        toastSuccess(t(method === 'tribePostCreate' ? t('Posted successfully') : t('Saved successfully')));
         // TODO:
         return FetchStatus.SUCCESS;
       }
-      if (res.code === 30004019) {
+      if (res.code === ResponseCode.ADD_POST_VERIFY) {
         return FetchStatus.VERIFY;
       }
-      if (res.code === 30004020) {
+      if (res.code === ResponseCode.ADD_POST_VERIFY_ERROR) {
         toastError(t('verifyError'));
         return FetchStatus.VERIFY_ERROR;
+      }
+      
+      if (res.code === ResponseCode.TRIBE_FILE_MEMBER_ERROR) {
+        toastError(t(`http-error-${res.code}`));
       }
       return FetchStatus.FAILED;
     },
