@@ -209,7 +209,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
 
     // 删除
     const onPostDelRequest = async (pid: number) => {
-      const res = await Api.AttentionApi.delPost(pid);
+      const res = await Api.TribeApi.tribePostDelete({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.DELPOST);
         toastSuccess(t('moreDeleteSuccess'));
@@ -219,7 +219,7 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
     return (
       <React.Fragment>
         <PopupWrapper>
-          {/* {isOwn && (
+          {isOwn && (
             <>
               <Text
                 textTransform='capitalize'
@@ -230,22 +230,8 @@ export const MoreTribePopup: React.FC<Iprops> = React.memo(
               >
                 {t('moreDelete')}
               </Text>
-              <Text
-                textTransform='capitalize'
-                onClick={() => {
-                  if (data.post.is_top === 1) {
-                    setInqueryType('cancelTopping');
-                    setCommonInqueryShow(true);
-                  } else {
-                    setInqueryType('topping');
-                    setCommonInqueryShow(true);
-                  }
-                }}
-              >
-                {data.post.is_top === 1 ? t('moreCancelTop') : t('moreTop')}
-              </Text>
             </>
-          )} */}
+          )}
 
           {/* todo 后端字段没改，所以传入用户id 屏蔽 */}
           {Number(postUid) !== data.post.user_id && (

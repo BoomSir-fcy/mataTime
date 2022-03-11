@@ -148,41 +148,18 @@ const PostListComponents = (props, ref) => {
     const resChangeMutePost = resPost.map(item => {
       if (muteUsersIds.includes(item.user_id)) {
         let muteObj = { ...item, is_mute: 1 };
-        console.log(
-          muteUsersIds,
-          muteObj.user_id,
-          muteObj.title,
-          muteObj.is_mute,
-          item.is_mute,
-          '禁言状态',
-        );
         return muteObj;
       } else {
         if (unMuteId === Number(item.user_id)) {
           let muteObj = { ...item, is_mute: 0 };
-          console.log(
-            muteUsersIds,
-            unMuteId,
-            muteObj.user_id,
-            muteObj.title,
-            muteObj.is_mute,
-            item.is_mute,
-            '取消禁言',
-          );
           return muteObj;
         }
         let muteObj = { ...item };
-        console.log(
-          muteUsersIds,
-          muteObj.user_id,
-          muteObj.title,
-          muteObj.is_mute,
-          item.is_mute,
-          '无操作',
-        );
         return muteObj;
       }
     });
+    console.log(resChangeMutePost);
+
     return resChangeMutePost;
   }, [list, blockUsersIds, deletePostIds, muteUsersIds, unMuteId]);
 

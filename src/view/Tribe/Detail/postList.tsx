@@ -243,6 +243,7 @@ const PostList: React.FC<PostListPorps> = ({
                       map[item[postIdKey]]?.add_time ??
                       item.add_time ??
                       (item as any).add_time_desc,
+                    is_mute: item.is_mute,
                   }}
                   callback={(item: any, type: MoreOperatorEnum) => {
                     handleUpdateList(item, type);

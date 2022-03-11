@@ -129,8 +129,8 @@ export const fetchTribePostDetailAsync =
             post: detailRes.data,
           }),
         );
-        const { postIds } = checkTranslateIds([detailRes.data])
-        dispatch(addTranslateIds(postIds))
+        const { postIds } = checkTranslateIds([detailRes.data]);
+        dispatch(addTranslateIds(postIds));
       }
     } catch (error) {
       console.error(error);
@@ -422,6 +422,7 @@ export const Post = createSlice({
         );
       })
       .addCase(addMuteUserId, (state, { payload }) => {
+        state.unMuteId = null;
         if (!state.muteUsersIds.includes(payload)) {
           state.muteUsersIds = [...state.muteUsersIds, payload];
         }
