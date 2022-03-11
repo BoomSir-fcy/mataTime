@@ -131,6 +131,7 @@ const Home = () => {
                 </LinkBox>
               ))}
             </FlexAutoWarpper>
+            {!TribeList.length && !loading && <Empty />}
           </Flex>
         </List>
       </PaddingFlex>

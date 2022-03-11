@@ -31,13 +31,15 @@ export const ImageStyled = styled.img`
 export const ImageStyledFull = styled.img`
   max-width: 100%;
   min-width: 105px;
+  width: 100%;
 `;
 
-export const BoxStyled = styled(Box)<{ selected?: boolean }>`
+export const BoxStyled = styled(Box)<{ selected?: boolean; full?: boolean }>`
   display: inline-block;
   line-height: 0; /* 去除 inline-block 底部间距 */
   outline: ${({ selected, theme }) =>
     selected ? `3px solid ${theme.colors.textPrimary}` : 'none'};
+  width: ${({ full }) => (full ? '100%' : 'auto')};
 `;
 
 export const BoxStyledWrapper = styled(Box)<{ align?: string }>`
@@ -87,8 +89,8 @@ export const ImageStyledRender: React.FC<ImageStyledRenderProps> = ({
 
   const preViewImg = useCallback(
     i => {
-      if (!i) return;
-      if (list) return;
+      if (typeof i !== 'number') return;
+      if (!list) return;
       const preList = [...list.slice(i), ...list.slice(0, i)];
       setPreviewImgList(preList);
       setPhotoIndex(0);
@@ -119,7 +121,7 @@ export const ImageStyledRender: React.FC<ImageStyledRenderProps> = ({
           }
         />
       )}
-      <BoxStyled>
+      <BoxStyled full={full}>
         {full ? (
           <ImageStyledFull
             style={{ cursor: list ? 'zoom-in' : 'inherit' }}
@@ -182,7 +184,7 @@ const Image = ({ attributes, children, element, isEditor }) => {
           contentEditable={false}
           selected={isEditor && selected && focused}
           position='relative'
-          display='inline-block'
+          full={element.full}
         >
           <Loading zIndex={2} overlay visible={element.loading} />
           {/* <ImageStyled src={element.url} alt='' /> */}

@@ -14,6 +14,7 @@ import {
   fetchPostTranslateAsync,
 } from 'store/mapModule/reducer';
 import { TranslateInfo } from 'store/types';
+import { data } from 'libs/mini-swap/pancake-uikit/components/Table/example/const';
 
 type ContentParsingOfTranslateProps = {
   showTranslate?: boolean;
@@ -56,6 +57,7 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
             callback={(type: MoreOperatorEnum) => {
               callback(itemData, type);
             }}
+            imgList={itemData.image_list}
           />
           <Box className='print-hide'>
             {showTranslate && !!translateData && (

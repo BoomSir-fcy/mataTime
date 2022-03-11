@@ -79,6 +79,7 @@ const TribeResult: React.FC<TribeResultProps> = ({ list, loading, isEnd }) => {
               </LinkBox>
             ))}
           </FlexAutoWarpper>
+          {!list.length && !loading && <Empty />}
         </Flex>
       </List>
     </Box>
