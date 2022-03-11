@@ -136,7 +136,11 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
               "You haven't joined / pledged the current tribe. You can't view the current post.",
             )}
           </Text>
-          <LinkExternal href={`/tribe/detail?id=${itemData.tribe_id}`} external>
+          <LinkExternal
+            color='textPrimary'
+            href={`/tribe/detail?id=${itemData.tribe_id}`}
+            external
+          >
             {t('To join / pledge')}
           </LinkExternal>
         </Flex>

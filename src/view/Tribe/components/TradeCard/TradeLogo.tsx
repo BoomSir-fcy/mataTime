@@ -71,7 +71,7 @@ const BoxStyled = styled(Box)<{ scale: Scales; round: boolean }>`
 `;
 
 const ProBox = styled(Box)<{ scale?: Scales }>`
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.primaryDark};
   width: 35%;
   min-width: ${({ scale }) => `${style[scale].iconMinWidth}px`};
   text-align: center;

@@ -15,6 +15,7 @@ import {
   Table,
   TableBox,
   MyTribeActionFlex,
+  MemberActionFlex,
 } from './styled';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
@@ -34,6 +35,7 @@ import { useWeb3React } from '@web3-react/core';
 import useConnectWallet from 'hooks/useConnectWallet';
 import { getTribeAddress } from 'utils/addressHelpers';
 import { getBscScanLink } from 'utils/contract';
+import { setTimeout } from 'timers';
 
 const InfoBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.paddingxs}
@@ -41,6 +43,7 @@ const InfoBox = styled(Box)`
 const InfoFlex = styled(Flex)`
   padding: 16px 0;
   flex-wrap: wrap;
+  /* align-items: center; */
 `;
 const TabText = styled(Text).attrs({ small: true })`
   color: ${({ theme }) => theme.colors.textTips};
@@ -70,11 +73,15 @@ const ManageButton = styled(Box)`
   position: relative;
   .tips-flex {
     position: absolute;
-    top: -10px;
-    left: 76px;
+    top: -27px;
+    right: 0px;
     padding: 5px 15px;
     background-color: ${({ theme }) => theme.colors.tipsBg};
     border-radius: 9px;
+    ${({ theme }) => theme.mediaQueries.md} {
+      right: -174px;
+      top: -10px;
+    }
   }
 `;
 
@@ -127,14 +134,17 @@ const MyMasterNftTribe = React.memo(() => {
   const { onConnectWallet } = useConnectWallet();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pageSize, setPageSize] = useState(6);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(1);
 
   // 1 未领取 2已领取 3 取消质押 4 已质押 5已过期
-  const getMyTribeList = useCallback(async () => {
+  const getMyTribeList = useCallback(async (pageNum?: number) => {
     try {
       setLoading(true);
       const res = await Api.TribeApi.MyTribeList({
-        page: 1,
-        page_size: 10,
+        page: pageNum || page,
+        page_size: pageSize,
       });
       if (Api.isSuccess(res)) {
         const list = res.data?.list || [];
@@ -148,6 +158,7 @@ const MyMasterNftTribe = React.memo(() => {
             };
           });
           setList(tribeList);
+          setTotal(res.data?.total_count || 1);
         }
       }
       setLoading(false);
@@ -169,8 +180,24 @@ const MyMasterNftTribe = React.memo(() => {
     });
   }, []);
 
+  const handlePageClick = useCallback(
+    event => {
+      setPage(event.selected + 1);
+      getMyTribeList(event.selected + 1);
+    },
+    [setPage],
+  );
+
+  const getTotalPage = useCallback(() => {
+    if (pageSize !== 0 && total % pageSize === 0) {
+      return parseInt(String(total / pageSize));
+    }
+    if (pageSize !== 0 && total % pageSize !== 0) {
+      return parseInt(String(total / pageSize)) + 1;
+    }
+  }, [total, pageSize]);
   return (
-    <>
+    <Box>
       {loading ? (
         <LoadingAnimation>
           <Spinner />
@@ -251,8 +278,10 @@ const MyMasterNftTribe = React.memo(() => {
                       tribeId={item.id}
                       nftType={1}
                       callback={() => {
-                        // 领取nft成功后，不能从服务器拿到实时数据，有延迟，暂时屏蔽掉刷新方法
-                        // getMyTribeList();
+                        // 领取nft成功后，不能从服务器拿到实时数据，有延迟
+                        setTimeout(() => {
+                          getMyTribeList();
+                        }, 15000);
                       }}
                     />
                   )}
@@ -319,7 +348,7 @@ const MyMasterNftTribe = React.memo(() => {
                               <Text
                                 ml='5px'
                                 small
-                                color='textTips'
+                                color='white'
                                 style={{ whiteSpace: 'nowrap' }}
                               >
                                 {t('Please set member NFT')}
@@ -336,7 +365,30 @@ const MyMasterNftTribe = React.memo(() => {
           </Box>
         ))
       )}
-    </>
+
+      <PaginateStyle alignItems='center' justifyContent='flex-end'>
+        <Text
+          width='auto'
+          className='totalPage'
+          fontSize='14px'
+          color='textTips'
+        >
+          {t('Account Total %page% page', { page: getTotalPage() })}
+        </Text>
+        <ReactPaginate
+          breakLabel='...'
+          nextLabel='>'
+          forcePage={page - 1}
+          disableInitialCallback={true}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={1}
+          pageCount={getTotalPage()}
+          previousLabel='<'
+          renderOnZeroPageCount={null}
+        />
+      </PaginateStyle>
+    </Box>
   );
 });
 
@@ -346,30 +398,33 @@ const MemberNftTribe = React.memo(() => {
   const { account } = useWeb3React();
   const tribeAddress = getTribeAddress();
   const { onConnectWallet } = useConnectWallet();
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(8);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
   const [loading, setLoading] = useState(false);
   const [memberNftList, setMemberNftList] = useState([]);
 
-  const getMyMemberTribeList = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await Api.TribeApi.MyJoinedTribeList({
-        page,
-        page_size: pageSize,
-      });
-      if (Api.isSuccess(res)) {
-        const list = ItemGroupBy(res.data?.list, 'id');
-        setMemberNftList(list);
-        setTotal(res.data?.total_count || 1);
+  const getMyMemberTribeList = useCallback(
+    async (pageNum?: number) => {
+      try {
+        setLoading(true);
+        const res = await Api.TribeApi.MyJoinedTribeList({
+          page: pageNum || page,
+          page_size: pageSize,
+        });
+        if (Api.isSuccess(res)) {
+          const list = ItemGroupBy(res.data?.list, 'id');
+          setMemberNftList(list);
+          setTotal(res.data?.total_count || 1);
+        }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setMemberNftList([]);
       }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setMemberNftList([]);
-    }
-  }, [page, pageSize]);
+    },
+    [page, pageSize],
+  );
 
   useEffect(() => {
     getMyMemberTribeList();
@@ -409,6 +464,7 @@ const MemberNftTribe = React.memo(() => {
   const handlePageClick = useCallback(
     event => {
       setPage(event.selected + 1);
+      getMyMemberTribeList(event.selected + 1);
     },
     [setPage],
   );
@@ -453,14 +509,18 @@ const MemberNftTribe = React.memo(() => {
                 ) : (
                   <ItemText />
                 )}
-                <Flex alignItems='center'>
+                <Flex flexWrap='wrap' alignItems='center'>
                   <TradeLogo
                     scales='xs'
                     logo={item?.image}
                     pro={item?.tribe_info?.tribe?.type}
                   />
-                  <ItemText className='member-nft' ml='10px'>
-                    <Link external href={getBscScanLink(tribeAddress, 'token')}>
+                  <ItemText className='member-nft'>
+                    <Link
+                      color='white_black'
+                      external
+                      href={getBscScanLink(tribeAddress, 'token')}
+                    >
                       #{item?.nft_id}
                     </Link>
                   </ItemText>
@@ -468,11 +528,7 @@ const MemberNftTribe = React.memo(() => {
                 <ItemText>
                   {formatTime(item?.claim_time, 'YYYY-MM-DD HH:mm')}
                 </ItemText>
-                <Flex
-                  justifyContent='flex-end'
-                  // flexWrap='wrap'
-                  alignItems='center'
-                >
+                <MemberActionFlex>
                   {!account && (
                     <StyledButton
                       onClick={e => {
@@ -489,8 +545,8 @@ const MemberNftTribe = React.memo(() => {
                     item?.status === NftStatus.UnStake) ? (
                     <>
                       <StakeButton
+                        className='stake-button'
                         scale='sm'
-                        mr='8px'
                         tribeId={item.id}
                         nftId={item.nft_id}
                         nftType={2}
@@ -525,15 +581,20 @@ const MemberNftTribe = React.memo(() => {
                       }}
                     />
                   )}
-                </Flex>
+                </MemberActionFlex>
               </Row>
             ))
           )}
         </Table>
       </TableBox>
 
-      <PaginateStyle alignItems='center' justifyContent='end'>
-        <Text className='totalPage' fontSize='14px' color='textTips'>
+      <PaginateStyle alignItems='center' justifyContent='flex-end'>
+        <Text
+          width='auto'
+          className='totalPage'
+          fontSize='14px'
+          color='textTips'
+        >
           {t('Account Total %page% page', { page: getTotalPage() })}
         </Text>
         <ReactPaginate

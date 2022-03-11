@@ -22,7 +22,7 @@ const TopicsIcon = () => {
         justifyContent='center'
         alignItems='center'
       >
-        <Icon size={28} color='white_black' name='icon-24gf-tags2' />
+        <Icon size={28} color='white' name='icon-24gf-tags2' />
       </Flex>
     </TopBox>
   );
