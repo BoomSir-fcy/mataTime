@@ -29,6 +29,7 @@ import TradeCard from 'view/Tribe/components/TradeCard';
 
 const LinkBox = styled(Box)`
   width: 48%;
+  overflow: hidden;
   ${({ theme }) => theme.mediaQueries.md} {
     width: auto;
   }
