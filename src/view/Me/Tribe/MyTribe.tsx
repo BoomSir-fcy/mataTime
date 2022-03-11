@@ -79,7 +79,8 @@ const ManageButton = styled(Box)`
     background-color: ${({ theme }) => theme.colors.tipsBg};
     border-radius: 9px;
     ${({ theme }) => theme.mediaQueries.md} {
-      right: -174px;
+      right: auto;
+      left: 76px;
       top: -10px;
     }
   }
@@ -310,54 +311,50 @@ const MyMasterNftTribe = React.memo(() => {
                       />
                     </>
                   ) : null}
-                  {account &&
-                    (item?.status === NftStatus.Staked ||
-                      item?.expire === TribeNftStatus.expire) && (
-                      <>
-                        <UnStakeButton
-                          tribeId={item.id}
-                          nftType={1}
-                          callback={() => {
-                            updateTribeList({
-                              ...item,
-                              status: NftStatus.UnStake,
-                            });
+                  {account && item?.status === NftStatus.Staked && (
+                    <>
+                      <UnStakeButton
+                        tribeId={item.id}
+                        nftType={1}
+                        callback={() => {
+                          updateTribeList({
+                            ...item,
+                            status: NftStatus.UnStake,
+                          });
+                        }}
+                      />
+                      <ManageButton>
+                        <StyledButton
+                          onClick={() => {
+                            if (item.initMemberNft) {
+                              history.push(`/me/tribe/info?i=${item.id}`);
+                            } else {
+                              history.push(`/me/tribe/member-nft?i=${item.id}`);
+                            }
                           }}
-                        />
-                        <ManageButton>
-                          <StyledButton
-                            onClick={() => {
-                              if (item.initMemberNft) {
-                                history.push(`/me/tribe/info?i=${item.id}`);
-                              } else {
-                                history.push(
-                                  `/me/tribe/member-nft?i=${item.id}`,
-                                );
-                              }
-                            }}
-                          >
-                            {t('Manage')}
-                          </StyledButton>
-                          {!item.initMemberNft && (
-                            <Flex className='tips-flex' alignItems='center'>
-                              <Icon
-                                name='icon-tishi'
-                                size={16}
-                                color='textOrigin'
-                              />
-                              <Text
-                                ml='5px'
-                                small
-                                color='white'
-                                style={{ whiteSpace: 'nowrap' }}
-                              >
-                                {t('Please set member NFT')}
-                              </Text>
-                            </Flex>
-                          )}
-                        </ManageButton>
-                      </>
-                    )}
+                        >
+                          {t('Manage')}
+                        </StyledButton>
+                        {!item.initMemberNft && (
+                          <Flex className='tips-flex' alignItems='center'>
+                            <Icon
+                              name='icon-tishi'
+                              size={16}
+                              color='textOrigin'
+                            />
+                            <Text
+                              ml='5px'
+                              small
+                              color='white'
+                              style={{ whiteSpace: 'nowrap' }}
+                            >
+                              {t('Please set member NFT')}
+                            </Text>
+                          </Flex>
+                        )}
+                      </ManageButton>
+                    </>
+                  )}
                 </MyTribeActionFlex>
               </InfoFlex>
             </InfoBox>
@@ -550,6 +547,9 @@ const MemberNftTribe = React.memo(() => {
                         tribeId={item.id}
                         nftId={item.nft_id}
                         nftType={2}
+                        status={
+                          item?.expire === 1 ? NftStatus.Expired : item?.status
+                        }
                         callback={() => {
                           updateTribeList({
                             ...item,
@@ -573,6 +573,9 @@ const MemberNftTribe = React.memo(() => {
                       scale='sm'
                       tribeId={item.id}
                       nftType={2}
+                      status={
+                        item?.expire === 1 ? NftStatus.Expired : item?.status
+                      }
                       callback={() => {
                         updateTribeList({
                           ...item,
