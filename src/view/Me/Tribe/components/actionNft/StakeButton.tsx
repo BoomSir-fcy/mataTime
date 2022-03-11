@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useStore } from 'store';
 import { fetchIsApproveStakeNft } from 'store/tribe';
 import { setOrGetTribeExpireToasted } from 'utils';
+import { NftStatus } from 'store/tribe/type';
 import { useApproveTribeStakeNFT, useTribeNft } from '../../hooks';
 import { StyledButton } from '../../styled';
 
@@ -14,9 +15,10 @@ export const StakeButton: React.FC<{
   tribeId: number;
   nftId: number;
   nftType: number;
+  status?: number;
   callback?: () => void;
   [key: string]: any;
-}> = ({ tribeId, nftId, nftType, callback, ...props }) => {
+}> = ({ tribeId, nftId, nftType, status, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -29,6 +31,10 @@ export const StakeButton: React.FC<{
 
   // 质押nft
   const handleStakeNft = useCallback(async () => {
+    if (status && status === NftStatus.Expired) {
+      toastError(t('The current NFT has expired'));
+      return false;
+    }
     try {
       setPending(true);
       // 部落主
@@ -48,7 +54,7 @@ export const StakeButton: React.FC<{
       setPending(false);
       toastError(t('Stake failed'));
     }
-  }, [tribeId, nftId, nftType]);
+  }, [tribeId, nftId, nftType, status]);
 
   return (
     <>
