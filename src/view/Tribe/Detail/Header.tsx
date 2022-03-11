@@ -8,6 +8,7 @@ import { useTranslation } from 'contexts';
 import { useStore, storeAction } from 'store';
 import { TribeInfo, NftStatus, TribeNftStatus } from 'store/tribe/type';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
+import { Icon } from 'components';
 
 import TradeLogo from '../components/TradeCard/TradeLogo';
 import BtnIcon from '../components/BtnIcon';
@@ -264,7 +265,19 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
                   TribeInfo?.tribe?.name,
                 )}`}
               >
-                <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+                <Button
+                  startIcon={
+                    <Icon
+                      className='show-media-md'
+                      margin='0 18px 0 0'
+                      size={21}
+                      color='white'
+                      name='icon-zhifeiji'
+                    />
+                  }
+                >
+                  {t('sendBtnText')}
+                </Button>
               </Link>
             )}
         </>

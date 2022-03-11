@@ -49,6 +49,8 @@ export const CommentTitle = styled(Flex)`
   font-weight: bold;
   border-top: solid 1px ${({ theme }) => theme.colors.borderColor};
   border-bottom: solid 1px ${({ theme }) => theme.colors.borderColor};
+  padding-left: 16px;
+  padding-right: 8px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding-left: 29px;
     padding-right: 17px;
