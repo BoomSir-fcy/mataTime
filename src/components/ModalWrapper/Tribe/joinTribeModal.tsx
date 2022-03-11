@@ -71,11 +71,17 @@ export const JoinTribeModal: React.FC<{
 
   // 加入部落
   const handleJoinTribe = React.useCallback(async () => {
-    console.log(state);
+    // 邀请地址
     const inviteAddress = Boolean(state.inviteAddress)
       ? state.inviteAddress
       : '0x0000000000000000000000000000000000000000';
-    const joinServiceFee = detail?.type === TribeType.PRO ? detail?.charge : '';
+    // BNB传入加入费用
+    const joinServiceFee =
+      detail?.type === TribeType.PRO &&
+      tribeBaseInfo?.feeToken === '0x0000000000000000000000000000000000000001'
+        ? detail?.charge
+        : '';
+    console.log(tribeInfo.tribe_id, inviteAddress, joinServiceFee);
     try {
       setState(p => {
         p.submitLoading = true;
