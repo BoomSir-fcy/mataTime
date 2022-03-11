@@ -118,3 +118,24 @@ export const isImageUrl = url => {
   // console.log(ext);
   // return imageExtensions.includes(ext)
 };
+
+/**
+ * 
+ * 获取或设置 过期时是否提示过弹窗
+ */
+const TRIBE_LOCALSTORAGE_TOASTED = 'tribeLocalStorageToasted_key'
+export const setOrGetTribeExpireToasted = (tribeId?: number, value?: number): number => {
+  if (!tribeId) return value
+  const dStr = localStorage.getItem(TRIBE_LOCALSTORAGE_TOASTED)
+  const data = dStr ? JSON.parse(dStr) : {};
+  if (typeof value !== 'undefined') {
+    localStorage.setItem(TRIBE_LOCALSTORAGE_TOASTED, JSON.stringify({
+      ...data,
+      [tribeId]: value,
+    }))
+    return value
+  }
+
+  
+  return Number(data[tribeId]) || 0
+}

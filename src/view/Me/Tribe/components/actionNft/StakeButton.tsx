@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useStore } from 'store';
 import { fetchIsApproveStakeNft } from 'store/tribe';
+import { setOrGetTribeExpireToasted } from 'utils';
 import { useApproveTribeStakeNFT, useTribeNft } from '../../hooks';
 import { StyledButton } from '../../styled';
 
@@ -40,6 +41,7 @@ export const StakeButton: React.FC<{
       }
       setPending(false);
       toastSuccess(t('Stake succeeded'));
+      setOrGetTribeExpireToasted(tribeId, 0);
       if (callback) callback();
     } catch (error) {
       console.log(error);
