@@ -13,6 +13,7 @@ import { useMapModule } from 'store/mapModule/hooks';
 import { fetchTribePostAsync, fetchTribeSearchPostAsync } from 'store/tribe';
 import PostList from './postList';
 import useParsedQueryString from 'hooks/useParsedQueryString';
+import { clearMuteUserId, removeMuteUserId } from 'store/mapModule/actions';
 
 const ArticleListBox = styled.div`
   color: #fff;
@@ -28,7 +29,8 @@ const PostListComponents = (props, ref) => {
   const dispatch = useDispatch();
   const [isEnd, setIsEnd] = useState(false);
   const { list, lastList, page, addListNum, loading, top, start } = article;
-  const { tribePostMap, blockUsersIds, deletePostIds } = useMapModule();
+  const { tribePostMap, blockUsersIds, deletePostIds, muteUsersIds, unMuteId } =
+    useMapModule();
   const pageSize = MAX_SPEND_TIME_PAGE_TATOL;
   const parsedQs = useParsedQueryString();
 
@@ -127,6 +129,15 @@ const PostListComponents = (props, ref) => {
     },
   }));
 
+  // 进入页面清除禁言列表和取消禁言的id
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(clearMuteUserId());
+  //     dispatch(removeMuteUserId(null));
+  //     console.log(1111);
+  //   };
+  // }, [dispatch]);
+
   const renderList = useMemo(() => {
     const resPost = list.filter(item => {
       return (
@@ -134,9 +145,46 @@ const PostListComponents = (props, ref) => {
         !deletePostIds.includes(item.id)
       );
     });
-
-    return resPost;
-  }, [list, blockUsersIds, deletePostIds]);
+    const resChangeMutePost = resPost.map(item => {
+      if (muteUsersIds.includes(item.user_id)) {
+        let muteObj = { ...item, is_mute: 1 };
+        console.log(
+          muteUsersIds,
+          muteObj.user_id,
+          muteObj.title,
+          muteObj.is_mute,
+          item.is_mute,
+          '禁言状态',
+        );
+        return muteObj;
+      } else {
+        if (unMuteId === Number(item.user_id)) {
+          let muteObj = { ...item, is_mute: 0 };
+          console.log(
+            muteUsersIds,
+            unMuteId,
+            muteObj.user_id,
+            muteObj.title,
+            muteObj.is_mute,
+            item.is_mute,
+            '取消禁言',
+          );
+          return muteObj;
+        }
+        let muteObj = { ...item };
+        console.log(
+          muteUsersIds,
+          muteObj.user_id,
+          muteObj.title,
+          muteObj.is_mute,
+          item.is_mute,
+          '无操作',
+        );
+        return muteObj;
+      }
+    });
+    return resChangeMutePost;
+  }, [list, blockUsersIds, deletePostIds, muteUsersIds, unMuteId]);
 
   const getList = useCallback(
     (type?: LoadType, id?) => {

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Flex, Text, Button, Box, FeaturedIcon } from 'uikit';
 import { useTranslation } from 'contexts/Localization';
-import styled, { useTheme } from 'styled-components';
-import { Icon, MoreOperatorEnum, ContentParsing } from 'components';
-import Popup from 'reactjs-popup';
-import { MoreTribePopup } from 'components/Popup/TribeMorePopup/morePopup';
-import { SetTribePopup } from 'components/Popup/TribeSetPopup/SetPopup';
+import styled from 'styled-components';
+import { Icon } from 'components';
 import { usePostTranslateMap } from 'store/mapModule/hooks';
 import PostHandleBtns from './PostHandleBtns';
 import { FetchStatus } from 'config/types';
@@ -21,23 +18,6 @@ const Top = styled(Flex)`
 const Featured = styled(FeaturedIcon)`
   width: 20px;
   height: 20px;
-`;
-
-const ContentText = styled(Text)`
-  margin: 15px 0;
-  font-size: 14px;
-  text-overflow: -o-ellipsis-lastline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-`;
-
-const PopupButton = styled(Flex)`
-  align-items: center;
-  cursor: pointer;
 `;
 
 interface PostInfoPorps {
@@ -56,10 +36,6 @@ const PostItem: React.FC<PostInfoPorps> = ({
   setIsShileUser,
 }) => {
   const { t } = useTranslation();
-  const popupRefSet = React.useRef(null);
-  const popupRef = React.useRef(null);
-  const theme = useTheme();
-
   const translateData = usePostTranslateMap(itemData.id);
 
   return (
