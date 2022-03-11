@@ -231,42 +231,60 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
         </Button>
       ) : (
         <>
-          {userInfo.address !== TribeInfo?.tribe?.owner_address &&
-            (TribeInfo?.status === 0 || TribeInfo?.status === 6) && (
-              <BtnIcon
-                disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
-                name='icon-wodebula'
-                text={t('tribeJoin')}
-                onClick={() => {
-                  dispatch(storeAction.setJoinTribeVisibleModal(true));
-                }}
-              />
-            )}
+          {/* 已经过期处理 */}
+          {TribeInfo?.expire === TribeNftStatus.expire ? (
+            <>
+              {TribeInfo?.status <= NftStatus.UnStake && (
+                <BtnIcon
+                  disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
+                  name='icon-wodebula'
+                  text={t('tribeJoin')}
+                  onClick={() => {
+                    dispatch(storeAction.setJoinTribeVisibleModal(true));
+                  }}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              {userInfo.address !== TribeInfo?.tribe?.owner_address &&
+                (TribeInfo?.status === NftStatus.INIT ||
+                  TribeInfo?.status === NftStatus.Quit) && (
+                  <BtnIcon
+                    disabled={!Boolean(TribeInfo?.baseInfo?.feeToken)}
+                    name='icon-wodebula'
+                    text={t('tribeJoin')}
+                    onClick={() => {
+                      dispatch(storeAction.setJoinTribeVisibleModal(true));
+                    }}
+                  />
+                )}
 
-          {(TribeInfo?.status === 2 || TribeInfo?.status === 3) &&
-            TribeInfo?.detail?.nft_id !== 0 && (
-              <StakeButton
-                tribeId={TribeInfo?.tribe_id}
-                nftId={TribeInfo?.detail?.nft_id}
-                nftType={
-                  userInfo.address === TribeInfo?.tribe?.owner_address ? 1 : 2
-                }
-                callback={() => {
-                  dispatch(fetchTribeInfoAsync(TribeInfo?.tribe_id));
-                }}
-              />
-            )}
+              {(TribeInfo?.status === NftStatus.Received ||
+                TribeInfo?.status === NftStatus.UnStake) && (
+                <StakeButton
+                  tribeId={TribeInfo?.tribe_id}
+                  nftId={TribeInfo?.detail?.nft_id}
+                  nftType={
+                    userInfo.address === TribeInfo?.tribe?.owner_address ? 1 : 2
+                  }
+                  callback={() => {
+                    dispatch(fetchTribeInfoAsync(TribeInfo?.tribe_id));
+                  }}
+                />
+              )}
 
-          {TribeInfo?.status === NftStatus.Staked &&
-            TribeInfo?.expire === TribeNftStatus.notExpired && (
-              <Link
-                to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
-                  TribeInfo?.tribe?.name,
-                )}`}
-              >
-                <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
-              </Link>
-            )}
+              {TribeInfo?.status === NftStatus.Staked && (
+                <Link
+                  to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
+                    TribeInfo?.tribe?.name,
+                  )}`}
+                >
+                  <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+                </Link>
+              )}
+            </>
+          )}
         </>
       )}
     </Box>

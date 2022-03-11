@@ -4,7 +4,7 @@ import tribeAbi from 'config/abi/tribe.json';
 import erc20Abi from 'config/abi/erc20.json';
 import { getBalanceNumber } from 'utils/formatBalance';
 import { ethers } from 'ethers';
-import { getTribeAddress, getBnbAddress } from 'utils/addressHelpers';
+import { getTribeAddress } from 'utils/addressHelpers';
 import { useERC20 } from 'hooks/useContract';
 
 import multicall from 'utils/multicall';
@@ -269,7 +269,6 @@ export const ApproveToken = address => {
 // 加入部落
 export const JoinTribe = async tribe_id => {
   const tribeAddress = getTribeAddress();
-  const bnbAddress = getBnbAddress();
   const calls = [
     {
       address: tribeAddress,
