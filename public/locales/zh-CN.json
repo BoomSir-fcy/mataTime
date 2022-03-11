@@ -233,6 +233,7 @@
   "Saved successfully": "保存成功",
   "You haven't joined / pledged the current tribe. You can't view the current post.": "您未加入/质押当前部落,无法查看当前帖子。",
   "To join / pledge": "去加入/质押",
+  "There is \"%title%\" in the draft box. Do you want to restore it? Restore will overwrite the current content.": "草稿箱内有“%title%”，需要恢复吗？恢复将覆盖当前内容。",
   "******end*****@hhhhhhhhhhhhhh********": "@qi翻译结束",
   "******start*****@kksam********": "@kksam翻译开始",
   "loginWelcome": "欢迎来到Metatime",

@@ -1,20 +1,27 @@
 import React from 'react';
 import { Box, Card, Flex, Text, Button, CardProps, BoxProps } from 'uikit';
-
+import { useTranslation } from 'contexts';
 interface DraftTipsProps extends BoxProps {
   onCancle: () => void;
   onConfirm: () => void;
+  title: string;
 }
 const DraftTips: React.FC<DraftTipsProps> = ({
   onCancle,
   onConfirm,
+  title,
   ...props
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Box width='200px' {...props}>
       <Card padding='16px' isRadius>
         <Text fontSize='14px'>
-          草稿箱内有“显示上次的标题”，需要恢复吗？恢复将覆盖当前内容。
+          {t(
+            'There is "%title%" in the draft box. Do you want to restore it? Restore will overwrite the current content.',
+            { title },
+          )}
         </Text>
         <Flex justifyContent='flex-end' mt='16px'>
           <Button onClick={onCancle} scale='xs' variant='tertiary'>
