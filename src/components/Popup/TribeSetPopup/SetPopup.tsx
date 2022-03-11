@@ -103,7 +103,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       const res = await Api.TribeApi.tribePostSetSelected({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.FEATURED);
-        toastSuccess(t('精选成功'));
+        toastSuccess(t('Featured Success'));
       }
     };
 
@@ -112,7 +112,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       const res = await Api.TribeApi.tribePostSetNotSelected({ pid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.CANCEL_FEATURED);
-        toastSuccess(t('取消精选成功'));
+        toastSuccess(t('UnFeatured successfully'));
       }
     };
 
@@ -121,9 +121,9 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       const res = await Api.TribeApi.tribePostMute({ tribe_id, uid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.MUTE);
-        toastSuccess(t('禁言成功'));
+        toastSuccess(t('Mute successfully'));
       } else if (res.code === 30016020) {
-        toastError(t('成员不属于部落'));
+        toastError(t('Member does not belong to tribe'));
       }
     };
 
@@ -132,7 +132,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
       const res = await Api.TribeApi.tribePostNotMute({ tribe_id, uid });
       if (Api.isSuccess(res)) {
         callback(data, TribeMoreOperatorEnum.CANCEL_MUTE);
-        toastSuccess(t('取消禁言成功'));
+        toastSuccess(t('Unmuted successfully'));
       }
     };
 
@@ -208,7 +208,7 @@ export const SetTribePopup: React.FC<Iprops> = React.memo(
                 }
               }}
             >
-              {data.selected === 0 ? t('Featured') : t('取消精选')}
+              {data.selected === 0 ? t('Featured') : t('Unselect')}
             </Text>
             <Text
               textTransform='capitalize'

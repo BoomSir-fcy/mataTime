@@ -28,7 +28,6 @@ const NFTBox = styled(Box)`
   height: 200px;
   border-radius: 10px;
   .nft-img {
-    width: 200px;
     border-radius: 10px;
     box-shadow: ${({ theme }) =>
       theme.isDark
@@ -40,7 +39,13 @@ const StyledImg = styled.img`
   width: 200px;
   height: 200px;
 `;
-
+const ContentFlex = styled(Flex)`
+  max-width: 100%;
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 60%;
+  }
+`;
 const nftType = {
   MASTER: 'master',
   MEMBER: 'member',
@@ -103,7 +108,7 @@ export const CommonClaimNFT: React.FC<{
               alt=''
             />
           </NFTBox>
-          <Flex maxWidth='60%' flex='auto' flexDirection='column'>
+          <ContentFlex>
             <Text fontSize='18px' bold>
               {type === nftType.MASTER ? (
                 <>
@@ -194,7 +199,7 @@ export const CommonClaimNFT: React.FC<{
                 </Flex>
               )}
             </Flex>
-          </Flex>
+          </ContentFlex>
         </Flex>
       </>
     );

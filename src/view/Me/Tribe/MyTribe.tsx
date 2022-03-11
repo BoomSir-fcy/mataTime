@@ -6,6 +6,7 @@ import { Box, Divider, Text, Flex, Heading, Empty, Spinner, Link } from 'uikit';
 import styled from 'styled-components';
 import TradeLogo from 'view/Tribe/components/TradeCard/TradeLogo';
 import {
+  MyTribeHeaderFlex,
   HeadText,
   ItemText,
   LoadingAnimation,
@@ -13,6 +14,7 @@ import {
   StyledButton,
   Table,
   TableBox,
+  MyTribeActionFlex,
 } from './styled';
 import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
@@ -190,15 +192,11 @@ const MyMasterNftTribe = React.memo(() => {
                   flexDirection='column'
                   justifyContent='space-between'
                 >
-                  <Flex
-                    mt='8px'
-                    justifyContent='space-between'
-                    alignItems='center'
-                  >
+                  <MyTribeHeaderFlex>
                     <Heading
                       ellipsis
                       scale='md'
-                      style={{ maxWidth: '260px', cursor: 'pointer' }}
+                      style={{ maxWidth: '190px', cursor: 'pointer' }}
                       onClick={() => {
                         history.push(`/tribe/detail?id=${item.id}`);
                       }}
@@ -213,7 +211,7 @@ const MyMasterNftTribe = React.memo(() => {
                         )}
                       </Text>
                     </Flex>
-                  </Flex>
+                  </MyTribeHeaderFlex>
                   <NumberFlex justifyContent='space-between'>
                     <NumberItemFlex>
                       <Text bold>{item?.tribe_info?.member_count}</Text>
@@ -235,7 +233,7 @@ const MyMasterNftTribe = React.memo(() => {
                     </NumberItemFlex>
                   </NumberFlex>
                 </CenterFlex>
-                <Flex flexDirection='column' justifyContent='space-between'>
+                <MyTribeActionFlex>
                   {/* 1 未领取 2已领取 3 取消质押 4 已质押 5已过期 */}
                   {!account && (
                     <StyledButton
@@ -327,7 +325,7 @@ const MyMasterNftTribe = React.memo(() => {
                       </ManageButton>
                     </>
                   )}
-                </Flex>
+                </MyTribeActionFlex>
               </InfoFlex>
             </InfoBox>
             <Divider />
