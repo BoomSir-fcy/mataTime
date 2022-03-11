@@ -36,13 +36,13 @@ export const TransferButton: React.FC<{
       if (!inputAddress) return false;
       setPending(true);
       await onTranferNft(inputAddress, nftId);
-      toastSuccess(t('Transfer succeeded'));
+      toastSuccess(t('Transfer Succeeded'));
       setVisible(false);
       setPending(false);
       if (callback) callback();
     } catch (error) {
       console.log(error);
-      toastError(t('Transfer failed'));
+      toastError(t('Transfer Failed'));
       setPending(false);
     }
   }, [inputAddress, nftId]);

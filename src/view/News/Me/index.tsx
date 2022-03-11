@@ -55,7 +55,11 @@ const NewsMe: React.FC<any> = props => {
               image_list={item.post?.image_list}
               content_status={item.post?.content_status}
               content={item.post?.content}
-              href={`/articledetils/${item.post?.post_id}`}
+              href={
+                item.post?.tribe_id
+                  ? `/tribe/postdetail?i=${item.post?.post_id}`
+                  : `/articledetils/${item.post?.post_id}`
+              }
             >
               <Flex flexWrap='nowrap'>
                 <FollowPopup uid={item.send_uid}>
