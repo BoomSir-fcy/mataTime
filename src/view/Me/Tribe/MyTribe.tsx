@@ -330,7 +330,7 @@ const MyMasterNftTribe = React.memo(() => {
                         </ManageButton>
                       </>
                     )}
-                </Flex>
+                </MyTribeActionFlex>
               </InfoFlex>
             </InfoBox>
             <Divider />
