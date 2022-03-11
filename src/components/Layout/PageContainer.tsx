@@ -59,7 +59,7 @@ const InnerBox = styled(Flex)`
 `;
 
 const CennerBox = styled(Box)<{ showSidebar?: boolean }>`
-  width: 100%;
+  width: 100vw;
   max-width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
     max-width: ${({ showSidebar }) => (showSidebar ? '670px' : '984px')};

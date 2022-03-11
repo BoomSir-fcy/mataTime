@@ -63,7 +63,7 @@ const BoxStyled = styled(Box)<{ scale: Scales; round: boolean }>`
   overflow: hidden;
   border-radius: ${({ theme, round }) => (round ? '' : theme.radii.card)};
   width: ${props => style[props.scale].mobileWidth}px;
-  height: ${props => style[props.scale].mobileWidth}px;
+  height: auto;
   ${({ theme }) => theme.mediaQueries.md} {
     width: ${props => style[props.scale].width}px;
     height: ${props => style[props.scale].height}px;

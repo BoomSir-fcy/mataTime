@@ -21,7 +21,7 @@ import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import { Api } from 'apis';
 import { formatTime } from 'utils/timeFormat';
-import { NftStatus } from 'store/tribe/type';
+import { NftStatus, TribeNftStatus } from 'store/tribe/type';
 import { getTribeExtraInfo } from './hooks';
 import {
   StakeButton,
@@ -282,51 +282,55 @@ const MyMasterNftTribe = React.memo(() => {
                       />
                     </>
                   ) : null}
-                  {account && item?.status === NftStatus.Staked && (
-                    <>
-                      <UnStakeButton
-                        tribeId={item.id}
-                        nftType={1}
-                        callback={() => {
-                          updateTribeList({
-                            ...item,
-                            status: NftStatus.UnStake,
-                          });
-                        }}
-                      />
-                      <ManageButton>
-                        <StyledButton
-                          onClick={() => {
-                            if (item.initMemberNft) {
-                              history.push(`/me/tribe/info?i=${item.id}`);
-                            } else {
-                              history.push(`/me/tribe/member-nft?i=${item.id}`);
-                            }
+                  {account &&
+                    (item?.status === NftStatus.Staked ||
+                      item?.expire === TribeNftStatus.expire) && (
+                      <>
+                        <UnStakeButton
+                          tribeId={item.id}
+                          nftType={1}
+                          callback={() => {
+                            updateTribeList({
+                              ...item,
+                              status: NftStatus.UnStake,
+                            });
                           }}
-                        >
-                          {t('Manage')}
-                        </StyledButton>
-                        {!item.initMemberNft && (
-                          <Flex className='tips-flex' alignItems='center'>
-                            <Icon
-                              name='icon-tishi'
-                              size={16}
-                              color='textOrigin'
-                            />
-                            <Text
-                              ml='5px'
-                              small
-                              color='white'
-                              style={{ whiteSpace: 'nowrap' }}
-                            >
-                              {t('Please set member NFT')}
-                            </Text>
-                          </Flex>
-                        )}
-                      </ManageButton>
-                    </>
-                  )}
-                </MyTribeActionFlex>
+                        />
+                        <ManageButton>
+                          <StyledButton
+                            onClick={() => {
+                              if (item.initMemberNft) {
+                                history.push(`/me/tribe/info?i=${item.id}`);
+                              } else {
+                                history.push(
+                                  `/me/tribe/member-nft?i=${item.id}`,
+                                );
+                              }
+                            }}
+                          >
+                            {t('Manage')}
+                          </StyledButton>
+                          {!item.initMemberNft && (
+                            <Flex className='tips-flex' alignItems='center'>
+                              <Icon
+                                name='icon-tishi'
+                                size={16}
+                                color='textOrigin'
+                              />
+                              <Text
+                                ml='5px'
+                                small
+                                color='textTips'
+                                style={{ whiteSpace: 'nowrap' }}
+                              >
+                                {t('Please set member NFT')}
+                              </Text>
+                            </Flex>
+                          )}
+                        </ManageButton>
+                      </>
+                    )}
+                </Flex>
               </InfoFlex>
             </InfoBox>
             <Divider />

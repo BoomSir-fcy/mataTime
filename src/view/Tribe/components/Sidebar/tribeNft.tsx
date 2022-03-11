@@ -10,7 +10,7 @@ import { storeAction, useStore } from 'store';
 import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
-import { TribeType } from 'store/tribe/type';
+import { TribeType, NftStatus, TribeNftStatus } from 'store/tribe/type';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
 
@@ -167,7 +167,8 @@ const TribeNft: React.FC<{
                 </Flex>
               )}
               {/* 取消质押 */}
-              {(tribeInfo?.status === 4 || tribeInfo?.status === 5) && (
+              {(tribeInfo?.status === 4 ||
+                tribeInfo?.expire === TribeNftStatus.expire) && (
                 <Flex mb='12px' justifyContent='space-between'>
                   <Flex flexDirection='column' mr='15px'>
                     <Text>{t('ValidityDays')}:</Text>
