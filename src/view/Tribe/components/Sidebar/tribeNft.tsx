@@ -91,7 +91,7 @@ const TribeNft: React.FC<{
                   {isOwner === 1 ? tribe?.name : member_nft?.member_nft_name}
                 </Text>
                 <Text ml='6px' color='textTips' ellipsis>
-                  -Tribe Host NFT
+                  -Tribe Chief
                 </Text>
               </RowsEllipsis>
               <Desc maxLine={2} color='textTips'>

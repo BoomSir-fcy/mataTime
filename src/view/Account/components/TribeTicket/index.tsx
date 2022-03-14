@@ -123,19 +123,6 @@ const TribeTicket = () => {
             {t('Balance')}:{' '}
             {formatDisplayApr(getBalanceAmount(balance).toNumber())}
           </Text>
-          <Button
-            onClick={() => {
-              setValue(`${maxAmount}`);
-            }}
-            margin='0'
-            padding='0'
-            height='auto'
-            variant='text'
-          >
-            <Text color='textPrimary' fontSize='14px'>
-              MAX
-            </Text>
-          </Button>
         </Flex>
         <InputCard mt='6px' isRadius>
           <Flex mt='8px' justifyContent='space-between'>
@@ -170,7 +157,11 @@ const TribeTicket = () => {
             </Flex>
           </Flex>
           {/* <Input noShadow /> */}
-          <Box padding='16px 0'>
+          <Flex
+            justifyContent='space-between'
+            alignItems='center'
+            padding='16px 0'
+          >
             <NumericalInput
               className='token-amount-input'
               value={value}
@@ -178,7 +169,20 @@ const TribeTicket = () => {
                 setValue(val);
               }}
             />
-          </Box>
+            <Button
+              onClick={() => {
+                setValue(`${maxAmount}`);
+              }}
+              margin='0'
+              padding='0'
+              height='auto'
+              variant='text'
+            >
+              <Text color='textPrimary' fontSize='14px'>
+                MAX
+              </Text>
+            </Button>
+          </Flex>
         </InputCard>
         <Text fontSize='14px' mt='8px'>
           {t('Exchangeable Ticket Quantity')}: {maxAmount}
@@ -225,7 +229,7 @@ const TribeTicket = () => {
       </CardStyled>
       <CardStyled isRadius mt='65px'>
         <Text bold fontSize='18px'>
-          {t('Ticket Exchange')}
+          {t('Tribe Ticket')}
         </Text>
         <Flex mt='19px' justifyContent='center'>
           <Image

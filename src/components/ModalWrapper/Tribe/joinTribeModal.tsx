@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import dayjs from 'dayjs';
 import ReactLoading from 'react-loading';
 import BigNumber from 'bignumber.js';
@@ -11,12 +10,13 @@ import { useToast } from 'hooks';
 import { useStore } from 'store';
 import { fetchisApprove } from 'store/tribe';
 import { TribeType, TribeInfo, TribeBaseInfo } from 'store/tribe/type';
-
 import { ApproveToken } from 'store/tribe/fetchTribe';
 
 import { useTranslation } from 'contexts';
 import { useJoinTribe } from './hooks';
 
+import { getBalanceAmount } from 'utils/formatBalance';
+import { useGetBnbBalance, useTokenBalance } from 'hooks/useTokenBalance';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import QuestionHelper from 'components/QuestionHelper';
@@ -32,12 +32,21 @@ export const JoinTribeModal: React.FC<{
 }> = React.memo(({ visible, tribeInfo, tribeBaseInfo, onClose }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { balance: tokenBalance } = useTokenBalance(tribeBaseInfo?.feeToken);
+  const { balance: bnbBalance } = useGetBnbBalance();
   const { toastSuccess, toastError } = useToast();
   const { handleApprove } = ApproveToken(tribeBaseInfo?.feeToken);
   const { joinTribe } = useJoinTribe();
   const { account } = useActiveWeb3React();
   const joinTribeInfo = useStore(p => p.tribe.joinTribe);
   const { detail, baseInfo } = tribeInfo || {};
+
+  // 获取具体金额
+  const bnb = getBalanceAmount(bnbBalance).toString();
+  const proAmount = new BigNumber(detail?.charge)
+    .dividedBy(new BigNumber(10).pow(18))
+    .toString();
+  const token = getBalanceAmount(tokenBalance).toString();
 
   const [state, setState] = useImmer({
     loading: false,
@@ -71,7 +80,7 @@ export const JoinTribeModal: React.FC<{
 
   // 加入部落
   const handleJoinTribe = React.useCallback(async () => {
-    // 邀请地址
+    //邀请地址
     const inviteAddress = Boolean(state.inviteAddress)
       ? state.inviteAddress
       : '0x0000000000000000000000000000000000000000';
@@ -81,7 +90,25 @@ export const JoinTribeModal: React.FC<{
       tribeBaseInfo?.feeToken === '0x0000000000000000000000000000000000000001'
         ? detail?.charge
         : '';
-    console.log(tribeInfo.tribe_id, inviteAddress, joinServiceFee);
+
+    // TODO: 提示余额不足判断需要优化
+    if (detail?.type === TribeType.PRO) {
+      console.log('Pro', tribeBaseInfo.feeToken);
+      if (
+        tribeBaseInfo?.feeToken === '0x0000000000000000000000000000000000000001'
+      ) {
+        if (bnb <= proAmount) {
+          return toastError(t('contractCode-400002'));
+        }
+      } else if (token <= proAmount) {
+        return toastError(t('contractCode-400002'));
+      }
+    } else {
+      if (token <= tribeBaseInfo?.serviceCharge.toString()) {
+        return toastError(t('contractCode-400002'));
+      }
+    }
+
     try {
       setState(p => {
         p.submitLoading = true;

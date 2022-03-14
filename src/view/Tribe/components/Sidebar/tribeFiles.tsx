@@ -23,51 +23,45 @@ const TribeFiles: React.FC<{
 
   return (
     <>
-      {data?.reserved?.length > 0 &&
-        tribeInfo?.status === NftStatus.Staked &&
-        tribeInfo?.expire !== TribeNftStatus.expire && (
-          <Card padding='16px' isRadius {...props}>
-            <Flex
-              justifyContent='space-between'
-              alignItems='flex-end'
-              mb='20px'
-            >
-              <Text fontSize='18px' fontWeight='bold'>
-                {t('TribeFileTitle')}
+      {data?.reserved?.length > 0 && (
+        <Card padding='16px' isRadius {...props}>
+          <Flex justifyContent='space-between' alignItems='flex-end' mb='20px'>
+            <Text fontSize='18px' fontWeight='bold'>
+              {t('TribeFileTitle')}
+            </Text>
+            {data.reserved.length > 0 && (
+              <Text
+                color='textPrimary'
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  setState(p => {
+                    p.visible = true;
+                  })
+                }
+              >
+                {t('TribeFileLooks')}
               </Text>
-              {data.reserved.length > 0 && (
-                <Text
-                  color='textPrimary'
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    setState(p => {
-                      p.visible = true;
-                    })
-                  }
-                >
-                  {t('TribeFileLooks')}
+            )}
+          </Flex>
+          <Flex justifyContent='flex-start' flexDirection='column'>
+            {(data?.reserved?.slice(0, 3) ?? []).map((item, index) => (
+              <Flex
+                as='a'
+                href={`${item.url}`}
+                target='_blank'
+                key={index}
+                mb='10px'
+                rel='noreferrer'
+              >
+                <FileIcon ext={getFileExt(item.url)} />
+                <Text ellipsis ml='9px' color='textPrimary'>
+                  {item.file_name}
                 </Text>
-              )}
-            </Flex>
-            <Flex justifyContent='flex-start' flexDirection='column'>
-              {(data?.reserved?.slice(0, 3) ?? []).map((item, index) => (
-                <Flex
-                  as='a'
-                  href={`${item.url}`}
-                  target='_blank'
-                  key={index}
-                  mb='10px'
-                  rel='noreferrer'
-                >
-                  <FileIcon ext={getFileExt(item.url)} />
-                  <Text ellipsis ml='9px' color='textPrimary'>
-                    {item.file_name}
-                  </Text>
-                </Flex>
-              ))}
-            </Flex>
-          </Card>
-        )}
+              </Flex>
+            ))}
+          </Flex>
+        </Card>
+      )}
       <FileTribeModal
         visible={state.visible}
         loading={data.loading}
