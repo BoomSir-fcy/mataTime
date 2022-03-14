@@ -24,7 +24,7 @@ const TribeFiles: React.FC<{
   return (
     <>
       {data?.reserved?.length > 0 &&
-        tribeInfo?.status !== NftStatus.INIT &&
+        tribeInfo?.status === NftStatus.Staked &&
         tribeInfo?.expire !== TribeNftStatus.expire && (
           <Card padding='16px' isRadius {...props}>
             <Flex

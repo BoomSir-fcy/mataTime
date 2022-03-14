@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
-import { Icon, Avatar, JoinInviteModal } from 'components';
+import { Icon, Avatar, LineClamp, JoinInviteModal } from 'components';
 import { Card, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore } from 'store';
@@ -34,7 +34,8 @@ const TribeInfo: React.FC<{
             {tribeInfo?.tribe?.name}
           </Text>
           {userInfo?.address === tribeInfo?.tribe?.owner_address &&
-            tribeInfo?.status === 4 && (
+            tribeInfo?.status === NftStatus.Staked &&
+            tribeInfo?.expire !== TribeNftStatus.expire && (
               <Text
                 color='textPrimary'
                 onClick={() =>
@@ -76,7 +77,12 @@ const TribeInfo: React.FC<{
             {detail?.nick_name}
           </Text>
         </Flex>
-        <Desc>{detail?.summary}</Desc>
+        <LineClamp
+          showText={detail?.summary}
+          openText={t('homeOpen')}
+          collapseText={t('homePutAway')}
+          lineNum={5}
+        />
       </Card>
       {/* 邀请框 */}
       <JoinInviteModal

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
 import { TribeInfo } from 'store/tribe/type';
-import Search from 'components/SearchInput';
 
 import TribeDetail from './tribeInfo';
 import TribeNft from './tribeNft';
@@ -52,7 +51,6 @@ export const TribeSidebar: React.FC<{
       style={{ [`${position}`]: `-${maxPositionValue}px` }}
       ref={ref}
     >
-      <Search mt='15px' mb='15px' />
       <TribeDetail tribe_id={tribe_id} mb='15px' />
       <TribeNft tribe_id={tribe_id} mb='15px' />
       <TribePro tribe_id={tribe_id} mb='15px' />
