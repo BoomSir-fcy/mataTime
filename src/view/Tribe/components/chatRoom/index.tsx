@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useImmer } from 'use-immer';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { Box, Card, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts';
-import { useTribeInfoById } from 'store/mapModule/hooks';
 import { Avatar, List } from 'components';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import SendInput from './Input';
+import useIm from 'hooks/imHooks/useIm';
+
+const ChatRoomBox = styled(Box)`
+  background-color: ${({ theme }) => theme.colors.backgroundThemeCard};
+  /* padding: 16px; */
+  border-radius: 10px;
+`;
 
 const ChatList = styled(Box)`
   padding: 10px 0;
@@ -15,7 +23,7 @@ const MsgContent = styled(Box)<{ myMsg: boolean }>`
   position: relative;
   padding: 6px;
   background-color: ${({ myMsg, theme }) =>
-    myMsg ? theme.colors.background : theme.colors.backgroundTextArea};
+    myMsg ? theme.colors.backgroundTextArea : theme.colors.background};
   border-radius: 10px;
 `;
 
@@ -23,9 +31,14 @@ const Triangle = styled.div<{ myMsg: boolean }>`
   position: absolute;
   width: 0;
   height: 0;
-  border-right: 6px solid transparent;
-  border-left: 6px solid transparent;
-  border-top: ${({ theme }) => `6px solid ${theme.colors.backgroundTextArea}`};
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  border-top: 8px solid
+    ${({ myMsg, theme }) =>
+      myMsg ? theme.colors.backgroundTextArea : theme.colors.background};
+  top: 0;
+  left: ${({ myMsg }) => (myMsg ? 'auto' : `-7px`)};
+  right: ${({ myMsg }) => (myMsg ? '-7px' : `auto`)};
 `;
 
 const ChatRoom: React.FC<{
@@ -33,8 +46,10 @@ const ChatRoom: React.FC<{
   mb: string;
 }> = ({ ...props }) => {
   const { t } = useTranslation();
+  const { account } = useActiveWeb3React();
   const [Loading, setLoading] = useState(false);
-  const tribeInfo = useTribeInfoById(props.tribe_id);
+  const { im } = useIm();
+
   const msgList = [
     {
       address: '1231242124',
@@ -55,39 +70,52 @@ const ChatRoom: React.FC<{
   ];
 
   return (
-    <Card padding='16px' isRadius {...props}>
-      <Flex>
-        <Text>{t('聊天室')}</Text>
-      </Flex>
-      <ChatList>
-        <List loading={Loading} renderList={type => {}}>
-          {msgList.map(item => {
-            return <MsgBox detail={item} />;
-          })}
-        </List>
-      </ChatList>
-    </Card>
+    <ChatRoomBox {...props}>
+      <Box padding='16px'>
+        <Flex>
+          <Text>{t('聊天室')}</Text>
+        </Flex>
+        <ChatList>
+          <List loading={Loading} renderList={type => {}}>
+            {msgList.map(item => {
+              return <MsgBox detail={item} />;
+            })}
+          </List>
+        </ChatList>
+      </Box>
+      <SendInput tribe_id={props?.tribe_id} im={im} />
+    </ChatRoomBox>
   );
 };
 
 const MsgBox = ({ detail }) => {
+  const { account } = useActiveWeb3React();
+
+  const isMyMsg = useMemo(() => {
+    return account?.toLocaleLowerCase() === detail?.address.toLocaleLowerCase();
+  }, [account, detail]);
+
   return (
-    <Flex mb='16px'>
-      <Box mr='16px' mb='6px'>
-        <Avatar disableFollow scale='sm' src={detail?.nft_image} />
-      </Box>
+    <Flex mb='16px' justifyContent={isMyMsg ? `end` : `start`}>
+      {!isMyMsg && (
+        <Box mr='16px'>
+          <Avatar disableFollow scale='sm' src={detail?.nft_image} />
+        </Box>
+      )}
       <Box>
-        <Flex>
-          <Text fontSize='14px' mr='10px'>
-            {detail?.name}
-          </Text>
-          <Text fontSize='14px' color='textTips'>
-            {dayjs(detail?.time).format('HH:mm')}
-          </Text>
-        </Flex>
-        <MsgContent myMsg={true}>
-          {detail?.content}
-          <Triangle myMsg={true} />
+        {!isMyMsg && (
+          <Flex mb='6px'>
+            <Text fontSize='14px' mr='10px'>
+              {detail?.name}
+            </Text>
+            <Text fontSize='14px' color='textTips'>
+              {dayjs(detail?.time).format('HH:mm')}
+            </Text>
+          </Flex>
+        )}
+        <MsgContent myMsg={isMyMsg}>
+          <Text fontSize='14px'>{detail?.content}</Text>
+          <Triangle myMsg={isMyMsg} />
         </MsgContent>
       </Box>
     </Flex>

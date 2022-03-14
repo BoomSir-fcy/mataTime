@@ -14,7 +14,6 @@ const VIEW_PADDING = {
   bottom: 100, // 忽略底部100px的内容
 };
 
-
 interface ArticleIds {
   [readType: string]: ArticlePosition[];
 }
@@ -26,7 +25,7 @@ interface ArticleIds {
 const useReadArticle = (nonce?: number | boolean) => {
   const { im, articlePositions } = useIm();
   // const { im, articleIds, articlePositions, setArticleIds } = useIm();
-  const [articleIds, setArticleIds] = useState<ArticleIds>({})
+  const [articleIds, setArticleIds] = useState<ArticleIds>({});
   const timeStep = 1; // 推送时间间隔
   const isBrowserTabActiveRef = useIsBrowserTabActive();
 
@@ -36,16 +35,13 @@ const useReadArticle = (nonce?: number | boolean) => {
       if (articleIds[type] && articleIds[type].length) {
         if (Number(type) === ReadType.ARTICLE) {
           // 拼接转发内容
-          const readInfo = articleIds[type]?.reduce(
-            (prev, curr) => {
-              const { forwardReadInfo } = curr;
-              if (forwardReadInfo.post_id) {
-                prev.push(forwardReadInfo);
-              }
-              return prev;
-            },
-            [],
-          );
+          const readInfo = articleIds[type]?.reduce((prev, curr) => {
+            const { forwardReadInfo } = curr;
+            if (forwardReadInfo.post_id) {
+              prev.push(forwardReadInfo);
+            }
+            return prev;
+          }, []);
 
           if (readInfo.length) {
             im?.send(
@@ -59,29 +55,29 @@ const useReadArticle = (nonce?: number | boolean) => {
             );
           }
         } else {
-          const tribeIdsMap = {}
+          const tribeIdsMap = {};
           articleIds[type]?.forEach(item => {
-            const key = item.tribeId ? item.tribeId : 0
+            const key = item.tribeId ? item.tribeId : 0;
             if (tribeIdsMap[key]) {
-              tribeIdsMap[key].push(item)
+              tribeIdsMap[key].push(item);
             } else {
-              tribeIdsMap[key] = [item]
+              tribeIdsMap[key] = [item];
             }
-          })
+          });
           Object.keys(tribeIdsMap).forEach(id => {
-            const tribeId = Number(id)
-            im?.send(
-              tribeId ? im.messageProtocol.WSProtocol_Spend_Time_TRIBE : im.messageProtocol.WSProtocol_Spend_Time,
-              {
-                commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
-                read_type: tribeId ? Number(type) - 2 : Number(type), // 文章阅读
-                read_uid: tribeIdsMap[tribeId].map(item => item.articleId) || [], // id数组 推文或者评论的
-                time_step: timeStep, // 推送时间间隔
-                tribe_id: tribeId
-              },
-              true,
-            );
-          })
+            const tribeId = Number(id);
+            // im?.send(
+            //   tribeId ? im.messageProtocol.WSProtocol_Spend_Time_TRIBE : im.messageProtocol.WSProtocol_Spend_Time,
+            //   {
+            //     commit_time: Math.floor(new Date().getTime() / 1000 / timeStep), // 提交时间
+            //     read_type: tribeId ? Number(type) - 2 : Number(type), // 文章阅读
+            //     read_uid: tribeIdsMap[tribeId].map(item => item.articleId) || [], // id数组 推文或者评论的
+            //     time_step: timeStep, // 推送时间间隔
+            //     tribe_id: tribeId
+            //   },
+            //   true,
+            // );
+          });
         }
       }
     });
@@ -123,9 +119,13 @@ const useReadArticle = (nonce?: number | boolean) => {
         (offsetBottom >= top && bottom >= offsetBottom)
       ) {
         // if (topViews[readType]); topViews[readType] = []; topViews[readType].push
-        (topViews[readType] || (topViews[readType] = [])).push(articlePositionsVal[item]);
+        (topViews[readType] || (topViews[readType] = [])).push(
+          articlePositionsVal[item],
+        );
       } else if (top >= offsetTop && offsetBottom >= top) {
-        (topViews[readType] || (topViews[readType] = [])).push(articlePositionsVal[item]);
+        (topViews[readType] || (topViews[readType] = [])).push(
+          articlePositionsVal[item],
+        );
       }
     });
     setArticleIds(topViews);
