@@ -80,9 +80,12 @@ export const CommonClaimNFT: React.FC<{
     const nftInfo = useMemo(() => {
       if (type === nftType.MASTER) {
         return {
-          name: tribesNftInfo.owner_nft_name,
+          // name: tribesNftInfo.owner_nft_name,
+          // introduction: tribesNftInfo.owner_nft_introduction,
+          name: 'Tribe Chief NFT',
+          introduction:
+            'Own the Tribe Chief NFT you can enjoy the tribe chief rights.',
           image: tribesNftInfo.owner_nft_image,
-          introduction: tribesNftInfo.owner_nft_introduction,
           create_time: tribesNftInfo.create_time,
           nick_name: tribesNftInfo.nick_name,
         };

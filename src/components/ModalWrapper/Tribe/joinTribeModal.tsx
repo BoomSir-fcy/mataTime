@@ -128,7 +128,11 @@ export const JoinTribeModal: React.FC<{
                 mb='18px'
               >
                 <Flex>
-                  <Text color='textTips'>{t('TribeJoinModalText')}</Text>
+                  <Text color='textTips'>
+                    {detail?.type === TribeType.PRO
+                      ? t('TribeJoinModalTextPro')
+                      : t('TribeJoinModalText')}
+                  </Text>
                   {detail?.type === TribeType.BASIC && (
                     <QuestionHelper
                       ml='5px'
