@@ -9,6 +9,7 @@ import TribeNft from './tribeNft';
 import TribePro from './tribePro';
 import TribeTags from './tribeTags';
 import TribeFiles from './tribeFiles';
+import ChatRoom from '../chatRoom';
 
 const SidebarStyled = styled(Box)`
   position: sticky;
@@ -54,6 +55,7 @@ export const TribeSidebar: React.FC<{
     >
       <Search mt='15px' mb='15px' />
       <TribeDetail tribe_id={tribe_id} mb='15px' />
+      <ChatRoom tribe_id={tribe_id} mb='15px' />
       <TribeNft tribe_id={tribe_id} mb='15px' />
       <TribePro tribe_id={tribe_id} mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
