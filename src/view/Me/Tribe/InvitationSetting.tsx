@@ -52,7 +52,7 @@ const MeTribeInvitationSetting = () => {
   ];
 
   useEffect(() => {
-    if (tribeInfo?.baseInfo?.feeToken) {
+    if (tribeInfo?.baseInfo?.feeToken && !state.feeAmount) {
       setState(p => {
         p.feeAmount = getBalanceAmount(
           tribeInfo?.baseInfo?.feeAmount,
@@ -69,7 +69,7 @@ const MeTribeInvitationSetting = () => {
       });
       setFeeToken(tribeInfo?.baseInfo?.feeToken);
     }
-  }, [tribeInfo]);
+  }, [tribeInfo, state]);
 
   const getFeeDecimal = useCallback(
     (token: string) => {
