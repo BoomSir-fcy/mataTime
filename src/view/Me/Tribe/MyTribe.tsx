@@ -363,13 +363,8 @@ const MyMasterNftTribe = React.memo(() => {
         ))
       )}
 
-      <PaginateStyle alignItems='center' justifyContent='flex-end'>
-        <Text
-          width='auto'
-          className='totalPage'
-          fontSize='14px'
-          color='textTips'
-        >
+      <PaginateStyle pb='58px' alignItems='center' justifyContent='flex-end'>
+        <Text width='auto' mr='10px' fontSize='14px' color='textTips'>
           {t('Account Total %page% page', { page: getTotalPage() })}
         </Text>
         <ReactPaginate
@@ -573,9 +568,6 @@ const MemberNftTribe = React.memo(() => {
                       scale='sm'
                       tribeId={item.id}
                       nftType={2}
-                      status={
-                        item?.expire === 1 ? NftStatus.Expired : item?.status
-                      }
                       callback={() => {
                         updateTribeList({
                           ...item,
@@ -591,13 +583,8 @@ const MemberNftTribe = React.memo(() => {
         </Table>
       </TableBox>
 
-      <PaginateStyle alignItems='center' justifyContent='flex-end'>
-        <Text
-          width='auto'
-          className='totalPage'
-          fontSize='14px'
-          color='textTips'
-        >
+      <PaginateStyle pb='58px' alignItems='center' justifyContent='flex-end'>
+        <Text width='auto' mr='10px' fontSize='14px' color='textTips'>
           {t('Account Total %page% page', { page: getTotalPage() })}
         </Text>
         <ReactPaginate
