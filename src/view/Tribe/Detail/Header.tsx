@@ -320,7 +320,7 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
                     TribeInfo?.tribe?.name,
                   )}`}
                 >
-                  <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+                  <BtnIcon name='icon-zhifeiji' text={t('tribeSendBtnText')} />
                 </Link>
               )}
             </>
