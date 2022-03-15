@@ -6,6 +6,7 @@ import { Icon } from 'components';
 type imgListType = {
   imgList: string[];
   delImgItem: (index) => void;
+  Callback: () => void;
 };
 
 const ImgListBox = styled(Box)`
@@ -36,7 +37,7 @@ const ImgListBox = styled(Box)`
 `;
 
 export const UploadList = (props: imgListType) => {
-  const { imgList } = props;
+  const { imgList, Callback } = props;
 
   const delImgItem = index => {
     const temp = [...imgList];
@@ -47,7 +48,7 @@ export const UploadList = (props: imgListType) => {
   return (
     <React.Fragment>
       {imgList.length > 0 && (
-        <ImgListBox>
+        <ImgListBox onClick={() => Callback()}>
           {(imgList ?? []).map((item, index) => (
             <Box key={index}>
               <Icon

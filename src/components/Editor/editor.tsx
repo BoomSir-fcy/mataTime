@@ -2,7 +2,14 @@
  * firefox
  * 中英文双重输入: https://github.com/ianstormtaylor/slate/pull/4702
  */
-import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
+import {
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+  useImperativeHandle,
+} from 'react';
 import {
   Editor as slateEditor,
   Transforms,
@@ -61,6 +68,7 @@ type Iprops = {
   forwardContent?: Api.Home.post;
   ispadding?: boolean;
   isRequired?: boolean;
+  cref?: any;
 };
 
 export const Portal = ({ children }) => {
@@ -200,6 +208,7 @@ export const Editor = (props: Iprops) => {
     forwardContent,
     ispadding = true,
     isRequired = true,
+    cref,
   } = props;
   const { t } = useTranslation();
   const { toastError } = useToast();
@@ -344,6 +353,13 @@ export const Editor = (props: Iprops) => {
     setRefresh(refresh === 1 ? 2 : 1);
   };
 
+  useImperativeHandle(cref, () => ({
+    // 暴露给父组件的方法
+    rest: () => {
+      restInput();
+    },
+  }));
+
   const deepContent = arr => {
     let content = '',
       userIdList = [];
@@ -405,13 +421,21 @@ export const Editor = (props: Iprops) => {
         }),
       );
     }
-
-    props.sendArticle(
-      JSON.stringify(newValue2),
-      imgList.join(','),
-      userIdList.join(','),
-      restInput,
-    );
+    if (type === 'chatRoom') {
+      props.sendArticle(
+        JSON.stringify(newValue2),
+        imgList,
+        userIdList.join(','),
+        restInput,
+      );
+    } else {
+      props.sendArticle(
+        JSON.stringify(newValue2),
+        imgList.join(','),
+        userIdList.join(','),
+        restInput,
+      );
+    }
   };
 
   const searchSelect = (data, type) => {
@@ -429,10 +453,18 @@ export const Editor = (props: Iprops) => {
   const onKeyDown = useCallback(
     (event: any) => {
       if (event.ctrlKey && event.keyCode == 13) {
+        if (type === 'chatRoom') {
+          editor.insertBreak('/n');
+        } else {
+          sendArticle();
+        }
+        return;
+      }
+      if (type === 'chatRoom' && event.key === 'Enter') {
+        event.preventDefault();
         sendArticle();
         return;
       }
-
       // XXX: 解决火狐输入崩溃问题 后期待优化 现在解决方案不完美
       setValue(prep => {
         const fristDom: any = prep?.[0];
@@ -486,11 +518,15 @@ export const Editor = (props: Iprops) => {
         }
       }
     },
-    [index, search, target, editor, userList, sendArticle, setValue],
+    [index, search, type, target, editor, userList, sendArticle, setValue],
   );
 
   return (
-    <SlateBox ispadding={ispadding} key={refresh}>
+    <SlateBox
+      ispadding={ispadding}
+      isChatRoom={type === 'chatRoom'}
+      key={refresh}
+    >
       <Loading visible={isLoading} />
       <Slate
         editor={editor}
@@ -541,10 +577,14 @@ export const Editor = (props: Iprops) => {
               console.error(error);
             }
           }}
-          style={{
-            borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
-            borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px',
-          }}
+          style={
+            type !== 'chatRoom'
+              ? {
+                  borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
+                  borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px',
+                }
+              : {}
+          }
         >
           <Editable
             autoFocus
@@ -573,7 +613,13 @@ export const Editor = (props: Iprops) => {
             }
           />
         </div>
-        <UploadList delImgItem={data => setImgList(data)} imgList={imgList} />
+        <UploadList
+          Callback={() => {
+            ReactEditor.focus(editor);
+          }}
+          delImgItem={data => setImgList(data)}
+          imgList={imgList}
+        />
         {type === 'forward' && (
           <ForwardContent forwardContent={forwardContent} />
         )}
@@ -588,11 +634,14 @@ export const Editor = (props: Iprops) => {
             callbackInserTopic={() => setSearcTopic(!searcTopic)}
             selectImgLength={imgList.length}
             callbackSelectImg={() => setIsLoading(true)}
-            onSuccess={event => setImgList([...imgList, ...event])}
+            onSuccess={event => {
+              setImgList([...imgList, ...event]);
+              ReactEditor.focus(editor);
+            }}
             onError={() => setIsLoading(false)}
           />
           <Flex alignItems='center'>
-            {
+            {type !== 'chatRoom' && (
               <Text
                 mt='12px'
                 mr='12px'
@@ -600,7 +649,7 @@ export const Editor = (props: Iprops) => {
               >
                 {maxCreateNum - articleLength}
               </Text>
-            }
+            )}
             {initValue ? (
               <div>
                 <CancelButton onClick={cancelSendArticle}>取消</CancelButton>
@@ -609,12 +658,18 @@ export const Editor = (props: Iprops) => {
                 </SendButton>
               </div>
             ) : (
-              <SendButton
-                disabled={!isRequired ? isRequired : isDisabledSend}
-                onClick={sendArticle}
-              >
-                {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
-              </SendButton>
+              <>
+                {type !== 'chatRoom' && (
+                  <SendButton
+                    disabled={!isRequired ? isRequired : isDisabledSend}
+                    onClick={sendArticle}
+                  >
+                    {type === 'comment'
+                      ? t('newsCommentReply')
+                      : t('sendBtnText')}
+                  </SendButton>
+                )}
+              </>
             )}
           </Flex>
         </Flex>

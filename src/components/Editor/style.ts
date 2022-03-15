@@ -36,11 +36,17 @@ export const CancelButton = styled(Button)`
   margin-right: 20px;
 `;
 
-export const SlateBox = styled(Box)<{ ispadding?: boolean }>`
+export const SlateBox = styled(Box)<{
+  ispadding?: boolean;
+  isChatRoom: boolean;
+}>`
   position: relative;
-  background: ${({ theme }) => theme.colors.editorBoxBg};
-  border-radius: ${({ theme }) => theme.radii.card};
+  background: ${({ theme, isChatRoom }) =>
+    isChatRoom ? theme.colors.backgroundTextArea : theme.colors.editorBoxBg};
+  border-radius: ${({ theme, isChatRoom }) =>
+    isChatRoom ? `20px` : theme.radii.card};
   /* padding-left: 4px; */
+  padding-bottom: ${({ isChatRoom }) => (isChatRoom ? `10px` : ``)};
   ${({ ispadding }) =>
     ispadding &&
     css`
@@ -54,14 +60,15 @@ export const SlateBox = styled(Box)<{ ispadding?: boolean }>`
   z-index: 1004;
   div.text-box {
     color: ${({ theme }) => theme.colors.editorText};
-    background: ${({ theme }) => theme.colors.backgroundTextArea};
+    background: ${({ theme, isChatRoom }) =>
+      isChatRoom ? theme.colors.editorBoxBg : theme.colors.backgroundTextArea};
     padding: 8px;
     ${({ theme }) => theme.mediaQueries.sm} {
       padding: 15px;
     }
     padding-bottom: 16px;
-    border-radius: 5px;
-    min-height: 160px !important;
+    border-radius: ${({ isChatRoom }) => (isChatRoom ? `0` : `5px`)};
+    min-height: ${({ isChatRoom }) => (isChatRoom ? `0` : `160px !important`)};
     max-height: 200px;
     overflow-y: auto;
     &::-webkit-scrollbar {
@@ -75,7 +82,8 @@ export const SlateBox = styled(Box)<{ ispadding?: boolean }>`
       background: rgba(83, 83, 83, 0.5);
     }
     & > div {
-      min-height: 88px !important;
+      min-height: ${({ isChatRoom }) =>
+        isChatRoom ? `20px !important` : `88px !important`};
     }
   }
 `;
