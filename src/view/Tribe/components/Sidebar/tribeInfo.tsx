@@ -6,14 +6,13 @@ import { Icon, Avatar, LineClamp, JoinInviteModal } from 'components';
 import { Card, Flex, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore } from 'store';
-import { TribeType, NftStatus, TribeNftStatus } from 'store/tribe/type';
+import {
+  TribeType,
+  NftStatus,
+  TribeNftStatus,
+  TribeBelongNft,
+} from 'store/tribe/type';
 import { useTribeInfoById } from 'store/mapModule/hooks';
-
-const Desc = styled(Text)`
-  word-wrap: break-word;
-  word-break: break-word;
-  white-space: pre-wrap;
-`;
 
 const TribeInfo: React.FC<{
   tribe_id: number;
@@ -33,7 +32,7 @@ const TribeInfo: React.FC<{
           <Text fontSize='24px' fontWeight='bold'>
             {tribeInfo?.tribe?.name}
           </Text>
-          {userInfo?.address === tribeInfo?.tribe?.owner_address &&
+          {detail?.nft_type === TribeBelongNft.Owner &&
             tribeInfo?.status === NftStatus.Staked &&
             tribeInfo?.expire !== TribeNftStatus.expire && (
               <Text

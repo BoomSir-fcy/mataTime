@@ -29,6 +29,11 @@ export enum TribeNftStatus {
   expire = 1,
 }
 
+export enum TribeBelongNft {
+  Owner = 1,
+  Member = 2,
+}
+
 export interface TribeBaseInfo {
   name?: string;
   logo?: string;
@@ -153,6 +158,7 @@ export interface TribeDetails {
   nft_id: number;
   expire_time: number;
   memberNft: MemberNft;
+  nft_type: number;
 }
 
 export interface MemberNft {
