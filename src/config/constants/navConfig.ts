@@ -193,7 +193,7 @@ export const menuNavConfig: MenuNavConfig[] = [
       {
         icon: 'icon-wodebula',
         activeIcon: 'icon-bulaguanli',
-        lable: 'Tribe',
+        lable: 'My Tribe',
         path: '/me/tribe',
         backPath: '',
         configId: ConfigId.TRIBE_ME,
