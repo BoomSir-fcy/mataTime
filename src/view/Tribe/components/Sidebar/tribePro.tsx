@@ -43,9 +43,11 @@ const TribePro = ({ ...props }) => {
               {detail?.symbol}
             </Text>
           </GroupRows>
-          <GroupRows>
-            <Text color='textTips'>{t('TimingMethod')}</Text>
-          </GroupRows>
+          {detail?.valid_time === 0 && detail?.type !== TribeType.PRO && (
+            <GroupRows>
+              <Text color='textTips'>{t('TimingMethod')}</Text>
+            </GroupRows>
+          )}
         </Group>
         <Text mb='14px'>{t('TimedByJoiningTheTribe')}</Text>
         <Group>
