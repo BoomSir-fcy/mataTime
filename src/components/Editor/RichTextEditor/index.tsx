@@ -229,7 +229,7 @@ const RichTextEditor = (
             renderElement={renderElement}
             renderLeaf={renderLeaf}
             decorate={decorate}
-            placeholder='Enter some text...'
+            placeholder={t('Enter some text...')}
             onKeyDown={event => {
               onKeyDown(event);
               onHotkeyDown(editor, event);
