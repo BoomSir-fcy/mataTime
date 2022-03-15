@@ -93,7 +93,9 @@ const TribeNft: React.FC<{
                 <Text ml='6px' color='textTips' ellipsis>
                   {isOwner === 1
                     ? '-Tribe Chief NFT'
-                    : `#${detail?.nft_id || ''}`}
+                    : detail?.nft_id
+                    ? `#${detail?.nft_id}`
+                    : ''}
                 </Text>
               </RowsEllipsis>
               <Desc maxLine={2} color='textTips'>
