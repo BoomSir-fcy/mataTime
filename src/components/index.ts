@@ -29,4 +29,5 @@ export * from './MenuNav/NavTbs';
 export * from './Send';
 export * from './Text';
 export * from './Collapse';
+export * from './Mask';
 export { DropDown } from './DropDown';

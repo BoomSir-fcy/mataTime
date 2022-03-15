@@ -61,6 +61,7 @@ type Iprops = {
   forwardContent?: Api.Home.post;
   ispadding?: boolean;
   isRequired?: boolean;
+  disabled?: boolean;
 };
 
 export const Portal = ({ children }) => {
@@ -200,6 +201,7 @@ export const Editor = (props: Iprops) => {
     forwardContent,
     ispadding = true,
     isRequired = true,
+    disabled = false,
   } = props;
   const { t } = useTranslation();
   const { toastError } = useToast();
@@ -548,6 +550,7 @@ export const Editor = (props: Iprops) => {
         >
           <Editable
             autoFocus
+            readOnly={disabled}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             onPaste={async event => {
