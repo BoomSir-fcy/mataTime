@@ -77,6 +77,7 @@ interface PostListPorps {
   getList: (LoadType?: number, id?: number) => void;
   updateList: (id: number, type: MoreOperatorEnum) => void;
   postIdKey?: string;
+  flag?: boolean;
 }
 
 const PostList: React.FC<PostListPorps> = ({
@@ -87,6 +88,7 @@ const PostList: React.FC<PostListPorps> = ({
   getList,
   updateList,
   postIdKey = 'id',
+  flag = true,
 }) => {
   const [PostItemData, setPostItemData] = useState();
   const [isShileUser, setIsShileUser] = React.useState(false);
@@ -184,6 +186,7 @@ const PostList: React.FC<PostListPorps> = ({
                   )
                 }
                 <PostItem
+                  flag={flag}
                   isTribeOnwer={
                     TribeInfo?.tribe?.owner_address?.toLocaleLowerCase() ===
                     account?.toLocaleLowerCase()

@@ -130,7 +130,7 @@ const MeTribeTribalDocs: React.FC<init> = () => {
 
   useEffect(() => {
     if (parseQs.i) getFileList(1);
-  }, []);
+  }, [parseQs?.i]);
   return (
     <CountBox>
       <Crumbs title={t('Tribal Docs')}>

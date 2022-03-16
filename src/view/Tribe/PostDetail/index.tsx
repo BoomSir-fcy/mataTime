@@ -48,6 +48,7 @@ import ContentParsingOfTranslate from '../Detail/ContentParsingOfTranslate';
 import PostHandleBtns from '../Detail/PostHandleBtns';
 import { FetchStatus } from 'config/types';
 import PrintBtn from '../Detail/PrintBtn';
+import { NftStatus } from 'store/tribe/type';
 
 const ContentBox = styled(Box)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
@@ -132,6 +133,7 @@ const PostDetail = () => {
   const [PostItemData, setPostItemData] = useState();
   const [isShileUser, setIsShileUser] = React.useState(false);
 
+  console.log(tribeInfo);
   return (
     <Box>
       <Crumbs back />
@@ -204,17 +206,21 @@ const PostDetail = () => {
           />
         </Flex>
       </ContentBox>
+
       <Box className='print-hide'>
         <Divider />
-        <Editor type='comment' sendArticle={sendArticle} />
-        <CommentList
-          nonce={nonce}
-          setNonce={setNonce}
-          key={refresh}
-          itemData={data || {}}
-          tribeId={data?.tribe_id}
-        />
+        <Editor type='comment' disabled sendArticle={sendArticle} />
+        {tribeInfo?.status === NftStatus.Staked && (
+          <CommentList
+            nonce={nonce}
+            setNonce={setNonce}
+            key={refresh}
+            itemData={data || {}}
+            tribeId={data?.tribe_id}
+          />
+        )}
       </Box>
+
       <ShiledUserModal
         userinfo={PostItemData}
         visible={isShileUser}
