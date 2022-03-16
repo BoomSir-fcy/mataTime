@@ -41,7 +41,7 @@ export const ExpireModal: React.FC<{
   // const [toasted, setToasted] = useState(setOrGetTribeExpireToasted());
 
   useEffect(() => {
-    console.log(tribeInfo);
+    // console.log(tribeInfo);
     const toasted = setOrGetTribeExpireToasted(tribeInfo?.tribe_id);
     if (tribeInfo?.expire && !toasted) {
       setVisible(true);

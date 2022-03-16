@@ -48,6 +48,8 @@ const TribeCard = styled(Card)`
   ${({ theme }) => theme.mediaQueriesSize.padding}
 `;
 
+const VALID_DATE_MAX = 365 * 10;
+
 const TribeFeeForward = (props, ref) => {
   const { t } = useTranslation();
   const { feeCoinList } = useTribeState();
@@ -313,6 +315,9 @@ const TribeFeeForward = (props, ref) => {
                       value={state.validDate}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const val = e.target.value;
+                        if (Number(val) > VALID_DATE_MAX) {
+                          return false;
+                        }
                         if (!val.trim())
                           e.target.setCustomValidity(
                             t('Please enter the number of days'),

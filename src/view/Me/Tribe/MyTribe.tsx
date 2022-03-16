@@ -151,15 +151,15 @@ const MyMasterNftTribe = React.memo(() => {
         const list = res.data?.list || [];
         if (list.length) {
           const tribeIds = list.map(item => item.id);
-          // const [newlist, stakeList] = await Promise.all([
-          //   getTribeExtraInfo(tribeIds),
-          //   isExistStakeNft(account, tribeIds),
-          // ]);
-          const newlist = await getTribeExtraInfo(tribeIds);
+          const [newlist, stakeList] = await Promise.all([
+            getTribeExtraInfo(tribeIds),
+            isExistStakeNft(account, tribeIds),
+          ]);
           const tribeList = list.map((item, i) => {
             return {
               ...item,
               initMemberNft: newlist[i]?.initMemberNFT,
+              isExistStake: stakeList[i] > 0,
             };
           });
           setList(tribeList);
@@ -298,6 +298,7 @@ const MyMasterNftTribe = React.memo(() => {
                         tribeId={item.id}
                         nftId={item.nft_id}
                         nftType={1}
+                        isExistStake={item.isExistStake}
                         callback={() => {
                           updateTribeList({
                             ...item,
@@ -410,20 +411,18 @@ const MemberNftTribe = React.memo(() => {
         });
         if (Api.isSuccess(res)) {
           const list = res.data?.list || [];
-          // if (list.length) {
-          // const tribeIds = list.map(item => item.id);
-          // const stakeList = await isExistStakeNft(account, tribeIds);
-          // let tribeList = list.map((item, i) => {
-          //   return {
-          //     ...item,
-          //     isExistStake: stakeList[i] > 0,
-          //   };
-          // });
-          // setMemberNftList(ItemGroupBy(tribeList, 'id'));
-          // setTotal(res.data?.total_count || 1);
-          // }
-          setMemberNftList(ItemGroupBy(list, 'id'));
-          setTotal(res.data?.total_count || 1);
+          if (list.length) {
+            const tribeIds = list.map(item => item.id);
+            const stakeList = await isExistStakeNft(account, tribeIds);
+            let tribeList = list.map((item, i) => {
+              return {
+                ...item,
+                isExistStake: stakeList[i] > 0,
+              };
+            });
+            setMemberNftList(ItemGroupBy(tribeList, 'id'));
+            setTotal(res.data?.total_count || 1);
+          }
         }
         setLoading(false);
       } catch (error) {
@@ -561,6 +560,7 @@ const MemberNftTribe = React.memo(() => {
                         status={
                           item?.expire === 1 ? NftStatus.Expired : item?.status
                         }
+                        isExistStake={item.isExistStake}
                         callback={() => {
                           updateTribeList({
                             ...item,
