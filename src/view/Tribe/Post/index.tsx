@@ -35,6 +35,7 @@ import parseContentInfo from 'components/Editor/RichTextEditor/tools/parseConten
 import { Link, useHistory } from 'react-router-dom';
 import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { NftStatus, TribeBelongNft } from 'store/tribe/type';
 
 const BoxStyled = styled(Box)`
   padding: ${({ theme }) => theme.mediaQueriesSize.padding};
@@ -245,8 +246,8 @@ const Post = () => {
             <Text as='span' color='transparent'>
               *
             </Text>{' '}
-            {tribeInfo?.tribe?.owner_address?.toLowerCase() ===
-            account?.toLowerCase() ? (
+            {tribeInfo?.detail?.nft_type === TribeBelongNft.Owner &&
+            tribeInfo?.status === NftStatus.Staked ? (
               <Link to={`/me/tribe/topics-setting?i=${tribe_id}`}>
                 <Text as='span' color='textPrimary'>
                   {t('Tag')}

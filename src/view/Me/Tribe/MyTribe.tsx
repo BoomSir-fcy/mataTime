@@ -21,7 +21,7 @@ import ReactPaginate from 'react-paginate';
 import PaginateStyle from 'style/Paginate';
 import { Api } from 'apis';
 import { formatTime } from 'utils/timeFormat';
-import { NftStatus, TribeNftStatus } from 'store/tribe/type';
+import { NftStatus, TribeBelongNft, TribeNftStatus } from 'store/tribe/type';
 import { getTribeExtraInfo, isExistStakeNft } from './hooks';
 import {
   StakeButton,
@@ -281,7 +281,7 @@ const MyMasterNftTribe = React.memo(() => {
                   {account && item?.status <= NftStatus.UnReceive && (
                     <ClaimButton
                       tribeId={item.id}
-                      nftType={1}
+                      nftType={TribeBelongNft.Owner}
                       callback={() => {
                         // 领取nft成功后，不能从服务器拿到实时数据，有延迟
                         setTimeout(() => {
@@ -297,7 +297,7 @@ const MyMasterNftTribe = React.memo(() => {
                       <StakeButton
                         tribeId={item.id}
                         nftId={item.nft_id}
-                        nftType={1}
+                        nftType={TribeBelongNft.Owner}
                         isExistStake={item.isExistStake}
                         callback={() => {
                           updateTribeList({
@@ -310,7 +310,7 @@ const MyMasterNftTribe = React.memo(() => {
                         nftId={item.nft_id}
                         callback={() => {
                           setList(p => {
-                            return p.filter(v => v.id !== item?.id);
+                            return p.filter(v => v.nft_id !== item?.nft_id);
                           });
                         }}
                       />
@@ -320,7 +320,7 @@ const MyMasterNftTribe = React.memo(() => {
                     <>
                       <UnStakeButton
                         tribeId={item.id}
-                        nftType={1}
+                        nftType={TribeBelongNft.Owner}
                         callback={() => {
                           updateTribeList({
                             ...item,
@@ -556,7 +556,7 @@ const MemberNftTribe = React.memo(() => {
                         scale='sm'
                         tribeId={item.id}
                         nftId={item.nft_id}
-                        nftType={2}
+                        nftType={TribeBelongNft.Member}
                         status={
                           item?.expire === 1 ? NftStatus.Expired : item?.status
                         }
@@ -583,7 +583,7 @@ const MemberNftTribe = React.memo(() => {
                     <UnStakeButton
                       scale='sm'
                       tribeId={item.id}
-                      nftType={2}
+                      nftType={TribeBelongNft.Member}
                       callback={() => {
                         updateTribeList({
                           ...item,

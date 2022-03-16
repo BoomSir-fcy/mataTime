@@ -309,7 +309,7 @@ const TribeFeeForward = (props, ref) => {
                       required
                       scale='sm'
                       name='required-input-name'
-                      placeholder={t('Please enter the number of days')}
+                      placeholder='1~3650'
                       inputMode='decimal'
                       pattern={PATTERN_NUMBER}
                       value={state.validDate}
