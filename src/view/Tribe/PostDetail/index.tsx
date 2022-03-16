@@ -209,7 +209,11 @@ const PostDetail = () => {
 
       <Box className='print-hide'>
         <Divider />
-        <Editor type='comment' disabled sendArticle={sendArticle} />
+        <Editor
+          type='comment'
+          disabled={tribeInfo?.status !== NftStatus.Staked}
+          sendArticle={sendArticle}
+        />
         {tribeInfo?.status === NftStatus.Staked && (
           <CommentList
             nonce={nonce}

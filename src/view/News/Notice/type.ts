@@ -15,6 +15,5 @@ export enum MessageType {
   MessageSystemDeleteTag = 14, // 删除用户标签
   MessageSystemReceivedReward = 15, // 获得的打赏
   MessageSystemWithdrawalFail = 16, // 提取失败
+  MessageSystemDeleteTribeMember = 19, // 删除部落成员
 }
-
-

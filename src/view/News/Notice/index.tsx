@@ -14,6 +14,7 @@ import {
 import { MessageType } from './type';
 import { Link } from 'react-router-dom';
 import { displayTime, formatUTC } from 'utils';
+import { BASE_BSC_SCAN_URLS } from 'config';
 
 const SystemAvatar = styled(Box)`
   width: 60px;
@@ -72,7 +73,7 @@ const NoticeItem: React.FC<{
 }> = ({ itemData }) => {
   const { t, getHTML } = useTranslation();
   const { type } = itemData;
-
+  const chainId = parseInt(process.env.REACT_APP_CHAIN_ID, 10);
   const ruleUrl = `${window.location.origin}/content-rules/index.html`;
 
   const showUTCTime = useMemo(
@@ -167,6 +168,14 @@ const NoticeItem: React.FC<{
     }
     if (type === MessageType.MessageSystemDeleteTag) {
       return t('DeleteUserTag', { value: content });
+    }
+    if (type === MessageType.MessageSystemDeleteTribeMember) {
+      return getHTML('DeleteTribeMember', {
+        value: content?.tribe_name,
+        amount: content?.amount,
+        symbol: content?.symbol,
+        url: `<a href="${BASE_BSC_SCAN_URLS[chainId]}/tx/${content?.tx_hash}" target="_blank">HASH</a>`,
+      });
     }
   }, [itemData, getHTML, showUTCTime, type, t]);
 
