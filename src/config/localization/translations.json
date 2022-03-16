@@ -660,6 +660,7 @@
   "AddUserTag": "Congratulations！You have successfully joined the %value% channels.",
   "EditUserTag": "You have been changed from %beforeValue% channel to %afterValue% channel.",
   "DeleteUserTag": "You have been removed from the %value% channels.",
+  "DeleteTribeMember": "You have been removed from %value% tribe. Refund %amount% %symbol%, %url%",
   "My invites": "My invites: ",
   "Basic Information": "Basic Info",
   "Tribe name": "Tribe Name",

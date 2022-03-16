@@ -665,6 +665,7 @@
   "AddUserTag": "恭喜您加入 %value% 頻道。",
   "EditUserTag": "您從 %beforeValue% 頻道調整成了 %afterValue% 頻道。",
   "DeleteUserTag": "您被移除了 %value% 頻道。",
+  "DeleteTribeMember": "您被移除了 %value% 部落。退回費用 %amount%  %symbol%，%url%",
   "My invites": "我的邀請數：",
   "Basic Information": "基礎信息",
   "Tribe name": "部落名稱",
