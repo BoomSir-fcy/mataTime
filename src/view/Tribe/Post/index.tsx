@@ -36,6 +36,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useFetchTribeInfoById, useTribeInfoById } from 'store/mapModule/hooks';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { NftStatus, TribeBelongNft } from 'store/tribe/type';
+import { isApp } from 'utils/client';
 
 const BoxStyled = styled(Box)`
   padding: ${({ theme }) => theme.mediaQueriesSize.padding};
@@ -193,6 +194,7 @@ const Post = () => {
       stylePadding: '0',
       hideArrow: true,
       tooltipPadding: 0,
+      tooltipOffset: isApp() ? [-90, 0] : [10, 30],
     },
   );
 
@@ -293,7 +295,8 @@ const Post = () => {
             )} */}
             {driftTipsVisible && tooltip}
             <span
-              style={{ display: 'inline-block', paddingTop: '25px' }}
+              // style={{ display: 'inline-block', paddingTop: '25px' }}
+              style={{ display: 'inline-block' }}
               ref={targetRef}
             ></span>
             <Button

@@ -30,7 +30,7 @@ const initialState: TribeState = {
   tribeBaseInfo: tribeStore ? JSON.parse(tribeStore) : {},
   feeCoinList: [],
   ticketNftList: [],
-  loading: true,
+  loading: false,
   activeNftInfo: {
     nftId: tribeStore ? JSON.parse(tribeStore)?.nftid : '',
     nftToken: tribeStore ? JSON.parse(tribeStore)?.nftAddress : '',
@@ -139,7 +139,8 @@ export const fetchFeeTokenListAsync = createAsyncThunk(
 export const fetchTicketNftListAsync = createAsyncThunk<
   any,
   { account: string }
->('tribe/fetchTicketNftListAsync', async ({ account }) => {
+>('tribe/fetchTicketNftListAsync', async ({ account }, { dispatch }) => {
+  dispatch(setNftLoading(true));
   const [nftList, ticketNftToken] = await Promise.all([
     getNftsList(account),
     getTicketNftTokenList(),
@@ -272,6 +273,9 @@ export const tribe = createSlice({
   name: 'tribe',
   initialState,
   reducers: {
+    setNftLoading: (state, { payload }) => {
+      state.loading = payload;
+    },
     setResetData: (state, { payload }) => {
       state.postList.list = payload;
     },
@@ -373,6 +377,7 @@ export const tribe = createSlice({
 
 // Actions
 export const {
+  setNftLoading,
   setActiveNftInfo,
   setLoading,
   setIsEnd,

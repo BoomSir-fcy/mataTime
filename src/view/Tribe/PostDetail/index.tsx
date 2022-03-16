@@ -133,7 +133,7 @@ const PostDetail = () => {
   const [PostItemData, setPostItemData] = useState();
   const [isShileUser, setIsShileUser] = React.useState(false);
 
-  console.log(tribeInfo);
+  // console.log(tribeInfo);
   return (
     <Box>
       <Crumbs back />

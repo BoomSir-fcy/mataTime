@@ -44,14 +44,14 @@ export const TribeNFT: React.FC<{
             </Flex>
           ) : (
             <>
-              {ticketNftList.length > 0 ? (
+              {!ticketNftList.length ? (
+                <NftAvatar Nodata={true} />
+              ) : (
                 ticketNftList.map((item, index) => {
                   return (
                     <NftAvatar key={index} nftInfo={item} Nodata={false} />
                   );
                 })
-              ) : (
-                <NftAvatar Nodata={true} />
               )}
             </>
           )}

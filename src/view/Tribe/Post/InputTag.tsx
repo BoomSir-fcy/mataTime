@@ -130,7 +130,7 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
               mr='2px'
               key={item.id}
             >
-              <TagText>{item.topic}</TagText>
+              <TagText ellipsis>{item.topic}</TagText>
               <CancleIcon
                 onClick={() => {
                   handleRemoveTag(item);
@@ -187,7 +187,7 @@ const InputTag: React.FC<InputTagProps> = ({ onChange, tribe_id }) => {
               cursor='pointer'
               key={item.id}
             >
-              <TagText>{item.topic}</TagText>
+              <TagText ellipsis>{item.topic}</TagText>
             </Tag>
           ))}
         </Flex>
