@@ -307,6 +307,7 @@ const MyMasterNftTribe = React.memo(() => {
                       />
                       <TransferButton
                         nftId={item.nft_id}
+                        nftType={TribeBelongNft.Owner}
                         callback={() => {
                           setList(p => {
                             return p.filter(v => v.nft_id !== item?.nft_id);
@@ -571,6 +572,7 @@ const MemberNftTribe = React.memo(() => {
                       <TransferButton
                         scale='sm'
                         nftId={item.nft_id}
+                        nftType={TribeBelongNft.Member}
                         callback={() => {
                           setMemberNftList(p => {
                             return p.filter(v => v.nft_id !== item?.nft_id);
