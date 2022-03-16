@@ -22,7 +22,7 @@ import PaginateStyle from 'style/Paginate';
 import { Api } from 'apis';
 import { formatTime } from 'utils/timeFormat';
 import { NftStatus, TribeNftStatus } from 'store/tribe/type';
-import { getTribeExtraInfo } from './hooks';
+import { getTribeExtraInfo, isExistStakeNft } from './hooks';
 import {
   StakeButton,
   UnStakeButton,
@@ -151,6 +151,10 @@ const MyMasterNftTribe = React.memo(() => {
         const list = res.data?.list || [];
         if (list.length) {
           const tribeIds = list.map(item => item.id);
+          // const [newlist, stakeList] = await Promise.all([
+          //   getTribeExtraInfo(tribeIds),
+          //   isExistStakeNft(account, tribeIds),
+          // ]);
           const newlist = await getTribeExtraInfo(tribeIds);
           const tribeList = list.map((item, i) => {
             return {
@@ -405,8 +409,20 @@ const MemberNftTribe = React.memo(() => {
           page_size: pageSize,
         });
         if (Api.isSuccess(res)) {
-          const list = ItemGroupBy(res.data?.list, 'id');
-          setMemberNftList(list);
+          const list = res.data?.list || [];
+          // if (list.length) {
+          // const tribeIds = list.map(item => item.id);
+          // const stakeList = await isExistStakeNft(account, tribeIds);
+          // let tribeList = list.map((item, i) => {
+          //   return {
+          //     ...item,
+          //     isExistStake: stakeList[i] > 0,
+          //   };
+          // });
+          // setMemberNftList(ItemGroupBy(tribeList, 'id'));
+          // setTotal(res.data?.total_count || 1);
+          // }
+          setMemberNftList(ItemGroupBy(list, 'id'));
           setTotal(res.data?.total_count || 1);
         }
         setLoading(false);
@@ -557,7 +573,7 @@ const MemberNftTribe = React.memo(() => {
                         nftId={item.nft_id}
                         callback={() => {
                           setMemberNftList(p => {
-                            return p.filter(v => v.id !== item?.id);
+                            return p.filter(v => v.nft_id !== item?.nft_id);
                           });
                         }}
                       />

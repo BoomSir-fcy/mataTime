@@ -36,6 +36,7 @@ const Create = () => {
   const [state, setState] = useImmer({
     visible: false,
   });
+  const [pending, setPending] = useState(false);
 
   const [step, setStep] = useState(1);
   const { createStatus, onCheckUniqueName, onCreateTribe } = useTribe();
@@ -109,11 +110,21 @@ const Create = () => {
   }, []);
 
   const PayAndCreate = async () => {
+    setPending(true);
     const infoParams = infoForm.current.getInfoFrom();
     const feeParams = feeForm.current.getFeeFrom();
-    if (!(await validBaseInfo(infoParams))) return false;
-    if (!validFeeInfo(feeParams)) return false;
-    if (!validNftInfo()) return false;
+    if (!(await validBaseInfo(infoParams))) {
+      setPending(false);
+      return false;
+    }
+    if (!validFeeInfo(feeParams)) {
+      setPending(false);
+      return false;
+    }
+    if (!validNftInfo()) {
+      setPending(false);
+      return false;
+    }
     try {
       const params = {
         ...infoParams,
@@ -129,6 +140,7 @@ const Create = () => {
       await onCreateTribe(params);
       // 10秒后自动跳转
       setTimeout(() => {
+        setPending(false);
         setState(p => {
           p.visible = false;
         });
@@ -138,7 +150,7 @@ const Create = () => {
       }, 10000);
     } catch (error) {
       console.log(error);
-
+      setPending(false);
       setState(p => {
         p.visible = false;
       });
@@ -269,7 +281,11 @@ const Create = () => {
                 >
                   {t('Previous')}
                 </Button>
-                <TribeCreateBtn width='64%' hasNft={ticketNftList.length > 0} />
+                <TribeCreateBtn
+                  width='64%'
+                  pending={pending}
+                  hasNft={ticketNftList.length > 0}
+                />
               </BtnFlex>
             </form>
           )}
@@ -319,7 +335,10 @@ const Create = () => {
           <SubHeader title={t('Pay for tickets')} />
           <TribeNFT ticketNftList={ticketNftList} />
           <Flex mb='20px' justifyContent='center'>
-            <TribeCreateBtn hasNft={ticketNftList.length > 0} />
+            <TribeCreateBtn
+              pending={pending}
+              hasNft={ticketNftList.length > 0}
+            />
           </Flex>
         </form>
       )}

@@ -73,6 +73,7 @@ const MeTribeTopicsSetting = () => {
             <Flex alignItems='center'>
               <InputStyled
                 noShadow
+                maxLength={20}
                 placeholder={t('Please enter a subject')}
                 value={inputVal}
                 onChange={e => {

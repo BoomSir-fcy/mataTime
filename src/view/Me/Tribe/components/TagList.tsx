@@ -16,9 +16,13 @@ export const Tag = styled(Flex)<{ cursor?: string; mr?: string; mb?: string }>`
   text-align: center;
   cursor: ${({ cursor }) => cursor || 'default'};
   .text {
+    max-width: 200px;
     color: ${({ theme }) => theme.colors.textPrimary};
     cursor: inherit;
     white-space: nowrap;
+    ${({ theme }) => theme.mediaQueries.md} {
+      max-width: max-content;
+    }
   }
   .icon-cancel {
     /* margin-left: 10px; */
@@ -56,7 +60,7 @@ const TagList: React.FC<{
     <TopicsContentFlex>
       {list.map(item => (
         <Tag ml={ml} mr={mr} mb={mb} key={item.id}>
-          <TagText>{item.topic}</TagText>
+          <TagText ellipsis>{item.topic}</TagText>
           <CancleIcon
             onClick={() => {
               onDelete(item.id);

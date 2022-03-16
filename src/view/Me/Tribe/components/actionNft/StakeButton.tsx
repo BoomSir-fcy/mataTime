@@ -8,7 +8,11 @@ import { useStore } from 'store';
 import { fetchIsApproveStakeNft } from 'store/tribe';
 import { setOrGetTribeExpireToasted } from 'utils';
 import { NftStatus } from 'store/tribe/type';
-import { useApproveTribeStakeNFT, useTribeNft } from '../../hooks';
+import {
+  isExistStakeNft,
+  useApproveTribeStakeNFT,
+  useTribeNft,
+} from '../../hooks';
 import { StyledButton } from '../../styled';
 
 export const StakeButton: React.FC<{
@@ -16,9 +20,18 @@ export const StakeButton: React.FC<{
   nftId: number;
   nftType: number;
   status?: number;
+  // isExistStake?: boolean;
   callback?: () => void;
   [key: string]: any;
-}> = ({ tribeId, nftId, nftType, status, callback, ...props }) => {
+}> = ({
+  tribeId,
+  nftId,
+  nftType,
+  status,
+  // isExistStake,
+  callback,
+  ...props
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -31,12 +44,26 @@ export const StakeButton: React.FC<{
 
   // 质押nft
   const handleStakeNft = useCallback(async () => {
+    setPending(true);
+    // 当用户同时拥有一个部落主nft和该部落的成员nft时，只能质押一种nft
+    const stakeList = await isExistStakeNft(account, [tribeId]);
+    const isExistStake = stakeList[0];
+    if (isExistStake && nftType === 1) {
+      toastError(t('Staked Tribe Member NFT'));
+      setPending(false);
+      return false;
+    }
+    if (isExistStake && nftType === 2) {
+      toastError(t('Staked Tribe Chief NFT'));
+      setPending(false);
+      return false;
+    }
     if (status && status === NftStatus.Expired) {
       toastError(t('The current NFT has expired'));
+      setPending(false);
       return false;
     }
     try {
-      setPending(true);
       // 部落主
       if (nftType === 1) {
         await onStakeOwnerNft(tribeId, nftId);
