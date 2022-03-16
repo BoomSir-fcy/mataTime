@@ -613,7 +613,7 @@ export const Editor = (props: Iprops) => {
               </div>
             ) : (
               <SendButton
-                disabled={!isRequired ? isRequired : isDisabledSend}
+                disabled={disabled ?? !isRequired ? isRequired : isDisabledSend}
                 onClick={sendArticle}
               >
                 {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
