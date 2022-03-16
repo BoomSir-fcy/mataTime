@@ -869,7 +869,7 @@
   "TIMEMembers": "Members: %value%%",
   "TribeInvitatioTitle": "Tribe Invitation",
   "TribeInviteFriendsJoin": "Invite friend to join “%value%”",
-  "TribeInviteFriendsJoinText1": "You will get 50% of Tribe fee paid by your friends.",
+  "TribeInviteFriendsJoinText1": "You will get %value%% of Tribe fee paid by your friends.",
   "TribeInviteFriendsJoinText2": "Your friend need to fill in your wallet address (You must have joined the Tribe).",
   "TribeCopyAddress": "Copy Address",
   "TribeTagsTitle": "Tribe Hot Topics",

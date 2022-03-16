@@ -864,7 +864,7 @@
   "TIMEMembers": "会员：%value%%",
   "TribeInvitatioTitle": "部落邀请",
   "TribeInviteFriendsJoin": "邀请好友加入“%value%”",
-  "TribeInviteFriendsJoinText1": "你将获得好友支付部落费用的50%。",
+  "TribeInviteFriendsJoinText1": "你将获得好友支付部落费用的%value%%。",
   "TribeInviteFriendsJoinText2": "需好友填写你的钱包地址（已加入部落）",
   "TribeCopyAddress": "复制地址",
   "TribeTagsTitle": "部落主题热点",
