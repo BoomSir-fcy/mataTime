@@ -1,4 +1,5 @@
 import { Avatar } from 'components';
+import { useTranslation } from 'contexts';
 import dayjs from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
@@ -12,6 +13,7 @@ const MiddleText = styled(Text)`
 const PostDetailHeader: React.FC<{ data: Api.Tribe.PostDataInfo }> = ({
   data,
 }) => {
+  const { t } = useTranslation();
   return (
     <>
       <Flex
@@ -46,7 +48,7 @@ const PostDetailHeader: React.FC<{ data: Api.Tribe.PostDataInfo }> = ({
             </MiddleText>
           </Flex>
           <Flex mb='8px' alignItems='center'>
-            <MiddleText color='textTips'>发布在</MiddleText>
+            <MiddleText color='textTips'>{t('Posted in')}</MiddleText>
             <MiddleText color='textTips' ml='0.5em'>
               {data?.tribe_name}
             </MiddleText>

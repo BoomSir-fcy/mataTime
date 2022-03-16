@@ -26,6 +26,7 @@ interface PostInfoPorps {
   callback?: (event: any, type?: any) => void;
   isShileUser?: boolean;
   setIsShileUser?: (type, data) => void;
+  flag?: boolean;
 }
 
 const PostItem: React.FC<PostInfoPorps> = ({
@@ -34,6 +35,7 @@ const PostItem: React.FC<PostInfoPorps> = ({
   isShileUser,
   callback,
   setIsShileUser,
+  flag = true,
 }) => {
   const { t } = useTranslation();
   const translateData = usePostTranslateMap(itemData.id);
@@ -42,8 +44,8 @@ const PostItem: React.FC<PostInfoPorps> = ({
     <PostBox>
       <Top>
         <Flex width='80%' alignItems='center'>
-          {!!itemData.selected && <Featured />}
-          {!!itemData.tribe_top && (
+          {flag && !!itemData.selected && <Featured />}
+          {flag && !!itemData.tribe_top && (
             <Icon size={20} color='textOrigin' name='icon-jiantou' />
           )}
           <Text

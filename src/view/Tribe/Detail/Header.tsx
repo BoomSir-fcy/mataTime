@@ -6,7 +6,12 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex, Heading, Text, Box, Button } from 'uikit';
 import { useTranslation } from 'contexts';
 import { useStore, storeAction } from 'store';
-import { TribeInfo, NftStatus, TribeNftStatus } from 'store/tribe/type';
+import {
+  TribeInfo,
+  NftStatus,
+  TribeNftStatus,
+  TribeBelongNft,
+} from 'store/tribe/type';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
 import TradeLogo from '../components/TradeCard/TradeLogo';
@@ -251,7 +256,6 @@ const TribeOwner = ({ TribeInfo }) => {
 const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
   const { account } = useWeb3React();
   const { onConnectWallet } = useConnectWallet();
-  const { userInfo } = useStore(p => p.loginReducer);
 
   return (
     <Box
@@ -287,7 +291,7 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
             </>
           ) : (
             <>
-              {userInfo.address !== TribeInfo?.tribe?.owner_address &&
+              {TribeInfo?.detail?.nft_type === TribeBelongNft.Owner &&
                 (TribeInfo?.status === NftStatus.INIT ||
                   TribeInfo?.status === NftStatus.Quit) && (
                   <BtnIcon
@@ -305,9 +309,7 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
                 <StakeButton
                   tribeId={TribeInfo?.tribe_id}
                   nftId={TribeInfo?.detail?.nft_id}
-                  nftType={
-                    userInfo.address === TribeInfo?.tribe?.owner_address ? 1 : 2
-                  }
+                  nftType={TribeInfo?.detail?.nft_type}
                   callback={() => {
                     dispatch(fetchTribeInfoAsync(TribeInfo?.tribe_id));
                   }}
@@ -320,7 +322,7 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
                     TribeInfo?.tribe?.name,
                   )}`}
                 >
-                  <BtnIcon name='icon-zhifeiji' text={t('sendBtnText')} />
+                  <BtnIcon name='icon-zhifeiji' text={t('tribeSendBtnText')} />
                 </Link>
               )}
             </>

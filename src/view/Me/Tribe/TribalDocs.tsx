@@ -36,7 +36,7 @@ const Table = styled(Flex)`
 const Row = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 20% 70% 10%;
+  grid-template-columns: 80% 20%;
   align-items: center;
   ${({ theme }) => theme.mediaQueriesSize.padding}
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
@@ -130,7 +130,7 @@ const MeTribeTribalDocs: React.FC<init> = () => {
 
   useEffect(() => {
     if (parseQs.i) getFileList(1);
-  }, []);
+  }, [parseQs?.i]);
   return (
     <CountBox>
       <Crumbs title={t('Tribal Docs')}>
@@ -142,14 +142,14 @@ const MeTribeTribalDocs: React.FC<init> = () => {
       <TableBox>
         <Table>
           <Row className='head'>
-            <HeadText>{t('F-ID')}</HeadText>
+            {/* <HeadText>{t('F-ID')}</HeadText> */}
             <HeadText>{t('F-Title')}</HeadText>
             <HeadText>{t('Manage')}</HeadText>
           </Row>
           {TribalDocsList.length
             ? TribalDocsList.map((item, index) => (
                 <Row key={`${item.id}${index}`}>
-                  <ItemText>{item.id}</ItemText>
+                  {/* <ItemText>{item.id}</ItemText> */}
                   <ItemText ellipsis mr='8px'>
                     {item.file_name}
                   </ItemText>

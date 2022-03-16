@@ -23,6 +23,7 @@ import { TRIBE_FEE_BNB_TOKEN } from 'config';
 import BigNumber from 'bignumber.js';
 import { getTotalPage } from 'utils/pageHelpers';
 import { addMuteUserId, removeMuteUserId } from 'store/mapModule/actions';
+import { useStore } from 'store';
 
 const CountBox = styled(Box)`
   /* ${({ theme }) => theme.mediaQueriesSize.padding} */
@@ -99,6 +100,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const dispatch = useDispatch();
+  const userInfo = useStore(p => p.loginReducer.userInfo);
   const { DeleteNFTFromTribe } = useTribeMemberDelete();
 
   const [InputVal, setInputVal] = useState('');
@@ -161,9 +163,10 @@ const MeTribeMemberManagement: React.FC<init> = () => {
         setMemberList(Data.list);
         setPage(Data.page);
         setPageCount(getTotalPage(Data.total_count, pageSize));
-      } else {
-        throw new Error('errCode');
       }
+      //  else {
+      //   throw new Error('errCode');
+      // }
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -279,31 +282,35 @@ const MeTribeMemberManagement: React.FC<init> = () => {
                     {dayjs(item.add_time * 1000).format('YY-MM-DD HH:mm')}
                   </ItemText>
                   <Flex justifyContent='space-between'>
-                    <TextBtn
-                      variant='text'
-                      onClick={() => {
-                        if (item.is_mute === 0) {
-                          onPostMute(item.uid);
-                        } else {
-                          onPostNotMute(item.uid);
-                        }
-                      }}
-                    >
-                      {item.is_mute === 0
-                        ? t('Banned')
-                        : t('Cancel the prohibition')}
-                    </TextBtn>
-                    <TextBtn
-                      variant='text'
-                      onClick={() => {
-                        getSymbol(item);
-                        getApproveNum(item.fee_token);
-                        getRefundsAmount(item.nft_id);
-                        setCommonInqueryShow(true);
-                      }}
-                    >
-                      {t('moreDelete')}
-                    </TextBtn>
+                    {userInfo?.address !== item.address && (
+                      <>
+                        <TextBtn
+                          variant='text'
+                          onClick={() => {
+                            if (item.is_mute === 0) {
+                              onPostMute(item.uid);
+                            } else {
+                              onPostNotMute(item.uid);
+                            }
+                          }}
+                        >
+                          {item.is_mute === 0
+                            ? t('Banned')
+                            : t('Cancel the prohibition')}
+                        </TextBtn>
+                        <TextBtn
+                          variant='text'
+                          onClick={() => {
+                            getSymbol(item);
+                            getApproveNum(item.fee_token);
+                            getRefundsAmount(item.nft_id);
+                            setCommonInqueryShow(true);
+                          }}
+                        >
+                          {t('moreDelete')}
+                        </TextBtn>
+                      </>
+                    )}
                   </Flex>
                 </Row>
               ))

@@ -6,11 +6,16 @@ import { useWeb3React } from '@web3-react/core';
 import { Box, Card, Flex, Image, Button, Text } from 'uikit';
 import { useTranslation } from 'contexts';
 import { BASE_IMAGE_URL } from 'config';
-import { storeAction, useStore } from 'store';
+import { storeAction } from 'store';
 import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 import { fetchTribeInfoAsync } from 'store/mapModule/reducer';
 
-import { TribeType, NftStatus, TribeNftStatus } from 'store/tribe/type';
+import {
+  TribeType,
+  NftStatus,
+  TribeNftStatus,
+  TribeBelongNft,
+} from 'store/tribe/type';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { StakeButton, UnStakeButton } from 'view/Me/Tribe/components/actionNft';
 
@@ -62,11 +67,9 @@ const TribeNft: React.FC<{
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { onConnectWallet } = useConnectWallet();
-  const userInfo = useStore(p => p.loginReducer.userInfo);
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { tribe, detail, member_nft } = tribeInfo || {};
   const nowDateUnix = dayjs().unix();
-  const isOwner = userInfo?.address === tribeInfo?.tribe?.owner_address ? 1 : 2;
 
   return (
     <React.Fragment>
@@ -79,7 +82,7 @@ const TribeNft: React.FC<{
                 height={65}
                 src={
                   BASE_IMAGE_URL +
-                  (isOwner === 1
+                  (detail?.nft_type === TribeBelongNft.Owner
                     ? member_nft?.owner_nft_image
                     : member_nft?.member_nft_image)
                 }
@@ -88,14 +91,20 @@ const TribeNft: React.FC<{
             <Box style={{ width: 'calc(100% - 80px)' }}>
               <RowsEllipsis>
                 <Text fontWeight='bold' ellipsis>
-                  {isOwner === 1 ? tribe?.name : member_nft?.member_nft_name}
+                  {detail?.nft_type === TribeBelongNft.Owner
+                    ? tribe?.name
+                    : member_nft?.member_nft_name}
                 </Text>
                 <Text ml='6px' color='textTips' ellipsis>
-                  -Tribe Host NFT
+                  {detail?.nft_type === TribeBelongNft.Owner
+                    ? '-Tribe Chief NFT'
+                    : detail?.nft_id
+                    ? `#${detail?.nft_id}`
+                    : ''}
                 </Text>
               </RowsEllipsis>
               <Desc maxLine={2} color='textTips'>
-                {isOwner === 1
+                {detail?.nft_type === TribeBelongNft.Owner
                   ? member_nft?.owner_nft_introduction
                   : member_nft?.member_nft_introduction}
               </Desc>
@@ -139,7 +148,7 @@ const TribeNft: React.FC<{
                   {tribeInfo?.status === NftStatus.Staked && (
                     <Flex mb='12px' justifyContent='space-between'>
                       <Flex flexDirection='column' mr='15px'>
-                        <Text>{t('ValidityDays')}:</Text>
+                        <Text>{t('ValidityDays')}: </Text>
                         <Text color='textTips'>
                           {detail?.expire_time > 0 &&
                             nowDateUnix >= detail?.expire_time &&
@@ -156,7 +165,7 @@ const TribeNft: React.FC<{
                       </Flex>
                       <UnStakeButton
                         tribeId={props.tribe_id}
-                        nftType={isOwner}
+                        nftType={detail?.nft_type}
                         callback={() =>
                           dispatch(fetchTribeInfoAsync(props.tribe_id))
                         }
@@ -190,9 +199,9 @@ const TribeNft: React.FC<{
                       <Flex flexDirection='column' mr='15px'>
                         <Text>{t('ValidityDays')}:</Text>
                         <Text color='textTips'>
-                          {detail?.valid_time > 0
+                          {detail?.expire_time > 0
                             ? `${dayjs().format('YY-MM-DD')}~${dayjs()
-                                .add(detail?.valid_time / 60 / 60 / 24, 'day')
+                                .add(detail?.expire_time / 60 / 60 / 24, 'day')
                                 .format('YY-MM-DD')}`
                             : t('ValidityDaysForver')}
                         </Text>
@@ -201,7 +210,7 @@ const TribeNft: React.FC<{
                         <StakeButton
                           tribeId={props.tribe_id}
                           nftId={detail.nft_id}
-                          nftType={isOwner}
+                          nftType={detail?.nft_type}
                           callback={() => {
                             dispatch(fetchTribeInfoAsync(props.tribe_id));
                           }}
@@ -231,7 +240,7 @@ const TribeNft: React.FC<{
                       </Flex>
                       <UnStakeButton
                         tribeId={props.tribe_id}
-                        nftType={isOwner}
+                        nftType={detail?.nft_type}
                         callback={() =>
                           dispatch(fetchTribeInfoAsync(props.tribe_id))
                         }

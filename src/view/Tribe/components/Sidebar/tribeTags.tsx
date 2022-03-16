@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, Flex, Text } from 'uikit';
+import { Collapse } from 'components';
 import { useTranslation } from 'contexts';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { NftStatus, TribeNftStatus } from 'store/tribe/type';
@@ -76,14 +77,11 @@ const TribeTags: React.FC<{
   return (
     <>
       {tribeInfo?.topics?.length > 0 &&
-        tribeInfo?.status !== NftStatus.INIT &&
+        tribeInfo?.status === NftStatus.Staked &&
         tribeInfo?.expire !== TribeNftStatus.expire && (
-          <Card padding='16px' isRadius {...props}>
-            <Text mb='20px' fontSize='18px' fontWeight='bold'>
-              {t('TribeTagsTitle')}
-            </Text>
+          <Collapse title={t('TribeTagsTitle')} {...props}>
             <Tags list={tribeInfo?.topics?.slice(0, 7) ?? []} />
-          </Card>
+          </Collapse>
         )}
     </>
   );

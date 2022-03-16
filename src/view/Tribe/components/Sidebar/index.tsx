@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Box } from 'uikit';
-import { TribeInfo } from 'store/tribe/type';
-import Search from 'components/SearchInput';
+import { TribeInfo, NftStatus, TribeNftStatus } from 'store/tribe/type';
 
 import TribeDetail from './tribeInfo';
 import TribeNft from './tribeNft';
@@ -25,7 +24,7 @@ const SidebarStyled = styled(Box)`
 export const TribeSidebar: React.FC<{
   tribe_info: TribeInfo;
   tribe_id: number;
-}> = ({ tribe_id }) => {
+}> = ({ tribe_info, tribe_id }) => {
   const ref = React.useRef<HTMLDivElement | null>();
   const [scrollTop, setScrollTop] = React.useState(0);
   const [position, setPosition] = React.useState('top');
@@ -53,13 +52,15 @@ export const TribeSidebar: React.FC<{
       style={{ [`${position}`]: `-${maxPositionValue}px` }}
       ref={ref}
     >
-      <Search mt='15px' mb='15px' />
       <TribeDetail tribe_id={tribe_id} mb='15px' />
       <ChatRoom tribe_id={tribe_id} mb='15px' />
       <TribeNft tribe_id={tribe_id} mb='15px' />
       <TribePro tribe_id={tribe_id} mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
-      <TribeFiles tribe_id={tribe_id} mb='15px' />
+      {tribe_info?.status === NftStatus.Staked &&
+        tribe_info?.expire !== TribeNftStatus.expire && (
+          <TribeFiles tribe_id={tribe_id} mb='15px' />
+        )}
     </SidebarStyled>
   );
 };

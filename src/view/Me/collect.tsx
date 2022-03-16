@@ -155,6 +155,7 @@ const Collect = props => {
       <Box mt='14px'>
         {isTribe ? (
           <TribePostList
+            flag={false}
             list={renderTribeList}
             map={tribePostMap}
             loading={loading}

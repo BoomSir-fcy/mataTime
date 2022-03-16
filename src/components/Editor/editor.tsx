@@ -69,6 +69,7 @@ type Iprops = {
   ispadding?: boolean;
   isRequired?: boolean;
   cref?: any;
+  disabled?: boolean;
 };
 
 export const Portal = ({ children }) => {
@@ -209,6 +210,7 @@ export const Editor = (props: Iprops) => {
     ispadding = true,
     isRequired = true,
     cref,
+    disabled = false,
   } = props;
   const { t } = useTranslation();
   const { toastError } = useToast();
@@ -588,6 +590,7 @@ export const Editor = (props: Iprops) => {
         >
           <Editable
             autoFocus
+            readOnly={disabled}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             onPaste={async event => {

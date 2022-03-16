@@ -103,6 +103,7 @@ const initialState: TribeState = {
     nft_id: 0,
     expire_time: 0,
     memberNft: {} as MemberNft,
+    nft_type: 0,
   },
   joinTribe: {
     loading: false,
