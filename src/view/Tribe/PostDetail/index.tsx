@@ -133,7 +133,6 @@ const PostDetail = () => {
   const [PostItemData, setPostItemData] = useState();
   const [isShileUser, setIsShileUser] = React.useState(false);
 
-  console.log(tribeInfo);
   return (
     <Box>
       <Crumbs back />
@@ -165,7 +164,7 @@ const PostDetail = () => {
           <MentionOperator
             replyType='twitter'
             postId={data?.id}
-            joined
+            joined={tribeInfo?.status === NftStatus.Staked}
             hasReward={false}
             itemData={{
               ...data,
