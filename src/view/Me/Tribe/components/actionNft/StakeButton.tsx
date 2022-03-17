@@ -8,7 +8,11 @@ import { useStore } from 'store';
 import { fetchIsApproveStakeNft } from 'store/tribe';
 import { setOrGetTribeExpireToasted } from 'utils';
 import { NftStatus, TribeBelongNft } from 'store/tribe/type';
-import { useApproveTribeStakeNFT, useTribeNft } from '../../hooks';
+import {
+  isExistStakeNft,
+  useApproveTribeStakeNFT,
+  useTribeNft,
+} from '../../hooks';
 import { StyledButton } from '../../styled';
 
 export const StakeButton: React.FC<{
@@ -16,18 +20,9 @@ export const StakeButton: React.FC<{
   nftId: number;
   nftType: number;
   status?: number;
-  isExistStake?: boolean;
   callback?: () => void;
   [key: string]: any;
-}> = ({
-  tribeId,
-  nftId,
-  nftType,
-  status,
-  isExistStake,
-  callback,
-  ...props
-}) => {
+}> = ({ tribeId, nftId, nftType, status, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { account } = useWeb3React();
@@ -40,21 +35,20 @@ export const StakeButton: React.FC<{
 
   // 质押nft
   const handleStakeNft = useCallback(async () => {
-    // 当用户同时拥有一个部落主nft和该部落的成员nft时，只能质押/取消质押一种nft
-    if (isExistStake && nftType === TribeBelongNft.Owner) {
-      toastError(t('Staked Tribe Member NFT'));
-      return false;
-    }
-    if (isExistStake && nftType === TribeBelongNft.Member) {
-      toastError(t('Staked Tribe Chief NFT'));
+    setPending(true);
+    // 当用户同时拥有一个部落的多个nft时，只能质押一种nft
+    const isExistStake = await isExistStakeNft(account, [tribeId]);
+    if (isExistStake[0] > 0) {
+      toastError(t('NFT that have staked'));
+      setPending(false);
       return false;
     }
     if (status && status === NftStatus.Expired) {
       toastError(t('The current NFT has expired'));
+      setPending(false);
       return false;
     }
     try {
-      setPending(true);
       // 部落主
       if (nftType === TribeBelongNft.Owner) {
         await onStakeOwnerNft(tribeId, nftId);
@@ -72,7 +66,7 @@ export const StakeButton: React.FC<{
       setPending(false);
       toastError(t('Stake failed'));
     }
-  }, [tribeId, nftId, nftType, status, isExistStake]);
+  }, [tribeId, nftId, nftType, status]);
 
   return (
     <>
