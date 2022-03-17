@@ -7,7 +7,13 @@ import { Flex, Text, Box } from 'uikit';
 import { Icon } from 'components';
 import { useTranslation } from 'contexts';
 import { useStore } from 'store';
-import { TribeInfo } from 'store/tribe/type';
+import {
+  TribeInfo,
+  TribeType,
+  NftStatus,
+  TribeNftStatus,
+  TribeBelongNft,
+} from 'store/tribe/type';
 
 import TribeLogo from './tribeLogo';
 
@@ -50,6 +56,7 @@ const TribeInfoDetail: React.FC<HeaderProps> = ({ tribeInfo, openInvite }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const userInfo = useStore(p => p.loginReducer.userInfo);
+  const { detail } = tribeInfo || {};
 
   return (
     <Box>
@@ -115,16 +122,17 @@ const TribeInfoDetail: React.FC<HeaderProps> = ({ tribeInfo, openInvite }) => {
                     ),
                   })}
                 </Text>
-                {tribeInfo?.detail?.type === 2 && (
-                  <Icon
-                    name='icon-fenxiang'
-                    color='textPrimary'
-                    size={18}
-                    margin={'0 0 0 10px'}
-                    current
-                    onClick={openInvite}
-                  />
-                )}
+                {tribeInfo?.status === NftStatus.Staked &&
+                  tribeInfo?.expire !== TribeNftStatus.expire && (
+                    <Icon
+                      name='icon-fenxiang'
+                      color='textPrimary'
+                      size={18}
+                      margin={'0 0 0 10px'}
+                      current
+                      onClick={openInvite}
+                    />
+                  )}
               </Flex>
             </Flex>
           </Flex>
