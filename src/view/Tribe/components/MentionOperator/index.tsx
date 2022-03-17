@@ -40,7 +40,7 @@ const MentionOperator: React.FC<IProps> = ({
   replyType = 'comment',
   commentId = '',
   postId = 0,
-  joined = false,
+  joined = true,
 }) => {
   const { t } = useTranslation();
   const { toastSuccess, toastError } = useToast();
@@ -139,24 +139,22 @@ const MentionOperator: React.FC<IProps> = ({
     <MentionOperatorWrapper>
       <Flex justifyContent='space-between' className='mention-operator'>
         <Flex>
-          {joined && (
-            <Box
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                setReplyVisible(true);
-              }}
-              className='operator-item'
-            >
-              <Icon
-                name='icon-pinglun'
-                margin='0 10px 0 0'
-                size={18}
-                color='textTips'
-              />
-              {itemData.comment_num || 0}
-            </Box>
-          )}
+          <Box
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              joined && setReplyVisible(true);
+            }}
+            className='operator-item'
+          >
+            <Icon
+              name='icon-pinglun'
+              margin='0 10px 0 0'
+              size={18}
+              color='textTips'
+            />
+            {itemData.comment_num || 0}
+          </Box>
           {/* <Box className="operator-item">
             <Icon name="icon-retweet" margin="0 10px 0 0" color="textTips" />
             {itemData.share_num || 0}

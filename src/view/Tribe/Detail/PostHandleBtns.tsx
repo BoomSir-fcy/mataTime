@@ -10,6 +10,8 @@ import { changePostTranslateState } from 'store/mapModule/reducer';
 import { useDispatch } from 'react-redux';
 import PrintBtn from './PrintBtn';
 
+import { isApp } from 'utils/client';
+
 const PopupButton = styled(Flex)`
   align-items: center;
   cursor: pointer;
@@ -57,7 +59,7 @@ const PostHandleBtns: React.FC<PostHandleBtnsProps> = ({
 
   return (
     <FlexStyled alignItems='center'>
-      {print && <PrintBtn />}
+      {print && !isApp() && <PrintBtn />}
       {showTranslateIcon && (
         <Button
           onClick={e => {
