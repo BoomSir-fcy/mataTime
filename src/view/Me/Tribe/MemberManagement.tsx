@@ -125,10 +125,11 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     symbol: '',
     uid: null,
   });
+  const TribeId = parseQs.i;
 
   // 禁言
   const onPostMute = async (uid: number) => {
-    const res = await Api.TribeApi.tribePostMute({ tribe_id: parseQs.i, uid });
+    const res = await Api.TribeApi.tribePostMute({ tribe_id: TribeId, uid });
     if (Api.isSuccess(res)) {
       dispatch(addMuteUserId(uid));
       toastSuccess(t('Mute successfully'));
@@ -139,7 +140,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   // 取消禁言
   const onPostNotMute = async (uid: number) => {
     const res = await Api.TribeApi.tribePostNotMute({
-      tribe_id: parseQs.i,
+      tribe_id: TribeId,
       uid,
     });
     if (Api.isSuccess(res)) {
@@ -155,7 +156,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
       const res = await Api.TribeApi.tribeMemberList({
         page,
         page_size: pageSize,
-        tribe_id: parseQs.i,
+        tribe_id: TribeId,
         keyword: InputVal,
       });
       if (Api.isSuccess(res)) {
@@ -245,8 +246,8 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     [setInputVal],
   );
   useEffect(() => {
-    if (parseQs.i) getMemberList(1);
-  }, [InputVal, parseQs?.i]);
+    if (TribeId) getMemberList(1);
+  }, [InputVal, TribeId]);
 
   return (
     <CountBox>
