@@ -321,7 +321,7 @@ const Create = () => {
           />
           <Flex mr='7%' justifyContent='flex-end'>
             {/* TODO: 链接未改 */}
-            <LinkExternal
+            {/* <LinkExternal
               mb='20px'
               height='24px'
               color='textPrimary'
@@ -329,7 +329,7 @@ const Create = () => {
               href='http://www.google.com'
             >
               {t('Detail')}
-            </LinkExternal>
+            </LinkExternal> */}
           </Flex>
           <Divider />
           <SubHeader title={t('Pay for tickets')} />
