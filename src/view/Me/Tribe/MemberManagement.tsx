@@ -102,7 +102,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   const dispatch = useDispatch();
   const userInfo = useStore(p => p.loginReducer.userInfo);
   const { DeleteNFTFromTribe } = useTribeMemberDelete();
-
+  const parseQs = useParsedQueryString();
   const [InputVal, setInputVal] = useState('');
   const [page, setPage] = useState(1);
   const [pageSize, setpageSize] = useState(10);
@@ -110,7 +110,6 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   const [Loading, setLoading] = useState(true);
   const [pending, setpending] = useState(false);
   const [MemberList, setMemberList] = useState([]);
-  const parseQs = useParsedQueryString();
   const { toastSuccess, toastError } = useToast();
   const [commonInqueryShow, setCommonInqueryShow] = useState<boolean>(false);
   const [RefundAmount, setRefundAmount] = useState<BigNumber>();
@@ -125,7 +124,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     symbol: '',
     uid: null,
   });
-  const TribeId = parseQs.i;
+  const [TribeId, setTribeId] = useState(null);
 
   // 禁言
   const onPostMute = async (uid: number) => {
@@ -151,30 +150,41 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   };
 
   // 成员列表
-  const getMemberList = async page => {
-    try {
-      const res = await Api.TribeApi.tribeMemberList({
-        page,
-        page_size: pageSize,
-        tribe_id: TribeId,
-        keyword: InputVal,
-      });
-      if (Api.isSuccess(res)) {
-        const Data = res.data;
-        setMemberList(Data.list);
-        setPage(Data.page);
-        setPageCount(getTotalPage(Data.total_count, pageSize));
+  const getMemberList = useCallback(
+    async page => {
+      try {
+        const res = await Api.TribeApi.tribeMemberList({
+          page,
+          page_size: pageSize,
+          tribe_id: TribeId,
+          keyword: InputVal,
+        });
+        if (Api.isSuccess(res)) {
+          const Data = res.data;
+          setMemberList(Data.list);
+          setPage(Data.page);
+          setPageCount(getTotalPage(Data.total_count, pageSize));
+        }
+        //  else {
+        //   throw new Error('errCode');
+        // }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error(error);
+        throw error;
       }
-      //  else {
-      //   throw new Error('errCode');
-      // }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error(error);
-      throw error;
-    }
-  };
+    },
+    [
+      pageSize,
+      TribeId,
+      InputVal,
+      setMemberList,
+      setPage,
+      setPageCount,
+      setLoading,
+    ],
+  );
 
   // 退回币种
   const getSymbol = async item => {
@@ -206,8 +216,6 @@ const MeTribeMemberManagement: React.FC<init> = () => {
     }
     setApproveNum(null);
     const num = await FetchTokenApproveNum(account, fee_token);
-    console.log(num);
-
     setApproveNum(num);
   };
 
@@ -227,7 +235,7 @@ const MeTribeMemberManagement: React.FC<init> = () => {
         getMemberList(page);
       }
     },
-    [DeleteNFTFromTribe, page],
+    [DeleteNFTFromTribe, getMemberList, page],
   );
 
   const handlePageClick = event => {
@@ -248,6 +256,12 @@ const MeTribeMemberManagement: React.FC<init> = () => {
   useEffect(() => {
     if (TribeId) getMemberList(1);
   }, [InputVal, TribeId]);
+
+  useEffect(() => {
+    if (parseQs.i) {
+      setTribeId(Number(parseQs.i));
+    }
+  }, [parseQs]);
 
   return (
     <CountBox>
