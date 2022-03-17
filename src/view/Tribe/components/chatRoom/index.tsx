@@ -117,9 +117,8 @@ const ChatRoom: React.FC<{
 
   const sendMsg = useCallback(
     msg => {
-      setNewList([msg]);
       setisSend(true);
-      // console.log(list);
+      setNewList([msg]);
     },
     [setNewList, setisSend],
   );
@@ -135,8 +134,10 @@ const ChatRoom: React.FC<{
           break;
         case IM.MessageProtocol.WSProtocol_Chat_Message:
           //  发送成功/收到消息
-          setNewList(data?.data);
-          setisSend(true);
+          if (data?.data) {
+            setisSend(true);
+            setNewList([data?.data]);
+          }
           break;
         case IM.MessageProtocol.WSProtocol_Pull_Message:
           //  获取到消息列表
@@ -170,6 +171,8 @@ const ChatRoom: React.FC<{
   const loadMore = useCallback(
     (e: any) => {
       const { scrollTop } = e.nativeEvent.target;
+      console.log(scrollTop);
+
       // 滚动条是否到顶部
       if (scrollTop === 0) {
         if (Loading || End) return; // 判断是否在请求状态或者已到最后一页
