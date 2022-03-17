@@ -428,6 +428,17 @@ export const Editor = (props: Iprops) => {
     }
   };
 
+  // 计算模糊搜索框位置
+  useEffect(() => {
+    if (target && userList?.length > 0) {
+      const el = mentionRef.current;
+      const domRange = ReactEditor.toDOMRange(editor, target);
+      const rect = domRange.getBoundingClientRect();
+      el.style.top = `${rect.top + window.pageYOffset + 24}px`;
+      el.style.left = `${rect.left + window.pageXOffset}px`;
+    }
+  }, [userList, editor, index, search, target]);
+
   const onKeyDown = useCallback(
     (event: any) => {
       if (event.ctrlKey && event.keyCode == 13) {
