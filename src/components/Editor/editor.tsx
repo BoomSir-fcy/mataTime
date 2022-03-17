@@ -550,7 +550,6 @@ export const Editor = (props: Iprops) => {
         >
           <Editable
             autoFocus
-            readOnly={disabled}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             onPaste={async event => {
@@ -613,7 +612,7 @@ export const Editor = (props: Iprops) => {
               </div>
             ) : (
               <SendButton
-                disabled={disabled ?? !isRequired ? isRequired : isDisabledSend}
+                disabled={disabled || !isRequired ? isRequired : isDisabledSend}
                 onClick={sendArticle}
               >
                 {type === 'comment' ? t('newsCommentReply') : t('sendBtnText')}
