@@ -397,12 +397,14 @@ export const Editor = (props: Iprops) => {
 
   const [timeId, setTimeId] = useState(null);
   const sendArticle = () => {
-    if (timeId) return toast.warning(t('sendArticleMsgMaxTime'));
-    setTimeId(
-      setTimeout(() => {
-        setTimeId(null);
-      }, 3000),
-    );
+    if (type !== 'chatRoom') {
+      if (timeId) return toast.warning(t('sendArticleMsgMaxTime'));
+      setTimeId(
+        setTimeout(() => {
+          setTimeId(null);
+        }, 3000),
+      );
+    }
     // 递归收集字符和@的id
     // let userIdList = []
     // let content = ''

@@ -9,6 +9,8 @@ const Content = styled(Box)``;
 export const Collapse: React.FC<{
   mb?: string;
   title?: string;
+  padding?: string;
+  titleMb?: string;
 }> = React.memo(props => {
   const [state, setState] = useImmer({
     visible: false,
@@ -21,8 +23,17 @@ export const Collapse: React.FC<{
   };
 
   return (
-    <Card padding='16px' isRadius {...props}>
-      <Flex justifyContent='space-between' alignItems='flex-end' mb='20px'>
+    <Card
+      padding={props?.padding ? props?.padding : '16px'}
+      isRadius
+      {...props}
+    >
+      <Flex
+        padding={props?.padding ? '16px 16px 0' : '0'}
+        justifyContent='space-between'
+        alignItems='flex-end'
+        mb={props?.titleMb ? props?.titleMb : '20px'}
+      >
         <Text fontSize='18px' fontWeight='bold'>
           {props.title}
         </Text>

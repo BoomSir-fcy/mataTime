@@ -30,4 +30,5 @@ export * from './Send';
 export * from './Text';
 export * from './Collapse';
 export * from './Mask';
+export * from './chatRoomList';
 export { DropDown } from './DropDown';

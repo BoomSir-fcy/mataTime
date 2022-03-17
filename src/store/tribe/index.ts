@@ -16,6 +16,7 @@ import {
   setInitMemberNft,
   updateTribeDetails,
   setJoinTribeVisibleModal,
+  changrChatRoomList,
 } from './actions';
 import { MAX_SPEND_TIME_PAGE_TATOL } from 'config';
 import checkTranslateIds from 'utils/checkTranslateIds';
@@ -111,6 +112,13 @@ const initialState: TribeState = {
     approveLimit: 0,
     basicServiceCharge: 0,
   },
+  chatRoomMsg: [],
+  //  {
+  //   latest_read: null,
+  //   msg: [],
+  //   max_msg: null,
+  //   total_un_read: null,
+  // },
 };
 
 export const fetchIsApproveStakeNft = createAsyncThunk<any, any>(
@@ -297,6 +305,9 @@ export const tribe = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(changrChatRoomList, (state, { payload }) => {
+        state.chatRoomMsg = payload;
+      })
       .addCase(saveTribeBaseInfo, (state, action) => {
         state.tribeBaseInfo = action.payload
           ? Object.assign({}, state.tribeBaseInfo, action.payload)
