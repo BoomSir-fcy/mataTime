@@ -150,16 +150,19 @@ export const fetchTicketNftListAsync = createAsyncThunk<
       return val?.toLowerCase();
     })
     .toString();
+
   const list = nftList
-    .filter(v => tokens.indexOf(v.properties?.token?.toLowerCase()) !== -1)
-    .map(item => {
-      return {
-        name: item.name,
-        image: item.image,
-        nftToken: item.properties.token,
-        nftId: item.properties.token_id,
-      };
-    });
+    ? nftList
+        .filter(v => tokens.indexOf(v.properties?.token?.toLowerCase()) !== -1)
+        .map(item => {
+          return {
+            name: item.name,
+            image: item.image,
+            nftToken: item.properties.token,
+            nftId: item.properties.token_id,
+          };
+        })
+    : [];
   return list;
 });
 
