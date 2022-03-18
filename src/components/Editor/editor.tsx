@@ -70,6 +70,7 @@ type Iprops = {
   isRequired?: boolean;
   cref?: any;
   disabled?: boolean;
+  tribeId?: number;
 };
 
 export const Portal = ({ children }) => {
@@ -211,6 +212,7 @@ export const Editor = (props: Iprops) => {
     isRequired = true,
     cref,
     disabled = false,
+    tribeId,
   } = props;
   const { t } = useTranslation();
   const { toastError } = useToast();
@@ -286,7 +288,15 @@ export const Editor = (props: Iprops) => {
     debounce(async (nickName: string) => {
       try {
         if (nickName) {
-          const res = await Api.UserApi.searchUser(nickName);
+          let res = null;
+          if (tribeId) {
+            res = await Api.TribeApi.tribeUserSearchByName({
+              name: nickName,
+              tribe_id: tribeId,
+            });
+          } else {
+            res = await Api.UserApi.searchUser(nickName);
+          }
           if (Api.isSuccess(res)) {
             setStateEdit(p => {
               p.userList = res.data || [];
@@ -297,7 +307,7 @@ export const Editor = (props: Iprops) => {
         console.error(error);
       }
     }, 1000),
-    [],
+    [setStateEdit, tribeId],
   );
 
   const uploadImg = useCallback(

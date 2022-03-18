@@ -26,6 +26,7 @@ import { IM } from 'utils';
 import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'store';
 import ReactLoading from 'react-loading';
+import FloatBtn from './goMsg';
 
 dayjs.extend(isToday);
 
@@ -34,7 +35,7 @@ const ChatList = styled(Box)`
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 8px;
+  /* padding-right: 8px; */
   padding-bottom: 20px;
 `;
 
@@ -72,6 +73,8 @@ const Triangle = styled.div<{ myMsg: boolean }>`
   right: ${({ myMsg }) => (myMsg ? '-7px' : `auto`)};
 `;
 
+const MAX_LIMIT = 5;
+
 const ChatRoom: React.FC<{
   tribe_id: number;
   mb: string;
@@ -96,26 +99,31 @@ const ChatRoom: React.FC<{
   const [Start, setStart] = useState(0);
   const [Limit, setLimit] = useState(0);
   const [Loading, setLoading] = useState(false);
-  const [JoinTribeId, setJoinTribeId] = useState(null);
+  const [JoinTribe, setJoinTribe] = useState(false);
   const [AddScrollHeight, setAddScrollHeight] = useState(0);
 
   const End = useMemo(() => Start <= 1, [Start]);
 
   // 加入部落聊天室
-  const JoinChatRoom = ({ tribe_id }) => {
-    if (JoinTribeId !== tribe_id && JoinTribeId !== null) {
-      // 部落id改变 退出当前加入部落
-      im?.send(im.messageProtocol.WSProtocol_Join_Chat, {
-        tribe_id: tribe_id,
-        join: false,
-      });
-    } else {
-      im?.send(im.messageProtocol.WSProtocol_Join_Chat, {
-        tribe_id: tribe_id,
-        join: true,
-      });
-    }
-  };
+  const JoinChatRoom = useCallback(
+    ({ tribe_id, type }) => {
+      // type 1加入 2退出
+      if (type === 2) {
+        // 部落id改变 退出当前加入部落
+        im?.send(im.messageProtocol.WSProtocol_Join_Chat, {
+          tribe_id: tribe_id,
+          join: false,
+        });
+      } else {
+        if (!tribe_id) return;
+        im?.send(im.messageProtocol.WSProtocol_Join_Chat, {
+          tribe_id: tribe_id,
+          join: true,
+        });
+      }
+    },
+    [im],
+  );
   // 是否与上条消息同一个发送者
   const isSameSender = useCallback(
     (sender: number, index: number) => {
@@ -145,7 +153,9 @@ const ChatRoom: React.FC<{
       switch (data.ptl) {
         case IM.MessageProtocol.WSProtocol_Join_Chat:
           //  加入成功
-          setJoinTribeId(TribeId);
+          if (data.code === 1) {
+            setJoinTribe(true);
+          }
           break;
         case IM.MessageProtocol.WSProtocol_Chat_Message:
           //  发送成功/收到消息
@@ -162,9 +172,9 @@ const ChatRoom: React.FC<{
               setListInfo(info);
               setNewList(info.msg);
             } else {
-              let _start = info?.max_msg <= 6 ? 1 : info?.max_msg - 5;
+              let _start = info?.max_msg <= 6 ? 1 : info?.max_msg - MAX_LIMIT;
               setStart(_start);
-              setLimit(5);
+              setLimit(MAX_LIMIT);
             }
           }
           break;
@@ -176,7 +186,7 @@ const ChatRoom: React.FC<{
     [
       setStart,
       setLimit,
-      setJoinTribeId,
+      setJoinTribe,
       setisSend,
       setNewList,
       setListInfo,
@@ -220,7 +230,7 @@ const ChatRoom: React.FC<{
 
   // 首次进入滚动条定位到底部
   useEffect(() => {
-    if (MsgList.length && Start === ListInfo.max_msg - 5) {
+    if (MsgList.length && Start === ListInfo.max_msg - MAX_LIMIT) {
       setTimeout(() => {
         const current = chatListRef.current!;
         current.scrollTop = current.scrollHeight;
@@ -231,9 +241,12 @@ const ChatRoom: React.FC<{
   useEffect(() => {
     if (TribeId && im) {
       dispatch(storeAction.changrChatRoomList([]));
-      JoinChatRoom({ tribe_id: TribeId });
+      JoinChatRoom({ tribe_id: TribeId, type: 1 });
     }
-  }, [TribeId, im, dispatch]);
+    return () => {
+      JoinChatRoom({ tribe_id: TribeId, type: 2 });
+    };
+  }, [TribeId, im, JoinChatRoom, dispatch]);
 
   // 请求消息列表
   useEffect(() => {
@@ -244,11 +257,16 @@ const ChatRoom: React.FC<{
         limit: Limit,
       });
     };
-    if (JoinTribeId) {
+    if (
+      JoinTribe &&
+      ((Start === 0 && Limit === 0) || (Start !== 0 && Limit !== 0))
+    ) {
+      console.log(Start, Limit, '1111111');
+
       setLoading(true);
       sendMsgList();
     }
-  }, [TribeId, Start, Limit, im, JoinTribeId, setLoading]);
+  }, [TribeId, Start, Limit, im, JoinTribe, setLoading]);
 
   useEffect(() => {
     if (NewList.length) {
@@ -276,7 +294,7 @@ const ChatRoom: React.FC<{
 
   return (
     <Collapse title={t('聊天室')} padding='0' {...props}>
-      <Box padding=' 0 8px 0 16px'>
+      <Box position='relative' padding=' 0 0 0 16px'>
         <ChatList ref={chatListRef} onScroll={loadMore}>
           {Loading ? (
             <LoadingWrapper>
@@ -304,6 +322,9 @@ const ChatRoom: React.FC<{
             );
           })}
         </ChatList>
+        {ListInfo.total_un_read > MAX_LIMIT && (
+          <FloatBtn total_un_read={ListInfo.total_un_read} />
+        )}
       </Box>
       <SendInput sendMsg={sendMsg} tribe_id={TribeId} im={im} />
     </Collapse>
@@ -311,14 +332,13 @@ const ChatRoom: React.FC<{
 };
 
 const MsgBox = ({ detail, tribeHost, sameSender }) => {
-  const { account } = useActiveWeb3React();
-
+  const { address } = useStore(p => p.loginReducer.userInfo);
   const isMyMsg = useMemo(() => {
     return (
-      account?.toLocaleLowerCase() ===
+      address?.toLocaleLowerCase() ===
       detail?.sender_detail?.address?.toLocaleLowerCase()
     );
-  }, [account, detail]);
+  }, [address, detail]);
 
   return (
     <Flex mb='16px'>

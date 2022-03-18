@@ -19,8 +19,9 @@ const SendInput: React.FC<{
   const { t } = useTranslation();
   const { im, tribe_id, sendMsg } = props;
   const childRef = useRef(null);
-  const { account } = useActiveWeb3React();
-  const { uid, nft_image, nick_name } = useStore(p => p.loginReducer.userInfo);
+  const { uid, nft_image, nick_name, address } = useStore(
+    p => p.loginReducer.userInfo,
+  );
 
   // 发送消息
   const handleSubmit = useCallback(
@@ -36,7 +37,7 @@ const SendInput: React.FC<{
         message: res,
         sender: uid,
         sender_detail: {
-          address: account,
+          address: address,
           nft_image: nft_image,
           nick_name: nick_name,
         },
@@ -44,7 +45,7 @@ const SendInput: React.FC<{
       // 重置输入框
       childRef?.current?.rest();
     },
-    [im, tribe_id, account],
+    [im, tribe_id, uid, nft_image, nick_name, address],
   );
 
   return (
@@ -54,6 +55,7 @@ const SendInput: React.FC<{
         type='chatRoom'
         ispadding={false}
         sendArticle={handleSubmit}
+        tribeId={tribe_id}
       />
     </InputBox>
   );
