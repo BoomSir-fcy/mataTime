@@ -316,15 +316,20 @@ const Send_joinBtn = ({ TribeInfo, t, dispatch }) => {
                 />
               )}
 
-              {TribeInfo?.status === NftStatus.Staked && (
-                <Link
-                  to={`/tribe/post?i=${TribeInfo?.tribe_id}&n=${getEncodeValue(
-                    TribeInfo?.tribe?.name,
-                  )}`}
-                >
-                  <BtnIcon name='icon-zhifeiji' text={t('tribeSendBtnText')} />
-                </Link>
-              )}
+              {TribeInfo?.status === NftStatus.Staked &&
+                TribeInfo?.detail?.nft_id !== 0 &&
+                TribeInfo?.detail?.name && (
+                  <Link
+                    to={`/tribe/post?i=${
+                      TribeInfo?.tribe_id
+                    }&n=${getEncodeValue(TribeInfo?.tribe?.name)}`}
+                  >
+                    <BtnIcon
+                      name='icon-zhifeiji'
+                      text={t('tribeSendBtnText')}
+                    />
+                  </Link>
+                )}
             </>
           )}
         </>

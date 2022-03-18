@@ -980,6 +980,7 @@
   "http-error-30002004": "The picture file is too large",
   "http-error-30016024": "the number of tribal tag exceeds the limit.",
   "http-error-30016025": "Duplicate label name, please try again",
+  "http-error-30016026": "Tribal violation has been removed",
   "*************HTTP-ERROR end******": "*************HTTP-ERROR end******",
   "Tribe": "Tribe",
   "Tribal Info": "Tribe Info",

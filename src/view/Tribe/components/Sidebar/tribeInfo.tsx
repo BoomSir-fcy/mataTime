@@ -48,28 +48,30 @@ const TribeInfo: React.FC<{
               </Text>
             )}
         </Flex>
-        <Flex alignItems='center' mb='13px'>
-          <Text color='textTips'>{t('tribeInfoCreate')}</Text>
-          <Text margin='0 13px'>
-            {t('ValidityDaysUnit', {
-              value: dayjs().diff(
-                dayjs(tribeInfo?.tribe?.create_time * 1000),
-                'days',
-              ),
-            })}
-          </Text>
-          {detail?.type === TribeType.PRO &&
-            tribeInfo?.status === NftStatus.Staked &&
-            tribeInfo?.expire !== TribeNftStatus.expire && (
-              <Icon
-                name='icon-fenxiang'
-                color='textPrimary'
-                size={18}
-                current
-                onClick={() => setVisible(true)}
-              />
-            )}
-        </Flex>
+        {tribeInfo?.tribe?.create_time !== 0 && (
+          <Flex alignItems='center' mb='13px'>
+            <Text color='textTips'>{t('tribeInfoCreate')}</Text>
+            <Text margin='0 13px'>
+              {t('ValidityDaysUnit', {
+                value: dayjs().diff(
+                  dayjs(tribeInfo?.tribe?.create_time * 1000),
+                  'days',
+                ),
+              })}
+            </Text>
+            {detail?.type === TribeType.PRO &&
+              tribeInfo?.status === NftStatus.Staked &&
+              tribeInfo?.expire !== TribeNftStatus.expire && (
+                <Icon
+                  name='icon-fenxiang'
+                  color='textPrimary'
+                  size={18}
+                  current
+                  onClick={() => setVisible(true)}
+                />
+              )}
+          </Flex>
+        )}
         <Flex alignItems='center' mb='19px'>
           <Avatar disableFollow scale='sm' src={detail?.nft_image} />
           <Text fontSize='18px' fontWeight='bold' ml='16px'>
