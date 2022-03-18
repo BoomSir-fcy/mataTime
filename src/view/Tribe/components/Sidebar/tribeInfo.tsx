@@ -32,7 +32,8 @@ const TribeInfo: React.FC<{
           <Text fontSize='24px' fontWeight='bold'>
             {tribeInfo?.tribe?.name}
           </Text>
-          {tribeInfo?.status === NftStatus.Staked &&
+          {detail?.nft_type === TribeBelongNft.Owner &&
+            tribeInfo?.status === NftStatus.Staked &&
             tribeInfo?.expire !== TribeNftStatus.expire && (
               <Text
                 color='textPrimary'
