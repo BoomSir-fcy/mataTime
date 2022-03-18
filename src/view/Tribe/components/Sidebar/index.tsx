@@ -53,13 +53,13 @@ export const TribeSidebar: React.FC<{
       ref={ref}
     >
       <TribeDetail tribe_id={tribe_id} mb='15px' />
+      <TribePro tribe_id={tribe_id} mb='15px' />
       <ChatRoom
         tribe_id={tribe_id}
         tribeHost={tribe_info?.tribe?.owner_address}
         mb='15px'
       />
       <TribeNft tribe_id={tribe_id} mb='15px' />
-      <TribePro tribe_id={tribe_id} mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
       {tribe_info?.status === NftStatus.Staked &&
         tribe_info?.expire !== TribeNftStatus.expire && (
