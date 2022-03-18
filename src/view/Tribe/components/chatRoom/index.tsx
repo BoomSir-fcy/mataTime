@@ -16,6 +16,7 @@ import {
   ContentParsing,
   ChatRoomList,
   LoadingWrapper,
+  ImgList,
 } from 'components';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import SendInput from './Input';
@@ -91,11 +92,12 @@ const ChatRoom: React.FC<{
     total_un_read: null,
   });
   const [NewList, setNewList] = useState([]);
-  const [isSend, setisSend] = useState(false);
+  const [isSend, setisSend] = useState(0); //1自己发的 2收到新消息
   const [Start, setStart] = useState(0);
   const [Limit, setLimit] = useState(0);
   const [Loading, setLoading] = useState(false);
   const [JoinTribeId, setJoinTribeId] = useState(null);
+  const [AddScrollHeight, setAddScrollHeight] = useState(0);
 
   const End = useMemo(() => Start <= 1, [Start]);
 
@@ -117,7 +119,7 @@ const ChatRoom: React.FC<{
 
   const sendMsg = useCallback(
     msg => {
-      setisSend(true);
+      setisSend(1);
       setNewList([msg]);
     },
     [setNewList, setisSend],
@@ -135,7 +137,7 @@ const ChatRoom: React.FC<{
         case IM.MessageProtocol.WSProtocol_Chat_Message:
           //  发送成功/收到消息
           if (data?.data) {
-            setisSend(true);
+            setisSend(2);
             setNewList([data?.data]);
           }
           break;
@@ -148,12 +150,6 @@ const ChatRoom: React.FC<{
               setNewList(info.msg);
             } else {
               let _start = info?.max_msg - 5;
-              // if (list?.total_un_read === 0) {
-              //   // 已读完最新消息 拉取最新5条消息
-              //   _start = list?.max_msg;
-              // } else {
-              //   _start = list?.latest_read;
-              // }
               setStart(_start);
               setLimit(5);
             }
@@ -164,23 +160,38 @@ const ChatRoom: React.FC<{
           break;
       }
     },
-    [setStart, setLimit, setNewList, setListInfo, Start, Limit, TribeId],
+    [
+      setStart,
+      setLimit,
+      setJoinTribeId,
+      setisSend,
+      setNewList,
+      setListInfo,
+      Start,
+      Limit,
+      TribeId,
+    ],
   );
 
   // 滚动加载
   const loadMore = useCallback(
     (e: any) => {
       const { scrollTop } = e.nativeEvent.target;
-      console.log(scrollTop);
-
       // 滚动条是否到顶部
       if (scrollTop === 0) {
         if (Loading || End) return; // 判断是否在请求状态或者已到最后一页
         setStart(Start - Limit);
       }
     },
-    [Loading, End, Start, Limit],
+    [Loading, End, Start, Limit, setStart],
   );
+
+  // 向上滚动加载回弹到当前位置
+  const getAddHeight = () => {
+    const current = chatListRef.current!;
+    setAddScrollHeight(current.scrollHeight);
+    current.scrollTop = current.scrollHeight - AddScrollHeight + 100;
+  };
 
   // 监听接收消息
   useEffect(() => {
@@ -200,7 +211,7 @@ const ChatRoom: React.FC<{
       setTimeout(() => {
         const current = chatListRef.current!;
         current.scrollTop = current.scrollHeight;
-      }, 100);
+      }, 0);
     }
   }, [MsgList, Start, ListInfo.max_msg]);
 
@@ -220,24 +231,34 @@ const ChatRoom: React.FC<{
       });
     };
     if (JoinTribeId) {
+      setLoading(true);
       sendMsgList();
     }
-  }, [TribeId, Start, Limit, im, JoinTribeId]);
+  }, [TribeId, Start, Limit, im, JoinTribeId, setLoading]);
 
   useEffect(() => {
     if (NewList.length) {
+      setLoading(false);
       let concatList;
       if (isSend) {
-        // 发送的消息
+        // 发送/接收的单条消息
         concatList = MsgList.concat(NewList);
-        setisSend(false);
+        if (isSend === 1) {
+          // 自己发消息 回到底部
+          setTimeout(() => {
+            const current = chatListRef.current!;
+            current.scrollTop = current.scrollHeight;
+          }, 0);
+        }
       } else {
         concatList = NewList.concat(MsgList);
+        getAddHeight();
       }
       dispatch(storeAction.changrChatRoomList(concatList));
+      setisSend(0);
       setNewList([]);
     }
-  }, [NewList, MsgList, dispatch, isSend]);
+  }, [NewList, MsgList, dispatch, getAddHeight, setLoading, isSend]);
 
   return (
     <Collapse title={t('聊天室')} padding='0' {...props}>
@@ -304,7 +325,7 @@ const MsgBox = ({ detail, tribeHost }) => {
         alignItems={isMyMsg ? `end` : `start`}
       >
         {!isMyMsg && (
-          <Flex mb='6px'>
+          <Flex mb='6px' flexWrap='wrap'>
             <Text fontSize='14px' mr='10px'>
               {detail?.sender_detail?.nick_name}
             </Text>
@@ -315,7 +336,12 @@ const MsgBox = ({ detail, tribeHost }) => {
         )}
         <MsgContent myMsg={isMyMsg}>
           <Text style={{ wordBreak: 'break-all' }} fontSize='14px'>
-            <ContentParsing rows={100} content={detail?.message} />
+            <ContentParsing
+              rows={100}
+              content={detail?.message}
+              imgList={detail?.image_url}
+            />
+            {detail?.image_url && <ImgList list={detail?.image_url} />}
           </Text>
           <Triangle myMsg={isMyMsg} />
         </MsgContent>
