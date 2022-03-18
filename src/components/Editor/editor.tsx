@@ -475,7 +475,7 @@ export const Editor = (props: Iprops) => {
         }
         return;
       }
-      if (type === 'chatRoom' && event.key === 'Enter') {
+      if (type === 'chatRoom' && event.key === 'Enter' && !target) {
         event.preventDefault();
         sendArticle();
         return;

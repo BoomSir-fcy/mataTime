@@ -30,12 +30,12 @@ import ReactLoading from 'react-loading';
 dayjs.extend(isToday);
 
 const ChatList = styled(Box)`
-  /* padding: 10px 0; */
   min-height: 150px;
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 8px;
+  padding-bottom: 20px;
 `;
 
 const MsgContent = styled(Box)<{ myMsg: boolean }>`
@@ -116,6 +116,19 @@ const ChatRoom: React.FC<{
       });
     }
   };
+  // 是否与上条消息同一个发送者
+  const isSameSender = useCallback(
+    (sender: number, index: number) => {
+      let res;
+      if (index > 0) {
+        res = sender === MsgList[index - 1].sender;
+      } else {
+        res = false;
+      }
+      return res;
+    },
+    [MsgList],
+  );
 
   const sendMsg = useCallback(
     msg => {
@@ -149,7 +162,7 @@ const ChatRoom: React.FC<{
               setListInfo(info);
               setNewList(info.msg);
             } else {
-              let _start = info?.max_msg - 5;
+              let _start = info?.max_msg <= 6 ? 1 : info?.max_msg - 5;
               setStart(_start);
               setLimit(5);
             }
@@ -217,9 +230,10 @@ const ChatRoom: React.FC<{
 
   useEffect(() => {
     if (TribeId && im) {
+      dispatch(storeAction.changrChatRoomList([]));
       JoinChatRoom({ tribe_id: TribeId });
     }
-  }, [TribeId, im]);
+  }, [TribeId, im, dispatch]);
 
   // 请求消息列表
   useEffect(() => {
@@ -271,7 +285,7 @@ const ChatRoom: React.FC<{
           ) : (
             <>{!MsgList.length && <Empty />}</>
           )}
-          {MsgList.map(item => {
+          {MsgList.map((item, index) => {
             return (
               <>
                 {!dayjs(item?.create_time / 1000).isToday() && (
@@ -281,7 +295,11 @@ const ChatRoom: React.FC<{
                     </Text>
                   </Flex>
                 )}
-                <MsgBox tribeHost={tribeHost} detail={item} />
+                <MsgBox
+                  tribeHost={tribeHost}
+                  sameSender={isSameSender(item.sender, index)}
+                  detail={item}
+                />
               </>
             );
           })}
@@ -292,7 +310,7 @@ const ChatRoom: React.FC<{
   );
 };
 
-const MsgBox = ({ detail, tribeHost }) => {
+const MsgBox = ({ detail, tribeHost, sameSender }) => {
   const { account } = useActiveWeb3React();
 
   const isMyMsg = useMemo(() => {
@@ -304,7 +322,7 @@ const MsgBox = ({ detail, tribeHost }) => {
 
   return (
     <Flex mb='16px'>
-      {!isMyMsg && (
+      {!isMyMsg && !sameSender && (
         <Flex position='relative' mr='16px' justifyContent='center'>
           <Avatar
             disableFollow
@@ -324,7 +342,7 @@ const MsgBox = ({ detail, tribeHost }) => {
         flexDirection='column'
         alignItems={isMyMsg ? `end` : `start`}
       >
-        {!isMyMsg && (
+        {!sameSender && (
           <Flex mb='6px' flexWrap='wrap'>
             <Text fontSize='14px' mr='10px'>
               {detail?.sender_detail?.nick_name}
@@ -334,7 +352,11 @@ const MsgBox = ({ detail, tribeHost }) => {
             </Text>
           </Flex>
         )}
-        <MsgContent myMsg={isMyMsg}>
+        <MsgContent
+          ml={isMyMsg ? '0' : sameSender ? '56px' : '0'}
+          mr={isMyMsg ? (sameSender ? '56px' : '0') : '0'}
+          myMsg={isMyMsg}
+        >
           <Text style={{ wordBreak: 'break-all' }} fontSize='14px'>
             <ContentParsing
               rows={100}
@@ -346,6 +368,21 @@ const MsgBox = ({ detail, tribeHost }) => {
           <Triangle myMsg={isMyMsg} />
         </MsgContent>
       </Flex>
+      {isMyMsg && !sameSender && (
+        <Flex position='relative' ml='16px' justifyContent='center'>
+          <Avatar
+            disableFollow
+            scale='sm'
+            src={detail?.sender_detail?.nft_image}
+          />
+          {tribeHost?.toLocaleLowerCase() ===
+            detail?.sender_detail?.address?.toLocaleLowerCase() && (
+            <HostTag>
+              <Text fontSize='12px'>host</Text>
+            </HostTag>
+          )}
+        </Flex>
+      )}
     </Flex>
   );
 };
