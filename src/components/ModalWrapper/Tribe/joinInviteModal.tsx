@@ -33,7 +33,11 @@ export const JoinInviteModal: React.FC<{
               value: tribeInfo?.tribe?.name || '',
             })}
           </Text>
-          <Text mb='13px'>{t('TribeInviteFriendsJoinText1')}</Text>
+          <Text mb='13px'>
+            {t('TribeInviteFriendsJoinText1', {
+              value: tribeInfo?.nftInfo?.invitationRate || 0,
+            })}
+          </Text>
           <Text color='textTips'>{t('TribeInviteFriendsJoinText2')}</Text>
         </MaskInfo>
         <MaskInfo mt='17px' style={{ textAlign: 'center' }}>

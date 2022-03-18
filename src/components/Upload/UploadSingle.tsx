@@ -7,6 +7,7 @@ import { BASE_IMAGE_URL } from 'config';
 import { Loading } from 'components';
 import { Api } from 'apis';
 import { useImmer } from 'use-immer';
+import client from 'utils/client';
 interface UploadProps extends BoxProps {
   url?: string;
   tips?: string | ReactNode;
@@ -132,7 +133,10 @@ export const UploadSingle: React.FC<UploadProps> = ({
         disabled={disabled}
         onChange={() => uploadFile()}
         type='file'
-        accept='.jpeg, .jpg, .png, .gif'
+        // accept='.jpeg, .jpg, .png, .gif'
+        accept='image/*'
+        capture={!client.ios}
+        hidden
       />
 
       {tips ? tips : null}

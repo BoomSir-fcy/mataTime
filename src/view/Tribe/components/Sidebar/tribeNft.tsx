@@ -200,9 +200,9 @@ const TribeNft: React.FC<{
                         <Text>{t('ValidityDays')}:</Text>
                         <Text color='textTips'>
                           {detail?.expire_time > 0
-                            ? `${dayjs().format('YY-MM-DD')}~${dayjs()
-                                .add(detail?.expire_time / 60 / 60 / 24, 'day')
-                                .format('YY-MM-DD')}`
+                            ? `${dayjs().format('YY-MM-DD')}~${dayjs(
+                                detail?.expire_time * 1000,
+                              ).format('YY-MM-DD')}`
                             : t('ValidityDaysForver')}
                         </Text>
                       </Flex>

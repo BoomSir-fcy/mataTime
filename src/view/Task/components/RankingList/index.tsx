@@ -19,7 +19,9 @@ const RankingFlex = styled(Flex)`
 `;
 const RankingBox = styled(Box)`
   width: 100%;
+  max-width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 670px;
     border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};
   }
 `;

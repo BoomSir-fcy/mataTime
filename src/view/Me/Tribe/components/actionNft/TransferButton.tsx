@@ -6,6 +6,7 @@ import { useToast } from 'hooks';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useStore } from 'store';
+import { TribeBelongNft } from 'store/tribe/type';
 import styled from 'styled-components';
 import { Flex, Input, Text, Button } from 'uikit';
 import { useTranferNft, useTribeNft } from '../../hooks';
@@ -19,9 +20,10 @@ const InputStyled = styled(Input)`
 
 export const TransferButton: React.FC<{
   nftId: number;
+  nftType?: number;
   callback?: () => void;
   [key: string]: any;
-}> = ({ nftId, callback, ...props }) => {
+}> = ({ nftId, nftType, callback, ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toastSuccess, toastError } = useToast();
@@ -61,7 +63,11 @@ export const TransferButton: React.FC<{
       <ModalWrapper
         creactOnUse
         fillBody
-        title={t('Transfer the Tribe Host NFT')}
+        title={
+          nftType === TribeBelongNft.Owner
+            ? t('Transfer the Tribe Host NFT')
+            : t('Transfer the Tribe Member NFT')
+        }
         visible={visible}
         setVisible={setVisible}
       >
@@ -76,11 +82,13 @@ export const TransferButton: React.FC<{
               setInputAddress(e.target.value);
             }}
           />
-          <Text mt='10px' small>
-            {t(
-              '*Whoever gets the Tribe Host NFT will become the tribe host and has the tribe host rights.',
-            )}
-          </Text>
+          {nftType === TribeBelongNft.Owner && (
+            <Text mt='10px' small>
+              {t(
+                '*Whoever gets the Tribe Host NFT will become the tribe host and has the tribe host rights.',
+              )}
+            </Text>
+          )}
           <Flex justifyContent='center'>
             <Button
               disabled={pending}

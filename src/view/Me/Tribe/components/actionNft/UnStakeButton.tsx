@@ -4,7 +4,7 @@ import { useTranslation } from 'contexts';
 import { useToast } from 'hooks';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { NftStatus } from 'store/tribe/type';
+import { NftStatus, TribeBelongNft } from 'store/tribe/type';
 import { useTribeNft } from '../../hooks';
 import { StyledButton } from '../../styled';
 
@@ -30,11 +30,11 @@ export const UnStakeButton: React.FC<{
     try {
       setPending(true);
       // 部落主
-      if (nftType === 1) {
+      if (nftType === TribeBelongNft.Owner) {
         await onUnStakeOwnerNft(tribeId);
       }
       // 成员
-      if (nftType === 2) {
+      if (nftType === TribeBelongNft.Member) {
         await onUnStakeNft(tribeId);
       }
       toastSuccess(t('UnStake succeeded'));

@@ -23,7 +23,9 @@ import { ExpireModal } from 'components/ModalWrapper/Tribe/ExpireModal';
 
 const TribeBox = styled(Box)`
   width: 100%;
+  max-width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 670px;
     flex: 1;
     margin-right: 14px;
     border-right: 1px solid ${({ theme }) => theme.colors.borderThemeColor};

@@ -77,6 +77,23 @@ export const getTribeExtraInfo = async (tribeIds: number[]) => {
   }
 };
 
+// 查询用户是否有已质押的nft
+export const isExistStakeNft = async (account: string, tribeIds: number[]) => {
+  const address = getTribeAddress();
+  const calls = tribeIds.map(item => {
+    return { address, name: 'user_tribe_nftid', params: [account, item] };
+  });
+  try {
+    const list = await multicall(tribeAbi, calls);
+    return list.map(item => {
+      return new BigNumber(item[0].toJSON().hex).toNumber();
+    });
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
 export const useTribeNft = () => {
   const tribeContract = useTribeContract();
 

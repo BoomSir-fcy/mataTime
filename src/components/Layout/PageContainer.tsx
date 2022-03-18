@@ -106,7 +106,7 @@ const PageContainer: React.FC = ({ children }) => {
     <PageContainerStyled>
       <GlobalStyle />
       <ChildrenWrapper>
-        <Flex width='100%' alignItems='flex-start' justifyContent='center'>
+        <Flex width='100%' alignItems='flex-start'>
           {showMenuNav && <MenuNav />}
           <LineStyled className='print-hide' />
           <Flex

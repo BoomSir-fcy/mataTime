@@ -66,7 +66,7 @@ const HotBtn: React.FC<{
               }}
               key={`${item.id}${index}`}
             >
-              <Text fontSize='14px' color='textPrimary'>
+              <Text ellipsis fontSize='14px' color='textPrimary'>
                 {item.name}
               </Text>
             </Btn>

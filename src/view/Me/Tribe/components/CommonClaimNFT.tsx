@@ -9,7 +9,7 @@ import { formatTime } from 'utils';
 import { StyledButton } from '../styled';
 import { useWeb3React } from '@web3-react/core';
 import useConnectWallet from 'hooks/useConnectWallet';
-import { MemberNft, NftStatus } from 'store/tribe/type';
+import { MemberNft, NftStatus, TribeBelongNft } from 'store/tribe/type';
 import {
   ClaimButton,
   StakeButton,
@@ -191,6 +191,7 @@ export const CommonClaimNFT: React.FC<{
                       />
                       <TransferButton
                         nftId={nft_id}
+                        nftType={TribeBelongNft.Owner}
                         callback={() => {
                           history.push('/me/tribe');
                         }}

@@ -55,7 +55,6 @@ const AppTribeDetails = () => {
 
   useAccountStakeApprove();
 
-  // console.log(tribInfo, joinTribe);
   return (
     <>
       <Box>
@@ -74,7 +73,7 @@ const AppTribeDetails = () => {
 
       {/* 邀请框 */}
       <JoinInviteModal
-        tribe_id={parsedQs.tribe_id}
+        tribe_id={tribInfo?.tribe_id}
         visible={visible}
         onClose={() => setVisible(false)}
       />

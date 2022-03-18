@@ -16,9 +16,10 @@ const StyledButton = styled(Button)<{ width?: string }>`
 `;
 
 export const TribeCreateBtn: React.FC<{
+  pending?: boolean;
   hasNft?: boolean;
   [key: string]: any;
-}> = React.memo(({ hasNft, ...props }) => {
+}> = React.memo(({ hasNft, pending, ...props }) => {
   const { t } = useTranslation();
   const { account } = useWeb3React();
   const { toastError } = useToast();
@@ -69,8 +70,8 @@ export const TribeCreateBtn: React.FC<{
   return (
     <>
       {state.isApprove ? (
-        <StyledButton {...props} type='submit'>
-          {t('Pay and Create')}
+        <StyledButton disabled={pending} {...props} type='submit'>
+          {pending ? <Dots>{t('Pay and Create')}</Dots> : t('Pay and Create')}
         </StyledButton>
       ) : (
         <StyledButton

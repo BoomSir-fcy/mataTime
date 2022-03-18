@@ -33,17 +33,19 @@ export const JoinTribeModal: React.FC<{
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { balance: tokenBalance } = useTokenBalance(tribeBaseInfo?.feeToken);
-  const { balance: bnbBalance } = useGetBnbBalance();
+  const { balance: bnbBalance, fetchStatus } = useGetBnbBalance();
   const { toastSuccess, toastError } = useToast();
   const { handleApprove } = ApproveToken(tribeBaseInfo?.feeToken);
   const { joinTribe } = useJoinTribe();
   const { account } = useActiveWeb3React();
-  const joinTribeInfo = useStore(p => p.tribe.joinTribe);
   const { detail, baseInfo } = tribeInfo || {};
+  const { feeToken } = tribeBaseInfo || {};
+  const joinTribeInfo = useStore(p => p.tribe.joinTribe);
+  const isBnb = feeToken === '0x0000000000000000000000000000000000000001';
 
   // 获取具体金额
   const bnb = getBalanceAmount(bnbBalance).toString();
-  const proAmount = new BigNumber(detail?.charge)
+  const joinFee = new BigNumber(detail?.charge)
     .dividedBy(new BigNumber(10).pow(18))
     .toString();
   const token = getBalanceAmount(tokenBalance).toString();
@@ -86,21 +88,14 @@ export const JoinTribeModal: React.FC<{
       : '0x0000000000000000000000000000000000000000';
     // BNB传入加入费用
     const joinServiceFee =
-      detail?.type === TribeType.PRO &&
-      tribeBaseInfo?.feeToken === '0x0000000000000000000000000000000000000001'
-        ? detail?.charge
-        : '';
-
+      detail?.type === TribeType.PRO && isBnb ? detail?.charge : '';
     // TODO: 提示余额不足判断需要优化
     if (detail?.type === TribeType.PRO) {
-      console.log('Pro', tribeBaseInfo.feeToken);
-      if (
-        tribeBaseInfo?.feeToken === '0x0000000000000000000000000000000000000001'
-      ) {
-        if (bnb <= proAmount) {
+      if (isBnb) {
+        if (bnb <= joinFee) {
           return toastError(t('contractCode-400002'));
         }
-      } else if (token <= proAmount) {
+      } else if (token <= joinFee) {
         return toastError(t('contractCode-400002'));
       }
     } else {
@@ -254,6 +249,7 @@ export const JoinTribeModal: React.FC<{
                 )}
                 <Flex mt='20px' justifyContent='center'>
                   <Button
+                    disabled={fetchStatus !== 'success'}
                     onClick={() =>
                       setState(p => {
                         p.next = 2;
