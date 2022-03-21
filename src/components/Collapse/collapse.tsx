@@ -11,7 +11,9 @@ export const Collapse: React.FC<{
   title?: string;
   padding?: string;
   titleMb?: string;
+  setIsClose?: (isClose) => void;
 }> = React.memo(props => {
+  const { setIsClose } = props;
   const [state, setState] = useImmer({
     visible: false,
   });
@@ -26,6 +28,7 @@ export const Collapse: React.FC<{
     <Card
       padding={props?.padding ? props?.padding : '16px'}
       isRadius
+      onClick={() => (setIsClose ? setIsClose(state.visible) : {})}
       {...props}
     >
       <Flex

@@ -26,6 +26,13 @@ const SendInput: React.FC<{
   // 发送消息
   const handleSubmit = useCallback(
     (res, image_urls, remind_user, reset) => {
+      // const context = Array.isArray(JSON.parse(res)) ? JSON.parse(res) : [];
+      // console.log(context);
+      // //空|空格|换行
+      // if(test.match(/^\s*$/)){
+      //   console.log("all space or \\n or empty")
+      // }
+
       im?.send(im.messageProtocol.WSProtocol_Chat_Message, {
         tribe_id: tribe_id,
         msg: res,

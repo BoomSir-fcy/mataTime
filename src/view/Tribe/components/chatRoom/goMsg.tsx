@@ -27,7 +27,3 @@ const FloatBtn: React.FC<{ total_un_read: number }> = ({ total_un_read }) => {
 };
 
 export default FloatBtn;
-// //空|空格|换行
-// if(test.match(/^\s*$/)){
-//   console.log("all space or \\n or empty")
-// }

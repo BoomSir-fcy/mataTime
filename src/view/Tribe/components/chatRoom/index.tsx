@@ -35,7 +35,8 @@ const ChatList = styled(Box)`
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
-  /* padding-right: 8px; */
+  /* 阻止触底页面滚动 */
+  overscroll-behavior: none;
   padding-bottom: 20px;
 `;
 
@@ -101,8 +102,31 @@ const ChatRoom: React.FC<{
   const [Loading, setLoading] = useState(false);
   const [JoinTribe, setJoinTribe] = useState(false);
   const [AddScrollHeight, setAddScrollHeight] = useState(0);
+  const [IsSendRead, setIsSendRead] = useState(false);
+  const [IsClose, setIsClose] = useState(true);
 
   const End = useMemo(() => Start <= 1, [Start]);
+
+  // 已读消息更新
+  const upDateRead = useCallback(
+    (nonce?: number) => {
+      console.log(IsSendRead);
+
+      if (!MsgList.length || IsSendRead || IsClose) return;
+      let Nonce;
+      if (nonce) {
+        Nonce = nonce;
+      } else {
+        Nonce = MsgList[MsgList.length - 1].nonce;
+      }
+      if (!Nonce) return;
+      im?.send(im.messageProtocol.WSProtocol_Read_Nonce, {
+        tribe_id: TribeId,
+        read_nonce: Nonce,
+      });
+    },
+    [im, TribeId, MsgList, IsSendRead, IsClose],
+  );
 
   // 加入部落聊天室
   const JoinChatRoom = useCallback(
@@ -124,6 +148,7 @@ const ChatRoom: React.FC<{
     },
     [im],
   );
+
   // 是否与上条消息同一个发送者
   const isSameSender = useCallback(
     (sender: number, index: number) => {
@@ -162,11 +187,18 @@ const ChatRoom: React.FC<{
           if (data?.data) {
             setisSend(2);
             setNewList([data?.data]);
+            // 已在聊天室状态-接收到新消息标记已读
+            setIsSendRead(false);
           }
           break;
         case IM.MessageProtocol.WSProtocol_Pull_Message:
           //  获取到消息列表
           let info = data?.data;
+          if (info.max_msg === 0) {
+            // 没有消息
+            setLoading(false);
+            return;
+          }
           if (info) {
             if (info?.msg) {
               setListInfo(info);
@@ -176,6 +208,12 @@ const ChatRoom: React.FC<{
               setStart(_start);
               setLimit(MAX_LIMIT);
             }
+          }
+          break;
+        case IM.MessageProtocol.WSProtocol_Read_Nonce:
+          //  已读标记成功
+          if (data.code === 1) {
+            setIsSendRead(true);
           }
           break;
         default:
@@ -190,9 +228,8 @@ const ChatRoom: React.FC<{
       setisSend,
       setNewList,
       setListInfo,
-      Start,
-      Limit,
-      TribeId,
+      setLoading,
+      setIsSendRead,
     ],
   );
 
@@ -200,13 +237,15 @@ const ChatRoom: React.FC<{
   const loadMore = useCallback(
     (e: any) => {
       const { scrollTop } = e.nativeEvent.target;
+      upDateRead();
       // 滚动条是否到顶部
       if (scrollTop === 0) {
         if (Loading || End) return; // 判断是否在请求状态或者已到最后一页
-        setStart(Start - Limit);
+        const NewStart = Start - Limit < 1 ? 1 : Start - Limit;
+        setStart(NewStart);
       }
     },
-    [Loading, End, Start, Limit, setStart],
+    [Loading, End, Start, Limit, setStart, upDateRead],
   );
 
   // 向上滚动加载回弹到当前位置
@@ -228,8 +267,17 @@ const ChatRoom: React.FC<{
     };
   }, [im]);
 
-  // 首次进入滚动条定位到底部
   useEffect(() => {
+    if (!IsSendRead && !IsClose) {
+      // 已在聊天室状态-接收到新消息标记已读
+      console.log(11111);
+
+      upDateRead();
+    }
+  }, [IsClose, upDateRead, IsSendRead]);
+
+  useEffect(() => {
+    // 首次进入滚动条定位到底部
     if (MsgList.length && Start === ListInfo.max_msg - MAX_LIMIT) {
       setTimeout(() => {
         const current = chatListRef.current!;
@@ -238,6 +286,7 @@ const ChatRoom: React.FC<{
     }
   }, [MsgList, Start, ListInfo.max_msg]);
 
+  // 加入退出
   useEffect(() => {
     if (TribeId && im) {
       dispatch(storeAction.changrChatRoomList([]));
@@ -261,8 +310,6 @@ const ChatRoom: React.FC<{
       JoinTribe &&
       ((Start === 0 && Limit === 0) || (Start !== 0 && Limit !== 0))
     ) {
-      console.log(Start, Limit, '1111111');
-
       setLoading(true);
       sendMsgList();
     }
@@ -293,7 +340,16 @@ const ChatRoom: React.FC<{
   }, [NewList, MsgList, dispatch, getAddHeight, setLoading, isSend]);
 
   return (
-    <Collapse title={t('聊天室')} padding='0' {...props}>
+    <Collapse
+      setIsClose={e => {
+        console.log(e);
+
+        setIsClose(e);
+      }}
+      title={t('聊天室')}
+      padding='0'
+      {...props}
+    >
       <Box position='relative' padding=' 0 0 0 16px'>
         <ChatList ref={chatListRef} onScroll={loadMore}>
           {Loading ? (
