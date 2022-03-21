@@ -457,14 +457,14 @@ const TokenAccount: React.FC = () => {
                     >
                       {t('walleteComment')}
                     </TabText>
-                    <TabText
+                    {/* <TabText
                       className={readType === 4 ? 'active' : ''}
                       onClick={() => {
                         setreadType(4);
                       }}
                     >
                       {t('Tribe')}
-                    </TabText>
+                    </TabText> */}
                     <TabText
                       className={readType === 3 ? 'active' : ''}
                       onClick={() => {
@@ -478,8 +478,6 @@ const TokenAccount: React.FC = () => {
               )}
               {readType === 3 && ActiveToken === 1 ? (
                 <FriendsList showTitle={false} />
-              ) : readType === 4 && ActiveToken === 1 ? (
-                <TribeIncomeList />
               ) : (
                 <EarningsRecord
                   readType={readType}
