@@ -57,7 +57,7 @@ const HostTag = styled(Box)`
   background: ${({ theme }) => theme.colors.textOrigin};
   border-radius: 4px;
   width: max-content;
-  bottom: 8px;
+  bottom: -10px;
 `;
 
 const Triangle = styled.div<{ myMsg: boolean }>`
@@ -74,7 +74,8 @@ const Triangle = styled.div<{ myMsg: boolean }>`
   right: ${({ myMsg }) => (myMsg ? '-7px' : `auto`)};
 `;
 
-const MAX_LIMIT = 5;
+export const MAX_LIMIT = 5;
+const UNREAD_LIMIT = 20;
 
 const ChatRoom: React.FC<{
   tribe_id: number;
@@ -97,21 +98,32 @@ const ChatRoom: React.FC<{
   });
   const [NewList, setNewList] = useState([]);
   const [isSend, setisSend] = useState(0); //1自己发的 2收到新消息
-  const [Start, setStart] = useState(0);
-  const [Limit, setLimit] = useState(0);
+  const [TurnPages, setTurnPages] = useImmer({
+    Start: 0,
+    Limit: 0,
+  });
   const [Loading, setLoading] = useState(false);
   const [JoinTribe, setJoinTribe] = useState(false);
   const [AddScrollHeight, setAddScrollHeight] = useState(0);
   const [IsSendRead, setIsSendRead] = useState(false);
   const [IsClose, setIsClose] = useState(true);
+  const [IsGotop, setIsGotop] = useState(false);
+  const [UserInfo, setUserInfo] = useState({
+    uid: null,
+    nick_name: '',
+  });
+  const [UnreadMsg, setUnreadMsg] = useImmer({
+    latest_read: null,
+    max_msg: null,
+    at_msg_nonce: [],
+    total_un_read: null,
+  });
 
-  const End = useMemo(() => Start <= 1, [Start]);
+  const End = useMemo(() => TurnPages.Start <= 1, [TurnPages.Start]);
 
   // 已读消息更新
   const upDateRead = useCallback(
     (nonce?: number) => {
-      console.log(IsSendRead);
-
       if (!MsgList.length || IsSendRead || IsClose) return;
       let Nonce;
       if (nonce) {
@@ -201,12 +213,24 @@ const ChatRoom: React.FC<{
           }
           if (info) {
             if (info?.msg) {
-              setListInfo(info);
               setNewList(info.msg);
             } else {
-              let _start = info?.max_msg <= 6 ? 1 : info?.max_msg - MAX_LIMIT;
-              setStart(_start);
-              setLimit(MAX_LIMIT);
+              let _start =
+                info?.max_msg <= 6 ? 1 : info?.max_msg - MAX_LIMIT + 1;
+              console.log(info?.at_msg_nonce?.length, info?.at_msg_nonce);
+
+              setUnreadMsg(p => {
+                p.latest_read = info?.latest_read;
+                p.max_msg = info?.max_msg;
+                p.total_un_read = info?.total_un_read;
+                p.at_msg_nonce = info?.at_msg_nonce?.length
+                  ? info?.at_msg_nonce
+                  : [];
+              });
+              setTurnPages(p => {
+                p.Start = _start;
+                p.Limit = MAX_LIMIT;
+              });
             }
           }
           break;
@@ -222,12 +246,12 @@ const ChatRoom: React.FC<{
       }
     },
     [
-      setStart,
-      setLimit,
+      MAX_LIMIT,
+      setUnreadMsg,
+      setTurnPages,
       setJoinTribe,
       setisSend,
       setNewList,
-      setListInfo,
       setLoading,
       setIsSendRead,
     ],
@@ -237,15 +261,24 @@ const ChatRoom: React.FC<{
   const loadMore = useCallback(
     (e: any) => {
       const { scrollTop } = e.nativeEvent.target;
-      upDateRead();
       // 滚动条是否到顶部
       if (scrollTop === 0) {
+        if (IsClose) {
+          // 在没点击聊天室的情况下滚动 标记已读
+          setIsClose(false);
+        }
         if (Loading || End) return; // 判断是否在请求状态或者已到最后一页
-        const NewStart = Start - Limit < 1 ? 1 : Start - Limit;
-        setStart(NewStart);
+        const NewStart =
+          TurnPages.Start - TurnPages.Limit < 1
+            ? 1
+            : TurnPages.Start - TurnPages.Limit;
+        setTurnPages(p => {
+          p.Start = NewStart;
+          p.Limit = MAX_LIMIT;
+        });
       }
     },
-    [Loading, End, Start, Limit, setStart, upDateRead],
+    [Loading, End, TurnPages, IsClose, MAX_LIMIT, setTurnPages, setIsClose],
   );
 
   // 向上滚动加载回弹到当前位置
@@ -254,6 +287,80 @@ const ChatRoom: React.FC<{
     setAddScrollHeight(current.scrollHeight);
     current.scrollTop = current.scrollHeight - AddScrollHeight + 100;
   };
+
+  // 查看未读消息定位到消息顶部
+  const toTop = useCallback(() => {
+    if (IsGotop && TurnPages.Limit !== MAX_LIMIT) {
+      setTimeout(() => {
+        let anchorElement = document.getElementById(String(TurnPages.Start));
+        if (anchorElement) {
+          console.log(anchorElement);
+
+          // anchorElement.scrollIntoView();
+        }
+        // const current = chatListRef.current!;
+        // current.scrollTop = 2;
+        let arr = [];
+        if (UnreadMsg.at_msg_nonce.length) {
+          arr = UnreadMsg.at_msg_nonce.concat();
+          arr.shift();
+          setUnreadMsg(p => {
+            p.at_msg_nonce = arr;
+          });
+          setIsGotop(false);
+        } else {
+          setUnreadMsg(p => {
+            p.total_un_read = 0;
+          });
+        }
+      }, 0);
+    }
+  }, [TurnPages, UnreadMsg, IsGotop]);
+
+  // 加载到未读消息处
+  const goUnread = useCallback(() => {
+    const send = async (Start, Limit) => {
+      im?.send(im.messageProtocol.WSProtocol_Pull_Message, {
+        tribe_id: TribeId,
+        Start: Start,
+        limit: Limit,
+      });
+      return;
+    };
+    const LoadList = async end => {
+      for (
+        let i = TurnPages.Start - UNREAD_LIMIT;
+        i >= end;
+        i = i - UNREAD_LIMIT
+      ) {
+        await send(i, UNREAD_LIMIT);
+        if (i === end || i - UNREAD_LIMIT < end) {
+          setIsGotop(true);
+        }
+        if (i - UNREAD_LIMIT < end) {
+          // 最后一次拉取不足20条时
+          setTurnPages(p => {
+            p.Start = i - (i - end);
+            p.Limit = i - end;
+          });
+        }
+      }
+    };
+    if (UnreadMsg.at_msg_nonce.length) {
+      LoadList(UnreadMsg.at_msg_nonce[0]);
+    } else {
+      LoadList(UnreadMsg.latest_read);
+    }
+  }, [
+    im,
+    UnreadMsg,
+    TribeId,
+    TurnPages.Start,
+    UNREAD_LIMIT,
+    setUnreadMsg,
+    setIsGotop,
+    setTurnPages,
+  ]);
 
   // 监听接收消息
   useEffect(() => {
@@ -267,24 +374,25 @@ const ChatRoom: React.FC<{
     };
   }, [im]);
 
+  // 已在聊天室状态-接收到新消息标记已读
   useEffect(() => {
     if (!IsSendRead && !IsClose) {
-      // 已在聊天室状态-接收到新消息标记已读
-      console.log(11111);
-
       upDateRead();
     }
   }, [IsClose, upDateRead, IsSendRead]);
 
+  // 首次进入滚动条定位到底部
   useEffect(() => {
-    // 首次进入滚动条定位到底部
-    if (MsgList.length && Start === ListInfo.max_msg - MAX_LIMIT) {
+    if (
+      MsgList.length &&
+      TurnPages.Start === UnreadMsg.max_msg - MAX_LIMIT + 1
+    ) {
       setTimeout(() => {
         const current = chatListRef.current!;
         current.scrollTop = current.scrollHeight;
       }, 0);
     }
-  }, [MsgList, Start, ListInfo.max_msg]);
+  }, [MsgList, TurnPages.Start, UnreadMsg.max_msg, MAX_LIMIT]);
 
   // 加入退出
   useEffect(() => {
@@ -302,19 +410,17 @@ const ChatRoom: React.FC<{
     const sendMsgList = () => {
       im?.send(im.messageProtocol.WSProtocol_Pull_Message, {
         tribe_id: TribeId,
-        Start: Start,
-        limit: Limit,
+        Start: TurnPages.Start,
+        limit: TurnPages.Limit,
       });
     };
-    if (
-      JoinTribe &&
-      ((Start === 0 && Limit === 0) || (Start !== 0 && Limit !== 0))
-    ) {
+    if (JoinTribe) {
       setLoading(true);
       sendMsgList();
     }
-  }, [TribeId, Start, Limit, im, JoinTribe, setLoading]);
+  }, [TribeId, TurnPages, im, JoinTribe, setLoading]);
 
+  // 消息更新
   useEffect(() => {
     if (NewList.length) {
       setLoading(false);
@@ -329,21 +435,21 @@ const ChatRoom: React.FC<{
             current.scrollTop = current.scrollHeight;
           }, 0);
         }
+        dispatch(storeAction.changrChatRoomList(concatList));
       } else {
         concatList = NewList.concat(MsgList);
+        dispatch(storeAction.changrChatRoomList(concatList));
         getAddHeight();
+        toTop();
       }
-      dispatch(storeAction.changrChatRoomList(concatList));
       setisSend(0);
       setNewList([]);
     }
-  }, [NewList, MsgList, dispatch, getAddHeight, setLoading, isSend]);
+  }, [NewList, MsgList, dispatch, getAddHeight, toTop, setLoading, isSend]);
 
   return (
     <Collapse
       setIsClose={e => {
-        console.log(e);
-
         setIsClose(e);
       }}
       title={t('聊天室')}
@@ -373,21 +479,26 @@ const ChatRoom: React.FC<{
                   tribeHost={tribeHost}
                   sameSender={isSameSender(item.sender, index)}
                   detail={item}
+                  setUserInfo={setUserInfo}
                 />
               </>
             );
           })}
         </ChatList>
-        {ListInfo.total_un_read > MAX_LIMIT && (
-          <FloatBtn total_un_read={ListInfo.total_un_read} />
-        )}
+        <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
       </Box>
-      <SendInput sendMsg={sendMsg} tribe_id={TribeId} im={im} />
+      <SendInput
+        sendMsg={sendMsg}
+        tribe_id={TribeId}
+        im={im}
+        UserInfo={UserInfo}
+        setUserInfo={e => setUserInfo(e)}
+      />
     </Collapse>
   );
 };
 
-const MsgBox = ({ detail, tribeHost, sameSender }) => {
+const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
   const { address } = useStore(p => p.loginReducer.userInfo);
   const isMyMsg = useMemo(() => {
     return (
@@ -397,9 +508,21 @@ const MsgBox = ({ detail, tribeHost, sameSender }) => {
   }, [address, detail]);
 
   return (
-    <Flex mb='16px'>
+    <Flex mb='16px' id={detail?.nonce}>
       {!isMyMsg && !sameSender && (
-        <Flex position='relative' mr='16px' justifyContent='center'>
+        <Flex
+          style={{ cursor: 'pointer' }}
+          height='max-content'
+          position='relative'
+          mr='16px'
+          justifyContent='center'
+          onClick={() =>
+            setUserInfo({
+              uid: detail?.sender,
+              nick_name: detail?.sender_detail?.nick_name,
+            })
+          }
+        >
           <Avatar
             disableFollow
             scale='sm'
@@ -438,6 +561,7 @@ const MsgBox = ({ detail, tribeHost, sameSender }) => {
               rows={100}
               content={detail?.message}
               imgList={detail?.image_url}
+              chatRoom={true}
             />
             {detail?.image_url && <ImgList list={detail?.image_url} />}
           </Text>
@@ -445,7 +569,12 @@ const MsgBox = ({ detail, tribeHost, sameSender }) => {
         </MsgContent>
       </Flex>
       {isMyMsg && !sameSender && (
-        <Flex position='relative' ml='16px' justifyContent='center'>
+        <Flex
+          height='max-content'
+          position='relative'
+          ml='16px'
+          justifyContent='center'
+        >
           <Avatar
             disableFollow
             scale='sm'

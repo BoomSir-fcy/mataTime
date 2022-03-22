@@ -370,6 +370,13 @@ export const Editor = (props: Iprops) => {
     rest: () => {
       restInput();
     },
+    CircleUser: (uid: number, nick_name: string) => {
+      insertMention(editor, {
+        uid: uid,
+        character: `@${nick_name}`,
+      });
+      ReactEditor.focus(editor);
+    },
   }));
 
   const deepContent = arr => {

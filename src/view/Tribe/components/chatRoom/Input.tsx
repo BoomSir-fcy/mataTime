@@ -1,7 +1,7 @@
 import { Editor } from 'components';
 import { useTranslation } from 'contexts';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Flex, Input, Button, Card, Box } from 'uikit';
 import { useStore } from 'store';
@@ -14,10 +14,15 @@ const InputBox = styled(Box)`
 const SendInput: React.FC<{
   tribe_id: number;
   im: any;
+  UserInfo: {
+    uid: number;
+    nick_name: string;
+  };
+  setUserInfo: (obj) => void;
   sendMsg: ({}) => void;
 }> = ({ ...props }) => {
   const { t } = useTranslation();
-  const { im, tribe_id, sendMsg } = props;
+  const { im, tribe_id, sendMsg, UserInfo, setUserInfo } = props;
   const childRef = useRef(null);
   const { uid, nft_image, nick_name, address } = useStore(
     p => p.loginReducer.userInfo,
@@ -54,6 +59,13 @@ const SendInput: React.FC<{
     },
     [im, tribe_id, uid, nft_image, nick_name, address],
   );
+
+  useEffect(() => {
+    if (UserInfo.uid) {
+      childRef?.current?.CircleUser(UserInfo.uid, UserInfo.nick_name);
+      setUserInfo({ uid: null, nick_name: '' });
+    }
+  }, [UserInfo, setUserInfo]);
 
   return (
     <InputBox>

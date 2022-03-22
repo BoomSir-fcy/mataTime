@@ -41,6 +41,7 @@ type IProps = {
   mode?: 'preview' | 'detail';
   imgList?: string[];
   tribe_id?: number;
+  chatRoom?: boolean;
 };
 
 const ContentParsingWrapper = styled.div``;
@@ -54,7 +55,7 @@ const ExpandWrapper = styled.div`
     font-size: 12px;
   }
 `;
-const ParagraphItem = styled(Box)`
+const ParagraphItem = styled(Box)<{ isChatRoom: boolean }>`
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
@@ -62,7 +63,7 @@ const ParagraphItem = styled(Box)`
   font-family: Arial;
   line-height: 1.1875;
   user-select: text;
-  cursor: pointer;
+  cursor: ${({ isChatRoom }) => (isChatRoom ? 'auto' : 'pointer')};
   p {
     font-size: 18px;
     font-family: Arial;
@@ -96,6 +97,7 @@ export const ContentParsing = React.memo(
       rows,
       imgList,
       tribe_id,
+      chatRoom,
     } = props;
 
     useEffect(() => {
@@ -274,7 +276,7 @@ export const ContentParsing = React.memo(
           );
         case 'paragraph':
           return (
-            <ParagraphItem mt={paragraphMt} key={index}>
+            <ParagraphItem isChatRoom={chatRoom} mt={paragraphMt} key={index}>
               {children?.map((n, index) => serialize2(n, null, index))}
             </ParagraphItem>
           );

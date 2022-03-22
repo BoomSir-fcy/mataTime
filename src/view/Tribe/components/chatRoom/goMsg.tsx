@@ -2,6 +2,8 @@ import { Icon } from 'components';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Flex, Box, Text } from 'uikit';
+import { useTranslation } from 'contexts';
+import { MAX_LIMIT } from '.';
 
 const GoMsg = styled(Box)`
   position: absolute;
@@ -15,14 +17,36 @@ const GoMsg = styled(Box)`
   cursor: pointer;
 `;
 
-const FloatBtn: React.FC<{ total_un_read: number }> = ({ total_un_read }) => {
+const FloatBtn: React.FC<{ UnreadMsg: any; goUnread: () => void }> = ({
+  UnreadMsg,
+  goUnread,
+}) => {
+  const { t } = useTranslation();
+  useEffect(() => {
+    console.log(UnreadMsg);
+  }, [UnreadMsg]);
+
   return (
-    <GoMsg>
-      <Flex alignItems='center'>
-        <Icon size={14} color='white' current={0} name='icon-jiantou' />
-        <Text ml='4px'>{total_un_read}</Text>
-      </Flex>
-    </GoMsg>
+    <>
+      {UnreadMsg.total_un_read > MAX_LIMIT || UnreadMsg.at_msg_nonce.length ? (
+        <GoMsg onClick={() => goUnread()}>
+          <Flex alignItems='center'>
+            <Icon size={14} color='white' current={0} name='icon-jiantou' />
+            {UnreadMsg.at_msg_nonce.length ? (
+              <Text ml='4px' fontSize='12px'>
+                {t('有%num%条@我', { num: UnreadMsg.at_msg_nonce.length })}
+              </Text>
+            ) : (
+              <Text ml='4px' fontSize='12px'>
+                {UnreadMsg.total_un_read}
+              </Text>
+            )}
+          </Flex>
+        </GoMsg>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
