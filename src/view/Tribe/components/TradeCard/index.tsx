@@ -21,7 +21,12 @@ const TradeCard: React.FC<TradeCardProps> = ({ info }) => {
   return (
     <CardStyle isRadius mb='16px'>
       <PaddingBox>
-        <TradeLogo scales='lg' pro={info.type === 2} logo={info.logo} />
+        <TradeLogo
+          scales='lg'
+          pro={info.type === 2}
+          logo={info.logo}
+          spend_time={info.spend_time}
+        />
         <Text padding='14px 0' bold fontSize='18px' ellipsis>
           {info.name}
         </Text>

@@ -82,6 +82,18 @@ const ProBox = styled(Box)<{ scale?: Scales }>`
   z-index: 1;
 `;
 
+const SpeedTime = styled(Box)`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+`;
+
+const Mask = styled(Box)`
+  padding: 2px 10px;
+  background-color: ${({ theme }) => theme.colors.primaryDark};
+  border-radius: ${({ theme }) => theme.radii.card};
+`;
+
 const Crown = styled(ProTribeIcon)<{ scale: Scales }>`
   width: ${({ scale }) => `${style[scale].iconWidth}px`};
   height: ${({ scale }) => `${style[scale].iconWidth}px`};
@@ -91,9 +103,16 @@ interface TradeLogoProps {
   scales?: Scales;
   round?: boolean;
   pro?: boolean;
+  spend_time?: number | string;
 }
 
-const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo, pro }) => {
+const TradeLogo: React.FC<TradeLogoProps> = ({
+  scales,
+  round,
+  logo,
+  pro,
+  spend_time,
+}) => {
   return (
     <BoxStyled scale={scales} round={round}>
       <Image
@@ -105,6 +124,13 @@ const TradeLogo: React.FC<TradeLogoProps> = ({ scales, round, logo, pro }) => {
         <ProBox scale={scales}>
           <Crown scale={scales} />
         </ProBox>
+      )}
+      {Boolean(spend_time) && (
+        <SpeedTime>
+          <Mask>
+            <Text>10 TIME/s</Text>
+          </Mask>
+        </SpeedTime>
       )}
     </BoxStyled>
   );

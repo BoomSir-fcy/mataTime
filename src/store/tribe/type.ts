@@ -81,6 +81,7 @@ export interface TribeList {
   nick_name: string;
   address: string;
   nft_image: string;
+  spend_time?: number | string;
 }
 
 export interface TribeInfo {

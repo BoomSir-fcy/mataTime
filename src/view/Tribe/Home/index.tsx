@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, Link, useRouteMatch } from 'react-router-dom';
+import { useImmer } from 'use-immer';
 import { Box, Text, Button, Flex, Card, Image, Spinner, Empty } from 'uikit';
 import styled from 'styled-components';
 import { useTranslation } from 'contexts';
@@ -7,12 +9,12 @@ import { Crumbs, List, LoadType } from 'components';
 import Tabs from 'components/Tabs';
 import useParsedQueryString from 'hooks/useParsedQueryString';
 import TradeCard from '../components/TradeCard';
+import { Sortable } from '../components/sort';
+import { SearchTribe } from '../components/searchTribe';
 import FlexAutoWarpper from 'components/Layout/FlexAutoWarpper';
-import { storeAction, useStore } from 'store';
 // import { useTribeList } from 'store/tribe/hooks';
-import { useDispatch } from 'react-redux';
-import useBlockNumber from 'libs/mini-swap/state/application/hooks';
 import { Api } from 'apis';
+import { isApp } from 'utils/client';
 
 const PaddingFlex = styled(Flex)`
   padding: 16px 10px;
@@ -58,14 +60,21 @@ const Home = () => {
   const [avtiveTab, setAvtiveTab] = useState(
     Number(qsValue[TAB_QUERY_KEY]) || tabDatas[0].value,
   );
+  const [state, setState] = useState({
+    new: 1,
+    hot: 0,
+    keyword: '',
+  });
 
   const getTribeList = useCallback(async () => {
     try {
       setLoading(true);
+      console.log(state);
       const res = await Api.TribeApi.tribeList({
         page: page,
         page_size: page_size,
         tab: avtiveTab,
+        ...state,
       });
       if (Api.isSuccess(res)) {
         const list = page === 1 ? res.data : TribeList.concat(res.data);
@@ -78,11 +87,11 @@ const Home = () => {
       setLoading(false);
       setTribeList([]);
     }
-  }, [page, page_size, avtiveTab, TribeList]);
+  }, [page, page_size, avtiveTab, TribeList, state]);
 
   useEffect(() => {
     getTribeList();
-  }, [avtiveTab]);
+  }, [avtiveTab, state]);
 
   return (
     <Box>
@@ -100,12 +109,54 @@ const Home = () => {
           replace(`${pathname}?${TAB_QUERY_KEY}=${tab.value}`);
         }}
       >
-        <Flex flex='1' justifyContent='flex-end'>
+        <Flex flex='1' justifyContent='flex-end' alignItems='center'>
+          {!isApp() && (
+            <SearchTribe
+              loading={loading}
+              mr='10px'
+              onEndCallback={evnet => {
+                setState({
+                  ...state,
+                  keyword: evnet,
+                });
+                setPage(1);
+              }}
+            />
+          )}
+
           <Link to={`${path}/create`}>
             <Button>{t('Create a tribe')}</Button>
           </Link>
         </Flex>
       </Tabs>
+      <Sortable
+        items={[
+          {
+            text: t('detailTime'),
+            value: state.new,
+            changeEvent: async () => {
+              setState({
+                ...state,
+                new: state.new === 1 ? 2 : 1,
+                hot: 0,
+              });
+              setPage(1);
+            },
+          },
+          {
+            text: t('detailHeat'),
+            value: state.hot,
+            changeEvent: async () => {
+              setState({
+                ...state,
+                hot: state.hot === 1 ? 2 : 1,
+                new: 0,
+              });
+              setPage(1);
+            },
+          },
+        ]}
+      />
       <PaddingFlex justifyContent='space-around' flexWrap='wrap'>
         <List
           loading={loading}
@@ -124,7 +175,7 @@ const Home = () => {
             <FlexAutoWarpper lineMax={2}>
               {TribeList.map((item, index) => (
                 <LinkBox
-                  key={item.id}
+                  key={`${item.id}-${index}`}
                   as={Link}
                   to={`${path}/detail?id=${item.id}`}
                 >
