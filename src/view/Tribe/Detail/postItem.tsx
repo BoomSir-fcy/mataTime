@@ -27,6 +27,7 @@ interface PostInfoPorps {
   isShileUser?: boolean;
   setIsShileUser?: (type, data) => void;
   flag?: boolean;
+  showPrview?: boolean;
 }
 
 const PostItem: React.FC<PostInfoPorps> = ({
@@ -36,6 +37,7 @@ const PostItem: React.FC<PostInfoPorps> = ({
   callback,
   setIsShileUser,
   flag = true,
+  showPrview = false,
 }) => {
   const { t } = useTranslation();
   const translateData = usePostTranslateMap(itemData.id);
@@ -75,6 +77,7 @@ const PostItem: React.FC<PostInfoPorps> = ({
           mode='preview'
           callback={callback}
           translateData={translateData}
+          showPrview={showPrview}
         />
         {/* <ContentParsing mode='preview' content={itemData.content} /> */}
       </Box>

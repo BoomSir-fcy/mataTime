@@ -49,7 +49,6 @@ export const ContentTextStyled = styled(Text)`
   word-break: break-word;
   white-space: pre-wrap;
   min-height: 1.1875em;
-  font-family: Arial;
   line-height: 1.1875;
   user-select: text;
   display: ${({ display }) => display || 'inline'};

@@ -330,9 +330,9 @@ export const ContentParsing = React.memo(
         {mode === 'preview' ? (
           <ContentTextStyled
             display='-webkit-box'
-            color='textTips'
+            color='white_black'
             ellipsis
-            maxLine={2}
+            maxLine={3}
           >
             {preValue ||
               (parsingResult &&

@@ -14,7 +14,8 @@ import {
   fetchPostTranslateAsync,
 } from 'store/mapModule/reducer';
 import { TranslateInfo } from 'store/types';
-import { data } from 'libs/mini-swap/pancake-uikit/components/Table/example/const';
+
+import { PreviewImg } from '../components/post/previewImg';
 
 type ContentParsingOfTranslateProps = {
   showTranslate?: boolean;
@@ -25,6 +26,7 @@ type ContentParsingOfTranslateProps = {
   translateForwardData?: TranslateInfo;
   mode?: 'preview' | 'detail';
   rows?: number;
+  showPrview?: Boolean;
 };
 
 const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
@@ -35,6 +37,7 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
   translateForwardData,
   mode,
   rows,
+  showPrview,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -60,6 +63,7 @@ const ContentParsingOfTranslate: React.FC<ContentParsingOfTranslateProps> = ({
             }}
             imgList={itemData.image_list}
           />
+          {showPrview && <PreviewImg list={itemData.image_list} />}
           <Box className='print-hide'>
             {showTranslate && !!translateData && (
               <>
