@@ -11,7 +11,7 @@ import {
   NoticeItemWrapper,
   NoticeContentWrapper,
 } from './style';
-import { MessageType } from './type';
+import { MessageType, Violation } from './type';
 import { Link } from 'react-router-dom';
 import { displayTime, formatUTC } from 'utils';
 import { BASE_BSC_SCAN_URLS } from 'config';
@@ -143,7 +143,6 @@ const NoticeItem: React.FC<{
         </>
       );
     }
-
     if (type === MessageType.MessageSystemWithdrawalFail) {
       return (
         <>
@@ -176,6 +175,47 @@ const NoticeItem: React.FC<{
         symbol: content?.symbol,
         url: `<a href="${BASE_BSC_SCAN_URLS[chainId]}/tx/${content?.tx_hash}" target="_blank">HASH</a>`,
       });
+    }
+    if (type === MessageType.MessageTribeReportSuccess) {
+      return itemData?.post?.post_id
+        ? t('MessageTribeReportSuccess2', {
+            value: content?.tribe_name,
+            title: itemData?.post?.title,
+          })
+        : t('MessageTribeReportSuccess', {
+            value: content?.tribe_name,
+          });
+    }
+    if (type === MessageType.MessageTribeViolation) {
+      return (
+        <>
+          <Text color='textTips'>
+            {content?.review_time === 0
+              ? t('MessageTribeViolationText1')
+              : t('MessageTribeViolationText2')}
+          </Text>
+          {content?.content?.split(',')?.map((item, index) => (
+            <Text color='textTips'>
+              {index + 1}: {t(Violation[item])}
+            </Text>
+          ))}
+          <Text color='textTips'>
+            {content?.review_time === 0
+              ? t('MessageTribeViolationText3')
+              : t('MessageTribeViolationText4')}
+          </Text>
+          <Text color='textTips'>{t('MessageTribeViolationText5')}</Text>
+        </>
+      );
+    }
+    if (type === MessageType.MessageTribeViolationFinish) {
+      return t('MessageTribeViolationFinish');
+    }
+    if (type === MessageType.MessageTribePostViolation) {
+      return t('MessageTribePostViolation', { value: itemData?.post?.title });
+    }
+    if (type === MessageType.MessageTribeReportFailed) {
+      return t('MessageTribeReportFailed', { value: content });
     }
   }, [itemData, getHTML, showUTCTime, type, t]);
 
@@ -219,7 +259,7 @@ const NoticeItem: React.FC<{
           </Text>
         </Content>
       </Flex>
-      {itemData?.post?.user_address && (
+      {itemData?.post?.user_address && !itemData?.post?.tribe_id && (
         <PostContent as={Link} to={`/articledetils/${itemData.post?.post_id}`}>
           <AvatarCard
             userName={itemData?.post?.nick_name}

@@ -20,6 +20,7 @@ import { TribeSidebar } from '../components/Sidebar';
 import { fetchTribeInfoAsync, fetchisApprove } from 'store/tribe';
 import { useTribeInfoById, useFetchTribeInfoById } from 'store/mapModule/hooks';
 import { ExpireModal } from 'components/ModalWrapper/Tribe/ExpireModal';
+import { ShieldedModal } from 'components/ModalWrapper/Tribe/ShieldedModal';
 
 const TribeBox = styled(Box)`
   width: 100%;
@@ -101,6 +102,7 @@ const Detail: React.FC = React.memo(() => {
   return (
     <Flex width='100%'>
       <ExpireModal tribeInfo={tribeDetailInfo} tribeBaseInfo={baseInfo} />
+      <ShieldedModal tribeInfo={tribeDetailInfo} />
       <TribeBox>
         <Crumbs back>
           <Flex>

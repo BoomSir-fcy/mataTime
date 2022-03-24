@@ -170,8 +170,8 @@ declare namespace Api {
         nft_image: string;
         nick_name: string;
         post_id: number;
-        title: string
-      }
+        title: string;
+      };
     }
     interface TribeTopicInfo {
       id: number;
@@ -194,6 +194,15 @@ declare namespace Api {
       tribe_id: number;
       file_name: string;
       url: string;
+    }
+
+    interface ReportParams {
+      reason: string;
+      tribe_id?: number;
+      image?: string;
+      post_title?: string;
+      post_id?: number;
+      post_url?: string;
     }
   }
 }
