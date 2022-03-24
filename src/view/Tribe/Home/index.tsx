@@ -63,13 +63,13 @@ const Home = () => {
   const [state, setState] = useState({
     new: 1,
     hot: 0,
-    keyword: '',
+    keyword: qsValue.q || '',
   });
 
   const getTribeList = useCallback(async () => {
     try {
       setLoading(true);
-      console.log(state);
+      console.log(state, page);
       const res = await Api.TribeApi.tribeList({
         page: page,
         page_size: page_size,
@@ -106,7 +106,9 @@ const Home = () => {
           setIsEnd(false);
           setPage(1);
           setAvtiveTab(Number(tab.value));
-          replace(`${pathname}?${TAB_QUERY_KEY}=${tab.value}`);
+          replace(
+            `${pathname}?${TAB_QUERY_KEY}=${tab.value}&q=${qsValue.q || ''}`,
+          );
         }}
       >
         <Flex flex='1' justifyContent='flex-end' alignItems='center'>
@@ -114,12 +116,13 @@ const Home = () => {
             <SearchTribe
               loading={loading}
               mr='10px'
+              keyword={qsValue.q || state.keyword}
               onEndCallback={evnet => {
+                setPage(1);
                 setState({
                   ...state,
                   keyword: evnet,
                 });
-                setPage(1);
               }}
             />
           )}

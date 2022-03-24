@@ -2,9 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import { useImmer } from 'use-immer';
+import { useHistory } from 'react-router-dom';
 import { Card, Flex, Button, Input } from 'uikit';
 import { Icon } from 'components';
 import { useTranslation } from 'contexts';
+import { getDecodeValue } from 'utils/urlQueryPath';
+
 import CircleLoader from 'components/Loader/CircleLoader';
 
 const SearchBox = styled(Card)<{ focus?: boolean }>`
@@ -41,11 +44,13 @@ const InputStyled = styled(Input)`
 export const SearchTribe: React.FC<{
   mr?: string;
   loading: boolean;
+  keyword?: string;
   onEndCallback: (value?: string) => void;
 }> = React.memo(props => {
+  const { replace } = useHistory();
   const [state, setState] = useImmer({
     focus: false,
-    value: '',
+    value: props.keyword || '',
   });
   const { t } = useTranslation();
   const { loading, onEndCallback, mr } = props;
@@ -73,6 +78,7 @@ export const SearchTribe: React.FC<{
           if (inputRef.current) {
             inputRef.current.blur();
           }
+          replace('/tribe?q=' + getDecodeValue(value));
           onEndCallback(value.trim());
         }}
         action=''
@@ -100,6 +106,7 @@ export const SearchTribe: React.FC<{
                   setState(p => {
                     p.value = '';
                   });
+                  replace('/tribe');
                   onEndCallback();
                 }, 1000)}
                 focus={focus}
