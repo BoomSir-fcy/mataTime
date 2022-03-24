@@ -128,7 +128,7 @@ const TradeLogo: React.FC<TradeLogoProps> = ({
       {Boolean(spend_time) && (
         <SpeedTime>
           <Mask>
-            <Text>10 TIME/s</Text>
+            <Text>{spend_time} TIME/s</Text>
           </Mask>
         </SpeedTime>
       )}
