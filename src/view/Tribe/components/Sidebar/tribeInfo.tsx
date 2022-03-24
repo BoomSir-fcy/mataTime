@@ -13,6 +13,7 @@ import {
   TribeBelongNft,
 } from 'store/tribe/type';
 import { useTribeInfoById } from 'store/mapModule/hooks';
+import { ReportTribeModal } from 'view/Tribe/report';
 
 const TribeInfo: React.FC<{
   tribe_id: number;
@@ -24,6 +25,7 @@ const TribeInfo: React.FC<{
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { detail } = tribeInfo || {};
   const [visible, setVisible] = React.useState(false);
+  const [visibleReport, setVisibleReport] = React.useState(false);
 
   return (
     <React.Fragment>
@@ -32,6 +34,20 @@ const TribeInfo: React.FC<{
           <Text fontSize='24px' fontWeight='bold'>
             {tribeInfo?.tribe?.name}
           </Text>
+          {detail?.nft_type === TribeBelongNft.Member &&
+            (tribeInfo?.status === NftStatus.Received ||
+              tribeInfo?.status === NftStatus.UnStake ||
+              tribeInfo?.status === NftStatus.Staked) && (
+              <Icon
+                margin='0px 8px'
+                name='icon-tousu'
+                color='textgrey'
+                current
+                onClick={() => {
+                  setVisibleReport(true);
+                }}
+              />
+            )}
           {detail?.nft_type === TribeBelongNft.Owner &&
             tribeInfo?.status === NftStatus.Staked &&
             tribeInfo?.expire !== TribeNftStatus.expire && (
@@ -90,6 +106,12 @@ const TribeInfo: React.FC<{
         tribe_id={props.tribe_id}
         visible={visible}
         onClose={() => setVisible(false)}
+      />
+      {/* 举报 */}
+      <ReportTribeModal
+        tribeInfo={tribeInfo}
+        visible={visibleReport}
+        onClose={() => setVisibleReport(false)}
       />
     </React.Fragment>
   );

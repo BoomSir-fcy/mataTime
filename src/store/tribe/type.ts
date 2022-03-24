@@ -24,6 +24,12 @@ export enum NftStatus {
   Quit = 6,
 }
 
+export enum TribeStatus {
+  Received = 1,
+  Staked = 2,
+  Shield = 4,
+}
+
 export enum TribeNftStatus {
   notExpired = 0,
   expire = 1,
@@ -95,6 +101,7 @@ export interface TribeInfo {
     create_time: number;
     member_nft_id?: number;
     nft_id: number;
+    tribe_status?: number;
   };
   expire: number;
   topics: Api.Tribe.TopicInfo[];

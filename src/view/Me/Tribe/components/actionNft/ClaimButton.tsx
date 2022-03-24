@@ -19,7 +19,7 @@ export const ClaimButton: React.FC<{
   const { toastSuccess, toastError } = useToast();
   const { onClaimOwnerNft } = useTribeNft();
 
-  // 领取
+  // 领取并质押
   const handleClaimOwnerNft = useCallback(async () => {
     try {
       setPending(true);
@@ -31,10 +31,12 @@ export const ClaimButton: React.FC<{
       }
       await onClaimOwnerNft(tribeId);
       setPending(false);
+      toastSuccess(t('Claim succeeded'));
       if (callback) callback();
     } catch (error) {
       console.log(error);
       setPending(false);
+      toastError(t('Claim failed'));
     }
   }, [tribeId]);
 
