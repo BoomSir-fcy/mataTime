@@ -27,6 +27,10 @@ import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'store';
 import ReactLoading from 'react-loading';
 import FloatBtn from './goMsg';
+import { TribeInfo, TribeType } from 'store/tribe/type';
+import BtnIcon from '../BtnIcon';
+import { useTribeInfoById } from 'store/mapModule/hooks';
+import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 
 dayjs.extend(isToday);
 
@@ -80,21 +84,18 @@ const ChatRoom: React.FC<{
   tribe_id: number;
   mb: string;
   tribeHost: string;
+  isMember: boolean;
 }> = ({ ...props }) => {
   const { t } = useTranslation();
   const { account } = useActiveWeb3React();
   const dispatch = useDispatch();
   const chatListRef = useRef(null);
-  const { tribeHost, tribe_id: TribeId } = props;
+  const { tribeHost, tribe_id: TribeId, isMember } = props;
   const { im } = useIm();
+  const tribeInfo = useTribeInfoById(props.tribe_id);
+  const { detail } = tribeInfo || {};
 
   const MsgList = useStore(p => p.tribe.chatRoomMsg);
-  const [ListInfo, setListInfo] = useState({
-    latest_read: null,
-    msg: [],
-    max_msg: null,
-    total_un_read: null,
-  });
   const [NewList, setNewList] = useState([]);
   const [isSend, setisSend] = useState(0); //1自己发的 2收到新消息
   const [TurnPages, setTurnPages] = useImmer({
@@ -438,14 +439,14 @@ const ChatRoom: React.FC<{
 
   // 加入退出
   useEffect(() => {
-    if (TribeId && im) {
+    if (TribeId && im && isMember) {
       dispatch(storeAction.changrChatRoomList([]));
       JoinChatRoom({ tribe_id: TribeId, type: 1 });
     }
     return () => {
       JoinChatRoom({ tribe_id: TribeId, type: 2 });
     };
-  }, [TribeId, im, JoinChatRoom, dispatch]);
+  }, [TribeId, im, JoinChatRoom, dispatch, isMember]);
 
   // 请求消息列表
   useEffect(() => {
@@ -498,44 +499,63 @@ const ChatRoom: React.FC<{
       padding='0'
       {...props}
     >
-      <Box position='relative' padding=' 0 0 0 16px'>
-        <ChatList ref={chatListRef} onScroll={loadMore}>
-          {Loading ? (
-            <LoadingWrapper>
-              <Spinner />
-            </LoadingWrapper>
-          ) : (
-            <>{!MsgList.length && <Empty />}</>
-          )}
-          {MsgList.map((item, index) => {
-            return (
-              <>
-                {!dayjs(item?.create_time / 1000).isToday() && (
-                  <Flex justifyContent='center' mb='10px'>
-                    <Text fontSize='14px' color='textTips'>
-                      {dayjs(item?.create_time / 1000).format('MM-DD')}
-                    </Text>
-                  </Flex>
-                )}
-                <MsgBox
-                  tribeHost={tribeHost}
-                  sameSender={isSameSender(item.sender, index)}
-                  detail={item}
-                  setUserInfo={setUserInfo}
-                />
-              </>
-            );
-          })}
-        </ChatList>
-        <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
-      </Box>
-      <SendInput
-        sendMsg={sendMsg}
-        tribe_id={TribeId}
-        im={im}
-        UserInfo={UserInfo}
-        setUserInfo={e => setUserInfo(e)}
-      />
+      {isMember ? (
+        <>
+          <Box position='relative' padding=' 0 0 0 16px'>
+            <ChatList ref={chatListRef} onScroll={loadMore}>
+              {Loading ? (
+                <LoadingWrapper>
+                  <Spinner />
+                </LoadingWrapper>
+              ) : (
+                <>{!MsgList.length && <Empty />}</>
+              )}
+              {MsgList.map((item, index) => {
+                return (
+                  <>
+                    {!dayjs(item?.create_time / 1000).isToday() && (
+                      <Flex justifyContent='center' mb='10px'>
+                        <Text fontSize='14px' color='textTips'>
+                          {dayjs(item?.create_time / 1000).format('MM-DD')}
+                        </Text>
+                      </Flex>
+                    )}
+                    <MsgBox
+                      tribeHost={tribeHost}
+                      sameSender={isSameSender(item.sender, index)}
+                      detail={item}
+                      setUserInfo={setUserInfo}
+                    />
+                  </>
+                );
+              })}
+            </ChatList>
+            <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
+          </Box>
+          <SendInput
+            sendMsg={sendMsg}
+            tribe_id={TribeId}
+            im={im}
+            UserInfo={UserInfo}
+            setUserInfo={e => setUserInfo(e)}
+          />
+        </>
+      ) : (
+        // 加入部落
+        <Flex mb='12px' justifyContent='center'>
+          <BtnIcon
+            disabled={!Boolean(tribeInfo?.baseInfo?.feeToken)}
+            name='icon-wodebula'
+            text={t('tribeJoin')}
+            onClick={() => {
+              if (detail?.type === TribeType.BASIC) {
+                dispatch(fetchTribeJoinBasicServiceAsync());
+              }
+              dispatch(storeAction.setJoinTribeVisibleModal(true));
+            }}
+          />
+        </Flex>
+      )}
     </Collapse>
   );
 };

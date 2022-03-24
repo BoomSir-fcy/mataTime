@@ -57,6 +57,7 @@ export const TribeSidebar: React.FC<{
       <ChatRoom
         tribe_id={tribe_id}
         tribeHost={tribe_info?.tribe?.owner_address}
+        isMember={tribe_info?.status === NftStatus.Staked}
         mb='15px'
       />
       <TribeNft tribe_id={tribe_id} mb='15px' />
