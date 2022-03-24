@@ -124,18 +124,18 @@ const ChatRoom: React.FC<{
   // 已读消息更新
   const upDateRead = useCallback(
     (nonce?: number) => {
-      if (!MsgList.length || IsSendRead || IsClose) return;
-      let Nonce;
-      if (nonce) {
-        Nonce = nonce;
-      } else {
-        Nonce = MsgList[MsgList.length - 1].nonce;
-      }
-      if (!Nonce) return;
-      im?.send(im.messageProtocol.WSProtocol_Read_Nonce, {
-        tribe_id: TribeId,
-        read_nonce: Nonce,
-      });
+      // if (!MsgList.length || IsSendRead || IsClose) return;
+      // let Nonce;
+      // if (nonce) {
+      //   Nonce = nonce;
+      // } else {
+      //   Nonce = MsgList[MsgList.length - 1].nonce;
+      // }
+      // if (!Nonce) return;
+      // im?.send(im.messageProtocol.WSProtocol_Read_Nonce, {
+      //   tribe_id: TribeId,
+      //   read_nonce: Nonce,
+      // });
     },
     [im, TribeId, MsgList, IsSendRead, IsClose],
   );
@@ -217,8 +217,6 @@ const ChatRoom: React.FC<{
             } else {
               let _start =
                 info?.max_msg <= 6 ? 1 : info?.max_msg - MAX_LIMIT + 1;
-              console.log(info?.at_msg_nonce?.length, info?.at_msg_nonce);
-
               setUnreadMsg(p => {
                 p.latest_read = info?.latest_read;
                 p.max_msg = info?.max_msg;
@@ -283,39 +281,51 @@ const ChatRoom: React.FC<{
 
   // 向上滚动加载回弹到当前位置
   const getAddHeight = () => {
-    const current = chatListRef.current!;
-    setAddScrollHeight(current.scrollHeight);
-    current.scrollTop = current.scrollHeight - AddScrollHeight + 100;
+    if (!IsGotop) {
+      const current = chatListRef.current!;
+      setAddScrollHeight(current.scrollHeight);
+      current.scrollTop = current.scrollHeight - AddScrollHeight + 100;
+    }
   };
 
   // 查看未读消息定位到消息顶部
-  const toTop = useCallback(() => {
-    if (IsGotop && TurnPages.Limit !== MAX_LIMIT) {
-      setTimeout(() => {
-        let anchorElement = document.getElementById(String(TurnPages.Start));
-        if (anchorElement) {
-          console.log(anchorElement);
+  const toTop = useCallback(
+    (init?, nonce?) => {
+      if (IsGotop || TurnPages.Limit !== MAX_LIMIT || init) {
+        setTimeout(() => {
+          let anchorElement = document.getElementById(
+            String(nonce ? nonce : TurnPages.Start),
+          );
+          if (anchorElement) {
+            console.log(anchorElement.offsetTop, anchorElement.scrollTop);
+            console.log('查看未读消息定位到消息顶部');
 
-          // anchorElement.scrollIntoView();
-        }
-        // const current = chatListRef.current!;
-        // current.scrollTop = 2;
-        let arr = [];
-        if (UnreadMsg.at_msg_nonce.length) {
-          arr = UnreadMsg.at_msg_nonce.concat();
-          arr.shift();
-          setUnreadMsg(p => {
-            p.at_msg_nonce = arr;
-          });
+            // anchorElement.scrollIntoView();
+            const current = chatListRef.current!;
+            current.scrollTop = anchorElement.offsetTop + 2;
+          }
+          let arr = [];
+          if (UnreadMsg.at_msg_nonce.length) {
+            arr = UnreadMsg.at_msg_nonce.concat();
+            let readNonce = arr.pop();
+            setUnreadMsg(p => {
+              p.at_msg_nonce = arr;
+              p.total_un_read =
+                UnreadMsg.max_msg -
+                UnreadMsg.latest_read -
+                (UnreadMsg.max_msg - readNonce);
+            });
+          } else {
+            setUnreadMsg(p => {
+              p.total_un_read = 0;
+            });
+          }
           setIsGotop(false);
-        } else {
-          setUnreadMsg(p => {
-            p.total_un_read = 0;
-          });
-        }
-      }, 0);
-    }
-  }, [TurnPages, UnreadMsg, IsGotop]);
+        }, 0);
+      }
+    },
+    [TurnPages, UnreadMsg, IsGotop],
+  );
 
   // 加载到未读消息处
   const goUnread = useCallback(() => {
@@ -328,26 +338,51 @@ const ChatRoom: React.FC<{
       return;
     };
     const LoadList = async end => {
+      let size =
+        TurnPages.Start - end < UNREAD_LIMIT
+          ? TurnPages.Start - end
+          : UNREAD_LIMIT;
+      let begin =
+        TurnPages.Start - UNREAD_LIMIT < end
+          ? TurnPages.Start - size
+          : TurnPages.Start - UNREAD_LIMIT;
+      let last_i;
+      if (size <= 0) {
+        setIsGotop(true);
+        toTop(true, end);
+        return;
+      }
+      if (begin === end) {
+        setTurnPages(p => {
+          p.Start = begin;
+          p.Limit = size;
+        });
+        setIsGotop(true);
+        return;
+      }
       for (
-        let i = TurnPages.Start - UNREAD_LIMIT;
-        i >= end;
-        i = i - UNREAD_LIMIT
+        let i = begin;
+        i > end;
+        i = i - UNREAD_LIMIT <= end ? i - (i - end) : i - UNREAD_LIMIT
       ) {
-        await send(i, UNREAD_LIMIT);
-        if (i === end || i - UNREAD_LIMIT < end) {
-          setIsGotop(true);
+        last_i = i;
+        if (begin !== end) {
+          await send(i, UNREAD_LIMIT);
         }
         if (i - UNREAD_LIMIT < end) {
           // 最后一次拉取不足20条时
           setTurnPages(p => {
             p.Start = i - (i - end);
-            p.Limit = i - end;
+            p.Limit = last_i - end;
           });
+        }
+        if (i - UNREAD_LIMIT < end) {
+          setIsGotop(true);
         }
       }
     };
     if (UnreadMsg.at_msg_nonce.length) {
-      LoadList(UnreadMsg.at_msg_nonce[0]);
+      LoadList(UnreadMsg.at_msg_nonce[UnreadMsg.at_msg_nonce.length - 1]);
     } else {
       LoadList(UnreadMsg.latest_read);
     }
@@ -357,6 +392,7 @@ const ChatRoom: React.FC<{
     TribeId,
     TurnPages.Start,
     UNREAD_LIMIT,
+    toTop,
     setUnreadMsg,
     setIsGotop,
     setTurnPages,
@@ -508,7 +544,7 @@ const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
   }, [address, detail]);
 
   return (
-    <Flex mb='16px' id={detail?.nonce}>
+    <Flex pt='16px' id={detail?.nonce}>
       {!isMyMsg && !sameSender && (
         <Flex
           style={{ cursor: 'pointer' }}
