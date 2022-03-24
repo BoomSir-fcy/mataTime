@@ -22,9 +22,6 @@ const FloatBtn: React.FC<{ UnreadMsg: any; goUnread: () => void }> = ({
   goUnread,
 }) => {
   const { t } = useTranslation();
-  useEffect(() => {
-    console.log(UnreadMsg);
-  }, [UnreadMsg]);
 
   return (
     <>

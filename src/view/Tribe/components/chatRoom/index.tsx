@@ -48,7 +48,6 @@ const MsgContent = styled(Box)<{ myMsg: boolean }>`
   border-radius: 10px;
   max-width: 74%;
   min-width: 20px;
-  min-height: 22px;
 `;
 
 const HostTag = styled(Box)`
@@ -197,10 +196,12 @@ const ChatRoom: React.FC<{
         case IM.MessageProtocol.WSProtocol_Chat_Message:
           //  发送成功/收到消息
           if (data?.data) {
-            setisSend(2);
-            setNewList([data?.data]);
-            // 已在聊天室状态-接收到新消息标记已读
-            setIsSendRead(false);
+            if (data?.data.tribe_id === TribeId) {
+              setisSend(2);
+              setNewList([data?.data]);
+              // 已在聊天室状态-接收到新消息标记已读
+              setIsSendRead(false);
+            }
           }
           break;
         case IM.MessageProtocol.WSProtocol_Pull_Message:
@@ -244,6 +245,7 @@ const ChatRoom: React.FC<{
       }
     },
     [
+      TribeId,
       MAX_LIMIT,
       setUnreadMsg,
       setTurnPages,
@@ -270,9 +272,13 @@ const ChatRoom: React.FC<{
           TurnPages.Start - TurnPages.Limit < 1
             ? 1
             : TurnPages.Start - TurnPages.Limit;
+        const NewLimit =
+          TurnPages.Start - TurnPages.Limit < 1
+            ? TurnPages.Start - 1
+            : MAX_LIMIT;
         setTurnPages(p => {
           p.Start = NewStart;
-          p.Limit = MAX_LIMIT;
+          p.Limit = NewLimit;
         });
       }
     },
@@ -591,6 +597,7 @@ const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
           ml={isMyMsg ? '0' : sameSender ? '56px' : '0'}
           mr={isMyMsg ? (sameSender ? '56px' : '0') : '0'}
           myMsg={isMyMsg}
+          minHeight={detail?.image_url?.length ? '100px' : '22px'}
         >
           <Text style={{ wordBreak: 'break-all' }} fontSize='14px'>
             <ContentParsing
@@ -599,7 +606,11 @@ const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
               imgList={detail?.image_url}
               chatRoom={true}
             />
-            {detail?.image_url && <ImgList list={detail?.image_url} />}
+            {detail?.image_url?.length ? (
+              <ImgList list={detail?.image_url} />
+            ) : (
+              <></>
+            )}
           </Text>
           <Triangle myMsg={isMyMsg} />
         </MsgContent>
