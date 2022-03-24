@@ -118,6 +118,7 @@ const ChatRoom: React.FC<{
     at_msg_nonce: [],
     total_un_read: null,
   });
+  const [OutChatRoom, setOutChatRoom] = useState(false);
 
   const End = useMemo(() => TurnPages.Start <= 1, [TurnPages.Start]);
 
@@ -287,11 +288,15 @@ const ChatRoom: React.FC<{
   );
 
   // 向上滚动加载回弹到当前位置
-  const getAddHeight = () => {
+  const getAddHeight = nonce => {
     if (!IsGotop) {
-      const current = chatListRef.current!;
-      setAddScrollHeight(current.scrollHeight);
-      current.scrollTop = current.scrollHeight - AddScrollHeight + 100;
+      setTimeout(() => {
+        let anchorElement = document.getElementById(String(nonce));
+        if (anchorElement) {
+          const current = chatListRef.current!;
+          current.scrollTop = anchorElement.offsetTop + 2;
+        }
+      }, 0);
     }
   };
 
@@ -304,10 +309,8 @@ const ChatRoom: React.FC<{
             String(nonce ? nonce : TurnPages.Start),
           );
           if (anchorElement) {
-            console.log(anchorElement.offsetTop, anchorElement.scrollTop);
-            console.log('查看未读消息定位到消息顶部');
+            console.log(anchorElement.offsetTop, nonce);
 
-            // anchorElement.scrollIntoView();
             const current = chatListRef.current!;
             current.scrollTop = anchorElement.offsetTop + 2;
           }
@@ -441,12 +444,16 @@ const ChatRoom: React.FC<{
   useEffect(() => {
     if (TribeId && im && isMember) {
       dispatch(storeAction.changrChatRoomList([]));
-      JoinChatRoom({ tribe_id: TribeId, type: 1 });
+      if (OutChatRoom) {
+        JoinChatRoom({ tribe_id: TribeId, type: 2 });
+      } else {
+        JoinChatRoom({ tribe_id: TribeId, type: 1 });
+      }
     }
     return () => {
       JoinChatRoom({ tribe_id: TribeId, type: 2 });
     };
-  }, [TribeId, im, JoinChatRoom, dispatch, isMember]);
+  }, [TribeId, im, OutChatRoom, JoinChatRoom, dispatch, isMember]);
 
   // 请求消息列表
   useEffect(() => {
@@ -482,7 +489,7 @@ const ChatRoom: React.FC<{
       } else {
         concatList = NewList.concat(MsgList);
         dispatch(storeAction.changrChatRoomList(concatList));
-        getAddHeight();
+        getAddHeight(NewList[NewList.length - 1].nonce);
         toTop();
       }
       setisSend(0);
@@ -495,67 +502,51 @@ const ChatRoom: React.FC<{
       setIsClose={e => {
         setIsClose(e);
       }}
+      callBack={e => {
+        setOutChatRoom(e);
+      }}
       title={t('聊天室')}
       padding='0'
       {...props}
     >
-      {isMember ? (
-        <>
-          <Box position='relative' padding=' 0 0 0 16px'>
-            <ChatList ref={chatListRef} onScroll={loadMore}>
-              {Loading ? (
-                <LoadingWrapper>
-                  <Spinner />
-                </LoadingWrapper>
-              ) : (
-                <>{!MsgList.length && <Empty />}</>
-              )}
-              {MsgList.map((item, index) => {
-                return (
-                  <>
-                    {!dayjs(item?.create_time / 1000).isToday() && (
-                      <Flex justifyContent='center' mb='10px'>
-                        <Text fontSize='14px' color='textTips'>
-                          {dayjs(item?.create_time / 1000).format('MM-DD')}
-                        </Text>
-                      </Flex>
-                    )}
-                    <MsgBox
-                      tribeHost={tribeHost}
-                      sameSender={isSameSender(item.sender, index)}
-                      detail={item}
-                      setUserInfo={setUserInfo}
-                    />
-                  </>
-                );
-              })}
-            </ChatList>
-            <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
-          </Box>
-          <SendInput
-            sendMsg={sendMsg}
-            tribe_id={TribeId}
-            im={im}
-            UserInfo={UserInfo}
-            setUserInfo={e => setUserInfo(e)}
-          />
-        </>
-      ) : (
-        // 加入部落
-        <Flex mb='12px' justifyContent='center'>
-          <BtnIcon
-            disabled={!Boolean(tribeInfo?.baseInfo?.feeToken)}
-            name='icon-wodebula'
-            text={t('tribeJoin')}
-            onClick={() => {
-              if (detail?.type === TribeType.BASIC) {
-                dispatch(fetchTribeJoinBasicServiceAsync());
-              }
-              dispatch(storeAction.setJoinTribeVisibleModal(true));
-            }}
-          />
-        </Flex>
-      )}
+      <Box position='relative' padding=' 0 0 0 16px'>
+        <ChatList ref={chatListRef} onScroll={loadMore}>
+          {Loading ? (
+            <LoadingWrapper>
+              <Spinner />
+            </LoadingWrapper>
+          ) : (
+            <>{!MsgList.length && <Empty />}</>
+          )}
+          {MsgList.map((item, index) => {
+            return (
+              <>
+                {!dayjs(item?.create_time / 1000).isToday() && (
+                  <Flex justifyContent='center' mb='10px'>
+                    <Text fontSize='14px' color='textTips'>
+                      {dayjs(item?.create_time / 1000).format('MM-DD')}
+                    </Text>
+                  </Flex>
+                )}
+                <MsgBox
+                  tribeHost={tribeHost}
+                  sameSender={isSameSender(item.sender, index)}
+                  detail={item}
+                  setUserInfo={setUserInfo}
+                />
+              </>
+            );
+          })}
+        </ChatList>
+        <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
+      </Box>
+      <SendInput
+        sendMsg={sendMsg}
+        tribe_id={TribeId}
+        im={im}
+        UserInfo={UserInfo}
+        setUserInfo={e => setUserInfo(e)}
+      />
     </Collapse>
   );
 };

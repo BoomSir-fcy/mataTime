@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useImmer } from 'use-immer';
 import { Icon } from 'components';
@@ -11,19 +11,29 @@ export const Collapse: React.FC<{
   title?: string;
   padding?: string;
   titleMb?: string;
+  visible?: boolean;
   setIsClose?: (isClose) => void;
+  callBack?: (type) => void;
 }> = React.memo(props => {
-  const { setIsClose } = props;
+  const { setIsClose, visible, callBack } = props;
   const [state, setState] = useImmer({
-    visible: false,
+    visible: visible ? visible : false,
   });
 
   const handleClick = () => {
     setState(p => {
       p.visible = !p.visible;
     });
+    if (callBack) {
+      callBack(!state.visible);
+    }
   };
 
+  useEffect(() => {
+    setState(p => {
+      p.visible = visible;
+    });
+  }, [visible]);
   return (
     <Card
       padding={props?.padding ? props?.padding : '16px'}
