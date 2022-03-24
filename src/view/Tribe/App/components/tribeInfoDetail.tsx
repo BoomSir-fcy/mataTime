@@ -122,7 +122,8 @@ const TribeInfoDetail: React.FC<HeaderProps> = ({ tribeInfo, openInvite }) => {
                     ),
                   })}
                 </Text>
-                {tribeInfo?.status === NftStatus.Staked &&
+                {detail?.type === TribeType.PRO &&
+                  tribeInfo?.status === NftStatus.Staked &&
                   tribeInfo?.expire !== TribeNftStatus.expire && (
                     <Icon
                       name='icon-fenxiang'

@@ -1061,6 +1061,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "removeSupportFeeToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "nft",
         "type": "address"
       }
@@ -1427,6 +1440,37 @@
       }
     ],
     "name": "settingInvitaion",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tribe_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "invaiteAddress",
+        "type": "address"
+      }
+    ],
+    "name": "claimStakeMember",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tribe_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimStakeChief",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

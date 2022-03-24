@@ -286,7 +286,7 @@ const MyMasterNftTribe = React.memo(() => {
                         // 领取nft成功后，不能从服务器拿到实时数据，有延迟
                         setTimeout(() => {
                           getMyTribeList();
-                        }, 15000);
+                        }, 10000);
                       }}
                     />
                   )}
@@ -575,7 +575,10 @@ const MemberNftTribe = React.memo(() => {
                         nftType={TribeBelongNft.Member}
                         callback={() => {
                           setMemberNftList(p => {
-                            return p.filter(v => v.nft_id !== item?.nft_id);
+                            const list = p.filter(
+                              v => v.nft_id !== item?.nft_id,
+                            );
+                            return ItemGroupBy(list, 'id');
                           });
                         }}
                       />

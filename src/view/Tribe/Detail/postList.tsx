@@ -248,6 +248,7 @@ const PostList: React.FC<PostListPorps> = ({
                       (item as any).add_time_desc,
                     is_mute: item.is_mute,
                   }}
+                  showPrview
                   callback={(item: any, type: MoreOperatorEnum) => {
                     handleUpdateList(item, type);
                   }}
@@ -256,6 +257,12 @@ const PostList: React.FC<PostListPorps> = ({
                   <SendUser
                     time={new Date(item.add_time || item.post_time).getTime()}
                     name={item.user_name}
+                    nameColor='textTips'
+                    nameStyle={{
+                      fontSize: '16px',
+                      fontWeight: 'normal',
+                      fontFamily: 'normal',
+                    }}
                     Avatar={item.user_avator_url || item.nft_image}
                   />
                   <ToolBar>

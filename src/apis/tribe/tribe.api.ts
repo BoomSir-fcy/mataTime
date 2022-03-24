@@ -186,4 +186,9 @@ export class TribeApi extends Http {
   ): Promise<Api.Response<Api.Tribe.FileInfo[]>> {
     return this.get('/v1/tribe/file/list', params);
   }
+
+  // 举报部落/帖子
+  async reportTribePost(params: Api.Tribe.ReportParams) {
+    return this.post('/v1/tribe/report/add', params);
+  }
 }

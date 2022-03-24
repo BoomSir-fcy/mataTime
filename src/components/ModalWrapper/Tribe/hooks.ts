@@ -12,9 +12,17 @@ export const useJoinTribe = () => {
     ) => {
       console.log('joinTribe', tribeId, invaiteAddress, amount);
       try {
-        const tx = await tribeContract.ClaimMemberNFT(tribeId, invaiteAddress, {
-          value: !amount ? '' : amount,
-        });
+        // const tx = await tribeContract.ClaimMemberNFT(tribeId, invaiteAddress, {
+        //   value: !amount ? '' : amount,
+        // });
+        // 加入、领取并质押
+        const tx = await tribeContract.claimStakeMember(
+          tribeId,
+          invaiteAddress,
+          {
+            value: !amount ? '' : amount,
+          },
+        );
         const receipt = await tx.wait();
         return receipt.status;
       } catch (error: any) {
