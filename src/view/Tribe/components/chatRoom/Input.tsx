@@ -37,7 +37,46 @@ const SendInput: React.FC<{
       // if(test.match(/^\s*$/)){
       //   console.log("all space or \\n or empty")
       // }
+      console.log(res);
 
+      if (res !== '[]' && image_urls.length) {
+        im?.send(im.messageProtocol.WSProtocol_Chat_Message, {
+          tribe_id: tribe_id,
+          msg: res,
+          image_url: [],
+        });
+        sendMsg({
+          create_time: new Date().getTime() * 1000,
+          image_url: [],
+          message: res,
+          sender: uid,
+          sender_detail: {
+            address: address,
+            nft_image: nft_image,
+            nick_name: nick_name,
+          },
+        });
+        setTimeout(() => {
+          im?.send(im.messageProtocol.WSProtocol_Chat_Message, {
+            tribe_id: tribe_id,
+            msg: '[]',
+            image_url: image_urls,
+          });
+          sendMsg({
+            create_time: new Date().getTime() * 1000,
+            image_url: image_urls,
+            message: '[]',
+            sender: uid,
+            sender_detail: {
+              address: address,
+              nft_image: nft_image,
+              nick_name: nick_name,
+            },
+          });
+        }, 10);
+        childRef?.current?.rest();
+        return;
+      }
       im?.send(im.messageProtocol.WSProtocol_Chat_Message, {
         tribe_id: tribe_id,
         msg: res,

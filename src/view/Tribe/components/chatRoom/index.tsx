@@ -50,7 +50,7 @@ const MsgContent = styled(Box)<{ myMsg: boolean }>`
   background-color: ${({ myMsg, theme }) =>
     myMsg ? theme.colors.backgroundTextArea : theme.colors.background};
   border-radius: 10px;
-  max-width: 74%;
+  max-width: 60%;
   min-width: 20px;
 `;
 
@@ -92,8 +92,6 @@ const ChatRoom: React.FC<{
   const chatListRef = useRef(null);
   const { tribeHost, tribe_id: TribeId, isMember } = props;
   const { im } = useIm();
-  const tribeInfo = useTribeInfoById(props.tribe_id);
-  const { detail } = tribeInfo || {};
 
   const MsgList = useStore(p => p.tribe.chatRoomMsg);
   const [NewList, setNewList] = useState([]);
@@ -104,7 +102,6 @@ const ChatRoom: React.FC<{
   });
   const [Loading, setLoading] = useState(false);
   const [JoinTribe, setJoinTribe] = useState(false);
-  const [AddScrollHeight, setAddScrollHeight] = useState(0);
   const [IsSendRead, setIsSendRead] = useState(false);
   const [IsClose, setIsClose] = useState(true);
   const [IsGotop, setIsGotop] = useState(false);
@@ -119,24 +116,25 @@ const ChatRoom: React.FC<{
     total_un_read: null,
   });
   const [OutChatRoom, setOutChatRoom] = useState(false);
+  const [DateList, setDateList] = useState([]);
 
   const End = useMemo(() => TurnPages.Start <= 1, [TurnPages.Start]);
 
   // 已读消息更新
   const upDateRead = useCallback(
     (nonce?: number) => {
-      // if (!MsgList.length || IsSendRead || IsClose) return;
-      // let Nonce;
-      // if (nonce) {
-      //   Nonce = nonce;
-      // } else {
-      //   Nonce = MsgList[MsgList.length - 1].nonce;
-      // }
-      // if (!Nonce) return;
-      // im?.send(im.messageProtocol.WSProtocol_Read_Nonce, {
-      //   tribe_id: TribeId,
-      //   read_nonce: Nonce,
-      // });
+      if (!MsgList.length || IsSendRead || IsClose) return;
+      let Nonce;
+      if (nonce) {
+        Nonce = nonce;
+      } else {
+        Nonce = MsgList[MsgList.length - 1].nonce;
+      }
+      if (!Nonce) return;
+      im?.send(im.messageProtocol.WSProtocol_Read_Nonce, {
+        tribe_id: TribeId,
+        read_nonce: Nonce,
+      });
     },
     [im, TribeId, MsgList, IsSendRead, IsClose],
   );
@@ -191,7 +189,7 @@ const ChatRoom: React.FC<{
       switch (data.ptl) {
         case IM.MessageProtocol.WSProtocol_Join_Chat:
           //  加入成功
-          if (data.code === 1) {
+          if (data.code === 1 && data.data?.join) {
             setJoinTribe(true);
           }
           break;
@@ -435,7 +433,9 @@ const ChatRoom: React.FC<{
     ) {
       setTimeout(() => {
         const current = chatListRef.current!;
-        current.scrollTop = current.scrollHeight;
+        if (current?.scrollHeight) {
+          current.scrollTop = current.scrollHeight;
+        }
       }, 0);
     }
   }, [MsgList, TurnPages.Start, UnreadMsg.max_msg, MAX_LIMIT]);
@@ -446,14 +446,24 @@ const ChatRoom: React.FC<{
       dispatch(storeAction.changrChatRoomList([]));
       if (OutChatRoom) {
         JoinChatRoom({ tribe_id: TribeId, type: 2 });
+        setJoinTribe(false);
       } else {
         JoinChatRoom({ tribe_id: TribeId, type: 1 });
       }
     }
     return () => {
+      setJoinTribe(false);
       JoinChatRoom({ tribe_id: TribeId, type: 2 });
     };
-  }, [TribeId, im, OutChatRoom, JoinChatRoom, dispatch, isMember]);
+  }, [
+    TribeId,
+    im,
+    OutChatRoom,
+    JoinChatRoom,
+    setJoinTribe,
+    dispatch,
+    isMember,
+  ]);
 
   // 请求消息列表
   useEffect(() => {
@@ -467,8 +477,14 @@ const ChatRoom: React.FC<{
     if (JoinTribe) {
       setLoading(true);
       sendMsgList();
+    } else {
+      setTurnPages(p => {
+        p.Start = 0;
+        p.Limit = 0;
+      });
+      setIsGotop(false);
     }
-  }, [TribeId, TurnPages, im, JoinTribe, setLoading]);
+  }, [TribeId, TurnPages, im, JoinTribe, setIsGotop, setTurnPages, setLoading]);
 
   // 消息更新
   useEffect(() => {
@@ -521,8 +537,19 @@ const ChatRoom: React.FC<{
           {MsgList.map((item, index) => {
             return (
               <>
-                {!dayjs(item?.create_time / 1000).isToday() && (
-                  <Flex justifyContent='center' mb='10px'>
+                {index !== 0 &&
+                dayjs(MsgList[index - 1].create_time / 1000).format('MM-DD') !==
+                  dayjs(item?.create_time / 1000).format('MM-DD') ? (
+                  <Flex justifyContent='center' alignItems='end' height='50px'>
+                    <Text fontSize='14px' color='textTips'>
+                      {dayjs(item?.create_time / 1000).format('MM-DD')}
+                    </Text>
+                  </Flex>
+                ) : (
+                  <></>
+                )}
+                {index === 0 && (
+                  <Flex justifyContent='center' alignItems='end' height='70px'>
                     <Text fontSize='14px' color='textTips'>
                       {dayjs(item?.create_time / 1000).format('MM-DD')}
                     </Text>
