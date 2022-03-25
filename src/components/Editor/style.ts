@@ -67,7 +67,7 @@ export const SlateBox = styled(Box)<{
     ${({ theme }) => theme.mediaQueries.sm} {
       padding: 15px;
     }
-    padding-bottom: 16px;
+    padding-bottom: ${({ isApp }) => (isApp ? `4px` : `16px`)};
     border-radius: ${({ isChatRoom }) => (isChatRoom ? `0` : `5px`)};
     min-height: ${({ isChatRoom }) => (isChatRoom ? `0` : `160px !important`)};
     max-height: 200px;
@@ -85,8 +85,11 @@ export const SlateBox = styled(Box)<{
     & > div {
       min-height: ${({ isChatRoom }) =>
         isChatRoom ? `20px !important` : `88px !important`};
-      height: ${({ isApp }) => (isApp ? `50px ` : `auto`)};
+      height: ${({ isApp }) => (isApp ? `50px` : `auto`)};
     }
+  }
+  .scrollBox {
+    height: 88px;
   }
 `;
 export const Toolbar = styled(Flex)`

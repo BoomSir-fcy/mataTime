@@ -155,9 +155,11 @@ const Detail: React.FC = React.memo(() => {
         />
       </TribeBox>
 
-      <Sidebar>
-        <TribeSidebar tribe_info={tribeDetailInfo} tribe_id={TribeId} />
-      </Sidebar>
+      {!isApp() && (
+        <Sidebar>
+          <TribeSidebar tribe_info={tribeDetailInfo} tribe_id={TribeId} />
+        </Sidebar>
+      )}
 
       {/* 加入部落 */}
       {joinTribe.joinVisible && (

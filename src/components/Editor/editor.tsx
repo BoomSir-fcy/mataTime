@@ -600,59 +600,61 @@ export const Editor = (props: Iprops) => {
           setIsDisabledSend(!content);
         }}
       >
-        <div
-          className='text-box'
-          ref={ref}
-          onClick={() => {
-            try {
-              ReactEditor.focus(editor);
-            } catch (error) {
-              console.error(error);
-            }
-          }}
-          style={
-            type !== 'chatRoom'
-              ? {
-                  borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
-                  borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px',
-                }
-              : {}
-          }
-        >
-          <Editable
-            autoFocus
-            renderElement={renderElement}
-            onKeyDown={onKeyDown}
-            onPaste={async event => {
-              const data = event.clipboardData;
-              const { files } = data;
-              let fileList: any[] = [];
-              if (files && files.length > 0) {
-                //@ts-ignore
-                for (const file of files) {
-                  const [mime] = file.type.split('/');
-                  if (mime === 'image') {
-                    const compressImage = await cutDownImg(file);
-                    fileList.push(compressImage);
-                  }
-                }
-                uploadImg(fileList);
+        <Box className={isApp() ? 'scrollBox' : ''}>
+          <div
+            className='text-box'
+            ref={ref}
+            onClick={() => {
+              try {
+                ReactEditor.focus(editor);
+              } catch (error) {
+                console.error(error);
               }
             }}
-            placeholder={
-              type === 'comment'
-                ? t('newsCommentReply')
-                : t('editorPlaceholder')
+            style={
+              type !== 'chatRoom'
+                ? {
+                    borderBottomRightRadius: imgList.length > 0 ? '0px' : '5px',
+                    borderBottomLeftRadius: imgList.length > 0 ? '0px' : '5px',
+                  }
+                : {}
             }
+          >
+            <Editable
+              autoFocus
+              renderElement={renderElement}
+              onKeyDown={onKeyDown}
+              onPaste={async event => {
+                const data = event.clipboardData;
+                const { files } = data;
+                let fileList: any[] = [];
+                if (files && files.length > 0) {
+                  //@ts-ignore
+                  for (const file of files) {
+                    const [mime] = file.type.split('/');
+                    if (mime === 'image') {
+                      const compressImage = await cutDownImg(file);
+                      fileList.push(compressImage);
+                    }
+                  }
+                  uploadImg(fileList);
+                }
+              }}
+              placeholder={
+                type === 'comment'
+                  ? t('newsCommentReply')
+                  : t('editorPlaceholder')
+              }
+            />
+          </div>
+          <UploadList
+            Callback={() => {
+              ReactEditor.focus(editor);
+            }}
+            delImgItem={data => setImgList(data)}
+            imgList={imgList}
           />
-        </div>
-        <UploadList
-          Callback={() => {
-            ReactEditor.focus(editor);
-          }}
-          delImgItem={data => setImgList(data)}
-          imgList={imgList}
-        />
+        </Box>
         {type === 'forward' && (
           <ForwardContent forwardContent={forwardContent} />
         )}

@@ -25,21 +25,16 @@ import isToday from 'dayjs/plugin/isToday';
 import { IM } from 'utils';
 import { useDispatch } from 'react-redux';
 import { storeAction, useStore } from 'store';
-import ReactLoading from 'react-loading';
 import FloatBtn from './goMsg';
-import { TribeInfo, TribeType } from 'store/tribe/type';
-import BtnIcon from '../BtnIcon';
-import { useTribeInfoById } from 'store/mapModule/hooks';
-import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
 import { isApp } from 'utils/client';
 
 dayjs.extend(isToday);
 
 const ChatList = styled(Box)<{ IsApp: boolean }>`
   min-height: ${({ IsApp }) =>
-    IsApp ? 'calc(100vh - 135px - 138px)' : `200px`};
+    IsApp ? 'calc(100vh - 135px - 150px)' : `200px`};
   max-height: ${({ IsApp }) =>
-    IsApp ? 'calc(100vh - 135px - 138px)' : `200px`};
+    IsApp ? 'calc(100vh - 135px - 150px)' : `200px`};
   overflow-y: auto;
   overflow-x: hidden;
   /* 阻止触底页面滚动 */
@@ -80,7 +75,7 @@ const Triangle = styled.div<{ myMsg: boolean }>`
   right: ${({ myMsg }) => (myMsg ? '-7px' : `auto`)};
 `;
 
-export const MAX_LIMIT = isApp() ? 10 : 5;
+export const MAX_LIMIT = isApp() ? 15 : 5;
 const UNREAD_LIMIT = 20;
 
 const ChatRoom: React.FC<{
@@ -310,8 +305,6 @@ const ChatRoom: React.FC<{
             String(nonce ? nonce : TurnPages.Start),
           );
           if (anchorElement) {
-            console.log(anchorElement.offsetTop, nonce);
-
             const current = chatListRef.current!;
             current.scrollTop = anchorElement.offsetTop + 2;
           }
