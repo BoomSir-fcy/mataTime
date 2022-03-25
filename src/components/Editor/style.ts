@@ -38,7 +38,8 @@ export const CancelButton = styled(Button)`
 
 export const SlateBox = styled(Box)<{
   ispadding?: boolean;
-  isChatRoom: boolean;
+  isChatRoom?: boolean;
+  isApp?: boolean;
 }>`
   position: relative;
   background: ${({ theme, isChatRoom }) =>
@@ -84,6 +85,7 @@ export const SlateBox = styled(Box)<{
     & > div {
       min-height: ${({ isChatRoom }) =>
         isChatRoom ? `20px !important` : `88px !important`};
+      height: ${({ isApp }) => (isApp ? `50px ` : `auto`)};
     }
   }
 `;

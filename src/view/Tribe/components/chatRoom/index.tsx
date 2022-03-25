@@ -31,12 +31,15 @@ import { TribeInfo, TribeType } from 'store/tribe/type';
 import BtnIcon from '../BtnIcon';
 import { useTribeInfoById } from 'store/mapModule/hooks';
 import { fetchTribeJoinBasicServiceAsync } from 'store/tribe';
+import { isApp } from 'utils/client';
 
 dayjs.extend(isToday);
 
-const ChatList = styled(Box)`
-  min-height: 150px;
-  max-height: 200px;
+const ChatList = styled(Box)<{ IsApp: boolean }>`
+  min-height: ${({ IsApp }) =>
+    IsApp ? 'calc(100vh - 135px - 138px)' : `200px`};
+  max-height: ${({ IsApp }) =>
+    IsApp ? 'calc(100vh - 135px - 138px)' : `200px`};
   overflow-y: auto;
   overflow-x: hidden;
   /* 阻止触底页面滚动 */
@@ -77,12 +80,12 @@ const Triangle = styled.div<{ myMsg: boolean }>`
   right: ${({ myMsg }) => (myMsg ? '-7px' : `auto`)};
 `;
 
-export const MAX_LIMIT = 5;
+export const MAX_LIMIT = isApp() ? 10 : 5;
 const UNREAD_LIMIT = 20;
 
 const ChatRoom: React.FC<{
   tribe_id: number;
-  mb: string;
+  mb?: string;
   tribeHost: string;
   isMember: boolean;
 }> = ({ ...props }) => {
@@ -90,6 +93,7 @@ const ChatRoom: React.FC<{
   const { account } = useActiveWeb3React();
   const dispatch = useDispatch();
   const chatListRef = useRef(null);
+
   const { tribeHost, tribe_id: TribeId, isMember } = props;
   const { im } = useIm();
 
@@ -116,7 +120,6 @@ const ChatRoom: React.FC<{
     total_un_read: null,
   });
   const [OutChatRoom, setOutChatRoom] = useState(false);
-  const [DateList, setDateList] = useState([]);
 
   const End = useMemo(() => TurnPages.Start <= 1, [TurnPages.Start]);
 
@@ -514,67 +517,141 @@ const ChatRoom: React.FC<{
   }, [NewList, MsgList, dispatch, getAddHeight, toTop, setLoading, isSend]);
 
   return (
-    <Collapse
-      setIsClose={e => {
-        setIsClose(e);
-      }}
-      callBack={e => {
-        setOutChatRoom(e);
-      }}
-      title={t('聊天室')}
-      padding='0'
-      {...props}
-    >
-      <Box position='relative' padding=' 0 0 0 16px'>
-        <ChatList ref={chatListRef} onScroll={loadMore}>
-          {Loading ? (
-            <LoadingWrapper>
-              <Spinner />
-            </LoadingWrapper>
-          ) : (
-            <>{!MsgList.length && <Empty />}</>
-          )}
-          {MsgList.map((item, index) => {
-            return (
-              <>
-                {index !== 0 &&
-                dayjs(MsgList[index - 1].create_time / 1000).format('MM-DD') !==
-                  dayjs(item?.create_time / 1000).format('MM-DD') ? (
-                  <Flex justifyContent='center' alignItems='end' height='50px'>
-                    <Text fontSize='14px' color='textTips'>
-                      {dayjs(item?.create_time / 1000).format('MM-DD')}
-                    </Text>
-                  </Flex>
-                ) : (
-                  <></>
-                )}
-                {index === 0 && (
-                  <Flex justifyContent='center' alignItems='end' height='70px'>
-                    <Text fontSize='14px' color='textTips'>
-                      {dayjs(item?.create_time / 1000).format('MM-DD')}
-                    </Text>
-                  </Flex>
-                )}
-                <MsgBox
-                  tribeHost={tribeHost}
-                  sameSender={isSameSender(item.sender, index)}
-                  detail={item}
-                  setUserInfo={setUserInfo}
-                />
-              </>
-            );
-          })}
-        </ChatList>
-        <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
-      </Box>
-      <SendInput
-        sendMsg={sendMsg}
-        tribe_id={TribeId}
-        im={im}
-        UserInfo={UserInfo}
-        setUserInfo={e => setUserInfo(e)}
-      />
-    </Collapse>
+    <>
+      {isApp() ? (
+        <>
+          <Box position='relative' padding=' 0 0 0 16px'>
+            <ChatList IsApp={isApp()} ref={chatListRef} onScroll={loadMore}>
+              {Loading ? (
+                <LoadingWrapper>
+                  <Spinner />
+                </LoadingWrapper>
+              ) : (
+                <>{!MsgList.length && <Empty />}</>
+              )}
+              {MsgList.map((item, index) => {
+                return (
+                  <>
+                    {index !== 0 &&
+                    dayjs(MsgList[index - 1].create_time / 1000).format(
+                      'MM-DD',
+                    ) !== dayjs(item?.create_time / 1000).format('MM-DD') ? (
+                      <Flex
+                        justifyContent='center'
+                        alignItems='flex-end'
+                        height='50px'
+                      >
+                        <Text fontSize='14px' color='textTips'>
+                          {dayjs(item?.create_time / 1000).format('MM-DD')}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <></>
+                    )}
+                    {index === 0 && (
+                      <Flex
+                        justifyContent='center'
+                        alignItems='flex-end'
+                        height='70px'
+                      >
+                        <Text fontSize='14px' color='textTips'>
+                          {dayjs(item?.create_time / 1000).format('MM-DD')}
+                        </Text>
+                      </Flex>
+                    )}
+                    <MsgBox
+                      tribeHost={tribeHost}
+                      sameSender={isSameSender(item.sender, index)}
+                      detail={item}
+                      setUserInfo={setUserInfo}
+                    />
+                  </>
+                );
+              })}
+            </ChatList>
+            <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
+          </Box>
+          <SendInput
+            sendMsg={sendMsg}
+            tribe_id={TribeId}
+            im={im}
+            UserInfo={UserInfo}
+            setUserInfo={e => setUserInfo(e)}
+          />
+        </>
+      ) : (
+        <Collapse
+          setIsClose={e => {
+            setIsClose(e);
+          }}
+          callBack={e => {
+            setOutChatRoom(e);
+          }}
+          title={t('聊天室')}
+          padding='0'
+          {...props}
+        >
+          <Box position='relative' padding=' 0 0 0 16px'>
+            <ChatList IsApp={isApp()} ref={chatListRef} onScroll={loadMore}>
+              {Loading ? (
+                <LoadingWrapper>
+                  <Spinner />
+                </LoadingWrapper>
+              ) : (
+                <>{!MsgList.length && <Empty />}</>
+              )}
+              {MsgList.map((item, index) => {
+                return (
+                  <>
+                    {index !== 0 &&
+                    dayjs(MsgList[index - 1].create_time / 1000).format(
+                      'MM-DD',
+                    ) !== dayjs(item?.create_time / 1000).format('MM-DD') ? (
+                      <Flex
+                        justifyContent='center'
+                        alignItems='flex-end'
+                        height='50px'
+                      >
+                        <Text fontSize='14px' color='textTips'>
+                          {dayjs(item?.create_time / 1000).format('MM-DD')}
+                        </Text>
+                      </Flex>
+                    ) : (
+                      <></>
+                    )}
+                    {index === 0 && (
+                      <Flex
+                        justifyContent='center'
+                        alignItems='flex-end'
+                        height='70px'
+                      >
+                        <Text fontSize='14px' color='textTips'>
+                          {dayjs(item?.create_time / 1000).format('MM-DD')}
+                        </Text>
+                      </Flex>
+                    )}
+                    <MsgBox
+                      tribeHost={tribeHost}
+                      sameSender={isSameSender(item.sender, index)}
+                      detail={item}
+                      setUserInfo={setUserInfo}
+                    />
+                  </>
+                );
+              })}
+            </ChatList>
+            <FloatBtn goUnread={() => goUnread()} UnreadMsg={UnreadMsg} />
+          </Box>
+          <SendInput
+            sendMsg={sendMsg}
+            tribe_id={TribeId}
+            im={im}
+            UserInfo={UserInfo}
+            setUserInfo={e => setUserInfo(e)}
+          />
+        </Collapse>
+      )}
+    </>
   );
 };
 
@@ -619,7 +696,7 @@ const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
       <Flex
         flex={1}
         flexDirection='column'
-        alignItems={isMyMsg ? `end` : `start`}
+        alignItems={isMyMsg ? `flex-end` : `flex-start`}
       >
         {!sameSender && (
           <Flex mb='6px' flexWrap='wrap'>
@@ -635,7 +712,7 @@ const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
           ml={isMyMsg ? '0' : sameSender ? '56px' : '0'}
           mr={isMyMsg ? (sameSender ? '56px' : '0') : '0'}
           myMsg={isMyMsg}
-          minHeight={detail?.image_url?.length ? '100px' : '22px'}
+          minHeight={detail?.image_url?.length ? '50px' : '22px'}
         >
           <Text style={{ wordBreak: 'break-all' }} fontSize='14px'>
             <ContentParsing
@@ -645,7 +722,7 @@ const MsgBox = ({ detail, tribeHost, sameSender, setUserInfo }) => {
               chatRoom={true}
             />
             {detail?.image_url?.length ? (
-              <ImgList list={detail?.image_url} />
+              <ImgList type='chatRoom' list={detail?.image_url} />
             ) : (
               <></>
             )}

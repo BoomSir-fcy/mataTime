@@ -58,7 +58,7 @@ import {
   ARTICLE_COMMENTS_MAX_LEN,
   POST_UPLOAD_IMG,
 } from 'config';
-import client from 'utils/client';
+import client, { isApp } from 'utils/client';
 
 type Iprops = {
   type: any;
@@ -557,6 +557,7 @@ export const Editor = (props: Iprops) => {
     <SlateBox
       ispadding={ispadding}
       isChatRoom={type === 'chatRoom'}
+      isApp={isApp()}
       key={refresh}
     >
       <Loading visible={isLoading} />

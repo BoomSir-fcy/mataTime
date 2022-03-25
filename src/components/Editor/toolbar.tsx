@@ -127,7 +127,7 @@ export const Toolbar: React.FC<{
       <EditorToolbar
         width='100%'
         alignItems='center'
-        justifyContent={type === 'chatRoom' ? 'end' : 'normal'}
+        justifyContent={type === 'chatRoom' ? 'flex-end' : 'normal'}
       >
         <EmojiButton callbackEmoji={callbackEmoji} />
         {type === 'post' ? (

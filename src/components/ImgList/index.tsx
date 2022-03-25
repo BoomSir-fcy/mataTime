@@ -7,12 +7,35 @@ import { Image } from 'uikit';
 import { ImgListBox } from './style';
 type Iprops = {
   list: string[];
+  type?: string;
 };
 const BlockLink = styled.a`
   display: block;
 `;
+
+const reSizeImageDom = (imgDom: HTMLImageElement, type: string) => {
+  /* eslint-disable */
+  if (imgDom.naturalHeight === imgDom.naturalWidth) {
+    imgDom.parentElement.style.maxWidth = '300px';
+    imgDom.style.width = '100%';
+    imgDom.style.maxHeight = '300px';
+  }
+  // 宽大于高的图片
+  if (imgDom.naturalWidth > imgDom.naturalHeight) {
+    imgDom.style.width = '100%';
+    imgDom.style.maxHeight = '540px';
+  }
+  // 高大于宽的图片
+  if (imgDom.naturalHeight > imgDom.naturalWidth) {
+    if (type !== 'chatRoom') {
+      imgDom.parentElement.style.width = '50%';
+    }
+    imgDom.style.width = '100%';
+    imgDom.style.maxHeight = '540px';
+  }
+};
 export const ImgList = (props: Iprops) => {
-  const { list = [] } = props;
+  const { list = [], type } = props;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [previewImgList, setPreviewImgList] = useState([]);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -42,24 +65,12 @@ export const ImgList = (props: Iprops) => {
     if (imgDoms?.length === 1) {
       const imgDom = (Array.from(imgDoms) as HTMLImageElement[])[0];
       imgDom.addEventListener('load', () => {
-        // 正方形图片
-        if (imgDom.naturalHeight === imgDom.naturalWidth) {
-          imgDom.parentElement.style.maxWidth = '300px';
-          imgDom.style.width = '100%';
-          imgDom.style.maxHeight = '300px';
-        }
-        // 宽大于高的图片
-        if (imgDom.naturalWidth > imgDom.naturalHeight) {
-          imgDom.style.width = '100%';
-          imgDom.style.maxHeight = '540px';
-        }
-        // 高大于宽的图片
-        if (imgDom.naturalHeight > imgDom.naturalWidth) {
-          imgDom.parentElement.style.width = '50%';
-          imgDom.style.width = '100%';
-          imgDom.style.maxHeight = '540px';
-        }
+        reSizeImageDom(imgDom, type);
       });
+      if (imgDom.complete && !imgDom.attributes['data-load']) {
+        reSizeImageDom(imgDom, type);
+        imgDom.attributes['data-load'] = true;
+      }
     }
   }, [imgRef, list]);
 

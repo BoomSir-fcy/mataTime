@@ -1,7 +1,7 @@
 import { Editor } from 'components';
 import { useTranslation } from 'contexts';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { Ref, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Flex, Input, Button, Card, Box } from 'uikit';
 import { useStore } from 'store';
@@ -37,7 +37,6 @@ const SendInput: React.FC<{
       // if(test.match(/^\s*$/)){
       //   console.log("all space or \\n or empty")
       // }
-      console.log(res);
 
       if (res !== '[]' && image_urls.length) {
         im?.send(im.messageProtocol.WSProtocol_Chat_Message, {
