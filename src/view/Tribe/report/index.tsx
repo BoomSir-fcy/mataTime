@@ -13,6 +13,7 @@ import Dots from 'components/Loader/Dots';
 
 const ContentFlex = styled(Flex)`
   flex-direction: column;
+  padding-right: 4px;
   ${({ theme }) => theme.mediaQueries.md} {
     width: 30vw;
   }
@@ -53,6 +54,7 @@ export const ReportTribeModal: React.FC<{
     post_title: '',
     post_url: '',
   });
+
   const onSubmit = useCallback(async () => {
     if (!state.reason.trim()) {
       toastError(t('Please fill in the reasons for reporting'));

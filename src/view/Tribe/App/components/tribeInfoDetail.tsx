@@ -16,6 +16,7 @@ import {
 } from 'store/tribe/type';
 
 import TribeLogo from './tribeLogo';
+import { ReportBtn } from 'view/Tribe/report/ReportBtn';
 
 const Container = styled(Box)`
   width: 100%;
@@ -75,6 +76,7 @@ const TribeInfoDetail: React.FC<HeaderProps> = ({ tribeInfo, openInvite }) => {
             <Box>
               <Flex justifyContent='space-between' alignItems='flex-end'>
                 <TribeName>{tribeInfo?.tribe?.name}</TribeName>
+                <ReportBtn tribeInfo={tribeInfo} />
                 {userInfo?.address === tribeInfo?.tribe?.owner_address && (
                   <Text
                     color='textPrimary'
