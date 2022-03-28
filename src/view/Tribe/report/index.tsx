@@ -99,6 +99,8 @@ export const ReportTribeModal: React.FC<{
           t('Submitted successfully, waiting for review to complete'),
         );
         onClose();
+      } else if (res.code === 30016020) {
+        toastError(t('Member does not belong to tribe'));
       }
       setPending(false);
     } catch (e) {
