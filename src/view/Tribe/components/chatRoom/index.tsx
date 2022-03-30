@@ -143,16 +143,24 @@ const ChatRoom: React.FC<{
       // type 1加入 2退出
       if (type === 2) {
         // 部落id改变 退出当前加入部落
-        im?.send(im.messageProtocol.WSProtocol_Join_Chat, {
-          tribe_id: tribe_id,
-          join: false,
-        });
+        im?.send(
+          im.messageProtocol.WSProtocol_Join_Chat,
+          {
+            tribe_id: tribe_id,
+            join: false,
+          },
+          true,
+        );
       } else {
         if (!tribe_id) return;
-        im?.send(im.messageProtocol.WSProtocol_Join_Chat, {
-          tribe_id: tribe_id,
-          join: true,
-        });
+        im?.send(
+          im.messageProtocol.WSProtocol_Join_Chat,
+          {
+            tribe_id: tribe_id,
+            join: true,
+          },
+          true,
+        );
       }
     },
     [im],
