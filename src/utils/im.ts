@@ -16,6 +16,14 @@ enum MessageProtocol {
   WSProtocol_Spend_TimeV2 = 4,
   // 部落帖子时间消耗
   WSProtocol_Spend_Time_TRIBE = 5,
+  // 聊天室发送消息
+  WSProtocol_Chat_Message = 6,
+  // 加入/退出聊天室
+  WSProtocol_Join_Chat = 7,
+  // 已读
+  WSProtocol_Read_Nonce = 8,
+  // 拉取数据
+  WSProtocol_Pull_Message = 9,
   // 心跳检测
   WSProtocol_HEART_Jump_Jump = 97,
 }

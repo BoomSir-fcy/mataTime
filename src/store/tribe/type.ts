@@ -183,6 +183,27 @@ export interface MemberNft {
   nick_name?: string;
 }
 
+export interface ChatRoomMsgListSender_detail {
+  address: string;
+  nft_image: string;
+  nick_name: string;
+  user_id: number;
+}
+export interface ChatRoomMsgList {
+  create_time: number;
+  image_url: number;
+  message: string;
+  nonce: number;
+  sender: number;
+  sender_detail: ChatRoomMsgListSender_detail;
+  tribe_id: number;
+}
+// export interface ChatRoomMsg {
+//   latest_read: number;
+//   msg?: ChatRoomMsgList[];
+//   max_msg: number;
+//   total_un_read: number;
+// }
 export interface TribeState {
   tribeId?: number;
   isApproveStakeNft?: boolean;
@@ -197,4 +218,5 @@ export interface TribeState {
   postList: PostList;
   joinTribe: JoinTribe;
   tribeDetails: TribeDetails;
+  chatRoomMsg: ChatRoomMsgList[];
 }

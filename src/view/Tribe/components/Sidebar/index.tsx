@@ -8,6 +8,7 @@ import TribeNft from './tribeNft';
 import TribePro from './tribePro';
 import TribeTags from './tribeTags';
 import TribeFiles from './tribeFiles';
+import ChatRoom from '../chatRoom';
 
 const SidebarStyled = styled(Box)`
   position: sticky;
@@ -52,8 +53,24 @@ export const TribeSidebar: React.FC<{
       ref={ref}
     >
       <TribeDetail tribe_id={tribe_id} mb='15px' />
+      <TribePro
+        tribe_id={tribe_id}
+        isClose={
+          tribe_info?.status === NftStatus.Staked &&
+          tribe_info?.expire !== TribeNftStatus.expire
+        }
+        mb='15px'
+      />
+      {tribe_info?.status === NftStatus.Staked &&
+        tribe_info?.expire !== TribeNftStatus.expire && (
+          <ChatRoom
+            tribe_id={tribe_id}
+            tribeHost={tribe_info?.tribe?.owner_address}
+            isMember={tribe_info?.status === NftStatus.Staked}
+            mb='15px'
+          />
+        )}
       <TribeNft tribe_id={tribe_id} mb='15px' />
-      <TribePro tribe_id={tribe_id} mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
       {tribe_info?.status === NftStatus.Staked &&
         tribe_info?.expire !== TribeNftStatus.expire && (

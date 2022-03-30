@@ -124,7 +124,11 @@ export const Toolbar: React.FC<{
     const { t } = useTranslation();
 
     return (
-      <EditorToolbar alignItems='center'>
+      <EditorToolbar
+        width='100%'
+        alignItems='center'
+        justifyContent={type === 'chatRoom' ? 'flex-end' : 'normal'}
+      >
         <EmojiButton callbackEmoji={callbackEmoji} />
         {type === 'post' ? (
           <>
@@ -153,6 +157,15 @@ export const Toolbar: React.FC<{
             />
           </>
         ) : null}
+        {type === 'chatRoom' && (
+          <InsertImageButton
+            multiple={true}
+            maxUploadLength={selectImgLength}
+            onSuccess={onSuccess}
+            onError={onError}
+            callbackSelectImg={callbackSelectImg}
+          />
+        )}
       </EditorToolbar>
     );
   },

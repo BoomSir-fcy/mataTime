@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TribeBaseInfo, TribeInfo } from './type';
+import { ChatRoomMsgList, TribeBaseInfo, TribeInfo } from './type';
 
 export const postGetArticle = createAction('post/get/article');
 export const postUpdateArticle = createAction<Api.Home.post[]>(
@@ -32,4 +32,8 @@ export const updateTribeDetails = createAction<TribeInfo>(
 // 加入部落弹框
 export const setJoinTribeVisibleModal = createAction<boolean>(
   'tribe/setJoinTribeVisibleModal',
+);
+
+export const changrChatRoomList = createAction<ChatRoomMsgList[]>(
+  'tribe/changrChatRoomList',
 );

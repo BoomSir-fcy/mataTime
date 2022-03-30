@@ -15,7 +15,7 @@ const TopBox = styled(Box)`
   opacity: 0;
   position: fixed;
   right: 5%;
-  bottom: 12%;
+  bottom: 15%;
   cursor: auto;
   z-index: 1000;
   width: 40px;

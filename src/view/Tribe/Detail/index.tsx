@@ -123,7 +123,10 @@ const Detail: React.FC = React.memo(() => {
                 <Icon name='icon-sousuo' size={20} color='white_black'></Icon>
               </Button>
             </Link>
-            <Link className='hide-media-md' to='/notification/me'>
+            <Link
+              className='hide-media-md'
+              to={`/tribe/app/chatRoom?id=${parsedQs.id}`}
+            >
               <Button variant='text'>
                 <Icon name='icon-tixing' size={20} color='white_black'></Icon>
               </Button>
@@ -152,9 +155,11 @@ const Detail: React.FC = React.memo(() => {
         />
       </TribeBox>
 
-      <Sidebar>
-        <TribeSidebar tribe_info={tribeDetailInfo} tribe_id={TribeId} />
-      </Sidebar>
+      {!isApp() && (
+        <Sidebar>
+          <TribeSidebar tribe_info={tribeDetailInfo} tribe_id={TribeId} />
+        </Sidebar>
+      )}
 
       {/* 加入部落 */}
       {joinTribe.joinVisible && (

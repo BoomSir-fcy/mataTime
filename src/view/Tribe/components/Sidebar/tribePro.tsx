@@ -18,7 +18,7 @@ const TribePro = ({ ...props }) => {
   const { t } = useTranslation();
   const tribeInfo = useTribeInfoById(props.tribe_id);
   const { detail, baseInfo } = tribeInfo || {};
-
+  const { isClose } = props;
   return (
     <>
       <Collapse
@@ -29,6 +29,7 @@ const TribePro = ({ ...props }) => {
               : 'ProInformation'
           }`,
         )}
+        visible={props?.isClose}
         {...props}
       >
         <Group>

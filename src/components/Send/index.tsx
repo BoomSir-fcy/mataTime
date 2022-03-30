@@ -7,7 +7,7 @@ import { Flex } from 'uikit';
 const Content = styled(Flex)`
   position: fixed;
   right: 5%;
-  bottom: calc(12% + 40px + 20px);
+  bottom: calc(15% + 40px + 20px);
   cursor: pointer;
   justify-content: center;
   align-items: center;
