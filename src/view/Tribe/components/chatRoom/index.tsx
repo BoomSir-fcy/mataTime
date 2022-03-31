@@ -32,9 +32,9 @@ dayjs.extend(isToday);
 
 const ChatList = styled(Box)<{ IsApp: boolean }>`
   min-height: ${({ IsApp }) =>
-    IsApp ? 'calc(100vh - 135px - 150px)' : `200px`};
+    IsApp ? 'calc(100vh - 135px - 150px)' : `500px`};
   max-height: ${({ IsApp }) =>
-    IsApp ? 'calc(100vh - 135px - 150px)' : `200px`};
+    IsApp ? 'calc(100vh - 135px - 150px)' : `500px`};
   overflow-y: auto;
   overflow-x: hidden;
   /* 阻止触底页面滚动 */
@@ -75,7 +75,7 @@ const Triangle = styled.div<{ myMsg: boolean }>`
   right: ${({ myMsg }) => (myMsg ? '-7px' : `auto`)};
 `;
 
-export const MAX_LIMIT = isApp() ? 15 : 5;
+export const MAX_LIMIT = 15;
 const UNREAD_LIMIT = 20;
 
 const ChatRoom: React.FC<{
