@@ -45,7 +45,7 @@ const PostItem: React.FC<PostInfoPorps> = ({
   return (
     <PostBox>
       <Top>
-        <Flex width='80%' alignItems='center'>
+        <Flex width='60%' alignItems='center'>
           {flag && !!itemData.selected && <Featured />}
           {flag && !!itemData.tribe_top && (
             <Icon size={20} color='textOrigin' name='icon-jiantou' />

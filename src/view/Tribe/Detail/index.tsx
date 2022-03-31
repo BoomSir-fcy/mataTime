@@ -123,14 +123,15 @@ const Detail: React.FC = React.memo(() => {
                 <Icon name='icon-sousuo' size={20} color='white_black'></Icon>
               </Button>
             </Link>
-            <Link
+            {/* TODO: 聊天室 */}
+            {/* <Link
               className='hide-media-md'
               to={`/tribe/app/chatRoom?id=${parsedQs.id}`}
             >
               <Button variant='text'>
                 <Icon name='icon-tixing' size={20} color='white_black'></Icon>
               </Button>
-            </Link>
+            </Link> */}
           </Flex>
         </Crumbs>
         <TribeInfo>

@@ -61,7 +61,8 @@ export const TribeSidebar: React.FC<{
         }
         mb='15px'
       />
-      {tribe_info?.status === NftStatus.Staked &&
+      {/* TODO: 聊天室 */}
+      {/* {tribe_info?.status === NftStatus.Staked &&
         tribe_info?.expire !== TribeNftStatus.expire && (
           <ChatRoom
             tribe_id={tribe_id}
@@ -69,7 +70,7 @@ export const TribeSidebar: React.FC<{
             isMember={tribe_info?.status === NftStatus.Staked}
             mb='15px'
           />
-        )}
+        )} */}
       <TribeNft tribe_id={tribe_id} mb='15px' />
       <TribeTags tribe_id={tribe_id} mb='15px' />
       {tribe_info?.status === NftStatus.Staked &&

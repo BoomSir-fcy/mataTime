@@ -25,7 +25,8 @@ const Tribe = () => {
         <Route path={`${path}/post`} component={Post} />
         <Route path={`${path}/postdetail`} component={PostDetail} />
         <Route path={`${path}/app/detail`} component={AppDetail} />
-        <Route path={`${path}/app/chatRoom`} component={ChatRoom} />
+        {/* TODO: 聊天室 */}
+        {/* <Route path={`${path}/app/chatRoom`} component={ChatRoom} /> */}
       </Switch>
     </Box>
   );
