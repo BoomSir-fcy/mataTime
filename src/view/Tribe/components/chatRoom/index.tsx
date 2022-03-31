@@ -588,7 +588,7 @@ const ChatRoom: React.FC<{
           callBack={e => {
             setOutChatRoom(e);
           }}
-          title={t('聊天室')}
+          title={t('Chatroom')}
           padding='0'
           {...props}
         >

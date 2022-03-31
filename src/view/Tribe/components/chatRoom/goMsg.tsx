@@ -31,7 +31,7 @@ const FloatBtn: React.FC<{ UnreadMsg: any; goUnread: () => void }> = ({
             <Icon size={14} color='white' current={0} name='icon-jiantou' />
             {UnreadMsg.at_msg_nonce.length ? (
               <Text ml='4px' fontSize='12px'>
-                {t('有%num%条@我', { num: UnreadMsg.at_msg_nonce.length })}
+                {t('%num% @me', { num: UnreadMsg.at_msg_nonce.length })}
               </Text>
             ) : (
               <Text ml='4px' fontSize='12px'>
